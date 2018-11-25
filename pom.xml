@@ -134,6 +134,11 @@
             <version>${rest-assured.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.knowm</groupId>
+            <artifactId>yank</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc6</artifactId>
             <version>${jdbcdriver.version}</version>

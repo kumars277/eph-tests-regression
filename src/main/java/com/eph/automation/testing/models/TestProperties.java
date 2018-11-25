@@ -10,4 +10,6 @@ import com.eph.automation.testing.annotations.StaticInjection;
 public class TestProperties {
     public String browserType;
     public Boolean gridRun;
+    public String environment;
+    public Boolean targetDB;
 }

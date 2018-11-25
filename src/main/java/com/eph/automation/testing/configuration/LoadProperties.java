@@ -1,7 +1,5 @@
 package com.eph.automation.testing.configuration;
 
-import com.eph.automation.testing.services.decryption.DecryptionService;
-
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
@@ -26,9 +24,9 @@ public class LoadProperties {
         }
     }
 
-    public static String getDBConnection(String connectionURL) {
+    public static String getEndPoint(String connectionURL) {
         initialise();
-        return DecryptionService.decrypt(definition.getProperty(connectionURL));
+        return definition.getProperty(connectionURL);
     }
 
     public static String getProperty(String key) {
