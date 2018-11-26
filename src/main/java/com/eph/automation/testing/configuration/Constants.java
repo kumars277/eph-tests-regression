@@ -42,15 +42,18 @@ public class Constants {
     public static String CRM_UAT_DB_URL_KEY = "CRM_UAT_URL";
     public static String SDW_SIT_DB_URL_KEY = "SDW_SIT_URL";
     public static String CMX_PROD_DB_URL_KEY = "CMX_PROD_URL";
+
+    //PPM Database Constants
     public static String PPM_UAT_URL = "PPM_UAT_URL";
-
     public static String PPM_DEV_URL = "PPM_DEV_URL";
-
     public static String PPM_PROD_URL = "PPM_PROD_URL";
-
     public static String PPM_UAT_SCHEMA = "MEX_OPER_DEV";
-
     public static String PPM_PROD_SCHEMA = "MEX_OPER_PROD";
+
+    //PMX Database Constants
+    public static String PMX_SIT_URL = "PMX_SIT_URL";
+    public static String PMX_UAT_URL = "PMX_UAT_URL";
+    public static String PMX_PROD_URL = "PMX_PROD_URL";
 
     //MySql Database
     public static String MYSQL_SIT_DB_URL_KEY = "MYSQL_SIT_URL";
