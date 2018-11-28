@@ -11,7 +11,7 @@ import java.util.List;
 public class DataAccessServiceImpl {
 
     public static List getPPMTableRows(String sql,Class klass) {
-        return DBManager.getDBResultAsBeanList(sql, klass, null, Constants.PPM_PROD_URL);
+        return DBManager.getDBResultAsBeanList(sql, klass, Constants.PPM_PROD_URL);
     }
 
 }

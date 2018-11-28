@@ -5,5 +5,9 @@ Feature: Data Quality Checks
   So that the data in the EPH Systems are valid and meeting the expected data quality requirements.
 
   @ZERO-DEPLOYMENT
-  Scenario: Validate Database Access
-    Given I am EPH System User
+  Scenario: Validate Product details against DQ library Tier 1 checks
+    Given The data is loaded from PMX to EPH
+    When  The product from PMX Source fails a Tier 1 DQ rule
+    Then  The product is not loaded into the golden layer in EPH
+    And The product is written to the Data Quality output table with all attributes
+    And The product is listed as a Tier 1 DQ rule failure

@@ -40,4 +40,19 @@ public class ProductExtractSQL {
             "  JOIN GD_PRODUCT_TYPE T ON W.F_PRODUCT_TYPE = T.PRODUCT_TYPE_ID\n" +
             "  LEFT JOIN GD_IMPRINT I ON W.F_IMPRINT = I.IMPRINT_ID)\n" +
             "   WHERE ROWNUM = 1";
+
+        public static String PRODUCT_WORK_FROM_EPH_SA = "\tselect work_title as WORK_TITLE\n" +
+                "\t\t,work_sub_title as WORK_SUBTITLE\n" +
+                "\t\t,electro_rights_indicator as ELECTRONIC_RIGHTS_IND\n" +
+                "\t\t,volume as BOOK_EDITION_VOLUME\n" +
+                "\t\t,copyright_year as PRODUCT_WORK_PUB_DATE\n" +
+                "\t\t,f_pmc as PMC\n" +
+                "\t\t--,edition_number as BOOK_EDITION_NAME\n" +
+                "\t\t--,f_pmg as PMG\n" +
+                "\t\t,f_oa_type as OPEN_ACCESS_JNL_TYPE_CODE\n" +
+                "\t\t,f_type as WORK_TYPE\n" +
+                "\t\t,f_status as WORK_STATUS\n" +
+                "\t\t,f_imprint as IMPRINT \n" +
+                "\tfrom SEMARCHY_EPH_MDM.SA_WWORK"
+                ;
 }

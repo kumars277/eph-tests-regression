@@ -2,10 +2,6 @@ package com.eph.automation.testing.configuration;
 
 import com.eph.automation.testing.models.EnumConstants;
 import com.eph.automation.testing.models.TestContext;
-import com.eph.automation.testing.services.secure.EncryptOrDecryptService;
-import org.apache.commons.dbutils.DbUtils;
-import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.knowm.yank.Yank;
 
 import java.sql.Connection;
@@ -21,34 +17,28 @@ public class DBManager {
 
     private static Connection connection = null;
     private static String driver = "oracle.jdbc.driver.OracleDriver";
-    private static String PPM_PROD_ENCRYPTED_PASSWORD="eh10MvrWPRZd93nkR+pca0bRC6bzwXrT";
-    private static String BBI_REDSHIFT_UAT_ENCRYPTED_PASSWORD="eh10MvrWPRZd93nkR+pca0bRC6bzwXrT";
+    private static String mySQLDriver = "com.mysql.jdbc.Driver";
 
-    public static List getDBResultAsEntity(Class classType, String dbEndPoint, String sql) {
-        List entityRows = null;
-        try {
-            if (connection == null) {
-                DbUtils.loadDriver(driver);
-            }
-            connection = DriverManager.getConnection(LoadProperties.getDBConnection(getDatabaseEnvironmentKey(dbEndPoint)));
-//            connection = DriverManager.getConnection(jdbcurl, username, pass);
-            QueryRunner query = new QueryRunner();
-            entityRows = (List) query.query(connection,sql,new BeanListHandler(classType));
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
-        } finally {
-            DbUtils.closeQuietly(connection);
-        }
-        return entityRows;
-    }
-
-    public static List getDBResultAsBeanList(String sql, Class klass, Object[] params, String dbEndPoint) {
+    public static List getDBResultAsBeanList(String sql, Class klass, String dbEndPoint) {
         Properties dbProps = new Properties();
         dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(getDatabaseEnvironmentKey(dbEndPoint)));
         Yank.setupDataSource(dbProps);
-        List klassList = Yank.queryBeanList(sql,klass, params);
+        List klassList = Yank.queryBeanList(sql,klass, null);
         Yank.releaseDataSource();
         return klassList;
+    }
+
+    public static Connection getPostgresConnection(String dbEndPoint) {
+        Properties dbProps = new Properties();
+        dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(getDatabaseEnvironmentKey(dbEndPoint)));
+        if (connection == null) {
+            try {
+                connection = DriverManager.getConnection(LoadProperties.getDBConnection(dbEndPoint));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return connection;
     }
 
     public static String getDatabaseEnvironmentKey(String givenDBEndPoint) {
@@ -64,18 +54,4 @@ public class DBManager {
         return dbEndPointKey;
     }
 
-
-    public static List getPostgresDatabaseResults(String sql, Class klass) {
-        Properties dbProps = new Properties();
-        //jdbc:postgresql://localhost:5432/example", "postgres", "postgres"
-        dbProps.setProperty("jdbcUrl", LoadProperties.getEndPoint(Constants.PPM_DEV_URL));
-//        dbProps.setProperty("jdbcUrl", LoadProperties.getEndPoint(Constants.BBI_REDSHIFT_DEV_URL_KEY));
-        dbProps.setProperty("username","bbi_master");
-        dbProps.setProperty("password", EncryptOrDecryptService.decrypt(BBI_REDSHIFT_UAT_ENCRYPTED_PASSWORD));
-//        dbProps.setProperty("password", EncryptOrDecryptService.decrypt(BBI_REDSHIFT_ENCRYPTED_PASSWORD));
-        Yank.setupDataSource(dbProps);
-        List klassList = Yank.queryBeanList(sql,klass, null);
-        Yank.releaseDataSource();
-        return klassList;
-    }
 }

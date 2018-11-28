@@ -26,11 +26,6 @@ public class LoadProperties {
         }
     }
 
-    public static String getEndPoint(String connectionURL) {
-        initialise();
-        return definition.getProperty(connectionURL);
-    }
-
     public static String getDBConnection(String connectionURL) {
         initialise();
         return DecryptionService.decrypt(definition.getProperty(connectionURL));
