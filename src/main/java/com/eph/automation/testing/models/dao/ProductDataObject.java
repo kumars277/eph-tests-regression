@@ -5,11 +5,16 @@ package com.eph.automation.testing.models.dao;
  */
 public class ProductDataObject {
 
-    public String PRODUCT_ID;
+    //ProductWork Entities
+    public String PRIMARY_ISBN;
+
     public String WORK_TITLE;
     public String WORK_SUBTITLE;
+
+    //ProductManifestation Entites
+
+    public String PRODUCT_ID;
     public String DAC_KEY;
-    public String PRIMARY_ISBN;
     public String PROJECT_NUM;
     public String ISSN_L;
     public String JOURNAL_NUMBER;
@@ -18,6 +23,7 @@ public class ProductDataObject {
     public String BOOK_VOLUME_NAME;
     public String PMC;
     public String PMG;
+    public String WORK_ID;
     public String WORK_STATUS;
     public String WORK_SUBSTATUS;
     public String WORK_TYPE;
@@ -29,6 +35,23 @@ public class ProductDataObject {
     public String F_OPCO_R12;
     public String PRODUCT_WORK_PUB_DATE;
     public String JOURNAL_ACRONYM;
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ProductDataObject that = (ProductDataObject) o;
+
+        return !(PRIMARY_ISBN != null ? !PRIMARY_ISBN.equals(that.PRIMARY_ISBN) : that.PRIMARY_ISBN != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return PRIMARY_ISBN != null ? PRIMARY_ISBN.hashCode() : 0;
+    }
 
     public void setPRODUCT_ID(String PRODUCT_ID) {
         this.PRODUCT_ID = PRODUCT_ID;
@@ -124,5 +147,16 @@ public class ProductDataObject {
 
     public void setJOURNAL_ACRONYM(String JOURNAL_ACRONYM) {
         this.JOURNAL_ACRONYM = JOURNAL_ACRONYM;
+    }
+
+    public void setWORK_ID(String WORK_ID) {
+        this.WORK_ID = WORK_ID;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductDataObject{" +
+                "PRIMARY_ISBN='" + PRIMARY_ISBN + '\'' +
+                '}';
     }
 }

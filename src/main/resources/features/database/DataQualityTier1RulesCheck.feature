@@ -13,3 +13,4 @@ Feature: Validate Product details against DQ library Tier 1 checks
     Examples:
       |                     rule                          |
       |   Availability status for product manifestation   |
+      |   duplicates ISSN   |

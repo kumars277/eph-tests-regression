@@ -6,8 +6,8 @@ package com.eph.automation.testing.services.db.sql;
 public class ProductExtractSQL {
 
     public static String PMX_WORK_EXTRACT = "  SELECT * FROM (\n" +
-            "  SELECT \n" +
-            "   M.ELSEVIER_PRODUCT_ID AS PRODUCT_ID -- Product Manifestation Reference,  not needed in EPH but extracted for record linking purposes\n" +
+            "  SELECT DISTINCT 1 \n" +
+//            "  , M.ELSEVIER_PRODUCT_ID AS PRODUCT_ID -- Product Manifestation Reference,  not needed in EPH but extracted for record linking purposes\n" +
             "  ,W.PRODUCT_WORK_TITLE AS WORK_TITLE -- Title\n" +
             "  ,W.PRODUCT_SUBTITLE AS WORK_SUBTITLE -- Subtitle\n" +
             "  ,W.DAC_KEY -- DAC Key (may go in IDs table, depending on implementation of data model)\n" +
@@ -39,9 +39,9 @@ public class ProductExtractSQL {
             "  JOIN GD_PRODUCT_STATUS S ON W.F_WORK_STATUS = S.PRODUCT_STATUS_ID\n" +
             "  JOIN GD_PRODUCT_TYPE T ON W.F_PRODUCT_TYPE = T.PRODUCT_TYPE_ID\n" +
             "  LEFT JOIN GD_IMPRINT I ON W.F_IMPRINT = I.IMPRINT_ID)\n" +
-            "   WHERE ROWNUM = 1";
+            "   WHERE PRIMARY_ISBN = 'PARAM1'";
 
-        public static String PRODUCT_WORK_FROM_EPH_SA = "\tselect work_title as WORK_TITLE\n" +
+        public static String PRODUCT_WORK_FROM_EPH_SA = "\tselect work_id, work_title as WORK_TITLE\n" +
                 "\t\t,work_sub_title as WORK_SUBTITLE\n" +
                 "\t\t,electro_rights_indicator as ELECTRONIC_RIGHTS_IND\n" +
                 "\t\t,volume as BOOK_EDITION_VOLUME\n" +
@@ -54,5 +54,11 @@ public class ProductExtractSQL {
                 "\t\t,f_status as WORK_STATUS\n" +
                 "\t\t,f_imprint as IMPRINT \n" +
                 "\tfrom SEMARCHY_EPH_MDM.SA_WWORK"
+                ;
+        public static String PRODUCT_MANIFESTATION_FROM_EPH_SA = "select SAMI.s_identifier as PRIMARY_ISBN,SAM.*\n" +
+                "from semarchy_eph_mdm.sa_manifestation_identifier SAMI,\n" +
+                "\t semarchy_eph_mdm.sa_manifestation SAM\n" +
+                "where SAMI.s_identifier = 'PARAM1'\n" +
+                "and SAM.manifestation_id = SAMI.f_manifestation"
                 ;
 }

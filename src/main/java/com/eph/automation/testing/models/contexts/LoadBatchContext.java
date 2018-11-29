@@ -12,6 +12,7 @@ public class LoadBatchContext {
     public static String batchId;
     public static String oldBatchId;
     public static String loadId;
+    public static String eventId;
     public static String oldLooadId;
     public static boolean jobStatus;
 
