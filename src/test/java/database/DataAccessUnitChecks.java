@@ -7,7 +7,7 @@ import com.eph.automation.testing.configuration.LoadProperties;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ProductDataObject;
 import com.eph.automation.testing.services.db.sql.ProductExtractSQL;
-import com.eph.automation.testing.services.decryption.DecryptionService;
+import com.eph.automation.testing.services.security.DecryptionService;
 import org.junit.Ignore;
 import org.junit.Test;
 

@@ -1,6 +1,6 @@
 package com.eph.automation.testing.configuration;
 
-import com.eph.automation.testing.services.decryption.DecryptionService;
+import com.eph.automation.testing.services.security.DecryptionService;
 
 import java.io.FileInputStream;
 import java.io.InputStream;

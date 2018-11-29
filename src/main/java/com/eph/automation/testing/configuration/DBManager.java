@@ -2,6 +2,9 @@ package com.eph.automation.testing.configuration;
 
 import com.eph.automation.testing.models.EnumConstants;
 import com.eph.automation.testing.models.TestContext;
+import org.apache.commons.dbutils.DbUtils;
+import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.lang3.StringUtils;
 import org.knowm.yank.Yank;
 
 import java.sql.Connection;
@@ -52,6 +55,29 @@ public class DBManager {
             dbEndPointKey = Constants.PMX_UAT_URL;
         }
         return dbEndPointKey;
+    }
+
+    public static int mysqlConnection(String sql, Class classType, String URL) {
+        int updateStatus = 0;
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            if (connection == null) {
+                DbUtils.loadDriver(mySQLDriver);
+            }
+            String host = StringUtils.substring(URL, 0, StringUtils.indexOf(URL, "?"));
+            String user = StringUtils.substring(URL,StringUtils.indexOf(URL,"?")+1,StringUtils.indexOf(URL,"&")).replace("user=","").trim();
+            String pwd = StringUtils.substring(URL,StringUtils.indexOf(URL,"&")+1).replace("password=","").trim();
+            connection = DriverManager.getConnection(host,user,pwd);
+            QueryRunner query = new QueryRunner();
+            updateStatus = query.update(connection,sql);
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            DbUtils.closeQuietly(connection);
+        }
+        return updateStatus;
     }
 
 }
