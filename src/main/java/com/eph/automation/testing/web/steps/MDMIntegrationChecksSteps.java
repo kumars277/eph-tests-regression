@@ -26,12 +26,15 @@ public class MDMIntegrationChecksSteps {
     public void A_new_work_is_created_that_has_not_existed_previously() throws Throwable {
         //Check the Product ID not exist in Semarchy - SQL Checks
 
-        //Now Create the New Product
+        //Now Create the New Product BY  Calling the Semarchy Certification
         DataLoadServiceImpl.createProductByStoreProcedure();
+
+        //Wait till the batch
 
     }
 
     @Then("^A unique reference is assigned that is clearly identifiable as a work identifier$")
     public void A_unique_reference_is_assigned_that_is_clearly_identifiable_as_a_work_identifier() throws Throwable {
+        //Build the SQL to get the details from GD Layer and Assert
     }
 }
