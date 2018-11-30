@@ -24,35 +24,43 @@ public class DataLoadServiceImpl {
     public static String createProductByStoreProcedure() {
         String batchID = null;
         BigDecimal loadId = null;
-        BigDecimal eventId = null;
+        int eventId;
         String query;
         Connection conn = DBManager.getPostgresConnection(Constants.EPH_SIT_URL);
         try {
-//            query = "{? = call semarchy_repository.get_new_loadid(?, ?, ?,?)}";
-//            CallableStatement statement = conn.prepareCall(query);
-//            statement.registerOutParameter(1, Types.DECIMAL);
-//            statement.setString(2, "EPH");
-//            statement.setString(3, "Manual");
-//            statement.setString(4, "Entity Load");
-//            statement.setString(5, "EPH Regression Test");
-//            statement.execute();
-//
-//            loadId = statement.getBigDecimal(1);
-//            String loadID = String.valueOf(loadId);
-//            loadBatchContext.loadId = loadID;
-//
-//            System.out.println(loadID);
-
-//            //Need to gete New Event ID
-            query = "{? = call semarchy_eph_mdm.EPH_GET_NEW_EVENTID()}";
+            query = "{? = call semarchy_repository.get_new_loadid(?, ?, ?,?)}";
             CallableStatement statement = conn.prepareCall(query);
             statement.registerOutParameter(1, Types.DECIMAL);
+            statement.setString(2, "EPH");
+            statement.setString(3, "Manual");
+            statement.setString(4, "Entity Load");
+            statement.setString(5, "EPH Regression Test");
             statement.execute();
-            eventId = statement.getBigDecimal(1);
+
+            loadId = statement.getBigDecimal(1);
+            String loadID = String.valueOf(loadId);
+            loadBatchContext.loadId = loadID;
+
+            System.out.println(loadID);
+
+//            //Need to gete New Event IDeventtype text, description text,
+// thirdparty text, workflowid text, workflowsource text, loadid integer)
+            //
+            query = "{? = call semarchy_eph_mdm.eph_create_event(?,?,?,?,?,?)}";
+            statement = conn.prepareCall(query);
+            statement.registerOutParameter(1, Types.INTEGER);
+            statement.setString(2, "NEW");
+            statement.setString(3, "Regression test");
+            statement.setString(4, null);
+            statement.setString(5, "1");
+            statement.setString(6, "TEST");
+            statement.setInt(7, Integer.valueOf(loadID));
+            statement.execute();
+            eventId = statement.getInt(1);
             String eventID = String.valueOf(eventId);
             loadBatchContext.eventId = eventID;
 //
-//            System.out.println(loadID);
+            System.out.println(eventID);
 //
 //
 //            //Execute Insert Statements

@@ -1,7 +1,14 @@
 package com.eph.automation.testing.services.talend;
 
+import com.eph.automation.testing.configuration.Constants;
+import com.eph.automation.testing.configuration.LoadProperties;
+import com.eph.automation.testing.helper.SFTPFunctions;
+import com.eph.automation.testing.models.contexts.DataLoadContext;
+import com.eph.automation.testing.services.security.DecryptionService;
+
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Map;
 
 /**
  * Created by RAVIVARMANS on 11/29/2018.
@@ -20,6 +27,26 @@ public class TACServices {
             exception.printStackTrace();
         }
         return inputStatus;
+    }
+
+    public static boolean uploadSourceFileAndRunTalendJob(DataLoadContext dataLoadContext) {
+        try {
+            //SFTP the Incremental File
+            SFTPFunctions.SFTPUpload(dataLoadContext.incrementalFile, dataLoadContext.sftpLandingLocation);
+
+            //Set the necessary Reference Parameters for Talend Job in My SQL
+            Map contextMap = TalendUtils.getContextParamsForRinggoldIncremental();
+            TalendUtils.performUpdate(dataLoadContext.TALEND_RINGGOLD_PROJECT_114_NAME, contextMap,
+                    DecryptionService.decrypt(LoadProperties.getProperty(Constants.MYSQL_SIT_DB_URL_KEY)));
+
+            //Kick Off the Talend Job
+            int jobStatus = TACServices.runTalendJob(TACJobConstants.EPHJobNames.RINGGOLD_CMX_NEW_JOB.name());
+            return jobStatus != Integer.MIN_VALUE;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+
+        }
     }
 
     public static int runTalendJobByEnv(String jobName, String tacEnvironment) {
@@ -41,13 +68,9 @@ public class TACServices {
             case "RINGGOLD_CMX_NEW_JOB":
                 return TACJobConstants.JOB_200_PRJ_114_RINGGOLD_CMX_KEY;
             default:
-                return TACJobConstants.JOB_110_EIP_SEMARCHY_KEY;
+                return TACJobConstants.JOB_YYY_PRJ_AAA_PRODUCT_EPH_JOB_KEY;
         }
     }
 
-    public static int runPrintSummaryJob() {
-        return TACServices.runTalendJobByEnv(
-                TACJobConstants.CMXJobNames.PRINT_SUMMARY_REPORT_SEMARCHY_JOB.name(),
-                TACJobConstants.EndPoints.SIT.toString());
-    }
+
 }

@@ -31,7 +31,7 @@ public class TalendJobHelper implements TalendServerVariables {
                     DecryptionService.decrypt(LoadProperties.getProperty(Constants.MYSQL_SIT_DB_URL_KEY)));
 
             //Kick Off the Talend Job
-            int jobStatus = TACServices.runTalendJob(TACJobConstants.CMXJobNames.RINGGOLD_CMX_NEW_JOB.name());
+            int jobStatus = TACServices.runTalendJob(TACJobConstants.EPHJobNames.RINGGOLD_CMX_NEW_JOB.name());
             assertTrue(jobStatus != Integer.MIN_VALUE);
         } catch (Exception e) {
             e.printStackTrace();
