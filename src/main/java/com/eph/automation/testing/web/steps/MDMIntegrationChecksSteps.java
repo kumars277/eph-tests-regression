@@ -20,6 +20,9 @@ public class MDMIntegrationChecksSteps {
     public void aWorkNeedToCreateInEPH() throws Throwable {
         //Set the Context to create New Work
         loadBatchContext.productDetailsToCreate = Product.getNewProduct();
+
+        //Or Exceute PMX SQL
+        //Set in the resultset in the conext
     }
 
     @When("^A new work is created that has not existed previously$")
@@ -30,7 +33,7 @@ public class MDMIntegrationChecksSteps {
         DataLoadServiceImpl.createProductByStoreProcedure();
 
         //Wait till the batch
-
+        System.out.println(loadBatchContext.batchId);
     }
 
     @Then("^A unique reference is assigned that is clearly identifiable as a work identifier$")

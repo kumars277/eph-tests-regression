@@ -18,6 +18,6 @@ public class MDMIntegrationTest {
     @Ignore
     public void testPostgresStoredFunctionToGetLoadID() {
         DataLoadServiceImpl.createProductByStoreProcedure();
-        System.out.println(loadBatchContext.eventId);
+        System.out.println(loadBatchContext.batchId);
     }
 }

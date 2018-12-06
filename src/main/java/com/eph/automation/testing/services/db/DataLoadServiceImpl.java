@@ -23,6 +23,7 @@ public class DataLoadServiceImpl {
 
     public static String createProductByStoreProcedure() {
         String batchID = null;
+        long batchId;
         BigDecimal loadId = null;
         int eventId;
         String query;
@@ -64,8 +65,8 @@ public class DataLoadServiceImpl {
 //
 //
 //            //Execute Insert Statements
-//            QueryRunner queryRunner = new QueryRunner();
-//            InsertEachEntities(loadID, queryRunner, conn);
+            QueryRunner queryRunner = new QueryRunner();
+            InsertEachEntities(queryRunner, conn);
 //
 //
 //
@@ -74,15 +75,15 @@ public class DataLoadServiceImpl {
 ////            connection.commit();
 //
 //            //Submit the Batch
-//            statement = conn.prepareCall("{? = call semarchy_repository.SUBMIT_LOAD(?,?,?)}");
-//            statement.registerOutParameter(1, Types.DECIMAL);
-//            statement.setBigDecimal(2, loadId);
-//            statement.setString(3, "Entity Load");
-//            statement.setString(4, "EPH Regression Test");
-//            statement.execute();
-//            batchID = statement.getString(1);
-//            System.out.println(batchID);
-//            loadBatchContext.batchId = batchID;
+            statement = conn.prepareCall("{? = call semarchy_repository.SUBMIT_LOAD(?,?,?)}");
+            statement.registerOutParameter(1, Types.BIGINT);
+            statement.setLong(2, Long.valueOf(loadId.toString()));
+            statement.setString(3, "Product");
+            statement.setString(4, "EPH Regression Test");
+            statement.execute();
+            batchID = String.valueOf(statement.getLong(1));
+            System.out.println(batchID);
+            loadBatchContext.batchId = batchID;
             statement.close();
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -95,7 +96,7 @@ public class DataLoadServiceImpl {
         return batchID;
     }
 
-    public static void InsertEachEntities(String loadID, QueryRunner queryRunner, Connection conn) throws SQLException {
+    public static void InsertEachEntities(QueryRunner queryRunner, Connection conn) throws SQLException {
 
         //Insert SQL to create each entities
 
@@ -107,10 +108,15 @@ public class DataLoadServiceImpl {
 //        INSERT INTO SA_SUBJECT_AREA(B_LOADID,B_CLASSNAME,SUBJECT_AREA_ID,F_TYPE,CODE,NAME,F_PARENT_SUBJECT_AREA) VALUES (VLOAD_ID,'SubjectArea','1000000','A','1','Level1',null) ,(VLOAD_ID,'SubjectArea','1000001','A','2-a','Level2-a','1000000')
 
         //Insert Work
-//        INSERT INTO SA_WWORK(B_LOADID,B_CLASSNAME,WORK_ID,WORK_TITLE,WORK_SUB_TITLE,F_TYPE,F_STATUS,WORK_KEY_TITLE,ELECTRO_RIGHTS_INDICATOR,VOLUME,COPYRIGHT_YEAR,F_ACCOUNTABLE_PRODUCT,F_PMC,F_OA_TYPE,F_FAMILY,F_IMPRINT,F_SOCIETY_OWNERSHIP,F_ACCESS_MODEL,F_EVENT) VALUES
-//                (VLOAD_ID,'Work','3000','Manual of Critical Care Nursing','Nursing Interventions and Collaborative Management','TBK','WPU',null,null,null,'2015','3355','241','N',null,'MOSBY',null,null,VEVENT_ID))
+        String saProductWorkInsertSQL = "INSERT INTO semarchy_eph_mdm.SA_WWORK(B_LOADID,B_CLASSNAME,WORK_ID,WORK_TITLE,WORK_SUB_TITLE,F_TYPE,F_STATUS,WORK_KEY_TITLE,ELECTRO_RIGHTS_INDICATOR,VOLUME,COPYRIGHT_YEAR,F_ACCOUNTABLE_PRODUCT,F_PMC,F_OA_TYPE,F_FAMILY,F_IMPRINT,F_SOCIETY_OWNERSHIP,F_ACCESS_MODEL,F_EVENT) " +
+                " VALUES  (" + loadBatchContext.loadId + ",'Work','8419','Notarzt-Leitfaden','Mit Zugang zur Medizinwelt','RBK','WDI',null,null,null,null,null,'689','N',null,'URBFI',null,null,"+loadBatchContext.eventId+")"
+//                " VALUES  (" + loadBatchContext.loadId + ",'Work','3000','Manual of Critical Care Nursing','Nursing Interventions and Collaborative Management','TBK','WPU',null,null,null,'2015','3355','241','N',null,'MOSBY',null,null,"+loadBatchContext.eventId +")"
+                ;
 
-        //int updateStatus = queryRunner.update(conn, saProductLineInserSQL.replace("VLOAD_ID", loadBatchContext.loadId));
+        System.out.println(saProductWorkInsertSQL);
+        int updateStatus = queryRunner.update(conn, saProductWorkInsertSQL);
+
+        System.out.println(updateStatus);
 
 
 

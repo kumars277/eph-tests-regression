@@ -70,6 +70,8 @@ public class DataQualityCheckSteps {
         dataQualityContext.productDataObjectsFromSource = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class,
                 Constants.PMX_UAT_URL);
 
+        //Invoke Talend Job
+
         sql = ProductExtractSQL.PRODUCT_MANIFESTATION_FROM_EPH_SA.replace("PARAM1", dataQualityContext.productIdentifierID);
         dataQualityContext.productDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
     }
