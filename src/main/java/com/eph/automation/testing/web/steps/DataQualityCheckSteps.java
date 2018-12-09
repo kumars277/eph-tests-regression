@@ -66,7 +66,7 @@ public class DataQualityCheckSteps {
 
     @When("^checking the loaded product in EPH$")
     public void checking_the_loaded_product_in_EPH() throws Throwable {
-        sql = ProductExtractSQL.PMX_WORK_EXTRACT.replace("PARAM1",dataQualityContext.productIdentifierID);
+        sql = ProductExtractSQL.PMX_WORK_EXTRACT_BY_ISBN.replace("PARAM1",dataQualityContext.productIdentifierID);
         dataQualityContext.productDataObjectsFromSource = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class,
                 Constants.PMX_UAT_URL);
 

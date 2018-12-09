@@ -36,7 +36,7 @@ public class DataAccessUnitChecks {
     @Test
     @Ignore
     public void testPMXDBAccess() {
-        String SQL = ProductExtractSQL.PMX_WORK_EXTRACT.replace("PARAM1","9781416049722");
+        String SQL = ProductExtractSQL.PMX_WORK_EXTRACT_BY_ISBN.replace("PARAM1","9781416049722");
         dataQualityContext.productDataObjectsFromSource = DBManager.getDBResultAsBeanList(SQL, ProductDataObject.class, Constants.PMX_UAT_URL);
         System.out.println(dataQualityContext.productDataObjectsFromSource.get(0).PRIMARY_ISBN);
     }

@@ -1,6 +1,7 @@
 package com.eph.automation.testing.web.steps;
 
 import com.eph.automation.testing.annotations.StaticInjection;
+import com.eph.automation.testing.helper.JobUtils;
 import com.eph.automation.testing.models.Product;
 import com.eph.automation.testing.models.contexts.LoadBatchContext;
 import com.eph.automation.testing.services.db.DataLoadServiceImpl;
@@ -18,10 +19,10 @@ public class MDMIntegrationChecksSteps {
 
     @Given("^A work is moved from PMX to EPH$")
     public void aWorkNeedToCreateInEPH() throws Throwable {
-        //Set the Context to create New Work
-        loadBatchContext.productDetailsToCreate = Product.getNewProduct();
-
-        //Or Exceute PMX SQL
+        //Set the Context to create New Work FROM PMX
+        String pmcID = "471";
+        loadBatchContext.productDetailsToCreate = Product.getNewProductFromPMX(pmcID);
+        System.out.println(loadBatchContext.productDetailsToCreate.workID);
         //Set in the resultset in the conext
     }
 
@@ -34,6 +35,7 @@ public class MDMIntegrationChecksSteps {
 
         //Wait till the batch
         System.out.println(loadBatchContext.batchId);
+        JobUtils.waitTillTheBatchComplete();
     }
 
     @Then("^A unique reference is assigned that is clearly identifiable as a work identifier$")

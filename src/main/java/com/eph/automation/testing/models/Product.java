@@ -1,5 +1,12 @@
 package com.eph.automation.testing.models;
 
+import com.eph.automation.testing.configuration.Constants;
+import com.eph.automation.testing.configuration.DBManager;
+import com.eph.automation.testing.models.dao.ProductDataObject;
+import com.eph.automation.testing.services.db.sql.ProductExtractSQL;
+
+import java.util.List;
+
 /**
  * Created by RAVIVARMANS on 28/11/2018.
  */
@@ -21,6 +28,25 @@ public class Product {
     public String productLineTypeName;
     public String productLineParentId;
 
+    //Product Work
+    public String workID;
+    public String workTitle;
+    public String workSubTitle;
+    public String fType;
+    public String fStatus;
+    public String workKeyTitle;
+    public String electroRightsIndicator;
+    public String volume;
+    public String copyRightYear;
+    public String fAccountableProduct;
+    public String fPMC;
+    public String fOAType;
+    public String fFmily;
+    public String fImPrint;
+    public String fsocietyOwnership;
+    public String fAccessModel;
+
+
 
     public static Product getNewProduct() {
         Product product = new Product();
@@ -39,9 +65,21 @@ public class Product {
     }
 
 
+    public static Product getNewProductWork() {
+        Product productWork = new Product();
+
+        return productWork;
+    }
 
 
-
-
-
+    public static Product getNewProductFromPMX(String pmc) {
+        Product productWork = new Product();
+        String SQL = ProductExtractSQL.GET_PRODUCT_EXPORT_FROM_PMX_BY_PMC.replace("PARAM1",pmc);
+        List<ProductDataObject> productWorkFromPMX = DBManager.getDBResultAsBeanList(SQL,
+                ProductDataObject.class, Constants.PMX_UAT_URL);
+        ProductDataObject productFromPMX = productWorkFromPMX.get(0);
+        productWork.workID = productFromPMX.PRODUCT_WORK_ID;
+        productWork.workTitle = productFromPMX.WORK_TITLE;
+        return productWork;
+    }
 }
