@@ -36,6 +36,35 @@ public class ProductDataObject {
     public String PRODUCT_WORK_PUB_DATE;
     public String JOURNAL_ACRONYM;
 
+    public Integer getWorkCountPmx() {
+        return workCountPmx;
+    }
+
+    public void setWorkCountPmx(Integer workCountPmx) {
+        this.workCountPmx = workCountPmx;
+    }
+
+    public Integer workCountPmx;
+
+    public Integer getWorkCountPMXSTG() {
+        return workCountPMXSTG;
+    }
+
+    public void setWorkCountPMXSTG(Integer workCountPMXSTG) {
+        this.workCountPMXSTG = workCountPMXSTG;
+    }
+
+    public Integer workCountPMXSTG;
+
+    public Integer getWorkCountEPH() {
+        return workCountEPH;
+    }
+
+    public void setWorkCountEPH(Integer workCountEPH) {
+        this.workCountEPH = workCountEPH;
+    }
+
+    public Integer workCountEPH;
 
     @Override
     public boolean equals(Object o) {

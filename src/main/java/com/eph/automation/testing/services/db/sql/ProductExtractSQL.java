@@ -13,18 +13,18 @@ public class ProductExtractSQL {
             "  ,W.DAC_KEY -- DAC Key (may go in IDs table, depending on implementation of data model)\n" +
             "  ,W.MASTER_ISBN_STRIPPED AS PRIMARY_ISBN -- DAC ISBN (may go in IDs table, depending on implementation of data model)\n" +
             "  ,A.WORK_ALTERNATIVE_ID_REF AS PROJECT_NUM -- Project Number (may go in IDs table, depending on implementation of data model)\n" +
-            "  ,W.ISSN_L -- ISSN-L (may go in IDs table, depending on implementation of data model)\n" +
+            "  ,W.ISSN_L as ISSN_L-- ISSN-L (may go in IDs table, depending on implementation of data model)\n" +
             "  ,W.ELSEVIER_JOURNAL_NUMBER AS JOURNAL_NUMBER -- Journal Number (may go in IDs table, depending on implementation of data model)\n" +
-            "  ,W.ELECTRONIC_RIGHTS_IND -- Electronic Rights Indicator\n" +
-            "  ,W.BOOK_EDITION_NAME -- Edition Number\n" +
-            "  ,W.BOOK_VOLUME_NAME -- Volume\n" +
+            "  ,W.ELECTRONIC_RIGHTS_IND as ELECTRONIC_RIGHTS_IND-- Electronic Rights Indicator\n" +
+            "  ,W.BOOK_EDITION_NAME as BOOK_EDITION_NAME-- Edition Number\n" +
+            "  ,W.BOOK_VOLUME_NAME as BOOK_VOLUME_NAME-- Volume\n" +
             "  ,W.F_PMC AS PMC -- PMC to link to LOV table\n" +
             "  ,W.F_PMG AS PMG -- PMG to link to LOV table\n" +
             "  ,S.STATUS_CODE AS WORK_STATUS\t-- Work Level Status to link to LOV table (this will need mapping to new values, logic TBC)\n" +
             "  ,SS.SUBSTATUS_NAME AS WORK_SUBSTATUS -- Work Level substatus which is part of Status mapping\n" +
             "  ,T.PRODUCT_TYPE_CODE AS WORK_TYPE -- Work Type to link to LOV table (this will need mapping to new values, logic TBC)\n" +
             "  ,I.IMPRINT_CODE AS IMPRINT -- Imprint Code to link to LOV table\n" +
-            "  ,O.OPEN_ACCESS_JNL_TYPE_CODE -- Open Access Journal Type to link to LOV table\n" +
+            "  ,O.OPEN_ACCESS_JNL_TYPE_CODE as OPEN_ACCESS_JNL_TYPE_CODE-- Open Access Journal Type to link to LOV table\n" +
             "  ,W.PRODUCT_WORK_ID -- Internal PMX ID, not needed in EPH but extracted for record linking purposes\n" +
             "  ,W.F_ACC_PROD_HIERARCHY -- Product Parent Code in Accountable Product Entity\n" +
             "  ,W.F_RESPONSIBILITY_CENTRE -- Responsibility Centre in Accountable Product Entity to link to LOV table\n" +
@@ -78,19 +78,19 @@ public class ProductExtractSQL {
                 "  where pmc = 'PARAM1' ";
 
         public static String PRODUCT_WORK_FROM_EPH_SA = "\tselect work_id, work_title as WORK_TITLE\n" +
-                "\t\t,work_sub_title as WORK_SUBTITLE\n" +
-                "\t\t,electro_rights_indicator as ELECTRONIC_RIGHTS_IND\n" +
-                "\t\t,volume as BOOK_EDITION_VOLUME\n" +
-                "\t\t,copyright_year as PRODUCT_WORK_PUB_DATE\n" +
-                "\t\t,f_pmc as PMC\n" +
-                "\t\t--,edition_number as BOOK_EDITION_NAME\n" +
-                "\t\t--,f_pmg as PMG\n" +
-                "\t\t,f_oa_type as OPEN_ACCESS_JNL_TYPE_CODE\n" +
-                "\t\t,f_type as WORK_TYPE\n" +
-                "\t\t,f_status as WORK_STATUS\n" +
-                "\t\t,f_imprint as IMPRINT \n" +
-                "\tfrom SEMARCHY_EPH_MDM.SA_WWORK"
-                ;
+            "\t\t,work_sub_title as WORK_SUBTITLE\n" +
+            "\t\t,electro_rights_indicator as ELECTRONIC_RIGHTS_IND\n" +
+            "\t\t,volume as BOOK_EDITION_VOLUME\n" +
+            "\t\t,copyright_year as PRODUCT_WORK_PUB_DATE\n" +
+            "\t\t,f_pmc as PMC\n" +
+            "\t\t--,edition_number as BOOK_EDITION_NAME\n" +
+            "\t\t--,f_pmg as PMG\n" +
+            "\t\t,f_oa_type as OPEN_ACCESS_JNL_TYPE_CODE\n" +
+            "\t\t,f_type as WORK_TYPE\n" +
+            "\t\t,f_status as WORK_STATUS\n" +
+            "\t\t,f_imprint as IMPRINT \n" +
+            "\tfrom SEMARCHY_EPH_MDM.SA_WWORK"
+            ;
         public static String PRODUCT_MANIFESTATION_FROM_EPH_SA = "select SAMI.s_identifier as PRIMARY_ISBN,SAM.*\n" +
                 "from semarchy_eph_mdm.sa_manifestation_identifier SAMI,\n" +
                 "\t semarchy_eph_mdm.sa_manifestation SAM\n" +

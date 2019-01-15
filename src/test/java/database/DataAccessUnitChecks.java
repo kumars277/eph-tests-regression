@@ -23,7 +23,7 @@ public class DataAccessUnitChecks {
     @Ignore
     public void testDecrypt() {
         //PMX_UAT_URL=jdbc:oracle:thin:PMX/pmxuat@//pmxuat.cucvf0thmu0s.eu-west-1.rds.amazonaws.com:1521/PMXUAT
-        System.out.println(DecryptionService.decrypt(LoadProperties.getProperty(Constants.EPH_SIT_URL)));
+        System.out.println(DecryptionService.decrypt(LoadProperties.getProperty(Constants.EPH_DEV_URL)));
     }
 
     @Test
@@ -46,7 +46,7 @@ public class DataAccessUnitChecks {
     public void testPostgressDBAccess() {
         String SQL = ProductExtractSQL.PRODUCT_MANIFESTATION_FROM_EPH_SA.replace("PARAM1","9781416049722");
         dataQualityContext.productDataObjectsFromSource =
-                DBManager.getDBResultAsBeanList(SQL, ProductDataObject.class, Constants.EPH_SIT_URL);
+                DBManager.getDBResultAsBeanList(SQL, ProductDataObject.class, Constants.EPH_DEV_URL);
         System.out.println(dataQualityContext.productDataObjectsFromSource.get(0).PRIMARY_ISBN
         );
     }
