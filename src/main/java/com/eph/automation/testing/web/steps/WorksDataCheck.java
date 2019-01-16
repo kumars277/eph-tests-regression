@@ -60,17 +60,17 @@ public class WorksDataCheck {
                     .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
 
             //sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1",dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID);
-            sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1","EPR-W-000447");
+/*            sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1","EPR-W-000447");
             dataQualityContext.productDataObjectsFromEPH = DBManager
-                    .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+                    .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);*/
         }
     }
 
     @Then("^The work data between PMX and PMX STG is identical$")
     public void checkPMXtoPMGSTGData() {
-        System.out.println(dataQualityContext.productDataObjectsFromSource);
-        System.out.println(dataQualityContext.productDataObjectsFromEPH);
-        System.out.println(dataQualityContext.productDataObjectsFromPMXSTG);
+        System.out.println(dataQualityContext.productDataObjectsFromSource.get(0).WORK_TITLE);
+        //System.out.println(dataQualityContext.productDataObjectsFromEPH.WORK_TITLE);
+        System.out.println(dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_TITLE);
 
 
         assertTrue("Expecting the Work title details from PMX and PMX Staging Consistent ",
@@ -118,10 +118,13 @@ public class WorksDataCheck {
                     dataQualityContext.productDataObjectsFromSource.get(0).ELECTRONIC_RIGHTS_IND
                             .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).ELECTRONIC_RIGHTS_IND));
         }
-        assertTrue("Expecting the Product details from PMX and EPH Consistent ",
-                dataQualityContext.productDataObjectsFromSource.get(0).BOOK_EDITION_NAME
-                        .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).BOOK_EDITION_NAME));
 
+        if (dataQualityContext.productDataObjectsFromSource.get(0).BOOK_EDITION_NAME!=null
+                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).BOOK_EDITION_NAME !=null) {
+            assertTrue("Expecting the Product details from PMX and EPH Consistent ",
+                    dataQualityContext.productDataObjectsFromSource.get(0).BOOK_EDITION_NAME
+                            .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).BOOK_EDITION_NAME));
+        }
         if (dataQualityContext.productDataObjectsFromSource.get(0).BOOK_VOLUME_NAME!=null
                 && dataQualityContext.productDataObjectsFromPMXSTG.get(0).BOOK_VOLUME_NAME !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
