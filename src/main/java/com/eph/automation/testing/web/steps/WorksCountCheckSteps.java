@@ -26,7 +26,7 @@ public class WorksCountCheckSteps {
     public void getPmxWorks() {
         sqlPMX = WorkCountSQL.PMX_WORKS_COUNT;
         workCountPmx = DBManager.getDBResultAsBeanList(sqlPMX, ProductDataObject.class,
-                Constants.PMX_UAT_URL);
+                Constants.PMX_SIT_URL);
         pmxWork = workCountPmx.get(0).workCountPmx;
         System.out.println("Works in PMX are: " + pmxWork);
     }
@@ -39,7 +39,7 @@ public class WorksCountCheckSteps {
 
         sqlPMXSTG = WorkCountSQL.PMX_STG_WORKS_COUNT;
         workCountPMXSTG =DBManager.getDBResultAsBeanList(sqlPMXSTG, ProductDataObject.class,
-                Constants.PMX_STG_UAT_URL);
+                Constants.EPH_SIT_URL);
         pmxSTGWork = workCountPMXSTG.get(0).workCountPMXSTG;
         System.out.println("\nWorks in PMX staging are: " + pmxSTGWork);
     }
