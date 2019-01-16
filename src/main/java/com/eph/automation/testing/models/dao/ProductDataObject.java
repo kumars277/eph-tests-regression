@@ -36,6 +36,16 @@ public class ProductDataObject {
     public String PRODUCT_WORK_PUB_DATE;
     public String JOURNAL_ACRONYM;
 
+    public String getB_CLASSNAME() {
+        return B_CLASSNAME;
+    }
+
+    public void setB_CLASSNAME(String b_CLASSNAME) {
+        B_CLASSNAME = b_CLASSNAME;
+    }
+
+    public String B_CLASSNAME;
+
     public Integer getWorkCountPmx() {
         return workCountPmx;
     }
@@ -65,6 +75,16 @@ public class ProductDataObject {
     }
 
     public Integer workCountEPH;
+
+    public String getRandom_value() {
+        return random_value;
+    }
+
+    public void setRandom_value(String random_value) {
+        this.random_value = random_value;
+    }
+
+    public String random_value;
 
     @Override
     public boolean equals(Object o) {
