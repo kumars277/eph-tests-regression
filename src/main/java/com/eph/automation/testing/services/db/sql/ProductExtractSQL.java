@@ -97,4 +97,43 @@ public class ProductExtractSQL {
                 "where SAMI.s_identifier = 'PARAM1'\n" +
                 "and SAM.manifestation_id = SAMI.f_manifestation"
                 ;
+
+        public static String COUNT_MANIFESTATIONS_IN_PMX_GD_PRODUCT_MANIFESTATION_TABLE ="SELECT count(*) \n" +
+                "FROM PMX.GD_PRODUCT_MANIFESTATION M\n" +
+                "JOIN PMX.GD_PRODUCT_WORK W ON M.F_PRODUCT_WORK = W.PRODUCT_WORK_ID\n" +
+                "JOIN PMX.GD_PRODUCT_SUBSTATUS SS ON M.F_MANIFESTATION_SUBSTATUS = SS.PRODUCT_SUBSTATUS_ID;\n";
+
+        public static String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "SELECT count(*) FROM STG_PMX_MANIFESTATION";
+        public static final String COUNT_MANIFESTATIONS_IN_SA_MANIFESTATION_TABLE = "SELECT count(*) FROM SA_MANIFESTATION";
+
+
+    public static String SELECT_MANIFESTATIONS_DATA_IN_PMX = "SELECT\n" +
+                "\t M.ELSEVIER_PRODUCT_ID AS MANIFESTATION_ELS_PROD_ID -- Product Manifestation Reference,  not needed in EPH but extracted for record linking purposes\n" +
+                "\t,M.PRODUCT_MANIFESTATION_ID AS MANIFESTATION_ID -- PMX Primary Key for Manifestation \n" +
+                "\t,M.PRODUCT_MANIFESTATION_TIT AS MANIFESTATION_KEY_TITLE -- Manifestation Title\n" +
+                "\t,M.ISBN_STRIPPED AS ISBN -- ISBN (may go in IDs table, depending on implementation of data model)\n" +
+                "\t,M.ISSN AS ISSN -- ISSN (may go in IDs table, depending on implementation of data model)\n" +
+                "\t,M.COVER_HEIGHT_AMOUNT AS COVER_HEIGHT -- Cover Height for Format sub entity\n" +
+                "\t,M.COVER_WIDTH_AMOUNT AS COVER_WIDTH -- Cover Width for Format sub entity\n" +
+                "\t,M.PAGE_HEIGHT_AMOUNT AS PAGE_HEIGHT -- Page Height for Format sub entity\n" +
+                "\t,M.PAGE_WIDTH_AMOUNT AS PAGE_WIDTH -- Page Width for Format sub entity\n" +
+                "\t,M.WEIGHT_AMOUNT AS WEIGHT -- Weight for Format sub entity\n" +
+                "\t,M.CARTON_QTY AS CARTON_QTY -- Carton Quantity for Format sub entity\n" +
+                "\t,M.INTERNATIONAL_EDITION_IND -- International Edition Indicator\n" +
+                "\t,M.COPYRIGHT_DATE -- Manifestation First Publication Date\n" +
+                "\t,M.F_PRODUCT_MANIFESTATION_TYP -- 1 = Print, 2 = Electronic. Will have to map to Manifestation Type (logic TBC)\n" +
+                "\t,M.FORMAT_TXT -- Additional Format info (may feed Format Entity, may feed logic for Manifestation Type\n" +
+                "\t,M.F_MANIFESTATION_STATUS AS MANIFESTATION_STATUS -- Manifestation Level Status to link to LOV table (this will need mapping to new values, logic TBC)\n" +
+                "\t,M.PRODUCT_MANIFESTATION_ID -- Internal PMX ID, not needed in EPH but extracted for record linking purposes\n" +
+                "\t,M.F_PRODUCT_WORK -- Internal PMX Work ID, not needed in EPH but extracted for record linking purposes\n" +
+                "\t,W.F_PRODUCT_TYPE AS WORK_TYPE_ID -- Work Type so for mapping Key title and type fields\n" +
+                "\t,M.F_PRODUCT_DISTRIBUTION_TYPE AS MANIFESTATION_SUBTYPE -- Manifestation Distribution Type for mapping manifestation type\n" +
+                "\t,M.F_COMMODITY_CODE AS COMMODITY --  Commodity Code for mapping manifestation type\n" +
+                "\t,SS.SUBSTATUS_NAME AS MANIFESTATION_SUBSTATUS -- Manifestation Sub status for mapping Status\n" +
+                "FROM GD_PRODUCT_MANIFESTATION M\n" +
+                "JOIN GD_PRODUCT_WORK W ON M.F_PRODUCT_WORK = W.PRODUCT_WORK_ID\n" +
+                "JOIN GD_PRODUCT_SUBSTATUS SS ON M.F_MANIFESTATION_SUBSTATUS = SS.PRODUCT_SUBSTATUS_ID;\n" +
+                "\n";
+
+//Select Journals (JNR)
 }
