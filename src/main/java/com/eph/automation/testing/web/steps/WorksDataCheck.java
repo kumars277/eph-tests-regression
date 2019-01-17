@@ -26,23 +26,21 @@ public class WorksDataCheck {
     public String sql;
     private static List<ProductDataObject> isbn;
 
-    @Given("^We have a work with (.*) id to check$")
-    public void setWorkID(String work_id){
-        sql = GeneratingRandomSQL.generatingValue.replace("PARAM1", work_id);
+    @Given("^We have a work with (.*) id and type (.*) to check$")
+    public void setWorkID(String work_id, String type){
+        sql = GeneratingRandomSQL.generatingValue
+                .replace("PARAM1", work_id)
+                .replace("PARAM2", type);
         //System.out.println(sql+"\n");
         isbn = DBManager.getDBResultAsBeanList(sql,ProductDataObject.class, Constants.EPH_SIT_URL);
         dataQualityContext.productIdentifierID = isbn.get(0).random_value;
-        System.out.println("\n" + work_id + " is " + dataQualityContext.productIdentifierID+"\n");
-    }
-
-    @Given("^We have a work with issn (.*) id to check$")
-    public void setWorkISSNID(String work_issn_id){
-        dataQualityContext.productIdentifierID = work_issn_id;
+        System.out.println("\n" + work_id + " is " + dataQualityContext.productIdentifierID+" and type is "
+                +type+"\n");
     }
 
     @When("^We get the product data from PMX, EPH Staging and EPH using (.*)$")
     public void getPMXWorkData(String id){
-        if(id.equalsIgnoreCase("isbn")) {
+        if(id.equalsIgnoreCase("PRIMARY_ISBN")) {
             sql = ProductExtractSQL.PMX_WORK_EXTRACT_BY_ISBN
                     .replace("PARAM1", dataQualityContext.productIdentifierID);
             dataQualityContext.productDataObjectsFromSource = DBManager
