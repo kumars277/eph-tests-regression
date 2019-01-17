@@ -31,7 +31,7 @@ public class WorkDataCheckSQL {
 
     public static String GET_EPH_WORKS_DATA ="SELECT \n" +
             "   WORK_ID AS WORK_ID\n" +
-            "  -- ,PMX_SOURCE_REFERENCE AS PMX_SOURCE_REFERENCE\n" +
+            "  ,PMX_SOURCE_REFERENCE AS PMX_SOURCE_REFERENCE\n" +
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
             "  ,WORK_TITLE AS WORK_TITLE -- Title\n" +
             "  ,WORK_SUB_TITLE AS WORK_SUBTITLE -- Subtitle\n" +
@@ -45,7 +45,7 @@ public class WorkDataCheckSQL {
             "  ,F_STATUS AS WORK_STATUS\n" +
             "  ,F_IMPRINT AS IMPRINT\n" +
             "  FROM ephsit.semarchy_eph_mdm.sa_wwork\n" +
-            "  WHERE WORK_ID='PARAM1'";
+            "  WHERE PMX_SOURCE_REFERENCE='PARAM1'";
 
     public static String PMX_WORK_EXTRACT_BY_ISSN = "  SELECT * FROM (\n" +
             "  SELECT DISTINCT 1 \n" +
