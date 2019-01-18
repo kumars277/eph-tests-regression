@@ -36,6 +36,7 @@ public class ProductDataObject {
     public String PRODUCT_WORK_PUB_DATE;
     public String JOURNAL_ACRONYM;
 
+
     public String getB_CLASSNAME() {
         return B_CLASSNAME;
     }
