@@ -36,7 +36,7 @@ public class WorkDataCheckSQL {
             "  ,WORK_TITLE AS WORK_TITLE -- Title\n" +
             "  ,WORK_SUB_TITLE AS WORK_SUBTITLE -- Subtitle\n" +
             "  ,ELECTRO_RIGHTS_INDICATOR as ELECTRONIC_RIGHTS_IND\n" +
-            "  ,VOLUME as VOLUME\n" +
+            "  ,VOLUME as BOOK_VOLUME_NAME\n" +
             "  ,COPYRIGHT_YEAR as PRODUCT_WORK_PUB_DATE\n" +
             " -- ,EDITION_NUMBER as EDITION_NUMBER\n" +
             "  ,F_PMC as F_PMC\n" +
@@ -45,7 +45,7 @@ public class WorkDataCheckSQL {
             "  ,F_STATUS AS WORK_STATUS\n" +
             "  ,F_IMPRINT AS IMPRINT\n" +
             "  FROM ephsit.semarchy_eph_mdm.sa_wwork\n" +
-            "  WHERE PMX_SOURCE_REFERENCE='PARAM1'";
+            "  WHERE WORK_ID='PARAM1'";
 
     public static String PMX_WORK_EXTRACT_BY_ISSN = "  SELECT * FROM (\n" +
             "  SELECT DISTINCT 1 \n" +
@@ -109,4 +109,22 @@ public class WorkDataCheckSQL {
             "  ,\"JOURNAL_ACRONYM\" AS JOURNAL_ACRONYM -- PTS Journal Acronym (may go in IDs table, depending on implementation of data model)\n" +
             "  FROM ephsit.ephsit_talend_owner.stg_pmx_wwork\n" +
             "  WHERE \"ISSN_L\"='PARAM1'";
+
+    public static String GET_EPH_GD_WORKS_DATA ="SELECT \n" +
+            "   WORK_ID AS WORK_ID\n" +
+            "  ,PMX_SOURCE_REFERENCE AS PMX_SOURCE_REFERENCE\n" +
+            "  ,B_CLASSNAME as B_CLASSNAME\n" +
+            "  ,WORK_TITLE AS WORK_TITLE -- Title\n" +
+            "  ,WORK_SUB_TITLE AS WORK_SUBTITLE -- Subtitle\n" +
+            "  ,ELECTRO_RIGHTS_INDICATOR as ELECTRONIC_RIGHTS_IND\n" +
+            "  ,VOLUME as BOOK_VOLUME_NAME\n" +
+            "  ,COPYRIGHT_YEAR as PRODUCT_WORK_PUB_DATE\n" +
+            " -- ,EDITION_NUMBER as EDITION_NUMBER\n" +
+            "  ,F_PMC as F_PMC\n" +
+            "  ,F_OA_TYPE AS OPEN_ACCESS_JNL_TYPE_CODE\n" +
+            "  ,F_TYPE AS WORK_TYPE\n" +
+            "  ,F_STATUS AS WORK_STATUS\n" +
+            "  ,F_IMPRINT AS IMPRINT\n" +
+            "  FROM ephsit.semarchy_eph_mdm.gd_wwork\n" +
+            "  WHERE WORK_ID='PARAM1'";
 }

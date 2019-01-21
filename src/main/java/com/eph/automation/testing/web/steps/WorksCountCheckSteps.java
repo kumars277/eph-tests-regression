@@ -15,16 +15,19 @@ public class WorksCountCheckSteps {
     private static List<ProductDataObject> workCountPmx;
     private static List<ProductDataObject> workCountPMXSTG;
     private static List<ProductDataObject> workCountEPH;
+    private static List<ProductDataObject> workCountEPHGD;
     private static String sqlPMX;
     private static String sqlPMXSTG;
     private static String sqlEPH;
     private static int pmxWork;
     private static int pmxSTGWork;
     private static int ephWork;
+    private static int ephWorkGD;
 
     @Given("^We know the number of Works in PMX$")
     public void getPmxWorks() {
         sqlPMX = WorkCountSQL.PMX_WORKS_COUNT;
+        System.out.println(sqlPMX);
         workCountPmx = DBManager.getDBResultAsBeanList(sqlPMX, ProductDataObject.class,
                 Constants.PMX_SIT_URL);
         pmxWork = workCountPmx.get(0).workCountPmx;
@@ -48,8 +51,10 @@ public class WorksCountCheckSteps {
     public void comparePMXtoPMXStaging(String source, String target){
         if (source.contentEquals("PMX")) {
             Assert.assertEquals("The number of works in PMX and PMX Staging is not equal!", pmxWork, pmxSTGWork);
-        }else {
-            Assert.assertEquals("The number of works in PMX and PMX Staging is not equal!", pmxSTGWork, ephWork);
+        }else if (source.contentEquals("PMX STG")){
+            Assert.assertEquals("The number of works in PMX Staging and EPH SA is not equal!", pmxSTGWork, ephWork);
+        } else {
+            Assert.assertEquals("The number of works in SA and GD is not equal!", ephWork, ephWorkGD);
         }
     }
 
@@ -61,7 +66,13 @@ public class WorksCountCheckSteps {
         workCountEPH =DBManager.getDBResultAsBeanList(sqlEPH, ProductDataObject.class,
                 Constants.EPH_SIT_URL);
         ephWork = workCountEPH.get(0).workCountEPH;
-        System.out.println("\nWorks in PMX staging are: " + ephWork);
+        System.out.println("\nWorks in EPH SA are: " + ephWork);
+
+        sqlEPH = WorkCountSQL.EPH_GD_WORKS_COUNT;
+        workCountEPHGD =DBManager.getDBResultAsBeanList(sqlEPH, ProductDataObject.class,
+                Constants.EPH_SIT_URL);
+        ephWorkGD = workCountEPH.get(0).workCountEPH;
+        System.out.println("\nWorks in EPH GD are: " + ephWork);
 
     }
 

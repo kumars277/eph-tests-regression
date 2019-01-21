@@ -17,6 +17,7 @@ public class DataQualityContext {
     public static List<ProductDataObject> productDataObjectsFromSource;
     public static List<ProductDataObject> productDataObjectsFromPMXSTG;
     public static List<ProductDataObject> productDataObjectsFromEPH;
+    public static List<ProductDataObject> productDataObjectsFromEPHGD;
 
     //public static List<ProductWorkEntity> productEntityObjectsFromSource;
     //public static List<ProductWorkEntity> productEntityObjectsFromEPH;

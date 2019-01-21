@@ -50,10 +50,10 @@ public class WorksDataCheck {
         //System.out.println(sql);
         dataQualityContext.productDataObjectsFromPMXSTG = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
 
-        sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1",dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID);
+/*        sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1",dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID);
             // sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1","EPR-W-000447");
         dataQualityContext.productDataObjectsFromEPH = DBManager
-                .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);*/
         } else {
             sql = WorkDataCheckSQL.PMX_WORK_EXTRACT_BY_ISSN
                     .replace("PARAM1", dataQualityContext.productIdentifierID);
@@ -64,12 +64,15 @@ public class WorksDataCheck {
                     .replace("PARAM1",dataQualityContext.productIdentifierID);
             dataQualityContext.productDataObjectsFromPMXSTG = DBManager
                     .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-
-            //sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1",dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID);
-            sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1","EPR-W-000447");
-            dataQualityContext.productDataObjectsFromEPH = DBManager
-                    .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
         }
+        //sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1",dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID);
+        sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1","EPR-W-000468");
+        dataQualityContext.productDataObjectsFromEPH = DBManager
+                .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+
+        sql =  WorkDataCheckSQL.GET_EPH_GD_WORKS_DATA.replace("PARAM1","EPR-W-000468");
+        dataQualityContext.productDataObjectsFromEPHGD = DBManager
+                .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
     }
 
     @Then("^The work data between PMX and PMX STG is identical$")
@@ -83,144 +86,144 @@ public class WorksDataCheck {
                 dataQualityContext.productDataObjectsFromSource.get(0).WORK_TITLE
                         .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_TITLE));
         if (dataQualityContext.productDataObjectsFromSource.get(0).WORK_SUBTITLE!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_SUBTITLE !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_SUBTITLE !=null) {
         assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                 dataQualityContext.productDataObjectsFromSource.get(0).WORK_SUBTITLE
                         .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_SUBTITLE));
     }        if (dataQualityContext.productDataObjectsFromSource.get(0).DAC_KEY!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).DAC_KEY !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).DAC_KEY !=null) {
         assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                 dataQualityContext.productDataObjectsFromSource.get(0).DAC_KEY
                         .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).DAC_KEY));
         }
         if (dataQualityContext.productDataObjectsFromSource.get(0).PRIMARY_ISBN!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRIMARY_ISBN !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRIMARY_ISBN !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromSource.get(0).PRIMARY_ISBN
                             .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRIMARY_ISBN));
         }
         if (dataQualityContext.productDataObjectsFromSource.get(0).PROJECT_NUM!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).PROJECT_NUM !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).PROJECT_NUM !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromSource.get(0).PROJECT_NUM
                             .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).PROJECT_NUM));
         }
         if (dataQualityContext.productDataObjectsFromSource.get(0).ISSN_L!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).ISSN_L !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).ISSN_L !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromSource.get(0).ISSN_L
                             .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).ISSN_L));
         }
 
         if (dataQualityContext.productDataObjectsFromSource.get(0).JOURNAL_NUMBER!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).JOURNAL_NUMBER !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).JOURNAL_NUMBER !=null) {
         assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                 dataQualityContext.productDataObjectsFromSource.get(0).JOURNAL_NUMBER
                        .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).JOURNAL_NUMBER));
         }
         if (dataQualityContext.productDataObjectsFromSource.get(0).ELECTRONIC_RIGHTS_IND!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).ELECTRONIC_RIGHTS_IND !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).ELECTRONIC_RIGHTS_IND !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromSource.get(0).ELECTRONIC_RIGHTS_IND
                             .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).ELECTRONIC_RIGHTS_IND));
         }
 
         if (dataQualityContext.productDataObjectsFromSource.get(0).BOOK_EDITION_NAME!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).BOOK_EDITION_NAME !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).BOOK_EDITION_NAME !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromSource.get(0).BOOK_EDITION_NAME
                             .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).BOOK_EDITION_NAME));
         }
         if (dataQualityContext.productDataObjectsFromSource.get(0).BOOK_VOLUME_NAME!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).BOOK_VOLUME_NAME !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).BOOK_VOLUME_NAME !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromSource.get(0).BOOK_VOLUME_NAME
                        .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).BOOK_VOLUME_NAME));
         }
         if (dataQualityContext.productDataObjectsFromSource.get(0).PMC!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).PMC !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).PMC !=null) {
                     assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                             dataQualityContext.productDataObjectsFromSource.get(0).PMC
                                     .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).PMC));
             }
        if (dataQualityContext.productDataObjectsFromSource.get(0).PMG!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).PMG !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).PMG !=null) {
            assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                    dataQualityContext.productDataObjectsFromSource.get(0).PMG
                            .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).PMG));
        }
 
         if (dataQualityContext.productDataObjectsFromSource.get(0).PMG!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).PMG !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).PMG !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromSource.get(0).PMG
                             .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).PMG));
         }
 
         if (dataQualityContext.productDataObjectsFromSource.get(0).WORK_STATUS!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_STATUS !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_STATUS !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromSource.get(0).WORK_STATUS
                             .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_STATUS));
         }
 
         if (dataQualityContext.productDataObjectsFromSource.get(0).WORK_SUBSTATUS!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_SUBSTATUS !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_SUBSTATUS !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromSource.get(0).WORK_SUBSTATUS
                             .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_SUBSTATUS));
         }
 
         if (dataQualityContext.productDataObjectsFromSource.get(0).WORK_TYPE!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_TYPE !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_TYPE !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromSource.get(0).WORK_TYPE
                             .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_TYPE));
         }
 
         if (dataQualityContext.productDataObjectsFromSource.get(0).IMPRINT!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).IMPRINT !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).IMPRINT !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromSource.get(0).IMPRINT
                             .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).IMPRINT));
         }
 
         if (dataQualityContext.productDataObjectsFromSource.get(0).OPEN_ACCESS_JNL_TYPE_CODE!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).OPEN_ACCESS_JNL_TYPE_CODE !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).OPEN_ACCESS_JNL_TYPE_CODE !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromSource.get(0).OPEN_ACCESS_JNL_TYPE_CODE
                             .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).OPEN_ACCESS_JNL_TYPE_CODE));
         }
 
         if (dataQualityContext.productDataObjectsFromSource.get(0).PRODUCT_WORK_ID!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromSource.get(0).PRODUCT_WORK_ID
                             .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID));
         }
 
         if (dataQualityContext.productDataObjectsFromSource.get(0).F_ACC_PROD_HIERARCHY!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).F_ACC_PROD_HIERARCHY !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).F_ACC_PROD_HIERARCHY !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromSource.get(0).F_ACC_PROD_HIERARCHY
                             .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).F_ACC_PROD_HIERARCHY));
         }
         if (dataQualityContext.productDataObjectsFromSource.get(0).F_RESPONSIBILITY_CENTRE!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).F_RESPONSIBILITY_CENTRE !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).F_RESPONSIBILITY_CENTRE !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromSource.get(0).F_RESPONSIBILITY_CENTRE
                             .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).F_RESPONSIBILITY_CENTRE));
         }
 
         if (dataQualityContext.productDataObjectsFromSource.get(0).F_OPCO_R12!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).F_OPCO_R12 !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).F_OPCO_R12 !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromSource.get(0).F_OPCO_R12
                             .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).F_OPCO_R12));
         }
 
         if (dataQualityContext.productDataObjectsFromSource.get(0).PRODUCT_WORK_PUB_DATE!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_PUB_DATE !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_PUB_DATE !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromSource.get(0).PRODUCT_WORK_PUB_DATE.substring(0,10)
                             .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_PUB_DATE));
@@ -229,7 +232,7 @@ public class WorksDataCheck {
         }
 
         if (dataQualityContext.productDataObjectsFromSource.get(0).JOURNAL_ACRONYM!=null
-                && dataQualityContext.productDataObjectsFromPMXSTG.get(0).JOURNAL_ACRONYM !=null) {
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).JOURNAL_ACRONYM !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromSource.get(0).JOURNAL_ACRONYM
                             .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).JOURNAL_ACRONYM));
@@ -237,7 +240,7 @@ public class WorksDataCheck {
 
     }
     
-    @And("^The work data between PMX STG and EPH is identical$")
+    @And("^The work data between PMX STG and EPH SA is identical$")
     public void checkPMXSTGandEPHData() {
              System.out.println(dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_TITLE);
         System.out.println(dataQualityContext.productDataObjectsFromEPH.get(0).WORK_TITLE);
@@ -249,14 +252,14 @@ public class WorksDataCheck {
                         .equals(dataQualityContext.productDataObjectsFromEPH.get(0).WORK_TITLE));
 
         if (dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_SUBTITLE!=null
-                && dataQualityContext.productDataObjectsFromEPH.get(0).WORK_SUBTITLE !=null) {
+                || dataQualityContext.productDataObjectsFromEPH.get(0).WORK_SUBTITLE !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_SUBTITLE
                             .equals(dataQualityContext.productDataObjectsFromEPH.get(0).WORK_SUBTITLE));
         }
 
         if (dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_PUB_DATE!=null
-                && dataQualityContext.productDataObjectsFromEPH.get(0).PRODUCT_WORK_PUB_DATE !=null) {
+                || dataQualityContext.productDataObjectsFromEPH.get(0).PRODUCT_WORK_PUB_DATE !=null) {
 
             System.out.print(dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_PUB_DATE + " \n" +
                     dataQualityContext.productDataObjectsFromEPH.get(0).PRODUCT_WORK_PUB_DATE);
@@ -285,6 +288,22 @@ public class WorksDataCheck {
             Assert.assertEquals("The OPEN_ACCESS_JNL_TYPE_CODE is incorrect", dataQualityContext.productDataObjectsFromEPH.get(0).OPEN_ACCESS_JNL_TYPE_CODE, "N");
         }
 
+        if (dataQualityContext.productDataObjectsFromPMXSTG.get(0).BOOK_VOLUME_NAME!=null
+                || dataQualityContext.productDataObjectsFromEPH.get(0).BOOK_VOLUME_NAME !=null) {
+            assertTrue("Expecting the Product details from PMX and EPH Consistent ",
+                    dataQualityContext.productDataObjectsFromPMXSTG.get(0).BOOK_VOLUME_NAME
+                            .equals(dataQualityContext.productDataObjectsFromEPH.get(0).BOOK_VOLUME_NAME));
+        }
+
+
+
+        if (dataQualityContext.productDataObjectsFromPMXSTG.get(0).PMC!=null
+                || dataQualityContext.productDataObjectsFromEPH.get(0).PMC !=null) {
+            assertTrue("Expecting the Product details from PMX and EPH Consistent ",
+                    dataQualityContext.productDataObjectsFromPMXSTG.get(0).PMC
+                            .equals(dataQualityContext.productDataObjectsFromEPH.get(0).PMC));
+        }
+
         if (dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_TYPE.equalsIgnoreCase("STAB") ||
                 dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_TYPE.equalsIgnoreCase("SERMEM")) {
             Assert.assertEquals("The Work type is incorrect",
@@ -310,10 +329,71 @@ public class WorksDataCheck {
         }
 
         if (dataQualityContext.productDataObjectsFromPMXSTG.get(0).IMPRINT!=null
-                && dataQualityContext.productDataObjectsFromEPH.get(0).IMPRINT !=null) {
+                || dataQualityContext.productDataObjectsFromEPH.get(0).IMPRINT !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                     dataQualityContext.productDataObjectsFromPMXSTG.get(0).IMPRINT
                             .equals(dataQualityContext.productDataObjectsFromEPH.get(0).IMPRINT));
+        }
+    }
+
+    @And("^The work data between EPH SA and EPH GD is identical$")
+    public void checkBetweenSAandGD(){
+        assertTrue("Expecting the Work title details from SA and GD Staging Consistent ",
+                dataQualityContext.productDataObjectsFromEPH.get(0).WORK_TITLE
+                        .equals(dataQualityContext.productDataObjectsFromEPHGD.get(0).WORK_TITLE));
+
+        if (dataQualityContext.productDataObjectsFromEPH.get(0).WORK_SUBTITLE!=null
+                || dataQualityContext.productDataObjectsFromEPHGD.get(0).WORK_SUBTITLE !=null) {
+            assertTrue("Expecting the Product details from SA and GD Consistent ",
+                    dataQualityContext.productDataObjectsFromEPH.get(0).WORK_SUBTITLE
+                            .equals(dataQualityContext.productDataObjectsFromEPHGD.get(0).WORK_SUBTITLE));
+        }
+
+        if (dataQualityContext.productDataObjectsFromEPH.get(0).PRODUCT_WORK_PUB_DATE!=null
+                || dataQualityContext.productDataObjectsFromEPHGD.get(0).PRODUCT_WORK_PUB_DATE !=null) {
+            assertTrue("Expecting the Product details from SA and GD Consistent ",
+                    dataQualityContext.productDataObjectsFromEPH.get(0).PRODUCT_WORK_PUB_DATE
+                            .equals(dataQualityContext.productDataObjectsFromEPHGD.get(0).PRODUCT_WORK_PUB_DATE));
+        }
+        if (dataQualityContext.productDataObjectsFromEPH.get(0).ELECTRONIC_RIGHTS_IND!=null
+                || dataQualityContext.productDataObjectsFromEPHGD.get(0).ELECTRONIC_RIGHTS_IND !=null) {
+            assertTrue("Expecting the Product details from SA and GD Consistent ",
+                    dataQualityContext.productDataObjectsFromEPH.get(0).ELECTRONIC_RIGHTS_IND
+                            .equals(dataQualityContext.productDataObjectsFromEPHGD.get(0).ELECTRONIC_RIGHTS_IND));
+        }
+        if (dataQualityContext.productDataObjectsFromEPH.get(0).OPEN_ACCESS_JNL_TYPE_CODE!=null
+                || dataQualityContext.productDataObjectsFromEPHGD.get(0).OPEN_ACCESS_JNL_TYPE_CODE !=null) {
+            assertTrue("Expecting the Product details from SA and GD Consistent ",
+                    dataQualityContext.productDataObjectsFromEPH.get(0).OPEN_ACCESS_JNL_TYPE_CODE
+                            .equals(dataQualityContext.productDataObjectsFromEPHGD.get(0).OPEN_ACCESS_JNL_TYPE_CODE));
+        }
+
+        if (dataQualityContext.productDataObjectsFromEPH.get(0).PMC!=null
+                || dataQualityContext.productDataObjectsFromEPHGD.get(0).PMC !=null) {
+            assertTrue("Expecting the Product details from SA and GD Consistent ",
+                    dataQualityContext.productDataObjectsFromEPH.get(0).PMC
+                            .equals(dataQualityContext.productDataObjectsFromEPHGD.get(0).PMC));
+        }
+
+        if (dataQualityContext.productDataObjectsFromEPH.get(0).WORK_TYPE!=null
+                || dataQualityContext.productDataObjectsFromEPHGD.get(0).WORK_TYPE !=null) {
+            assertTrue("Expecting the Product details from SA and GD Consistent ",
+                    dataQualityContext.productDataObjectsFromEPH.get(0).WORK_TYPE
+                            .equals(dataQualityContext.productDataObjectsFromEPHGD.get(0).WORK_TYPE));
+        }
+
+        if (dataQualityContext.productDataObjectsFromEPH.get(0).WORK_STATUS!=null
+                || dataQualityContext.productDataObjectsFromEPHGD.get(0).WORK_STATUS !=null) {
+            assertTrue("Expecting the Product details from SA and GD Consistent ",
+                    dataQualityContext.productDataObjectsFromEPH.get(0).WORK_STATUS
+                            .equals(dataQualityContext.productDataObjectsFromEPHGD.get(0).WORK_STATUS));
+        }
+
+        if (dataQualityContext.productDataObjectsFromEPH.get(0).IMPRINT!=null
+                || dataQualityContext.productDataObjectsFromEPHGD.get(0).IMPRINT !=null) {
+            assertTrue("Expecting the Product details from SA and GD Consistent ",
+                    dataQualityContext.productDataObjectsFromEPH.get(0).IMPRINT
+                            .equals(dataQualityContext.productDataObjectsFromEPHGD.get(0).IMPRINT));
         }
     }
 }
