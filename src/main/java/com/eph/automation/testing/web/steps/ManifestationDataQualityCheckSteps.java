@@ -30,6 +30,8 @@ public class ManifestationDataQualityCheckSteps {
     private List<Map<?, ?>> randomISBNIds;
     private List<Map<?, ?>> manifestationIds;
     private static List<String> ids;
+    private static List<String> isbns;
+    private static List<String> idsManifestationsToSelect;
 
 
     @Given("We get the count of the manifestations records in PMX$")
@@ -82,24 +84,26 @@ public class ManifestationDataQualityCheckSteps {
 
     }
 
-    @Given("^We get 5 random records for (.*)$")
-    public void getRandomData(String journalType) {
+    @Given("^We get (.*) random records for (.*)$")
+    public void getRandomData(String numberOfRecords, String journalType) {
         switch (journalType) {
             case "JPR":
-                sql = ProductExtractSQL.SELECT_RANDOM_MANIFESTATION_IDS_JPR;
+                sql = String.format(ProductExtractSQL.SELECT_RANDOM_MANIFESTATION_IDS_JPR, numberOfRecords);
                 break;
             case "JEL":
-                sql = ProductExtractSQL.SELECT_RANDOM_MANIFESTATION_IDS_JEL;
+                sql = String.format(ProductExtractSQL.SELECT_RANDOM_MANIFESTATION_IDS_JEL, numberOfRecords);
                 break;
         }
+        manifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        ids = manifestationIds.stream().map(m -> (String) m.get("manifestation_id")).collect(Collectors.toList());
     }
 
 
-    @Given("^We get 5 random ISBNs for (.*)$")
-    public void getRandomISBNs(String bookType) {
+    @Given("^We get (.*) random ISBNs for (.*)$")
+    public void getRandomISBNs(String numberOfRecords, String bookType) {
         switch (bookType) {
             case "PHB":
-                sql = ProductExtractSQL.SELECT_RANDOM_ISBN_IDS_PHB;
+                sql = String.format(ProductExtractSQL.SELECT_RANDOM_ISBN_IDS_PHB, numberOfRecords);
                 break;
             case "PSB":
                 sql = ProductExtractSQL.SELECT_RANDOM_ISBN_IDS_PSB;
@@ -107,19 +111,31 @@ public class ManifestationDataQualityCheckSteps {
             case "EBK":
                 sql = ProductExtractSQL.SELECT_RANDOM_ISBN_IDS_EBK;
                 break;
+            default:
+                break;
         }
 
         randomISBNIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
 
-        ids = randomISBNIds.stream().map(m -> (String) m.get("isbn")).collect(Collectors.toList());
+        isbns = randomISBNIds.stream().map(m -> (String) m.get("isbn")).collect(Collectors.toList());
     }
 
-    @When("^We get the manifestations records from PMX$")
+    @When("^We get the manifestation ids for these books$")
+    public void getManifestationsIds() {
+        //  Get manifestations ids for isbns which are in PMX STG
+        String sqlSelectManifestationIDS = String.format(ProductExtractSQL.SELECT_MANIFESTATIONS_IDS_FOR_SPECIFIC_ISBN, Joiner.on("','").join(isbns));
+
+        manifestationIds = DBManager.getDBResultMap(sqlSelectManifestationIDS, Constants.EPH_SIT_URL);
+        ids = manifestationIds.stream().map(m -> (String) m.get("manifestation_id")).collect(Collectors.toList());
+    }
+
+    @Then("^We get the manifestations records from PMX$")
     public void getPMXManifestationData() {
         sql = String.format(ProductExtractSQL.SELECT_MANIFESTATIONS_DATA_IN_PMX, Joiner.on("','").join(ids));
 
         dataQualityContext.manifestationDataObjectsFromPMX = DBManager
                 .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.PMX_SIT_URL);
+        sql.length();
 
     }
 
@@ -129,6 +145,8 @@ public class ManifestationDataQualityCheckSteps {
 
         dataQualityContext.manifestationDataObjectsFromEPH = DBManager
                 .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_SIT_URL);
+        sql.length();
+
     }
 
 
@@ -140,23 +158,46 @@ public class ManifestationDataQualityCheckSteps {
 
     @And("^We get the manifestations in EPH$")
     public void getManifestationsEPHSA() {
-        //  Get manifestations ids for isbns which are in PMX STG
-        String sqlSelectManifestationIDS = String.format(ProductExtractSQL.SELECT_MANIFESTATIONS_IDS_FOR_SPECIFIC_ISBN, Joiner.on("','").join(ids));
-
-        manifestationIds = DBManager.getDBResultMap(sqlSelectManifestationIDS, Constants.EPH_SIT_URL);
-        List<String> idsManifestationsToSelect = manifestationIds.stream().map(m -> (String) m.get("manifestation_id")).collect(Collectors.toList());
+//        //  Get manifestations ids for isbns which are in PMX STG
+//        String sqlSelectManifestationIDS = String.format(ProductExtractSQL.SELECT_MANIFESTATIONS_IDS_FOR_SPECIFIC_ISBN, Joiner.on("','").join(ids));
+//
+//        manifestationIds = DBManager.getDBResultMap(sqlSelectManifestationIDS, Constants.EPH_SIT_URL);
+//        List<String> idsManifestationsToSelect = manifestationIds.stream().map(m -> (String) m.get("manifestation_id")).collect(Collectors.toList());
 
         // Get manifestations data from EPH SA_MANIFESTATION
-        sql = String.format(ProductExtractSQL.SELECT_MANIFESTATIONS_DATA_IN_PMX_SA, Joiner.on("','").join(idsManifestationsToSelect));
+        sql = String.format(ProductExtractSQL.SELECT_MANIFESTATIONS_DATA_IN_PMX_SA, Joiner.on("','").join(ids));
 
         dataQualityContext.manifestationDataObjectsFromEPHSA = DBManager
                 .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_SIT_URL);
-
+        sql.length();
     }
 
     @And("^We compare the manifestations in PMX STG and EPH$")
     public void compareDataBetweenStagingAndEPHSA() {
         assertThat("Data for manifestations in EPH Staging and EPH SA is equal without order", dataQualityContext.manifestationDataObjectsFromEPH, containsInAnyOrder(dataQualityContext.manifestationDataObjectsFromEPHSA.toArray()));
+
+    }
+
+
+    @And("^We get the manifestations in EPH golden data$")
+    public void getManifestationsEPHGD() {
+//        //  Get manifestations ids for isbns which are in PMX STG
+//        String sqlSelectManifestationIDS = String.format(ProductExtractSQL.SELECT_MANIFESTATIONS_IDS_FOR_SPECIFIC_ISBN, Joiner.on("','").join(ids));
+//
+//        manifestationIds = DBManager.getDBResultMap(sqlSelectManifestationIDS, Constants.EPH_SIT_URL);
+//        List<String> idsManifestationsToSelect = manifestationIds.stream().map(m -> (String) m.get("manifestation_id")).collect(Collectors.toList());
+
+        // Get manifestations data from EPH SA_MANIFESTATION
+        sql = String.format(ProductExtractSQL.SELECT_MANIFESTATIONS_DATA_IN_PMX_GD, Joiner.on("','").join(ids));
+
+        dataQualityContext.manifestationDataObjectsFromEPHGD = DBManager
+                .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_SIT_URL);
+        sql.length();
+    }
+
+    @And("^We compare the manifestations in EPH and EPH golden data$")
+    public void compareDataBetweenEPHAndEPHGD() {
+        assertThat("Data for manifestations in EPH and EPH GD is equal without order", dataQualityContext.manifestationDataObjectsFromEPH, containsInAnyOrder(dataQualityContext.manifestationDataObjectsFromEPHGD.toArray()));
 
     }
 }

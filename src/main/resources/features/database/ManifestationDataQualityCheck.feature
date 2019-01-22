@@ -19,30 +19,34 @@ Feature: Verify the db records for manifestations in PMX and EPH
 
 
   Scenario Outline: Verify db records for manifestations for books in PMX and EPH is equal
-    Given We get 5 random ISBNs for <book_type>
+    Given We get <numberOfRecords> random ISBNs for <book_type>
+    When We get the manifestation ids for these books
+    Then We get the manifestations records from PMX
+    Then We have the manifestations in PMX STG
+    And The data for manifestations in PMX and PMX STG is equal
+    And We get the manifestations in EPH
+    And We compare the manifestations in PMX STG and EPH
+    And We get the manifestations in EPH golden data
+    And We compare the manifestations in EPH and EPH golden data
+    Examples:
+      | numberOfRecords | book_type |
+      | 5               | PHB       |
+      | 5               | PSB       |
+      | 5               | EBK       |
+
+  Scenario Outline: Verify db records for manifestations for journals in PMX and EPH is equal
+    Given We get <numberOfRecords> random records for <journal_type>
     When We get the manifestations records from PMX
     Then We have the manifestations in PMX STG
     And The data for manifestations in PMX and PMX STG is equal
     And We get the manifestations in EPH
     And We compare the manifestations in PMX STG and EPH
+    And We get the manifestations in EPH golden data
+    And We compare the manifestations in EPH and EPH golden data
     Examples:
-      | book_type |
-      | PHB       |
-      | PSB       |
-      | EBK       |
-
-  Scenario Outline: Verify db records for manifestations for journals in PMX and EPH is equal
-    Given We get 5 random records for <journal_type>
-#    When We get the manifestations records from PMX
-#    Then We have the manifestations in PMX STG
-#    And The data for manifestations in PMX and PMX STG is equal
-#    And We get the manifestations in EPH
-#    And We compare the manifestations in PMX STG and EPH
-    Examples:
-      | journal_type |
-      | JPR          |
-      | JEL          |
-#select * from ephsit_talend_owner.stg_pmx_manifestation where "WORK_TYPE_ID" IN (4,3,102) and "F_PRODUCT_MANIFESTATION_TYP" = 1 order by random() limit 5
+      | numberOfRecords | journal_type |
+      | 5               | JPR          |
+      | 5               | JEL          |
 
 
 #1)	JPR – Print Journal   - WORK_TYPE_ID IN (4,3,102) F_PRODUCT_MANIFESTATION_TYP = 1

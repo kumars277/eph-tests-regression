@@ -134,7 +134,10 @@ public class ProductExtractSQL {
             "\t,SS.SUBSTATUS_NAME AS MANIFESTATION_SUBSTATUS -- Manifestation Sub status for mapping Status\n" +
             "FROM GD_PRODUCT_MANIFESTATION M\n" +
             "JOIN GD_PRODUCT_WORK W ON M.F_PRODUCT_WORK = W.PRODUCT_WORK_ID\n" +
-            "JOIN GD_PRODUCT_SUBSTATUS SS ON M.F_MANIFESTATION_SUBSTATUS = SS.PRODUCT_SUBSTATUS_ID WHERE M.ISBN_STRIPPED IN ('%s')";
+            "JOIN GD_PRODUCT_SUBSTATUS SS ON M.F_MANIFESTATION_SUBSTATUS = SS.PRODUCT_SUBSTATUS_ID\n" +
+//            " WHERE M.ISBN_STRIPPED IN ('%s')";
+            "WHERE M.ELSEVIER_PRODUCT_ID IN ('%s')";
+
 
     public static final String SELECT_MANIFESTATIONS_DATA_IN_PMX_STG = "SELECT " +
 //             "\"MANIFESTATION_ELS_PROD_ID\" as MANIFESTATION_ELS_PROD_ID,\n" +
@@ -159,17 +162,18 @@ public class ProductExtractSQL {
             "\"MANIFESTATION_SUBTYPE\" as MANIFESTATION_SUBTYPE,\n" +
             "\"COMMODITY\" as COMMODITY,\n" +
             "\"MANIFESTATION_SUBSTATUS\" as MANIFESTATION_SUBSTATUS\n" +
-            "from ephsit_talend_owner.stg_pmx_manifestation WHERE \"ISBN\" IN ('%s')";
+            "from ephsit_talend_owner.stg_pmx_manifestation\n" +
+//            "WHERE \"ISBN\" IN ('%s')";
+            "WHERE \"MANIFESTATION_ID\" IN ('%s')";
+    public static final String SELECT_RANDOM_ISBN_IDS_PHB = "select \"ISBN\" AS ISBN from ephsit_talend_owner.stg_pmx_manifestation where \"MANIFESTATION_SUBTYPE\" = 424 order by random() limit '%s'";
 
-    public static final String SELECT_RANDOM_ISBN_IDS_PHB = "select \"ISBN\" AS ISBN from ephsit_talend_owner.stg_pmx_manifestation where \"MANIFESTATION_SUBTYPE\" = 424 order by random() limit 5";
+    public static final String SELECT_RANDOM_ISBN_IDS_PSB = "select \"ISBN\" AS ISBN from ephsit_talend_owner.stg_pmx_manifestation where \"MANIFESTATION_SUBTYPE\" = 425 order by random() limit '%s'";
 
-    public static final String SELECT_RANDOM_ISBN_IDS_PSB = "select \"ISBN\" AS ISBN from ephsit_talend_owner.stg_pmx_manifestation where \"MANIFESTATION_SUBTYPE\" = 425 order by random() limit 5";
+    public static final String SELECT_RANDOM_ISBN_IDS_EBK = "select \"ISBN\" AS ISBN from ephsit_talend_owner.stg_pmx_manifestation where \"COMMODITY\" = 'EB' order by random() limit '%s'";
 
-    public static final String SELECT_RANDOM_ISBN_IDS_EBK = "select \"ISBN\" AS ISBN from ephsit_talend_owner.stg_pmx_manifestation where \"COMMODITY\" = 'EB' order by random() limit 5";
+    public static final String SELECT_RANDOM_MANIFESTATION_IDS_JPR = "select \"MANIFESTATION_ID\" from ephsit_talend_owner.stg_pmx_manifestation where \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" = 1 order by random() limit '%s'";
 
-    public static final String SELECT_RANDOM_MANIFESTATION_IDS_JPR = "select \"MANIFESTATION_ID\" from ephsit_talend_owner.stg_pmx_manifestation where \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" = 1 order by random() limit 5";
-
-    public static final String SELECT_RANDOM_MANIFESTATION_IDS_JEL = "select \"MANIFESTATION_ID\" from ephsit_talend_owner.stg_pmx_manifestation where \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" != 1 order by random() limit 5";
+    public static final String SELECT_RANDOM_MANIFESTATION_IDS_JEL = "select \"MANIFESTATION_ID\" from ephsit_talend_owner.stg_pmx_manifestation where \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" != 1 order by random() limit '%s'";
 
     public static final String SELECT_MANIFESTATIONS_IDS_FOR_SPECIFIC_ISBN = "select \"MANIFESTATION_ID\" AS manifestation_id from ephsit_talend_owner.stg_pmx_manifestation where \"ISBN\" in ('%s')";
 
@@ -188,4 +192,18 @@ public class ProductExtractSQL {
             "F_WWORK as F_WWORK\n" +
             "FROM semarchy_eph_mdm.sa_manifestation WHERE MANIFESTATION_ID IN ('%s')";
 
+    public static final String SELECT_MANIFESTATIONS_DATA_IN_PMX_GD = "select b_loadid as B_LOADID,\n" +
+            "F_EVENT  as F_EVENT,\n" +
+            "B_CLASSNAME as B_CLASSNAME,\n" +
+            "MANIFESTATION_ID as MANIFESTATION_ID,\n" +
+            "PMX_SOURCE_REFERENCE as PMX_SOURCE_REFERENCE,\n" +
+            "MANIFESTATION_KEY_TITLE as MANIFESTATION_KEY_TITLE,\n" +
+            "INTER_EDITION_FLAG as INTER_EDITION_FLAG,\n" +
+            "FIRST_PUB_DATE as FIRST_PUB_DATE,\n" +
+            "LAST_PUB_DATE as LAST_PUB_DATE, \n" +
+            "F_TYPE as F_TYPE,\n" +
+            "F_STATUS as F_STATUS, \n" +
+            "F_FORMAT_TYPE as F_FORMAT_TYPE, \n" +
+            "F_WWORK as F_WWORK\n" +
+            "FROM semarchy_eph_mdm.sa_manifestation WHERE MANIFESTATION_ID IN ('%s')";
 }
