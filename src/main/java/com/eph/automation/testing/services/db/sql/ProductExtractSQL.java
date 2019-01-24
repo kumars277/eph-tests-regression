@@ -5,7 +5,7 @@ package com.eph.automation.testing.services.db.sql;
  */
 public class ProductExtractSQL {
 
-    public static String PMX_WORK_EXTRACT_BY_ISBN = "  SELECT * FROM (\n" +
+    public static String PMX_WORK_EXTRACT= "  SELECT * FROM (\n" +
             "  SELECT DISTINCT 1 \n" +
 //            "  , M.ELSEVIER_PRODUCT_ID AS PRODUCT_ID -- Product Manifestation Reference,  not needed in EPH but extracted for record linking purposes\n" +
             "  ,W.PRODUCT_WORK_TITLE AS WORK_TITLE -- Title\n" +
@@ -39,7 +39,7 @@ public class ProductExtractSQL {
             "  JOIN GD_PRODUCT_STATUS S ON W.F_WORK_STATUS = S.PRODUCT_STATUS_ID\n" +
             "  JOIN GD_PRODUCT_TYPE T ON W.F_PRODUCT_TYPE = T.PRODUCT_TYPE_ID\n" +
             "  LEFT JOIN GD_IMPRINT I ON W.F_IMPRINT = I.IMPRINT_ID)\n" +
-            "   WHERE PRIMARY_ISBN = 'PARAM1'";
+            "   WHERE PARAM1 = 'PARAM2'";
 
         public static String GET_PRODUCT_EXPORT_FROM_PMX_BY_PMC = "  select distinct * from\n" +
                 "  (SELECT \n" +

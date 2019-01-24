@@ -40,13 +40,16 @@ public class WorksDataCheck {
 
     @When("^We get the product data from PMX, EPH Staging and EPH using (.*)$")
     public void getPMXWorkData(String id){
-        if(id.equalsIgnoreCase("PRIMARY_ISBN")) {
-            sql = ProductExtractSQL.PMX_WORK_EXTRACT_BY_ISBN
-                    .replace("PARAM1", dataQualityContext.productIdentifierID);
+            sql = ProductExtractSQL.PMX_WORK_EXTRACT
+                    .replace("PARAM1",id)
+                    .replace("PARAM2", dataQualityContext.productIdentifierID);
+        //System.out.println(sql);
             dataQualityContext.productDataObjectsFromSource = DBManager
                     .getDBResultAsBeanList(sql, ProductDataObject.class,Constants.PMX_SIT_URL);
 
-        sql = WorkDataCheckSQL.GET_PMX_WORKS_STG_DATA_ISBN.replace("PARAM1",dataQualityContext.productIdentifierID);
+        sql = WorkDataCheckSQL.GET_PMX_WORKS_STG_DATA
+                .replace("PARAM1", id)
+                .replace("PARAM2",dataQualityContext.productIdentifierID);
         //System.out.println(sql);
         dataQualityContext.productDataObjectsFromPMXSTG = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
 
@@ -54,17 +57,6 @@ public class WorksDataCheck {
             // sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1","EPR-W-000447");
         dataQualityContext.productDataObjectsFromEPH = DBManager
                 .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);*/
-        } else {
-            sql = WorkDataCheckSQL.PMX_WORK_EXTRACT_BY_ISSN
-                    .replace("PARAM1", dataQualityContext.productIdentifierID);
-            dataQualityContext.productDataObjectsFromSource = DBManager
-                    .getDBResultAsBeanList(sql, ProductDataObject.class,Constants.PMX_SIT_URL);
-
-            sql = WorkDataCheckSQL.GET_PMX_WORKS_STG_DATA_ISSN
-                    .replace("PARAM1",dataQualityContext.productIdentifierID);
-            dataQualityContext.productDataObjectsFromPMXSTG = DBManager
-                    .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-        }
         //sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1",dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID);
         sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1","EPR-W-000468");
         dataQualityContext.productDataObjectsFromEPH = DBManager
@@ -153,11 +145,11 @@ public class WorksDataCheck {
                            .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).PMG));
        }
 
-        if (dataQualityContext.productDataObjectsFromSource.get(0).PMG!=null
-                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).PMG !=null) {
+        if (dataQualityContext.productDataObjectsFromSource.get(0).WORK_ID!=null
+                || dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_ID !=null) {
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
-                    dataQualityContext.productDataObjectsFromSource.get(0).PMG
-                            .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).PMG));
+                    dataQualityContext.productDataObjectsFromSource.get(0).WORK_ID
+                            .equals(dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_ID));
         }
 
         if (dataQualityContext.productDataObjectsFromSource.get(0).WORK_STATUS!=null

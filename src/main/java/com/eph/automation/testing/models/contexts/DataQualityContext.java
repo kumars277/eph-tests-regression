@@ -22,6 +22,7 @@ public class DataQualityContext {
     //public static List<ProductWorkEntity> productEntityObjectsFromSource;
     //public static List<ProductWorkEntity> productEntityObjectsFromEPH;
     public static String productIdentifierID;
+    public static String productIdFromStg;
     public static String productIdentifierISSN_ID;
 
 }
