@@ -31,7 +31,6 @@ public class ManifestationDataQualityCheckSteps {
     private List<Map<?, ?>> manifestationIds;
     private static List<String> ids;
     private static List<String> isbns;
-    private static List<String> idsManifestationsToSelect;
 
 
     @Given("We get the count of the manifestations records in PMX$")

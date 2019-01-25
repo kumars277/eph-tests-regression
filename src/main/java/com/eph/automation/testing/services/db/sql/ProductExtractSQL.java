@@ -206,4 +206,43 @@ public class ProductExtractSQL {
             "F_FORMAT_TYPE as F_FORMAT_TYPE, \n" +
             "F_WWORK as F_WWORK\n" +
             "FROM semarchy_eph_mdm.sa_manifestation WHERE MANIFESTATION_ID IN ('%s')";
+
+    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "select count(*) AS count from ephsit_talend_owner.stg_pmx_manifestation where \"%s\" is not null";
+
+    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_SA_MANIFESTATION_TABLE = "select count(*) AS count from semarchy_eph_mdm.sa_manifestation_identifier where f_type = '%s'";
+
+    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_GD_MANIFESTATION_TABLE = "select count(*) as count from semarchy_eph_mdm.gd_manifestation_identifier where f_type = '%s'";
+
+    public static final String SELECT_RECORDS_SA = "select\n" +
+            "b_loadid as b_loadid,\n" +
+            "f_event as f_event,\n" +
+            "b_classname as b_classname,\n" +
+            "manif_identifier_id as manif_identifier_id,\n" +
+            "identifier as identifier,\n" +
+            "f_type as f_type,\n" +
+            "f_manifestation as f_manifestation\n" +
+            "from semarchy_eph_mdm.sa_manifestation_identifier\n" +
+            "where f_manifestation = '%s'";
+
+    public static final String SELECT_RECORDS_GD = "select\n" +
+            "b_loadid as b_loadid,\n" +
+            "f_event as f_event,\n" +
+            "b_classname as b_classname,\n" +
+            "manif_identifier_id as manif_identifier_id,\n" +
+            "identifier as identifier,\n" +
+            "f_type as f_type,\n" +
+            "f_manifestation as f_manifestation\n" +
+            "from semarchy_eph_mdm.gd_manifestation_identifier\n" +
+            "where f_manifestation = '%s'";
+
+    public static final String SELECT_RANDOM_MANIFESTATION_IDS_PHB = "select \"MANIFESTATION_ID\" as manifestation_id from ephsit_talend_owner.stg_pmx_manifestation where \"%s\" is not null and \"MANIFESTATION_SUBTYPE\" = 424 order by random() limit '%s'";
+
+    public static final String SELECT_RANDOM_MANIFESTATION_IDS_PSB = "select \"MANIFESTATION_ID\" as manifestation_id from ephsit_talend_owner.stg_pmx_manifestation where \"%s\" is not null and \"MANIFESTATION_SUBTYPE\" = 425 order by random() limit '%s'";
+
+    public static final String SELECT_RANDOM_MANIFESTATION_IDS_EBK = "select \"MANIFESTATION_ID\" as manifestation_id from ephsit_talend_owner.stg_pmx_manifestation where \"%s\" is not null and \"COMMODITY\" = 'EB' order by random() limit '%s'";
+
+    public static final String SELECT_RANDOM_MANIFESTATION_IDS_JPR_IDS = "select \"MANIFESTATION_ID\" as manifestation_id from ephsit_talend_owner.stg_pmx_manifestation\"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" = 1 order by random() limit '%s'";
+
+    public static final String SELECT_RANDOM_MANIFESTATION_IDS_JEL_IDS = "select \"MANIFESTATION_ID\" as manifestation_id from ephsit_talend_owner.stg_pmx_manifestation where\"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" != 1 order by random() limit '%s'";
+
 }
