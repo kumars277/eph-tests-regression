@@ -39,13 +39,13 @@ public class WorkDataCheckSQL {
             "  ,VOLUME as BOOK_VOLUME_NAME\n" +
             "  ,COPYRIGHT_YEAR as PRODUCT_WORK_PUB_DATE\n" +
             " -- ,EDITION_NUMBER as EDITION_NUMBER\n" +
-            "  ,F_PMC as F_PMC\n" +
+            "  ,F_PMC as PMC\n" +
             "  ,F_OA_TYPE AS OPEN_ACCESS_JNL_TYPE_CODE\n" +
             "  ,F_TYPE AS WORK_TYPE\n" +
             "  ,F_STATUS AS WORK_STATUS\n" +
             "  ,F_IMPRINT AS IMPRINT\n" +
             "  FROM ephsit.semarchy_eph_mdm.sa_wwork\n" +
-            "  WHERE WORK_ID='PARAM1'";
+            "  WHERE pmx_source_reference='PARAM1'";
 
 
     public static String GET_EPH_GD_WORKS_DATA ="SELECT \n" +
@@ -58,11 +58,11 @@ public class WorkDataCheckSQL {
             "  ,VOLUME as BOOK_VOLUME_NAME\n" +
             "  ,COPYRIGHT_YEAR as PRODUCT_WORK_PUB_DATE\n" +
             " -- ,EDITION_NUMBER as EDITION_NUMBER\n" +
-            "  ,F_PMC as F_PMC\n" +
+            "  ,F_PMC as PMC\n" +
             "  ,F_OA_TYPE AS OPEN_ACCESS_JNL_TYPE_CODE\n" +
             "  ,F_TYPE AS WORK_TYPE\n" +
             "  ,F_STATUS AS WORK_STATUS\n" +
             "  ,F_IMPRINT AS IMPRINT\n" +
             "  FROM ephsit.semarchy_eph_mdm.gd_wwork\n" +
-            "  WHERE WORK_ID='PARAM1'";
+            "  WHERE pmx_source_reference='PARAM1'";
 }

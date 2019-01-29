@@ -53,16 +53,12 @@ public class WorksDataCheck {
         //System.out.println(sql);
         dataQualityContext.productDataObjectsFromPMXSTG = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
 
-/*        sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1",dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID);
-            // sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1","EPR-W-000447");
-        dataQualityContext.productDataObjectsFromEPH = DBManager
-                .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);*/
-        //sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1",dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID);
-        sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1","EPR-W-000468");
+        sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1",dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID);
+        //System.out.println(sql);
         dataQualityContext.productDataObjectsFromEPH = DBManager
                 .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
 
-        sql =  WorkDataCheckSQL.GET_EPH_GD_WORKS_DATA.replace("PARAM1","EPR-W-000468");
+        sql =  WorkDataCheckSQL.GET_EPH_GD_WORKS_DATA.replace("PARAM1",dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID);
         dataQualityContext.productDataObjectsFromEPHGD = DBManager
                 .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
     }
@@ -253,11 +249,11 @@ public class WorksDataCheck {
         if (dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_PUB_DATE!=null
                 || dataQualityContext.productDataObjectsFromEPH.get(0).PRODUCT_WORK_PUB_DATE !=null) {
 
-            System.out.print(dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_PUB_DATE + " \n" +
-                    dataQualityContext.productDataObjectsFromEPH.get(0).PRODUCT_WORK_PUB_DATE);
+            System.out.print(dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_PUB_DATE.substring(0,4) + " \n" +
+                    dataQualityContext.productDataObjectsFromEPH.get(0).PRODUCT_WORK_PUB_DATE.substring(0,4));
             assertTrue("Expecting the Product details from PMX and EPH Consistent ",
-                    dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_PUB_DATE
-                            .equals(dataQualityContext.productDataObjectsFromEPH.get(0).PRODUCT_WORK_PUB_DATE));
+                    dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_PUB_DATE.substring(0,4)
+                            .equals(dataQualityContext.productDataObjectsFromEPH.get(0).PRODUCT_WORK_PUB_DATE.substring(0,4)));
 
         }
 
@@ -282,9 +278,7 @@ public class WorksDataCheck {
 
         if (dataQualityContext.productDataObjectsFromPMXSTG.get(0).BOOK_VOLUME_NAME!=null
                 || dataQualityContext.productDataObjectsFromEPH.get(0).BOOK_VOLUME_NAME !=null) {
-            assertTrue("Expecting the Product details from PMX and EPH Consistent ",
-                    dataQualityContext.productDataObjectsFromPMXSTG.get(0).BOOK_VOLUME_NAME
-                            .equals(dataQualityContext.productDataObjectsFromEPH.get(0).BOOK_VOLUME_NAME));
+            Assert.assertEquals("The volume is not 0", dataQualityContext.productDataObjectsFromEPH.get(0).BOOK_VOLUME_NAME, "0");
         }
 
 

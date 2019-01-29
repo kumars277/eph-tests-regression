@@ -47,19 +47,19 @@ public class WorksIdSteps {
         dataFromSTG = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
 
 
-/*        sql = WorksIdentifierSQL.getEphWorkID
+        sql = WorksIdentifierSQL.getEphWorkID
                 .replace("PARAM1", dataQualityContext.productIdFromStg);
-        dataFromSA = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);*/
+        dataFromSA = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
 
         sql = WorksIdentifierSQL.getIdentifierDataFromSA
-                //.replace("PARAM1", dataFromSA.get(0).WORK_ID);
-                .replace("PARAM1", "EPR-W-1000SX");
+                .replace("PARAM1", dataFromSA.get(0).WORK_ID);
+                //.replace("PARAM1", "EPR-W-1000SX");
         System.out.println(sql+"\n");
         dataFromSAId = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
 
         sql = WorksIdentifierSQL.getIdentifierDataFromGD
-                //.replace("PARAM1", dataFromSA.get(0).WORK_ID);
-                .replace("PARAM1", "EPR-W-1000SX");
+                .replace("PARAM1", dataFromSA.get(0).WORK_ID);
+                //.replace("PARAM1", "EPR-W-1000SX");
         System.out.println(sql+"\n");
         dataFromGDId = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
     }
@@ -87,7 +87,7 @@ public class WorksIdSteps {
         System.out.println("Identifiers are "+dataFromSTGCount.size());
         System.out.println("Identifiers are "+dataFromSAId.size());
 
-        //Assert.assertEquals("There are missing identifiers", dataFromSTGCount.size(),dataFromSAId.size());
+        Assert.assertEquals("There are missing identifiers", dataFromSTGCount.size(),dataFromSAId.size());
     }
 
     @And("^The identifiers data is correct$")
