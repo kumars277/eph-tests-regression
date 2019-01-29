@@ -42,10 +42,10 @@ public class WorksIdentifierSQL {
             "  WHERE f_wwork='PARAM1'";
 
     public static String getRandomProductNum="SELECT \n" +
-            "    \"PRODUCT_ID\" as random_value\n" +
+            "    \"PARAM1\" as random_value\n" +
             "FROM\n" +
             "    ephsit.ephsit_talend_owner.stg_pmx_wwork\n" +
-            "where \"WORK_TYPE\" = 'PARAM1' \n" +
+            "where \"WORK_TYPE\" = 'PARAM2' \n" +
             "ORDER BY RANDOM()\n" +
             "LIMIT 1;";
 
@@ -56,6 +56,16 @@ public class WorksIdentifierSQL {
             "  ,\"DAC_KEY\" as DAC_KEY-- DAC Key (may go in IDs table, depending on implementation of data model)\n" +
             "  ,\"PROJECT_NUM\" AS PROJECT_NUM -- Project Number (may go in IDs table, depending on implementation of data model)\n" +
             "  FROM ephsit.ephsit_talend_owner.stg_pmx_wwork\n" +
-            "  WHERE \"PRODUCT_ID\"='PARAM1'";
+            "  WHERE \"PARAM1\"='PARAM2'";
+
+    public static String getIdentifierDataFromGD="SELECT \n" +
+            " F_EVENT as F_EVENT\n" +
+            " ,B_CLASSNAME as B_CLASSNAME\n" +
+            " ,WORK_IDENTIFIER_ID AS WORK_IDENTIFIER_ID -- WORK IDENTIFIER\n" +
+            " ,IDENTIFIER AS IDENTIFIER --  IDENTIFIER\n" +
+            " ,F_TYPE AS F_TYPE -- WORK IDENTIFIER\n" +
+            " ,F_WWORK AS PRODUCT_WORK_ID -- WORK IDENTIFIER\n" +
+            "  FROM ephsit.semarchy_eph_mdm.gd_work_identifier\n" +
+            "  WHERE f_wwork='PARAM1'";
 
 }
