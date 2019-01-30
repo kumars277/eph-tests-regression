@@ -14,13 +14,16 @@ import java.util.List;
 public class WorksCountCheckSteps {
     private static List<ProductDataObject> workCountPmx;
     private static List<ProductDataObject> workCountPMXSTG;
+    private static List<ProductDataObject> workCountPMXSTGDistinct;
     private static List<ProductDataObject> workCountEPH;
     private static List<ProductDataObject> workCountEPHGD;
     private static String sqlPMX;
     private static String sqlPMXSTG;
+    private static String sqlPMXSTGDistinct;
     private static String sqlEPH;
     private static int pmxWork;
     private static int pmxSTGWork;
+    private static int pmxSTGWorkDistinct;
     private static int ephWork;
     private static int ephWorkGD;
 
@@ -45,6 +48,7 @@ public class WorksCountCheckSteps {
                 Constants.EPH_SIT_URL);
         pmxSTGWork = workCountPMXSTG.get(0).workCountPMXSTG;
         System.out.println("\nWorks in PMX staging are: " + pmxSTGWork);
+
     }
 
     @Then("^The work number between (.*) and (.*) is identical$")
@@ -52,7 +56,7 @@ public class WorksCountCheckSteps {
         if (source.contentEquals("PMX")) {
             Assert.assertEquals("The number of works in PMX and PMX Staging is not equal!", pmxWork, pmxSTGWork);
         }else if (source.contentEquals("PMX STG")){
-            Assert.assertEquals("The number of works in PMX Staging and EPH SA is not equal!", pmxSTGWork, ephWork);
+            Assert.assertEquals("The number of works in PMX Staging and EPH SA is not equal!", pmxSTGWorkDistinct, ephWork);
         } else {
             Assert.assertEquals("The number of works in SA and GD is not equal!", ephWork, ephWorkGD);
         }
@@ -73,6 +77,12 @@ public class WorksCountCheckSteps {
                 Constants.EPH_SIT_URL);
         ephWorkGD = workCountEPH.get(0).workCountEPH;
         System.out.println("\nWorks in EPH GD are: " + ephWork);
+
+        sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_Distinct;
+        workCountPMXSTGDistinct =DBManager.getDBResultAsBeanList(sqlPMXSTGDistinct, ProductDataObject.class,
+                Constants.EPH_SIT_URL);
+        pmxSTGWorkDistinct = workCountPMXSTGDistinct.get(0).workCountPMXSTG;
+        System.out.println("\nDistinct works in PMX staging are: " + pmxSTGWorkDistinct);
 
     }
 

@@ -1,32 +1,6 @@
 package com.eph.automation.testing.services.db.sql;
 
 public class WorksIdentifierSQL {
-    public static String getRandomIdentifier="SELECT \n" +
-            "    \"PARAM1\" as random_value\n" +
-            "FROM\n" +
-            "    ephsit.ephsit_talend_owner.stg_pmx_wwork\n" +
-            "where \"PARAM1\" is not null \n" +
-            "ORDER BY RANDOM()\n" +
-            "LIMIT 1;";
-
-    public static String getCountOfIds="SELECT count (*) as workCountEPH from ephsit.semarchy_eph_mdm.sa_work_identifier where f_wwork='PARAM1'";
-
-    public static String getRandomWithSeveralIdentifiers="SELECT \n" +
-            "    \"PARAM1\" as random_value\n" +
-            "FROM\n" +
-            "    ephsit.ephsit_talend_owner.stg_pmx_wwork\n" +
-            "where \"PARAM1\" is not null \n" +
-            "where \"PARAM2\" is not null \n" +
-            "where \"PARAM3\" is not null \n" +
-            "ORDER BY RANDOM()\n" +
-            "LIMIT 1;";
-
-    public static String getIdentifierDataFromSTG="SELECT DISTINCT \n"+
-            "  \"PRODUCT_WORK_ID\" as PRODUCT_WORK_ID -- Internal PMX ID, not needed in EPH but extracted for record linking purposes\n" +
-            "  ,\"PARAM1\" AS IDENTIFIER -- Journal Number (may go in IDs table, depending on implementation of data model)\n" +
-            "  FROM ephsit.ephsit_talend_owner.stg_pmx_wwork\n" +
-            "  WHERE \"PARAM1\"='PARAM2'";
-
     public static String getEphWorkID="SELECT \n" +
             "WORK_ID as WORK_ID FROM ephsit.semarchy_eph_mdm.sa_wwork WHERE PMX_SOURCE_REFERENCE='PARAM1'";
 
@@ -55,6 +29,7 @@ public class WorksIdentifierSQL {
             "  ,\"JOURNAL_ACRONYM\" AS JOURNAL_ACRONYM -- PTS Journal Acronym (may go in IDs table, depending on implementation of data model)\n" +
             "  ,\"DAC_KEY\" as DAC_KEY-- DAC Key (may go in IDs table, depending on implementation of data model)\n" +
             "  ,\"PROJECT_NUM\" AS PROJECT_NUM -- Project Number (may go in IDs table, depending on implementation of data model)\n" +
+            "  ,\"PRODUCT_WORK_ID\" AS PRODUCT_WORK_ID-- Project Number (may go in IDs table, depending on implementation of data model)\n" +
             "  FROM ephsit.ephsit_talend_owner.stg_pmx_wwork\n" +
             "  WHERE \"PARAM1\"='PARAM2'";
 
@@ -67,5 +42,19 @@ public class WorksIdentifierSQL {
             " ,F_WWORK AS PRODUCT_WORK_ID -- WORK IDENTIFIER\n" +
             "  FROM ephsit.semarchy_eph_mdm.gd_work_identifier\n" +
             "  WHERE f_wwork='PARAM1'";
+
+    public static String getTypeId="SELECT \n" +
+            "  F_TYPE AS F_TYPE -- WORK IDENTIFIER\n" +
+            "  FROM ephsit.semarchy_eph_mdm.sa_work_identifier\n" +
+            "  WHERE f_wwork='PARAM1'"+
+            "  AND F_TYPE='PARAM2'";
+
+    public static String getTypeIdGD="SELECT \n" +
+            "  F_TYPE AS F_TYPE -- WORK IDENTIFIER\n" +
+            "  FROM ephsit.semarchy_eph_mdm.gd_work_identifier\n" +
+            "  WHERE f_wwork='PARAM1'"+
+            "  AND F_TYPE='PARAM2'";
+
+
 
 }
