@@ -93,14 +93,16 @@ public class WorksIdSteps {
 
         Assert.assertTrue("F_EVENT is empty!", dataFromSAId.get(0).F_EVENT != null);
 
-        Assert.assertEquals("The classname is incorrect!","WorkIdentifier", dataFromSAId.get(0).B_CLASSNAME);
+        Assert.assertEquals("The classname is incorrect for id="+dataQualityContext.productIdFromStg,
+                "WorkIdentifier", dataFromSAId.get(0).B_CLASSNAME);
 
             if (dataFromSTG.get(0).JOURNAL_NUMBER != null) {
                 sql = WorksIdentifierSQL.getTypeId
                         .replace("PARAM1", dataFromSA.get(0).WORK_ID)
                         .replace("PARAM2", "ELSEVIER JOURNAL NUMBER");
                 dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-                Assert.assertEquals("The f_type is incorrect!", "ELSEVIER JOURNAL NUMBER", dataFromSAFtype.get(0).F_TYPE);
+                Assert.assertEquals("The JOURNAL_NUMBER is incorrect for id="+dataQualityContext.productIdFromStg,
+                        "ELSEVIER JOURNAL NUMBER", dataFromSAFtype.get(0).F_TYPE);
                 System.out.println("Journal number is correct");
             }
             if (dataFromSTG.get(0).ISSN_L != null) {
@@ -108,7 +110,8 @@ public class WorksIdSteps {
                         .replace("PARAM1", dataFromSA.get(0).WORK_ID)
                         .replace("PARAM2", "ISSN-L");
                 dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-                Assert.assertEquals("The f_type is incorrect!", "ISSN-L", dataFromSAFtype.get(0).F_TYPE);
+                Assert.assertEquals("The ISSN_L is incorrect for id="+dataQualityContext.productIdFromStg,
+                        "ISSN-L", dataFromSAFtype.get(0).F_TYPE);
                 System.out.println("ISSN_L is correct");
             }
             if (dataFromSTG.get(0).JOURNAL_ACRONYM != null) {
@@ -116,16 +119,17 @@ public class WorksIdSteps {
                         .replace("PARAM1", dataFromSA.get(0).WORK_ID)
                         .replace("PARAM2", "JOURNAL ACRONYM");
                 dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-                Assert.assertEquals("The f_type is incorrect!", "JOURNAL ACRONYM", dataFromSAFtype.get(0).F_TYPE);
+                Assert.assertEquals("The JOURNAL_ACRONYM is incorrect for id="+dataQualityContext.productIdFromStg,
+                        "JOURNAL ACRONYM", dataFromSAFtype.get(0).F_TYPE);
                 System.out.println("Journal acronym is correct");
             }
             if (dataFromSTG.get(0).DAC_KEY != null) {
                 sql = WorksIdentifierSQL.getTypeId
                         .replace("PARAM1", dataFromSA.get(0).WORK_ID)
                         .replace("PARAM2", "DAC-K");
-                System.out.println(sql);
                 dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-                Assert.assertEquals("The f_type is incorrect!", "DAC-K", dataFromSAFtype.get(0).F_TYPE);
+                Assert.assertEquals("The DAC_KEY is incorrect for id="+dataQualityContext.productIdFromStg,
+                        "DAC-K", dataFromSAFtype.get(0).F_TYPE);
                 System.out.println("DAC_KEY is correct");
             }
             if (dataFromSTG.get(0).PROJECT_NUM != null) {
@@ -133,7 +137,8 @@ public class WorksIdSteps {
                         .replace("PARAM1", dataFromSA.get(0).WORK_ID)
                         .replace("PARAM2", "PROJECT-NUM");
                 dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-                Assert.assertEquals("The f_type is incorrect!", "PROJECT-NUM", dataFromSAFtype.get(0).F_TYPE);
+                Assert.assertEquals("The PROJECT_NUM is incorrect for id="+dataQualityContext.productIdFromStg,
+                        "PROJECT-NUM", dataFromSAFtype.get(0).F_TYPE);
                 System.out.println("PROJECT_NUM is correct");
             }
 
@@ -156,35 +161,40 @@ public class WorksIdSteps {
                     .replace("PARAM1",dataFromSA.get(0).WORK_ID)
                     .replace("PARAM2","ELSEVIER JOURNAL NUMBER");
             dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-            Assert.assertEquals("The f_type is incorrect!","ELSEVIER JOURNAL NUMBER",dataFromGDFtype.get(0).F_TYPE);
+            Assert.assertEquals("The Journal Number is incorrect for id="+dataFromSA.get(0).WORK_ID,
+                    "ELSEVIER JOURNAL NUMBER",dataFromGDFtype.get(0).F_TYPE);
         }
         if (dataFromSTG.get(0).ISSN_L!=null){
             sql=WorksIdentifierSQL.getTypeIdGD
                     .replace("PARAM1",dataFromSA.get(0).WORK_ID)
                     .replace("PARAM2","ISSN-L");
             dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-            Assert.assertEquals("The f_type is incorrect!","ISSN-L",dataFromGDFtype.get(0).F_TYPE);
+            Assert.assertEquals("The ISSN_L is incorrect for id="+dataFromSA.get(0).WORK_ID,
+                    "ISSN-L",dataFromGDFtype.get(0).F_TYPE);
         }
         if (dataFromSTG.get(0).JOURNAL_ACRONYM!=null){
             sql=WorksIdentifierSQL.getTypeIdGD
                     .replace("PARAM1",dataFromSA.get(0).WORK_ID)
                     .replace("PARAM2","JOURNAL ACRONYM");
             dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-            Assert.assertEquals("The f_type is incorrect!","JOURNAL ACRONYM",dataFromGDFtype.get(0).F_TYPE);
+            Assert.assertEquals("The JOURNAL_ACRONYM is incorrect for id="+dataFromSA.get(0).WORK_ID,
+                    "JOURNAL ACRONYM",dataFromGDFtype.get(0).F_TYPE);
         }
         if (dataFromSTG.get(0).DAC_KEY!=null){
             sql=WorksIdentifierSQL.getTypeIdGD
                     .replace("PARAM1",dataFromSA.get(0).WORK_ID)
                     .replace("PARAM2","DAC-K");
             dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-            Assert.assertEquals("The f_type is incorrect!","DAC-K",dataFromGDFtype.get(0).F_TYPE);
+            Assert.assertEquals("The DAC_KEY is incorrect for id="+dataFromSA.get(0).WORK_ID,
+                    "DAC-K",dataFromGDFtype.get(0).F_TYPE);
         }
         if (dataFromSTG.get(0).PROJECT_NUM!=null){
             sql=WorksIdentifierSQL.getTypeIdGD
                     .replace("PARAM1",dataFromSA.get(0).WORK_ID)
                     .replace("PARAM2","PROJECT-NUM");
             dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-            Assert.assertEquals("The f_type is incorrect!","PROJECT-NUM",dataFromGDFtype.get(0).F_TYPE);
+            Assert.assertEquals("The PROJECT_NUM is incorrect for id="+dataFromSA.get(0).WORK_ID,
+                    "PROJECT-NUM",dataFromGDFtype.get(0).F_TYPE);
         }
     }
 }

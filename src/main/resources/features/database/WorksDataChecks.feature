@@ -13,7 +13,7 @@ Feature: Checking the data between PMX works and EPH works
       | PRIMARY_ISBN |STAB       |
       | PRIMARY_ISBN |SERMEM     |
       | PRIMARY_ISBN |BOOKSET    |
-      #| ISSN_L       |BOOKSERIES |
+      | ISSN_L       |BOOKSERIES |
       | ISSN_L       |CONT       |
       | ISSN_L       |JNL        |
       | ISSN_L       |CABS       |
