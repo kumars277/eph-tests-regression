@@ -31,9 +31,12 @@ Feature: Check db records for manifestation identifiers in EPH
 
     Examples:
       | numberOfRecords | identifier | type |
-      | 10              | ISBN       | PHB  |
-      | 10              | ISBN       | PSB  |
-      | 10              | ISBN       | EBK  |
-      | 10              | ISSN       | JPR  |
-      | 10              | ISSN       | JEL  |
+      | 1              | ISBN       | PHB  |
+      | 1             | ISBN       | PSB  |
+      | 1             | ISBN       | EBK  |
+      | 1             | ISSN       | JPR  |
+      | 1             | ISSN       | JEL  |
+
+
+
 

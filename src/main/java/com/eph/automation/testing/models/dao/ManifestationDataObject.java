@@ -2,7 +2,7 @@ package com.eph.automation.testing.models.dao;
 
 import java.util.Objects;
 
-public class ManifestationDataObject {
+public class  ManifestationDataObject {
     public String MANIFESTATION_ID;
     public String MANIFESTATION_KEY_TITLE;
     public String ISBN;
@@ -19,10 +19,23 @@ public class ManifestationDataObject {
     public String FORMAT_TXT;
     public String MANIFESTATION_STATUS;
     public String PRODUCT_MANIFESTATION_ID;
+    public String F_PRODUCT_WORK;
     public String WORK_TYPE_ID;
     public String MANIFESTATTION_SUBTYPE;
     public String COMMODITY;
     public String MANIFESTATION_SUBSTATUS;
+
+    //SA_MANIFESTATION columns
+    public String F_EVENT;
+    public String B_CLASSNAME;
+    public String PMX_SOURCE_REFERENCE;
+    public String INTER_EDITION_FLAG;
+    public String FIRST_PUB_DATE;
+    public String LAST_PUB_DATE;
+    public String F_TYPE;
+    public String F_STATUS;
+    public String F_FORMAT_TYPE;
+    public String F_WWORK;
 
 
     public String getMANIFESTATION_ID() {
@@ -129,6 +142,14 @@ public class ManifestationDataObject {
         F_PRODUCT_MANIFESTATION_TYP = f_PRODUCT_MANIFESTATION_TYP;
     }
 
+    public String getF_PRODUCT_WORK() {
+        return F_PRODUCT_WORK;
+    }
+
+    public void setF_PRODUCT_WORK(String f_PRODUCT_WORK) {
+        F_PRODUCT_WORK = f_PRODUCT_WORK;
+    }
+
     public String getFORMAT_TXT() {
         return FORMAT_TXT;
     }
@@ -190,7 +211,7 @@ public class ManifestationDataObject {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ManifestationDataObject that = (ManifestationDataObject) o;
-        return  Objects.equals(MANIFESTATION_ID, that.MANIFESTATION_ID) &&
+        return Objects.equals(MANIFESTATION_ID, that.MANIFESTATION_ID) &&
                 Objects.equals(MANIFESTATION_KEY_TITLE, that.MANIFESTATION_KEY_TITLE) &&
                 Objects.equals(ISBN, that.ISBN) &&
                 Objects.equals(ISSN, that.ISSN) &&
@@ -212,8 +233,94 @@ public class ManifestationDataObject {
                 Objects.equals(MANIFESTATION_SUBSTATUS, that.MANIFESTATION_SUBSTATUS);
     }
 
+
+
     @Override
     public int hashCode() {
         return Objects.hash(MANIFESTATION_ID, MANIFESTATION_KEY_TITLE, ISBN, ISSN, COVER_HEIGHT, COVER_WIDTH, PAGE_HEIGHT, PAGE_WIDTH, WEIGHT, CARTON_QTY, INTERNATIONAL_EDITION_IND, COPYRIGHT_DATE, F_PRODUCT_MANIFESTATION_TYP, FORMAT_TXT, MANIFESTATION_STATUS, PRODUCT_MANIFESTATION_ID, WORK_TYPE_ID, MANIFESTATTION_SUBTYPE, COMMODITY, MANIFESTATION_SUBSTATUS);
+    }
+
+
+    //SA_MANIFESTATION columns
+
+
+    public String getF_EVENT() {
+        return F_EVENT;
+    }
+
+    public void setF_EVENT(String f_EVENT) {
+        F_EVENT = f_EVENT;
+    }
+
+    public String getB_CLASSNAME() {
+        return B_CLASSNAME;
+    }
+
+    public void setB_CLASSNAME(String b_CLASSNAME) {
+        B_CLASSNAME = b_CLASSNAME;
+    }
+
+    public String getPMX_SOURCE_REFERENCE() {
+        return PMX_SOURCE_REFERENCE;
+    }
+
+    public void setPMX_SOURCE_REFERENCE(String PMX_SOURCE_REFERENCE) {
+        this.PMX_SOURCE_REFERENCE = PMX_SOURCE_REFERENCE;
+    }
+
+    public String getINTER_EDITION_FLAG() {
+        return INTER_EDITION_FLAG;
+    }
+
+    public void setINTER_EDITION_FLAG(String INTER_EDITION_FLAG) {
+        this.INTER_EDITION_FLAG = INTER_EDITION_FLAG;
+    }
+
+    public String getFIRST_PUB_DATE() {
+        return FIRST_PUB_DATE;
+    }
+
+    public void setFIRST_PUB_DATE(String FIRST_PUB_DATE) {
+        this.FIRST_PUB_DATE = FIRST_PUB_DATE;
+    }
+
+    public String getLAST_PUB_DATE() {
+        return LAST_PUB_DATE;
+    }
+
+    public void setLAST_PUB_DATE(String LAST_PUB_DATE) {
+        this.LAST_PUB_DATE = LAST_PUB_DATE;
+    }
+
+    public String getF_TYPE() {
+        return F_TYPE;
+    }
+
+    public void setF_TYPE(String f_TYPE) {
+        F_TYPE = f_TYPE;
+    }
+
+    public String getF_STATUS() {
+        return F_STATUS;
+    }
+
+    public void setF_STATUS(String f_STATUS) {
+        F_STATUS = f_STATUS;
+    }
+
+    public String getF_FORMAT_TYPE() {
+        return F_FORMAT_TYPE;
+    }
+
+    public void setF_FORMAT_TYPE(String f_FORMAT_TYPE) {
+        F_FORMAT_TYPE = f_FORMAT_TYPE;
+    }
+
+    public String getF_WWORK() {
+        return F_WWORK;
+    }
+
+    public void setF_WWORK(String f_WWORK) {
+        F_WWORK = f_WWORK;
     }
 }
