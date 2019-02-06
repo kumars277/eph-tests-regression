@@ -1,3 +1,4 @@
+/*
 package com.eph.automation.testing.web.steps;
 
 import com.eph.automation.testing.annotations.StaticInjection;
@@ -14,9 +15,11 @@ import cucumber.api.java.en.When;
 
 import static org.junit.Assert.assertTrue;
 
+*/
 /**
  * Created by RAVIVARMANS on 25/11/2018.
- */
+ *//*
+
 public class DataQualityCheckSteps {
 
     @StaticInjection
@@ -66,7 +69,7 @@ public class DataQualityCheckSteps {
 
     @When("^checking the loaded product in EPH$")
     public void checking_the_loaded_product_in_EPH() throws Throwable {
-        sql = ProductExtractSQL.PMX_WORK_EXTRACT_BY_ISBN.replace("PARAM1",dataQualityContext.productIdentifierID);
+        sql = ProductExtractSQL.PMX_WORK_EXTRACT.replace("PARAM1",dataQualityContext.productIdentifierID);
         dataQualityContext.productDataObjectsFromSource = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class,
                 Constants.PMX_UAT_URL);
 
@@ -86,3 +89,4 @@ public class DataQualityCheckSteps {
                         .equals(dataQualityContext.productDataObjectsFromEPH));
     }
 }
+*/

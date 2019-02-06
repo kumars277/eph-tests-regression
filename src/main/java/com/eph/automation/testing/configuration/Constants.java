@@ -29,9 +29,12 @@ public class Constants {
     public static String PMX_SIT_URL = "PMX_SIT_URL";
     public static String PMX_UAT_URL = "PMX_UAT_URL";
     public static String PMX_PROD_URL = "PMX_PROD_URL";
+    public static String PMX_STG_SIT_URL = "PMX_STG_SIT_URL";
+    public static String PMX_STG_UAT_URL = "PMX_STG_UAT_URL";
 
     //EPH Database Constants
     public static String EPH_SIT_URL = "EPH_SIT_URL";
+    public static String EPH_DEV_URL = "EPH_DEV_URL";
 
 
     //MySql Database

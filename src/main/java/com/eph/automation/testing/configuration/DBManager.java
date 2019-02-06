@@ -4,6 +4,7 @@ import com.eph.automation.testing.models.EnumConstants;
 import com.eph.automation.testing.models.TestContext;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.knowm.yank.Yank;
 
@@ -78,6 +79,23 @@ public class DBManager {
             DbUtils.closeQuietly(connection);
         }
         return updateStatus;
+    }
+
+    public static List getDBResultMap(String sql, String URL) {
+        List mapList = null;
+        try {
+            if (connection == null) {
+                DbUtils.loadDriver(driver);
+            }
+            connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
+            QueryRunner query = new QueryRunner();
+            mapList = (List) query.query(connection, sql, new MapListHandler());
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } finally {
+            DbUtils.closeQuietly(connection);
+        }
+        return mapList;
     }
 
 }
