@@ -1,3 +1,4 @@
+/*
 package com.eph.automation.testing.web.steps;
 
 import com.eph.automation.testing.annotations.StaticInjection;
@@ -14,9 +15,11 @@ import cucumber.api.java.en.When;
 
 import static org.junit.Assert.assertTrue;
 
+*/
 /**
  * Created by RAVIVARMANS on 25/11/2018.
- */
+ *//*
+
 public class DataQualityCheckSteps {
 
     @StaticInjection
@@ -86,3 +89,4 @@ public class DataQualityCheckSteps {
                         .equals(dataQualityContext.productDataObjectsFromEPH));
     }
 }
+*/
