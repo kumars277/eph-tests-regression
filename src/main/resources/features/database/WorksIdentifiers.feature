@@ -12,7 +12,7 @@ Feature: Checking the data in the Works Identifier table
       |STAB       |PRIMARY_ISBN|
       |SERMEM     |PRIMARY_ISBN|
       |BOOKSET    |PRIMARY_ISBN|
-      #|BOOKSERIES |ISSN_L|
+      |BOOKSERIES |ISSN_L|
       |CONT       |ISSN_L|
       |JNL        |ISSN_L|
       |CABS       |ISSN_L|

@@ -54,7 +54,7 @@ public class WorksDataCheck {
         dataQualityContext.productDataObjectsFromPMXSTG = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
 
         sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1",dataQualityContext.productDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID);
-        //System.out.println(sql);
+        System.out.println(sql);
         dataQualityContext.productDataObjectsFromEPH = DBManager
                 .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
 
@@ -230,10 +230,10 @@ public class WorksDataCheck {
     
     @And("^The work data between PMX STG and EPH SA is identical$")
     public void checkPMXSTGandEPHData() {
-             System.out.println(dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_TITLE);
-        System.out.println(dataQualityContext.productDataObjectsFromEPH.get(0).WORK_TITLE);
+           //  System.out.println(dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_STATUS);
+       // System.out.println(dataQualityContext.productDataObjectsFromEPH.get(0).WORK_STATUS);
 
-        Assert.assertEquals("The classname is incorrect!","Work", dataQualityContext.productDataObjectsFromEPH.get(0).B_CLASSNAME);
+//        Assert.assertEquals("The classname is incorrect!","Work", dataQualityContext.productDataObjectsFromEPH.get(0).B_CLASSNAME);
 
         assertTrue("Expecting the Work title details from PMX Staging and EPH SA Consistent for id="+ dataQualityContext.productIdentifierID,
                 dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_TITLE
@@ -298,7 +298,11 @@ public class WorksDataCheck {
                             .equals(dataQualityContext.productDataObjectsFromEPH.get(0).PMC));
         }
 
-        if (dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_TYPE.equalsIgnoreCase("STAB") ||
+        if (dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_TYPE==null
+                || dataQualityContext.productDataObjectsFromEPH.get(0).WORK_TYPE ==null){
+            Assert.assertEquals("The Work type is incorrect for id="+ dataQualityContext.productIdentifierID,
+                    "UNK",dataQualityContext.productDataObjectsFromEPH.get(0).WORK_TYPE);
+        } else if (dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_TYPE.equalsIgnoreCase("STAB") ||
                 dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_TYPE.equalsIgnoreCase("SERMEM")) {
             Assert.assertEquals("The Work type is incorrect for id="+ dataQualityContext.productIdentifierID,
                     dataQualityContext.productDataObjectsFromEPH.get(0).WORK_TYPE, "RBK");
@@ -312,17 +316,22 @@ public class WorksDataCheck {
                     dataQualityContext.productDataObjectsFromEPH.get(0).WORK_TYPE, "BKS");
         }
 
-        if (dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_STATUS.equalsIgnoreCase("1")){
-            Assert.assertEquals("The Work type is incorrect for id="+ dataQualityContext.productIdentifierID,
+
+        if (dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_STATUS==null
+                || dataQualityContext.productDataObjectsFromEPH.get(0).WORK_STATUS ==null){
+            Assert.assertEquals("The Work status is incorrect for id="+ dataQualityContext.productIdentifierID,
+                    "UNK",dataQualityContext.productDataObjectsFromEPH.get(0).WORK_STATUS);
+        } else if (dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_SUBSTATUS.equalsIgnoreCase("DIVESTED")) {
+            Assert.assertEquals("The Work status is incorrect for id=" + dataQualityContext.productIdentifierID,
+                    "WDI", dataQualityContext.productDataObjectsFromEPH.get(0).WORK_STATUS);
+        } else if (dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_STATUS.equalsIgnoreCase("1")){
+            Assert.assertEquals("The Work status is incorrect for id="+ dataQualityContext.productIdentifierID,
                     "WAS",dataQualityContext.productDataObjectsFromEPH.get(0).WORK_STATUS);
         } else if (dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_STATUS.equalsIgnoreCase("3")) {
-            Assert.assertEquals("The Work type is incorrect for id="+ dataQualityContext.productIdentifierID
+            Assert.assertEquals("The Work status is incorrect for id="+ dataQualityContext.productIdentifierID
                     , "WAP", dataQualityContext.productDataObjectsFromEPH.get(0).WORK_STATUS);
-        } else if (dataQualityContext.productDataObjectsFromPMXSTG.get(0).WORK_SUBSTATUS.equalsIgnoreCase("DIVESTED")){
-            Assert.assertEquals("The Work type is incorrect for id="+ dataQualityContext.productIdentifierID,
-                    "WDI", dataQualityContext.productDataObjectsFromEPH.get(0).WORK_STATUS );
-        }else{
-            Assert.assertEquals("The Work type is incorrect for id="+ dataQualityContext.productIdentifierID,
+        } else{
+            Assert.assertEquals("The Work status is incorrect for id="+ dataQualityContext.productIdentifierID,
                     "WST", dataQualityContext.productDataObjectsFromEPH.get(0).WORK_STATUS);
         }
 

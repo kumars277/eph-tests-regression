@@ -32,7 +32,7 @@ public class WorkDataCheckSQL {
     public static String GET_EPH_WORKS_DATA ="SELECT \n" +
             "   WORK_ID AS WORK_ID\n" +
             "  ,PMX_SOURCE_REFERENCE AS PMX_SOURCE_REFERENCE\n" +
-            "  ,B_CLASSNAME as B_CLASSNAME\n" +
+            "  ,sa.B_CLASSNAME as B_CLASSNAME\n" +
             "  ,WORK_TITLE AS WORK_TITLE -- Title\n" +
             "  ,WORK_SUB_TITLE AS WORK_SUBTITLE -- Subtitle\n" +
             "  ,ELECTRO_RIGHTS_INDICATOR as ELECTRONIC_RIGHTS_IND\n" +
@@ -44,7 +44,9 @@ public class WorkDataCheckSQL {
             "  ,F_TYPE AS WORK_TYPE\n" +
             "  ,F_STATUS AS WORK_STATUS\n" +
             "  ,F_IMPRINT AS IMPRINT\n" +
-            "  FROM ephsit.semarchy_eph_mdm.sa_wwork\n" +
+            "  FROM ephsit.semarchy_eph_mdm.sa_wwork sa\n" +
+            "  join semarchy_eph_mdm.sa_event on f_event = event_id and f_event = (select max (f_event) from semarchy_eph_mdm.sa_wwork)\n" +
+            "  and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
             "  WHERE pmx_source_reference='PARAM1'";
 
 

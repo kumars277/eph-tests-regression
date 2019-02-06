@@ -35,6 +35,7 @@ public class WorksIdSteps {
                 .replace("PARAM1", id)
                 .replace("PARAM2", type);
         data = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+        System.out.print(sql);
         dataQualityContext.productIdFromStg = data.get(0).random_value;
         System.out.println("\n The product number is " + dataQualityContext.productIdFromStg);
     }
@@ -83,7 +84,7 @@ public class WorksIdSteps {
         System.out.println("\nIdentifiers are "+dataFromSTGCount.size());
         System.out.println("\nIdentifiers are "+dataFromSAId.size());
 
-        //Assert.assertEquals("There are missing identifiers", dataFromSTGCount.size(),dataFromSAId.size());
+        Assert.assertEquals("There are missing identifiers", dataFromSTGCount.size(),dataFromSAId.size());
     }
 
     @And("^The identifiers data is correct$")

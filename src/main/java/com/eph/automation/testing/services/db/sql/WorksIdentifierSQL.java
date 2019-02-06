@@ -46,6 +46,8 @@ public class WorksIdentifierSQL {
     public static String getTypeId="SELECT \n" +
             "  F_TYPE AS F_TYPE -- WORK IDENTIFIER\n" +
             "  FROM ephsit.semarchy_eph_mdm.sa_work_identifier\n" +
+            "  join semarchy_eph_mdm.sa_event on f_event = event_id and f_event = (select max (f_event) from semarchy_eph_mdm.sa_wwork)\n" +
+            "  and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
             "  WHERE f_wwork='PARAM1'"+
             "  AND F_TYPE='PARAM2'";
 
