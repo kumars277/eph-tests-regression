@@ -1,3 +1,4 @@
+/*
 package com.eph.automation.testing.web.steps;
 
 import com.eph.automation.testing.annotations.StaticInjection;
@@ -10,9 +11,11 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
 
+*/
 /**
  * Created by RAVIVARMANS on 30/11/2018.
- */
+ *//*
+
 public class TalendExampleSteps {
 
     @StaticInjection
@@ -47,3 +50,4 @@ public class TalendExampleSteps {
         JobUtils.waitTillTheBatchComplete();
     }
 }
+*/
