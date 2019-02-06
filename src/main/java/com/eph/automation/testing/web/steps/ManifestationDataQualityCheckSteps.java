@@ -329,7 +329,7 @@ public class ManifestationDataQualityCheckSteps {
     @And("^We get the manifestations in EPH$")
     public void getManifestationsEPHSA() {
         // Get manifestations data from EPH SA_MANIFESTATION
-        sql = String.format(ProductExtractSQL.SELECT_MANIFESTATIONS_DATA_IN_PMX_SA, Joiner.on("','").join(ids));
+        sql = String.format(ProductExtractSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_SA, Joiner.on("','").join(ids));
 
         dataQualityContext.manifestationDataObjectsFromEPHSA = DBManager
                 .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_SIT_URL);
@@ -434,7 +434,7 @@ public class ManifestationDataQualityCheckSteps {
     @And("^We get the manifestations in EPH golden data$")
     public void getManifestationsEPHGD() {
         // Get manifestations data from EPH SA_MANIFESTATION
-        sql = String.format(ProductExtractSQL.SELECT_MANIFESTATIONS_DATA_IN_PMX_GD, Joiner.on("','").join(ids));
+        sql = String.format(ProductExtractSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_GD, Joiner.on("','").join(ids));
 
         dataQualityContext.manifestationDataObjectsFromEPHGD = DBManager
                 .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_SIT_URL);

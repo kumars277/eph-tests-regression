@@ -104,10 +104,9 @@ public class ProductExtractSQL {
 
     public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM ephsit_talend_owner.stg_pmx_manifestation";
 
-    public static final String COUNT_MANIFESTATIONS_IN_SA_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation";
+    public static final String COUNT_MANIFESTATIONS_IN_SA_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation join semarchy_eph_mdm.sa_event on f_event = event_id and semarchy_eph_mdm.sa_event.f_event_type = 'PMX' and f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation)";
 
     public static final String COUNT_MANIFESTATIONS_IN_GD_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.gd_manifestation";
-
 
     public static final String SELECT_MANIFESTATIONS_DATA_IN_PMX = "SELECT\n" +
 //            "\t M.ELSEVIER_PRODUCT_ID AS MANIFESTATION_ELS_PROD_ID -- Product Manifestation Reference,  not needed in EPH but extracted for record linking purposes\n" +
@@ -178,22 +177,27 @@ public class ProductExtractSQL {
 
     public static final String SELECT_MANIFESTATIONS_IDS_FOR_SPECIFIC_ISBN = "select \"MANIFESTATION_ID\" AS manifestation_id from ephsit_talend_owner.stg_pmx_manifestation where \"ISBN\" in ('%s')";
 
-    public static final String SELECT_MANIFESTATIONS_DATA_IN_PMX_SA = "select distinct b_loadid as B_LOADID,\n" +
-            "F_EVENT  as F_EVENT,\n" +
-            "B_CLASSNAME as B_CLASSNAME,\n" +
-            "MANIFESTATION_ID as MANIFESTATION_ID,\n" +
-            "PMX_SOURCE_REFERENCE as PMX_SOURCE_REFERENCE,\n" +
-            "MANIFESTATION_KEY_TITLE as MANIFESTATION_KEY_TITLE,\n" +
-            "INTER_EDITION_FLAG as INTER_EDITION_FLAG,\n" +
-            "FIRST_PUB_DATE as FIRST_PUB_DATE,\n" +
-            "LAST_PUB_DATE as LAST_PUB_DATE, \n" +
-            "F_TYPE as F_TYPE,\n" +
-            "F_STATUS as F_STATUS, \n" +
-            "F_FORMAT_TYPE as F_FORMAT_TYPE, \n" +
-            "F_WWORK as F_WWORK\n" +
-            "FROM semarchy_eph_mdm.sa_manifestation WHERE pmx_source_reference IN ('%s') order by FIRST_PUB_DATE";
+    public static final String SELECT_MANIFESTATIONS_DATA_IN_EPH_SA = "select distinct sa.b_loadid as B_LOADID,\n" +
+            "sa.F_EVENT  as F_EVENT,\n" +
+            "sa.B_CLASSNAME as B_CLASSNAME,\n" +
+            "sa.MANIFESTATION_ID as MANIFESTATION_ID,\n" +
+            "sa.PMX_SOURCE_REFERENCE as PMX_SOURCE_REFERENCE,\n" +
+            "sa.MANIFESTATION_KEY_TITLE as MANIFESTATION_KEY_TITLE,\n" +
+            "sa.INTER_EDITION_FLAG as INTER_EDITION_FLAG,\n" +
+            "sa.FIRST_PUB_DATE as FIRST_PUB_DATE,\n" +
+            "sa.LAST_PUB_DATE as LAST_PUB_DATE, \n" +
+            "sa.F_TYPE as F_TYPE,\n" +
+            "sa.F_STATUS as F_STATUS, \n" +
+            "sa.F_FORMAT_TYPE as F_FORMAT_TYPE, \n" +
+            "sa.F_WWORK as F_WWORK\n" +
+            "FROM semarchy_eph_mdm.sa_manifestation sa JOIN semarchy_eph_mdm.sa_event sa_event ON \n" +
+            "sa.f_event = sa_event.event_id AND \n" +
+            "sa_event.f_event_type = 'PMX'  AND \n" +
+            "sa.f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation)  \n" +
+            "WHERE pmx_source_reference IN ('%s')\n" +
+            "order by FIRST_PUB_DATE";
 
-    public static final String SELECT_MANIFESTATIONS_DATA_IN_PMX_GD = "select F_EVENT  as F_EVENT,\n" +
+    public static final String SELECT_MANIFESTATIONS_DATA_IN_EPH_GD = "select F_EVENT  as F_EVENT,\n" +
             "B_CLASSNAME as B_CLASSNAME,\n" +
             "MANIFESTATION_ID as MANIFESTATION_ID,\n" +
             "PMX_SOURCE_REFERENCE as PMX_SOURCE_REFERENCE,\n" +
@@ -209,19 +213,26 @@ public class ProductExtractSQL {
 
     public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "select count(*) AS count from ephsit_talend_owner.stg_pmx_manifestation where \"%s\" is not null";
 
-    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_SA_MANIFESTATION_TABLE = "select count(*) AS count from semarchy_eph_mdm.sa_manifestation_identifier where f_type = '%s'";
+    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_SA_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation_identifier\n" +
+            "JOIN semarchy_eph_mdm.sa_event ON f_event = event_id \n" +
+            "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "AND f_event = (SELECT max (f_event) FROM semarchy_eph_mdm.sa_manifestation_identifier)\n" +
+            "WHERE f_type = '%s'";
 
     public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_GD_MANIFESTATION_TABLE = "select count(*) as count from semarchy_eph_mdm.gd_manifestation_identifier where f_type = '%s'";
 
     public static final String SELECT_RECORDS_SA = "select\n" +
-            "b_loadid as b_loadid,\n" +
-            "f_event as f_event,\n" +
-            "b_classname as b_classname,\n" +
-            "manif_identifier_id as manif_identifier_id,\n" +
-            "identifier as identifier,\n" +
-            "f_type as f_type,\n" +
-            "f_manifestation as f_manifestation\n" +
-            "from semarchy_eph_mdm.sa_manifestation_identifier\n" +
+            "sa.b_loadid as b_loadid,\n" +
+            "sa.f_event as f_event,\n" +
+            "sa.b_classname as b_classname,\n" +
+            "sa.manif_identifier_id as manif_identifier_id,\n" +
+            "sa.identifier as identifier,\n" +
+            "sa.f_type as f_type,\n" +
+            "sa.f_manifestation as f_manifestation\n" +
+            "from semarchy_eph_mdm.sa_manifestation_identifier sa\n" +
+            "JOIN semarchy_eph_mdm.sa_event sa_event ON f_event = event_id \n" +
+            "AND sa_event.f_event_type = 'PMX'\n" +
+            "AND f_event = (SELECT max (f_event) FROM semarchy_eph_mdm.sa_manifestation_identifier)\n" +
             "where identifier in ('%s')";
 
     public static final String SELECT_RECORDS_GD = "select\n" +
