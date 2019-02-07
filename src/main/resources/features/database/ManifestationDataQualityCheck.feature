@@ -1,23 +1,24 @@
 Feature: Verify the db records for manifestations in PMX and EPH
 
+  @Regression
   Scenario: Verify count of manifestations records in PMX and EPH staging is equal
     Given We get the count of the manifestations records in PMX
     When We get the count of the manifestations records in PMX STG
     Then The number of the records in PMX and EPH staging table is equal
 
-
+  @Regression
   Scenario: Verify count of manifestations records in EPH staging and EPH is equal
     Given We get the count of the manifestations records in PMX STG
     When The manifestations are transferred to EPH
     Then The number of the records in EPH staging table and SA_MANIFESTATION is equal
 
-
+  @Regression
   Scenario: Verify count of manifestations records in EPH SA and EPH golden data is equal
     Given The manifestations are transferred to EPH
     When The manifestations are transferred to the golden data table
     Then The number of the records in EPH staging table and GD_MANIFESTATION is equal
 
-
+  @Regression
   Scenario Outline: Verify db records for manifestations for books in PMX and EPH is equal
     Given We get <numberOfRecords> random ISBNs for <book_type>
     When We get the manifestation ids for these books
@@ -35,6 +36,7 @@ Feature: Verify the db records for manifestations in PMX and EPH
       | 10            | PSB       |
       | 10            | EBK       |
 
+  @Regression
   Scenario Outline: Verify db records for manifestations for journals in PMX and EPH is equal
     Given We get <numberOfRecords> random records for <journal_type>
     When We get the manifestations records from PMX
