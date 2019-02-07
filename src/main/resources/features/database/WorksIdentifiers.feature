@@ -1,5 +1,6 @@
 Feature: Checking the data in the Works Identifier table
 
+  @Regression
   Scenario Outline: Check if all of the identifiers are stored in the identifiers table
     Given We have a work from type <type> to check by <random value>
     When We get the data from Staging, SA and Work Identifiers using <random value>
