@@ -11,7 +11,6 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
-import org.junit.Assert;
 
 import java.util.Comparator;
 import java.util.List;
@@ -105,21 +104,21 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
         sql = String.format(ProductExtractSQL.SELECT_RECORDS_SA, Joiner.on("','").join(ids));
 
-        DataQualityContext.manifestationDataObjectsFromSA = DBManager
+        DataQualityContext.manifestationIdentifiersDataObjectsFromSA = DBManager
                 .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_SIT_URL);
 
     }
 
     @Then("^Verify that data in SA_MANIFESTATION_IDENTIFIER is populated correctly for (.*)$")
     public void verifyDataIsPopulatedCorrectlyInSATable(String identifier) {
-        ids.sort(Comparator.reverseOrder());
-        IntStream.range(0, dataQualityContext.manifestationDataObjectsFromSA.size()).forEach(i -> {
+//        ids.sort(Comparator.reverseOrder());
+        IntStream.range(0, dataQualityContext.manifestationIdentifiersDataObjectsFromSA.size()).forEach(i -> {
 
-            assertEquals("ManifestationIdentifier", DataQualityContext.manifestationDataObjectsFromSA.get(i).getB_classname());
-//            assertEquals(ids.get(i) + "-" + DataQualityContext.manifestationDataObjectsFromSA.get(i).getF_type(), DataQualityContext.manifestationDataObjectsFromSA.get(i).getManif_identifier_id());
-            assertEquals(identifier, DataQualityContext.manifestationDataObjectsFromSA.get(i).getF_type());
-            assertEquals(ids.get(i), DataQualityContext.manifestationDataObjectsFromSA.get(i).getIdentifier());
-//            assertEquals(ids.get(i), DataQualityContext.manifestationDataObjectsFromSA.get(i).getF_manifestation());
+            assertEquals("ManifestationIdentifier", DataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getB_classname());
+//            assertEquals(ids.get(i) + "-" + DataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_type(), DataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getManif_identifier_id());
+            assertEquals(identifier, DataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_type());
+            assertEquals(ids.get(i), DataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getIdentifier());
+//            assertEquals(ids.get(i), DataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
         });
     }
 
@@ -127,22 +126,22 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
     public void getEPHGDManifestationIdentifiersData() {
         sql = String.format(ProductExtractSQL.SELECT_RECORDS_GD, Joiner.on("','").join(ids));
 
-        DataQualityContext.manifestationDataObjectsFromGD = DBManager
+        DataQualityContext.manifestationIdentifiersDataObjectsFromGD = DBManager
                 .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_SIT_URL);
     }
 
     @And("^Verify the data in SA_MANIFESTATION_IDENTIFIER and GD_MANIFESTATION_IDENTIFIER is equal$")
     public void verifyDataInSAAndGDIsEqual() {
-//        assertThat("\nData for manifestations in SA_MANIFESTATION_IDENTIFIER and GD_MANIFESTATION_IDENTIFIER is equal without order",  DataQualityContext.manifestationDataObjectsFromSA , containsInAnyOrder(DataQualityContext.manifestationDataObjectsFromGD.toArray()));
+//        assertThat("\nData for manifestations in SA_MANIFESTATION_IDENTIFIER and GD_MANIFESTATION_IDENTIFIER is equal without order",  DataQualityContext.manifestationIdentifiersDataObjectsFromSA , containsInAnyOrder(DataQualityContext.manifestationIdentifiersDataObjectsFromGD.toArray()));
         ids.sort(Comparator.reverseOrder());
 
-        IntStream.range(0, dataQualityContext.manifestationDataObjectsFromSA.size()).forEach(i -> {
+        IntStream.range(0, dataQualityContext.manifestationIdentifiersDataObjectsFromSA.size()).forEach(i -> {
 
-            assertEquals(DataQualityContext.manifestationDataObjectsFromSA.get(i).getB_classname(), DataQualityContext.manifestationDataObjectsFromGD.get(i).getB_classname());
-            //            assertEquals(ids.get(i) + "-" + DataQualityContext.manifestationDataObjectsFromSA.get(i).getF_type(), DataQualityContext.manifestationDataObjectsFromSA.get(i).getManif_identifier_id());
-            Objects.equals(DataQualityContext.manifestationDataObjectsFromSA.get(i).getF_type(), DataQualityContext.manifestationDataObjectsFromGD.get(i).getF_type());
-            Objects.equals(DataQualityContext.manifestationDataObjectsFromSA.get(i).getIdentifier(), DataQualityContext.manifestationDataObjectsFromGD.get(i).getIdentifier());
-            //            assertEquals(ids.get(i), DataQualityContext.manifestationDataObjectsFromSA.get(i).getF_manifestation());
+            assertEquals(DataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getB_classname(), DataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(i).getB_classname());
+            //            assertEquals(ids.get(i) + "-" + DataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_type(), DataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getManif_identifier_id());
+            Objects.equals(DataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_type(), DataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(i).getF_type());
+            Objects.equals(DataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getIdentifier(), DataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(i).getIdentifier());
+            //            assertEquals(ids.get(i), DataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
         });
 
 

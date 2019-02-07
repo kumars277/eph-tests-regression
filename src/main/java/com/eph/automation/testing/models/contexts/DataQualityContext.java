@@ -27,8 +27,8 @@ public class DataQualityContext {
     public static List<ManifestationDataObject> manifestationDataObjectsFromEPHGD;
 
 
-    public static List<ManifestationIdentifierObject> manifestationDataObjectsFromSA;
-    public static List<ManifestationIdentifierObject> manifestationDataObjectsFromGD;
+    public static List<ManifestationIdentifierObject> manifestationIdentifiersDataObjectsFromSA;
+    public static List<ManifestationIdentifierObject> manifestationIdentifiersDataObjectsFromGD;
 
 
     //public static List<ProductWorkEntity> productEntityObjectsFromSource;
