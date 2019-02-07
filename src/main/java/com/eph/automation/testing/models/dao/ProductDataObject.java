@@ -41,35 +41,6 @@ public class ProductDataObject {
     public String PRODUCT_WORK_PUB_DATE;
     public String JOURNAL_ACRONYM;
 
-    public String getF_TYPE() {
-        return F_TYPE;
-    }
-
-    public void setF_TYPE(String f_TYPE) {
-        F_TYPE = f_TYPE;
-    }
-
-    public String F_TYPE;
-
-    public String getB_LOADID() {
-        return B_LOADID;
-    }
-
-    public void setB_LOADID(String b_LOADID) {
-        B_LOADID = b_LOADID;
-    }
-
-    public String B_LOADID;
-
-    public String getF_EVENT() {
-        return F_EVENT;
-    }
-
-    public void setF_EVENT(String f_EVENT) {
-        F_EVENT = f_EVENT;
-    }
-
-    public String F_EVENT;
 
     public String getB_CLASSNAME() {
         return B_CLASSNAME;
