@@ -1,5 +1,6 @@
 Feature: Checking the data between PMX works and EPH works
 
+  @Regression
   Scenario Outline: Checking the Works data between PMX and EPH
     Given We have a work with <random_value> id and type <type> to check
     When We get the product data from PMX, EPH Staging and EPH using <random_value>
