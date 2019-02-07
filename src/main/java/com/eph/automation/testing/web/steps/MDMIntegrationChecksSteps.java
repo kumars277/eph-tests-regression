@@ -1,3 +1,4 @@
+/*
 package com.eph.automation.testing.web.steps;
 
 import com.eph.automation.testing.annotations.StaticInjection;
@@ -9,9 +10,11 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
+*/
 /**
  * Created by RAVIVARMANS on 28/11/2018.
- */
+ *//*
+
 public class MDMIntegrationChecksSteps {
 
     @StaticInjection
@@ -43,3 +46,4 @@ public class MDMIntegrationChecksSteps {
         //Build the SQL to get the details from GD Layer and Assert
     }
 }
+*/

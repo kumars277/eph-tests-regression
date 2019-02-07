@@ -5,7 +5,7 @@ package com.eph.automation.testing.services.db.sql;
  */
 public class ProductExtractSQL {
 
-    public static String PMX_WORK_EXTRACT_BY_ISBN = "  SELECT * FROM (\n" +
+    public static String PMX_WORK_EXTRACT= "  SELECT * FROM (\n" +
             "  SELECT DISTINCT 1 \n" +
 //            "  , M.ELSEVIER_PRODUCT_ID AS PRODUCT_ID -- Product Manifestation Reference,  not needed in EPH but extracted for record linking purposes\n" +
             "  ,W.PRODUCT_WORK_TITLE AS WORK_TITLE -- Title\n" +
@@ -32,14 +32,14 @@ public class ProductExtractSQL {
             "  ,W.PRODUCT_WORK_PUB_DATE -- Work Publication Date\n" +
             "  ,W.JOURNAL_ACRONYM_PTS AS JOURNAL_ACRONYM -- PTS Journal Acronym (may go in IDs table, depending on implementation of data model)\n" +
             "  FROM GD_PRODUCT_WORK W\n" +
-            "  JOIN GD_PRODUCT_MANIFESTATION M ON W.PRODUCT_WORK_ID = M.F_PRODUCT_WORK\n" +
+            "  -- JOIN GD_PRODUCT_MANIFESTATION M ON W.PRODUCT_WORK_ID = M.F_PRODUCT_WORK\n" +
             "  LEFT JOIN GD_WORK_ALT_IDENTIFIER A ON W.PRODUCT_WORK_ID = A.F_PRODUCT_WORK AND A.F_ALTERNATIVE_IDENTIFIER_TY = 24\n" +
             "  LEFT JOIN GD_OPEN_ACCESS_JOURNAL_TYPE O ON W.F_OPEN_ACCESS_JOURNAL_TYPE = O.OPEN_ACCESS_JOURNAL_TYPE_\n" +
-            "  JOIN GD_PRODUCT_SUBSTATUS SS ON W.F_WORK_SUBSTATUS = SS.PRODUCT_SUBSTATUS_ID\n" +
-            "  JOIN GD_PRODUCT_STATUS S ON W.F_WORK_STATUS = S.PRODUCT_STATUS_ID\n" +
-            "  JOIN GD_PRODUCT_TYPE T ON W.F_PRODUCT_TYPE = T.PRODUCT_TYPE_ID\n" +
+            "  LEFT JOIN GD_PRODUCT_SUBSTATUS SS ON W.F_WORK_SUBSTATUS = SS.PRODUCT_SUBSTATUS_ID\n" +
+            "  LEFT JOIN GD_PRODUCT_STATUS S ON W.F_WORK_STATUS = S.PRODUCT_STATUS_ID\n" +
+            "  LEFT JOIN GD_PRODUCT_TYPE T ON W.F_PRODUCT_TYPE = T.PRODUCT_TYPE_ID\n" +
             "  LEFT JOIN GD_IMPRINT I ON W.F_IMPRINT = I.IMPRINT_ID)\n" +
-            "   WHERE PRIMARY_ISBN = 'PARAM1'";
+            "   WHERE PARAM1 = 'PARAM2'";
 
     public static String GET_PRODUCT_EXPORT_FROM_PMX_BY_PMC = "  select distinct * from\n" +
             "  (SELECT \n" +

@@ -19,6 +19,7 @@ public class DataQualityContext {
     public static List<ProductDataObject> productDataObjectsFromSource;
     public static List<ProductDataObject> productDataObjectsFromPMXSTG;
     public static List<ProductDataObject> productDataObjectsFromEPH;
+    public static List<ProductDataObject> productDataObjectsFromEPHGD;
 
     public static List<ManifestationDataObject> manifestationDataObjectsFromEPH;
     public static List<ManifestationDataObject> manifestationDataObjectsFromPMX;
@@ -33,6 +34,7 @@ public class DataQualityContext {
     //public static List<ProductWorkEntity> productEntityObjectsFromSource;
     //public static List<ProductWorkEntity> productEntityObjectsFromEPH;
     public static String productIdentifierID;
+    public static String productIdFromStg;
     public static String productIdentifierISSN_ID;
 
 }
