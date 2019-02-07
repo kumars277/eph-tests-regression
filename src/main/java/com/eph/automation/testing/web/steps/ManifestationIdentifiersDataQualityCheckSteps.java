@@ -1,5 +1,6 @@
 package com.eph.automation.testing.web.steps;
 
+import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
@@ -19,8 +20,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static database.DataAccessUnitChecks.dataQualityContext;
-import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.junit.Assert.*;
 
 /**
@@ -34,6 +33,10 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
     private static int countISBNSA;
     private static int countISBNGD;
     private static List<String> ids;
+
+
+    @StaticInjection
+    public DataQualityContext dataQualityContext;
 
 
     @Given("We get the count of records with (.*) in STG_PMX_MANIFESTATION$")
