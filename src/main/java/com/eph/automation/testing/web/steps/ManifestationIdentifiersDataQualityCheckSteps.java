@@ -35,7 +35,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
 
     @StaticInjection
-    public DataQualityContext dataQualityContext;
+    private DataQualityContext dataQualityContext;
 
 
     @Given("We get the count of records with (.*) in STG_PMX_MANIFESTATION$")
