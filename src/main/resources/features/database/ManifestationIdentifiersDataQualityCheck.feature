@@ -1,5 +1,6 @@
 Feature: Check db records for manifestation identifiers in EPH
 
+  @Regression
   Scenario Outline: Verify count of records in STG_PMX_MANIFESTATION and SA_MANIFESTATION_IDENTIFIER is equal
     Given We get the count of records with <identifier> in STG_PMX_MANIFESTATION
     When We get the count of records with <identifier> in SA_MANIFESTATION_IDENTIFIER
@@ -10,7 +11,7 @@ Feature: Check db records for manifestation identifiers in EPH
       | ISBN       |
       | ISSN       |
 
-
+  @Regression
   Scenario Outline: Verify count of records in SA_MANIFESTATION_IDENTIFIER and GD_MANIFESTATION_IDENTIFIER is equal
     Given We get the count of records with <identifier> in SA_MANIFESTATION_IDENTIFIER
     When We get the count of records with <identifier> in GD_MANIFESTATION_IDENTIFIER
@@ -21,7 +22,7 @@ Feature: Check db records for manifestation identifiers in EPH
       | ISBN       |
       | ISSN       |
 
-
+  @Regression
   Scenario Outline: Check the mapping of data between STG_PMX_MANIFESTATION and SA_MANIFESTATION_IDENTIFIER
     Given We get the manifestation ids of <numberOfRecords> random records from STG_PMX_MANIFESTATION that have <identifier> for <type>
     When We get the records from SA_MANIFESTATION_IDENTIFIER
