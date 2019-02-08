@@ -4,7 +4,7 @@ Feature: Check db records for manifestation identifiers in EPH
   Scenario Outline: Verify count of records in STG_PMX_MANIFESTATION and SA_MANIFESTATION_IDENTIFIER is equal
     Given We get the count of records with <identifier> in STG_PMX_MANIFESTATION
     When We get the count of records with <identifier> in SA_MANIFESTATION_IDENTIFIER
-    Then Check the count of the records in STG_PMX_MANIFESTATION and SA_MANIFESTATION_IDENTIFIER is equal
+    Then Check the count of the records in STG_PMX_MANIFESTATION and SA_MANIFESTATION_IDENTIFIER is equal for <identifier>
 
     Examples:
       | identifier |
@@ -15,7 +15,7 @@ Feature: Check db records for manifestation identifiers in EPH
   Scenario Outline: Verify count of records in SA_MANIFESTATION_IDENTIFIER and GD_MANIFESTATION_IDENTIFIER is equal
     Given We get the count of records with <identifier> in SA_MANIFESTATION_IDENTIFIER
     When We get the count of records with <identifier> in GD_MANIFESTATION_IDENTIFIER
-    Then Check the count of the records in SA_MANIFESTATION_IDENTIFIER and GD_MANIFESTATION_IDENTIFIER is equal
+    Then Check the count of the records in SA_MANIFESTATION_IDENTIFIER and GD_MANIFESTATION_IDENTIFIER is equal for <identifier>
 
     Examples:
       | identifier |
