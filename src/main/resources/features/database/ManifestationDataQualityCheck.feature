@@ -7,7 +7,7 @@ Feature: Verify the db records for manifestations in PMX and EPH
     Then The number of the records in PMX and EPH staging table is equal
 
   @Regression
-  Scenario: Verify count of manifestations records in EPH staging and EPH is equal
+  Scenario: Verify count of manifestations records in EPH staging and EPH SA is equal
     Given We get the count of the manifestations records in PMX STG
     When The manifestations are transferred to EPH
     Then The number of the records in EPH staging table and SA_MANIFESTATION is equal
@@ -16,7 +16,7 @@ Feature: Verify the db records for manifestations in PMX and EPH
   Scenario: Verify count of manifestations records in EPH SA and EPH golden data is equal
     Given The manifestations are transferred to EPH
     When The manifestations are transferred to the golden data table
-    Then The number of the records in EPH staging table and GD_MANIFESTATION is equal
+    Then The number of the records in EPH SA and GD_MANIFESTATION is equal
 
   @Regression
   Scenario Outline: Verify db records for manifestations for books in PMX and EPH is equal
@@ -25,11 +25,11 @@ Feature: Verify the db records for manifestations in PMX and EPH
     Then We get the manifestations records from PMX
     Then We have the manifestations in PMX STG
     And The data for manifestations in PMX and PMX STG is equal
-    And We get the manifestations in EPH
+    And We get the manifestations in EPH SA
     And We check that mandatory fields are not null
-    And We compare the manifestations in PMX STG and EPH for <book_type>
+    And We compare the manifestations in PMX STG and EPH SA for <book_type>
     And We get the manifestations in EPH golden data
-    And We compare the manifestations in EPH and EPH golden data
+    And We compare the manifestations in EPH SA and EPH golden data
     Examples:
       | numberOfRecords | book_type |
       | 1               | PHB       |
@@ -42,10 +42,10 @@ Feature: Verify the db records for manifestations in PMX and EPH
     When We get the manifestations records from PMX
     Then We have the manifestations in PMX STG
     And The data for manifestations in PMX and PMX STG is equal
-    And We get the manifestations in EPH
-    And We compare the manifestations in PMX STG and EPH for <journal_type>
+    And We get the manifestations in EPH SA
+    And We compare the manifestations in PMX STG and EPH SA for <journal_type>
     And We get the manifestations in EPH golden data
-    And We compare the manifestations in EPH and EPH golden data
+    And We compare the manifestations in EPH SA and EPH golden data
     Examples:
       | numberOfRecords | journal_type |
       | 5               | JPR          |
