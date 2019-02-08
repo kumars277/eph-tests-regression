@@ -32,9 +32,9 @@ Feature: Verify the db records for manifestations in PMX and EPH
     And We compare the manifestations in EPH SA and EPH golden data
     Examples:
       | numberOfRecords | book_type |
-      | 1               | PHB       |
-      | 10            | PSB       |
-      | 10            | EBK       |
+      | 3              | PHB       |
+      | 3              | PSB       |
+      | 3              | EBK       |
 
   @Regression
   Scenario Outline: Verify db records for manifestations for journals in PMX and EPH is equal

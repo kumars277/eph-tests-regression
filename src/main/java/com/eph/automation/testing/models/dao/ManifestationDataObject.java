@@ -18,17 +18,17 @@ public class  ManifestationDataObject {
     public String F_PRODUCT_MANIFESTATION_TYP;
     public String FORMAT_TXT;
     public String MANIFESTATION_STATUS;
-    public String PRODUCT_MANIFESTATION_ID;
+    public int PRODUCT_MANIFESTATION_ID;
     public String F_PRODUCT_WORK;
     public String WORK_TYPE_ID;
-    public String MANIFESTATTION_SUBTYPE;
+    public String MANIFESTATION_SUBTYPE;
     public String COMMODITY;
     public String MANIFESTATION_SUBSTATUS;
 
     //SA_MANIFESTATION columns
     public String F_EVENT;
     public String B_CLASSNAME;
-    public String PMX_SOURCE_REFERENCE;
+    public int PMX_SOURCE_REFERENCE;
     public String INTER_EDITION_FLAG;
     public String FIRST_PUB_DATE;
     public String LAST_PUB_DATE;
@@ -166,11 +166,11 @@ public class  ManifestationDataObject {
         this.MANIFESTATION_STATUS = MANIFESTATION_STATUS;
     }
 
-    public String getPRODUCT_MANIFESTATION_ID() {
+    public int getPRODUCT_MANIFESTATION_ID() {
         return PRODUCT_MANIFESTATION_ID;
     }
 
-    public void setPRODUCT_MANIFESTATION_ID(String PRODUCT_MANIFESTATION_ID) {
+    public void setPRODUCT_MANIFESTATION_ID(int PRODUCT_MANIFESTATION_ID) {
         this.PRODUCT_MANIFESTATION_ID = PRODUCT_MANIFESTATION_ID;
     }
 
@@ -182,12 +182,12 @@ public class  ManifestationDataObject {
         this.WORK_TYPE_ID = WORK_TYPE_ID;
     }
 
-    public String getMANIFESTATTION_SUBTYPE() {
-        return MANIFESTATTION_SUBTYPE;
+    public String getMANIFESTATION_SUBTYPE() {
+        return MANIFESTATION_SUBTYPE;
     }
 
-    public void setMANIFESTATTION_SUBTYPE(String MANIFESTATTION_SUBTYPE) {
-        this.MANIFESTATTION_SUBTYPE = MANIFESTATTION_SUBTYPE;
+    public void setMANIFESTATION_SUBTYPE(String MANIFESTATION_SUBTYPE) {
+        this.MANIFESTATION_SUBTYPE = MANIFESTATION_SUBTYPE;
     }
 
     public String getCOMMODITY() {
@@ -228,7 +228,7 @@ public class  ManifestationDataObject {
                 Objects.equals(MANIFESTATION_STATUS, that.MANIFESTATION_STATUS) &&
                 Objects.equals(PRODUCT_MANIFESTATION_ID, that.PRODUCT_MANIFESTATION_ID) &&
                 Objects.equals(WORK_TYPE_ID, that.WORK_TYPE_ID) &&
-                Objects.equals(MANIFESTATTION_SUBTYPE, that.MANIFESTATTION_SUBTYPE) &&
+                Objects.equals(MANIFESTATION_SUBTYPE, that.MANIFESTATION_SUBTYPE) &&
                 Objects.equals(COMMODITY, that.COMMODITY) &&
                 Objects.equals(MANIFESTATION_SUBSTATUS, that.MANIFESTATION_SUBSTATUS);
     }
@@ -237,7 +237,7 @@ public class  ManifestationDataObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(MANIFESTATION_ID, MANIFESTATION_KEY_TITLE, ISBN, ISSN, COVER_HEIGHT, COVER_WIDTH, PAGE_HEIGHT, PAGE_WIDTH, WEIGHT, CARTON_QTY, INTERNATIONAL_EDITION_IND, COPYRIGHT_DATE, F_PRODUCT_MANIFESTATION_TYP, FORMAT_TXT, MANIFESTATION_STATUS, PRODUCT_MANIFESTATION_ID, WORK_TYPE_ID, MANIFESTATTION_SUBTYPE, COMMODITY, MANIFESTATION_SUBSTATUS);
+        return Objects.hash(MANIFESTATION_ID, MANIFESTATION_KEY_TITLE, ISBN, ISSN, COVER_HEIGHT, COVER_WIDTH, PAGE_HEIGHT, PAGE_WIDTH, WEIGHT, CARTON_QTY, INTERNATIONAL_EDITION_IND, COPYRIGHT_DATE, F_PRODUCT_MANIFESTATION_TYP, FORMAT_TXT, MANIFESTATION_STATUS, PRODUCT_MANIFESTATION_ID, WORK_TYPE_ID, MANIFESTATION_SUBTYPE, COMMODITY, MANIFESTATION_SUBSTATUS);
     }
 
 
@@ -260,11 +260,11 @@ public class  ManifestationDataObject {
         B_CLASSNAME = b_CLASSNAME;
     }
 
-    public String getPMX_SOURCE_REFERENCE() {
+    public int getPMX_SOURCE_REFERENCE() {
         return PMX_SOURCE_REFERENCE;
     }
 
-    public void setPMX_SOURCE_REFERENCE(String PMX_SOURCE_REFERENCE) {
+    public void setPMX_SOURCE_REFERENCE(int PMX_SOURCE_REFERENCE) {
         this.PMX_SOURCE_REFERENCE = PMX_SOURCE_REFERENCE;
     }
 
