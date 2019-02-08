@@ -1,4 +1,4 @@
-Feature: Checking the data between PMX works and EPH works
+Feature: Checking the data between PMX works and EPH works (column by column check)
 
   @Regression
   Scenario Outline: Checking the Works data between PMX and EPH

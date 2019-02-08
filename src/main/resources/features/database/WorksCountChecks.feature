@@ -1,4 +1,4 @@
-Feature: Validate all the data is transferred from PMX to EPH
+Feature: Validate all the Works data is transferred from PMX to EPH (Count check)
 
   @Regression
   Scenario: Verify that all the work data is transferred to PMX Staging
