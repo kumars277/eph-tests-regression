@@ -1,4 +1,4 @@
-Feature: Checking the data in the Works Identifier table
+Feature: Checking the data in the Works Identifier table (Identifiers count and column by column check)
 
   @Regression
   Scenario Outline: Check if all of the identifiers are stored in the identifiers table
