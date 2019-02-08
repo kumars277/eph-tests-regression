@@ -2,17 +2,22 @@ package com.eph.automation.testing.services.db.sql;
 
 public class WorksIdentifierSQL {
     public static String getEphWorkID="SELECT \n" +
-            "WORK_ID as WORK_ID FROM ephsit.semarchy_eph_mdm.sa_wwork WHERE PMX_SOURCE_REFERENCE='PARAM1'";
+            "WORK_ID as WORK_ID FROM ephsit.semarchy_eph_mdm.sa_wwork\n"  +
+            " join semarchy_eph_mdm.sa_event on f_event = event_id and f_event = (select max (f_event) from semarchy_eph_mdm.sa_wwork)\n" +
+            " and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+            " WHERE PMX_SOURCE_REFERENCE='PARAM1'";
 
     public static String getIdentifierDataFromSA="SELECT \n" +
-            " B_LOADID as B_LOADID\n" +
-            " ,F_EVENT as F_EVENT\n" +
-            " ,B_CLASSNAME as B_CLASSNAME\n" +
+            " wi.B_LOADID as B_LOADID\n" +
+            " ,wi.F_EVENT as F_EVENT\n" +
+            " ,wi.B_CLASSNAME as B_CLASSNAME\n" +
             " ,WORK_IDENTIFIER_ID AS WORK_IDENTIFIER_ID -- WORK IDENTIFIER\n" +
             " ,IDENTIFIER AS IDENTIFIER --  IDENTIFIER\n" +
             " ,F_TYPE AS F_TYPE -- WORK IDENTIFIER\n" +
             " ,F_WWORK AS PRODUCT_WORK_ID -- WORK IDENTIFIER\n" +
-            "  FROM ephsit.semarchy_eph_mdm.sa_work_identifier\n" +
+            "  FROM ephsit.semarchy_eph_mdm.sa_work_identifier wi\n" +
+            "  join semarchy_eph_mdm.sa_event on f_event = event_id and f_event = (select max (f_event) from semarchy_eph_mdm.sa_wwork)\n" +
+            "  and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
             "  WHERE f_wwork='PARAM1'";
 
     public static String getRandomProductNum="SELECT \n" +
