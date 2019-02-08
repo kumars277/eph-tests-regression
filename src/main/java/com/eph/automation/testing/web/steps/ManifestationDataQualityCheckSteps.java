@@ -323,7 +323,7 @@ public class ManifestationDataQualityCheckSteps {
     @And("^We compare the manifestations in PMX STG and EPH SA for (.*)$")
     public void compareDataBetweenStagingAndEPHSA(String type) {
         //sort data from PMX STG by COPYRIGHT_DATE
-        DataQualityContext.manifestationDataObjectsFromEPH.sort(Comparator.comparing(ManifestationDataObject::getCOPYRIGHT_DATE));
+//        DataQualityContext.manifestationDataObjectsFromEPH.sort(Comparator.comparing(ManifestationDataObject::getCOPYRIGHT_DATE));
 
 //        assertThat("Data for manifestations in EPH Staging and EPH SA is equal without order", dataQualityContext.manifestationDataObjectsFromEPH, containsInAnyOrder(dataQualityContext.manifestationDataObjectsFromEPHSA.toArray()));
 
