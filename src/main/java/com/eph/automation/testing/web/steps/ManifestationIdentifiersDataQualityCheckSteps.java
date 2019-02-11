@@ -5,7 +5,7 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ManifestationIdentifierObject;
-import com.eph.automation.testing.services.db.sql.ProductExtractSQL;
+import com.eph.automation.testing.services.db.sql.WorkExtractSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -40,7 +40,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
     @Given("We get the count of records with (.*) in STG_PMX_MANIFESTATION$")
     public void getCountOfRecordsWithISBNInSTGPMX(String identifier) {
-        sql = String.format(ProductExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE, identifier);
+        sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE, identifier);
         List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
         countISBNSTGPMX = ((Long) numberOfISBNs.get(0).get("count")).intValue();
         System.out.println("\nCount of of records in STG_PMX_MANIFESTATION table is: " + countISBNSTGPMX);
@@ -48,7 +48,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
     @When("^We get the count of records with (.*) in SA_MANIFESTATION_IDENTIFIER$")
     public void getCountOfRecordsInEPHSA(String identifier) {
-        sql = String.format(ProductExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_SA_MANIFESTATION_TABLE, identifier);
+        sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_SA_MANIFESTATION_TABLE, identifier);
         List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
         countISBNSA = ((Long) numberOfISBNs.get(0).get("count")).intValue();
         System.out.println("\nCount of of records in SA_MANIFESTATION_IDENTIFIER table is: " + countISBNSA);
@@ -61,7 +61,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
     @When("^We get the count of records with (.*) in GD_MANIFESTATION_IDENTIFIER$")
     public void getCountOfRecordsInEPHGD(String identifier) {
-        sql = String.format(ProductExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_GD_MANIFESTATION_TABLE, identifier);
+        sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_GD_MANIFESTATION_TABLE, identifier);
         List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
         countISBNGD = ((Long) numberOfISBNs.get(0).get("count")).intValue();
         System.out.println("\nCount of of records in GD_MANIFESTATION_IDENTIFIER table is: " + countISBNGD);
@@ -76,19 +76,19 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
     public void getRandomRecords(String numberOfRecords, String identifier, String type) {
         switch (type) {
             case "PHB":
-                sql = String.format(ProductExtractSQL.SELECT_RANDOM_ISBNS_PHB, identifier, numberOfRecords);
+                sql = String.format(WorkExtractSQL.SELECT_RANDOM_ISBNS_PHB, identifier, numberOfRecords);
                 break;
             case "PSB":
-                sql = String.format(ProductExtractSQL.SELECT_RANDOM_ISBNS_PSB, identifier, numberOfRecords);
+                sql = String.format(WorkExtractSQL.SELECT_RANDOM_ISBNS_PSB, identifier, numberOfRecords);
                 break;
             case "EBK":
-                sql = String.format(ProductExtractSQL.SELECT_RANDOM_ISBNS_EBK, identifier, numberOfRecords);
+                sql = String.format(WorkExtractSQL.SELECT_RANDOM_ISBNS_EBK, identifier, numberOfRecords);
                 break;
             case "JPR":
-                sql = String.format(ProductExtractSQL.SELECT_RANDOM_ISSNS_JPR_IDS, numberOfRecords);
+                sql = String.format(WorkExtractSQL.SELECT_RANDOM_ISSNS_JPR_IDS, numberOfRecords);
                 break;
             case "JEL":
-                sql = String.format(ProductExtractSQL.SELECT_RANDOM_ISSNS_JEL_IDS, numberOfRecords);
+                sql = String.format(WorkExtractSQL.SELECT_RANDOM_ISSNS_JEL_IDS, numberOfRecords);
                 break;
             default:
                 break;
@@ -107,7 +107,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
     @When("^We get the records from SA_MANIFESTATION_IDENTIFIER$")
     public void getEPHStagingManifestationIdentifiersData() {
 
-        sql = String.format(ProductExtractSQL.SELECT_RECORDS_SA_MANIFESTATION_IDENTIFIER, Joiner.on("','").join(ids));
+        sql = String.format(WorkExtractSQL.SELECT_RECORDS_SA_MANIFESTATION_IDENTIFIER, Joiner.on("','").join(ids));
 
         dataQualityContext.manifestationIdentifiersDataObjectsFromSA = DBManager
                 .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_SIT_URL);
@@ -129,7 +129,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
     @And("^We get the records from GD_MANIFESTATION_IDENTIFIER$")
     public void getEPHGDManifestationIdentifiersData() {
-        sql = String.format(ProductExtractSQL.SELECT_RECORDS_GD_MANIFESTATION_IDENTIFIER, Joiner.on("','").join(ids));
+        sql = String.format(WorkExtractSQL.SELECT_RECORDS_GD_MANIFESTATION_IDENTIFIER, Joiner.on("','").join(ids));
 
         dataQualityContext.manifestationIdentifiersDataObjectsFromGD = DBManager
                 .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_SIT_URL);

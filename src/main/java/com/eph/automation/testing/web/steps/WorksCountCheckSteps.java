@@ -2,7 +2,7 @@ package com.eph.automation.testing.web.steps;
 
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
-import com.eph.automation.testing.models.dao.ProductDataObject;
+import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.WorkCountSQL;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -12,11 +12,11 @@ import org.junit.Assert;
 import java.util.List;
 
 public class WorksCountCheckSteps {
-    private static List<ProductDataObject> workCountPmx;
-    private static List<ProductDataObject> workCountPMXSTG;
-    private static List<ProductDataObject> workCountPMXSTGDistinct;
-    private static List<ProductDataObject> workCountEPH;
-    private static List<ProductDataObject> workCountEPHGD;
+    private static List<WorkDataObject> workCountPmx;
+    private static List<WorkDataObject> workCountPMXSTG;
+    private static List<WorkDataObject> workCountPMXSTGDistinct;
+    private static List<WorkDataObject> workCountEPH;
+    private static List<WorkDataObject> workCountEPHGD;
     private static String sqlPMX;
     private static String sqlPMXSTG;
     private static String sqlPMXSTGDistinct;
@@ -31,7 +31,7 @@ public class WorksCountCheckSteps {
     public void getPmxWorks() {
         sqlPMX = WorkCountSQL.PMX_WORKS_COUNT;
         System.out.println(sqlPMX);
-        workCountPmx = DBManager.getDBResultAsBeanList(sqlPMX, ProductDataObject.class,
+        workCountPmx = DBManager.getDBResultAsBeanList(sqlPMX, WorkDataObject.class,
                 Constants.PMX_SIT_URL);
         pmxWork = workCountPmx.get(0).workCountPmx;
         System.out.println("Works in PMX are: " + pmxWork);
@@ -44,7 +44,7 @@ public class WorksCountCheckSteps {
         // Run the Talend job
 
         sqlPMXSTG = WorkCountSQL.PMX_STG_WORKS_COUNT;
-        workCountPMXSTG =DBManager.getDBResultAsBeanList(sqlPMXSTG, ProductDataObject.class,
+        workCountPMXSTG =DBManager.getDBResultAsBeanList(sqlPMXSTG, WorkDataObject.class,
                 Constants.EPH_SIT_URL);
         pmxSTGWork = workCountPMXSTG.get(0).workCountPMXSTG;
         System.out.println("\nWorks in PMX staging are: " + pmxSTGWork);
@@ -67,19 +67,19 @@ public class WorksCountCheckSteps {
         // Run the Talend Job
 
         sqlEPH = WorkCountSQL.EPH_SA_WORKS_COUNT;
-        workCountEPH =DBManager.getDBResultAsBeanList(sqlEPH, ProductDataObject.class,
+        workCountEPH =DBManager.getDBResultAsBeanList(sqlEPH, WorkDataObject.class,
                 Constants.EPH_SIT_URL);
         ephWork = workCountEPH.get(0).workCountEPH;
         System.out.println("\nWorks in EPH SA are: " + ephWork);
 
         sqlEPH = WorkCountSQL.EPH_GD_WORKS_COUNT;
-        workCountEPHGD =DBManager.getDBResultAsBeanList(sqlEPH, ProductDataObject.class,
+        workCountEPHGD =DBManager.getDBResultAsBeanList(sqlEPH, WorkDataObject.class,
                 Constants.EPH_SIT_URL);
         ephWorkGD = workCountEPH.get(0).workCountEPH;
         System.out.println("\nWorks in EPH GD are: " + ephWork);
 
         sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_Distinct;
-        workCountPMXSTGDistinct =DBManager.getDBResultAsBeanList(sqlPMXSTGDistinct, ProductDataObject.class,
+        workCountPMXSTGDistinct =DBManager.getDBResultAsBeanList(sqlPMXSTGDistinct, WorkDataObject.class,
                 Constants.EPH_SIT_URL);
         pmxSTGWorkDistinct = workCountPMXSTGDistinct.get(0).workCountPMXSTG;
         System.out.println("\nDistinct works in PMX staging are: " + pmxSTGWorkDistinct);

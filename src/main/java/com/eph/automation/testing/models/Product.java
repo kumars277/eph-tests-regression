@@ -2,8 +2,8 @@ package com.eph.automation.testing.models;
 
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
-import com.eph.automation.testing.models.dao.ProductDataObject;
-import com.eph.automation.testing.services.db.sql.ProductExtractSQL;
+import com.eph.automation.testing.models.dao.WorkDataObject;
+import com.eph.automation.testing.services.db.sql.WorkExtractSQL;
 
 import java.util.List;
 
@@ -74,10 +74,10 @@ public class Product {
 
     public static Product getNewProductFromPMX(String pmc) {
         Product productWork = new Product();
-        String SQL = ProductExtractSQL.GET_PRODUCT_EXPORT_FROM_PMX_BY_PMC.replace("PARAM1",pmc);
-        List<ProductDataObject> productWorkFromPMX = DBManager.getDBResultAsBeanList(SQL,
-                ProductDataObject.class, Constants.PMX_UAT_URL);
-        ProductDataObject productFromPMX = productWorkFromPMX.get(0);
+        String SQL = WorkExtractSQL.GET_PRODUCT_EXPORT_FROM_PMX_BY_PMC.replace("PARAM1",pmc);
+        List<WorkDataObject> productWorkFromPMX = DBManager.getDBResultAsBeanList(SQL,
+                WorkDataObject.class, Constants.PMX_UAT_URL);
+        WorkDataObject productFromPMX = productWorkFromPMX.get(0);
         productWork.workID = productFromPMX.PRODUCT_WORK_ID;
         productWork.workTitle = productFromPMX.WORK_TITLE;
         return productWork;

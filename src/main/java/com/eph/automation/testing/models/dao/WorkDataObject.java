@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Created by RAVIVARMANS on 26/11/2018.
  */
-public class ProductDataObject {
+public class WorkDataObject {
 
     //ProductWork Entities
     public String PRIMARY_ISBN;
@@ -223,7 +223,7 @@ public class ProductDataObject {
 
     @Override
     public String toString() {
-        return "ProductDataObject{" +
+        return "WorkDataObject{" +
                 "PRIMARY_ISBN='" + PRIMARY_ISBN + '\'' +
                 '}';
     }
@@ -232,7 +232,7 @@ public class ProductDataObject {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ProductDataObject that = (ProductDataObject) o;
+        WorkDataObject that = (WorkDataObject) o;
         return Objects.equals(PRIMARY_ISBN, that.PRIMARY_ISBN) &&
                 Objects.equals(WORK_TITLE, that.WORK_TITLE) &&
                 Objects.equals(WORK_SUBTITLE, that.WORK_SUBTITLE) &&

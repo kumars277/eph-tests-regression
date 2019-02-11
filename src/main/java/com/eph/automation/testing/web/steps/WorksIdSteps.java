@@ -4,7 +4,7 @@ import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
-import com.eph.automation.testing.models.dao.ProductDataObject;
+import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.WorksIdentifierSQL;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -21,20 +21,20 @@ public class WorksIdSteps {
     @StaticInjection
     public DataQualityContext dataQualityContext;
     public String sql;
-    private static List<ProductDataObject> data;
-    private static List<ProductDataObject> dataFromSTG;
-    private static List<ProductDataObject> dataFromSA;
-    private static List<ProductDataObject> dataFromSAId;
-    private static List<ProductDataObject> dataFromSAFtype;
-    private static List<ProductDataObject> dataFromGDFtype;
-    private static List<ProductDataObject> dataFromGDId;
+    private static List<WorkDataObject> data;
+    private static List<WorkDataObject> dataFromSTG;
+    private static List<WorkDataObject> dataFromSA;
+    private static List<WorkDataObject> dataFromSAId;
+    private static List<WorkDataObject> dataFromSAFtype;
+    private static List<WorkDataObject> dataFromGDFtype;
+    private static List<WorkDataObject> dataFromGDId;
 
     @Given("^We have a work from type (.*) to check by (.*)$")
     public void getProductNum(String type, String id){
         sql = WorksIdentifierSQL.getRandomProductNum
                 .replace("PARAM1", id)
                 .replace("PARAM2", type);
-        data = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+        data = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
         System.out.print(sql);
         dataQualityContext.productIdFromStg = data.get(0).random_value;
         System.out.println("\n The product number is " + dataQualityContext.productIdFromStg);
@@ -45,20 +45,20 @@ public class WorksIdSteps {
         sql = WorksIdentifierSQL.getIdentifiers
                 .replace("PARAM1",id)
                 .replace("PARAM2", dataQualityContext.productIdFromStg);
-        dataFromSTG = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+        dataFromSTG = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
 
 
         sql = WorksIdentifierSQL.getEphWorkID
                 .replace("PARAM1", dataFromSTG.get(0).PRODUCT_WORK_ID);
-        dataFromSA = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+        dataFromSA = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
 
         sql = WorksIdentifierSQL.getIdentifierDataFromSA
                 .replace("PARAM1", dataFromSA.get(0).WORK_ID);
-        dataFromSAId = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+        dataFromSAId = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
 
         sql = WorksIdentifierSQL.getIdentifierDataFromGD
                 .replace("PARAM1", dataFromSA.get(0).WORK_ID);
-        dataFromGDId = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+        dataFromGDId = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
     }
 
     @Then("^All of the identifiers are stored")
@@ -101,7 +101,7 @@ public class WorksIdSteps {
                 sql = WorksIdentifierSQL.getTypeId
                         .replace("PARAM1", dataFromSA.get(0).WORK_ID)
                         .replace("PARAM2", "ELSEVIER JOURNAL NUMBER");
-                dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+                dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
                 Assert.assertEquals("The JOURNAL_NUMBER is incorrect for id="+dataQualityContext.productIdFromStg,
                         "ELSEVIER JOURNAL NUMBER", dataFromSAFtype.get(0).F_TYPE);
                 System.out.println("Journal number is correct");
@@ -110,7 +110,7 @@ public class WorksIdSteps {
                 sql = WorksIdentifierSQL.getTypeId
                         .replace("PARAM1", dataFromSA.get(0).WORK_ID)
                         .replace("PARAM2", "ISSN-L");
-                dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+                dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
                 Assert.assertEquals("The ISSN_L is incorrect for id="+dataQualityContext.productIdFromStg,
                         "ISSN-L", dataFromSAFtype.get(0).F_TYPE);
                 System.out.println("ISSN_L is correct");
@@ -119,7 +119,7 @@ public class WorksIdSteps {
                 sql = WorksIdentifierSQL.getTypeId
                         .replace("PARAM1", dataFromSA.get(0).WORK_ID)
                         .replace("PARAM2", "JOURNAL ACRONYM");
-                dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+                dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
                 Assert.assertEquals("The JOURNAL_ACRONYM is incorrect for id="+dataQualityContext.productIdFromStg,
                         "JOURNAL ACRONYM", dataFromSAFtype.get(0).F_TYPE);
                 System.out.println("Journal acronym is correct");
@@ -128,7 +128,7 @@ public class WorksIdSteps {
                 sql = WorksIdentifierSQL.getTypeId
                         .replace("PARAM1", dataFromSA.get(0).WORK_ID)
                         .replace("PARAM2", "DAC-K");
-                dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+                dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
                 Assert.assertEquals("The DAC_KEY is incorrect for id="+dataQualityContext.productIdFromStg,
                         "DAC-K", dataFromSAFtype.get(0).F_TYPE);
                 System.out.println("DAC_KEY is correct");
@@ -137,7 +137,7 @@ public class WorksIdSteps {
                 sql = WorksIdentifierSQL.getTypeId
                         .replace("PARAM1", dataFromSA.get(0).WORK_ID)
                         .replace("PARAM2", "PROJECT-NUM");
-                dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+                dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
                 Assert.assertEquals("The PROJECT_NUM is incorrect for id="+dataQualityContext.productIdFromStg,
                         "PROJECT-NUM", dataFromSAFtype.get(0).F_TYPE);
                 System.out.println("PROJECT_NUM is correct");
@@ -161,7 +161,7 @@ public class WorksIdSteps {
             sql=WorksIdentifierSQL.getTypeIdGD
                     .replace("PARAM1",dataFromSA.get(0).WORK_ID)
                     .replace("PARAM2","ELSEVIER JOURNAL NUMBER");
-            dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+            dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
             Assert.assertEquals("The Journal Number is incorrect for id="+dataFromSA.get(0).WORK_ID,
                     "ELSEVIER JOURNAL NUMBER",dataFromGDFtype.get(0).F_TYPE);
         }
@@ -169,7 +169,7 @@ public class WorksIdSteps {
             sql=WorksIdentifierSQL.getTypeIdGD
                     .replace("PARAM1",dataFromSA.get(0).WORK_ID)
                     .replace("PARAM2","ISSN-L");
-            dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+            dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
             Assert.assertEquals("The ISSN_L is incorrect for id="+dataFromSA.get(0).WORK_ID,
                     "ISSN-L",dataFromGDFtype.get(0).F_TYPE);
         }
@@ -177,7 +177,7 @@ public class WorksIdSteps {
             sql=WorksIdentifierSQL.getTypeIdGD
                     .replace("PARAM1",dataFromSA.get(0).WORK_ID)
                     .replace("PARAM2","JOURNAL ACRONYM");
-            dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+            dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
             Assert.assertEquals("The JOURNAL_ACRONYM is incorrect for id="+dataFromSA.get(0).WORK_ID,
                     "JOURNAL ACRONYM",dataFromGDFtype.get(0).F_TYPE);
         }
@@ -185,7 +185,7 @@ public class WorksIdSteps {
             sql=WorksIdentifierSQL.getTypeIdGD
                     .replace("PARAM1",dataFromSA.get(0).WORK_ID)
                     .replace("PARAM2","DAC-K");
-            dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+            dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
             Assert.assertEquals("The DAC_KEY is incorrect for id="+dataFromSA.get(0).WORK_ID,
                     "DAC-K",dataFromGDFtype.get(0).F_TYPE);
         }
@@ -193,7 +193,7 @@ public class WorksIdSteps {
             sql=WorksIdentifierSQL.getTypeIdGD
                     .replace("PARAM1",dataFromSA.get(0).WORK_ID)
                     .replace("PARAM2","PROJECT-NUM");
-            dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+            dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
             Assert.assertEquals("The PROJECT_NUM is incorrect for id="+dataFromSA.get(0).WORK_ID,
                     "PROJECT-NUM",dataFromGDFtype.get(0).F_TYPE);
         }

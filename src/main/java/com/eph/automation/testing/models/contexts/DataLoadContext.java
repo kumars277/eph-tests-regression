@@ -1,7 +1,7 @@
 package com.eph.automation.testing.models.contexts;
 
 import com.eph.automation.testing.annotations.StaticInjection;
-import com.eph.automation.testing.models.dao.ProductDataObject;
+import com.eph.automation.testing.models.dao.WorkDataObject;
 
 import java.util.List;
 
@@ -13,8 +13,8 @@ public class DataLoadContext {
 
     public static String incrementalFile;
     public static String sftpLandingLocation;
-    public static List<ProductDataObject> productDetailsFromPMXSource;
-    public static List<ProductDataObject> productDetailsFromSDLayer;
+    public static List<WorkDataObject> productDetailsFromPMXSource;
+    public static List<WorkDataObject> productDetailsFromSDLayer;
     public static String loadId;
     public static String sourceId;
     public static String talendJobName;

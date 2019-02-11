@@ -5,7 +5,7 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ManifestationDataObject;
-import com.eph.automation.testing.services.db.sql.ProductExtractSQL;
+import com.eph.automation.testing.services.db.sql.WorkExtractSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -39,7 +39,7 @@ public class ManifestationDataQualityCheckSteps {
 
     @Given("We get the count of the manifestations records in PMX$")
     public void getCountManifestationsPmxGdProductManifestation() {
-        sql = ProductExtractSQL.COUNT_MANIFESTATIONS_IN_PMX_GD_PRODUCT_MANIFESTATION_TABLE;
+        sql = WorkExtractSQL.COUNT_MANIFESTATIONS_IN_PMX_GD_PRODUCT_MANIFESTATION_TABLE;
         List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.PMX_SIT_URL);
         countManifestationsPMX = ((BigDecimal) manifestationsNumber.get(0).get("count")).intValue();
         System.out.println("\nCount of manifestations in PMX.GD_PRODUCT_MANIFESTATION table is: " + countManifestationsPMX);
@@ -47,7 +47,7 @@ public class ManifestationDataQualityCheckSteps {
 
     @When("We get the count of the manifestations records in PMX STG$")
     public void getCountManifestationsPmxStg() {
-        sql = ProductExtractSQL.COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE;
+        sql = WorkExtractSQL.COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE;
         List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
         countManifestationsSTGPMX = ((Long) manifestationsNumber.get(0).get("count")).intValue();
         System.out.println("\nCount of manifestations in STG_PMX_MANIFESTATION table is: " + countManifestationsSTGPMX);
@@ -61,7 +61,7 @@ public class ManifestationDataQualityCheckSteps {
 
     @When("^The manifestations are transferred to EPH$")
     public void getCountSAManifestation() {
-        sql = ProductExtractSQL.COUNT_MANIFESTATIONS_IN_SA_MANIFESTATION_TABLE;
+        sql = WorkExtractSQL.COUNT_MANIFESTATIONS_IN_SA_MANIFESTATION_TABLE;
         List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
         countManifestationsEPH = ((Long) manifestationsNumber.get(0).get("count")).intValue();
         System.out.println("\nCount of manifestations in EPH SA table is: " + countManifestationsEPH);
@@ -75,7 +75,7 @@ public class ManifestationDataQualityCheckSteps {
 
     @Then("^The manifestations are transferred to the golden data table$")
     public void getCountGDManifestation() {
-        sql = ProductExtractSQL.COUNT_MANIFESTATIONS_IN_GD_MANIFESTATION_TABLE;
+        sql = WorkExtractSQL.COUNT_MANIFESTATIONS_IN_GD_MANIFESTATION_TABLE;
         List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
         countManifestationsEPHGD = ((Long) manifestationsNumber.get(0).get("count")).intValue();
         System.out.println("\nCount of manifestations in GD_MANIFESTATION table is: " + countManifestationsEPHGD);
@@ -91,10 +91,10 @@ public class ManifestationDataQualityCheckSteps {
     public void getRandomData(String numberOfRecords, String journalType) {
         switch (journalType) {
             case "JPR":
-                sql = String.format(ProductExtractSQL.SELECT_RANDOM_MANIFESTATION_IDS_JPR, numberOfRecords);
+                sql = String.format(WorkExtractSQL.SELECT_RANDOM_MANIFESTATION_IDS_JPR, numberOfRecords);
                 break;
             case "JEL":
-                sql = String.format(ProductExtractSQL.SELECT_RANDOM_MANIFESTATION_IDS_JEL, numberOfRecords);
+                sql = String.format(WorkExtractSQL.SELECT_RANDOM_MANIFESTATION_IDS_JEL, numberOfRecords);
                 break;
         }
         manifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
@@ -106,13 +106,13 @@ public class ManifestationDataQualityCheckSteps {
     public void getRandomISBNs(String numberOfRecords, String bookType) {
         switch (bookType) {
             case "PHB":
-                sql = String.format(ProductExtractSQL.SELECT_RANDOM_ISBN_IDS_PHB, numberOfRecords);
+                sql = String.format(WorkExtractSQL.SELECT_RANDOM_ISBN_IDS_PHB, numberOfRecords);
                 break;
             case "PSB":
-                sql = String.format(ProductExtractSQL.SELECT_RANDOM_ISBN_IDS_PSB, numberOfRecords);
+                sql = String.format(WorkExtractSQL.SELECT_RANDOM_ISBN_IDS_PSB, numberOfRecords);
                 break;
             case "EBK":
-                sql = String.format(ProductExtractSQL.SELECT_RANDOM_ISBN_IDS_EBK, numberOfRecords);
+                sql = String.format(WorkExtractSQL.SELECT_RANDOM_ISBN_IDS_EBK, numberOfRecords);
                 break;
             default:
                 break;
@@ -127,7 +127,7 @@ public class ManifestationDataQualityCheckSteps {
     @When("^We get the manifestation ids for these books$")
     public void getManifestationsIds() {
         //  Get manifestations ids for isbns which are in PMX STG
-        String sqlSelectManifestationIDS = String.format(ProductExtractSQL.SELECT_MANIFESTATIONS_IDS_FOR_SPECIFIC_ISBN, Joiner.on("','").join(isbns));
+        String sqlSelectManifestationIDS = String.format(WorkExtractSQL.SELECT_MANIFESTATIONS_IDS_FOR_SPECIFIC_ISBN, Joiner.on("','").join(isbns));
 
         manifestationIds = DBManager.getDBResultMap(sqlSelectManifestationIDS, Constants.EPH_SIT_URL);
         ids = manifestationIds.stream().map(m -> (BigDecimal) m.get("manifestation_id")).map(String::valueOf).collect(Collectors.toList());
@@ -136,7 +136,7 @@ public class ManifestationDataQualityCheckSteps {
 
     @Then("^We get the manifestations records from PMX$")
     public void getPMXManifestationData() {
-        sql = String.format(ProductExtractSQL.SELECT_MANIFESTATIONS_DATA_IN_PMX, Joiner.on("','").join(ids));
+        sql = String.format(WorkExtractSQL.SELECT_MANIFESTATIONS_DATA_IN_PMX, Joiner.on("','").join(ids));
 
         dataQualityContext.manifestationDataObjectsFromPMX = DBManager
                 .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.PMX_SIT_URL);
@@ -144,7 +144,7 @@ public class ManifestationDataQualityCheckSteps {
 
     @Then("^We have the manifestations in PMX STG$")
     public void getEPHStagingManifestationData() {
-        sql = String.format(ProductExtractSQL.SELECT_MANIFESTATIONS_DATA_IN_PMX_STG, Joiner.on("','").join(ids));
+        sql = String.format(WorkExtractSQL.SELECT_MANIFESTATIONS_DATA_IN_PMX_STG, Joiner.on("','").join(ids));
 
         dataQualityContext.manifestationDataObjectsFromEPH = DBManager
                 .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_SIT_URL);
@@ -297,7 +297,7 @@ public class ManifestationDataQualityCheckSteps {
     @And("^We get the manifestations in EPH SA$")
     public void getManifestationsEPHSA() {
         // Get manifestations data from EPH SA_MANIFESTATION
-        sql = String.format(ProductExtractSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_SA, Joiner.on("','").join(ids));
+        sql = String.format(WorkExtractSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_SA, Joiner.on("','").join(ids));
 
         dataQualityContext.manifestationDataObjectsFromEPHSA = DBManager
                 .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_SIT_URL);
@@ -408,7 +408,7 @@ public class ManifestationDataQualityCheckSteps {
     @And("^We get the manifestations in EPH golden data$")
     public void getManifestationsEPHGD() {
         // Get manifestations data from EPH SA_MANIFESTATION
-        sql = String.format(ProductExtractSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_GD, Joiner.on("','").join(ids));
+        sql = String.format(WorkExtractSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_GD, Joiner.on("','").join(ids));
 
         dataQualityContext.manifestationDataObjectsFromEPHGD = DBManager
                 .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_SIT_URL);
