@@ -70,18 +70,18 @@ public class ProductDataSQL {
             "   B_LOADID AS LOADID\n" +
             "  ,F_EVENT AS F_EVENT\n" +
             "  ,sa.B_CLASSNAME as B_CLASSNAME\n" +
-            "  ,product_id AS product_id -- Title\n" +
+            "  ,product_id AS PRODUCT_ID -- Title\n" +
             "  ,pmx_source_reference AS pmx_source_reference -- Subtitle\n" +
-            "  ,name as name\n" +
-            "  ,short_name as short_name\n" +
-            "  ,separately_sale_indicator as separately_sale_indicator\n" +
-            "  ,trial_allowed_indicator as trial_allowed_indicator\n" +
-            "  ,launch_date as launch_date\n" +
+            "  ,name as PRODUCT_NAME\n" +
+            "  ,short_name as PRODUCT_SHORT_NAME\n" +
+            "  ,separately_sale_indicator as SEPARATELY_SALEABLE_IND\n" +
+            "  ,trial_allowed_indicator as TRIAL_ALLOWED_IND\n" +
+            "  ,launch_date as FIRST_PUB_DATE\n" +
             "  ,f_type AS f_type\n" +
             "  ,f_status AS f_status\n" +
             "  ,f_revenue_model AS f_revenue_model\n" +
-            "  ,f_wwork AS f_wwork\n" +
-            "  ,f_manifestation AS f_manifestation\n" +
+            "  ,f_wwork AS F_PRODUCT_WORK\n" +
+            "  ,f_manifestation AS F_PRODUCT_MANIFESTATION_TYP\n" +
             "  FROM ephsit.semarchy_eph_mdm.sa_product sa\n" +
             "  join semarchy_eph_mdm.sa_event on f_event = event_id and f_event = (select max (f_event) from semarchy_eph_mdm.sa_product)\n" +
             "  and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
