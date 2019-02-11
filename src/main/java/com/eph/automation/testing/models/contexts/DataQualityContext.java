@@ -4,7 +4,7 @@ import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.models.dao.GenericDataObject;
 import com.eph.automation.testing.models.dao.ManifestationDataObject;
 import com.eph.automation.testing.models.dao.ManifestationIdentifierObject;
-import com.eph.automation.testing.models.dao.ProductDataObject;
+import com.eph.automation.testing.models.dao.WorkDataObject;
 //import com.eph.automation.testing.models.dao.ProductWorkEntity;
 
 import java.util.List;
@@ -16,10 +16,10 @@ import java.util.List;
 public class DataQualityContext {
 
     public static List<GenericDataObject> genericDataObjectsFromSource;
-    public static List<ProductDataObject> productDataObjectsFromSource;
-    public static List<ProductDataObject> productDataObjectsFromPMXSTG;
-    public static List<ProductDataObject> productDataObjectsFromEPH;
-    public static List<ProductDataObject> productDataObjectsFromEPHGD;
+    public static List<WorkDataObject> workDataObjectsFromSource;
+    public static List<WorkDataObject> workDataObjectsFromPMXSTG;
+    public static List<WorkDataObject> workDataObjectsFromEPH;
+    public static List<WorkDataObject> workDataObjectsFromEPHGD;
 
     public static List<ManifestationDataObject> manifestationDataObjectsFromEPH;
     public static List<ManifestationDataObject> manifestationDataObjectsFromPMX;

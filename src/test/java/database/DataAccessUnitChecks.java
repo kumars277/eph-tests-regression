@@ -5,8 +5,8 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.configuration.LoadProperties;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
-import com.eph.automation.testing.models.dao.ProductDataObject;
-import com.eph.automation.testing.services.db.sql.ProductExtractSQL;
+import com.eph.automation.testing.models.dao.WorkDataObject;
+import com.eph.automation.testing.services.db.sql.WorkExtractSQL;
 import com.eph.automation.testing.services.security.DecryptionService;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -36,18 +36,18 @@ public class DataAccessUnitChecks {
     @Test
     @Ignore
     public void testPMXDBAccess() {
-        String SQL = ProductExtractSQL.PMX_WORK_EXTRACT.replace("PARAM1","9781416049722");
-        dataQualityContext.productDataObjectsFromSource = DBManager.getDBResultAsBeanList(SQL, ProductDataObject.class, Constants.PMX_UAT_URL);
-        System.out.println(dataQualityContext.productDataObjectsFromSource.get(0).PRIMARY_ISBN);
+        String SQL = WorkExtractSQL.PMX_WORK_EXTRACT.replace("PARAM1","9781416049722");
+        dataQualityContext.workDataObjectsFromSource = DBManager.getDBResultAsBeanList(SQL, WorkDataObject.class, Constants.PMX_UAT_URL);
+        System.out.println(dataQualityContext.workDataObjectsFromSource.get(0).PRIMARY_ISBN);
     }
 
     @Test
     @Ignore
     public void testPostgressDBAccess() {
-        String SQL = ProductExtractSQL.PRODUCT_MANIFESTATION_FROM_EPH_SA.replace("PARAM1","9781416049722");
-        dataQualityContext.productDataObjectsFromSource =
-                DBManager.getDBResultAsBeanList(SQL, ProductDataObject.class, Constants.EPH_DEV_URL);
-        System.out.println(dataQualityContext.productDataObjectsFromSource.get(0).PRIMARY_ISBN
+        String SQL = WorkExtractSQL.PRODUCT_MANIFESTATION_FROM_EPH_SA.replace("PARAM1","9781416049722");
+        dataQualityContext.workDataObjectsFromSource =
+                DBManager.getDBResultAsBeanList(SQL, WorkDataObject.class, Constants.EPH_DEV_URL);
+        System.out.println(dataQualityContext.workDataObjectsFromSource.get(0).PRIMARY_ISBN
         );
     }
 }

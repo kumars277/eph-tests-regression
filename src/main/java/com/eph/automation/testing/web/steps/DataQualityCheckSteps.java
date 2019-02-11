@@ -5,8 +5,8 @@ import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
-import com.eph.automation.testing.models.dao.ProductDataObject;
-import com.eph.automation.testing.services.db.sql.ProductExtractSQL;
+import com.eph.automation.testing.models.dao.WorkDataObject;
+import com.eph.automation.testing.services.db.sql.WorkExtractSQL;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -69,24 +69,24 @@ public class DataQualityCheckSteps {
 
     @When("^checking the loaded product in EPH$")
     public void checking_the_loaded_product_in_EPH() throws Throwable {
-        sql = ProductExtractSQL.PMX_WORK_EXTRACT.replace("PARAM1",dataQualityContext.productIdentifierID);
-        dataQualityContext.productDataObjectsFromSource = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class,
+        sql = WorkExtractSQL.PMX_WORK_EXTRACT.replace("PARAM1",dataQualityContext.productIdentifierID);
+        dataQualityContext.workDataObjectsFromSource = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                 Constants.PMX_UAT_URL);
 
         //Invoke Talend Job
 
-        sql = ProductExtractSQL.PRODUCT_MANIFESTATION_FROM_EPH_SA.replace("PARAM1", dataQualityContext.productIdentifierID);
-        dataQualityContext.productDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+        sql = WorkExtractSQL.PRODUCT_MANIFESTATION_FROM_EPH_SA.replace("PARAM1", dataQualityContext.productIdentifierID);
+        dataQualityContext.workDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
     }
 
     @Then("^the product details are consistent between EPH and PMX$")
     public void the_product_details_are_consistent_between_EPH_and_PMX() throws Throwable {
-        System.out.println(dataQualityContext.productDataObjectsFromSource.toString());
-        System.out.println(dataQualityContext.productDataObjectsFromEPH.toString());
+        System.out.println(dataQualityContext.workDataObjectsFromSource.toString());
+        System.out.println(dataQualityContext.workDataObjectsFromEPH.toString());
 
         assertTrue("Expecting the Product details from PMX and EPH Consistent ",
-                dataQualityContext.productDataObjectsFromSource
-                        .equals(dataQualityContext.productDataObjectsFromEPH));
+                dataQualityContext.workDataObjectsFromSource
+                        .equals(dataQualityContext.workDataObjectsFromEPH));
     }
 }
 */
