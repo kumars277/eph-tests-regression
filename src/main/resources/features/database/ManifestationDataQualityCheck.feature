@@ -1,4 +1,4 @@
-Feature: Verify the db records for manifestations in PMX and EPH
+Feature: Entity - Manifestations - Count & Data Mapping Check - Validate data between PMX and EPH - Talend Full Load
 
   @Regression
   Scenario: Verify count of manifestations records in PMX and EPH staging is equal

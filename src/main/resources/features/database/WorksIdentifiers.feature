@@ -1,4 +1,4 @@
-Feature: Checking the data in the Works Identifier table (Identifiers count and column by column check)
+Feature: Entity - Work Identifier - Count & Data Mapping Check - Validate data between PMX and EPH - Talend Full Load
 
   @Regression
   Scenario Outline: Check if all of the identifiers are stored in the identifiers table
