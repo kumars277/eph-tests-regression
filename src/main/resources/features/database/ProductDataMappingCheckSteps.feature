@@ -1,4 +1,5 @@
-Feature: Products data mapping checks
+Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and EPH - Talend Full Load
+
 
   @Regression
   Scenario Outline: Validate data is transferred from PMX to EPH STG
