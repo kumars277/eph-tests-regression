@@ -408,7 +408,7 @@ public class ProductDataMappingCheck {
                     dataQualityContext.productDataObjectsFromEPHSA.get(i).getB_CLASSNAME()));
 
             //verify PMX_SOURCE_REFERENCE
-            System.out.println("\"Expecting PMX_SOURCE_REFERENCE in EPH Staging and EPH SA are consistent for " );
+            System.out.println("\"Expecting PMX_SOURCE_REFERENCE in EPH Staging and EPH SA are consistent for ");
 
             System.out.println("\nPRODUCT_MANIFESTATION_ID in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID());
             System.out.println("\nPRODUCT_SHORT_NAME in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE());
@@ -418,7 +418,7 @@ public class ProductDataMappingCheck {
                     dataQualityContext.productDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE()));
 
             //verify PRODUCT_NAME
-            System.out.println("\"Expecting PRODUCT_NAME in EPH Staging and EPH SA are consistent for " );
+            System.out.println("\"Expecting PRODUCT_NAME in EPH Staging and EPH SA are consistent for ");
 
             System.out.println("\nPRODUCT_NAME in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_NAME());
             System.out.println("\nPRODUCT_NAME in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
@@ -429,9 +429,9 @@ public class ProductDataMappingCheck {
 
 
             //verify PRODUCT_SHORT_NAME
-            System.out.println("\"Expecting PRODUCT_SHORT_NAME in EPH Staging and EPH SA are consistent for " );
+            System.out.println("\"Expecting PRODUCT_SHORT_NAME in EPH Staging and EPH SA are consistent for ");
 
-            System.out.println("\nPRODUCT_SHORT_NAME in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_SHORT_NAME() );
+            System.out.println("\nPRODUCT_SHORT_NAME in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_SHORT_NAME());
             System.out.println("\nPRODUCT_SHORT_NAME in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_SHORT_NAME());
 
 
@@ -440,7 +440,7 @@ public class ProductDataMappingCheck {
 
 
             //verify SEPARATELY_SALEABLE_IND
-            System.out.println("\"Expecting SEPARATELY_SALEABLE_IND in EPH Staging and EPH SA are consistent for " );
+            System.out.println("\"Expecting SEPARATELY_SALEABLE_IND in EPH Staging and EPH SA are consistent for ");
 
             System.out.println("\nSEPARATELY_SALEABLE_IND in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getSEPARATELY_SALEABLE_IND());
 
@@ -448,28 +448,27 @@ public class ProductDataMappingCheck {
             String availability_status = dataQualityContext.productDataObjectsFromEPHSTG.get(i).getAVAILABILITY_STATUS();
 
 
-            if(availability_status.equals("PNS"))
+            if (availability_status.equals("PNS"))
                 assertTrue(dataQualityContext.productDataObjectsFromEPHSA.get(i).getSEPARATELY_SALEABLE_IND().equals("f"));
             else
                 assertTrue(dataQualityContext.productDataObjectsFromEPHSA.get(i).getSEPARATELY_SALEABLE_IND().equals("t"));
 
 
-
             //verify TRIAL_ALLOWED_IND
-            System.out.println("\"Expecting TRIAL_ALLOWED_IND in EPH Staging and EPH SA are consistent for " );
+            System.out.println("\"Expecting TRIAL_ALLOWED_IND in EPH Staging and EPH SA are consistent for ");
 
             System.out.println("\nTRIAL_ALLOWED_IND in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND());
             System.out.println("\nTRIAL_ALLOWED_IND in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getTRIAL_ALLOWED_IND());
 
 
-            if(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND() == null)
+            if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND() == null)
                 assertTrue(dataQualityContext.productDataObjectsFromEPHSA.get(i).getTRIAL_ALLOWED_IND().equals("f"));
             else
                 assertTrue(dataQualityContext.productDataObjectsFromEPHSA.get(i).getTRIAL_ALLOWED_IND().equals("t"));
 
 
             //verify FIRST_PUB_DATE
-            System.out.println("\nExpecting FIRST_PUB_DATE in EPH Staging And EPH SA are consistent for " );
+            System.out.println("\nExpecting FIRST_PUB_DATE in EPH Staging And EPH SA are consistent for ");
 
 
             if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE() != null)
@@ -480,21 +479,20 @@ public class ProductDataMappingCheck {
             assertTrue(Objects.equals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE(),
                     dataQualityContext.productDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE()));
 
-//
-//            //verify F_TYPE
-//            System.out.println("\"Expecting F_TYPE in EPH Staging and EPH SA are consistent for " );
-//
-//            System.out.println("\nF_TYPE in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_TYPE());
-//            System.out.println("\nF_TYPE in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE());
-//
-//
-//            assertTrue(Objects.equals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_TYPE(),
-//                    dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE()));
 
+            //verify F_TYPE
+            System.out.println("\"Expecting F_TYPE in EPH SA is correct" );
+
+            System.out.println("\nF_TYPE in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE());
+
+            String pmx_source_reference = dataQualityContext.productDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE();
+
+            assertTrue(Objects.equals(pmx_source_reference.substring(pmx_source_reference.length() - 3),
+                    dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE()));
 
 
             //verify F_STATUS
-            System.out.println("\"Expecting F_STATUS in EPH Staging and EPH SA are consistent for " );
+            System.out.println("\"Expecting F_STATUS in EPH Staging and EPH SA are consistent for ");
 
             System.out.println("\nF_STATUS in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_STATUS());
 
@@ -505,18 +503,18 @@ public class ProductDataMappingCheck {
 
 
             //verify F_REVENUE_MODEL
-            System.out.println("\"Expecting F_REVENUE_MODEL in EPH Staging and EPH SA are consistent for " );
+            System.out.println("\"Expecting F_REVENUE_MODEL in EPH Staging and EPH SA are consistent for ");
 
             System.out.println("\nF_TYPE in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_TYPE());
             System.out.println("\nF_REVENUE_MODEL in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_REVENUE_MODEL());
 
 
             String fType = dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE();
-            if(fType.equals("OOA") || fType.equals("JAS") || fType.equals("JBS") || fType.equals("JBF") || fType.equals("RPR"))
+            if (fType.equals("OOA") || fType.equals("JAS") || fType.equals("JBS") || fType.equals("JBF") || fType.equals("RPR"))
                 assertTrue(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_REVENUE_MODEL().equals("ONE"));
-            else if(fType.equals("OAA"))
+            else if (fType.equals("OAA"))
                 assertTrue(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_REVENUE_MODEL().equals("EVE"));
-            else if(fType.equals("SUB") )
+            else if (fType.equals("SUB"))
                 assertTrue(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_REVENUE_MODEL().equals("EVE"));
             else
                 assertTrue(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_REVENUE_MODEL().equals("SUB"));
@@ -555,11 +553,11 @@ public class ProductDataMappingCheck {
 
                 id = pmxSourceReference.replace("-SUB", "");
 
-                if(type.equals("print_journal"))
-                sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
-                else if(type.equals("electronic_journal"))
+                if (type.equals("print_journal"))
+                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
+                else if (type.equals("electronic_journal"))
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2);
-                else if(type.equals("non_print_or_electronic_journal"))
+                else if (type.equals("non_print_or_electronic_journal"))
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC, id);
 
                 dataQualityContext.productDataObjectsFromEPHSTG = DBManager
@@ -573,11 +571,11 @@ public class ProductDataMappingCheck {
                 //get the id
                 id = pmxSourceReference.replace("-RPR", "");
 
-                if(type.equals("print_journal"))
-                sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
-                else if(type.equals("electronic_journal"))
+                if (type.equals("print_journal"))
+                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
+                else if (type.equals("electronic_journal"))
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2);
-                else if(type.equals("non_print_or_electronic_journal"))
+                else if (type.equals("non_print_or_electronic_journal"))
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC, id);
 
                 dataQualityContext.productDataObjectsFromEPHSTG = DBManager
@@ -592,11 +590,11 @@ public class ProductDataMappingCheck {
                 //get the id
                 id = pmxSourceReference.replace("-JBS", "");
 
-                if(type.equals("print_journal"))
-                sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
-                else if(type.equals("electronic_journal"))
+                if (type.equals("print_journal"))
+                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
+                else if (type.equals("electronic_journal"))
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2);
-                else if(type.equals("non_print_or_electronic_journal"))
+                else if (type.equals("non_print_or_electronic_journal"))
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC, id);
 
                 dataQualityContext.productDataObjectsFromEPHSTG = DBManager
@@ -610,13 +608,12 @@ public class ProductDataMappingCheck {
                 //get the id
                 id = pmxSourceReference.replace("-JAS", "");
 
-                if(type.equals("print_journal"))
-                sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK, id, 1);
-                else if(type.equals("electronic_journal"))
+                if (type.equals("print_journal"))
+                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK, id, 1);
+                else if (type.equals("electronic_journal"))
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK, id, 2);
-                else if(type.equals("non_print_or_electronic_journal"))
+                else if (type.equals("non_print_or_electronic_journal"))
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_NOT_PRINT_OR_ELECTRONIC, id);
-
 
 
                 dataQualityContext.productDataObjectsFromEPHSTG = DBManager
@@ -630,11 +627,11 @@ public class ProductDataMappingCheck {
                 //get the id
                 id = pmxSourceReference.replace("-OAA", "");
 
-                if(type.equals("print_journal"))
+                if (type.equals("print_journal"))
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK, id, 1);
-                else if(type.equals("electronic_journal"))
+                else if (type.equals("electronic_journal"))
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK, id, 2);
-                else if(type.equals("non_print_or_electronic_journal"))
+                else if (type.equals("non_print_or_electronic_journal"))
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_NOT_PRINT_OR_ELECTRONIC, id);
 
 
@@ -655,22 +652,36 @@ public class ProductDataMappingCheck {
 
             String suffix = null;
             if (pmxSourceReference.contains("SUB")) {
-               suffix = "Subscription";
-            } else  if (pmxSourceReference.contains("JBS")) {
+                suffix = "Subscription";
+                Assert.assertTrue(Objects.equals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME()));
+            } else if (pmxSourceReference.contains("JBS")) {
                 suffix = " Bulk Sales";
-            } else  if (pmxSourceReference.contains("BKF")) {
+                Assert.assertTrue(Objects.equals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME()));
+            } else if (pmxSourceReference.contains("BKF")) {
                 suffix = " Back Files";
-            } else  if (pmxSourceReference.contains("RPR")) {
+                Assert.assertTrue(Objects.equals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME()));
+            } else if (pmxSourceReference.contains("RPR")) {
                 suffix = " Reprints";
-            } else  if (pmxSourceReference.contains("OOA")) {
+                Assert.assertTrue(Objects.equals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME()));
+            } else if (pmxSourceReference.contains("OOA")) {
                 suffix = " One off Access";
-            }  else  if (pmxSourceReference.contains("OAA")) {
+                Assert.assertTrue(Objects.equals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME()));
+            } else if (pmxSourceReference.contains("OAA")) {
                 suffix = " Open Access";
-            } else  if (pmxSourceReference.contains("JAS")) {
-                suffix = " Author Charges";
-            }
+                String name = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME();
+                if (name.contains("Print"))
+                    Assert.assertTrue(Objects.equals(name.replace(" (Print)", "") + " " + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME()));
+                else if (name.contains("Online"))
+                    Assert.assertTrue(Objects.equals(name.replace(" (Online)", "") + " " + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME()));
 
-            Assert.assertTrue(Objects.equals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME()));
+            } else if (pmxSourceReference.contains("JAS")) {
+                suffix = " Author Charges";
+                String name = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME();
+                if (name.contains("Print"))
+                    Assert.assertTrue(Objects.equals(name.replace(" (Print)", "") + " " + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME()));
+                else if (name.contains("Online"))
+                    Assert.assertTrue(Objects.equals(name.replace(" (Online)", "") + " " + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME()));
+            }
 
 
             //PRODUCT_SHORT_NAME
@@ -679,7 +690,7 @@ public class ProductDataMappingCheck {
             System.out.println("\nPRODUCT_SHORT_NAME in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_SHORT_NAME());
             System.out.println("\nPRODUCT_SHORT_NAME in EPH SA: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_SHORT_NAME());
 
-            Assert.assertTrue(Objects.equals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_SHORT_NAME(),dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_SHORT_NAME()));
+            Assert.assertTrue(Objects.equals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_SHORT_NAME(), dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_SHORT_NAME()));
 
 
             //SEPARATELY_SALE_IND
@@ -688,11 +699,20 @@ public class ProductDataMappingCheck {
             System.out.println("\n SEPARATELY_SALE_IND : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getSEPARATELY_SALEABLE_IND());
 
 
-            if(availability_status.equals("PNS"))
+            if (availability_status.equals("PNS"))
                 assertTrue(dataQualityContext.productDataObjectsFromEPHSA.get(i).getSEPARATELY_SALEABLE_IND().equals("f"));
             else
                 assertTrue(dataQualityContext.productDataObjectsFromEPHSA.get(i).getSEPARATELY_SALEABLE_IND().equals("t"));
 
+            //F_TYPE
+            System.out.println("\"Expecting F_TYPE in EPH SA is correct" );
+
+            System.out.println("\nF_TYPE in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE());
+
+            String pmx_source_reference = dataQualityContext.productDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE();
+
+            assertTrue(Objects.equals(pmx_source_reference.substring(pmx_source_reference.length() - 3),
+                    dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE()));
 
             //F_STATUS
             System.out.println("\nF_STATUS in EPH SA: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_STATUS());
@@ -702,7 +722,7 @@ public class ProductDataMappingCheck {
                     assertTrue(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_STATUS().equals("PST"));
                 else if (availability_status.equals("PSTB"))
                     assertTrue(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_STATUS().equals(availability_status));
-            } else if(pmxSourceReference.contains("BKF") || pmxSourceReference.contains("RPR")) {
+            } else if (pmxSourceReference.contains("BKF") || pmxSourceReference.contains("RPR")) {
                 if (availability_status.equals("PSTB"))
                     assertTrue(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_STATUS().equals("PAS"));
                 else
@@ -711,11 +731,11 @@ public class ProductDataMappingCheck {
 
             //F_REVENUE_MODEL
             String fType = dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE();
-            if(fType.equals("OOA") || fType.equals("JAS") || fType.equals("JBS") || fType.equals("JBF") || fType.equals("RPR"))
+            if (fType.equals("OOA") || fType.equals("JAS") || fType.equals("JBS") || fType.equals("JBF") || fType.equals("RPR"))
                 assertTrue(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_REVENUE_MODEL().equals("ONE"));
-            else if(fType.equals("OAA"))
+            else if (fType.equals("OAA"))
                 assertTrue(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_REVENUE_MODEL().equals("EVE"));
-            else if(fType.equals("SUB") && type.equals("print_journal"))
+            else if (fType.equals("SUB") && type.equals("print_journal"))
                 assertTrue(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_REVENUE_MODEL().equals("EVE"));
             else
                 assertTrue(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_REVENUE_MODEL().equals("SUB"));
