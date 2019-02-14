@@ -1,6 +1,6 @@
 Feature: Products data mapping checks
 
-  @WIP
+  @Regression
   Scenario Outline: Validate data is transferred from PMX to EPH STG
     Given We get <countOfRandomIds> random ids for <type>
     When We get the corresponding records from PMX
@@ -11,29 +11,36 @@ Feature: Products data mapping checks
       | 10               | journal |
       | 10               | book    |
 
-  @WIP
+  @Regression
   Scenario Outline: Validate data is transferred from EPH STG and EPH SA for books
     Given We get <countOfRandomIds> random ids for <type>
-    When we get the corresponding pmx_source_reference ids for the random ids for <type>
     Then We get the data from EPH STG
     And We get the data from EPH SA
-    And Compare the records in EPH STG and EPH SA for <type>
+    And We check that mandatory columns are populated
+    And Compare the records in EPH STG and EPH SA for books
+    And We get the data from EPH GD
+    And Compare the products data between EPH SA and EPH GD
     Examples:
       | countOfRandomIds | type |
       | 10               | book |
 
-  @WIP
+  @Regression
   Scenario Outline: Validate data is transferred from EPH STG and EPH SA for journals
-    Given We get <countOfRandomIds> random ids for <type>
-    When we get the corresponding pmx_source_reference ids for the random ids for <type>
-    Then We get the data from EPH STG
-    And We get the data from EPH SA
-    And Compare the records in EPH STG and EPH SA for <type>
-    Examples:
-      | countOfRandomIds | type |
-      | 2                | print_journal |
-      | 2                | electronic_journal |
-      | 2                | non_print_or_electronic_journal |
+    Given We get <countOfRandomIds> ids of journals for <type> with <open_access>
+    When We get the data from EPH STG
+    Then We get the data from EPH SA for journals
+    And We check that mandatory columns are populated
+    And Depends on the flags of every record from Staging check if we have the expected number of records in SA
+    And Compare the records in EPH STG and EPH SA for journals with <type>
+    And We get the data from EPH GD for journals
+    And Compare the products data between EPH SA and EPH GD
 
-    @WIP
-    Scenario: Validate data mapping between EPH STG and EPH SA for journals with OAA
+    Examples:
+      | countOfRandomIds | type                            | open_access |
+      | 2                | print_journal                   | N           |
+      | 2                | print_journal                   | Y           |
+      | 2                | electronic_journal              | N           |
+      | 2                | electronic_journal              | Y           |
+      | 2                | non_print_or_electronic_journal | N           |
+
+

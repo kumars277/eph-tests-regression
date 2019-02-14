@@ -27,6 +27,7 @@ public class ProductDataObject {
     private String WORK_TITLE;
 
     //SA
+    private String F_EVENT;
     private String B_CLASSNAME;
     private String F_REVENUE_MODEL;
     private String PMX_SOURCE_REFERENCE;
@@ -210,6 +211,14 @@ public class ProductDataObject {
 
     public void setPMX_SOURCE_REFERENCE(String PMX_SOURCE_REFERENCE) {
         this.PMX_SOURCE_REFERENCE = PMX_SOURCE_REFERENCE;
+    }
+
+    public String getF_EVENT() {
+        return F_EVENT;
+    }
+
+    public void setF_EVENT(String f_EVENT) {
+        F_EVENT = f_EVENT;
     }
 
     public String getF_TYPE() {
