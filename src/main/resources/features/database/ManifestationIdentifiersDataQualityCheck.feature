@@ -1,4 +1,4 @@
-Feature: Check db records for manifestation identifiers in EPH
+Feature: Entity - Manifestation Identifier - Count & Data Mapping Check - Validate data between PMX and EPH - Talend Full Load
 
   @Regression
   Scenario Outline: Verify count of records in STG_PMX_MANIFESTATION and SA_MANIFESTATION_IDENTIFIER is equal

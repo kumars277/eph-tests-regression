@@ -1,4 +1,4 @@
-Feature: Checking the data between PMX works and EPH works (column by column check)
+Feature: Entity - WORK - Data Mapping Check - Validate data between PMX and EPH - Talend Full Load
 
   @Regression
   Scenario Outline: Checking the Works data between PMX and EPH
