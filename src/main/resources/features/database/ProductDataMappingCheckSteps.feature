@@ -38,10 +38,10 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
 
     Examples:
       | countOfRandomIds | type                            | open_access |
-      | 2                | print_journal                   | N           |
-      | 2                | print_journal                   | Y           |
-      | 2                | electronic_journal              | N           |
-      | 2                | electronic_journal              | Y           |
-      | 2                | non_print_or_electronic_journal | N           |
+      | 10                | print_journal                   | N           |
+      | 10               | print_journal                   | Y           |
+      | 10               | electronic_journal              | N           |
+      | 10               | electronic_journal              | Y           |
+      | 10               | non_print_or_electronic_journal | N           |
 
 

@@ -645,11 +645,11 @@ public class ProductDataMappingCheck {
             } else if (pmxSourceReference.contains("OAA")) {
                 suffix = " Open Access";
                 String name = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME();
-                if (name.contains("Print")) {
+                if (name.contains("(Print)")) {
                     String str = "(Print)";
                     assertEquals(name.substring(0, name.length() - str.length()) + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
                 }
-                else if (name.contains("Online")) {
+                else if (name.contains("(Online)")) {
                     String str = "(Online)";
 
                     assertEquals( name.substring(0, name.length() - str.length()) + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
@@ -657,12 +657,12 @@ public class ProductDataMappingCheck {
             } else if (pmxSourceReference.contains("JAS")) {
                 suffix = " Author Charges";
                 String name = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME();
-                if (name.contains("Print")) {
+                if (name.contains("(Print)")) {
                     String str = "(Print)";
                     assertEquals(name.substring(0, name.length() - str.length()) + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
 
                 }
-                else if (name.contains("Online")) {
+                else if (name.contains("(Online)")) {
                     String str = "(Online)";
                     assertEquals(name.substring(0, name.length() - str.length()) + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
                 }
