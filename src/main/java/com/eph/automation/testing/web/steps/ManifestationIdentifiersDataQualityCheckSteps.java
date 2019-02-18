@@ -56,7 +56,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
     @Then("^Check the count of the records in STG_PMX_MANIFESTATION and SA_MANIFESTATION_IDENTIFIER is equal for (.*)$")
     public void verifyCountOfRecordsIsEqualInSTGAndSA(String identifier) {
-        assertEquals("\nThe number of records in STG_PMX_MANIFESTATION and SA_MANIFESTATION_IDENTIFIER is equal for " + identifier, countISBNSTGPMX, countISBNSA);
+        assertEquals("\nThe number of records in STG_PMX_MANIFESTATION and SA_MANIFESTATION_IDENTIFIER is not equal for " + identifier, countISBNSTGPMX, countISBNSA);
     }
 
     @When("^We get the count of records with (.*) in GD_MANIFESTATION_IDENTIFIER$")
@@ -69,7 +69,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
     @Then("^Check the count of the records in SA_MANIFESTATION_IDENTIFIER and GD_MANIFESTATION_IDENTIFIER is equal for (.*)$")
     public void verifyCountOfRecordsWithISBNIsEqualInSAndGD(String identifier) {
-        assertEquals("\nThe number of records in SA_MANIFESTATION_IDENTIFIER and GD_MANIFESTATION_IDENTIFIER is equal for " + identifier, countISBNSA, countISBNGD);
+        assertEquals("\nThe number of records in SA_MANIFESTATION_IDENTIFIER and GD_MANIFESTATION_IDENTIFIER is not equal for " + identifier, countISBNSA, countISBNGD);
     }
 
     @Given("^We get the manifestation ids of (.*) random records from STG_PMX_MANIFESTATION that have (.*) for (.*)$")
