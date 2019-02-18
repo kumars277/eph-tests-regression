@@ -510,6 +510,9 @@ public class ProductDataMappingCheck {
 
     @And("^Compare the records in EPH STG and EPH SA for journals with (.*)$")
     public void compareProductsDataBetweenSTGAndSAPrintJournals(String type) {
+        dataQualityContext.productDataObjectsFromEPHSTG.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
+        dataQualityContext.productDataObjectsFromEPHSA.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
+
         IntStream.range(0, dataQualityContext.productDataObjectsFromEPHSA.size()).forEach(i -> {
 
             //verify B_CLASSNAME
@@ -644,27 +647,23 @@ public class ProductDataMappingCheck {
                 assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
             } else if (pmxSourceReference.contains("OAA")) {
                 suffix = " Open Access";
-                String name = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME();
+                String name = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_TITLE();
                 if (name.contains("(Print)")) {
-                    String str = "(Print)";
-                    assertEquals(name.substring(0, name.length() - str.length()) + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
+                    assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
                 }
                 else if (name.contains("(Online)")) {
-                    String str = "(Online)";
 
-                    assertEquals( name.substring(0, name.length() - str.length()) + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
+                    assertEquals( name + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
                 }
             } else if (pmxSourceReference.contains("JAS")) {
                 suffix = " Author Charges";
-                String name = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME();
+                String name = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_TITLE();
                 if (name.contains("(Print)")) {
-                    String str = "(Print)";
-                    assertEquals(name.substring(0, name.length() - str.length()) + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
+                    assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
 
                 }
                 else if (name.contains("(Online)")) {
-                    String str = "(Online)";
-                    assertEquals(name.substring(0, name.length() - str.length()) + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
+                    assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
                 }
             }
 
