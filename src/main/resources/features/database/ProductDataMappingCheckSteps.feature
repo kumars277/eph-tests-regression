@@ -20,7 +20,7 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
     And We check that mandatory columns are populated
     And Compare the records in EPH STG and EPH SA for books
     And We get the data from EPH GD
-    And Compare the products data between EPH SA and EPH GD
+    And Compare the products data between EPH SA and EPH GD for <type>
     Examples:
       | countOfRandomIds | type |
       | 10               | book |
@@ -34,7 +34,7 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
     And Depends on the flags of every record from Staging check if we have the expected number of records in SA
     And Compare the records in EPH STG and EPH SA for journals with <type>
     And We get the data from EPH GD for journals
-    And Compare the products data between EPH SA and EPH GD
+    And Compare the products data between EPH SA and EPH GD for <type>
 
     Examples:
       | countOfRandomIds | type                            | open_access |
