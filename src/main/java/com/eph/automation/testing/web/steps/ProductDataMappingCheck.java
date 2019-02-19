@@ -38,6 +38,10 @@ public class ProductDataMappingCheck {
 
     @Given("^We get (.*) random ids for (.*)$")
     public void getRandomProductManifestationIdsForBooks(String numberOfRecords, String type) {
+        //Get property when run with jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        System.out.println("numberOfRecords = "  + numberOfRecords);
+
 
         sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS, numberOfRecords);
 
@@ -51,6 +55,11 @@ public class ProductDataMappingCheck {
 
     @Given("^We get (.*) ids of journals for (.*) with (.*)$")
     public void getRandomProductManifestationIdsForJournals(String numberOfRecords, String type, String open_access) {
+        //Get property when run with jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        System.out.println("numberOfRecords = "  + numberOfRecords);
+
+
         switch (type) {
             case "journal":
                 sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_JOURNALS, numberOfRecords);

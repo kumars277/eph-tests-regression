@@ -89,6 +89,11 @@ public class ManifestationDataQualityCheckSteps {
 
     @Given("^We get (.*) random records for (.*)$")
     public void getRandomData(String numberOfRecords, String journalType) {
+        //Get property when run with jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        System.out.println("numberOfRecords = "  + numberOfRecords);
+
+
         switch (journalType) {
             case "JPR":
                 sql = String.format(WorkExtractSQL.SELECT_RANDOM_MANIFESTATION_IDS_JPR, numberOfRecords);
@@ -104,6 +109,11 @@ public class ManifestationDataQualityCheckSteps {
 
     @Given("^We get (.*) random ISBNs for (.*)$")
     public void getRandomISBNs(String numberOfRecords, String bookType) {
+        //Get property when run with jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        System.out.println("numberOfRecords = "  + numberOfRecords);
+
+
         switch (bookType) {
             case "PHB":
                 sql = String.format(WorkExtractSQL.SELECT_RANDOM_ISBN_IDS_PHB, numberOfRecords);

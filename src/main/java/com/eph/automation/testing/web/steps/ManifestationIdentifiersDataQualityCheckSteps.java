@@ -74,8 +74,10 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
     @Given("^We get the manifestation ids of (.*) random records from STG_PMX_MANIFESTATION that have (.*) for (.*)$")
     public void getRandomRecords(String numberOfRecords, String identifier, String type) {
-        numberOfRecords = System.getProperty("dbRecordsNumber");
-        System.out.println("!!!!!!!!!!!!! numberOfRecords = "  + numberOfRecords);
+        //Get property when run with jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        System.out.println("numberOfRecords = "  + numberOfRecords);
+
         switch (type) {
             case "PHB":
                 sql = String.format(WorkExtractSQL.SELECT_RANDOM_ISBNS_PHB, identifier, numberOfRecords);

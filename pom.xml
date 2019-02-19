@@ -77,6 +77,7 @@
                     <systemPropertyVariables>
                         <env>SIT</env>
                         <encryptionPasswordEOAS>EOAS Secret Password</encryptionPasswordEOAS>
+                        <dbRandomRecordsNumber>${dbRandomRecordsNumber}</dbRandomRecordsNumber>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
