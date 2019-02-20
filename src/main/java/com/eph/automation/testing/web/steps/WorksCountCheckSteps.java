@@ -8,6 +8,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
+import com.eph.automation.testing.helper.Log;
 
 import java.util.List;
 
@@ -30,11 +31,11 @@ public class WorksCountCheckSteps {
     @Given("^We know the number of Works in PMX$")
     public void getPmxWorks() {
         sqlPMX = WorkCountSQL.PMX_WORKS_COUNT;
-        System.out.println(sqlPMX);
+        Log.info(sqlPMX);
         workCountPmx = DBManager.getDBResultAsBeanList(sqlPMX, WorkDataObject.class,
                 Constants.PMX_SIT_URL);
         pmxWork = workCountPmx.get(0).workCountPmx;
-        System.out.println("Works in PMX are: " + pmxWork);
+        Log.info("Works in PMX are: " + pmxWork);
     }
 
 
@@ -47,7 +48,7 @@ public class WorksCountCheckSteps {
         workCountPMXSTG =DBManager.getDBResultAsBeanList(sqlPMXSTG, WorkDataObject.class,
                 Constants.EPH_SIT_URL);
         pmxSTGWork = workCountPMXSTG.get(0).workCountPMXSTG;
-        System.out.println("\nWorks in PMX staging are: " + pmxSTGWork);
+        Log.info("\nWorks in PMX staging are: " + pmxSTGWork);
 
     }
 
@@ -70,19 +71,19 @@ public class WorksCountCheckSteps {
         workCountEPH =DBManager.getDBResultAsBeanList(sqlEPH, WorkDataObject.class,
                 Constants.EPH_SIT_URL);
         ephWork = workCountEPH.get(0).workCountEPH;
-        System.out.println("\nWorks in EPH SA are: " + ephWork);
+        Log.info("\nWorks in EPH SA are: " + ephWork);
 
         sqlEPH = WorkCountSQL.EPH_GD_WORKS_COUNT;
         workCountEPHGD =DBManager.getDBResultAsBeanList(sqlEPH, WorkDataObject.class,
                 Constants.EPH_SIT_URL);
         ephWorkGD = workCountEPH.get(0).workCountEPH;
-        System.out.println("\nWorks in EPH GD are: " + ephWork);
+        Log.info("\nWorks in EPH GD are: " + ephWork);
 
         sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_Distinct;
         workCountPMXSTGDistinct =DBManager.getDBResultAsBeanList(sqlPMXSTGDistinct, WorkDataObject.class,
                 Constants.EPH_SIT_URL);
         pmxSTGWorkDistinct = workCountPMXSTGDistinct.get(0).workCountPMXSTG;
-        System.out.println("\nDistinct works in PMX staging are: " + pmxSTGWorkDistinct);
+        Log.info("\nDistinct works in PMX staging are: " + pmxSTGWorkDistinct);
 
     }
 

@@ -11,7 +11,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
-
+import com.eph.automation.testing.helper.Log;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +37,7 @@ public class WorksIdSteps {
         data = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
         System.out.print(sql);
         dataQualityContext.productIdFromStg = data.get(0).random_value;
-        System.out.println("\n The product number is " + dataQualityContext.productIdFromStg);
+        Log.info("\n The product number is " + dataQualityContext.productIdFromStg);
     }
 
     @When("^We get the data from Staging, SA and Work Identifiers using (.*)")
@@ -81,8 +81,8 @@ public class WorksIdSteps {
             dataFromSTGCount.add(dataFromSTG.get(0).PROJECT_NUM);
         }
 
-        System.out.println("\nIdentifiers are "+dataFromSTGCount.size());
-        System.out.println("\nIdentifiers are "+dataFromSAId.size());
+        Log.info("\nIdentifiers are "+dataFromSTGCount.size());
+        Log.info("\nIdentifiers are "+dataFromSAId.size());
 
         Assert.assertEquals("There are missing identifiers", dataFromSTGCount.size(),dataFromSAId.size());
     }
@@ -104,7 +104,7 @@ public class WorksIdSteps {
                 dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
                 Assert.assertEquals("The JOURNAL_NUMBER is incorrect for id="+dataQualityContext.productIdFromStg,
                         "ELSEVIER JOURNAL NUMBER", dataFromSAFtype.get(0).F_TYPE);
-                System.out.println("Journal number is correct");
+                Log.info("Journal number is correct");
             }
             if (dataFromSTG.get(0).ISSN_L != null) {
                 sql = WorksIdentifierSQL.getTypeId
@@ -113,7 +113,7 @@ public class WorksIdSteps {
                 dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
                 Assert.assertEquals("The ISSN_L is incorrect for id="+dataQualityContext.productIdFromStg,
                         "ISSN-L", dataFromSAFtype.get(0).F_TYPE);
-                System.out.println("ISSN_L is correct");
+                Log.info("ISSN_L is correct");
             }
             if (dataFromSTG.get(0).JOURNAL_ACRONYM != null) {
                 sql = WorksIdentifierSQL.getTypeId
@@ -122,7 +122,7 @@ public class WorksIdSteps {
                 dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
                 Assert.assertEquals("The JOURNAL_ACRONYM is incorrect for id="+dataQualityContext.productIdFromStg,
                         "JOURNAL ACRONYM", dataFromSAFtype.get(0).F_TYPE);
-                System.out.println("Journal acronym is correct");
+                Log.info("Journal acronym is correct");
             }
             if (dataFromSTG.get(0).DAC_KEY != null) {
                 sql = WorksIdentifierSQL.getTypeId
@@ -131,7 +131,7 @@ public class WorksIdSteps {
                 dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
                 Assert.assertEquals("The DAC_KEY is incorrect for id="+dataQualityContext.productIdFromStg,
                         "DAC-K", dataFromSAFtype.get(0).F_TYPE);
-                System.out.println("DAC_KEY is correct");
+                Log.info("DAC_KEY is correct");
             }
             if (dataFromSTG.get(0).PROJECT_NUM != null) {
                 sql = WorksIdentifierSQL.getTypeId
@@ -140,7 +140,7 @@ public class WorksIdSteps {
                 dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
                 Assert.assertEquals("The PROJECT_NUM is incorrect for id="+dataQualityContext.productIdFromStg,
                         "PROJECT-NUM", dataFromSAFtype.get(0).F_TYPE);
-                System.out.println("PROJECT_NUM is correct");
+                Log.info("PROJECT_NUM is correct");
             }
 
     }

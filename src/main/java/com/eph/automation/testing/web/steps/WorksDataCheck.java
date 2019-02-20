@@ -13,7 +13,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
-
+import com.eph.automation.testing.helper.Log;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -31,10 +31,12 @@ public class WorksDataCheck {
         sql = GeneratingRandomSQL.generatingValue
                 .replace("PARAM1", work_id)
                 .replace("PARAM2", type);
-        //System.out.println(sql+"\n");
+        //Log.info
+        // (sql+"\n");
         isbn = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
         dataQualityContext.productIdentifierID = isbn.get(0).random_value;
-        System.out.println("\n" + work_id + " is " + dataQualityContext.productIdentifierID+" and type is "
+        Log.info
+                ("\n" + work_id + " is " + dataQualityContext.productIdentifierID+" and type is "
                 +type+"\n");
     }
 
@@ -43,18 +45,21 @@ public class WorksDataCheck {
             sql = WorkExtractSQL.PMX_WORK_EXTRACT
                     .replace("PARAM1",id)
                     .replace("PARAM2", dataQualityContext.productIdentifierID);
-        //System.out.println(sql);
+        //Log.info
+        // (sql);
             dataQualityContext.workDataObjectsFromSource = DBManager
                     .getDBResultAsBeanList(sql, WorkDataObject.class,Constants.PMX_SIT_URL);
 
         sql = WorkDataCheckSQL.GET_PMX_WORKS_STG_DATA
                 .replace("PARAM1", id)
                 .replace("PARAM2",dataQualityContext.productIdentifierID);
-        //System.out.println(sql);
+        //Log.info
+        // (sql);
         dataQualityContext.workDataObjectsFromPMXSTG = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
 
         sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1",dataQualityContext.workDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID);
-        System.out.println(sql);
+        Log.info
+                (sql);
         dataQualityContext.workDataObjectsFromEPH = DBManager
                 .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
 
@@ -65,9 +70,12 @@ public class WorksDataCheck {
 
     @Then("^The work data between PMX and PMX STG is identical$")
     public void checkPMXtoPMGSTGData() {
-        System.out.println(dataQualityContext.workDataObjectsFromSource.get(0).WORK_TITLE);
-        //System.out.println(dataQualityContext.workDataObjectsFromEPH.WORK_TITLE);
-        System.out.println(dataQualityContext.workDataObjectsFromPMXSTG.get(0).WORK_TITLE);
+        Log.info
+                (dataQualityContext.workDataObjectsFromSource.get(0).WORK_TITLE);
+        //Log.info
+        // (dataQualityContext.workDataObjectsFromEPH.WORK_TITLE);
+        Log.info
+                (dataQualityContext.workDataObjectsFromPMXSTG.get(0).WORK_TITLE);
 
 
         assertTrue("Expecting the Work title details from PMX and PMX Staging Consistent for id=" + dataQualityContext.productIdentifierID,
@@ -230,8 +238,10 @@ public class WorksDataCheck {
     
     @And("^The work data between PMX STG and EPH SA is identical$")
     public void checkPMXSTGandEPHData() {
-           //  System.out.println(dataQualityContext.workDataObjectsFromPMXSTG.get(0).WORK_STATUS);
-       // System.out.println(dataQualityContext.workDataObjectsFromEPH.get(0).WORK_STATUS);
+           //  Log.info
+        // (dataQualityContext.workDataObjectsFromPMXSTG.get(0).WORK_STATUS);
+       // Log.info
+        // (dataQualityContext.workDataObjectsFromEPH.get(0).WORK_STATUS);
 
 //        Assert.assertEquals("The classname is incorrect!","Work", dataQualityContext.workDataObjectsFromEPH.get(0).B_CLASSNAME);
 
