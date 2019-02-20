@@ -62,8 +62,7 @@ public class ManifestationDataQualityCheckSteps {
 
     @Then("^The number of the records in PMX and EPH staging table is equal$")
     public void verifyCountOfManifestationDataInPMXAndEPHIsEqual() {
-        Log.info("Then Check number of the records in PMX and EPH staging table is equal .. ");
-        Assert.assertEquals("\nThe number of manifestations in PMX GD_PRODUCT_MANIFESTATION and STG_PMX_MANIFESTATION is equal", countManifestationsPMX, countManifestationsSTGPMX);
+        Assert.assertEquals("\nThe number of manifestations in PMX GD_PRODUCT_MANIFESTATION and STG_PMX_MANIFESTATION is not equal", countManifestationsPMX, countManifestationsSTGPMX);
     }
 
     @When("^The manifestations are transferred to EPH$")
@@ -79,8 +78,7 @@ public class ManifestationDataQualityCheckSteps {
 
     @Then("^The number of the records in EPH staging table and SA_MANIFESTATION is equal$")
     public void verifyCountOfManifestationDataInSTGEPHandSAManifestationIsEqual() {
-        Log.info("The check number of the records in EPH staging table and SA_MANIFESTATION is equal ..");
-        Assert.assertEquals("\nThe number of manifestations in PMX_STG and SA_MANIFESTATION is equal", countManifestationsSTGPMX, countManifestationsEPH);
+        Assert.assertEquals("\nThe number of manifestations in PMX_STG and SA_MANIFESTATION is not equal", countManifestationsSTGPMX, countManifestationsEPH);
     }
 
     @Then("^The manifestations are transferred to the golden data table$")
@@ -97,8 +95,7 @@ public class ManifestationDataQualityCheckSteps {
 
     @Then("^The number of the records in EPH SA and GD_MANIFESTATION is equal$")
     public void verifyCountOfManifestationsInSaAndGoldenDataTableIsEqual() {
-        Log.info("Then Check number of the records in EPH SA and GD_MANIFESTATION is equal ..");
-        Assert.assertEquals("\nThe number of manifestations in EPH_STG and GD_MANIFESTATION is equal", countManifestationsEPH, countManifestationsEPHGD);
+        Assert.assertEquals("\nThe number of manifestations in EPH_STG and GD_MANIFESTATION is not equal", countManifestationsEPH, countManifestationsEPHGD);
 
     }
 

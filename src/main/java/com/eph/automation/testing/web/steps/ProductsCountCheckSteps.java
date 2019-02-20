@@ -87,13 +87,13 @@ public class ProductsCountCheckSteps {
     @Then("^The number of products between (.*) and (.*) is equal$")
     public void comparePMXtoEPHCount(String source, String target){
         if (source.contentEquals("PMX")) {
-            Assert.assertEquals("The number of works in PMX and PMX Staging is not equal!", productsCountContext.productCountPMX.get(0).pmxCount,
+            Assert.assertEquals("The number of products in PMX and PMX Staging is not equal!", productsCountContext.productCountPMX.get(0).pmxCount,
                     productsCountContext.productCountStg.get(0).stgCount);
            }else if (target.contentEquals("SA")){
-            Assert.assertEquals("\nThe number of works in PMX Staging and EPH SA is not equal!", stgToSA,
+            Assert.assertEquals("\nThe number of products in PMX Staging and EPH SA is not equal!", stgToSA,
                     productsCountContext.productCountEPHSA.get(0).ephSACount);
         } else {
-            Assert.assertEquals("\nThe number of works in SA and GD is not equal!", productsCountContext.productCountEPHSA.get(0).ephSACount,
+            Assert.assertEquals("\nThe number of products in SA and GD is not equal!", productsCountContext.productCountEPHSA.get(0).ephSACount,
                     productsCountContext.productCountEPHGD.get(0).ephGDCount);
         }
     }
