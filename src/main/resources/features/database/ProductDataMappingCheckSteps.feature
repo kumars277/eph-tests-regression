@@ -25,7 +25,7 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
       | countOfRandomIds | type |
       | 10               | book |
 
-  @Regression
+  @Regression @wip
   Scenario Outline: Validate data is transferred from EPH STG and EPH SA for journals
     Given We get <countOfRandomIds> ids of journals for <type> with <open_access>
     When We get the data from EPH STG
@@ -38,7 +38,7 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
 
     Examples:
       | countOfRandomIds | type                            | open_access |
-      | 10                | print_journal                   | N           |
+      | 10               | print_journal                   | N           |
       | 10               | print_journal                   | Y           |
       | 10               | electronic_journal              | N           |
       | 10               | electronic_journal              | Y           |

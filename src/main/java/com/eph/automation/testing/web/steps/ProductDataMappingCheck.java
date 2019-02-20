@@ -3,6 +3,7 @@ package com.eph.automation.testing.web.steps;
 import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
+import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ProductDataObject;
 import com.eph.automation.testing.services.db.sql.ProductDataSQL;
@@ -30,7 +31,8 @@ import static org.junit.Assert.*;
 public class ProductDataMappingCheck {
 
     @StaticInjection
-    private DataQualityContext dataQualityContext;
+    public DataQualityContext dataQualityContext;
+
     private String sql;
     private static List<String> ids;
     private static List<String> idsSA;
@@ -38,43 +40,50 @@ public class ProductDataMappingCheck {
 
     @Given("^We get (.*) random ids for (.*)$")
     public void getRandomProductManifestationIdsForBooks(String numberOfRecords, String type) {
+        Log.info("Get random ids ..");
         //Get property when run with jenkins
         numberOfRecords = System.getProperty("dbRandomRecordsNumber");
-        System.out.println("numberOfRecords = "  + numberOfRecords);
+        Log.info("numberOfRecords = " + numberOfRecords);
 
 
         sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS, numberOfRecords);
+        Log.info(sql);
 
         List<Map<?, ?>> randomProductManifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
 
         ids = randomProductManifestationIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
-
-        sql.length();
+        Log.info("Selected random product manifestation ids for books : " + ids);
     }
 
 
     @Given("^We get (.*) ids of journals for (.*) with (.*)$")
     public void getRandomProductManifestationIdsForJournals(String numberOfRecords, String type, String open_access) {
+        Log.info("In Given method get random product manifestation ids for journals");
         //Get property when run with jenkins
         numberOfRecords = System.getProperty("dbRandomRecordsNumber");
-        System.out.println("numberOfRecords = "  + numberOfRecords);
+        Log.info("Number of random records = " + numberOfRecords);
 
 
         switch (type) {
             case "journal":
                 sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_JOURNALS, numberOfRecords);
+                Log.info(sql);
                 break;
             case "print_journal":
                 sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PRINT_JOURNALS, open_access, numberOfRecords);
+                Log.info(sql);
                 break;
             case "electronic_journal":
                 sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_ELECTRONIC_JOURNALS, numberOfRecords);
+                Log.info(sql);
                 break;
             case "non_print_or_electronic_journal":
                 sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_NON_PRINT_OR_ELECTRONIC_JOURNALS, numberOfRecords);
+                Log.info(sql);
                 break;
             case "book":
                 sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS, numberOfRecords);
+                Log.info(sql);
                 break;
             default:
                 break;
@@ -83,80 +92,81 @@ public class ProductDataMappingCheck {
         List<Map<?, ?>> randomProductManifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
 
         ids = randomProductManifestationIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("Selected product manifestation ids : " + ids);
 
-        sql.length();
+
     }
 
     @When("^We get the corresponding records from PMX$")
     public void getProductsDataFromPMX() {
+        Log.info("When We get the corresponding records from PMX : ");
         sql = String.format(ProductDataSQL.PMX_PRODUCT_EXTRACT, Joiner.on("','").join(ids));
-
+        Log.info(sql);
         dataQualityContext.productDataObjectsFromPMX = DBManager
                 .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.PMX_SIT_URL);
-        sql.length();
+
     }
 
     @Then("^We get the data from EPH STG$")
     public void getProductsDataFromEPHSTG() {
+        com.eph.automation.testing.helper.Log.info("In Then method");
         sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT, Joiner.on("','").join(ids));
+        Log.info(sql);
 
         dataQualityContext.productDataObjectsFromEPHSTG = DBManager
                 .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-        sql.length();
     }
 
     @And("^Compare the records in PMX and EPH STG for (.*)$")
     public void compareProductsDataBetweenPMXAndEPHSTG(String type) {
+        Log.info("Compare the records in PMX and EPH STG for " + type);
 
         IntStream.range(0, dataQualityContext.productDataObjectsFromPMX.size()).forEach(i -> {
 
             //verify PRODUCT_ID
-            System.out.println("\"Expecting Product IDs in PMX and EPH Staging are consistent for " + type);
+            Log.info("PRODUCT_ID in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getPRODUCT_ID());
+            Log.info("PRODUCT_ID in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_ID());
 
-            System.out.println("\nPRODUCT_ID in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getPRODUCT_ID());
-            System.out.println("\nPRODUCT_ID in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_ID());
+            Log.info(("Expecting Product IDs in PMX and EPH Staging are consistent for " + type));
 
             assertEquals(dataQualityContext.productDataObjectsFromPMX.get(i).getPRODUCT_ID(), dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_ID());
 
+
             //PRODUCT_NAME
-            System.out.println("\"Expecting PRODUCT_NAME in PMX and EPH Staging are consistent for " + type);
+            Log.info("PRODUCT_ID in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getPRODUCT_ID());
+            Log.info("PRODUCT_ID in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_ID());
 
-            System.out.println("\nPRODUCT_ID in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getPRODUCT_ID());
-            System.out.println("\nPRODUCT_ID in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_ID());
-
+            Log.info("Expecting PRODUCT_NAME in PMX and EPH Staging are consistent for " + type);
 
             assertEquals(dataQualityContext.productDataObjectsFromPMX.get(i).getPRODUCT_NAME(), dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_NAME());
 
 
             //PRODUCT_SHORT_NAME
-            System.out.println("\"Expecting PRODUCT_SHORT_NAME in PMX and EPH Staging are consistent for " + type);
+            Log.info("PRODUCT_SHORT_NAME in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getPRODUCT_SHORT_NAME());
+            Log.info("PRODUCT_SHORT_NAME in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_SHORT_NAME());
 
-            System.out.println("\nPRODUCT_SHORT_NAME in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getPRODUCT_SHORT_NAME());
-            System.out.println("\nPRODUCT_SHORT_NAME in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_SHORT_NAME());
-
+            Log.info("Expecting PRODUCT_SHORT_NAME in PMX and EPH Staging are consistent for " + type);
 
             assertEquals(dataQualityContext.productDataObjectsFromPMX.get(i).getPRODUCT_SHORT_NAME(), dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_SHORT_NAME());
 
             //TRIAL_ALLOWED_IND
-            System.out.println("\nExpecting TRIAL_ALLOWED_IND in PMX and EPH Staging are consistent for " + type);
+            Log.info("TRIAL_ALLOWED_IND in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getTRIAL_ALLOWED_IND());
+            Log.info("TRIAL_ALLOWED_IND in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND());
 
-            System.out.println("\nTRIAL_ALLOWED_IND in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getTRIAL_ALLOWED_IND());
-            System.out.println("\nTRIAL_ALLOWED_IND in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND());
-
+            Log.info("Expecting TRIAL_ALLOWED_IND in PMX and EPH Staging are consistent for " + type);
 
             assertEquals(dataQualityContext.productDataObjectsFromPMX.get(i).getTRIAL_ALLOWED_IND(), dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND());
 
             //FIRST_PUB_DATE
-            System.out.println("\nExpecting FIRST_PUB_DATE in PMX and EPH Staging are consistent for " + type);
-
+            Log.info("Expecting FIRST_PUB_DATE in PMX and EPH Staging are consistent for " + type);
 
             if (dataQualityContext.productDataObjectsFromPMX.get(i).getFIRST_PUB_DATE() != null)
                 try {
                     Date pmxFirstPubDate = new SimpleDateFormat("yyyy-MM-dd").parse(dataQualityContext.productDataObjectsFromPMX.get(i).getFIRST_PUB_DATE());
-                    System.out.println("\nFIRST_PUB_DATE in PMX : " + pmxFirstPubDate);
+                    Log.info("FIRST_PUB_DATE in PMX : " + pmxFirstPubDate);
 
                     Date ephStgFirstPubDate = new SimpleDateFormat("yyyy-MM-dd").parse(dataQualityContext.productDataObjectsFromPMX.get(i).getFIRST_PUB_DATE());
-                    System.out.println("\nFIRST_PUB_DATE in EPH STG : " + ephStgFirstPubDate);
+                    Log.info("FIRST_PUB_DATE in EPH STG : " + ephStgFirstPubDate);
 
 
                     assertEquals(0, pmxFirstPubDate.compareTo(ephStgFirstPubDate));
@@ -166,112 +176,106 @@ public class ProductDataMappingCheck {
                 }
 
             //ELSEVIER_TAX_CODE
-            System.out.println("\nExpecting ELSEVIER_TAX_CODE in PMX and EPH Staging are consistent for " + type);
+            Log.info("ELSEVIER_TAX_CODE in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getELSEVIER_TAX_CODE());
+            Log.info("ELSEVIER_TAX_CODE in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getELSEVIER_TAX_CODE());
 
-            System.out.println("\nELSEVIER_TAX_CODE in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getELSEVIER_TAX_CODE());
-            System.out.println("\nELSEVIER_TAX_CODE in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getELSEVIER_TAX_CODE());
-
+            Log.info("Expecting ELSEVIER_TAX_CODE in PMX and EPH Staging are consistent for " + type);
 
             assertEquals(dataQualityContext.productDataObjectsFromPMX.get(i).getELSEVIER_TAX_CODE(), dataQualityContext.productDataObjectsFromEPHSTG.get(i).getELSEVIER_TAX_CODE());
 
-            // PRODUCT_MANIFESTATION_ID
-            System.out.println("\nExpecting PRODUCT_MANIFESTATION_ID in PMX and EPH Staging are consistent for " + type);
+            // PRODUCT_MANIFESTATION_I
+            Log.info("PRODUCT_MANIFESTATION_ID in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getELSEVIER_TAX_CODE());
+            Log.info("PRODUCT_MANIFESTATION_ID in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getELSEVIER_TAX_CODE());
 
-            System.out.println("\nPRODUCT_MANIFESTATION_ID in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getELSEVIER_TAX_CODE());
-            System.out.println("\nPRODUCT_MANIFESTATION_ID in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getELSEVIER_TAX_CODE());
-
+            Log.info("Expecting PRODUCT_MANIFESTATION_ID in PMX and EPH Staging are consistent for " + type);
 
             assertEquals(dataQualityContext.productDataObjectsFromPMX.get(i).getPRODUCT_MANIFESTATION_ID(), dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID());
 
             //F_PRODUCT_WORK
-            System.out.println("\nExpecting F_PRODUCT_WORK in PMX and EPH Staging are consistent for " + type);
+            Log.info("F_PRODUCT_WORK in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getF_PRODUCT_WORK());
+            Log.info("F_PRODUCT_WORK in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
 
-            System.out.println("\nF_PRODUCT_WORK in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getF_PRODUCT_WORK());
-            System.out.println("\nF_PRODUCT_WORK in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
-
+            Log.info("Expecting F_PRODUCT_WORK in PMX and EPH Staging are consistent for " + type);
             assertEquals(Integer.parseInt(dataQualityContext.productDataObjectsFromPMX.get(i).getF_PRODUCT_WORK()), Integer.parseInt(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK()));
 
             //F_PRODUCT_MANIFESTATION_TYP
-            System.out.println("\nExpecting F_PRODUCT_MANIFESTATION_TYP in PMX and EPH Staging are consistent for " + type);
+            Log.info("F_PRODUCT_MANIFESTATION_TYP in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getF_PRODUCT_MANIFESTATION_TYP());
+            Log.info("F_PRODUCT_MANIFESTATION_TYP in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_MANIFESTATION_TYP());
 
-            System.out.println("\nF_PRODUCT_MANIFESTATION_TYP in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getF_PRODUCT_MANIFESTATION_TYP());
-            System.out.println("\nF_PRODUCT_MANIFESTATION_TYP in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_MANIFESTATION_TYP());
+            Log.info("Expecting F_PRODUCT_MANIFESTATION_TYP in PMX and EPH Staging are consistent for " + type);
 
             assertEquals(Integer.parseInt(dataQualityContext.productDataObjectsFromPMX.get(i).getF_PRODUCT_MANIFESTATION_TYP()), Integer.parseInt(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_MANIFESTATION_TYP()));
 
             //SUBSCRIPTION
-            System.out.println("\nExpecting SUBSCRIPTION in PMX and EPH Staging are consistent for " + type);
+            Log.info("SUBSCRIPTION in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getSUBSCRIPTION());
+            Log.info("SUBSCRIPTION in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getSUBSCRIPTION());
 
-            System.out.println("\nSUBSCRIPTION in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getSUBSCRIPTION());
-            System.out.println("\nSUBSCRIPTION in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getSUBSCRIPTION());
+            Log.info("Expecting SUBSCRIPTION in PMX and EPH Staging are consistent for " + type);
 
 
             assertEquals(dataQualityContext.productDataObjectsFromPMX.get(i).getSUBSCRIPTION(), dataQualityContext.productDataObjectsFromEPHSTG.get(i).getSUBSCRIPTION());
 
             //BULK_SALES
-            System.out.println("\nExpecting BULK_SALES in PMX and EPH Staging are consistent for " + type);
+            Log.info("BULK_SALES in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getBULK_SALES());
+            Log.info("BULK_SALES in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getBULK_SALES());
 
-            System.out.println("\nBULK_SALES in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getBULK_SALES());
-            System.out.println("\nBULK_SALES in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getBULK_SALES());
+            Log.info("Expecting BULK_SALES in PMX and EPH Staging are consistent for " + type);
 
             assertEquals(dataQualityContext.productDataObjectsFromPMX.get(i).getBULK_SALES(), dataQualityContext.productDataObjectsFromEPHSTG.get(i).getBULK_SALES());
 
             //BACK_FILES
-            System.out.println("\nExpecting BACK_FILES in PMX and EPH Staging are consistent for " + type);
+            Log.info("BACK_FILES in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getBACK_FILES());
+            Log.info("BACK_FILES in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getBACK_FILES());
 
-            System.out.println("\nBACK_FILES in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getBACK_FILES());
-            System.out.println("\nBACK_FILES in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getBACK_FILES());
+            Log.info("Expecting BACK_FILES in PMX and EPH Staging are consistent for " + type);
 
             assertEquals(dataQualityContext.productDataObjectsFromPMX.get(i).getBACK_FILES(), dataQualityContext.productDataObjectsFromEPHSTG.get(i).getBACK_FILES());
 
             //OPEN_ACCESS
-            System.out.println("\nExpecting OPEN_ACCESS in PMX and EPH Staging are consistent for " + type);
+            Log.info("OPEN_ACCESS in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getOPEN_ACCESS());
+            Log.info("OPEN_ACCESS in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getOPEN_ACCESS());
 
-            System.out.println("\nOPEN_ACCESS in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getOPEN_ACCESS());
-            System.out.println("\nOPEN_ACCESS in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getOPEN_ACCESS());
+            Log.info("Expecting OPEN_ACCESS in PMX and EPH Staging are consistent for " + type);
 
             assertEquals(dataQualityContext.productDataObjectsFromPMX.get(i).getOPEN_ACCESS(), dataQualityContext.productDataObjectsFromEPHSTG.get(i).getOPEN_ACCESS());
 
             //REPRINTS
-            System.out.println("\nExpecting REPRINTS in PMX and EPH Staging are consistent for " + type);
+            Log.info("REPRINTS in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getREPRINTS());
+            Log.info("REPRINTS in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getREPRINTS());
 
-            System.out.println("\nREPRINTS in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getREPRINTS());
-            System.out.println("\nREPRINTS in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getREPRINTS());
-
+            Log.info("Expecting REPRINTS in PMX and EPH Staging are consistent for " + type);
 
             assertEquals(dataQualityContext.productDataObjectsFromPMX.get(i).getREPRINTS(), dataQualityContext.productDataObjectsFromEPHSTG.get(i).getREPRINTS());
 
             //AUTHOR_CHARGES
-            System.out.println("\nExpecting AUTHOR_CHARGES in PMX and EPH Staging are consistent for " + type);
+            Log.info("AUTHOR_CHARGES in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getAUTHOR_CHARGES());
+            Log.info("AUTHOR_CHARGES in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getAUTHOR_CHARGES());
 
-            System.out.println("\nAUTHOR_CHARGES in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getAUTHOR_CHARGES());
-            System.out.println("\nAUTHOR_CHARGES in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getAUTHOR_CHARGES());
+            Log.info("Expecting AUTHOR_CHARGES in PMX and EPH Staging are consistent for " + type);
 
             assertEquals(dataQualityContext.productDataObjectsFromPMX.get(i).getAUTHOR_CHARGES(), dataQualityContext.productDataObjectsFromEPHSTG.get(i).getAUTHOR_CHARGES());
 
             //ONE_OFF_ACCESS
-            System.out.println("\nExpecting ONE_OFF_ACCESS in PMX and EPH Staging are consistent for " + type);
+            Log.info("ONE_OFF_ACCESS in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getONE_OFF_ACCESS());
+            Log.info("ONE_OFF_ACCESS in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getONE_OFF_ACCESS());
 
-            System.out.println("\nONE_OFF_ACCESS in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getONE_OFF_ACCESS());
-            System.out.println("\nONE_OFF_ACCESS in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getONE_OFF_ACCESS());
+            Log.info("Expecting ONE_OFF_ACCESS in PMX and EPH Staging are consistent for " + type);
 
             assertEquals(dataQualityContext.productDataObjectsFromPMX.get(i).getONE_OFF_ACCESS(), dataQualityContext.productDataObjectsFromEPHSTG.get(i).getONE_OFF_ACCESS());
 
             //AVAILABILITY_STATUS
-            System.out.println("\nExpecting AVAILABILITY_STATUS in PMX and EPH Staging are consistent for " + type);
+            Log.info("AVAILABILITY_STATUS in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getAVAILABILITY_STATUS());
+            Log.info("AVAILABILITY_STATUS in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getAVAILABILITY_STATUS());
 
-            System.out.println("\nAVAILABILITY_STATUS in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getAVAILABILITY_STATUS());
-            System.out.println("\nAVAILABILITY_STATUS in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getAVAILABILITY_STATUS());
-
+            Log.info("Expecting AVAILABILITY_STATUS in PMX and EPH Staging are consistent for " + type);
 
             assertEquals(dataQualityContext.productDataObjectsFromPMX.get(i).getAVAILABILITY_STATUS(), dataQualityContext.productDataObjectsFromEPHSTG.get(i).getAVAILABILITY_STATUS());
 
             //WORK_TITLE
-            System.out.println("\nExpecting WORK_TITLE in PMX and EPH Staging are consistent for " + type);
+            Log.info("WORK_TITLE in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getWORK_TITLE());
+            Log.info("WORK_TITLE in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getWORK_TITLE());
 
-            System.out.println("\nWORK_TITLE in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getWORK_TITLE());
-            System.out.println("\nWORK_TITLE in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getWORK_TITLE());
-
+            Log.info("Expecting WORK_TITLE in PMX and EPH Staging are consistent for " + type);
 
             assertEquals(dataQualityContext.productDataObjectsFromPMX.get(i).getWORK_TITLE(), dataQualityContext.productDataObjectsFromEPHSTG.get(i).getWORK_TITLE());
 
@@ -281,57 +285,68 @@ public class ProductDataMappingCheck {
 
     @And("^We get the data from EPH SA$")
     public void getProductsDataFromEPHSA() {
+        Log.info("And We get the data from EPH SA ...");
         //for books
         idsSA = ids.stream().collect(Collectors.toList());
         IntStream.range(0, idsSA.size()).forEach(i -> idsSA.set(i, idsSA.get(i) + "-OOA"));
-        idsSA.size();
-
+        Log.info("Modified ids : " + idsSA);
         sql = String.format(ProductDataSQL.EPH_SA_PRODUCT_EXTRACT, Joiner.on("','").join(idsSA));
+        Log.info(sql);
 
         dataQualityContext.productDataObjectsFromEPHSA = DBManager
                 .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-        sql.length();
     }
 
     @And("^We get the data from EPH GD$")
     public void getProductsDataFromEPHGD() {
+        Log.info("And We get the data from EPH GD ...");
         sql = String.format(ProductDataSQL.EPH_GD_PRODUCT_EXTRACT, Joiner.on("','").join(idsSA));
+        Log.info(sql);
 
         dataQualityContext.productDataObjectsFromEPHGD = DBManager
                 .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-        sql.length();
     }
 
     @And("^We get the data from EPH SA for journals$")
     public void getProductsDataFromEPHSAForJournals() {
+        Log.info("And We get the data from EPH SA for journals ...");
+
         //get F_ProductWorkIds
         sql = String.format(ProductDataSQL.SELECT_F_PRODUCT_WORK_IDS_FOR_GIVEN_MANIFESTATION_IDS, Joiner.on("','").join(ids));
+        Log.info(sql);
+
         List<Map<?, ?>> fProductWorkIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
 
         workIds = fProductWorkIds.stream().map(m -> (BigDecimal) m.get("F_PRODUCT_WORK")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("work ids : " + workIds);
 
         idsSA = Stream.concat(ids.stream(), workIds.stream()).collect(Collectors.toList());
         IntStream.range(0, idsSA.size()).forEach(i -> idsSA.set(i, idsSA.get(i) + "%"));
+        Log.info(idsSA.toString());
 
         sql = String.format(ProductDataSQL.EPH_SA_PRODUCT_EXTRACT_JOURNALS, Joiner.on("|").join(idsSA));
+        Log.info(sql);
 
         dataQualityContext.productDataObjectsFromEPHSA = DBManager
                 .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-        sql.length();
+
     }
 
     @And("^We get the data from EPH GD for journals$")
     public void getProductsDataFromEPHGDForJournals() {
+        Log.info("And We get the data from EPH GD for journals ...");
         sql = String.format(ProductDataSQL.EPH_GD_PRODUCT_EXTRACT_JOURNALS, Joiner.on("|").join(idsSA));
+        Log.info(sql);
 
         dataQualityContext.productDataObjectsFromEPHGD = DBManager
                 .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-        sql.length();
 
     }
 
     @And("^We check that mandatory columns are populated$")
     public void checkMandatoryColumnsForProductsInSAArePopulated() {
+        Log.info("We check that mandatory columns are populated ...");
+
         IntStream.range(0, dataQualityContext.productDataObjectsFromEPHSA.size()).forEach(i -> {
             //verify F_EVENT is not null
             assertNotNull(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_EVENT());
@@ -352,6 +367,8 @@ public class ProductDataMappingCheck {
 
     @And("^Depends on the flags of every record from Staging check if we have the expected number of records in SA$")
     public void checkCountOfRecordsInSAIsApplicableToDataInSTG() {
+        Log.info("And Depends on the flags of every record from Staging check if we have the expected number of records in SA ...");
+
         int expectedNumberOfRecordsInSA = 0;
 
         for (int i = 0; i < dataQualityContext.productDataObjectsFromEPHSTG.size(); i++) {
@@ -375,14 +392,17 @@ public class ProductDataMappingCheck {
                 expectedNumberOfRecordsInSA++;
         }
 
-        System.out.println("\nExpected number of records in SA is : " + expectedNumberOfRecordsInSA);
-        System.out.println("\nNumber of records in SA is : " + dataQualityContext.productDataObjectsFromEPHSA.size());
+        Log.info("Expected number of records in SA is : " + expectedNumberOfRecordsInSA);
+        Log.info("Number of records in SA is : " + dataQualityContext.productDataObjectsFromEPHSA.size());
 
+        Log.info("Assert the number of records in SA is as expected ..");
         Assert.assertEquals(expectedNumberOfRecordsInSA, dataQualityContext.productDataObjectsFromEPHSA.size());
     }
 
     @And("^Compare the records in EPH STG and EPH SA for books$")
     public void compareProductsDataBetweenSTGAndSA() {
+        Log.info("Compare the records in EPH STG and EPH SA for books ..");
+
         //sort the lists before comparison
         dataQualityContext.productDataObjectsFromEPHSTG.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
         dataQualityContext.productDataObjectsFromEPHSA.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
@@ -390,51 +410,45 @@ public class ProductDataMappingCheck {
         IntStream.range(0, dataQualityContext.productDataObjectsFromEPHSTG.size()).forEach(i -> {
 
             //verify B_CLASSNAME
-            System.out.println("\nExpecting B_CLASSNAME in EPH SA for books to be Product");
+            Log.info("B_CLASSNAME in EPH SA for book: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
 
-            System.out.println("\nB_CLASSNAME in EPH SA for book: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
-
+            Log.info("Expecting B_CLASSNAME in EPH SA for books to be Product");
 
             assertEquals("Product", dataQualityContext.productDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
 
             //verify PMX_SOURCE_REFERENCE
-            System.out.println("\"Expecting PMX_SOURCE_REFERENCE in EPH Staging and EPH SA are consistent for ");
+            Log.info("PRODUCT_MANIFESTATION_ID in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID());
+            Log.info("PRODUCT_SHORT_NAME in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE());
 
-            System.out.println("\nPRODUCT_MANIFESTATION_ID in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID());
-            System.out.println("\nPRODUCT_SHORT_NAME in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE());
-
+            Log.info("Expecting PMX_SOURCE_REFERENCE in EPH Staging and EPH SA are consistent for ");
 
             assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID() + "-OOA", dataQualityContext.productDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE());
 
             //verify PRODUCT_NAME
-            System.out.println("\"Expecting PRODUCT_NAME in EPH Staging and EPH SA are consistent for ");
+            Log.info("PRODUCT_NAME in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_NAME());
+            Log.info("PRODUCT_NAME in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
 
-            System.out.println("\nPRODUCT_NAME in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_NAME());
-            System.out.println("\nPRODUCT_NAME in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
-
+            Log.info("Expecting PRODUCT_NAME in EPH Staging and EPH SA are consistent for ");
 
             assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_NAME() + "  " + "Purchase", dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
 
 
             //verify PRODUCT_SHORT_NAME
-            System.out.println("\"Expecting PRODUCT_SHORT_NAME in EPH Staging and EPH SA are consistent for ");
+            Log.info("PRODUCT_SHORT_NAME in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_SHORT_NAME());
+            Log.info("PRODUCT_SHORT_NAME in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_SHORT_NAME());
 
-            System.out.println("\nPRODUCT_SHORT_NAME in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_SHORT_NAME());
-            System.out.println("\nPRODUCT_SHORT_NAME in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_SHORT_NAME());
-
+            Log.info("Expecting PRODUCT_SHORT_NAME in EPH Staging and EPH SA are consistent for ");
 
             assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_SHORT_NAME(), dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_SHORT_NAME());
 
 
             //verify SEPARATELY_SALEABLE_IND
-            System.out.println("\"Expecting SEPARATELY_SALEABLE_IND in EPH Staging and EPH SA are consistent for ");
-
-            System.out.println("\nSEPARATELY_SALEABLE_IND in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getSEPARATELY_SALEABLE_IND());
-
+            Log.info("SEPARATELY_SALEABLE_IND in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getSEPARATELY_SALEABLE_IND());
 
             String availability_status = dataQualityContext.productDataObjectsFromEPHSTG.get(i).getAVAILABILITY_STATUS();
+            Log.info("availability status : " + availability_status);
 
-
+            Log.info("Expecting SEPARATELY_SALEABLE_IND in EPH Staging and EPH SA are consistent for ");
             if (availability_status.equals("PNS"))
                 assertEquals("f", dataQualityContext.productDataObjectsFromEPHSA.get(i).getSEPARATELY_SALEABLE_IND());
             else
@@ -442,11 +456,10 @@ public class ProductDataMappingCheck {
 
 
             //verify TRIAL_ALLOWED_IND
-            System.out.println("\"Expecting TRIAL_ALLOWED_IND in EPH Staging and EPH SA are consistent for ");
+            Log.info("TRIAL_ALLOWED_IND in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND());
+            Log.info("TRIAL_ALLOWED_IND in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getTRIAL_ALLOWED_IND());
 
-            System.out.println("\nTRIAL_ALLOWED_IND in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND());
-            System.out.println("\nTRIAL_ALLOWED_IND in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getTRIAL_ALLOWED_IND());
-
+            Log.info("Expecting TRIAL_ALLOWED_IND in EPH Staging and EPH SA are consistent for ");
 
             if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND() == null)
                 assertEquals("f", dataQualityContext.productDataObjectsFromEPHSA.get(i).getTRIAL_ALLOWED_IND());
@@ -455,31 +468,31 @@ public class ProductDataMappingCheck {
 
 
             //verify FIRST_PUB_DATE
-            System.out.println("\nExpecting FIRST_PUB_DATE in EPH Staging And EPH SA are consistent for ");
+            Log.info("FIRST_PUB_DATE in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE());
+            Log.info("FIRST_PUB_DATE in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE());
 
+            Log.info("Expecting FIRST_PUB_DATE in EPH Staging And EPH SA are consistent for ");
 
             if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE() != null)
-                System.out.println("\nFIRST_PUB_DATE in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE());
-
-            System.out.println("\nFIRST_PUB_DATE in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE());
-
-            assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE(), dataQualityContext.productDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE());
+                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE(), dataQualityContext.productDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE());
 
 
             //verify F_TYPE
-            System.out.println("\"Expecting F_TYPE in EPH SA is correct");
-
-            System.out.println("\nF_TYPE in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE());
+            Log.info("F_TYPE in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE());
 
             String pmx_source_reference = dataQualityContext.productDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE();
+            Log.info("pmx_source_reference" + pmx_source_reference);
+
+            Log.info("Expecting F_TYPE in EPH SA is correct");
 
             assertEquals(pmx_source_reference.substring(pmx_source_reference.length() - 3), dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE());
 
 
             //verify F_STATUS
-            System.out.println("\"Expecting F_STATUS in EPH Staging and EPH SA are consistent for ");
+            Log.info("F_STATUS in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_STATUS());
+            Log.info("availability_status" + availability_status);
 
-            System.out.println("\nF_STATUS in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_STATUS());
+            Log.info("Expecting F_STATUS in EPH Staging and EPH SA are consistent for ");
 
             if (availability_status.equals("PSTB"))
                 assertEquals("PST", dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_STATUS());
@@ -488,13 +501,13 @@ public class ProductDataMappingCheck {
 
 
             //verify F_REVENUE_MODEL
-            System.out.println("\"Expecting F_REVENUE_MODEL in EPH Staging and EPH SA are consistent for ");
+            Log.info("F_TYPE in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_TYPE());
+            Log.info("F_REVENUE_MODEL in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_REVENUE_MODEL());
 
-            System.out.println("\nF_TYPE in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_TYPE());
-            System.out.println("\nF_REVENUE_MODEL in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_REVENUE_MODEL());
-
+            Log.info("Expecting F_REVENUE_MODEL in EPH Staging and EPH SA are consistent for ");
 
             String fType = dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE();
+
             if (fType.equals("OOA") || fType.equals("JAS") || fType.equals("JBS") || fType.equals("JBF") || fType.equals("RPR"))
                 assertEquals("ONE", dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_REVENUE_MODEL());
             else if (fType.equals("OAA"))
@@ -506,10 +519,10 @@ public class ProductDataMappingCheck {
 
 
 //            //verify F_PRODUCT_WORK
-//            System.out.println("\"Expecting F_PRODUCT_WORK in EPH Staging and EPH SA are consistent for " );
+//             Log.info("\"Expecting F_PRODUCT_WORK in EPH Staging and EPH SA are consistent for " );
 //
-//            System.out.println("\nF_PRODUCT_WORK in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
-//            System.out.println("\nF_PRODUCT_WORK in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_PRODUCT_WORK());
+//             Log.info("\nF_PRODUCT_WORK in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
+//             Log.info("\nF_PRODUCT_WORK in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_PRODUCT_WORK());
 //
 //
 //            assertTrue(Objects.equals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK(),
@@ -519,38 +532,49 @@ public class ProductDataMappingCheck {
 
     @And("^Compare the records in EPH STG and EPH SA for journals with (.*)$")
     public void compareProductsDataBetweenSTGAndSAPrintJournals(String type) {
+        Log.info("Compare the records in EPH STG and EPH SA for journals ..");
+
         dataQualityContext.productDataObjectsFromEPHSTG.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
         dataQualityContext.productDataObjectsFromEPHSA.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
 
         IntStream.range(0, dataQualityContext.productDataObjectsFromEPHSA.size()).forEach(i -> {
 
             //verify B_CLASSNAME
-            System.out.println("\nExpecting B_CLASSNAME in EPH SA for journals to be Product");
+            Log.info("B_CLASSNAME in EPH SA for journal: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
 
-            System.out.println("\nB_CLASSNAME in EPH SA for journal: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
+            Log.info("Expecting B_CLASSNAME in EPH SA for journals to be Product");
 
             assertEquals("Product", dataQualityContext.productDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
 
             //verify PMX_SOURCE_REFERENCE and get the manifestation or work id
             String id;
             String pmxSourceReference = dataQualityContext.productDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE();
-            System.out.println("\n PMX_SOURCE_REFERENCE in EPH SA for journal is " + pmxSourceReference);
+            Log.info("PMX_SOURCE_REFERENCE in EPH SA for journal is " + pmxSourceReference);
+
 
             if (pmxSourceReference.contains("SUB")) {
                 //get the id
 
                 id = pmxSourceReference.replace("-SUB", "");
 
-                if (type.equals("print_journal"))
+
+                if (type.equals("print_journal")) {
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
-                else if (type.equals("electronic_journal"))
+                    Log.info(sql);
+                } else if (type.equals("electronic_journal")) {
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2);
-                else if (type.equals("non_print_or_electronic_journal"))
+                    Log.info(sql);
+                } else if (type.equals("non_print_or_electronic_journal")) {
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC, id);
+                    Log.info(sql);
+                }
+
 
                 dataQualityContext.productDataObjectsFromEPHSTG = DBManager
                         .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-                System.out.println("\n PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
+                Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
+
+                Log.info("Assert pmxSourceReference value is correct ...");
 
                 //assert pmxSourceReference value is correct
                 assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID() + "-SUB", pmxSourceReference);
@@ -559,18 +583,23 @@ public class ProductDataMappingCheck {
                 //get the id
                 id = pmxSourceReference.replace("-RPR", "");
 
-                if (type.equals("print_journal"))
+                if (type.equals("print_journal")) {
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
-                else if (type.equals("electronic_journal"))
+                    Log.info(sql);
+                } else if (type.equals("electronic_journal")) {
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2);
-                else if (type.equals("non_print_or_electronic_journal"))
+                    Log.info(sql);
+                } else if (type.equals("non_print_or_electronic_journal")) {
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC, id);
+                    Log.info(sql);
+                }
 
                 dataQualityContext.productDataObjectsFromEPHSTG = DBManager
                         .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-                System.out.println("\n PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
+                Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
 
-                //assert pmxSourceReference value is correct
+                Log.info("Assert pmxSourceReference value is correct");
+
                 assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID() + "-RPR", pmxSourceReference);
 
             } else if (pmxSourceReference.contains("JBS")) {
@@ -578,65 +607,78 @@ public class ProductDataMappingCheck {
                 //get the id
                 id = pmxSourceReference.replace("-JBS", "");
 
-                if (type.equals("print_journal"))
+                if (type.equals("print_journal")) {
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
-                else if (type.equals("electronic_journal"))
+                    Log.info(sql);
+                } else if (type.equals("electronic_journal")) {
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2);
-                else if (type.equals("non_print_or_electronic_journal"))
+                    Log.info(sql);
+                } else if (type.equals("non_print_or_electronic_journal")) {
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC, id);
+                    Log.info(sql);
+                }
 
                 dataQualityContext.productDataObjectsFromEPHSTG = DBManager
                         .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-                System.out.println("\n PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
+                Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
 
-                //assert pmxSourceReference value is correct
+                Log.info("Assert pmxSourceReference value is correct ...");
                 assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID() + "-JBS", pmxSourceReference);
 
             } else if (pmxSourceReference.contains("JAS")) {
                 //get the id
                 id = pmxSourceReference.replace("-JAS", "");
 
-                if (type.equals("print_journal"))
+                if (type.equals("print_journal")) {
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK, id, 1);
-                else if (type.equals("electronic_journal"))
+                    Log.info(sql);
+                } else if (type.equals("electronic_journal")) {
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK, id, 2);
-                else if (type.equals("non_print_or_electronic_journal"))
+                    Log.info(sql);
+                } else if (type.equals("non_print_or_electronic_journal")) {
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_NOT_PRINT_OR_ELECTRONIC, id);
+                    Log.info(sql);
+                }
 
 
                 dataQualityContext.productDataObjectsFromEPHSTG = DBManager
                         .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-                System.out.println("\n PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK());
+                Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK());
 
-                //assert pmxSourceReference value is correct
+                Log.info("Assert pmxSourceReference value is correct ...");
                 assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK() + "-JAS", pmxSourceReference);
+
             } else if (pmxSourceReference.contains("OAA")) {
 
                 //get the id
                 id = pmxSourceReference.replace("-OAA", "");
 
-                if (type.equals("print_journal"))
+                if (type.equals("print_journal")) {
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK, id, 1);
-                else if (type.equals("electronic_journal"))
+                    Log.info(sql);
+                } else if (type.equals("electronic_journal")) {
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK, id, 2);
-                else if (type.equals("non_print_or_electronic_journal"))
+                    Log.info(sql);
+                } else if (type.equals("non_print_or_electronic_journal")) {
                     sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_NOT_PRINT_OR_ELECTRONIC, id);
+                    Log.info(sql);
+                }
 
 
                 dataQualityContext.productDataObjectsFromEPHSTG = DBManager
                         .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
-                System.out.println("\n PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK());
+                Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK());
 
-                //assert pmxSourceReference value is correct
+                Log.info("Assert pmxSourceReference value is correct ..");
                 assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK() + "-OAA", pmxSourceReference);
             }
 
 
             //PRODUCT_NAME
-            System.out.println("\nExpecting PRODUCT_NAME in EPH STH and EPH SA for journals is consistent");
+            Log.info("\nPRODUCT_NAME in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME());
+            Log.info("\nPRODUCT_NAME in EPH SA: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
 
-            System.out.println("\nPRODUCT_NAME in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME());
-            System.out.println("\nPRODUCT_NAME in EPH SA: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
+            Log.info("\nExpecting PRODUCT_NAME in EPH STH and EPH SA for journals is consistent");
 
             String suffix = null;
             if (pmxSourceReference.contains("SUB")) {
@@ -659,10 +701,9 @@ public class ProductDataMappingCheck {
                 String name = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_TITLE();
                 if (name.contains("(Print)")) {
                     assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
-                }
-                else if (name.contains("(Online)")) {
+                } else if (name.contains("(Online)")) {
 
-                    assertEquals( name + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
+                    assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
                 }
             } else if (pmxSourceReference.contains("JAS")) {
                 suffix = " Author Charges";
@@ -670,26 +711,27 @@ public class ProductDataMappingCheck {
                 if (name.contains("(Print)")) {
                     assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
 
-                }
-                else if (name.contains("(Online)")) {
+                } else if (name.contains("(Online)")) {
                     assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
                 }
             }
 
 
             //PRODUCT_SHORT_NAME
-            System.out.println("\nExpecting PRODUCT_SHORT_NAME in EPH STH and EPH SA for journals is consistent");
+            Log.info("PRODUCT_SHORT_NAME in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_SHORT_NAME());
+            Log.info("PRODUCT_SHORT_NAME in EPH SA: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_SHORT_NAME());
 
-            System.out.println("\nPRODUCT_SHORT_NAME in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_SHORT_NAME());
-            System.out.println("\nPRODUCT_SHORT_NAME in EPH SA: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_SHORT_NAME());
+            Log.info("Expecting PRODUCT_SHORT_NAME in EPH STH and EPH SA for journals is consistent");
 
             assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_SHORT_NAME(), dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_SHORT_NAME());
 
 
             //SEPARATELY_SALE_IND
             String availability_status = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getAVAILABILITY_STATUS();
-            System.out.println("\n Availability status: " + availability_status);
-            System.out.println("\n SEPARATELY_SALE_IND : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getSEPARATELY_SALEABLE_IND());
+            Log.info("Availability status: " + availability_status);
+            Log.info("SEPARATELY_SALE_IND : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getSEPARATELY_SALEABLE_IND());
+
+            Log.info("Expecting SEPARATELY_SALE_IND in EPH SA is correct");
 
 
             if (availability_status.equals("PNS"))
@@ -698,17 +740,21 @@ public class ProductDataMappingCheck {
                 assertEquals("t", dataQualityContext.productDataObjectsFromEPHSA.get(i).getSEPARATELY_SALEABLE_IND());
 
             //F_TYPE
-            System.out.println("\"Expecting F_TYPE in EPH SA is correct");
 
-            System.out.println("\nF_TYPE in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE());
+            Log.info("F_TYPE in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE());
 
             String pmx_source_reference = dataQualityContext.productDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE();
+            Log.info("pmx_source_reference : " + pmx_source_reference);
+
+            Log.info("Expecting F_TYPE in EPH SA is correct");
 
             assertEquals(pmx_source_reference.substring(pmx_source_reference.length() - 3), dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE());
 
-            //F_STATUS
-            System.out.println("\nF_STATUS in EPH SA: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_STATUS());
 
+            //F_STATUS
+            Log.info("F_STATUS in EPH SA: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_STATUS());
+
+            Log.info("Expecting F_STATUS in EPH SA is correct");
             if (pmxSourceReference.contains("SUB") || pmxSourceReference.contains("JBS") || pmxSourceReference.contains("OAA") || pmxSourceReference.contains("JAS")) {
                 if (availability_status.equals("PSTB"))
                     assertEquals("PST", dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_STATUS());
@@ -722,7 +768,11 @@ public class ProductDataMappingCheck {
             }
 
             //F_REVENUE_MODEL
+            Log.info("F_TYPE : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE());
             String fType = dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE();
+
+            Log.info("Expecting F_REVENUE_MODEL in EPH SA is correct");
+
             if (fType.equals("OOA") || fType.equals("JAS") || fType.equals("JBS") || fType.equals("JBF") || fType.equals("RPR"))
                 assertEquals("ONE", dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_REVENUE_MODEL());
             else if (fType.equals("OAA"))
@@ -738,6 +788,8 @@ public class ProductDataMappingCheck {
 
     @And("^Compare the products data between EPH SA and EPH GD for (.*)$")
     public void compareProductsDataBetweenSAndGD(String type) {
+        Log.info("Compare the products data between EPH SA and EPH GD for " + type);
+
         //sort the lists before comparison
         dataQualityContext.productDataObjectsFromEPHSA.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
         dataQualityContext.productDataObjectsFromEPHGD.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
@@ -746,127 +798,127 @@ public class ProductDataMappingCheck {
 
         assertEquals("Count of records in SA and GD is equal for " + type, dataQualityContext.productDataObjectsFromEPHSA.size(), dataQualityContext.productDataObjectsFromEPHGD.size());
 
-            for (int i = 0; i < bound; i++) {
+        for (int i = 0; i < bound; i++) {
 
-                // F_EVENT
-                System.out.println("\nExpecting F_EVENT in EPH SA and EPH GD is consistent");
+            // F_EVENT
+            Log.info("F_EVENT in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_EVENT());
+            Log.info("F_EVENT in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_EVENT());
 
-                System.out.println("\nF_EVENT in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_EVENT());
-                System.out.println("\nF_EVENT in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_EVENT());
+            Log.info("Expecting F_EVENT in EPH SA and EPH GD is consistent");
 
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_EVENT(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_EVENT());
+            assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_EVENT(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_EVENT());
 
-                // B_CLASSNAME
-                System.out.println("\nExpecting B_CLASSNAME in EPH SA and EPH GD is consistent");
+            // B_CLASSNAME
+            Log.info("B_CLASSNAME in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
+            Log.info("B_CLASSNAME in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getB_CLASSNAME());
 
-                System.out.println("\nB_CLASSNAME in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
-                System.out.println("\nB_CLASSNAME in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getB_CLASSNAME());
+            Log.info("Expecting B_CLASSNAME in EPH SA and EPH GD is consistent");
 
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getB_CLASSNAME(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getB_CLASSNAME());
+            assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getB_CLASSNAME(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getB_CLASSNAME());
 
-                // PRODUCT_ID
-                System.out.println("\nExpecting PRODUCT_ID in EPH SA and EPH GD is consistent");
+            // PRODUCT_ID
+            Log.info("PRODUCT_ID in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_ID());
+            Log.info("PRODUCT_ID in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getPRODUCT_ID());
 
-                System.out.println("\nPRODUCT_ID in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_ID());
-                System.out.println("\nPRODUCT_ID in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getPRODUCT_ID());
+            Log.info("Expecting PRODUCT_ID in EPH SA and EPH GD is consistent");
 
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_ID(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getPRODUCT_ID());
+            assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_ID(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getPRODUCT_ID());
 
-                // PMX_SOURCE_REFERENCE
-                System.out.println("\nExpecting PMX_SOURCE_REFERENCE in EPH SA and EPH GD is consistent");
+            // PMX_SOURCE_REFERENCE
+            Log.info("PMX_SOURCE_REFERENCE in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE());
+            Log.info("PMX_SOURCE_REFERENCE in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getPMX_SOURCE_REFERENCE());
 
-                System.out.println("\nPMX_SOURCE_REFERENCE in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE());
-                System.out.println("\nPMX_SOURCE_REFERENCE in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getPMX_SOURCE_REFERENCE());
+            Log.info("Expecting PMX_SOURCE_REFERENCE in EPH SA and EPH GD is consistent");
 
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getPMX_SOURCE_REFERENCE());
+            assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getPMX_SOURCE_REFERENCE());
 
-                // PRODUCT_NAME
-                System.out.println("\nExpecting PRODUCT_NAME in EPH SA and EPH GD is consistent");
+            // PRODUCT_NAME
+            Log.info("PRODUCT_NAME in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
+            Log.info("PRODUCT_NAME in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getPRODUCT_NAME());
 
-                System.out.println("\nPRODUCT_NAME in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME());
-                System.out.println("\nPRODUCT_NAME in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getPRODUCT_NAME());
+            Log.info("Expecting PRODUCT_NAME in EPH SA and EPH GD is consistent");
 
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getPRODUCT_NAME());
+            assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_NAME(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getPRODUCT_NAME());
 
-                // PRODUCT_SHORT_NAME
-                System.out.println("\nExpecting PRODUCT_SHORT_NAME in EPH SA and EPH GD is consistent");
+            // PRODUCT_SHORT_NAME
+            Log.info("PRODUCT_SHORT_NAME in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_SHORT_NAME());
+            Log.info("PRODUCT_SHORT_NAME in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getPRODUCT_SHORT_NAME());
 
-                System.out.println("\nPRODUCT_SHORT_NAME in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_SHORT_NAME());
-                System.out.println("\nPRODUCT_SHORT_NAME in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getPRODUCT_SHORT_NAME());
+            Log.info("Expecting PRODUCT_SHORT_NAME in EPH SA and EPH GD is consistent");
 
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_SHORT_NAME(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getPRODUCT_SHORT_NAME());
-
-
-                // SEPARATELY_SALEABLE_IND
-                System.out.println("\nExpecting SEPARATELY_SALEABLE_IND in EPH SA and EPH GD is consistent");
-
-                System.out.println("\nSEPARATELY_SALEABLE_IND in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getSEPARATELY_SALEABLE_IND());
-                System.out.println("\nSEPARATELY_SALEABLE_IND in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getSEPARATELY_SALEABLE_IND());
-
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getSEPARATELY_SALEABLE_IND(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getSEPARATELY_SALEABLE_IND());
-
-                // TRIAL_ALLOWED_IND
-                System.out.println("\nExpecting TRIAL_ALLOWED_IND in EPH SA and EPH GD is consistent");
-
-                System.out.println("\nTRIAL_ALLOWED_IND in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getTRIAL_ALLOWED_IND());
-                System.out.println("\nTRIAL_ALLOWED_IND in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getTRIAL_ALLOWED_IND());
-
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getTRIAL_ALLOWED_IND(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getTRIAL_ALLOWED_IND());
+            assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getPRODUCT_SHORT_NAME(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getPRODUCT_SHORT_NAME());
 
 
-                // FIRST_PUB_DATE
-                System.out.println("\nExpecting FIRST_PUB_DATE in EPH SA and EPH GD is consistent");
+            // SEPARATELY_SALEABLE_IND
+            Log.info("SEPARATELY_SALEABLE_IND in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getSEPARATELY_SALEABLE_IND());
+            Log.info("SEPARATELY_SALEABLE_IND in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getSEPARATELY_SALEABLE_IND());
 
-                System.out.println("\nFIRST_PUB_DATE in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE());
-                System.out.println("\nFIRST_PUB_DATE in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getFIRST_PUB_DATE());
+            Log.info("Expecting SEPARATELY_SALEABLE_IND in EPH SA and EPH GD is consistent");
 
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getFIRST_PUB_DATE());
+            assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getSEPARATELY_SALEABLE_IND(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getSEPARATELY_SALEABLE_IND());
 
+            // TRIAL_ALLOWED_IND
+            Log.info("TRIAL_ALLOWED_IND in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getTRIAL_ALLOWED_IND());
+            Log.info("TRIAL_ALLOWED_IND in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getTRIAL_ALLOWED_IND());
 
-                // F_TYPE
-                System.out.println("\nExpecting F_TYPE in EPH SA and EPH GD is consistent");
+            Log.info("Expecting TRIAL_ALLOWED_IND in EPH SA and EPH GD is consistent");
 
-                System.out.println("\nF_TYPE in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE());
-                System.out.println("\nF_TYPE in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_TYPE());
-
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_TYPE());
-
-
-                // F_STATUS
-                System.out.println("\nExpecting F_STATUS in EPH SA and EPH GD is consistent");
-
-                System.out.println("\nF_STATUS in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_STATUS());
-                System.out.println("\nF_STATUS in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_STATUS());
-
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_STATUS(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_STATUS());
+            assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getTRIAL_ALLOWED_IND(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getTRIAL_ALLOWED_IND());
 
 
-                // F_REVENUE_MODEL
-                System.out.println("\nExpecting F_REVENUE_MODEL in EPH SA and EPH GD is consistent");
+            // FIRST_PUB_DATE
+            Log.info("FIRST_PUB_DATE in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE());
+            Log.info("FIRST_PUB_DATE in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getFIRST_PUB_DATE());
 
-                System.out.println("\nF_REVENUE_MODEL in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_REVENUE_MODEL());
-                System.out.println("\nF_REVENUE_MODEL in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_REVENUE_MODEL());
+            Log.info("Expecting FIRST_PUB_DATE in EPH SA and EPH GD is consistent");
 
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_REVENUE_MODEL(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_REVENUE_MODEL());
-
-
-                // F_PRODUCT_WORK
-                System.out.println("\nExpecting F_PRODUCT_WORK in EPH SA and EPH GD is consistent");
-
-                System.out.println("\nF_PRODUCT_WORK in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_PRODUCT_WORK());
-                System.out.println("\nF_PRODUCT_WORK in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_PRODUCT_WORK());
-
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_PRODUCT_WORK());
-
-                // F_PRODUCT_MANIFESTATION_TYP
-                System.out.println("\nExpecting F_PRODUCT_MANIFESTATION_TYP in EPH SA and EPH GD is consistent");
-
-                System.out.println("\nF_PRODUCT_MANIFESTATION_TYP in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_PRODUCT_MANIFESTATION_TYP());
-                System.out.println("\nF_PRODUCT_MANIFESTATION_TYP in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_PRODUCT_MANIFESTATION_TYP());
-
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_PRODUCT_MANIFESTATION_TYP(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_PRODUCT_MANIFESTATION_TYP());
+            assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getFIRST_PUB_DATE());
 
 
-            }
+            // F_TYPE
+            Log.info("F_TYPE in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE());
+            Log.info("F_TYPE in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_TYPE());
+
+            Log.info("Expecting F_TYPE in EPH SA and EPH GD is consistent");
+
+            assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_TYPE(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_TYPE());
+
+
+            // F_STATUS
+            Log.info("F_STATUS in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_STATUS());
+            Log.info("F_STATUS in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_STATUS());
+
+            Log.info("Expecting F_STATUS in EPH SA and EPH GD is consistent");
+
+            assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_STATUS(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_STATUS());
+
+
+            // F_REVENUE_MODEL
+            Log.info("F_REVENUE_MODEL in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_REVENUE_MODEL());
+            Log.info("F_REVENUE_MODEL in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_REVENUE_MODEL());
+
+            Log.info("Expecting F_REVENUE_MODEL in EPH SA and EPH GD is consistent");
+
+            assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_REVENUE_MODEL(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_REVENUE_MODEL());
+
+
+            // F_PRODUCT_WORK
+            Log.info("F_PRODUCT_WORK in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_PRODUCT_WORK());
+            Log.info("F_PRODUCT_WORK in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_PRODUCT_WORK());
+
+            Log.info("Expecting F_PRODUCT_WORK in EPH SA and EPH GD is consistent");
+
+            assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_PRODUCT_WORK());
+
+            // F_PRODUCT_MANIFESTATION_TYP
+            Log.info("F_PRODUCT_MANIFESTATION_TYP in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_PRODUCT_MANIFESTATION_TYP());
+            Log.info("F_PRODUCT_MANIFESTATION_TYP in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_PRODUCT_MANIFESTATION_TYP());
+
+            Log.info("Expecting F_PRODUCT_MANIFESTATION_TYP in EPH SA and EPH GD is consistent");
+
+            assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_PRODUCT_MANIFESTATION_TYP(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_PRODUCT_MANIFESTATION_TYP());
+
+
+        }
     }
 }
