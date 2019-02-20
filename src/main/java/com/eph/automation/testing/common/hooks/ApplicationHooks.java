@@ -1,6 +1,7 @@
 package com.eph.automation.testing.common.hooks;
 
 
+import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.TestContext;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
@@ -18,9 +19,12 @@ public class ApplicationHooks {
     @Before
     public void setUp() {
         //Set up the test pre-requisite
+        Log.startLog("Test is starting ...");
+
     }
     @After(order = 99)
     public void closeDriver() {
+        Log.endLog("Test is ending ...");
         if (TestContext.getValues().gridRun && null != driverProvider) {
             driverProvider.get().quit();
         }

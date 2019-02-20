@@ -32,9 +32,9 @@ Feature: Entity - Manifestations - Count & Data Mapping Check - Validate data be
     And We compare the manifestations in EPH SA and EPH golden data
     Examples:
       | numberOfRecords | book_type |
-      | 3              | PHB       |
-      | 3              | PSB       |
-      | 3              | EBK       |
+      | 3               | PHB       |
+      | 3               | PSB       |
+      | 3               | EBK       |
 
   @Regression
   Scenario Outline: Verify db records for manifestations for journals in PMX and EPH is equal
