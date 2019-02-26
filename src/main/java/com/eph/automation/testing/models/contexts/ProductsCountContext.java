@@ -19,6 +19,7 @@ public class ProductsCountContext {
     public static List<ProductCountObject> productCountStgOAMore;
     public static List<ProductCountObject> productCountStgAC;
     public static List<ProductCountObject> productCountStgACMore;
+    public static List<ProductCountObject> productCountStgPackages;
     public static List<ProductCountObject> productCountEPHSA;
     public static List<ProductCountObject> productCountEPHGD;
 

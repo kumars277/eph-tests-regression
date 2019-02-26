@@ -58,6 +58,9 @@ public class ProductsCountCheckSteps {
         sql= ProductCountSQL.EPH_STG_PRODUCT_Count_AC_More;
         productsCountContext.productCountStgACMore= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
 
+        sql=ProductCountSQL.EPH_STG_PRODUCT_Packages;
+        productsCountContext.productCountStgPackages= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
+
         stgToSA =
                 productsCountContext.productCountStgBooks.get(0).booksCount +
                 productsCountContext.productCountStgSubscription.get(0).subCount +
@@ -67,7 +70,8 @@ public class ProductsCountCheckSteps {
                 productsCountContext.productCountStgOA.get(0).oaCount +
                 productsCountContext.productCountStgOAMore.get(0).oaMoreCount +
                 productsCountContext.productCountStgAC.get(0).acCount +
-                productsCountContext.productCountStgACMore.get(0).acMoreCount;
+                productsCountContext.productCountStgACMore.get(0).acMoreCount +
+                productsCountContext.productCountStgPackages.get(0).packagesCount;
 
         System.out.println("\nThe number of products in Staging for SA compare is: " + stgToSA);
 
