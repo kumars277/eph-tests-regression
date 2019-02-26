@@ -80,7 +80,7 @@ public class WorksCountCheckSteps {
         workCountEPHGD =DBManager.getDBResultAsBeanList(sqlEPH, WorkDataObject.class,
                 Constants.EPH_SIT_URL);
         ephWorkGD = workCountEPHGD.get(0).workCountEPHGD;
-        Log.info("\nWorks in EPH GD are: " + ephWork);
+        Log.info("\nWorks in EPH GD are: " + ephWorkGD);
 
         sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_Distinct;
         workCountPMXSTGDistinct =DBManager.getDBResultAsBeanList(sqlPMXSTGDistinct, WorkDataObject.class,
