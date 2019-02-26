@@ -10,6 +10,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
+import com.eph.automation.testing.helper.Log;
 
 public class ProductsCountCheckSteps {
     @StaticInjection
@@ -20,16 +21,16 @@ public class ProductsCountCheckSteps {
     @Given("^We know the products count in PMX$")
     public void getPmxProducts() {
         sql= ProductCountSQL.PMX_PRODUCT_Count;
-        System.out.println(sql);
+        Log.info(sql);
         productsCountContext.productCountPMX= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.PMX_SIT_URL);
-        System.out.println("\nThe number of products in PMX is: " + productsCountContext.productCountPMX.get(0).pmxCount);
+        Log.info("\nThe number of products in PMX is: " + productsCountContext.productCountPMX.get(0).pmxCount);
     }
 
     @When("^The products are in PMX Staging$")
     public void getStgProducts(){
         sql= ProductCountSQL.EPH_STG_PRODUCT_Count;
         productsCountContext.productCountStg= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
-        System.out.println("\nThe number of products in Staging is: " + productsCountContext.productCountStg.get(0).stgCount);
+        Log.info("\nThe number of products in Staging is: " + productsCountContext.productCountStg.get(0).stgCount);
 
         sql= ProductCountSQL.EPH_STG_PRODUCT_Count_BOOKS;
         productsCountContext.productCountStgBooks= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
@@ -73,7 +74,7 @@ public class ProductsCountCheckSteps {
                 productsCountContext.productCountStgACMore.get(0).acMoreCount +
                 productsCountContext.productCountStgPackages.get(0).packagesCount;
 
-        System.out.println("\nThe number of products in Staging for SA compare is: " + stgToSA);
+        Log.info("\nThe number of products in Staging for SA compare is: " + stgToSA);
 
     }
 
@@ -81,11 +82,11 @@ public class ProductsCountCheckSteps {
     public void getEPHProducts(){
         sql= ProductCountSQL.EPH_SA_PRODUCT_Count;
         productsCountContext.productCountEPHSA= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
-        System.out.println("\nThe number of products in EPH SA is: " + productsCountContext.productCountEPHSA.get(0).ephSACount);
+        Log.info("\nThe number of products in EPH SA is: " + productsCountContext.productCountEPHSA.get(0).ephSACount);
 
         sql= ProductCountSQL.EPH_GD_PRODUCT_Count;
         productsCountContext.productCountEPHGD= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
-        System.out.println("\nThe number of products in EPH GD is: " + productsCountContext.productCountEPHGD.get(0).ephGDCount);
+        Log.info("\nThe number of products in EPH GD is: " + productsCountContext.productCountEPHGD.get(0).ephGDCount);
     }
 
     @Then("^The number of products between (.*) and (.*) is equal$")

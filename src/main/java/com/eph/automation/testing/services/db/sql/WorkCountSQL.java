@@ -21,7 +21,7 @@ public class WorkCountSQL {
             "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'";
 
 
-    public static String EPH_GD_WORKS_COUNT = "select count (*) as workCountEPH from ephsit.semarchy_eph_mdm.GD_wwork";
+    public static String EPH_GD_WORKS_COUNT = "select count (*) as workCountEPHGD from ephsit.semarchy_eph_mdm.GD_wwork";
 
     public static String EPH_AE_WORKS_COUNT = "select count (*) as errorsCountEPH from ephsit.semarchy_eph_mdm.ae_wwork";
 }

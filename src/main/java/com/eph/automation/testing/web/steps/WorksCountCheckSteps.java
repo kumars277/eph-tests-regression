@@ -56,10 +56,13 @@ public class WorksCountCheckSteps {
     public void comparePMXtoPMXStaging(String source, String target){
         if (source.contentEquals("PMX")) {
             Assert.assertEquals("The number of works in PMX and PMX Staging is not equal!", pmxWork, pmxSTGWork);
+            Log.info("The count between PMX and Staging is equal");
         }else if (source.contentEquals("PMX STG")){
             Assert.assertEquals("The number of works in PMX Staging and EPH SA is not equal!", pmxSTGWorkDistinct, ephWork);
+            Log.info("The count between Staging and SA is equal");
         } else {
             Assert.assertEquals("The number of works in SA and GD is not equal!", ephWork, ephWorkGD);
+            Log.info("The count between SA and GD is equal");
         }
     }
 
@@ -76,7 +79,7 @@ public class WorksCountCheckSteps {
         sqlEPH = WorkCountSQL.EPH_GD_WORKS_COUNT;
         workCountEPHGD =DBManager.getDBResultAsBeanList(sqlEPH, WorkDataObject.class,
                 Constants.EPH_SIT_URL);
-        ephWorkGD = workCountEPH.get(0).workCountEPH;
+        ephWorkGD = workCountEPHGD.get(0).workCountEPHGD;
         Log.info("\nWorks in EPH GD are: " + ephWork);
 
         sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_Distinct;
