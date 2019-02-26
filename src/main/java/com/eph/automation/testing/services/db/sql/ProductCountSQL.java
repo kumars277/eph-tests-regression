@@ -28,6 +28,7 @@ public class ProductCountSQL {
     public static String EPH_STG_PRODUCT_Count_AC_More="select count(*) as acMoreCount from \n" +
             "(select \"F_PRODUCT_WORK\" from ephsit_talend_owner.stg_pmx_product where  \"SUBSCRIPTION\" ='Y' and  \"AUTHOR_CHARGES\" = 'Y' group by \"F_PRODUCT_WORK\" having count(*) > 1) a";
 
+    public static String EPH_STG_PRODUCT_Packages="select count(*) as packagesCount from ephsit_talend_owner.stg_pmx_product where \"PACKAGES\" = 'Y'";
 
     public static String EPH_SA_PRODUCT_Count="select count(*) as ephSACount FROM semarchy_eph_mdm.sa_product sa\n" +
             "join semarchy_eph_mdm.sa_event on f_event = event_id and f_event = (select max (f_event) from semarchy_eph_mdm.sa_product)\n" +
