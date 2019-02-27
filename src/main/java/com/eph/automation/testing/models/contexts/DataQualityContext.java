@@ -28,10 +28,13 @@ public class DataQualityContext {
     public static List<ProductDataObject> productDataObjectsFromEPHSA;
     public static List<ProductDataObject> productDataObjectsFromEPHGD;
 
+    public static List<ProductRelationshipDataObject> productRelationshipDataObjectsFromPMX;
+    public static List<ProductRelationshipDataObject> productRelationshipDataObjectsFromEPHSTG;
+    public static List<ProductRelationshipDataObject> productRelationshipDataObjectsFromEPHSA;
+    public static List<ProductRelationshipDataObject> productRelationshipDataObjectsFromEPHGD;
 
     public static List<ManifestationIdentifierObject> manifestationIdentifiersDataObjectsFromSA;
     public static List<ManifestationIdentifierObject> manifestationIdentifiersDataObjectsFromGD;
-
 
     //public static List<ProductDataObject> productEntityObjectsFromSource;
     //public static List<ProductDataObject> productEntityObjectsFromEPH;

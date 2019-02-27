@@ -19,8 +19,9 @@ public class ProductDataSQL {
             "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND M.F_PRODUCT_MANIFESTATION_TYP = 2 THEN 'Y' ELSE 'N' END AS BACK_FILES\n" +
             "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND WT.OA_TYPE = 'Y' THEN 'Y' ELSE 'N' END AS OPEN_ACCESS\n" +
             "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND M.F_PRODUCT_MANIFESTATION_TYP = 1 THEN 'Y' ELSE 'N' END AS REPRINTS\n" +
-            "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' THEN 'Y' ELSE 'N' END AS AUTHOR_CHARGES\n" +
+            "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND M.PRODUCT_MANIFESTATION_ID = WT.FIRST_MANIFESTATION THEN 'Y' ELSE 'N' END AS AUTHOR_CHARGES\n" +
             "\t,CASE WHEN WT.WORK_TYPE = 'BOOK' THEN 'Y' ELSE 'N' END AS ONE_OFF_ACCESS\n" +
+            "\t,CASE WHEN WT.WORK_TYPE = 'PACKAGE' THEN 'Y' ELSE 'N' END AS PACKAGES\n" +
             "\t,CASE \n" +
             "\t\tWHEN (MSS.SUBSTATUS_DESC IN ('Planned to be available','Planned to be available (secret)'))  THEN 'PPL'\n" +
             "\t\tWHEN (MSS.SUBSTATUS_DESC = 'Available for customer sale') THEN 'PAS' \n" +
@@ -31,18 +32,20 @@ public class ProductDataSQL {
             "\t\tELSE 'UNK' \n" +
             "\tEND AS AVAILABILITY_STATUS\n" +
             "\t,WT.WORK_TITLE\n" +
-            "\n" +
             "FROM GD_PRODUCT_MANIFESTATION M\n" +
-            "\n" +
             "LEFT JOIN GD_PRODUCT_SUBSTATUS MSS ON M.F_MANIFESTATION_SUBSTATUS = MSS.PRODUCT_SUBSTATUS_ID\n" +
-            "\n" +
-            "JOIN (SELECT MAN.PRODUCT_MANIFESTATION_ID\n" +
-            "\t  ,CASE WHEN T.F_PRODUCT_GROUP_TYPE = 1 THEN 'BOOK' WHEN T.F_PRODUCT_GROUP_TYPE = 2 THEN 'JOURNAL' ELSE 'OTHER' END AS WORK_TYPE\n" +
-            "\t  ,CASE WHEN W.F_OPEN_ACCESS_JOURNAL_TYPE IN (10,11,12) THEN 'Y' ELSE 'N' END AS OA_TYPE\n" +
-            "\t  ,W.PRODUCT_WORK_TITLE AS WORK_TITLE\n" +
-            "\t  FROM GD_PRODUCT_MANIFESTATION MAN \n" +
-            "\t  JOIN GD_PRODUCT_WORK W ON MAN.F_PRODUCT_WORK = W.PRODUCT_WORK_ID\n" +
-            "\t  JOIN GD_PRODUCT_TYPE T ON W.F_PRODUCT_TYPE = T.PRODUCT_TYPE_ID) WT ON WT.PRODUCT_MANIFESTATION_ID = M.PRODUCT_MANIFESTATION_ID\n" +
+            "JOIN (SELECT \n" +
+            "\t     MAN.PRODUCT_MANIFESTATION_ID\n" +
+            "\t    ,CASE WHEN T.PRODUCT_TYPE_ID IN (143,21) THEN 'PACKAGE' WHEN T.F_PRODUCT_GROUP_TYPE = 1 THEN 'BOOK' WHEN T.F_PRODUCT_GROUP_TYPE = 2 THEN 'JOURNAL' ELSE 'OTHER' END AS WORK_TYPE\n" +
+            "\t    ,CASE WHEN W.F_OPEN_ACCESS_JOURNAL_TYPE IN (10,11,12) AND MAN.PRODUCT_MANIFESTATION_ID = FIR.FIRST_MANIFESTATION THEN 'Y' ELSE 'N' END AS OA_TYPE\n" +
+            "\t    ,W.PRODUCT_WORK_TITLE AS WORK_TITLE\n" +
+            "\t    ,FIR.FIRST_MANIFESTATION\n" +
+            "      FROM GD_PRODUCT_MANIFESTATION MAN \n" +
+            "      JOIN GD_PRODUCT_WORK W ON MAN.F_PRODUCT_WORK = W.PRODUCT_WORK_ID\n" +
+            "      JOIN GD_PRODUCT_TYPE T ON W.F_PRODUCT_TYPE = T.PRODUCT_TYPE_ID\n" +
+            "      JOIN (SELECT FMAN.F_PRODUCT_WORK, MIN(FMAN.PRODUCT_MANIFESTATION_ID) AS FIRST_MANIFESTATION \n" +
+            "\t        FROM GD_PRODUCT_MANIFESTATION FMAN GROUP BY FMAN.F_PRODUCT_WORK) FIR ON MAN.F_PRODUCT_WORK = FIR.F_PRODUCT_WORK\n" +
+            "\t   ) WT ON WT.PRODUCT_MANIFESTATION_ID = M.PRODUCT_MANIFESTATION_ID\n" +
             "\t WHERE  M.PRODUCT_MANIFESTATION_ID IN ('%s')\n" +
             "\t order by  M.PRODUCT_MANIFESTATION_ID";
 
@@ -63,6 +66,7 @@ public class ProductDataSQL {
             "            \"REPRINTS\" as REPRINTS,\n" +
             "            \"AUTHOR_CHARGES\" as AUTHOR_CHARGES,\n" +
             "            \"ONE_OFF_ACCESS\" as ONE_OFF_ACCESS,\n" +
+            "            \"PACKAGES\" as PACKAGES,\n" +
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
             "            \"WORK_TITLE\" as WORK_TITLE\n" +
             "            FROM ephsit.ephsit_talend_owner.stg_pmx_product\n" +
@@ -135,6 +139,13 @@ public class ProductDataSQL {
             "            \"WORK_TITLE\" as WORK_TITLE\n" +
             "            FROM ephsit.ephsit_talend_owner.stg_pmx_product\n" +
             "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" = '%s'";
+
+    public static String EPH_STG_GET_COUNT_OF_RECORDS_WITH_GIVEN_F_PRODUCT_WORK = "select count(*) as count from ephsit_talend_owner.stg_pmx_product where \"SUBSCRIPTION\" ='Y' and \"F_PRODUCT_WORK\"  = '%s' group by \"F_PRODUCT_WORK\"";
+
+    public static String EPH_STG_GET_COUNT_OF_RECORDS_WITH_OAA_GIVEN_F_PRODUCT_WORK = "select count(*) as count from ephsit_talend_owner.stg_pmx_product where \"SUBSCRIPTION\" ='Y' and \"F_PRODUCT_WORK\"  = '%s' and \"OPEN_ACCESS\" ='Y'  group by \"F_PRODUCT_WORK\"";
+
+    public static String EPH_STG_GET_COUNT_OF_RECORDS_WITH_JAS_GIVEN_F_PRODUCT_WORK = "select count(*) as count from ephsit_talend_owner.stg_pmx_product where \"SUBSCRIPTION\" ='Y' and \"F_PRODUCT_WORK\"  = '%s' and \"AUTHOR_CHARGES\" ='Y'  group by \"F_PRODUCT_WORK\"";
+
 
     public static String EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_NOT_PRINT_OR_ELECTRONIC = "SELECT\n" +
             "           \"PRODUCT_ID\" as PRODUCT_ID,\n" +
@@ -219,7 +230,7 @@ public class ProductDataSQL {
             "  where pmx_source_reference similar to '%s' and pmx_source_reference not like '%%OOA'";
 
 
-    public static String EPH_GD_PRODUCT_EXTRACT_JOURNALS = "SELECT \n" +
+    public static String EPH_GD_PRODUCT_EXTRACT_JOURNALS_OR_PACKAGES = "SELECT \n" +
             "  F_EVENT AS F_EVENT\n" +
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
             "  ,product_id AS PRODUCT_ID -- Title\n" +
@@ -244,11 +255,13 @@ public class ProductDataSQL {
 
     public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PRINT_JOURNALS= "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID  from ephsit_talend_owner.stg_pmx_product where \"SUBSCRIPTION\" = 'Y' and \"F_PRODUCT_MANIFESTATION_TYP\" = '1' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = 'Y' order by random() limit '%s'";
 
-    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_ELECTRONIC_JOURNALS = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from ephsit_talend_owner.stg_pmx_product where \"SUBSCRIPTION\" = 'Y' and \"F_PRODUCT_MANIFESTATION_TYP\" = '2' order by random() limit '%s'";
+    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_ELECTRONIC_JOURNALS = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from ephsit_talend_owner.stg_pmx_product where \"SUBSCRIPTION\" = 'Y' and \"F_PRODUCT_MANIFESTATION_TYP\" = '2' and \"OPEN_ACCESS\" = '%s' order by random() limit '%s'";
 
     public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_NON_PRINT_OR_ELECTRONIC_JOURNALS = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from ephsit_talend_owner.stg_pmx_product where \"SUBSCRIPTION\" = 'Y' and \"F_PRODUCT_MANIFESTATION_TYP\" NOT IN ('1', '2') order by random() limit '%s'";
 
-    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS = "  select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from ephsit_talend_owner.stg_pmx_product where \"ONE_OFF_ACCESS\" = 'Y' order by random() limit '%s'";
+    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from ephsit_talend_owner.stg_pmx_product where \"ONE_OFF_ACCESS\" = 'Y' order by random() limit '%s'";
+
+    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PACKAGES = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from ephsit_talend_owner.stg_pmx_product where \"PACKAGES\" = 'Y' order by random() limit '%s'";
 
 
 }
