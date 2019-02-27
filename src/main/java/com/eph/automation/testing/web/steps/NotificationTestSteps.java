@@ -18,11 +18,12 @@ public class NotificationTestSteps {
     public NotificationCountContext notificationCountContext;
     private String sql;
 
+
     @Given("^We know the number of (.*) GD records after a full-load$")
     public void getGDRecordsAfterFullLoad(String table){
         sql= NotificationsSQL.EPH_GD_PRODUCT_Count.replace("PARAM1",table);
         notificationCountContext.gdCountNumber= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_SIT_URL);
-        Log.info("\nThe number of products in GD is: " + notificationCountContext.gdCountNumber.get(0).ephGDCount);
+        Log.info("\nThe number of records in GD is: " + notificationCountContext.gdCountNumber.get(0).ephGDCount);
     }
 
     @When("^We check the created notifications by (.*)$")
