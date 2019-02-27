@@ -11,4 +11,3 @@ Feature: Entity - Notifications - Validate a notification is created for every c
       | PRODUCT           |product      |
       | WORK              |wwork        |
       | MANIFESTATION     |manifestation|
-      #| ISSN_L            |BOOKSERIES |
