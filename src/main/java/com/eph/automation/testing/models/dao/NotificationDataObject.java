@@ -19,4 +19,24 @@ public class NotificationDataObject {
 
     public int ephGDCount;
     public int notificationCount;
+
+    public String gdID;
+
+    public String getGdID() {
+        return gdID;
+    }
+
+    public void setGdID(String gdID) {
+        this.gdID = gdID;
+    }
+
+    public String getNotificationID() {
+        return notificationID;
+    }
+
+    public void setNotificationID(String notificationID) {
+        this.notificationID = notificationID;
+    }
+
+    public String notificationID;
 }

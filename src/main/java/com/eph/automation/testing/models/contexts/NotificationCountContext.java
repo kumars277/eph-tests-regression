@@ -7,4 +7,6 @@ import java.util.List;
 public class NotificationCountContext {
     public static List<NotificationDataObject> gdCountNumber;
     public static List<NotificationDataObject> notificationCountNumber;
+    public static List<NotificationDataObject> gdID;
+    public static List<NotificationDataObject> notificationID;
 }
