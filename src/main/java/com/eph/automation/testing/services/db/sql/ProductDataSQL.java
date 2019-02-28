@@ -188,6 +188,9 @@ public class ProductDataSQL {
             "  FROM ephsit.semarchy_eph_mdm.sa_product sa\n" +
             "  join semarchy_eph_mdm.sa_event on f_event = event_id and f_event = (select max (f_event) from semarchy_eph_mdm.sa_product)\n" +
             "  and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
+            "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX'\n" +
             "  WHERE pmx_source_reference IN ('%s')\n" ;
 
     public static String EPH_GD_PRODUCT_EXTRACT = "SELECT \n" +
@@ -226,7 +229,9 @@ public class ProductDataSQL {
             "  ,f_manifestation AS F_PRODUCT_MANIFESTATION_TYP\n" +
             "  FROM ephsit.semarchy_eph_mdm.sa_product sa\n" +
             "  join semarchy_eph_mdm.sa_event on f_event = event_id and f_event = (select max (f_event) from semarchy_eph_mdm.sa_product)\n" +
-            "  and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
+            "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX'\n" +
             "  where pmx_source_reference similar to '%s' and pmx_source_reference not like '%%OOA'";
 
 

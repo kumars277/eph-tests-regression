@@ -38,11 +38,14 @@ public class ProductRelationshipChecksSQL {
     public static String GET_EPH_GD_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from semarchy_eph_mdm.gd_product_rel_package";
 
     public static String GET_PMX_PRODUCT_RELATIONSHIPS_DATA = "SELECT \n" +
-            "\tWL.PRODUCT_WORK_LINK_ID AS RELATIONSHIP_PMX_SOURCEREF, \n" +
-            "\tW1.PRODUCT_WORK_ID || '-PKG' AS OWNER_PMX_SOURCE,\n" +
-            "\tM2.PRODUCT_MANIFESTATION_ID || '-SUB' AS COMPONENT_PMX_SOURCE,\n" +
-            "\t'CON' AS F_RELATIONSHIP_TYPE,\n" +
-            "\tCASE WHEN W1.F_WORK_STATUS = 81 THEN '2019-01-01' ELSE NULL END AS EFFECTIVE_START_DATE  -- available work (81)\n" +
+            "\t WL.PRODUCT_WORK_LINK_ID AS RELATIONSHIP_PMX_SOURCEREF \n" +
+            "\t,W1.PRODUCT_WORK_ID || '-PKG' AS OWNER_PMX_SOURCE\n" +
+            "\t,M2.PRODUCT_MANIFESTATION_ID || '-SUB' AS COMPONENT_PMX_SOURCE\n" +
+            "\t,'CON' AS F_RELATIONSHIP_TYPE\n" +
+            "\t,CASE WHEN W1.F_WORK_STATUS = 81 AND EFFFROM_DATE IS NULL THEN TO_DATE('2019-01-01', 'YYYY-MM-DD')\n" +
+            "\t      WHEN W1.F_WORK_STATUS = 81 AND EFFFROM_DATE IS NOT NULL THEN EFFFROM_DATE\n" +
+            "\t      ELSE NULL END AS EFFECTIVE_START_DATE  -- available work (81)\n" +
+            "\t,NVL(W1.EFFECTIVE_TO_DATE, NVL(M2.EFFECTIVE_TO_DATE, WL.EFFTO_DATE)) AS ENDON\n" +
             "FROM \n" +
             "\tGD_PRODUCT_WORK_LINK WL,\n" +
             "\tGD_PRODUCT_WORK W1,\n" +
@@ -61,12 +64,11 @@ public class ProductRelationshipChecksSQL {
             "AND\n" +
             "\tM2.F_PRODUCT_MANIFESTATION_TYP = 2  \t-- electronic \n" +
             "AND\n" +
-            "\tWL.EFFTO_DATE IS NULL\n" +
+            "\tNVL(W1.EFFECTIVE_TO_DATE, NVL(M2.EFFECTIVE_TO_DATE, WL.EFFTO_DATE)) IS NULL\n" +
             "AND\n" +
             "\tW1.F_WORK_STATUS = 81\n" +
             "AND\n" +
-            "\tWL.F_PRODUCT_WORK_LINK_TYPE = 42\t-- includes\n" +
-            "\t AND PRODUCT_WORK_LINK_ID in ('%s')";
+            "\tWL.F_PRODUCT_WORK_LINK_TYPE = 42\t-- includes";
 
     public static String GET_EPH_STG_PRODUCT_RELATIONSHIPS_DATA = "select\n" +
             "   \"RELATIONSHIP_PMX_SOURCEREF\" as RELATIONSHIP_PMX_SOURCEREF,\n" +
@@ -79,8 +81,8 @@ public class ProductRelationshipChecksSQL {
 
     public static String SELECT_RANDOM_RELATIONSHIP_PMX_SOURCEREF = "select \"RELATIONSHIP_PMX_SOURCEREF\" as RELATIONSHIP_PMX_SOURCEREF from ephsit_talend_owner.stg_pmx_product_pack_rel order by random() limit '%s'";
 
-    public static String GET_PRODUCT_REL_PACK_ID_FROM_LOOKUP_TABLE = "select ident_ref as PRODUCT_REL_PACK_ID\n" +
-            "FROM ephsit_talend_owner.map_identref_2_identid where ident_id in ('%s')\n";
+    public static String GET_PRODUCT_REL_PACK_ID_FROM_LOOKUP_TABLE = "select source_ref as PRODUCT_REL_PACK_ID\n" +
+            "FROM ephsit_talend_owner.map_sourceref_2_numericid where numeric_id in ('%s')";
 
     public static String GET_RELATIONSHIP_PMX_SOURCEREF_FROM_LOOKUP_TABLE = "select ident_id as RELATIONSHIP_PMX_SOURCEREF\n" +
             "FROM ephsit_talend_owner.map_identref_2_identid where ident_ref in ('%s')";
