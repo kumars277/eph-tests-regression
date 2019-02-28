@@ -700,7 +700,7 @@ public class ProductDataMappingCheck {
                 if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND() == null)
                     assertEquals("f", dataQualityContext.productDataObjectsFromEPHSA.get(i).getTRIAL_ALLOWED_IND());
                 else
-                    assertEquals("t", dataQualityContext.productDataObjectsFromEPHSA.get(i).getTRIAL_ALLOWED_IND());
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND(), dataQualityContext.productDataObjectsFromEPHSA.get(i).getTRIAL_ALLOWED_IND());
             } else {
                 Log.info("TRIAL_ALLOWED_IND in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getTRIAL_ALLOWED_IND());
                 Log.info("TRIAL_ALLOWED_IND in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getTRIAL_ALLOWED_IND());
@@ -710,7 +710,7 @@ public class ProductDataMappingCheck {
                 if (dataQualityContext.productDataObjectsFromEPHSTG.get(0).getTRIAL_ALLOWED_IND() == null)
                     assertEquals("f", dataQualityContext.productDataObjectsFromEPHSA.get(i).getTRIAL_ALLOWED_IND());
                 else
-                    assertEquals("t", dataQualityContext.productDataObjectsFromEPHSA.get(i).getTRIAL_ALLOWED_IND());
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND(), dataQualityContext.productDataObjectsFromEPHSA.get(i).getTRIAL_ALLOWED_IND());
 
             }
 
