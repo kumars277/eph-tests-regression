@@ -43,21 +43,15 @@ public class NotificationTestSteps {
 
     @And("^The (.*) id is the same as the id from table (.*)$")
     public void checkIds(String type, String table){
-        sql= NotificationsSQL.EPH_GD_ID.replace("PARAM1",table)
-        .replace("PARAM2", type);
-        notificationCountContext.gdID= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_SIT_URL);
-        Log.info("\nThe GD ID is: " + notificationCountContext.gdID.get(0).gdID);
-
-        sql= NotificationsSQL.EPH_Notification_ID.replace("PARAM1",type);
+        sql= NotificationsSQL.EPH_Notification_ID.replace("PARAM1",type)
+        .replace("PARAM2", table);
+        Log.info(sql);
         notificationCountContext.notificationID= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_SIT_URL);
-        Log.info("\nThe Notification ID is: " + notificationCountContext.notificationID.get(0).notificationID);
 
-        if(notificationCountContext.gdCountNumber.get(0).ephGDCount==1) {
-            Assert.assertEquals("The notification id is not the same as the GD ID!",
-                    notificationCountContext.gdID.get(0).gdID, notificationCountContext.notificationID.get(0).notificationID);
-        }
-        else{
-            Log.info("The ids are matching");
+        if (notificationCountContext.notificationID.isEmpty()) {
+            Log.info("Notifications for all ids are created!");
+        }else {
+            Assert.fail("There are missing ids: " + notificationCountContext.notificationID.get(0).gdID);
         }
     }
 }
