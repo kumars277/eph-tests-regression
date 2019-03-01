@@ -6,13 +6,13 @@ Feature: Entity - PRODUCT RELATIONSHIP - Data Mapping Check - Validate data betw
     When We get the count of the product relationship records in EPH STG
     Then The count of the product relationship records in PMX and EPH staging table is equal
 
-  @wip
+  @Regression
   Scenario: Verify count of product relationship records in EPH staging and EPH SA is equal
     Given We get the count of the product relationship records in EPH STG
     When The product relationship records are transferred to EPH SA
     Then The count of the product relationship records in EPH staging table and EPH SA is equal
 
-  @wip
+  @Regression
   Scenario: Verify count of product relationship records in EPH SA and EPH golden data is equal
     Given The product relationship records are transferred to EPH SA
     When The product relationship are transferred to the golden data table
@@ -29,15 +29,24 @@ Feature: Entity - PRODUCT RELATIONSHIP - Data Mapping Check - Validate data betw
       | countOfRandomIds |
      | 10                |
 
-  @wip
-  Scenario Outline: Validate product relationship data is transferred from EPH STG and EPH SA for books
+  @Regression
+  Scenario Outline: Validate product relationship data is transferred from EPH STG and EPH SA
     Given We get <countOfRandomIds> random ids of product relationship records
     When We get the product relationship records from EPH STG
     Then We get the product relationship records from EPH SA
     And We check that mandatory columns for product relationship SA
     And Compare the product relationship data between EPH STG and EPH SA
+    Examples:
+      | countOfRandomIds |
+      | 10            |
+
+  @Regression
+  Scenario Outline: Validate product relationship data is transferred from EPH SA and EPH GD
+    Given We get <countOfRandomIds> random ids of product relationship records
+    Then We get the product relationship records from EPH SA
+    And We check that mandatory columns for product relationship SA
     And We get the product relationship records from EPH GD
     And Compare the product relationship data between EPH SA and EPH GD
     Examples:
       | countOfRandomIds |
-      | 1                |
+      | 10            |

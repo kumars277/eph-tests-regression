@@ -68,7 +68,8 @@ public class ProductRelationshipChecksSQL {
             "AND\n" +
             "\tW1.F_WORK_STATUS = 81\n" +
             "AND\n" +
-            "\tWL.F_PRODUCT_WORK_LINK_TYPE = 42\t-- includes";
+            "\tWL.F_PRODUCT_WORK_LINK_TYPE = 42\t-- includes\n" +
+            "\t AND PRODUCT_WORK_LINK_ID in ('%s')";
 
     public static String GET_EPH_STG_PRODUCT_RELATIONSHIPS_DATA = "select\n" +
             "   \"RELATIONSHIP_PMX_SOURCEREF\" as RELATIONSHIP_PMX_SOURCEREF,\n" +
@@ -81,11 +82,11 @@ public class ProductRelationshipChecksSQL {
 
     public static String SELECT_RANDOM_RELATIONSHIP_PMX_SOURCEREF = "select \"RELATIONSHIP_PMX_SOURCEREF\" as RELATIONSHIP_PMX_SOURCEREF from ephsit_talend_owner.stg_pmx_product_pack_rel order by random() limit '%s'";
 
-    public static String GET_PRODUCT_REL_PACK_ID_FROM_LOOKUP_TABLE = "select source_ref as PRODUCT_REL_PACK_ID\n" +
-            "FROM ephsit_talend_owner.map_sourceref_2_numericid where numeric_id in ('%s')";
+    public static String GET_PRODUCT_REL_PACK_ID_FROM_LOOKUP_TABLE = "select numeric_id as PRODUCT_REL_PACK_ID\n" +
+            "FROM ephsit_talend_owner.map_sourceref_2_numericid where source_ref in ('%s')";
 
-    public static String GET_RELATIONSHIP_PMX_SOURCEREF_FROM_LOOKUP_TABLE = "select ident_id as RELATIONSHIP_PMX_SOURCEREF\n" +
-            "FROM ephsit_talend_owner.map_identref_2_identid where ident_ref in ('%s')";
+    public static String GET_RELATIONSHIP_PMX_SOURCEREF_FROM_LOOKUP_TABLE = "select numeric_id as PRODUCT_REL_PACK_ID\n" +
+            "FROM ephsit_talend_owner.map_sourceref_2_numericid where source_ref in ('%s')";
 
     public static String GET_ID_FROM_SOURCEREF_LOOKUP_TABLE = "SELECT eph_id as eph_id\n" +
             "FROM ephsit_talend_owner.map_sourceref_2_ephid where source_ref in ('%s')";
@@ -100,8 +101,8 @@ public class ProductRelationshipChecksSQL {
             "f_relationship_type as F_RELATIONSHIP_TYPE,\n" +
             "effective_start_date as EFFECTIVE_START_DATE,\n" +
             "effective_end_date as EFFECTIVE_END_DATE\n" +
-            "from semarchy_eph_mdm.sa_product_rel_packagel\n" +
-            "where \"PRODUCT_REL_PACK_ID\"  in ('%s')";
+            "from semarchy_eph_mdm.sa_product_rel_package\n" +
+            "where \"product_rel_pack_id\"  in ('%s')";
 
 
     public static String GET_EPH_GD_PRODUCT_RELATIONSHIPS_DATA = "select \n" +
@@ -114,7 +115,7 @@ public class ProductRelationshipChecksSQL {
             "effective_start_date as EFFECTIVE_START_DATE,\n" +
             "effective_end_date as EFFECTIVE_END_DATE\n" +
             "from semarchy_eph_mdm.gd_product_rel_package\n" +
-            "where \"PRODUCT_REL_PACK_ID\"  in ('%s')";
+            "where \"product_rel_pack_id\"  in ('%s')";
 
 
 }

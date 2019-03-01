@@ -339,6 +339,7 @@ public class ProductDataMappingCheck {
 
         dataQualityContext.productDataObjectsFromEPHSA = DBManager
                 .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+sql.length();
 
     }
 
