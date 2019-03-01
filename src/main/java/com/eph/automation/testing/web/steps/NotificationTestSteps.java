@@ -47,11 +47,14 @@ public class NotificationTestSteps {
         .replace("PARAM2", table);
         Log.info(sql);
         notificationCountContext.notificationID= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_SIT_URL);
-
         if (notificationCountContext.notificationID.isEmpty()) {
             Log.info("Notifications for all ids are created!");
         }else {
-            Assert.fail("There are missing ids: " + notificationCountContext.notificationID.get(0).gdID);
+            for(int i=0;i<notificationCountContext.notificationID.size();i++) {
+                Log.info("There are missing ids: " + notificationCountContext.notificationID.size());
+                Log.info("The missing id is: " + notificationCountContext.notificationID.get(i).gdID);
+            }
+            Assert.fail("There are missing ids");
         }
     }
 }
