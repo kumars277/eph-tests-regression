@@ -33,7 +33,13 @@ public class ProductRelationshipChecksSQL {
 
     public static String GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from ephsit.ephsit_talend_owner.stg_pmx_product_pack_rel\n";
 
-    public static String GET_EPH_SA_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from semarchy_eph_mdm.sa_product_rel_package";
+    public static String GET_EPH_SA_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from semarchy_eph_mdm.sa_product_rel_package\n" +
+            "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
+            "and f_event = (select max (f_event) from semarchy_eph_mdm.sa_product_rel_package)\n" +
+            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
+            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX'";
 
     public static String GET_EPH_GD_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from semarchy_eph_mdm.gd_product_rel_package";
 
@@ -92,16 +98,21 @@ public class ProductRelationshipChecksSQL {
             "FROM ephsit_talend_owner.map_sourceref_2_ephid where source_ref in ('%s')";
 
     public static String GET_EPH_SA_PRODUCT_RELATIONSHIPS_DATA = "select \n" +
-            "b_loadid as B_LOADID,\n" +
+            "sa.b_loadid as B_LOADID,\n" +
             "f_event as F_EVENT,\n" +
-            "b_classname as B_CLASSNAME,\n" +
+            "sa.b_classname as B_CLASSNAME,\n" +
             "product_rel_pack_id as PRODUCT_REL_PACK_ID,\n" +
             "f_package_owner as F_PACKAGE_OWNER,\n" +
             "f_component as F_COMPONENT,\n" +
             "f_relationship_type as F_RELATIONSHIP_TYPE,\n" +
             "effective_start_date as EFFECTIVE_START_DATE,\n" +
             "effective_end_date as EFFECTIVE_END_DATE\n" +
-            "from semarchy_eph_mdm.sa_product_rel_package\n" +
+            "from semarchy_eph_mdm.sa_product_rel_package sa\n" +
+            "join semarchy_eph_mdm.sa_event on f_event = event_id and f_event = (select max (f_event) from semarchy_eph_mdm.sa_product_rel_package)\n" +
+            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
+            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX'\n" +
             "where \"product_rel_pack_id\"  in ('%s')";
 
 

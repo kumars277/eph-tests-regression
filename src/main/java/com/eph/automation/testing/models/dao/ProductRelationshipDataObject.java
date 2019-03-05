@@ -15,7 +15,7 @@ public class ProductRelationshipDataObject {
     //SA
     private String F_EVENT;
     private String B_CLASSNAME;
-    private String PRODUCT_REL_PACKAGE_ID;
+    private String PRODUCT_REL_PACK_ID;
     private String F_PACKAGE_OWNER;
     private String F_COMPONENT;
     private String EFFECTIVE_END_DATE;
@@ -85,12 +85,12 @@ public class ProductRelationshipDataObject {
         B_CLASSNAME = b_CLASSNAME;
     }
 
-    public String getPRODUCT_REL_PACKAGE_ID() {
-        return PRODUCT_REL_PACKAGE_ID;
+    public String getPRODUCT_REL_PACK_ID() {
+        return PRODUCT_REL_PACK_ID;
     }
 
-    public void setPRODUCT_REL_PACKAGE_ID(String PRODUCT_REL_PACKAGE_ID) {
-        this.PRODUCT_REL_PACKAGE_ID = PRODUCT_REL_PACKAGE_ID;
+    public void setPRODUCT_REL_PACK_ID(String PRODUCT_REL_PACK_ID) {
+        this.PRODUCT_REL_PACK_ID = PRODUCT_REL_PACK_ID;
     }
 
     public String getF_PACKAGE_OWNER() {
@@ -121,7 +121,7 @@ public class ProductRelationshipDataObject {
                 Objects.equals(EFFECTIVE_START_DATE, that.EFFECTIVE_START_DATE) &&
                 F_EVENT.equals(that.F_EVENT) &&
                 B_CLASSNAME.equals(that.B_CLASSNAME) &&
-                PRODUCT_REL_PACKAGE_ID.equals(that.PRODUCT_REL_PACKAGE_ID) &&
+                PRODUCT_REL_PACK_ID.equals(that.PRODUCT_REL_PACK_ID) &&
                 Objects.equals(F_PACKAGE_OWNER, that.F_PACKAGE_OWNER) &&
                 F_COMPONENT.equals(that.F_COMPONENT) &&
                 Objects.equals(EFFECTIVE_END_DATE, that.EFFECTIVE_END_DATE);

@@ -15,15 +15,13 @@ import cucumber.api.java.en.When;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * Created by Bistra Drazheva on 21/02/2019
@@ -51,6 +49,9 @@ public class ProductRelationshipDataMappingCheckSteps {
         List<Map<String, Object>> productsRelNumber = DBManager.getDBResultMap(sql, Constants.PMX_SIT_URL);
         countProductsRelPMX = ((BigDecimal) productsRelNumber.get(0).get("count")).intValue();
         Log.info("Count of product relationship records in PMX is: " + countProductsRelPMX);
+
+        Log.info("Assert count of records is not null");
+        assertTrue("No data found in PMX for product relationships", countProductsRelPMX != 0);
     }
 
     @When("We get the count of the product relationship records in EPH STG$")
@@ -62,20 +63,30 @@ public class ProductRelationshipDataMappingCheckSteps {
         countProductsRelEPHSTG = ((Long) productsRelNumber.get(0).get("count")).intValue();
         Log.info("Count of product relationship records in EPH STG is: " + countProductsRelEPHSTG);
 
+        Log.info("Assert count of records is not null");
+
+        assertTrue("No data found in EPH STG for product relationships", countProductsRelEPHSTG != 0);
+
+
     }
 
 
-    @When("^The product relationship records are transferred to EPH SA$")
+    @When("^We get the count of product relationship records in EPH SA$")
     public void getCountProductRelEPHSA() {
-        Log.info("When We get the count of the product relationship records in EPH STG ..");
+        Log.info("When We get the count of the product relationship records in EPH SA ..");
         sql = ProductRelationshipChecksSQL.GET_EPH_SA_PRODUCT_RELATIONSHIPS_COUNT;
         Log.info(sql);
         List<Map<String, Object>> productsRelNumber = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
         countProductsRelEPHSA = ((Long) productsRelNumber.get(0).get("count")).intValue();
         Log.info("Count of product relationship records in EPH SA is: " + countProductsRelEPHSA);
+
+        Log.info("Assert count of records is not null");
+
+        assertTrue("No data found in EPH SA for product relationships", countProductsRelEPHSA != 0);
+
     }
 
-    @When("^The product relationship are transferred to the golden data table")
+    @When("^We get the count of product relationship records in EPH GD")
     public void getCountProductRelEPHGD() {
         Log.info("When We get the count of the product relationship records in EPH GD ..");
         sql = ProductRelationshipChecksSQL.GET_EPH_GD_PRODUCT_RELATIONSHIPS_COUNT;
@@ -83,6 +94,11 @@ public class ProductRelationshipDataMappingCheckSteps {
         List<Map<String, Object>> productsRelNumber = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
         countProductsRelEPHGD = ((Long) productsRelNumber.get(0).get("count")).intValue();
         Log.info("Count of product relationship records in EPH GD is: " + countProductsRelEPHGD);
+
+        Log.info("Assert count of records is not null");
+
+        assertTrue("No data found in EPH GD for product relationships", countProductsRelEPHGD != 0);
+
     }
 
     @Then("^The count of the product relationship records in PMX and EPH staging table is equal$")
@@ -185,14 +201,19 @@ public class ProductRelationshipDataMappingCheckSteps {
 
 
             //verify EFFECTIVE_START_DATE
-            Log.info("EFFECTIVE_START_DATE in PMX : " + dataQualityContext.productRelationshipDataObjectsFromPMX.get(i).getEFFECTIVE_START_DATE());
-            Log.info("EFFECTIVE_START_DATE in EPH STG : " + dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE());
+            if (dataQualityContext.productRelationshipDataObjectsFromPMX.get(i).getEFFECTIVE_START_DATE() != null || dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE() != null) {
+                try {
+                    Date pmxEffectiveStartDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.s").parse(dataQualityContext.productRelationshipDataObjectsFromPMX.get(i).getEFFECTIVE_START_DATE());
+                    Log.info("EFFECTIVE_START_DATE in PMX: " + pmxEffectiveStartDate);
 
-            Log.info("Expecting EFFECTIVE_START_DATE in PMX and EPH STG to be equal");
+                    Date ephEffectiveStartDate = new SimpleDateFormat("yyyy-MM-dd").parse(dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE());
+                    Log.info("EFFECTIVE_START_DATE in EPH Staging: " + ephEffectiveStartDate);
 
-//            assertEquals(dataQualityContext.productRelationshipDataObjectsFromPMX.get(i).getEFFECTIVE_START_DATE(), dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE());
-
-
+                    assertEquals("EFFECTIVE_START_DATE in PMX and EPH STG is not equal ", pmxEffectiveStartDate, ephEffectiveStartDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
         });
     }
 
@@ -237,7 +258,7 @@ public class ProductRelationshipDataMappingCheckSteps {
             //verify F_EVENT is not null
             assertNotNull(dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getF_EVENT());
             //verify PRODUCT_REL_PACKAGE_ID
-//            assertNotNull(dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getPRODUCT_REL_PACKAGE_ID());
+            assertNotNull(dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getPRODUCT_REL_PACK_ID());
             //verify F_PACKAGE_OWNER
             assertNotNull(dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getF_PACKAGE_OWNER());
             //verify F_COMPONENT
@@ -250,9 +271,6 @@ public class ProductRelationshipDataMappingCheckSteps {
     @And("^Compare the product relationship data between EPH STG and EPH SA$")
     public void compareProductRelationshipsDataBetweenEPHSTGAndEPHSA() {
         Log.info("Compare the product relationship data between EPH STG and EPH SA ...");
-
-//        dataQualityContext.productRelationshipDataObjectsFromEPHSTG.sort(Comparator.comparing(ProductRelationshipDataObject::getF_EVENT));
-//        dataQualityContext.productRelationshipDataObjectsFromEPHSA.sort(Comparator.comparing(ProductRelationshipDataObject::getF_EVENT));
 
         IntStream.range(0, dataQualityContext.productRelationshipDataObjectsFromEPHSTG.size()).forEach(i -> {
 
@@ -355,12 +373,12 @@ public class ProductRelationshipDataMappingCheckSteps {
             assertEquals(dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getB_CLASSNAME(), dataQualityContext.productRelationshipDataObjectsFromEPHGD.get(i).getB_CLASSNAME());
 
             //PRODUCT_REL_PACK_ID
-            Log.info("PRODUCT_REL_PACK_ID in EPH SA : " + dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getPRODUCT_REL_PACKAGE_ID());
-            Log.info("PRODUCT_REL_PACK_ID in EPH GD : " + dataQualityContext.productRelationshipDataObjectsFromEPHGD.get(i).getPRODUCT_REL_PACKAGE_ID());
+            Log.info("PRODUCT_REL_PACK_ID in EPH SA : " + dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getPRODUCT_REL_PACK_ID());
+            Log.info("PRODUCT_REL_PACK_ID in EPH GD : " + dataQualityContext.productRelationshipDataObjectsFromEPHGD.get(i).getPRODUCT_REL_PACK_ID());
 
             Log.info("Expecting PRODUCT_REL_PACK_ID in EPH SA and EPH GD to be equal");
 
-            assertEquals(dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getPRODUCT_REL_PACKAGE_ID(), dataQualityContext.productRelationshipDataObjectsFromEPHGD.get(i).getPRODUCT_REL_PACKAGE_ID());
+            assertEquals(dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getPRODUCT_REL_PACK_ID(), dataQualityContext.productRelationshipDataObjectsFromEPHGD.get(i).getPRODUCT_REL_PACK_ID());
 
             //F_PACKAGE_OWNER
             Log.info("F_PACKAGE_OWNER in EPH SA : " + dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getF_PACKAGE_OWNER());

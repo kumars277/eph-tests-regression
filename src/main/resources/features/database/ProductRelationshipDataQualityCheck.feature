@@ -1,5 +1,12 @@
 Feature: Entity - PRODUCT RELATIONSHIP - Data Mapping Check - Validate data between PMX and EPH - Talend Full Load
 
+  @BeforeAll @Regression
+  Scenario: Check if data is loaded in the db
+  Given We get the count of the product relationship records in PMX
+    And We get the count of the product relationship records in EPH STG
+    And We get the count of product relationship records in EPH SA
+    And We get the count of product relationship records in EPH GD
+
   @Regression
   Scenario: Verify count of product relationship records in PMX and EPH staging is equal
     Given We get the count of the product relationship records in PMX
@@ -9,13 +16,13 @@ Feature: Entity - PRODUCT RELATIONSHIP - Data Mapping Check - Validate data betw
   @Regression
   Scenario: Verify count of product relationship records in EPH staging and EPH SA is equal
     Given We get the count of the product relationship records in EPH STG
-    When The product relationship records are transferred to EPH SA
+    When We get the count of product relationship records in EPH SA
     Then The count of the product relationship records in EPH staging table and EPH SA is equal
 
   @Regression
   Scenario: Verify count of product relationship records in EPH SA and EPH golden data is equal
-    Given The product relationship records are transferred to EPH SA
-    When The product relationship are transferred to the golden data table
+    Given We get the count of product relationship records in EPH SA
+    When We get the count of product relationship records in EPH GD
     Then The count of the product relationship records in in EPH SA and EPH GD is equal
 
 
