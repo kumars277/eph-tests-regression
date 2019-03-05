@@ -3,16 +3,15 @@ package com.eph.automation.testing.web.steps;
 import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
+import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.NotificationCountContext;
 import com.eph.automation.testing.models.dao.NotificationDataObject;
-import com.eph.automation.testing.models.dao.ProductCountObject;
 import com.eph.automation.testing.services.db.sql.NotificationsSQL;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
-import com.eph.automation.testing.helper.Log;
 
 public class NotificationTestSteps {
     @StaticInjection
@@ -27,9 +26,10 @@ public class NotificationTestSteps {
         Log.info("\nThe number of records in GD is: " + notificationCountContext.gdCountNumber.get(0).ephGDCount);
     }
 
-    @When("^We check the created notifications by (.*)$")
-    public void getNotifications(String type){
-        sql= NotificationsSQL.EPH_Notifications_Count.replace("PARAM1",type);
+    @When("^We check the created notifications by (.*) and by (.*)$")
+    public void getNotifications(String type,String table){
+        sql= NotificationsSQL.EPH_Notifications_Count.replace("PARAM1",type).replace("PARAM2", table);
+    //    Log.info(sql);
         notificationCountContext.notificationCountNumber= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_SIT_URL);
         Log.info("\nThe number of notifications is: " + notificationCountContext.notificationCountNumber.get(0).notificationCount);
     }
@@ -47,11 +47,14 @@ public class NotificationTestSteps {
         .replace("PARAM2", table);
         Log.info(sql);
         notificationCountContext.notificationID= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_SIT_URL);
-
         if (notificationCountContext.notificationID.isEmpty()) {
             Log.info("Notifications for all ids are created!");
         }else {
-            Assert.fail("There are missing ids: " + notificationCountContext.notificationID.get(0).gdID);
+            for(int i=0;i<notificationCountContext.notificationID.size();i++) {
+                Log.info("There are missing ids: " + notificationCountContext.notificationID.size());
+                Log.info("The missing id is: " + notificationCountContext.notificationID.get(i).gdID);
+            }
+            Assert.fail("There are missing ids");
         }
     }
 }
