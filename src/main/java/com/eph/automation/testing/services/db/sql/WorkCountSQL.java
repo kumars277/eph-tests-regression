@@ -12,9 +12,9 @@ public class WorkCountSQL {
     "LEFT JOIN PMX.GD_IMPRINT I ON W.F_IMPRINT = I.IMPRINT_ID\n" +
     "WHERE T.PRODUCT_TYPE_CODE NOT IN ('COMPENDIUM','JCOLSC','ADVERTISING','FS','DUES')";
 
-    public static String PMX_STG_WORKS_COUNT = "select count (*) as workCountPMXSTG from ephsit.ephsit_talend_owner.stg_pmx_wwork";
+    public static String PMX_STG_WORKS_COUNT = "select count (*) as workCountPMXSTG from ephsit.ephsit_talend_owner.stg_10_pmx_wwork";
 
-    public static String PMX_STG_WORKS_COUNT_Distinct = "  select count(distinct \"PRODUCT_WORK_ID\") as workCountPMXSTG from ephsit_talend_owner.stg_pmx_wwork";
+    public static String PMX_STG_WORKS_COUNT_Distinct = "  select count(distinct \"PRODUCT_WORK_ID\") as workCountPMXSTG from ephsit_talend_owner.stg_10_pmx_wwork";
 
     public static String EPH_SA_WORKS_COUNT = "select count (*) as workCountEPH from ephsit.semarchy_eph_mdm.sa_wwork " +
             "join semarchy_eph_mdm.sa_event on f_event = event_id and event_id = (select max (event_id) from semarchy_eph_mdm.sa_event " +

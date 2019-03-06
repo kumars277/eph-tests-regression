@@ -26,7 +26,7 @@ public class WorkDataCheckSQL {
             "  ,\"F_OPCO_R12\" as F_OPCO_R12-- Company in Accountable Product Entity to link to LOV table\n" +
             "  ,\"PRODUCT_WORK_PUB_DATE\" as PRODUCT_WORK_PUB_DATE-- Work Publication Date\n" +
             "  ,\"JOURNAL_ACRONYM\" AS JOURNAL_ACRONYM -- PTS Journal Acronym (may go in IDs table, depending on implementation of data model)\n" +
-            "  FROM ephsit.ephsit_talend_owner.stg_pmx_wwork\n" +
+            "  FROM ephsit.ephsit_talend_owner.stg_10_pmx_wwork\n" +
             "  WHERE \"PARAM1\"='PARAM2'";
 
     public static String GET_EPH_WORKS_DATA ="SELECT \n" +
