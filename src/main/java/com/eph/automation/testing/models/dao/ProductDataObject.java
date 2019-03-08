@@ -23,6 +23,7 @@ public class ProductDataObject {
     private String REPRINTS;
     private String AUTHOR_CHARGES;
     private String ONE_OFF_ACCESS;
+    private String PACKAGES;
     private String AVAILABILITY_STATUS;
     private String WORK_TITLE;
 
@@ -173,6 +174,14 @@ public class ProductDataObject {
         this.ONE_OFF_ACCESS = ONE_OFF_ACCESS;
     }
 
+    public String getPACKAGES() {
+        return PACKAGES;
+    }
+
+    public void setPACKAGES(String PACKAGES) {
+        this.PACKAGES = PACKAGES;
+    }
+
     public String getAVAILABILITY_STATUS() {
         return AVAILABILITY_STATUS;
     }
@@ -292,4 +301,7 @@ public class ProductDataObject {
                 ", WORK_TITLE='" + WORK_TITLE + '\'' +
                 '}';
     }
+
+
+
 }

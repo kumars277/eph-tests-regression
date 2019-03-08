@@ -103,9 +103,9 @@ public class WorkExtractSQL {
             "JOIN GD_PRODUCT_TYPE T ON W.F_PRODUCT_TYPE = T.PRODUCT_TYPE_ID\n" +
             "WHERE T.PRODUCT_TYPE_CODE NOT IN ('COMPENDIUM','JCOLSC','ADVERTISING','FS','DUES') ";
 
-    public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM ephsit_talend_owner.stg_pmx_manifestation";
+    public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM ephsit_talend_owner.stg_10_pmx_manifestation";
 
-    public static final String COUNT_MANIFESTATIONS_IN_SA_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation join semarchy_eph_mdm.sa_event on f_event = event_id and semarchy_eph_mdm.sa_event.f_event_type = 'PMX' and f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation)";
+    public static final String COUNT_MANIFESTATIONS_IN_SA_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation join semarchy_eph_mdm.sa_event on f_event = event_id and semarchy_eph_mdm.sa_event.workflow_id = 'talend' and semarchy_eph_mdm.sa_event.f_event_type = 'PMX' and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' and f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation)";
 
     public static final String COUNT_MANIFESTATIONS_IN_GD_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.gd_manifestation";
 
@@ -162,21 +162,21 @@ public class WorkExtractSQL {
             "\"MANIFESTATION_SUBTYPE\" as MANIFESTATION_SUBTYPE,\n" +
             "\"COMMODITY\" as COMMODITY,\n" +
             "\"MANIFESTATION_SUBSTATUS\" as MANIFESTATION_SUBSTATUS\n" +
-            "from ephsit_talend_owner.stg_pmx_manifestation\n" +
+            "from ephsit_talend_owner.stg_10_pmx_manifestation\n" +
 //            "WHERE \"ISBN\" IN ('%s')";
             "WHERE \"MANIFESTATION_ID\" IN ('%s') order by \"MANIFESTATION_ID\"";
 
-    public static final String SELECT_RANDOM_ISBN_IDS_PHB = "select \"ISBN\" AS ISBN from ephsit_talend_owner.stg_pmx_manifestation where \"MANIFESTATION_SUBTYPE\" = 424 and \"ISBN\" is not null order by random() limit '%s'";
+    public static final String SELECT_RANDOM_ISBN_IDS_PHB = "select \"ISBN\" AS ISBN from ephsit_talend_owner.stg_10_pmx_manifestation where \"MANIFESTATION_SUBTYPE\" = 424 and \"ISBN\" is not null order by random() limit '%s'";
 
-    public static final String SELECT_RANDOM_ISBN_IDS_PSB = "select \"ISBN\" AS ISBN from ephsit_talend_owner.stg_pmx_manifestation where \"MANIFESTATION_SUBTYPE\" = 425  and \"ISBN\" is not null order by random() limit '%s'";
+    public static final String SELECT_RANDOM_ISBN_IDS_PSB = "select \"ISBN\" AS ISBN from ephsit_talend_owner.stg_10_pmx_manifestation where \"MANIFESTATION_SUBTYPE\" = 425  and \"ISBN\" is not null order by random() limit '%s'";
 
-    public static final String SELECT_RANDOM_ISBN_IDS_EBK = "select \"ISBN\" AS ISBN from ephsit_talend_owner.stg_pmx_manifestation where \"COMMODITY\" = 'EB'  and \"ISBN\" is not null order by random() limit '%s'";
+    public static final String SELECT_RANDOM_ISBN_IDS_EBK = "select \"ISBN\" AS ISBN from ephsit_talend_owner.stg_10_pmx_manifestation where \"COMMODITY\" = 'EB'  and \"ISBN\" is not null order by random() limit '%s'";
 
-    public static final String SELECT_RANDOM_MANIFESTATION_IDS_JPR = "select \"MANIFESTATION_ID\" from ephsit_talend_owner.stg_pmx_manifestation where \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" = 1 order by random() limit '%s'";
+    public static final String SELECT_RANDOM_MANIFESTATION_IDS_JPR = "select \"MANIFESTATION_ID\" from ephsit_talend_owner.stg_10_pmx_manifestation where \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" = 1 order by random() limit '%s'";
 
-    public static final String SELECT_RANDOM_MANIFESTATION_IDS_JEL = "select \"MANIFESTATION_ID\" from ephsit_talend_owner.stg_pmx_manifestation where \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" != 1 order by random() limit '%s'";
+    public static final String SELECT_RANDOM_MANIFESTATION_IDS_JEL = "select \"MANIFESTATION_ID\" from ephsit_talend_owner.stg_10_pmx_manifestation where \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" != 1 order by random() limit '%s'";
 
-    public static final String SELECT_MANIFESTATIONS_IDS_FOR_SPECIFIC_ISBN = "select \"MANIFESTATION_ID\" AS manifestation_id from ephsit_talend_owner.stg_pmx_manifestation where \"ISBN\" in ('%s')";
+    public static final String SELECT_MANIFESTATIONS_IDS_FOR_SPECIFIC_ISBN = "select \"MANIFESTATION_ID\" AS manifestation_id from ephsit_talend_owner.stg_10_pmx_manifestation where \"ISBN\" in ('%s')";
 
     public static final String SELECT_MANIFESTATIONS_DATA_IN_EPH_SA = "select distinct sa.b_loadid as B_LOADID,\n" +
             "sa.F_EVENT  as F_EVENT,\n" +
@@ -193,7 +193,9 @@ public class WorkExtractSQL {
             "sa.F_WWORK as F_WWORK\n" +
             "FROM semarchy_eph_mdm.sa_manifestation sa JOIN semarchy_eph_mdm.sa_event sa_event ON \n" +
             "sa.f_event = sa_event.event_id AND \n" +
+            "sa_event.workflow_id = 'talend' AND \n" +
             "sa_event.f_event_type = 'PMX'  AND \n" +
+            "sa_event.f_workflow_source = 'PMX' AND\n" +
             "sa.f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation)  \n" +
             "WHERE pmx_source_reference IN ('%s')";
 
@@ -211,11 +213,13 @@ public class WorkExtractSQL {
             "F_WWORK as F_WWORK\n" +
             "FROM semarchy_eph_mdm.gd_manifestation WHERE pmx_source_reference IN ('%s')";
 
-    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "select count(*) AS count from ephsit_talend_owner.stg_pmx_manifestation where \"%s\" is not null";
+    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "select count(*) AS count from ephsit_talend_owner.stg_10_pmx_manifestation where \"%s\" is not null";
 
-    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_SA_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation_identifier\n" +
+    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_SA_MANIFESTATION_TABLE ="SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation_identifier\n" +
             "JOIN semarchy_eph_mdm.sa_event ON f_event = event_id \n" +
+            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
             "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX'\n" +
             "AND f_event = (SELECT max (f_event) FROM semarchy_eph_mdm.sa_manifestation_identifier)\n" +
             "WHERE f_type = '%s'";
 
@@ -229,7 +233,9 @@ public class WorkExtractSQL {
             "f_manifestation as f_manifestation\n" +
             "FROM semarchy_eph_mdm.sa_manifestation_identifier sa JOIN semarchy_eph_mdm.sa_event sa_event ON \n" +
             "sa.f_event = sa_event.event_id AND \n" +
+            "sa_event.workflow_id = 'talend' AND \n" +
             "sa_event.f_event_type = 'PMX'  AND \n" +
+            "sa_event.f_workflow_source = 'PMX' AND\n" +
             "sa.f_event = (SELECT max (f_event) FROM semarchy_eph_mdm.sa_manifestation_identifier) \n" +
             "WHERE identifier IN ('%s')";
 
@@ -241,14 +247,14 @@ public class WorkExtractSQL {
             "from semarchy_eph_mdm.gd_manifestation_identifier \n" +
             "where identifier in ('%s')";
 
-    public static final String SELECT_RANDOM_ISBNS_PHB = "select \"ISBN\" as ISBN from ephsit_talend_owner.stg_pmx_manifestation where \"%s\" is not null and \"MANIFESTATION_SUBTYPE\" = 424 order by random() limit '%s'";
+    public static final String SELECT_RANDOM_ISBNS_PHB = "select \"ISBN\" as ISBN from ephsit_talend_owner.stg_10_pmx_manifestation where \"%s\" is not null and \"MANIFESTATION_SUBTYPE\" = 424 order by random() limit '%s'";
 
-    public static final String SELECT_RANDOM_ISBNS_PSB = "select \"ISBN\" as ISBN from ephsit_talend_owner.stg_pmx_manifestation where \"%s\" is not null and \"MANIFESTATION_SUBTYPE\" = 425 order by random() limit '%s'";
+    public static final String SELECT_RANDOM_ISBNS_PSB = "select \"ISBN\" as ISBN from ephsit_talend_owner.stg_10_pmx_manifestation where \"%s\" is not null and \"MANIFESTATION_SUBTYPE\" = 425 order by random() limit '%s'";
 
-    public static final String SELECT_RANDOM_ISBNS_EBK = "select \"ISBN\" as ISBN from ephsit_talend_owner.stg_pmx_manifestation where \"%s\" is not null and \"COMMODITY\" = 'EB' order by random() limit '%s'";
+    public static final String SELECT_RANDOM_ISBNS_EBK = "select \"ISBN\" as ISBN from ephsit_talend_owner.stg_10_pmx_manifestation where \"%s\" is not null and \"COMMODITY\" = 'EB' order by random() limit '%s'";
 
-    public static final String SELECT_RANDOM_ISSNS_JPR_IDS = "select \"ISSN\" as ISSN from ephsit_talend_owner.stg_pmx_manifestation where \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" = 1 order by random() limit '%s'";
+    public static final String SELECT_RANDOM_ISSNS_JPR_IDS = "select \"ISSN\" as ISSN from ephsit_talend_owner.stg_pmx_10_manifestation where \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" = 1 order by random() limit '%s'";
 
-    public static final String SELECT_RANDOM_ISSNS_JEL_IDS = "select \"ISSN\" as ISSN from ephsit_talend_owner.stg_pmx_manifestation where\"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" != 1 order by random() limit '%s'";
+    public static final String SELECT_RANDOM_ISSNS_JEL_IDS = "select \"ISSN\" as ISSN from ephsit_talend_owner.stg_pmx_10_manifestation where\"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" != 1 order by random() limit '%s'";
 
 }
