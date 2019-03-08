@@ -13,7 +13,8 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
       | 10               | book    |
       | 10               | package |
 
-  @WIP
+    
+  @Regression
   Scenario Outline: Validate data is transferred from EPH STG to EPH STG Canonical
     Given We get <countOfRandomIds> random ids for <type>
     When We get the data from EPH STG
@@ -25,6 +26,7 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
       | 10               | package |
 
 
+  @Regression
   Scenario Outline: Validate data is transferred from EPH STG to EPH STG Canonical for journals
     Given We get <countOfRandomIds> ids of journals for <type> with <open_access>
     When We get the data from EPH STG
