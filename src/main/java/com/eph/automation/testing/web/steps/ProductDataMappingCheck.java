@@ -328,6 +328,8 @@ public class ProductDataMappingCheck {
 
             assertEquals(dataQualityContext.productDataObjectsFromPMX.get(i).getWORK_TITLE(), dataQualityContext.productDataObjectsFromEPHSTG.get(i).getWORK_TITLE());
 
+
+
         });
     }
 
@@ -711,11 +713,14 @@ sql.length();
 
             //SEPARATELY_SALE_IND
             String availability_status;
+            String index;
             if (type.equals("book") || type.equals("package")) {
                 availability_status = dataQualityContext.productDataObjectsFromEPHSTG.get(i).getAVAILABILITY_STATUS();
+                index = dataQualityContext.productDataObjectsFromEPHSTG.get(i).getSEPARATELY_SALEABLE_IND();
 
             } else {
                 availability_status = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getAVAILABILITY_STATUS();
+
             }
             Log.info("Availability status: " + availability_status);
             Log.info("SEPARATELY_SALE_IND : " + dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getSEPARATELY_SALEABLE_IND());
@@ -812,39 +817,18 @@ sql.length();
 
 
             //verify F_WWORK (F_PRODUCT_WORK)
-            Log.info("F_WWORK in EPH STG Canonical: " + dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_WORK());
+            if (type.equals("package")) {
+                Log.info("F_PRODUCT_WORK in EPH STG Canonical : " + dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_WORK());
 
-            if (type.equals("book") || type.equals("package")) {
-                Log.info("F_WWORK in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
-
-                Log.info("Expecting F_WWORK in EPH STG and EPH STG Canonical is consistent");
-
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_WORK());
-            } else {
-                Log.info("F_WWORK in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK());
-
-                Log.info("Expecting F_WWORK in EPH STG and EPH STG Canonical is consistent");
-
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_WORK());
+                assertNull(dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_WORK());
             }
 
 
-
             //verify F_MANIFESTATION (F_PRODUCT_MANIFESTATION_TYP)
-            Log.info("F_PRODUCT_MANIFESTATION_TYP in EPH STG Canonical: " + dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_MANIFESTATION_TYP());
+            if (type.equals("package")) {
+                Log.info("F_PRODUCT_MANIFESTATION_TYP in EPH STG Canonical : " + dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_WORK());
 
-            if (type.equals("book") || type.equals("package")) {
-                Log.info("F_PRODUCT_MANIFESTATION_TYP in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_MANIFESTATION_TYP());
-
-                Log.info("Expecting F_PRODUCT_MANIFESTATION_TYP in EPH STG and EPH STG Canonical is consistent");
-
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_MANIFESTATION_TYP(), dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_MANIFESTATION_TYP());
-            } else {
-                Log.info("F_PRODUCT_MANIFESTATION_TYP in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK());
-
-                Log.info("Expecting F_PRODUCT_MANIFESTATION_TYP in EPH STG and EPH STG Canonical is consistent");
-
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_MANIFESTATION_TYP(), dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_MANIFESTATION_TYP());
+                assertNull(dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_MANIFESTATION_TYP());
             }
 
 
