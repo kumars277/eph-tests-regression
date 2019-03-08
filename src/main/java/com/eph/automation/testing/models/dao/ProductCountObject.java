@@ -119,4 +119,14 @@ public class ProductCountObject {
     public int acMoreCount;
     public int ephSACount;
     public int ephGDCount;
+
+    public int getPackagesCount() {
+        return packagesCount;
+    }
+
+    public void setPackagesCount(int packagesCount) {
+        this.packagesCount = packagesCount;
+    }
+
+    public int packagesCount;
 }

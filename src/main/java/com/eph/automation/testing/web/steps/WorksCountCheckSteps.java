@@ -8,6 +8,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
+import com.eph.automation.testing.helper.Log;
 
 import java.util.List;
 
@@ -30,11 +31,11 @@ public class WorksCountCheckSteps {
     @Given("^We know the number of Works in PMX$")
     public void getPmxWorks() {
         sqlPMX = WorkCountSQL.PMX_WORKS_COUNT;
-        System.out.println(sqlPMX);
+        Log.info(sqlPMX);
         workCountPmx = DBManager.getDBResultAsBeanList(sqlPMX, WorkDataObject.class,
                 Constants.PMX_SIT_URL);
         pmxWork = workCountPmx.get(0).workCountPmx;
-        System.out.println("Works in PMX are: " + pmxWork);
+        Log.info("Works in PMX are: " + pmxWork);
     }
 
 
@@ -47,7 +48,7 @@ public class WorksCountCheckSteps {
         workCountPMXSTG =DBManager.getDBResultAsBeanList(sqlPMXSTG, WorkDataObject.class,
                 Constants.EPH_SIT_URL);
         pmxSTGWork = workCountPMXSTG.get(0).workCountPMXSTG;
-        System.out.println("\nWorks in PMX staging are: " + pmxSTGWork);
+        Log.info("\nWorks in PMX staging are: " + pmxSTGWork);
 
     }
 
@@ -55,10 +56,13 @@ public class WorksCountCheckSteps {
     public void comparePMXtoPMXStaging(String source, String target){
         if (source.contentEquals("PMX")) {
             Assert.assertEquals("The number of works in PMX and PMX Staging is not equal!", pmxWork, pmxSTGWork);
+            Log.info("The count between PMX and Staging is equal");
         }else if (source.contentEquals("PMX STG")){
             Assert.assertEquals("The number of works in PMX Staging and EPH SA is not equal!", pmxSTGWorkDistinct, ephWork);
+            Log.info("The count between Staging and SA is equal");
         } else {
             Assert.assertEquals("The number of works in SA and GD is not equal!", ephWork, ephWorkGD);
+            Log.info("The count between SA and GD is equal");
         }
     }
 
@@ -70,19 +74,19 @@ public class WorksCountCheckSteps {
         workCountEPH =DBManager.getDBResultAsBeanList(sqlEPH, WorkDataObject.class,
                 Constants.EPH_SIT_URL);
         ephWork = workCountEPH.get(0).workCountEPH;
-        System.out.println("\nWorks in EPH SA are: " + ephWork);
+        Log.info("\nWorks in EPH SA are: " + ephWork);
 
         sqlEPH = WorkCountSQL.EPH_GD_WORKS_COUNT;
         workCountEPHGD =DBManager.getDBResultAsBeanList(sqlEPH, WorkDataObject.class,
                 Constants.EPH_SIT_URL);
-        ephWorkGD = workCountEPH.get(0).workCountEPH;
-        System.out.println("\nWorks in EPH GD are: " + ephWork);
+        ephWorkGD = workCountEPHGD.get(0).workCountEPHGD;
+        Log.info("\nWorks in EPH GD are: " + ephWorkGD);
 
         sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_Distinct;
         workCountPMXSTGDistinct =DBManager.getDBResultAsBeanList(sqlPMXSTGDistinct, WorkDataObject.class,
                 Constants.EPH_SIT_URL);
         pmxSTGWorkDistinct = workCountPMXSTGDistinct.get(0).workCountPMXSTG;
-        System.out.println("\nDistinct works in PMX staging are: " + pmxSTGWorkDistinct);
+        Log.info("\nDistinct works in PMX staging are: " + pmxSTGWorkDistinct);
 
     }
 

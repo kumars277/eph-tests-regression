@@ -111,6 +111,16 @@ public class WorkDataObject {
 
     public Integer workCountEPH;
 
+    public Integer getWorkCountEPHGD() {
+        return workCountEPHGD;
+    }
+
+    public void setWorkCountEPHGD(Integer workCountEPHGD) {
+        this.workCountEPHGD = workCountEPHGD;
+    }
+
+    public Integer workCountEPHGD;
+
     public String getRandom_value() {
         return random_value;
     }
