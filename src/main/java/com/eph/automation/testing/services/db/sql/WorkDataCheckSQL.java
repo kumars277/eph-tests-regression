@@ -26,7 +26,7 @@ public class WorkDataCheckSQL {
             "  ,\"F_OPCO_R12\" as F_OPCO_R12-- Company in Accountable Product Entity to link to LOV table\n" +
             "  ,\"PRODUCT_WORK_PUB_DATE\" as PRODUCT_WORK_PUB_DATE-- Work Publication Date\n" +
             "  ,\"JOURNAL_ACRONYM\" AS JOURNAL_ACRONYM -- PTS Journal Acronym (may go in IDs table, depending on implementation of data model)\n" +
-            "  FROM ephsit.ephsit_talend_owner.stg_pmx_wwork\n" +
+            "  FROM ephsit.ephsit_talend_owner.stg_10_pmx_wwork\n" +
             "  WHERE \"PARAM1\"='PARAM2'";
 
     public static String GET_EPH_WORKS_DATA ="SELECT \n" +
@@ -45,8 +45,10 @@ public class WorkDataCheckSQL {
             "  ,F_STATUS AS WORK_STATUS\n" +
             "  ,F_IMPRINT AS IMPRINT\n" +
             "  FROM ephsit.semarchy_eph_mdm.sa_wwork sa\n" +
-            "  join semarchy_eph_mdm.sa_event on f_event = event_id and f_event = (select max (f_event) from semarchy_eph_mdm.sa_wwork)\n" +
-            "  and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+            "  join semarchy_eph_mdm.sa_event on f_event = event_id and event_id = (select max (event_id) from semarchy_eph_mdm.sa_event\n" +
+            "  where semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+            "  and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX'\n"+
+            "  and semarchy_eph_mdm.sa_event.workflow_id = 'talend')\n"+
             "  WHERE pmx_source_reference='PARAM1'";
 
 

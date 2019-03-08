@@ -12,16 +12,18 @@ public class WorkCountSQL {
     "LEFT JOIN PMX.GD_IMPRINT I ON W.F_IMPRINT = I.IMPRINT_ID\n" +
     "WHERE T.PRODUCT_TYPE_CODE NOT IN ('COMPENDIUM','JCOLSC','ADVERTISING','FS','DUES')";
 
-    public static String PMX_STG_WORKS_COUNT = "select count (*) as workCountPMXSTG from ephsit.ephsit_talend_owner.stg_pmx_wwork";
+    public static String PMX_STG_WORKS_COUNT = "select count (*) as workCountPMXSTG from ephsit.ephsit_talend_owner.stg_10_pmx_wwork";
 
-    public static String PMX_STG_WORKS_COUNT_Distinct = "  select count(distinct \"PRODUCT_WORK_ID\") as workCountPMXSTG from ephsit_talend_owner.stg_pmx_wwork";
+    public static String PMX_STG_WORKS_COUNT_Distinct = "  select count(distinct \"PRODUCT_WORK_ID\") as workCountPMXSTG from ephsit_talend_owner.stg_10_pmx_wwork";
 
     public static String EPH_SA_WORKS_COUNT = "select count (*) as workCountEPH from ephsit.semarchy_eph_mdm.sa_wwork " +
-            "join semarchy_eph_mdm.sa_event on f_event = event_id and f_event = (select max (f_event) from semarchy_eph_mdm.sa_wwork) " +
-            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'";
+            "join semarchy_eph_mdm.sa_event on f_event = event_id and event_id = (select max (event_id) from semarchy_eph_mdm.sa_event " +
+            "where semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX'\n"+
+            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend')";
 
 
-    public static String EPH_GD_WORKS_COUNT = "select count (*) as workCountEPH from ephsit.semarchy_eph_mdm.GD_wwork";
+    public static String EPH_GD_WORKS_COUNT = "select count (*) as workCountEPHGD from ephsit.semarchy_eph_mdm.GD_wwork";
 
     public static String EPH_AE_WORKS_COUNT = "select count (*) as errorsCountEPH from ephsit.semarchy_eph_mdm.ae_wwork";
 }
