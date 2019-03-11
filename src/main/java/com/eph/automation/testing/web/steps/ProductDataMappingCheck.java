@@ -720,6 +720,8 @@ sql.length();
 
             } else {
                 availability_status = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getAVAILABILITY_STATUS();
+                index = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getSEPARATELY_SALEABLE_IND();
+
 
             }
             Log.info("Availability status: " + availability_status);
@@ -728,9 +730,7 @@ sql.length();
             Log.info("Expecting SEPARATELY_SALE_IND in EPH STG Canonical is correct");
 
 
-            if (availability_status.equals("PNS"))
-                assertEquals("f", dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getSEPARATELY_SALEABLE_IND());
-            else if(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getSEPARATELY_SALEABLE_IND() == "N")
+            if (availability_status.equals("PNS") || index.equals("N"))
                 assertEquals("f", dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getSEPARATELY_SALEABLE_IND());
             else
                 assertEquals("t", dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getSEPARATELY_SALEABLE_IND());
