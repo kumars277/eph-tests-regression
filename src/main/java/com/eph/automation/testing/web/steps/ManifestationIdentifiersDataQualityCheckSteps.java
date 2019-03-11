@@ -80,7 +80,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
     @Given("^We get the manifestation ids of (.*) random records from STG_PMX_MANIFESTATION that have (.*) for (.*)$")
     public void getRandomRecords(String numberOfRecords, String identifier, String type) {
         //Get property when run with jenkins
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         switch (type) {
