@@ -10,6 +10,7 @@ import java.util.List;
 public class ProductsCountContext {
     public static List<ProductCountObject> productCountPMX;
     public static List<ProductCountObject> productCountStg;
+    public static List<ProductCountObject> productCountStgCan;
     public static List<ProductCountObject> productCountStgBooks;
     public static List<ProductCountObject> productCountStgSubscription;
     public static List<ProductCountObject> productCountStgBulk;

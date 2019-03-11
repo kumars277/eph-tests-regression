@@ -16,7 +16,7 @@ public class ProductsCountCheckSteps {
     @StaticInjection
     public ProductsCountContext productsCountContext;
     private String sql;
-    private static int stgToSA;
+    private static int stgToCanonical;
 
     @Given("^We know the products count in PMX$")
     public void getPmxProducts() {
@@ -62,7 +62,7 @@ public class ProductsCountCheckSteps {
         sql=ProductCountSQL.EPH_STG_PRODUCT_Packages;
         productsCountContext.productCountStgPackages= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
 
-        stgToSA =
+        stgToCanonical =
                 productsCountContext.productCountStgBooks.get(0).booksCount +
                 productsCountContext.productCountStgSubscription.get(0).subCount +
                 productsCountContext.productCountStgBulk.get(0).bulkCount +
@@ -74,7 +74,7 @@ public class ProductsCountCheckSteps {
                 productsCountContext.productCountStgACMore.get(0).acMoreCount +
                 productsCountContext.productCountStgPackages.get(0).packagesCount;
 
-        Log.info("\nThe number of products in Staging for SA compare is: " + stgToSA);
+        Log.info("\nThe number of products in Staging for Canonical compare is: " + stgToCanonical);
 
     }
 
@@ -89,17 +89,28 @@ public class ProductsCountCheckSteps {
         Log.info("\nThe number of products in EPH GD is: " + productsCountContext.productCountEPHGD.get(0).ephGDCount);
     }
 
+    @When("^We know the number of products in canonical$")
+    public void getCanonicalCount(){
+        sql= ProductCountSQL.EPH_STG_CAN_Count;
+        productsCountContext.productCountStgCan= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
+        Log.info("\nThe number of products in EPH SA is: " + productsCountContext.productCountStgCan.get(0).ephCanCount);
+
+    }
+
     @Then("^The number of products between (.*) and (.*) is equal$")
     public void comparePMXtoEPHCount(String source, String target){
         if (source.contentEquals("PMX")) {
             Assert.assertEquals("The number of products in PMX and PMX Staging is not equal!", productsCountContext.productCountPMX.get(0).pmxCount,
                     productsCountContext.productCountStg.get(0).stgCount);
            }else if (target.contentEquals("SA")){
-            Assert.assertEquals("\nThe number of products in PMX Staging and EPH SA is not equal!", stgToSA,
+            Assert.assertEquals("\nThe number of products in PMX Staging and EPH SA is not equal!", productsCountContext.productCountStgCan.get(0).ephCanCount,
                     productsCountContext.productCountEPHSA.get(0).ephSACount);
-        } else {
+        } else if (target.contentEquals("GD")){
             Assert.assertEquals("\nThe number of products in SA and GD is not equal!", productsCountContext.productCountEPHSA.get(0).ephSACount,
                     productsCountContext.productCountEPHGD.get(0).ephGDCount);
+        }else {
+            Assert.assertEquals("\nThe number of products in Staging and Canonical is not equal!", stgToCanonical,
+                    productsCountContext.productCountStgCan.get(0).ephCanCount);
         }
     }
 }

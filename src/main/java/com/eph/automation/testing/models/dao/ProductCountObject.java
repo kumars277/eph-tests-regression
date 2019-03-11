@@ -129,4 +129,14 @@ public class ProductCountObject {
     }
 
     public int packagesCount;
+
+    public int getEphCanCount() {
+        return ephCanCount;
+    }
+
+    public void setEphCanCount(int ephCanCount) {
+        this.ephCanCount = ephCanCount;
+    }
+
+    public int ephCanCount;
 }
