@@ -122,7 +122,8 @@ public class ProductDataSQL {
             "            \"AUTHOR_CHARGES\" as AUTHOR_CHARGES,\n" +
             "            \"ONE_OFF_ACCESS\" as ONE_OFF_ACCESS,\n" +
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
-            "            \"WORK_TITLE\" as WORK_TITLE\n" +
+            "            \"WORK_TITLE\" as WORK_TITLE,\n" +
+            "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" = '%s'";
 
@@ -144,7 +145,8 @@ public class ProductDataSQL {
             "            \"AUTHOR_CHARGES\" as AUTHOR_CHARGES,\n" +
             "            \"ONE_OFF_ACCESS\" as ONE_OFF_ACCESS,\n" +
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
-            "            \"WORK_TITLE\" as WORK_TITLE\n" +
+            "            \"WORK_TITLE\" as WORK_TITLE,\n" +
+            "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" not in (1,2)";
 
@@ -166,7 +168,8 @@ public class ProductDataSQL {
             "            \"AUTHOR_CHARGES\" as AUTHOR_CHARGES,\n" +
             "            \"ONE_OFF_ACCESS\" as ONE_OFF_ACCESS,\n" +
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
-            "            \"WORK_TITLE\" as WORK_TITLE\n" +
+            "            \"WORK_TITLE\" as WORK_TITLE,\n" +
+            "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
             "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" = '%s'";
 
@@ -194,7 +197,8 @@ public class ProductDataSQL {
             "            \"AUTHOR_CHARGES\" as AUTHOR_CHARGES,\n" +
             "            \"ONE_OFF_ACCESS\" as ONE_OFF_ACCESS,\n" +
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
-            "            \"WORK_TITLE\" as WORK_TITLE\n" +
+            "            \"WORK_TITLE\" as WORK_TITLE,\n" +
+            "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
             "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" NOT IN (1, 2)";
 
