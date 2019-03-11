@@ -68,7 +68,8 @@ public class ProductDataSQL {
             "            \"ONE_OFF_ACCESS\" as ONE_OFF_ACCESS,\n" +
             "            \"PACKAGES\" as PACKAGES,\n" +
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
-            "            \"WORK_TITLE\" as WORK_TITLE\n" +
+            "            \"WORK_TITLE\" as WORK_TITLE,\n" +
+            "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s')\n" +
              "           order by \"PRODUCT_MANIFESTATION_ID\"";
