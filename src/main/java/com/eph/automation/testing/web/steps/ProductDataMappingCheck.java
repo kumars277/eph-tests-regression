@@ -730,6 +730,8 @@ sql.length();
 
             if (availability_status.equals("PNS"))
                 assertEquals("f", dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getSEPARATELY_SALEABLE_IND());
+            else if(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getSEPARATELY_SALEABLE_IND() == "N")
+                assertEquals("f", dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getSEPARATELY_SALEABLE_IND());
             else
                 assertEquals("t", dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getSEPARATELY_SALEABLE_IND());
 
