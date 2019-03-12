@@ -191,13 +191,14 @@ public class WorkExtractSQL {
             "sa.F_STATUS as F_STATUS, \n" +
             "sa.F_FORMAT_TYPE as F_FORMAT_TYPE, \n" +
             "sa.F_WWORK as F_WWORK\n" +
-            "FROM semarchy_eph_mdm.sa_manifestation sa JOIN semarchy_eph_mdm.sa_event sa_event ON \n" +
-            "sa.f_event = sa_event.event_id AND \n" +
-            "sa_event.workflow_id = 'talend' AND \n" +
-            "sa_event.f_event_type = 'PMX'  AND \n" +
-            "sa_event.f_workflow_source = 'PMX' AND\n" +
-            "sa.f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation)  \n" +
-            "WHERE pmx_source_reference IN ('%s')";
+            "FROM semarchy_eph_mdm.sa_manifestation sa\n" +
+            "where f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation\n" +
+            "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
+            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
+            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n" +
+            "and pmx_source_reference IN ('%s')";
 
     public static final String SELECT_MANIFESTATIONS_DATA_IN_EPH_GD = "select F_EVENT  as F_EVENT,\n" +
             "B_CLASSNAME as B_CLASSNAME,\n" +
@@ -216,12 +217,12 @@ public class WorkExtractSQL {
     public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "select count(*) AS count from ephsit_talend_owner.stg_10_pmx_manifestation where \"%s\" is not null";
 
     public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_SA_MANIFESTATION_TABLE ="SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation_identifier\n" +
-            "JOIN semarchy_eph_mdm.sa_event ON f_event = event_id \n" +
+            "where f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier\n" +
+            "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
+            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
-            "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
-            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX'\n" +
-            "AND f_event = (SELECT max (f_event) FROM semarchy_eph_mdm.sa_manifestation_identifier)\n" +
-            "WHERE f_type = '%s'";
+            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')";
 
     public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_GD_MANIFESTATION_TABLE = "select count(*) as count from semarchy_eph_mdm.gd_manifestation_identifier where f_type = '%s'";
 
@@ -231,13 +232,14 @@ public class WorkExtractSQL {
             "manif_identifier_id as manif_identifier_id,\n" +
             "f_type as f_type,\n" +
             "f_manifestation as f_manifestation\n" +
-            "FROM semarchy_eph_mdm.sa_manifestation_identifier sa JOIN semarchy_eph_mdm.sa_event sa_event ON \n" +
-            "sa.f_event = sa_event.event_id AND \n" +
-            "sa_event.workflow_id = 'talend' AND \n" +
-            "sa_event.f_event_type = 'PMX'  AND \n" +
-            "sa_event.f_workflow_source = 'PMX' AND\n" +
-            "sa.f_event = (SELECT max (f_event) FROM semarchy_eph_mdm.sa_manifestation_identifier) \n" +
-            "WHERE identifier IN ('%s')";
+            "FROM semarchy_eph_mdm.sa_manifestation_identifier sa\n" +
+            "where f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier \n" +
+            "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
+            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
+            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n" +
+            "and identifier IN ('%s')";
 
     public static final String SELECT_RECORDS_GD_MANIFESTATION_IDENTIFIER = "select f_event as f_event,\n" +
             "b_classname as b_classname, \n" +
