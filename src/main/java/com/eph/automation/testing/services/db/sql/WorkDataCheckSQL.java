@@ -44,12 +44,15 @@ public class WorkDataCheckSQL {
             "  ,F_TYPE AS WORK_TYPE\n" +
             "  ,F_STATUS AS WORK_STATUS\n" +
             "  ,F_IMPRINT AS IMPRINT\n" +
-            "  FROM ephsit.semarchy_eph_mdm.sa_wwork sa\n" +
-            "  join semarchy_eph_mdm.sa_event on f_event = event_id and event_id = (select max (event_id) from semarchy_eph_mdm.sa_event\n" +
-            "  where semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
-            "  and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX'\n"+
-            "  and semarchy_eph_mdm.sa_event.workflow_id = 'talend')\n"+
-            "  WHERE pmx_source_reference='PARAM1'";
+            "  FROM ephsit.semarchy_eph_mdm.sa_wwork sa\n"+
+            " where f_event =  (select max (f_event) from\n" +
+            "semarchy_eph_mdm.sa_wwork join \n"+
+            "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
+            "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
+            "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n"+
+            "  AND pmx_source_reference='PARAM1'";
 
 
     public static String GET_EPH_GD_WORKS_DATA ="SELECT \n" +
