@@ -3,11 +3,14 @@ package com.eph.automation.testing.services.db.sql;
 public class WorksIdentifierSQL {
     public static String getEphWorkID="SELECT \n" +
             "WORK_ID as WORK_ID FROM ephsit.semarchy_eph_mdm.sa_wwork\n"  +
-            " join semarchy_eph_mdm.sa_event on f_event = event_id and event_id = (select max (event_id) from semarchy_eph_mdm.sa_event\n" +
-            " where semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
-            " and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX'\n"+
-            " and semarchy_eph_mdm.sa_event.workflow_id = 'talend')\n"+
-            " WHERE PMX_SOURCE_REFERENCE='PARAM1'";
+            " where f_event =  (select max (f_event) from\n" +
+            "semarchy_eph_mdm.sa_wwork join \n"+
+            "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
+            "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
+            "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )"+
+            " AND PMX_SOURCE_REFERENCE='PARAM1'";
 
     public static String getIdentifierDataFromSA="SELECT \n" +
             " wi.B_LOADID as B_LOADID\n" +
@@ -18,11 +21,14 @@ public class WorksIdentifierSQL {
             " ,F_TYPE AS F_TYPE -- WORK IDENTIFIER\n" +
             " ,F_WWORK AS PRODUCT_WORK_ID -- WORK IDENTIFIER\n" +
             "  FROM ephsit.semarchy_eph_mdm.sa_work_identifier wi\n" +
-            "  join semarchy_eph_mdm.sa_event on f_event = event_id and event_id = (select max (event_id) from semarchy_eph_mdm.sa_event\n" +
-            " where semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
-            " and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX'\n"+
-            " and semarchy_eph_mdm.sa_event.workflow_id = 'talend')\n"+
-            "  WHERE f_wwork='PARAM1'";
+            " where f_event =  (select max (f_event) from\n" +
+            "semarchy_eph_mdm.sa_work_identifier join \n"+
+            "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
+            "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
+            "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n"+
+            " AND  f_wwork='PARAM1'";
 
     public static String getRandomProductNum="SELECT \n" +
             "    \"PARAM1\" as random_value\n" +
