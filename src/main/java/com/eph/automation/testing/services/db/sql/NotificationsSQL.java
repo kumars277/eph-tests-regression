@@ -47,5 +47,30 @@ public class NotificationsSQL {
                     "join semarchy_eph_mdm.gd_event e on gd.b_batchid = e.b_batchid and gd.b_batchid = (select max (batch_id) from semarchy_eph_stg.st_out_notification where notification_type='PARAM1')))a";
 
 
+    public static String EPH_Notification_Unprocessed = "select * from semarchy_eph_stg.st_out_notification where status='UNPROCESSED'";
+
+    public static String EPH_Notification_Failed = "select notification_id as notificationID from semarchy_eph_stg.st_out_notification where status='FAILED'";
+
+    public static String EPH_Notification_Created = "select * from semarchy_eph_stg.st_out_notification where batch_id='PARAM1'";
+
+    public static String EPH_GET_Notify_Status = "select status as status from semarchy_eph_stg.st_out_notification where batch_id='PARAM1'";
+
+    public static String EPH_GET_Payload_Notif_Work = "select payload_key as key, payload_value as value, insert_timestamp as timestamp \n" +
+            "from semarchy_eph_stg.st_test_notification_payload\n" +
+            " where payload_key in ('EPR-W-1025F9:JNL','EPR-10XT0V:OAA','EPR-10WJ7J:JAS'," +
+            "'EPR-10VNBR:BKF','EPR-10T6R0:SUB','EPR-114D1J:RPR','EPR-11392Y:SUB','EPR-112JW0:JBS')";
+
+
+    public static String EPH_GET_Payload_Notif_Product = "select payload_key as key, payload_value as value, insert_timestamp as timestamp \n" +
+            "from semarchy_eph_stg.st_test_notification_payload\n" +
+            " where payload_key = 'EPR-10VNBR'";
+
+
+    public static String EPH_GET_Payload_Notif_Manifestation = "select payload_key as key, payload_value as value, insert_timestamp as timestamp \n" +
+            "from semarchy_eph_stg.st_test_notification_payload\n" +
+            " where payload_key in ('EPR-M-10R71F:JPR','EPR-10WJ7J','EPR-10VNBR','EPR-10T6R0','EPR-114D1J','EPR-11392Y','EPR-112JW0')";
+
+    public static String EPH_GET_Write_Attempts = "select write_attempts as attempts from from semarchy_eph_stg.st_test_notification_payload\n" +
+            " where payload_key='PARAM1'";
 
 }
