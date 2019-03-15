@@ -9,7 +9,6 @@ public class NotificationCountContext {
     public static List<NotificationDataObject> notificationCountNumber;
     public static List<NotificationDataObject> failedNotifications;
     public static List<NotificationDataObject> notificationID;
-    public static List<NotificationDataObject> status;
     public static List<NotificationDataObject> createdNotification;
     public static List<NotificationDataObject> payloadResult;
     public static List<NotificationDataObject> writeAttemptsBefore;

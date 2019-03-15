@@ -23,7 +23,7 @@ public class ManageDatesService {
     }
 
     public static String currentDate(){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         Date date = new Date(System.currentTimeMillis());
         String currentDate = dateFormat.format(date);
 

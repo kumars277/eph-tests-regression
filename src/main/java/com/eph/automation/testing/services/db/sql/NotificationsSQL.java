@@ -55,22 +55,22 @@ public class NotificationsSQL {
 
     public static String EPH_GET_Notify_Status = "select status as status from semarchy_eph_stg.st_out_notification where batch_id='PARAM1'";
 
-    public static String EPH_GET_Payload_Notif_Work = "select payload_key as key, payload_value as value, insert_timestamp as timestamp \n" +
+    public static String EPH_GET_Payload_Notif_Work = "select payload_key as key, payload_value as value, update_timestamp as timestamp \n" +
             "from semarchy_eph_stg.st_test_notification_payload\n" +
-            " where payload_key in ('EPR-W-1025F9:JNL','EPR-10XT0V:OAA','EPR-10WJ7J:JAS'," +
-            "'EPR-10VNBR:BKF','EPR-10T6R0:SUB','EPR-114D1J:RPR','EPR-11392Y:SUB','EPR-112JW0:JBS')";
+            " where payload_key in ('EPR-W-TSTW01:JNL','EPR-TSTP01:OAA','EPR-TSTP02:JAS'," +
+            "'EPR-TSTP03:BKF','EPR-TSTP04:SUB','EPR-TSTP05:RPR','EPR-TSTP06:SUB','EPR-TSTP07:JBS')";
 
 
-    public static String EPH_GET_Payload_Notif_Product = "select payload_key as key, payload_value as value, insert_timestamp as timestamp \n" +
+    public static String EPH_GET_Payload_Notif_Product = "select payload_key as key, payload_value as value, update_timestamp as timestamp \n" +
             "from semarchy_eph_stg.st_test_notification_payload\n" +
-            " where payload_key = 'EPR-10VNBR'";
+            " where payload_key = 'EPR-TSTP03:BKF'";
 
 
-    public static String EPH_GET_Payload_Notif_Manifestation = "select payload_key as key, payload_value as value, insert_timestamp as timestamp \n" +
+    public static String EPH_GET_Payload_Notif_Manifestation = "select payload_key as key, payload_value as value, update_timestamp as timestamp \n" +
             "from semarchy_eph_stg.st_test_notification_payload\n" +
-            " where payload_key in ('EPR-M-10R71F:JPR','EPR-10WJ7J','EPR-10VNBR','EPR-10T6R0','EPR-114D1J','EPR-11392Y','EPR-112JW0')";
+            " where payload_key in ('EPR-W-TSTW01:JNL','EPR-TSTP03:BKF','EPR-TSTP04:SUB')";
 
-    public static String EPH_GET_Write_Attempts = "select write_attempts as attempts from from semarchy_eph_stg.st_test_notification_payload\n" +
+    public static String EPH_GET_Write_Attempts = "select write_attempts as attempts from semarchy_eph_stg.st_test_notification_payload\n" +
             " where payload_key='PARAM1'";
 
 }
