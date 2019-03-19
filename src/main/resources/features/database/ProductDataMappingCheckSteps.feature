@@ -81,3 +81,7 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
 #     | 10               | non_print_or_electronic_journal | N           |  ##covered from packages scenario
 
 
+
+  @Regression
+  Scenario: Check if a product is linked to different works and manifestations (duplicate product with different product id and manifestation ids)
+    Given Check the db for duplicate products

@@ -1076,4 +1076,20 @@ public class ProductDataMappingCheck {
 
         }
     }
+
+    @Given("^Check the db for duplicate products$")
+    public void checkForDuplicateProducts() {
+        Log.info("Check for duplicate products..");
+        sql = ProductDataSQL.SELECT_DUPLICATE_PRODUCT_IDS;
+        Log.info(sql);
+
+        List<Map<?, ?>> results = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        if (!results.isEmpty()) {
+            List<String> idsDuplicateProducts = results.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
+            Log.info(idsDuplicateProducts.toString());
+        } else
+            Log.info("No duplicate products found.");
+
+        assertTrue(results.isEmpty());
+    }
 }
