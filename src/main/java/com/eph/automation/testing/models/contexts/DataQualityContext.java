@@ -37,10 +37,27 @@ public class DataQualityContext {
     public static List<ManifestationIdentifierObject> manifestationIdentifiersDataObjectsFromSA;
     public static List<ManifestationIdentifierObject> manifestationIdentifiersDataObjectsFromGD;
 
+    public static List<PersonDataObject> personDataObjectsFromPMX;
+    public static List<PersonDataObject> personDataObjectsFromEPHSTG;
+    public static List<PersonDataObject> personDataObjectsFromEPHSA;
+    public static List<PersonDataObject> personDataObjectsFromEPHGD;
+
+    public static List<PersonProductRoleDataObject> personProductRoleDataObjectsFromEPHSTGCAN;
+    public static List<PersonProductRoleDataObject> personProductRoleDataObjectsFromEPHSTG;
+    public static List<PersonProductRoleDataObject> personProductRoleDataObjectsFromEPHSA;
+    public static List<PersonProductRoleDataObject> personProductRoleDataObjectsFromEPHGD;
+
+    public static List<PersonWorkRoleDataObject> personWorkRoleDataObjectsFromPMX;
+    public static List<PersonWorkRoleDataObject> personWorkRoleDataObjectsFromEPHSTG;
+    public static List<PersonWorkRoleDataObject> personWorkRoleDataObjectsFromEPHSA;
+    public static List<PersonWorkRoleDataObject> personWorkRoleDataObjectsFromEPHGD;
+
     //public static List<ProductDataObject> productEntityObjectsFromSource;
     //public static List<ProductDataObject> productEntityObjectsFromEPH;
     public static String productIdentifierID;
     public static String productIdFromStg;
     public static String productIdentifierISSN_ID;
+
+
 
 }
