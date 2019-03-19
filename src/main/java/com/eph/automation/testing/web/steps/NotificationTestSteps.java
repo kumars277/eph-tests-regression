@@ -112,13 +112,13 @@ public class NotificationTestSteps {
 
             loadBatchContext.batchId = DataLoadServiceImpl.createProductByStoreProcedure();
         } else if(type.equalsIgnoreCase("work")){
-             sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
+             sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-TSTP03:BKF");
              notificationCountContext.writeAttemptsBefore= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_SIT_URL);
              Log.info("The attempts before update are: " + notificationCountContext.writeAttemptsBefore.get(0).attempts);
 
             loadBatchContext.batchId = DataLoadServiceImpl.createWorkByStoreProcedure();
         } else {
-            sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
+            sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-TSTP03:BKF");
             notificationCountContext.writeAttemptsBefore= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_SIT_URL);
             Log.info("The attempts before update are: " + notificationCountContext.writeAttemptsBefore.get(0).attempts);
             loadBatchContext.batchId = DataLoadServiceImpl.createManifestationByStoreProcedure();
@@ -141,13 +141,19 @@ public class NotificationTestSteps {
 
     @Then("^The notification is processed$")
     public void checkNotifStatus() throws InterruptedException {
+        int i = 0;
         sql= NotificationsSQL.EPH_GET_Notify_Status.replace("PARAM1",loadBatchContext.batchId);
         do {
             Thread.sleep(1000);
+            i++;
             status= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_SIT_URL);
-        }while(status.get(0).status.equalsIgnoreCase("UNPROCESSED"));
+        }while(status.get(0).status.equalsIgnoreCase("UNPROCESSED") && i<30);
         currentTime=ManageDatesService.currentDate();
-        Log.info("The notification was processed");
+        if (status.get(0).status.equalsIgnoreCase("UNPROCESSED")){
+            Assert.fail("The notification was not processed!");
+        }else{
+            Log.info("The notification was processed");
+        }
     }
 
     @Then("^The (.*) notification is in the payload table$")
@@ -157,11 +163,11 @@ public class NotificationTestSteps {
             notificationCountContext.payloadResult= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_SIT_URL);
             Assert.assertEquals("Notifications number not as expected",notificationCountContext.payloadResult.size(),7);
 
-            sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
+            sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-TSTP03:BKF");
             notificationCountContext.writeAttemptsAfter= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_SIT_URL);
             Log.info("The attempts after update are: " + notificationCountContext.writeAttemptsAfter.get(0).attempts);
-            Assert.assertEquals("The attempts are not as expected",notificationCountContext.writeAttemptsBefore.get(0).attempts,
-                    notificationCountContext.writeAttemptsAfter.get(0).attempts + 1);
+            Assert.assertEquals("The attempts are not as expected",notificationCountContext.writeAttemptsBefore.get(0).attempts + 1,
+                    notificationCountContext.writeAttemptsAfter.get(0).attempts);
 
         }  else if(notType.equalsIgnoreCase("product")){
             sql= NotificationsSQL.EPH_GET_Payload_Notif_Product;
@@ -177,9 +183,9 @@ public class NotificationTestSteps {
         } else{
             sql= NotificationsSQL.EPH_GET_Payload_Notif_Manifestation;
             notificationCountContext.payloadResult= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_SIT_URL);
-            Assert.assertEquals("The notification number not as expected",notificationCountContext.payloadResult.size(),3);
+            Assert.assertEquals("The notification number not as expected",notificationCountContext.payloadResult.size(),2);
 
-            sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
+            sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-TSTP03:BKF");
             notificationCountContext.writeAttemptsAfter= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_SIT_URL);
             Log.info("The attempts after update are: " + notificationCountContext.writeAttemptsAfter.get(0).attempts);
             Assert.assertEquals("The attempts are not as expected",notificationCountContext.writeAttemptsBefore.get(0).attempts + 1,
@@ -194,10 +200,12 @@ public class NotificationTestSteps {
             Log.info(json);
             if (notificationCountContext.payloadResult.get(i).timestamp.substring(0, 16).equalsIgnoreCase(currentTime)) {
                 Log.info("The notification timestamp was updated");
+                Log.info("The update time is: " + notificationCountContext.payloadResult.get(i).timestamp.substring(0, 16) +
+                        " and the current time is: " + currentTime);
             } else {
                 Log.info("The notification timestamp for key:" + notificationCountContext.payloadResult.get(i).key + " was not updated");
                 Log.info("The update time was: " + notificationCountContext.payloadResult.get(i).timestamp.substring(0, 16) +
-                        " but current time is: " + currentTime);
+                        " but the current time is: " + currentTime);
                 Assert.fail("The notification timestamp for key:" + notificationCountContext.payloadResult.get(i).key + " was not updated");
             }
         }

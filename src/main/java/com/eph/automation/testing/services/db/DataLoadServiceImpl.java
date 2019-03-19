@@ -81,7 +81,7 @@ public class DataLoadServiceImpl {
             exception.printStackTrace();
             DbUtils.rollbackAndCloseQuietly(conn);
         } finally {
-            DbUtils.closeQuietly(conn);
+            //DbUtils.closeQuietly(conn);
         }
 
 
@@ -185,7 +185,7 @@ public class DataLoadServiceImpl {
             exception.printStackTrace();
             DbUtils.rollbackAndCloseQuietly(conn);
         } finally {
-            DbUtils.closeQuietly(conn);
+          // DbUtils.closeQuietly(conn);
         }
 
 
