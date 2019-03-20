@@ -43,7 +43,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
     public void getCountOfRecordsWithISBNInSTGPMX(String identifier) {
         sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE, identifier);
         Log.info(sql);
-        List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countISBNSTGPMX = ((Long) numberOfISBNs.get(0).get("count")).intValue();
         Log.info("Count of of records in STG_PMX_MANIFESTATION table is: " + countISBNSTGPMX);
     }
@@ -52,7 +52,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
     public void getCountOfRecordsInEPHSA(String identifier) {
         sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_SA_MANIFESTATION_TABLE, identifier);
         Log.info(sql);
-        List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countISBNSA = ((Long) numberOfISBNs.get(0).get("count")).intValue();
         Log.info("Count of of records in SA_MANIFESTATION_IDENTIFIER table is: " + countISBNSA);
     }
@@ -67,7 +67,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
         sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_GD_MANIFESTATION_TABLE, identifier);
         Log.info(sql);
 
-        List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countISBNGD = ((Long) numberOfISBNs.get(0).get("count")).intValue();
         Log.info("Count of of records in GD_MANIFESTATION_IDENTIFIER table is: " + countISBNGD);
     }
@@ -108,7 +108,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
                 break;
         }
 
-        List<Map<?, ?>> manifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<?, ?>> manifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         if (identifier.equals("ISBN")) {
             ids = manifestationIds.stream().map(m -> (String) m.get("ISBN")).collect(Collectors.toList());
@@ -128,7 +128,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
         Log.info(sql);
 
         dataQualityContext.manifestationIdentifiersDataObjectsFromSA = DBManager
-                .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
 
     }
 
@@ -150,7 +150,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
         Log.info(sql);
 
         dataQualityContext.manifestationIdentifiersDataObjectsFromGD = DBManager
-                .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
     }
 
     @And("^Verify the data in SA_MANIFESTATION_IDENTIFIER and GD_MANIFESTATION_IDENTIFIER is equal$")

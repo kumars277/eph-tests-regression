@@ -43,7 +43,7 @@ public class PersonDataQualityCheckSteps {
         Log.info("When We get the count of persons records in PMX STG ..");
         sql = PersonDataSQL.GET_COUNT_PERSONS_PMX;
         Log.info(sql);
-        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.PMX_SIT_URL);
+        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.PMX_URL);
         countPersonsPMX = ((BigDecimal) personsNumber.get(0).get("count")).intValue();
         Log.info("Count of persons in PMX is: " + countPersonsPMX);
     }
@@ -54,7 +54,7 @@ public class PersonDataQualityCheckSteps {
         Log.info("When We get the count of persons records in PMX STG ..");
         sql = PersonDataSQL.GET_COUNT_PERSONS_EPHSTG;
         Log.info(sql);
-        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countPersonsEPHSTG = ((Long) personsNumber.get(0).get("count")).intValue();
         Log.info("Count of persons in EPH STG is: " + countPersonsEPHSTG);
     }
@@ -70,7 +70,7 @@ public class PersonDataQualityCheckSteps {
         Log.info("When We get the count of persons records in PMX STG ..");
         sql = PersonDataSQL.GET_COUNT_PERSONS_EPHSA;
         Log.info(sql);
-        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countPersonsEPHSA = ((Long) personsNumber.get(0).get("count")).intValue();
         Log.info("Count of persons in EPH SA is: " + countPersonsEPHSA);
     }
@@ -86,7 +86,7 @@ public class PersonDataQualityCheckSteps {
         Log.info("When We get the count of persons records in PMX STG ..");
         sql = PersonDataSQL.GET_COUNT_PERSONS_EPHGD;
         Log.info(sql);
-        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countPersonsEPHGD = ((Long) personsNumber.get(0).get("count")).intValue();
         Log.info("Count of persons in EPH GD is: " + countPersonsEPHGD);
     }
@@ -110,7 +110,7 @@ public class PersonDataQualityCheckSteps {
         Log.info(sql);
 
 
-        List<Map<?, ?>> randomPersons = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<?, ?>> randomPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         ids = randomPersons.stream().map(m -> (BigDecimal) m.get("PERSON_SOURCE_REF")).map(String::valueOf).collect(Collectors.toList());
         Log.info(ids.toString());
@@ -124,7 +124,7 @@ public class PersonDataQualityCheckSteps {
         Log.info(sql);
 
         dataQualityContext.personDataObjectsFromPMX = DBManager
-                .getDBResultAsBeanList(sql, PersonDataObject.class, Constants.PMX_SIT_URL);
+                .getDBResultAsBeanList(sql, PersonDataObject.class, Constants.PMX_URL);
     }
 
 
@@ -135,7 +135,7 @@ public class PersonDataQualityCheckSteps {
         Log.info(sql);
 
         dataQualityContext.personDataObjectsFromEPHSTG = DBManager
-                .getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
     }
 
 
@@ -188,7 +188,7 @@ public class PersonDataQualityCheckSteps {
         Log.info(sql);
 
 
-        List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         idsLookup = lookupResults.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info(idsLookup.toString());
@@ -201,7 +201,7 @@ public class PersonDataQualityCheckSteps {
         Log.info(sql);
 
         dataQualityContext.personDataObjectsFromEPHSA = DBManager
-                .getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
     }
 
     @And("^Compare person records in EPH STG and EPH SA$")
@@ -215,14 +215,14 @@ public class PersonDataQualityCheckSteps {
             sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE, currentId);
             Log.info(sql);
 
-            List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+            List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             idsLookup = lookupResults.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
 
             sql = String.format(PersonDataSQL.GET_DATA_PERSONS_EPHSA, Joiner.on("','").join(idsLookup));
             Log.info(sql);
 
             dataQualityContext.personDataObjectsFromEPHSA = DBManager
-                    .getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_SIT_URL);
+                    .getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
 
 
             //B_CLASSNAME
@@ -256,7 +256,7 @@ public class PersonDataQualityCheckSteps {
         Log.info(sql);
 
         dataQualityContext.personDataObjectsFromEPHGD = DBManager
-                .getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
     }
 
 

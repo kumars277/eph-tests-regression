@@ -37,7 +37,7 @@ public class TACServices {
             //Set the necessary Reference Parameters for Talend Job in My SQL
             Map contextMap = TalendUtils.getContextParamsForRinggoldIncremental();
             TalendUtils.performUpdate(dataLoadContext.TALEND_RINGGOLD_PROJECT_114_NAME, contextMap,
-                    DecryptionService.decrypt(LoadProperties.getProperty(Constants.MYSQL_SIT_DB_URL_KEY)));
+                    DecryptionService.decrypt(LoadProperties.getProperty(Constants.MYSQL_DB_URL_KEY)));
 
             //Kick Off the Talend Job
             int jobStatus = TACServices.runTalendJob(TACJobConstants.EPHJobNames.RINGGOLD_CMX_NEW_JOB.name());

@@ -26,20 +26,20 @@ public class Constants {
     public static String PPM_PROD_SCHEMA = "MEX_OPER_PROD";
 
     //PMX Database Constants
-    public static String PMX_SIT_URL = "PMX_SIT_URL";
-    public static String PMX_UAT_URL = "PMX_UAT_URL";
-    public static String PMX_PROD_URL = "PMX_PROD_URL";
-    public static String PMX_STG_SIT_URL = "PMX_STG_SIT_URL";
-    public static String PMX_STG_UAT_URL = "PMX_STG_UAT_URL";
+//    public static String PMX_SIT_URL = "PMX_SIT_URL";
+//    public static String PMX_UAT_URL = "PMX_UAT_URL";
+//    public static String PMX_PROD_URL = "PMX_PROD_URL";
+//    public static String PMX_STG_SIT_URL = "PMX_STG_SIT_URL";
+//    public static String PMX_STG_UAT_URL = "PMX_STG_UAT_URL";
 
     //EPH Database Constants
-    public static String EPH_SIT_URL = "EPH_SIT_URL";
-    public static String EPH_DEV_URL = "EPH_DEV_URL";
+//    public static String EPH_SIT_URL = "EPH_SIT_URL";
+//    public static String EPH_DEV_URL = "EPH_DEV_URL";
 
 
     //MySql Database
-    public static String MYSQL_SIT_DB_URL_KEY = "MYSQL_SIT_URL";
-    public static String MYSQL_UAT_DB_URL_KEY = "MYSQL_UAT_URL";
+//    public static String MYSQL_SIT_DB_URL_KEY = "MYSQL_SIT_URL";
+//    public static String MYSQL_UAT_DB_URL_KEY = "MYSQL_UAT_URL";
 
     public static String HEADER_KEY_FOR_EIP_NOTIFICAIOTN = "Authorization";
     public static String HEADER_VALUE_FOR_EIP_NOTIFICAIOTN = "Basic Q01YX1RETVBfVVNFUjAwMTpEcnVNLVVsdGltYXRFLU1ha0UtQ29tbXVuaXRpZVM=";

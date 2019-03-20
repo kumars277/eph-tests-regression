@@ -51,7 +51,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info("When We get the count of persons work role records in PMX STG ..");
         sql = PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_PMX;
         Log.info(sql);
-        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.PMX_SIT_URL);
+        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.PMX_URL);
         countPersonsWorkRolePMX = ((BigDecimal) personsNumber.get(0).get("count")).intValue();
         Log.info("Count of persons work role in PMX is: " + countPersonsWorkRolePMX);
     }
@@ -62,7 +62,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info("When We get the count of persons work role records in PMX STG ..");
         sql = PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHSTG;
         Log.info(sql);
-        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countPersonsWorkRoleEPHSTG = ((Long) personsNumber.get(0).get("count")).intValue();
         Log.info("Count of persons work role in EPH STG is: " + countPersonsWorkRoleEPHSTG);
     }
@@ -78,7 +78,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info("When We get the count of persons records in PMX STG ..");
         sql = PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHSA;
         Log.info(sql);
-        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countPersonsWorkRoleEPHSA = ((Long) personsNumber.get(0).get("count")).intValue();
         Log.info("Count of persons work role in EPH SA is: " + countPersonsWorkRoleEPHSA);
     }
@@ -94,7 +94,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info("When We get the count of persons records in PMX STG ..");
         sql = PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHGD;
         Log.info(sql);
-        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countPersonsWorkRoleEPHGD = ((Long) personsNumber.get(0).get("count")).intValue();
         Log.info("Count of persons work role in EPH GD is: " + countPersonsWorkRoleEPHGD);
     }
@@ -110,7 +110,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
 
@@ -118,7 +118,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info(sql);
 
 
-        List<Map<?, ?>> randomPersons = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<?, ?>> randomPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         ids = randomPersons.stream().map(m -> (String) m.get("WORK_PERSON_ROLE_SOURCE_REF")).map(String::valueOf).collect(Collectors.toList());
         Log.info(ids.toString());
@@ -139,7 +139,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info(sql);
 
         dataQualityContext.personWorkRoleDataObjectsFromPMX = DBManager
-                .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.PMX_SIT_URL);
+                .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.PMX_URL);
     }
 
     @Then("^We get the person work role records from EPH STG$")
@@ -149,7 +149,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info(sql);
 
         dataQualityContext.personWorkRoleDataObjectsFromEPHSTG = DBManager
-                .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
     }
 
     @And("^Compare person work role records in PMX and EPH STG$")
@@ -208,7 +208,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info(sql);
 
 
-        List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         idsLookup = lookupResults.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info(idsLookup.toString());
@@ -222,7 +222,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info(sql);
 
         dataQualityContext.personWorkRoleDataObjectsFromEPHSA = DBManager
-                .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
         sql.length();
     }
 
@@ -258,14 +258,14 @@ public class PersonWorkRoleDataQualityCheckSteps {
             sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE, currentId);
             Log.info(sql);
 
-            List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+            List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             idsLookup = lookupResults.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
 
             sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHSA, Joiner.on("','").join(idsLookup));
             Log.info(sql);
 
             dataQualityContext.personWorkRoleDataObjectsFromEPHSA = DBManager
-                    .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_SIT_URL);
+                    .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
 
 
             //B_CLASSNAME
@@ -294,7 +294,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
             String expectedF_WWORK;
 
 
-            List<Map<String, Object>> results = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+            List<Map<String, Object>> results = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             expectedF_WWORK = ((String) results.get(0).get("PERSON_ID"));
 
             assertEquals(expectedF_WWORK, currentF_WWORK);
@@ -311,7 +311,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
             Log.info(sql);
 
             String expectedF_PERSON;
-            results = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+            results = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             expectedF_PERSON = ((String) results.get(0).get("PERSON_ID"));
 
             assertEquals(currentF_PERSON, expectedF_PERSON);
@@ -328,7 +328,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info(sql);
 
         dataQualityContext.personWorkRoleDataObjectsFromEPHGD = DBManager
-                .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
         sql.length();
     }
 
