@@ -46,6 +46,15 @@ public class Constants {
 
     public static String ENCRYPTION_PASSWORD = "encryptionPassword";
 
+
+    //Base Constants
+    public static String PMX_URL = "PMX_URL";
+    public static String EPH_URL = "EPH_URL";
+    public static String MYSQL_DB_URL_KEY = "MYSQL_URL";
+
+
+
+
     //Wiremock
     public static String WIRE_MOCK_END_POINT = "http://10.48.67.42:8080/api/";
 }

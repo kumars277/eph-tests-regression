@@ -12,12 +12,24 @@ import java.util.Properties;
 public class LoadProperties {
 
     protected static Properties definition;
+    private static LoadProperties properties;
+    static String propertiesFile;
+
+
+
+    private static void findPropertiesFile() {
+//        propertiesFile = System.getProperty("user.dir") + "/src/main/resources/" + (System.getProperty("ENV") == null || "".equals(System.getProperty("ENV")) ? "SIT" : System.getProperty("ENV")) + ".properties";
+        propertiesFile = System.getProperty("user.dir") + "/src/main/resources/" +  System.getProperty("ENV") + ".properties";
+
+    }
 
     private static void initialise() {
         InputStream inStream;
         try {
+            findPropertiesFile();
             if (definition == null) {
-                inStream = new FileInputStream(System.getProperty("user.dir") + "/src/main/resources/config.properties");
+//                inStream = new FileInputStream(System.getProperty("user.dir") + "/src/main/resources/config.properties");
+                inStream = new FileInputStream(propertiesFile);
                 definition = new Properties();
                 definition.load(inStream);
             }
