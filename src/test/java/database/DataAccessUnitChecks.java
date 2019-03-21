@@ -23,7 +23,7 @@ public class DataAccessUnitChecks {
     @Ignore
     public void testDecrypt() {
         //PMX_UAT_URL=jdbc:oracle:thin:PMX/pmxuat@//pmxuat.cucvf0thmu0s.eu-west-1.rds.amazonaws.com:1521/PMXUAT
-        System.out.println(DecryptionService.decrypt(LoadProperties.getProperty(Constants.EPH_DEV_URL)));
+        System.out.println(DecryptionService.decrypt(LoadProperties.getProperty(Constants.EPH_URL)));
     }
 
     @Test
@@ -37,7 +37,7 @@ public class DataAccessUnitChecks {
     @Ignore
     public void testPMXDBAccess() {
         String SQL = WorkExtractSQL.PMX_WORK_EXTRACT.replace("PARAM1","9781416049722");
-        dataQualityContext.workDataObjectsFromSource = DBManager.getDBResultAsBeanList(SQL, WorkDataObject.class, Constants.PMX_UAT_URL);
+        dataQualityContext.workDataObjectsFromSource = DBManager.getDBResultAsBeanList(SQL, WorkDataObject.class, Constants.PMX_URL);
         System.out.println(dataQualityContext.workDataObjectsFromSource.get(0).PRIMARY_ISBN);
     }
 
@@ -46,7 +46,7 @@ public class DataAccessUnitChecks {
     public void testPostgressDBAccess() {
         String SQL = WorkExtractSQL.PRODUCT_MANIFESTATION_FROM_EPH_SA.replace("PARAM1","9781416049722");
         dataQualityContext.workDataObjectsFromSource =
-                DBManager.getDBResultAsBeanList(SQL, WorkDataObject.class, Constants.EPH_DEV_URL);
+                DBManager.getDBResultAsBeanList(SQL, WorkDataObject.class, Constants.EPH_URL);
         System.out.println(dataQualityContext.workDataObjectsFromSource.get(0).PRIMARY_ISBN
         );
     }
