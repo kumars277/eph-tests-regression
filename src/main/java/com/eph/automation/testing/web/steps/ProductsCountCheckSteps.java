@@ -92,7 +92,7 @@ public class ProductsCountCheckSteps {
     @When("^We know the number of products in canonical$")
     public void getCanonicalCount(){
         sql= ProductCountSQL.EPH_STG_CAN_Count;
-        productsCountContext.productCountStgCan= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
+        productsCountContext.productCountStgCan= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
         Log.info("\nThe number of products in EPH SA is: " + productsCountContext.productCountStgCan.get(0).ephCanCount);
 
     }
