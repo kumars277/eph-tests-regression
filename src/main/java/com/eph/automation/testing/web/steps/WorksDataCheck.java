@@ -33,7 +33,7 @@ public class WorksDataCheck {
                 .replace("PARAM2", type);
         //Log.info
         // (sql+"\n");
-        isbn = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
+        isbn = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
         dataQualityContext.productIdentifierID = isbn.get(0).random_value;
         Log.info
                 ("\n" + work_id + " is " + dataQualityContext.productIdentifierID+" and type is "
@@ -48,24 +48,24 @@ public class WorksDataCheck {
         //Log.info
         // (sql);
             dataQualityContext.workDataObjectsFromSource = DBManager
-                    .getDBResultAsBeanList(sql, WorkDataObject.class,Constants.PMX_SIT_URL);
+                    .getDBResultAsBeanList(sql, WorkDataObject.class,Constants.PMX_URL);
 
         sql = WorkDataCheckSQL.GET_PMX_WORKS_STG_DATA
                 .replace("PARAM1", id)
                 .replace("PARAM2",dataQualityContext.productIdentifierID);
         //Log.info
         // (sql);
-        dataQualityContext.workDataObjectsFromPMXSTG = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
+        dataQualityContext.workDataObjectsFromPMXSTG = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
         sql =  WorkDataCheckSQL.GET_EPH_WORKS_DATA.replace("PARAM1",dataQualityContext.workDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID);
         Log.info
                 (sql);
         dataQualityContext.workDataObjectsFromEPH = DBManager
-                .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
         sql =  WorkDataCheckSQL.GET_EPH_GD_WORKS_DATA.replace("PARAM1",dataQualityContext.workDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID);
         dataQualityContext.workDataObjectsFromEPHGD = DBManager
-                .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
     }
 
     @Then("^The work data between PMX and PMX STG is identical$")

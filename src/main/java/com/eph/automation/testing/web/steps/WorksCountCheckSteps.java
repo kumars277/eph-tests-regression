@@ -33,7 +33,7 @@ public class WorksCountCheckSteps {
         sqlPMX = WorkCountSQL.PMX_WORKS_COUNT;
         Log.info(sqlPMX);
         workCountPmx = DBManager.getDBResultAsBeanList(sqlPMX, WorkDataObject.class,
-                Constants.PMX_SIT_URL);
+                Constants.PMX_URL);
         pmxWork = workCountPmx.get(0).workCountPmx;
         Log.info("Works in PMX are: " + pmxWork);
     }
@@ -46,7 +46,7 @@ public class WorksCountCheckSteps {
 
         sqlPMXSTG = WorkCountSQL.PMX_STG_WORKS_COUNT;
         workCountPMXSTG =DBManager.getDBResultAsBeanList(sqlPMXSTG, WorkDataObject.class,
-                Constants.EPH_SIT_URL);
+                Constants.EPH_URL);
         pmxSTGWork = workCountPMXSTG.get(0).workCountPMXSTG;
         Log.info("\nWorks in PMX staging are: " + pmxSTGWork);
 
@@ -72,19 +72,19 @@ public class WorksCountCheckSteps {
 
         sqlEPH = WorkCountSQL.EPH_SA_WORKS_COUNT;
         workCountEPH =DBManager.getDBResultAsBeanList(sqlEPH, WorkDataObject.class,
-                Constants.EPH_SIT_URL);
+                Constants.EPH_URL);
         ephWork = workCountEPH.get(0).workCountEPH;
         Log.info("\nWorks in EPH SA are: " + ephWork);
 
         sqlEPH = WorkCountSQL.EPH_GD_WORKS_COUNT;
         workCountEPHGD =DBManager.getDBResultAsBeanList(sqlEPH, WorkDataObject.class,
-                Constants.EPH_SIT_URL);
+                Constants.EPH_URL);
         ephWorkGD = workCountEPHGD.get(0).workCountEPHGD;
         Log.info("\nWorks in EPH GD are: " + ephWorkGD);
 
         sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_Distinct;
         workCountPMXSTGDistinct =DBManager.getDBResultAsBeanList(sqlPMXSTGDistinct, WorkDataObject.class,
-                Constants.EPH_SIT_URL);
+                Constants.EPH_URL);
         pmxSTGWorkDistinct = workCountPMXSTGDistinct.get(0).workCountPMXSTG;
         Log.info("\nDistinct works in PMX staging are: " + pmxSTGWorkDistinct);
 

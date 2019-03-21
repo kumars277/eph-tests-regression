@@ -22,7 +22,7 @@ public class NotificationTestSteps {
     @Given("^We know the number of (.*) GD records after a full-load$")
     public void getGDRecordsAfterFullLoad(String table){
         sql= NotificationsSQL.EPH_GD_PRODUCT_Count.replace("PARAM1",table);
-        notificationCountContext.gdCountNumber= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_SIT_URL);
+        notificationCountContext.gdCountNumber= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
         Log.info("\nThe number of records in GD is: " + notificationCountContext.gdCountNumber.get(0).ephGDCount);
     }
 
@@ -30,7 +30,7 @@ public class NotificationTestSteps {
     public void getNotifications(String type,String table){
         sql= NotificationsSQL.EPH_Notifications_Count.replace("PARAM1",type).replace("PARAM2", table);
     //    Log.info(sql);
-        notificationCountContext.notificationCountNumber= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_SIT_URL);
+        notificationCountContext.notificationCountNumber= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
         Log.info("\nThe number of notifications is: " + notificationCountContext.notificationCountNumber.get(0).notificationCount);
     }
 
@@ -46,7 +46,7 @@ public class NotificationTestSteps {
         sql= NotificationsSQL.EPH_Notification_ID.replace("PARAM1",type)
         .replace("PARAM2", table);
         Log.info(sql);
-        notificationCountContext.notificationID= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_SIT_URL);
+        notificationCountContext.notificationID= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
         if (notificationCountContext.notificationID.isEmpty()) {
             Log.info("Notifications for all ids are created!");
         }else {

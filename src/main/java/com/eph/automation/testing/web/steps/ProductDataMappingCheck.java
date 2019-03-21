@@ -63,7 +63,7 @@ public class ProductDataMappingCheck {
             default:
                 break;
         }
-        List<Map<?, ?>> randomProductManifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<?, ?>> randomProductManifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         ids = randomProductManifestationIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random product manifestation ids  : " + ids);
@@ -95,7 +95,7 @@ public class ProductDataMappingCheck {
                 break;
         }
 
-        List<Map<?, ?>> randomProductManifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<?, ?>> randomProductManifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         ids = randomProductManifestationIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected product manifestation ids : " + ids);
@@ -109,7 +109,7 @@ public class ProductDataMappingCheck {
         sql = String.format(ProductDataSQL.PMX_PRODUCT_EXTRACT, Joiner.on("','").join(ids));
         Log.info(sql);
         dataQualityContext.productDataObjectsFromPMX = DBManager
-                .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.PMX_SIT_URL);
+                .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.PMX_URL);
 
     }
 
@@ -120,7 +120,7 @@ public class ProductDataMappingCheck {
         Log.info(sql);
 
         dataQualityContext.productDataObjectsFromEPHSTG = DBManager
-                .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
     }
 
     @Then("^We get the data from EPH STG Canonical for (.*)$")
@@ -146,7 +146,7 @@ public class ProductDataMappingCheck {
 //            sql = String.format(ProductDataSQL.SELECT_F_PRODUCT_WORK_IDS_FOR_GIVEN_MANIFESTATION_IDS, Joiner.on("','").join(ids));
 //            Log.info(sql);
 //
-//            List<Map<?, ?>> fProductWorkIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+//            List<Map<?, ?>> fProductWorkIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 //
 //            List<String> workIds = fProductWorkIds.stream().map(m -> (BigDecimal) m.get("F_PRODUCT_WORK")).map(String::valueOf).collect(Collectors.toList());
 //            Log.info("work ids : " + workIds);
@@ -162,7 +162,7 @@ public class ProductDataMappingCheck {
         }
 
         dataQualityContext.productDataObjectsFromEPHSTGCan = DBManager
-                .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
         sql.length();
     }
 
@@ -348,7 +348,7 @@ public class ProductDataMappingCheck {
         Log.info(sql);
 
         dataQualityContext.productDataObjectsFromEPHGD = DBManager
-                .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
     }
 
     @And("^We get the data from EPH SA for (.*)$")
@@ -369,7 +369,7 @@ public class ProductDataMappingCheck {
         Log.info(sql);
 
         dataQualityContext.productDataObjectsFromEPHSA = DBManager
-                .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
         sql.length();
 
     }
@@ -383,7 +383,7 @@ public class ProductDataMappingCheck {
         Log.info(sql);
 
         dataQualityContext.productDataObjectsFromEPHGD = DBManager
-                .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
 
 
     }
@@ -489,7 +489,7 @@ public class ProductDataMappingCheck {
 
 
                 dataQualityContext.productDataObjectsFromEPHSTG = DBManager
-                        .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+                        .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
                 Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
 
                 Log.info("Assert pmxSourceReference value is correct ...");
@@ -513,7 +513,7 @@ public class ProductDataMappingCheck {
                 }
 
                 dataQualityContext.productDataObjectsFromEPHSTG = DBManager
-                        .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+                        .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
                 Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
 
                 Log.info("Assert pmxSourceReference value is correct");
@@ -537,7 +537,7 @@ public class ProductDataMappingCheck {
                 }
 
                 dataQualityContext.productDataObjectsFromEPHSTG = DBManager
-                        .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+                        .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
                 Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
 
                 Log.info("Assert pmxSourceReference value is correct ...");
@@ -560,7 +560,7 @@ public class ProductDataMappingCheck {
                 }
 
                 dataQualityContext.productDataObjectsFromEPHSTG = DBManager
-                        .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+                        .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
                 Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
 
                 Log.info("Assert pmxSourceReference value is correct ...");
@@ -583,7 +583,7 @@ public class ProductDataMappingCheck {
 
 
                 dataQualityContext.productDataObjectsFromEPHSTG = DBManager
-                        .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+                        .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
                 Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK());
 
                 Log.info("Assert pmxSourceReference value is correct ...");
@@ -607,7 +607,7 @@ public class ProductDataMappingCheck {
 
 
                 dataQualityContext.productDataObjectsFromEPHSTG = DBManager
-                        .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_SIT_URL);
+                        .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
                 Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK());
 
                 Log.info("Assert pmxSourceReference value is correct ..");
@@ -1083,7 +1083,7 @@ public class ProductDataMappingCheck {
         sql = ProductDataSQL.SELECT_DUPLICATE_PRODUCT_IDS;
         Log.info(sql);
 
-        List<Map<?, ?>> results = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<?, ?>> results = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         if (!results.isEmpty()) {
             List<String> idsDuplicateProducts = results.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
             Log.info(idsDuplicateProducts.toString());
