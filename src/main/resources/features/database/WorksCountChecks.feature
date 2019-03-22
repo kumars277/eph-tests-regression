@@ -11,7 +11,13 @@ Feature: Entity - WORK - Count Check - Validate data count between PMX and EPH -
   Scenario: Verify that all the work data is transferred to EPH
     Given The works are in PMX Staging
     When The works are transferred to EPH
-    Then The work number between PMX STG and EPH is identical
+    Then The work number between PMX STG and DQ STG is identical
+
+  @Regression
+  Scenario: Verify that all the work data is transferred to EPH
+    Given The works are in PMX Staging
+    When The works are transferred to EPH
+    Then The work number between DQ STG and SA is identical
 
   @Regression
   Scenario: Verify that all the work data is transferred to GD

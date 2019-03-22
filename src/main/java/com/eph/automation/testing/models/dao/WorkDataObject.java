@@ -121,6 +121,25 @@ public class WorkDataObject {
 
     public Integer workCountEPHGD;
 
+    public Integer getWorkCountDQSTG() {
+        return workCountDQSTG;
+    }
+
+    public void setWorkCountDQSTG(Integer workCountDQSTG) {
+        this.workCountDQSTG = workCountDQSTG;
+    }
+
+    public Integer getWorkCountDQSTGnoError() {
+        return workCountDQSTGnoError;
+    }
+
+    public void setWorkCountDQSTGnoError(Integer workCountDQSTGnoError) {
+        this.workCountDQSTGnoError = workCountDQSTGnoError;
+    }
+
+    public Integer workCountDQSTG;
+    public Integer workCountDQSTGnoError;
+
     public String getRandom_value() {
         return random_value;
     }

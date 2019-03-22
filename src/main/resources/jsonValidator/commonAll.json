@@ -1,0 +1,118 @@
+{
+	"effectiveStartDate": {
+		"$id": "#/properties/effectiveStartDate",
+		"type": "string",
+		"title": "The Effectivestartdate Schema",
+		"examples": [
+			"2017-12-20"
+		],
+		"pattern": "^(.*)$"
+	},
+	"effectiveEndDate": {
+		"$id": "#/properties/effectiveEndDate",
+		"type": "string",
+		"title": "The Effectiveenddate Schema",
+		"examples": [
+			"2018-12-20"
+		],
+		"pattern": "^(.*)$"
+	},
+	"identifierType": {
+		"$id": "#/properties/identifierType",
+		"type": "object",
+		"title": "The Identifiertype Schema",
+		"required": [
+			"identifierTypeCode",
+			"identifierTypeName"
+		],
+		"properties": {
+			"identifierTypeCode": {
+				"$id": "#/properties/identifierTypeCode",
+				"type": "string",
+				"title": "The Identifiertypecode Schema",
+				"examples": [
+					"ISSN"
+				],
+				"pattern": "^(.*)$"
+			},
+			"identifierTypeName": {
+				"$id": "#/properties/identifierTypeName",
+				"type": "string",
+				"title": "The Identifiertypename Schema",
+				"examples": [
+					"ISSN"
+				],
+				"pattern": "^(.*)$"
+			}
+		},
+		"additionalProperties": false
+	},
+	"person": {
+		"$id": "#/properties/person",
+		"type": "object",
+		"title": "The Person Schema",
+		"required": [
+			"personId",
+			"personLastName"
+		],
+		"properties": {
+			"personId": {
+				"$id": "#/properties/person/properties/personId",
+				"type": "integer",
+				"title": "The Personid Schema",
+				"examples": [
+					15864548
+				]
+			},
+			"personFirstName": {
+				"$id": "#/properties/person/properties/personFirstName",
+				"type": "string",
+				"title": "The Personfirstname Schema",
+				"examples": [
+					"Andrew"
+				],
+				"pattern": "^(.*)$"
+			},
+			"personLastName": {
+				"$id": "#/properties/person/properties/personLastName",
+				"type": "string",
+				"title": "The Personlastname Schema",
+				"examples": [
+					"Binks"
+				],
+				"pattern": "^(.*)$"
+			}
+		},
+		"additionalProperties": false
+	},
+	"role": {
+		"$id": "#/properties/role",
+		"type": "object",
+		"title": "The Role Schema",
+		"required": [
+			"roleCode",
+			"roleName"
+		],
+		"properties": {
+			"roleCode": {
+				"$id": "#/properties/role/properties/roleCode",
+				"type": "string",
+				"title": "The Rolecode Schema",
+				"examples": [
+					"PO"
+				],
+				"pattern": "^(.*)$"
+			},
+			"roleName": {
+				"$id": "#/propertiesrole/properties/roleName",
+				"type": "string",
+				"title": "The Rolename Schema",
+				"examples": [
+					"Product Owner"
+				],
+				"pattern": "^(.*)$"
+			}
+		},
+		"additionalProperties": false
+	}
+}

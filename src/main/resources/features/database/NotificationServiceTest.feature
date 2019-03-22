@@ -16,14 +16,14 @@ Feature: Entity - Notifications - Validate a notification is created for every c
 
     @WIP
     Scenario Outline: Verify notification is processed successfully
-      Given A <type> is updated
-      When A notification is created
-      Then The notification is processed
+      #Given A <type> is updated
+      #When A notification is created
+      #Then The notification is processed
       And The <type> notification is in the payload table
 
       Examples:
        | type          |
-       | work          |
+       #| work          |
        | product       |
-       | manifestation |
+       #| manifestation |
 
