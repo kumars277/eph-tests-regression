@@ -76,7 +76,7 @@ public class Product {
         Product productWork = new Product();
         String SQL = WorkExtractSQL.GET_PRODUCT_EXPORT_FROM_PMX_BY_PMC.replace("PARAM1",pmc);
         List<WorkDataObject> productWorkFromPMX = DBManager.getDBResultAsBeanList(SQL,
-                WorkDataObject.class, Constants.PMX_UAT_URL);
+                WorkDataObject.class, Constants.PMX_URL);
         WorkDataObject productFromPMX = productWorkFromPMX.get(0);
         productWork.workID = productFromPMX.PRODUCT_WORK_ID;
         productWork.workTitle = productFromPMX.WORK_TITLE;

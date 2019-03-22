@@ -53,7 +53,7 @@ public class DBManager {
             //Get SIT
         } else if (EnumConstants.ENVIRONMENTS.UAT.name().equalsIgnoreCase(TestContext.getValues().environment) && !TestContext.getValues().targetDB) {
             //GET UAT
-            dbEndPointKey = Constants.PMX_UAT_URL;
+            dbEndPointKey = Constants.PMX_URL;
         }
         return dbEndPointKey;
     }

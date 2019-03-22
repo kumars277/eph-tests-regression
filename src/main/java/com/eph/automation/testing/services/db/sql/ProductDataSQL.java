@@ -355,5 +355,7 @@ public class ProductDataSQL {
 
     public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PACKAGES = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from ephsit_talend_owner.stg_10_pmx_product where \"PACKAGES\" = 'Y' order by random() limit '%s'";
 
+    public static String SELECT_DUPLICATE_PRODUCT_IDS = "select distinct \"PRODUCT_ID\" as PRODUCT_ID from ephsit_talend_owner.stg_10_pmx_product  where \"PRODUCT_ID\" in (select b.\"PRODUCT_ID\" from ephsit_talend_owner.stg_10_pmx_product B ,ephsit_talend_owner.stg_10_pmx_product C where B.\"PRODUCT_ID\" = C.\"PRODUCT_ID\" \n" +
+            "and b.\"F_PRODUCT_WORK\" != c.\"F_PRODUCT_WORK\" and B.\"SUBSCRIPTION\" = 'Y' and C.\"SUBSCRIPTION\" ='Y');\n";
 
 }

@@ -44,7 +44,7 @@ public class ManifestationDataQualityCheckSteps {
 
         sql = WorkExtractSQL.COUNT_MANIFESTATIONS_IN_PMX_GD_PRODUCT_MANIFESTATION_TABLE;
         Log.info(sql);
-        List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.PMX_SIT_URL);
+        List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.PMX_URL);
         countManifestationsPMX = ((BigDecimal) manifestationsNumber.get(0).get("count")).intValue();
         Log.info("Count of manifestations in PMX.GD_PRODUCT_MANIFESTATION table is: " + countManifestationsPMX);
     }
@@ -54,7 +54,7 @@ public class ManifestationDataQualityCheckSteps {
         Log.info("When We get the count of the manifestations records in PMX STG ..");
         sql = WorkExtractSQL.COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE;
         Log.info(sql);
-        List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countManifestationsSTGPMX = ((Long) manifestationsNumber.get(0).get("count")).intValue();
         Log.info("Count of manifestations in STG_PMX_MANIFESTATION table is: " + countManifestationsSTGPMX);
 
@@ -70,7 +70,7 @@ public class ManifestationDataQualityCheckSteps {
         com.eph.automation.testing.helper.Log.info("When The manifestations are transferred to EPH ..");
         sql = WorkExtractSQL.COUNT_MANIFESTATIONS_IN_SA_MANIFESTATION_TABLE;
         Log.info(sql);
-        List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countManifestationsEPH = ((Long) manifestationsNumber.get(0).get("count")).intValue();
         Log.info("Count of manifestations in EPH SA table is: " + countManifestationsEPH);
 
@@ -88,7 +88,7 @@ public class ManifestationDataQualityCheckSteps {
         sql = WorkExtractSQL.COUNT_MANIFESTATIONS_IN_GD_MANIFESTATION_TABLE;
         Log.info(sql);
 
-        List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countManifestationsEPHGD = ((Long) manifestationsNumber.get(0).get("count")).intValue();
         Log.info("Count of manifestations in GD_MANIFESTATION table is: " + countManifestationsEPHGD);
     }
@@ -118,7 +118,7 @@ public class ManifestationDataQualityCheckSteps {
                 Log.info(sql);
                 break;
         }
-        manifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        manifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = manifestationIds.stream().map(m -> (BigDecimal) m.get("manifestation_id")).map(String::valueOf).collect(Collectors.toList());
         Log.info("ids : " + ids);
     }
@@ -150,7 +150,7 @@ public class ManifestationDataQualityCheckSteps {
                 break;
         }
 
-        List<Map<?, ?>> randomISBNIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<?, ?>> randomISBNIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         isbns = randomISBNIds.stream().map(m -> (String) m.get("isbn")).collect(Collectors.toList());
         Log.info(isbns.toString());
@@ -164,7 +164,7 @@ public class ManifestationDataQualityCheckSteps {
         sql = String.format(WorkExtractSQL.SELECT_MANIFESTATIONS_IDS_FOR_SPECIFIC_ISBN, Joiner.on("','").join(isbns));
         Log.info(sql);
 
-        manifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        manifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = manifestationIds.stream().map(m -> (BigDecimal) m.get("manifestation_id")).map(String::valueOf).collect(Collectors.toList());
         Log.info("ids : " + ids);
 
@@ -177,7 +177,7 @@ public class ManifestationDataQualityCheckSteps {
         Log.info(sql);
 
         dataQualityContext.manifestationDataObjectsFromPMX = DBManager
-                .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.PMX_SIT_URL);
+                .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.PMX_URL);
     }
 
     @Then("^We have the manifestations in PMX STG$")
@@ -187,7 +187,7 @@ public class ManifestationDataQualityCheckSteps {
         Log.info(sql);
 
         dataQualityContext.manifestationDataObjectsFromEPH = DBManager
-                .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
 
     }
 
@@ -340,7 +340,7 @@ public class ManifestationDataQualityCheckSteps {
         Log.info(sql);
 
         dataQualityContext.manifestationDataObjectsFromEPHSA = DBManager
-                .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
     }
 
     @And("^We check that mandatory fields are not null$")
@@ -460,7 +460,7 @@ public class ManifestationDataQualityCheckSteps {
         Log.info(sql);
 
         dataQualityContext.manifestationDataObjectsFromEPHGD = DBManager
-                .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
     }
 
     @And("^We compare the manifestations in EPH SA and EPH golden data$")

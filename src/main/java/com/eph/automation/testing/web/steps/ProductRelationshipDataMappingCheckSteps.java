@@ -46,7 +46,7 @@ public class ProductRelationshipDataMappingCheckSteps {
 
         sql = ProductRelationshipChecksSQL.GET_PMX_PRODUCT_RELATIONSHIPS_COUNT;
         Log.info(sql);
-        List<Map<String, Object>> productsRelNumber = DBManager.getDBResultMap(sql, Constants.PMX_SIT_URL);
+        List<Map<String, Object>> productsRelNumber = DBManager.getDBResultMap(sql, Constants.PMX_URL);
         countProductsRelPMX = ((BigDecimal) productsRelNumber.get(0).get("count")).intValue();
         Log.info("Count of product relationship records in PMX is: " + countProductsRelPMX);
 
@@ -59,7 +59,7 @@ public class ProductRelationshipDataMappingCheckSteps {
         Log.info("When We get the count of the product relationship records in EPH STG ..");
         sql = ProductRelationshipChecksSQL.GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT;
         Log.info(sql);
-        List<Map<String, Object>> productsRelNumber = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<String, Object>> productsRelNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countProductsRelEPHSTG = ((Long) productsRelNumber.get(0).get("count")).intValue();
         Log.info("Count of product relationship records in EPH STG is: " + countProductsRelEPHSTG);
 
@@ -76,7 +76,7 @@ public class ProductRelationshipDataMappingCheckSteps {
         Log.info("When We get the count of the product relationship records in EPH SA ..");
         sql = ProductRelationshipChecksSQL.GET_EPH_SA_PRODUCT_RELATIONSHIPS_COUNT;
         Log.info(sql);
-        List<Map<String, Object>> productsRelNumber = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<String, Object>> productsRelNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countProductsRelEPHSA = ((Long) productsRelNumber.get(0).get("count")).intValue();
         Log.info("Count of product relationship records in EPH SA is: " + countProductsRelEPHSA);
 
@@ -91,7 +91,7 @@ public class ProductRelationshipDataMappingCheckSteps {
         Log.info("When We get the count of the product relationship records in EPH GD ..");
         sql = ProductRelationshipChecksSQL.GET_EPH_GD_PRODUCT_RELATIONSHIPS_COUNT;
         Log.info(sql);
-        List<Map<String, Object>> productsRelNumber = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<String, Object>> productsRelNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countProductsRelEPHGD = ((Long) productsRelNumber.get(0).get("count")).intValue();
         Log.info("Count of product relationship records in EPH GD is: " + countProductsRelEPHGD);
 
@@ -131,7 +131,7 @@ public class ProductRelationshipDataMappingCheckSteps {
         sql = String.format(ProductRelationshipChecksSQL.SELECT_RANDOM_RELATIONSHIP_PMX_SOURCEREF, numberOfRecords);
         Log.info(sql);
 
-        productRelIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        productRelIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = productRelIds.stream().map(m -> (BigDecimal) m.get("RELATIONSHIP_PMX_SOURCEREF")).map(String::valueOf).collect(Collectors.toList());
         Log.info("ids : " + ids);
     }
@@ -144,7 +144,7 @@ public class ProductRelationshipDataMappingCheckSteps {
         Log.info(sql);
 
         dataQualityContext.productRelationshipDataObjectsFromPMX = DBManager
-                .getDBResultAsBeanList(sql, ProductRelationshipDataObject.class, Constants.PMX_SIT_URL);
+                .getDBResultAsBeanList(sql, ProductRelationshipDataObject.class, Constants.PMX_URL);
     }
 
     @Then("^We get the product relationship records from EPH STG$")
@@ -155,7 +155,7 @@ public class ProductRelationshipDataMappingCheckSteps {
         Log.info(sql);
 
         dataQualityContext.productRelationshipDataObjectsFromEPHSTG = DBManager
-                .getDBResultAsBeanList(sql, ProductRelationshipDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, ProductRelationshipDataObject.class, Constants.EPH_URL);
     }
 
     @And("^Compare the product relationship records in PMX and EPH STG$")
@@ -227,7 +227,7 @@ public class ProductRelationshipDataMappingCheckSteps {
         sql = String.format(ProductRelationshipChecksSQL.GET_PRODUCT_REL_PACK_ID_FROM_LOOKUP_TABLE,  Joiner.on("','").join(idsSA));
         Log.info(sql);
 
-        List<Map<?, ?>> productRelIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<?, ?>> productRelIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         idsSA = productRelIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_REL_PACK_ID")).map(String::valueOf).collect(Collectors.toList());
 
         Log.info("Get data from EPH SA ..");
@@ -235,7 +235,7 @@ public class ProductRelationshipDataMappingCheckSteps {
         Log.info(sql);
 
         dataQualityContext.productRelationshipDataObjectsFromEPHSA = DBManager
-                .getDBResultAsBeanList(sql, ProductRelationshipDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, ProductRelationshipDataObject.class, Constants.EPH_URL);
         sql.length();
     }
 
@@ -247,7 +247,7 @@ public class ProductRelationshipDataMappingCheckSteps {
         Log.info(sql);
 
         dataQualityContext.productRelationshipDataObjectsFromEPHGD = DBManager
-                .getDBResultAsBeanList(sql, ProductRelationshipDataObject.class, Constants.EPH_SIT_URL);
+                .getDBResultAsBeanList(sql, ProductRelationshipDataObject.class, Constants.EPH_URL);
     }
 
     @And("^We check that mandatory columns for product relationship SA$")
@@ -279,7 +279,7 @@ public class ProductRelationshipDataMappingCheckSteps {
             sql = String.format(ProductRelationshipChecksSQL.GET_PRODUCT_REL_PACK_ID_FROM_LOOKUP_TABLE, c);
             Log.info(sql);
 
-            List<Map<?, ?>> productRelIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+            List<Map<?, ?>> productRelIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             idsSA = productRelIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_REL_PACK_ID")).map(String::valueOf).collect(Collectors.toList());
 
             Log.info("Get data from EPH SA ..");
@@ -287,7 +287,7 @@ public class ProductRelationshipDataMappingCheckSteps {
             Log.info(sql);
 
             dataQualityContext.productRelationshipDataObjectsFromEPHSA = DBManager
-                    .getDBResultAsBeanList(sql, ProductRelationshipDataObject.class, Constants.EPH_SIT_URL);
+                    .getDBResultAsBeanList(sql, ProductRelationshipDataObject.class, Constants.EPH_URL);
 
 
 
@@ -310,7 +310,7 @@ public class ProductRelationshipDataMappingCheckSteps {
             sql = String.format(ProductRelationshipChecksSQL.GET_ID_FROM_SOURCEREF_LOOKUP_TABLE,dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getOWNER_PMX_SOURCE());
             Log.info((sql));
 
-            productRelIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+            productRelIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             expectedF_PACKAGE_OWNER =  productRelIds.get(0).get("eph_id").toString();
 
             Log.info("Verify F_PACKAGE_OWNER is correctly populated");
@@ -324,7 +324,7 @@ public class ProductRelationshipDataMappingCheckSteps {
             sql = String.format(ProductRelationshipChecksSQL.GET_ID_FROM_SOURCEREF_LOOKUP_TABLE,dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getCOMPONENT_PMX_SOURCE());
             Log.info((sql));
 
-            productRelIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+            productRelIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             expectedF_COMPONENT =  productRelIds.get(0).get("eph_id").toString();
 
             Log.info("Verify F_COMPONENT is correctly populated");

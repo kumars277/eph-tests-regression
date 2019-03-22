@@ -28,7 +28,7 @@ public class DataLoadServiceImpl {
         BigDecimal loadId = null;
         int eventId;
         String query;
-        Connection conn = DBManager.getPostgresConnection(Constants.EPH_SIT_URL);
+        Connection conn = DBManager.getPostgresConnection(Constants.EPH_URL);
         try {
             query = "{? = call semarchy_repository.get_new_loadid(?, ?, ?,?)}";
             CallableStatement statement = conn.prepareCall(query);

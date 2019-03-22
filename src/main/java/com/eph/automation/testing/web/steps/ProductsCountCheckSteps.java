@@ -22,45 +22,45 @@ public class ProductsCountCheckSteps {
     public void getPmxProducts() {
         sql= ProductCountSQL.PMX_PRODUCT_Count;
         Log.info(sql);
-        productsCountContext.productCountPMX= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.PMX_SIT_URL);
+        productsCountContext.productCountPMX= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.PMX_URL);
         Log.info("\nThe number of products in PMX is: " + productsCountContext.productCountPMX.get(0).pmxCount);
     }
 
     @When("^The products are in PMX Staging$")
     public void getStgProducts(){
         sql= ProductCountSQL.EPH_STG_PRODUCT_Count;
-        productsCountContext.productCountStg= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
+        productsCountContext.productCountStg= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
         Log.info("\nThe number of products in Staging is: " + productsCountContext.productCountStg.get(0).stgCount);
 
         sql= ProductCountSQL.EPH_STG_PRODUCT_Count_BOOKS;
-        productsCountContext.productCountStgBooks= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
+        productsCountContext.productCountStgBooks= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
         sql= ProductCountSQL.EPH_STG_PRODUCT_Count_Sub;
-        productsCountContext.productCountStgSubscription= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
+        productsCountContext.productCountStgSubscription= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
         sql= ProductCountSQL.EPH_STG_PRODUCT_Count_Bulk;
-        productsCountContext.productCountStgBulk= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
+        productsCountContext.productCountStgBulk= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
         sql= ProductCountSQL.EPH_STG_PRODUCT_Count_Reprint;
-        productsCountContext.productCountStgReprints= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
+        productsCountContext.productCountStgReprints= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
         sql= ProductCountSQL.EPH_STG_PRODUCT_Count_Back;
-        productsCountContext.productCountStgBack= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
+        productsCountContext.productCountStgBack= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
         sql= ProductCountSQL.EPH_STG_PRODUCT_Count_OA;
-        productsCountContext.productCountStgOA= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
+        productsCountContext.productCountStgOA= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
         sql= ProductCountSQL.EPH_STG_PRODUCT_Count_OA_More;
-        productsCountContext.productCountStgOAMore= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
+        productsCountContext.productCountStgOAMore= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
         sql= ProductCountSQL.EPH_STG_PRODUCT_Count_AC;
-        productsCountContext.productCountStgAC=DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
+        productsCountContext.productCountStgAC=DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
         sql= ProductCountSQL.EPH_STG_PRODUCT_Count_AC_More;
-        productsCountContext.productCountStgACMore= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
+        productsCountContext.productCountStgACMore= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
         sql=ProductCountSQL.EPH_STG_PRODUCT_Packages;
-        productsCountContext.productCountStgPackages= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
+        productsCountContext.productCountStgPackages= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
         stgToCanonical =
                 productsCountContext.productCountStgBooks.get(0).booksCount +
@@ -81,18 +81,18 @@ public class ProductsCountCheckSteps {
     @When("^We know the number of Products in EPH$")
     public void getEPHProducts(){
         sql= ProductCountSQL.EPH_SA_PRODUCT_Count;
-        productsCountContext.productCountEPHSA= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
+        productsCountContext.productCountEPHSA= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
         Log.info("\nThe number of products in EPH SA is: " + productsCountContext.productCountEPHSA.get(0).ephSACount);
 
         sql= ProductCountSQL.EPH_GD_PRODUCT_Count;
-        productsCountContext.productCountEPHGD= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
+        productsCountContext.productCountEPHGD= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
         Log.info("\nThe number of products in EPH GD is: " + productsCountContext.productCountEPHGD.get(0).ephGDCount);
     }
 
     @When("^We know the number of products in canonical$")
     public void getCanonicalCount(){
         sql= ProductCountSQL.EPH_STG_CAN_Count;
-        productsCountContext.productCountStgCan= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_SIT_URL);
+        productsCountContext.productCountStgCan= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
         Log.info("\nThe number of products in EPH SA is: " + productsCountContext.productCountStgCan.get(0).ephCanCount);
 
     }

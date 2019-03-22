@@ -84,7 +84,7 @@
                 <configuration>
                     <skipTests>false</skipTests>
                     <systemPropertyVariables>
-                        <env>SIT</env>
+                        <env>${ENV}</env>
                         <encryptionPasswordEOAS>EOAS Secret Password</encryptionPasswordEOAS>
                         <dbRandomRecordsNumber>${dbRandomRecordsNumber}</dbRandomRecordsNumber>
                     </systemPropertyVariables>
