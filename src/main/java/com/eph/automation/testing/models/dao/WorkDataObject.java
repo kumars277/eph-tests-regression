@@ -41,6 +41,16 @@ public class WorkDataObject {
     public String PRODUCT_WORK_PUB_DATE;
     public String JOURNAL_ACRONYM;
 
+    public String getOWNERSHIP() {
+        return OWNERSHIP;
+    }
+
+    public void setOWNERSHIP(String OWNERSHIP) {
+        this.OWNERSHIP = OWNERSHIP;
+    }
+
+    public String OWNERSHIP;
+
     public String getF_TYPE() {
         return F_TYPE;
     }
