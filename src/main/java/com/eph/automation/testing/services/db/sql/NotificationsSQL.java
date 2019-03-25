@@ -47,9 +47,11 @@ public class NotificationsSQL {
                     "join semarchy_eph_mdm.gd_event e on gd.b_batchid = e.b_batchid and gd.b_batchid = (select max (batch_id) from semarchy_eph_stg.st_out_notification where notification_type='PARAM1')))a";
 
 
-    public static String EPH_Notification_Unprocessed = "select * from semarchy_eph_stg.st_out_notification where status='UNPROCESSED'";
+    public static String EPH_Notification_Processed = "select count(distinct notification_id) as processed from semarchy_eph_stg.st_out_notification \n" +
+            "where status = 'PROCESSED' and notification_type = 'PARAM1'";
 
-    public static String EPH_Notification_Failed = "select notification_id as notificationID from semarchy_eph_stg.st_out_notification where status='FAILED'";
+    public static String EPH_Notification_Payload = "select count(distinct substring(payload_key,1,strpos(payload_key,':')-1) ) as payloadcount " +
+            "from semarchy_eph_stg.st_test_notification_payload where substring(payload_key,1,strpos(payload_key,'-')+1)  PARAM1 'EPR-W'";
 
     public static String EPH_Notification_Created = "select * from semarchy_eph_stg.st_out_notification where batch_id='PARAM1'";
 

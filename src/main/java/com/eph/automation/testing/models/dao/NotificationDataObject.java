@@ -20,6 +20,25 @@ public class NotificationDataObject {
     public int ephGDCount;
     public int notificationCount;
 
+    public int getProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(int processed) {
+        this.processed = processed;
+    }
+
+    public int getPayloadcount() {
+        return payloadcount;
+    }
+
+    public void setPayloadcount(int payloadcount) {
+        this.payloadcount = payloadcount;
+    }
+
+    public int processed;
+    public int payloadcount;
+
     public String gdID;
 
     public String getGdID() {
