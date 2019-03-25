@@ -100,8 +100,8 @@ public class WorksCountCheckSteps {
         sql = WorkCountSQL.PMX_STG_DQ_WORKS_COUNT;
         workCountSTGDQ =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                 Constants.EPH_URL);
-        dqWorks = workCountSTGDQNOERROR.get(0).workCountDQSTG;
-        Log.info("\nThe Works in DQ table are : " + workCountSTGDQNOERROR.get(0).workCountDQSTG);
+        dqWorks = workCountSTGDQ.get(0).workCountDQSTG;
+        Log.info("\nThe Works in DQ table are : " + workCountSTGDQ.get(0).workCountDQSTG);
 
         sql = WorkCountSQL.PMX_STG_DQ_WORKS_COUNT_NoErr;
         workCountSTGDQNOERROR =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
