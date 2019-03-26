@@ -41,5 +41,12 @@ public class ProductCountSQL {
     "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
     "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )";
 
-    public static String EPH_GD_PRODUCT_Count="select count(*) as ephGDCount FROM semarchy_eph_mdm.gd_product";
+    public static String EPH_GD_PRODUCT_Count="select count(*) as ephGDCount FROM semarchy_eph_mdm.gd_product\n" +
+            "     where f_event =  (select max (f_event) from\n" +
+            "    semarchy_eph_mdm.gd_product join\n" +
+            "   semarchy_eph_mdm.gd_event on f_event = event_id\n" +
+            "    where  semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n" +
+            "    and semarchy_eph_mdm.gd_event.workflow_id = 'talend'\n" +
+            "    AND semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n" +
+            "    and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )";
 }
