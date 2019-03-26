@@ -21,44 +21,56 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
 
   @Regression
   Scenario Outline: Validate data is transferred from PMX to EPH STG
-    Given We get <countOfRandomIds> random ids of persons work role
-    When We get the person work role records from PMX
+    Given We get <countOfRandomIds> random ids of persons work role with <type>
+    When We get the person work role records with <type> from PMX
     Then We get the person work role records from EPH STG
-    And Compare person work role records in PMX and EPH STG
+    And Compare person work role records in PMX and EPH STG for <type>
     Examples:
-      | countOfRandomIds |
-      | 10               |
+      | countOfRandomIds | type |
+      | 10               | PD   |
+      | 10               | AU   |
+      | 10               | PU   |
+
 
   @Regression
   Scenario Outline: Validate mandatory columns are populated in EPH SA for persons work role
-    Given We get <countOfRandomIds> random ids of persons work role
+    Given We get <countOfRandomIds> random ids of persons work role with <type>
     When We get the ids of the person work role records in EPH SA from the lookup table
     Then We get the person work role records from EPH SA
     And Check the mandatory columns are populated for persons work role
     Examples:
-      | countOfRandomIds |
-      | 10               |
+      | countOfRandomIds | type |
+      | 10               | PD   |
+      | 10               | AU   |
+      | 10               | PU   |
 
 
   @Regression
   Scenario Outline: Validate data is transferred from EPH STG to EPH SA
-    Given We get <countOfRandomIds> random ids of persons work role
+    Given We get <countOfRandomIds> random ids of persons work role with <type>
     When We get the person work role records from EPH STG
     Then We get the ids of the person work role records in EPH SA from the lookup table
     Then We get the person work role records from EPH SA
     And Compare person work role records in EPH STG and EPH SA
     Examples:
-      | countOfRandomIds |
-      | 10               |
+      | countOfRandomIds | type |
+      | 10               | PD   |
+      | 10               | AU   |
+      | 10               | PU   |
+
 
 
   @Regression
   Scenario Outline: Validate data is transferred from EPH SA to EPH GD
-    Given We get <countOfRandomIds> random ids of persons work role
+    Given We get <countOfRandomIds> random ids of persons work role with <type>
     When We get the ids of the person work role records in EPH SA from the lookup table
     Then We get the person work role records from EPH SA
     Then We get the person work role records from EPH GD
     And Compare person work role records in EPH SA and EPH GD
     Examples:
-      | countOfRandomIds |
-      | 10               |
+      | countOfRandomIds | type |
+      | 10               | PD   |
+      | 10               | AU   |
+      | 10               | PU   |
+
+

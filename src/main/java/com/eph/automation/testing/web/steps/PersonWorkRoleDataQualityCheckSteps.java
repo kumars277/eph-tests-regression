@@ -5,7 +5,6 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
-import com.eph.automation.testing.models.dao.PersonProductRoleDataObject;
 import com.eph.automation.testing.models.dao.PersonWorkRoleDataObject;
 import com.eph.automation.testing.services.db.sql.PersonDataSQL;
 import com.eph.automation.testing.services.db.sql.PersonWorkRoleDataSQL;
@@ -17,7 +16,6 @@ import cucumber.api.java.en.When;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -105,18 +103,30 @@ public class PersonWorkRoleDataQualityCheckSteps {
     }
 
 
-    @Given("^We get (.*) random ids of persons work role$")
-    public void getRandomIds(String numberOfRecords) {
+    @Given("^We get (.*) random ids of persons work role with (.*)$")
+    public void getRandomIds(String numberOfRecords, String type) {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
 //        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
-
-        sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, numberOfRecords);
-        Log.info(sql);
-
+        switch(type) {
+            case "PD":
+                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, type, numberOfRecords);
+                Log.info(sql);
+                break;
+            case "AU":
+                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, type, numberOfRecords);
+                Log.info(sql);
+                break;
+            case "PU":
+                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, type, numberOfRecords);
+                Log.info(sql);
+                break;
+            default:
+                break;
+        }
 
         List<Map<?, ?>> randomPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
@@ -125,18 +135,26 @@ public class PersonWorkRoleDataQualityCheckSteps {
     }
 
 
-    @When("^We get the person work role records from PMX$")
-    public void getPersonWorkRoleRecordsPMX() {
-        Log.info("Get the person work role records from EPH STG Can ..");
+    @When("^We get the person work role records with (.*) from PMX$")
+    public void getPersonWorkRoleRecordsPMX(String type) {
+        Log.info("Get the person work role records with type from PMX ..");
 
         //prepare ids
         idsPMX = new ArrayList<>(ids);
 
 
-        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).replace("-PD", "")));
+        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).replace("-" + type, "")));
 
-        sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX, Joiner.on("','").join(idsPMX));
-        Log.info(sql);
+        if(type.equals("PD")) {
+            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_PD, Joiner.on("','").join(idsPMX));
+            Log.info(sql);
+        } if(type.equals("AU")) {
+            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_AU, Joiner.on("','").join(idsPMX));
+            Log.info(sql);
+        } if(type.equals("PU")) {
+            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_PU, Joiner.on("','").join(idsPMX));
+            Log.info(sql);
+        }
 
         dataQualityContext.personWorkRoleDataObjectsFromPMX = DBManager
                 .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.PMX_URL);
@@ -152,8 +170,8 @@ public class PersonWorkRoleDataQualityCheckSteps {
                 .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
     }
 
-    @And("^Compare person work role records in PMX and EPH STG$")
-    public void comparePersonWorkRolesRecordsInPMXAndEPHSTG() {
+    @And("^Compare person work role records in PMX and EPH STG for (.*)$")
+    public void comparePersonWorkRolesRecordsInPMXAndEPHSTG(String type) {
         Log.info("And compare work role records in PMX and EPH STG ..");
 
         //sort the lists before comparison
@@ -191,7 +209,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
             //F_ROLE
             Log.info("F_ROLE in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
 
-            assertEquals("PD", dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
+            assertEquals(type , dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
 
         });
 

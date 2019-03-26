@@ -5,7 +5,12 @@ package com.eph.automation.testing.services.db.sql;
  */
 public class PersonWorkRoleDataSQL {
 
-    public static String GET_COUNT_PERSONS_WORK_ROLE_PMX = "SELECT count(*) AS count\n" +
+    public static String GET_COUNT_PERSONS_WORK_ROLE_PMX = "SELECT count(*) as count FROM (\n" +
+            "SELECT\n" +
+            "     W.PRODUCT_WORK_ID||'-PD' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
+            "    ,PMG.F_PARTY AS PMX_PARTY_SOURCE_REF\n" +
+            "    ,W.PRODUCT_WORK_ID AS PMX_WORK_SOURCE_REF\n" +
+            "    ,'PD' AS F_ROLE\n" +
             "FROM\n" +
             "    GD_PRODUCT_WORK W\n" +
             "JOIN\n" +
@@ -13,7 +18,28 @@ public class PersonWorkRoleDataSQL {
             "JOIN\n" +
             "    GD_PMG PMG ON PMC.F_PMG = PMG.PMGCODE\n" +
             "WHERE\n" +
-            "    PMG.F_PARTY IS NOT NULL";
+            "    PMG.F_PARTY IS NOT NULL\n" +
+            "UNION\n" +
+            "SELECT\n" +
+            "\t P.PARTY_IN_PRODUCT_ID||'-AU' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
+            "\t,P.F_PARTY AS PMX_PARTY_SOURCE_REF\n" +
+            "\t,P.F_PRODUCT_WORK  AS PMX_WORK_SOURCE_REF\n" +
+            "\t,'AU' AS F_ROLE\n" +
+            "FROM\n" +
+            "\tGD_PARTY_IN_PRODUCT P\n" +
+            "WHERE\n" +
+            "\tP.F_ROLE_TYPE = 1\n" +
+            "UNION\n" +
+            "SELECT\n" +
+            "\t P.PARTY_IN_PRODUCT_ID||'-PU' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
+            "\t,P.F_PARTY AS PMX_PARTY_SOURCE_REF\n" +
+            "\t,P.F_PRODUCT_WORK  AS PMX_WORK_SOURCE_REF\n" +
+            "\t,'PU' AS F_ROLE\n" +
+            "FROM\n" +
+            "\tGD_PARTY_IN_PRODUCT P\n" +
+            "WHERE\n" +
+            "\tP.F_ROLE_TYPE IN (1120,1126)\n" +
+            ")";
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTG = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_work_person_role";
 
@@ -30,7 +56,7 @@ public class PersonWorkRoleDataSQL {
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHGD = "select count(*) as count from semarchy_eph_mdm.gd_work_person_role";
 
 
-    public static String GET_DATA_PERSONS_WORK_ROLE_PMX = "SELECT\n" +
+    public static String GET_DATA_PERSONS_WORK_ROLE_PMX_PD = "SELECT\n" +
             "     W.PRODUCT_WORK_ID||'-PD' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
             "    ,PMG.F_PARTY AS PMX_PARTY_SOURCE_REF\n" +
             "    ,W.PRODUCT_WORK_ID AS PMX_WORK_SOURCE_REF\n" +
@@ -44,6 +70,28 @@ public class PersonWorkRoleDataSQL {
             "WHERE\n" +
             "    PMG.F_PARTY IS NOT NULL \n" +
             "      AND W.PRODUCT_WORK_ID IN ('%s')";
+
+    public static String GET_DATA_PERSONS_WORK_ROLE_PMX_AU = "SELECT\n" +
+            "\t P.PARTY_IN_PRODUCT_ID||'-AU' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
+            "\t,P.F_PARTY AS PMX_PARTY_SOURCE_REF\n" +
+            "\t,P.F_PRODUCT_WORK  AS PMX_WORK_SOURCE_REF\n" +
+            "\t,'AU' AS F_ROLE\n" +
+            "FROM\n" +
+            "\tGD_PARTY_IN_PRODUCT P\n" +
+            "WHERE\n" +
+            "\tP.F_ROLE_TYPE = 1\n" +
+            "\tAND P.PARTY_IN_PRODUCT_ID IN ('%s')";
+
+    public static String GET_DATA_PERSONS_WORK_ROLE_PMX_PU = "SELECT\n" +
+            "\t P.PARTY_IN_PRODUCT_ID||'-PU' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
+            "\t,P.F_PARTY AS PMX_PARTY_SOURCE_REF\n" +
+            "\t,P.F_PRODUCT_WORK  AS PMX_WORK_SOURCE_REF\n" +
+            "\t,'PU' AS F_ROLE\n" +
+            "FROM\n" +
+            "\tGD_PARTY_IN_PRODUCT P\n" +
+            "WHERE\n" +
+            "\tP.F_ROLE_TYPE IN (1120,1126)\n" +
+            "\tAND P.PARTY_IN_PRODUCT_ID IN ('%s')";
 
     public static String GET_DATA_PERSONS_WORK_ROLE_EPHSTG = "select \n" +
             "\"WORK_PERSON_ROLE_SOURCE_REF\" as WORK_PERSON_ROLE_SOURCE_REF,\n" +
@@ -89,6 +137,7 @@ public class PersonWorkRoleDataSQL {
     public static String GET_RANDOM_PERSON_WORK_ROLE_IDS = "select \n" +
             "\"WORK_PERSON_ROLE_SOURCE_REF\" as WORK_PERSON_ROLE_SOURCE_REF\n" +
             "from ephsit_talend_owner.stg_10_pmx_work_person_role\n" +
+            "where \"WORK_PERSON_ROLE_SOURCE_REF\" like '%%%s'\n" +
             "order by random() limit '%s'";
 
 }

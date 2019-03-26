@@ -13,8 +13,7 @@ import java.util.Properties;
 public class LoadProperties {
 
     protected static Properties definition;
-    private static LoadProperties properties;
-    static String propertiesFile;
+    protected static String propertiesFile;
 
 
 

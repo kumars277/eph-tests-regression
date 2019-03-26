@@ -6,13 +6,13 @@ import java.util.Objects;
  * Created by Bistra Drazheva on 24/01/2019
  */
 public class ManifestationIdentifierObject {
-   public String b_loadid;
-   public String f_event;
-   public String b_classname;
-   public String manif_identifier_id;
-   public int identifier;
-   public String f_type;
-   public String f_manifestation;
+   private String b_loadid;
+   private String f_event;
+   private String b_classname;
+   private String manif_identifier_id;
+   private int identifier;
+   private String f_type;
+   private String f_manifestation;
 
     public String getB_loadid() {
         return b_loadid;

@@ -3,39 +3,39 @@ package com.eph.automation.testing.models.dao;
 import java.util.Objects;
 
 public class  ManifestationDataObject {
-    public String MANIFESTATION_ID;
-    public String MANIFESTATION_KEY_TITLE;
-    public String ISBN;
-    public String ISSN;
-    public String COVER_HEIGHT;
-    public String COVER_WIDTH;
-    public String PAGE_HEIGHT;
-    public String PAGE_WIDTH;
-    public String WEIGHT;
-    public String CARTON_QTY;
-    public String INTERNATIONAL_EDITION_IND;
-    public String COPYRIGHT_DATE;
-    public String F_PRODUCT_MANIFESTATION_TYP;
-    public String FORMAT_TXT;
-    public String MANIFESTATION_STATUS;
-    public int PRODUCT_MANIFESTATION_ID;
-    public String F_PRODUCT_WORK;
-    public String WORK_TYPE_ID;
-    public String MANIFESTATION_SUBTYPE;
-    public String COMMODITY;
-    public String MANIFESTATION_SUBSTATUS;
+    private String MANIFESTATION_ID;
+    private String MANIFESTATION_KEY_TITLE;
+    private String ISBN;
+    private String ISSN;
+    private String COVER_HEIGHT;
+    private String COVER_WIDTH;
+    private String PAGE_HEIGHT;
+    private String PAGE_WIDTH;
+    private String WEIGHT;
+    private String CARTON_QTY;
+    private String INTERNATIONAL_EDITION_IND;
+    private String COPYRIGHT_DATE;
+    private String F_PRODUCT_MANIFESTATION_TYP;
+    private String FORMAT_TXT;
+    private String MANIFESTATION_STATUS;
+    private int PRODUCT_MANIFESTATION_ID;
+    private String F_PRODUCT_WORK;
+    private String WORK_TYPE_ID;
+    private String MANIFESTATION_SUBTYPE;
+    private String COMMODITY;
+    private String MANIFESTATION_SUBSTATUS;
 
     //SA_MANIFESTATION columns
-    public String F_EVENT;
-    public String B_CLASSNAME;
-    public int PMX_SOURCE_REFERENCE;
-    public String INTER_EDITION_FLAG;
-    public String FIRST_PUB_DATE;
-    public String LAST_PUB_DATE;
-    public String F_TYPE;
-    public String F_STATUS;
-    public String F_FORMAT_TYPE;
-    public String F_WWORK;
+    private String F_EVENT;
+    private String B_CLASSNAME;
+    private int PMX_SOURCE_REFERENCE;
+    private String INTER_EDITION_FLAG;
+    private String FIRST_PUB_DATE;
+    private String LAST_PUB_DATE;
+    private String F_TYPE;
+    private String F_STATUS;
+    private String F_FORMAT_TYPE;
+    private String F_WWORK;
 
 
     public String getMANIFESTATION_ID() {
