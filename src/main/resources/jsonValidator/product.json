@@ -1,0 +1,744 @@
+{
+	"definitions": {
+		"allocationPercentage": {
+			"$id": "#/properties/allocationPercentage",
+			"type": "number",
+			"title": "The Allocation% Schema",
+		"examples": [
+				15
+			]
+		},
+		"packages": {
+			"$id": "#/properties/packages",
+			"type": "object",
+			"title": "The Packages Schema",
+			"properties": {
+				"isInPackages": {
+					"$id": "#/properties/packages/properties/isInPackages",
+					"type": "array",
+					"title": "The Isinpackages Schema",
+					"default": null,
+					"items": {
+						"$id": "#/properties/packages/properties/isInPackages/items",
+						"type": "object",
+						"title": "The Items Schema",
+						"required": [
+							"packageProductId"
+						],
+						"properties": {
+							"packageProductId": {
+								"$id": "#/properties/isInPackages/items/properties/packageProductId",
+								"type": "string",
+								"title": "The Packageproductid Schema",
+								"examples": [
+									"EPR-123AAF"
+								],
+								"pattern": "^(.*)$"
+							},
+							"allocation%": {
+								"$ref": "#/definitions/allocationPercentage" 
+							},
+							"effectiveStartDate": {
+								"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
+							},
+							"effectiveEndDate": {
+								"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
+							}
+						},
+						"additionalProperties": false
+					}
+				},
+				"hasComponents": {
+					"$id": "#/properties/packages/properties/hasComponents",
+					"type": "array",
+					"title": "The Hascomponents Schema",
+					"default": null,
+					"items": {
+						"$id": "#/properties/packages/properties/hasComponents/items",
+						"type": "object",
+						"title": "The Items Schema",
+						"required": [
+							"componentProductId"
+						],
+						"properties": {
+							"componentProductId": {
+								"$id": "#/properties/hasComponents/items/properties/componentProductId",
+								"type": "string",
+								"title": "The Componentproductid Schema",
+								"examples": [
+									"EPR-123AAF"
+								],
+								"pattern": "^(.*)$"
+							},
+							"allocation%": {
+								"$ref": "#/definitions/allocationPercentage" 
+							},
+							"effectiveStartDate": {
+								"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
+							},
+							"effectiveEndDate": {
+								"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
+							}
+						},
+						"additionalProperties": false
+					}
+				}
+			},
+			"additionalProperties": false
+		},
+		"work": {
+			"$id": "#/properties/work",
+			"type": "object",
+			"title": "The Work Schema",
+			"required": [
+				"workId",
+				"workTitle",
+				"workType",
+				"workStatus"
+			],
+			"properties": {
+				"workId": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workId"
+				},
+				"workTitle": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workTitle"
+				},
+				"workSubTitle": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workSubTitle"
+				},
+				"electronicRightsInd": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/electronicRightsInd"
+				},
+				"language": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/language"
+				},
+				"editionNumber": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/editionNumber"
+				},
+				"volume": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/volume"
+				},
+				"copyrightYear": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/copyrightYear"
+				},
+				"workIdentifiers": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workIdentifiers"
+				},
+				"workType": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workType"
+				},
+				"workStatus": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workStatus"
+				},
+				"imprint": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/imprint"
+				},
+				"ownershipType": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/ownershipType"
+				},
+				"copyrightOwners": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/copyrightOwners"
+				},
+				"accessModel": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/accessModel"
+				},
+				"pmc": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/pmc"
+				},
+				"workTranslations": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workTranslations"
+				},
+				"workEditions": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workEditions"
+				},
+				"workPersons": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workPersons"
+				}
+			},
+			"additionalProperties": false
+		}
+	},
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://elsevier.com/product.json",
+	"type": "object",
+	"title": "Product",
+	"description": "The EPH Product Schema",
+	"required": [
+		"schemaVersion",
+		"productId",
+		"productName",
+		"productType",   
+		"productStatus"
+	],
+	"properties": {
+		"schemaVersion": {
+			"$id": "#/properties/schemaVersion",
+			"type": "string",
+			"title": "The Schema Version",
+			"pattern": "^(.*)$"
+		},
+		"productId": {
+			"$id": "#/properties/productId",
+			"type": "string",
+			"title": "The Productid Schema",
+			"examples": [
+				"EPR-1234AF"
+			],
+			"pattern": "^(.*)$"
+		},
+		"productName": {
+			"$id": "#/properties/productName",
+			"type": "string",
+			"title": "The Productname Schema",
+			"examples": [
+				"Sample Product Open Access"
+			],
+			"pattern": "^(.*)$"
+		},
+		"productShortName": {
+			"$id": "#/properties/productShortName",
+			"type": "string",
+			"title": "The Productshortname Schema",
+			"examples": [
+				"Sample Prod"
+			],
+			"pattern": "^(.*)$"
+		},
+		"separatelySaleableIndicator": {
+			"$id": "#/properties/separatelySaleableIndicator",
+			"type": "boolean",
+			"title": "The Separatelysaleableindicator Schema",
+			"examples": [
+				true
+			]
+		},
+		"trialAllowedIndicator": {
+			"$id": "#/properties/trialAllowedIndicator",
+			"type": "boolean",
+			"title": "The Trialallowedindicator Schema",
+			"examples": [
+				true
+			]
+		},
+		"launchDate": {
+			"$id": "#/properties/launchDate",
+			"type": "string",
+			"format": "date",
+			"title": "The Launchdate Schema",
+			"examples": [
+				"2017-12-20"
+			],
+			"pattern": "^(.*)$"
+		},
+		"contentFromDate": {
+			"$id": "#/properties/contentFromDate",
+			"type": "string",
+			"format": "date",
+			"title": "The Contentfromdate Schema",
+			"examples": [
+				"2016-12-20"
+			],
+			"pattern": "^(.*)$"
+		},
+		"contentToDate": {
+			"$id": "#/properties/contentToDate",
+			"type": "string",
+			"format": "date",
+			"title": "The Contenttodate Schema",
+			"examples": [
+				"2018-12-20"
+			],
+			"pattern": "^(.*)$"
+		},
+		"contentDateOffset": {
+			"$id": "#/properties/contentDateOffset",
+			"type": "integer",
+			"title": "The Contentdateoffset Schema",
+			"examples": [
+				48
+			]
+		},
+		"productIdentifiers": {
+			"$id": "#/properties/productIdentifiers",
+			"type": "array",
+			"default": null,
+			"title": "The Productidentifiers Schema",
+			"items": {
+				"$id": "#/properties/productIdentifiers/items",
+				"type": "object",
+				"title": "The Items Schema",
+				"required": [
+					"productIdentifier",
+					"identifierType"
+				],
+				"properties": {
+					"productIdentifier": {
+						"$id": "#/properties/productIdentifiers/items/properties/productIdentifier",
+						"type": "string",
+						"title": "The Productidentifier Schema",
+						"examples": [
+							"1234-5678"
+						],
+						"pattern": "^(.*)$"
+					},
+					"identifierType": {
+					 	"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/identifierType"
+					}
+				},
+				"additionalProperties": false
+			}
+		},	
+		"productType": {
+			"$id": "#/properties/productType",
+			"type": "object",
+			"title": "The Producttype Schema",
+			"required": [
+				"productTypeCode",
+				"productTypeName"
+			],
+			"properties": {
+				"productTypeCode": {
+					"$id": "#/properties/productType/properties/productTypeCode",
+					"type": "string",
+					"title": "The Producttypecode Schema",
+					"examples": [
+						"JBF"
+					],
+					"pattern": "^(.*)$"
+				},
+				"productTypeName": {
+					"$id": "#/properties/productType/properties/productTypeName",
+					"type": "string",
+					"title": "The Producttypename Schema",
+					"examples": [
+						"Journal Backfiles"
+					],
+					"pattern": "^(.*)$"
+				}
+			},
+			"additionalProperties": false
+		},
+		"productStatus": {
+			"$id": "#/properties/productStatus",
+			"type": "object",
+			"title": "The Productstatus Schema",
+			"required": [
+				"productStatusCode",
+				"productStatusName"
+			],
+			"properties": {
+				"productStatusCode": {
+					"$id": "#/properties/productStatus/properties/productStatusCode",
+					"type": "string",
+					"title": "The Productstatuscode Schema",
+					"examples": [
+						"AVL"
+					],
+					"pattern": "^(.*)$"
+				},
+				"productStatusName": {
+					"$id": "#/properties/productStatus/properties/productStatusName",
+					"type": "string",
+					"title": "The Productstatusname Schema",
+					"examples": [
+						"Available for Sale"
+					],
+					"pattern": "^(.*)$"
+				}
+			},
+			"additionalProperties": false
+		},
+		"revenueModel": {
+			"$id": "#/properties/revenueModel",
+			"type": "object",
+			"title": "The Revenuemodel Schema",
+			"required": [
+				"revenueModelCode",
+				"revenueModelName"
+			],
+			"properties": {
+				"revenueModelCode": {
+					"$id": "#/properties/revenueModel/properties/revenueModelCode",
+					"type": "string",
+					"title": "The Revenuemodelcode Schema",
+					"examples": [
+						"OOA"
+					],
+					"pattern": "^(.*)$"
+				},
+				"revenueModelName": {
+					"$id": "#/properties/revenueModel/properties/revenueModelName",
+					"type": "string",
+					"title": "The Revenuemodelname Schema",
+					"examples": [
+						"One-Off Access"
+					],
+					"pattern": "^(.*)$"
+				}
+			},
+			"additionalProperties": false
+		},
+		"etaxProductCode": {
+			"$id": "#/properties/etaxProductCode",
+			"type": "object",
+			"title": "The Etaxproductcode Schema",
+			"required": [
+				"revenueModelCode",
+				"revenueModelName"
+			],
+			"properties": {
+				"revenueModelCode": {
+					"$id": "#/properties/etaxProductCode/properties/revenueModelCode",
+					"type": "string",
+					"title": "The Revenuemodelcode Schema",
+					"examples": [
+						"G003"
+					],
+					"pattern": "^(.*)$"
+				},
+				"revenueModelName": {
+					"$id": "#/properties/etaxProductCode/properties/revenueModelName",
+					"type": "string",
+					"title": "The Revenuemodelname Schema",
+					"examples": [
+						"Journals – incl. single issues and supplements"
+					],
+					"pattern": "^(.*)$"
+				}
+			},
+			"additionalProperties": false
+		},
+		"revenueAccount": {
+			"$id": "#/properties/revenueAccount",
+			"type": "object",
+			"title": "The Revenueaccount Schema",
+			"required": [
+				"revenueAccountCode",
+				"revenueAccountName"
+			],
+			"properties": {
+				"revenueAccountCode": {
+					"$id": "#/properties/revenueAccount/properties/revenueAccountCode",
+					"type": "string",
+					"title": "The Revenueaccountcode Schema",
+					"examples": [
+						42910100
+					]
+				},
+				"revenueAccountName": {
+					"$id": "#/properties/revenueAccount/properties/revenueAccountName",
+					"type": "string",
+					"title": "The Revenueaccountname Schema",
+					"examples": [
+						"Backfiles /back issues - electronic"
+					],
+					"pattern": "^(.*)$"
+				}
+			},
+			"additionalProperties": false
+		},
+		"prices": {
+			"$id": "#/properties/prices",
+			"type": "array",
+			"title": "The Prices Schema",
+			"default": null,
+			"items": {
+				"$id": "#/properties/prices/items",
+				"type": "object",
+				"title": "The Items Schema",
+				"required": [
+					"currencyCode",
+					"price"
+				],
+				"properties": {
+					"currencyCode": {
+						"$id": "#/properties/prices/items/properties/currencyCode",
+						"type": "string",
+						"title": "The Currencycode Schema",
+						"examples": [
+							"EUR"
+						],
+						"pattern": "^(.*)$"
+					},
+					"price": {
+						"$id": "#/properties/prices/items/properties/price",
+						"type": "number",
+						"minimum": 0,
+						"exclusiveMinimum": true,
+						"title": "The Price Schema",
+						"examples": [
+							1000
+						]
+					},
+					"effectiveStartDate": {
+						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
+					},
+					"effectiveEndDate": {
+						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
+					}
+				},
+				"additionalProperties": false
+			}
+		},
+		"accountableProduct": {
+			"$id": "#/properties/accountableProduct",
+			"type": "object",
+			"title": "The Accountableproduct Schema",
+			"required": [
+				"glProductSegmentCode",
+				"glProductSegmentName",
+				"glProductParentValue"
+			],
+			"properties": {
+				"glProductSegmentCode": {
+					"$id": "#/properties/accountableProduct/properties/glProductSegmentCode",
+					"type": "string",
+					"title": "The Glproductsegmentcode Schema",
+					"examples": [
+						"01259"
+					],
+					"pattern": "^(.*)$"
+				},
+				"glProductSegmentName": {
+					"$id": "#/properties/accountableProduct/properties/glProductSegmentName",
+					"type": "string",
+					"title": "The Glproductsegmentname Schema",
+					"examples": [
+						"Journal of Sample Products"
+					],
+					"pattern": "^(.*)$"
+				},
+				"glProductParentValue": {
+					"$id": "#/properties/accountableProduct/properties/glProductParentValue",
+					"type": "object",
+					"title": "The Glproductparentvalue Schema",
+					"required": [
+						"segmentParentCode",
+						"segmentParentName"
+					],
+					"properties": {
+						"segmentParentCode": {
+							"$id": "#/properties/accountableProduct/properties/glProductParentValue/properties/segmentParentCode",
+							"type": "string",
+							"title": "The Segmentparentcode Schema",
+							"examples": [
+								"PJNLOWN"
+							],
+							"pattern": "^(.*)$"
+						},
+						"segmentParentName": {
+							"$id": "#/properties/accountableProduct/properties/glProductParentValue/properties/segmentParentName",
+							"type": "string",
+							"title": "The Segmentparentname Schema",
+							"examples": [
+								"Elsevier Owned Journals"
+							],
+							"pattern": "^(.*)$"
+						}
+					},
+					"additionalProperties" : false
+				}
+			},
+			"additionalProperties": false
+		},
+		"financialHierarchy": {
+			"$id": "#/properties/financialHierarchy",
+			"type": "array",
+			"title": "The Financialhierarchy Schema",
+			"default": null,
+			"items": {
+				"$id": "#/properties/financialHierarchy/items",
+				"type": "object",
+				"title": "The Items Schema",
+				"required": [
+					"glCompany",
+					"costResponsibilityCentre",
+					"revenueResponsibilityCentre",
+					"effectiveStartDate",
+					"effectiveEndDate"
+				],
+				"properties": {
+					"glCompany": {
+						"$id": "#/properties/financialHierarchy/items/properties/glCompany",
+						"type": "object",
+						"title": "The Glcompany Schema",
+						"required": [
+							"glCompanyCode",
+							"glCompanyName"
+						],
+						"properties": {
+							"glCompanyCode": {
+								"$id": "#/properties/financialHierarchy/items/properties/glCompany/properties/glCompanyCode",
+								"type": "integer",
+								"title": "The Glcompanycode Schema",
+								"examples": [
+									121
+								]
+							},
+							"glCompanyName": {
+								"$id": "#/properties/financialHierarchy/items/properties/glCompany/properties/glCompanyName",
+								"type": "string",
+								"title": "The Glcompanyname Schema",
+								"examples": [
+									"Elsevier BV"
+								],
+								"pattern": "^(.*)$"
+							}
+						},
+						"additionalProperties": false
+					},
+					"costResponsibilityCentre": {
+						"$id": "#/properties/financialHierarchy/items/properties/costResponsibilityCentre",
+						"type": "object",
+						"title": "The Costresponsibilitycentre Schema",
+						"required": [
+							"responsibilityCentreCode",
+							"responsibilityCentreName"
+						],
+						"properties": {
+							"responsibilityCentreCode": {
+								"$id": "#/properties/financialHierarchy/items/properties/costResponsibilityCentre/properties/responsibilityCentreCode",
+								"type": "integer",
+								"title": "The Responsibilitycentrecode Schema",
+								"examples": [
+									10063
+								]
+							},
+							"responsibilityCentreName": {
+								"$id": "#/properties/financialHierarchy/items/properties/costResponsibilityCentre/properties/responsibilityCentreName",
+								"type": "string",
+								"title": "The Responsibilitycentrename Schema",
+								"examples": [
+									"Cell Press General"
+								],
+								"pattern": "^(.*)$"
+							}
+						},
+						"additionalProperties": false
+					},
+					"revenueResponsibilityCentre": {
+						"$id": "#/properties/financialHierarchy/items/properties/revenueResponsibilityCentre",
+						"type": "object",
+						"title": "The Revenueresponsibilitycentre Schema",
+						"required": [
+							"responsibilityCentreCode",
+							"responsibilityCentreName"
+						],
+						"properties": {
+							"responsibilityCentreCode": {
+								"$id": "#/properties/financialHierarchy/items/properties/revenueResponsibilityCentre/properties/responsibilityCentreCode",
+								"type": "integer",
+								"title": "The Responsibilitycentrecode Schema",
+								"examples": [
+									10063
+								]
+							},
+							"responsibilityCentreName": {
+								"$id": "#/properties/financialHierarchy/items/properties/revenueResponsibilityCentre/properties/responsibilityCentreName",
+								"type": "string",
+								"title": "The Responsibilitycentrename Schema",
+								"examples": [
+									"Cell Press General"
+								],
+								"pattern": "^(.*)$"
+							}
+						},
+						"additionalProperties": false
+					},
+					"effectiveStartDate": {
+						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
+					},
+					"effectiveEndDate": {
+						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
+					}
+				},
+				"additionalProperties": false
+			}
+		},
+		"productPersons": {
+			"$id": "#/properties/productPersons",
+			"type": "array",
+			"title": "The Productpersons Schema",
+			"default": null,
+			"items": {
+				"$id": "#/properties/productPersons/items",
+				"type": "object",
+				"title": "The Items Schema",
+				"required": [
+					"productPersonId",
+					"role",
+					"person"
+				],
+				"properties": {
+					"productPersonId": {
+						"$id": "#/properties/productPersons/items/properties/productPersonId",
+						"type": "integer",
+						"title": "The Productpersonid Schema",						
+						"examples": [
+							2032154584
+						]
+					},
+					"role": { 
+						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/role"
+					},
+					"person": {
+						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/person"
+					}
+				},
+				"additionalProperties": false
+			}
+		},
+		"packages": { 
+			"$ref": "#/definitions/packages" 
+		},
+	    "manifestation": {
+	      "$id": "#/properties/manifestation",
+	      "type": "object",
+	      "title": "The Manifestation Schema",
+	      "required": [
+	        "manifestationId",
+	        "manifestationKeyTitle",
+	        "manifestationType",
+			"manifestationStatus",
+	        "work"
+	      ],
+	      "properties": {
+			"manifestationId": {
+				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/manifestationId"
+			},
+			"manifestationKeyTitle": {
+				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/manifestationKeyTitle"
+			},
+			"internationalEditionFlag": {
+				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/internationalEditionFlag"
+			},
+			"firstPubDate": {
+				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/firstPubDate"
+			},
+			"lastPubDate": {
+				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/lastPubDate"
+			},
+			"manifestationIdentifiers": {
+				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/manifestationIdentifiers"
+			},
+			"manifestationType": {
+				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/manifestationType"
+			},
+			"manifestationStatus": {
+				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/manifestationStatus"
+			},
+			"manifestationFormat": {
+				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/manifestationFormat"
+			},
+			"work": { 
+				"$ref": "#/definitions/work" 
+			}
+	      },
+	      "additionalProperties": false
+	    },
+	    "work": {
+			"$ref": "#/definitions/work" 
+	    }
+    },
+	"additionalProperties": false
+}

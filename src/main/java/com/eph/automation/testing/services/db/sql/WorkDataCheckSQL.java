@@ -26,8 +26,26 @@ public class WorkDataCheckSQL {
             "  ,\"F_OPCO_R12\" as F_OPCO_R12-- Company in Accountable Product Entity to link to LOV table\n" +
             "  ,\"PRODUCT_WORK_PUB_DATE\" as PRODUCT_WORK_PUB_DATE-- Work Publication Date\n" +
             "  ,\"JOURNAL_ACRONYM\" AS JOURNAL_ACRONYM -- PTS Journal Acronym (may go in IDs table, depending on implementation of data model)\n" +
+            "  ,\"SOC_OWNERSHIP\" AS OWNERSHIP \n"+
             "  FROM ephsit.ephsit_talend_owner.stg_10_pmx_wwork\n" +
             "  WHERE \"PARAM1\"='PARAM2'";
+
+    public static String GET_STG_DQ_WORKS_DATA ="SELECT \n" +
+            "  PMX_SOURCE_REFERENCE AS PMX_SOURCE_REFERENCE\n" +
+            "  ,WORK_TITLE AS WORK_TITLE -- Title\n" +
+            "  ,WORK_SUBTITLE AS WORK_SUBTITLE -- Subtitle\n" +
+            "  ,ELECTRO_RIGHTS_INDICATOR as ELECTRONIC_RIGHTS_IND\n" +
+            "  ,VOLUME as BOOK_VOLUME_NAME\n" +
+            "  ,COPYRIGHT_YEAR as PRODUCT_WORK_PUB_DATE\n" +
+            " -- ,EDITION_NUMBER as EDITION_NUMBER\n" +
+            "  ,F_PMC as PMC\n" +
+            "  ,F_OA_JOURNAL_TYPE AS OPEN_ACCESS_JNL_TYPE_CODE\n" +
+            "  ,F_TYPE AS WORK_TYPE\n" +
+            "  ,F_STATUS AS WORK_STATUS\n" +
+            "  ,F_IMPRINT AS IMPRINT\n" +
+            "  ,F_SOCIETY_OWNERSHIP AS OWNERSHIP\n" +
+            "  FROM ephsit_talend_owner.stg_10_pmx_wwork_dq \n"+
+            "  WHERE pmx_source_reference='PARAM1'";
 
     public static String GET_EPH_WORKS_DATA ="SELECT \n" +
             "   WORK_ID AS WORK_ID\n" +
@@ -44,6 +62,7 @@ public class WorkDataCheckSQL {
             "  ,F_TYPE AS WORK_TYPE\n" +
             "  ,F_STATUS AS WORK_STATUS\n" +
             "  ,F_IMPRINT AS IMPRINT\n" +
+            "  ,F_SOCIETY_OWNERSHIP AS OWNERSHIP\n" +
             "  FROM ephsit.semarchy_eph_mdm.sa_wwork sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_wwork join \n"+
@@ -70,6 +89,7 @@ public class WorkDataCheckSQL {
             "  ,F_TYPE AS WORK_TYPE\n" +
             "  ,F_STATUS AS WORK_STATUS\n" +
             "  ,F_IMPRINT AS IMPRINT\n" +
+            "  ,F_SOCIETY_OWNERSHIP AS OWNERSHIP\n" +
             "  FROM ephsit.semarchy_eph_mdm.gd_wwork\n" +
             "  WHERE pmx_source_reference='PARAM1'";
 }

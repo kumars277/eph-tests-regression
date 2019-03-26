@@ -5,7 +5,8 @@ Feature: Entity - WORK - Data Mapping Check - Validate data between PMX and EPH 
     Given We have a work with <random_value> id and type <type> to check
     When We get the product data from PMX, EPH Staging and EPH using <random_value>
     Then The work data between PMX and PMX STG is identical
-    And The work data between PMX STG and EPH SA is identical
+    And The work data between PMX STG and STG DQ is identical
+    And The work data between STG DQ and SA is identical
     And The work data between EPH SA and EPH GD is identical
 
 

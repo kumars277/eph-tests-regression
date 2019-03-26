@@ -1,0 +1,199 @@
+{
+    "manifestationId": {
+      "$id": "#/properties/manifestationId", 
+      "type": "string",
+      "title": "The Manifestationid Schema",
+      "examples": [
+        "EPR-M-1458AF"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "manifestationKeyTitle": {
+      "$id": "#/properties/manifestationKeyTitle",
+      "type": "string",
+      "title": "The Manifestationkeytitle Schema",
+      "examples": [
+        "Sample Product (Online)"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "internationalEditionFlag": {
+      "$id": "#/properties/internationalEditionFlag",
+      "type": "boolean",
+      "title": "The Internationaleditionflag Schema",
+      "examples": [
+        false
+      ]
+    },
+    "firstPubDate": {
+      "$id": "#/properties/firstPubDate",
+      "type": "string",
+      "format": "date",
+      "title": "The Firstpubdate Schema",
+      "examples": [
+        "2014-12-20"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "lastPubDate": {
+      "$id": "#/properties/lastPubDate",
+      "type": "string",
+      "format": "date",
+      "title": "The Lastpubdate Schema",
+      "examples": [
+        "2014-12-20"
+      ]
+    },
+	"manifestationIdentifiers": {
+		"$id": "#/properties/manifestationIdentifiers",
+		"type": "array",
+		"default": null,
+		"title": "The Manifestationidentifiers Schema",
+		"items": {
+			"$id": "#/properties/manifestationIdentifiers/items",
+			"type": "object",
+			"title": "The Items Schema",
+			"required": [
+				"manifestationIdentifier",
+				"identifierType"
+			],
+			"properties": {
+				"manifestationIdentifier": {
+					"$id": "#/properties/manifestationIdentifiers/items/properties/manifestationIdentifier",
+					"type": "string",
+					"title": "The Manifestationidentifier Schema",
+					"examples": [
+						"1234-5678"
+					],
+					"pattern": "^(.*)$"
+				},
+				"identifierType": { 
+					"$ref": "file:src/main/resources/jsonValidator/CommonAll.json#/identifierType"
+				}
+			},
+			"additionalProperties": false
+		}
+	},
+	"manifestationType": {
+		"$id": "#/properties/manifestationType",
+		"type": "object",
+		"title": "The Manifestationtype Schema",
+		"required": [
+			"manifestationTypeCode",
+			"manifestationTypeName",
+			"typeRollUp"
+		],
+		"properties": {
+			"manifestationTypeCode": {
+				"$id": "#/properties/manifestation/properties/manifestationType/properties/manifestationTypeCode",
+				"type": "string",
+				"title": "The Manifestationtypecode Schema",
+				"examples": [
+					"PSB"
+				],
+				"pattern": "^(.*)$"
+			},
+			"manifestationTypeName": {
+				"$id": "#/properties/manifestation/properties/manifestationType/properties/manifestationTypeName",
+				"type": "string",
+				"title": "The Manifestationtypename Schema",
+				"examples": [
+					"Softback Book"
+				],
+				"pattern": "^(.*)$"
+			},
+			"typeRollUp": {
+				"$id": "#/properties/manifestation/properties/manifestationType/properties/typeRollUp",
+				"type": "string",
+				"title": "The Typerollup Schema",
+				"examples": [
+					"Print"
+				],
+				"pattern": "^(.*)$"
+			}
+		},
+		"additionalProperties": false
+	},
+	"manifestationStatus": {
+		"$id": "#/properties/manifestationStatus",
+		"type": "object",
+		"title": "The Manifestationstatus Schema",
+		"required": [
+			"manifestationStatusCode",
+			"manifestationStatusName"
+		],
+		"properties": {
+			"manifestationStatusCode": {
+				"$id": "#/properties/manifestation/properties/manifestationStatus/properties/workStatusCode",
+				"type": "string",
+				"title": "The Manifestationstatuscode Schema",
+				"examples": [
+					"MPU"
+				],
+				"pattern": "^(.*)$"
+			},
+			"manifestationStatusName": {
+				"$id": "#/properties/manifestation/properties/manifestationStatus/properties/manifestationStatusName",
+				"type": "string",
+				"title": "The Manifestationstatusname Schema",
+				"examples": [
+					"Published"
+				],
+				"pattern": "^(.*)$"
+			}
+		},
+		"additionalProperties": false
+	},
+	"manifestationFormat": {
+		"$id": "#/properties/manifestationFormat",
+		"type": "object",
+		"title": "The Manifestationformat Schema",
+		"required": [
+			"manifestationFormatCode",
+			"manifestationFormatName"
+		],
+		"properties": {
+			"manifestationFormatCode": {
+				"$id": "#/properties/manifestationFormat/properties/manifestationFormatCode",
+				"type": "string",
+				"title": "The Manifestationformatcode Schema",
+				"examples": [
+					"F1"
+				]
+			},
+			"manifestationFormatName": {
+				"$id": "#/properties/manifestationFormat/properties/manifestationFormatName",
+				"type": "string",
+				"title": "The Manifestationformatname Schema",
+				"examples": [
+					"Format1"
+				]
+			},
+			"manifestationFormatLvl1": {
+				"$id": "#/properties/manifestationFormat/properties/manifestationFormatLvl1",
+				"type": "string",
+				"title": "The Manifestationformatlvl1 Schema",
+				"examples": [
+					null
+				]
+			},
+			"manifestationFormatLvl2": {
+				"$id": "#/properties/manifestationFormat/properties/manifestationFormatLvl2",
+				"type": "string",
+				"title": "The Manifestationformatlvl2 Schema",
+				"examples": [
+					null
+				]
+			},
+			"manifestationFormatLvl3": {
+				"$id": "#/properties/manifestationFormat/properties/manifestationFormatLvl3",
+				"type": "string",
+				"title": "The Manifestationformatlvl3 Schema",
+				"examples": [
+					null
+				]
+			}
+		},
+		"additionalProperties": false
+	}
+}

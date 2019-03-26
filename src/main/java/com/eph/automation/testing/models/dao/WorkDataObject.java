@@ -41,6 +41,16 @@ public class WorkDataObject {
     public String PRODUCT_WORK_PUB_DATE;
     public String JOURNAL_ACRONYM;
 
+    public String getOWNERSHIP() {
+        return OWNERSHIP;
+    }
+
+    public void setOWNERSHIP(String OWNERSHIP) {
+        this.OWNERSHIP = OWNERSHIP;
+    }
+
+    public String OWNERSHIP;
+
     public String getF_TYPE() {
         return F_TYPE;
     }
@@ -120,6 +130,25 @@ public class WorkDataObject {
     }
 
     public Integer workCountEPHGD;
+
+    public Integer getWorkCountDQSTG() {
+        return workCountDQSTG;
+    }
+
+    public void setWorkCountDQSTG(Integer workCountDQSTG) {
+        this.workCountDQSTG = workCountDQSTG;
+    }
+
+    public Integer getWorkCountDQSTGnoError() {
+        return workCountDQSTGnoError;
+    }
+
+    public void setWorkCountDQSTGnoError(Integer workCountDQSTGnoError) {
+        this.workCountDQSTGnoError = workCountDQSTGnoError;
+    }
+
+    public Integer workCountDQSTG;
+    public Integer workCountDQSTGnoError;
 
     public String getRandom_value() {
         return random_value;

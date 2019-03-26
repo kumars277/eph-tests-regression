@@ -16,6 +16,10 @@ public class WorkCountSQL {
 
     public static String PMX_STG_WORKS_COUNT_Distinct = "  select count(distinct \"PRODUCT_WORK_ID\") as workCountPMXSTG from ephsit_talend_owner.stg_10_pmx_wwork";
 
+    public static String PMX_STG_DQ_WORKS_COUNT = "select count (*) as workCountDQSTG from ephsit_talend_owner.stg_10_pmx_wwork_dq";
+
+    public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count (*) as workCountDQSTGnoError from ephsit_talend_owner.stg_10_pmx_wwork_dq where dq_err='N'";
+
     public static String EPH_SA_WORKS_COUNT = "select count (*) as workCountEPH from ephsit.semarchy_eph_mdm.sa_wwork "+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_wwork join \n"+
