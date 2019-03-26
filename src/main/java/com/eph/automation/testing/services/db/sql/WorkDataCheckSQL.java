@@ -31,17 +31,15 @@ public class WorkDataCheckSQL {
             "  WHERE \"PARAM1\"='PARAM2'";
 
     public static String GET_STG_DQ_WORKS_DATA ="SELECT \n" +
-            "   WORK_ID AS WORK_ID\n" +
-            "  ,PMX_SOURCE_REFERENCE AS PMX_SOURCE_REFERENCE\n" +
-            "  ,sa.B_CLASSNAME as B_CLASSNAME\n" +
+            "  PMX_SOURCE_REFERENCE AS PMX_SOURCE_REFERENCE\n" +
             "  ,WORK_TITLE AS WORK_TITLE -- Title\n" +
-            "  ,WORK_SUB_TITLE AS WORK_SUBTITLE -- Subtitle\n" +
+            "  ,WORK_SUBTITLE AS WORK_SUBTITLE -- Subtitle\n" +
             "  ,ELECTRO_RIGHTS_INDICATOR as ELECTRONIC_RIGHTS_IND\n" +
             "  ,VOLUME as BOOK_VOLUME_NAME\n" +
             "  ,COPYRIGHT_YEAR as PRODUCT_WORK_PUB_DATE\n" +
             " -- ,EDITION_NUMBER as EDITION_NUMBER\n" +
             "  ,F_PMC as PMC\n" +
-            "  ,F_OA_TYPE AS OPEN_ACCESS_JNL_TYPE_CODE\n" +
+            "  ,F_OA_JOURNAL_TYPE AS OPEN_ACCESS_JNL_TYPE_CODE\n" +
             "  ,F_TYPE AS WORK_TYPE\n" +
             "  ,F_STATUS AS WORK_STATUS\n" +
             "  ,F_IMPRINT AS IMPRINT\n" +

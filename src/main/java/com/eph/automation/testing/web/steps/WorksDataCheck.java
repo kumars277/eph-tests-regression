@@ -58,6 +58,8 @@ public class WorksDataCheck {
         dataQualityContext.workDataObjectsFromPMXSTG = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
         sql =  WorkDataCheckSQL.GET_STG_DQ_WORKS_DATA.replace("PARAM1",dataQualityContext.workDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID);
+        Log.info
+         (sql);
         dataQualityContext.workDataObjectsFromSTGDQ = DBManager
                 .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
