@@ -105,18 +105,30 @@ public class PersonWorkRoleDataQualityCheckSteps {
     }
 
 
-    @Given("^We get (.*) random ids of persons work role$")
-    public void getRandomIds(String numberOfRecords) {
+    @Given("^We get (.*) random ids of persons work role with (.*)$")
+    public void getRandomIds(String numberOfRecords, String type) {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
 //        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
-
-        sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, numberOfRecords);
-        Log.info(sql);
-
+        switch(type) {
+            case "PD":
+                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, type, numberOfRecords);
+                Log.info(sql);
+                break;
+            case "AU":
+                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, type, numberOfRecords);
+                Log.info(sql);
+                break;
+            case "PU":
+                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, type, numberOfRecords);
+                Log.info(sql);
+                break;
+            default:
+                break;
+        }
 
         List<Map<?, ?>> randomPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
@@ -152,8 +164,8 @@ public class PersonWorkRoleDataQualityCheckSteps {
                 .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
     }
 
-    @And("^Compare person work role records in PMX and EPH STG$")
-    public void comparePersonWorkRolesRecordsInPMXAndEPHSTG() {
+    @And("^Compare person work role records in PMX and EPH STG for (.*)$")
+    public void comparePersonWorkRolesRecordsInPMXAndEPHSTG(String type) {
         Log.info("And compare work role records in PMX and EPH STG ..");
 
         //sort the lists before comparison
@@ -191,7 +203,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
             //F_ROLE
             Log.info("F_ROLE in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
 
-            assertEquals("PD", dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
+            assertEquals(type , dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
 
         });
 

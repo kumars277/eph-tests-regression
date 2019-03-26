@@ -23,12 +23,15 @@ public class DBManager {
     private static String driver = "oracle.jdbc.driver.OracleDriver";
     private static String mySQLDriver = "com.mysql.jdbc.Driver";
 
+
     public static List getDBResultAsBeanList(String sql, Class klass, String dbEndPoint) {
         Properties dbProps = new Properties();
         dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(getDatabaseEnvironmentKey(dbEndPoint)));
-        Yank.setupDataSource(dbProps);
+//        Yank.setupDataSource(dbProps);
+        Yank.setupDefaultConnectionPool(dbProps);
         List klassList = Yank.queryBeanList(sql,klass, null);
-        Yank.releaseDataSource();
+//        Yank.releaseDataSource();
+        Yank.releaseDefaultConnectionPool();
         return klassList;
     }
 
