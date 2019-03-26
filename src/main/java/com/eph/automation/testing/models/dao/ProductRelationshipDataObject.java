@@ -11,6 +11,7 @@ public class ProductRelationshipDataObject {
     private String COMPONENT_PMX_SOURCE;
     private String F_RELATIONSHIP_TYPE;
     private String EFFECTIVE_START_DATE;
+    private String ENDON;
 
     //SA
     private String F_EVENT;
@@ -109,23 +110,22 @@ public class ProductRelationshipDataObject {
         F_COMPONENT = f_COMPONENT;
     }
 
+
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProductRelationshipDataObject that = (ProductRelationshipDataObject) o;
-        return Objects.equals(RELATIONSHIP_PMX_SOURCEREF, that.RELATIONSHIP_PMX_SOURCEREF) &&
-                Objects.equals(OWNER_PMX_SOURCE, that.OWNER_PMX_SOURCE) &&
-                Objects.equals(COMPONENT_PMX_SOURCE, that.COMPONENT_PMX_SOURCE) &&
-                F_RELATIONSHIP_TYPE.equals(that.F_RELATIONSHIP_TYPE) &&
-                Objects.equals(EFFECTIVE_START_DATE, that.EFFECTIVE_START_DATE) &&
-                F_EVENT.equals(that.F_EVENT) &&
-                B_CLASSNAME.equals(that.B_CLASSNAME) &&
-                PRODUCT_REL_PACK_ID.equals(that.PRODUCT_REL_PACK_ID) &&
-                Objects.equals(F_PACKAGE_OWNER, that.F_PACKAGE_OWNER) &&
-                F_COMPONENT.equals(that.F_COMPONENT) &&
-                Objects.equals(EFFECTIVE_END_DATE, that.EFFECTIVE_END_DATE);
+    public String toString() {
+        return "ProductRelationshipDataObject{" +
+                "RELATIONSHIP_PMX_SOURCEREF='" + RELATIONSHIP_PMX_SOURCEREF + '\'' +
+                ", OWNER_PMX_SOURCE='" + OWNER_PMX_SOURCE + '\'' +
+                ", COMPONENT_PMX_SOURCE='" + COMPONENT_PMX_SOURCE + '\'' +
+                ", F_RELATIONSHIP_TYPE='" + F_RELATIONSHIP_TYPE + '\'' +
+                ", EFFECTIVE_START_DATE='" + EFFECTIVE_START_DATE + '\'' +
+                ", ENDON='" + ENDON + '\'' +
+                ", F_EVENT='" + F_EVENT + '\'' +
+                ", B_CLASSNAME='" + B_CLASSNAME + '\'' +
+                ", PRODUCT_REL_PACK_ID='" + PRODUCT_REL_PACK_ID + '\'' +
+                ", F_PACKAGE_OWNER='" + F_PACKAGE_OWNER + '\'' +
+                ", F_COMPONENT='" + F_COMPONENT + '\'' +
+                ", EFFECTIVE_END_DATE='" + EFFECTIVE_END_DATE + '\'' +
+                '}';
     }
-
-
 }

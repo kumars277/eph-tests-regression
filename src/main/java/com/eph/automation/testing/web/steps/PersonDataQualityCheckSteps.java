@@ -78,7 +78,7 @@ public class PersonDataQualityCheckSteps {
 
     @Then("^Compare the count on records for persons in EPH Staging and EPH SA$")
     public void verifyCountOfPersonsInEPHSTGAndEPHSAIsEqual() {
-        Assert.assertEquals("\nPersons count in PMX and EPH STG is not equal", countPersonsEPHSTG, countPersonsEPHSA);
+        Assert.assertEquals("\nPersons count in EPH STG and EPH SA is not equal", countPersonsEPHSTG, countPersonsEPHSA);
     }
 
     @When("^Get the count of records for persons in EPH GD$")

@@ -22,7 +22,7 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
   @Regression
   Scenario Outline: Validate data is transferred from PMX to EPH STG
     Given We get <countOfRandomIds> random ids of persons work role with <type>
-    When We get the person work role records from PMX
+    When We get the person work role records with <type> from PMX
     Then We get the person work role records from EPH STG
     And Compare person work role records in PMX and EPH STG for <type>
     Examples:

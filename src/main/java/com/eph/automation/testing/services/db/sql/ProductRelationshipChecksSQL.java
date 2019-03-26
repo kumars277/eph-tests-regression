@@ -82,7 +82,8 @@ public class ProductRelationshipChecksSQL {
             "   \"OWNER_PMX_SOURCE\" as OWNER_PMX_SOURCE,\n" +
             "   \"COMPONENT_PMX_SOURCE\" as COMPONENT_PMX_SOURCE,\n" +
             "   \"F_RELATIONSHIP_TYPE\" as F_RELATIONSHIP_TYPE,\n" +
-            "   \"EFFECTIVE_START_DATE\" as EFFECTIVE_START_DATE\n" +
+            "   \"EFFECTIVE_START_DATE\" as EFFECTIVE_START_DATE,\n" +
+            "   \"ENDON\" as ENDON \n" +
             "   from ephsit.ephsit_talend_owner.stg_pmx_product_pack_rel\n" +
             "   where \"RELATIONSHIP_PMX_SOURCEREF\"  in ('%s')";
 

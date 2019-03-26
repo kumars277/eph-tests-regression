@@ -5,7 +5,6 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
-import com.eph.automation.testing.models.dao.PersonProductRoleDataObject;
 import com.eph.automation.testing.models.dao.PersonWorkRoleDataObject;
 import com.eph.automation.testing.services.db.sql.PersonDataSQL;
 import com.eph.automation.testing.services.db.sql.PersonWorkRoleDataSQL;
@@ -17,7 +16,6 @@ import cucumber.api.java.en.When;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -110,7 +108,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         switch(type) {
@@ -137,18 +135,26 @@ public class PersonWorkRoleDataQualityCheckSteps {
     }
 
 
-    @When("^We get the person work role records from PMX$")
-    public void getPersonWorkRoleRecordsPMX() {
-        Log.info("Get the person work role records from EPH STG Can ..");
+    @When("^We get the person work role records with (.*) from PMX$")
+    public void getPersonWorkRoleRecordsPMX(String type) {
+        Log.info("Get the person work role records with type from PMX ..");
 
         //prepare ids
         idsPMX = new ArrayList<>(ids);
 
 
-        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).replace("-PD", "")));
+        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).replace("-" + type, "")));
 
-        sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX, Joiner.on("','").join(idsPMX));
-        Log.info(sql);
+        if(type.equals("PD")) {
+            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_PD, Joiner.on("','").join(idsPMX));
+            Log.info(sql);
+        } if(type.equals("AU")) {
+            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_AU, Joiner.on("','").join(idsPMX));
+            Log.info(sql);
+        } if(type.equals("PU")) {
+            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_PU, Joiner.on("','").join(idsPMX));
+            Log.info(sql);
+        }
 
         dataQualityContext.personWorkRoleDataObjectsFromPMX = DBManager
                 .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.PMX_URL);

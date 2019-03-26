@@ -32,6 +32,7 @@ public class ProductDataSQL {
             "\t\tELSE 'UNK'\n" +
             "\tEND AS AVAILABILITY_STATUS\n" +
             "\t,WT.WORK_TITLE\n" +
+            "\t,WT.WORK_TYPE\n" +
             "FROM GD_PRODUCT_MANIFESTATION M\n" +
             "LEFT JOIN GD_PRODUCT_SUBSTATUS MSS ON M.F_MANIFESTATION_SUBSTATUS = MSS.PRODUCT_SUBSTATUS_ID\n" +
             "JOIN (SELECT\n" +
@@ -69,12 +70,13 @@ public class ProductDataSQL {
             "            \"PACKAGES\" as PACKAGES,\n" +
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
+            "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s')\n" +
              "           order by \"PRODUCT_MANIFESTATION_ID\"";
 
-    public static String EPH_STG_CAN_PRODUCT_EXTRACT_BOOKS = "SELECT \n" +
+    public static String EPH_STG_CAN_PRODUCT_EXTRACT_BOOKS = " SELECT \n" +
             "       pmx_source_reference as PMX_SOURCE_REFERENCE,\n" +
             "       name as PRODUCT_NAME,\n" +
             "       product_short_name as PRODUCT_SHORT_NAME,\n" +
@@ -86,9 +88,11 @@ public class ProductDataSQL {
             "       f_status AS F_STATUS,\n" +
             "       f_revenue_model AS F_REVENUE_MODEL, \n" +
             "       f_work_source_ref AS F_PRODUCT_WORK, \n" +
-            "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP\n" +
+            "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP,\n" +
+            "       work_type as WORK_TYPE,\n" +
+            "       ult_work_ref as ULT_WORK_REF\n" +
             "FROM ephsit_talend_owner.stg_10_pmx_product_can\n" +
-            "where pmx_source_reference in ('%s')";
+            "where pmx_source_reference in ('%s')\n";
 
     public static String EPH_STG_CAN_PRODUCT_EXTRACT_JOURNALS_OR_PACKAGES = "SELECT \n" +
             "       pmx_source_reference as PMX_SOURCE_REFERENCE,\n" +
@@ -102,7 +106,9 @@ public class ProductDataSQL {
             "       f_status AS F_STATUS,\n" +
             "       f_revenue_model AS F_REVENUE_MODEL, \n" +
             "       f_work_source_ref AS F_PRODUCT_WORK, \n" +
-            "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP\n" +
+            "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP,\n" +
+            "       work_type as WORK_TYPE,\n" +
+            "       ult_work_ref as ULT_WORK_REF\n" +
             "FROM ephsit_talend_owner.stg_10_pmx_product_can\n" +
             "where pmx_source_reference similar to '%s' and pmx_source_reference not like '%%OOA'";
 
