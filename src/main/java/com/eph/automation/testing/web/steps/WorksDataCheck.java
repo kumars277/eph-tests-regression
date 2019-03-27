@@ -26,33 +26,31 @@ public class WorksDataCheck {
     public String sql;
     private static List<WorkDataObject> isbn;
 
-    @Given("^We have a work with (.*) id and type (.*) to check$")
-    public void setWorkID(String work_id, String type){
+    @Given("^We have a work with type (.*) to check$")
+    public void setWorkID(String type){
         sql = GeneratingRandomSQL.generatingValue
-                .replace("PARAM1", work_id)
-                .replace("PARAM2", type);
+                .replace("PARAM1", type);
+               // .replace("PARAM2", type);
         //Log.info
         // (sql+"\n");
         isbn = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
         dataQualityContext.productIdentifierID = isbn.get(0).random_value;
         Log.info
-                ("\n" + work_id + " is " + dataQualityContext.productIdentifierID+" and type is "
+                ("\nWork id is " + dataQualityContext.productIdentifierID+" and type is "
                 +type+"\n");
     }
 
-    @When("^We get the product data from PMX, EPH Staging and EPH using (.*)$")
-    public void getPMXWorkData(String id){
+    @When("^We get the product data from PMX, EPH Staging and EPH$")
+    public void getPMXWorkData(){
             sql = WorkExtractSQL.PMX_WORK_EXTRACT
-                    .replace("PARAM1",id)
-                    .replace("PARAM2", dataQualityContext.productIdentifierID);
+                    .replace("PARAM1", dataQualityContext.productIdentifierID);
         //Log.info
         // (sql);
             dataQualityContext.workDataObjectsFromSource = DBManager
                     .getDBResultAsBeanList(sql, WorkDataObject.class,Constants.PMX_URL);
 
         sql = WorkDataCheckSQL.GET_PMX_WORKS_STG_DATA
-                .replace("PARAM1", id)
-                .replace("PARAM2",dataQualityContext.productIdentifierID);
+                .replace("PARAM1",dataQualityContext.productIdentifierID);
         //Log.info
         // (sql);
         dataQualityContext.workDataObjectsFromPMXSTG = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
@@ -304,7 +302,12 @@ public class WorksDataCheck {
                     dataQualityContext.workDataObjectsFromSTGDQ.get(0).BOOK_VOLUME_NAME, "0");
         }
 
-
+        if (dataQualityContext.workDataObjectsFromPMXSTG.get(0).BOOK_EDITION_NAME!=null
+                || dataQualityContext.workDataObjectsFromSTGDQ.get(0).BOOK_EDITION_NAME !=null) {
+            assertTrue("Expecting the Edition number details from STG and DQ Consistent for id="+ dataQualityContext.productIdentifierID,
+                    dataQualityContext.workDataObjectsFromPMXSTG.get(0).BOOK_EDITION_NAME
+                            .equals(dataQualityContext.workDataObjectsFromSTGDQ.get(0).BOOK_EDITION_NAME));
+        }
 
         if (dataQualityContext.workDataObjectsFromPMXSTG.get(0).PMC!=null
                 || dataQualityContext.workDataObjectsFromSTGDQ.get(0).PMC !=null) {
@@ -405,6 +408,13 @@ public class WorksDataCheck {
                             .equals(dataQualityContext.workDataObjectsFromEPH.get(0).BOOK_VOLUME_NAME));
         }
 
+        if (dataQualityContext.workDataObjectsFromSTGDQ.get(0).BOOK_EDITION_NAME!=null
+                || dataQualityContext.workDataObjectsFromEPH.get(0).BOOK_EDITION_NAME !=null) {
+            assertTrue("Expecting the BOOK_EDITION_Number details from DQ and SA Consistent for id="+ dataQualityContext.productIdentifierID,
+                    dataQualityContext.workDataObjectsFromSTGDQ.get(0).BOOK_EDITION_NAME
+                            .equals(dataQualityContext.workDataObjectsFromEPH.get(0).BOOK_EDITION_NAME));
+        }
+
         if (dataQualityContext.workDataObjectsFromSTGDQ.get(0).OPEN_ACCESS_JNL_TYPE_CODE!=null
                 || dataQualityContext.workDataObjectsFromEPH.get(0).OPEN_ACCESS_JNL_TYPE_CODE !=null) {
             assertTrue("Expecting the Open access details from DQ and SA Consistent for id="+ dataQualityContext.productIdentifierID,
@@ -480,6 +490,13 @@ public class WorksDataCheck {
             assertTrue("Expecting the BOOK_VOLUME_NAME details from SA and GD Consistent for id="+ dataQualityContext.productIdentifierID,
                     dataQualityContext.workDataObjectsFromEPH.get(0).BOOK_VOLUME_NAME
                             .equals(dataQualityContext.workDataObjectsFromEPHGD.get(0).BOOK_VOLUME_NAME));
+        }
+
+        if (dataQualityContext.workDataObjectsFromEPH.get(0).BOOK_EDITION_NAME!=null
+                || dataQualityContext.workDataObjectsFromEPHGD.get(0).BOOK_EDITION_NAME !=null) {
+            assertTrue("Expecting the BOOK_EDITION_NUMBER details from SA and GD Consistent for id="+ dataQualityContext.productIdentifierID,
+                    dataQualityContext.workDataObjectsFromEPH.get(0).BOOK_EDITION_NAME
+                            .equals(dataQualityContext.workDataObjectsFromEPHGD.get(0).BOOK_EDITION_NAME));
         }
 
         if (dataQualityContext.workDataObjectsFromEPH.get(0).OPEN_ACCESS_JNL_TYPE_CODE!=null

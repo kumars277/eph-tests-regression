@@ -31,10 +31,10 @@ public class WorksIdentifierSQL {
             " AND  f_wwork='PARAM1'";
 
     public static String getRandomProductNum="SELECT \n" +
-            "    \"PARAM1\" as random_value\n" +
+            "    \"PRODUCT_WORK_ID\" as random_value\n" +
             "FROM\n" +
             "    ephsit.ephsit_talend_owner.stg_10_pmx_wwork\n" +
-            "where \"WORK_TYPE\" = 'PARAM2' \n" +
+            "where \"WORK_TYPE\" = 'PARAM1' \n" +
             "ORDER BY RANDOM()\n" +
             "LIMIT 1;";
 
@@ -46,7 +46,7 @@ public class WorksIdentifierSQL {
             "  ,\"PROJECT_NUM\" AS PROJECT_NUM -- Project Number (may go in IDs table, depending on implementation of data model)\n" +
             "  ,\"PRODUCT_WORK_ID\" AS PRODUCT_WORK_ID-- Project Number (may go in IDs table, depending on implementation of data model)\n" +
             "  FROM ephsit.ephsit_talend_owner.stg_10_pmx_wwork\n" +
-            "  WHERE \"PARAM1\"='PARAM2'";
+            "  WHERE \"PRODUCT_WORK_ID\"='PARAM1'";
 
     public static String getIdentifierDataFromGD="SELECT \n" +
             " F_EVENT as F_EVENT\n" +
