@@ -109,7 +109,7 @@ public class NotificationTestSteps {
             Log.info("Notifications in payload table are: " + notificationCountContext.payloadNotification.get(0).payloadcount);
             Assert.assertEquals("There are difference between processed and payload notifications",
                     notificationCountContext.processedNotification.get(0).processed
-                    , notificationCountContext.processedNotification.get(0).payloadcount);
+                    , notificationCountContext.payloadNotification.get(0).payloadcount);
         }
     }
 
