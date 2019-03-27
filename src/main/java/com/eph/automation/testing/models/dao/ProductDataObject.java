@@ -26,6 +26,8 @@ public class ProductDataObject {
     private String PACKAGES;
     private String AVAILABILITY_STATUS;
     private String WORK_TITLE;
+    private String WORK_TYPE;
+    private String UTL_WORK_REF;
 
     //SA
     private String F_EVENT;
@@ -246,19 +248,36 @@ public class ProductDataObject {
         F_STATUS = f_STATUS;
     }
 
+    public String getWORK_TYPE() {
+        return WORK_TYPE;
+    }
+
+    public void setWORK_TYPE(String WORK_TYPE) {
+        this.WORK_TYPE = WORK_TYPE;
+    }
+
+    public String getUTL_WORK_REF() {
+        return UTL_WORK_REF;
+    }
+
+    public void setUTL_WORK_REF(String UTL_WORK_REF) {
+        this.UTL_WORK_REF = UTL_WORK_REF;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductDataObject that = (ProductDataObject) o;
-        return Objects.equals(PRODUCT_ID, that.PRODUCT_ID) &&
+        return PRODUCT_MANIFESTATION_ID == that.PRODUCT_MANIFESTATION_ID &&
+                Objects.equals(PRODUCT_ID, that.PRODUCT_ID) &&
                 Objects.equals(PRODUCT_NAME, that.PRODUCT_NAME) &&
                 Objects.equals(PRODUCT_SHORT_NAME, that.PRODUCT_SHORT_NAME) &&
                 Objects.equals(SEPARATELY_SALEABLE_IND, that.SEPARATELY_SALEABLE_IND) &&
                 Objects.equals(TRIAL_ALLOWED_IND, that.TRIAL_ALLOWED_IND) &&
                 Objects.equals(FIRST_PUB_DATE, that.FIRST_PUB_DATE) &&
                 Objects.equals(ELSEVIER_TAX_CODE, that.ELSEVIER_TAX_CODE) &&
-                Objects.equals(PRODUCT_MANIFESTATION_ID, that.PRODUCT_MANIFESTATION_ID) &&
                 Objects.equals(F_PRODUCT_WORK, that.F_PRODUCT_WORK) &&
                 Objects.equals(F_PRODUCT_MANIFESTATION_TYP, that.F_PRODUCT_MANIFESTATION_TYP) &&
                 Objects.equals(SUBSCRIPTION, that.SUBSCRIPTION) &&
@@ -268,14 +287,24 @@ public class ProductDataObject {
                 Objects.equals(REPRINTS, that.REPRINTS) &&
                 Objects.equals(AUTHOR_CHARGES, that.AUTHOR_CHARGES) &&
                 Objects.equals(ONE_OFF_ACCESS, that.ONE_OFF_ACCESS) &&
+                Objects.equals(PACKAGES, that.PACKAGES) &&
                 Objects.equals(AVAILABILITY_STATUS, that.AVAILABILITY_STATUS) &&
-                Objects.equals(WORK_TITLE, that.WORK_TITLE);
+                Objects.equals(WORK_TITLE, that.WORK_TITLE) &&
+                Objects.equals(WORK_TYPE, that.WORK_TYPE) &&
+                Objects.equals(UTL_WORK_REF, that.UTL_WORK_REF) &&
+                Objects.equals(F_EVENT, that.F_EVENT) &&
+                Objects.equals(B_CLASSNAME, that.B_CLASSNAME) &&
+                Objects.equals(F_REVENUE_MODEL, that.F_REVENUE_MODEL) &&
+                Objects.equals(PMX_SOURCE_REFERENCE, that.PMX_SOURCE_REFERENCE) &&
+                Objects.equals(F_TYPE, that.F_TYPE) &&
+                Objects.equals(F_STATUS, that.F_STATUS);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(PRODUCT_ID, PRODUCT_NAME, PRODUCT_SHORT_NAME, SEPARATELY_SALEABLE_IND, TRIAL_ALLOWED_IND, FIRST_PUB_DATE, ELSEVIER_TAX_CODE, PRODUCT_MANIFESTATION_ID, F_PRODUCT_WORK, F_PRODUCT_MANIFESTATION_TYP, SUBSCRIPTION, BULK_SALES, BACK_FILES, OPEN_ACCESS, REPRINTS, AUTHOR_CHARGES, ONE_OFF_ACCESS, AVAILABILITY_STATUS, WORK_TITLE);
+        return Objects.hash(PRODUCT_ID, PRODUCT_NAME, PRODUCT_SHORT_NAME, SEPARATELY_SALEABLE_IND, TRIAL_ALLOWED_IND, FIRST_PUB_DATE, ELSEVIER_TAX_CODE, PRODUCT_MANIFESTATION_ID, F_PRODUCT_WORK, F_PRODUCT_MANIFESTATION_TYP, SUBSCRIPTION, BULK_SALES, BACK_FILES, OPEN_ACCESS, REPRINTS, AUTHOR_CHARGES, ONE_OFF_ACCESS, PACKAGES, AVAILABILITY_STATUS, WORK_TITLE, WORK_TYPE, UTL_WORK_REF, F_EVENT, B_CLASSNAME, F_REVENUE_MODEL, PMX_SOURCE_REFERENCE, F_TYPE, F_STATUS);
     }
+
 
     @Override
     public String toString() {
@@ -287,7 +316,7 @@ public class ProductDataObject {
                 ", TRIAL_ALLOWED_IND='" + TRIAL_ALLOWED_IND + '\'' +
                 ", FIRST_PUB_DATE='" + FIRST_PUB_DATE + '\'' +
                 ", ELSEVIER_TAX_CODE='" + ELSEVIER_TAX_CODE + '\'' +
-                ", PRODUCT_MANIFESTATION_ID='" + PRODUCT_MANIFESTATION_ID + '\'' +
+                ", PRODUCT_MANIFESTATION_ID=" + PRODUCT_MANIFESTATION_ID +
                 ", F_PRODUCT_WORK='" + F_PRODUCT_WORK + '\'' +
                 ", F_PRODUCT_MANIFESTATION_TYP='" + F_PRODUCT_MANIFESTATION_TYP + '\'' +
                 ", SUBSCRIPTION='" + SUBSCRIPTION + '\'' +
@@ -297,11 +326,17 @@ public class ProductDataObject {
                 ", REPRINTS='" + REPRINTS + '\'' +
                 ", AUTHOR_CHARGES='" + AUTHOR_CHARGES + '\'' +
                 ", ONE_OFF_ACCESS='" + ONE_OFF_ACCESS + '\'' +
+                ", PACKAGES='" + PACKAGES + '\'' +
                 ", AVAILABILITY_STATUS='" + AVAILABILITY_STATUS + '\'' +
                 ", WORK_TITLE='" + WORK_TITLE + '\'' +
+                ", WORK_TYPE='" + WORK_TYPE + '\'' +
+                ", UTL_WORK_REF='" + UTL_WORK_REF + '\'' +
+                ", F_EVENT='" + F_EVENT + '\'' +
+                ", B_CLASSNAME='" + B_CLASSNAME + '\'' +
+                ", F_REVENUE_MODEL='" + F_REVENUE_MODEL + '\'' +
+                ", PMX_SOURCE_REFERENCE='" + PMX_SOURCE_REFERENCE + '\'' +
+                ", F_TYPE='" + F_TYPE + '\'' +
+                ", F_STATUS='" + F_STATUS + '\'' +
                 '}';
     }
-
-
-
 }
