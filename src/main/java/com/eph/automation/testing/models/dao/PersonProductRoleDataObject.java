@@ -10,6 +10,7 @@ public class PersonProductRoleDataObject {
     private String PRODUCT_SOURCE_REF;
     private String PERSON_SOURCE_REF;
     private String F_ROLE;
+    private String WORK_ROLE;
 
     //SA_PRODUCT_PERSON_ROLE
     private String B_LOADID;
@@ -117,6 +118,14 @@ public class PersonProductRoleDataObject {
         F_PERSON = f_PERSON;
     }
 
+    public String getWORK_ROLE() {
+        return WORK_ROLE;
+    }
+
+    public void setWORK_ROLE(String WORK_ROLE) {
+        this.WORK_ROLE = WORK_ROLE;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -126,6 +135,7 @@ public class PersonProductRoleDataObject {
                 Objects.equals(PRODUCT_SOURCE_REF, that.PRODUCT_SOURCE_REF) &&
                 Objects.equals(PERSON_SOURCE_REF, that.PERSON_SOURCE_REF) &&
                 Objects.equals(F_ROLE, that.F_ROLE) &&
+                Objects.equals(WORK_ROLE, that.WORK_ROLE) &&
                 Objects.equals(B_LOADID, that.B_LOADID) &&
                 Objects.equals(F_EVENT, that.F_EVENT) &&
                 Objects.equals(B_CLASSNAME, that.B_CLASSNAME) &&
@@ -137,12 +147,18 @@ public class PersonProductRoleDataObject {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(PROD_PER_ROLE_SOURCE_REF, PRODUCT_SOURCE_REF, PERSON_SOURCE_REF, F_ROLE, WORK_ROLE, B_LOADID, F_EVENT, B_CLASSNAME, PRODUCT_PERSON_ROLE_ID, EFFECTIVE_START_DATE, EFFECTIVE_END_DATE, F_PRODUCT, F_PERSON);
+    }
+
+    @Override
     public String toString() {
         return "PersonProductRoleDataObject{" +
                 "PROD_PER_ROLE_SOURCE_REF='" + PROD_PER_ROLE_SOURCE_REF + '\'' +
                 ", PRODUCT_SOURCE_REF='" + PRODUCT_SOURCE_REF + '\'' +
                 ", PERSON_SOURCE_REF='" + PERSON_SOURCE_REF + '\'' +
                 ", F_ROLE='" + F_ROLE + '\'' +
+                ", WORK_ROLE='" + WORK_ROLE + '\'' +
                 ", B_LOADID='" + B_LOADID + '\'' +
                 ", F_EVENT='" + F_EVENT + '\'' +
                 ", B_CLASSNAME='" + B_CLASSNAME + '\'' +

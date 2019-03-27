@@ -105,7 +105,7 @@ public class PersonProductRoleDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
 
@@ -153,7 +153,7 @@ public class PersonProductRoleDataQualityCheckSteps {
             //PROD_PER_ROLE_SOURCE_REF
             Log.info("PROD_PER_ROLE_SOURCE_REF in EPH STG: " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPROD_PER_ROLE_SOURCE_REF());
 
-            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN.get(i).getPRODUCT_SOURCE_REF() + "-PO", dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPROD_PER_ROLE_SOURCE_REF());
+            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN.get(i).getPROD_PER_ROLE_SOURCE_REF(), dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPROD_PER_ROLE_SOURCE_REF());
 
 
             //PRODUCT_SOURCE_REF
@@ -177,6 +177,14 @@ public class PersonProductRoleDataQualityCheckSteps {
 
             assertEquals("PO", dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
 
+            //WORK_ROLE
+            Log.info("WORK_ROLE in EPH STG CAN : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN.get(i).getWORK_ROLE());
+            Log.info("WORK_ROLE in EPH STG: " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN.get(i).getWORK_ROLE());
+
+            Log.info("Expecting WORK_ROLE in EPH STG CAN and EPH STG is consistent");
+
+            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN.get(i).getWORK_ROLE(), dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getWORK_ROLE());
+
         });
 
     }
@@ -184,10 +192,11 @@ public class PersonProductRoleDataQualityCheckSteps {
     @Then("^We get the ids of the person product role records in EPH SA from the lookup table$")
     public void getIdsFromLookupTable() {
         Log.info("Get the ids of the records in EPH SA from the lookup table ..");
-        idsSourceRef = new ArrayList<>(ids);
+        idsSourceRef = new ArrayList<>();
+
+        IntStream.range(0, dataQualityContext.personProductRoleDataObjectsFromEPHSTG.size()).forEach(i -> idsSourceRef.add(i, "PPR-" + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPROD_PER_ROLE_SOURCE_REF()));
 
 
-        IntStream.range(0, idsSourceRef.size()).forEach(i -> idsSourceRef.set(i, "PPR-" + idsSourceRef.get(i) + "-PO"));
         sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE, Joiner.on("','").join(idsSourceRef));
         Log.info(sql);
 
@@ -297,7 +306,7 @@ public class PersonProductRoleDataQualityCheckSteps {
 
             String expectedF_PERSON;
             results = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            expectedF_PERSON = (String) results.get(0).get("PERSON_ID");
+            expectedF_PERSON = String.valueOf(results.get(0).get("PERSON_ID"));
 
             assertEquals(currentF_PERSON, expectedF_PERSON);
 
