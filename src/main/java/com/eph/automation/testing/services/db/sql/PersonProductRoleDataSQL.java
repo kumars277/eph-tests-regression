@@ -5,13 +5,13 @@ package com.eph.automation.testing.services.db.sql;
  */
 public class PersonProductRoleDataSQL {
 
-    public static String GET_COUNT_PERSONS_PRODUCT_ROLE_EPH_STG_CAN = "select count (*) as count\n" +
-            "from\n" +
-            "    ephsit_talend_owner.stg_10_pmx_product_can p\n" +
-            "left join\n" +
-            "    ephsit_talend_owner.stg_10_pmx_manifestation m on p.f_manifestation_source_ref = m.\"MANIFESTATION_ID\"::text\n" +
-            "left join\n" +
-            "    ephsit_talend_owner.stg_10_pmx_work_person_role wp on coalesce(p.f_work_source_ref, m.\"F_PRODUCT_WORK\"::text) = wp.\"PMX_WORK_SOURCE_REF\"::text \n";
+    public static String GET_COUNT_PERSONS_PRODUCT_ROLE_EPH_STG_CAN = "    select count(*) as count\n" +
+            "    from\n" +
+            "    ephsit_talend_owner.stg_10_pmx_product_can pr\n" +
+            "join\n" +
+            "    ephsit_talend_owner.stg_10_pmx_work_person_role wp on pr.ult_work_ref::varchar = wp.\"PMX_WORK_SOURCE_REF\"::varchar\n" +
+            "where\n" +
+            "    wp.\"F_ROLE\" = 'PU'";
 
     public static String GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_product_person_role";
 
@@ -28,22 +28,26 @@ public class PersonProductRoleDataSQL {
     public static String GET_COUNT_PERSONS_PRODUCT_ROLE_EPHGD = "select count(*) as count from semarchy_eph_mdm.gd_product_person_role";
 
 
-    public static String GET_DATA_PERSONS_PRODUCT_ROLE_EPH_STG_CAN = "select  \n" +
-            "pmx_source_reference as PRODUCT_SOURCE_REF,\n" +
-            "wp.\"PMX_PARTY_SOURCE_REF\" as PERSON_SOURCE_REF\n" +
+    public static String GET_DATA_PERSONS_PRODUCT_ROLE_EPH_STG_CAN = "select\n" +
+            "     concat(pr.pmx_source_reference,'-',wp.\"WORK_PERSON_ROLE_SOURCE_REF\",'-PO') as prod_per_role_source_ref\n" +
+            "    ,pr.pmx_source_reference as product_source_ref\n" +
+            "    ,wp.\"PMX_PARTY_SOURCE_REF\" as person_source_ref\n" +
+            "    ,'PO' as f_role\n" +
+            "    ,wp.\"F_ROLE\" as work_role\n" +
             "from\n" +
-            "    ephsit_talend_owner.stg_10_pmx_product_can p\n" +
-            "left join\n" +
-            "    ephsit_talend_owner.stg_10_pmx_manifestation m on p.f_manifestation_source_ref = m.\"MANIFESTATION_ID\"::text\n" +
-            "left join\n" +
-            "    ephsit_talend_owner.stg_10_pmx_work_person_role wp on coalesce(p.f_work_source_ref, m.\"F_PRODUCT_WORK\"::text) = wp.\"PMX_WORK_SOURCE_REF\"::text \n" +
-            "    where pmx_source_reference in ('%s');";
+            "    ephsit_talend_owner.stg_10_pmx_product_can pr\n" +
+            "join\n" +
+            "    ephsit_talend_owner.stg_10_pmx_work_person_role wp on pr.ult_work_ref::varchar = wp.\"PMX_WORK_SOURCE_REF\"::varchar\n" +
+            "where\n" +
+            "    wp.\"F_ROLE\" = 'PU'\n" +
+            "    and pr.pmx_source_reference in ('%s')";
 
     public static String GET_DATA_PERSONS_PRODUCT_ROLE_EPHSTG = "select \n" +
             "PROD_PER_ROLE_SOURCE_REF as PROD_PER_ROLE_SOURCE_REF,\n" +
             "PRODUCT_SOURCE_REF as PRODUCT_SOURCE_REF,\n" +
             "PERSON_SOURCE_REF as PERSON_SOURCE_REF,\n" +
-            "F_ROLE as F_ROLE\n" +
+            "F_ROLE as F_ROLE,\n" +
+            "WORK_ROLE as WORK_ROLE\n" +
             "from ephsit_talend_owner.stg_10_pmx_product_person_role\n" +
             "where PRODUCT_SOURCE_REF in ('%s')";
 

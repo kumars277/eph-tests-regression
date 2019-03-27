@@ -32,6 +32,7 @@ public class ProductDataSQL {
             "\t\tELSE 'UNK'\n" +
             "\tEND AS AVAILABILITY_STATUS\n" +
             "\t,WT.WORK_TITLE\n" +
+            "\t,WT.WORK_TYPE\n" +
             "FROM GD_PRODUCT_MANIFESTATION M\n" +
             "LEFT JOIN GD_PRODUCT_SUBSTATUS MSS ON M.F_MANIFESTATION_SUBSTATUS = MSS.PRODUCT_SUBSTATUS_ID\n" +
             "JOIN (SELECT\n" +
@@ -69,6 +70,7 @@ public class ProductDataSQL {
             "            \"PACKAGES\" as PACKAGES,\n" +
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
+            "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s')\n" +
@@ -87,6 +89,8 @@ public class ProductDataSQL {
             "       f_revenue_model AS F_REVENUE_MODEL, \n" +
             "       f_work_source_ref AS F_PRODUCT_WORK, \n" +
             "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP\n" +
+            "       work_type as WORK_TYPE,\n" +
+            "       utl_work_ref as UTL_WORK_REF\n" +
             "FROM ephsit_talend_owner.stg_10_pmx_product_can\n" +
             "where pmx_source_reference in ('%s')";
 
@@ -103,6 +107,8 @@ public class ProductDataSQL {
             "       f_revenue_model AS F_REVENUE_MODEL, \n" +
             "       f_work_source_ref AS F_PRODUCT_WORK, \n" +
             "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP\n" +
+            "       work_type as WORK_TYPE,\n" +
+            "       utl_work_ref as UTL_WORK_REF\n" +
             "FROM ephsit_talend_owner.stg_10_pmx_product_can\n" +
             "where pmx_source_reference similar to '%s' and pmx_source_reference not like '%%OOA'";
 
