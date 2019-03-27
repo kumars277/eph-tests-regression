@@ -25,7 +25,7 @@ public class WorkExtractSQL {
             "  ,T.PRODUCT_TYPE_CODE AS WORK_TYPE -- Work Type to link to LOV table (this will need mapping to new values, logic TBC)\n" +
             "  ,I.IMPRINT_CODE AS IMPRINT -- Imprint Code to link to LOV table\n" +
             "  ,O.OPEN_ACCESS_JNL_TYPE_CODE as OPEN_ACCESS_JNL_TYPE_CODE-- Open Access Journal Type to link to LOV table\n" +
-            "  ,W.PRODUCT_WORK_ID -- Internal PMX ID, not needed in EPH but extracted for record linking purposes\n" +
+            "  ,W.PRODUCT_WORK_ID as PRODUCT_WORK_ID-- Internal PMX ID, not needed in EPH but extracted for record linking purposes\n" +
             "  ,W.F_ACC_PROD_HIERARCHY -- Product Parent Code in Accountable Product Entity\n" +
             "  ,W.F_RESPONSIBILITY_CENTRE -- Responsibility Centre in Accountable Product Entity to link to LOV table\n" +
             "  ,W.F_OPCO_R12 -- Company in Accountable Product Entity to link to LOV table\n" +
@@ -42,7 +42,7 @@ public class WorkExtractSQL {
             "  LEFT JOIN GD_IMPRINT I ON W.F_IMPRINT = I.IMPRINT_ID\n" +
             "  LEFT JOIN GD_PRODUCT_OWNER PO ON W.PRODUCT_WORK_ID = PO.F_PRODUCT_WORK\n" +
             "  LEFT JOIN GD_OWNERSHIP_SUB_TYPE O ON PO.F_OWNERSHIP_SUB_TYPE = O.OWNERSHIP_SUB_TYPE_ID)\n" +
-            "  WHERE PARAM1 = 'PARAM2'";
+            "  WHERE PRODUCT_WORK_ID = 'PARAM1'";
 
     public static String GET_PRODUCT_EXPORT_FROM_PMX_BY_PMC = "  select distinct * from\n" +
             "  (SELECT \n" +

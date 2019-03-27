@@ -29,22 +29,20 @@ public class WorksIdSteps {
     private static List<WorkDataObject> dataFromGDFtype;
     private static List<WorkDataObject> dataFromGDId;
 
-    @Given("^We have a work from type (.*) to check by (.*)$")
-    public void getProductNum(String type, String id){
+    @Given("^We have a work from type (.*) to check$")
+    public void getProductNum(String type){
         sql = WorksIdentifierSQL.getRandomProductNum
-                .replace("PARAM1", id)
-                .replace("PARAM2", type);
+                .replace("PARAM1", type);
         data = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
         System.out.print(sql);
         dataQualityContext.productIdFromStg = data.get(0).random_value;
         Log.info("\n The product number is " + dataQualityContext.productIdFromStg);
     }
 
-    @When("^We get the data from Staging, SA and Work Identifiers using (.*)")
-    public void getIdentifiers(String id){
+    @When("^We get the data from Staging, SA and Work Identifiers")
+    public void getIdentifiers(){
         sql = WorksIdentifierSQL.getIdentifiers
-                .replace("PARAM1",id)
-                .replace("PARAM2", dataQualityContext.productIdFromStg);
+                .replace("PARAM1", dataQualityContext.productIdFromStg);
         dataFromSTG = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
 
