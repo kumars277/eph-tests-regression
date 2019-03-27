@@ -28,7 +28,7 @@ public class WorkDataCheckSQL {
             "  ,\"JOURNAL_ACRONYM\" AS JOURNAL_ACRONYM -- PTS Journal Acronym (may go in IDs table, depending on implementation of data model)\n" +
             "  ,\"SOC_OWNERSHIP\" AS OWNERSHIP \n"+
             "  FROM ephsit.ephsit_talend_owner.stg_10_pmx_wwork\n" +
-            "  WHERE \"PARAM1\"='PARAM2'";
+            "  WHERE \"PRODUCT_WORK_ID\"='PARAM1'";
 
     public static String GET_STG_DQ_WORKS_DATA ="SELECT \n" +
             "  PMX_SOURCE_REFERENCE AS PMX_SOURCE_REFERENCE\n" +
@@ -37,7 +37,7 @@ public class WorkDataCheckSQL {
             "  ,ELECTRO_RIGHTS_INDICATOR as ELECTRONIC_RIGHTS_IND\n" +
             "  ,VOLUME as BOOK_VOLUME_NAME\n" +
             "  ,COPYRIGHT_YEAR as PRODUCT_WORK_PUB_DATE\n" +
-            " -- ,EDITION_NUMBER as EDITION_NUMBER\n" +
+            "  ,EDITION_NUMBER as BOOK_EDITION_NAME\n" +
             "  ,F_PMC as PMC\n" +
             "  ,F_OA_JOURNAL_TYPE AS OPEN_ACCESS_JNL_TYPE_CODE\n" +
             "  ,F_TYPE AS WORK_TYPE\n" +
@@ -56,7 +56,7 @@ public class WorkDataCheckSQL {
             "  ,ELECTRO_RIGHTS_INDICATOR as ELECTRONIC_RIGHTS_IND\n" +
             "  ,VOLUME as BOOK_VOLUME_NAME\n" +
             "  ,COPYRIGHT_YEAR as PRODUCT_WORK_PUB_DATE\n" +
-            " -- ,EDITION_NUMBER as EDITION_NUMBER\n" +
+            "  ,EDITION_NUMBER as BOOK_EDITION_NAME\n" +
             "  ,F_PMC as PMC\n" +
             "  ,F_OA_TYPE AS OPEN_ACCESS_JNL_TYPE_CODE\n" +
             "  ,F_TYPE AS WORK_TYPE\n" +
@@ -83,7 +83,7 @@ public class WorkDataCheckSQL {
             "  ,ELECTRO_RIGHTS_INDICATOR as ELECTRONIC_RIGHTS_IND\n" +
             "  ,VOLUME as BOOK_VOLUME_NAME\n" +
             "  ,COPYRIGHT_YEAR as PRODUCT_WORK_PUB_DATE\n" +
-            " -- ,EDITION_NUMBER as EDITION_NUMBER\n" +
+            "  ,EDITION_NUMBER as BOOK_EDITION_NAME\n" +
             "  ,F_PMC as PMC\n" +
             "  ,F_OA_TYPE AS OPEN_ACCESS_JNL_TYPE_CODE\n" +
             "  ,F_TYPE AS WORK_TYPE\n" +
