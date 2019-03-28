@@ -41,7 +41,7 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
       | 10               | electronic_journal              | N           |       Y         |
       | 10               | electronic_journal              | N           |       N         |
       | 10               | electronic_journal              | Y           |       Y         |
-#     | 10              | non_print_or_electronic_journal  | N           |  ##covered from packages scenario
+#      | 10              | non_print_or_electronic_journal  | N           |  ##covered from packages scenario
 
 
   @Regression

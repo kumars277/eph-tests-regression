@@ -76,7 +76,7 @@ public class ProductDataSQL {
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s')\n" +
              "           order by \"PRODUCT_MANIFESTATION_ID\"";
 
-    public static String EPH_STG_CAN_PRODUCT_EXTRACT_BOOKS = "SELECT \n" +
+    public static String EPH_STG_CAN_PRODUCT_EXTRACT_BOOKS = " SELECT \n" +
             "       pmx_source_reference as PMX_SOURCE_REFERENCE,\n" +
             "       name as PRODUCT_NAME,\n" +
             "       product_short_name as PRODUCT_SHORT_NAME,\n" +
@@ -88,11 +88,11 @@ public class ProductDataSQL {
             "       f_status AS F_STATUS,\n" +
             "       f_revenue_model AS F_REVENUE_MODEL, \n" +
             "       f_work_source_ref AS F_PRODUCT_WORK, \n" +
-            "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP\n" +
+            "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP,\n" +
             "       work_type as WORK_TYPE,\n" +
-            "       utl_work_ref as UTL_WORK_REF\n" +
+            "       ult_work_ref as ULT_WORK_REF\n" +
             "FROM ephsit_talend_owner.stg_10_pmx_product_can\n" +
-            "where pmx_source_reference in ('%s')";
+            "where pmx_source_reference in ('%s')\n";
 
     public static String EPH_STG_CAN_PRODUCT_EXTRACT_JOURNALS_OR_PACKAGES = "SELECT \n" +
             "       pmx_source_reference as PMX_SOURCE_REFERENCE,\n" +
@@ -106,9 +106,9 @@ public class ProductDataSQL {
             "       f_status AS F_STATUS,\n" +
             "       f_revenue_model AS F_REVENUE_MODEL, \n" +
             "       f_work_source_ref AS F_PRODUCT_WORK, \n" +
-            "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP\n" +
+            "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP,\n" +
             "       work_type as WORK_TYPE,\n" +
-            "       utl_work_ref as UTL_WORK_REF\n" +
+            "       ult_work_ref as ULT_WORK_REF\n" +
             "FROM ephsit_talend_owner.stg_10_pmx_product_can\n" +
             "where pmx_source_reference similar to '%s' and pmx_source_reference not like '%%OOA'";
 

@@ -142,15 +142,6 @@ public class ProductDataMappingCheck {
             }
 
 
-//            //get F_ProductWorkIds for journals and packages
-//            sql = String.format(ProductDataSQL.SELECT_F_PRODUCT_WORK_IDS_FOR_GIVEN_MANIFESTATION_IDS, Joiner.on("','").join(ids));
-//            Log.info(sql);
-//
-//            List<Map<?, ?>> fProductWorkIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-//
-//            List<String> workIds = fProductWorkIds.stream().map(m -> (BigDecimal) m.get("F_PRODUCT_WORK")).map(String::valueOf).collect(Collectors.toList());
-//            Log.info("work ids : " + workIds);
-
             //concatenate the ids used for pmx_source_reference in SA
             idsCanonical = Stream.concat(ids.stream(), workIds.stream()).collect(Collectors.toList());
             IntStream.range(0, idsCanonical.size()).forEach(i -> idsCanonical.set(i, idsCanonical.get(i) + "%"));
@@ -800,7 +791,6 @@ public class ProductDataMappingCheck {
             //verify F_WWORK (F_PRODUCT_WORK)
             Log.info("F_PRODUCT_WORK in EPH STG Canonical : " + dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_WORK());
 
-
             if(pmxSourceReference.contains("OAA")||pmxSourceReference.contains("JAS"))
                 assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_WORK());
             else
@@ -815,7 +805,8 @@ public class ProductDataMappingCheck {
 
                 if(pmxSourceReference.contains("JBS")||pmxSourceReference.contains("BKF")||pmxSourceReference.contains("RPR")||pmxSourceReference.contains("OOA"))
 
-                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_MANIFESTATION_TYP(),dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_MANIFESTATION_TYP());
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID(),Integer.parseInt(dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_MANIFESTATION_TYP()));
+
                 else
                     assertNull(dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_MANIFESTATION_TYP());
 
@@ -825,11 +816,11 @@ public class ProductDataMappingCheck {
 
             assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getWORK_TYPE(),dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getWORK_TYPE());
 
-            //UTL_WORK_REF
+            //ULT_WORK_REF
             Log.info("F_PRODUCT_WORK in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
-            Log.info("UTL_WORK_REF in EPH STG Canonical : " + dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getUTL_WORK_REF());
+            Log.info("ULT_WORK_REF in EPH STG Canonical : " + dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getULT_WORK_REF());
 
-            assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK(),dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getUTL_WORK_REF());
+            assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK(),dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getULT_WORK_REF());
 
 
         });
