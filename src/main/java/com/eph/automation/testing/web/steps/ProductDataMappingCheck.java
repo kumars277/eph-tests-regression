@@ -790,8 +790,13 @@ public class ProductDataMappingCheck {
 
             //verify F_WWORK (F_PRODUCT_WORK)
             Log.info("F_PRODUCT_WORK in EPH STG Canonical : " + dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_WORK());
+<<<<<<< HEAD
 
 
+=======
+
+
+>>>>>>> 79e449a1a5291a8f53a4c169d32ab9b381b3e868
             if(pmxSourceReference.contains("OAA")||pmxSourceReference.contains("JAS"))
                 assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_WORK());
             else
@@ -806,7 +811,11 @@ public class ProductDataMappingCheck {
 
                 if(pmxSourceReference.contains("JBS")||pmxSourceReference.contains("BKF")||pmxSourceReference.contains("RPR")||pmxSourceReference.contains("OOA"))
 
+<<<<<<< HEAD
                     assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID(),Integer.parseInt(dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_MANIFESTATION_TYP()));
+=======
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_MANIFESTATION_TYP(),dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_MANIFESTATION_TYP());
+>>>>>>> 79e449a1a5291a8f53a4c169d32ab9b381b3e868
                 else
                     assertNull(dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_MANIFESTATION_TYP());
 
@@ -818,9 +827,15 @@ public class ProductDataMappingCheck {
 
             //UTL_WORK_REF
             Log.info("F_PRODUCT_WORK in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
+<<<<<<< HEAD
             Log.info("UTL_WORK_REF in EPH STG Canonical : " + dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getULT_WORK_REF());
 
             assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK(),dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getULT_WORK_REF());
+=======
+            Log.info("UTL_WORK_REF in EPH STG Canonical : " + dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getUTL_WORK_REF());
+
+            assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK(),dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getUTL_WORK_REF());
+>>>>>>> 79e449a1a5291a8f53a4c169d32ab9b381b3e868
 
 
         });

@@ -88,9 +88,15 @@ public class ProductDataSQL {
             "       f_status AS F_STATUS,\n" +
             "       f_revenue_model AS F_REVENUE_MODEL, \n" +
             "       f_work_source_ref AS F_PRODUCT_WORK, \n" +
+<<<<<<< HEAD
             "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP,\n" +
             "       work_type as WORK_TYPE,\n" +
             "       ult_work_ref as ULT_WORK_REF\n" +
+=======
+            "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP\n" +
+            "       work_type as WORK_TYPE,\n" +
+            "       utl_work_ref as UTL_WORK_REF\n" +
+>>>>>>> 79e449a1a5291a8f53a4c169d32ab9b381b3e868
             "FROM ephsit_talend_owner.stg_10_pmx_product_can\n" +
             "where pmx_source_reference in ('%s')\n";
 
@@ -106,9 +112,15 @@ public class ProductDataSQL {
             "       f_status AS F_STATUS,\n" +
             "       f_revenue_model AS F_REVENUE_MODEL, \n" +
             "       f_work_source_ref AS F_PRODUCT_WORK, \n" +
+<<<<<<< HEAD
             "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP,\n" +
             "       work_type as WORK_TYPE,\n" +
             "       ult_work_ref as ULT_WORK_REF\n" +
+=======
+            "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP\n" +
+            "       work_type as WORK_TYPE,\n" +
+            "       utl_work_ref as UTL_WORK_REF\n" +
+>>>>>>> 79e449a1a5291a8f53a4c169d32ab9b381b3e868
             "FROM ephsit_talend_owner.stg_10_pmx_product_can\n" +
             "where pmx_source_reference similar to '%s' and pmx_source_reference not like '%%OOA'";
 
