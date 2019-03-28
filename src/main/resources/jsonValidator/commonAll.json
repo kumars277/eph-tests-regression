@@ -47,6 +47,181 @@
 		},
 		"additionalProperties": false
 	},
+	"accountableProduct": {
+		"$id": "#/properties/accountableProduct",
+		"type": "object",
+		"title": "The Accountableproduct Schema",
+		"required": [
+			"glProductSegmentCode",
+			"glProductSegmentName",
+			"glProductParentValue"
+		],
+		"properties": {
+			"glProductSegmentCode": {
+				"$id": "#/properties/accountableProduct/properties/glProductSegmentCode",
+				"type": "string",
+				"title": "The Glproductsegmentcode Schema",
+				"examples": [
+					"01259"
+				],
+				"pattern": "^(.*)$"
+			},
+			"glProductSegmentName": {
+				"$id": "#/properties/accountableProduct/properties/glProductSegmentName",
+				"type": "string",
+				"title": "The Glproductsegmentname Schema",
+				"examples": [
+					"Journal of Sample Products"
+				],
+				"pattern": "^(.*)$"
+			},
+			"glProductParentValue": {
+				"$id": "#/properties/accountableProduct/properties/glProductParentValue",
+				"type": "object",
+				"title": "The Glproductparentvalue Schema",
+				"required": [
+					"segmentParentCode",
+					"segmentParentName"
+				],
+				"properties": {
+					"segmentParentCode": {
+						"$id": "#/properties/accountableProduct/properties/glProductParentValue/properties/segmentParentCode",
+						"type": "string",
+						"title": "The Segmentparentcode Schema",
+						"examples": [
+							"PJNLOWN"
+						],
+						"pattern": "^(.*)$"
+					},
+					"segmentParentName": {
+						"$id": "#/properties/accountableProduct/properties/glProductParentValue/properties/segmentParentName",
+						"type": "string",
+						"title": "The Segmentparentname Schema",
+						"examples": [
+							"Elsevier Owned Journals"
+						],
+						"pattern": "^(.*)$"
+					}
+				},
+				"additionalProperties" : false
+			}
+		},
+		"additionalProperties": false
+	},
+	"financialAttributes": {
+		"$id": "#/properties/financialAttributes",
+		"type": "array",
+		"title": "The Financialattributes Schema",
+		"default": null,
+		"items": {
+			"$id": "#/properties/financialAttributes/items",
+			"type": "object",
+			"title": "The Items Schema",
+			"required": [
+				"glCompany",
+				"costResponsibilityCentre",
+				"revenueResponsibilityCentre",
+				"effectiveStartDate",
+				"effectiveEndDate"
+			],
+			"properties": {
+				"glCompany": {
+					"$id": "#/properties/financialAttributes/items/properties/glCompany",
+					"type": "object",
+					"title": "The Glcompany Schema",
+					"required": [
+						"glCompanyCode",
+						"glCompanyName"
+					],
+					"properties": {
+						"glCompanyCode": {
+							"$id": "#/properties/financialAttributes/items/properties/glCompany/properties/glCompanyCode",
+							"type": "string",
+							"title": "The Glcompanycode Schema",
+							"examples": [
+								121
+							]
+						},
+						"glCompanyName": {
+							"$id": "#/properties/financialAttributes/items/properties/glCompany/properties/glCompanyName",
+							"type": "string",
+							"title": "The Glcompanyname Schema",
+							"examples": [
+								"Elsevier BV"
+							],
+							"pattern": "^(.*)$"
+						}
+					},
+					"additionalProperties": false
+				},
+				"costResponsibilityCentre": {
+					"$id": "#/properties/financialAttributes/items/properties/costResponsibilityCentre",
+					"type": "object",
+					"title": "The Costresponsibilitycentre Schema",
+					"required": [
+						"responsibilityCentreCode",
+						"responsibilityCentreName"
+					],
+					"properties": {
+						"responsibilityCentreCode": {
+							"$id": "#/properties/financialAttributes/items/properties/costResponsibilityCentre/properties/responsibilityCentreCode",
+							"type": "string",
+							"title": "The Responsibilitycentrecode Schema",
+							"examples": [
+								10063
+							]
+						},
+						"responsibilityCentreName": {
+							"$id": "#/properties/financialAttributes/items/properties/costResponsibilityCentre/properties/responsibilityCentreName",
+							"type": "string",
+							"title": "The Responsibilitycentrename Schema",
+							"examples": [
+								"Cell Press General"
+							],
+							"pattern": "^(.*)$"
+						}
+					},
+					"additionalProperties": false
+				},
+				"revenueResponsibilityCentre": {
+					"$id": "#/properties/financialAttributes/items/properties/revenueResponsibilityCentre",
+					"type": "object",
+					"title": "The Revenueresponsibilitycentre Schema",
+					"required": [
+						"responsibilityCentreCode",
+						"responsibilityCentreName"
+					],
+					"properties": {
+						"responsibilityCentreCode": {
+							"$id": "#/properties/financialAttributes/items/properties/revenueResponsibilityCentre/properties/responsibilityCentreCode",
+							"type": "string",
+							"title": "The Responsibilitycentrecode Schema",
+							"examples": [
+								10063
+							]
+						},
+						"responsibilityCentreName": {
+							"$id": "#/properties/financialAttributes/items/properties/revenueResponsibilityCentre/properties/responsibilityCentreName",
+							"type": "string",
+							"title": "The Responsibilitycentrename Schema",
+							"examples": [
+								"Cell Press General"
+							],
+							"pattern": "^(.*)$"
+						}
+					},
+					"additionalProperties": false
+				},
+				"effectiveStartDate": {
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
+				},
+				"effectiveEndDate": {
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
+				}
+			},
+			"additionalProperties": false
+		}
+	},
 	"person": {
 		"$id": "#/properties/person",
 		"type": "object",

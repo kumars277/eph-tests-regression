@@ -68,7 +68,7 @@
 					"pattern": "^(.*)$"
 				},
 				"identifierType": { 
-					"$ref": "file:src/main/resources/jsonValidator/CommonAll.json#/identifierType"
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/identifierType"
 				}
 			},
 			"additionalProperties": false

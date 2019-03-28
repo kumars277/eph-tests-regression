@@ -13,7 +13,7 @@ public class UpdateProductSQL {
 
     public static String Insert_product = "INSERT INTO ephsit.semarchy_eph_mdm.sa_product (b_loadid, product_id, b_classname, name," +
             " f_type, f_status,f_manifestation, f_event)\n" +
-            " VALUES ('LOADID','EPR-TSTP03','Product','Test 7 Letters Online'," +
+            " VALUES ('LOADID','EPR-TSTP03','Product','Test Product Letters Online'," +
             "'BKF','PAS','EPR-M-TSTM02','EVENT')";
 
     public static String Insert_manifestation = "INSERT INTO ephsit.semarchy_eph_mdm.sa_manifestation (b_loadid, manifestation_id, b_classname," +
