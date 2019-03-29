@@ -791,37 +791,60 @@ public class ProductDataMappingCheck {
             //verify F_WWORK (F_PRODUCT_WORK)
             Log.info("F_PRODUCT_WORK in EPH STG Canonical : " + dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_WORK());
 
-            if(pmxSourceReference.contains("OAA")||pmxSourceReference.contains("JAS"))
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_WORK());
+            if (pmxSourceReference.contains("OAA") || pmxSourceReference.contains("JAS"))
+                if (type.equals("book") || type.equals("package")) {
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_WORK());
+                } else
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_WORK());
             else
                 assertNull(dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_WORK());
-
-
 
 
             //verify F_MANIFESTATION (F_PRODUCT_MANIFESTATION_TYP)
 
             Log.info("F_PRODUCT_MANIFESTATION_TYP in EPH STG Canonical : " + dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_MANIFESTATION_TYP());
 
-                if(pmxSourceReference.contains("JBS")||pmxSourceReference.contains("BKF")||pmxSourceReference.contains("RPR")||pmxSourceReference.contains("OOA"))
 
-                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID(),Integer.parseInt(dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_MANIFESTATION_TYP()));
+            if (pmxSourceReference.contains("SUB") || pmxSourceReference.contains("JBS") || pmxSourceReference.contains("BKF") || pmxSourceReference.contains("RPR") || pmxSourceReference.contains("OOA")) {
+                if (type.equals("book") || type.equals("package")) {
+                    Log.info("F_PRODUCT_MANIFESTATION_TYP in EPH STG  : " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID());
 
-                else
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID(), Integer.parseInt(dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_MANIFESTATION_TYP()));
+                } else {
+                    Log.info("F_PRODUCT_MANIFESTATION_TYP in EPH STG  : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID(), Integer.parseInt(dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_MANIFESTATION_TYP()));
+                }
+            }else {
                     assertNull(dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getF_PRODUCT_MANIFESTATION_TYP());
+                }
+
+
 
             //WORK_TYPE
-            Log.info("WORK_TYPE in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getWORK_TYPE());
             Log.info("WORK_TYPE in EPH STG Canonical : " + dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getWORK_TYPE());
 
-            assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getWORK_TYPE(),dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getWORK_TYPE());
+            if (type.equals("book") || type.equals("package")) {
+                Log.info("WORK_TYPE in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getWORK_TYPE());
+                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getWORK_TYPE(), dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getWORK_TYPE());
+            } else {
+                Log.info("WORK_TYPE in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_TYPE());
+                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_TYPE(), dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getWORK_TYPE());
+
+            }
+
+
+
 
             //ULT_WORK_REF
-            Log.info("F_PRODUCT_WORK in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
             Log.info("ULT_WORK_REF in EPH STG Canonical : " + dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getULT_WORK_REF());
 
-            assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK(),dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getULT_WORK_REF());
-
+            if (type.equals("book") || type.equals("package")) {
+                Log.info("F_PRODUCT_WORK in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
+                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getULT_WORK_REF());
+            } else {
+                Log.info("F_PRODUCT_WORK in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK());
+                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getULT_WORK_REF());
+            }
 
         });
     }
