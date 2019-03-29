@@ -108,7 +108,13 @@ public class WorkExtractSQL {
 
     public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM ephsit_talend_owner.stg_10_pmx_manifestation";
 
-    public static final String COUNT_MANIFESTATIONS_IN_SA_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation join semarchy_eph_mdm.sa_event on f_event = event_id and semarchy_eph_mdm.sa_event.workflow_id = 'talend' and semarchy_eph_mdm.sa_event.f_event_type = 'PMX' and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' and f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation)";
+    public static final String COUNT_MANIFESTATIONS_IN_SA_MANIFESTATION_TABLE =
+            "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation sa where f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation\n" +
+                    "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
+                    "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+                    "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
+                    "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+                    "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')";
 
     public static final String COUNT_MANIFESTATIONS_IN_GD_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.gd_manifestation";
 
