@@ -3,16 +3,15 @@ package com.eph.automation.testing.services.db;
 import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
+import com.eph.automation.testing.configuration.LoadProperties;
 import com.eph.automation.testing.models.contexts.LoadBatchContext;
 import com.eph.automation.testing.services.db.sql.UpdateProductSQL;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 
 import java.math.BigDecimal;
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Types;
+import java.sql.*;
+import java.util.Properties;
 
 /**
  * Created by RAVIVARMANS on 28/11/2018.
@@ -22,13 +21,24 @@ public class DataLoadServiceImpl {
     @StaticInjection
     public static LoadBatchContext loadBatchContext;
 
+    private static Connection conn = null;
+
     public static String createProductByStoreProcedure() {
         String batchID = null;
         long batchId;
         BigDecimal loadId = null;
         int eventId;
         String query;
-        Connection conn = DBManager.getPostgresConnection(Constants.EPH_URL);
+        conn=null;
+        Properties dbProps = new Properties();
+        dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(DBManager.getDatabaseEnvironmentKey(Constants.EPH_URL)));
+        if (conn == null) {
+            try {
+                conn = DriverManager.getConnection(LoadProperties.getDBConnection(Constants.EPH_URL));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         try {
             query = "{? = call semarchy_repository.get_new_loadid(?, ?, ?,?)}";
             CallableStatement statement = conn.prepareCall(query);
@@ -81,7 +91,7 @@ public class DataLoadServiceImpl {
             exception.printStackTrace();
             DbUtils.rollbackAndCloseQuietly(conn);
         } finally {
-            //DbUtils.closeQuietly(conn);
+            DbUtils.closeQuietly(conn);
         }
 
 
@@ -132,7 +142,16 @@ public class DataLoadServiceImpl {
         BigDecimal loadId = null;
         int eventId;
         String query;
-        Connection conn = DBManager.getPostgresConnection(Constants.EPH_URL);
+        conn=null;
+        Properties dbProps = new Properties();
+        dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(DBManager.getDatabaseEnvironmentKey(Constants.EPH_URL)));
+        if (conn == null) {
+            try {
+                conn = DriverManager.getConnection(LoadProperties.getDBConnection(Constants.EPH_URL));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         try {
             query = "{? = call semarchy_repository.get_new_loadid(?, ?, ?,?)}";
             CallableStatement statement = conn.prepareCall(query);
@@ -185,7 +204,7 @@ public class DataLoadServiceImpl {
             exception.printStackTrace();
             DbUtils.rollbackAndCloseQuietly(conn);
         } finally {
-          // DbUtils.closeQuietly(conn);
+           DbUtils.closeQuietly(conn);
         }
 
 
@@ -210,7 +229,16 @@ public class DataLoadServiceImpl {
         BigDecimal loadId = null;
         int eventId;
         String query;
-        Connection conn = DBManager.getPostgresConnection(Constants.EPH_URL);
+        conn=null;
+        Properties dbProps = new Properties();
+        dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(DBManager.getDatabaseEnvironmentKey(Constants.EPH_URL)));
+        if (conn == null) {
+            try {
+                conn = DriverManager.getConnection(LoadProperties.getDBConnection(Constants.EPH_URL));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
         try {
             query = "{? = call semarchy_repository.get_new_loadid(?, ?, ?,?)}";
             CallableStatement statement = conn.prepareCall(query);
