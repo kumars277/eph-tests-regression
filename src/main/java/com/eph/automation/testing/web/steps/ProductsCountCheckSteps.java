@@ -87,6 +87,10 @@ public class ProductsCountCheckSteps {
         sql= ProductCountSQL.EPH_GD_PRODUCT_Count;
         productsCountContext.productCountEPHGD= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
         Log.info("\nThe number of products in EPH GD is: " + productsCountContext.productCountEPHGD.get(0).ephGDCount);
+
+        sql= ProductCountSQL.EPH_AE_PRODUCT_Count;
+        productsCountContext.productCountEPHAE= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
+        Log.info("\nThe number of products in EPH AE is: " + productsCountContext.productCountEPHAE.get(0).aeCount);
     }
 
     @When("^We know the number of products in canonical$")
@@ -108,9 +112,12 @@ public class ProductsCountCheckSteps {
         } else if (target.contentEquals("GD")){
             Assert.assertEquals("\nThe number of products in SA and GD is not equal!", productsCountContext.productCountEPHSA.get(0).ephSACount,
                     productsCountContext.productCountEPHGD.get(0).ephGDCount);
-        }else {
+        }else if (target.contentEquals("Canonical")){
             Assert.assertEquals("\nThe number of products in Staging and Canonical is not equal!", stgToCanonical,
                     productsCountContext.productCountStgCan.get(0).ephCanCount);
+        } else {
+            Assert.assertEquals("\nThe number of products in SA and GD with AE is not equal!", productsCountContext.productCountEPHSA.get(0).ephSACount,
+                    productsCountContext.productCountEPHGD.get(0).ephGDCount + productsCountContext.productCountEPHAE.get(0).aeCount);
         }
     }
 }

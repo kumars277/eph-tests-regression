@@ -23,3 +23,9 @@ Feature: Entity - PRODUCT - Count Check - Validate data count between PMX and EP
     Given The products are in PMX Staging
     When We know the number of Products in EPH
     Then The number of products between SA and GD is equal
+
+  @Regression
+  Scenario: Count check between EPH SA and EPH GD with EPH AE
+    Given The products are in PMX Staging
+    When We know the number of Products in EPH
+    Then The number of products between SA and GD with AE is equal
