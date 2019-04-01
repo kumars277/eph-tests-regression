@@ -14,7 +14,7 @@ Feature: Entity - Notifications - Validate a notification is created for every c
        | WORK              |wwork        |
        | MANIFESTATION     |manifestation|
 
-    @WIP
+    @Regression
     Scenario Outline: Verify notification is processed successfully
       Given A <type> is updated
       When A notification is created

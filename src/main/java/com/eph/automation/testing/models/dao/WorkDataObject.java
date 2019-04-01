@@ -147,6 +147,16 @@ public class WorkDataObject {
         this.workCountDQSTGnoError = workCountDQSTGnoError;
     }
 
+    public Integer getErrorsCountEPH() {
+        return errorsCountEPH;
+    }
+
+    public void setErrorsCountEPH(Integer errorsCountEPH) {
+        this.errorsCountEPH = errorsCountEPH;
+    }
+
+    public Integer errorsCountEPH;
+
     public Integer workCountDQSTG;
     public Integer workCountDQSTGnoError;
 
