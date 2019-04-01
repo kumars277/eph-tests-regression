@@ -60,7 +60,7 @@ public class NotificationsSQL {
     public static String EPH_GET_Payload_Notif_Work = "select payload_key as key, payload_value as value, update_timestamp as timestamp \n" +
             "from semarchy_eph_stg.st_test_notification_payload\n" +
             " where payload_key in ('EPR-W-TSTW01:JNL','EPR-TSTP01:BKF','EPR-TSTP02:BKF'," +
-            "'EPR-TSTP03:BKF','EPR-TSTP04:SUB','EPR-TSTP05:RPR','EPR-TSTP06:SUB','EPR-TSTP07:JBS')";
+            "'EPR-TSTP03:BKF','EPR-TSTP04:SUB','EPR-TSTP05:RPR','EPR-TSTP06:SUB','EPR-TSTP07:JBS') order by key desc";
 
 
     public static String EPH_GET_Payload_Notif_Product = "select payload_key as key, payload_value as value, update_timestamp as timestamp \n" +
