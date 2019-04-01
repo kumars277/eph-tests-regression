@@ -27,7 +27,8 @@ public class ProductDataObject {
     private String AVAILABILITY_STATUS;
     private String WORK_TITLE;
     private String WORK_TYPE;
-    private String UTL_WORK_REF;
+    private String ULT_WORK_REF;
+
 
     //SA
     private String F_EVENT;
@@ -256,12 +257,14 @@ public class ProductDataObject {
         this.WORK_TYPE = WORK_TYPE;
     }
 
-    public String getUTL_WORK_REF() {
-        return UTL_WORK_REF;
+    public String getULT_WORK_REF() {
+        return ULT_WORK_REF;
     }
 
-    public void setUTL_WORK_REF(String UTL_WORK_REF) {
-        this.UTL_WORK_REF = UTL_WORK_REF;
+    public void setULT_WORK_REF(String ULT_WORK_REF) {
+        this.ULT_WORK_REF = ULT_WORK_REF;
+
+
     }
 
 
@@ -291,7 +294,7 @@ public class ProductDataObject {
                 Objects.equals(AVAILABILITY_STATUS, that.AVAILABILITY_STATUS) &&
                 Objects.equals(WORK_TITLE, that.WORK_TITLE) &&
                 Objects.equals(WORK_TYPE, that.WORK_TYPE) &&
-                Objects.equals(UTL_WORK_REF, that.UTL_WORK_REF) &&
+                Objects.equals(ULT_WORK_REF, that.ULT_WORK_REF) &&
                 Objects.equals(F_EVENT, that.F_EVENT) &&
                 Objects.equals(B_CLASSNAME, that.B_CLASSNAME) &&
                 Objects.equals(F_REVENUE_MODEL, that.F_REVENUE_MODEL) &&
@@ -302,7 +305,8 @@ public class ProductDataObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(PRODUCT_ID, PRODUCT_NAME, PRODUCT_SHORT_NAME, SEPARATELY_SALEABLE_IND, TRIAL_ALLOWED_IND, FIRST_PUB_DATE, ELSEVIER_TAX_CODE, PRODUCT_MANIFESTATION_ID, F_PRODUCT_WORK, F_PRODUCT_MANIFESTATION_TYP, SUBSCRIPTION, BULK_SALES, BACK_FILES, OPEN_ACCESS, REPRINTS, AUTHOR_CHARGES, ONE_OFF_ACCESS, PACKAGES, AVAILABILITY_STATUS, WORK_TITLE, WORK_TYPE, UTL_WORK_REF, F_EVENT, B_CLASSNAME, F_REVENUE_MODEL, PMX_SOURCE_REFERENCE, F_TYPE, F_STATUS);
+        return Objects.hash(PRODUCT_ID, PRODUCT_NAME, PRODUCT_SHORT_NAME, SEPARATELY_SALEABLE_IND, TRIAL_ALLOWED_IND, FIRST_PUB_DATE, ELSEVIER_TAX_CODE, PRODUCT_MANIFESTATION_ID, F_PRODUCT_WORK, F_PRODUCT_MANIFESTATION_TYP, SUBSCRIPTION, BULK_SALES, BACK_FILES, OPEN_ACCESS, REPRINTS, AUTHOR_CHARGES, ONE_OFF_ACCESS, PACKAGES, AVAILABILITY_STATUS, WORK_TITLE, WORK_TYPE, ULT_WORK_REF, F_EVENT, B_CLASSNAME, F_REVENUE_MODEL, PMX_SOURCE_REFERENCE, F_TYPE, F_STATUS);
+
     }
 
 
@@ -330,7 +334,7 @@ public class ProductDataObject {
                 ", AVAILABILITY_STATUS='" + AVAILABILITY_STATUS + '\'' +
                 ", WORK_TITLE='" + WORK_TITLE + '\'' +
                 ", WORK_TYPE='" + WORK_TYPE + '\'' +
-                ", UTL_WORK_REF='" + UTL_WORK_REF + '\'' +
+                ", ULT_WORK_REF='" + ULT_WORK_REF + '\'' +
                 ", F_EVENT='" + F_EVENT + '\'' +
                 ", B_CLASSNAME='" + B_CLASSNAME + '\'' +
                 ", F_REVENUE_MODEL='" + F_REVENUE_MODEL + '\'' +

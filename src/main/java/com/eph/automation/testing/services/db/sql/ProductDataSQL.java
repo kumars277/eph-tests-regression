@@ -14,9 +14,9 @@ public class ProductDataSQL {
             "\t,M.PRODUCT_MANIFESTATION_ID -- Internal PMX ID, not needed in EPH but extracted for record linking purposes\n" +
             "\t,M.F_PRODUCT_WORK -- Internal PMX Work ID, not needed in EPH but extracted for record linking purposes\n" +
             "\t,M.F_PRODUCT_MANIFESTATION_TYP --Print (1) or Electronic (2)\n" +
-            "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' THEN 'Y' ELSE 'N' END AS SUBSCRIPTION\n" +
-            "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND M.F_PRODUCT_MANIFESTATION_TYP = 1 THEN 'Y' ELSE 'N' END AS BULK_SALES\n" +
-            "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND M.F_PRODUCT_MANIFESTATION_TYP = 2 THEN 'Y' ELSE 'N' END AS BACK_FILES\n" +
+            "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND WT.F_OPEN_ACCESS_JOURNAL_TYPE NOT IN (10,12) THEN 'Y' ELSE 'N' END AS SUBSCRIPTION\n" +
+            "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND WT.F_OPEN_ACCESS_JOURNAL_TYPE NOT IN (10,12) AND M.F_PRODUCT_MANIFESTATION_TYP = 1 THEN 'Y' ELSE 'N' END AS BULK_SALES\n" +
+            "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND WT.F_OPEN_ACCESS_JOURNAL_TYPE NOT IN (10,12) AND M.F_PRODUCT_MANIFESTATION_TYP = 2 THEN 'Y' ELSE 'N' END AS BACK_FILES\n" +
             "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND WT.OA_TYPE = 'Y' THEN 'Y' ELSE 'N' END AS OPEN_ACCESS\n" +
             "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND M.F_PRODUCT_MANIFESTATION_TYP = 1 THEN 'Y' ELSE 'N' END AS REPRINTS\n" +
             "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND M.PRODUCT_MANIFESTATION_ID = WT.FIRST_MANIFESTATION THEN 'Y' ELSE 'N' END AS AUTHOR_CHARGES\n" +
@@ -41,6 +41,7 @@ public class ProductDataSQL {
             "\t    ,CASE WHEN W.F_OPEN_ACCESS_JOURNAL_TYPE IN (10,11,12) AND MAN.PRODUCT_MANIFESTATION_ID = FIR.FIRST_MANIFESTATION THEN 'Y' ELSE 'N' END AS OA_TYPE\n" +
             "\t    ,W.PRODUCT_WORK_TITLE AS WORK_TITLE\n" +
             "\t    ,FIR.FIRST_MANIFESTATION\n" +
+            "\t    ,W.F_OPEN_ACCESS_JOURNAL_TYPE\n" +
             "      FROM GD_PRODUCT_MANIFESTATION MAN\n" +
             "      JOIN GD_PRODUCT_WORK W ON MAN.F_PRODUCT_WORK = W.PRODUCT_WORK_ID\n" +
             "      JOIN GD_PRODUCT_TYPE T ON W.F_PRODUCT_TYPE = T.PRODUCT_TYPE_ID\n" +
@@ -76,7 +77,7 @@ public class ProductDataSQL {
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s')\n" +
              "           order by \"PRODUCT_MANIFESTATION_ID\"";
 
-    public static String EPH_STG_CAN_PRODUCT_EXTRACT_BOOKS = "SELECT \n" +
+    public static String EPH_STG_CAN_PRODUCT_EXTRACT_BOOKS = " SELECT \n" +
             "       pmx_source_reference as PMX_SOURCE_REFERENCE,\n" +
             "       name as PRODUCT_NAME,\n" +
             "       product_short_name as PRODUCT_SHORT_NAME,\n" +
@@ -88,11 +89,11 @@ public class ProductDataSQL {
             "       f_status AS F_STATUS,\n" +
             "       f_revenue_model AS F_REVENUE_MODEL, \n" +
             "       f_work_source_ref AS F_PRODUCT_WORK, \n" +
-            "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP\n" +
+            "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP,\n" +
             "       work_type as WORK_TYPE,\n" +
-            "       utl_work_ref as UTL_WORK_REF\n" +
+            "       ult_work_ref as ULT_WORK_REF\n" +
             "FROM ephsit_talend_owner.stg_10_pmx_product_can\n" +
-            "where pmx_source_reference in ('%s')";
+            "where pmx_source_reference in ('%s')\n";
 
     public static String EPH_STG_CAN_PRODUCT_EXTRACT_JOURNALS_OR_PACKAGES = "SELECT \n" +
             "       pmx_source_reference as PMX_SOURCE_REFERENCE,\n" +
@@ -106,9 +107,9 @@ public class ProductDataSQL {
             "       f_status AS F_STATUS,\n" +
             "       f_revenue_model AS F_REVENUE_MODEL, \n" +
             "       f_work_source_ref AS F_PRODUCT_WORK, \n" +
-            "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP\n" +
+            "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP,\n" +
             "       work_type as WORK_TYPE,\n" +
-            "       utl_work_ref as UTL_WORK_REF\n" +
+            "       ult_work_ref as ULT_WORK_REF\n" +
             "FROM ephsit_talend_owner.stg_10_pmx_product_can\n" +
             "where pmx_source_reference similar to '%s' and pmx_source_reference not like '%%OOA'";
 
@@ -131,6 +132,7 @@ public class ProductDataSQL {
             "            \"ONE_OFF_ACCESS\" as ONE_OFF_ACCESS,\n" +
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
+            "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" = '%s'";
@@ -154,6 +156,7 @@ public class ProductDataSQL {
             "            \"ONE_OFF_ACCESS\" as ONE_OFF_ACCESS,\n" +
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
+            "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" not in (1,2)";
@@ -177,6 +180,7 @@ public class ProductDataSQL {
             "            \"ONE_OFF_ACCESS\" as ONE_OFF_ACCESS,\n" +
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
+            "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
             "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" = '%s' ";
@@ -200,6 +204,7 @@ public class ProductDataSQL {
             "            \"ONE_OFF_ACCESS\" as ONE_OFF_ACCESS,\n" +
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
+            "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
             "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" = '%s' ";
@@ -229,6 +234,7 @@ public class ProductDataSQL {
             "            \"ONE_OFF_ACCESS\" as ONE_OFF_ACCESS,\n" +
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
+            "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
             "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" NOT IN (1, 2) AND \"AUTHOR_CHARGES\" = 'Y'";
@@ -252,6 +258,7 @@ public class ProductDataSQL {
             "            \"ONE_OFF_ACCESS\" as ONE_OFF_ACCESS,\n" +
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
+            "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
             "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" NOT IN (1, 2) AND \"OPEN_ACCESS\" = 'Y'";
