@@ -23,5 +23,5 @@ public class ProductsCountContext {
     public static List<ProductCountObject> productCountStgPackages;
     public static List<ProductCountObject> productCountEPHSA;
     public static List<ProductCountObject> productCountEPHGD;
-
+    public static List<ProductCountObject> productCountEPHAE;
 }

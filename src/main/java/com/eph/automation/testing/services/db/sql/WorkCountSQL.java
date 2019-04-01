@@ -39,5 +39,12 @@ public class WorkCountSQL {
             "AND semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )";
 
-    public static String EPH_AE_WORKS_COUNT = "select count (*) as errorsCountEPH from ephsit.semarchy_eph_mdm.ae_wwork";
+    public static String EPH_AE_WORKS_COUNT = "select count (*) as errorsCountEPH from ephsit.semarchy_eph_mdm.ae_wwork ae\n"+
+            " where ae.b_batchid =  (select max (ae.b_batchid) from\n" +
+            "semarchy_eph_mdm.ae_wwork ae join \n"+
+            "semarchy_eph_mdm.gd_event e on ae.b_batchid = e.b_batchid\n"+
+            "where  e.f_event_type = 'PMX'\n"+
+            "and e.workflow_id = 'talend'\n"+
+            "AND e.f_event_type = 'PMX'\n"+
+            "and e.f_workflow_source = 'PMX' )";
 }

@@ -71,8 +71,11 @@ public class WorksCountCheckSteps {
         } else if (target.contentEquals("SA")){
             Assert.assertEquals("The number of works in DQ and SA is not equal!", dqNoErrorWorks, ephWork);
             Log.info("The count between SA and GD is equal");
+        } else if (target.contentEquals("GD")){
+            Assert.assertEquals("The number of works in SA and GD is not equal!", ephWork, ephWorkGD);
+            Log.info("The count between SA and GD is equal");
         } else{
-            Assert.assertEquals("The number of works in SA and GD is not equal!", ephWork, ephWorkGD + aeCount);
+            Assert.assertEquals("The number of works in SA and GD with AE is not equal!", ephWork, ephWorkGD + aeCount);
             Log.info("The count between SA and GD is equal");
         }
     }
