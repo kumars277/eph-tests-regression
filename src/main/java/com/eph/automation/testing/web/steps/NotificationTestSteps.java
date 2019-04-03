@@ -271,7 +271,7 @@ public class NotificationTestSteps {
         } else {
             sql = NotificationsSQL.EPH_GET_Payload_Notif_Manifestation;
             notificationCountContext.payloadResult = DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
-            Assert.assertEquals("The notification number not as expected",2,notificationCountContext.payloadResult.size());
+            Assert.assertEquals("The notification number not as expected",3,notificationCountContext.payloadResult.size());
 
             sql = NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1", "EPR-TSTP03:BKF");
             notificationCountContext.writeAttemptsAfter = DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
