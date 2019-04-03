@@ -54,6 +54,13 @@ public class FinancialAttributesSteps {
         sql = FinAttrSQL.GET_GD_FinnAttr_DATA.replace("PARAM1", financialAttribs.workID);
         financialAttribs.financialDataFromGD = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
 
+        sql = FinAttrSQL.GET_FinnAttr_ID.replace("PARAM1", financialAttribs.identifier +
+                financialAttribs.financialDataFromStg.get(0).opco +
+                financialAttribs.financialDataFromStg.get(0).resp_centre
+                );
+        Log.info(sql);
+        financialAttribs.financialID = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+        Log.info(financialAttribs.financialID.get(0).fin_attribs_id);
 
     }
 
@@ -62,6 +69,13 @@ public class FinancialAttributesSteps {
 
         Assert.assertEquals("The classname is incorrect for id="+financialAttribs.id,
                 "WorkFinancialAttributes", financialAttribs.financialDataFromSA.get(0).B_CLASSNAME);
+
+        if (financialAttribs.financialID.get(0).fin_attribs_id!=null
+                || financialAttribs.financialDataFromSA.get(0).fin_attribs_id !=null) {
+            assertTrue("Expecting the financial attribute id details from STG and SA Consistent for id="+ financialAttribs.identifier,
+                    financialAttribs.financialID.get(0).fin_attribs_id
+                            .equals(financialAttribs.financialDataFromSA.get(0).fin_attribs_id ));
+        }
 
         if (financialAttribs.financialDataFromStg.get(0).opco!=null
                 || financialAttribs.financialDataFromSA.get(0).gl_company !=null) {

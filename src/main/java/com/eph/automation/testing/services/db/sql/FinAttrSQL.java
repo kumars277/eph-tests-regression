@@ -49,4 +49,7 @@ public class FinAttrSQL {
             "AND semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )\n"+
             "  AND f_wwork='PARAM1'";
+
+    public static String GET_FinnAttr_ID = "select numeric_id as fin_attribs_id from ephsit_talend_owner.map_sourceref_2_numericid " +
+            "where source_ref = 'PARAM1'";
 }
