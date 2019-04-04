@@ -18,6 +18,7 @@ public class DataQualityContext {
     public static List<WorkDataObject> workDataObjectsFromSTGDQ;
     public static List<WorkDataObject> workDataObjectsFromEPH;
     public static List<WorkDataObject> workDataObjectsFromEPHGD;
+    public static List<WorkDataObject> workDataObjectsAccProd;
 
     public static List<ManifestationDataObject> manifestationDataObjectsFromEPH;
     public static List<ManifestationDataObject> manifestationDataObjectsFromPMX;
