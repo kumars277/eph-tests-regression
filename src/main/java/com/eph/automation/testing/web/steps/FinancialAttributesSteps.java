@@ -25,9 +25,9 @@ public class FinancialAttributesSteps {
     private static List<FinancialAttribsDataObject> id;
     private static List<FinancialAttribsDataObject> workid;
 
-    @Given("^We have to check a number of financial attributes$")
-    public void getID(){
-        sql = FinAttrSQL.gettingSourceRef;
+    @Given("^We have to check financial attributes for (.*)$")
+    public void getID(String type){
+        sql = FinAttrSQL.gettingSourceRef.replace("PARAM1", type);
         id = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
         financialAttribs.identifier = id.get(0).random_value;
         Log.info
