@@ -40,6 +40,35 @@ public class WorkDataObject {
     public String F_OPCO_R12;
     public String PRODUCT_WORK_PUB_DATE;
     public String JOURNAL_ACRONYM;
+    public String f_accountable_product;
+
+    public String getF_accountable_product() {
+        return f_accountable_product;
+    }
+
+    public void setF_accountable_product(String f_accountable_product) {
+        this.f_accountable_product = f_accountable_product;
+    }
+
+    public String getACC_PROD_ID() {
+        return ACC_PROD_ID;
+    }
+
+    public void setACC_PROD_ID(String ACC_PROD_ID) {
+        this.ACC_PROD_ID = ACC_PROD_ID;
+    }
+
+    public String getPARENT_ACC_PROD() {
+        return PARENT_ACC_PROD;
+    }
+
+    public void setPARENT_ACC_PROD(String PARENT_ACC_PROD) {
+        this.PARENT_ACC_PROD = PARENT_ACC_PROD;
+    }
+
+    public String ACC_PROD_ID;
+    public String PARENT_ACC_PROD;
+
 
     public String getOWNERSHIP() {
         return OWNERSHIP;

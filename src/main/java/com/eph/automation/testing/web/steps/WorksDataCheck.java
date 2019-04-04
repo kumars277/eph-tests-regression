@@ -68,6 +68,12 @@ public class WorksDataCheck {
         sql =  WorkDataCheckSQL.GET_EPH_GD_WORKS_DATA.replace("PARAM1",dataQualityContext.workDataObjectsFromPMXSTG.get(0).PRODUCT_WORK_ID);
         dataQualityContext.workDataObjectsFromEPHGD = DBManager
                 .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+
+        sql =  WorkDataCheckSQL.GET_Acc_Prod.replace("PARAM1",dataQualityContext.workDataObjectsFromSTGDQ.get(0).ACC_PROD_ID +
+                dataQualityContext.workDataObjectsFromSTGDQ.get(0).PARENT_ACC_PROD );
+        Log.info(sql);
+        dataQualityContext.workDataObjectsAccProd = DBManager
+                .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
     }
 
     @Then("^The work data between PMX and PMX STG is identical$")
@@ -456,6 +462,11 @@ public class WorksDataCheck {
                     dataQualityContext.workDataObjectsFromSTGDQ.get(0).OWNERSHIP
                             .equals(dataQualityContext.workDataObjectsFromEPH.get(0).OWNERSHIP));
         }
+
+            assertTrue("Expecting the Acc prod details from DQ and SA Consistent for id="+ dataQualityContext.productIdentifierID,
+                    dataQualityContext.workDataObjectsAccProd.get(0).f_accountable_product
+                            .equals(dataQualityContext.workDataObjectsFromEPH.get(0).f_accountable_product));
+
     }
 
 
@@ -540,5 +551,10 @@ public class WorksDataCheck {
                     dataQualityContext.workDataObjectsFromEPH.get(0).OWNERSHIP
                             .equals(dataQualityContext.workDataObjectsFromEPHGD.get(0).OWNERSHIP));
         }
+
+        assertTrue("Expecting the Acc prod details from SA and GD Consistent for id="+ dataQualityContext.productIdentifierID,
+                dataQualityContext.workDataObjectsFromEPH.get(0).f_accountable_product
+                        .equals(dataQualityContext.workDataObjectsFromEPHGD.get(0).f_accountable_product));
+
     }
 }
