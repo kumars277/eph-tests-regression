@@ -37,7 +37,7 @@ public class NotificationTestSteps {
     public static String currentTime;
 
     public List<NotificationDataObject> status;
-    public int attemptsBefore;
+    private int attemptsBefore;
 
 
     @Given("^We know the number of (.*) GD records after a full-load$")
@@ -139,7 +139,7 @@ public class NotificationTestSteps {
 
             loadBatchContext.batchId = DataLoadServiceImpl.createWorkByStoreProcedure();
         } else {
-            sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-TSTP03:BKF");
+            sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
             notificationCountContext.writeAttemptsBefore= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
             if (notificationCountContext.writeAttemptsBefore.isEmpty()){
                 attemptsBefore = 0;
@@ -271,12 +271,12 @@ public class NotificationTestSteps {
         } else {
             sql = NotificationsSQL.EPH_GET_Payload_Notif_Manifestation;
             notificationCountContext.payloadResult = DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
-            Assert.assertEquals("The notification number not as expected",2,notificationCountContext.payloadResult.size());
+            Assert.assertEquals("The notification number not as expected",3,notificationCountContext.payloadResult.size());
 
-            sql = NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1", "EPR-TSTP03:BKF");
+            sql = NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1", "EPR-W-TSTW01:JNL");
             notificationCountContext.writeAttemptsAfter = DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
             Log.info("The attempts after update are: " + notificationCountContext.writeAttemptsAfter.get(0).attempts);
-            Assert.assertEquals("The attempts are not as expected", attemptsBefore + 1,
+            Assert.assertEquals("The attempts are not as expected", notificationCountContext.writeAttemptsBefore.get(0).attempts  + 1,
                     notificationCountContext.writeAttemptsAfter.get(0).attempts);
         }
 

@@ -309,5 +309,127 @@ public class DataLoadServiceImpl {
 
     }
 
+    public static String createTestDataByStoreProcedure() {
+        String batchID = null;
+        long batchId;
+        BigDecimal loadId = null;
+        int eventId;
+        String query;
+        conn=null;
+        Properties dbProps = new Properties();
+        dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(DBManager.getDatabaseEnvironmentKey(Constants.EPH_URL)));
+        if (conn == null) {
+            try {
+                conn = DriverManager.getConnection(LoadProperties.getDBConnection(Constants.EPH_URL));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            query = "{? = call semarchy_repository.get_new_loadid(?, ?, ?,?)}";
+            CallableStatement statement = conn.prepareCall(query);
+            statement.registerOutParameter(1, Types.DECIMAL);
+            statement.setString(2, "EPH");
+            statement.setString(3, "Manual");
+            statement.setString(4, "Entity Load");
+            statement.setString(5, "EPH Regression Test");
+            statement.execute();
+
+            loadId = statement.getBigDecimal(1);
+            String loadID = String.valueOf(loadId);
+            loadBatchContext.loadId = loadID;
+
+            System.out.println(loadID);
+
+//            //Need to gete New Event IDeventtype text, description text,
+// thirdparty text, workflowid text, workflowsource text, loadid integer)
+            //
+            query = "{? = call semarchy_eph_mdm.eph_create_event(?,?,?,?,?,?)}";
+            statement = conn.prepareCall(query);
+            statement.registerOutParameter(1, Types.INTEGER);
+            statement.setString(2, "NEW");
+            statement.setString(3, "Regression test");
+            statement.setString(4, null);
+            statement.setString(5, "1");
+            statement.setString(6, "TEST");
+            statement.setInt(7, Integer.valueOf(loadID));
+            statement.execute();
+            eventId = statement.getInt(1);
+            String eventID = String.valueOf(eventId);
+
+            loadBatchContext.eventId = eventID;
+
+            System.out.println(eventID);
+
+            QueryRunner queryRunner = new QueryRunner();
+            CreateTestData(loadID, queryRunner, conn, eventID);
+            statement = conn.prepareCall("{? = call semarchy_repository.SUBMIT_LOAD(?,?,?)}");
+            statement.registerOutParameter(1, Types.BIGINT);
+            statement.setLong(2, Long.valueOf(loadId.toString()));
+            statement.setString(3, "Product");
+            statement.setString(4, "EPH Regression Test");
+            statement.execute();
+            batchID = String.valueOf(statement.getLong(1));
+            System.out.println(batchID);
+            loadBatchContext.batchId = batchID;
+            statement.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            DbUtils.rollbackAndCloseQuietly(conn);
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+
+
+        return batchID;
+    }
+
+    public static void CreateTestData(String loadID, QueryRunner queryRunner, Connection conn, String eventID) throws SQLException {
+        String updateManifestation = "";
+        String updateManifestation1 = "";
+        String updateWork = "";
+        String updateProduct1 = "";
+        String updateProduct2 = "";
+        String updateProduct3 = "";
+        String updateProduct4 = "";
+        String updateProduct5 = "";
+        String updateProduct6 = "";
+        String updateProduct7 = "";
+        int updateStatus;
+
+        updateWork = UpdateProductSQL.Insert_work;
+        updateManifestation = UpdateProductSQL.Insert_manifestation;
+        updateManifestation1 = UpdateProductSQL.Insert_manifestation_1;
+        updateProduct1 = UpdateProductSQL.Insert_product_1;
+        updateProduct2 = UpdateProductSQL.Insert_product_2;
+        updateProduct3 = UpdateProductSQL.Insert_product;
+        updateProduct4 = UpdateProductSQL.Insert_product_4;
+        updateProduct5 = UpdateProductSQL.Insert_product_5;
+        updateProduct6 = UpdateProductSQL.Insert_product_6;
+        updateProduct7 = UpdateProductSQL.Insert_product_7;
+
+        updateStatus = queryRunner.update(conn, updateWork.replace("LOADID", loadID).replace("EVENT", eventID));
+        System.out.println(updateStatus);
+        updateStatus = queryRunner.update(conn, updateManifestation.replace("LOADID", loadID).replace("EVENT", eventID));
+        System.out.println(updateStatus);
+        updateStatus = queryRunner.update(conn, updateManifestation1.replace("LOADID", loadID).replace("EVENT", eventID));
+        System.out.println(updateStatus);
+        updateStatus = queryRunner.update(conn, updateProduct1.replace("LOADID", loadID).replace("EVENT", eventID));
+        System.out.println(updateStatus);
+        updateStatus = queryRunner.update(conn, updateProduct2.replace("LOADID", loadID).replace("EVENT", eventID));
+        System.out.println(updateStatus);
+        updateStatus = queryRunner.update(conn, updateProduct3.replace("LOADID", loadID).replace("EVENT", eventID));
+        System.out.println(updateStatus);
+        updateStatus = queryRunner.update(conn, updateProduct4.replace("LOADID", loadID).replace("EVENT", eventID));
+        System.out.println(updateStatus);
+        updateStatus = queryRunner.update(conn, updateProduct5.replace("LOADID", loadID).replace("EVENT", eventID));
+        System.out.println(updateStatus);
+        updateStatus = queryRunner.update(conn, updateProduct6.replace("LOADID", loadID).replace("EVENT", eventID));
+        System.out.println(updateStatus);
+        updateStatus = queryRunner.update(conn, updateProduct7.replace("LOADID", loadID).replace("EVENT", eventID));
+        System.out.println(updateStatus);
+
+    }
+
 
 }
