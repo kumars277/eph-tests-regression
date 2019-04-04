@@ -379,6 +379,20 @@ public class WorksDataCheck {
             }
         }
 
+        if (dataQualityContext.workDataObjectsFromPMXSTG.get(0).F_OPCO_R12!=null
+                || dataQualityContext.workDataObjectsFromSTGDQ.get(0).F_OPCO_R12 !=null) {
+            assertTrue("Expecting the OPCO details from STG and DQ Consistent for id="+ dataQualityContext.productIdentifierID,
+                    dataQualityContext.workDataObjectsFromPMXSTG.get(0).F_OPCO_R12
+                            .equals(dataQualityContext.workDataObjectsFromSTGDQ.get(0).F_OPCO_R12));
+        }
+
+        if (dataQualityContext.workDataObjectsFromPMXSTG.get(0).F_RESPONSIBILITY_CENTRE!=null
+                || dataQualityContext.workDataObjectsFromSTGDQ.get(0).F_RESPONSIBILITY_CENTRE !=null) {
+            assertTrue("Expecting the resp centre details from STG and DQ Consistent for id="+ dataQualityContext.productIdentifierID,
+                    dataQualityContext.workDataObjectsFromPMXSTG.get(0).F_RESPONSIBILITY_CENTRE
+                            .equals(dataQualityContext.workDataObjectsFromSTGDQ.get(0).F_RESPONSIBILITY_CENTRE));
+        }
+
     }
 
     @And("^The work data between STG DQ and SA is identical$")

@@ -44,6 +44,8 @@ public class WorkDataCheckSQL {
             "  ,ww.F_STATUS AS WORK_STATUS\n" +
             "  ,ww.F_IMPRINT AS IMPRINT\n" +
             "  ,ww.F_SOCIETY_OWNERSHIP AS OWNERSHIP\n" +
+            "  ,ww.opco AS F_OPCO_R12\n" +
+            "  ,ww.resp_centre AS F_RESPONSIBILITY_CENTRE\n" +
             "  ,ap.\"ACC_PROD_ID\" as ACC_PROD_ID" +
             "  ,ap.\"PARENT_ACC_PROD\" as PARENT_ACC_PROD"+
             "  FROM ephsit_talend_owner.stg_10_pmx_wwork_dq ww\n"+
