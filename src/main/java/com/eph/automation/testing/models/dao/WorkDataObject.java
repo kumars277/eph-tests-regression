@@ -42,6 +42,16 @@ public class WorkDataObject {
     public String JOURNAL_ACRONYM;
     public String f_accountable_product;
 
+    public int getPMX_SOURCE_REFERENCE() {
+        return PMX_SOURCE_REFERENCE;
+    }
+
+    public void setPMX_SOURCE_REFERENCE(int PMX_SOURCE_REFERENCE) {
+        this.PMX_SOURCE_REFERENCE = PMX_SOURCE_REFERENCE;
+    }
+
+    public int PMX_SOURCE_REFERENCE;
+
     public String getF_accountable_product() {
         return f_accountable_product;
     }

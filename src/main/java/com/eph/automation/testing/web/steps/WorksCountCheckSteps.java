@@ -64,14 +64,14 @@ public class WorksCountCheckSteps {
         if (source.contentEquals("PMX")) {
             Assert.assertEquals("The number of works in PMX and PMX Staging is not equal!", pmxWork, pmxSTGWork);
             Log.info("The count between PMX and Staging is equal");
-        }else if (source.contentEquals("PMX STG")){
+        }else if (source.contentEquals("EPH STG")){
             Assert.assertEquals("The number of works in PMX Staging and DQ is not equal!", pmxSTGWorkDistinct,
                     dqWorks);
             Log.info("The count between Staging and SA is equal");
-        } else if (target.contentEquals("SA")){
+        } else if (target.contentEquals("EPH SA")){
             Assert.assertEquals("The number of works in DQ and SA is not equal!", dqNoErrorWorks, ephWork);
             Log.info("The count between SA and GD is equal");
-        } else if (target.contentEquals("GD")){
+        } else if (target.contentEquals("EPH GD")){
             Assert.assertEquals("The number of works in SA and GD is not equal!", ephWork, ephWorkGD);
             Log.info("The count between SA and GD is equal");
         } else{

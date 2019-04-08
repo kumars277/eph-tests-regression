@@ -42,7 +42,7 @@ public class WorkExtractSQL {
             "  LEFT JOIN GD_IMPRINT I ON W.F_IMPRINT = I.IMPRINT_ID\n" +
             "  LEFT JOIN GD_PRODUCT_OWNER PO ON W.PRODUCT_WORK_ID = PO.F_PRODUCT_WORK\n" +
             "  LEFT JOIN GD_OWNERSHIP_SUB_TYPE O ON PO.F_OWNERSHIP_SUB_TYPE = O.OWNERSHIP_SUB_TYPE_ID)\n" +
-            "  WHERE PRODUCT_WORK_ID = 'PARAM1'";
+            "  WHERE PRODUCT_WORK_ID IN ('%s') ORDER BY PRODUCT_WORK_ID";
 
     public static String GET_PRODUCT_EXPORT_FROM_PMX_BY_PMC = "  select distinct * from\n" +
             "  (SELECT \n" +
