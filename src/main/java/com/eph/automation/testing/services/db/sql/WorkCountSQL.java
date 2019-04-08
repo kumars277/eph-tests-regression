@@ -20,7 +20,7 @@ public class WorkCountSQL {
 
     public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count (*) as workCountDQSTGnoError from ephsit_talend_owner.stg_10_pmx_wwork_dq where dq_err='N'";
 
-    public static String EPH_SA_WORKS_COUNT = "select count (*) as workCountEPH from ephsit.semarchy_eph_mdm.sa_wwork "+
+    public static String EPH_SA_WORKS_COUNT = "select count (distinct pmx_source_reference) as workCountEPH from ephsit.semarchy_eph_mdm.sa_wwork "+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_wwork join \n"+
             "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
