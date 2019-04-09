@@ -11,7 +11,8 @@ public class PersonDataSQL {
             "SELECT F_PARTY FROM GD_PMG\n" +
             "UNION\n" +
             "SELECT F_PARTY FROM GD_PARTY_IN_PRODUCT WHERE F_ROLE_TYPE IN (\n" +
-            "1,49,1206))";
+            "SELECT ROLE_TYPE_ID FROM GD_ROLE_TYPE WHERE ROLE_TYPE_CODE IN\n" +
+            "('PPC','PUB','A01','A02','B01','B13','B09','B11','PUBDIR')))";
 
     public static String GET_COUNT_PERSONS_EPHSTG = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_person";
 
@@ -38,7 +39,8 @@ public class PersonDataSQL {
             "SELECT F_PARTY FROM GD_PMG\n" +
             "UNION\n" +
             "SELECT F_PARTY FROM GD_PARTY_IN_PRODUCT WHERE F_ROLE_TYPE IN (\n" +
-            "1,49,1206) )\n" +
+            "SELECT ROLE_TYPE_ID FROM GD_ROLE_TYPE WHERE ROLE_TYPE_CODE IN\n" +
+            "('PPC','PUB','A01','A02','B01','B13','B09','B11','PUBDIR'))) \n" +
             "AND PARTY_ID IN ('%s')";
 
     public static String GET_DATA_PERSONS_EPHSTG = "select \n" +
