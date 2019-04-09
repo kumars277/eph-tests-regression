@@ -5,6 +5,26 @@ public class FinancialAttribsDataObject {
     public String opco;
     public String resp_centre;
 
+
+    public String getPMX_SOURCE_REFERENCE() {
+        return PMX_SOURCE_REFERENCE;
+    }
+
+    public void setPMX_SOURCE_REFERENCE(String PMX_SOURCE_REFERENCE) {
+        this.PMX_SOURCE_REFERENCE = PMX_SOURCE_REFERENCE;
+    }
+
+    public String getWorkID() {
+        return workID;
+    }
+
+    public void setWorkID(String workID) {
+        this.workID = workID;
+    }
+
+    public String workID;
+    public String PMX_SOURCE_REFERENCE;
+
     public String getRandom_value() {
         return random_value;
     }
@@ -37,13 +57,6 @@ public class FinancialAttribsDataObject {
         B_CLASSNAME = b_CLASSNAME;
     }
 
-    public String getFin_attribs_id() {
-        return fin_attribs_id;
-    }
-
-    public void setFin_attribs_id(String fin_attribs_id) {
-        this.fin_attribs_id = fin_attribs_id;
-    }
 
     public String getGl_company() {
         return gl_company;
@@ -78,6 +91,16 @@ public class FinancialAttribsDataObject {
     }
 
     public String B_CLASSNAME;
+
+
+    public String getFin_attribs_id() {
+        return fin_attribs_id;
+    }
+
+    public void setFin_attribs_id(String fin_attribs_id) {
+        this.fin_attribs_id = fin_attribs_id;
+    }
+
     public String fin_attribs_id;
     public String gl_company;
     public String cost_resp_centre;

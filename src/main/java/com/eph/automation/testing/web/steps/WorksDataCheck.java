@@ -44,7 +44,7 @@ public class WorksDataCheck {
 
         //Get property when run with jenkins
         numberOfRecords = System.getProperty("dbRandomRecordsNumber");
-        //numberOfRecords = "5";
+        //numberOfRecords = "10";
         Log.info("numberOfRecords = " + numberOfRecords);
 
         sql = GeneratingRandomSQL.generatingValue
@@ -75,8 +75,6 @@ public class WorksDataCheck {
         dataQualityContext.workDataObjectsFromPMXSTG = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
         sql =  String.format(WorkDataCheckSQL.GET_STG_DQ_WORKS_DATA, Joiner.on("','").join(ids));
-        Log.info
-                (sql);
         dataQualityContext.workDataObjectsFromSTGDQ = DBManager
                 .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
@@ -86,6 +84,8 @@ public class WorksDataCheck {
                 .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
         sql =  String.format(WorkDataCheckSQL.GET_EPH_GD_WORKS_DATA, Joiner.on("','").join(ids));
+        Log.info
+                (sql);
         dataQualityContext.workDataObjectsFromEPHGD = DBManager
                 .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
@@ -602,7 +602,9 @@ public class WorksDataCheck {
             }
 
             if (dataQualityContext.workDataObjectsFromEPH.get(i).f_accountable_product != null
-                    || dataQualityContext.workDataObjectsFromEPHGD.get(i).f_accountable_product != null) {
+                    ||  dataQualityContext.workDataObjectsFromEPHGD.get(i).f_accountable_product != null) {
+                Log.info(dataQualityContext.workDataObjectsFromEPH.get(i).f_accountable_product);
+                Log.info(dataQualityContext.workDataObjectsFromEPHGD.get(i).f_accountable_product);
                 assertTrue("Expecting the Acc prod details from SA and GD Consistent for id=" + ids.get(i),
                         dataQualityContext.workDataObjectsFromEPH.get(i).f_accountable_product
                                 .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).f_accountable_product));

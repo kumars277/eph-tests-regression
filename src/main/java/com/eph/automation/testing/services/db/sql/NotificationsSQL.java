@@ -1,17 +1,29 @@
 package com.eph.automation.testing.services.db.sql;
 
 public class NotificationsSQL {
-    public static String EPH_GD_PRODUCT_Count = "select count(*) as ephGDCount FROM semarchy_eph_mdm.gd_PARAM1 gd\n" +
-            "join semarchy_eph_mdm.gd_event e on gd.b_batchid = e.b_batchid and gd.b_batchid = (select max (b_batchid) from semarchy_eph_mdm.gd_PARAM1)";
+    public static String EPH_GD_PRODUCT_Count = "select count (*) as ephGDCount from ephsit.semarchy_eph_mdm.gd_PARAM1";
+/*            " where f_event =  (select max (f_event) from\n" +
+            "semarchy_eph_mdm.gd_PARAM1 join \n"+
+            "semarchy_eph_mdm.gd_event on f_event = event_id\n"+
+            "where  semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n"+
+            "and semarchy_eph_mdm.gd_event.workflow_id = 'talend'\n"+
+            "AND semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n"+
+            "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )";*/
 
    /* public static String EPH_Notifications_Count = "select count(*) as notificationCount FROM semarchy_eph_stg.st_out_notification st\n" +
             "join semarchy_eph_mdm.gd_event e on st.batch_id = e.b_batchid and st.notification_type='PARAM1' and st.batch_id = " +
             "(select max (batch_id) from semarchy_eph_stg.st_out_notification where notification_type='PARAM1' )";*/
 
 
-    public static String EPH_Notifications_Count = "select count(*) as notificationCount FROM semarchy_eph_stg.st_out_notification st\n" +
-            "join semarchy_eph_mdm.gd_event e on st.batch_id = e.b_batchid and st.notification_type='PARAM1' and st.batch_id = " +
-            "(select max (b_batchid) from semarchy_eph_mdm.gd_PARAM2)";
+    public static String EPH_Notifications_Count = "select count(distinct notification_id) as notificationCount from semarchy_eph_stg.st_out_notification\n"+
+/*    "where batch_id =  (select max (batch_id) from\n"+
+            "semarchy_eph_stg.st_out_notification join\n"+
+            " semarchy_eph_mdm.gd_event e on batch_id = e.b_batchid\n"+
+            "where  e.f_event_type = 'PMX'\n"+
+            " and e.workflow_id = 'talend'\n"+
+            "AND e.f_event_type = 'PMX'\n"+
+            "and e.f_workflow_source = 'PMX')\n"+*/
+            "where notification_type='PARAM1'";
 
     public static String EPH_GD_ID = "select PARAM2_id as gdID FROM semarchy_eph_mdm.gd_PARAM1 gd\n" +
             "join semarchy_eph_mdm.gd_event e on gd.b_batchid = e.b_batchid and gd.b_batchid = (select max (b_batchid) from semarchy_eph_mdm.gd_PARAM1)";
@@ -74,5 +86,18 @@ public class NotificationsSQL {
 
     public static String EPH_GET_Write_Attempts = "select write_attempts as attempts from semarchy_eph_stg.st_test_notification_payload\n" +
             " where payload_key='PARAM1'";
+
+    public static String EPH_GET_TEST_DATA_Product="select * \n" +
+            "from semarchy_eph_mdm.gd_product\n" +
+            " where product_id in ('EPR-TSTP01','EPR-TSTP02'," +
+            "'EPR-TSTP03','EPR-TSTP04','EPR-TSTP05','EPR-TSTP06','EPR-TSTP07')";
+
+    public static String EPH_GET_TEST_DATA_Work="select * \n" +
+            "from semarchy_eph_mdm.gd_wwork\n" +
+            " where work_id = 'EPR-W-TSTW01'";
+
+    public static String EPH_GET_TEST_DATA_Manifestation="select * \n" +
+            "from semarchy_eph_mdm.gd_manifestation\n" +
+            " where manifestation_id in ('EPR-M-TSTM01','EPR-M-TSTM02')";
 
 }
