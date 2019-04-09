@@ -75,7 +75,7 @@ public class PersonProductRoleDataSQL {
     public static String GET_DATA_PERSONS_PRODUCT_ROLE_EPHGD = "select \n" +
             "f_event as F_EVENT,\n" +
             "b_classname as B_CLASSNAME,\n" +
-            "product_person_role_id as WORK_PERSON_ROLE_ID,\n" +
+            "product_person_role_id as PRODUCT_PERSON_ROLE_ID,\n" +
             "effective_start_date as EFFECTIVE_START_DATE,\n" +
             "effective_end_date as EFFECTIVE_END_DATE,\n" +
             "f_role as F_ROLE,\n" +
@@ -84,15 +84,26 @@ public class PersonProductRoleDataSQL {
             "from semarchy_eph_mdm.gd_product_person_role \n" +
             "where product_person_role_id in ('%s')";
 
-    public static String GET_RANDOM_PERSON_PRODUCT_ROLE_IDS = "select  \n" +
-            "pmx_source_reference as PRODUCT_SOURCE_REF\n" +
-            "from\n" +
-            "    ephsit_talend_owner.stg_10_pmx_product_can p\n" +
-            "left join\n" +
-            "    ephsit_talend_owner.stg_10_pmx_manifestation m on p.f_manifestation_source_ref = m.\"MANIFESTATION_ID\"::text\n" +
-            "left join\n" +
-            "    ephsit_talend_owner.stg_10_pmx_work_person_role wp on coalesce(p.f_work_source_ref, m.\"F_PRODUCT_WORK\"::text) = wp.\"PMX_WORK_SOURCE_REF\"::text \n" +
-            "    order by random() limit '%s'";
+    public static String GET_RANDOM_PERSON_PRODUCT_ROLE_IDS = "select  PRODUCT_SOURCE_REF as PRODUCT_SOURCE_REF\n" +
+            "from ephsit_talend_owner.stg_10_pmx_product_person_role ppr\n" +
+            "left join ephsit_talend_owner.map_sourceref_2_ephid mp on  mp.source_ref = ppr.product_source_ref \n" +
+            "left join semarchy_eph_mdm.sa_product_person_role sa on sa.f_product = mp.eph_id\n" +
+            "where sa.b_error_status is null \n" +
+            "and SA.b_loadid in (select max(b_loadid) from semarchy_eph_mdm.sa_event where f_event_type ='PMX' and f_workflow_source = 'PMX' and workflow_id = 'talend')\n" +
+            "order by random() limit '%s'";
+
+    public static String GET_RANDOM_PERSON_PRODUCT_ROLE_IDS_FROM_SA = "select \n" +
+            "product_person_role_id as PRODUCT_PERSON_ROLE_ID\n" +
+            "from semarchy_eph_mdm.sa_product_person_role p\n" +
+            "where p.b_loadid =  (\n" +
+            "select max (p1.b_loadid) from \n" +
+            "semarchy_eph_mdm.sa_product_person_role p1\n" +
+            "join \n" +
+            "semarchy_eph_mdm.sa_event sa on sa.b_loadid = p1.b_loadid \n" +
+            "where  sa.f_event_type = 'PMX'\n" +
+            "and sa.workflow_id = 'talend'\n" +
+            "and sa.f_workflow_source = 'PMX' )\n" +
+            "order by random() limit '10'";
 
 
 }

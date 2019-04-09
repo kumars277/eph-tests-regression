@@ -20,6 +20,13 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
     Then Compare the count on records for persons work role in EPH SA and EPH GD
 
   @Regression
+  Scenario: Verify sum of counts of persons work role in EPH GD and EPH AE is equal to count of persons work role in EPH SA
+    Given Get the count of records for persons work role in EPH SA
+    Given Get the count of records for persons work role in EPH AE
+    When Get the count of records for persons work role in EPH GD
+    Then Verify sum of records for persons work role in EPH GD and EPH AE is equal to number of records in EPH SA
+
+  @Regression
   Scenario Outline: Validate data is transferred from PMX to EPH STG
     Given We get <countOfRandomIds> random ids of persons work role with <type>
     When We get the person work role records with <type> from PMX
@@ -35,7 +42,6 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
   @Regression
   Scenario Outline: Validate mandatory columns are populated in EPH SA for persons work role
     Given We get <countOfRandomIds> random ids of persons work role with <type>
-    When We get the ids of the person work role records in EPH SA from the lookup table
     Then We get the person work role records from EPH SA
     And Check the mandatory columns are populated for persons work role
     Examples:
@@ -49,7 +55,6 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
   Scenario Outline: Validate data is transferred from EPH STG to EPH SA
     Given We get <countOfRandomIds> random ids of persons work role with <type>
     When We get the person work role records from EPH STG
-    Then We get the ids of the person work role records in EPH SA from the lookup table
     Then We get the person work role records from EPH SA
     And Compare person work role records in EPH STG and EPH SA
     Examples:
@@ -63,7 +68,6 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
   @Regression
   Scenario Outline: Validate data is transferred from EPH SA to EPH GD
     Given We get <countOfRandomIds> random ids of persons work role with <type>
-    When We get the ids of the person work role records in EPH SA from the lookup table
     Then We get the person work role records from EPH SA
     Then We get the person work role records from EPH GD
     And Compare person work role records in EPH SA and EPH GD

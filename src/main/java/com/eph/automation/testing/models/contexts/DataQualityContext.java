@@ -52,6 +52,12 @@ public class DataQualityContext {
     public static List<PersonWorkRoleDataObject> personWorkRoleDataObjectsFromEPHSA;
     public static List<PersonWorkRoleDataObject> personWorkRoleDataObjectsFromEPHGD;
 
+
+    public static List<AccountableProductDataObject> accountableProductDataObjectsFromPMX;
+    public static List<AccountableProductDataObject> accountableProductDataObjectsFromSTG;
+    public static List<AccountableProductDataObject> accountableProductDataObjectsFromSA;
+    public static List<AccountableProductDataObject> accountableProductDataObjectsFromGD;
+
     //public static List<ProductDataObject> productEntityObjectsFromSource;
     //public static List<ProductDataObject> productEntityObjectsFromEPH;
     public static String productIdentifierID;

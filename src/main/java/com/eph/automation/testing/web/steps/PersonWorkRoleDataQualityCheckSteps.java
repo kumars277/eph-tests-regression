@@ -36,12 +36,13 @@ public class PersonWorkRoleDataQualityCheckSteps {
     private static int countPersonsWorkRolePMX;
     private static int countPersonsWorkRoleEPHSTG;
     private static int countPersonsWorkRoleEPHSA;
+    private static int countPersonsWorkRoleEPHAE;
     private static int countPersonsWorkRoleEPHGD;
     private List<Map<?, ?>> personIds;
     private static List<String> ids;
     private static List<String> idsPMX;
     private static List<String> idsSourceRef;
-    private static List<String> idsLookup;
+    private static List<String> idsSA;
 
 
     @Given("^Get the count of records for persons work role in PMX$")
@@ -81,6 +82,16 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info("Count of persons work role in EPH SA is: " + countPersonsWorkRoleEPHSA);
     }
 
+    @Given("^Get the count of records for persons work role in EPH AE$")
+    public void getCountPersonsProductRoleEPHAE() {
+        Log.info("When We get the count of persons records in PMX STG ..");
+        sql = PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHAE;
+        Log.info(sql);
+        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countPersonsWorkRoleEPHAE = ((Long) personsNumber.get(0).get("count")).intValue();
+        Log.info("Count of persons work role in EPH AE is: " + countPersonsWorkRoleEPHAE);
+    }
+
 
     @Then("^Compare the count on records for persons work role in EPH Staging and EPH SA$")
     public void verifyCountOfPersonsProductRoleInEPHSTGAndEPHSAIsEqual() {
@@ -102,6 +113,12 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Assert.assertEquals("\nPersons work role count in EPH SA and EPH GD is not equal", countPersonsWorkRoleEPHSA, countPersonsWorkRoleEPHGD);
     }
 
+    @Then("^Verify sum of records for persons work role in EPH GD and EPH AE is equal to number of records in EPH SA$")
+    public void verifyCountOfPersonsProductRoleInEPHGDAndEPHAEIsEqualToEPHSA() {
+        int sumOFRecords = countPersonsWorkRoleEPHAE + countPersonsWorkRoleEPHGD;
+        Assert.assertEquals("\nSum of the records for persons work role in EPH GD and EPH AE is NOT equal to number of records in EPH SA", sumOFRecords, countPersonsWorkRoleEPHSA);
+    }
+
 
     @Given("^We get (.*) random ids of persons work role with (.*)$")
     public void getRandomIds(String numberOfRecords, String type) {
@@ -113,15 +130,18 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
         switch(type) {
             case "PD":
-                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, type, numberOfRecords);
+//                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, type, numberOfRecords);
+                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS_FROM_SA_WITH_NO_ERROR, type, numberOfRecords);
                 Log.info(sql);
                 break;
             case "AU":
-                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, type, numberOfRecords);
+//                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, type, numberOfRecords);
+                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS_FROM_SA_WITH_NO_ERROR, type, numberOfRecords);
                 Log.info(sql);
                 break;
             case "PU":
-                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, type, numberOfRecords);
+//                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, type, numberOfRecords);
+                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS_FROM_SA_WITH_NO_ERROR, type, numberOfRecords);
                 Log.info(sql);
                 break;
             default:
@@ -130,7 +150,23 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
         List<Map<?, ?>> randomPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
-        ids = randomPersons.stream().map(m -> (String) m.get("WORK_PERSON_ROLE_SOURCE_REF")).map(String::valueOf).collect(Collectors.toList());
+//        ids = randomPersons.stream().map(m -> (String) m.get("WORK_PERSON_ROLE_SOURCE_REF")).map(String::valueOf).collect(Collectors.toList());
+        idsSA = randomPersons.stream().map(m -> (BigDecimal) m.get("WORK_PERSON_ROLE_ID")).map(String::valueOf).collect(Collectors.toList());
+        Log.info(idsSA.toString());
+
+        //get ids (WORK_PERSON_SOURCE_REF)
+        Log.info("Get the ids of the records in EPH STG from the lookup table ..");
+        idsSourceRef = new ArrayList<>(idsSA);
+
+
+//        IntStream.range(0, idsSourceRef.size()).forEach(i -> idsSourceRef.set(i, "WPR-" + idsSourceRef.get(i)));
+        sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE, Joiner.on("','").join(idsSA));
+        Log.info(sql);
+
+
+        List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+
+        ids = lookupResults.stream().map(m -> (String) m.get("WORK_PERSON_ROLE_SOURCE_REF")).map(String::valueOf).collect(Collectors.toList());
         Log.info(ids.toString());
     }
 
@@ -141,9 +177,8 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
         //prepare ids
         idsPMX = new ArrayList<>(ids);
+        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).substring(idsPMX.get(i).indexOf("-")+1, idsPMX.get(i).lastIndexOf("-"))));
 
-
-        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).replace("-" + type, "")));
 
         if(type.equals("PD")) {
             sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_PD, Joiner.on("','").join(idsPMX));
@@ -215,28 +250,29 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
     }
 
-    @Then("^We get the ids of the person work role records in EPH SA from the lookup table$")
-    public void getIdsFromLookupTable() {
-        Log.info("Get the ids of the records in EPH SA from the lookup table ..");
-        idsSourceRef = new ArrayList<>(ids);
-
-
-        IntStream.range(0, idsSourceRef.size()).forEach(i -> idsSourceRef.set(i, "WPR-" + idsSourceRef.get(i)));
-        sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE, Joiner.on("','").join(idsSourceRef));
-        Log.info(sql);
-
-
-        List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-
-        idsLookup = lookupResults.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
-        Log.info(idsLookup.toString());
-    }
+//    @Then("^We get the ids of the person work role records in EPH SA from the lookup table$")
+//    public void getIdsFromLookupTable() {
+//        Log.info("Get the ids of the records in EPH SA from the lookup table ..");
+//        idsSourceRef = new ArrayList<>(ids);
+//
+//
+//        IntStream.range(0, idsSourceRef.size()).forEach(i -> idsSourceRef.set(i, "WPR-" + idsSourceRef.get(i)));
+//        sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE, Joiner.on("','").join(idsSourceRef));
+//        Log.info(sql);
+//
+//
+//        List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+//
+//        idsSA = lookupResults.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
+//        Log.info(idsSA.toString());
+//    }
 
 
     @Then("^We get the person work role records from EPH SA$")
     public void getPersonWorkRoleRecordsEPHSA() {
         Log.info("Get the person product role records from EPH SA  ..");
-        sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHSA, Joiner.on("','").join(idsLookup));
+        sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHSA, Joiner.on("','").join(idsSA));
+//        sql = PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHSA;
         Log.info(sql);
 
         dataQualityContext.personWorkRoleDataObjectsFromEPHSA = DBManager
@@ -277,9 +313,9 @@ public class PersonWorkRoleDataQualityCheckSteps {
             Log.info(sql);
 
             List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            idsLookup = lookupResults.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
+            idsSA = lookupResults.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
 
-            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHSA, Joiner.on("','").join(idsLookup));
+            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHSA, Joiner.on("','").join(idsSA));
             Log.info(sql);
 
             dataQualityContext.personWorkRoleDataObjectsFromEPHSA = DBManager
@@ -342,7 +378,9 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @Then("^We get the person work role records from EPH GD$")
     public void getPersonWorkRoleRecordsEPHGD() {
         Log.info("Get the person work role records from EPH GD  ..");
-        sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHGD, Joiner.on("','").join(idsLookup));
+        sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHGD, Joiner.on("','").join(idsSA));
+//        sql = PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHGD;
+
         Log.info(sql);
 
         dataQualityContext.personWorkRoleDataObjectsFromEPHGD = DBManager
