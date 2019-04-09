@@ -43,8 +43,8 @@ public class WorksDataCheck {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber");
-        numberOfRecords = "10";
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        //numberOfRecords = "10";
         Log.info("numberOfRecords = " + numberOfRecords);
 
         sql = GeneratingRandomSQL.generatingValue
