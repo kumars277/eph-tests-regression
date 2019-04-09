@@ -76,7 +76,8 @@ public class WorkDataCheckSQL {
             "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
             "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
-            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n"+
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n" +
+            "and b_error_status is null\n"+
             "  AND pmx_source_reference IN ('%s')";
 
 

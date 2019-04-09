@@ -38,11 +38,12 @@ public class NotificationTestSteps {
 
     public List<NotificationDataObject> status;
     private int attemptsBefore;
-
+    public static boolean testDataMissing = false;
 
     @Given("^We know the number of (.*) GD records after a full-load$")
     public void getGDRecordsAfterFullLoad(String table){
         sql= NotificationsSQL.EPH_GD_PRODUCT_Count.replace("PARAM1",table);
+        Log.info(sql);
         notificationCountContext.gdCountNumber= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
         Log.info("\nThe number of records in GD is: " + notificationCountContext.gdCountNumber.get(0).ephGDCount);
     }
@@ -50,7 +51,7 @@ public class NotificationTestSteps {
     @When("^We check the created notifications by (.*) and by (.*)$")
     public void getNotifications(String type,String table){
         sql= NotificationsSQL.EPH_Notifications_Count.replace("PARAM1",type).replace("PARAM2", table);
-    //    Log.info(sql);
+        //Log.info(sql);
         notificationCountContext.notificationCountNumber= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
         Log.info("\nThe number of notifications is: " + notificationCountContext.notificationCountNumber.get(0).notificationCount);
     }
@@ -92,9 +93,9 @@ public class NotificationTestSteps {
 
             Log.info("Processed notifications are: " + notificationCountContext.processedNotification.get(0).processed);
             Log.info("Notifications in payload table are: " + notificationCountContext.processedNotification.get(0).payloadcount);
-            Assert.assertEquals("There are difference between processed and payload notifications",
+            Assert.assertTrue("There are difference between processed and payload notifications",
                     notificationCountContext.processedNotification.get(0).processed
-                    , notificationCountContext.payloadNotification.get(0).payloadcount);
+                    <= notificationCountContext.payloadNotification.get(0).payloadcount);
 
         } else if (type.equalsIgnoreCase("PRODUCT")){
             sql= NotificationsSQL.EPH_Notification_Processed.replace("PARAM1",type);
@@ -110,6 +111,51 @@ public class NotificationTestSteps {
             Assert.assertEquals("There are difference between processed and payload notifications",
                     notificationCountContext.processedNotification.get(0).processed
                     , notificationCountContext.payloadNotification.get(0).payloadcount);
+        }
+    }
+
+    @Given("^A full load was performed$")
+    public void checkForFullLoad(){
+        sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
+        notificationCountContext.checkTestData= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
+        if (notificationCountContext.checkTestData.isEmpty()){
+            testDataMissing = true;
+        }else{
+            Log.info("Test data exists. Skipping this test...");
+        }
+    }
+
+    @When("^The test data is inserted$")
+    public void createTestData(){
+        if (testDataMissing){
+            loadBatchContext.batchId = DataLoadServiceImpl.createTestDataByStoreProcedure();
+            System.out.println(loadBatchContext.batchId);
+            JobUtils.waitTillTheBatchComplete();
+        }else{
+            Log.info("Test data exists. Skipping this test...");
+        }
+    }
+
+    @Then("^The test data is created successfully$")
+    public void verifyTestDataCreated(){
+        if (testDataMissing){
+            sql= NotificationsSQL.EPH_GET_TEST_DATA_Work;
+            notificationCountContext.getWorkTD= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
+            Assert.assertEquals("The Work test data is missing", 1
+                    ,notificationCountContext.getWorkTD.size());
+
+            sql= NotificationsSQL.EPH_GET_TEST_DATA_Product;
+            notificationCountContext.getProductTD= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
+            Assert.assertEquals("The Work test data is missing", 7
+                    ,notificationCountContext.getProductTD.size());
+
+            sql= NotificationsSQL.EPH_GET_TEST_DATA_Manifestation;
+            notificationCountContext.getManifestationTD= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
+            Assert.assertEquals("The Work test data is missing", 2
+                    ,notificationCountContext.getManifestationTD.size());
+            Log.info("Test data is created successfully!");
+        }else{
+            Log.info("Test data exists. Skipping this test...");
         }
     }
 

@@ -15,6 +15,12 @@ Feature: Entity - Notifications - Validate a notification is created for every c
        | MANIFESTATION     |manifestation|
 
     @Regression
+    Scenario: Creating test data for notification test
+      Given A full load was performed
+      When The test data is inserted
+      Then The test data is created successfully
+
+    @Regression
     Scenario Outline: Verify notification is processed successfully
       Given A <type> is updated
       When A notification is created

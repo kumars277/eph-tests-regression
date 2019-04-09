@@ -15,4 +15,8 @@ public class NotificationCountContext {
     public static List<NotificationDataObject> payloadResult;
     public static List<NotificationDataObject> writeAttemptsBefore;
     public static List<NotificationDataObject> writeAttemptsAfter;
+    public static List<NotificationDataObject> checkTestData;
+    public static List<NotificationDataObject> getWorkTD;
+    public static List<NotificationDataObject> getProductTD;
+    public static List<NotificationDataObject> getManifestationTD;
 }
