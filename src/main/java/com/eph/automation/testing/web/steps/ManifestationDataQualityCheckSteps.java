@@ -159,7 +159,7 @@ public class ManifestationDataQualityCheckSteps {
 
     @When("^We get the manifestation ids for these books$")
     public void getManifestationsIds() {
-        Log.info("Get manifestation ids ..");
+        Log.info("Get manifestationApiObject ids ..");
 
         //  Get manifestations ids for isbns which are in PMX STG
         sql = String.format(WorkExtractSQL.SELECT_MANIFESTATIONS_IDS_FOR_SPECIFIC_ISBN, Joiner.on("','").join(isbns));
@@ -200,9 +200,9 @@ public class ManifestationDataQualityCheckSteps {
 
         IntStream.range(0, manifestationDataObjectsFromPMX.size()).forEach(i -> {
 
-            //verify manifestation ids are equal
-            Log.info("Manifestation id in PMX: " + manifestationDataObjectsFromPMX.get(i).getMANIFESTATION_ID());
-            Log.info("Manifestation id in EPH Staging: " + manifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID());
+            //verify manifestationApiObject ids are equal
+            Log.info("ManifestationApiObject id in PMX: " + manifestationDataObjectsFromPMX.get(i).getMANIFESTATION_ID());
+            Log.info("ManifestationApiObject id in EPH Staging: " + manifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID());
 
             assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ",
                     Integer.parseInt(manifestationDataObjectsFromPMX.get(i).getMANIFESTATION_ID()),
@@ -324,8 +324,8 @@ public class ManifestationDataQualityCheckSteps {
             assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ", manifestationDataObjectsFromPMX.get(i).getCOMMODITY(), manifestationDataObjectsFromEPH.get(i).getCOMMODITY());
 
             //MANIFESTATION_SUBSTATUS
-            Log.info("Manifestation substatus in PMX: " + manifestationDataObjectsFromPMX.get(i).getMANIFESTATION_SUBSTATUS());
-            Log.info("Manifestation substatus in EPH Staging: " + manifestationDataObjectsFromEPH.get(i).getMANIFESTATION_SUBSTATUS());
+            Log.info("ManifestationApiObject substatus in PMX: " + manifestationDataObjectsFromPMX.get(i).getMANIFESTATION_SUBSTATUS());
+            Log.info("ManifestationApiObject substatus in EPH Staging: " + manifestationDataObjectsFromEPH.get(i).getMANIFESTATION_SUBSTATUS());
 
             assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ",manifestationDataObjectsFromPMX.get(i).getMANIFESTATION_SUBSTATUS(), manifestationDataObjectsFromEPH.get(i).getMANIFESTATION_SUBSTATUS());
         });
@@ -352,9 +352,9 @@ public class ManifestationDataQualityCheckSteps {
         IntStream.range(0, bound).forEach(i -> {
             //verify F_EVENT is not null
             assertNotNull(manifestationDataObjectsFromEPHSA.get(i).getF_EVENT());
-            //verify manifestation id is not null
+            //verify manifestationApiObject id is not null
             assertNotNull(manifestationDataObjectsFromEPHSA.get(i).getMANIFESTATION_ID());
-            //verify manifestation key title is not null
+            //verify manifestationApiObject key title is not null
             assertNotNull(manifestationDataObjectsFromEPHSA.get(i).getMANIFESTATION_KEY_TITLE());
             //verify F_TYPE is not null
             assertNotNull(manifestationDataObjectsFromEPHSA.get(i).getF_TYPE());
@@ -379,7 +379,7 @@ public class ManifestationDataQualityCheckSteps {
 
             //B_CLASSNAME
             Log.info("B_CLASSNAME in sa_manifestation: " + manifestationDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
-            assertEquals("Manifestation", manifestationDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
+            assertEquals("ManifestationApiObject", manifestationDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
 
 
             //PMX_SOURCE_REFERENCE
@@ -391,8 +391,8 @@ public class ManifestationDataQualityCheckSteps {
                    manifestationDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE());
 
             //MANIFESTATION_KEY_TITLE
-            Log.info("Manifestation key title in sa_manifestation: " + manifestationDataObjectsFromEPHSA.get(i).getMANIFESTATION_KEY_TITLE());
-            Log.info("Manifestation key title in staging: " + manifestationDataObjectsFromEPH.get(i).getMANIFESTATION_KEY_TITLE());
+            Log.info("ManifestationApiObject key title in sa_manifestation: " + manifestationDataObjectsFromEPHSA.get(i).getMANIFESTATION_KEY_TITLE());
+            Log.info("ManifestationApiObject key title in staging: " + manifestationDataObjectsFromEPH.get(i).getMANIFESTATION_KEY_TITLE());
 
 
             if (Objects.equals(type, "JPR"))
@@ -485,8 +485,8 @@ public class ManifestationDataQualityCheckSteps {
             Log.info("B_CLASSNAME in sa_manifestation : " + manifestationDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
             Log.info("B_CLASSNAME in gd_manifestation : " + manifestationDataObjectsFromEPHGD.get(i).getB_CLASSNAME());
 
-            assertEquals("Manifestation", manifestationDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
-            assertEquals("Manifestation", manifestationDataObjectsFromEPHGD.get(i).getB_CLASSNAME());
+            assertEquals("ManifestationApiObject", manifestationDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
+            assertEquals("ManifestationApiObject", manifestationDataObjectsFromEPHGD.get(i).getB_CLASSNAME());
 
 
             //MANIFESTATION_ID
