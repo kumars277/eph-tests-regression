@@ -3,9 +3,9 @@ package com.eph.automation.testing.models.api;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class Prices {
+class PricesApiObject {
 
-    public Prices() {
+    public PricesApiObject() {
     }
 
     private float price;

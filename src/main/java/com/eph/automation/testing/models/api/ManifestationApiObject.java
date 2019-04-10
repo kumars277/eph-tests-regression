@@ -5,22 +5,22 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.HashMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-   public class Manifestation {
-    public Manifestation() {
+   public class ManifestationApiObject {
+    public ManifestationApiObject() {
     }
 
     private String manifestationId;
     private String manifestationKeyTitle;
     private Boolean internationalEditionFlag;
     private String firstPubDate;
-    private ManifestationIdentifiers[] manifestationIdentifiers;
+    private ManifestationIdentifiersApiObject[] manifestationIdentifierApiObjects;
     private HashMap<String, Object> manifestationType;
     private HashMap<String, Object> manifestationStatus;
     private HashMap<String, Object> manifestationFormat;
-    private Work work;
+    private ManifestationWorkApiObject manifestationWorkApiObject;
 
-    public ManifestationIdentifiers[] getManifestationIdentifiers() {
-        return  manifestationIdentifiers;
+    public ManifestationIdentifiersApiObject[] getManifestationIdentifierApiObjects() {
+        return manifestationIdentifierApiObjects;
     }
 
     public HashMap<String, Object> getManifestationFormat() {
@@ -31,8 +31,8 @@ import java.util.HashMap;
         this.manifestationFormat = manifestationFormat;
     }
 
-    public void setManifestationIdentifiers(ManifestationIdentifiers[] manifestationIdentifiers) {
-        this.manifestationIdentifiers = manifestationIdentifiers;
+    public void setManifestationIdentifierApiObjects(ManifestationIdentifiersApiObject[] manifestationIdentifierApiObjects) {
+        this.manifestationIdentifierApiObjects = manifestationIdentifierApiObjects;
     }
 
     public String getManifestationId() {
@@ -43,12 +43,12 @@ import java.util.HashMap;
         this.manifestationId = manifestationId;
     }
 
-    public Work getWork() {
-        return work;
+    public ManifestationWorkApiObject getManifestationWorkApiObject() {
+        return manifestationWorkApiObject;
     }
 
-    public void setWork(Work work) {
-        this.work = work;
+    public void setManifestationWorkApiObject(ManifestationWorkApiObject manifestationWorkApiObject) {
+        this.manifestationWorkApiObject = manifestationWorkApiObject;
     }
 
     public String getManifestationKeyTitle() {

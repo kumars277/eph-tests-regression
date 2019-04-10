@@ -5,20 +5,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.HashMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class Work {
-    public Work() {
+class ManifestationWorkApiObject {
+    public ManifestationWorkApiObject() {
     }
 
     private String workTitle;
-    private WorkPersons[] workPersons;
+    private WorkPersonsApiObject[] workPersonApiObjects;
     private Boolean electronicRightsInd;
     private int volume;
     private int copyrightYear;
-    private WorkIdentifiers[] workIdentifiers;
+    private WorkIdentifiersApiObject[] workIdentifierApiObjects;
     private HashMap<String, Object> workType;
     private HashMap<String, Object> workStatus;
     private HashMap<String, Object> imprint;
-    private PMC pmc;
+    private PMCApiObject pmcApiObject;
 
     public String getWorkTitle() {
         return workTitle;
@@ -76,28 +76,28 @@ class Work {
         this.imprint = imprint;
     }
 
-    public WorkIdentifiers[] getWorkIdentifiers() {
-        return workIdentifiers;
+    public WorkIdentifiersApiObject[] getWorkIdentifierApiObjects() {
+        return workIdentifierApiObjects;
     }
 
-    public void setWorkIdentifiers(WorkIdentifiers[] workIdentifiers) {
-        this.workIdentifiers = workIdentifiers;
+    public void setWorkIdentifierApiObjects(WorkIdentifiersApiObject[] workIdentifierApiObjects) {
+        this.workIdentifierApiObjects = workIdentifierApiObjects;
     }
 
-    public PMC getPmc() {
-        return pmc;
+    public PMCApiObject getPmcApiObject() {
+        return pmcApiObject;
     }
 
-    public void setPmc(PMC pmc) {
-        this.pmc = pmc;
+    public void setPmcApiObject(PMCApiObject pmcApiObject) {
+        this.pmcApiObject = pmcApiObject;
     }
 
-    public WorkPersons[] getWorkPersons() {
-        return workPersons;
+    public WorkPersonsApiObject[] getWorkPersonApiObjects() {
+        return workPersonApiObjects;
     }
 
-    public void setWorkPersons(WorkPersons[] workPersons) {
-        this.workPersons = workPersons;
+    public void setWorkPersonApiObjects(WorkPersonsApiObject[] workPersonApiObjects) {
+        this.workPersonApiObjects = workPersonApiObjects;
     }
 
 }

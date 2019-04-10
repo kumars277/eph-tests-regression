@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class ProductIdentifiers {
+class ProductIdentifiersApiObject {
     private List<ProductIdentifier> productIdentifiers;
 
-    public ProductIdentifiers() {
+    public ProductIdentifiersApiObject() {
     }
 
     public List<ProductIdentifier> getProductIdentifiers() {

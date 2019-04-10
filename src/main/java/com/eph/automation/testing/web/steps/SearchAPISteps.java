@@ -4,12 +4,12 @@ import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
-import com.eph.automation.testing.models.api.ProductSearchResponse;
-import com.eph.automation.testing.models.api.WorkSearchResponse;
+import com.eph.automation.testing.models.api.ProductApiObject;
+import com.eph.automation.testing.models.api.WorkApiObject;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ProductDataObject;
 import com.eph.automation.testing.models.dao.WorkDataObject;
-import com.eph.automation.testing.services.db.sql.ProductDataSQL;
+import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
@@ -34,17 +34,19 @@ public class SearchAPISteps {
 
     private String sql;
     private static List<String> ids;
-    private ProductSearchResponse response;
-    private WorkSearchResponse work_response;
+    private ProductApiObject response;
+    private WorkApiObject work_response;
 
     @Given("^We get (.*) random search ids for (.*)$")
     public void getRandomProductSearchManifestationIds(String numberOfRecords, String type) {
         Log.info("Get random ids ..");
+        //Get property when run with jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         switch (type) {
             case "book":
-                sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_IDS_FOR_SEARCH_BOOKS, numberOfRecords);
+                sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_FOR_SEARCH_BOOKS, numberOfRecords);
                 Log.info(sql);
                 break;
             default:
@@ -53,24 +55,24 @@ public class SearchAPISteps {
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
-        Log.info("Selected random product manifestation ids  : " + ids);
+        Log.info("Selected random product manifestationApiObject ids  : " + ids);
     }
 
     @Given("^We get (.*) random search id for works")
     public void getRandomWorkSearchIds(String numberOfRecords) {
-        sql = String.format(ProductDataSQL.SELECT_RANDOM_WORK_IDS_FOR_SEARCH, numberOfRecords);
+        sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_IDS_FOR_SEARCH, numberOfRecords);
         Log.info(sql);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
-        Log.info("Selected random product manifestation ids  : " + ids);
+        Log.info("Selected random product manifestationApiObject ids  : " + ids);
     }
 
     @And("^We get the search data from EPH GD for (.*)$")
     public void getProductsDataFromEPHGDForJournals(String type) {
         Log.info("And We get the data from EPH GD for journals ...");
         if (type.equals("book")) {
-            sql = String.format(ProductDataSQL.EPH_GD_PRODUCT_EXTRACT_FOR_SEARCH, Joiner.on("','").join(ids));
+            sql = String.format(APIDataSQL.EPH_GD_PRODUCT_EXTRACT_FOR_SEARCH, Joiner.on("','").join(ids));
         }
         Log.info(sql);
 
@@ -81,7 +83,7 @@ public class SearchAPISteps {
     @And("^We get the work search data from EPH GD$")
     public void getWorksDataFromEPHGD() {
         Log.info("And We get the data from EPH GD for journals ...");
-        sql = String.format(ProductDataSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, Joiner.on("','").join(ids));
+        sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, Joiner.on("','").join(ids));
         Log.info(sql);
 
         dataQualityContext.workDataObjectsFromEPHGD = DBManager
@@ -90,138 +92,6 @@ public class SearchAPISteps {
 
     @When("^the product details are retrieved and compared$")
     public void compareSearchResultsWithDB() throws IOException {
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = "{\n" +
-                "    \"schemaVersion\": \"1.1\",\n" +
-                "    \"productId\": \"EPR-000442\",\n" +
-                "    \"productName\": \"Heart & Lung\",\n" +
-                "    \"productIdentifiers\": [\n" +
-                "        {\n" +
-                "            \"productIdentifier\": \"J013169\",\n" +
-                "            \"identifierType\": {\n" +
-                "                \"identifierTypeCode\": \"SKU\",\n" +
-                "                \"identifierTypeName\": \"Stock Keeping Unit ID\"\n" +
-                "            }\n" +
-                "        }\n" +
-                "    ],\n" +
-                "    \"productType\": {\n" +
-                "        \"productTypeCode\": \"SUB\",\n" +
-                "        \"productTypeName\": \"Subscription\"\n" +
-                "    },\n" +
-                "    \"productStatus\": {\n" +
-                "        \"productStatusCode\": \"PAS\",\n" +
-                "        \"productStatusName\": \"Available for Sale\"\n" +
-                "    },\n" +
-                "    \"prices\": [\n" +
-                "        {\n" +
-                "            \"currencyCode\": \"EUR\",\n" +
-                "            \"price\": 54.95\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"currencyCode\": \"GBP\",\n" +
-                "            \"price\": 43.99\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"currencyCode\": \"USD\",\n" +
-                "            \"price\": 72.95\n" +
-                "        }\n" +
-                "    ],\n" +
-                "    \"accountableProduct\": {\n" +
-                "        \"glProductSegmentCode\": \"J013169\",\n" +
-                "        \"glProductSegmentName\": \"J013169\",\n" +
-                "        \"glProductParentValue\": {\n" +
-                "            \"segmentParentCode\": \"1\",\n" +
-                "            \"segmentParentName\": \"Parent 1\"\n" +
-                "        }\n" +
-                "    },\n" +
-                "    \"packages\": {\n" +
-                "        \"hasComponents\": [\n" +
-                "            {\n" +
-                "                \"componentProductId\": \"EPR-000442\",\n" +
-                "                \"allocation%\": 0.1606\n" +
-                "            },\n" +
-                "            {\n" +
-                "                \"componentProductId\": \"EPR-000442\",\n" +
-                "                \"allocation%\": 0.1923\n" +
-                "            }\n" +
-                "        ]\n" +
-                "    },\n" +
-                "    \"manifestation\": {\n" +
-                "        \"manifestationId\": \"EPR-M-000440\",\n" +
-                "        \"manifestationKeyTitle\": \"Heart & Lung\",\n" +
-                "        \"manifestationIdentifiers\": [\n" +
-                "            {\n" +
-                "                \"manifestationIdentifier\": \"0147-9563\",\n" +
-                "                \"identifierType\": {\n" +
-                "                    \"identifierTypeCode\": \"ISSN\",\n" +
-                "                    \"identifierTypeName\": \"ISSN of the Journal Publication\"\n" +
-                "                }\n" +
-                "            }\n" +
-                "        ],\n" +
-                "        \"manifestationType\": {\n" +
-                "            \"manifestationTypeCode\": \"PSB\",\n" +
-                "            \"manifestationTypeName\": \"Paperback/Softback Book\",\n" +
-                "            \"typeRollUp\": \"Print\"\n" +
-                "        },\n" +
-                "        \"manifestationStatus\": {\n" +
-                "            \"manifestationStatusCode\": \"MPU\",\n" +
-                "            \"manifestationStatusName\": \"Published\"\n" +
-                "        },\n" +
-                "        \"manifestationFormat\": {\n" +
-                "            \"manifestationFormatCode\": \"F1\",\n" +
-                "            \"manifestationFormatName\": \"Format1\"\n" +
-                "        },\n" +
-                "        \"work\": {\n" +
-                "            \"workId\": \"EPR-W-000440\",\n" +
-                "            \"workTitle\": \"Heart & Lung\",\n" +
-                "            \"electronicRightsInd\": false,\n" +
-                "            \"language\": {\n" +
-                "                \"languageCode\": \"EN\",\n" +
-                "                \"languageName\": \"English\"\n" +
-                "            },\n" +
-                "            \"editionNumber\": 1,\n" +
-                "            \"workIdentifiers\": [\n" +
-                "                {\n" +
-                "                    \"workIdentifier\": \"13169\",\n" +
-                "                    \"identifierType\": {\n" +
-                "                        \"identifierTypeCode\": \"ELSEVIER JOURNAL NUMBER\",\n" +
-                "                        \"identifierTypeName\": \"Elsevier internal Journal number\"\n" +
-                "                    }\n" +
-                "                },\n" +
-                "                {\n" +
-                "                    \"workIdentifier\": \"0147-9563\",\n" +
-                "                    \"identifierType\": {\n" +
-                "                        \"identifierTypeCode\": \"ISSN-L\",\n" +
-                "                        \"identifierTypeName\": \"Linking ISSN\"\n" +
-                "                    }\n" +
-                "                }\n" +
-                "            ],\n" +
-                "            \"workType\": {\n" +
-                "                \"workTypeCode\": \"JNL\",\n" +
-                "                \"workTypeName\": \"Journal\",\n" +
-                "                \"typeRollUp\": \"Journal\"\n" +
-                "            },\n" +
-                "            \"workStatus\": {\n" +
-                "                \"workStatusCode\": \"WPU\",\n" +
-                "                \"workStatusName\": \"Published\"\n" +
-                "            },\n" +
-                "            \"imprint\": {\n" +
-                "                \"imprintCode\": \"MOSBY\",\n" +
-                "                \"imprintName\": \"Mosby\"\n" +
-                "            },\n" +
-                "            \"pmc\": {\n" +
-                "                \"pmcCode\": \"276\",\n" +
-                "                \"pmcName\": \"HC033\",\n" +
-                "                \"pmg\": {\n" +
-                "                    \"pmgCode\": \"725\",\n" +
-                "                    \"pmgName\": \"Health & Medical Sciences 2\"\n" +
-                "                }\n" +
-                "            }\n" +
-                "        }\n" +
-                "    }\n" +
-                "}";
-        ProductSearchResponse prod =objectMapper.readValue(json, ProductSearchResponse.class);
         //sort the lists before comparison
         dataQualityContext.productDataObjectsFromEPHGD.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
 

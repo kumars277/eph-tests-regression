@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class ManifestationIdentifiers {
+class ManifestationIdentifiersApiObject {
     private List<ManifestationIdentifier> manifestationIdentifiers;
 
-    public ManifestationIdentifiers() {
+    public ManifestationIdentifiersApiObject() {
     }
 
     public List<ManifestationIdentifier> getManifestationIdentifiers() {

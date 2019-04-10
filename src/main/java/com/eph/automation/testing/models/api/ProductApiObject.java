@@ -5,45 +5,45 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.HashMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ProductSearchResponse {
-    public ProductSearchResponse() {
+public class ProductApiObject {
+    public ProductApiObject() {
     }
 
     private String productId;
     private String productName;
-    private ProductIdentifiers[] productIdentifiers;
+    private ProductIdentifiersApiObject[] productIdentifierApiObjects;
     private String productShortName;
     private Boolean separatelySaleableIndicator;
     private Boolean trialAllowedIndicator;
     private String launchDate;
     private HashMap<String,Object> productType;
     private HashMap<String,Object> productStatus;
-    private Prices[] prices;
+    private PricesApiObject[] prices;
     private HashMap<String,Object> revenueModel;
-    public Manifestation manifestation;
+    public ManifestationApiObject manifestationApiObject;
 
-    public ProductIdentifiers[] getProductIdentifiers() {
-        return productIdentifiers;
+    public ProductIdentifiersApiObject[] getProductIdentifierApiObjects() {
+        return productIdentifierApiObjects;
     }
 
-    public void setProductIdentifiers(ProductIdentifiers[] productIdentifiers) {
-        this.productIdentifiers = productIdentifiers;
+    public void setProductIdentifierApiObjects(ProductIdentifiersApiObject[] productIdentifierApiObjects) {
+        this.productIdentifierApiObjects = productIdentifierApiObjects;
     }
 
-    public Prices[] getPrices() {
+    public PricesApiObject[] getPrices() {
         return prices;
     }
 
-    public void setPrices(Prices[] prices) {
+    public void setPrices(PricesApiObject[] prices) {
         this.prices = prices;
     }
 
-    public Manifestation getManifestation() {
-        return manifestation;
+    public ManifestationApiObject getManifestationApiObject() {
+        return manifestationApiObject;
     }
 
-    public void setManifestation(Manifestation manifestation) {
-        this.manifestation = manifestation;
+    public void setManifestationApiObject(ManifestationApiObject manifestationApiObject) {
+        this.manifestationApiObject = manifestationApiObject;
     }
 
     public HashMap<String, Object> getProductStatus() {

@@ -73,6 +73,22 @@ public class ProductDataObject {
         this.SEPARATELY_SALEABLE_IND = SEPARATELY_SALEABLE_IND;
     }
 
+        public Boolean getBoolTRIAL_ALLOWED_IND() {
+        if(TRIAL_ALLOWED_IND.equalsIgnoreCase("t")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Boolean getBoolSEPARATELY_SALEABLE_IND() {
+        if(SEPARATELY_SALEABLE_IND.equalsIgnoreCase("t")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public String getTRIAL_ALLOWED_IND() {
         return TRIAL_ALLOWED_IND;
     }

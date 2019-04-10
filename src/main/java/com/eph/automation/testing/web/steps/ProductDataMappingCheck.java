@@ -66,13 +66,13 @@ public class ProductDataMappingCheck {
         List<Map<?, ?>> randomProductManifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         ids = randomProductManifestationIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
-        Log.info("Selected random product manifestation ids  : " + ids);
+        Log.info("Selected random product manifestationApiObject ids  : " + ids);
     }
 
 
     @Given("^We get (.*) ids of journals for (.*) with (.*) and (.*)$")
     public void getRandomProductManifestationIdsForJournals(String numberOfRecords, String type, String open_access, String author_charges) {
-        Log.info("In Given method get random product manifestation ids for journals");
+        Log.info("In Given method get random product manifestationApiObject ids for journals");
         //Get property when run with jenkins
         numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("Number of random records = " + numberOfRecords);
@@ -98,7 +98,7 @@ public class ProductDataMappingCheck {
         List<Map<?, ?>> randomProductManifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         ids = randomProductManifestationIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
-        Log.info("Selected product manifestation ids : " + ids);
+        Log.info("Selected product manifestationApiObject ids : " + ids);
 
 
     }
@@ -457,7 +457,7 @@ public class ProductDataMappingCheck {
 
         IntStream.range(0, dataQualityContext.productDataObjectsFromEPHSTGCan.size()).forEach(i -> {
 
-            //verify PMX_SOURCE_REFERENCE and get the manifestation or work id
+            //verify PMX_SOURCE_REFERENCE and get the manifestationApiObject or work id
             String id;
             String pmxSourceReference = dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getPMX_SOURCE_REFERENCE();
             Log.info("PMX_SOURCE_REFERENCE in EPH STG Canonical is " + pmxSourceReference);

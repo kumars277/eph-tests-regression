@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class WorkIdentifiers {
+class WorkIdentifiersApiObject {
     private List<WorkIdentifier> workIdentifiers;
 
-    public WorkIdentifiers() {
+    public WorkIdentifiersApiObject() {
     }
 
     public List<WorkIdentifier> getWorkIdentifiers() {

@@ -2,12 +2,12 @@ package com.eph.automation.testing.services.db.sql;
 
 public class ProductDataSQL {
     public static String PMX_PRODUCT_EXTRACT = "SELECT\n" +
-            "\t M.ELSEVIER_PRODUCT_ID AS PRODUCT_ID -- Product Manifestation Reference,  not needed in EPH but extracted for record linking purposes\n" +
+            "\t M.ELSEVIER_PRODUCT_ID AS PRODUCT_ID -- Product ManifestationApiObject Reference,  not needed in EPH but extracted for record linking purposes\n" +
             "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND M.F_PRODUCT_MANIFESTATION_TYP = 1 THEN CONCAT(M.PRODUCT_MANIFESTATION_TIT, ' (Print)')\n" +
             "\t\t  WHEN WT.WORK_TYPE = 'JOURNAL' AND M.F_PRODUCT_MANIFESTATION_TYP = 2 THEN CONCAT(M.PRODUCT_MANIFESTATION_TIT, ' (Online)')\n" +
             "\t\t  ELSE M.PRODUCT_MANIFESTATION_TIT END AS PRODUCT_NAME -- Title\n" +
             "\t,M.PRODUCT_MANIF_SHORT_TITLE AS PRODUCT_SHORT_NAME -- Short Title\n" +
-            "\t,NVL(M.NONSALEABLE_ANCILLARY_IND,'Y') AS SEPARATELY_SALEABLE_IND -- Set flag as 'Y' when manifestation is not flagged as Nonsaleable Ancillary\n" +
+            "\t,NVL(M.NONSALEABLE_ANCILLARY_IND,'Y') AS SEPARATELY_SALEABLE_IND -- Set flag as 'Y' when manifestationApiObject is not flagged as Nonsaleable Ancillary\n" +
             "\t,NVL(M.TRIAL_ALLOWED_IND, 'N') AS TRIAL_ALLOWED_IND -- Trial Allowed Indicator\n" +
             "\t,TRUNC(M.COPYRIGHT_DATE) AS FIRST_PUB_DATE -- Launch Date (dropping Time component)\n" +
             "\t,M.ELSEVIER_TAX_CODE -- Tax Code to link to LOV table (this may not be imported in the end, I have a meeting on Thursday to discuss further)\n" +

@@ -5,12 +5,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.HashMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PMC {
+public class PMCApiObject {
     private String pmcCode;
     private String pmcName;
     private HashMap<String, Object> pmg;
 
-    public PMC() {
+    public PMCApiObject() {
     }
 
     public String getPmcCode() {

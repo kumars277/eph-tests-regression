@@ -2,8 +2,8 @@ package com.eph.automation.testing.services.api;
 
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.RESTEndPoints;
-import com.eph.automation.testing.models.api.ProductSearchResponse;
-import com.eph.automation.testing.models.api.WorkSearchResponse;
+import com.eph.automation.testing.models.api.ProductApiObject;
+import com.eph.automation.testing.models.api.WorkApiObject;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.RequestSpecification;
 
@@ -18,7 +18,7 @@ public class APIService {
 
     private static RequestSpecification request;
 
-//    private static Object ProductSearchResponse;
+//    private static Object ProductApiObject;
 
     public static Response getEIPNotificationEndpointResponse() {
         return get(Constants.EIP_NOTIFICATION_WADL_END_POINT_SIT);
@@ -48,13 +48,13 @@ public class APIService {
                 .thenReturn();
     }
 
-    public static ProductSearchResponse searchForProductResult(String productID) {
+    public static ProductApiObject searchForProductResult(String productID) {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
                 .when()
                 .get("/product/" + productID)
-                .thenReturn().as(ProductSearchResponse.class);
+                .thenReturn().as(ProductApiObject.class);
 
     }
 
@@ -78,13 +78,13 @@ public class APIService {
 
     }
 
-    public static WorkSearchResponse searchForWorkByIDResult(String workID) {
+    public static WorkApiObject searchForWorkByIDResult(String workID) {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
                 .when()
                 .get("/work/" + workID)
-                .thenReturn().as(WorkSearchResponse.class);
+                .thenReturn().as(WorkApiObject.class);
 
     }
 
@@ -95,7 +95,7 @@ public class APIService {
                 .param("title", title)
                 .when()
                 .get("/works").asString();
-//                .thenReturn().as(ProductSearchResponse.class);
+//                .thenReturn().as(ProductApiObject.class);
 
     }
 
@@ -106,7 +106,7 @@ public class APIService {
                 .param("name", name)
                 .when()
                 .get("/products").asString();
-//                .thenReturn().as(ProductSearchResponse.class);
+//                .thenReturn().as(ProductApiObject.class);
 
     }
 
@@ -117,7 +117,7 @@ public class APIService {
                 .param("identifier", identifier)
                 .when()
                 .get("/works").asString();
-//                .thenReturn().as(ProductSearchResponse.class);
+//                .thenReturn().as(ProductApiObject.class);
 
     }
 
@@ -129,7 +129,7 @@ public class APIService {
                 .param("identifierType", identifierType)
                 .when()
                 .get("/works").asString();
-//                .thenReturn().as(ProductSearchResponse.class);
+//                .thenReturn().as(ProductApiObject.class);
 
     }
 
@@ -140,7 +140,7 @@ public class APIService {
                 .param("identifier", identifier)
                 .when()
                 .get("/products").asString();
-//                .thenReturn().as(ProductSearchResponse.class);
+//                .thenReturn().as(ProductApiObject.class);
 
     }
 
@@ -152,7 +152,7 @@ public class APIService {
                 .param("identifierType", identifierType)
                 .when()
                 .get("/products").asString();
-//                .thenReturn().as(ProductSearchResponse.class);
+//                .thenReturn().as(ProductApiObject.class);
 
     }
 

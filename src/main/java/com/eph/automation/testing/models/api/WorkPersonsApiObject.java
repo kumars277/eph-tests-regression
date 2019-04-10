@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.HashMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class WorkPersons {
-    public WorkPersons() {
+class WorkPersonsApiObject {
+    public WorkPersonsApiObject() {
     }
 
     private int workPersonId;

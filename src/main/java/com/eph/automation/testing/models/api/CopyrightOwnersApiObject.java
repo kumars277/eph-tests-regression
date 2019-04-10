@@ -2,8 +2,8 @@ package com.eph.automation.testing.models.api;
 
 import java.util.HashMap;
 
-public class CopyrightOwners {
-    public CopyrightOwners() {
+public class CopyrightOwnersApiObject {
+    public CopyrightOwnersApiObject() {
     }
     private HashMap<String, Object> copyrightOwner;
     private String effectiveStartDate;

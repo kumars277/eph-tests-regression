@@ -158,7 +158,7 @@ public class WorksDataCheck {
             }
             if (dataQualityContext.workDataObjectsFromSource.get(i).PMC != null
                     || dataQualityContext.workDataObjectsFromPMXSTG.get(i).PMC != null) {
-                assertTrue("Expecting the PMC details from PMX and EPH Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the PMCApiObject details from PMX and EPH Consistent for id=" + ids.get(i),
                         dataQualityContext.workDataObjectsFromSource.get(i).PMC
                                 .equals(dataQualityContext.workDataObjectsFromPMXSTG.get(i).PMC));
             }
@@ -331,7 +331,7 @@ public class WorksDataCheck {
 
             if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).PMC != null
                     || dataQualityContext.workDataObjectsFromSTGDQ.get(i).PMC != null) {
-                assertTrue("Expecting the PMC details from STG and DQ Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the PMCApiObject details from STG and DQ Consistent for id=" + ids.get(i),
                         dataQualityContext.workDataObjectsFromPMXSTG.get(i).PMC
                                 .equals(dataQualityContext.workDataObjectsFromSTGDQ.get(i).PMC));
             }
@@ -473,7 +473,7 @@ public class WorksDataCheck {
 
             if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).PMC != null
                     || dataQualityContext.workDataObjectsFromEPH.get(i).PMC != null) {
-                assertTrue("Expecting the PMC details from DQ and SA Consistent for id=" +
+                assertTrue("Expecting the PMCApiObject details from DQ and SA Consistent for id=" +
                                 dataQualityContext.workDataObjectsFromEPH.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromSTGDQ.get(i).PMC
                                 .equals(dataQualityContext.workDataObjectsFromEPH.get(i).PMC));
@@ -589,7 +589,7 @@ public class WorksDataCheck {
 
             if (dataQualityContext.workDataObjectsFromEPH.get(i).PMC != null
                     || dataQualityContext.workDataObjectsFromEPHGD.get(i).PMC != null) {
-                assertTrue("Expecting the PMC details from SA and GD Consistent for id=" +
+                assertTrue("Expecting the PMCApiObject details from SA and GD Consistent for id=" +
                                 dataQualityContext.workDataObjectsFromEPHGD.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromEPH.get(i).PMC
                                 .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).PMC));

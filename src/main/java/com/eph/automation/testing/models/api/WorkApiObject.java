@@ -5,9 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.HashMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class WorkSearchResponse {
+public class WorkApiObject {
 
-    public WorkSearchResponse() {
+    public WorkApiObject() {
     }
 
     private String workId;
@@ -19,8 +19,8 @@ public class WorkSearchResponse {
     private HashMap<String,Object> workType;
     private HashMap<String,Object> workStatus;
     private HashMap<String,Object> imprint;
-    private CopyrightOwners[] copyrightOwners;
-    private WorkIdentifiers[] workIdentifiers;
+    private CopyrightOwnersApiObject[] copyrightOwnerApiObjects;
+    private WorkIdentifiersApiObject[] workIdentifierApiObjects;
 
     public String getWorkId() {
         return workId;
@@ -94,19 +94,19 @@ public class WorkSearchResponse {
         this.imprint = imprint;
     }
 
-    public WorkIdentifiers[] getWorkIdentifiers() {
-        return workIdentifiers;
+    public WorkIdentifiersApiObject[] getWorkIdentifierApiObjects() {
+        return workIdentifierApiObjects;
     }
 
-    public void setWorkIdentifiers(WorkIdentifiers[] workIdentifiers) {
-        this.workIdentifiers = workIdentifiers;
+    public void setWorkIdentifierApiObjects(WorkIdentifiersApiObject[] workIdentifierApiObjects) {
+        this.workIdentifierApiObjects = workIdentifierApiObjects;
     }
 
-    public CopyrightOwners[] getCopyrightOwners() {
-        return copyrightOwners;
+    public CopyrightOwnersApiObject[] getCopyrightOwnerApiObjects() {
+        return copyrightOwnerApiObjects;
     }
 
-    public void setCopyrightOwners(CopyrightOwners[] copyrightOwners) {
-        this.copyrightOwners = copyrightOwners;
+    public void setCopyrightOwnerApiObjects(CopyrightOwnersApiObject[] copyrightOwnerApiObjects) {
+        this.copyrightOwnerApiObjects = copyrightOwnerApiObjects;
     }
 }
