@@ -846,7 +846,22 @@ public class ProductDataMappingCheck {
                 assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getULT_WORK_REF());
             }
 
-        });
+
+            //TAX_CODE
+            Log.info("TAX_CODE in EPH STG Canonical : " + dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getTAX_CODE());
+
+            if (fType.equals("PKG"))
+                assertNull(dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getTAX_CODE());
+            else if (fType.equals("OAA") || fType.equals("JAS"))
+                assertEquals("S001", dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getTAX_CODE());
+            else if (fType.equals("SUB") || fType.equals("JBS") || fType.equals("BKF") || fType.equals("RPR")) {
+                if (type.equals("book"))
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getELSEVIER_TAX_CODE(), dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getTAX_CODE());
+                else
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getELSEVIER_TAX_CODE(), dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getTAX_CODE());
+            }
+
+            });
     }
 
     @And("^Compare the records in EPH STG Canonical and EPH SA for (.*)$")
@@ -970,6 +985,13 @@ public class ProductDataMappingCheck {
                 assertNull(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_PRODUCT_MANIFESTATION_TYP());
             }
 
+            //TAX_CODE
+            Log.info("TAX_CODE in EPH STG Canonical : " + dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getTAX_CODE());
+            Log.info("TAX_CODE in EPH SA: " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getTAX_CODE());
+
+            Log.info("Expecting TAX_CODE in  EPH STG Canonical and EPH SA is consistent");
+
+            assertEquals(dataQualityContext.productDataObjectsFromEPHSTGCan.get(i).getTAX_CODE(), dataQualityContext.productDataObjectsFromEPHSA.get(i).getTAX_CODE());
 
         });
     }
@@ -1105,6 +1127,14 @@ public class ProductDataMappingCheck {
             Log.info("Expecting F_PRODUCT_MANIFESTATION_TYP in EPH SA and EPH GD is consistent");
 
             assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getF_PRODUCT_MANIFESTATION_TYP(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getF_PRODUCT_MANIFESTATION_TYP());
+
+            //TAX_CODE
+            Log.info("TAX_CODE in EPH SA : " + dataQualityContext.productDataObjectsFromEPHSA.get(i).getTAX_CODE());
+            Log.info("TAX_CODE in EPH GD: " + dataQualityContext.productDataObjectsFromEPHGD.get(i).getTAX_CODE());
+
+            Log.info("Expecting TAX_CODE in EPH SA and EPH GD is consistent");
+
+            assertEquals(dataQualityContext.productDataObjectsFromEPHSA.get(i).getTAX_CODE(), dataQualityContext.productDataObjectsFromEPHGD.get(i).getTAX_CODE());
 
 
         }
