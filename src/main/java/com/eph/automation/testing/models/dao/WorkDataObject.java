@@ -21,6 +21,107 @@ public class WorkDataObject {
 
     public String DAC_KEY;
     public String PROJECT_NUM;
+
+    public String getPRIMARY_ISBN() {
+        return PRIMARY_ISBN;
+    }
+
+    public String getWORK_TITLE() {
+        return WORK_TITLE;
+    }
+
+    public String getWORK_SUBTITLE() {
+        return WORK_SUBTITLE;
+    }
+
+    public String getPRODUCT_ID() {
+        return PRODUCT_ID;
+    }
+
+    public String getDAC_KEY() {
+        return DAC_KEY;
+    }
+
+    public String getPROJECT_NUM() {
+        return PROJECT_NUM;
+    }
+
+    public String getISSN_L() {
+        return ISSN_L;
+    }
+
+    public String getJOURNAL_NUMBER() {
+        return JOURNAL_NUMBER;
+    }
+
+    public String getELECTRONIC_RIGHTS_IND() {
+        return ELECTRONIC_RIGHTS_IND;
+    }
+
+    public String getBOOK_EDITION_NAME() {
+        return BOOK_EDITION_NAME;
+    }
+
+    public String getBOOK_VOLUME_NAME() {
+        return BOOK_VOLUME_NAME;
+    }
+
+    public String getPMC() {
+        return PMC;
+    }
+
+    public String getPMG() {
+        return PMG;
+    }
+
+    public String getWORK_ID() {
+        return WORK_ID;
+    }
+
+    public String getWORK_STATUS() {
+        return WORK_STATUS;
+    }
+
+    public String getWORK_SUBSTATUS() {
+        return WORK_SUBSTATUS;
+    }
+
+    public String getWORK_TYPE() {
+        return WORK_TYPE;
+    }
+
+    public String getIMPRINT() {
+        return IMPRINT;
+    }
+
+    public String getOPEN_ACCESS_JNL_TYPE_CODE() {
+        return OPEN_ACCESS_JNL_TYPE_CODE;
+    }
+
+    public String getPRODUCT_WORK_ID() {
+        return PRODUCT_WORK_ID;
+    }
+
+    public String getF_ACC_PROD_HIERARCHY() {
+        return F_ACC_PROD_HIERARCHY;
+    }
+
+    public String getF_RESPONSIBILITY_CENTRE() {
+        return F_RESPONSIBILITY_CENTRE;
+    }
+
+    public String getF_OPCO_R12() {
+        return F_OPCO_R12;
+    }
+
+    public String getPRODUCT_WORK_PUB_DATE() {
+        return PRODUCT_WORK_PUB_DATE;
+    }
+
+    public String getJOURNAL_ACRONYM() {
+        return JOURNAL_ACRONYM;
+    }
+
     public String ISSN_L;
     public String JOURNAL_NUMBER;
     public String ELECTRONIC_RIGHTS_IND;
