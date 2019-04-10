@@ -43,8 +43,8 @@ public class WorksDataCheck {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
-        //numberOfRecords = "10";
+        //numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = "10";
         Log.info("numberOfRecords = " + numberOfRecords);
 
         sql = GeneratingRandomSQL.generatingValue
@@ -79,7 +79,8 @@ public class WorksDataCheck {
                 .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
         sql =  String.format(WorkDataCheckSQL.GET_EPH_WORKS_DATA, Joiner.on("','").join(ids));
-
+        Log.info
+                (sql);
         dataQualityContext.workDataObjectsFromEPH = DBManager
                 .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
@@ -418,82 +419,94 @@ public class WorksDataCheck {
 
             Log.info(dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_TITLE);
             Log.info(dataQualityContext.workDataObjectsFromEPH.get(i).WORK_TITLE);
-            assertTrue("Expecting the Work title details from DQ and SA Staging Consistent for id=" + ids.get(i),
+            assertTrue("Expecting the Work title details from DQ and SA Staging Consistent for id=" +
+                            dataQualityContext.workDataObjectsFromEPH.get(i).PMX_SOURCE_REFERENCE,
                     dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_TITLE
                             .equals(dataQualityContext.workDataObjectsFromEPH.get(i).WORK_TITLE));
 
             if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_SUBTITLE != null
                     || dataQualityContext.workDataObjectsFromEPH.get(i).WORK_SUBTITLE != null) {
-                assertTrue("Expecting the WORK subtitle from DQ and SA Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the WORK subtitle from DQ and SA Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPH.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_SUBTITLE
                                 .equals(dataQualityContext.workDataObjectsFromEPH.get(i).WORK_SUBTITLE));
             }
 
             if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).PRODUCT_WORK_PUB_DATE != null
                     || dataQualityContext.workDataObjectsFromEPH.get(i).PRODUCT_WORK_PUB_DATE != null) {
-                assertTrue("Expecting the WORK pub date from DQ and SA Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the WORK pub date from DQ and SA Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPH.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromSTGDQ.get(i).PRODUCT_WORK_PUB_DATE
                                 .equals(dataQualityContext.workDataObjectsFromEPH.get(i).PRODUCT_WORK_PUB_DATE));
             }
             if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).ELECTRONIC_RIGHTS_IND != null
                     || dataQualityContext.workDataObjectsFromEPH.get(i).ELECTRONIC_RIGHTS_IND != null) {
-                assertTrue("Expecting the Electronic rights ind details from DQ and SA Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the Electronic rights ind details from DQ and SA Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPH.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromSTGDQ.get(i).ELECTRONIC_RIGHTS_IND
                                 .equals(dataQualityContext.workDataObjectsFromEPH.get(i).ELECTRONIC_RIGHTS_IND));
             }
 
             if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).BOOK_VOLUME_NAME != null
                     || dataQualityContext.workDataObjectsFromEPH.get(i).BOOK_VOLUME_NAME != null) {
-                assertTrue("Expecting the Volume details from DQ and SA Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the Volume details from DQ and SA Consistent for id=" +
+                        dataQualityContext.workDataObjectsFromEPH.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromSTGDQ.get(i).BOOK_VOLUME_NAME
                                 .equals(dataQualityContext.workDataObjectsFromEPH.get(i).BOOK_VOLUME_NAME));
             }
 
             if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).BOOK_EDITION_NAME != null
                     || dataQualityContext.workDataObjectsFromEPH.get(i).BOOK_EDITION_NAME != null) {
-                assertTrue("Expecting the BOOK_EDITION_Number details from DQ and SA Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the BOOK_EDITION_Number details from DQ and SA Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPH.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromSTGDQ.get(i).BOOK_EDITION_NAME
                                 .equals(dataQualityContext.workDataObjectsFromEPH.get(i).BOOK_EDITION_NAME));
             }
 
             if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).OPEN_ACCESS_JNL_TYPE_CODE != null
                     || dataQualityContext.workDataObjectsFromEPH.get(i).OPEN_ACCESS_JNL_TYPE_CODE != null) {
-                assertTrue("Expecting the Open access details from DQ and SA Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the Open access details from DQ and SA Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPH.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromSTGDQ.get(i).OPEN_ACCESS_JNL_TYPE_CODE
                                 .equals(dataQualityContext.workDataObjectsFromEPH.get(i).OPEN_ACCESS_JNL_TYPE_CODE));
             }
 
             if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).PMC != null
                     || dataQualityContext.workDataObjectsFromEPH.get(i).PMC != null) {
-                assertTrue("Expecting the PMC details from DQ and SA Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the PMC details from DQ and SA Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPH.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromSTGDQ.get(i).PMC
                                 .equals(dataQualityContext.workDataObjectsFromEPH.get(i).PMC));
             }
 
             if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_TYPE != null
                     || dataQualityContext.workDataObjectsFromEPH.get(i).WORK_TYPE != null) {
-                assertTrue("Expecting the Work type details from DQ and SA Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the Work type details from DQ and SA Consistent for id=" +
+                        dataQualityContext.workDataObjectsFromEPH.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_TYPE
                                 .equals(dataQualityContext.workDataObjectsFromEPH.get(i).WORK_TYPE));
             }
 
             if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_STATUS != null
                     || dataQualityContext.workDataObjectsFromEPH.get(i).WORK_STATUS != null) {
-                assertTrue("Expecting the Work status details from DQ and SA Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the Work status details from DQ and SA Consistent for id="+
+                        dataQualityContext.workDataObjectsFromEPH.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_STATUS
                                 .equals(dataQualityContext.workDataObjectsFromEPH.get(i).WORK_STATUS));
             }
 
             if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).IMPRINT != null
                     || dataQualityContext.workDataObjectsFromEPH.get(i).IMPRINT != null) {
-                assertTrue("Expecting the Imprint details from DQ and SA Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the Imprint details from DQ and SA Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPH.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromSTGDQ.get(i).IMPRINT
                                 .equals(dataQualityContext.workDataObjectsFromEPH.get(i).IMPRINT));
             }
 
             if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).OWNERSHIP != null
                     || dataQualityContext.workDataObjectsFromEPH.get(i).OWNERSHIP != null) {
-                assertTrue("Expecting the Ownership details from DQ and SA Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the Ownership details from DQ and SA Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPH.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromSTGDQ.get(i).OWNERSHIP
                                 .equals(dataQualityContext.workDataObjectsFromEPH.get(i).OWNERSHIP));
             }
@@ -508,7 +521,8 @@ public class WorksDataCheck {
                 workDataObjectsAccProd = DBManager
                         .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
-                assertTrue("Expecting the Acc prod details from DQ and SA Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the Acc prod details from DQ and SA Consistent for id="+
+                                dataQualityContext.workDataObjectsFromEPH.get(i).PMX_SOURCE_REFERENCE,
                         workDataObjectsAccProd.get(0).f_accountable_product
                                 .equals(dataQualityContext.workDataObjectsFromEPH.get(i).f_accountable_product));
             }
@@ -521,82 +535,94 @@ public class WorksDataCheck {
         dataQualityContext.workDataObjectsFromEPHGD.sort(Comparator.comparing(WorkDataObject::getPMX_SOURCE_REFERENCE));
         dataQualityContext.workDataObjectsFromEPH.sort(Comparator.comparing(WorkDataObject::getPMX_SOURCE_REFERENCE));
         for (int i=0; i<dataQualityContext.workDataObjectsFromSource.size();i++) {
-            assertTrue("Expecting the Work title details from SA and GD Staging Consistent for id=" + ids.get(i),
+            assertTrue("Expecting the Work title details from SA and GD Staging Consistent for id="+
+                            dataQualityContext.workDataObjectsFromEPHGD.get(i).PMX_SOURCE_REFERENCE,
                     dataQualityContext.workDataObjectsFromEPH.get(i).WORK_TITLE
                             .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).WORK_TITLE));
 
             if (dataQualityContext.workDataObjectsFromEPH.get(i).WORK_SUBTITLE != null
                     || dataQualityContext.workDataObjectsFromEPHGD.get(i).WORK_SUBTITLE != null) {
-                assertTrue("Expecting the Work subtitle details from SA and GD Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the Work subtitle details from SA and GD Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPHGD.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromEPH.get(i).WORK_SUBTITLE
                                 .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).WORK_SUBTITLE));
             }
 
             if (dataQualityContext.workDataObjectsFromEPH.get(i).PRODUCT_WORK_PUB_DATE != null
                     || dataQualityContext.workDataObjectsFromEPHGD.get(i).PRODUCT_WORK_PUB_DATE != null) {
-                assertTrue("Expecting the Pub date details from SA and GD Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the Pub date details from SA and GD Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPHGD.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromEPH.get(i).PRODUCT_WORK_PUB_DATE
                                 .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).PRODUCT_WORK_PUB_DATE));
             }
             if (dataQualityContext.workDataObjectsFromEPH.get(i).ELECTRONIC_RIGHTS_IND != null
                     || dataQualityContext.workDataObjectsFromEPHGD.get(i).ELECTRONIC_RIGHTS_IND != null) {
-                assertTrue("Expecting the Electronic Rights Ind details from SA and GD Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the Electronic Rights Ind details from SA and GD Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPHGD.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromEPH.get(i).ELECTRONIC_RIGHTS_IND
                                 .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).ELECTRONIC_RIGHTS_IND));
             }
 
             if (dataQualityContext.workDataObjectsFromEPH.get(i).BOOK_VOLUME_NAME != null
                     || dataQualityContext.workDataObjectsFromEPHGD.get(i).BOOK_VOLUME_NAME != null) {
-                assertTrue("Expecting the BOOK_VOLUME_NAME details from SA and GD Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the BOOK_VOLUME_NAME details from SA and GD Consistent for id="+
+                                dataQualityContext.workDataObjectsFromEPHGD.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromEPH.get(i).BOOK_VOLUME_NAME
                                 .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).BOOK_VOLUME_NAME));
             }
 
             if (dataQualityContext.workDataObjectsFromEPH.get(i).BOOK_EDITION_NAME != null
                     || dataQualityContext.workDataObjectsFromEPHGD.get(i).BOOK_EDITION_NAME != null) {
-                assertTrue("Expecting the BOOK_EDITION_NUMBER details from SA and GD Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the BOOK_EDITION_NUMBER details from SA and GD Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPHGD.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromEPH.get(i).BOOK_EDITION_NAME
                                 .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).BOOK_EDITION_NAME));
             }
 
             if (dataQualityContext.workDataObjectsFromEPH.get(i).OPEN_ACCESS_JNL_TYPE_CODE != null
                     || dataQualityContext.workDataObjectsFromEPHGD.get(i).OPEN_ACCESS_JNL_TYPE_CODE != null) {
-                assertTrue("Expecting the Open access details from SA and GD Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the Open access details from SA and GD Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPHGD.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromEPH.get(i).OPEN_ACCESS_JNL_TYPE_CODE
                                 .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).OPEN_ACCESS_JNL_TYPE_CODE));
             }
 
             if (dataQualityContext.workDataObjectsFromEPH.get(i).PMC != null
                     || dataQualityContext.workDataObjectsFromEPHGD.get(i).PMC != null) {
-                assertTrue("Expecting the PMC details from SA and GD Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the PMC details from SA and GD Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPHGD.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromEPH.get(i).PMC
                                 .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).PMC));
             }
 
             if (dataQualityContext.workDataObjectsFromEPH.get(i).WORK_TYPE != null
                     || dataQualityContext.workDataObjectsFromEPHGD.get(i).WORK_TYPE != null) {
-                assertTrue("Expecting the Work type details from SA and GD Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the Work type details from SA and GD Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPHGD.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromEPH.get(i).WORK_TYPE
                                 .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).WORK_TYPE));
             }
 
             if (dataQualityContext.workDataObjectsFromEPH.get(i).WORK_STATUS != null
                     || dataQualityContext.workDataObjectsFromEPHGD.get(i).WORK_STATUS != null) {
-                assertTrue("Expecting the Work status details from SA and GD Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the Work status details from SA and GD Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPHGD.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromEPH.get(i).WORK_STATUS
                                 .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).WORK_STATUS));
             }
 
             if (dataQualityContext.workDataObjectsFromEPH.get(i).IMPRINT != null
                     || dataQualityContext.workDataObjectsFromEPHGD.get(i).IMPRINT != null) {
-                assertTrue("Expecting the Imprint details from SA and GD Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the Imprint details from SA and GD Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPHGD.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromEPH.get(i).IMPRINT
                                 .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).IMPRINT));
             }
 
             if (dataQualityContext.workDataObjectsFromEPH.get(i).OWNERSHIP != null
                     || dataQualityContext.workDataObjectsFromEPHGD.get(i).OWNERSHIP != null) {
-                assertTrue("Expecting the Ownership details from SA and GD Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the Ownership details from SA and GD Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPHGD.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromEPH.get(i).OWNERSHIP
                                 .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).OWNERSHIP));
             }
@@ -605,7 +631,8 @@ public class WorksDataCheck {
                     ||  dataQualityContext.workDataObjectsFromEPHGD.get(i).f_accountable_product != null) {
                 Log.info(dataQualityContext.workDataObjectsFromEPH.get(i).f_accountable_product);
                 Log.info(dataQualityContext.workDataObjectsFromEPHGD.get(i).f_accountable_product);
-                assertTrue("Expecting the Acc prod details from SA and GD Consistent for id=" + ids.get(i),
+                assertTrue("Expecting the Acc prod details from SA and GD Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPHGD.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromEPH.get(i).f_accountable_product
                                 .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).f_accountable_product));
             }
