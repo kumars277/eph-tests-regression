@@ -94,10 +94,18 @@ public class NotificationsSQL {
 
     public static String EPH_GET_TEST_DATA_Work="select * \n" +
             "from semarchy_eph_mdm.gd_wwork\n" +
-            " where work_id = 'EPR-W-TSTW01'";
+            " where work_id = 'PARAM1'";
 
     public static String EPH_GET_TEST_DATA_Manifestation="select * \n" +
             "from semarchy_eph_mdm.gd_manifestation\n" +
-            " where manifestation_id in ('EPR-M-TSTM01','EPR-M-TSTM02')";
+            " where manifestation_id in ('PARAM1','PARAM2')";
+
+
+    public static String EPH_GET_TEST_DATA_Product_Neg="select * \n" +
+            "from semarchy_eph_mdm.gd_product\n" +
+            " where product_id in ('PARAM1','PARAM2')";
+
+    public static String EPH_GET_Notification_Neg = "select status as status from semarchy_eph_stg.st_out_notification" +
+            " where notification_id = 'PARAM1'";
 
 }

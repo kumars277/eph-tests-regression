@@ -13,7 +13,7 @@ public class WorkDataCheckSQL {
             "  ,\"ELECTRONIC_RIGHTS_IND\" as ELECTRONIC_RIGHTS_IND -- Electronic Rights Indicator\n" +
             "  ,\"BOOK_EDITION_NAME\" as BOOK_EDITION_NAME-- Edition Number\n" +
             "  ,\"BOOK_VOLUME_NAME\" as BOOK_VOLUME_NAME-- Volume\n" +
-            "  ,\"PMCApiObject\" AS PMCApiObject -- PMCApiObject to link to LOV table\n" +
+            "  ,\"PMC\" AS PMC -- PMC to link to LOV table\n" +
             "  ,\"PMG\" AS PMG -- PMG to link to LOV table\n" +
             "  ,\"WORK_STATUS\" AS WORK_STATUS\t-- Work Level Status to link to LOV table (this will need mapping to new values, logic TBC)\n" +
             "  ,\"WORK_SUBSTATUS\" AS WORK_SUBSTATUS -- Work Level substatus which is part of Status mapping\n" +
@@ -38,7 +38,7 @@ public class WorkDataCheckSQL {
             "  ,ww.VOLUME as BOOK_VOLUME_NAME\n" +
             "  ,ww.COPYRIGHT_YEAR as PRODUCT_WORK_PUB_DATE\n" +
             "  ,ww.EDITION_NUMBER as BOOK_EDITION_NAME\n" +
-            "  ,ww.F_PMC as PMCApiObject\n" +
+            "  ,ww.F_PMC as PMC\n" +
             "  ,ww.F_OA_JOURNAL_TYPE AS OPEN_ACCESS_JNL_TYPE_CODE\n" +
             "  ,ww.F_TYPE AS WORK_TYPE\n" +
             "  ,ww.F_STATUS AS WORK_STATUS\n" +
@@ -62,7 +62,7 @@ public class WorkDataCheckSQL {
             "  ,VOLUME as BOOK_VOLUME_NAME\n" +
             "  ,COPYRIGHT_YEAR as PRODUCT_WORK_PUB_DATE\n" +
             "  ,EDITION_NUMBER as BOOK_EDITION_NAME\n" +
-            "  ,F_PMC as PMCApiObject\n" +
+            "  ,F_PMC as PMC\n" +
             "  ,F_OA_TYPE AS OPEN_ACCESS_JNL_TYPE_CODE\n" +
             "  ,F_TYPE AS WORK_TYPE\n" +
             "  ,F_STATUS AS WORK_STATUS\n" +
@@ -91,7 +91,7 @@ public class WorkDataCheckSQL {
             "  ,VOLUME as BOOK_VOLUME_NAME\n" +
             "  ,COPYRIGHT_YEAR as PRODUCT_WORK_PUB_DATE\n" +
             "  ,EDITION_NUMBER as BOOK_EDITION_NAME\n" +
-            "  ,F_PMC as PMCApiObject\n" +
+            "  ,F_PMC as PMC\n" +
             "  ,F_OA_TYPE AS OPEN_ACCESS_JNL_TYPE_CODE\n" +
             "  ,F_TYPE AS WORK_TYPE\n" +
             "  ,F_STATUS AS WORK_STATUS\n" +
