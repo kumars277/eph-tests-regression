@@ -115,7 +115,7 @@ public class ProductDataSQL {
             "       ult_work_ref as ULT_WORK_REF,\n" +
             "       tax_code as TAX_CODE\n" +
             "FROM ephsit_talend_owner.stg_10_pmx_product_can\n" +
-            "where pmx_source_reference in ('%s')\n";
+            "where pmx_source_reference similar to '%s'\n";
 
     public static String EPH_STG_PRODUCT_EXTRACT_JOURNAL = "SELECT\n" +
             "           \"PRODUCT_ID\" as PRODUCT_ID,\n" +
