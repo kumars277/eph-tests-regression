@@ -19,4 +19,9 @@ public class NotificationCountContext {
     public static List<NotificationDataObject> getWorkTD;
     public static List<NotificationDataObject> getProductTD;
     public static List<NotificationDataObject> getManifestationTD;
+
+    //negative test
+    public static List<NotificationDataObject> getWorkTDNegative;
+    public static List<NotificationDataObject> getProductTDNegative;
+    public static List<NotificationDataObject> getManifestationTDNegative;
 }

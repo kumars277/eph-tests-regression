@@ -33,3 +33,10 @@ Feature: Entity - Notifications - Validate a notification is created for every c
        | product       |
        | manifestation |
 
+      ######## Negative Tests
+  @WIP
+  Scenario: Work - Succeeds , Product - Fails
+    Given A incorrect product data is inserted
+    When The data and the notifications are created
+    Then The product notification is not processed
+

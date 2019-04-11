@@ -139,7 +139,7 @@ public class NotificationTestSteps {
     @Then("^The test data is created successfully$")
     public void verifyTestDataCreated(){
         if (testDataMissing){
-            sql= NotificationsSQL.EPH_GET_TEST_DATA_Work;
+            sql= NotificationsSQL.EPH_GET_TEST_DATA_Work.replace("PARAM1", "EPR-W-TSTW01");
             notificationCountContext.getWorkTD= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
             Assert.assertEquals("The Work test data is missing", 1
                     ,notificationCountContext.getWorkTD.size());
@@ -149,7 +149,9 @@ public class NotificationTestSteps {
             Assert.assertEquals("The Work test data is missing", 7
                     ,notificationCountContext.getProductTD.size());
 
-            sql= NotificationsSQL.EPH_GET_TEST_DATA_Manifestation;
+            sql= NotificationsSQL.EPH_GET_TEST_DATA_Manifestation
+                    .replace("PARAM1", "EPR-M-TSTM01")
+                    .replace("PARAM2", "EPR-M-TSTM02");
             notificationCountContext.getManifestationTD= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
             Assert.assertEquals("The Work test data is missing", 2
                     ,notificationCountContext.getManifestationTD.size());
@@ -339,5 +341,39 @@ public class NotificationTestSteps {
                 Assert.fail("The notification timestamp for key:" + notificationCountContext.payloadResult.get(i).key + " was not updated");
             }
         }
+    }
+
+    @Given("^A incorrect product data is inserted$")
+    public void incorrectProductInsert(){
+        loadBatchContext.batchId = DataLoadServiceImpl.createFalseData1();
+        System.out.println(loadBatchContext.batchId);
+        JobUtils.waitTillTheBatchComplete();
+    }
+
+    @When("^The data and the notifications are created$")
+    public void checkDataExists(){
+        sql= NotificationsSQL.EPH_GET_TEST_DATA_Work.replace("PARAM1", "EPR-W-TSTW10");
+        notificationCountContext.getWorkTDNegative= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
+        Assert.assertEquals("The Work test data is missing", 1
+                ,notificationCountContext.getWorkTDNegative.size());
+
+        sql= NotificationsSQL.EPH_GET_TEST_DATA_Manifestation
+                .replace("PARAM1", "EPR-M-TSTM10")
+                .replace("PARAM2", "EPR-M-TSTM20");
+        notificationCountContext.getManifestationTDNegative= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
+        Assert.assertEquals("The Manifetation test data is missing", 2
+                ,notificationCountContext.getManifestationTDNegative.size());
+
+        sql= NotificationsSQL.EPH_GET_TEST_DATA_Product_Neg
+                .replace("PARAM1", "EPR-TSTP10")
+                .replace("PARAM2", "EPR-TSTP20");
+        notificationCountContext.getProductTDNegative= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
+        Assert.assertEquals("The Product test data is missing", 2
+                ,notificationCountContext.getProductTDNegative.size());
+    }
+
+    @Then("^The product notification is not processed$")
+    public void checkNotificationStatus(){
+
     }
 }

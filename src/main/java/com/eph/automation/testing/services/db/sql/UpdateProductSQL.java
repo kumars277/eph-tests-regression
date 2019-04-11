@@ -18,12 +18,12 @@ public class UpdateProductSQL {
 
     public static String Insert_manifestation = "INSERT INTO ephsit.semarchy_eph_mdm.sa_manifestation (b_loadid, manifestation_id, b_classname," +
             " manifestation_key_title,f_type,f_status,f_wwork,f_event)\n" +
-            " VALUES ('LOADID','EPR-M-TSTM02','ManifestationApiObject','Tetrahedron Letters (Print) test'," +
+            " VALUES ('LOADID','EPR-M-TSTM02','Manifestation','Tetrahedron Letters (Print) test'," +
             "'JPR','MPU','EPR-W-TSTW01','EVENT')";
 
     public static String Insert_manifestation_1 = "INSERT INTO ephsit.semarchy_eph_mdm.sa_manifestation (b_loadid, manifestation_id, b_classname," +
             " manifestation_key_title,f_type,f_status,f_wwork,f_event)\n" +
-            " VALUES ('LOADID','EPR-M-TSTM01','ManifestationApiObject','Tetrahedron Letters (Print) test'," +
+            " VALUES ('LOADID','EPR-M-TSTM01','Manifestation','Tetrahedron Letters (Print) test'," +
             "'JPR','MPU','EPR-W-TSTW01','EVENT')";
 
     public static String Insert_product_1 = "INSERT INTO ephsit.semarchy_eph_mdm.sa_product (b_loadid, product_id, b_classname, name," +
