@@ -14,9 +14,9 @@ public class PersonWorkRoleDataSQL {
             "FROM\n" +
             "    GD_PRODUCT_WORK W\n" +
             "JOIN\n" +
-            "    GD_PMC PMCApiObject ON W.F_PMC = PMCApiObject.PMCCODE\n" +
+            "    GD_PMC PMC ON W.F_PMC = PMC.PMCCODE\n" +
             "JOIN\n" +
-            "    GD_PMG PMG ON PMCApiObject.F_PMG = PMG.PMGCODE\n" +
+            "    GD_PMG PMG ON PMC.F_PMG = PMG.PMGCODE\n" +
             "WHERE\n" +
             "    PMG.F_PARTY IS NOT NULL\n" +
             "UNION\n" +
@@ -67,9 +67,9 @@ public class PersonWorkRoleDataSQL {
             "FROM\n" +
             "    GD_PRODUCT_WORK W\n" +
             "JOIN\n" +
-            "    GD_PMC PMCApiObject ON W.F_PMC = PMCApiObject.PMCCODE\n" +
+            "    GD_PMC PMC ON W.F_PMC = PMC.PMCCODE\n" +
             "JOIN\n" +
-            "    GD_PMG PMG ON PMCApiObject.F_PMG = PMG.PMGCODE\n" +
+            "    GD_PMG PMG ON PMC.F_PMG = PMG.PMGCODE\n" +
             "WHERE\n" +
             "    PMG.F_PARTY IS NOT NULL \n" +
             "      AND W.PRODUCT_WORK_ID IN ('%s')";
