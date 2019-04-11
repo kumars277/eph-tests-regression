@@ -12,6 +12,10 @@ public class FinancialAttribsContext {
     public static List<FinancialAttribsDataObject> financialDataFromGD;
     public static List<FinancialAttribsDataObject> financialID;
     public static List<FinancialAttribsDataObject> workID;
+    public static List<FinancialAttribsDataObject> dqCount;
+    public static List<FinancialAttribsDataObject> saCount;
+    public static List<FinancialAttribsDataObject> gdCount;
+    public static List<FinancialAttribsDataObject> aeCount;
 
     public static String identifier;
 }
