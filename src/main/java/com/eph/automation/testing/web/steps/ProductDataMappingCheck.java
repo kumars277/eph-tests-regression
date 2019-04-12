@@ -137,7 +137,11 @@ public class ProductDataMappingCheck {
         } else {
             List<String> workIds = new ArrayList<>();
             for (int i = 0; i < dataQualityContext.productDataObjectsFromEPHSTG.size(); i++) {
-                if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getOPEN_ACCESS().equals("Y") || dataQualityContext.productDataObjectsFromEPHSTG.get(i).getAUTHOR_CHARGES().equals("Y") || dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPACKAGES().equals("Y"))
+                if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getOPEN_ACCESS().equals("Y") )
+                    workIds.add(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
+                if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getAUTHOR_CHARGES().equals("Y"))
+                    workIds.add(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
+                if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPACKAGES().equals("Y"))
                     workIds.add(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
             }
 
