@@ -115,7 +115,7 @@ public class ProductDataSQL {
             "       ult_work_ref as ULT_WORK_REF,\n" +
             "       tax_code as TAX_CODE\n" +
             "FROM ephsit_talend_owner.stg_10_pmx_product_can\n" +
-            "where pmx_source_reference similar to '%s'\n";
+            "where pmx_source_reference similar to '%s' and pmx_source_reference not like '%%OOA'\n";
 
     public static String EPH_STG_PRODUCT_EXTRACT_JOURNAL = "SELECT\n" +
             "           \"PRODUCT_ID\" as PRODUCT_ID,\n" +
@@ -366,15 +366,38 @@ public class ProductDataSQL {
 
     public static String SELECT_F_PRODUCT_WORK_IDS_FOR_GIVEN_MANIFESTATION_IDS = "select \"F_PRODUCT_WORK\" as F_PRODUCT_WORK from ephsit_talend_owner.stg_10_pmx_product where \"PRODUCT_MANIFESTATION_ID\" IN ('%s')";
 
-    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PRINT_JOURNALS= "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID  from ephsit_talend_owner.stg_10_pmx_product where \"SUBSCRIPTION\" = 'Y' and \"F_PRODUCT_MANIFESTATION_TYP\" = '1' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = '%s' order by random() limit '%s'";
+    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PRINT_JOURNALS= "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID  from ephsit_talend_owner.stg_10_pmx_product stg\n" +
+            "left join ephsit_talend_owner.stg_10_pmx_product_can can on can.product_short_name = stg.\"PRODUCT_SHORT_NAME\"\n" +
+            "left join semarchy_eph_mdm.sa_product sa on can.pmx_source_reference = sa.pmx_source_reference\n" +
+            "where \"SUBSCRIPTION\" = 'Y'\n" +
+            "and \"F_PRODUCT_MANIFESTATION_TYP\" = '1' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = '%s' \n" +
+            "and sa.b_error_status is null\n" +
+            "order by random() limit '%s'";
 
-    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_ELECTRONIC_JOURNALS = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from ephsit_talend_owner.stg_10_pmx_product where \"SUBSCRIPTION\" = 'Y' and \"F_PRODUCT_MANIFESTATION_TYP\" = '2' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = '%s' order by random() limit '%s'";
+    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_ELECTRONIC_JOURNALS = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID  from ephsit_talend_owner.stg_10_pmx_product stg\n" +
+            "left join ephsit_talend_owner.stg_10_pmx_product_can can on can.product_short_name = stg.\"PRODUCT_SHORT_NAME\"\n" +
+            "left join semarchy_eph_mdm.sa_product sa on can.pmx_source_reference = sa.pmx_source_reference\n" +
+            "where \"SUBSCRIPTION\" = 'Y'\n" +
+            "and \"F_PRODUCT_MANIFESTATION_TYP\" = '2' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = '%s' \n" +
+            "and sa.b_error_status is null\n" +
+            "order by random() limit '%s'";
 
     public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_NON_PRINT_OR_ELECTRONIC_JOURNALS = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from ephsit_talend_owner.stg_10_pmx_product where \"SUBSCRIPTION\" = 'Y' and \"F_PRODUCT_MANIFESTATION_TYP\" NOT IN ('1', '2') and \"AUTHOR_CHARGES\" = '%s' order by random() limit '%s'";
 
-    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from ephsit_talend_owner.stg_10_pmx_product where \"ONE_OFF_ACCESS\" = 'Y' order by random() limit '%s'";
+    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID \n" +
+            "from ephsit_talend_owner.stg_10_pmx_product stg \n" +
+            "left join ephsit_talend_owner.stg_10_pmx_product_can can on can.product_short_name = stg.\"PRODUCT_SHORT_NAME\"\n" +
+            "left join semarchy_eph_mdm.sa_product sa on can.pmx_source_reference = sa.pmx_source_reference\n" +
+            "where \"ONE_OFF_ACCESS\" = 'Y' \n" +
+            "and sa.b_error_status is null\n" +
+            "order by random() limit '%s'";
 
-    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PACKAGES = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from ephsit_talend_owner.stg_10_pmx_product where \"PACKAGES\" = 'Y' order by random() limit '%s'";
+    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PACKAGES = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from ephsit_talend_owner.stg_10_pmx_product stg \n" +
+            "left join ephsit_talend_owner.stg_10_pmx_product_can can on can.product_short_name = stg.\"PRODUCT_SHORT_NAME\"\n" +
+            "left join semarchy_eph_mdm.sa_product sa on can.pmx_source_reference = sa.pmx_source_reference\n" +
+            "where \"PACKAGES\" = 'Y'\n" +
+            "and sa.b_error_status is null\n" +
+            "order by random() limit '%s'";
 
     public static String SELECT_DUPLICATE_PRODUCT_IDS = "select distinct \"PRODUCT_ID\" as PRODUCT_ID from ephsit_talend_owner.stg_10_pmx_product  where \"PRODUCT_ID\" in (select b.\"PRODUCT_ID\" from ephsit_talend_owner.stg_10_pmx_product B ,ephsit_talend_owner.stg_10_pmx_product C where B.\"PRODUCT_ID\" = C.\"PRODUCT_ID\" \n" +
             "and b.\"F_PRODUCT_WORK\" != c.\"F_PRODUCT_WORK\" and B.\"SUBSCRIPTION\" = 'Y' and C.\"SUBSCRIPTION\" ='Y');\n";
