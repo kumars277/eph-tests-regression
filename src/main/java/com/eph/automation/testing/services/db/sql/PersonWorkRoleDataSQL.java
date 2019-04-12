@@ -29,6 +29,7 @@ public class PersonWorkRoleDataSQL {
             "\tGD_PARTY_IN_PRODUCT P\n" +
             "WHERE\n" +
             "\tP.F_ROLE_TYPE = 1\n" +
+            "AND P.EFFTO_DATE IS NULL\n" +
             "UNION\n" +
             "SELECT\n" +
             "\t P.PARTY_IN_PRODUCT_ID||'-PU' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
@@ -39,11 +40,12 @@ public class PersonWorkRoleDataSQL {
             "\tGD_PARTY_IN_PRODUCT P\n" +
             "WHERE\n" +
             "\tP.F_ROLE_TYPE IN (1120,1126)\n" +
+            "AND P.EFFTO_DATE IS NULL\n" +
             ")";
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTG = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_work_person_role";
 
-    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHAE = "select count(*) as count from semarchy_eph_mdm.ae_work_person_role\n";
+    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHAE = "select count(distinct work_person_role_id) as count from semarchy_eph_mdm.ae_work_person_role\n";
 
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSA = "select count(*) as count from semarchy_eph_mdm.sa_work_person_role sa\n" +
@@ -83,6 +85,7 @@ public class PersonWorkRoleDataSQL {
             "\tGD_PARTY_IN_PRODUCT P\n" +
             "WHERE\n" +
             "\tP.F_ROLE_TYPE = 1\n" +
+            "\tAND P.EFFTO_DATE IS NULL\n" +
             "\tAND P.PARTY_IN_PRODUCT_ID IN ('%s')";
 
     public static String GET_DATA_PERSONS_WORK_ROLE_PMX_PU = "SELECT\n" +
@@ -94,6 +97,7 @@ public class PersonWorkRoleDataSQL {
             "\tGD_PARTY_IN_PRODUCT P\n" +
             "WHERE\n" +
             "\tP.F_ROLE_TYPE IN (1120,1126)\n" +
+            "\tAND P.EFFTO_DATE IS NULL\n" +
             "\tAND P.PARTY_IN_PRODUCT_ID IN ('%s')";
 
     public static String GET_DATA_PERSONS_WORK_ROLE_EPHSTG = "select \n" +
