@@ -105,7 +105,10 @@ public class NotificationsSQL {
             "from semarchy_eph_mdm.gd_product\n" +
             " where product_id in ('PARAM1','PARAM2')";
 
-    public static String EPH_GET_Notification_Neg = "select status as status from semarchy_eph_stg.st_out_notification" +
-            " where notification_id = 'PARAM1'";
+    public static String EPH_GET_Notification_Neg = "select status as status, notification_id as not_id from semarchy_eph_stg.st_out_notification" +
+            " where batch_id = 'PARAM1'";
+
+    public static String GET_FAILED_NOT_PAYLOAD = "select write_attempts as attempts from semarchy_eph_stg.st_test_notification_payload\n" +
+            " where payload_key in ('EPR-W-TSTW20:RBK','EPR-TSTP30:OOA','EPR-TSTP40:OOA')";
 
 }
