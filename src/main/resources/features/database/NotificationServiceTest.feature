@@ -40,3 +40,9 @@ Feature: Entity - Notifications - Validate a notification is created for every c
     When The data and the notifications are created
     Then The product notification is not processed
 
+  @WIP
+  Scenario: Work - Fails , Product - Fails
+    Given A incorrect work and product data is inserted
+    When The incorrect data and the notifications are created
+    Then The work and product notifications are not processed
+

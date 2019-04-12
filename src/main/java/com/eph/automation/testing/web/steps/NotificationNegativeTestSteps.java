@@ -96,7 +96,7 @@ public class NotificationNegativeTestSteps {
         notificationCountContext.getStatusSTNotification = DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
 
         for (int i = 0; i < notificationCountContext.getStatusSTNotification.size(); i++) {
-            Assert.assertEquals("The notifications are not in Failed status for id " + notificationCountContext.getStatusSTNotification.get(i).not_id,
+            Assert.assertEquals("The notifications are not in Failed status",
                     "ERROR",
                     notificationCountContext.getStatusSTNotification.get(i).status);
         }
@@ -182,7 +182,7 @@ public class NotificationNegativeTestSteps {
         notificationCountContext.getStatusSTNotification = DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
 
         for (int i = 0; i < notificationCountContext.getStatusSTNotification.size(); i++) {
-            Assert.assertEquals("The notifications are not in Failed status for id " + notificationCountContext.getStatusSTNotification.get(i).not_id,
+            Assert.assertEquals("The notifications are not in Failed status!",
                     "ERROR",
                     notificationCountContext.getStatusSTNotification.get(i).status);
         }
