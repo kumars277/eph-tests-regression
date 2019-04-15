@@ -6,6 +6,7 @@ public class FinAttrSQL {
             " join semarchy_eph_mdm.sa_work_financial_attribs sa on dq.pmx_source_reference=cast(sa.work_fin_attribs_id as numeric)\n" +
             "join ephsit_talend_owner.stg_10_pmx_wwork st on dq.pmx_source_reference=st.\"PRODUCT_WORK_ID\"\n"+
             "where dq.\"dq_err\" = 'N' and sa.b_error_status is null\n" +
+            "and dq.opco is  not null and dq.resp_centre is not null\n" +
             "ORDER BY RANDOM()\n" +
             " LIMIT PARAM1;";
 
@@ -98,7 +99,7 @@ public class FinAttrSQL {
             "AND semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )";
 
-    public static String Get_AE_count = "select count (*) as aeCount " +
+    public static String Get_AE_count = "select count (distinct work_fin_attribs_id ) as aeCount " +
             "  FROM ephsit.semarchy_eph_mdm.ae_work_financial_attribs ae\n"+
             " where ae.b_batchid =  (select max (ae.b_batchid) from\n" +
             "semarchy_eph_mdm.ae_work_financial_attribs ae join \n"+
@@ -109,5 +110,5 @@ public class FinAttrSQL {
             "and e.f_workflow_source = 'PMX' )";
 
 
-    public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count (*) as dqCount from ephsit_talend_owner.stg_10_pmx_wwork_dq where dq_err='N'";
+    public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count (*) as dqCount from ephsit_talend_owner.stg_10_pmx_wwork_dq where dq_err='N' and opco is not null and resp_centre is not null";
 }
