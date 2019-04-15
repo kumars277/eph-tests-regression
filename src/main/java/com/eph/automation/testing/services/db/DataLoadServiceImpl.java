@@ -632,5 +632,254 @@ public class DataLoadServiceImpl {
 
     }
 
+    // Negative Test 3
+    public static String updateManifestation1() {
+        String batchID = null;
+        long batchId;
+        BigDecimal loadId = null;
+        int eventId;
+        String query;
+        conn=null;
+        Properties dbProps = new Properties();
+        dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(DBManager.getDatabaseEnvironmentKey(Constants.EPH_URL)));
+        if (conn == null) {
+            try {
+                conn = DriverManager.getConnection(LoadProperties.getDBConnection(Constants.EPH_URL));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            query = "{? = call semarchy_repository.get_new_loadid(?, ?, ?,?)}";
+            CallableStatement statement = conn.prepareCall(query);
+            statement.registerOutParameter(1, Types.DECIMAL);
+            statement.setString(2, "EPH");
+            statement.setString(3, "Manual");
+            statement.setString(4, "Entity Load");
+            statement.setString(5, "EPH Regression Test");
+            statement.execute();
 
+            loadId = statement.getBigDecimal(1);
+            String loadID = String.valueOf(loadId);
+            loadBatchContext.loadId = loadID;
+
+            System.out.println(loadID);
+
+            query = "{? = call semarchy_eph_mdm.eph_create_event(?,?,?,?,?,?)}";
+            statement = conn.prepareCall(query);
+            statement.registerOutParameter(1, Types.INTEGER);
+            statement.setString(2, "NEW");
+            statement.setString(3, "Regression test");
+            statement.setString(4, null);
+            statement.setString(5, "1");
+            statement.setString(6, "TEST");
+            statement.setInt(7, Integer.valueOf(loadID));
+            statement.execute();
+            eventId = statement.getInt(1);
+            String eventID = String.valueOf(eventId);
+
+            loadBatchContext.eventId = eventID;
+
+            System.out.println(eventID);
+
+            QueryRunner queryRunner = new QueryRunner();
+            insertManifestation1(loadID, queryRunner, conn, eventID);
+            statement = conn.prepareCall("{? = call semarchy_repository.SUBMIT_LOAD(?,?,?)}");
+            statement.registerOutParameter(1, Types.BIGINT);
+            statement.setLong(2, Long.valueOf(loadId.toString()));
+            statement.setString(3, "Product");
+            statement.setString(4, "EPH Regression Test");
+            statement.execute();
+            batchID = String.valueOf(statement.getLong(1));
+            System.out.println(batchID);
+            loadBatchContext.batchId = batchID;
+            statement.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            DbUtils.rollbackAndCloseQuietly(conn);
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+
+
+        return batchID;
+    }
+
+    public static void insertManifestation1(String loadID, QueryRunner queryRunner, Connection conn, String eventID) throws SQLException {
+        String updateManifestation = "";
+        int updateStatus;
+
+        updateManifestation = NegativeTestNotificationSQL.Manifestation_2_Negative_1;
+
+        updateStatus = queryRunner.update(conn, updateManifestation.replace("LOADID", loadID).replace("EVENT", eventID));
+        System.out.println(updateStatus);
+    }
+
+    //Negative test 4
+    public static String updateManifestation2() {
+        String batchID = null;
+        long batchId;
+        BigDecimal loadId = null;
+        int eventId;
+        String query;
+        conn=null;
+        Properties dbProps = new Properties();
+        dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(DBManager.getDatabaseEnvironmentKey(Constants.EPH_URL)));
+        if (conn == null) {
+            try {
+                conn = DriverManager.getConnection(LoadProperties.getDBConnection(Constants.EPH_URL));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            query = "{? = call semarchy_repository.get_new_loadid(?, ?, ?,?)}";
+            CallableStatement statement = conn.prepareCall(query);
+            statement.registerOutParameter(1, Types.DECIMAL);
+            statement.setString(2, "EPH");
+            statement.setString(3, "Manual");
+            statement.setString(4, "Entity Load");
+            statement.setString(5, "EPH Regression Test");
+            statement.execute();
+
+            loadId = statement.getBigDecimal(1);
+            String loadID = String.valueOf(loadId);
+            loadBatchContext.loadId = loadID;
+
+            System.out.println(loadID);
+
+            query = "{? = call semarchy_eph_mdm.eph_create_event(?,?,?,?,?,?)}";
+            statement = conn.prepareCall(query);
+            statement.registerOutParameter(1, Types.INTEGER);
+            statement.setString(2, "NEW");
+            statement.setString(3, "Regression test");
+            statement.setString(4, null);
+            statement.setString(5, "1");
+            statement.setString(6, "TEST");
+            statement.setInt(7, Integer.valueOf(loadID));
+            statement.execute();
+            eventId = statement.getInt(1);
+            String eventID = String.valueOf(eventId);
+
+            loadBatchContext.eventId = eventID;
+
+            System.out.println(eventID);
+
+            QueryRunner queryRunner = new QueryRunner();
+            insertManifestation2(loadID, queryRunner, conn, eventID);
+            statement = conn.prepareCall("{? = call semarchy_repository.SUBMIT_LOAD(?,?,?)}");
+            statement.registerOutParameter(1, Types.BIGINT);
+            statement.setLong(2, Long.valueOf(loadId.toString()));
+            statement.setString(3, "Product");
+            statement.setString(4, "EPH Regression Test");
+            statement.execute();
+            batchID = String.valueOf(statement.getLong(1));
+            System.out.println(batchID);
+            loadBatchContext.batchId = batchID;
+            statement.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            DbUtils.rollbackAndCloseQuietly(conn);
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+
+
+        return batchID;
+    }
+
+
+    public static void insertManifestation2(String loadID, QueryRunner queryRunner, Connection conn, String eventID) throws SQLException {
+        String updateManifestation = "";
+        int updateStatus;
+
+        updateManifestation = NegativeTestNotificationSQL.Manifestation_1_Negative_2;
+
+        updateStatus = queryRunner.update(conn, updateManifestation.replace("LOADID", loadID).replace("EVENT", eventID));
+        System.out.println(updateStatus);
+    }
+
+    //Negative test 5
+    public static String updateProduct1() {
+        String batchID = null;
+        long batchId;
+        BigDecimal loadId = null;
+        int eventId;
+        String query;
+        conn=null;
+        Properties dbProps = new Properties();
+        dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(DBManager.getDatabaseEnvironmentKey(Constants.EPH_URL)));
+        if (conn == null) {
+            try {
+                conn = DriverManager.getConnection(LoadProperties.getDBConnection(Constants.EPH_URL));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            query = "{? = call semarchy_repository.get_new_loadid(?, ?, ?,?)}";
+            CallableStatement statement = conn.prepareCall(query);
+            statement.registerOutParameter(1, Types.DECIMAL);
+            statement.setString(2, "EPH");
+            statement.setString(3, "Manual");
+            statement.setString(4, "Entity Load");
+            statement.setString(5, "EPH Regression Test");
+            statement.execute();
+
+            loadId = statement.getBigDecimal(1);
+            String loadID = String.valueOf(loadId);
+            loadBatchContext.loadId = loadID;
+
+            System.out.println(loadID);
+
+            query = "{? = call semarchy_eph_mdm.eph_create_event(?,?,?,?,?,?)}";
+            statement = conn.prepareCall(query);
+            statement.registerOutParameter(1, Types.INTEGER);
+            statement.setString(2, "NEW");
+            statement.setString(3, "Regression test");
+            statement.setString(4, null);
+            statement.setString(5, "1");
+            statement.setString(6, "TEST");
+            statement.setInt(7, Integer.valueOf(loadID));
+            statement.execute();
+            eventId = statement.getInt(1);
+            String eventID = String.valueOf(eventId);
+
+            loadBatchContext.eventId = eventID;
+
+            System.out.println(eventID);
+
+            QueryRunner queryRunner = new QueryRunner();
+            insertProduct1(loadID, queryRunner, conn, eventID);
+            statement = conn.prepareCall("{? = call semarchy_repository.SUBMIT_LOAD(?,?,?)}");
+            statement.registerOutParameter(1, Types.BIGINT);
+            statement.setLong(2, Long.valueOf(loadId.toString()));
+            statement.setString(3, "Product");
+            statement.setString(4, "EPH Regression Test");
+            statement.execute();
+            batchID = String.valueOf(statement.getLong(1));
+            System.out.println(batchID);
+            loadBatchContext.batchId = batchID;
+            statement.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            DbUtils.rollbackAndCloseQuietly(conn);
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+
+
+        return batchID;
+    }
+
+
+    public static void insertProduct1(String loadID, QueryRunner queryRunner, Connection conn, String eventID) throws SQLException {
+        String updateProduct = "";
+        int updateStatus;
+
+        updateProduct = NegativeTestNotificationSQL.Product_1_Negative_1;
+
+        updateStatus = queryRunner.update(conn, updateProduct.replace("LOADID", loadID).replace("EVENT", eventID));
+        System.out.println(updateStatus);
+    }
 }
