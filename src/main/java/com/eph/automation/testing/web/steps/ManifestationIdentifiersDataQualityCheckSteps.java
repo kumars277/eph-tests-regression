@@ -50,7 +50,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
     @When("^We get the count of records with (.*) in SA_MANIFESTATION_IDENTIFIER$")
     public void getCountOfRecordsInEPHSA(String identifier) {
-        sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_SA_MANIFESTATION_TABLE, identifier);
+        sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE, identifier);
         Log.info(sql);
         List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countISBNSA = ((Long) numberOfISBNs.get(0).get("count")).intValue();
@@ -64,7 +64,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
     @When("^We get the count of records with (.*) in GD_MANIFESTATION_IDENTIFIER$")
     public void getCountOfRecordsInEPHGD(String identifier) {
-        sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_GD_MANIFESTATION_TABLE, identifier);
+        sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_IN_EPH_GD_MANIFESTATION_TABLE, identifier);
         Log.info(sql);
 
         List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -80,7 +80,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
     @Given("^We get the manifestation ids of (.*) random records from STG_PMX_MANIFESTATION that have (.*) for (.*)$")
     public void getRandomRecords(String numberOfRecords, String identifier, String type) {
         //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         switch (type) {

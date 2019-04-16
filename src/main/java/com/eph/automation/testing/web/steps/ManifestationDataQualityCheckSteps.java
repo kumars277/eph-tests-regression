@@ -470,6 +470,7 @@ public class ManifestationDataQualityCheckSteps {
         Log.info("And compare the manifestations in EPH SA and EPH GD ..");
 //        assertThat("Data for manifestations in EPH and EPH GD is equal without order", dataQualityContext.manifestationDataObjectsFromEPH, containsInAnyOrder(dataQualityContext.manifestationDataObjectsFromEPHGD.toArray()));
         //sort data in the lists
+        manifestationDataObjectsFromEPHSA.sort(Comparator.comparing(ManifestationDataObject::getPMX_SOURCE_REFERENCE));
         manifestationDataObjectsFromEPHGD.sort(Comparator.comparing(ManifestationDataObject::getPMX_SOURCE_REFERENCE));
 
         IntStream.range(0, manifestationDataObjectsFromEPHSA.size()).forEach(i -> {
