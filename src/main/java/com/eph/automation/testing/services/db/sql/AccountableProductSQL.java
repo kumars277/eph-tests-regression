@@ -5,7 +5,7 @@ package com.eph.automation.testing.services.db.sql;
  */
 public class AccountableProductSQL {
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_PMX = "SELECT\n" +
-            "       count(*) as count\n" +
+            "    distinct count(*) as count\n" +
             "    FROM\n" +
             "        GD_PRODUCT_WORK W\n" +
             "    JOIN\n" +
@@ -19,12 +19,17 @@ public class AccountableProductSQL {
             "    WHERE\n" +
             "        T.PRODUCT_TYPE_CODE NOT IN ('COMPENDIUM','JCOLSC','ADVERTISING','FS','DUES')";
 
-    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG = "select \n" +
-            "count(*) as count\n" +
-            "from ephsit_talend_owner.STG_10_PMX_ACCOUNTABLE_PRODUCT";
+    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_THAT_WILL_BE_PROCESSED_TO_SA = "select count(*) from \n" +
+            "(select distinct\n" +
+            "\"ACC_PROD_ID\"\n" +
+            ",\"ACC_PROD_NAME\"\n" +
+            ",\"PARENT_ACC_PROD\"\n" +
+            "from ephsit_talend_owner.stg_10_pmx_accountable_product) A ";
+
+    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX = "select count(*) from ephsit_talend_owner.stg_10_pmx_accountable_product ";
 
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_SA = "select \n" +
-            "count(*) as count\n" +
+            " distinct count(*) as count\n" +
             "from semarchy_eph_mdm.sa_accountable_product sa\n" +
             "where sa.b_loadid =  (\n" +
             "select max (sa1.b_loadid) from \n" +
@@ -35,7 +40,9 @@ public class AccountableProductSQL {
             "and sa2.workflow_id = 'talend'\n" +
             "and sa2.f_workflow_source = 'PMX' )";
 
-    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_GD = "";
+    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_GD = "select \n" +
+            "distinct count(*)\n" +
+            "from semarchy_eph_mdm.gd_accountable_product";
 
     public static String SELECT_DATA_ACCOUNTABLE_PRODUCT_PMX = "SELECT\n" +
             "         W.PRODUCT_WORK_ID as PRODUCT_WORK_ID\n" +
@@ -100,9 +107,9 @@ public class AccountableProductSQL {
             ",ACCOUNTABLE_PRODUCT_ID as ACCOUNTABLE_PRODUCT_ID\n" +
             ",GL_PRODUCT_SEGMENT_CODE as GL_PRODUCT_SEGMENT_CODE\n" +
             ",GL_PRODUCT_SEGMENT_NAME as GL_PRODUCT_SEGMENT_NAME\n" +
-            ",F_GL_PRODUCT_SEGMENT_PARENT as GL_PRODUCT_SEGMENT_NAME\n" +
+            ",F_GL_PRODUCT_SEGMENT_PARENT as F_GL_PRODUCT_SEGMENT_PARENT\n" +
             "from semarchy_eph_mdm.gd_accountable_product \n" +
-            "and ACCOUNTABLE_PRODUCT_ID in ('%s')";
+            "where ACCOUNTABLE_PRODUCT_ID in ('%s')";
 
 
     public static String GET_RANDOM_ACCOUNTABLE_PRODUCT_IDS_FROM_SA = "select \n" +

@@ -105,7 +105,7 @@ public class PersonProductRoleDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
 
@@ -116,6 +116,25 @@ public class PersonProductRoleDataQualityCheckSteps {
         List<Map<?, ?>> randomPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         ids = randomPersons.stream().map(m -> (String) m.get("PRODUCT_SOURCE_REF")).map(String::valueOf).collect(Collectors.toList());
+        Log.info(ids.toString());
+    }
+
+    @Given("^We get (.*) random ids of persons product role from SA$")
+    public void getRandomIdsSA(String numberOfRecords) {
+        Log.info("Get random records ..");
+
+        //Get property when run with jenkins
+//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        Log.info("numberOfRecords = " + numberOfRecords);
+
+
+        sql = String.format(PersonProductRoleDataSQL.GET_RANDOM_PERSON_PRODUCT_ROLE_IDS_FROM_SA, numberOfRecords);
+        Log.info(sql);
+
+
+        List<Map<?, ?>> randomPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+
+        ids = randomPersons.stream().map(m -> (BigDecimal) m.get("PRODUCT_PERSON_ROLE_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info(ids.toString());
     }
 
@@ -144,8 +163,8 @@ public class PersonProductRoleDataQualityCheckSteps {
         Log.info("And compare product role records in EPH STG Can and EPH STG ..");
 
         //sort the lists before comparison
-        dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN.sort(Comparator.comparing(PersonProductRoleDataObject::getPRODUCT_SOURCE_REF));
-        dataQualityContext.personProductRoleDataObjectsFromEPHSTG.sort(Comparator.comparing(PersonProductRoleDataObject::getPRODUCT_SOURCE_REF));
+        dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN.sort(Comparator.comparing(PersonProductRoleDataObject::getPROD_PER_ROLE_SOURCE_REF));
+        dataQualityContext.personProductRoleDataObjectsFromEPHSTG.sort(Comparator.comparing(PersonProductRoleDataObject::getPROD_PER_ROLE_SOURCE_REF));
 
         IntStream.range(0, dataQualityContext.personProductRoleDataObjectsFromEPHSTG.size()).forEach(i -> {
 
@@ -218,6 +237,19 @@ public class PersonProductRoleDataQualityCheckSteps {
                 .getDBResultAsBeanList(sql, PersonProductRoleDataObject.class, Constants.EPH_URL);
         sql.length();
     }
+
+
+    @Then("^We get the random person product role records from EPH SA$")
+    public void geRandomPersonProductRoleRecordsEPHSA() {
+        Log.info("Get the person product role records from EPH SA  ..");
+        sql = String.format(PersonProductRoleDataSQL.GET_DATA_PERSONS_PRODUCT_ROLE_EPHSA, Joiner.on("','").join(ids));
+        Log.info(sql);
+
+        dataQualityContext.personProductRoleDataObjectsFromEPHSA = DBManager
+                .getDBResultAsBeanList(sql, PersonProductRoleDataObject.class, Constants.EPH_URL);
+        sql.length();
+    }
+
 
     @And("^Check the mandatory columns are populated$")
     public void checkMandatoryColumnsForPersonsInSAArePopulated() {
@@ -317,7 +349,7 @@ public class PersonProductRoleDataQualityCheckSteps {
     @Then("^We get the person product role records from EPH GD$")
     public void getPersonProductRoleRecordsEPHGD() {
         Log.info("Get the person product role records from EPH GD  ..");
-        sql = String.format(PersonProductRoleDataSQL.GET_DATA_PERSONS_PRODUCT_ROLE_EPHGD, Joiner.on("','").join(idsLookup));
+        sql = String.format(PersonProductRoleDataSQL.GET_DATA_PERSONS_PRODUCT_ROLE_EPHGD, Joiner.on("','").join(ids));
         Log.info(sql);
 
         dataQualityContext.personProductRoleDataObjectsFromEPHGD = DBManager

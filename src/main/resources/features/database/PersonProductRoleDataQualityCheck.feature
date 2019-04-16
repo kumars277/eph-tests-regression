@@ -56,10 +56,8 @@ Feature: Entity - PERSON PRODUCT ROLE - Validate data between PMX and EPH - Tale
 
   @Regression
   Scenario Outline: Validate data is transferred from EPH SA to EPH GD
-    Given We get <countOfRandomIds> random ids of persons product role
-    When We get the person product role records from EPH STG
-    When We get the ids of the person product role records in EPH SA from the lookup table
-    Then We get the person product role records from EPH SA
+    Given We get <countOfRandomIds> random ids of persons product role from SA
+    Then We get the random person product role records from EPH SA
     Then We get the person product role records from EPH GD
     And Compare person product role records in EPH SA and EPH GD
     Examples:
