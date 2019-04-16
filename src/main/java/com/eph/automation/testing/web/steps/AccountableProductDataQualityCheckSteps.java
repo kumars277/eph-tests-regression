@@ -51,11 +51,30 @@ public class AccountableProductDataQualityCheckSteps {
         Log.info("Count of accountable product data in PMX is: " + countAccountableProductsPMX);
     }
 
-
     @When("^We get the count of accountable product data from EPH STG$")
+    public void getCountAccountableProductsEPHSTGFromPMX() {
+        Log.info("When We get the count of accountable product data in EPH STG ..");
+        sql = AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX;
+        Log.info(sql);
+        List<Map<String, Object>> accountableProductsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countAccountableProductsEPHSTG = ((Long) accountableProductsNumber.get(0).get("count")).intValue();
+        Log.info("Count of accountable product data in EPH STG is: " + countAccountableProductsEPHSTG);
+    }
+
+    @When("^We get the count of accountable product data from EPH STG processed to SA$")
     public void getCountAccountableProductsEPHSTG() {
         Log.info("When We get the count of accountable product data in EPH STG ..");
-        sql = AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG;
+        sql = AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_THAT_WILL_BE_PROCESSED_TO_SA;
+        Log.info(sql);
+        List<Map<String, Object>> accountableProductsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countAccountableProductsEPHSTG = ((Long) accountableProductsNumber.get(0).get("count")).intValue();
+        Log.info("Count of accountable product data in EPH STG is: " + countAccountableProductsEPHSTG);
+    }
+
+    @When("^We check the count of accountable product data received from PMX to EPH STG$")
+    public void getCountAccountableProductsEPHSTGReceivedFromPMX() {
+        Log.info("When We get the count of accountable product data in EPH STG ..");
+        sql = AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX;
         Log.info(sql);
         List<Map<String, Object>> accountableProductsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countAccountableProductsEPHSTG = ((Long) accountableProductsNumber.get(0).get("count")).intValue();
@@ -104,7 +123,7 @@ public class AccountableProductDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         Log.info("Get the product work ids for given random ids from Staging ..");

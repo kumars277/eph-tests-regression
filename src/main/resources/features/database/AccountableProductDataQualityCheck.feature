@@ -8,7 +8,7 @@ Feature: Entity - ACCOUNTABLE PRODUCT - Count And Data Mapping Check - Validate 
 
   @Regression
   Scenario: Compare count of accountable product data between EPH STG and EPH SA
-    Given We get the count of accountable product data from EPH STG
+    Given We get the count of accountable product data from EPH STG processed to SA
     When We get the count of accountable product data from EPH SA
     Then Compare the count of accountable product data in EPH STG and EPH SA
 
@@ -53,6 +53,7 @@ Feature: Entity - ACCOUNTABLE PRODUCT - Count And Data Mapping Check - Validate 
   @Regression
   Scenario Outline: Validate accountable product data is transferred from EPH SA to EPH GD
     Given We get <countOfRandomIds> random ids of accountable product
+    When We get the accountable product data from EPH STG
     When We get the accountable product data from EPH SA
     Then We get the accountable product data from EPH GD
     And Compare the accountable product data in EPH SA and EPH GD

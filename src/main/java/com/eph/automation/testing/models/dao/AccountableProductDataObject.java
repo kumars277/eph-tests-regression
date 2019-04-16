@@ -19,7 +19,7 @@ public class AccountableProductDataObject {
     private String B_LOADID;
     private String F_EVENT;
     private String B_CLASSNAME;
-    private String ACCOUNTABLE_PRODUCT_ID;
+    private int ACCOUNTABLE_PRODUCT_ID;
     private String GL_PRODUCT_SEGMENT_CODE;
     private String GL_PRODUCT_SEGMENT_NAME;
     private String F_GL_PRODUCT_SEGMENT_PARENT;
@@ -105,11 +105,11 @@ public class AccountableProductDataObject {
         B_CLASSNAME = b_CLASSNAME;
     }
 
-    public String getACCOUNTABLE_PRODUCT_ID() {
+    public int getACCOUNTABLE_PRODUCT_ID() {
         return ACCOUNTABLE_PRODUCT_ID;
     }
 
-    public void setACCOUNTABLE_PRODUCT_ID(String ACCOUNTABLE_PRODUCT_ID) {
+    public void setACCOUNTABLE_PRODUCT_ID(int ACCOUNTABLE_PRODUCT_ID) {
         this.ACCOUNTABLE_PRODUCT_ID = ACCOUNTABLE_PRODUCT_ID;
     }
 
