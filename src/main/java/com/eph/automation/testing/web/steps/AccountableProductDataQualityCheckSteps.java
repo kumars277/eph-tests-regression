@@ -148,9 +148,6 @@ public class AccountableProductDataQualityCheckSteps {
 
     @When("^We get the accountable product data from PMX$")
     public void getAccountableProductsDataPMX() {
-
-
-
         Log.info("Get the accountable product data from PMX  ..");
         sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_PMX, Joiner.on("','").join(idsPMX));
         Log.info(sql);
