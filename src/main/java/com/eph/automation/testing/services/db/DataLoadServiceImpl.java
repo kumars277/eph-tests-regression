@@ -5,6 +5,7 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.configuration.LoadProperties;
 import com.eph.automation.testing.models.contexts.LoadBatchContext;
+import com.eph.automation.testing.models.contexts.NotificationCountContext;
 import com.eph.automation.testing.services.db.sql.NegativeTestNotificationSQL;
 import com.eph.automation.testing.services.db.sql.UpdateProductSQL;
 import org.apache.commons.dbutils.DbUtils;
@@ -881,5 +882,97 @@ public class DataLoadServiceImpl {
 
         updateStatus = queryRunner.update(conn, updateProduct.replace("LOADID", loadID).replace("EVENT", eventID));
         System.out.println(updateStatus);
+    }
+
+    public static String createIdentifier() {
+        String batchID = null;
+        long batchId;
+        BigDecimal loadId = null;
+        int eventId;
+        String query;
+        conn=null;
+        Properties dbProps = new Properties();
+        dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(DBManager.getDatabaseEnvironmentKey(Constants.EPH_URL)));
+        if (conn == null) {
+            try {
+                conn = DriverManager.getConnection(LoadProperties.getDBConnection(Constants.EPH_URL));
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            query = "{? = call semarchy_repository.get_new_loadid(?, ?, ?,?)}";
+            CallableStatement statement = conn.prepareCall(query);
+            statement.registerOutParameter(1, Types.DECIMAL);
+            statement.setString(2, "EPH");
+            statement.setString(3, "Manual");
+            statement.setString(4, "Entity Load");
+            statement.setString(5, "EPH Regression Test");
+            statement.execute();
+
+            loadId = statement.getBigDecimal(1);
+            String loadID = String.valueOf(loadId);
+            loadBatchContext.loadId = loadID;
+
+            System.out.println(loadID);
+
+//            //Need to gete New Event IDeventtype text, description text,
+// thirdparty text, workflowid text, workflowsource text, loadid integer)
+            //
+            query = "{? = call semarchy_eph_mdm.eph_create_event(?,?,?,?,?,?)}";
+            statement = conn.prepareCall(query);
+            statement.registerOutParameter(1, Types.INTEGER);
+            statement.setString(2, "NEW");
+            statement.setString(3, "Regression test");
+            statement.setString(4, null);
+            statement.setString(5, "1");
+            statement.setString(6, "TEST");
+            statement.setInt(7, Integer.valueOf(loadID));
+            statement.execute();
+            eventId = statement.getInt(1);
+            String eventID = String.valueOf(eventId);
+
+            loadBatchContext.eventId = eventID;
+
+            System.out.println(eventID);
+
+            QueryRunner queryRunner = new QueryRunner();
+            InsertIdentifier(loadID, queryRunner, conn, eventID);
+            statement = conn.prepareCall("{? = call semarchy_repository.SUBMIT_LOAD(?,?,?)}");
+            statement.registerOutParameter(1, Types.BIGINT);
+            statement.setLong(2, Long.valueOf(loadId.toString()));
+            statement.setString(3, "Product");
+            statement.setString(4, "EPH Regression Test");
+            statement.execute();
+            batchID = String.valueOf(statement.getLong(1));
+            System.out.println(batchID);
+            loadBatchContext.batchId = batchID;
+            statement.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            DbUtils.rollbackAndCloseQuietly(conn);
+        } finally {
+            DbUtils.closeQuietly(conn);
+        }
+
+
+        return batchID;
+    }
+
+    public static void InsertIdentifier(String loadID, QueryRunner queryRunner, Connection conn, String eventID) throws SQLException {
+        String updateIdentifier = "";
+        int updateStatus;
+
+        if(NotificationCountContext.manifestationIdentifier){
+            updateIdentifier = UpdateProductSQL.Insert_manifestation_identifier;
+
+            updateStatus = queryRunner.update(conn, updateIdentifier.replace("LOADID", loadID).replace("EVENT", eventID));
+            System.out.println(updateStatus);
+        }else {
+            updateIdentifier = UpdateProductSQL.Insert_work_identifier;
+
+            updateStatus = queryRunner.update(conn, updateIdentifier.replace("LOADID", loadID).replace("EVENT", eventID));
+            System.out.println(updateStatus);
+        }
     }
 }
