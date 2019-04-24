@@ -27,7 +27,7 @@ Feature: Entity - ACCOUNTABLE PRODUCT - Count And Data Mapping Check - Validate 
     Examples:
       | countOfRandomIds |
       | 10               |
-      | 10               |
+
 
   @Regression
   Scenario Outline: Check mandatory columns are populated in SA
@@ -48,7 +48,7 @@ Feature: Entity - ACCOUNTABLE PRODUCT - Count And Data Mapping Check - Validate 
     Examples:
       | countOfRandomIds |
       | 10               |
-      | 10               |
+
 
   @Regression
   Scenario Outline: Validate accountable product data is transferred from EPH SA to EPH GD
@@ -59,5 +59,4 @@ Feature: Entity - ACCOUNTABLE PRODUCT - Count And Data Mapping Check - Validate 
     And Compare the accountable product data in EPH SA and EPH GD
     Examples:
       | countOfRandomIds |
-      | 10               |
       | 10               |

@@ -146,14 +146,14 @@ public class NotificationTestSteps {
 
             sql= NotificationsSQL.EPH_GET_TEST_DATA_Product;
             notificationCountContext.getProductTD= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
-            Assert.assertEquals("The Work test data is missing", 7
+            Assert.assertEquals("The Product test data is missing", 7
                     ,notificationCountContext.getProductTD.size());
 
             sql= NotificationsSQL.EPH_GET_TEST_DATA_Manifestation
                     .replace("PARAM1", "EPR-M-TSTM01")
                     .replace("PARAM2", "EPR-M-TSTM02");
             notificationCountContext.getManifestationTD= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
-            Assert.assertEquals("The Work test data is missing", 2
+            Assert.assertEquals("The Manifestation test data is missing", 2
                     ,notificationCountContext.getManifestationTD.size());
             Log.info("Test data is created successfully!");
         }else{
