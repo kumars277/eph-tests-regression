@@ -57,4 +57,14 @@ public class UpdateProductSQL {
             " f_type, f_status,f_manifestation, f_event,f_tax_code,f_revenue_model,separately_sale_indicator,trial_allowed_indicator)\n" +
             " VALUES ('LOADID','EPR-TSTP07','Product','Test - Tetrahedron Letters (Print) Bulk Sales'," +
             "'JBS','PAS','EPR-M-TSTM01','EVENT','G003','ONE','true','false')";
+
+    public static String Insert_work_identifier= "INSERT INTO ephsit.semarchy_eph_mdm.sa_work_identifier (b_loadid, work_identifier_id, b_classname, identifier," +
+            " f_type,f_wwork, f_event)\n" +
+            " VALUES ('LOADID','9999999999','WorkIdentifier','99999999999'," +
+            "'PROJECT-NUM','EPR-W-TSTW01','EVENT')";
+
+    public static String Insert_manifestation_identifier= "INSERT INTO ephsit.semarchy_eph_mdm.sa_manifestation_identifier (b_loadid, manif_identifier_id, b_classname, identifier," +
+            " f_type,f_manifestation, f_event)\n" +
+            " VALUES ('LOADID','88888888888','ManifestationIdentifier','8888-8888'," +
+            "'ISSN','EPR-M-TSTM02','EVENT')";
 }
