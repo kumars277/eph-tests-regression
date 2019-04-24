@@ -29,9 +29,9 @@ Feature: Entity - Notifications - Validate a notification is created for every c
 
       Examples:
        | type                     |
-       #| work                    |
-       #| product                 |
-       #| manifestation           |
+       | work                     |
+       | product                  |
+       | manifestation            |
        | work_identifier          |
        | manifestation_identifier |
 
