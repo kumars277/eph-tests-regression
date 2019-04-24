@@ -21,17 +21,17 @@ Feature: Entity - Notifications - Validate a notification is created for every c
       Then The test data is created successfully
 
     @Regression
-    Scenario Outline: Verify notification is processed successfully
-      Given A <type> is updated
-      When A notification is created
-      Then The notification is processed
-      And The <type> notification is in the payload table
+  Scenario Outline: Verify notification is processed successfully
+    Given A <type> is updated
+    When A notification is created
+    Then The notification is processed
+    And The <type> notification is in the payload table
 
-      Examples:
-       | type          |
-       | work          |
-       | product       |
-       | manifestation |
+    Examples:
+      | type          |
+      | work          |
+      | manifestation |
+      | product       |
 
       ######## Negative Tests
   @Regression
