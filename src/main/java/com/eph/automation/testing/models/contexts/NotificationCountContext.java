@@ -33,4 +33,6 @@ public class NotificationCountContext {
     public static List<NotificationDataObject> getWriteAttemptsAfterNegProduct2;
     public static List<NotificationDataObject> getFailedPayloadNot;
     public static List<NotificationDataObject> getFailedPayloadNotBefore;
+
+    public static boolean manifestationIdentifier=false;
 }

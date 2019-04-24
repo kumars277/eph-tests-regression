@@ -28,10 +28,12 @@ Feature: Entity - Notifications - Validate a notification is created for every c
       And The <type> notification is in the payload table
 
       Examples:
-       | type          |
-       | work          |
-       | product       |
-       | manifestation |
+       | type                     |
+       #| work                    |
+       #| product                 |
+       #| manifestation           |
+       | work_identifier          |
+       | manifestation_identifier |
 
       ######## Negative Tests
   @Regression

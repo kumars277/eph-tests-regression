@@ -84,6 +84,11 @@ public class NotificationsSQL {
             "from semarchy_eph_stg.st_test_notification_payload\n" +
             " where payload_key in ('EPR-W-TSTW01:JNL','EPR-TSTP03:BKF','EPR-TSTP04:SUB')";
 
+
+    public static String EPH_GET_Payload_Notif_Work_identifier = "select payload_key as key, payload_value as value, update_timestamp as timestamp \n" +
+            "from semarchy_eph_stg.st_test_notification_payload\n" +
+            " where payload_key = 'EPR-W-TSTW01:JNL'";
+
     public static String EPH_GET_Write_Attempts = "select write_attempts as attempts from semarchy_eph_stg.st_test_notification_payload\n" +
             " where payload_key='PARAM1'";
 
