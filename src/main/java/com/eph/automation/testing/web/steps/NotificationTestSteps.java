@@ -220,6 +220,60 @@ public class NotificationTestSteps {
 
             NotificationCountContext.manifestationIdentifier=true;
             loadBatchContext.batchId = DataLoadServiceImpl.createIdentifier();
+        }else if (type.equalsIgnoreCase("translation")) {
+            sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
+            notificationCountContext.writeAttemptsBefore= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
+            if (notificationCountContext.writeAttemptsBefore.isEmpty()){
+                attemptsBefore = 0;
+            }else{
+                attemptsBefore = notificationCountContext.writeAttemptsBefore.get(0).attempts;
+            }
+            Log.info("The attempts before update are: " + attemptsBefore);
+            NotificationCountContext.manifestationIdentifier=false;
+            NotificationCountContext.translation=true;
+            loadBatchContext.batchId = DataLoadServiceImpl.createIdentifier();
+        }else if (type.equalsIgnoreCase("person_role")) {
+            sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
+            notificationCountContext.writeAttemptsBefore= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
+            if (notificationCountContext.writeAttemptsBefore.isEmpty()){
+                attemptsBefore = 0;
+            }else{
+                attemptsBefore = notificationCountContext.writeAttemptsBefore.get(0).attempts;
+            }
+            Log.info("The attempts before update are: " + attemptsBefore);
+            NotificationCountContext.manifestationIdentifier=false;
+            NotificationCountContext.translation=false;
+            NotificationCountContext.personRole=true;
+            loadBatchContext.batchId = DataLoadServiceImpl.createIdentifier();
+        }else if (type.equalsIgnoreCase("mirror")) {
+            sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
+            notificationCountContext.writeAttemptsBefore= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
+            if (notificationCountContext.writeAttemptsBefore.isEmpty()){
+                attemptsBefore = 0;
+            }else{
+                attemptsBefore = notificationCountContext.writeAttemptsBefore.get(0).attempts;
+            }
+            Log.info("The attempts before update are: " + attemptsBefore);
+            NotificationCountContext.manifestationIdentifier=false;
+            NotificationCountContext.translation=false;
+            NotificationCountContext.personRole=false;
+            NotificationCountContext.mirror = true;
+            loadBatchContext.batchId = DataLoadServiceImpl.createIdentifier();
+        }else if (type.equalsIgnoreCase("financial_attribute")) {
+            sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
+            notificationCountContext.writeAttemptsBefore= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
+            if (notificationCountContext.writeAttemptsBefore.isEmpty()){
+                attemptsBefore = 0;
+            }else{
+                attemptsBefore = notificationCountContext.writeAttemptsBefore.get(0).attempts;
+            }
+            Log.info("The attempts before update are: " + attemptsBefore);
+            NotificationCountContext.manifestationIdentifier=false;
+            NotificationCountContext.translation=false;
+            NotificationCountContext.personRole=false;
+            NotificationCountContext.mirror = false;
+            NotificationCountContext.finAttribute = true;
+            loadBatchContext.batchId = DataLoadServiceImpl.createIdentifier();
         }
         System.out.println(loadBatchContext.batchId);
         JobUtils.waitTillTheBatchComplete();
@@ -258,45 +312,7 @@ public class NotificationTestSteps {
     public void checkPayloadTable(String notType){
         Gson gson = new Gson();
 
-        if(notType.equalsIgnoreCase("work")||notType.equalsIgnoreCase("work_identifier")){
-            sql= NotificationsSQL.EPH_GET_Payload_Notif_Work;
-            notificationCountContext.payloadResult= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
-            Assert.assertEquals("Notifications number not as expected",8,notificationCountContext.payloadResult.size());
-
-            sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
-            notificationCountContext.writeAttemptsAfter= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
-            Log.info("The attempts after update are: " + notificationCountContext.writeAttemptsAfter.get(0).attempts);
-            Assert.assertEquals("The attempts are not as expected",notificationCountContext.writeAttemptsBefore.get(0).attempts + 1,
-                    notificationCountContext.writeAttemptsAfter.get(0).attempts);
-
-            String json = gson.toJson(notificationCountContext.payloadResult.get(0).value);
-            JsonObject jsonObj = new JsonParser().parse(notificationCountContext.payloadResult.get(0).value).getAsJsonObject();
-            Log.info(json);
-            String schemaVersion = jsonObj.get("schemaVersion").getAsString();
-            String id = jsonObj.get("workId").getAsString();
-            String type = jsonObj.getAsJsonObject("workType").get("workTypeCode").getAsString();
-            Log.info(notificationCountContext.payloadResult.get(0).timestamp.substring(0,16));
-            Log.info(json);
-            Log.info(schemaVersion);
-
-            JSONObject jsonSchema = new JSONObject(new JSONTokener(getClass().getClassLoader().getResourceAsStream("jsonValidator/work.json")));
-            JSONObject jsonSubject = new JSONObject(new JSONTokener(notificationCountContext.payloadResult.get(0).value));
-            Schema schema=SchemaLoader.load(jsonSchema);
-            schema.validate(jsonSubject);
-
-            if (notificationCountContext.payloadResult.get(0).key.substring(0,12).equalsIgnoreCase(id)){
-                Log.info("The id in the payload message is correct");
-            }else{
-                Assert.fail("The id in the payload message is different!");
-            }
-
-            if (notificationCountContext.payloadResult.get(0).key.substring(13,16).equalsIgnoreCase(type)){
-                Log.info("The type in the payload message is correct");
-            }else{
-                Assert.fail("The type in the payload message is different!");
-            }
-
-        }  else if(notType.equalsIgnoreCase("product")){
+        if(notType.equalsIgnoreCase("product")){
             sql= NotificationsSQL.EPH_GET_Payload_Notif_Product;
             notificationCountContext.payloadResult= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
             Assert.assertEquals("Notification number not as expected",notificationCountContext.payloadResult.size(), 1);
@@ -346,6 +362,44 @@ public class NotificationTestSteps {
             Log.info("The attempts after update are: " + notificationCountContext.writeAttemptsAfter.get(0).attempts);
             Assert.assertEquals("The attempts are not as expected", notificationCountContext.writeAttemptsBefore.get(0).attempts  + 1,
                     notificationCountContext.writeAttemptsAfter.get(0).attempts);
+        } else{
+            sql= NotificationsSQL.EPH_GET_Payload_Notif_Work;
+            notificationCountContext.payloadResult= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
+            Assert.assertEquals("Notifications number not as expected",8,notificationCountContext.payloadResult.size());
+
+            sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
+            notificationCountContext.writeAttemptsAfter= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
+            Log.info("The attempts after update are: " + notificationCountContext.writeAttemptsAfter.get(0).attempts);
+            Assert.assertEquals("The attempts are not as expected",notificationCountContext.writeAttemptsBefore.get(0).attempts + 1,
+                    notificationCountContext.writeAttemptsAfter.get(0).attempts);
+
+            String json = gson.toJson(notificationCountContext.payloadResult.get(0).value);
+            JsonObject jsonObj = new JsonParser().parse(notificationCountContext.payloadResult.get(0).value).getAsJsonObject();
+            Log.info(json);
+            String schemaVersion = jsonObj.get("schemaVersion").getAsString();
+            String id = jsonObj.get("workId").getAsString();
+            String type = jsonObj.getAsJsonObject("workType").get("workTypeCode").getAsString();
+            Log.info(notificationCountContext.payloadResult.get(0).timestamp.substring(0,16));
+            Log.info(json);
+            Log.info(schemaVersion);
+
+            JSONObject jsonSchema = new JSONObject(new JSONTokener(getClass().getClassLoader().getResourceAsStream("jsonValidator/work.json")));
+            JSONObject jsonSubject = new JSONObject(new JSONTokener(notificationCountContext.payloadResult.get(0).value));
+            Schema schema=SchemaLoader.load(jsonSchema);
+            schema.validate(jsonSubject);
+
+            if (notificationCountContext.payloadResult.get(0).key.substring(0,12).equalsIgnoreCase(id)){
+                Log.info("The id in the payload message is correct");
+            }else{
+                Assert.fail("The id in the payload message is different!");
+            }
+
+            if (notificationCountContext.payloadResult.get(0).key.substring(13,16).equalsIgnoreCase(type)){
+                Log.info("The type in the payload message is correct");
+            }else{
+                Assert.fail("The type in the payload message is different!");
+            }
+
         }
         for (int i=0;i<notificationCountContext.payloadResult.size();i++) {
 
