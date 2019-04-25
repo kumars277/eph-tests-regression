@@ -35,4 +35,8 @@ public class NotificationCountContext {
     public static List<NotificationDataObject> getFailedPayloadNotBefore;
 
     public static boolean manifestationIdentifier=false;
+    public static boolean translation=false;
+    public static boolean personRole=false;
+    public static boolean mirror=false;
+    public static boolean finAttribute =false;
 }

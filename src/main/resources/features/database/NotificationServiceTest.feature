@@ -34,6 +34,10 @@ Feature: Entity - Notifications - Validate a notification is created for every c
        | manifestation            |
        | work_identifier          |
        | manifestation_identifier |
+       | translation              |
+       | person_role              |
+       | mirror                   |
+       | financial_attribute      |
 
       ######## Negative Tests
   @Regression

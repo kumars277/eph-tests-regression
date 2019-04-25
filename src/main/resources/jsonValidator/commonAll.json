@@ -120,9 +120,7 @@
 			"required": [
 				"glCompany",
 				"costResponsibilityCentre",
-				"revenueResponsibilityCentre",
-				"effectiveStartDate",
-				"effectiveEndDate"
+				"revenueResponsibilityCentre"
 			],
 			"properties": {
 				"glCompany": {

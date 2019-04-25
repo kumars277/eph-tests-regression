@@ -961,6 +961,7 @@ public class DataLoadServiceImpl {
 
     public static void InsertIdentifier(String loadID, QueryRunner queryRunner, Connection conn, String eventID) throws SQLException {
         String updateIdentifier = "";
+        String updatePerson = "";
         int updateStatus;
 
         if(NotificationCountContext.manifestationIdentifier){
@@ -968,7 +969,31 @@ public class DataLoadServiceImpl {
 
             updateStatus = queryRunner.update(conn, updateIdentifier.replace("LOADID", loadID).replace("EVENT", eventID));
             System.out.println(updateStatus);
-        }else {
+        } else if (NotificationCountContext.translation){
+            updateIdentifier = UpdateProductSQL.Insert_work_translation;
+
+            updateStatus = queryRunner.update(conn, updateIdentifier.replace("LOADID", loadID).replace("EVENT", eventID));
+            System.out.println(updateStatus);
+        }else if (NotificationCountContext.personRole){
+            updatePerson = UpdateProductSQL.Insert_person;
+            updateIdentifier = UpdateProductSQL.Insert_person_role;
+
+            updateStatus = queryRunner.update(conn, updatePerson.replace("LOADID", loadID));
+            System.out.println(updateStatus);
+            updateStatus = queryRunner.update(conn, updateIdentifier.replace("LOADID", loadID).replace("EVENT", eventID));
+            System.out.println(updateStatus);
+        }else if (NotificationCountContext.mirror){
+            updateIdentifier = UpdateProductSQL.Insert_mirror;
+
+            updateStatus = queryRunner.update(conn, updateIdentifier.replace("LOADID", loadID).replace("EVENT", eventID));
+            System.out.println(updateStatus);
+        }else if (NotificationCountContext.finAttribute){
+            updateIdentifier = UpdateProductSQL.Insert_financial_attr;
+
+            updateStatus = queryRunner.update(conn, updateIdentifier.replace("LOADID", loadID).replace("EVENT", eventID));
+            System.out.println(updateStatus);
+        }
+        else {
             updateIdentifier = UpdateProductSQL.Insert_work_identifier;
 
             updateStatus = queryRunner.update(conn, updateIdentifier.replace("LOADID", loadID).replace("EVENT", eventID));
