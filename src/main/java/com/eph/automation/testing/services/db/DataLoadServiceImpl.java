@@ -390,6 +390,8 @@ public class DataLoadServiceImpl {
         String updateManifestation = "";
         String updateManifestation1 = "";
         String updateWork = "";
+        String updateWork1 = "";
+        String updateWork2 = "";
         String updateProduct1 = "";
         String updateProduct2 = "";
         String updateProduct3 = "";
@@ -400,6 +402,8 @@ public class DataLoadServiceImpl {
         int updateStatus;
 
         updateWork = UpdateProductSQL.Insert_work;
+        updateWork1 = UpdateProductSQL.Insert_work_1;
+        updateWork2 = UpdateProductSQL.Insert_work_2;
         updateManifestation = UpdateProductSQL.Insert_manifestation;
         updateManifestation1 = UpdateProductSQL.Insert_manifestation_1;
         updateProduct1 = UpdateProductSQL.Insert_product_1;
@@ -411,6 +415,10 @@ public class DataLoadServiceImpl {
         updateProduct7 = UpdateProductSQL.Insert_product_7;
 
         updateStatus = queryRunner.update(conn, updateWork.replace("LOADID", loadID).replace("EVENT", eventID));
+        System.out.println(updateStatus);
+        updateStatus = queryRunner.update(conn,updateWork1.replace("LOADID", loadID).replace("EVENT", eventID));
+        System.out.println(updateStatus);
+        updateStatus = queryRunner.update(conn,updateWork2.replace("LOADID", loadID).replace("EVENT", eventID));
         System.out.println(updateStatus);
         updateStatus = queryRunner.update(conn, updateManifestation.replace("LOADID", loadID).replace("EVENT", eventID));
         System.out.println(updateStatus);

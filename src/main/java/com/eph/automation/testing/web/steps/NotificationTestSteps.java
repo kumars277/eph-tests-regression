@@ -139,9 +139,12 @@ public class NotificationTestSteps {
     @Then("^The test data is created successfully$")
     public void verifyTestDataCreated(){
         if (testDataMissing){
-            sql= NotificationsSQL.EPH_GET_TEST_DATA_Work.replace("PARAM1", "EPR-W-TSTW01");
+            sql= NotificationsSQL.EPH_GET_TEST_DATA_Work
+                    .replace("PARAM1", "EPR-W-TSTW01")
+                    .replace("PARAM2", "EPR-W-TSTW02")
+                    .replace("PARAM3", "EPR-W-TSTW03");
             notificationCountContext.getWorkTD= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
-            Assert.assertEquals("The Work test data is missing", 1
+            Assert.assertEquals("The Work test data is missing", 3
                     ,notificationCountContext.getWorkTD.size());
 
             sql= NotificationsSQL.EPH_GET_TEST_DATA_Product;
@@ -279,16 +282,33 @@ public class NotificationTestSteps {
         JobUtils.waitTillTheBatchComplete();
     }
 
-    @When("A notification is created$")
-    public void checkNotificationCreated(){
+    @When("^A (.*) notification is created$")
+    public void checkNotificationCreated(String type){
         sql= NotificationsSQL.EPH_Notification_Created.replace("PARAM1",loadBatchContext.batchId);
         notificationCountContext.createdNotification=DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
-        if (notificationCountContext.createdNotification.size() == 1){
-            Log.info("Notifications were created");
-        } else {
-            Log.info("Notification was not created! Number of notifications is " + notificationCountContext.createdNotification.size());
-            Assert.fail("Notifications were not created");
+        if ((type.equalsIgnoreCase("translation")) || (type.equalsIgnoreCase("mirror")))
+        {
+            if (notificationCountContext.createdNotification.size() == 2)
+            {
+                Log.info("Notifications were created");
+            }
+            else {
+                Log.info("Notification was not created! Number of notifications is " + notificationCountContext.createdNotification.size());
+                Assert.fail("Notifications were not created");
+            }
         }
+        else
+        {
+            if (notificationCountContext.createdNotification.size() == 1)
+            {
+                Log.info("Notifications were created");
+            }
+            else {
+                Log.info("Notification was not created! Number of notifications is " + notificationCountContext.createdNotification.size());
+                Assert.fail("Notifications were not created");
+            }
+        }
+
     }
 
     @Then("^The notification is processed$")
@@ -362,10 +382,30 @@ public class NotificationTestSteps {
             Log.info("The attempts after update are: " + notificationCountContext.writeAttemptsAfter.get(0).attempts);
             Assert.assertEquals("The attempts are not as expected", notificationCountContext.writeAttemptsBefore.get(0).attempts  + 1,
                     notificationCountContext.writeAttemptsAfter.get(0).attempts);
-        } else{
-            sql= NotificationsSQL.EPH_GET_Payload_Notif_Work;
-            notificationCountContext.payloadResult= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
-            Assert.assertEquals("Notifications number not as expected",8,notificationCountContext.payloadResult.size());
+        } else
+            {
+
+              if(notType.equalsIgnoreCase("translation") || notType.equalsIgnoreCase("mirror")) {
+
+                  if (notType.equalsIgnoreCase("translation")) {
+                      sql = NotificationsSQL.EPH_GET_Payload_Notif_Work_TRS;
+                  }
+                  else
+                  {
+                      sql = NotificationsSQL.EPH_GET_Payload_Notif_Work_MIR;
+                  }
+
+                  System.out.println(sql);
+                  notificationCountContext.payloadResult= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
+                  Assert.assertEquals("Notifications number not as expected",9,notificationCountContext.payloadResult.size());
+              }
+
+              else {
+                  sql = NotificationsSQL.EPH_GET_Payload_Notif_Work;
+                  notificationCountContext.payloadResult = DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
+                  Assert.assertEquals("Notifications number not as expected", 8, notificationCountContext.payloadResult.size());
+              }
+
 
             sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
             notificationCountContext.writeAttemptsAfter= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);

@@ -12,6 +12,16 @@ public class UpdateProductSQL {
             "work_title,f_type,f_status,f_pmc,f_oa_type,f_imprint,f_event,electro_rights_indicator,volume)\n" +
             " VALUES ('LOADID','EPR-W-TSTW01','Work','Test - Tetrahedron Letters','JNL','WAS','541','H','ELSEVIER','EVENT','false','0')";
 
+    // Translation for the work
+    public static String Insert_work_1 = "INSERT INTO ephsit.semarchy_eph_mdm.sa_wwork(b_loadid, work_id, b_classname,work_title,f_type,f_status,f_pmc,f_oa_type," +
+            "f_imprint,f_event,electro_rights_indicator,volume)\n" +
+            " VALUES ('LOADID','EPR-W-TSTW02','Work','Test - de Tétrahédrón Léttérs','JNL','WST','200','H','MOSBY','EVENT','false','0')";
+
+    // Mirror for the work
+    public static String Insert_work_2 = "INSERT INTO ephsit.semarchy_eph_mdm.sa_wwork(b_loadid, work_id, b_classname,work_title,f_type,f_status,f_pmc,f_oa_type,f_imprint," +
+            "f_event,electro_rights_indicator,volume)\n" +
+            " VALUES ('LOADID','EPR-W-TSTW03','Work','Test - Tetrahedron Letters: X','JNL','WAS','541','F','MOSBY','EVENT','false','0')";
+
     // Test data - Manifestation
     public static String Insert_manifestation = "INSERT INTO ephsit.semarchy_eph_mdm.sa_manifestation (b_loadid, manifestation_id, b_classname," +
             " manifestation_key_title,f_type,f_status,f_wwork,f_event)\n" +
@@ -68,25 +78,26 @@ public class UpdateProductSQL {
             " VALUES ('LOADID','88888888888','ManifestationIdentifier','8888-8888'," +
             "'ISSN','EPR-M-TSTM02','EVENT')";
 
+    //updated the child work/translated work id
     public static String Insert_work_translation= "INSERT INTO semarchy_eph_mdm.sa_work_rel_translation (b_loadid, work_rel_translation_id, b_classname, effective_start_date," +
             " f_original,f_translated, f_event)\n" +
             " VALUES ('LOADID','77777777777','WorkRelationshipTranslation','2017-05-04'," +
-            "'EPR-W-TSTW01','EPR-W-TSTW01','EVENT')";
+            "'EPR-W-TSTW01','EPR-W-TSTW02','EVENT')";
 
     public static String Insert_person= "INSERT INTO semarchy_eph_mdm.sa_person (b_loadid, person_id, b_classname, given_name," +
             " family_name)\n" +
-            " VALUES ('LOADID','66666666666','Person'," +
+            " VALUES ('LOADID','666666666','Person'," +
             "'Kobe','Bryant')";
 
     public static String Insert_person_role= "INSERT INTO semarchy_eph_mdm.sa_work_person_role (b_loadid, work_person_role_id, b_classname, f_role," +
             " f_wwork,f_person, f_event)\n" +
-            " VALUES ('LOADID','666666666','WorkPersonRole','PD'," +
-            "'EPR-W-TSTW01','66666666666','EVENT')";
+            " VALUES ('LOADID','999999999','WorkPersonRole','PD'," +
+            "'EPR-W-TSTW01','666666666','EVENT')";
 
     public static String Insert_mirror= "INSERT INTO semarchy_eph_mdm.sa_work_relationship_mirror (b_loadid, work_rel_mirror_id, b_classname, effective_start_date," +
             " f_original,f_mirrored, f_event)\n" +
             " VALUES ('LOADID','555555555','WorkRelationshipMirror','2017-05-04'," +
-            "'EPR-W-TSTW01','EPR-W-TSTW01','EVENT')";
+            "'EPR-W-TSTW01','EPR-W-TSTW03','EVENT')";
 
     public static String Insert_financial_attr= "INSERT INTO semarchy_eph_mdm.sa_work_financial_attribs (b_loadid, work_fin_attribs_id, b_classname, f_gl_company," +
             " f_event,f_gl_cost_resp_centre,f_gl_revenue_resp_centre,f_wwork)\n" +
