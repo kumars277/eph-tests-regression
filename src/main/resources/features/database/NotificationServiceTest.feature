@@ -23,7 +23,7 @@ Feature: Entity - Notifications - Validate a notification is created for every c
     @Regression
     Scenario Outline: Verify notification is processed successfully
       Given A <type> is updated
-      When A notification is created
+      When A <type> notification is created
       Then The notification is processed
       And The <type> notification is in the payload table
 
