@@ -10,7 +10,9 @@ public class ProductDataSQL {
             "\t,NVL(M.NONSALEABLE_ANCILLARY_IND,'Y') AS SEPARATELY_SALEABLE_IND -- Set flag as 'Y' when manifestationApiObject is not flagged as Nonsaleable Ancillary\n" +
             "\t,NVL(M.TRIAL_ALLOWED_IND, 'N') AS TRIAL_ALLOWED_IND -- Trial Allowed Indicator\n" +
             "\t,TRUNC(M.COPYRIGHT_DATE) AS FIRST_PUB_DATE -- Launch Date (dropping Time component)\n" +
-            "\t,M.ELSEVIER_TAX_CODE -- Tax Code to link to LOV table (this may not be imported in the end, I have a meeting on Thursday to discuss further)\n" +
+            "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND M.F_PRODUCT_MANIFESTATION_TYP = 1 THEN 'G003'\n" +
+            "\t      WHEN WT.WORK_TYPE = 'JOURNAL' AND M.F_PRODUCT_MANIFESTATION_TYP != 1 THEN 'S001'\n" +
+            "\t      ELSE M.ELSEVIER_TAX_CODE END AS ELSEVIER_TAX_CODE -- Tax Code to link to LOV table (this may not be imported in the end, I have a meeting on Thursday to discuss further)\n" +
             "\t,M.PRODUCT_MANIFESTATION_ID -- Internal PMX ID, not needed in EPH but extracted for record linking purposes\n" +
             "\t,M.F_PRODUCT_WORK -- Internal PMX Work ID, not needed in EPH but extracted for record linking purposes\n" +
             "\t,M.F_PRODUCT_MANIFESTATION_TYP --Print (1) or Electronic (2)\n" +
@@ -77,7 +79,7 @@ public class ProductDataSQL {
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s')\n" +
              "           order by \"PRODUCT_MANIFESTATION_ID\"";
 
-    public static String EPH_STG_CAN_PRODUCT_EXTRACT_BOOKS = " SELECT \n" +
+    public static String EPH_STG_CAN_PRODUCT_EXTRACT_BOOKS = "SELECT \n" +
             "       pmx_source_reference as PMX_SOURCE_REFERENCE,\n" +
             "       name as PRODUCT_NAME,\n" +
             "       product_short_name as PRODUCT_SHORT_NAME,\n" +
@@ -91,11 +93,12 @@ public class ProductDataSQL {
             "       f_work_source_ref AS F_PRODUCT_WORK, \n" +
             "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP,\n" +
             "       work_type as WORK_TYPE,\n" +
-            "       ult_work_ref as ULT_WORK_REF\n" +
+            "       ult_work_ref as ULT_WORK_REF,\n" +
+            "       tax_code as TAX_CODE\n" +
             "FROM ephsit_talend_owner.stg_10_pmx_product_can\n" +
             "where pmx_source_reference in ('%s')\n";
 
-    public static String EPH_STG_CAN_PRODUCT_EXTRACT_JOURNALS_OR_PACKAGES = "SELECT \n" +
+    public static String EPH_STG_CAN_PRODUCT_EXTRACT_JOURNALS_OR_PACKAGES = " SELECT \n" +
             "       pmx_source_reference as PMX_SOURCE_REFERENCE,\n" +
             "       name as PRODUCT_NAME,\n" +
             "       product_short_name as PRODUCT_SHORT_NAME,\n" +
@@ -109,9 +112,10 @@ public class ProductDataSQL {
             "       f_work_source_ref AS F_PRODUCT_WORK, \n" +
             "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP,\n" +
             "       work_type as WORK_TYPE,\n" +
-            "       ult_work_ref as ULT_WORK_REF\n" +
+            "       ult_work_ref as ULT_WORK_REF,\n" +
+            "       tax_code as TAX_CODE\n" +
             "FROM ephsit_talend_owner.stg_10_pmx_product_can\n" +
-            "where pmx_source_reference similar to '%s' and pmx_source_reference not like '%%OOA'";
+            "where pmx_source_reference in ('%s')\n";
 
     public static String EPH_STG_PRODUCT_EXTRACT_JOURNAL = "SELECT\n" +
             "           \"PRODUCT_ID\" as PRODUCT_ID,\n" +
@@ -280,6 +284,7 @@ public class ProductDataSQL {
             "  ,f_revenue_model AS F_REVENUE_MODEL\n" +
             "  ,f_wwork AS F_PRODUCT_WORK\n" +
             "  ,f_manifestation AS F_PRODUCT_MANIFESTATION_TYP\n" +
+            "  ,f_tax_code as TAX_CODE\n" +
             "  FROM ephsit.semarchy_eph_mdm.sa_product sa where f_event =  (\n" +
             "select max (f_event) from \n" +
             "semarchy_eph_mdm.sa_product   \n" +
@@ -305,6 +310,7 @@ public class ProductDataSQL {
             "  ,f_revenue_model AS F_REVENUE_MODEL\n" +
             "  ,f_wwork AS F_PRODUCT_WORK\n" +
             "  ,f_manifestation AS F_PRODUCT_MANIFESTATION_TYP\n" +
+            "  ,f_tax_code as TAX_CODE\n" +
             "  FROM ephsit.semarchy_eph_mdm.gd_product" +
             "  WHERE pmx_source_reference IN ('%s')\n" ;
 
@@ -324,6 +330,7 @@ public class ProductDataSQL {
             "  ,f_revenue_model AS F_REVENUE_MODEL\n" +
             "  ,f_wwork AS F_PRODUCT_WORK\n" +
             "  ,f_manifestation AS F_PRODUCT_MANIFESTATION_TYP\n" +
+            "  ,f_tax_code as TAX_CODE\n" +
             "  FROM ephsit.semarchy_eph_mdm.sa_product sa where f_event =  (\n" +
             "select max (f_event) from \n" +
             "semarchy_eph_mdm.sa_product   \n" +
@@ -350,6 +357,7 @@ public class ProductDataSQL {
             "  ,f_revenue_model AS F_REVENUE_MODEL\n" +
             "  ,f_wwork AS F_PRODUCT_WORK\n" +
             "  ,f_manifestation AS F_PRODUCT_MANIFESTATION_TYP\n" +
+            "  ,f_tax_code as TAX_CODE\n" +
             "  FROM ephsit.semarchy_eph_mdm.gd_product\n" +
             "  where pmx_source_reference similar to '%s' and pmx_source_reference not like '%%OOA'";
 
