@@ -19,4 +19,24 @@ public class NotificationCountContext {
     public static List<NotificationDataObject> getWorkTD;
     public static List<NotificationDataObject> getProductTD;
     public static List<NotificationDataObject> getManifestationTD;
+
+    //negative test
+    public static List<NotificationDataObject> getWorkTDNegative;
+    public static List<NotificationDataObject> getProductTDNegative;
+    public static List<NotificationDataObject> getManifestationTDNegative;
+    public static List<NotificationDataObject> getStatusSTNotification;
+    public static List<NotificationDataObject> getWriteAttemptsBeforeNegWork;
+    public static List<NotificationDataObject> getWriteAttemptsBeforeNegProduct1;
+    public static List<NotificationDataObject> getWriteAttemptsBeforeNegProduct2;
+    public static List<NotificationDataObject> getWriteAttemptsAfterNegWork;
+    public static List<NotificationDataObject> getWriteAttemptsAfterNegProduct1;
+    public static List<NotificationDataObject> getWriteAttemptsAfterNegProduct2;
+    public static List<NotificationDataObject> getFailedPayloadNot;
+    public static List<NotificationDataObject> getFailedPayloadNotBefore;
+
+    public static boolean manifestationIdentifier=false;
+    public static boolean translation=false;
+    public static boolean personRole=false;
+    public static boolean mirror=false;
+    public static boolean finAttribute =false;
 }

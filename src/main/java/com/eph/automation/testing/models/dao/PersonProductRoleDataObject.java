@@ -16,7 +16,7 @@ public class PersonProductRoleDataObject {
     private String B_LOADID;
     private String F_EVENT;
     private String B_CLASSNAME;
-    private String PRODUCT_PERSON_ROLE_ID;
+    private int PRODUCT_PERSON_ROLE_ID;
     private String EFFECTIVE_START_DATE;
     private String EFFECTIVE_END_DATE;
     private String F_PRODUCT;
@@ -78,11 +78,11 @@ public class PersonProductRoleDataObject {
         B_CLASSNAME = b_CLASSNAME;
     }
 
-    public String getPRODUCT_PERSON_ROLE_ID() {
+    public int getPRODUCT_PERSON_ROLE_ID() {
         return PRODUCT_PERSON_ROLE_ID;
     }
 
-    public void setPRODUCT_PERSON_ROLE_ID(String PRODUCT_PERSON_ROLE_ID) {
+    public void setPRODUCT_PERSON_ROLE_ID(int PRODUCT_PERSON_ROLE_ID) {
         this.PRODUCT_PERSON_ROLE_ID = PRODUCT_PERSON_ROLE_ID;
     }
 

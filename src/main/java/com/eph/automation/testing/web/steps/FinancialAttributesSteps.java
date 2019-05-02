@@ -7,6 +7,7 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.FinancialAttribsContext;
 import com.eph.automation.testing.models.dao.FinancialAttribsDataObject;
 import com.eph.automation.testing.services.db.sql.FinAttrSQL;
+import com.eph.automation.testing.services.db.sql.WorkCountSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -36,6 +37,53 @@ public class FinancialAttributesSteps {
     private static List<String> isbns;
     public String fWorkID;
 
+    @Given("^We know the number of financial attributes in DQ$")
+    public void getFinAttrCountDQ(){
+        sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr;
+        financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+        Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
+    }
+
+    @When("^We get the financial attributes from SA$")
+    public void getFinAttrCountSA(){
+        sql = FinAttrSQL.Get_SA_count;
+        financialAttribs.saCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+        Log.info("The SA count is: " + financialAttribs.saCount.get(0).saCount);
+    }
+
+    @When("^We get the financial attributes from GD$")
+    public void getFinAttrCountGD(){
+        sql = FinAttrSQL.Get_GD_count;
+        Log.info(sql);
+        financialAttribs.gdCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+        Log.info("The GD count is: " + financialAttribs.gdCount.get(0).gdCount);
+    }
+
+    @When("^We get the financial attributes from AE$")
+    public void getFinAttrCountAE(){
+        sql = FinAttrSQL.Get_GD_count;
+        Log.info(sql);
+        financialAttribs.gdCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+        Log.info("The GD count is: " + financialAttribs.gdCount.get(0).gdCount);
+
+        sql = FinAttrSQL.Get_AE_count;
+        financialAttribs.aeCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+        Log.info("The AE count is: " + financialAttribs.aeCount.get(0).aeCount);
+    }
+
+    @Then("^The financial attributes between (.*) and (.*) are equal$")
+    public void compareCount(String source, String target){
+        if (source.equalsIgnoreCase("DQ")){
+           Assert.assertEquals("The count between DQ and SA does not match!", financialAttribs.dqCount.get(0).dqCount,
+                   financialAttribs.saCount.get(0).saCount);
+        }else if (target.equalsIgnoreCase("GD")){
+            Assert.assertEquals("The count between SA and GD does not match!", financialAttribs.saCount.get(0).saCount,
+                    financialAttribs.gdCount.get(0).gdCount);
+        }else {
+            Assert.assertEquals("The count between SA and GD + AE does not match!", financialAttribs.saCount.get(0).saCount,
+                    financialAttribs.gdCount.get(0).gdCount + financialAttribs.aeCount.get(0).aeCount);
+        }
+    }
 
     @Given("^We have a number of financial attributes to check$")
     public void getID(){

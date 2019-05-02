@@ -71,9 +71,20 @@ public class NotificationsSQL {
 
     public static String EPH_GET_Payload_Notif_Work = "select payload_key as key, payload_value as value, update_timestamp as timestamp \n" +
             "from semarchy_eph_stg.st_test_notification_payload\n" +
-            " where payload_key in ('EPR-W-TSTW01:JNL','EPR-TSTP01:BKF','EPR-TSTP02:BKF'," +
+            " where payload_key in ('EPR-W-TSTW01:JNL','EPR-TSTP01:JAS','EPR-TSTP02:OAA'," +
             "'EPR-TSTP03:BKF','EPR-TSTP04:SUB','EPR-TSTP05:RPR','EPR-TSTP06:SUB','EPR-TSTP07:JBS') order by key desc";
 
+
+    public static String EPH_GET_Payload_Notif_Work_TRS = "select payload_key as key, payload_value as value, update_timestamp as timestamp \n" +
+            "from semarchy_eph_stg.st_test_notification_payload\n" +
+            " where payload_key in ('EPR-W-TSTW01:JNL','EPR-W-TSTW02:JNL','EPR-TSTP01:JAS','EPR-TSTP02:OAA'," +
+            "'EPR-TSTP03:BKF','EPR-TSTP04:SUB','EPR-TSTP05:RPR','EPR-TSTP06:SUB','EPR-TSTP07:JBS') order by key desc";
+
+
+    public static String EPH_GET_Payload_Notif_Work_MIR = "select payload_key as key, payload_value as value, update_timestamp as timestamp \n" +
+            "from semarchy_eph_stg.st_test_notification_payload\n" +
+            " where payload_key in ('EPR-W-TSTW01:JNL','EPR-W-TSTW03:JNL','EPR-TSTP01:JAS','EPR-TSTP02:OAA'," +
+            "'EPR-TSTP03:BKF','EPR-TSTP04:SUB','EPR-TSTP05:RPR','EPR-TSTP06:SUB','EPR-TSTP07:JBS') order by key desc";
 
     public static String EPH_GET_Payload_Notif_Product = "select payload_key as key, payload_value as value, update_timestamp as timestamp \n" +
             "from semarchy_eph_stg.st_test_notification_payload\n" +
@@ -84,6 +95,11 @@ public class NotificationsSQL {
             "from semarchy_eph_stg.st_test_notification_payload\n" +
             " where payload_key in ('EPR-W-TSTW01:JNL','EPR-TSTP03:BKF','EPR-TSTP04:SUB')";
 
+
+    public static String EPH_GET_Payload_Notif_Work_identifier = "select payload_key as key, payload_value as value, update_timestamp as timestamp \n" +
+            "from semarchy_eph_stg.st_test_notification_payload\n" +
+            " where payload_key = 'EPR-W-TSTW01:JNL'";
+
     public static String EPH_GET_Write_Attempts = "select write_attempts as attempts from semarchy_eph_stg.st_test_notification_payload\n" +
             " where payload_key='PARAM1'";
 
@@ -92,12 +108,24 @@ public class NotificationsSQL {
             " where product_id in ('EPR-TSTP01','EPR-TSTP02'," +
             "'EPR-TSTP03','EPR-TSTP04','EPR-TSTP05','EPR-TSTP06','EPR-TSTP07')";
 
+    //added another param
     public static String EPH_GET_TEST_DATA_Work="select * \n" +
             "from semarchy_eph_mdm.gd_wwork\n" +
-            " where work_id = 'EPR-W-TSTW01'";
+            " where work_id in ('PARAM1','PARAM2','PARAM3')";
 
     public static String EPH_GET_TEST_DATA_Manifestation="select * \n" +
             "from semarchy_eph_mdm.gd_manifestation\n" +
-            " where manifestation_id in ('EPR-M-TSTM01','EPR-M-TSTM02')";
+            " where manifestation_id in ('PARAM1','PARAM2')";
+
+
+    public static String EPH_GET_TEST_DATA_Product_Neg="select * \n" +
+            "from semarchy_eph_mdm.gd_product\n" +
+            " where product_id in ('PARAM1','PARAM2')";
+
+    public static String EPH_GET_Notification_Neg = "select status as status, notification_id as not_id from semarchy_eph_stg.st_out_notification" +
+            " where batch_id = 'PARAM1'";
+
+    public static String GET_FAILED_NOT_PAYLOAD = "select write_attempts as attempts from semarchy_eph_stg.st_test_notification_payload\n" +
+            " where payload_key in ('EPR-W-TSTW20:RBK','EPR-TSTP30:OOA','EPR-TSTP40:OOA')";
 
 }

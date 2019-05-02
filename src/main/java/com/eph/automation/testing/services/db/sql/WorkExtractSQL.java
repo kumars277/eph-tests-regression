@@ -7,7 +7,7 @@ public class WorkExtractSQL {
 
     public static String PMX_WORK_EXTRACT= "  SELECT * FROM (\n" +
             "  SELECT DISTINCT 1 \n" +
-//            "  , M.ELSEVIER_PRODUCT_ID AS PRODUCT_ID -- Product ManifestationApiObject Reference,  not needed in EPH but extracted for record linking purposes\n" +
+//            "  , M.ELSEVIER_PRODUCT_ID AS PRODUCT_ID -- Product Manifestation Reference,  not needed in EPH but extracted for record linking purposes\n" +
             "  ,W.PRODUCT_WORK_TITLE AS WORK_TITLE -- Title\n" +
             "  ,W.PRODUCT_SUBTITLE AS WORK_SUBTITLE -- Subtitle\n" +
             "  ,W.DAC_KEY -- DAC Key (may go in IDs table, depending on implementation of data model)\n" +
@@ -18,7 +18,7 @@ public class WorkExtractSQL {
             "  ,W.ELECTRONIC_RIGHTS_IND as ELECTRONIC_RIGHTS_IND-- Electronic Rights Indicator\n" +
             "  ,W.BOOK_EDITION_NAME as BOOK_EDITION_NAME-- Edition Number\n" +
             "  ,W.BOOK_VOLUME_NAME as BOOK_VOLUME_NAME-- Volume\n" +
-            "  ,W.F_PMC AS PMCApiObject -- PMCApiObject to link to LOV table\n" +
+            "  ,W.F_PMC AS PMC -- PMC to link to LOV table\n" +
             "  ,W.F_PMG AS PMG -- PMG to link to LOV table\n" +
             "  ,S.STATUS_CODE AS WORK_STATUS\t-- Work Level Status to link to LOV table (this will need mapping to new values, logic TBC)\n" +
             "  ,SS.SUBSTATUS_NAME AS WORK_SUBSTATUS -- Work Level substatus which is part of Status mapping\n" +
@@ -46,7 +46,7 @@ public class WorkExtractSQL {
 
     public static String GET_PRODUCT_EXPORT_FROM_PMX_BY_PMC = "  select distinct * from\n" +
             "  (SELECT \n" +
-            "     M.ELSEVIER_PRODUCT_ID AS PRODUCT_ID -- Product ManifestationApiObject Reference,  not needed in EPH but extracted for record linking purposes\n" +
+            "     M.ELSEVIER_PRODUCT_ID AS PRODUCT_ID -- Product Manifestation Reference,  not needed in EPH but extracted for record linking purposes\n" +
             "    ,W.PRODUCT_WORK_TITLE AS WORK_TITLE -- Title\n" +
             "    ,W.PRODUCT_SUBTITLE AS WORK_SUBTITLE -- Subtitle\n" +
             "    ,W.DAC_KEY -- DAC Key (may go in IDs table, depending on implementation of data model)\n" +
@@ -57,7 +57,7 @@ public class WorkExtractSQL {
             "    ,W.ELECTRONIC_RIGHTS_IND -- Electronic Rights Indicator\n" +
             "    ,W.BOOK_EDITION_NAME -- Edition Number\n" +
             "    ,W.BOOK_VOLUME_NAME -- Volume\n" +
-            "    ,W.F_PMC AS PMCApiObject -- PMCApiObject to link to LOV table\n" +
+            "    ,W.F_PMC AS PMC -- PMC to link to LOV table\n" +
             "    ,W.F_PMG AS PMG -- PMG to link to LOV table\n" +
             "    ,S.STATUS_CODE AS WORK_STATUS\t-- Work Level Status to link to LOV table (this will need mapping to new values, logic TBC)\n" +
             "    ,SS.SUBSTATUS_NAME AS WORK_SUBSTATUS -- Work Level substatus which is part of Status mapping\n" +
@@ -85,7 +85,7 @@ public class WorkExtractSQL {
             "\t\t,electro_rights_indicator as ELECTRONIC_RIGHTS_IND\n" +
             "\t\t,volume as BOOK_EDITION_VOLUME\n" +
             "\t\t,copyright_year as PRODUCT_WORK_PUB_DATE\n" +
-            "\t\t,f_pmc as PMCApiObject\n" +
+            "\t\t,f_pmc as PMC\n" +
             "\t\t--,edition_number as BOOK_EDITION_NAME\n" +
             "\t\t--,f_pmg as PMG\n" +
             "\t\t,f_oa_type as OPEN_ACCESS_JNL_TYPE_CODE\n" +
@@ -119,8 +119,8 @@ public class WorkExtractSQL {
     public static final String COUNT_MANIFESTATIONS_IN_GD_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.gd_manifestation";
 
     public static final String SELECT_MANIFESTATIONS_DATA_IN_PMX = "SELECT\n" +
-            "\t M.PRODUCT_MANIFESTATION_ID AS MANIFESTATION_ID -- PMX Primary Key for ManifestationApiObject \n" +
-            "\t,M.PRODUCT_MANIFESTATION_TIT AS MANIFESTATION_KEY_TITLE -- ManifestationApiObject Title\n" +
+            "\t M.PRODUCT_MANIFESTATION_ID AS MANIFESTATION_ID -- PMX Primary Key for Manifestation \n" +
+            "\t,M.PRODUCT_MANIFESTATION_TIT AS MANIFESTATION_KEY_TITLE -- Manifestation Title\n" +
             "\t,M.ISBN_STRIPPED AS ISBN -- ISBN (may go in IDs table, depending on implementation of data model)\n" +
             "\t,M.ISSN AS ISSN -- ISSN (may go in IDs table, depending on implementation of data model)\n" +
             "\t,M.COVER_HEIGHT_AMOUNT AS COVER_HEIGHT -- Cover Height for Format sub entity\n" +
@@ -130,15 +130,15 @@ public class WorkExtractSQL {
             "\t,M.WEIGHT_AMOUNT AS WEIGHT -- Weight for Format sub entity\n" +
             "\t,M.CARTON_QTY AS CARTON_QTY -- Carton Quantity for Format sub entity\n" +
             "\t,M.INTERNATIONAL_EDITION_IND AS INTERNATIONAL_EDITION_IND -- International Edition Indicator\n" +
-            "\t,M.COPYRIGHT_DATE AS COPYRIGHT_DATE  -- ManifestationApiObject First Publication Date\n" +
-            "\t,M.F_PRODUCT_MANIFESTATION_TYP AS F_PRODUCT_MANIFESTATION_TYP -- 1 = Print, 2 = Electronic. Will have to map to ManifestationApiObject Type (logic TBC)\n" +
-            "\t,M.FORMAT_TXT AS FORMAT_TXT-- Additional Format info (may feed Format Entity, may feed logic for ManifestationApiObject Type\n" +
-            "\t,M.F_MANIFESTATION_STATUS AS MANIFESTATION_STATUS -- ManifestationApiObject Level Status to link to LOV table (this will need mapping to new values, logic TBC)\n" +
+            "\t,M.COPYRIGHT_DATE AS COPYRIGHT_DATE  -- Manifestation First Publication Date\n" +
+            "\t,M.F_PRODUCT_MANIFESTATION_TYP AS F_PRODUCT_MANIFESTATION_TYP -- 1 = Print, 2 = Electronic. Will have to map to Manifestation Type (logic TBC)\n" +
+            "\t,M.FORMAT_TXT AS FORMAT_TXT-- Additional Format info (may feed Format Entity, may feed logic for Manifestation Type\n" +
+            "\t,M.F_MANIFESTATION_STATUS AS MANIFESTATION_STATUS -- Manifestation Level Status to link to LOV table (this will need mapping to new values, logic TBC)\n" +
             "\t,M.F_PRODUCT_WORK AS F_PRODUCT_WORK -- Internal PMX Work ID, not needed in EPH but extracted for record linking purposes\n" +
             "\t,W.F_PRODUCT_TYPE AS WORK_TYPE_ID -- Work Type so for mapping Key title and type fields\n" +
-            "\t,M.F_PRODUCT_DISTRIBUTION_TYPE AS MANIFESTATION_SUBTYPE -- ManifestationApiObject Distribution Type for mapping manifestationApiObject type\n" +
-            "\t,M.F_COMMODITY_CODE AS COMMODITY --  Commodity Code for mapping manifestationApiObject type\n" +
-            "\t,SS.SUBSTATUS_NAME AS MANIFESTATION_SUBSTATUS -- ManifestationApiObject Sub status for mapping Status\n" +
+            "\t,M.F_PRODUCT_DISTRIBUTION_TYPE AS MANIFESTATION_SUBTYPE -- Manifestation Distribution Type for mapping manifestation type\n" +
+            "\t,M.F_COMMODITY_CODE AS COMMODITY --  Commodity Code for mapping manifestation type\n" +
+            "\t,SS.SUBSTATUS_NAME AS MANIFESTATION_SUBSTATUS -- Manifestation Sub status for mapping Status\n" +
             "FROM GD_PRODUCT_MANIFESTATION M\n" +
             "JOIN GD_PRODUCT_WORK W ON M.F_PRODUCT_WORK = W.PRODUCT_WORK_ID\n" +
             "LEFT JOIN GD_PRODUCT_SUBSTATUS SS ON M.F_MANIFESTATION_SUBSTATUS = SS.PRODUCT_SUBSTATUS_ID\n" +
@@ -225,15 +225,16 @@ public class WorkExtractSQL {
 
     public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "select count(*) AS count from ephsit_talend_owner.stg_10_pmx_manifestation where \"%s\" is not null";
 
-    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_SA_MANIFESTATION_TABLE ="SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation_identifier\n" +
+    public static final String COUNT_OF_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE ="SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation_identifier\n" +
             "where f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier\n" +
             "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
             "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
             "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
-            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')";
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n" +
+            "and f_type = '%s'";
 
-    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_GD_MANIFESTATION_TABLE = "select count(*) as count from semarchy_eph_mdm.gd_manifestation_identifier where f_type = '%s'";
+    public static final String COUNT_OF_RECORDS_IN_EPH_GD_MANIFESTATION_TABLE = "select count(*) as count from semarchy_eph_mdm.gd_manifestation_identifier where f_type = '%s'";
 
     public static final String SELECT_RECORDS_SA_MANIFESTATION_IDENTIFIER = "SELECT sa.b_loadid as b_loadid,\n" +
             "f_event as f_event,\n" +

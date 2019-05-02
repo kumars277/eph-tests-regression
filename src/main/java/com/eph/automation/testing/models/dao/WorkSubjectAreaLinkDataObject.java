@@ -1,0 +1,110 @@
+package com.eph.automation.testing.models.dao;
+
+import java.util.Objects;
+
+/**
+ * Created by Bistra Drazheva on 18/04/2019
+ */
+public class WorkSubjectAreaLinkDataObject {
+    private String PRODUCT_SUBJECT_AREA_ID;
+    private String F_SUBJECT_AREA;
+    private String F_PRODUCT_WORK;
+
+
+    //SA
+    private String B_LOADID;
+    private String B_CLASSNAME;
+    private String WORK_SUBJECT_AREA_LINK_ID;
+    private String F_WWORK;
+
+
+    public String getPRODUCT_SUBJECT_AREA_ID() {
+        return PRODUCT_SUBJECT_AREA_ID;
+    }
+
+    public void setPRODUCT_SUBJECT_AREA_ID(String PRODUCT_SUBJECT_AREA_ID) {
+        this.PRODUCT_SUBJECT_AREA_ID = PRODUCT_SUBJECT_AREA_ID;
+    }
+
+    public String getF_SUBJECT_AREA() {
+        return F_SUBJECT_AREA;
+    }
+
+    public void setF_SUBJECT_AREA(String f_SUBJECT_AREA) {
+        F_SUBJECT_AREA = f_SUBJECT_AREA;
+    }
+
+    public String getF_WWORK() {
+        return F_WWORK;
+    }
+
+    public void setF_WWORK(String f_WWORK) {
+        F_WWORK = f_WWORK;
+    }
+
+    public String getF_PRODUCT_WORK() {
+        return F_PRODUCT_WORK;
+    }
+
+    public void setF_PRODUCT_WORK(String f_PRODUCT_WORK) {
+        F_PRODUCT_WORK = f_PRODUCT_WORK;
+    }
+
+    public String getB_LOADID() {
+        return B_LOADID;
+    }
+
+    public void setB_LOADID(String b_LOADID) {
+        B_LOADID = b_LOADID;
+    }
+
+    public String getB_CLASSNAME() {
+        return B_CLASSNAME;
+    }
+
+    public void setB_CLASSNAME(String b_CLASSNAME) {
+        B_CLASSNAME = b_CLASSNAME;
+    }
+
+    public String getWORK_SUBJECT_AREA_LINK_ID() {
+        return WORK_SUBJECT_AREA_LINK_ID;
+    }
+
+    public void setWORK_SUBJECT_AREA_LINK_ID(String WORK_SUBJECT_AREA_LINK_ID) {
+        this.WORK_SUBJECT_AREA_LINK_ID = WORK_SUBJECT_AREA_LINK_ID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WorkSubjectAreaLinkDataObject that = (WorkSubjectAreaLinkDataObject) o;
+        return Objects.equals(PRODUCT_SUBJECT_AREA_ID, that.PRODUCT_SUBJECT_AREA_ID) &&
+                Objects.equals(F_SUBJECT_AREA, that.F_SUBJECT_AREA) &&
+                Objects.equals(F_PRODUCT_WORK, that.F_PRODUCT_WORK) &&
+                Objects.equals(B_LOADID, that.B_LOADID) &&
+                Objects.equals(B_CLASSNAME, that.B_CLASSNAME) &&
+                Objects.equals(WORK_SUBJECT_AREA_LINK_ID, that.WORK_SUBJECT_AREA_LINK_ID) &&
+                Objects.equals(F_SUBJECT_AREA, that.F_SUBJECT_AREA) &&
+                Objects.equals(F_WWORK, that.F_WWORK);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(PRODUCT_SUBJECT_AREA_ID, F_SUBJECT_AREA, F_PRODUCT_WORK, B_LOADID, B_CLASSNAME, WORK_SUBJECT_AREA_LINK_ID, F_SUBJECT_AREA, F_WWORK);
+    }
+
+    @Override
+    public String toString() {
+        return "WorkSubjectAreaLinkDataObject{" +
+                "PRODUCT_SUBJECT_AREA_ID='" + PRODUCT_SUBJECT_AREA_ID + '\'' +
+                ", F_SUBJECT_AREA='" + F_SUBJECT_AREA + '\'' +
+                ", F_PRODUCT_WORK='" + F_PRODUCT_WORK + '\'' +
+                ", B_LOADID='" + B_LOADID + '\'' +
+                ", B_CLASSNAME='" + B_CLASSNAME + '\'' +
+                ", WORK_SUBJECT_AREA_LINK_ID='" + WORK_SUBJECT_AREA_LINK_ID + '\'' +
+                ", F_SUBJECT_AREA='" + F_SUBJECT_AREA + '\'' +
+                ", F_WWORK='" + F_WWORK + '\'' +
+                '}';
+    }
+}

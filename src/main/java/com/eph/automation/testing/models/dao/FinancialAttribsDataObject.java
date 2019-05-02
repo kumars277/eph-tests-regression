@@ -107,4 +107,43 @@ public class FinancialAttribsDataObject {
     public String revenue_resp_centre;
     public String work_id;
 
+    public int dqCount;
+    public int saCount;
+
+    public int getDqCount() {
+        return dqCount;
+    }
+
+    public void setDqCount(int dqCount) {
+        this.dqCount = dqCount;
+    }
+
+    public int getSaCount() {
+        return saCount;
+    }
+
+    public void setSaCount(int saCount) {
+        this.saCount = saCount;
+    }
+
+    public int getGdCount() {
+        return gdCount;
+    }
+
+    public void setGdCount(int gdCount) {
+        this.gdCount = gdCount;
+    }
+
+    public int getAeCount() {
+        return aeCount;
+    }
+
+    public void setAeCount(int aeCount) {
+        this.aeCount = aeCount;
+    }
+
+    public int gdCount;
+    public int aeCount;
+
+
 }
