@@ -4,6 +4,7 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.RESTEndPoints;
 import com.eph.automation.testing.models.api.ProductApiObject;
 import com.eph.automation.testing.models.api.WorkApiObject;
+import com.eph.automation.testing.models.api.WorksMatchedApiObject;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.RequestSpecification;
 
@@ -58,25 +59,6 @@ public class APIService {
 
     }
 
-    public static int checkProductExists(String productID) {
-        return given()
-                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
-                .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
-                .when()
-                .get("/product/" + productID)
-                .thenReturn().statusCode();
-
-    }
-
-    public static int checkWorkExists(String workID) {
-        return given()
-                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
-                .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
-                .when()
-                .get("/work/" + workID)
-                .thenReturn().statusCode();
-
-    }
 
     public static WorkApiObject searchForWorkByIDResult(String workID) {
         return given()
@@ -88,14 +70,14 @@ public class APIService {
 
     }
 
-    public static String searchForWorkByTitleResult(String title) {
+    public static WorksMatchedApiObject searchForWorkByTitleResult(String title) {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
                 .param("title", title)
                 .when()
-                .get("/works").asString();
-//                .thenReturn().as(ProductApiObject.class);
+                .get("/works")
+                .thenReturn().as(WorksMatchedApiObject.class);
 
     }
 
@@ -110,26 +92,25 @@ public class APIService {
 
     }
 
-    public static String searchForWorksByIdentifierResult(String identifier) {
+    public static WorksMatchedApiObject searchForWorksByIdentifierResult(String identifier) {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
                 .param("identifier", identifier)
                 .when()
-                .get("/works").asString();
-//                .thenReturn().as(ProductApiObject.class);
+                .get("/works")
+                .thenReturn().as(WorksMatchedApiObject.class);
 
     }
 
-    public static String searchForWorksByIdentifierAndTypeResult(String identifier, String identifierType) {
+    public static WorksMatchedApiObject searchForWorksByIdentifierAndTypeResult(String identifier, String identifierType) {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
                 .param("identifier", identifier)
                 .param("identifierType", identifierType)
                 .when()
-                .get("/works").asString();
-//                .thenReturn().as(ProductApiObject.class);
+                .get("/works").thenReturn().as(WorksMatchedApiObject.class);
 
     }
 
@@ -156,5 +137,31 @@ public class APIService {
 
     }
 
+
+    public static int checkProductExists(String productID) {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
+                .when()
+                .get("/product/" + productID)
+                .thenReturn().statusCode();
+
+    }
+
+    public static Boolean checkWorkExists(String workID) {
+
+        int statusCode = given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
+                .when()
+                .get("/work/" + workID)
+                .thenReturn().statusCode();
+
+        if(statusCode==200){
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }

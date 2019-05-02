@@ -17,6 +17,15 @@ public class WorkDataObject {
 
     public String PRODUCT_ID;
 
+    public String getIDENTIFIER() {
+        return IDENTIFIER;
+    }
+
+    public void setIDENTIFIER(String IDENTIFIER) {
+        this.IDENTIFIER = IDENTIFIER;
+    }
+
+    public String IDENTIFIER;
 
 
     public String DAC_KEY;
@@ -142,6 +151,35 @@ public class WorkDataObject {
     public String PRODUCT_WORK_PUB_DATE;
     public String JOURNAL_ACRONYM;
     public String f_accountable_product;
+
+    public int getVOLUME() {
+        return VOLUME;
+    }
+
+    public void setVOLUME(int VOLUME) {
+        this.VOLUME = VOLUME;
+    }
+
+    public int getEDITION_NUMBER() {
+        return EDITION_NUMBER;
+    }
+
+    public void setEDITION_NUMBER(int EDITION_NUMBER) {
+        this.EDITION_NUMBER = EDITION_NUMBER;
+    }
+
+    public int getCOPYRIGHT_YEAR() {
+        return COPYRIGHT_YEAR;
+    }
+
+    public void setCOPYRIGHT_YEAR(int COPYRIGHT_YEAR) {
+        this.COPYRIGHT_YEAR = COPYRIGHT_YEAR;
+    }
+
+    public int VOLUME;
+    public int EDITION_NUMBER;
+    public int COPYRIGHT_YEAR;
+
 
     public int getPMX_SOURCE_REFERENCE() {
         return PMX_SOURCE_REFERENCE;

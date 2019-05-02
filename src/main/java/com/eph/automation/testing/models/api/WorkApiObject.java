@@ -16,11 +16,40 @@ public class WorkApiObject {
     private String editionNumber;
     private String volume;
     private String copyrightYear;
+    private WorkIdentifiersApiObject[] workIdentifiers;
     private HashMap<String,Object> workType;
     private HashMap<String,Object> workStatus;
     private HashMap<String,Object> imprint;
-    private CopyrightOwnersApiObject[] copyrightOwnerApiObjects;
-    private WorkIdentifiersApiObject[] workIdentifierApiObjects;
+    private PMCApiObject pmc;
+
+    public WorkPersonsApiObject[] getWorkPersons() {
+        return workPersons;
+    }
+
+    public void setWorkPersons(WorkPersonsApiObject[] workPersons) {
+        this.workPersons = workPersons;
+    }
+
+    private WorkPersonsApiObject[] workPersons;
+    private CopyrightOwnersApiObject[] copyrightOwner;
+    public WorkManifestationApiObject[] manifestations;
+
+
+    public PMCApiObject getPmc() {
+        return pmc;
+    }
+
+    public void setPmc(PMCApiObject pmc) {
+        this.pmc = pmc;
+    }
+
+    public WorkManifestationApiObject[] getManifestations() {
+        return manifestations;
+    }
+
+    public void setManifestations(WorkManifestationApiObject[] manifestations) {
+        this.manifestations = manifestations;
+    }
 
     public String getWorkId() {
         return workId;
@@ -94,19 +123,19 @@ public class WorkApiObject {
         this.imprint = imprint;
     }
 
-    public WorkIdentifiersApiObject[] getWorkIdentifierApiObjects() {
-        return workIdentifierApiObjects;
+    public WorkIdentifiersApiObject[] getWorkIdentifiers() {
+        return workIdentifiers;
     }
 
-    public void setWorkIdentifierApiObjects(WorkIdentifiersApiObject[] workIdentifierApiObjects) {
-        this.workIdentifierApiObjects = workIdentifierApiObjects;
+    public void setWorkIdentifiers(WorkIdentifiersApiObject[] workIdentifiers) {
+        this.workIdentifiers = workIdentifiers;
     }
 
-    public CopyrightOwnersApiObject[] getCopyrightOwnerApiObjects() {
-        return copyrightOwnerApiObjects;
+    public CopyrightOwnersApiObject[] getCopyrightOwner() {
+        return copyrightOwner;
     }
 
-    public void setCopyrightOwnerApiObjects(CopyrightOwnersApiObject[] copyrightOwnerApiObjects) {
-        this.copyrightOwnerApiObjects = copyrightOwnerApiObjects;
+    public void setCopyrightOwner(CopyrightOwnersApiObject[] copyrightOwner) {
+        this.copyrightOwner = copyrightOwner;
     }
 }

@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.HashMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ProductApiObject {
-    public ProductApiObject() {
+public class ProductsMatchedApiObject {
+    public ProductsMatchedApiObject() {
     }
 
     private String productId;

@@ -3,37 +3,40 @@ package com.eph.automation.testing.models.api;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.HashMap;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-   public class ManifestationApiObject {
-    public ManifestationApiObject() {
+   public class WorkManifestationApiObject {
+    public WorkManifestationApiObject() {
     }
 
     private String manifestationId;
     private String manifestationKeyTitle;
     private Boolean internationalEditionFlag;
     private String firstPubDate;
-    private ManifestationIdentifiersApiObject[] manifestationIdentifierApiObjects;
+
+    public List<ManifestationIdentifiersApiObject> getManifestationIdentifiers() {
+        return manifestationIdentifiers;
+    }
+
+    public void setManifestationIdentifiers(List<ManifestationIdentifiersApiObject> manifestationIdentifiers) {
+        this.manifestationIdentifiers = manifestationIdentifiers;
+    }
+
+    private List<ManifestationIdentifiersApiObject> manifestationIdentifiers;
     private HashMap<String, Object> manifestationType;
     private HashMap<String, Object> manifestationStatus;
-    private HashMap<String, Object> manifestationFormat;
-    private ManifestationWorkApiObject manifestationWorkApiObject;
 
-    public ManifestationIdentifiersApiObject[] getManifestationIdentifierApiObjects() {
-        return manifestationIdentifierApiObjects;
+    public Products[] getProducts() {
+        return products;
     }
 
-    public HashMap<String, Object> getManifestationFormat() {
-        return manifestationFormat;
+    public void setProducts(Products[] products) {
+        this.products = products;
     }
 
-    public void setManifestationFormat(HashMap<String, Object> manifestationFormat) {
-        this.manifestationFormat = manifestationFormat;
-    }
+    private Products[] products;
 
-    public void setManifestationIdentifierApiObjects(ManifestationIdentifiersApiObject[] manifestationIdentifierApiObjects) {
-        this.manifestationIdentifierApiObjects = manifestationIdentifierApiObjects;
-    }
 
     public String getManifestationId() {
         return manifestationId;
@@ -41,14 +44,6 @@ import java.util.HashMap;
 
     public void setManifestationId(String manifestationId) {
         this.manifestationId = manifestationId;
-    }
-
-    public ManifestationWorkApiObject getManifestationWorkApiObject() {
-        return manifestationWorkApiObject;
-    }
-
-    public void setManifestationWorkApiObject(ManifestationWorkApiObject manifestationWorkApiObject) {
-        this.manifestationWorkApiObject = manifestationWorkApiObject;
     }
 
     public String getManifestationKeyTitle() {
@@ -91,6 +86,22 @@ import java.util.HashMap;
         this.manifestationStatus = manifestationStatus;
     }
 
+
+    static class Products {
+        public Products() {
+
+        }
+
+        public String getProductId() {
+            return productId;
+        }
+
+        public void setProductId(String productId) {
+            this.productId = productId;
+        }
+
+        String productId;
+    }
 }
 
 
