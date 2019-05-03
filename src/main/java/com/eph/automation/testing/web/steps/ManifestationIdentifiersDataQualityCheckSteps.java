@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Bistra Drazheva on 23/01/2019
@@ -43,6 +43,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
     public void getCountOfRecordsWithISBNInSTGPMX(String identifier) {
         sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE, identifier);
         Log.info(sql);
+
         List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countISBNSTGPMX = ((Long) numberOfISBNs.get(0).get("count")).intValue();
         Log.info("Count of of records in STG_PMX_MANIFESTATION table is: " + countISBNSTGPMX);
@@ -52,6 +53,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
     public void getCountOfRecordsInEPHSA(String identifier) {
         sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE, identifier);
         Log.info(sql);
+
         List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countISBNSA = ((Long) numberOfISBNs.get(0).get("count")).intValue();
         Log.info("Count of of records in SA_MANIFESTATION_IDENTIFIER table is: " + countISBNSA);
@@ -113,10 +115,23 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
         if (identifier.equals("ISBN")) {
             ids = manifestationIds.stream().map(m -> (String) m.get("ISBN")).collect(Collectors.toList());
             Log.info("isbns : " + ids);
+
+            sql = String.format(WorkExtractSQL.SELECT_RECORDS_STG_MANIF_IDENTIFIER_ISBN, Joiner.on("','").join(ids));
+            Log.info(sql);
+
+            dataQualityContext.manifestationIdentifiersDataObjectsFromSTG = DBManager
+                    .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
+
         }
         if (identifier.equals("ISSN")) {
             ids = manifestationIds.stream().map(m -> (String) m.get("ISSN")).collect(Collectors.toList());
-            Log.info("isbns : " + ids);
+            Log.info("issns : " + ids);
+
+            sql = String.format(WorkExtractSQL.SELECT_RECORDS_STG_MANIF_IDENTIFIER_ISSN, Joiner.on("','").join(ids));
+            Log.info(sql);
+
+            dataQualityContext.manifestationIdentifiersDataObjectsFromSTG = DBManager
+                    .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
 
         }
     }
@@ -135,12 +150,39 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
     @Then("^Verify that data in SA_MANIFESTATION_IDENTIFIER is populated correctly for (.*)$")
     public void verifyDataIsPopulatedCorrectlyInSATable(String identifier) {
 
+        Log.info("And the identifier data in STG and SA ..");
+
+        dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.sort(Comparator.comparing(ManifestationIdentifierObject::getManif_identifier_id));
+        dataQualityContext.manifestationIdentifiersDataObjectsFromSA.sort(Comparator.comparing(ManifestationIdentifierObject::getManif_identifier_id));
+
         IntStream.range(0, dataQualityContext.manifestationIdentifiersDataObjectsFromSA.size()).forEach(i -> {
 
+            //b_classname
             assertEquals("ManifestationIdentifier", dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getB_classname());
 //            assertEquals(ids.get(i) + "-" + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_type(), DataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getManif_identifier_id());
+
+            //f_type
             assertEquals(identifier, dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_type());
 //            assertEquals(ids.get(i), dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
+
+            //Manif_identifier_id
+            Log.info("MANIF_IDENFIER_ID  in EPH STG : " + dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getManif_identifier_id());
+            Log.info("MANIF_IDENFIER_ID  in EPH SА: " + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getManif_identifier_id());
+
+            assertEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getManif_identifier_id(),dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getManif_identifier_id());
+
+            //f_manifestation
+            Log.info("F_MANIFESTATION  in EPH STG : " + dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getF_manifestation());
+            Log.info("F_MANIFESTATION  in EPH SА: " + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
+
+            assertEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getF_manifestation(),dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
+
+            //identifier
+            Log.info("IDENTIFIER  in EPH STG : " + dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getIdentifier());
+            Log.info("IDENTIFIER  in EPH SА: " + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getIdentifier());
+
+            assertEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getIdentifier(),dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getIdentifier());
+
         });
     }
 

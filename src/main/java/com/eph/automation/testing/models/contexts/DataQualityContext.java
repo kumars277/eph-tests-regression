@@ -36,6 +36,7 @@ public class DataQualityContext {
     public static List<ProductRelationshipDataObject> productRelationshipDataObjectsFromEPHSA;
     public static List<ProductRelationshipDataObject> productRelationshipDataObjectsFromEPHGD;
 
+    public static List<ManifestationIdentifierObject> manifestationIdentifiersDataObjectsFromSTG;
     public static List<ManifestationIdentifierObject> manifestationIdentifiersDataObjectsFromSA;
     public static List<ManifestationIdentifierObject> manifestationIdentifiersDataObjectsFromGD;
 

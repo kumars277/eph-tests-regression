@@ -10,7 +10,16 @@ public class ManifestationIdentifierObject {
    private String f_event;
    private String b_classname;
    private String manif_identifier_id;
-   private int identifier;
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
+
+    private String identifier;
    private String f_type;
    private String f_manifestation;
 
@@ -44,14 +53,6 @@ public class ManifestationIdentifierObject {
 
     public void setManif_identifier_id(String manif_identifier_id) {
         this.manif_identifier_id = manif_identifier_id;
-    }
-
-    public int getIdentifier() {
-        return identifier;
-    }
-
-    public void setIdentifier(int identifier) {
-        this.identifier = identifier;
     }
 
     public String getF_type() {
