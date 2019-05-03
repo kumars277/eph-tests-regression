@@ -31,6 +31,7 @@ public class PersonDataQualityCheckSteps {
     private String sql;
     private static int countPersonsPMX;
     private static int countPersonsEPHSTG;
+    private static int countPersonsEPHDQ;
     private static int countPersonsEPHSA;
     private static int countPersonsEPHGD;
     private static List<String> ids;
@@ -59,9 +60,34 @@ public class PersonDataQualityCheckSteps {
         Log.info("Count of persons in EPH STG is: " + countPersonsEPHSTG);
     }
 
+    @When("^Get the count of records for persons in EPH DQ$")
+    public void getCountPersonsEPHDQ() {
+        Log.info("When We get the count of persons records in EPH DQ..");
+        sql = PersonDataSQL.GET_COUNT_PERSONS_EPHDQ;
+        Log.info(sql);
+        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countPersonsEPHDQ = ((Long) personsNumber.get(0).get("count")).intValue();
+        Log.info("Count of persons in EPH DQ is: " + countPersonsEPHDQ);
+    }
+
+    @When("^Get the count of records for persons in EPH DQ going to SA$")
+    public void getCountPersonsEPHDQtoSA() {
+        Log.info("When We get the count of persons records in EPH DQ going to sa..");
+        sql = PersonDataSQL.GET_COUNT_PERSONS_EPHDQ_TO_SA;
+        Log.info(sql);
+        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countPersonsEPHDQ = ((Long) personsNumber.get(0).get("count")).intValue();
+        Log.info("Count of persons in EPH DQ going to sa is: " + countPersonsEPHDQ);
+    }
+
     @Then("^Compare the count on records for persons in PMX and EPH Staging$")
     public void verifyCountOfPersonsInPMXAndEPHSTGIsEqual() {
         Assert.assertEquals("\nPersons count in PMX and EPH STG is not equal", countPersonsPMX, countPersonsEPHSTG);
+    }
+
+    @Then("^Compare the count on records for persons in EPH Staging and EPH DQ$")
+    public void verifyCountOfPersonsInEPHSTGAndEPHDQIsEqual() {
+        Assert.assertEquals("\nPersons count in EPH STG and EPH DQ is not equal", countPersonsEPHSTG, countPersonsEPHDQ);
     }
 
 
@@ -76,9 +102,9 @@ public class PersonDataQualityCheckSteps {
     }
 
 
-    @Then("^Compare the count on records for persons in EPH Staging and EPH SA$")
-    public void verifyCountOfPersonsInEPHSTGAndEPHSAIsEqual() {
-        Assert.assertEquals("\nPersons count in EPH STG and EPH SA is not equal", countPersonsEPHSTG, countPersonsEPHSA);
+    @Then("^Compare the count on records for persons in EPH DQ and EPH SA$")
+    public void verifyCountOfPersonsInEPHDQAndEPHSAIsEqual() {
+        Assert.assertEquals("\nPersons count in EPH DQ and EPH SA is not equal", countPersonsEPHDQ, countPersonsEPHSA);
     }
 
     @When("^Get the count of records for persons in EPH GD$")
@@ -138,6 +164,15 @@ public class PersonDataQualityCheckSteps {
                 .getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
     }
 
+    @Then("^We get the person records from EPH DQ$")
+    public void getProductsDataFromEPHDQ() {
+        Log.info("In Then method");
+        sql = String.format(PersonDataSQL.GET_DATA_PERSONS_EPHSTG, Joiner.on("','").join(ids));
+        Log.info(sql);
+
+        dataQualityContext.personDataObjectsFromEPHDQ = DBManager
+                .getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
+    }
 
     @And("^Compare person records in PMX and EPH STG$")
     public void comparePersonRecordsInPMXAndEPHSTG() {
@@ -172,6 +207,63 @@ public class PersonDataQualityCheckSteps {
                     dataQualityContext.personDataObjectsFromPMX.get(i).getPERSON_FAMILY_NAME(),
                     dataQualityContext.personDataObjectsFromEPHSTG.get(i).getPERSON_FAMILY_NAME());
 
+            //PEOPLEHUB_ID
+            Log.info("PEOPLEHUB_ID in PMX : " + dataQualityContext.personDataObjectsFromPMX.get(i).getPEOPLEHUB_ID());
+            Log.info("PEOPLEHUB_ID in EPH STG: " + dataQualityContext.personDataObjectsFromEPHSTG.get(i).getPEOPLEHUB_ID());
+
+            assertEquals("Expecting the PEOPLEHUB_ID in PMX and EPH STG are consistent ",
+                    dataQualityContext.personDataObjectsFromPMX.get(i).getPEOPLEHUB_ID(),
+                    dataQualityContext.personDataObjectsFromEPHSTG.get(i).getPEOPLEHUB_ID());
+        });
+
+    }
+
+    @And("^Compare person records in EPH STG and EPH DQ$")
+    public void comparePersonRecordsInEPHSTGAndEPHDQ() {
+        Log.info("And compare the person records in EPH STG and PEH DQ ..");//sort data in the lists
+        dataQualityContext.personDataObjectsFromEPHSTG.sort(Comparator.comparing(PersonDataObject::getPERSON_SOURCE_REF));
+        dataQualityContext.personDataObjectsFromEPHDQ.sort(Comparator.comparing(PersonDataObject::getPERSON_SOURCE_REF));
+
+
+        IntStream.range(0, dataQualityContext.personDataObjectsFromEPHSTG.size()).forEach(i -> {
+
+            //PERSON_SOURCE_REF
+            Log.info("PERSON_SOURCE_REF in EPH STG: " + dataQualityContext.personDataObjectsFromEPHSTG.get(i).getPERSON_SOURCE_REF());
+            Log.info("PERSON_SOURCE_REF in EPH DQ: " + dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_SOURCE_REF());
+
+
+            assertEquals("Expecting the PERSON_SOURCE_REF in EPH STG and EPH DQ are consistent ",
+                    dataQualityContext.personDataObjectsFromEPHSTG.get(i).getPERSON_SOURCE_REF(),
+                    dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_SOURCE_REF());
+
+            //PERSON_FIRST_NAME
+            Log.info("PERSON_FIRST_NAME in EPH STG: " + dataQualityContext.personDataObjectsFromEPHSTG.get(i).getPERSON_FIRST_NAME());
+            Log.info("PERSON_FIRST_NAME in EPH DQ: " + dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_FIRST_NAME());
+
+            assertEquals("Expecting the PERSON_FIRST_NAME in EPH STG and EPH DQ are consistent ",
+                    dataQualityContext.personDataObjectsFromEPHSTG.get(i).getPERSON_FIRST_NAME(),
+                    dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_FIRST_NAME());
+
+            //PERSON_FAMILY_NAME
+            Log.info("PERSON_FAMILY_NAME in EPH STG: " + dataQualityContext.personDataObjectsFromEPHSTG.get(i).getPERSON_FAMILY_NAME());
+            Log.info("PERSON_FAMILY_NAME in EPH DQ: " + dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_FAMILY_NAME());
+
+            assertEquals("Expecting the PERSON_FAMILY_NAME in EPH STG and EPH DQ are consistent ",
+                    dataQualityContext.personDataObjectsFromEPHSTG.get(i).getPERSON_FAMILY_NAME(),
+                    dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_FAMILY_NAME());
+
+            //PEOPLEHUB_ID
+            Log.info("PEOPLEHUB_ID in EPH STG: " + dataQualityContext.personDataObjectsFromEPHSTG.get(i).getPEOPLEHUB_ID());
+            Log.info("PEOPLEHUB_ID in EPH DQ: " + dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPEOPLEHUB_ID());
+
+
+            assertEquals("Expecting the PEOPLEHUB_ID in EPH STG and EPH DQ are consistent ",
+                    dataQualityContext.personDataObjectsFromEPHSTG.get(i).getPEOPLEHUB_ID(),
+                    dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPEOPLEHUB_ID());
+
+            //DQ_ERR
+            Log.info("PEOPLEHUB_ID in EPH DQ: " + dataQualityContext.personDataObjectsFromEPHDQ.get(i).getDQ_ERR());
+            assertEquals( "N", dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPEOPLEHUB_ID());
         });
 
     }
@@ -204,14 +296,16 @@ public class PersonDataQualityCheckSteps {
                 .getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
     }
 
-    @And("^Compare person records in EPH STG and EPH SA$")
-    public void comparePersonRecordsInEPHSTGAndEPHSA() {
-        Log.info("And compare the person records in EPH STG and EPH SA ..");
 
-        IntStream.range(0, dataQualityContext.personDataObjectsFromEPHSTG.size()).forEach(i -> {
 
-            //get data from SA for the current record from STG
-            String currentId = "PERSON-" + dataQualityContext.personDataObjectsFromEPHSTG.get(i).getPERSON_SOURCE_REF();
+    @And("^Compare person records in EPH DQ and EPH SA$")
+    public void comparePersonRecordsInEPHDQAndEPHSA() {
+        Log.info("And compare the person records in EPH DQ and EPH SA ..");
+
+        IntStream.range(0, dataQualityContext.personDataObjectsFromEPHDQ.size()).forEach(i -> {
+
+            //get data from SA for the current record from DQ
+            String currentId = "PERSON-" + dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_SOURCE_REF();
             sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE, currentId);
             Log.info(sql);
 
@@ -230,20 +324,20 @@ public class PersonDataQualityCheckSteps {
             assertEquals("Person", dataQualityContext.personDataObjectsFromEPHSA.get(0).getB_CLASSNAME());
 
             //FIRST_NAME
-            Log.info("FIRST_NAME in EPH STG : " + dataQualityContext.personDataObjectsFromEPHSTG.get(i).getPERSON_FIRST_NAME());
+            Log.info("FIRST_NAME in EPH DQ : " + dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_FIRST_NAME());
             Log.info("FIRST_NAME in EPH SA: " + dataQualityContext.personDataObjectsFromEPHSA.get(0).getPERSON_FIRST_NAME());
 
-            Log.info("Expecting FIRST_NAME in EPH STG  and EPH SA is consistent");
+            Log.info("Expecting FIRST_NAME in EPH DQ and EPH SA is consistent");
 
-            assertEquals(dataQualityContext.personDataObjectsFromEPHSTG.get(i).getPERSON_FIRST_NAME(), dataQualityContext.personDataObjectsFromEPHSA.get(0).getPERSON_FIRST_NAME());
+            assertEquals(dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_FIRST_NAME(), dataQualityContext.personDataObjectsFromEPHSA.get(0).getPERSON_FIRST_NAME());
 
             //FAMILY_NAME
-            Log.info("FAMILY_NAME in EPH STG : " + dataQualityContext.personDataObjectsFromEPHSTG.get(i).getPERSON_FAMILY_NAME());
+            Log.info("FAMILY_NAME in EPH DQ : " + dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_FAMILY_NAME());
             Log.info("FAMILY_NAME in EPH SA: " + dataQualityContext.personDataObjectsFromEPHSA.get(0).getPERSON_FIRST_NAME());
 
-            Log.info("Expecting FAMILY_NAME in EPH STG and EPH SA is consistent");
+            Log.info("Expecting FAMILY_NAME in EPH DQ and EPH SA is consistent");
 
-            assertEquals(dataQualityContext.personDataObjectsFromEPHSTG.get(i).getPERSON_FAMILY_NAME(), dataQualityContext.personDataObjectsFromEPHSA.get(0).getPERSON_FAMILY_NAME());
+            assertEquals(dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_FAMILY_NAME(), dataQualityContext.personDataObjectsFromEPHSA.get(0).getPERSON_FAMILY_NAME());
 
         });
 

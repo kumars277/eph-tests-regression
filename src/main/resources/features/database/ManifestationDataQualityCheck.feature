@@ -3,18 +3,25 @@ Feature: Entity - Manifestations - Count & Data Mapping Check - Validate data be
   @Regression
   Scenario: Verify count of manifestations records in PMX and EPH staging is equal
     Given We get the count of the manifestations records in PMX
-    When We get the count of the manifestations records in PMX STG
+    When We get the count of the manifestations records in EPH STG
     Then The number of the records in PMX and EPH staging table is equal
 
   @Regression
-  Scenario: Verify count of manifestations records in EPH staging and EPH SA is equal
-    Given We get the count of the manifestations records in PMX STG
-    When The manifestations are transferred to EPH
-    Then The number of the records in EPH staging table and SA_MANIFESTATION is equal
+  Scenario: Verify count of manifestations records in EPH staging and EPH DQ is equal
+    Given We get the count of the manifestations records in EPH STG
+    When We get the count of the manifestations records in EPH DQ
+    Then The number of the records in EPH staging and EPH DQ is equal
+
+
+  @Regression
+  Scenario: Verify count of manifestations records in EPH DQ and EPH SA is equal
+    Given We get the count of the manifestations records in EPH DQ going to SA
+    When The manifestations are transferred to EPH SA
+    Then The number of the records in EPH DQ and SA_MANIFESTATION is equal
 
   @Regression
   Scenario: Verify count of manifestations records in EPH SA and EPH golden data is equal
-    Given The manifestations are transferred to EPH
+    Given The manifestations are transferred to EPH SA
     When The manifestations are transferred to the golden data table
     Then The number of the records in EPH SA and GD_MANIFESTATION is equal
 
@@ -25,9 +32,11 @@ Feature: Entity - Manifestations - Count & Data Mapping Check - Validate data be
     Then We get the manifestations records from PMX
     Then We have the manifestations in PMX STG
     And The data for manifestations in PMX and PMX STG is equal
+    And We get the manifestations in EPH DQ
+    And We compare the manifestations in EPH STG and EPH DQ for <book_type>
     And We get the manifestations in EPH SA
     And We check that mandatory fields are not null
-    And We compare the manifestations in PMX STG and EPH SA for <book_type>
+    And We compare the manifestations in DQ and EPH SA for <book_type>
     And We get the manifestations in EPH golden data
     And We compare the manifestations in EPH SA and EPH golden data
     Examples:
@@ -43,7 +52,7 @@ Feature: Entity - Manifestations - Count & Data Mapping Check - Validate data be
     Then We have the manifestations in PMX STG
     And The data for manifestations in PMX and PMX STG is equal
     And We get the manifestations in EPH SA
-    And We compare the manifestations in PMX STG and EPH SA for <journal_type>
+    And We compare the manifestations in DQ and EPH SA for <book_type>
     And We get the manifestations in EPH golden data
     And We compare the manifestations in EPH SA and EPH golden data
     Examples:

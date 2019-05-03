@@ -44,7 +44,7 @@ public class DataLoadServiceImpl {
 
             System.out.println(loadID);
 
-//            //Need to gete New Event IDeventtype text, description text,
+//            //Need to get New Event IDeventtype text, description text,
 // thirdparty text, workflowid text, workflowsource text, loadid integer)
             //
             query = "{? = call semarchy_eph_mdm.eph_create_event(?,?,?,?,?,?)}";

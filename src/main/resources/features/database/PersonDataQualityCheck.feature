@@ -7,10 +7,16 @@ Feature: Entity - PERSON  - Validate data between PMX and EPH - Talend Full Load
     Then Compare the count on records for persons in PMX and EPH Staging
 
   @Regression
-  Scenario: Count check between EPH Staging and EPH SA
+  Scenario: Count check between EPH Staging and EPH DQ
     Given Get the count of records for persons in EPH Staging
+    When Get the count of records for persons in EPH DQ
+    Then Compare the count on records for persons in EPH Staging and EPH DQ
+
+  @Regression
+  Scenario: Count check between EPH DQ and EPH SA
+    Given Get the count of records for persons in EPH DQ going to SA
     When Get the count of records for persons in EPH SA
-    Then Compare the count on records for persons in EPH Staging and EPH SA
+    Then Compare the count on records for persons in EPH DQ and EPH SA
 
 
   @Regression
@@ -32,12 +38,14 @@ Feature: Entity - PERSON  - Validate data between PMX and EPH - Talend Full Load
 
 
   @Regression
-  Scenario Outline: Validate data is transferred from EPH STG to EPH SA
+  Scenario Outline: Validate data is transferred from EPH STG to EPH DQ and EPH SA
     Given We get <countOfRandomIds> random ids of persons
     When We get the person records from EPH STG
+    Then We get the person records from EPH DQ
+    Then Compare person records in EPH STG and EPH DQ
     Then We get the ids of the records in EPH SA from the lookup table
     Then We get the person records from EPH SA
-    And Compare person records in EPH STG and EPH SA
+    And Compare person records in EPH DQ and EPH SA
     Examples:
       | countOfRandomIds |
       | 10               |

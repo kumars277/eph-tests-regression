@@ -10,6 +10,8 @@ public class PersonDataObject {
     private String PERSON_SOURCE_REF;
     private String PERSON_FIRST_NAME;
     private String PERSON_FAMILY_NAME;
+    private String PEOPLEHUB_ID;
+    private String DQ_ERR;
 
     //SA_PERSON
     private String B_LOADID;
@@ -65,6 +67,21 @@ public class PersonDataObject {
         this.PERSON_ID = PERSON_ID;
     }
 
+    public String getPEOPLEHUB_ID() {
+        return PEOPLEHUB_ID;
+    }
+
+    public void setPEOPLEHUB_ID(String PEOPLEHUB_ID) {
+        this.PEOPLEHUB_ID = PEOPLEHUB_ID;
+    }
+
+    public String getDQ_ERR() {
+        return DQ_ERR;
+    }
+
+    public void setDQ_ERR(String DQ_ERR) {
+        this.DQ_ERR = DQ_ERR;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -74,10 +91,16 @@ public class PersonDataObject {
         return Objects.equals(PERSON_SOURCE_REF, that.PERSON_SOURCE_REF) &&
                 Objects.equals(PERSON_FIRST_NAME, that.PERSON_FIRST_NAME) &&
                 Objects.equals(PERSON_FAMILY_NAME, that.PERSON_FAMILY_NAME) &&
+                Objects.equals(PEOPLEHUB_ID, that.PEOPLEHUB_ID) &&
+                Objects.equals(DQ_ERR, that.DQ_ERR) &&
                 Objects.equals(B_LOADID, that.B_LOADID) &&
                 Objects.equals(B_CLASSNAME, that.B_CLASSNAME) &&
                 Objects.equals(PERSON_ID, that.PERSON_ID);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(PERSON_SOURCE_REF, PERSON_FIRST_NAME, PERSON_FAMILY_NAME, PEOPLEHUB_ID, DQ_ERR, B_LOADID, B_CLASSNAME, PERSON_ID);
     }
 
     @Override
@@ -86,6 +109,8 @@ public class PersonDataObject {
                 "PERSON_SOURCE_REF='" + PERSON_SOURCE_REF + '\'' +
                 ", PERSON_FIRST_NAME='" + PERSON_FIRST_NAME + '\'' +
                 ", PERSON_FAMILY_NAME='" + PERSON_FAMILY_NAME + '\'' +
+                ", PEOPLEHUB_ID='" + PEOPLEHUB_ID + '\'' +
+                ", DQ_ERR='" + DQ_ERR + '\'' +
                 ", B_LOADID='" + B_LOADID + '\'' +
                 ", B_CLASSNAME='" + B_CLASSNAME + '\'' +
                 ", PERSON_ID='" + PERSON_ID + '\'' +
