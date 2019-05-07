@@ -18,6 +18,7 @@ import cucumber.api.java.en.When;
 import org.junit.Assert;
 
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -33,7 +34,7 @@ public class ApiWorksSearchSteps {
 
     @StaticInjection
     public DataQualityContext dataQualityContext;
-
+    public static List<ManifestationIdentifierObject> manifestationIdentifiers;
     private String sql;
     private static List<String> ids;
     private static List<String> manifestation_Ids;
@@ -50,8 +51,6 @@ public class ApiWorksSearchSteps {
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
     }
-
-
 
     @And("^We get the work search data from EPH GD$")
     public void getWorksDataFromEPHGD() {
@@ -80,6 +79,21 @@ public class ApiWorksSearchSteps {
         }
     }
 
+    @When("^the work details are retrieved by title and compared$")
+    public void compareWorkSearchByTitleResultsWithDB() {
+        int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
+        System.out.println("Missing entries:\n");
+        for (int i = 0; i < bound; i++) {
+            Assert.assertTrue("Verify that the searched work exists and is accessible trough the API", checkWorkExists(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID()));
+
+            workApi_response = searchForWorkByIDResult(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+            compareWorkApiResponseWithDB(i);
+            getManifestationsByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+            getEPHGDManifestationIdentifiersByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+
+        }
+    }
+
     @When("^the works search by identifier (.*) details are retrieved and compared$")
     public void compareWorkSearchByIdentifierResultsWithDB(String identifierType) {
         WorksMatchedApiObject returnedWorks = null;
@@ -90,15 +104,41 @@ public class ApiWorksSearchSteps {
                 getWorkIdentifiers(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
                 returnedWorks = searchForWorksByIdentifierResult(workIdentifiers.get(i).getIDENTIFIER());
             } else if (identifierType.equals("WORK_MANIFESTATION_IDENTIFIER")){
-                getEPHGDManifestationIdentifiersByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-                returnedWorks = searchForWorksByIdentifierResult(String.valueOf(dataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(i).getIdentifier()));
+                List<Map<String, Object>> manifIdentifiers = getEPHGDManifestationIdentifiersByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                returnedWorks = searchForWorksByIdentifierResult(manifIdentifiers.get(i).get("identifier").toString());
             } else if (identifierType.equals("WORK_ID")){
                 returnedWorks = searchForWorksByIdentifierResult(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
             } else if (identifierType.equals("WORK_MANIFESTATION_ID")){
                 getManifestationsByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
                 returnedWorks = searchForWorksByIdentifierResult(dataQualityContext.manifestationDataObjectsFromEPHGD.get(i).getMANIFESTATION_ID());
             }
-            System.out.println(returnedWorks.toString());
+            
+            returnedWorks.verifyWorksAreReturned(); returnedWorks.verifyWorkWithIdIsReturned(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+
+        }
+    }
+
+    @When("^the works retrieved by search (.*) details are retrieved and compared$")
+    public void compareWorksRetrievdBySearchOptionWithDB(String identifierType) {
+        WorksMatchedApiObject returnedWorks = null;
+
+        int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
+        for (int i = 0; i < bound; i++) {
+            if (identifierType.equals("WORK_IDENTIFIER")){
+                getWorkIdentifiers(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                returnedWorks = searchForWorksBySearchOptionResult(workIdentifiers.get(i).getIDENTIFIER());
+            } else if (identifierType.equals("WORK_MANIFESTATION_IDENTIFIER")){
+                List<Map<String, Object>> manifIdentifiers = getEPHGDManifestationIdentifiersByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                returnedWorks = searchForWorksBySearchOptionResult(manifIdentifiers.get(i).get("identifier").toString());
+            } else if (identifierType.equals("WORK_ID")){
+                returnedWorks = searchForWorksBySearchOptionResult(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+            } else if (identifierType.equals("WORK_MANIFESTATION_ID")){
+                getManifestationsByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                returnedWorks = searchForWorksBySearchOptionResult(dataQualityContext.manifestationDataObjectsFromEPHGD.get(i).getMANIFESTATION_ID());
+            } else if (identifierType.equals("WORK_PRODUCT_ID")){
+                returnedWorks = searchForWorksBySearchOptionResult(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+            }
+            returnedWorks.verifyWorksAreReturned(); returnedWorks.verifyWorkWithIdIsReturned(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
         }
     }
 
@@ -112,11 +152,10 @@ public class ApiWorksSearchSteps {
                 getWorkIdentifiers(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
                 returnedWorks = searchForWorksByIdentifierAndTypeResult(workIdentifiers.get(i).getIDENTIFIER(), workIdentifiers.get(i).getF_TYPE());
             } else if (identifierType.equals("WORK_MANIFESTATION_IDENTIFIER")) {
-                getEPHGDManifestationIdentifiersByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-                returnedWorks = searchForWorksByIdentifierAndTypeResult(String.valueOf(dataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(i).getIdentifier()),
-                        dataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(i).getF_type());
+                List<Map<String, Object>> manifIdentifiers = getEPHGDManifestationIdentifiersByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                returnedWorks = searchForWorksByIdentifierAndTypeResult(manifIdentifiers.get(i).get("identifier").toString(),manifIdentifiers.get(i).get("f_type").toString());
             }
-            System.out.println(returnedWorks.toString());
+            returnedWorks.verifyWorksAreReturned(); returnedWorks.verifyWorkWithIdIsReturned(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
         }
     }
 
@@ -136,24 +175,6 @@ public class ApiWorksSearchSteps {
         // TODO: PMG compare
 //        Assert.assertEquals(workApi_response.getPmc().getPmg().get("pmgCode"),dataQualityContext.workDataObjectsFromEPHGD.get(DataObjectNumber).getPMG());
     }
-
-    @When("^the work search by title details are retrieved and compared$")
-    public void compareWorkSearchByTitleResultsWithDB() {
-        dataQualityContext.workDataObjectsFromEPHGD.sort(Comparator.comparing(WorkDataObject::getWORK_ID));
-
-        int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
-        for (int i = 0; i < bound; i++) {
-            Assert.assertTrue("Verify that the searched work exists and is accessible trough the API", checkWorkExists(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID()));
-
-                System.out.println(i + ") Checking: " + dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-
-                WorksMatchedApiObject returnedWorks = searchForWorkByTitleResult(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TITLE());
-                returnedWorks.getItems();
-
-        }
-    }
-
-
 
 
     public List<String> getManifestationIdsForWorkID(String workID) {
@@ -178,12 +199,12 @@ public class ApiWorksSearchSteps {
                 .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
     }
 
-    public void getEPHGDManifestationIdentifiersByWorkID(String workID) {
-        sql = String.format(APIDataSQL.SELECT_GD_MANIFESTATION_IDENTIFIER_BY_MANIFESTATION_ID, Joiner.on("','").join(getManifestationIdsForWorkID(workID)));
+    public List getEPHGDManifestationIdentifiersByWorkID(String workID) {
+        sql = String.format(APIDataSQL.SELECT_GD_MANIFESTATION_IDENTIFIER_BY_MANIFESTATION_ID,
+                Joiner.on("','").join(getManifestationIdsForWorkID(workID)));
         Log.info(sql);
 
-        dataQualityContext.manifestationIdentifiersDataObjectsFromGD = DBManager
-                .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
+        return DBManager.getDBResultMap(sql, Constants.EPH_URL);
     }
 
     public void getWorkIdentifiers(String workID){

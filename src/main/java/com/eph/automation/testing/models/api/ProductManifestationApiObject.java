@@ -9,47 +9,12 @@ import java.util.HashMap;
     public ProductManifestationApiObject() {
     }
 
-    private String manifestationId;
-    private String manifestationKeyTitle;
-    private Boolean internationalEditionFlag;
-    private String firstPubDate;
-    private ManifestationIdentifiersApiObject[] manifestationIdentifierApiObjects;
-    private HashMap<String, Object> manifestationType;
-    private HashMap<String, Object> manifestationStatus;
-    
-    private HashMap<String, Object> manifestationFormat;
-    private ManifestationWorkApiObject manifestationWorkApiObject;
-
-    public ManifestationIdentifiersApiObject[] getManifestationIdentifierApiObjects() {
-        return manifestationIdentifierApiObjects;
-    }
-
-    public HashMap<String, Object> getManifestationFormat() {
-        return manifestationFormat;
-    }
-
-    public void setManifestationFormat(HashMap<String, Object> manifestationFormat) {
-        this.manifestationFormat = manifestationFormat;
-    }
-
-    public void setManifestationIdentifierApiObjects(ManifestationIdentifiersApiObject[] manifestationIdentifierApiObjects) {
-        this.manifestationIdentifierApiObjects = manifestationIdentifierApiObjects;
-    }
-
     public String getManifestationId() {
         return manifestationId;
     }
 
     public void setManifestationId(String manifestationId) {
         this.manifestationId = manifestationId;
-    }
-
-    public ManifestationWorkApiObject getManifestationWorkApiObject() {
-        return manifestationWorkApiObject;
-    }
-
-    public void setManifestationWorkApiObject(ManifestationWorkApiObject manifestationWorkApiObject) {
-        this.manifestationWorkApiObject = manifestationWorkApiObject;
     }
 
     public String getManifestationKeyTitle() {
@@ -76,6 +41,14 @@ import java.util.HashMap;
         this.firstPubDate = firstPubDate;
     }
 
+    public ManifestationIdentifiersApiObject[] getManifestationIdentifiers() {
+        return manifestationIdentifiers;
+    }
+
+    public void setManifestationIdentifiers(ManifestationIdentifiersApiObject[] manifestationIdentifiers) {
+        this.manifestationIdentifiers = manifestationIdentifiers;
+    }
+
     public HashMap<String, Object> getManifestationType() {
         return manifestationType;
     }
@@ -91,6 +64,35 @@ import java.util.HashMap;
     public void setManifestationStatus(HashMap<String, Object> manifestationStatus) {
         this.manifestationStatus = manifestationStatus;
     }
+
+    public HashMap<String, Object> getManifestationFormat() {
+        return manifestationFormat;
+    }
+
+    public void setManifestationFormat(HashMap<String, Object> manifestationFormat) {
+        this.manifestationFormat = manifestationFormat;
+    }
+
+    public ManifestationWorkApiObject getWork() {
+        return work;
+    }
+
+    public void setWork(ManifestationWorkApiObject work) {
+        this.work = work;
+    }
+
+    private String manifestationId;
+    private String manifestationKeyTitle;
+    private Boolean internationalEditionFlag;
+    private String firstPubDate;
+    private ManifestationIdentifiersApiObject[] manifestationIdentifiers;
+    private HashMap<String, Object> manifestationType;
+    private HashMap<String, Object> manifestationStatus;
+    
+    private HashMap<String, Object> manifestationFormat;
+    private ManifestationWorkApiObject work;
+
+
 
 }
 
