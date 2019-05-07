@@ -5,16 +5,22 @@ package com.eph.automation.testing.services.db.sql;
  */
 public class PersonDataSQL {
 
-    public static String GET_COUNT_PERSONS_PMX = "SELECT count(*) AS count\n" +
-            "FROM GD_PARTY\n" +
+    public static String GET_COUNT_PERSONS_PMX = "SELECT \n" +
+            "     count(*) AS count\n" +
+            "FROM \n" +
+            "GD_PARTY P\n" +
             "WHERE PARTY_ID IN (\n" +
             "SELECT F_PARTY FROM GD_PMG\n" +
             "UNION\n" +
             "SELECT F_PARTY FROM GD_PARTY_IN_PRODUCT WHERE F_ROLE_TYPE IN (\n" +
-            "SELECT ROLE_TYPE_ID FROM GD_ROLE_TYPE WHERE ROLE_TYPE_CODE IN\n" +
-            "('PPC','PUB','A01','A02','B01','B13','B09','B11','PUBDIR')))";
+            "    SELECT ROLE_TYPE_ID FROM GD_ROLE_TYPE WHERE ROLE_TYPE_CODE IN \n" +
+            "        ('PPC','PUB','A01','A02','B01','B13','B09','B11','PUBDIR')))";
 
     public static String GET_COUNT_PERSONS_EPHSTG = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_person";
+
+    public static String GET_COUNT_PERSONS_EPHDQ = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_person_dq";
+
+    public static String GET_COUNT_PERSONS_EPHDQ_TO_SA = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_person_dq where dq_err != 'Y'";
 
 
     public static String GET_COUNT_PERSONS_EPHSA = "select count(*) as count from semarchy_eph_mdm.sa_person p\n" +
@@ -34,20 +40,31 @@ public class PersonDataSQL {
             "     PARTY_ID AS PERSON_SOURCE_REF\n" +
             "    ,PERSON_FIRST_NAME AS PERSON_FIRST_NAME\n" +
             "    ,PERSON_FAMILY_NAME as PERSON_FAMILY_NAME \n" +
-            "FROM GD_PARTY\n" +
+            "    ,PEOPLEHUB_ID as PEOPLEHUB_ID\n" +
+            "FROM \n" +
+            "GD_PARTY P\n" +
             "WHERE PARTY_ID IN (\n" +
             "SELECT F_PARTY FROM GD_PMG\n" +
             "UNION\n" +
             "SELECT F_PARTY FROM GD_PARTY_IN_PRODUCT WHERE F_ROLE_TYPE IN (\n" +
-            "SELECT ROLE_TYPE_ID FROM GD_ROLE_TYPE WHERE ROLE_TYPE_CODE IN\n" +
-            "('PPC','PUB','A01','A02','B01','B13','B09','B11','PUBDIR'))) \n" +
+            "    SELECT ROLE_TYPE_ID FROM GD_ROLE_TYPE WHERE ROLE_TYPE_CODE IN \n" +
+            "        ('PPC','PUB','A01','A02','B01','B13','B09','B11','PUBDIR')))\n" +
             "AND PARTY_ID IN ('%s')";
 
     public static String GET_DATA_PERSONS_EPHSTG = "select \n" +
             "\"PERSON_SOURCE_REF\" as PERSON_SOURCE_REF,\n" +
             "\"PERSON_FIRST_NAME\" as PERSON_FIRST_NAME,\n" +
-            "\"PERSON_FAMILY_NAME\" as PERSON_FAMILY_NAME\n" +
+            "\"PERSON_FAMILY_NAME\" as PERSON_FAMILY_NAME,\n" +
+            "\"PEOPLEHUB_ID\" as PEOPLEHUB_ID\n" +
             "from ephsit_talend_owner.stg_10_pmx_person\n" +
+            "where \"PERSON_SOURCE_REF\" in ('%s')\n";
+
+    public static String GET_DATA_PERSONS_EPHDQ = "select distinct\n" +
+            "\"PERSON_SOURCE_REF\" as PERSON_SOURCE_REF,\n" +
+            "\"PERSON_FIRST_NAME\" as PERSON_FIRST_NAME,\n" +
+            "\"PERSON_FAMILY_NAME\" as PERSON_FAMILY_NAME,\n" +
+            "\"PEOPLEHUB_ID\" as PEOPLEHUB_ID\n" +
+            "from ephsit_talend_owner.stg_10_pmx_person_dq\n" +
             "where \"PERSON_SOURCE_REF\" in ('%s')\n";
 
     public static String GET_DATA_PERSONS_EPHSA = "select\n" +

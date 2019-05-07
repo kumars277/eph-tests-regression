@@ -108,6 +108,12 @@ public class WorkExtractSQL {
 
     public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM ephsit_talend_owner.stg_10_pmx_manifestation";
 
+    public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_DQ_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM ephsit_talend_owner.stg_10_pmx_manifestation_dq";
+
+    public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_TO_SA = "SELECT count(*) AS count FROM ephsit_talend_owner.stg_10_pmx_manifestation_dq dq\n" +
+            "join  stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
+            "where dq.dq_err != 'Y' and w.dq_err != 'Y'";
+
     public static final String COUNT_MANIFESTATIONS_IN_SA_MANIFESTATION_TABLE =
             "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation sa where f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation\n" +
                     "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
@@ -186,6 +192,23 @@ public class WorkExtractSQL {
     public static final String SELECT_RANDOM_MANIFESTATION_IDS_JEL = "select \"MANIFESTATION_ID\" from ephsit_talend_owner.stg_10_pmx_manifestation where \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" != 1 order by random() limit '%s'";
 
     public static final String SELECT_MANIFESTATIONS_IDS_FOR_SPECIFIC_ISBN = "select \"MANIFESTATION_ID\" AS manifestation_id from ephsit_talend_owner.stg_10_pmx_manifestation where \"ISBN\" in ('%s')";
+
+    public static final String SELECT_MANIFESTATIONS_DATA_IN_EPH_DQ = "select distinct \n" +
+            "PMX_SOURCE_REFERENCE as PMX_SOURCE_REFERENCE,\n" +
+            "MANIFESTATION_KEY_TITLE as MANIFESTATION_KEY_TITLE,\n" +
+            "INTER_EDITION_FLAG as INTER_EDITION_FLAG,\n" +
+            "FIRST_PUB_DATE as FIRST_PUB_DATE,\n" +
+            "LAST_PUB_DATE as LAST_PUB_DATE, \n" +
+            "F_TYPE as F_TYPE,\n" +
+            "F_STATUS as F_STATUS, \n" +
+            "F_FORMAT_TYPE as F_FORMAT_TYPE, \n" +
+            "F_WWORK as F_WWORK,\n" +
+            "DQ_ERR as DQ_ERR\n" +
+            "FROM ephsit_talend_owner.stg_10_pmx_manifestation_dq dq\n" +
+            "join  stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
+            "where dq.dq_err != 'Y' and w.dq_err != 'Y' \n" +
+            "and pmx_source_reference IN ('%s')";
+
 
     public static final String SELECT_MANIFESTATIONS_DATA_IN_EPH_SA = "select distinct sa.b_loadid as B_LOADID,\n" +
             "sa.F_EVENT  as F_EVENT,\n" +

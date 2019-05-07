@@ -29,7 +29,7 @@ public class ProductDataObject {
     private String WORK_TYPE;
     private String ULT_WORK_REF;
     private String TAX_CODE;
-
+    private String DQ_ERR;
 
     //SA
     private String F_EVENT;
@@ -40,7 +40,13 @@ public class ProductDataObject {
     private String F_STATUS;
 
 
+    public String getDQ_ERR() {
+        return DQ_ERR;
+    }
 
+    public void setDQ_ERR(String DQ_ERR) {
+        this.DQ_ERR = DQ_ERR;
+    }
 
     public String getPRODUCT_ID() {
         return PRODUCT_ID;
@@ -293,41 +299,6 @@ public class ProductDataObject {
     }
 
     @Override
-    public String toString() {
-        return "ProductDataObject{" +
-                "PRODUCT_ID='" + PRODUCT_ID + '\'' +
-                ", PRODUCT_NAME='" + PRODUCT_NAME + '\'' +
-                ", PRODUCT_SHORT_NAME='" + PRODUCT_SHORT_NAME + '\'' +
-                ", SEPARATELY_SALEABLE_IND='" + SEPARATELY_SALEABLE_IND + '\'' +
-                ", TRIAL_ALLOWED_IND='" + TRIAL_ALLOWED_IND + '\'' +
-                ", FIRST_PUB_DATE='" + FIRST_PUB_DATE + '\'' +
-                ", ELSEVIER_TAX_CODE='" + ELSEVIER_TAX_CODE + '\'' +
-                ", PRODUCT_MANIFESTATION_ID=" + PRODUCT_MANIFESTATION_ID +
-                ", F_PRODUCT_WORK='" + F_PRODUCT_WORK + '\'' +
-                ", F_PRODUCT_MANIFESTATION_TYP='" + F_PRODUCT_MANIFESTATION_TYP + '\'' +
-                ", SUBSCRIPTION='" + SUBSCRIPTION + '\'' +
-                ", BULK_SALES='" + BULK_SALES + '\'' +
-                ", BACK_FILES='" + BACK_FILES + '\'' +
-                ", OPEN_ACCESS='" + OPEN_ACCESS + '\'' +
-                ", REPRINTS='" + REPRINTS + '\'' +
-                ", AUTHOR_CHARGES='" + AUTHOR_CHARGES + '\'' +
-                ", ONE_OFF_ACCESS='" + ONE_OFF_ACCESS + '\'' +
-                ", PACKAGES='" + PACKAGES + '\'' +
-                ", AVAILABILITY_STATUS='" + AVAILABILITY_STATUS + '\'' +
-                ", WORK_TITLE='" + WORK_TITLE + '\'' +
-                ", WORK_TYPE='" + WORK_TYPE + '\'' +
-                ", ULT_WORK_REF='" + ULT_WORK_REF + '\'' +
-                ", TAX_CODE='" + TAX_CODE + '\'' +
-                ", F_EVENT='" + F_EVENT + '\'' +
-                ", B_CLASSNAME='" + B_CLASSNAME + '\'' +
-                ", F_REVENUE_MODEL='" + F_REVENUE_MODEL + '\'' +
-                ", PMX_SOURCE_REFERENCE='" + PMX_SOURCE_REFERENCE + '\'' +
-                ", F_TYPE='" + F_TYPE + '\'' +
-                ", F_STATUS='" + F_STATUS + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -355,6 +326,7 @@ public class ProductDataObject {
                 Objects.equals(WORK_TYPE, that.WORK_TYPE) &&
                 Objects.equals(ULT_WORK_REF, that.ULT_WORK_REF) &&
                 Objects.equals(TAX_CODE, that.TAX_CODE) &&
+                Objects.equals(DQ_ERR, that.DQ_ERR) &&
                 Objects.equals(F_EVENT, that.F_EVENT) &&
                 Objects.equals(B_CLASSNAME, that.B_CLASSNAME) &&
                 Objects.equals(F_REVENUE_MODEL, that.F_REVENUE_MODEL) &&
@@ -365,6 +337,42 @@ public class ProductDataObject {
 
     @Override
     public int hashCode() {
-        return Objects.hash(PRODUCT_ID, PRODUCT_NAME, PRODUCT_SHORT_NAME, SEPARATELY_SALEABLE_IND, TRIAL_ALLOWED_IND, FIRST_PUB_DATE, ELSEVIER_TAX_CODE, PRODUCT_MANIFESTATION_ID, F_PRODUCT_WORK, F_PRODUCT_MANIFESTATION_TYP, SUBSCRIPTION, BULK_SALES, BACK_FILES, OPEN_ACCESS, REPRINTS, AUTHOR_CHARGES, ONE_OFF_ACCESS, PACKAGES, AVAILABILITY_STATUS, WORK_TITLE, WORK_TYPE, ULT_WORK_REF, TAX_CODE, F_EVENT, B_CLASSNAME, F_REVENUE_MODEL, PMX_SOURCE_REFERENCE, F_TYPE, F_STATUS);
+        return Objects.hash(PRODUCT_ID, PRODUCT_NAME, PRODUCT_SHORT_NAME, SEPARATELY_SALEABLE_IND, TRIAL_ALLOWED_IND, FIRST_PUB_DATE, ELSEVIER_TAX_CODE, PRODUCT_MANIFESTATION_ID, F_PRODUCT_WORK, F_PRODUCT_MANIFESTATION_TYP, SUBSCRIPTION, BULK_SALES, BACK_FILES, OPEN_ACCESS, REPRINTS, AUTHOR_CHARGES, ONE_OFF_ACCESS, PACKAGES, AVAILABILITY_STATUS, WORK_TITLE, WORK_TYPE, ULT_WORK_REF, TAX_CODE, DQ_ERR, F_EVENT, B_CLASSNAME, F_REVENUE_MODEL, PMX_SOURCE_REFERENCE, F_TYPE, F_STATUS);
+    }
+
+    @Override
+    public String toString() {
+        return "ProductDataObject{" +
+                "PRODUCT_ID='" + PRODUCT_ID + '\'' +
+                ", PRODUCT_NAME='" + PRODUCT_NAME + '\'' +
+                ", PRODUCT_SHORT_NAME='" + PRODUCT_SHORT_NAME + '\'' +
+                ", SEPARATELY_SALEABLE_IND='" + SEPARATELY_SALEABLE_IND + '\'' +
+                ", TRIAL_ALLOWED_IND='" + TRIAL_ALLOWED_IND + '\'' +
+                ", FIRST_PUB_DATE='" + FIRST_PUB_DATE + '\'' +
+                ", ELSEVIER_TAX_CODE='" + ELSEVIER_TAX_CODE + '\'' +
+                ", PRODUCT_MANIFESTATION_ID=" + PRODUCT_MANIFESTATION_ID +
+                ", F_PRODUCT_WORK='" + F_PRODUCT_WORK + '\'' +
+                ", F_PRODUCT_MANIFESTATION_TYP='" + F_PRODUCT_MANIFESTATION_TYP + '\'' +
+                ", SUBSCRIPTION='" + SUBSCRIPTION + '\'' +
+                ", BULK_SALES='" + BULK_SALES + '\'' +
+                ", BACK_FILES='" + BACK_FILES + '\'' +
+                ", OPEN_ACCESS='" + OPEN_ACCESS + '\'' +
+                ", REPRINTS='" + REPRINTS + '\'' +
+                ", AUTHOR_CHARGES='" + AUTHOR_CHARGES + '\'' +
+                ", ONE_OFF_ACCESS='" + ONE_OFF_ACCESS + '\'' +
+                ", PACKAGES='" + PACKAGES + '\'' +
+                ", AVAILABILITY_STATUS='" + AVAILABILITY_STATUS + '\'' +
+                ", WORK_TITLE='" + WORK_TITLE + '\'' +
+                ", WORK_TYPE='" + WORK_TYPE + '\'' +
+                ", ULT_WORK_REF='" + ULT_WORK_REF + '\'' +
+                ", TAX_CODE='" + TAX_CODE + '\'' +
+                ", DQ_ERR='" + DQ_ERR + '\'' +
+                ", F_EVENT='" + F_EVENT + '\'' +
+                ", B_CLASSNAME='" + B_CLASSNAME + '\'' +
+                ", F_REVENUE_MODEL='" + F_REVENUE_MODEL + '\'' +
+                ", PMX_SOURCE_REFERENCE='" + PMX_SOURCE_REFERENCE + '\'' +
+                ", F_TYPE='" + F_TYPE + '\'' +
+                ", F_STATUS='" + F_STATUS + '\'' +
+                '}';
     }
 }

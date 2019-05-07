@@ -20,14 +20,15 @@ public class DataQualityContext {
     public static List<WorkDataObject> workDataObjectsFromEPHGD;
     public static List<WorkDataObject> workDataObjectsAccProd;
 
-    public static List<ManifestationDataObject> manifestationDataObjectsFromEPH;
+    public static List<ManifestationDataObject> manifestationDataObjectsFromEPHSTG;
     public static List<ManifestationDataObject> manifestationDataObjectsFromPMX;
     public static List<ManifestationDataObject> manifestationDataObjectsFromEPHSA;
+    public static List<ManifestationDataObject> manifestationDataObjectsFromEPHDQ;
     public static List<ManifestationDataObject> manifestationDataObjectsFromEPHGD;
 
     public static List<ProductDataObject> productDataObjectsFromPMX;
     public static List<ProductDataObject> productDataObjectsFromEPHSTG;
-    public static List<ProductDataObject> productDataObjectsFromEPHSTGCan;
+    public static List<ProductDataObject> productDataObjectsFromEPHSTGDQ;
     public static List<ProductDataObject> productDataObjectsFromEPHSA;
     public static List<ProductDataObject> productDataObjectsFromEPHGD;
 
@@ -42,6 +43,7 @@ public class DataQualityContext {
 
     public static List<PersonDataObject> personDataObjectsFromPMX;
     public static List<PersonDataObject> personDataObjectsFromEPHSTG;
+    public static List<PersonDataObject> personDataObjectsFromEPHDQ;
     public static List<PersonDataObject> personDataObjectsFromEPHSA;
     public static List<PersonDataObject> personDataObjectsFromEPHGD;
 

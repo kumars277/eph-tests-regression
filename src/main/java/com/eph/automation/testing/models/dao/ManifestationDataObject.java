@@ -24,6 +24,7 @@ public class  ManifestationDataObject {
     private String MANIFESTATION_SUBTYPE;
     private String COMMODITY;
     private String MANIFESTATION_SUBSTATUS;
+    private String DQ_ERR;
 
     //SA_MANIFESTATION columns
     private String F_EVENT;
@@ -206,12 +207,22 @@ public class  ManifestationDataObject {
         this.MANIFESTATION_SUBSTATUS = MANIFESTATION_SUBSTATUS;
     }
 
+    public String getDQ_ERR() {
+        return DQ_ERR;
+    }
+
+    public void setDQ_ERR(String DQ_ERR) {
+        this.DQ_ERR = DQ_ERR;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ManifestationDataObject that = (ManifestationDataObject) o;
-        return Objects.equals(MANIFESTATION_ID, that.MANIFESTATION_ID) &&
+        return PRODUCT_MANIFESTATION_ID == that.PRODUCT_MANIFESTATION_ID &&
+                PMX_SOURCE_REFERENCE == that.PMX_SOURCE_REFERENCE &&
+                Objects.equals(MANIFESTATION_ID, that.MANIFESTATION_ID) &&
                 Objects.equals(MANIFESTATION_KEY_TITLE, that.MANIFESTATION_KEY_TITLE) &&
                 Objects.equals(ISBN, that.ISBN) &&
                 Objects.equals(ISSN, that.ISSN) &&
@@ -226,14 +237,22 @@ public class  ManifestationDataObject {
                 Objects.equals(F_PRODUCT_MANIFESTATION_TYP, that.F_PRODUCT_MANIFESTATION_TYP) &&
                 Objects.equals(FORMAT_TXT, that.FORMAT_TXT) &&
                 Objects.equals(MANIFESTATION_STATUS, that.MANIFESTATION_STATUS) &&
-                Objects.equals(PRODUCT_MANIFESTATION_ID, that.PRODUCT_MANIFESTATION_ID) &&
+                Objects.equals(F_PRODUCT_WORK, that.F_PRODUCT_WORK) &&
                 Objects.equals(WORK_TYPE_ID, that.WORK_TYPE_ID) &&
                 Objects.equals(MANIFESTATION_SUBTYPE, that.MANIFESTATION_SUBTYPE) &&
                 Objects.equals(COMMODITY, that.COMMODITY) &&
-                Objects.equals(MANIFESTATION_SUBSTATUS, that.MANIFESTATION_SUBSTATUS);
+                Objects.equals(MANIFESTATION_SUBSTATUS, that.MANIFESTATION_SUBSTATUS) &&
+                Objects.equals(DQ_ERR, that.DQ_ERR) &&
+                Objects.equals(F_EVENT, that.F_EVENT) &&
+                Objects.equals(B_CLASSNAME, that.B_CLASSNAME) &&
+                Objects.equals(INTER_EDITION_FLAG, that.INTER_EDITION_FLAG) &&
+                Objects.equals(FIRST_PUB_DATE, that.FIRST_PUB_DATE) &&
+                Objects.equals(LAST_PUB_DATE, that.LAST_PUB_DATE) &&
+                Objects.equals(F_TYPE, that.F_TYPE) &&
+                Objects.equals(F_STATUS, that.F_STATUS) &&
+                Objects.equals(F_FORMAT_TYPE, that.F_FORMAT_TYPE) &&
+                Objects.equals(F_WWORK, that.F_WWORK);
     }
-
-
 
     @Override
     public int hashCode() {
