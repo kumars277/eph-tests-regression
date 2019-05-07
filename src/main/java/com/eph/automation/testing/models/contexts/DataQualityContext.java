@@ -15,8 +15,10 @@ public class DataQualityContext {
     public static List<GenericDataObject> genericDataObjectsFromSource;
     public static List<WorkDataObject> workDataObjectsFromSource;
     public static List<WorkDataObject> workDataObjectsFromPMXSTG;
+    public static List<WorkDataObject> workDataObjectsFromSTGDQ;
     public static List<WorkDataObject> workDataObjectsFromEPH;
     public static List<WorkDataObject> workDataObjectsFromEPHGD;
+    public static List<WorkDataObject> workDataObjectsAccProd;
 
     public static List<ManifestationDataObject> manifestationDataObjectsFromEPHSTG;
     public static List<ManifestationDataObject> manifestationDataObjectsFromPMX;
@@ -35,6 +37,7 @@ public class DataQualityContext {
     public static List<ProductRelationshipDataObject> productRelationshipDataObjectsFromEPHSA;
     public static List<ProductRelationshipDataObject> productRelationshipDataObjectsFromEPHGD;
 
+    public static List<ManifestationIdentifierObject> manifestationIdentifiersDataObjectsFromSTG;
     public static List<ManifestationIdentifierObject> manifestationIdentifiersDataObjectsFromSA;
     public static List<ManifestationIdentifierObject> manifestationIdentifiersDataObjectsFromGD;
 

@@ -7,16 +7,18 @@ public class WorkSubjectAreaLinkDataSQL {
 
     public static String SELECT_COUNT_WORK_SUBJECT_AREA_PMX = "SELECT count(*) as count FROM (\n" +
             "SELECT\n" +
-            "     PRODUCT_SUBJECT_AREA_ID\n" +
-            "    ,F_SUBJECT_AREA\n" +
-            "    ,F_PRODUCT_WORK\n" +
-            "FROM GD_PRODUCT_SUBJECT_AREA \n" +
-            "WHERE F_PRODUCT_WORK IN \n" +
+            "     PSA.PRODUCT_SUBJECT_AREA_ID\n" +
+            "    ,PSA.F_SUBJECT_AREA\n" +
+            "    ,PSA.F_PRODUCT_WORK\n" +
+            "FROM GD_PRODUCT_SUBJECT_AREA PSA \n" +
+            "JOIN GD_SUBJECT_AREA SA ON F_SUBJECT_AREA = SUBJECT_AREA_ID\n " +
+            "WHERE PSA.F_PRODUCT_WORK IN \n" +
             "    (SELECT PRODUCT_WORK_ID FROM GD_PRODUCT_WORK WHERE F_PRODUCT_TYPE IN \n" +
             "        (SELECT PRODUCT_TYPE_ID FROM GD_PRODUCT_TYPE WHERE F_PRODUCT_GROUP_TYPE = 2\n" +
             "            )\n" +
             "        )\n" +
-            "AND EFFTO_DATE IS NULL\n" +
+            "AND PSA.EFFTO_DATE IS NULL\n" +
+            "AND SA.F_SUBJECT_AREA_TYPE = 181\n" +
             "    ) ";
 
     public static String SELECT_COUNT_WORK_SUBJECT_AREA_STG = "select count(*) as count from ephsit_talend_owner.STG_10_PMX_WORK_SUBJECT_AREA";
@@ -27,16 +29,18 @@ public class WorkSubjectAreaLinkDataSQL {
 
     public static String EXTRACT_DATA_WORK_SUBJECT_AREA_PMX = "SELECT * FROM (\n" +
             "SELECT\n" +
-            "     PRODUCT_SUBJECT_AREA_ID\n" +
-            "    ,F_SUBJECT_AREA\n" +
-            "    ,F_PRODUCT_WORK\n" +
-            "FROM GD_PRODUCT_SUBJECT_AREA \n" +
-            "WHERE F_PRODUCT_WORK IN \n" +
+            "     PSA.PRODUCT_SUBJECT_AREA_ID\n" +
+            "    ,PSA.F_SUBJECT_AREA\n" +
+            "    ,PSA.F_PRODUCT_WORK\n" +
+            "FROM GD_PRODUCT_SUBJECT_AREA  PSA\n" +
+            "JOIN GD_SUBJECT_AREA SA ON F_SUBJECT_AREA = SUBJECT_AREA_ID\n" +
+            "WHERE PSA.F_PRODUCT_WORK IN \n" +
             "    (SELECT PRODUCT_WORK_ID FROM GD_PRODUCT_WORK WHERE F_PRODUCT_TYPE IN \n" +
             "        (SELECT PRODUCT_TYPE_ID FROM GD_PRODUCT_TYPE WHERE F_PRODUCT_GROUP_TYPE = 2\n" +
             "            )\n" +
             "        )\n" +
-            "AND EFFTO_DATE IS NULL\n" +
+            "AND PSA.EFFTO_DATE IS NULL\n" +
+            "AND SA.F_SUBJECT_AREA_TYPE = 181\n" +
             "    ) WHERE PRODUCT_SUBJECT_AREA_ID IN ('%s')";
 
     public static String EXTRACT_DATA_WORK_SUBJECT_AREA_STG = "select  \n" +

@@ -120,6 +120,16 @@ public class ProductCountObject {
     public int ephSACount;
     public int ephGDCount;
 
+    public int getAeCount() {
+        return aeCount;
+    }
+
+    public void setAeCount(int aeCount) {
+        this.aeCount = aeCount;
+    }
+
+    public int aeCount;
+
     public int getPackagesCount() {
         return packagesCount;
     }

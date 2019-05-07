@@ -17,10 +17,120 @@ public class WorkDataObject {
 
     public String PRODUCT_ID;
 
+    public String getIDENTIFIER() {
+        return IDENTIFIER;
+    }
+
+    public void setIDENTIFIER(String IDENTIFIER) {
+        this.IDENTIFIER = IDENTIFIER;
+    }
+
+    public String IDENTIFIER;
 
 
     public String DAC_KEY;
     public String PROJECT_NUM;
+
+    public String getPRIMARY_ISBN() {
+        return PRIMARY_ISBN;
+    }
+
+    public String getWORK_TITLE() {
+        return WORK_TITLE;
+    }
+
+    public String getWORK_SUBTITLE() {
+        return WORK_SUBTITLE;
+    }
+
+    public String getPRODUCT_ID() {
+        return PRODUCT_ID;
+    }
+
+    public String getDAC_KEY() {
+        return DAC_KEY;
+    }
+
+    public String getPROJECT_NUM() {
+        return PROJECT_NUM;
+    }
+
+    public String getISSN_L() {
+        return ISSN_L;
+    }
+
+    public String getJOURNAL_NUMBER() {
+        return JOURNAL_NUMBER;
+    }
+
+    public String getELECTRONIC_RIGHTS_IND() {
+        return ELECTRONIC_RIGHTS_IND;
+    }
+
+    public String getBOOK_EDITION_NAME() {
+        return BOOK_EDITION_NAME;
+    }
+
+    public String getBOOK_VOLUME_NAME() {
+        return BOOK_VOLUME_NAME;
+    }
+
+    public String getPMC() {
+        return PMC;
+    }
+
+    public String getPMG() {
+        return PMG;
+    }
+
+    public String getWORK_ID() {
+        return WORK_ID;
+    }
+
+    public String getWORK_STATUS() {
+        return WORK_STATUS;
+    }
+
+    public String getWORK_SUBSTATUS() {
+        return WORK_SUBSTATUS;
+    }
+
+    public String getWORK_TYPE() {
+        return WORK_TYPE;
+    }
+
+    public String getIMPRINT() {
+        return IMPRINT;
+    }
+
+    public String getOPEN_ACCESS_JNL_TYPE_CODE() {
+        return OPEN_ACCESS_JNL_TYPE_CODE;
+    }
+
+    public String getPRODUCT_WORK_ID() {
+        return PRODUCT_WORK_ID;
+    }
+
+    public String getF_ACC_PROD_HIERARCHY() {
+        return F_ACC_PROD_HIERARCHY;
+    }
+
+    public String getF_RESPONSIBILITY_CENTRE() {
+        return F_RESPONSIBILITY_CENTRE;
+    }
+
+    public String getF_OPCO_R12() {
+        return F_OPCO_R12;
+    }
+
+    public String getPRODUCT_WORK_PUB_DATE() {
+        return PRODUCT_WORK_PUB_DATE;
+    }
+
+    public String getJOURNAL_ACRONYM() {
+        return JOURNAL_ACRONYM;
+    }
+
     public String ISSN_L;
     public String JOURNAL_NUMBER;
     public String ELECTRONIC_RIGHTS_IND;
@@ -40,6 +150,84 @@ public class WorkDataObject {
     public String F_OPCO_R12;
     public String PRODUCT_WORK_PUB_DATE;
     public String JOURNAL_ACRONYM;
+    public String f_accountable_product;
+
+    public int getVOLUME() {
+        return VOLUME;
+    }
+
+    public void setVOLUME(int VOLUME) {
+        this.VOLUME = VOLUME;
+    }
+
+    public int getEDITION_NUMBER() {
+        return EDITION_NUMBER;
+    }
+
+    public void setEDITION_NUMBER(int EDITION_NUMBER) {
+        this.EDITION_NUMBER = EDITION_NUMBER;
+    }
+
+    public int getCOPYRIGHT_YEAR() {
+        return COPYRIGHT_YEAR;
+    }
+
+    public void setCOPYRIGHT_YEAR(int COPYRIGHT_YEAR) {
+        this.COPYRIGHT_YEAR = COPYRIGHT_YEAR;
+    }
+
+    public int VOLUME;
+    public int EDITION_NUMBER;
+    public int COPYRIGHT_YEAR;
+
+
+    public int getPMX_SOURCE_REFERENCE() {
+        return PMX_SOURCE_REFERENCE;
+    }
+
+    public void setPMX_SOURCE_REFERENCE(int PMX_SOURCE_REFERENCE) {
+        this.PMX_SOURCE_REFERENCE = PMX_SOURCE_REFERENCE;
+    }
+
+    public int PMX_SOURCE_REFERENCE;
+
+    public String getF_accountable_product() {
+        return f_accountable_product;
+    }
+
+    public void setF_accountable_product(String f_accountable_product) {
+        this.f_accountable_product = f_accountable_product;
+    }
+
+    public String getACC_PROD_ID() {
+        return ACC_PROD_ID;
+    }
+
+    public void setACC_PROD_ID(String ACC_PROD_ID) {
+        this.ACC_PROD_ID = ACC_PROD_ID;
+    }
+
+    public String getPARENT_ACC_PROD() {
+        return PARENT_ACC_PROD;
+    }
+
+    public void setPARENT_ACC_PROD(String PARENT_ACC_PROD) {
+        this.PARENT_ACC_PROD = PARENT_ACC_PROD;
+    }
+
+    public String ACC_PROD_ID;
+    public String PARENT_ACC_PROD;
+
+
+    public String getOWNERSHIP() {
+        return OWNERSHIP;
+    }
+
+    public void setOWNERSHIP(String OWNERSHIP) {
+        this.OWNERSHIP = OWNERSHIP;
+    }
+
+    public String OWNERSHIP;
 
     public String getF_TYPE() {
         return F_TYPE;
@@ -120,6 +308,35 @@ public class WorkDataObject {
     }
 
     public Integer workCountEPHGD;
+
+    public Integer getWorkCountDQSTG() {
+        return workCountDQSTG;
+    }
+
+    public void setWorkCountDQSTG(Integer workCountDQSTG) {
+        this.workCountDQSTG = workCountDQSTG;
+    }
+
+    public Integer getWorkCountDQSTGnoError() {
+        return workCountDQSTGnoError;
+    }
+
+    public void setWorkCountDQSTGnoError(Integer workCountDQSTGnoError) {
+        this.workCountDQSTGnoError = workCountDQSTGnoError;
+    }
+
+    public Integer getErrorsCountEPH() {
+        return errorsCountEPH;
+    }
+
+    public void setErrorsCountEPH(Integer errorsCountEPH) {
+        this.errorsCountEPH = errorsCountEPH;
+    }
+
+    public Integer errorsCountEPH;
+
+    public Integer workCountDQSTG;
+    public Integer workCountDQSTGnoError;
 
     public String getRandom_value() {
         return random_value;
@@ -229,6 +446,27 @@ public class WorkDataObject {
 
     public void setWORK_ID(String WORK_ID) {
         this.WORK_ID = WORK_ID;
+    }
+
+
+    public String getIDENTIFER() {
+        return IDENTIFER;
+    }
+
+    public void setIDENTIFER(String IDENTIFER) {
+        this.IDENTIFER = IDENTIFER;
+    }
+
+    public String IDENTIFER;
+
+    public String F_WWORK;
+
+    public String getF_WWORK() {
+        return F_WWORK;
+    }
+
+    public void setF_WWORK(String f_WWORK) {
+        F_WWORK = f_WWORK;
     }
 
     @Override

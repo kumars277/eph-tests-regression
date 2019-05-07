@@ -26,8 +26,31 @@ public class WorkDataCheckSQL {
             "  ,\"F_OPCO_R12\" as F_OPCO_R12-- Company in Accountable Product Entity to link to LOV table\n" +
             "  ,\"PRODUCT_WORK_PUB_DATE\" as PRODUCT_WORK_PUB_DATE-- Work Publication Date\n" +
             "  ,\"JOURNAL_ACRONYM\" AS JOURNAL_ACRONYM -- PTS Journal Acronym (may go in IDs table, depending on implementation of data model)\n" +
+            "  ,\"SOC_OWNERSHIP\" AS OWNERSHIP \n"+
             "  FROM ephsit.ephsit_talend_owner.stg_10_pmx_wwork\n" +
-            "  WHERE \"PARAM1\"='PARAM2'";
+            "  WHERE \"PRODUCT_WORK_ID\" IN ('%s') ORDER BY \"PRODUCT_WORK_ID\"";
+
+    public static String GET_STG_DQ_WORKS_DATA ="SELECT \n" +
+            "  ww.PMX_SOURCE_REFERENCE AS PMX_SOURCE_REFERENCE\n" +
+            "  ,ww.WORK_TITLE AS WORK_TITLE -- Title\n" +
+            "  ,ww.WORK_SUBTITLE AS WORK_SUBTITLE -- Subtitle\n" +
+            "  ,ww.ELECTRO_RIGHTS_INDICATOR as ELECTRONIC_RIGHTS_IND\n" +
+            "  ,ww.VOLUME as BOOK_VOLUME_NAME\n" +
+            "  ,ww.COPYRIGHT_YEAR as PRODUCT_WORK_PUB_DATE\n" +
+            "  ,ww.EDITION_NUMBER as BOOK_EDITION_NAME\n" +
+            "  ,ww.F_PMC as PMC\n" +
+            "  ,ww.F_OA_JOURNAL_TYPE AS OPEN_ACCESS_JNL_TYPE_CODE\n" +
+            "  ,ww.F_TYPE AS WORK_TYPE\n" +
+            "  ,ww.F_STATUS AS WORK_STATUS\n" +
+            "  ,ww.F_IMPRINT AS IMPRINT\n" +
+            "  ,ww.F_SOCIETY_OWNERSHIP AS OWNERSHIP\n" +
+            "  ,ww.opco AS F_OPCO_R12\n" +
+            "  ,ww.resp_centre AS F_RESPONSIBILITY_CENTRE\n" +
+            "  ,ap.\"ACC_PROD_ID\" as ACC_PROD_ID" +
+            "  ,ap.\"PARENT_ACC_PROD\" as PARENT_ACC_PROD"+
+            "  FROM ephsit_talend_owner.stg_10_pmx_wwork_dq ww\n"+
+            "  left join ephsit_talend_owner.stg_10_pmx_accountable_product ap on ww.pmx_source_reference = ap.\"PRODUCT_WORK_ID\"\n"+
+            "  WHERE pmx_source_reference IN ('%s') ORDER BY pmx_source_reference";
 
     public static String GET_EPH_WORKS_DATA ="SELECT \n" +
             "   WORK_ID AS WORK_ID\n" +
@@ -38,12 +61,14 @@ public class WorkDataCheckSQL {
             "  ,ELECTRO_RIGHTS_INDICATOR as ELECTRONIC_RIGHTS_IND\n" +
             "  ,VOLUME as BOOK_VOLUME_NAME\n" +
             "  ,COPYRIGHT_YEAR as PRODUCT_WORK_PUB_DATE\n" +
-            " -- ,EDITION_NUMBER as EDITION_NUMBER\n" +
+            "  ,EDITION_NUMBER as BOOK_EDITION_NAME\n" +
             "  ,F_PMC as PMC\n" +
             "  ,F_OA_TYPE AS OPEN_ACCESS_JNL_TYPE_CODE\n" +
             "  ,F_TYPE AS WORK_TYPE\n" +
             "  ,F_STATUS AS WORK_STATUS\n" +
             "  ,F_IMPRINT AS IMPRINT\n" +
+            "  ,F_SOCIETY_OWNERSHIP AS OWNERSHIP\n" +
+            "  ,f_accountable_product as f_accountable_product\n"+
             "  FROM ephsit.semarchy_eph_mdm.sa_wwork sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_wwork join \n"+
@@ -51,8 +76,9 @@ public class WorkDataCheckSQL {
             "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
             "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
-            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n"+
-            "  AND pmx_source_reference='PARAM1'";
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n" +
+            "and b_error_status is null\n"+
+            "  AND pmx_source_reference IN ('%s')";
 
 
     public static String GET_EPH_GD_WORKS_DATA ="SELECT \n" +
@@ -64,12 +90,20 @@ public class WorkDataCheckSQL {
             "  ,ELECTRO_RIGHTS_INDICATOR as ELECTRONIC_RIGHTS_IND\n" +
             "  ,VOLUME as BOOK_VOLUME_NAME\n" +
             "  ,COPYRIGHT_YEAR as PRODUCT_WORK_PUB_DATE\n" +
-            " -- ,EDITION_NUMBER as EDITION_NUMBER\n" +
+            "  ,EDITION_NUMBER as BOOK_EDITION_NAME\n" +
             "  ,F_PMC as PMC\n" +
             "  ,F_OA_TYPE AS OPEN_ACCESS_JNL_TYPE_CODE\n" +
             "  ,F_TYPE AS WORK_TYPE\n" +
             "  ,F_STATUS AS WORK_STATUS\n" +
             "  ,F_IMPRINT AS IMPRINT\n" +
+            "  ,F_SOCIETY_OWNERSHIP AS OWNERSHIP\n" +
+            "  ,f_accountable_product as f_accountable_product\n"+
             "  FROM ephsit.semarchy_eph_mdm.gd_wwork\n" +
-            "  WHERE pmx_source_reference='PARAM1'";
+            "  WHERE pmx_source_reference IN ('%s')";
+
+    public static String GET_Acc_Prod ="SELECT \n" +
+            "numeric_id as f_accountable_product from ephsit_talend_owner.map_sourceref_2_numericid " +
+            "where source_ref = 'PARAM1'";
+
+
 }

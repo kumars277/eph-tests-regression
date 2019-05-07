@@ -44,7 +44,7 @@ public class ProductDataMappingCheck {
     public void getRandomProductManifestationIds(String numberOfRecords, String type) {
         Log.info("Get random ids ..");
         //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+       // numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         switch (type) {
@@ -74,7 +74,7 @@ public class ProductDataMappingCheck {
     public void getRandomProductManifestationIdsForJournals(String numberOfRecords, String type, String open_access, String author_charges) {
         Log.info("In Given method get random product manifestation ids for journals");
         //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+       // numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("Number of random records = " + numberOfRecords);
 
 
