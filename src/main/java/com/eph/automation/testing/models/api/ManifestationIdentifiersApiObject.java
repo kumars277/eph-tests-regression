@@ -7,34 +7,19 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 class ManifestationIdentifiersApiObject {
-    private List<ManifestationIdentifier> manifestationIdentifiers;
 
-    public ManifestationIdentifiersApiObject() {
+    public String getManifestationIdentifier() {
+        return manifestationIdentifier;
     }
 
-    public List<ManifestationIdentifier> getManifestationIdentifiers() {
-        return this.manifestationIdentifiers;
+    public void setManifestationIdentifier(String manifestationIdentifier) {
+        this.manifestationIdentifier = manifestationIdentifier;
     }
 
-    public void setManifestationIdentifiers(List<ManifestationIdentifier> manifestationIdentifiers) {
-        this.manifestationIdentifiers = manifestationIdentifiers;
-    }
-
-
-    private class ManifestationIdentifier {
-
-        private String manifestationIdentifier;
+    private String manifestationIdentifier;
         private HashMap<String, Object> identifierType;
 
-        public ManifestationIdentifier() {
-        }
-
-        public String getManifestationId() {
-            return manifestationIdentifier;
-        }
-
-        public void setManifestationId(String manifestationIdentifier) {
-            this.manifestationIdentifier = manifestationIdentifier;
+        public ManifestationIdentifiersApiObject() {
         }
 
         public HashMap<String, Object> getIdentifierType() {
@@ -44,5 +29,5 @@ class ManifestationIdentifiersApiObject {
         public void setIdentifierType(HashMap<String, Object> identifierType) {
             this.identifierType = identifierType;
         }
-    }
+
 }

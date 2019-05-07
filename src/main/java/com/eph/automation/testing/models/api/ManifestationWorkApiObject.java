@@ -9,16 +9,27 @@ class ManifestationWorkApiObject {
     public ManifestationWorkApiObject() {
     }
 
+    private String workId;
     private String workTitle;
+    private String workSubTitle;
     private WorkPersonsApiObject[] workPersonApiObjects;
     private Boolean electronicRightsInd;
+    private int editionNumber;
     private int volume;
     private int copyrightYear;
-    private WorkIdentifiersApiObject[] workIdentifierApiObjects;
+    private WorkIdentifiersApiObject[] workIdentifiers;
     private HashMap<String, Object> workType;
     private HashMap<String, Object> workStatus;
     private HashMap<String, Object> imprint;
-    private PMCApiObject pmcApiObject;
+    private PMCApiObject pmc;
+
+    public String getWorkId() {
+        return workId;
+    }
+
+    public void setWorkId(String workId) {
+        this.workId = workId;
+    }
 
     public String getWorkTitle() {
         return workTitle;
@@ -28,12 +39,36 @@ class ManifestationWorkApiObject {
         this.workTitle = workTitle;
     }
 
+    public String getWorkSubTitle() {
+        return workSubTitle;
+    }
+
+    public void setWorkSubTitle(String workSubTitle) {
+        this.workSubTitle = workSubTitle;
+    }
+
+    public WorkPersonsApiObject[] getWorkPersonApiObjects() {
+        return workPersonApiObjects;
+    }
+
+    public void setWorkPersonApiObjects(WorkPersonsApiObject[] workPersonApiObjects) {
+        this.workPersonApiObjects = workPersonApiObjects;
+    }
+
     public Boolean getElectronicRightsInd() {
         return electronicRightsInd;
     }
 
     public void setElectronicRightsInd(Boolean electronicRightsInd) {
         this.electronicRightsInd = electronicRightsInd;
+    }
+
+    public int getEditionNumber() {
+        return editionNumber;
+    }
+
+    public void setEditionNumber(int editionNumber) {
+        this.editionNumber = editionNumber;
     }
 
     public int getVolume() {
@@ -50,6 +85,14 @@ class ManifestationWorkApiObject {
 
     public void setCopyrightYear(int copyrightYear) {
         this.copyrightYear = copyrightYear;
+    }
+
+    public WorkIdentifiersApiObject[] getWorkIdentifiers() {
+        return workIdentifiers;
+    }
+
+    public void setWorkIdentifiers(WorkIdentifiersApiObject[] workIdentifiers) {
+        this.workIdentifiers = workIdentifiers;
     }
 
     public HashMap<String, Object> getWorkType() {
@@ -76,28 +119,11 @@ class ManifestationWorkApiObject {
         this.imprint = imprint;
     }
 
-    public WorkIdentifiersApiObject[] getWorkIdentifierApiObjects() {
-        return workIdentifierApiObjects;
+    public PMCApiObject getPmc() {
+        return pmc;
     }
 
-    public void setWorkIdentifierApiObjects(WorkIdentifiersApiObject[] workIdentifierApiObjects) {
-        this.workIdentifierApiObjects = workIdentifierApiObjects;
+    public void setPmc(PMCApiObject pmc) {
+        this.pmc = pmc;
     }
-
-    public PMCApiObject getPmcApiObject() {
-        return pmcApiObject;
-    }
-
-    public void setPmcApiObject(PMCApiObject pmcApiObject) {
-        this.pmcApiObject = pmcApiObject;
-    }
-
-    public WorkPersonsApiObject[] getWorkPersonApiObjects() {
-        return workPersonApiObjects;
-    }
-
-    public void setWorkPersonApiObjects(WorkPersonsApiObject[] workPersonApiObjects) {
-        this.workPersonApiObjects = workPersonApiObjects;
-    }
-
 }

@@ -20,7 +20,8 @@ public class ProductApiObject {
     private HashMap<String,Object> productStatus;
     private PricesApiObject[] prices;
     private HashMap<String,Object> revenueModel;
-    public ManifestationApiObject manifestationApiObject;
+    private HashMap<String,Object> etaxProductCode;
+    public ProductManifestationApiObject manifestation;
 
     public ProductIdentifiersApiObject[] getProductIdentifierApiObjects() {
         return productIdentifierApiObjects;
@@ -38,12 +39,12 @@ public class ProductApiObject {
         this.prices = prices;
     }
 
-    public ManifestationApiObject getManifestationApiObject() {
-        return manifestationApiObject;
+    public ProductManifestationApiObject getManifestationApiObject() {
+        return manifestation;
     }
 
-    public void setManifestationApiObject(ManifestationApiObject manifestationApiObject) {
-        this.manifestationApiObject = manifestationApiObject;
+    public void setManifestationApiObject(ProductManifestationApiObject manifestation) {
+        this.manifestation = manifestation;
     }
 
     public HashMap<String, Object> getProductStatus() {

@@ -7,35 +7,21 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 class WorkIdentifiersApiObject {
-    private List<WorkIdentifier> workIdentifiers;
 
-    public WorkIdentifiersApiObject() {
+    public String getWorkIdentifier() {
+        return workIdentifier;
     }
 
-    public List<WorkIdentifier> getWorkIdentifiers() {
-        return this.workIdentifiers;
+    public void setWorkIdentifier(String workIdentifier) {
+        this.workIdentifier = workIdentifier;
     }
 
-    public void setWorkIdentifiers(List<WorkIdentifier> workIdentifiers) {
-        this.workIdentifiers = workIdentifiers;
-    }
-
-
-    private class WorkIdentifier {
-
-        private String workIdentifier;
+    private String workIdentifier;
         private HashMap<String, Object> identifierType;
 
-        public WorkIdentifier() {
+        public WorkIdentifiersApiObject() {
         }
 
-        public String getWorkId() {
-            return workIdentifier;
-        }
-
-        public void setWorkId(String workIdentifier) {
-            this.workIdentifier = workIdentifier;
-        }
 
         public HashMap<String, Object> getIdentifierType() {
             return identifierType;
@@ -44,5 +30,5 @@ class WorkIdentifiersApiObject {
         public void setIdentifierType(HashMap<String, Object> identifierType) {
             this.identifierType = identifierType;
         }
-    }
+
 }

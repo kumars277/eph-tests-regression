@@ -269,4 +269,5 @@ public class WorkExtractSQL {
 
     public static final String SELECT_RANDOM_ISSNS_JEL_IDS = "select \"ISSN\" as ISSN from ephsit_talend_owner.stg_10_pmx_manifestation where\"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" != 1 order by random() limit '%s'";
 
+
 }
