@@ -448,6 +448,27 @@ public class WorkDataObject {
         this.WORK_ID = WORK_ID;
     }
 
+
+    public String getIDENTIFER() {
+        return IDENTIFER;
+    }
+
+    public void setIDENTIFER(String IDENTIFER) {
+        this.IDENTIFER = IDENTIFER;
+    }
+
+    public String IDENTIFER;
+
+    public String F_WWORK;
+
+    public String getF_WWORK() {
+        return F_WWORK;
+    }
+
+    public void setF_WWORK(String f_WWORK) {
+        F_WWORK = f_WWORK;
+    }
+
     @Override
     public String toString() {
         return "WorkDataObject{" +

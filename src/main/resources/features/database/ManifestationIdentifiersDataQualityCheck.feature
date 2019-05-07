@@ -28,7 +28,7 @@ Feature: Entity - Manifestation Identifier - Count & Data Mapping Check - Valida
     When We get the records from SA_MANIFESTATION_IDENTIFIER
     Then Verify that data in SA_MANIFESTATION_IDENTIFIER is populated correctly for <identifier>
     And We get the records from GD_MANIFESTATION_IDENTIFIER
-    And Verify the data in SA_MANIFESTATION_IDENTIFIER and GD_MANIFESTATION_IDENTIFIER is equal
+    And Verify the data in SA_MANIFESTATION_IDENTIFIER and GD_MANIFESTATION_IDENTIFIER is equal for <identifier>
 
     Examples:
       | numberOfRecords | identifier | type |
