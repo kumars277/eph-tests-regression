@@ -79,7 +79,7 @@ public class ProductDataSQL {
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s')\n" +
              "           order by \"PRODUCT_MANIFESTATION_ID\"";
 
-    public static String EPH_STG_CAN_PRODUCT_EXTRACT_BOOKS = "SELECT \n" +
+    public static String EPH_STG_DQ_PRODUCT_EXTRACT_BOOKS = "SELECT \n" +
             "       pmx_source_reference as PMX_SOURCE_REFERENCE,\n" +
             "       name as PRODUCT_NAME,\n" +
             "       product_short_name as PRODUCT_SHORT_NAME,\n" +
@@ -94,11 +94,12 @@ public class ProductDataSQL {
             "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP,\n" +
             "       work_type as WORK_TYPE,\n" +
             "       ult_work_ref as ULT_WORK_REF,\n" +
-            "       tax_code as TAX_CODE\n" +
-            "FROM ephsit_talend_owner.stg_10_pmx_product_can\n" +
+            "       tax_code as TAX_CODE,\n" +
+            "       dq_err as DQ_ERR\n" +
+            "FROM ephsit_talend_owner.stg_10_pmx_product_dq\n" +
             "where pmx_source_reference in ('%s')\n";
 
-    public static String EPH_STG_CAN_PRODUCT_EXTRACT_JOURNALS_OR_PACKAGES = " SELECT \n" +
+    public static String EPH_STG_DQ_PRODUCT_EXTRACT_JOURNALS_OR_PACKAGES = " SELECT \n" +
             "       pmx_source_reference as PMX_SOURCE_REFERENCE,\n" +
             "       name as PRODUCT_NAME,\n" +
             "       product_short_name as PRODUCT_SHORT_NAME,\n" +
@@ -113,8 +114,9 @@ public class ProductDataSQL {
             "       f_manifestation_source_ref AS F_PRODUCT_MANIFESTATION_TYP,\n" +
             "       work_type as WORK_TYPE,\n" +
             "       ult_work_ref as ULT_WORK_REF,\n" +
-            "       tax_code as TAX_CODE\n" +
-            "FROM ephsit_talend_owner.stg_10_pmx_product_can\n" +
+            "       tax_code as TAX_CODE,\n" +
+            "       dq_err as DQ_ERR\n" +
+            "FROM ephsit_talend_owner.stg_10_pmx_product_dq\n" +
             "where pmx_source_reference similar to '%s' and pmx_source_reference not like '%%OOA'\n";
 
     public static String EPH_STG_PRODUCT_EXTRACT_JOURNAL = "SELECT\n" +
@@ -367,16 +369,16 @@ public class ProductDataSQL {
     public static String SELECT_F_PRODUCT_WORK_IDS_FOR_GIVEN_MANIFESTATION_IDS = "select \"F_PRODUCT_WORK\" as F_PRODUCT_WORK from ephsit_talend_owner.stg_10_pmx_product where \"PRODUCT_MANIFESTATION_ID\" IN ('%s')";
 
     public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PRINT_JOURNALS= "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID  from ephsit_talend_owner.stg_10_pmx_product stg\n" +
-            "left join ephsit_talend_owner.stg_10_pmx_product_can can on can.product_short_name = stg.\"PRODUCT_SHORT_NAME\"\n" +
-            "left join semarchy_eph_mdm.sa_product sa on can.pmx_source_reference = sa.pmx_source_reference\n" +
+            "left join ephsit_talend_owner.stg_10_pmx_product_dq dq on dq.product_short_name = stg.\"PRODUCT_SHORT_NAME\"\n" +
+            "left join semarchy_eph_mdm.sa_product sa on dq.pmx_source_reference = sa.pmx_source_reference\n" +
             "where \"SUBSCRIPTION\" = 'Y'\n" +
             "and \"F_PRODUCT_MANIFESTATION_TYP\" = '1' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = '%s' \n" +
             "and sa.b_error_status is null\n" +
             "order by random() limit '%s'";
 
     public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_ELECTRONIC_JOURNALS = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID  from ephsit_talend_owner.stg_10_pmx_product stg\n" +
-            "left join ephsit_talend_owner.stg_10_pmx_product_can can on can.product_short_name = stg.\"PRODUCT_SHORT_NAME\"\n" +
-            "left join semarchy_eph_mdm.sa_product sa on can.pmx_source_reference = sa.pmx_source_reference\n" +
+            "left join ephsit_talend_owner.stg_10_pmx_product_dq dq on dq.product_short_name = stg.\"PRODUCT_SHORT_NAME\"\n" +
+            "left join semarchy_eph_mdm.sa_product sa on dq.pmx_source_reference = sa.pmx_source_reference\n" +
             "where \"SUBSCRIPTION\" = 'Y'\n" +
             "and \"F_PRODUCT_MANIFESTATION_TYP\" = '2' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = '%s' \n" +
             "and sa.b_error_status is null\n" +
@@ -386,15 +388,15 @@ public class ProductDataSQL {
 
     public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID \n" +
             "from ephsit_talend_owner.stg_10_pmx_product stg \n" +
-            "left join ephsit_talend_owner.stg_10_pmx_product_can can on can.product_short_name = stg.\"PRODUCT_SHORT_NAME\"\n" +
-            "left join semarchy_eph_mdm.sa_product sa on can.pmx_source_reference = sa.pmx_source_reference\n" +
+            "left join ephsit_talend_owner.stg_10_pmx_product_dq dq on dq.product_short_name = stg.\"PRODUCT_SHORT_NAME\"\n" +
+            "left join semarchy_eph_mdm.sa_product sa on dq.pmx_source_reference = sa.pmx_source_reference\n" +
             "where \"ONE_OFF_ACCESS\" = 'Y' \n" +
             "and sa.b_error_status is null\n" +
             "order by random() limit '%s'";
 
     public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PACKAGES = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from ephsit_talend_owner.stg_10_pmx_product stg \n" +
-            "left join ephsit_talend_owner.stg_10_pmx_product_can can on can.product_short_name = stg.\"PRODUCT_SHORT_NAME\"\n" +
-            "left join semarchy_eph_mdm.sa_product sa on can.pmx_source_reference = sa.pmx_source_reference\n" +
+            "left join ephsit_talend_owner.stg_10_pmx_product_dq dq on dq.product_short_name = stg.\"PRODUCT_SHORT_NAME\"\n" +
+            "left join semarchy_eph_mdm.sa_product sa on dq.pmx_source_reference = sa.pmx_source_reference\n" +
             "where \"PACKAGES\" = 'Y'\n" +
             "and sa.b_error_status is null\n" +
             "order by random() limit '%s'";
