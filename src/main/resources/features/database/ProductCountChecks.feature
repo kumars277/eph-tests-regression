@@ -7,16 +7,16 @@ Feature: Entity - PRODUCT - Count Check - Validate data count between PMX and EP
     Then The number of products between PMX and Staging is equal
 
   @Regression
-  Scenario: Count check between Staging and Canonical Staging
+  Scenario: Count check between EPH Staging and EPH DQ
     Given The products are in PMX Staging
-    When We know the number of products in canonical
-    Then The number of products between Staging and Canonical is equal
+    When We know the number of products in EPH DQ
+    Then The number of products between Staging and EPH DQ is equal
 
   @Regression
-  Scenario: Count check between Canonical Staging and EPH SA
+  Scenario: Count check between EPH DQ and EPH SA
     Given The products are in PMX Staging
     When We know the number of Products in EPH
-    Then The number of products between Canonical and SA is equal
+    Then The number of products between EPH DQ and SA is equal
 
   @Regression
   Scenario: Count check between EPH SA and EPH GD

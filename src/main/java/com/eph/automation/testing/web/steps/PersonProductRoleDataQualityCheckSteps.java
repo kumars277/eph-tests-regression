@@ -35,6 +35,7 @@ public class PersonProductRoleDataQualityCheckSteps {
     private String sql;
     private static int countPersonsEPHSTGCAN;
     private static int countPersonsEPHSTG;
+    private static int countPersonsEPHSTGDQ;
     private static int countPersonsEPHSA;
     private static int countPersonsEPHGD;
     private static List<String> idsSourceRef;
@@ -42,9 +43,9 @@ public class PersonProductRoleDataQualityCheckSteps {
     private static List<String> idsLookup;
 
 
-    @Given("^Get the count of records for persons product role in EPH STG Canonical$")
+    @Given("^Get the count of records for persons product role in EPH STG Product DQ")
     public void getCountPersonsProductRoleEPHSTGCan() {
-        Log.info("When We get the count of persons product role records in EPH STG Canonical..");
+        Log.info("When We get the count of persons product role records in EPH STG Product DQ..");
         sql = PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPH_STG_CAN;
         Log.info(sql);
         List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -55,12 +56,23 @@ public class PersonProductRoleDataQualityCheckSteps {
 
     @When("^Get the count of records for persons product role in EPH Staging$")
     public void getCountPersonsProductRolePHSTG() {
-        Log.info("When We get the count of persons product role records in PMX STG ..");
+        Log.info("When We get the count of persons product role records in EPH STG ..");
         sql = PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG;
         Log.info(sql);
         List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countPersonsEPHSTG = ((Long) personsNumber.get(0).get("count")).intValue();
         Log.info("Count of persons product role in EPH STG is: " + countPersonsEPHSTG);
+    }
+
+
+    @When("^Get the count of records for persons product role in EPH Staging with DQ$")
+    public void getCountPersonsProductRolePHSTGDQ() {
+        Log.info("When We get the count of persons product role records in EPH STG with DQ..");
+        sql = PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTGDQ;
+        Log.info(sql);
+        List<Map<String, Object>> personsNumberDQ = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countPersonsEPHSTGDQ = ((Long) personsNumberDQ.get(0).get("count")).intValue();
+        Log.info("Count of persons product role in EPH STG with DQ is: " + countPersonsEPHSTGDQ);
     }
 
     @Then("^Compare the count on records for persons product role in PMX and EPH Staging$")
@@ -80,9 +92,9 @@ public class PersonProductRoleDataQualityCheckSteps {
     }
 
 
-    @Then("^Compare the count on records for persons product role in EPH Staging and EPH SA$")
+    @Then("^Compare the count on records for persons product role in EPH Staging with DQ and EPH SA$")
     public void verifyCountOfPersonsProductRoleInEPHSTGAndEPHSAIsEqual() {
-        Assert.assertEquals("\nPersons product role count in PMX and EPH STG is not equal", countPersonsEPHSTG, countPersonsEPHSA);
+        Assert.assertEquals("\nPersons product role count in PMX and EPH STG is not equal", countPersonsEPHSTGDQ, countPersonsEPHSA);
     }
 
     @When("^Get the count of records for persons product role in EPH GD$")

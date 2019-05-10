@@ -93,12 +93,15 @@ public class ProductsCountCheckSteps {
         Log.info("\nThe number of products in EPH AE is: " + productsCountContext.productCountEPHAE.get(0).aeCount);
     }
 
-    @When("^We know the number of products in canonical$")
+    @When("^We know the number of products in EPH DQ$")
     public void getCanonicalCount(){
         sql= ProductCountSQL.EPH_STG_CAN_Count;
         productsCountContext.productCountStgCan= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
         Log.info("\nThe number of products in Canonical is: " + productsCountContext.productCountStgCan.get(0).ephCanCount);
 
+        sql= ProductCountSQL.EPH_STG_CAN_DQ_Count;
+        productsCountContext.productCountStgCanDQ= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
+        Log.info("\nThe number of products in Canonical is: " + productsCountContext.productCountStgCanDQ.get(0).ephCanDqCount);
     }
 
     @Then("^The number of products between (.*) and (.*) is equal$")
@@ -107,13 +110,13 @@ public class ProductsCountCheckSteps {
             Assert.assertEquals("The number of products in PMX and PMX Staging is not equal!", productsCountContext.productCountPMX.get(0).pmxCount,
                     productsCountContext.productCountStg.get(0).stgCount);
            }else if (target.contentEquals("SA")){
-            Assert.assertEquals("\nThe number of products in PMX Staging and EPH SA is not equal!", productsCountContext.productCountStgCan.get(0).ephCanCount,
+            Assert.assertEquals("\nThe number of products in EPH DQ and EPH SA is not equal!", productsCountContext.productCountStgCanDQ.get(0).ephCanDqCount,
                     productsCountContext.productCountEPHSA.get(0).ephSACount);
         } else if (target.contentEquals("GD")){
             Assert.assertEquals("\nThe number of products in SA and GD is not equal!", productsCountContext.productCountEPHSA.get(0).ephSACount,
                     productsCountContext.productCountEPHGD.get(0).ephGDCount);
-        }else if (target.contentEquals("Canonical")){
-            Assert.assertEquals("\nThe number of products in Staging and Canonical is not equal!", stgToCanonical,
+        }else if (target.contentEquals("EPH DQ")){
+            Assert.assertEquals("\nThe number of products in Staging and EPH DQ is not equal!", stgToCanonical,
                     productsCountContext.productCountStgCan.get(0).ephCanCount);
         } else {
             Assert.assertEquals("\nThe number of products in SA and GD with AE is not equal!", productsCountContext.productCountEPHSA.get(0).ephSACount,

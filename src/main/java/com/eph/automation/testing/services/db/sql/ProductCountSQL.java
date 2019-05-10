@@ -30,7 +30,11 @@ public class ProductCountSQL {
 
     public static String EPH_STG_PRODUCT_Packages="select count(*) as packagesCount from ephsit_talend_owner.stg_10_pmx_product where \"PACKAGES\" = 'Y'";
 
-    public static String EPH_STG_CAN_Count = "SELECT count(*) as ephCanCount from ephsit_talend_owner.stg_10_pmx_product_can";
+    public static String EPH_STG_CAN_Count = "SELECT count(*) as ephCanCount from ephsit_talend_owner.stg_10_pmx_product_dq";
+
+    public static String EPH_STG_CAN_DQ_Count = "SELECT count(*) as ephCanDQCount from ephsit_talend_owner.stg_10_pmx_product_dq pdq left join ephsit_talend_owner.stg_10_pmx_wwork_dq w  on pdq.f_work_source_ref = w.pmx_source_reference \n" +
+            "left join ephsit_talend_owner.stg_10_pmx_manifestation_dq m on pdq.f_manifestation_source_ref = m.pmx_source_reference \n" +
+            "where pdq.dq_err != 'Y' and m.dq_err!= 'Y' and w.dq_err!= 'Y'";
 
     public static String EPH_SA_PRODUCT_Count="select count(*) as ephSACount FROM semarchy_eph_mdm.sa_product sa\n" +
            " where f_event =  (select max (f_event) from\n" +

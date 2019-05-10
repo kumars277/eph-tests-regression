@@ -2,7 +2,6 @@ package com.eph.automation.testing.models.contexts;
 
 import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.models.dao.ProductCountObject;
-import com.eph.automation.testing.models.dao.WorkDataObject;
 
 import java.util.List;
 
@@ -11,6 +10,7 @@ public class ProductsCountContext {
     public static List<ProductCountObject> productCountPMX;
     public static List<ProductCountObject> productCountStg;
     public static List<ProductCountObject> productCountStgCan;
+    public static List<ProductCountObject> productCountStgCanDQ;
     public static List<ProductCountObject> productCountStgBooks;
     public static List<ProductCountObject> productCountStgSubscription;
     public static List<ProductCountObject> productCountStgBulk;
