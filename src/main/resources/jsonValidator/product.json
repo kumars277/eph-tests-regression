@@ -23,19 +23,19 @@
 						"type": "object",
 						"title": "The Items Schema",
 						"required": [
-							"packageProductId"
+							"productId"
 						],
 						"properties": {
-							"packageProductId": {
-								"$id": "#/properties/isInPackages/items/properties/packageProductId",
+							"productId": {
+								"$id": "#/properties/isInPackages/items/properties/productId",
 								"type": "string",
-								"title": "The Packageproductid Schema",
+								"title": "The Productid Schema",
 								"examples": [
 									"EPR-123AAF"
 								],
 								"pattern": "^(.*)$"
 							},
-							"allocation%": {
+							"allocationPercentage": {
 								"$ref": "#/definitions/allocationPercentage" 
 							},
 							"effectiveStartDate": {
@@ -58,19 +58,19 @@
 						"type": "object",
 						"title": "The Items Schema",
 						"required": [
-							"componentProductId"
+							"productId"
 						],
 						"properties": {
-							"componentProductId": {
-								"$id": "#/properties/hasComponents/items/properties/componentProductId",
+							"productId": {
+								"$id": "#/properties/hasComponents/items/properties/productId",
 								"type": "string",
-								"title": "The Componentproductid Schema",
+								"title": "The Productid Schema",
 								"examples": [
 									"EPR-123AAF"
 								],
 								"pattern": "^(.*)$"
 							},
-							"allocation%": {
+							"allocationPercentage": {
 								"$ref": "#/definitions/allocationPercentage" 
 							},
 							"effectiveStartDate": {
@@ -91,68 +91,80 @@
 			"type": "object",
 			"title": "The Work Schema",
 			"required": [
-				"workId",
-				"workTitle",
-				"workType",
-				"workStatus"
+				"id",
+				"title",
+				"type",
+				"status"
 			],
 			"properties": {
-				"workId": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workId"
+				"id": {
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/id" 
 				},
-				"workTitle": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workTitle"
+				"title": {
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/title" 
 				},
-				"workSubTitle": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workSubTitle"
+				"subTitle": {
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/subTitle" 
 				},
 				"electronicRightsInd": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/electronicRightsInd"
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/electronicRightsInd" 
 				},
 				"language": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/language"
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/language" 
 				},
 				"editionNumber": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/editionNumber"
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/editionNumber" 
 				},
 				"volume": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/volume"
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/volume" 
 				},
 				"copyrightYear": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/copyrightYear"
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/copyrightYear" 
 				},
-				"workIdentifiers": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workIdentifiers"
+				"identifiers": {
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/identifiers" 
 				},
-				"workType": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workType"
+				"type": {
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/type" 
 				},
-				"workStatus": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workStatus"
+				"status": {
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/status" 
 				},
 				"imprint": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/imprint"
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/imprint" 
 				},
 				"ownershipType": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/ownershipType"
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/ownershipType" 
 				},
 				"copyrightOwners": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/copyrightOwners"
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/copyrightOwners" 
 				},
 				"accessModel": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/accessModel"
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/accessModel" 
 				},
 				"pmc": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/pmc"
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/pmc" 
 				},
-				"workTranslations": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workTranslations"
+				"translations": {
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/translations" 
 				},
-				"workEditions": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workEditions"
+				"editions": {
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/editions" 
 				},
-				"workPersons": {
-					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workPersons"
+				"accountableProduct": {
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/accountableProduct"
+				},
+				"financialAttributes": {
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/financialAttributes"
+				},
+				"persons": {
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/persons" 
+				},
+				"subjectAreas": {
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/subjectAreas" 
+				},
+				"mirrors": {
+					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/mirrors" 
 				}
 			},
 			"additionalProperties": false
@@ -165,10 +177,10 @@
 	"description": "The EPH Product Schema",
 	"required": [
 		"schemaVersion",
-		"productId",
-		"productName",
-		"productType",   
-		"productStatus"
+		"id",
+		"name",
+		"type",   
+		"status"
 	],
 	"properties": {
 		"schemaVersion": {
@@ -177,43 +189,43 @@
 			"title": "The Schema Version",
 			"pattern": "^(.*)$"
 		},
-		"productId": {
-			"$id": "#/properties/productId",
+		"id": {
+			"$id": "#/properties/id",
 			"type": "string",
-			"title": "The Productid Schema",
+			"title": "The Id Schema",
 			"examples": [
 				"EPR-1234AF"
 			],
 			"pattern": "^(.*)$"
 		},
-		"productName": {
-			"$id": "#/properties/productName",
+		"name": {
+			"$id": "#/properties/name",
 			"type": "string",
-			"title": "The Productname Schema",
+			"title": "The Name Schema",
 			"examples": [
 				"Sample Product Open Access"
 			],
 			"pattern": "^(.*)$"
 		},
-		"productShortName": {
-			"$id": "#/properties/productShortName",
+		"shortName": {
+			"$id": "#/properties/shortName",
 			"type": "string",
-			"title": "The Productshortname Schema",
+			"title": "The Shortname Schema",
 			"examples": [
 				"Sample Prod"
 			],
 			"pattern": "^(.*)$"
 		},
-		"separatelySaleableIndicator": {
-			"$id": "#/properties/separatelySaleableIndicator",
+		"separatelySaleableInd": {
+			"$id": "#/properties/separatelySaleableInd",
 			"type": "boolean",
 			"title": "The Separatelysaleableindicator Schema",
 			"examples": [
 				true
 			]
 		},
-		"trialAllowedIndicator": {
-			"$id": "#/properties/trialAllowedIndicator",
+		"trialAllowedInd": {
+			"$id": "#/properties/trialAllowedInd",
 			"type": "boolean",
 			"title": "The Trialallowedindicator Schema",
 			"examples": [
@@ -258,122 +270,29 @@
 				48
 			]
 		},
-		"productIdentifiers": {
-			"$id": "#/properties/productIdentifiers",
-			"type": "array",
-			"default": null,
-			"title": "The Productidentifiers Schema",
-			"items": {
-				"$id": "#/properties/productIdentifiers/items",
-				"type": "object",
-				"title": "The Items Schema",
-				"required": [
-					"productIdentifier",
-					"identifierType"
-				],
-				"properties": {
-					"productIdentifier": {
-						"$id": "#/properties/productIdentifiers/items/properties/productIdentifier",
-						"type": "string",
-						"title": "The Productidentifier Schema",
-						"examples": [
-							"1234-5678"
-						],
-						"pattern": "^(.*)$"
-					},
-					"identifierType": {
-					 	"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/identifierType"
-					}
-				},
-				"additionalProperties": false
-			}
+		"identifiers": {
+			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/identifiers"
 		},	
-		"productType": {
-			"$id": "#/properties/productType",
-			"type": "object",
-			"title": "The Producttype Schema",
-			"required": [
-				"productTypeCode",
-				"productTypeName"
-			],
-			"properties": {
-				"productTypeCode": {
-					"$id": "#/properties/productType/properties/productTypeCode",
-					"type": "string",
-					"title": "The Producttypecode Schema",
-					"examples": [
-						"JBF"
-					],
-					"pattern": "^(.*)$"
-				},
-				"productTypeName": {
-					"$id": "#/properties/productType/properties/productTypeName",
-					"type": "string",
-					"title": "The Producttypename Schema",
-					"examples": [
-						"Journal Backfiles"
-					],
-					"pattern": "^(.*)$"
-				}
-			},
-			"additionalProperties": false
+		"type": {
+			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/type"
 		},
-		"productStatus": {
-			"$id": "#/properties/productStatus",
-			"type": "object",
-			"title": "The Productstatus Schema",
-			"required": [
-				"productStatusCode",
-				"productStatusName"
-			],
-			"properties": {
-				"productStatusCode": {
-					"$id": "#/properties/productStatus/properties/productStatusCode",
-					"type": "string",
-					"title": "The Productstatuscode Schema",
-					"examples": [
-						"AVL"
-					],
-					"pattern": "^(.*)$"
-				},
-				"productStatusName": {
-					"$id": "#/properties/productStatus/properties/productStatusName",
-					"type": "string",
-					"title": "The Productstatusname Schema",
-					"examples": [
-						"Available for Sale"
-					],
-					"pattern": "^(.*)$"
-				}
-			},
-			"additionalProperties": false
+		"status": {
+			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/status"
 		},
 		"revenueModel": {
 			"$id": "#/properties/revenueModel",
 			"type": "object",
 			"title": "The Revenuemodel Schema",
 			"required": [
-				"revenueModelCode",
-				"revenueModelName"
+				"code",
+				"name"
 			],
 			"properties": {
-				"revenueModelCode": {
-					"$id": "#/properties/revenueModel/properties/revenueModelCode",
-					"type": "string",
-					"title": "The Revenuemodelcode Schema",
-					"examples": [
-						"OOA"
-					],
-					"pattern": "^(.*)$"
+				"code": {
+				 	"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 				},
-				"revenueModelName": {
-					"$id": "#/properties/revenueModel/properties/revenueModelName",
-					"type": "string",
-					"title": "The Revenuemodelname Schema",
-					"examples": [
-						"One-Off Access"
-					],
-					"pattern": "^(.*)$"
+				"name": {
+				 	"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 				}
 			},
 			"additionalProperties": false
@@ -383,27 +302,15 @@
 			"type": "object",
 			"title": "The Etaxproductcode Schema",
 			"required": [
-				"revenueModelCode",
-				"revenueModelName"
+				"code",
+				"name"
 			],
 			"properties": {
-				"revenueModelCode": {
-					"$id": "#/properties/etaxProductCode/properties/revenueModelCode",
-					"type": "string",
-					"title": "The Revenuemodelcode Schema",
-					"examples": [
-						"G003"
-					],
-					"pattern": "^(.*)$"
+				"code": {
+				 	"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 				},
-				"revenueModelName": {
-					"$id": "#/properties/etaxProductCode/properties/revenueModelName",
-					"type": "string",
-					"title": "The Revenuemodelname Schema",
-					"examples": [
-						"Journals – incl. single issues and supplements"
-					],
-					"pattern": "^(.*)$"
+				"name": {
+				 	"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 				}
 			},
 			"additionalProperties": false
@@ -413,26 +320,15 @@
 			"type": "object",
 			"title": "The Revenueaccount Schema",
 			"required": [
-				"revenueAccountCode",
-				"revenueAccountName"
+				"code",
+				"name"
 			],
 			"properties": {
-				"revenueAccountCode": {
-					"$id": "#/properties/revenueAccount/properties/revenueAccountCode",
-					"type": "string",
-					"title": "The Revenueaccountcode Schema",
-					"examples": [
-						42910100
-					]
+				"code": {
+				 	"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 				},
-				"revenueAccountName": {
-					"$id": "#/properties/revenueAccount/properties/revenueAccountName",
-					"type": "string",
-					"title": "The Revenueaccountname Schema",
-					"examples": [
-						"Backfiles /back issues - electronic"
-					],
-					"pattern": "^(.*)$"
+				"name": {
+				 	"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 				}
 			},
 			"additionalProperties": false
@@ -481,212 +377,13 @@
 			}
 		},
 		"accountableProduct": {
-			"$id": "#/properties/accountableProduct",
-			"type": "object",
-			"title": "The Accountableproduct Schema",
-			"required": [
-				"glProductSegmentCode",
-				"glProductSegmentName",
-				"glProductParentValue"
-			],
-			"properties": {
-				"glProductSegmentCode": {
-					"$id": "#/properties/accountableProduct/properties/glProductSegmentCode",
-					"type": "string",
-					"title": "The Glproductsegmentcode Schema",
-					"examples": [
-						"01259"
-					],
-					"pattern": "^(.*)$"
-				},
-				"glProductSegmentName": {
-					"$id": "#/properties/accountableProduct/properties/glProductSegmentName",
-					"type": "string",
-					"title": "The Glproductsegmentname Schema",
-					"examples": [
-						"Journal of Sample Products"
-					],
-					"pattern": "^(.*)$"
-				},
-				"glProductParentValue": {
-					"$id": "#/properties/accountableProduct/properties/glProductParentValue",
-					"type": "object",
-					"title": "The Glproductparentvalue Schema",
-					"required": [
-						"segmentParentCode",
-						"segmentParentName"
-					],
-					"properties": {
-						"segmentParentCode": {
-							"$id": "#/properties/accountableProduct/properties/glProductParentValue/properties/segmentParentCode",
-							"type": "string",
-							"title": "The Segmentparentcode Schema",
-							"examples": [
-								"PJNLOWN"
-							],
-							"pattern": "^(.*)$"
-						},
-						"segmentParentName": {
-							"$id": "#/properties/accountableProduct/properties/glProductParentValue/properties/segmentParentName",
-							"type": "string",
-							"title": "The Segmentparentname Schema",
-							"examples": [
-								"Elsevier Owned Journals"
-							],
-							"pattern": "^(.*)$"
-						}
-					},
-					"additionalProperties" : false
-				}
-			},
-			"additionalProperties": false
+			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/accountableProduct"
 		},
-		"financialHierarchy": {
-			"$id": "#/properties/financialHierarchy",
-			"type": "array",
-			"title": "The Financialhierarchy Schema",
-			"default": null,
-			"items": {
-				"$id": "#/properties/financialHierarchy/items",
-				"type": "object",
-				"title": "The Items Schema",
-				"required": [
-					"glCompany",
-					"costResponsibilityCentre",
-					"revenueResponsibilityCentre",
-					"effectiveStartDate",
-					"effectiveEndDate"
-				],
-				"properties": {
-					"glCompany": {
-						"$id": "#/properties/financialHierarchy/items/properties/glCompany",
-						"type": "object",
-						"title": "The Glcompany Schema",
-						"required": [
-							"glCompanyCode",
-							"glCompanyName"
-						],
-						"properties": {
-							"glCompanyCode": {
-								"$id": "#/properties/financialHierarchy/items/properties/glCompany/properties/glCompanyCode",
-								"type": "integer",
-								"title": "The Glcompanycode Schema",
-								"examples": [
-									121
-								]
-							},
-							"glCompanyName": {
-								"$id": "#/properties/financialHierarchy/items/properties/glCompany/properties/glCompanyName",
-								"type": "string",
-								"title": "The Glcompanyname Schema",
-								"examples": [
-									"Elsevier BV"
-								],
-								"pattern": "^(.*)$"
-							}
-						},
-						"additionalProperties": false
-					},
-					"costResponsibilityCentre": {
-						"$id": "#/properties/financialHierarchy/items/properties/costResponsibilityCentre",
-						"type": "object",
-						"title": "The Costresponsibilitycentre Schema",
-						"required": [
-							"responsibilityCentreCode",
-							"responsibilityCentreName"
-						],
-						"properties": {
-							"responsibilityCentreCode": {
-								"$id": "#/properties/financialHierarchy/items/properties/costResponsibilityCentre/properties/responsibilityCentreCode",
-								"type": "integer",
-								"title": "The Responsibilitycentrecode Schema",
-								"examples": [
-									10063
-								]
-							},
-							"responsibilityCentreName": {
-								"$id": "#/properties/financialHierarchy/items/properties/costResponsibilityCentre/properties/responsibilityCentreName",
-								"type": "string",
-								"title": "The Responsibilitycentrename Schema",
-								"examples": [
-									"Cell Press General"
-								],
-								"pattern": "^(.*)$"
-							}
-						},
-						"additionalProperties": false
-					},
-					"revenueResponsibilityCentre": {
-						"$id": "#/properties/financialHierarchy/items/properties/revenueResponsibilityCentre",
-						"type": "object",
-						"title": "The Revenueresponsibilitycentre Schema",
-						"required": [
-							"responsibilityCentreCode",
-							"responsibilityCentreName"
-						],
-						"properties": {
-							"responsibilityCentreCode": {
-								"$id": "#/properties/financialHierarchy/items/properties/revenueResponsibilityCentre/properties/responsibilityCentreCode",
-								"type": "integer",
-								"title": "The Responsibilitycentrecode Schema",
-								"examples": [
-									10063
-								]
-							},
-							"responsibilityCentreName": {
-								"$id": "#/properties/financialHierarchy/items/properties/revenueResponsibilityCentre/properties/responsibilityCentreName",
-								"type": "string",
-								"title": "The Responsibilitycentrename Schema",
-								"examples": [
-									"Cell Press General"
-								],
-								"pattern": "^(.*)$"
-							}
-						},
-						"additionalProperties": false
-					},
-					"effectiveStartDate": {
-						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
-					},
-					"effectiveEndDate": {
-						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
-					}
-				},
-				"additionalProperties": false
-			}
+		"financialAttributes": {
+			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/financialAttributes"
 		},
-		"productPersons": {
-			"$id": "#/properties/productPersons",
-			"type": "array",
-			"title": "The Productpersons Schema",
-			"default": null,
-			"items": {
-				"$id": "#/properties/productPersons/items",
-				"type": "object",
-				"title": "The Items Schema",
-				"required": [
-					"productPersonId",
-					"role",
-					"person"
-				],
-				"properties": {
-					"productPersonId": {
-						"$id": "#/properties/productPersons/items/properties/productPersonId",
-						"type": "integer",
-						"title": "The Productpersonid Schema",						
-						"examples": [
-							2032154584
-						]
-					},
-					"role": { 
-						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/role"
-					},
-					"person": {
-						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/person"
-					}
-				},
-				"additionalProperties": false
-			}
+		"persons": {
+			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/persons"
 		},
 		"packages": { 
 			"$ref": "#/definitions/packages" 
@@ -696,39 +393,39 @@
 	      "type": "object",
 	      "title": "The Manifestation Schema",
 	      "required": [
-	        "manifestationId",
-	        "manifestationKeyTitle",
-	        "manifestationType",
-			"manifestationStatus",
+	        "id",
+	        "keyTitle",
+	        "type",
+			"status",
 	        "work"
 	      ],
 	      "properties": {
-			"manifestationId": {
-				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/manifestationId"
+			"id": {
+				"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/id" 
 			},
-			"manifestationKeyTitle": {
-				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/manifestationKeyTitle"
+			"keyTitle": {
+				"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/keyTitle" 
 			},
-			"internationalEditionFlag": {
-				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/internationalEditionFlag"
+			"internationalEditionInd": {
+				"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/internationalEditionInd" 
 			},
 			"firstPubDate": {
-				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/firstPubDate"
+				"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/firstPubDate" 
 			},
 			"lastPubDate": {
-				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/lastPubDate"
+				"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/lastPubDate" 
 			},
-			"manifestationIdentifiers": {
-				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/manifestationIdentifiers"
+			"identifiers": {
+				"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/identifiers" 
 			},
-			"manifestationType": {
-				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/manifestationType"
+			"type": {
+				"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/type" 
 			},
-			"manifestationStatus": {
-				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/manifestationStatus"
+			"status": {
+				"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/status" 
 			},
-			"manifestationFormat": {
-				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/manifestationFormat"
+			"format": {
+				"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/format" 
 			},
 			"work": { 
 				"$ref": "#/definitions/work" 
