@@ -1,26 +1,26 @@
 	{
-	"workId": {
-		"$id": "#/properties/workId",
+	"id": {
+		"$id": "#/properties/id",
 		"type": "string",
-		"title": "The Workid Schema",
+		"title": "The Id Schema",
 		"examples": [
 			"EPR-W-14PTAF"
 		],
 		"pattern": "^(.*)$"
 	},
-	"workTitle": {
-		"$id": "#/properties/workTitle",
+	"title": {
+		"$id": "#/properties/title",
 		"type": "string",
-		"title": "The Worktitle Schema",
+		"title": "The Title Schema",
 		"examples": [
 			"Sample Product"
 		],
 		"pattern": "^(.*)$"
 	},
-	"workSubTitle": {
-		"$id": "#/properties/workSubTitle",
+	"subTitle": {
+		"$id": "#/properties/subTitle",
 		"type": "string",
-		"title": "The Worksubtitle Schema",
+		"title": "The Subtitle Schema",
 		"examples": [
 			"An Elsevier Journal"
 		],
@@ -40,27 +40,15 @@
 		"type": "object",
 		"title": "The Language Schema",
 		"required": [
-			"languageCode",
-			"languageName"
+			"code",
+			"name"
 		],
 		"properties": {
-			"languageCode": {
-				"$id": "#/properties/language/properties/languageCode",
-				"type": "string",
-				"title": "The Languagecode Schema",
-				"examples": [
-					"EN"
-				],
-				"pattern": "^(.*)$"
+			"code": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 			},
-			"languageName": {
-				"$id": "#/properties/language/properties/languageName",
-				"type": "string",
-				"title": "The Languagename Schema",
-				"examples": [
-					"English"
-				],
-				"pattern": "^(.*)$"
+			"name": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 			}
 		},
 		"additionalProperties": false
@@ -89,133 +77,29 @@
 			2015
 		]
 	},
-	"workIdentifiers": {
-		"$id": "#/properties/workIdentifiers",
-		"type": "array",
-		"default": null,
-		"title": "The Workidentifiers Schema",
-		"items": {
-			"$id": "#/properties/workIdentifiers/items",
-			"type": "object",
-			"title": "The Items Schema",
-			"required": [
-				"workIdentifier",
-				"identifierType"
-			],
-			"properties": {
-				"workIdentifier": {
-					"$id": "#/properties/workIdentifiers/items/properties/workIdentifier",
-					"type": "string",
-					"title": "The Workidentifier Schema",
-					"examples": [
-						"1234-5678"
-					],
-					"pattern": "^(.*)$"
-				},
-				"identifierType": { 
-					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/identifierType"
-					
-				}
-			},
-			"additionalProperties": false
-		}
+	"identifiers": {
+		"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/identifiers"
 	},
-	"workType": {
-		"$id": "#/properties/workType",
-		"type": "object",
-		"title": "The Worktype Schema",
-		"required": [
-			"workTypeCode",
-			"workTypeName",
-			"typeRollUp"
-		],
-		"properties": {
-			"workTypeCode": {
-				"$id": "#/properties/workType/properties/workTypeCode",
-				"type": "string",
-				"title": "The Worktypecode Schema",
-				"examples": [
-					"JNL"
-				],
-				"pattern": "^(.*)$"
-			},
-			"workTypeName": {
-				"$id": "#/properties/workType/properties/workTypeName",
-				"type": "string",
-				"title": "The Worktypename Schema",
-				"examples": [
-					"Journal"
-				],
-				"pattern": "^(.*)$"
-			},
-			"typeRollUp": {
-				"$id": "#/properties/workType/properties/typeRollUp",
-				"type": "string",
-				"title": "The Typerollup Schema",
-				"examples": [
-					"Journal"
-				],
-				"pattern": "^(.*)$"
-			}
-		},
-		"additionalProperties": false
+	"type": {
+		"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/workManifestationType"
 	},
-	"workStatus": {
-		"$id": "#/properties/workStatus",
-		"type": "object",
-		"title": "The Workstatus Schema",
-		"required": [
-			"workStatusCode",
-			"workStatusName"
-		],
-		"properties": {
-			"workStatusCode": {
-				"$id": "#/properties/workStatus/properties/workStatusCode",
-				"type": "string",
-				"title": "The Workstatuscode Schema",
-				"examples": [
-					"WAS"
-				],
-				"pattern": "^(.*)$"
-			},
-			"workStatusName": {
-				"$id": "#/properties/workStatus/properties/workStatusName",
-				"type": "string",
-				"title": "The Workstatusname Schema",
-				"examples": [
-					"Accepting Submissions"
-				],
-				"pattern": "^(.*)$"
-			}
-		},
-		"additionalProperties": false
+	"status": {
+		"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/status"
 	},
 	"imprint": {
 		"$id": "#/properties/imprint",
 		"type": "object",
 		"title": "The Imprint Schema",
 		"required": [
-			"imprintCode",
-			"imprintName"
+			"code",
+			"name"
 		],
 		"properties": {
-			"imprintCode": {
-				"$id": "#/properties/imprint/properties/imprintCode",
-				"type": "string",
-				"title": "The Imprintcode Schema",
-				"examples": [
-					"ELSEVIER"
-				],
-				"pattern": "^(.*)$"
+			"code": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 			},
-			"imprintName": {
-				"$id": "#/properties/imprint/properties/imprintName",
-				"type": "string",
-				"title": "The Imprintname Schema",
-				"examples": [
-					"Elsevier"
-				],
-				"pattern": "^(.*)$"
+			"name": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 			}
 		},
 		"additionalProperties": false
@@ -225,27 +109,15 @@
 		"type": "object",
 		"title": "The Ownershiptype Schema",
 		"required": [
-			"ownershipTypeCode",
-			"ownershipTypeName"
+			"code",
+			"name"
 		],
 		"properties": {
-			"ownershipTypeCode": {
-				"$id": "#/properties/ownershipType/properties/ownershipTypeCode",
-				"type": "string",
-				"title": "The Ownershiptypecode Schema",
-				"examples": [
-					"COOWN"
-				],
-				"pattern": "^(.*)$"
+			"code": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 			},
-			"ownershipTypeName": {
-				"$id": "#/properties/ownershipType/properties/ownershipTypeName",
-				"type": "string",
-				"title": "The Ownershiptypename Schema",
-				"examples": [
-					"Co Owned"
-				],
-				"pattern": "^(.*)$"
+			"name": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 			}
 		},
 		"additionalProperties": false
@@ -268,17 +140,11 @@
 					"type": "object",
 					"title": "The Copyrightowner Schema",
 					"required": [
-						"copyrightOwnerName"
+						"name"
 					],
 					"properties": {
-						"copyrightOwnerName": {
-							"$id": "#/properties/copyrightOwners/items/properties/copyrightOwner/properties/copyrightOwnerName",
-							"type": "string",
-							"title": "The Copyrightownername Schema",
-							"examples": [
-								"Elsevier"
-							],
-							"pattern": "^(.*)$"
+						"name": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 						}
 					},
 					"additionalProperties": false
@@ -298,33 +164,21 @@
 		"type": "object",
 		"title": "The Accessmodel Schema",
 		"required": [
-			"accessModelCode",
-			"accessModelName",
-			"journalCountFlag"
+			"code",
+			"name",
+			"journalCountInd"
 		],
 		"properties": {
-			"accessModelCode": {
-				"$id": "#/properties/accessModel/properties/accessModelCode",
-				"type": "string",
-				"title": "The Accessmodelcode Schema",
-				"examples": [
-					"H"
-				],
-				"pattern": "^(.*)$"
+			"code": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 			},
-			"accessModelName": {
-				"$id": "#/properties/accessModel/properties/accessModelName",
-				"type": "string",
-				"title": "The Accessmodelname Schema",
-				"examples": [
-					"Hybrid"
-				],
-				"pattern": "^(.*)$"
+			"name": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 			},
-			"journalCountFlag": {
-				"$id": "#/properties/accessModel/properties/journalCountFlag",
+			"journalCountInd": {
+				"$id": "#/properties/accessModel/properties/journalCountInd",
 				"type": "boolean",
-				"title": "The Journalcountflag Schema",
+				"title": "The JournalcountIndicator Schema",
 				"examples": [
 					true
 				]
@@ -337,54 +191,31 @@
 		"type": "object",
 		"title": "The Pmc Schema",
 		"required": [
-			"pmcCode",
-			"pmcName",
+			"code",
+			"name",
 			"pmg"
 		],
 		"properties": {
-			"pmcCode": {
-				"$id": "#/properties/pmc/properties/pmcCode",
-				"type": "string",
-				"title": "The Pmccode Schema",
-				"examples": [
-					"315"
-				]
+			"code": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 			},
-			"pmcName": {
-				"$id": "#/properties/pmc/properties/pmcName",
-				"type": "string",
-				"title": "The Pmcname Schema",
-				"examples": [
-					"Environment Eng"
-				],
-				"pattern": "^(.*)$"
+			"name": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 			},
 			"pmg": {
 				"$id": "#/properties/pmc/properties/pmg",
 				"type": "object",
 				"title": "The Pmg Schema",
 				"required": [
-					"pmgCode",
-					"pmgName"
+					"code",
+					"name"
 				],
 				"properties": {
-					"pmgCode": {
-						"$id": "#/properties/pmc/properties/pmg/properties/pmgCode",
-						"type": "string",
-						"title": "The Pmgcode Schema",
-						"examples": [
-							"034"
-						],
-						"pattern": "^(.*)$"
+					"code": {
+						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 					},
-					"pmgName": {
-						"$id": "#/properties/pmc/properties/pmg/properties/pmgName",
-						"type": "string",
-						"title": "The Pmgname Schema",
-						"examples": [
-							"Engineering"
-						],
-						"pattern": "^(.*)$"
+					"name": {
+						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 					}
 				},
 				"additionalProperties": false
@@ -392,35 +223,47 @@
 		},
 		"additionalProperties": false
 	},
-	"workTranslations": {
-		"$id": "#/properties/workTranslations",
+	"translations": {
+		"$id": "#/properties/translations",
 		"type": "object",
-		"title": "The Worktranslations Schema",
+		"title": "The Translations Schema",
 		"properties": {
 			"isTranslatedFrom": {
-				"$id": "#/properties/workTranslations/properties/isTranslatedFrom",
-				"type": "object",
+				"$id": "#/properties/translations/properties/isTranslatedFrom",
+				"type": "array",
+				"default": null,
 				"title": "The Istranslatedfrom Schema",
-				"required": [
+				"items": {
+					"$id": "#/properties/translations/properties/isTranslatedFrom/items",
+					"type": "object",
+					"title": "The Items Schema",
+					"required": [
 					"workId"
-				],
-				"properties": {
-					"workId": {
-						"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workId"
+					],
+					"properties": {
+						"workId": {
+							"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/id" 
+						},
+						"language": {
+							"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/language" 
+						},
+						"effectiveStartDate": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
+						},
+						"effectiveEndDate": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
+						}
 					},
-					"language": {
-						"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/language"
-					}
-				},
-				"additionalProperties": false
+					"additionalProperties": false
+				}
 			},
 			"isTranslatedInto": {
-				"$id": "#/properties/workTranslations/properties/isTranslatedInto",
+				"$id": "#/properties/translations/properties/isTranslatedInto",
 				"type": "array",
 				"default": null,
 				"title": "The Istranslatedinto Schema",
 				"items": {
-					"$id": "#/properties/workTranslations/properties/isTranslatedInto/items",
+					"$id": "#/properties/translations/properties/isTranslatedInto/items",
 					"type": "object",
 					"title": "The Items Schema",
 					"required": [
@@ -428,10 +271,16 @@
 					],
 					"properties": {
 						"workId": {
-							"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workId"
+							"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/id" 
 						},
 						"language": {
-							"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/language"
+							"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/language" 
+						},
+						"effectiveStartDate": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
+						},
+						"effectiveEndDate": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
 						}
 					},
 					"additionalProperties": false
@@ -440,13 +289,13 @@
 		},
 		"additionalProperties": false
 	},
-	"workEditions": {
-		"$id": "#/properties/workEditions",
+	"editions": {
+		"$id": "#/properties/editions",
 		"type": "array",
 		"default": null,
-		"title": "The Workeditions Schema",
+		"title": "The Editions Schema",
 		"items": {
-			"$id": "#/properties/workEditions/items",
+			"$id": "#/properties/editions/items",
 			"type": "object",
 			"title": "The Items Schema",
 			"required": [
@@ -454,7 +303,7 @@
 			],
 			"properties": {
 				"editionOfWork": {
-					"$id": "#/properties/workEditions/items/properties/editionOfWork",
+					"$id": "#/properties/editions/items/properties/editionOfWork",
 					"type": "string",
 					"title": "The Editionofwork Schema",
 					"examples": [
@@ -465,37 +314,147 @@
 			"additionalProperties": false
 		}
 	},
-	"workPersons": {
-		"$id": "#/properties/workPersons",
-		"type": "array",
+	"persons": {
+		"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/persons"
+	},
+    "subjectAreas": {
+     	"$id": "#/properties/subjectAreas",
+      	"type": "array",
 		"default": null,
-		"title": "The Workpersons Schema",
-		"items": {
-			"$id": "#/properties/workPersons/items",
-			"type": "object",
-			"title": "The Items Schema",
-			"required": [
-				"workPersonId",
-				"role",
-				"person"
-			],
-			"properties": {
-				"workPersonId": {
-					"$id": "#/properties/workPersons/items/properties/workPersonId",
-					"type": "integer",
-					"title": "The Workpersonid Schema",
-					"examples": [
-						1234858765
-					]
+      	"title": "The Subjectareas Schema",
+      	"items": {
+        	"$id": "#/properties/subjectAreas/items",
+        	"type": "object",
+        	"title": "The Items Schema",
+        	"required": [
+          	"subjectArea"
+        	],
+        	"properties": {
+          		"subjectArea": {
+            		"$id": "#/properties/workSubjectAreas/items/properties/subjectArea",
+            		"type": "object",
+            		"title": "The Subjectarea Schema",
+            		"required": [
+              			"code",
+              			"name",
+              			"type"
+            		],
+            		"properties": {
+              			"code": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+              			},
+              			"name": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+						},
+              			"type": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/type"
+						},
+              			"parentSubjectArea": {
+                			"$id": "#/properties/workSubjectAreas/items/properties/subjectArea/properties/parentSubjectArea",
+                			"type": "object",
+                			"title": "The Parentsubjectarea Schema",
+                			"required": [
+                  				"code",
+                  				"name"
+                			],
+                			"properties": {
+                  				"code": {
+									"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+								},
+    	              			"name": {
+									"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+								}
+            	    		},
+							"additionalProperties": false
+              			}
+					},
+					"additionalProperties": false
 				},
-				"role": { 
-					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/role"
+          		"primary": {
+            		"$id": "#/properties/workSubjectAreas/items/properties/primary",
+            		"type": "boolean",
+            		"title": "The Primary Schema",
+            		"default": false,
+            		"examples": [
+              			false
+            		]
+          		},
+          		"effectiveStartDate": {
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
 				},
-				"person": { 
-					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/person"
-				}
-			},
+          		"effectiveEndDate": {
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
+          		}
+        	},
 			"additionalProperties": false
-		}
-	}
+      	}
+    },
+    "mirrors": {
+		"$id": "#/properties/mirrors",
+      	"type": "object",
+      	"title": "The Mirrors Schema",
+      	"oneOf": [
+      		{ "required":
+      			["isMirroredFrom"] },
+      		{ "required": 
+      			["isMirroredInto"] }
+      	],
+      	"properties": {
+        	"isMirroredFrom": {
+          		"$id": "#/properties/mirrors/properties/isMirroredFrom",
+          		"type": "object",
+          		"title": "The Ismirroredfrom Schema",
+          		"required": [
+            		"workId"
+	        	],
+				"properties": {
+            		"workId": {
+              			"$id": "#/properties/mirrors/properties/isMirroredFrom/properties/workId",
+              			"type": "string",
+              			"title": "The Workid Schema",
+              			"default": "",
+              			"examples": [
+                			"EPR-W-000050"
+              			],
+              			"pattern": "^(.*)$"
+					},
+		    		"effectiveStartDate": {
+						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
+					},
+		    		"effectiveEndDate": {
+						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
+					}
+          		},
+				"additionalProperties": false
+        	},
+        	"isMirroredInto": {
+          		"$id": "#/properties/mirrors/properties/isMirroredInto",
+          		"type": "object",
+          		"title": "The Ismirroredinto Schema",
+          		"required": [
+            		"workId"
+				],
+          		"properties": {
+            		"workId": {
+              			"$id": "#/properties/mirrors/properties/isMirroredInto/properties/workId",
+              			"type": "string",
+              			"title": "The Workid Schema",
+              			"default": "",
+              			"examples": [
+                			"EPR-W-000060"
+              			],
+              			"pattern": "^(.*)$"
+            		},
+		    		"effectiveStartDate": {
+						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
+					},
+		    		"effectiveEndDate": {
+						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
+					}
+				},
+				"additionalProperties": false
+			}
+		},
+		"additionalProperties": false
+    }	
 }
