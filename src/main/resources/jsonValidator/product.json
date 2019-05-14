@@ -98,58 +98,58 @@
 			],
 			"properties": {
 				"id": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/id" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/id"
 				},
 				"title": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/title" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/title"
 				},
 				"subTitle": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/subTitle" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/subTitle"
 				},
 				"electronicRightsInd": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/electronicRightsInd" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/electronicRightsInd"
 				},
 				"language": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/language" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/language"
 				},
 				"editionNumber": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/editionNumber" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/editionNumber"
 				},
 				"volume": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/volume" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/volume"
 				},
 				"copyrightYear": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/copyrightYear" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/copyrightYear"
 				},
 				"identifiers": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/identifiers" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/identifiers"
 				},
 				"type": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/type" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/type"
 				},
 				"status": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/status" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/status"
 				},
 				"imprint": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/imprint" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/imprint"
 				},
 				"ownershipType": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/ownershipType" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/ownershipType"
 				},
 				"copyrightOwners": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/copyrightOwners" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/copyrightOwners"
 				},
 				"accessModel": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/accessModel" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/accessModel"
 				},
 				"pmc": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/pmc" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/pmc"
 				},
 				"translations": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/translations" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/translations"
 				},
 				"editions": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/editions" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/editions"
 				},
 				"accountableProduct": {
 					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/accountableProduct"
@@ -158,13 +158,13 @@
 					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/financialAttributes"
 				},
 				"persons": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/persons" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/persons"
 				},
 				"subjectAreas": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/subjectAreas" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/subjectAreas"
 				},
 				"mirrors": {
-					"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/mirrors" 
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/mirrors"
 				}
 			},
 			"additionalProperties": false
@@ -401,31 +401,31 @@
 	      ],
 	      "properties": {
 			"id": {
-				"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/id" 
+				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/id"
 			},
 			"keyTitle": {
-				"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/keyTitle" 
+				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/keyTitle"
 			},
 			"internationalEditionInd": {
-				"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/internationalEditionInd" 
+				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/internationalEditionInd"
 			},
 			"firstPubDate": {
-				"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/firstPubDate" 
+				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/firstPubDate"
 			},
 			"lastPubDate": {
-				"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/lastPubDate" 
+				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/lastPubDate"
 			},
 			"identifiers": {
-				"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/identifiers" 
+				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/identifiers"
 			},
 			"type": {
-				"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/type" 
+				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/type"
 			},
 			"status": {
-				"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/status" 
+				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/status"
 			},
 			"format": {
-				"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/format" 
+				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/format"
 			},
 			"work": { 
 				"$ref": "#/definitions/work" 

@@ -242,10 +242,10 @@
 					],
 					"properties": {
 						"workId": {
-							"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/id" 
+							"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/id"
 						},
 						"language": {
-							"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/language" 
+							"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/language"
 						},
 						"effectiveStartDate": {
 							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
@@ -271,10 +271,10 @@
 					],
 					"properties": {
 						"workId": {
-							"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/id" 
+							"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/id"
 						},
 						"language": {
-							"$ref": "resource:/schema/definitions/common/work/v2-1/commonWork.json#/language" 
+							"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/language"
 						},
 						"effectiveStartDate": {
 							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
