@@ -101,10 +101,10 @@
 			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/editions"
 		},
 		"accountableProduct": {
-			"$ref": "resource:/schema/definitions/common/all/v2-0/commonAll.json#/accountableProduct" 
+			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/accountableProduct"
 		},
 		"financialAttributes": {
-			"$ref": "resource:/schema/definitions/common/all/v2-0/commonAll.json#/financialAttributes" 
+			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/financialAttributes"
 		},
 		"persons": {
 			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/persons"
@@ -132,31 +132,31 @@
 				],
 				"properties": {
 					"id": {
-						"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/id" 
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/id"
 					},
 					"keyTitle": {
-						"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/keyTitle" 
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/keyTitle"
 					},
 					"internationalEditionInd": {
-						"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/internationalEditionInd" 
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/internationalEditionInd"
 					},
 					"firstPubDate": {
-						"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/firstPubDate" 
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/firstPubDate"
 					},
 					"lastPubDate": {
-						"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/lastPubDate" 
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/lastPubDate"
 					},
 					"identifiers": {
-						"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/identifiers" 
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/identifiers"
 					},
 					"type": {
-						"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/type" 
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/type"
 					},
 					"status": {
-						"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/status" 
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/status"
 					},
 					"format": {
-						"$ref": "resource:/schema/definitions/common/manifestation/v2-0/commonManifestation.json#/format" 
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/format"
 					},
 					"products": {
 						"$ref": "#/definitions/products"
