@@ -103,7 +103,7 @@ public class ManifestationDataQualityCheckSteps {
 
     @Then("^The number of the records in EPH staging and EPH DQ is equal$")
     public void verifyCountOfManifestationDataInSTGAndDQManifestationIsEqual() {
-        Assert.assertEquals("\nThe number of manifestations in EPH STG and DQ is not equal", countManifestationsEPH, countManifestationsDQ);
+        Assert.assertEquals("\nThe number of manifestations in EPH STG and DQ is not equal", countManifestationsSTGPMX, countManifestationsDQ);
     }
 
 

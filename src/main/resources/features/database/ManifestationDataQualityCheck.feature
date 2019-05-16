@@ -51,8 +51,9 @@ Feature: Entity - Manifestations - Count & Data Mapping Check - Validate data be
     When We get the manifestations records from PMX
     Then We have the manifestations in PMX STG
     And The data for manifestations in PMX and PMX STG is equal
+    And We get the manifestations in EPH DQ
     And We get the manifestations in EPH SA
-    And We compare the manifestations in DQ and EPH SA for <book_type>
+    And We compare the manifestations in DQ and EPH SA for <journal_type>
     And We get the manifestations in EPH golden data
     And We compare the manifestations in EPH SA and EPH golden data
     Examples:

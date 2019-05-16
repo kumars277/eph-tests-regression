@@ -75,7 +75,7 @@ public class ProductDataSQL {
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
-            "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
+            "            FROM ephsit_talend_owner.stg_10_pmx_product\n" +
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s')\n" +
              "           order by \"PRODUCT_MANIFESTATION_ID\"";
 
