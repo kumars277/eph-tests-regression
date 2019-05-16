@@ -128,7 +128,7 @@ public class PersonDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
 
@@ -167,7 +167,7 @@ public class PersonDataQualityCheckSteps {
     @Then("^We get the person records from EPH DQ$")
     public void getProductsDataFromEPHDQ() {
         Log.info("In Then method");
-        sql = String.format(PersonDataSQL.GET_DATA_PERSONS_EPHSTG, Joiner.on("','").join(ids));
+        sql = String.format(PersonDataSQL.GET_DATA_PERSONS_EPHDQ, Joiner.on("','").join(ids));
         Log.info(sql);
 
         dataQualityContext.personDataObjectsFromEPHDQ = DBManager
@@ -262,8 +262,8 @@ public class PersonDataQualityCheckSteps {
                     dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPEOPLEHUB_ID());
 
             //DQ_ERR
-            Log.info("PEOPLEHUB_ID in EPH DQ: " + dataQualityContext.personDataObjectsFromEPHDQ.get(i).getDQ_ERR());
-            assertEquals( "N", dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPEOPLEHUB_ID());
+            Log.info("DQ_ERR in EPH DQ: " + dataQualityContext.personDataObjectsFromEPHDQ.get(i).getDQ_ERR());
+            assertEquals( "N", dataQualityContext.personDataObjectsFromEPHDQ.get(i).getDQ_ERR());
         });
 
     }
