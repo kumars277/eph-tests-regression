@@ -299,6 +299,8 @@ public class PersonProductRoleDataQualityCheckSteps {
             List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             idsLookup = lookupResults.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
 
+            Log.info("The id's are : " +idsLookup);
+
             sql = String.format(PersonProductRoleDataSQL.GET_DATA_PERSONS_PRODUCT_ROLE_EPHSA, Joiner.on("','").join(idsLookup));
             Log.info(sql);
 

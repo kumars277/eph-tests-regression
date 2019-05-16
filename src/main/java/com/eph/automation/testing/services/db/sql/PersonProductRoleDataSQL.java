@@ -40,21 +40,26 @@ public class PersonProductRoleDataSQL {
             "    ,'PO' as f_role\n" +
             "    ,wp.\"F_ROLE\" as work_role\n" +
             "from\n" +
-            "    ephsit_talend_owner.stg_10_pmx_product_can pr\n" +
+            "    ephsit_talend_owner.stg_10_pmx_product_dq pr\n" +
             "join\n" +
             "    ephsit_talend_owner.stg_10_pmx_work_person_role wp on pr.ult_work_ref::varchar = wp.\"PMX_WORK_SOURCE_REF\"::varchar\n" +
+            "join ephsit_talend_owner.stg_10_pmx_person_dq perd on wp.\"PMX_PARTY_SOURCE_REF\" = perd.\"person_source_ref\" \n " +
             "where\n" +
             "    wp.\"F_ROLE\" = 'PU'\n" +
-            "    and pr.pmx_source_reference in ('%s')";
+            "    and pr.pmx_source_reference in ('%s') \n" +
+            "and pr.dq_err !='Y' and perd.dq_err !='Y' ";
 
     public static String GET_DATA_PERSONS_PRODUCT_ROLE_EPHSTG = "select \n" +
-            "PROD_PER_ROLE_SOURCE_REF as PROD_PER_ROLE_SOURCE_REF,\n" +
-            "PRODUCT_SOURCE_REF as PRODUCT_SOURCE_REF,\n" +
-            "PERSON_SOURCE_REF as PERSON_SOURCE_REF,\n" +
-            "F_ROLE as F_ROLE,\n" +
-            "WORK_ROLE as WORK_ROLE\n" +
-            "from ephsit_talend_owner.stg_10_pmx_product_person_role\n" +
-            "where PRODUCT_SOURCE_REF in ('%s')";
+            "ppr.PROD_PER_ROLE_SOURCE_REF as PROD_PER_ROLE_SOURCE_REF,\n" +
+            "ppr.PRODUCT_SOURCE_REF as PRODUCT_SOURCE_REF,\n" +
+            "ppr.PERSON_SOURCE_REF as PERSON_SOURCE_REF,\n" +
+            "ppr.F_ROLE as F_ROLE,\n" +
+            "ppr.WORK_ROLE as WORK_ROLE\n" +
+            "from ephsit_talend_owner.stg_10_pmx_product_person_role ppr\n" +
+            "join ephsit_talend_owner.stg_10_pmx_person_dq perd on ppr.person_source_ref = perd.person_source_ref \n"+
+            "join ephsit_talend_owner.stg_10_pmx_product_dq prod on ppr.product_source_ref = prod.pmx_source_reference \n" +
+            "where PRODUCT_SOURCE_REF in ('%s') \n" +
+            "and perd.dq_err !='Y' and prod.dq_err != 'Y' \n" ;
 
     public static String GET_DATA_PERSONS_PRODUCT_ROLE_EPHSA = "select \n" +
             "b_loadid as B_LOADID,\n" +
@@ -111,7 +116,7 @@ public class PersonProductRoleDataSQL {
             "where  sa.f_event_type = 'PMX'\n" +
             "and sa.workflow_id = 'talend'\n" +
             "and sa.f_workflow_source = 'PMX' )\n" +
-            "order by random() limit '10'";
+            "order by random() limit '%s'";
 
 
 }

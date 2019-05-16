@@ -21,9 +21,13 @@ public class WorkSubjectAreaLinkDataSQL {
             "AND SA.F_SUBJECT_AREA_TYPE = 181\n" +
             "    ) ";
 
-    public static String SELECT_COUNT_WORK_SUBJECT_AREA_STG = "select count(*) as count from ephsit_talend_owner.STG_10_PMX_WORK_SUBJECT_AREA";
 
     public static String SELECT_COUNT_WORK_SUBJECT_AREA_SA = "select count(*) as count from semarchy_eph_mdm.sa_work_subject_area_link";
+
+    public static String SELECT_COUNT_WORK_SUBJECT_AREA_STG = "select count(*) as count from ephsit_talend_owner.STG_10_PMX_WORK_SUBJECT_AREA ";
+
+    public static String SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ = "select count(*) as count from ephsit_talend_owner.STG_10_PMX_WORK_SUBJECT_AREA where \"F_SUBJECT_AREA\"  is not null and \n" +
+            "\"F_PRODUCT_WORK\" in (select pmx_source_reference from ephsit_talend_owner.stg_10_pmx_wwork_dq where dq_err!= 'Y')";
 
     public static String SELECT_COUNT_WORK_SUBJECT_AREA_GD = "select count(*) as count from semarchy_eph_mdm.gd_work_subject_area_link";
 
@@ -68,8 +72,7 @@ public class WorkSubjectAreaLinkDataSQL {
             " ";
 
     public static String EXTRACT_DATA_WORK_SUBJECT_AREA_GD = "select  \n" +
-            "B_LOADID as B_LOADID\n" +
-            ",B_CLASSNAME as B_CLASSNAME\n" +
+            "B_CLASSNAME as B_CLASSNAME\n" +
             ",WORK_SUBJECT_AREA_LINK_ID as WORK_SUBJECT_AREA_LINK_ID\n" +
             ",F_SUBJECT_AREA as F_SUBJECT_AREA\n" +
             ",F_WWORK as F_WWORK\n" +
@@ -90,7 +93,9 @@ public class WorkSubjectAreaLinkDataSQL {
         "order by random()\n" +
         "limit '%s'";
 
-    public static String SELECT_DATA_FROM_STG_FOR_CURRENT_RECORD_FROM_SA = "select *\n" +
+    public static String SELECT_DATA_FROM_STG_FOR_CURRENT_RECORD_FROM_SA = "select \"PRODUCT_SUBJECT_AREA_ID\" as PRODUCT_SUBJECT_AREA_ID \n" +
+            ",\"F_SUBJECT_AREA\" as F_SUBJECT_AREA  \n" +
+            ",\"F_PRODUCT_WORK\" as F_PRODUCT_WORK \n " +
             "from ephsit_talend_owner.stg_10_pmx_work_subject_area\t\n" +
             "left join ephsit_talend_owner.map_sourceref_2_numericid mp on mp.source_ref = concat('WORK_SUBJ_AREA-',\"PRODUCT_SUBJECT_AREA_ID\")\n" +
             "left join semarchy_eph_mdm.sa_work_subject_area_link sa on sa.work_subject_area_link_id = mp.numeric_id\n" +

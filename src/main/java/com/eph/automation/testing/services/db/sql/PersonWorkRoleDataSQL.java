@@ -46,8 +46,8 @@ public class PersonWorkRoleDataSQL {
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTG = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_work_person_role" ;
 
-    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTGDQ = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_work_person_role wpr  join  ephsit_talend_owner.stg_10_pmx_person_dq perd  on wpr.PMX_PARTY_SOURCE_REF = perd.person_source_ref \n" +
-            "join ephsit_talend_owner.stg_10_pmx_wwork_dq word on wpr.PMX_WORK_SOURCE_REF = word.pmx_source_reference \n" +
+    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTGDQ = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_work_person_role wpr  join  ephsit_talend_owner.stg_10_pmx_person_dq perd  on wpr.\"PMX_PARTY_SOURCE_REF\" = perd.person_source_ref \n" +
+            "join ephsit_talend_owner.stg_10_pmx_wwork_dq word on wpr.\"PMX_WORK_SOURCE_REF\" = word.pmx_source_reference \n" +
             "where perd.dq_err != 'Y' and word.dq_err != 'Y'" ;
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHAE = "select count(distinct work_person_role_id) as count from semarchy_eph_mdm.ae_work_person_role\n";
@@ -56,18 +56,22 @@ public class PersonWorkRoleDataSQL {
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSA = "select count(*) as count from semarchy_eph_mdm.sa_work_person_role sa\n" +
             "where f_event =  (\n" +
             "select max (f_event) from \n" +
-            "semarchy_eph_mdm.sa_product   \n" +
+            "semarchy_eph_mdm.sa_work_person_role   \n" +
             "join \n" +
             "semarchy_eph_mdm.sa_event on f_event = event_id \n" +
             "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )";
 
-    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHGD = "select count(*) as count from semarchy_eph_mdm.gd_work_person_role";
+    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHGD = "select count(*) as count from semarchy_eph_mdm.gd_work_person_role \n" +
+            "join  semarchy_eph_mdm.gd_event on f_event = event_id  \n " +
+            " where  semarchy_eph_mdm.gd_event.f_event_type = 'PMX' \n" +
+            " and semarchy_eph_mdm.gd_event.workflow_id = 'talend' \n" +
+            " and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX'";
 
 
     public static String GET_DATA_PERSONS_WORK_ROLE_PMX_PD = "SELECT\n" +
-            "     W.PRODUCT_WORK_ID||'-PD' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
+            "     W.PRODUCT_WORK_ID||PMG.F_PARTY||'-PD' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
             "    ,PMG.F_PARTY AS PMX_PARTY_SOURCE_REF\n" +
             "    ,W.PRODUCT_WORK_ID AS PMX_WORK_SOURCE_REF\n" +
             "    ,'PD' AS F_ROLE\n" +
@@ -79,7 +83,7 @@ public class PersonWorkRoleDataSQL {
             "    GD_PMG PMG ON PMC.F_PMG = PMG.PMGCODE\n" +
             "WHERE\n" +
             "    PMG.F_PARTY IS NOT NULL \n" +
-            "      AND W.PRODUCT_WORK_ID IN ('%s')";
+            "      AND W.PRODUCT_WORK_ID||PMG.F_PARTY IN ('%s')";
 
     public static String GET_DATA_PERSONS_WORK_ROLE_PMX_AU = "SELECT\n" +
             "\t P.PARTY_IN_PRODUCT_ID||'-AU' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
@@ -107,13 +111,13 @@ public class PersonWorkRoleDataSQL {
 
 
     public static String GET_DATA_PERSONS_WORK_ROLE_EPHSTG = "select \n" +
-            "\"wpr.WORK_PERSON_ROLE_SOURCE_REF\" as WORK_PERSON_ROLE_SOURCE_REF,\n" +
-            "\"wpr.PMX_PARTY_SOURCE_REF\" as PMX_PARTY_SOURCE_REF,\n" +
-            "\"wpr.PMX_WORK_SOURCE_REF\" as PMX_WORK_SOURCE_REF,\n" +
-            "\"wpr.F_ROLE\" as F_ROLE\n" +
+            "wpr.\"WORK_PERSON_ROLE_SOURCE_REF\" as WORK_PERSON_ROLE_SOURCE_REF,\n" +
+            "wpr.\"PMX_PARTY_SOURCE_REF\" as PMX_PARTY_SOURCE_REF,\n" +
+            "wpr.\"PMX_WORK_SOURCE_REF\" as PMX_WORK_SOURCE_REF,\n" +
+            "wpr.\"F_ROLE\" as F_ROLE\n" +
             "from ephsit_talend_owner.stg_10_pmx_work_person_role wpr\n" +
-            "join ephsit_talend_owner.stg_10_pmx_person_dq perd  on wpr.PMX_PARTY_SOURCE_REF = perd.person_source_ref \n " +
-            "join ephsit_talend_owner.stg_10_pmx_wwork_dq word on wpr.PMX_WORK_SOURCE_REF = word.pmx_source_reference \n " +
+            "join ephsit_talend_owner.stg_10_pmx_person_dq perd  on wpr.\"PMX_PARTY_SOURCE_REF\" = perd.\"person_source_ref\" \n " +
+            "join ephsit_talend_owner.stg_10_pmx_wwork_dq word on wpr.\"PMX_WORK_SOURCE_REF\" = word.\"pmx_source_reference\" \n " +
             "where \"WORK_PERSON_ROLE_SOURCE_REF\" in ('%s') and perd.dq_err != 'Y' and word.dq_err != 'Y'";
 
     public static String GET_DATA_PERSONS_WORK_ROLE_EPHSA = "select \n" +

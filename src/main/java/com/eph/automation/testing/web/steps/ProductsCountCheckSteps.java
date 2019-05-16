@@ -101,7 +101,7 @@ public class ProductsCountCheckSteps {
 
         sql= ProductCountSQL.EPH_STG_CAN_DQ_Count;
         productsCountContext.productCountStgCanDQ= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
-        Log.info("\nThe number of products in Canonical is: " + productsCountContext.productCountStgCanDQ.get(0).ephCanDqCount);
+        Log.info("\nThe number of products in Canonical with DQ is: " + productsCountContext.productCountStgCanDQ.get(0).ephCanDqCount);
     }
 
     @Then("^The number of products between (.*) and (.*) is equal$")
