@@ -210,13 +210,6 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
             //classname
             assertEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getB_classname(), dataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(i).getB_classname());
 
-            //identifier
-
-            Log.info("IDENTIFIER  in EPH SА: " +  dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getIdentifier());
-            Log.info("IDENTIFIER  in EPH GD : " + dataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(i).getIdentifier());
-
-            //identifier
-            assertEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getIdentifier(), dataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(i).getIdentifier());
 
             //f_type
             assertEquals(identifier, dataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(i).getF_type());
