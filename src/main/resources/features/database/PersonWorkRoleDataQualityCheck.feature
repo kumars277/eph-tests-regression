@@ -9,9 +9,9 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
 
   @Regression
   Scenario: Count check of persons work role between EPH Staging and EPH SA
-    Given Get the count of records for persons work role in EPH Staging
+    Given Get the count of records for persons work role in EPH Staging with DQ
     When Get the count of records for persons work role in EPH SA
-    Then Compare the count on records for persons work role in EPH Staging and EPH SA
+    Then Compare the count on records for persons work role in EPH Staging with DQ and EPH SA
 
   @Regression
   Scenario: Count check of persons work role between EPH SA and EPH GD

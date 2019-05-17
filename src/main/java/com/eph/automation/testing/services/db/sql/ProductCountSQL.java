@@ -30,7 +30,11 @@ public class ProductCountSQL {
 
     public static String EPH_STG_PRODUCT_Packages="select count(*) as packagesCount from ephsit_talend_owner.stg_10_pmx_product where \"PACKAGES\" = 'Y'";
 
-    public static String EPH_STG_CAN_Count = "SELECT count(*) as ephCanCount from ephsit_talend_owner.stg_10_pmx_product_can";
+    public static String EPH_STG_CAN_Count = "SELECT count(*) as ephCanCount from ephsit_talend_owner.stg_10_pmx_product_dq";
+
+    public static String EPH_STG_CAN_DQ_Count = "SELECT count(*) as ephCanDQCount from ephsit_talend_owner.stg_10_pmx_product_dq pdq left join ephsit_talend_owner.stg_10_pmx_wwork_dq w  on pdq.f_work_source_ref::int = w.pmx_source_reference::int \n" +
+            "left join ephsit_talend_owner.stg_10_pmx_manifestation_dq m on pdq.f_manifestation_source_ref::int = m.pmx_source_reference::int \n" +
+            "where pdq.dq_err != 'Y'";
 
     public static String EPH_SA_PRODUCT_Count="select count(*) as ephSACount FROM semarchy_eph_mdm.sa_product sa\n" +
            " where f_event =  (select max (f_event) from\n" +
@@ -50,7 +54,7 @@ public class ProductCountSQL {
             "    AND semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n" +
             "    and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )";
 
-    public static String EPH_AE_PRODUCT_Count="select count(*) as aeCount FROM semarchy_eph_mdm.ae_product ae\n" +
+    public static String EPH_AE_PRODUCT_Count="select count(distinct product_id) as aeCount FROM semarchy_eph_mdm.ae_product ae\n" +
             "     where ae.b_batchid =  (select max (ae.b_batchid) from\n" +
             "    semarchy_eph_mdm.ae_product ae join\n" +
             "   semarchy_eph_mdm.gd_event e on ae.b_batchid = e.b_batchid\n" +

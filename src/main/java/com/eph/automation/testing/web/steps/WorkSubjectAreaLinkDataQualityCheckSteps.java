@@ -1,3 +1,5 @@
+
+
 package com.eph.automation.testing.web.steps;
 
 import com.eph.automation.testing.annotations.StaticInjection;
@@ -32,6 +34,7 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
     private String sql;
     private static int countWorkSubjectAreaRecordsPMX;
     private static int countWorkSubjectAreaRecordsEPHSTG;
+    private static int countWorkSubjectAreaRecordsEPHSTGDQ;
     private static int countWorkSubjectAreaRecordsEPHSA;
     private static int countWorkSubjectAreaRecordsEPHGD;
     private static List<String> ids;
@@ -56,6 +59,17 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
         Log.info("Count of work subject area data in EPH STG is: " + countWorkSubjectAreaRecordsEPHSTG);
     }
 
+
+    @When("^We get the count of work subject area data from EPH STG With DQ$")
+    public void getCountWorkSubjectAreaRecordsEPHSTGDQ() {
+        Log.info("When We get the count of work subject area data in EPH STG with DQ ..");
+        sql = WorkSubjectAreaLinkDataSQL.SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ;
+        Log.info(sql);
+        List<Map<String, Object>> workSubjectAreaNumberDQ = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countWorkSubjectAreaRecordsEPHSTGDQ = ((Long) workSubjectAreaNumberDQ.get(0).get("count")).intValue();
+        Log.info("Count of work subject area data in EPH STG with DQ is: " + countWorkSubjectAreaRecordsEPHSTGDQ);
+    }
+
     @When("^We get the count of work subject area data from EPH SA$")
     public void getCountWorkSubjectAreaRecordsEPHSA() {
         Log.info("When We get the count of work subject area data in EPH SA ..");
@@ -77,7 +91,6 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
     }
 
 
-
     @Then("^Compare the count of work subject area data in PMX and EPH STG$")
     public void compareCountWorkSubjectAreaRecordsBetweenPMXAndEPHSTG() {
         assertEquals("\nWork Subject area data count in PMX and EPH STG is not equal", countWorkSubjectAreaRecordsPMX, countWorkSubjectAreaRecordsEPHSTG);
@@ -86,7 +99,7 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
 
     @Then("^Compare the count of work subject area data in EPH STG and EPH SA$")
     public void compareCountWorkSubjectAreaRecordsBetweenEPHSTGAndEPHSA() {
-        assertEquals("\nWork Subject area data count in EPH STG and EPH SA is not equal", countWorkSubjectAreaRecordsEPHSTG, countWorkSubjectAreaRecordsEPHSA);
+        assertEquals("\nWork Subject area data count in EPH STG and EPH SA is not equal", countWorkSubjectAreaRecordsEPHSTGDQ, countWorkSubjectAreaRecordsEPHSA);
 
     }
 
@@ -101,7 +114,7 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        //numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         Log.info("Get the ids from stg ...");
@@ -157,7 +170,6 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
             assertNotNull(dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK());
 
 
-
         });
     }
 
@@ -190,7 +202,7 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
             Log.info("F_SUBJECT_AREA in PMX: " + dataQualityContext.workSubjectAreaDataObjectsFromPMX.get(i).getF_SUBJECT_AREA());
             Log.info("F_SUBJECT_AREA in EPH STG: " + dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getF_SUBJECT_AREA());
 
-            assertEquals( dataQualityContext.workSubjectAreaDataObjectsFromPMX.get(i).getF_SUBJECT_AREA(), dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getF_SUBJECT_AREA());
+            assertEquals(dataQualityContext.workSubjectAreaDataObjectsFromPMX.get(i).getF_SUBJECT_AREA(), dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getF_SUBJECT_AREA());
 
             //F_PRODUCT_WORK
             Log.info("F_PRODUCT_WORK in PMX: " + dataQualityContext.workSubjectAreaDataObjectsFromPMX.get(i).getF_PRODUCT_WORK());
@@ -205,6 +217,9 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
     public void compareWorkSubjectAreaDataSTGANDSA() {
         Log.info("And compare the work subject area data in EPH STG and EPH SA..");
 
+
+        Log.info("The Size of SA list is : " +  dataQualityContext.workSubjectAreaDataObjectsFromSA.size() );
+
         IntStream.range(0, dataQualityContext.workSubjectAreaDataObjectsFromSA.size()).forEach(i -> {
             sql = String.format(WorkSubjectAreaLinkDataSQL.SELECT_DATA_FROM_STG_FOR_CURRENT_RECORD_FROM_SA, dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getWORK_SUBJECT_AREA_LINK_ID());
             Log.info(sql);
@@ -217,27 +232,28 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
 
             assertEquals("WorkSubjectAreaLink", dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getB_CLASSNAME());
 
+
+            sql = String.format(WorkSubjectAreaLinkDataSQL.GET_F_SUBJECT_AREA, dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(0).getF_SUBJECT_AREA());
+            Log.info(sql);
+            List<Map<String, Object>> subjectAreaObject = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            int F_SUBJECT_AREA = ((BigDecimal) subjectAreaObject.get(0).get("F_SUBJECT_AREA")).intValue();
+
             //F_SUBJECT_AREA
-            Log.info("F_SUBJECT_AREA in EPH STG: " + dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getF_SUBJECT_AREA());
+            Log.info("F_SUBJECT_AREA in EPH STG: " + F_SUBJECT_AREA);
             Log.info("F_SUBJECT_AREA in SA: " + dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_SUBJECT_AREA());
 
+            assertEquals(String.valueOf(F_SUBJECT_AREA), dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_SUBJECT_AREA());
 
-                sql = String.format(WorkSubjectAreaLinkDataSQL.GET_F_SUBJECT_AREA, dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getF_SUBJECT_AREA());
-                Log.info(sql);
-                List<Map<String, Object>> subjectAreaObject = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                int F_SUBJECT_AREA = ((BigDecimal) subjectAreaObject.get(0).get("F_SUBJECT_AREA")).intValue();
-                assertEquals(F_SUBJECT_AREA, dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_SUBJECT_AREA());
+            sql = String.format(WorkSubjectAreaLinkDataSQL.GET_F_WWORK, dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(0).getF_PRODUCT_WORK());
+            Log.info(sql);
+            List<Map<String, Object>> fWworkObject = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            String F_WWORK = fWworkObject.get(0).get("F_WWORK").toString();
 
 
             //F_WWORK
-            Log.info("F_WWORK in EPH STG: " + dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getF_WWORK());
+            Log.info("F_WWORK in EPH STG: " + F_WWORK);
             Log.info("F_WWORK in SA: " + dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK());
 
-
-            sql = String.format(WorkSubjectAreaLinkDataSQL.GET_F_WWORK, dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getF_PRODUCT_WORK());
-            Log.info(sql);
-            List<Map<String, Object>> fWworkObject = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            int F_WWORK = ((BigDecimal) fWworkObject.get(0).get("F_WWORK")).intValue();
             assertEquals(F_WWORK, dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK());
         });
 
@@ -257,20 +273,20 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
             Log.info("B_CLASSNAME in SA: " + dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getB_CLASSNAME());
             Log.info("B_CLASSNAME in GD: " + dataQualityContext.workSubjectAreaDataObjectsFromGD.get(i).getB_CLASSNAME());
 
-            assertEquals(dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getB_CLASSNAME(),  dataQualityContext.workSubjectAreaDataObjectsFromGD.get(i).getB_CLASSNAME());
+            assertEquals(dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getB_CLASSNAME(), dataQualityContext.workSubjectAreaDataObjectsFromGD.get(i).getB_CLASSNAME());
 
             //F_SUBJECT_AREA
             Log.info("F_SUBJECT_AREA in SA: " + dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_SUBJECT_AREA());
             Log.info("F_SUBJECT_AREA in GD: " + dataQualityContext.workSubjectAreaDataObjectsFromGD.get(i).getF_SUBJECT_AREA());
 
-            assertEquals(dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_SUBJECT_AREA(),  dataQualityContext.workSubjectAreaDataObjectsFromGD.get(i).getF_SUBJECT_AREA());
+            assertEquals(dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_SUBJECT_AREA(), dataQualityContext.workSubjectAreaDataObjectsFromGD.get(i).getF_SUBJECT_AREA());
 
 
             //F_WWORK
             Log.info("F_WWORK in SA: " + dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK());
             Log.info("F_WWORK in GD: " + dataQualityContext.workSubjectAreaDataObjectsFromGD.get(i).getF_WWORK());
 
-            assertEquals(dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK(),  dataQualityContext.workSubjectAreaDataObjectsFromGD.get(i).getF_WWORK());
+            assertEquals(dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK(), dataQualityContext.workSubjectAreaDataObjectsFromGD.get(i).getF_WWORK());
 
         });
 

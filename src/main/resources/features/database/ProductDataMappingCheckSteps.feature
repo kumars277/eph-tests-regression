@@ -45,7 +45,7 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
 
 
   @Regression
-  Scenario Outline: Validate data is transferred from EPH STG DQ and EPH SA for books
+  Scenario Outline: Validate data is transferred from EPH STG DQ and EPH SA and GD for books
     Given We get <countOfRandomIds> random ids for <type>
     When We get the data from EPH STG
     Then We get the data from EPH STG DQ for <type>
@@ -60,7 +60,7 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
       | 10               | package |
 
   @Regression
-  Scenario Outline: Validate data is transferred from EPH STG DQ and EPH SA for journals
+  Scenario Outline: Validate data is transferred from EPH STG DQ and EPH SA and GD for journals
     Given We get <countOfRandomIds> ids of journals for <type> with <open_access> and <author_charges>
     When We get the data from EPH STG
     When  We get the data from EPH STG DQ for <type>
@@ -82,6 +82,7 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
 
 
 
-  @Regression
-  Scenario: Check if a product is linked to different works and manifestations (duplicate product with different product id and manifestation ids)
-    Given Check the db for duplicate products
+
+  @WIP
+  #Scenario: Check if a product is linked to different works and manifestations (duplicate product with different product id and manifestation ids)
+  #Given Check the db for duplicate products
