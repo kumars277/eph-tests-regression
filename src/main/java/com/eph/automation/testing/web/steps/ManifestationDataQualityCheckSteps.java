@@ -109,7 +109,7 @@ public class ManifestationDataQualityCheckSteps {
 
     @Then("^The number of the records in EPH DQ and SA_MANIFESTATION is equal$")
     public void verifyCountOfManifestationDataInDQandSAManifestationIsEqual() {
-        Assert.assertEquals("\nThe number of manifestations in EPH DQ and SA is not equal", countManifestationsEPH, countManifestationsDQ);
+        Assert.assertEquals("\nThe number of manifestations in EPH DQ and SA is not equal", countManifestationsDQ, countManifestationsEPH);
     }
 
     @Then("^The manifestations are transferred to the golden data table$")

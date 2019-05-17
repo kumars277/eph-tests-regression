@@ -10,17 +10,17 @@ public class UpdateProductSQL {
     // Test data - Work
     public static String Insert_work = "INSERT INTO ephsit.semarchy_eph_mdm.sa_wwork (b_loadid, work_id, b_classname, " +
             "work_title,f_type,f_status,f_pmc,f_oa_type,f_imprint,f_event,electro_rights_indicator,volume)\n" +
-            " VALUES ('LOADID','EPR-W-TSTW01','Work','Test - Tetrahedron Letters','JNL','WAS','541','H','ELSEVIER','EVENT','false','0')";
+            " VALUES ('LOADID','EPR-W-TSTW01','Work','Test - Tetrahedron Letters','JNL','WDI','541','H','ELSEVIER','EVENT','false','0')";
 
     // Translation for the work
     public static String Insert_work_1 = "INSERT INTO ephsit.semarchy_eph_mdm.sa_wwork(b_loadid, work_id, b_classname,work_title,f_type,f_status,f_pmc,f_oa_type," +
             "f_imprint,f_event,electro_rights_indicator,volume)\n" +
-            " VALUES ('LOADID','EPR-W-TSTW02','Work','Test - de Tétrahédrón Léttérs','JNL','WST','200','H','MOSBY','EVENT','false','0')";
+            " VALUES ('LOADID','EPR-W-TSTW02','Work','Test - de Tétrahédrón Léttérs','JNL','WLA','200','H','MOSBY','EVENT','false','0')";
 
     // Mirror for the work
     public static String Insert_work_2 = "INSERT INTO ephsit.semarchy_eph_mdm.sa_wwork(b_loadid, work_id, b_classname,work_title,f_type,f_status,f_pmc,f_oa_type,f_imprint," +
             "f_event,electro_rights_indicator,volume)\n" +
-            " VALUES ('LOADID','EPR-W-TSTW03','Work','Test - Tetrahedron Letters: X','JNL','WAS','541','F','MOSBY','EVENT','false','0')";
+            " VALUES ('LOADID','EPR-W-TSTW03','Work','Test - Tetrahedron Letters: X','JNL','WDI','541','F','MOSBY','EVENT','false','0')";
 
     // Test data - Manifestation
     public static String Insert_manifestation = "INSERT INTO ephsit.semarchy_eph_mdm.sa_manifestation (b_loadid, manifestation_id, b_classname," +

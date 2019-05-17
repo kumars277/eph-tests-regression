@@ -8,7 +8,7 @@ Feature: Entity - WORK SUBJECT AREA - Count And Data Mapping Check - Validate da
 
   @Regression
   Scenario: Compare count of work subject area data between EPH STG and EPH SA
-    Given We get the count of work subject area data from EPH STG
+    Given We get the count of work subject area data from EPH STG With DQ
     When We get the count of work subject area data from EPH SA
     Then Compare the count of work subject area data in EPH STG and EPH SA
 
@@ -41,11 +41,12 @@ Feature: Entity - WORK SUBJECT AREA - Count And Data Mapping Check - Validate da
   @Regression
   Scenario Outline: Validate work subject area data is transferred from EPH STG to EPH SA
     Given We get <countOfRandomIds> random ids of work subject area data
-    When We get the work subject area data from EPH SA
-    Then Compare the work subject area data in EPH STG and EPH SA
+    When We get the work subject area data from EPH STG
+    Then We get the work subject area data from EPH SA
+    And Compare the work subject area data in EPH STG and EPH SA
     Examples:
       | countOfRandomIds |
-      | 10               |
+      | 10             |
 
   @Regression
   Scenario Outline: Validate work subject area data is transferred from EPH SA to EPH GD

@@ -1,4 +1,86 @@
 {
+	"code": {
+		"$id": "#/properties/code",
+		"type": "string",
+		"title": "The Code Schema",
+		"examples": [
+			"JBF"
+		],
+		"pattern": "^(.*)$"
+	},
+	"name": {
+		"$id": "#/properties/name",
+		"type": "string",
+		"title": "The Name Schema",
+		"examples": [
+			"Journal Backfiles"
+		],
+		"pattern": "^(.*)$"
+	},
+	"type": {
+		"$id": "#/properties/type",
+		"type": "object",
+		"title": "The Type Schema",
+		"required": [
+			"code",
+			"name"
+		],
+		"properties": {
+			"code": {
+			 	"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+			},
+			"name": {
+			 	"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+			}
+		},
+		"additionalProperties": false
+	},
+	"workManifestationType": {
+		"$id": "#/properties/workManifestationType",
+		"type": "object",
+		"title": "The WorkManifestationType Schema",
+		"required": [
+			"code",
+			"name",
+			"typeRollUp"
+		],
+		"properties": {
+			"code": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+			},
+			"name": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+			},
+			"typeRollUp": {
+				"$id": "#/properties/type/properties/typeRollUp",
+				"type": "string",
+				"title": "The Typerollup Schema",
+				"examples": [
+					"Journal"
+				],
+				"pattern": "^(.*)$"
+			}
+		},
+		"additionalProperties": false
+	},
+	"status": {
+		"$id": "#/properties/status",
+		"type": "object",
+		"title": "The Status Schema",
+		"required": [
+			"code",
+			"name"
+		],
+		"properties": {
+			"code": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+			},
+			"name": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+			}
+		},
+		"additionalProperties": false
+	},
 	"effectiveStartDate": {
 		"$id": "#/properties/effectiveStartDate",
 		"type": "string",
@@ -17,36 +99,51 @@
 		],
 		"pattern": "^(.*)$"
 	},
-	"identifierType": {
-		"$id": "#/properties/identifierType",
-		"type": "object",
-		"title": "The Identifiertype Schema",
-		"required": [
-			"identifierTypeCode",
-			"identifierTypeName"
-		],
-		"properties": {
-			"identifierTypeCode": {
-				"$id": "#/properties/identifierTypeCode",
-				"type": "string",
-				"title": "The Identifiertypecode Schema",
-				"examples": [
-					"ISSN"
-				],
-				"pattern": "^(.*)$"
+	"identifiers": {
+		"$id": "#/properties/identifiers",
+		"type": "array",
+		"default": null,
+		"title": "The Identifiers Schema",
+		"items": {
+			"$id": "#/properties/identifiers/items",
+			"type": "object",
+			"title": "The Items Schema",
+			"required": [
+				"identifier",
+				"identifierType"
+			],
+			"properties": {
+				"identifier": {
+					"$id": "#/properties/identifiers/items/properties/identifier",
+					"type": "string",
+					"title": "The Identifier Schema",
+					"examples": [
+						"1234-5678"
+					],
+					"pattern": "^(.*)$"
+				},
+				"identifierType": {
+					"$id": "#/properties/identifierType",
+					"type": "object",
+					"title": "The Identifiertype Schema",
+					"required": [
+						"code",
+						"name"
+					],
+					"properties": {
+						"code": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+						},
+						"name": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+						}
+					},
+					"additionalProperties": false
+				}
 			},
-			"identifierTypeName": {
-				"$id": "#/properties/identifierTypeName",
-				"type": "string",
-				"title": "The Identifiertypename Schema",
-				"examples": [
-					"ISSN"
-				],
-				"pattern": "^(.*)$"
-			}
-		},
-		"additionalProperties": false
-	},
+			"additionalProperties": false
+		}
+	},	
 	"accountableProduct": {
 		"$id": "#/properties/accountableProduct",
 		"type": "object",
@@ -80,27 +177,15 @@
 				"type": "object",
 				"title": "The Glproductparentvalue Schema",
 				"required": [
-					"segmentParentCode",
-					"segmentParentName"
+					"code",
+					"name"
 				],
 				"properties": {
-					"segmentParentCode": {
-						"$id": "#/properties/accountableProduct/properties/glProductParentValue/properties/segmentParentCode",
-						"type": "string",
-						"title": "The Segmentparentcode Schema",
-						"examples": [
-							"PJNLOWN"
-						],
-						"pattern": "^(.*)$"
+					"code": {
+						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 					},
-					"segmentParentName": {
-						"$id": "#/properties/accountableProduct/properties/glProductParentValue/properties/segmentParentName",
-						"type": "string",
-						"title": "The Segmentparentname Schema",
-						"examples": [
-							"Elsevier Owned Journals"
-						],
-						"pattern": "^(.*)$"
+					"name": {
+						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 					}
 				},
 				"additionalProperties" : false
@@ -128,26 +213,15 @@
 					"type": "object",
 					"title": "The Glcompany Schema",
 					"required": [
-						"glCompanyCode",
-						"glCompanyName"
+						"code",
+						"name"
 					],
 					"properties": {
-						"glCompanyCode": {
-							"$id": "#/properties/financialAttributes/items/properties/glCompany/properties/glCompanyCode",
-							"type": "string",
-							"title": "The Glcompanycode Schema",
-							"examples": [
-								121
-							]
+						"code": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 						},
-						"glCompanyName": {
-							"$id": "#/properties/financialAttributes/items/properties/glCompany/properties/glCompanyName",
-							"type": "string",
-							"title": "The Glcompanyname Schema",
-							"examples": [
-								"Elsevier BV"
-							],
-							"pattern": "^(.*)$"
+						"name": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 						}
 					},
 					"additionalProperties": false
@@ -157,26 +231,15 @@
 					"type": "object",
 					"title": "The Costresponsibilitycentre Schema",
 					"required": [
-						"responsibilityCentreCode",
-						"responsibilityCentreName"
+						"code",
+						"name"
 					],
 					"properties": {
-						"responsibilityCentreCode": {
-							"$id": "#/properties/financialAttributes/items/properties/costResponsibilityCentre/properties/responsibilityCentreCode",
-							"type": "string",
-							"title": "The Responsibilitycentrecode Schema",
-							"examples": [
-								10063
-							]
+						"code": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 						},
-						"responsibilityCentreName": {
-							"$id": "#/properties/financialAttributes/items/properties/costResponsibilityCentre/properties/responsibilityCentreName",
-							"type": "string",
-							"title": "The Responsibilitycentrename Schema",
-							"examples": [
-								"Cell Press General"
-							],
-							"pattern": "^(.*)$"
+						"name": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 						}
 					},
 					"additionalProperties": false
@@ -186,26 +249,15 @@
 					"type": "object",
 					"title": "The Revenueresponsibilitycentre Schema",
 					"required": [
-						"responsibilityCentreCode",
-						"responsibilityCentreName"
+						"code",
+						"name"
 					],
 					"properties": {
-						"responsibilityCentreCode": {
-							"$id": "#/properties/financialAttributes/items/properties/revenueResponsibilityCentre/properties/responsibilityCentreCode",
-							"type": "string",
-							"title": "The Responsibilitycentrecode Schema",
-							"examples": [
-								10063
-							]
+						"code": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 						},
-						"responsibilityCentreName": {
-							"$id": "#/properties/financialAttributes/items/properties/revenueResponsibilityCentre/properties/responsibilityCentreName",
-							"type": "string",
-							"title": "The Responsibilitycentrename Schema",
-							"examples": [
-								"Cell Press General"
-							],
-							"pattern": "^(.*)$"
+						"name": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 						}
 					},
 					"additionalProperties": false
@@ -220,36 +272,69 @@
 			"additionalProperties": false
 		}
 	},
+	"persons": {
+		"$id": "#/properties/persons",
+		"type": "array",
+		"default": null,
+		"title": "The Persons Schema",
+		"items": {
+			"$id": "#/properties/persons/items",
+			"type": "object",
+			"title": "The Items Schema",
+			"required": [
+				"id",
+				"role",
+				"person"
+			],
+			"properties": {
+				"id": {
+					"$id": "#/properties/persons/items/properties/id",
+					"type": "integer",
+					"title": "The Id Schema",
+					"examples": [
+						1234858765
+					]
+				},
+				"role": { 
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/role"
+				},
+				"person": { 
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/person"
+				}
+			},
+			"additionalProperties": false
+		}
+	},
 	"person": {
 		"$id": "#/properties/person",
 		"type": "object",
 		"title": "The Person Schema",
 		"required": [
-			"personId",
-			"personLastName"
+			"id",
+			"lastName"
 		],
 		"properties": {
-			"personId": {
-				"$id": "#/properties/person/properties/personId",
+			"id": {
+				"$id": "#/properties/person/properties/id",
 				"type": "integer",
 				"title": "The Personid Schema",
 				"examples": [
 					15864548
 				]
 			},
-			"personFirstName": {
-				"$id": "#/properties/person/properties/personFirstName",
+			"firstName": {
+				"$id": "#/properties/person/properties/firstName",
 				"type": "string",
-				"title": "The Personfirstname Schema",
+				"title": "The Firstname Schema",
 				"examples": [
 					"Andrew"
 				],
 				"pattern": "^(.*)$"
 			},
-			"personLastName": {
-				"$id": "#/properties/person/properties/personLastName",
+			"lastName": {
+				"$id": "#/properties/person/properties/lastName",
 				"type": "string",
-				"title": "The Personlastname Schema",
+				"title": "The Lastname Schema",
 				"examples": [
 					"Binks"
 				],
@@ -263,27 +348,15 @@
 		"type": "object",
 		"title": "The Role Schema",
 		"required": [
-			"roleCode",
-			"roleName"
+			"code",
+			"name"
 		],
 		"properties": {
-			"roleCode": {
-				"$id": "#/properties/role/properties/roleCode",
-				"type": "string",
-				"title": "The Rolecode Schema",
-				"examples": [
-					"PO"
-				],
-				"pattern": "^(.*)$"
+			"code": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 			},
-			"roleName": {
-				"$id": "#/propertiesrole/properties/roleName",
-				"type": "string",
-				"title": "The Rolename Schema",
-				"examples": [
-					"Product Owner"
-				],
-				"pattern": "^(.*)$"
+			"name": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 			}
 		},
 		"additionalProperties": false

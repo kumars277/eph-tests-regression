@@ -348,8 +348,8 @@ public class NotificationTestSteps {
             JsonObject jsonObj = new JsonParser().parse(notificationCountContext.payloadResult.get(0).value).getAsJsonObject();
             Log.info(json);
             String schemaVersion = jsonObj.get("schemaVersion").getAsString();
-            String id = jsonObj.get("productId").getAsString();
-            String type = jsonObj.getAsJsonObject("productType").get("productTypeCode").getAsString();
+            String id = jsonObj.get("id").getAsString();
+            String type = jsonObj.getAsJsonObject("type").get("code").getAsString();
             Log.info(notificationCountContext.payloadResult.get(0).timestamp.substring(0,16));
             Log.info(json);
             Log.info(schemaVersion);
@@ -417,8 +417,8 @@ public class NotificationTestSteps {
             JsonObject jsonObj = new JsonParser().parse(notificationCountContext.payloadResult.get(0).value).getAsJsonObject();
             Log.info(json);
             String schemaVersion = jsonObj.get("schemaVersion").getAsString();
-            String id = jsonObj.get("workId").getAsString();
-            String type = jsonObj.getAsJsonObject("workType").get("workTypeCode").getAsString();
+            String id = jsonObj.get("id").getAsString();
+            String type = jsonObj.getAsJsonObject("type").get("code").getAsString();
             Log.info(notificationCountContext.payloadResult.get(0).timestamp.substring(0,16));
             Log.info(json);
             Log.info(schemaVersion);

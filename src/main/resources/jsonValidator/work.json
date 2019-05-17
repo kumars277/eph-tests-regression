@@ -10,13 +10,13 @@
 				"type": "object",
 				"title": "The Items Schema",
 				"required": [
-			        "productId"				
+			        "id"				
 			    ],
 				"properties": {
-					"productId": {
-						"$id": "#/properties/productId",
+					"id": {
+						"$id": "#/properties/id",
 						"type": "string",
-						"title": "The Productid Schema",
+						"title": "The Id Schema",
 						"examples": [
 							"EPR-1234AF"
 						],
@@ -34,10 +34,10 @@
 	"description": "The EPH Work-Centric Schema",
 	"required": [
 		"schemaVersion",
-		"workId",
-		"workTitle",
-		"workType",
-		"workStatus"
+		"id",
+		"title",
+		"type",
+		"status"
 	],
 	"properties": {
 		"schemaVersion": {
@@ -46,14 +46,14 @@
 			"title": "The Schema Version",
 			"pattern": "^(.*)$"
 		},
-		"workId": {
-			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workId"
+		"id": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/id"
 		},
-		"workTitle": {
-			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workTitle"
+		"title": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/title"
 		},
-		"workSubTitle": {
-			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workSubTitle"
+		"subTitle": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/subTitle"
 		},
 		"electronicRightsInd": {
 			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/electronicRightsInd"
@@ -70,14 +70,14 @@
 		"copyrightYear": {
 			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/copyrightYear"
 		},
-		"workIdentifiers": {
-			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workIdentifiers"
+		"identifiers": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/identifiers"
 		},
-		"workType": {
-			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workType"
+		"type": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/type"
 		},
-		"workStatus": {
-			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workStatus"
+		"status": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/status"
 		},
 		"imprint": {
 			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/imprint"
@@ -94,20 +94,26 @@
 		"pmc": {
 			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/pmc"
 		},
-		"workTranslations": {
-			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workTranslations"
+		"translations": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/translations"
 		},
-		"workEditions": {
-			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workEditions"
+		"editions": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/editions"
 		},
 		"accountableProduct": {
 			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/accountableProduct"
 		},
-		"workFinancialAttributes": {
+		"financialAttributes": {
 			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/financialAttributes"
 		},
-		"workPersons": {
-			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/workPersons"
+		"persons": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/persons"
+		},
+		"subjectAreas": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/subjectAreas"
+		},
+		"mirrors": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/mirrors"
 		},
 		"manifestations": {
 			"$id": "#/properties/manifestations",
@@ -119,20 +125,20 @@
 				"type": "object",
 				"title": "The Items Schema",
 				"required": [
-			        "manifestationId",
-	    		    "manifestationKeyTitle",
-	        		"manifestationType",
-					"manifestationStatus"
+			        "id",
+	    		    "keyTitle",
+	        		"type",
+					"status"
 				],
 				"properties": {
-					"manifestationId": {
-						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/manifestationId"
+					"id": {
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/id"
 					},
-					"manifestationKeyTitle": {
-						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/manifestationKeyTitle"
+					"keyTitle": {
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/keyTitle"
 					},
-					"internationalEditionFlag": {
-						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/internationalEditionFlag"
+					"internationalEditionInd": {
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/internationalEditionInd"
 					},
 					"firstPubDate": {
 						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/firstPubDate"
@@ -140,17 +146,17 @@
 					"lastPubDate": {
 						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/lastPubDate"
 					},
-					"manifestationIdentifiers": {
-						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/manifestationIdentifiers"
+					"identifiers": {
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/identifiers"
 					},
-					"manifestationType": {
-						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/manifestationType"
+					"type": {
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/type"
 					},
-					"manifestationStatus": {
-						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/manifestationStatus"
+					"status": {
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/status"
 					},
-					"manifestationFormat": {
-						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/manifestationFormat"
+					"format": {
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/format"
 					},
 					"products": {
 						"$ref": "#/definitions/products"
