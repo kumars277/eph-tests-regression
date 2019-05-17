@@ -60,12 +60,13 @@ public class PersonDataSQL {
             "where \"PERSON_SOURCE_REF\" in ('%s')\n";
 
     public static String GET_DATA_PERSONS_EPHDQ = "select distinct\n" +
-            "\"PERSON_SOURCE_REF\" as PERSON_SOURCE_REF,\n" +
-            "\"PERSON_FIRST_NAME\" as PERSON_FIRST_NAME,\n" +
-            "\"PERSON_FAMILY_NAME\" as PERSON_FAMILY_NAME,\n" +
-            "\"PEOPLEHUB_ID\" as PEOPLEHUB_ID\n" +
-            "from ephsit_talend_owner.stg_10_pmx_person_dq\n" +
-            "where \"PERSON_SOURCE_REF\" in ('%s')\n";
+            " PERSON_SOURCE_REF as PERSON_SOURCE_REF,\n" +
+            " PERSON_FIRST_NAME as PERSON_FIRST_NAME,\n" +
+            " PERSON_FAMILY_NAME as PERSON_FAMILY_NAME,\n" +
+            " PEOPLEHUB_ID as PEOPLEHUB_ID,\n" +
+            " DQ_ERR as DQ_ERR\n" +
+            " from ephsit_talend_owner.stg_10_pmx_person_dq\n" +
+            " where PERSON_SOURCE_REF in ('%s')";
 
     public static String GET_DATA_PERSONS_EPHSA = "select\n" +
             "b_loadid as B_LOADID, \n" +
@@ -94,7 +95,9 @@ public class PersonDataSQL {
 
     public static String GET_RANDOM_PERSON_IDS = "select   \n" +
             "\"PERSON_SOURCE_REF\" AS PERSON_SOURCE_REF\n" +
-            "from ephsit_talend_owner.stg_10_pmx_person\n" +
+            "from ephsit_talend_owner.stg_10_pmx_person p\n" +
+            "join ephsit_talend_owner.stg_10_pmx_person_dq dq on p.\"PERSON_SOURCE_REF\" = dq.person_source_ref\n" +
+            "where dq.dq_err != 'Y'\n" +
             "order by random() limit '%s'";
 
     public static String GET_IDS_FROM_LOOKUP_TABLE = "select numeric_id as PERSON_ID from ephsit_talend_owner.map_sourceref_2_numericid\n" +
