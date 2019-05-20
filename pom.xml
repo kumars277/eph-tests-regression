@@ -85,6 +85,7 @@
                     <skipTests>false</skipTests>
                     <systemPropertyVariables>
                         <env>${ENV}</env>
+                        <load>${LOAD}</load>
                         <encryptionPasswordEOAS>EOAS Secret Password</encryptionPasswordEOAS>
                         <dbRandomRecordsNumber>${dbRandomRecordsNumber}</dbRandomRecordsNumber>
                     </systemPropertyVariables>

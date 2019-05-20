@@ -151,6 +151,25 @@ public class WorkDataObject {
     public String PRODUCT_WORK_PUB_DATE;
     public String JOURNAL_ACRONYM;
     public String f_accountable_product;
+    public String UPDATED;
+
+    public String getUPDATED() {
+        return UPDATED;
+    }
+
+    public void setUPDATED(String UPDATED) {
+        this.UPDATED = UPDATED;
+    }
+
+    public String getLANGUAGE_CODE() {
+        return LANGUAGE_CODE;
+    }
+
+    public void setLANGUAGE_CODE(String LANGUAGE_CODE) {
+        this.LANGUAGE_CODE = LANGUAGE_CODE;
+    }
+
+    public String LANGUAGE_CODE;
 
     public int getVOLUME() {
         return VOLUME;
@@ -460,6 +479,16 @@ public class WorkDataObject {
     public String IDENTIFER;
 
     public String F_WWORK;
+
+    public String getRefresh_timestamp() {
+        return refresh_timestamp;
+    }
+
+    public void setRefresh_timestamp(String refresh_timestamp) {
+        this.refresh_timestamp = refresh_timestamp;
+    }
+
+    public String refresh_timestamp;
 
     public String getF_WWORK() {
         return F_WWORK;
