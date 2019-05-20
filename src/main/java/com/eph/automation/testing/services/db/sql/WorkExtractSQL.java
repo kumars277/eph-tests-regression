@@ -5,19 +5,19 @@ package com.eph.automation.testing.services.db.sql;
  */
 public class WorkExtractSQL {
 
-    public static String PMX_WORK_EXTRACT= "  SELECT * FROM (\n" +
-            "  SELECT DISTINCT 1 \n" +
-//            "  , M.ELSEVIER_PRODUCT_ID AS PRODUCT_ID -- Product Manifestation Reference,  not needed in EPH but extracted for record linking purposes\n" +
-            "  ,W.PRODUCT_WORK_TITLE AS WORK_TITLE -- Title\n" +
+    public static String PMX_WORK_EXTRACT= " SELECT * FROM (\n" +
+            "  SELECT\n" +
+            "-- M.ELSEVIER_PRODUCT_ID AS PRODUCT_ID -- Product Manifestation Reference,  not needed in EPH but extracted for record linking purposes\n" +
+            "   W.PRODUCT_WORK_TITLE AS WORK_TITLE -- Title\n" +
             "  ,W.PRODUCT_SUBTITLE AS WORK_SUBTITLE -- Subtitle\n" +
             "  ,W.DAC_KEY -- DAC Key (may go in IDs table, depending on implementation of data model)\n" +
             "  ,W.MASTER_ISBN_STRIPPED AS PRIMARY_ISBN -- DAC ISBN (may go in IDs table, depending on implementation of data model)\n" +
             "  ,A.WORK_ALTERNATIVE_ID_REF AS PROJECT_NUM -- Project Number (may go in IDs table, depending on implementation of data model)\n" +
-            "  ,W.ISSN_L as ISSN_L-- ISSN-L (may go in IDs table, depending on implementation of data model)\n" +
+            "  ,W.ISSN_L -- ISSN-L (may go in IDs table, depending on implementation of data model)\n" +
             "  ,W.ELSEVIER_JOURNAL_NUMBER AS JOURNAL_NUMBER -- Journal Number (may go in IDs table, depending on implementation of data model)\n" +
-            "  ,W.ELECTRONIC_RIGHTS_IND as ELECTRONIC_RIGHTS_IND-- Electronic Rights Indicator\n" +
-            "  ,W.BOOK_EDITION_NAME as BOOK_EDITION_NAME-- Edition Number\n" +
-            "  ,W.BOOK_VOLUME_NAME as BOOK_VOLUME_NAME-- Volume\n" +
+            "  ,W.ELECTRONIC_RIGHTS_IND -- Electronic Rights Indicator\n" +
+            "  ,TO_NUMBER(W.BOOK_EDITION_NAME) BOOK_EDITION_NAME -- Edition Number\n" +
+            "  ,W.BOOK_VOLUME_NAME -- Volume\n" +
             "  ,W.F_PMC AS PMC -- PMC to link to LOV table\n" +
             "  ,W.F_PMG AS PMG -- PMG to link to LOV table\n" +
             "  ,S.STATUS_CODE AS WORK_STATUS\t-- Work Level Status to link to LOV table (this will need mapping to new values, logic TBC)\n" +
@@ -31,9 +31,11 @@ public class WorkExtractSQL {
             "  ,W.F_OPCO_R12 -- Company in Accountable Product Entity to link to LOV table\n" +
             "  ,W.PRODUCT_WORK_PUB_DATE -- Work Publication Date\n" +
             "  ,W.JOURNAL_ACRONYM_PTS AS JOURNAL_ACRONYM -- PTS Journal Acronym (may go in IDs table, depending on implementation of data model)\n" +
-            "  ,O.OWNERSHIP_SUB_TYPE_ID as OWNERSHIP\n"+
+            "    ,O.OWNERSHIP_SUB_TYPE_CODE AS OWNERSHIP -- This is the Ownership Sub Type Code in PMX for mapping to EPH Ownership Type Code\n" +
+            "    ,TO_CHAR(GREATEST(NVL(W.B_UPDDATE,W.B_CREDATE),CASE WHEN PO.B_UPDDATE IS NULL AND PO.B_CREDATE IS NULL THEN TO_DATE('01-01-1900','DD-MM-YYYY') ELSE NVL(PO.B_UPDDATE,PO.B_CREDATE) END)) AS UPDATED\n" +
+            "    ,LANGUAGE_CODE -- Includes dummy code for multi-langauge titles\n" +
             "  FROM GD_PRODUCT_WORK W\n" +
-            "  -- JOIN GD_PRODUCT_MANIFESTATION M ON W.PRODUCT_WORK_ID = M.F_PRODUCT_WORK\n" +
+            "--  JOIN GD_PRODUCT_MANIFESTATION M ON W.PRODUCT_WORK_ID = M.F_PRODUCT_WORK\n" +
             "  LEFT JOIN GD_WORK_ALT_IDENTIFIER A ON W.PRODUCT_WORK_ID = A.F_PRODUCT_WORK AND A.F_ALTERNATIVE_IDENTIFIER_TY = 24\n" +
             "  LEFT JOIN GD_OPEN_ACCESS_JOURNAL_TYPE O ON W.F_OPEN_ACCESS_JOURNAL_TYPE = O.OPEN_ACCESS_JOURNAL_TYPE_\n" +
             "  LEFT JOIN GD_PRODUCT_SUBSTATUS SS ON W.F_WORK_SUBSTATUS = SS.PRODUCT_SUBSTATUS_ID\n" +
@@ -41,7 +43,16 @@ public class WorkExtractSQL {
             "  LEFT JOIN GD_PRODUCT_TYPE T ON W.F_PRODUCT_TYPE = T.PRODUCT_TYPE_ID\n" +
             "  LEFT JOIN GD_IMPRINT I ON W.F_IMPRINT = I.IMPRINT_ID\n" +
             "  LEFT JOIN GD_PRODUCT_OWNER PO ON W.PRODUCT_WORK_ID = PO.F_PRODUCT_WORK\n" +
-            "  LEFT JOIN GD_OWNERSHIP_SUB_TYPE O ON PO.F_OWNERSHIP_SUB_TYPE = O.OWNERSHIP_SUB_TYPE_ID)\n" +
+            "  LEFT JOIN GD_OWNERSHIP_SUB_TYPE O ON PO.F_OWNERSHIP_SUB_TYPE = O.OWNERSHIP_SUB_TYPE_ID\n" +
+            "  LEFT JOIN (SELECT P.F_PRODUCT_WORK, CASE WHEN C.LANGUAGE_COUNT > 1 THEN 'ZZ' ELSE UPPER(L.LANGUAGE_ISO_CODE) END AS LANGUAGE_CODE\n" +
+            "             FROM\n" +
+            "            (SELECT F_PRODUCT_WORK, COUNT(PRODUCT_LANGUAGE_ID) AS LANGUAGE_COUNT FROM GD_PRODUCT_LANGUAGE GROUP BY F_PRODUCT_WORK) C\n" +
+            "             JOIN\n" +
+            "            GD_PRODUCT_LANGUAGE P  ON C.F_PRODUCT_WORK = P.F_PRODUCT_WORK\n" +
+            "             JOIN\n" +
+            "            GD_LANGUAGES L ON P.F_LANGUAGES = L.LANGUAGES_ID) WL ON W.PRODUCT_WORK_ID = WL.F_PRODUCT_WORK\n" +
+            "  WHERE T.PRODUCT_TYPE_CODE NOT IN ('COMPENDIUM','JCOLSC','ADVERTISING','FS','DUES')\n" +
+            ")\n"+
             "  WHERE PRODUCT_WORK_ID IN ('%s') ORDER BY PRODUCT_WORK_ID";
 
     public static String GET_PRODUCT_EXPORT_FROM_PMX_BY_PMC = "  select distinct * from\n" +
