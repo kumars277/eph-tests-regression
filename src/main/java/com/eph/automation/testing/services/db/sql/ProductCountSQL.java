@@ -30,6 +30,43 @@ public class ProductCountSQL {
 
     public static String EPH_STG_PRODUCT_Packages="select count(*) as packagesCount from ephsit_talend_owner.stg_10_pmx_product where \"PACKAGES\" = 'Y'";
 
+    public static String EPH_STG_PRODUCT_Count_Updated="select count(*) as stgCount from ephsit_talend_owner.stg_10_pmx_product " +
+            "where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+
+    public static String EPH_STG_PRODUCT_Count_BOOKS_Updated="select count(*) as booksCount from ephsit_talend_owner.stg_10_pmx_product where \"ONE_OFF_ACCESS\" = 'Y' " +
+            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+
+    public static String EPH_STG_PRODUCT_Count_Sub_Updated = "select count(*) as subCount from ephsit_talend_owner.stg_10_pmx_product where \"SUBSCRIPTION\" = 'Y' " +
+            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+
+    public static String EPH_STG_PRODUCT_Count_Bulk_Updated="select count(*) as bulkCount from ephsit_talend_owner.stg_10_pmx_product where \"WORK_TYPE\" = 'JOURNAL' and \"BULK_SALES\" = 'Y' " +
+            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+
+    public static String EPH_STG_PRODUCT_Count_Reprint_Updated="select count(*) as reprintCount from ephsit_talend_owner.stg_10_pmx_product where \"WORK_TYPE\" = 'JOURNAL' and \"REPRINTS\" = 'Y' " +
+            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+
+    public static String EPH_STG_PRODUCT_Count_Back_Updated="select count(*) as backCount from ephsit_talend_owner.stg_10_pmx_product where \"WORK_TYPE\" = 'JOURNAL' and \"BACK_FILES\" = 'Y' " +
+            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+
+    public static String EPH_STG_PRODUCT_Count_OA_Updated="select count(*) as oaCount from \n" +
+            "(select \"F_PRODUCT_WORK\" from ephsit_talend_owner.stg_10_pmx_product where  \"WORK_TYPE\" = 'JOURNAL' and  \"OPEN_ACCESS\" = 'Y' " +
+            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI') group by \"F_PRODUCT_WORK\" having count(*) = 1) a ";
+
+    public static String EPH_STG_PRODUCT_Count_OA_More_Updated="select count(*) as oaMoreCount from \n" +
+            "(select \"F_PRODUCT_WORK\" from ephsit_talend_owner.stg_10_pmx_product where \"WORK_TYPE\" = 'JOURNAL' and \"OPEN_ACCESS\" = 'Y' " +
+            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI') group by \"F_PRODUCT_WORK\" having count(*) > 1) a ";
+
+    public static String EPH_STG_PRODUCT_Count_AC_Updated="select count(*) as acCount from \n" +
+            "(select \"F_PRODUCT_WORK\" from ephsit_talend_owner.stg_10_pmx_product where  \"WORK_TYPE\" = 'JOURNAL' and  \"AUTHOR_CHARGES\" = 'Y' " +
+            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI') group by \"F_PRODUCT_WORK\" having count(*) = 1) a ";
+
+    public static String EPH_STG_PRODUCT_Count_AC_More_Updated="select count(*) as acMoreCount from \n" +
+            "(select \"F_PRODUCT_WORK\" from ephsit_talend_owner.stg_10_pmx_product where  \"WORK_TYPE\" = 'JOURNAL' and  \"AUTHOR_CHARGES\" = 'Y' " +
+            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI') group by \"F_PRODUCT_WORK\" having count(*) > 1) a " ;
+
+    public static String EPH_STG_PRODUCT_Packages_Updated="select count(*) as packagesCount from ephsit_talend_owner.stg_10_pmx_product where \"PACKAGES\" = 'Y' " +
+            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+
     public static String EPH_STG_CAN_Count = "SELECT count(*) as ephCanCount from ephsit_talend_owner.stg_10_pmx_product_dq";
 
     public static String EPH_STG_CAN_DQ_Count = "SELECT count(*) as ephCanDQCount from ephsit_talend_owner.stg_10_pmx_product_dq pdq left join ephsit_talend_owner.stg_10_pmx_wwork_dq w  on pdq.f_work_source_ref::int = w.pmx_source_reference::int \n" +

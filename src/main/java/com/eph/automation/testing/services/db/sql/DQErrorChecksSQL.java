@@ -21,7 +21,7 @@ public class DQErrorChecksSQL {
 
     public static String GET_Product_DQ_Linked_work = "select dq_err as dq_err, pmx_source_reference as pmx_source" +
             " from ephsit_talend_owner.stg_10_pmx_product_dq where " +
-            " f_work_source_ref in ('%s')";
+            " ult_work_ref in ('%s')";
 
     public static String GET_All_FAILED_DATA = "select pmx_source_reference as pmx_id from ephsit_talend_owner.stg_10_pmx_wwork_dq where dq_err='Y'";
 

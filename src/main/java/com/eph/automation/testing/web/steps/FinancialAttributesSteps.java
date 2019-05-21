@@ -91,8 +91,11 @@ public class FinancialAttributesSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
-        //numberOfRecords = "5";
+        if (System.getProperty("dbRandomRecordsNumber")!=null) {
+            numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        }else {
+            numberOfRecords = "5";
+        }
         Log.info("numberOfRecords = " + numberOfRecords);
 
         sql = FinAttrSQL.gettingSourceRef.replace("PARAM1", numberOfRecords);

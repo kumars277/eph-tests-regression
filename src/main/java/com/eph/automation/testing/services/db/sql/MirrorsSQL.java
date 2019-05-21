@@ -2,8 +2,15 @@ package com.eph.automation.testing.services.db.sql;
 
 public class MirrorsSQL {
 
-    public static String GET_STG_Mirrors_COUNT ="select count(*) as stgCount from ephsit_talend_owner.stg_10_pmx_work_rel " +
-            "where \"F_RELATIONSHIP_TYPE\"='MIR'";
+    public static String GET_STG_Mirrors_COUNT ="select count(*) as stgCount from ephsit_talend_owner.stg_10_pmx_work_rel \n" +
+            "join ephsit_talend_owner.stg_10_pmx_wwork_dq d1 on STG_10_PMX_WORK_REL.\"PARENT_PMX_SOURCE\"::varchar = d1.pmx_source_reference::varchar\n" +
+            "join ephsit_talend_owner.stg_10_pmx_wwork_dq d2 on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.pmx_source_reference::varchar\n" +
+            "where \"F_RELATIONSHIP_TYPE\"='MIR' and d1.dq_err != 'Y' and d2.dq_err != 'Y'";
+
+    public static String GET_STG_Mirrors_COUNT_Updated ="select count(*) as stgCount from ephsit_talend_owner.stg_10_pmx_work_rel " +
+            "join ephsit_talend_owner.stg_10_pmx_wwork_dq d1 on STG_10_PMX_WORK_REL.\"PARENT_PMX_SOURCE\"::varchar = d1.pmx_source_reference::varchar\n" +
+            "join ephsit_talend_owner.stg_10_pmx_wwork_dq d2 on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.pmx_source_reference::varchar\n" +
+            "where \"F_RELATIONSHIP_TYPE\"='MIR' and d1.dq_err != 'Y' and d2.dq_err != 'Y' and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
     public static String GET_SA_Mirrors_COUNT ="select count(*) as saCount from semarchy_eph_mdm.sa_work_relationship_mirror sa\n"+
             " where f_event =  (select max (f_event) from\n" +
@@ -32,10 +39,11 @@ public class MirrorsSQL {
             "AND e.f_event_type = 'PMX'\n"+
             "and e.f_workflow_source = 'PMX' )";
 
-    public static String gettingNumberOfIds="SELECT st.\"RELATIONSHIP_PMX_SOURCEREF\"  as random_value\n" +
-            " FROM ephsit_talend_owner.stg_10_pmx_work_rel st\n" +
-            " left join semarchy_eph_mdm.sa_work_relationship_mirror sa on st.\"RELATIONSHIP_PMX_SOURCEREF\" =cast(sa.work_rel_mirror_id as numeric)\n" +
-            "WHERE \"F_RELATIONSHIP_TYPE\"='MIR' and sa.b_error_status is null ORDER BY RANDOM()\n" +
+    public static String gettingNumberOfIds="SELECT \"RELATIONSHIP_PMX_SOURCEREF\"  as random_value\n" +
+            " FROM ephsit_talend_owner.stg_10_pmx_work_rel\n" +
+            "join ephsit_talend_owner.stg_10_pmx_wwork_dq d1 on STG_10_PMX_WORK_REL.\"PARENT_PMX_SOURCE\"::varchar = d1.pmx_source_reference::varchar\n" +
+            "join ephsit_talend_owner.stg_10_pmx_wwork_dq d2 on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.pmx_source_reference::varchar\n" +
+            "WHERE \"F_RELATIONSHIP_TYPE\"='MIR' and d1.dq_err != 'Y' and d2.dq_err != 'Y' ORDER BY RANDOM()\n" +
             " LIMIT PARAM1;";
 
     public static String gettingWorkID="SELECT work_id as work_id from semarchy_eph_mdm.sa_wwork where pmx_source_reference \n" +

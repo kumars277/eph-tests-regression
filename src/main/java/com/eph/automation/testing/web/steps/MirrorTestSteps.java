@@ -7,8 +7,10 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.MirrorsContext;
 import com.eph.automation.testing.models.dao.MirrorsDataObject;
 import com.eph.automation.testing.models.dao.MirrorsDataObject;
+import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.MirrorsSQL;
 import com.eph.automation.testing.services.db.sql.MirrorsSQL;
+import com.eph.automation.testing.services.db.sql.WorkCountSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -31,12 +33,31 @@ public class MirrorTestSteps {
     private static List<String> workid;
     private static List<String> isbns;
     public String fWorkID;
+    private static List<WorkDataObject> refreshDate;
 
     @Given("^We know the mirrors from STG$")
     public void getMirrorsCountSTG(){
-        sql = MirrorsSQL.GET_STG_Mirrors_COUNT;
-        mirrorContext.stgCount = DBManager.getDBResultAsBeanList(sql, MirrorsDataObject.class, Constants.EPH_URL);
-        Log.info("The STG count is: " + mirrorContext.stgCount.get(0).stgCount);
+        if (System.getProperty("LOAD") != null) {
+            if(System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                sql = MirrorsSQL.GET_STG_Mirrors_COUNT;
+                Log.info(sql);
+                mirrorContext.stgCount = DBManager.getDBResultAsBeanList(sql, MirrorsDataObject.class, Constants.EPH_URL);
+                Log.info("The STG count is: " + mirrorContext.stgCount.get(0).stgCount);
+            }else{
+                sql = WorkCountSQL.GET_REFRESH_DATE;
+                refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                        Constants.EPH_URL);
+
+                sql = MirrorsSQL.GET_STG_Mirrors_COUNT_Updated.replace("PARAM1",refreshDate.get(0).refresh_timestamp);
+                mirrorContext.stgCount = DBManager.getDBResultAsBeanList(sql, MirrorsDataObject.class, Constants.EPH_URL);
+                Log.info("The STG count is: " + mirrorContext.stgCount.get(0).stgCount);
+            }
+        } else {
+            sql = MirrorsSQL.GET_STG_Mirrors_COUNT;
+            Log.info(sql);
+            mirrorContext.stgCount = DBManager.getDBResultAsBeanList(sql, MirrorsDataObject.class, Constants.EPH_URL);
+            Log.info("The STG count is: " + mirrorContext.stgCount.get(0).stgCount);
+        }
     }
 
     @When("^We get the mirrors from SA$")
@@ -97,6 +118,7 @@ public class MirrorTestSteps {
         Log.info(ids.toString());
 
         sql = String.format(MirrorsSQL.gettingWorkID, Joiner.on("','").join(ids));
+        Log.info(sql);
         List<Map<?, ?>> randomWorkID = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         workid = randomWorkID.stream().map(m -> (String) m.get("work_id")).collect(Collectors.toList());
         Log.info(workid.toString());

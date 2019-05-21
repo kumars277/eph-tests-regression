@@ -7,8 +7,10 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.TranslationContext;
 import com.eph.automation.testing.models.dao.FinancialAttribsDataObject;
 import com.eph.automation.testing.models.dao.TranslationsDataObject;
+import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.FinAttrSQL;
 import com.eph.automation.testing.services.db.sql.TranslationsSQL;
+import com.eph.automation.testing.services.db.sql.WorkCountSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -33,6 +35,7 @@ public class TranslationTestSteps {
     private static List<String> workid;
     private static List<String> isbns;
     public String fWorkID;
+    private static List<WorkDataObject> refreshDate;
 
     @Given("^We know the number of translations in PMX$")
     public void getTranslationsCountDQ(){
@@ -47,9 +50,25 @@ public class TranslationTestSteps {
         translationContext.stgAllCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
         Log.info("The STG count is: " + translationContext.stgAllCount.get(0).stgCount);
 
-        sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT;
-        translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
-        Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
+        if (System.getProperty("LOAD") != null) {
+            if(System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT;
+                translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
+                Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
+            }else {
+                sql = WorkCountSQL.GET_REFRESH_DATE;
+                refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                        Constants.EPH_URL);
+
+                sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT_Updated.replace("PARAM1",refreshDate.get(0).refresh_timestamp);
+                translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
+                Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
+            }
+        }else {
+            sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT;
+            translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
+            Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
+        }
     }
 
     @When("^We get the translations from SA$")

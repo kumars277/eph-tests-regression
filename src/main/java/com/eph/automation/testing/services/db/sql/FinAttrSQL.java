@@ -1,12 +1,10 @@
 package com.eph.automation.testing.services.db.sql;
 
 public class FinAttrSQL {
-    public static String gettingSourceRef="SELECT dq.PMX_SOURCE_REFERENCE as random_value\n" +
-            " FROM ephsit_talend_owner.stg_10_pmx_wwork_dq dq\n" +
-            " join semarchy_eph_mdm.sa_work_financial_attribs sa on dq.pmx_source_reference=cast(sa.work_fin_attribs_id as numeric)\n" +
-            "join ephsit_talend_owner.stg_10_pmx_wwork st on dq.pmx_source_reference=st.\"PRODUCT_WORK_ID\"\n"+
-            "where dq.\"dq_err\" = 'N' and sa.b_error_status is null\n" +
-            "and dq.opco is  not null and dq.resp_centre is not null\n" +
+    public static String gettingSourceRef="SELECT PMX_SOURCE_REFERENCE as random_value\n" +
+            " FROM ephsit_talend_owner.stg_10_pmx_wwork_dq \n" +
+            "where \"dq_err\" = 'N'\n" +
+            "and opco is  not null and resp_centre is not null\n" +
             "ORDER BY RANDOM()\n" +
             " LIMIT PARAM1;";
 
