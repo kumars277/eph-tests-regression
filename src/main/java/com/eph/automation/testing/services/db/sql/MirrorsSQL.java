@@ -94,7 +94,7 @@ public class MirrorsSQL {
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
             "  ,effective_start_date as EFFECTIVE_START_DATE"+
             "  ,effective_to_date as ENDON"+
-            "  FROM ephsit.semarchy_eph_mdm.sa_work_relationship_mirror sa\n"+
+            "  FROM semarchy_eph_mdm.sa_work_relationship_mirror sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_relationship_mirror join \n"+
             "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
@@ -111,7 +111,7 @@ public class MirrorsSQL {
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
             "  ,effective_start_date as EFFECTIVE_START_DATE"+
             "  ,effective_to_date as ENDON"+
-            "  FROM ephsit.semarchy_eph_mdm.sa_work_relationship_mirror sa\n"+
+            "  FROM semarchy_eph_mdm.sa_work_relationship_mirror sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_relationship_mirror join \n"+
             "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
@@ -128,7 +128,7 @@ public class MirrorsSQL {
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
             "  ,effective_start_date as EFFECTIVE_START_DATE"+
             "  ,effective_to_date as ENDON"+
-            "  FROM ephsit.semarchy_eph_mdm.gd_work_relationship_mirror sa\n"+
+            "  FROM semarchy_eph_mdm.gd_work_relationship_mirror sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.gd_work_relationship_mirror join \n"+
             "semarchy_eph_mdm.gd_event on f_event = event_id\n"+

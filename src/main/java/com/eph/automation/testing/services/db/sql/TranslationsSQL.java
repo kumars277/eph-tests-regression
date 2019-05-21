@@ -128,7 +128,7 @@ public class TranslationsSQL {
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
             "  ,effective_start_date as EFFECTIVE_START_DATE"+
             "  ,effective_end_date as ENDON"+
-            "  FROM ephsit.semarchy_eph_mdm.sa_work_rel_translation sa\n"+
+            "  FROM semarchy_eph_mdm.sa_work_rel_translation sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_rel_translation join \n"+
             "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
@@ -145,7 +145,7 @@ public class TranslationsSQL {
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
             "  ,effective_start_date as EFFECTIVE_START_DATE"+
             "  ,effective_end_date as ENDON"+
-            "  FROM ephsit.semarchy_eph_mdm.sa_work_rel_translation sa\n"+
+            "  FROM semarchy_eph_mdm.sa_work_rel_translation sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_rel_translation join \n"+
             "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
@@ -162,7 +162,7 @@ public class TranslationsSQL {
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
             "  ,effective_start_date as EFFECTIVE_START_DATE"+
             "  ,effective_end_date as ENDON"+
-            "  FROM ephsit.semarchy_eph_mdm.gd_work_rel_translation sa\n"+
+            "  FROM semarchy_eph_mdm.gd_work_rel_translation sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.gd_work_rel_translation join \n"+
             "semarchy_eph_mdm.gd_event on f_event = event_id\n"+

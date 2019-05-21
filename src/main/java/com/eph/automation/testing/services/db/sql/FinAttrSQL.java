@@ -25,7 +25,7 @@ public class FinAttrSQL {
             "  ,f_gl_cost_resp_centre as cost_resp_centre\n" +
             "  ,f_gl_revenue_resp_centre as revenue_resp_centre\n" +
             "  ,f_wwork as work_id\n" +
-            "  FROM ephsit.semarchy_eph_mdm.sa_work_financial_attribs sa\n"+
+            "  FROM semarchy_eph_mdm.sa_work_financial_attribs sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_financial_attribs join \n"+
             "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
@@ -42,7 +42,7 @@ public class FinAttrSQL {
             "  ,f_gl_cost_resp_centre as cost_resp_centre\n" +
             "  ,f_gl_revenue_resp_centre as revenue_resp_centre\n" +
             "  ,f_wwork as work_id\n" +
-            "  FROM ephsit.semarchy_eph_mdm.sa_work_financial_attribs sa\n"+
+            "  FROM semarchy_eph_mdm.sa_work_financial_attribs sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_financial_attribs join \n"+
             "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
@@ -60,7 +60,7 @@ public class FinAttrSQL {
             "  ,f_gl_cost_resp_centre as cost_resp_centre\n" +
             "  ,f_gl_revenue_resp_centre as revenue_resp_centre\n" +
             "  ,f_wwork as work_id\n" +
-            "  FROM ephsit.semarchy_eph_mdm.gd_work_financial_attribs sa\n"+
+            "  FROM semarchy_eph_mdm.gd_work_financial_attribs sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.gd_work_financial_attribs join \n"+
             "semarchy_eph_mdm.gd_event on f_event = event_id\n"+
@@ -77,7 +77,7 @@ public class FinAttrSQL {
             "where ref_type = 'WORK' and source_ref='PARAM1'";
 
     public static String Get_SA_count = "select count (*) as saCount " +
-            "FROM ephsit.semarchy_eph_mdm.sa_work_financial_attribs sa\n"+
+            "FROM semarchy_eph_mdm.sa_work_financial_attribs sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_financial_attribs join \n"+
             "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
@@ -88,7 +88,7 @@ public class FinAttrSQL {
 
 
     public static String Get_GD_count = "select count (*) as gdCount " +
-            "  FROM ephsit.semarchy_eph_mdm.gd_work_financial_attribs gd\n"+
+            "  FROM semarchy_eph_mdm.gd_work_financial_attribs gd\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.gd_work_financial_attribs join \n"+
             "semarchy_eph_mdm.gd_event on f_event = event_id\n"+
@@ -98,7 +98,7 @@ public class FinAttrSQL {
             "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )";
 
     public static String Get_AE_count = "select count (distinct work_fin_attribs_id ) as aeCount " +
-            "  FROM ephsit.semarchy_eph_mdm.ae_work_financial_attribs ae\n"+
+            "  FROM semarchy_eph_mdm.ae_work_financial_attribs ae\n"+
             " where ae.b_batchid =  (select max (ae.b_batchid) from\n" +
             "semarchy_eph_mdm.ae_work_financial_attribs ae join \n"+
             "semarchy_eph_mdm.gd_event e on ae.b_batchid = e.b_batchid\n"+
