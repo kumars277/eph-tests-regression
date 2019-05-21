@@ -18,7 +18,10 @@ import org.junit.Assert;
 import com.eph.automation.testing.helper.Log;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,7 +49,7 @@ public class WorksDataCheck {
         if (System.getProperty("dbRandomRecordsNumber")!=null) {
             numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         }else {
-            numberOfRecords = "10";
+            numberOfRecords = "50";
         }
         Log.info("numberOfRecords = " + numberOfRecords);
 
@@ -99,7 +102,7 @@ public class WorksDataCheck {
     }
 
     @Then("^The work data between PMX and EPH STG is identical$")
-    public void checkPMXtoPMGSTGData() {
+    public void checkPMXtoPMGSTGData() throws ParseException {
         for (int i=0; i<dataQualityContext.workDataObjectsFromSource.size();i++) {
             Log.info(dataQualityContext.workDataObjectsFromSource.get(i).WORK_TITLE);
             assertTrue("Expecting the Work title details from PMX and PMX Staging Consistent for id=" + ids.get(i),
@@ -273,11 +276,14 @@ public class WorksDataCheck {
                                 .equals(dataQualityContext.workDataObjectsFromPMXSTG.get(i).LANGUAGE_CODE));
             }
 
+            Date pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(dataQualityContext.workDataObjectsFromSource.get(i).UPDATED);
+            Date stgDate = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS aaa").parse(dataQualityContext.workDataObjectsFromPMXSTG.get(i).UPDATED);
+
             if (dataQualityContext.workDataObjectsFromSource.get(i).UPDATED != null
                     || dataQualityContext.workDataObjectsFromPMXSTG.get(i).UPDATED != null) {
                 assertTrue("Expecting the UPDATED details from PMX and EPH Consistent for id=" + ids.get(i),
-                        dataQualityContext.workDataObjectsFromSource.get(i).UPDATED
-                                .equals(dataQualityContext.workDataObjectsFromPMXSTG.get(i).UPDATED));
+                        pmxUpdatedDate
+                                .equals(stgDate));
             }
         }
     }
