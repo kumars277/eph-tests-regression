@@ -19,6 +19,9 @@ import cucumber.api.java.en.When;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -156,7 +159,7 @@ public class TranslationTestSteps {
     }
 
     @Then("^The translations data between PMX and STG is identical$")
-    public void checkTranslationData(){
+    public void checkTranslationData() throws ParseException {
         for (int i=0; i<translationContext.translationDataFromStg.size();i++) {
             Assert.assertEquals("The RELATIONSHIP_PMX_SOURCEREF is incorrect for id=" + ids.get(i),
                     translationContext.translationDataFromPMX.get(i).RELATIONSHIP_PMX_SOURCEREF,
@@ -185,6 +188,16 @@ public class TranslationTestSteps {
                 Assert.assertEquals("The ENDON is incorrect for id=" + ids.get(i),
                         translationContext.translationDataFromPMX.get(i).ENDON,
                         translationContext.translationDataFromStg.get(i).ENDON);
+            }
+
+            Date pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(translationContext.translationDataFromPMX.get(i).UPDATED);
+            Date stgDate = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS aaa").parse(translationContext.translationDataFromStg.get(i).UPDATED);
+
+            if (translationContext.translationDataFromPMX.get(i).UPDATED != null
+                    ||translationContext.translationDataFromStg.get(i).UPDATED != null) {
+                assertTrue("Expecting the UPDATED details from PMX and EPH Consistent for id=" + ids.get(i),
+                        pmxUpdatedDate
+                                .equals(stgDate));
             }
         }
     }

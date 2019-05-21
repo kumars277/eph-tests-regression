@@ -116,6 +116,7 @@ public class TranslationsSQL {
             "  ,\"F_RELATIONSHIP_TYPE\" as F_RELATIONSHIP_TYPE\n" +
             "  ,\"EFFECTIVE_START_DATE\" as EFFECTIVE_START_DATE\n"+
             "  ,\"ENDON\" as ENDON\n"+
+            "  ,\"UPDATED\" as UPDATED\n"+
             "  FROM ephsit_talend_owner.stg_10_pmx_work_rel \n"+
             "  WHERE \"RELATIONSHIP_PMX_SOURCEREF\" in ('%s')"+
             "  AND \"F_RELATIONSHIP_TYPE\"='TRS' order by RELATIONSHIP_PMX_SOURCEREF";
