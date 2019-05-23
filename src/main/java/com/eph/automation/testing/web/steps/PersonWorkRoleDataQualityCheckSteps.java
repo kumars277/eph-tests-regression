@@ -8,6 +8,7 @@ import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.PersonWorkRoleDataObject;
 import com.eph.automation.testing.services.db.sql.PersonDataSQL;
 import com.eph.automation.testing.services.db.sql.PersonWorkRoleDataSQL;
+import com.eph.automation.testing.services.db.sql.WorkCountSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -61,8 +62,21 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @When("^Get the count of records for persons work role in EPH Staging$")
     public void getCountPersonsProductRolePHSTG() {
         Log.info("When We get the count of persons work role records in EPH STG ..");
-        sql = PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHSTG;
-        Log.info(sql);
+
+        if (System.getProperty("LOAD") != null) {
+            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                sql = PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHSTG;
+                Log.info(sql);
+            } else {
+                sql = WorkCountSQL.GET_REFRESH_DATE;
+                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                String refreshDate = (String) refreshDateNumber.get(0).get("refresh_timestamp");
+                sql = String.format( PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHSTG_DELTA, refreshDate );
+            }
+        }
+
+
+
         List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countPersonsWorkRoleEPHSTG = ((Long) personsNumber.get(0).get("count")).intValue();
         Log.info("Count of persons work role in EPH STG is: " + countPersonsWorkRoleEPHSTG);
@@ -265,6 +279,33 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
             assertEquals(type , dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
 
+
+            //START_DATE
+            Log.info("START_DATE in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getSTART_DATE());
+            Log.info("START_DATE in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getSTART_DATE());
+
+            Log.info("Expecting START_DATE in PMX and EPH STG is consistent");
+
+            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getSTART_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getSTART_DATE());
+
+            //END_DATE
+            Log.info("END_DATE in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getEND_DATE());
+            Log.info("END_DATE in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEND_DATE());
+
+            Log.info("Expecting END_DATE in PMX and EPH STG is consistent");
+
+            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getEND_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEND_DATE());
+
+
+            //UPDATED
+            Log.info("UPDATED in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getUPDATED());
+            Log.info("UPDATED in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getUPDATED());
+
+            Log.info("Expecting UPDATED in PMX and EPH STG is consistent");
+
+            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getUPDATED(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getUPDATED());
+
+
         });
 
     }
@@ -344,6 +385,24 @@ public class PersonWorkRoleDataQualityCheckSteps {
             //B_CLASSNAME
             Log.info("B_CLASSNAME in EPH SA: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getB_CLASSNAME());
             assertEquals("WorkPersonRole", dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getB_CLASSNAME());
+
+
+            //EFFECTIVE_START_DATE
+            Log.info("EFFECTIVE_START_DATE in EPH STG : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE());
+            Log.info("EFFECTIVE_START_DATE in EPH SA: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_START_DATE());
+
+            Log.info("Expecting EFFECTIVE_START_DATE in EPH STG and EPH SA to be consistent");
+
+            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_START_DATE());
+
+
+            //EFFECTIVE_END_DATE
+            Log.info("EFFECTIVE_END_DATE in EPH STG : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_END_DATE());
+            Log.info("EFFECTIVE_END_DATE in EPH SA: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_END_DATE());
+
+            Log.info("Expecting EFFECTIVE_END_DATE in EPH STG and EPH SA to be consistent");
+
+            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_END_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_END_DATE());
 
 
             //F_ROLE

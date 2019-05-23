@@ -8,6 +8,7 @@ import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.PersonProductRoleDataObject;
 import com.eph.automation.testing.services.db.sql.PersonDataSQL;
 import com.eph.automation.testing.services.db.sql.PersonProductRoleDataSQL;
+import com.eph.automation.testing.services.db.sql.WorkCountSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -33,7 +34,6 @@ public class PersonProductRoleDataQualityCheckSteps {
     @StaticInjection
     public DataQualityContext dataQualityContext;
     private String sql;
-    private static int countPersonsEPHSTGCAN;
     private static int countPersonsEPHSTG;
     private static int countPersonsEPHSTGDQ;
     private static int countPersonsEPHSA;
@@ -43,22 +43,34 @@ public class PersonProductRoleDataQualityCheckSteps {
     private static List<String> idsLookup;
 
 
-    @Given("^Get the count of records for persons product role in EPH STG Product DQ")
-    public void getCountPersonsProductRoleEPHSTGCan() {
+    @Given("^Get the count of records for persons product role in EPH STG DQ")
+    public void getCountPersonsProductRoleEPHSTGDQ() {
         Log.info("When We get the count of persons product role records in EPH STG Product DQ..");
-        sql = PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPH_STG_CAN;
+        sql = PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPH_STG_DQ;
         Log.info(sql);
         List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        countPersonsEPHSTGCAN = ((Long) personsNumber.get(0).get("count")).intValue();
-        Log.info("Count of persons product role in PMX is: " + countPersonsEPHSTGCAN);
+        countPersonsEPHSTGDQ = ((Long) personsNumber.get(0).get("count")).intValue();
+        Log.info("Count of persons product role in DQ is: " + countPersonsEPHSTGDQ);
     }
 
 
     @When("^Get the count of records for persons product role in EPH Staging$")
     public void getCountPersonsProductRolePHSTG() {
         Log.info("When We get the count of persons product role records in EPH STG ..");
-        sql = PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG;
-        Log.info(sql);
+
+        if (System.getProperty("LOAD") != null) {
+            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                sql = PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG;
+                Log.info(sql);
+            } else {
+                sql = WorkCountSQL.GET_REFRESH_DATE;
+                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                String refreshDate = (String) refreshDateNumber.get(0).get("refresh_timestamp");
+                sql = String.format(PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG_DELTA, refreshDate );
+            }
+        }
+
+
         List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countPersonsEPHSTG = ((Long) personsNumber.get(0).get("count")).intValue();
         Log.info("Count of persons product role in EPH STG is: " + countPersonsEPHSTG);
@@ -75,9 +87,9 @@ public class PersonProductRoleDataQualityCheckSteps {
         Log.info("Count of persons product role in EPH STG with DQ is: " + countPersonsEPHSTGDQ);
     }
 
-    @Then("^Compare the count on records for persons product role in PMX and EPH Staging$")
+    @Then("^Compare the count on records for persons product role in EPH STG DQ and EPH Staging$")
     public void verifyCountOfPersonsProductRoleInPMXAndEPHSTGIsEqual() {
-        Assert.assertEquals("\nPersons product role count in PMX and EPH STG is not equal", countPersonsEPHSTGCAN, countPersonsEPHSTG);
+        Assert.assertEquals("\nPersons product role count in DQ and STG is not equal", countPersonsEPHSTGDQ, countPersonsEPHSTG);
     }
 
 
@@ -150,13 +162,13 @@ public class PersonProductRoleDataQualityCheckSteps {
         Log.info(ids.toString());
     }
 
-    @When("^We get the person product role records from EPH STG Can$")
-    public void getPersonProductRoleRecordsEphStgCan() {
-        Log.info("Get the person product role records from EPH STG Can ..");
-        sql = String.format(PersonProductRoleDataSQL.GET_DATA_PERSONS_PRODUCT_ROLE_EPH_STG_CAN, Joiner.on("','").join(ids));
+    @When("^We get the person product role records from EPH DQ$")
+    public void getPersonProductRoleRecordsEphDQ() {
+        Log.info("Get the person product role records from EPH DQ ..");
+        sql = String.format(PersonProductRoleDataSQL.GET_DATA_PERSONS_PRODUCT_ROLE_EPH_DQ, Joiner.on("','").join(ids));
         Log.info(sql);
 
-        dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN = DBManager
+        dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ = DBManager
                 .getDBResultAsBeanList(sql, PersonProductRoleDataObject.class, Constants.EPH_URL);
     }
 
@@ -170,12 +182,12 @@ public class PersonProductRoleDataQualityCheckSteps {
                 .getDBResultAsBeanList(sql, PersonProductRoleDataObject.class, Constants.EPH_URL);
     }
 
-    @And("^Compare person product role records in EPH STG Can and EPH STG$")
-    public void comparePersonProductRolesRecordsInSTGAndCan() {
-        Log.info("And compare product role records in EPH STG Can and EPH STG ..");
+    @And("^Compare person product role records in EPH STG DQ and EPH STG$")
+    public void comparePersonProductRolesRecordsInSTGAndDQ() {
+        Log.info("And compare product role records in EPH STG DQ and EPH STG ..");
 
         //sort the lists before comparison
-        dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN.sort(Comparator.comparing(PersonProductRoleDataObject::getPROD_PER_ROLE_SOURCE_REF));
+        dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.sort(Comparator.comparing(PersonProductRoleDataObject::getPROD_PER_ROLE_SOURCE_REF));
         dataQualityContext.personProductRoleDataObjectsFromEPHSTG.sort(Comparator.comparing(PersonProductRoleDataObject::getPROD_PER_ROLE_SOURCE_REF));
 
         IntStream.range(0, dataQualityContext.personProductRoleDataObjectsFromEPHSTG.size()).forEach(i -> {
@@ -184,24 +196,24 @@ public class PersonProductRoleDataQualityCheckSteps {
             //PROD_PER_ROLE_SOURCE_REF
             Log.info("PROD_PER_ROLE_SOURCE_REF in EPH STG: " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPROD_PER_ROLE_SOURCE_REF());
 
-            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN.get(i).getPROD_PER_ROLE_SOURCE_REF(), dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPROD_PER_ROLE_SOURCE_REF());
+            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getPROD_PER_ROLE_SOURCE_REF(), dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPROD_PER_ROLE_SOURCE_REF());
 
 
             //PRODUCT_SOURCE_REF
-            Log.info("PRODUCT_SOURCE_REF in EPH STG CAN : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN.get(i).getPRODUCT_SOURCE_REF());
-            Log.info("PRODUCT_SOURCE_REF in EPH STG: " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN.get(i).getPRODUCT_SOURCE_REF());
+            Log.info("PRODUCT_SOURCE_REF in EPH STG DQ : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_SOURCE_REF());
+            Log.info("PRODUCT_SOURCE_REF in EPH STG: " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_SOURCE_REF());
 
-            Log.info("Expecting PRODUCT_SOURCE_REF in EPH STG CAN and EPH STG is consistent");
+            Log.info("Expecting PRODUCT_SOURCE_REF in EPH STG DQ and EPH STG is consistent");
 
-            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN.get(i).getPRODUCT_SOURCE_REF(), dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPRODUCT_SOURCE_REF());
+            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_SOURCE_REF(), dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPRODUCT_SOURCE_REF());
 
             //PERSON_SOURCE_REF
-            Log.info("PERSON_SOURCE_REF in EPH STG CAN : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN.get(i).getPERSON_SOURCE_REF());
-            Log.info("PERSON_SOURCE_REF in EPH STG: " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN.get(i).getPERSON_SOURCE_REF());
+            Log.info("PERSON_SOURCE_REF in EPH STG DQ : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getPERSON_SOURCE_REF());
+            Log.info("PERSON_SOURCE_REF in EPH STG: " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getPERSON_SOURCE_REF());
 
-            Log.info("Expecting PERSON_SOURCE_REF in EPH STG CAN and EPH STG is consistent");
+            Log.info("Expecting PERSON_SOURCE_REF in EPH STG DQ and EPH STG is consistent");
 
-            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN.get(i).getPERSON_SOURCE_REF(), dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPERSON_SOURCE_REF());
+            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getPERSON_SOURCE_REF(), dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPERSON_SOURCE_REF());
 
             //F_ROLE
             Log.info("F_ROLE in EPH STG: " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
@@ -209,12 +221,39 @@ public class PersonProductRoleDataQualityCheckSteps {
             assertEquals("PO", dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
 
             //WORK_ROLE
-            Log.info("WORK_ROLE in EPH STG CAN : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN.get(i).getWORK_ROLE());
-            Log.info("WORK_ROLE in EPH STG: " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN.get(i).getWORK_ROLE());
+            Log.info("WORK_ROLE in EPH STG DQ : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getWORK_ROLE());
+            Log.info("WORK_ROLE in EPH STG: " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getWORK_ROLE());
 
-            Log.info("Expecting WORK_ROLE in EPH STG CAN and EPH STG is consistent");
+            Log.info("Expecting WORK_ROLE in EPH STG DQ and EPH STG is consistent");
 
-            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTGCAN.get(i).getWORK_ROLE(), dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getWORK_ROLE());
+            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getWORK_ROLE(), dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getWORK_ROLE());
+
+
+            //START_DATE
+            Log.info("START_DATE in EPH STG DQ : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getSTART_DATE());
+            Log.info("START_DATE in EPH STG: " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getSTART_DATE());
+
+            Log.info("Expecting START_DATE in EPH STG DQ and EPH STG is consistent");
+
+            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getSTART_DATE(), dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getSTART_DATE());
+
+
+            //END_DATE
+            Log.info("END_DATE in EPH STG DQ : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getEND_DATE());
+            Log.info("END_DATE in EPH STG: " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getEND_DATE());
+
+            Log.info("Expecting END_DATE in EPH STG DQ and EPH STG is consistent");
+
+            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getEND_DATE(), dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEND_DATE());
+
+
+            //UPDATED
+            Log.info("UPDATED in EPH STG DQ : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getUPDATED());
+            Log.info("UPDATED in EPH STG: " + dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getUPDATED());
+
+            Log.info("Expecting UPDATED in EPH STG DQ and EPH STG is consistent");
+
+            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTGDQ.get(i).getUPDATED(), dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getUPDATED());
 
         });
 
@@ -311,6 +350,24 @@ public class PersonProductRoleDataQualityCheckSteps {
             //B_CLASSNAME
             Log.info("B_CLASSNAME in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(0).getB_CLASSNAME());
             assertEquals("ProductPersonRole", dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(0).getB_CLASSNAME());
+
+
+            //EFFECTIVE_START_DATE
+            Log.info("EFFECTIVE_START_DATE in EPH STG : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE());
+            Log.info("EFFECTIVE_START_DATE in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_START_DATE());
+
+            Log.info("Expecting EFFECTIVE_START_DATE in EPH STG and EPH SA to be consistent");
+
+            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_START_DATE());
+
+
+            //EFFECTIVE_END_DATE
+            Log.info("EFFECTIVE_END_DATE in EPH STG : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_END_DATE());
+            Log.info("EFFECTIVE_END_DATE in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_END_DATE());
+
+            Log.info("Expecting EFFECTIVE_END_DATE in EPH STG and EPH SA to be consistent");
+
+            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_END_DATE(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_END_DATE());
 
 
             //F_ROLE

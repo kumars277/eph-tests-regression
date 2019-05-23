@@ -25,6 +25,7 @@ public class  ManifestationDataObject {
     private String COMMODITY;
     private String MANIFESTATION_SUBSTATUS;
     private String DQ_ERR;
+    private String UPDATED;
 
     //SA_MANIFESTATION columns
     private String F_EVENT;
@@ -38,6 +39,13 @@ public class  ManifestationDataObject {
     private String F_FORMAT_TYPE;
     private String F_WWORK;
 
+    public String getUPDATED() {
+        return UPDATED;
+    }
+
+    public void setUPDATED(String UPDATED) {
+        this.UPDATED = UPDATED;
+    }
 
     public String getMANIFESTATION_ID() {
         return MANIFESTATION_ID;
@@ -215,51 +223,6 @@ public class  ManifestationDataObject {
         this.DQ_ERR = DQ_ERR;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ManifestationDataObject that = (ManifestationDataObject) o;
-        return PRODUCT_MANIFESTATION_ID == that.PRODUCT_MANIFESTATION_ID &&
-                PMX_SOURCE_REFERENCE == that.PMX_SOURCE_REFERENCE &&
-                Objects.equals(MANIFESTATION_ID, that.MANIFESTATION_ID) &&
-                Objects.equals(MANIFESTATION_KEY_TITLE, that.MANIFESTATION_KEY_TITLE) &&
-                Objects.equals(ISBN, that.ISBN) &&
-                Objects.equals(ISSN, that.ISSN) &&
-                Objects.equals(COVER_HEIGHT, that.COVER_HEIGHT) &&
-                Objects.equals(COVER_WIDTH, that.COVER_WIDTH) &&
-                Objects.equals(PAGE_HEIGHT, that.PAGE_HEIGHT) &&
-                Objects.equals(PAGE_WIDTH, that.PAGE_WIDTH) &&
-                Objects.equals(WEIGHT, that.WEIGHT) &&
-                Objects.equals(CARTON_QTY, that.CARTON_QTY) &&
-                Objects.equals(INTERNATIONAL_EDITION_IND, that.INTERNATIONAL_EDITION_IND) &&
-                Objects.equals(COPYRIGHT_DATE, that.COPYRIGHT_DATE) &&
-                Objects.equals(F_PRODUCT_MANIFESTATION_TYP, that.F_PRODUCT_MANIFESTATION_TYP) &&
-                Objects.equals(FORMAT_TXT, that.FORMAT_TXT) &&
-                Objects.equals(MANIFESTATION_STATUS, that.MANIFESTATION_STATUS) &&
-                Objects.equals(F_PRODUCT_WORK, that.F_PRODUCT_WORK) &&
-                Objects.equals(WORK_TYPE_ID, that.WORK_TYPE_ID) &&
-                Objects.equals(MANIFESTATION_SUBTYPE, that.MANIFESTATION_SUBTYPE) &&
-                Objects.equals(COMMODITY, that.COMMODITY) &&
-                Objects.equals(MANIFESTATION_SUBSTATUS, that.MANIFESTATION_SUBSTATUS) &&
-                Objects.equals(DQ_ERR, that.DQ_ERR) &&
-                Objects.equals(F_EVENT, that.F_EVENT) &&
-                Objects.equals(B_CLASSNAME, that.B_CLASSNAME) &&
-                Objects.equals(INTER_EDITION_FLAG, that.INTER_EDITION_FLAG) &&
-                Objects.equals(FIRST_PUB_DATE, that.FIRST_PUB_DATE) &&
-                Objects.equals(LAST_PUB_DATE, that.LAST_PUB_DATE) &&
-                Objects.equals(F_TYPE, that.F_TYPE) &&
-                Objects.equals(F_STATUS, that.F_STATUS) &&
-                Objects.equals(F_FORMAT_TYPE, that.F_FORMAT_TYPE) &&
-                Objects.equals(F_WWORK, that.F_WWORK);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(MANIFESTATION_ID, MANIFESTATION_KEY_TITLE, ISBN, ISSN, COVER_HEIGHT, COVER_WIDTH, PAGE_HEIGHT, PAGE_WIDTH, WEIGHT, CARTON_QTY, INTERNATIONAL_EDITION_IND, COPYRIGHT_DATE, F_PRODUCT_MANIFESTATION_TYP, FORMAT_TXT, MANIFESTATION_STATUS, PRODUCT_MANIFESTATION_ID, WORK_TYPE_ID, MANIFESTATION_SUBTYPE, COMMODITY, MANIFESTATION_SUBSTATUS);
-    }
-
-
     //SA_MANIFESTATION columns
 
 
@@ -341,5 +304,90 @@ public class  ManifestationDataObject {
 
     public void setF_WWORK(String f_WWORK) {
         F_WWORK = f_WWORK;
+    }
+
+
+    @Override
+    public String toString() {
+        return "ManifestationDataObject{" +
+                "MANIFESTATION_ID='" + MANIFESTATION_ID + '\'' +
+                ", MANIFESTATION_KEY_TITLE='" + MANIFESTATION_KEY_TITLE + '\'' +
+                ", ISBN='" + ISBN + '\'' +
+                ", ISSN='" + ISSN + '\'' +
+                ", COVER_HEIGHT='" + COVER_HEIGHT + '\'' +
+                ", COVER_WIDTH='" + COVER_WIDTH + '\'' +
+                ", PAGE_HEIGHT='" + PAGE_HEIGHT + '\'' +
+                ", PAGE_WIDTH='" + PAGE_WIDTH + '\'' +
+                ", WEIGHT='" + WEIGHT + '\'' +
+                ", CARTON_QTY='" + CARTON_QTY + '\'' +
+                ", INTERNATIONAL_EDITION_IND='" + INTERNATIONAL_EDITION_IND + '\'' +
+                ", COPYRIGHT_DATE='" + COPYRIGHT_DATE + '\'' +
+                ", F_PRODUCT_MANIFESTATION_TYP='" + F_PRODUCT_MANIFESTATION_TYP + '\'' +
+                ", FORMAT_TXT='" + FORMAT_TXT + '\'' +
+                ", MANIFESTATION_STATUS='" + MANIFESTATION_STATUS + '\'' +
+                ", PRODUCT_MANIFESTATION_ID=" + PRODUCT_MANIFESTATION_ID +
+                ", F_PRODUCT_WORK='" + F_PRODUCT_WORK + '\'' +
+                ", WORK_TYPE_ID='" + WORK_TYPE_ID + '\'' +
+                ", MANIFESTATION_SUBTYPE='" + MANIFESTATION_SUBTYPE + '\'' +
+                ", COMMODITY='" + COMMODITY + '\'' +
+                ", MANIFESTATION_SUBSTATUS='" + MANIFESTATION_SUBSTATUS + '\'' +
+                ", DQ_ERR='" + DQ_ERR + '\'' +
+                ", UPDATED='" + UPDATED + '\'' +
+                ", F_EVENT='" + F_EVENT + '\'' +
+                ", B_CLASSNAME='" + B_CLASSNAME + '\'' +
+                ", PMX_SOURCE_REFERENCE=" + PMX_SOURCE_REFERENCE +
+                ", INTER_EDITION_FLAG='" + INTER_EDITION_FLAG + '\'' +
+                ", FIRST_PUB_DATE='" + FIRST_PUB_DATE + '\'' +
+                ", LAST_PUB_DATE='" + LAST_PUB_DATE + '\'' +
+                ", F_TYPE='" + F_TYPE + '\'' +
+                ", F_STATUS='" + F_STATUS + '\'' +
+                ", F_FORMAT_TYPE='" + F_FORMAT_TYPE + '\'' +
+                ", F_WWORK='" + F_WWORK + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ManifestationDataObject that = (ManifestationDataObject) o;
+        return PRODUCT_MANIFESTATION_ID == that.PRODUCT_MANIFESTATION_ID &&
+                PMX_SOURCE_REFERENCE == that.PMX_SOURCE_REFERENCE &&
+                Objects.equals(MANIFESTATION_ID, that.MANIFESTATION_ID) &&
+                Objects.equals(MANIFESTATION_KEY_TITLE, that.MANIFESTATION_KEY_TITLE) &&
+                Objects.equals(ISBN, that.ISBN) &&
+                Objects.equals(ISSN, that.ISSN) &&
+                Objects.equals(COVER_HEIGHT, that.COVER_HEIGHT) &&
+                Objects.equals(COVER_WIDTH, that.COVER_WIDTH) &&
+                Objects.equals(PAGE_HEIGHT, that.PAGE_HEIGHT) &&
+                Objects.equals(PAGE_WIDTH, that.PAGE_WIDTH) &&
+                Objects.equals(WEIGHT, that.WEIGHT) &&
+                Objects.equals(CARTON_QTY, that.CARTON_QTY) &&
+                Objects.equals(INTERNATIONAL_EDITION_IND, that.INTERNATIONAL_EDITION_IND) &&
+                Objects.equals(COPYRIGHT_DATE, that.COPYRIGHT_DATE) &&
+                Objects.equals(F_PRODUCT_MANIFESTATION_TYP, that.F_PRODUCT_MANIFESTATION_TYP) &&
+                Objects.equals(FORMAT_TXT, that.FORMAT_TXT) &&
+                Objects.equals(MANIFESTATION_STATUS, that.MANIFESTATION_STATUS) &&
+                Objects.equals(F_PRODUCT_WORK, that.F_PRODUCT_WORK) &&
+                Objects.equals(WORK_TYPE_ID, that.WORK_TYPE_ID) &&
+                Objects.equals(MANIFESTATION_SUBTYPE, that.MANIFESTATION_SUBTYPE) &&
+                Objects.equals(COMMODITY, that.COMMODITY) &&
+                Objects.equals(MANIFESTATION_SUBSTATUS, that.MANIFESTATION_SUBSTATUS) &&
+                Objects.equals(DQ_ERR, that.DQ_ERR) &&
+                Objects.equals(UPDATED, that.UPDATED) &&
+                Objects.equals(F_EVENT, that.F_EVENT) &&
+                Objects.equals(B_CLASSNAME, that.B_CLASSNAME) &&
+                Objects.equals(INTER_EDITION_FLAG, that.INTER_EDITION_FLAG) &&
+                Objects.equals(FIRST_PUB_DATE, that.FIRST_PUB_DATE) &&
+                Objects.equals(LAST_PUB_DATE, that.LAST_PUB_DATE) &&
+                Objects.equals(F_TYPE, that.F_TYPE) &&
+                Objects.equals(F_STATUS, that.F_STATUS) &&
+                Objects.equals(F_FORMAT_TYPE, that.F_FORMAT_TYPE) &&
+                Objects.equals(F_WWORK, that.F_WWORK);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(MANIFESTATION_ID, MANIFESTATION_KEY_TITLE, ISBN, ISSN, COVER_HEIGHT, COVER_WIDTH, PAGE_HEIGHT, PAGE_WIDTH, WEIGHT, CARTON_QTY, INTERNATIONAL_EDITION_IND, COPYRIGHT_DATE, F_PRODUCT_MANIFESTATION_TYP, FORMAT_TXT, MANIFESTATION_STATUS, PRODUCT_MANIFESTATION_ID, F_PRODUCT_WORK, WORK_TYPE_ID, MANIFESTATION_SUBTYPE, COMMODITY, MANIFESTATION_SUBSTATUS, DQ_ERR, UPDATED, F_EVENT, B_CLASSNAME, PMX_SOURCE_REFERENCE, INTER_EDITION_FLAG, FIRST_PUB_DATE, LAST_PUB_DATE, F_TYPE, F_STATUS, F_FORMAT_TYPE, F_WWORK);
     }
 }

@@ -12,12 +12,20 @@ public class PersonDataObject {
     private String PERSON_FAMILY_NAME;
     private String PEOPLEHUB_ID;
     private String DQ_ERR;
+    private String UPDATED;
 
     //SA_PERSON
     private String B_LOADID;
     private String B_CLASSNAME;
     private String PERSON_ID;
 
+    public String getUPDATED() {
+        return UPDATED;
+    }
+
+    public void setUPDATED(String UPDATED) {
+        this.UPDATED = UPDATED;
+    }
 
     public String getPERSON_SOURCE_REF() {
         return PERSON_SOURCE_REF;

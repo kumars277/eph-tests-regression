@@ -15,6 +15,9 @@ public class AccountableProductDataObject {
     private String AC_ELS_PROD_ID;
     private String PRODUCT_WORK_TITLE;
     private String WORK_ELS_PROD_ID;
+    private String UPDATED;
+    private String DQ_ERR;
+
     //SA
     private String B_LOADID;
     private String F_EVENT;
@@ -24,6 +27,22 @@ public class AccountableProductDataObject {
     private String GL_PRODUCT_SEGMENT_NAME;
     private String F_GL_PRODUCT_SEGMENT_PARENT;
 
+
+    public String getDQ_ERR() {
+        return DQ_ERR;
+    }
+
+    public void setDQ_ERR(String DQ_ERR) {
+        this.DQ_ERR = DQ_ERR;
+    }
+
+    public String getUPDATED() {
+        return UPDATED;
+    }
+
+    public void setUPDATED(String UPDATED) {
+        this.UPDATED = UPDATED;
+    }
 
     public String getWORK_ELS_PROD_ID() {
         return WORK_ELS_PROD_ID;

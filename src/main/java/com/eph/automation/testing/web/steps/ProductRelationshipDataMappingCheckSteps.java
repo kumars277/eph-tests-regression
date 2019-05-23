@@ -7,6 +7,7 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ProductRelationshipDataObject;
 import com.eph.automation.testing.services.db.sql.ProductRelationshipChecksSQL;
+import com.eph.automation.testing.services.db.sql.WorkCountSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -57,8 +58,19 @@ public class ProductRelationshipDataMappingCheckSteps {
     @When("We get the count of the product relationship records in EPH STG$")
     public void getCountProductRelEPHSTG() {
         Log.info("When We get the count of the product relationship records in EPH STG ..");
-        sql = ProductRelationshipChecksSQL.GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT;
-        Log.info(sql);
+
+        if (System.getProperty("LOAD") != null) {
+            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                sql = ProductRelationshipChecksSQL.GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT;
+                Log.info(sql);
+            } else {
+                sql = WorkCountSQL.GET_REFRESH_DATE;
+                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                String refreshDate = (String) refreshDateNumber.get(0).get("refresh_timestamp");
+                sql = String.format( ProductRelationshipChecksSQL.GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT_DELTA, refreshDate );
+            }
+        }
+
         List<Map<String, Object>> productsRelNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countProductsRelEPHSTG = ((Long) productsRelNumber.get(0).get("count")).intValue();
         Log.info("Count of product relationship records in EPH STG is: " + countProductsRelEPHSTG);
@@ -214,6 +226,41 @@ public class ProductRelationshipDataMappingCheckSteps {
                     e.printStackTrace();
                 }
             }
+
+            //ENDON
+            Log.info("UPDATED in PMX: " + dataQualityContext.productRelationshipDataObjectsFromPMX.get(i).getENDON());
+            Log.info("UPDATED in EPH Staging: " + dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getENDON());
+
+            Log.info("Expecting UPDATED in PMX and EPH Staging are consistent for ");
+
+
+            try {
+                Date pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(dataQualityContext.productRelationshipDataObjectsFromPMX.get(i).getENDON());
+                Date ephUpdatedDate = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS aaa").parse(dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getENDON());
+
+                assertEquals("UPDATED in PMX and EPH STG is not equal ", pmxUpdatedDate, ephUpdatedDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
+            //UPDATED
+            Log.info("UPDATED in PMX: " + dataQualityContext.productRelationshipDataObjectsFromPMX.get(i).getUPDATED());
+            Log.info("UPDATED in EPH Staging: " + dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getUPDATED());
+
+            Log.info("Expecting UPDATED in PMX and EPH Staging are consistent for ");
+
+
+            try {
+                Date pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(dataQualityContext.productRelationshipDataObjectsFromPMX.get(i).getUPDATED());
+                Date ephUpdatedDate = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS aaa").parse(dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getUPDATED());
+
+                assertEquals("UPDATED in PMX and EPH STG is not equal ", pmxUpdatedDate, ephUpdatedDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
         });
     }
 
@@ -346,6 +393,14 @@ public class ProductRelationshipDataMappingCheckSteps {
             Log.info("Expecting EFFECTIVE_START_DATE in EPH STG and EPH SA to be equal");
 
             assertEquals(dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE(), dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(0).getEFFECTIVE_START_DATE());
+
+            //EFFECTIVE_END_DATE
+            Log.info("EFFECTIVE_END_DATE in EPH STG : " + dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getENDON());
+            Log.info("EFFECTIVE_END_DATE in EPH SA : " + dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(0).getEFFECTIVE_END_DATE());
+
+            Log.info("Expecting EFFECTIVE_END_DATE in EPH STG and EPH SA to be equal");
+
+            assertEquals(dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getENDON(), dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(0).getEFFECTIVE_END_DATE());
 
         });
     }

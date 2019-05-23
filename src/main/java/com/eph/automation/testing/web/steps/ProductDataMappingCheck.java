@@ -331,6 +331,21 @@ public class ProductDataMappingCheck {
 
             assertEquals(dataQualityContext.productDataObjectsFromPMX.get(i).getWORK_TITLE(), dataQualityContext.productDataObjectsFromEPHSTG.get(i).getWORK_TITLE());
 
+            //UPDATED
+            Log.info("UPDATED in PMX: " + dataQualityContext.productDataObjectsFromPMX.get(i).getUPDATED());
+            Log.info("UPDATED in EPH Staging: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getUPDATED());
+
+            Log.info("Expecting UPDATED in PMX and EPH Staging are consistent for " + type);
+
+
+            try {
+               Date pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(dataQualityContext.productDataObjectsFromPMX.get(i).getUPDATED());
+               Date ephUpdatedDate = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS aaa").parse(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getUPDATED());
+
+            assertEquals("UPDATED in PMX and EPH STG is not equal ", pmxUpdatedDate, ephUpdatedDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
         });
     }

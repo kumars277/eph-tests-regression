@@ -8,6 +8,9 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 class ManifestationIdentifiersApiObject {
 
+    private String manifestationIdentifier;
+    private HashMap<String, Object> identifierType;
+
     public String getManifestationIdentifier() {
         return manifestationIdentifier;
     }
@@ -16,8 +19,6 @@ class ManifestationIdentifiersApiObject {
         this.manifestationIdentifier = manifestationIdentifier;
     }
 
-    private String manifestationIdentifier;
-        private HashMap<String, Object> identifierType;
 
         public ManifestationIdentifiersApiObject() {
         }

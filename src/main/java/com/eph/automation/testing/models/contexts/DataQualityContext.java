@@ -47,7 +47,7 @@ public class DataQualityContext {
     public static List<PersonDataObject> personDataObjectsFromEPHSA;
     public static List<PersonDataObject> personDataObjectsFromEPHGD;
 
-    public static List<PersonProductRoleDataObject> personProductRoleDataObjectsFromEPHSTGCAN;
+    public static List<PersonProductRoleDataObject> personProductRoleDataObjectsFromEPHSTGDQ;
     public static List<PersonProductRoleDataObject> personProductRoleDataObjectsFromEPHSTG;
     public static List<PersonProductRoleDataObject> personProductRoleDataObjectsFromEPHSA;
     public static List<PersonProductRoleDataObject> personProductRoleDataObjectsFromEPHGD;
@@ -59,6 +59,7 @@ public class DataQualityContext {
 
     public static List<AccountableProductDataObject> accountableProductDataObjectsFromPMX;
     public static List<AccountableProductDataObject> accountableProductDataObjectsFromSTG;
+    public static List<AccountableProductDataObject> accountableProductDataObjectsFromSTGDQ;
     public static List<AccountableProductDataObject> accountableProductDataObjectsFromSA;
     public static List<AccountableProductDataObject> accountableProductDataObjectsFromGD;
 

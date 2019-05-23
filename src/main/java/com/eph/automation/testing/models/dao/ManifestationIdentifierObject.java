@@ -10,6 +10,12 @@ public class ManifestationIdentifierObject {
    private String f_event;
    private String b_classname;
    private String manif_identifier_id;
+   private String identifier;
+   private String f_type;
+   private String f_manifestation;
+   private String effective_start_date;
+   private String effective_end_date;
+
 
     public String getIdentifier() {
         return identifier;
@@ -18,10 +24,6 @@ public class ManifestationIdentifierObject {
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
     }
-
-    private String identifier;
-   private String f_type;
-   private String f_manifestation;
 
     public String getB_loadid() {
         return b_loadid;
@@ -71,6 +73,22 @@ public class ManifestationIdentifierObject {
         this.f_manifestation = f_manifestation;
     }
 
+    public String getEffective_start_date() {
+        return effective_start_date;
+    }
+
+    public void setEffective_start_date(String effective_start_date) {
+        this.effective_start_date = effective_start_date;
+    }
+
+    public String getEffective_end_date() {
+        return effective_end_date;
+    }
+
+    public void setEffective_end_date(String effective_end_date) {
+        this.effective_end_date = effective_end_date;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -82,11 +100,13 @@ public class ManifestationIdentifierObject {
                 Objects.equals(manif_identifier_id, that.manif_identifier_id) &&
                 Objects.equals(identifier, that.identifier) &&
                 Objects.equals(f_type, that.f_type) &&
-                Objects.equals(f_manifestation, that.f_manifestation);
+                Objects.equals(f_manifestation, that.f_manifestation) &&
+                Objects.equals(effective_start_date, that.effective_start_date) &&
+                Objects.equals(effective_end_date, that.effective_end_date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(b_loadid, f_event, b_classname, manif_identifier_id, identifier, f_type, f_manifestation);
+        return Objects.hash(b_loadid, f_event, b_classname, manif_identifier_id, identifier, f_type, f_manifestation, effective_start_date, effective_end_date);
     }
 }

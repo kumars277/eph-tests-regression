@@ -30,6 +30,7 @@ public class ProductDataObject {
     private String ULT_WORK_REF;
     private String TAX_CODE;
     private String DQ_ERR;
+    private String UPDATED;
 
     //SA
     private String F_EVENT;
@@ -39,6 +40,13 @@ public class ProductDataObject {
     private String F_TYPE;
     private String F_STATUS;
 
+    public String getUPDATED() {
+        return UPDATED;
+    }
+
+    public void setUPDATED(String UPDATED) {
+        this.UPDATED = UPDATED;
+    }
 
     public String getDQ_ERR() {
         return DQ_ERR;

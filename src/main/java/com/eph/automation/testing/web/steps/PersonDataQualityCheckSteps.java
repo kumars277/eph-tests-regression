@@ -7,6 +7,7 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.PersonDataObject;
 import com.eph.automation.testing.services.db.sql.PersonDataSQL;
+import com.eph.automation.testing.services.db.sql.WorkCountSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -15,6 +16,8 @@ import cucumber.api.java.en.When;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -53,8 +56,23 @@ public class PersonDataQualityCheckSteps {
     @When("^Get the count of records for persons in EPH Staging$")
     public void getCountPersonsEPHSTG() {
         Log.info("When We get the count of persons records in PMX STG ..");
-        sql = PersonDataSQL.GET_COUNT_PERSONS_EPHSTG;
-        Log.info(sql);
+
+        if (System.getProperty("LOAD") != null) {
+            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                sql = PersonDataSQL.GET_COUNT_PERSONS_EPHSTG;
+                Log.info(sql);
+            } else {
+                sql = WorkCountSQL.GET_REFRESH_DATE;
+                Log.info(sql);
+
+                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                String refreshDate = (String) refreshDateNumber.get(0).get("refresh_timestamp");
+
+                sql = String.format( PersonDataSQL.GET_COUNT_PERSONS_EPHSTG_DELTA, refreshDate );
+                Log.info(sql);
+            }
+        }
+
         List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countPersonsEPHSTG = ((Long) personsNumber.get(0).get("count")).intValue();
         Log.info("Count of persons in EPH STG is: " + countPersonsEPHSTG);
@@ -214,6 +232,24 @@ public class PersonDataQualityCheckSteps {
             assertEquals("Expecting the PEOPLEHUB_ID in PMX and EPH STG are consistent ",
                     dataQualityContext.personDataObjectsFromPMX.get(i).getPEOPLEHUB_ID(),
                     dataQualityContext.personDataObjectsFromEPHSTG.get(i).getPEOPLEHUB_ID());
+
+            //UPDATED
+            Log.info("UPDATED in PMX: " + dataQualityContext.personDataObjectsFromPMX.get(i).getUPDATED());
+            Log.info("UPDATED in EPH Staging: " + dataQualityContext.personDataObjectsFromEPHSTG.get(i).getUPDATED());
+
+            Log.info("Expecting UPDATED in PMX and EPH Staging are consistent for ");
+
+
+            try {
+                Date pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(dataQualityContext.personDataObjectsFromPMX.get(i).getUPDATED());
+                Date ephUpdatedDate = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS aaa").parse(dataQualityContext.personDataObjectsFromEPHSTG.get(i).getUPDATED());
+
+                assertEquals("UPDATED in PMX and EPH STG is not equal ", pmxUpdatedDate, ephUpdatedDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
         });
 
     }

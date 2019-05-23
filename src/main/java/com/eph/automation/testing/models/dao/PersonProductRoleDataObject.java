@@ -11,6 +11,9 @@ public class PersonProductRoleDataObject {
     private String PERSON_SOURCE_REF;
     private String F_ROLE;
     private String WORK_ROLE;
+    private String START_DATE;
+    private String END_DATE;
+    private String UPDATED;
 
     //SA_PRODUCT_PERSON_ROLE
     private String B_LOADID;
@@ -21,6 +24,31 @@ public class PersonProductRoleDataObject {
     private String EFFECTIVE_END_DATE;
     private String F_PRODUCT;
     private String F_PERSON;
+
+
+    public String getSTART_DATE() {
+        return START_DATE;
+    }
+
+    public void setSTART_DATE(String START_DATE) {
+        this.START_DATE = START_DATE;
+    }
+
+    public String getEND_DATE() {
+        return END_DATE;
+    }
+
+    public void setEND_DATE(String END_DATE) {
+        this.END_DATE = END_DATE;
+    }
+
+    public String getUPDATED() {
+        return UPDATED;
+    }
+
+    public void setUPDATED(String UPDATED) {
+        this.UPDATED = UPDATED;
+    }
 
     public String getPROD_PER_ROLE_SOURCE_REF() {
         return PROD_PER_ROLE_SOURCE_REF;

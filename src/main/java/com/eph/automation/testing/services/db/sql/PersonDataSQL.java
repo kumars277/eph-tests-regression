@@ -18,6 +18,10 @@ public class PersonDataSQL {
 
     public static String GET_COUNT_PERSONS_EPHSTG = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_person";
 
+    public static String GET_COUNT_PERSONS_EPHSTG_DELTA = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_person\n" +
+            "where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')";
+
+
     public static String GET_COUNT_PERSONS_EPHDQ = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_person_dq";
 
     public static String GET_COUNT_PERSONS_EPHDQ_TO_SA = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_person_dq where dq_err != 'Y'";
@@ -36,26 +40,27 @@ public class PersonDataSQL {
     public static String GET_COUNT_PERSONS_EPHGD = "select count(*) as count from semarchy_eph_mdm.gd_person";
 
 
-    public static String GET_DATA_PERSONS_PMX = "SELECT \n" +
-            "     PARTY_ID AS PERSON_SOURCE_REF\n" +
-            "    ,PERSON_FIRST_NAME AS PERSON_FIRST_NAME\n" +
-            "    ,PERSON_FAMILY_NAME as PERSON_FAMILY_NAME \n" +
-            "    ,PEOPLEHUB_ID as PEOPLEHUB_ID\n" +
-            "FROM \n" +
-            "GD_PARTY P\n" +
+    public static String GET_DATA_PERSONS_PMX = "SELECT DISTINCT\n" +
+            "     P.PARTY_ID AS PERSON_SOURCE_REF\n" +
+            "    ,P.PERSON_FIRST_NAME\n" +
+            "    ,P.PERSON_FAMILY_NAME\n" +
+            "    ,P.PEOPLEHUB_ID\n" +
+            "    ,TO_CHAR(NVL(P.B_UPDDATE,P.B_CREDATE)) AS UPDATED\n" +
+            "FROM GD_PARTY P\n" +
             "WHERE PARTY_ID IN (\n" +
             "SELECT F_PARTY FROM GD_PMG\n" +
             "UNION\n" +
             "SELECT F_PARTY FROM GD_PARTY_IN_PRODUCT WHERE F_ROLE_TYPE IN (\n" +
             "    SELECT ROLE_TYPE_ID FROM GD_ROLE_TYPE WHERE ROLE_TYPE_CODE IN \n" +
             "        ('PPC','PUB','A01','A02','B01','B13','B09','B11','PUBDIR')))\n" +
-            "AND PARTY_ID IN ('%s')";
+            "        AND PARTY_ID IN ('%s')";
 
     public static String GET_DATA_PERSONS_EPHSTG = "select \n" +
             "\"PERSON_SOURCE_REF\" as PERSON_SOURCE_REF,\n" +
             "\"PERSON_FIRST_NAME\" as PERSON_FIRST_NAME,\n" +
             "\"PERSON_FAMILY_NAME\" as PERSON_FAMILY_NAME,\n" +
             "\"PEOPLEHUB_ID\" as PEOPLEHUB_ID\n" +
+            "\"UPDATED\" as UPDATED\n" +
             "from ephsit_talend_owner.stg_10_pmx_person\n" +
             "where \"PERSON_SOURCE_REF\" in ('%s')\n";
 

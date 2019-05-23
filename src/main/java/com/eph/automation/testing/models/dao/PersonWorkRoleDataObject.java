@@ -10,6 +10,11 @@ public class PersonWorkRoleDataObject {
     private String PMX_PARTY_SOURCE_REF;
     private String PMX_WORK_SOURCE_REF;
     private String F_ROLE;
+    private String START_DATE;
+    private String END_DATE;
+    private String UPDATED;
+
+
 
     //SA_WORK_PERSON_ROLE
     private String B_LOADID;
@@ -21,6 +26,30 @@ public class PersonWorkRoleDataObject {
     private String F_WWORK;
     private String F_PERSON;
 
+
+    public String getSTART_DATE() {
+        return START_DATE;
+    }
+
+    public void setSTART_DATE(String START_DATE) {
+        this.START_DATE = START_DATE;
+    }
+
+    public String getEND_DATE() {
+        return END_DATE;
+    }
+
+    public void setEND_DATE(String END_DATE) {
+        this.END_DATE = END_DATE;
+    }
+
+    public String getUPDATED() {
+        return UPDATED;
+    }
+
+    public void setUPDATED(String UPDATED) {
+        this.UPDATED = UPDATED;
+    }
 
     public String getWORK_PERSON_ROLE_SOURCE_REF() {
         return WORK_PERSON_ROLE_SOURCE_REF;
