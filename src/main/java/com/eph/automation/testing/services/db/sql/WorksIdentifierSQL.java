@@ -20,7 +20,7 @@ public class WorksIdentifierSQL {
             " ,IDENTIFIER AS IDENTIFIER --  IDENTIFIER\n" +
             " ,F_TYPE AS F_TYPE -- WORK IDENTIFIER\n" +
             " ,F_WWORK AS F_WWORK -- WORK IDENTIFIER\n" +
-            "  FROM ephsit.semarchy_eph_mdm.sa_work_identifier wi\n" +
+            "  FROM semarchy_eph_mdm.sa_work_identifier wi\n" +
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_identifier join \n"+
             "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
@@ -34,7 +34,7 @@ public class WorksIdentifierSQL {
     public static String getRandomProductNum="SELECT \n" +
             "    \"PRODUCT_WORK_ID\" as random_value\n" +
             "FROM\n" +
-            "  ephsit_talend_owner.stg_10_pmx_wwork stg \n" +
+            "  "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork stg \n" +
             "where \"WORK_TYPE\" = 'PARAM1' \n" +
             "ORDER BY RANDOM()\n" +
             "LIMIT 1";
@@ -44,8 +44,8 @@ public class WorksIdentifierSQL {
     public static String getRandomProductNum="SELECT   \n" +
             "stg.\"PRODUCT_WORK_ID\" as random_value\n" +
             "from \n" +
-            "ephsit_talend_owner.stg_10_pmx_wwork stg,\n" +
-            "ephsit_talend_owner.stg_10_pmx_wwork_dq wdq\n" +
+            ""+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork stg,\n" +
+            ""+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq wdq\n" +
             "where \n" +
             "stg.\"WORK_TYPE\" = 'PARAM1' and \n" +
             "stg.\"PRODUCT_WORK_ID\" = wdq.pmx_source_reference and\n" +
@@ -60,7 +60,7 @@ public class WorksIdentifierSQL {
             "  ,\"DAC_KEY\" as DAC_KEY-- DAC Key (may go in IDs table, depending on implementation of data model)\n" +
             "  ,\"PROJECT_NUM\" AS PROJECT_NUM -- Project Number (may go in IDs table, depending on implementation of data model)\n" +
             "  ,\"PRODUCT_WORK_ID\" AS PRODUCT_WORK_ID-- Project Number (may go in IDs table, depending on implementation of data model)\n" +
-            "  FROM ephsit_talend_owner.stg_10_pmx_wwork\n" +
+            "  FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork\n" +
             "  WHERE \"PRODUCT_WORK_ID\"='PARAM1'";
 
     public static String getIdentifierDataFromGD="SELECT \n" +
@@ -94,6 +94,6 @@ public class WorksIdentifierSQL {
             "  AND F_TYPE='PARAM2'";
 
 
-    public static String GET_F_WWORK = "select eph_id as F_WWORK from ephsit_talend_owner.map_sourceref_2_ephid  where ref_type= 'WORK' and source_ref = '%s' ";
+    public static String GET_F_WWORK = "select eph_id as F_WWORK from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid  where ref_type= 'WORK' and source_ref = '%s' ";
 
 }

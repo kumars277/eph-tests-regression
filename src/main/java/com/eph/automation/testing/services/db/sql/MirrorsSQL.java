@@ -2,8 +2,15 @@ package com.eph.automation.testing.services.db.sql;
 
 public class MirrorsSQL {
 
-    public static String GET_STG_Mirrors_COUNT ="select count(*) as stgCount from ephsit_talend_owner.stg_10_pmx_work_rel " +
-            "where \"F_RELATIONSHIP_TYPE\"='MIR'";
+    public static String GET_STG_Mirrors_COUNT ="select count(*) as stgCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel \n" +
+            "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq d1 on STG_10_PMX_WORK_REL.\"PARENT_PMX_SOURCE\"::varchar = d1.pmx_source_reference::varchar\n" +
+            "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq d2 on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.pmx_source_reference::varchar\n" +
+            "where \"F_RELATIONSHIP_TYPE\"='MIR' and d1.dq_err != 'Y' and d2.dq_err != 'Y'";
+
+    public static String GET_STG_Mirrors_COUNT_Updated ="select count(*) as stgCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel " +
+            "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq d1 on STG_10_PMX_WORK_REL.\"PARENT_PMX_SOURCE\"::varchar = d1.pmx_source_reference::varchar\n" +
+            "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq d2 on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.pmx_source_reference::varchar\n" +
+            "where \"F_RELATIONSHIP_TYPE\"='MIR' and d1.dq_err != 'Y' and d2.dq_err != 'Y' and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
     public static String GET_SA_Mirrors_COUNT ="select count(*) as saCount from semarchy_eph_mdm.sa_work_relationship_mirror sa\n"+
             " where f_event =  (select max (f_event) from\n" +
@@ -32,10 +39,11 @@ public class MirrorsSQL {
             "AND e.f_event_type = 'PMX'\n"+
             "and e.f_workflow_source = 'PMX' )";
 
-    public static String gettingNumberOfIds="SELECT st.\"RELATIONSHIP_PMX_SOURCEREF\"  as random_value\n" +
-            " FROM ephsit_talend_owner.stg_10_pmx_work_rel st\n" +
-            " left join semarchy_eph_mdm.sa_work_relationship_mirror sa on st.\"RELATIONSHIP_PMX_SOURCEREF\" =cast(sa.work_rel_mirror_id as numeric)\n" +
-            "WHERE \"F_RELATIONSHIP_TYPE\"='MIR' and sa.b_error_status is null ORDER BY RANDOM()\n" +
+    public static String gettingNumberOfIds="SELECT \"RELATIONSHIP_PMX_SOURCEREF\"  as random_value\n" +
+            " FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel\n" +
+            "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq d1 on STG_10_PMX_WORK_REL.\"PARENT_PMX_SOURCE\"::varchar = d1.pmx_source_reference::varchar\n" +
+            "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq d2 on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.pmx_source_reference::varchar\n" +
+            "WHERE \"F_RELATIONSHIP_TYPE\"='MIR' and d1.dq_err != 'Y' and d2.dq_err != 'Y' ORDER BY RANDOM()\n" +
             " LIMIT PARAM1;";
 
     public static String gettingWorkID="SELECT work_id as work_id from semarchy_eph_mdm.sa_wwork where pmx_source_reference \n" +
@@ -75,7 +83,7 @@ public class MirrorsSQL {
             "  ,\"F_RELATIONSHIP_TYPE\" as F_RELATIONSHIP_TYPE\n" +
             "  ,\"EFFECTIVE_START_DATE\" as EFFECTIVE_START_DATE\n"+
             "  ,\"ENDON\" as ENDON\n"+
-            "  FROM ephsit_talend_owner.stg_10_pmx_work_rel \n"+
+            "  FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel \n"+
             "  WHERE \"RELATIONSHIP_PMX_SOURCEREF\" in ('%s')"+
             "  AND \"F_RELATIONSHIP_TYPE\"='MIR' order by RELATIONSHIP_PMX_SOURCEREF";
 
@@ -86,7 +94,7 @@ public class MirrorsSQL {
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
             "  ,effective_start_date as EFFECTIVE_START_DATE"+
             "  ,effective_to_date as ENDON"+
-            "  FROM ephsit.semarchy_eph_mdm.sa_work_relationship_mirror sa\n"+
+            "  FROM semarchy_eph_mdm.sa_work_relationship_mirror sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_relationship_mirror join \n"+
             "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
@@ -103,7 +111,7 @@ public class MirrorsSQL {
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
             "  ,effective_start_date as EFFECTIVE_START_DATE"+
             "  ,effective_to_date as ENDON"+
-            "  FROM ephsit.semarchy_eph_mdm.sa_work_relationship_mirror sa\n"+
+            "  FROM semarchy_eph_mdm.sa_work_relationship_mirror sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_relationship_mirror join \n"+
             "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
@@ -120,7 +128,7 @@ public class MirrorsSQL {
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
             "  ,effective_start_date as EFFECTIVE_START_DATE"+
             "  ,effective_to_date as ENDON"+
-            "  FROM ephsit.semarchy_eph_mdm.gd_work_relationship_mirror sa\n"+
+            "  FROM semarchy_eph_mdm.gd_work_relationship_mirror sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.gd_work_relationship_mirror join \n"+
             "semarchy_eph_mdm.gd_event on f_event = event_id\n"+
@@ -130,13 +138,13 @@ public class MirrorsSQL {
             "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )\n"+
             "  AND f_original in ('%s') order by WORK_REL_mirror_ID";
 
-    public static String Get_work_id = "select eph_id as workID from ephsit_talend_owner.map_sourceref_2_ephid " +
+    public static String Get_work_id = "select eph_id as workID from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid " +
             "where ref_type = 'WORK' and source_ref='PARAM1'";
 
-    public static String Get_mirror_id = "select numeric_id as mirrorId from ephsit_talend_owner.map_sourceref_2_numericid " +
+    public static String Get_mirror_id = "select numeric_id as mirrorId from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid " +
             "where source_ref = 'PARAM1'";
 
-    public static String Get_child_id = "select eph_id as workID from ephsit_talend_owner.map_sourceref_2_ephid " +
+    public static String Get_child_id = "select eph_id as workID from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid " +
             "where ref_type = 'WORK' and source_ref='PARAM1'";
 
 }

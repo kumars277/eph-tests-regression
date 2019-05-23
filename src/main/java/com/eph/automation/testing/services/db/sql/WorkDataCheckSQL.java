@@ -29,7 +29,7 @@ public class WorkDataCheckSQL {
             "  ,\"SOC_OWNERSHIP\" AS OWNERSHIP \n" +
             "  ,\"UPDATED\" as UPDATED\n" +
             "  ,\"LANGUAGE_CODE\" as LANGUAGE_CODE\n"+
-            "  FROM ephsit.ephsit_talend_owner.stg_10_pmx_wwork\n" +
+            "  FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork\n" +
             "  WHERE \"PRODUCT_WORK_ID\" IN ('%s') ORDER BY \"PRODUCT_WORK_ID\"";
 
     public static String GET_STG_DQ_WORKS_DATA ="SELECT \n" +
@@ -51,8 +51,8 @@ public class WorkDataCheckSQL {
             "  ,ap.\"ACC_PROD_ID\" as ACC_PROD_ID" +
             "  ,ap.\"PARENT_ACC_PROD\" as PARENT_ACC_PROD\n" +
             "  ,ww.LANGUAGE_CODE as LANGUAGE_CODE\n"+
-            "  FROM ephsit_talend_owner.stg_10_pmx_wwork_dq ww\n"+
-            "  left join ephsit_talend_owner.stg_10_pmx_accountable_product ap on ww.pmx_source_reference = ap.\"PRODUCT_WORK_ID\"\n"+
+            "  FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq ww\n"+
+            "  left join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_accountable_product ap on ww.pmx_source_reference = ap.\"PRODUCT_WORK_ID\"\n"+
             "  WHERE pmx_source_reference IN ('%s') ORDER BY pmx_source_reference";
 
     public static String GET_EPH_WORKS_DATA ="SELECT \n" +
@@ -73,7 +73,7 @@ public class WorkDataCheckSQL {
             "  ,F_SOCIETY_OWNERSHIP AS OWNERSHIP\n" +
             "  ,f_accountable_product as f_accountable_product\n" +
             "  ,f_llanguage as LANGUAGE_CODE\n"+
-            "  FROM ephsit.semarchy_eph_mdm.sa_wwork sa\n"+
+            "  FROM semarchy_eph_mdm.sa_wwork sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_wwork join \n"+
             "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
@@ -103,11 +103,11 @@ public class WorkDataCheckSQL {
             "  ,F_SOCIETY_OWNERSHIP AS OWNERSHIP\n" +
             "  ,f_accountable_product as f_accountable_product\n" +
             "  ,f_llanguage as LANGUAGE_CODE\n"+
-            "  FROM ephsit.semarchy_eph_mdm.gd_wwork\n" +
+            "  FROM semarchy_eph_mdm.gd_wwork\n" +
             "  WHERE pmx_source_reference IN ('%s')";
 
     public static String GET_Acc_Prod ="SELECT \n" +
-            "numeric_id as f_accountable_product from ephsit_talend_owner.map_sourceref_2_numericid " +
+            "numeric_id as f_accountable_product from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid " +
             "where source_ref = 'PARAM1'";
 
 

@@ -7,8 +7,10 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.TranslationContext;
 import com.eph.automation.testing.models.dao.FinancialAttribsDataObject;
 import com.eph.automation.testing.models.dao.TranslationsDataObject;
+import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.FinAttrSQL;
 import com.eph.automation.testing.services.db.sql.TranslationsSQL;
+import com.eph.automation.testing.services.db.sql.WorkCountSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -17,6 +19,9 @@ import cucumber.api.java.en.When;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -33,6 +38,7 @@ public class TranslationTestSteps {
     private static List<String> workid;
     private static List<String> isbns;
     public String fWorkID;
+    private static List<WorkDataObject> refreshDate;
 
     @Given("^We know the number of translations in PMX$")
     public void getTranslationsCountDQ(){
@@ -47,9 +53,25 @@ public class TranslationTestSteps {
         translationContext.stgAllCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
         Log.info("The STG count is: " + translationContext.stgAllCount.get(0).stgCount);
 
-        sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT;
-        translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
-        Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
+        if (System.getProperty("LOAD") != null) {
+            if(System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT;
+                translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
+                Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
+            }else {
+                sql = WorkCountSQL.GET_REFRESH_DATE;
+                refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                        Constants.EPH_URL);
+
+                sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT_Updated.replace("PARAM1",refreshDate.get(0).refresh_timestamp);
+                translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
+                Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
+            }
+        }else {
+            sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT;
+            translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
+            Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
+        }
     }
 
     @When("^We get the translations from SA$")
@@ -137,7 +159,7 @@ public class TranslationTestSteps {
     }
 
     @Then("^The translations data between PMX and STG is identical$")
-    public void checkTranslationData(){
+    public void checkTranslationData() throws ParseException {
         for (int i=0; i<translationContext.translationDataFromStg.size();i++) {
             Assert.assertEquals("The RELATIONSHIP_PMX_SOURCEREF is incorrect for id=" + ids.get(i),
                     translationContext.translationDataFromPMX.get(i).RELATIONSHIP_PMX_SOURCEREF,
@@ -166,6 +188,16 @@ public class TranslationTestSteps {
                 Assert.assertEquals("The ENDON is incorrect for id=" + ids.get(i),
                         translationContext.translationDataFromPMX.get(i).ENDON,
                         translationContext.translationDataFromStg.get(i).ENDON);
+            }
+
+            Date pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(translationContext.translationDataFromPMX.get(i).UPDATED);
+            Date stgDate = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS aaa").parse(translationContext.translationDataFromStg.get(i).UPDATED);
+
+            if (translationContext.translationDataFromPMX.get(i).UPDATED != null
+                    ||translationContext.translationDataFromStg.get(i).UPDATED != null) {
+                assertTrue("Expecting the UPDATED details from PMX and EPH Consistent for id=" + ids.get(i),
+                        pmxUpdatedDate
+                                .equals(stgDate));
             }
         }
     }

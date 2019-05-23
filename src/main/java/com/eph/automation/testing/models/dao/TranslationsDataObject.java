@@ -54,6 +54,16 @@ public class TranslationsDataObject {
     public String CHILD_PMX_SOURCE;
     public String PARENT_PMX_SOURCE;
 
+    public String getUPDATED() {
+        return UPDATED;
+    }
+
+    public void setUPDATED(String UPDATED) {
+        this.UPDATED = UPDATED;
+    }
+
+    public String UPDATED;
+
     public String getRELATIONSHIP_PMX_SOURCEREF() {
         return RELATIONSHIP_PMX_SOURCEREF;
     }

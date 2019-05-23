@@ -1,12 +1,10 @@
 package com.eph.automation.testing.services.db.sql;
 
 public class FinAttrSQL {
-    public static String gettingSourceRef="SELECT dq.PMX_SOURCE_REFERENCE as random_value\n" +
-            " FROM ephsit_talend_owner.stg_10_pmx_wwork_dq dq\n" +
-            " join semarchy_eph_mdm.sa_work_financial_attribs sa on dq.pmx_source_reference=cast(sa.work_fin_attribs_id as numeric)\n" +
-            "join ephsit_talend_owner.stg_10_pmx_wwork st on dq.pmx_source_reference=st.\"PRODUCT_WORK_ID\"\n"+
-            "where dq.\"dq_err\" = 'N' and sa.b_error_status is null\n" +
-            "and dq.opco is  not null and dq.resp_centre is not null\n" +
+    public static String gettingSourceRef="SELECT PMX_SOURCE_REFERENCE as random_value\n" +
+            " FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq \n" +
+            "where \"dq_err\" = 'N'\n" +
+            "and opco is  not null and resp_centre is not null\n" +
             "ORDER BY RANDOM()\n" +
             " LIMIT PARAM1;";
 
@@ -17,7 +15,7 @@ public class FinAttrSQL {
             " PMX_SOURCE_REFERENCE as PMX_SOURCE_REFERENCE " +
             "  ,opco as opco\n" +
             "  ,resp_centre as resp_centre\n" +
-            "  FROM ephsit_talend_owner.stg_10_pmx_wwork_dq \n"+
+            "  FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq \n"+
             "  WHERE pmx_source_reference in ('%s') ORDER BY resp_centre,opco,PMX_SOURCE_REFERENCE";
 
     public static String GET_SA_FinAttr_DATA ="SELECT \n" +
@@ -27,7 +25,7 @@ public class FinAttrSQL {
             "  ,f_gl_cost_resp_centre as cost_resp_centre\n" +
             "  ,f_gl_revenue_resp_centre as revenue_resp_centre\n" +
             "  ,f_wwork as work_id\n" +
-            "  FROM ephsit.semarchy_eph_mdm.sa_work_financial_attribs sa\n"+
+            "  FROM semarchy_eph_mdm.sa_work_financial_attribs sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_financial_attribs join \n"+
             "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
@@ -44,7 +42,7 @@ public class FinAttrSQL {
             "  ,f_gl_cost_resp_centre as cost_resp_centre\n" +
             "  ,f_gl_revenue_resp_centre as revenue_resp_centre\n" +
             "  ,f_wwork as work_id\n" +
-            "  FROM ephsit.semarchy_eph_mdm.sa_work_financial_attribs sa\n"+
+            "  FROM semarchy_eph_mdm.sa_work_financial_attribs sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_financial_attribs join \n"+
             "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
@@ -62,7 +60,7 @@ public class FinAttrSQL {
             "  ,f_gl_cost_resp_centre as cost_resp_centre\n" +
             "  ,f_gl_revenue_resp_centre as revenue_resp_centre\n" +
             "  ,f_wwork as work_id\n" +
-            "  FROM ephsit.semarchy_eph_mdm.gd_work_financial_attribs sa\n"+
+            "  FROM semarchy_eph_mdm.gd_work_financial_attribs sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.gd_work_financial_attribs join \n"+
             "semarchy_eph_mdm.gd_event on f_event = event_id\n"+
@@ -72,14 +70,14 @@ public class FinAttrSQL {
             "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )\n"+
             "  AND f_wwork in ('%s') order by fin_attribs_id";
 
-    public static String GET_FinnAttr_ID = "select numeric_id as fin_attribs_id from ephsit_talend_owner.map_sourceref_2_numericid " +
+    public static String GET_FinnAttr_ID = "select numeric_id as fin_attribs_id from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid " +
             "where source_ref = 'PARAM1'";
 
-    public static String Get_work_id = "select eph_id as workID from ephsit_talend_owner.map_sourceref_2_ephid " +
+    public static String Get_work_id = "select eph_id as workID from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid " +
             "where ref_type = 'WORK' and source_ref='PARAM1'";
 
     public static String Get_SA_count = "select count (*) as saCount " +
-            "FROM ephsit.semarchy_eph_mdm.sa_work_financial_attribs sa\n"+
+            "FROM semarchy_eph_mdm.sa_work_financial_attribs sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_financial_attribs join \n"+
             "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
@@ -90,7 +88,7 @@ public class FinAttrSQL {
 
 
     public static String Get_GD_count = "select count (*) as gdCount " +
-            "  FROM ephsit.semarchy_eph_mdm.gd_work_financial_attribs gd\n"+
+            "  FROM semarchy_eph_mdm.gd_work_financial_attribs gd\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.gd_work_financial_attribs join \n"+
             "semarchy_eph_mdm.gd_event on f_event = event_id\n"+
@@ -100,7 +98,7 @@ public class FinAttrSQL {
             "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )";
 
     public static String Get_AE_count = "select count (distinct work_fin_attribs_id ) as aeCount " +
-            "  FROM ephsit.semarchy_eph_mdm.ae_work_financial_attribs ae\n"+
+            "  FROM semarchy_eph_mdm.ae_work_financial_attribs ae\n"+
             " where ae.b_batchid =  (select max (ae.b_batchid) from\n" +
             "semarchy_eph_mdm.ae_work_financial_attribs ae join \n"+
             "semarchy_eph_mdm.gd_event e on ae.b_batchid = e.b_batchid\n"+
@@ -110,5 +108,5 @@ public class FinAttrSQL {
             "and e.f_workflow_source = 'PMX' )";
 
 
-    public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count (*) as dqCount from ephsit_talend_owner.stg_10_pmx_wwork_dq where dq_err='N' and opco is not null and resp_centre is not null";
+    public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count (*) as dqCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq where dq_err='N' and opco is not null and resp_centre is not null";
 }

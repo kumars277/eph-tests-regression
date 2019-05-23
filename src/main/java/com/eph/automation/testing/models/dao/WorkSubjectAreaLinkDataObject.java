@@ -17,6 +17,37 @@ public class WorkSubjectAreaLinkDataObject {
     private String WORK_SUBJECT_AREA_LINK_ID;
     private String F_WWORK;
 
+    public String getSTART_DATE() {
+        return START_DATE;
+    }
+
+    public void setSTART_DATE(String START_DATE) {
+        this.START_DATE = START_DATE;
+    }
+
+    private String START_DATE;
+
+
+    public String getUPDATED() {
+        return UPDATED;
+    }
+
+    public void setUPDATED(String UPDATED) {
+        this.UPDATED = UPDATED;
+    }
+
+    private String UPDATED;
+
+    public String getEFFTO_DATE() {
+        return EFFTO_DATE;
+    }
+
+    public void setEFFTO_DATE(String EFFTO_DATE) {
+        this.EFFTO_DATE = EFFTO_DATE;
+    }
+
+    private String EFFTO_DATE;
+
 
     public String getPRODUCT_SUBJECT_AREA_ID() {
         return PRODUCT_SUBJECT_AREA_ID;

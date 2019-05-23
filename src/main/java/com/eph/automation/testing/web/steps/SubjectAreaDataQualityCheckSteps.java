@@ -6,7 +6,9 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.SubjectAreaDataObject;
+import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.SubjectAreaDataSQL;
+import com.eph.automation.testing.services.db.sql.WorkCountSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -35,6 +37,7 @@ public class SubjectAreaDataQualityCheckSteps {
     private static int countSubjectAreaRecordsEPHSA;
     private static int countSubjectAreaRecordsEPHGD;
     private static List<String> ids;
+    private static List<WorkDataObject> refreshDate;
 
     @Given("^We get the count of subject area data from PMX$")
     public void getCountSubjectAreaRecordsPMX() {
@@ -49,11 +52,31 @@ public class SubjectAreaDataQualityCheckSteps {
     @When("^We get the count of subject area data from EPH STG$")
     public void getCountSubjectAreaRecordsEPHSTG() {
         Log.info("When We get the count of subject area data in EPH STG ..");
-        sql = SubjectAreaDataSQL.SELECT_COUNT_SUBJECT_AREA_STG;
-        Log.info(sql);
-        List<Map<String, Object>> subjectAreaNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        countSubjectAreaRecordsEPHSTG = ((Long) subjectAreaNumber.get(0).get("count")).intValue();
-        Log.info("Count of subject area data in EPH STG is: " + countSubjectAreaRecordsEPHSTG);
+        if (System.getProperty("LOAD") != null) {
+            if(System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                sql = SubjectAreaDataSQL.SELECT_COUNT_SUBJECT_AREA_STG;
+                Log.info(sql);
+                List<Map<String, Object>> subjectAreaNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                countSubjectAreaRecordsEPHSTG = ((Long) subjectAreaNumber.get(0).get("count")).intValue();
+                Log.info("Count of subject area data in EPH STG is: " + countSubjectAreaRecordsEPHSTG);
+            }else{
+                sql = WorkCountSQL.GET_REFRESH_DATE;
+                refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                        Constants.EPH_URL);
+
+                sql = SubjectAreaDataSQL.SELECT_COUNT_SUBJECT_AREA_STG_Delta.replace("PARAM1",refreshDate.get(0).refresh_timestamp);
+                Log.info(sql);
+                List<Map<String, Object>> subjectAreaNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                countSubjectAreaRecordsEPHSTG = ((Long) subjectAreaNumber.get(0).get("count")).intValue();
+                Log.info("Count of subject area data in EPH STG is: " + countSubjectAreaRecordsEPHSTG);
+            }
+        }else {
+            sql = SubjectAreaDataSQL.SELECT_COUNT_SUBJECT_AREA_STG;
+            Log.info(sql);
+            List<Map<String, Object>> subjectAreaNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            countSubjectAreaRecordsEPHSTG = ((Long) subjectAreaNumber.get(0).get("count")).intValue();
+            Log.info("Count of subject area data in EPH STG is: " + countSubjectAreaRecordsEPHSTG);
+        }
     }
 
     @When("^We get the count of subject area data from EPH SA$")

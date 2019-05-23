@@ -7,7 +7,9 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
+import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.models.dao.WorkSubjectAreaLinkDataObject;
+import com.eph.automation.testing.services.db.sql.WorkCountSQL;
 import com.eph.automation.testing.services.db.sql.WorkSubjectAreaLinkDataSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
@@ -16,7 +18,10 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -38,6 +43,7 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
     private static int countWorkSubjectAreaRecordsEPHSA;
     private static int countWorkSubjectAreaRecordsEPHGD;
     private static List<String> ids;
+    private static List<WorkDataObject> refreshDate;
 
     @Given("^We get the count of work subject area data from PMX$")
     public void getCountWorkSubjectAreaRecordsPMX() {
@@ -63,11 +69,32 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
     @When("^We get the count of work subject area data from EPH STG With DQ$")
     public void getCountWorkSubjectAreaRecordsEPHSTGDQ() {
         Log.info("When We get the count of work subject area data in EPH STG with DQ ..");
-        sql = WorkSubjectAreaLinkDataSQL.SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ;
-        Log.info(sql);
-        List<Map<String, Object>> workSubjectAreaNumberDQ = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        countWorkSubjectAreaRecordsEPHSTGDQ = ((Long) workSubjectAreaNumberDQ.get(0).get("count")).intValue();
-        Log.info("Count of work subject area data in EPH STG with DQ is: " + countWorkSubjectAreaRecordsEPHSTGDQ);
+        if (System.getProperty("LOAD") != null) {
+            if(System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                sql = WorkSubjectAreaLinkDataSQL.SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ;
+                Log.info(sql);
+                List<Map<String, Object>> workSubjectAreaNumberDQ = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                countWorkSubjectAreaRecordsEPHSTGDQ = ((Long) workSubjectAreaNumberDQ.get(0).get("count")).intValue();
+                Log.info("Count of work subject area data in EPH STG with DQ is: " + countWorkSubjectAreaRecordsEPHSTGDQ);
+            }else {
+                sql = WorkCountSQL.GET_REFRESH_DATE;
+                refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                        Constants.EPH_URL);
+
+                sql = WorkSubjectAreaLinkDataSQL.SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ_Delta.replace("PARAM1"
+                        ,refreshDate.get(0).refresh_timestamp);
+                Log.info(sql);
+                List<Map<String, Object>> workSubjectAreaNumberDQ = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                countWorkSubjectAreaRecordsEPHSTGDQ = ((Long) workSubjectAreaNumberDQ.get(0).get("count")).intValue();
+                Log.info("Count of work subject area data in EPH STG with DQ is: " + countWorkSubjectAreaRecordsEPHSTGDQ);
+            }
+        }else{
+            sql = WorkSubjectAreaLinkDataSQL.SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ;
+            Log.info(sql);
+            List<Map<String, Object>> workSubjectAreaNumberDQ = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            countWorkSubjectAreaRecordsEPHSTGDQ = ((Long) workSubjectAreaNumberDQ.get(0).get("count")).intValue();
+            Log.info("Count of work subject area data in EPH STG with DQ is: " + countWorkSubjectAreaRecordsEPHSTGDQ);
+        }
     }
 
     @When("^We get the count of work subject area data from EPH SA$")
@@ -209,6 +236,40 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
             Log.info("F_PRODUCT_WORK in EPH STG: " + dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getF_PRODUCT_WORK());
 
             assertEquals(dataQualityContext.workSubjectAreaDataObjectsFromPMX.get(i).getF_PRODUCT_WORK(), dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getF_PRODUCT_WORK());
+
+            Log.info("START_DATE in PMX: " + dataQualityContext.workSubjectAreaDataObjectsFromPMX.get(i).getSTART_DATE());
+            Log.info("START_DATE in EPH STG: " + dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getSTART_DATE());
+
+            assertEquals(dataQualityContext.workSubjectAreaDataObjectsFromPMX.get(i).getSTART_DATE().substring(0,10)
+                    , dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getSTART_DATE());
+
+            if (dataQualityContext.workSubjectAreaDataObjectsFromPMX.get(i).getEFFTO_DATE()!=null
+                    || dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getEFFTO_DATE() != null) {
+                Log.info("END_DATE in PMX: " + dataQualityContext.workSubjectAreaDataObjectsFromPMX.get(i).getEFFTO_DATE());
+                Log.info("END_DATE in EPH STG: " + dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getEFFTO_DATE());
+            assertEquals(dataQualityContext.workSubjectAreaDataObjectsFromPMX.get(i).getEFFTO_DATE().substring(0,10)
+                    , dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getEFFTO_DATE());
+            }
+
+            Date pmxUpdatedDate = null;
+            try {
+                pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(dataQualityContext.workSubjectAreaDataObjectsFromPMX.get(i).getUPDATED());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Date stgDate = null;
+            try {
+                stgDate = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS aaa").parse(dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getUPDATED());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            if (dataQualityContext.workSubjectAreaDataObjectsFromPMX.get(i).getUPDATED()!=null
+                    || dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getUPDATED() != null) {
+                assertTrue("Expecting the UPDATED details from PMX and EPH Consistent for id=" + ids.get(i),
+                        pmxUpdatedDate
+                                .equals(stgDate));
+            }
 
         });
     }
