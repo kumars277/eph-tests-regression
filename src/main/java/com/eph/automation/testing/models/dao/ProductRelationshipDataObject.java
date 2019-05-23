@@ -12,6 +12,8 @@ public class ProductRelationshipDataObject {
     private String F_RELATIONSHIP_TYPE;
     private String EFFECTIVE_START_DATE;
     private String ENDON;
+    private String UPDATED;
+
 
     //SA
     private String F_EVENT;
@@ -21,6 +23,22 @@ public class ProductRelationshipDataObject {
     private String F_COMPONENT;
     private String EFFECTIVE_END_DATE;
 
+
+    public String getENDON() {
+        return ENDON;
+    }
+
+    public void setENDON(String ENDON) {
+        this.ENDON = ENDON;
+    }
+
+    public String getUPDATED() {
+        return UPDATED;
+    }
+
+    public void setUPDATED(String UPDATED) {
+        this.UPDATED = UPDATED;
+    }
 
     public String getRELATIONSHIP_PMX_SOURCEREF() {
         return RELATIONSHIP_PMX_SOURCEREF;

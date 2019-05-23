@@ -46,6 +46,9 @@ public class PersonWorkRoleDataSQL {
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTG = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_work_person_role" ;
 
+    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTG_DELTA = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_work_person_role where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')\n" ;
+
+
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTGDQ = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_work_person_role wpr  join  ephsit_talend_owner.stg_10_pmx_person_dq perd  on wpr.\"PMX_PARTY_SOURCE_REF\" = perd.person_source_ref \n" +
             "join ephsit_talend_owner.stg_10_pmx_wwork_dq word on wpr.\"PMX_WORK_SOURCE_REF\" = word.pmx_source_reference \n" +
             "where perd.dq_err != 'Y' and word.dq_err != 'Y'" ;
@@ -75,6 +78,9 @@ public class PersonWorkRoleDataSQL {
             "    ,PMG.F_PARTY AS PMX_PARTY_SOURCE_REF\n" +
             "    ,W.PRODUCT_WORK_ID AS PMX_WORK_SOURCE_REF\n" +
             "    ,'PD' AS F_ROLE\n" +
+            "    ,CURRENT_DATE AS START_DATE\n" +
+            "    ,NULL AS END_DATE\n" +
+            "    ,TO_CHAR(PMG.B_UPDDATE) AS UPDATED\n" +
             "FROM\n" +
             "    GD_PRODUCT_WORK W\n" +
             "JOIN\n" +
@@ -82,19 +88,22 @@ public class PersonWorkRoleDataSQL {
             "JOIN\n" +
             "    GD_PMG PMG ON PMC.F_PMG = PMG.PMGCODE\n" +
             "WHERE\n" +
-            "    PMG.F_PARTY IS NOT NULL \n" +
-            "      AND W.PRODUCT_WORK_ID||PMG.F_PARTY IN ('%s')";
+            "    PMG.F_PARTY IS NOT NULL\n" +
+            "\t      AND W.PRODUCT_WORK_ID||PMG.F_PARTY IN ('%s')";
 
     public static String GET_DATA_PERSONS_WORK_ROLE_PMX_AU = "SELECT\n" +
             "\t P.PARTY_IN_PRODUCT_ID||'-AU' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
             "\t,P.F_PARTY AS PMX_PARTY_SOURCE_REF\n" +
             "\t,P.F_PRODUCT_WORK  AS PMX_WORK_SOURCE_REF\n" +
             "\t,'AU' AS F_ROLE\n" +
+            "\t,P.EFFFROM_DATE AS START_DATE\n" +
+            "\t,P.EFFTO_DATE AS END_DATE\n" +
+            "\t,TO_CHAR(NVL(P.B_UPDDATE,P.B_CREDATE)) AS UPDATED\n" +
             "FROM\n" +
             "\tGD_PARTY_IN_PRODUCT P\n" +
             "WHERE\n" +
             "\tP.F_ROLE_TYPE = 1\n" +
-            "\tAND P.EFFTO_DATE IS NULL\n" +
+            "AND P.EFFTO_DATE IS NULL\n" +
             "\tAND P.PARTY_IN_PRODUCT_ID IN ('%s')";
 
     public static String GET_DATA_PERSONS_WORK_ROLE_PMX_PU = "SELECT\n" +
@@ -102,11 +111,14 @@ public class PersonWorkRoleDataSQL {
             "\t,P.F_PARTY AS PMX_PARTY_SOURCE_REF\n" +
             "\t,P.F_PRODUCT_WORK  AS PMX_WORK_SOURCE_REF\n" +
             "\t,'PU' AS F_ROLE\n" +
+            "\t,P.EFFFROM_DATE AS START_DATE\n" +
+            "\t,P.EFFTO_DATE AS END_DATE\n" +
+            "\t,TO_CHAR(NVL(P.B_UPDDATE,P.B_CREDATE)) AS UPDATED\n" +
             "FROM\n" +
             "\tGD_PARTY_IN_PRODUCT P\n" +
             "WHERE\n" +
             "\tP.F_ROLE_TYPE IN (1120,1126)\n" +
-            "\tAND P.EFFTO_DATE IS NULL\n" +
+            "AND P.EFFTO_DATE IS NULL\n" +
             "\tAND P.PARTY_IN_PRODUCT_ID IN ('%s')";
 
 
@@ -114,10 +126,13 @@ public class PersonWorkRoleDataSQL {
             "wpr.\"WORK_PERSON_ROLE_SOURCE_REF\" as WORK_PERSON_ROLE_SOURCE_REF,\n" +
             "wpr.\"PMX_PARTY_SOURCE_REF\" as PMX_PARTY_SOURCE_REF,\n" +
             "wpr.\"PMX_WORK_SOURCE_REF\" as PMX_WORK_SOURCE_REF,\n" +
-            "wpr.\"F_ROLE\" as F_ROLE\n" +
+            "wpr.\"F_ROLE\" as F_ROLE,\n" +
+            "wpr.\"START_DATE\" as START_DATE,\n" +
+            "wpr.\"END_DATE\" as END_DATE,\n" +
+            "wpr.\"UPDATED\" as UPDATED\n" +
             "from ephsit_talend_owner.stg_10_pmx_work_person_role wpr\n" +
-            "join ephsit_talend_owner.stg_10_pmx_person_dq perd  on wpr.\"PMX_PARTY_SOURCE_REF\" = perd.\"person_source_ref\" \n " +
-            "join ephsit_talend_owner.stg_10_pmx_wwork_dq word on wpr.\"PMX_WORK_SOURCE_REF\" = word.\"pmx_source_reference\" \n " +
+            "join ephsit_talend_owner.stg_10_pmx_person_dq perd  on wpr.\"PMX_PARTY_SOURCE_REF\" = perd.\"person_source_ref\" \n" +
+            "join ephsit_talend_owner.stg_10_pmx_wwork_dq word on wpr.\"PMX_WORK_SOURCE_REF\" = word.\"pmx_source_reference\" \n" +
             "where \"WORK_PERSON_ROLE_SOURCE_REF\" in ('%s') and perd.dq_err != 'Y' and word.dq_err != 'Y'";
 
     public static String GET_DATA_PERSONS_WORK_ROLE_EPHSA = "select \n" +

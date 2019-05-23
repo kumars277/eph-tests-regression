@@ -7,6 +7,8 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.AccountableProductDataObject;
 import com.eph.automation.testing.services.db.sql.AccountableProductSQL;
+import com.eph.automation.testing.services.db.sql.WorkCountSQL;
+import com.eph.automation.testing.services.db.sql.WorkExtractSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -54,8 +56,20 @@ public class AccountableProductDataQualityCheckSteps {
     @When("^We get the count of accountable product data from EPH STG$")
     public void getCountAccountableProductsEPHSTGFromPMX() {
         Log.info("When We get the count of accountable product data in EPH STG ..");
-        sql = AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX;
-        Log.info(sql);
+
+        if (System.getProperty("LOAD") != null) {
+            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                sql = AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX;
+                Log.info(sql);
+            } else {
+                sql = WorkCountSQL.GET_REFRESH_DATE;
+                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                String refreshDate = (String) refreshDateNumber.get(0).get("refresh_timestamp");
+                sql = String.format(AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX_DELTA, refreshDate );
+            }
+        }
+
+
         List<Map<String, Object>> accountableProductsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countAccountableProductsEPHSTG = ((Long) accountableProductsNumber.get(0).get("count")).intValue();
         Log.info("Count of accountable product data in EPH STG is: " + countAccountableProductsEPHSTG);
@@ -64,8 +78,19 @@ public class AccountableProductDataQualityCheckSteps {
     @When("^We get the count of accountable product data from EPH STG processed to SA$")
     public void getCountAccountableProductsEPHSTG() {
         Log.info("When We get the count of accountable product data in EPH STG ..");
-        sql = AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_THAT_WILL_BE_PROCESSED_TO_SA;
-        Log.info(sql);
+
+        if (System.getProperty("LOAD") != null) {
+            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                sql = AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_THAT_WILL_BE_PROCESSED_TO_SA;
+                Log.info(sql);
+            } else {
+                sql = WorkCountSQL.GET_REFRESH_DATE;
+                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                String refreshDate = (String) refreshDateNumber.get(0).get("refresh_timestamp");
+                sql = String.format(AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_THAT_WILL_BE_PROCESSED_TO_SA_DELTA, refreshDate );
+            }
+        }
+
         List<Map<String, Object>> accountableProductsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countAccountableProductsEPHSTG = ((Long) accountableProductsNumber.get(0).get("count")).intValue();
         Log.info("Count of accountable product data in EPH STG is: " + countAccountableProductsEPHSTG);
@@ -257,6 +282,17 @@ public class AccountableProductDataQualityCheckSteps {
 
             assertEquals(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_WORK_ID(),dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPRODUCT_WORK_ID());
 
+
+            //UPDATED
+            Log.info("UPDATED in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getUPDATED());
+
+
+            sql = String.format(AccountableProductSQL.SELЕCT_UPDATED_VALUE, dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_WORK_ID());
+            List<Map<String, Object>> updatedNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            String updated = (String) updatedNumber.get(0).get("UPDATED");
+
+            assertEquals(updated,dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getUPDATED());
+
         });
 
 
@@ -289,6 +325,7 @@ public class AccountableProductDataQualityCheckSteps {
             Log.info("B_CLASSNAME in EPH: " + dataQualityContext.accountableProductDataObjectsFromSA.get(0).getB_CLASSNAME());
 
             assertEquals("AccountableProduct",dataQualityContext.accountableProductDataObjectsFromSA.get(0).getB_CLASSNAME());
+
 
             //GL_PRODUCT_SEGMENT_CODE
             Log.info("GL_PRODUCT_SEGMENT_CODE in EPH SА: " + dataQualityContext.accountableProductDataObjectsFromSA.get(0).getGL_PRODUCT_SEGMENT_CODE());

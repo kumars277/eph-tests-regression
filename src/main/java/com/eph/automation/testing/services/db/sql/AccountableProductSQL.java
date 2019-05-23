@@ -24,9 +24,20 @@ public class AccountableProductSQL {
             "\"ACC_PROD_ID\"\n" +
             ",\"ACC_PROD_NAME\"\n" +
             ",\"PARENT_ACC_PROD\"\n" +
-            "from ephsit_talend_owner.stg_10_pmx_accountable_product) A ";
+            "from ephsit_talend_owner.stg_10_pmx_accountable_product) A " ;
 
-    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX = "select count(*) from ephsit_talend_owner.stg_10_pmx_accountable_product ";
+    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_THAT_WILL_BE_PROCESSED_TO_SA_DELTA = "select count(*) from \n" +
+            "(select distinct\n" +
+            "\"ACC_PROD_ID\"\n" +
+            ",\"ACC_PROD_NAME\"\n" +
+            ",\"PARENT_ACC_PROD\"\n" +
+            "from ephsit_talend_owner.stg_10_pmx_accountable_product) A \n" +
+            "where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')";
+
+    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX = "select count(*) from ephsit_talend_owner.stg_10_pmx_accountable_product";
+
+    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX_DELTA = "select count(*) from ephsit_talend_owner.stg_10_pmx_accountable_product \n" +
+            "where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')";
 
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_SA = "select \n" +
             " distinct count(*) as count\n" +
@@ -45,13 +56,15 @@ public class AccountableProductSQL {
             "from semarchy_eph_mdm.gd_accountable_product";
 
     public static String SELECT_DATA_ACCOUNTABLE_PRODUCT_PMX = "SELECT\n" +
-            "         W.PRODUCT_WORK_ID as PRODUCT_WORK_ID\n" +
+            "         W.PRODUCT_WORK_ID\n" +
             "        ,W.ELSEVIER_PRODUCT_ID AS WORK_ELS_PROD_ID\n" +
             "        ,A.ELSEVIER_PRODUCT_ID AS AC_ELS_PROD_ID\n" +
-            "        ,G.PRODUCT_GROUP_TYPE_NAME AS PRODUCT_GROUP_TYPE_NAME\n" +
-            "        ,SUBSTR(A.ELSEVIER_PRODUCT_NAME,0,LENGTH(A.ELSEVIER_PRODUCT_NAME)-6) AS ACC_PROD_NAME\n" +
-            "        ,W.PRODUCT_WORK_TITLE as PRODUCT_WORK_TITLE\n" +
-            "        ,W.F_ACC_PROD_HIERARCHY AS ACC_PROD_HIERARHY\n" +
+            "        ,G.PRODUCT_GROUP_TYPE_NAME\n" +
+            "        ,SUBSTR(A.ELSEVIER_PRODUCT_NAME,0,LENGTH(A.ELSEVIER_PRODUCT_NAME)-6) AS AC_PROD_NAME\n" +
+            "        ,W.PRODUCT_WORK_TITLE\n" +
+            "        ,W.F_ACC_PROD_HIERARCHY\n" +
+            "        ,TO_CHAR(NVL(NVL(W.B_UPDDATE,W.B_CREDATE),TO_DATE('01-01-1900','DD-MM-YYYY'))) AS W_UPDATED\n" +
+            "        ,TO_CHAR(NVL(NVL(A.B_UPDDATE,A.B_CREDATE),TO_DATE('01-01-1900','DD-MM-YYYY'))) AS A_UPDATED\n" +
             "    FROM\n" +
             "        GD_PRODUCT_WORK W\n" +
             "    JOIN\n" +
@@ -59,12 +72,12 @@ public class AccountableProductSQL {
             "    JOIN\n" +
             "        GD_PRODUCT_GROUP_TYPE G ON T.F_PRODUCT_GROUP_TYPE = G.PRODUCT_GROUP_TYPE_ID\n" +
             "    LEFT JOIN\n" +
-            "        (SELECT DISTINCT AC.ELSEVIER_PRODUCT_ID, AC.ELSEVIER_PRODUCT_NAME, M.F_PRODUCT_WORK, M.ISBN\n" +
+            "        (SELECT DISTINCT AC.ELSEVIER_PRODUCT_ID, AC.ELSEVIER_PRODUCT_NAME, M.F_PRODUCT_WORK, M.ISBN, M.B_UPDDATE, M.B_CREDATE\n" +
             "         FROM   GD_PRODUCT_MANIFESTATION M\n" +
             "         JOIN   GD_ACCOUNTING_CLASS AC ON M.F_ACCOUNTING_CLASS = AC.ACCOUNTING_CLASS_CODE) A ON W.PRODUCT_WORK_ID = A.F_PRODUCT_WORK AND W.MASTER_ISBN = A.ISBN\n" +
             "    WHERE\n" +
-            "        T.PRODUCT_TYPE_CODE NOT IN ('COMPENDIUM','JCOLSC','ADVERTISING','FS','DUES')\n" +
-            "        AND W.PRODUCT_WORK_ID IN ('%s')";
+            "        T.PRODUCT_TYPE_CODE NOT IN ('COMPENDIUM','JCOLSC','ADVERTISING','FS','DUES'))\n" +
+            "         AND W.PRODUCT_WORK_ID IN ('%s')\n";
 
 
 
@@ -111,6 +124,23 @@ public class AccountableProductSQL {
             "from semarchy_eph_mdm.gd_accountable_product \n" +
             "where ACCOUNTABLE_PRODUCT_ID in ('%s')";
 
+
+    public static String SELЕCT_UPDATED_VALUE = "SELECT\n" +
+            "        GREATEST(TO_CHAR(NVL(NVL(W.B_UPDDATE,W.B_CREDATE),TO_DATE('01-01-1900','DD-MM-YYYY'))) \n" +
+            "        ,TO_CHAR(NVL(NVL(A.B_UPDDATE,A.B_CREDATE),TO_DATE('01-01-1900','DD-MM-YYYY'))) ) AS UPDATED\n" +
+            "    FROM\n" +
+            "        GD_PRODUCT_WORK W\n" +
+            "    JOIN\n" +
+            "        GD_PRODUCT_TYPE T ON W.F_PRODUCT_TYPE = T.PRODUCT_TYPE_ID\n" +
+            "    JOIN\n" +
+            "        GD_PRODUCT_GROUP_TYPE G ON T.F_PRODUCT_GROUP_TYPE = G.PRODUCT_GROUP_TYPE_ID\n" +
+            "    LEFT JOIN\n" +
+            "        (SELECT DISTINCT AC.ELSEVIER_PRODUCT_ID, AC.ELSEVIER_PRODUCT_NAME, M.F_PRODUCT_WORK, M.ISBN, M.B_UPDDATE, M.B_CREDATE\n" +
+            "         FROM   GD_PRODUCT_MANIFESTATION M\n" +
+            "         JOIN   GD_ACCOUNTING_CLASS AC ON M.F_ACCOUNTING_CLASS = AC.ACCOUNTING_CLASS_CODE) A ON W.PRODUCT_WORK_ID = A.F_PRODUCT_WORK AND W.MASTER_ISBN = A.ISBN\n" +
+            "    WHERE\n" +
+            "        T.PRODUCT_TYPE_CODE NOT IN ('COMPENDIUM','JCOLSC','ADVERTISING','FS','DUES')\n" +
+            "        and w.PRODUCT_WORK_ID IN ('%s')";
 
     public static String GET_RANDOM_ACCOUNTABLE_PRODUCT_IDS_FROM_SA = "select \n" +
             "ACCOUNTABLE_PRODUCT_ID as ACCOUNTABLE_PRODUCT_ID\n" +

@@ -119,6 +119,9 @@ public class WorkExtractSQL {
 
     public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM ephsit_talend_owner.stg_10_pmx_manifestation";
 
+    public static String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE_DELTA = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_manifestation\n" +
+            "where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')";
+
     public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_DQ_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM ephsit_talend_owner.stg_10_pmx_manifestation_dq";
 
     public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_TO_SA = "SELECT count(*) AS count FROM ephsit_talend_owner.stg_10_pmx_manifestation_dq dq\n" +
@@ -136,7 +139,7 @@ public class WorkExtractSQL {
     public static final String COUNT_MANIFESTATIONS_IN_GD_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.gd_manifestation";
 
     public static final String SELECT_MANIFESTATIONS_DATA_IN_PMX = "SELECT\n" +
-            "\t M.PRODUCT_MANIFESTATION_ID AS MANIFESTATION_ID -- PMX Primary Key for Manifestation \n" +
+            "\t M.PRODUCT_MANIFESTATION_ID AS MANIFESTATION_ID -- Product Manifestation Reference,  not needed in EPH but extracted for record linking purposes\n" +
             "\t,M.PRODUCT_MANIFESTATION_TIT AS MANIFESTATION_KEY_TITLE -- Manifestation Title\n" +
             "\t,M.ISBN_STRIPPED AS ISBN -- ISBN (may go in IDs table, depending on implementation of data model)\n" +
             "\t,M.ISSN AS ISSN -- ISSN (may go in IDs table, depending on implementation of data model)\n" +
@@ -146,27 +149,28 @@ public class WorkExtractSQL {
             "\t,M.PAGE_WIDTH_AMOUNT AS PAGE_WIDTH -- Page Width for Format sub entity\n" +
             "\t,M.WEIGHT_AMOUNT AS WEIGHT -- Weight for Format sub entity\n" +
             "\t,M.CARTON_QTY AS CARTON_QTY -- Carton Quantity for Format sub entity\n" +
-            "\t,M.INTERNATIONAL_EDITION_IND AS INTERNATIONAL_EDITION_IND -- International Edition Indicator\n" +
-            "\t,M.COPYRIGHT_DATE AS COPYRIGHT_DATE  -- Manifestation First Publication Date\n" +
-            "\t,M.F_PRODUCT_MANIFESTATION_TYP AS F_PRODUCT_MANIFESTATION_TYP -- 1 = Print, 2 = Electronic. Will have to map to Manifestation Type (logic TBC)\n" +
-            "\t,M.FORMAT_TXT AS FORMAT_TXT-- Additional Format info (may feed Format Entity, may feed logic for Manifestation Type\n" +
+            "\t,M.INTERNATIONAL_EDITION_IND -- International Edition Indicator\n" +
+            "\t,M.COPYRIGHT_DATE -- Manifestation First Publication Date\n" +
+            "\t,M.F_PRODUCT_MANIFESTATION_TYP -- 1 = Print, 2 = Electronic. Will have to map to Manifestation Type (logic TBC)\n" +
+            "\t,M.FORMAT_TXT -- Additional Format info (may feed Format Entity, may feed logic for Manifestation Type\n" +
             "\t,M.F_MANIFESTATION_STATUS AS MANIFESTATION_STATUS -- Manifestation Level Status to link to LOV table (this will need mapping to new values, logic TBC)\n" +
-            "\t,M.F_PRODUCT_WORK AS F_PRODUCT_WORK -- Internal PMX Work ID, not needed in EPH but extracted for record linking purposes\n" +
+            "\t,M.PRODUCT_MANIFESTATION_ID -- Internal PMX ID, not needed in EPH but extracted for record linking purposes\n" +
+            "\t,M.F_PRODUCT_WORK -- Internal PMX Work ID, not needed in EPH but extracted for record linking purposes\n" +
             "\t,W.F_PRODUCT_TYPE AS WORK_TYPE_ID -- Work Type so for mapping Key title and type fields\n" +
             "\t,M.F_PRODUCT_DISTRIBUTION_TYPE AS MANIFESTATION_SUBTYPE -- Manifestation Distribution Type for mapping manifestation type\n" +
             "\t,M.F_COMMODITY_CODE AS COMMODITY --  Commodity Code for mapping manifestation type\n" +
-            "\t,SS.SUBSTATUS_NAME AS MANIFESTATION_SUBSTATUS -- Manifestation Sub status for mapping Status\n" +
+            "\t,SS.SUBSTATUS_NAME AS MANIFESTATION_SUBSTATUS -- Manifestation Substatus for mapping Status\n" +
+            "\t,TO_CHAR(NVL(M.B_UPDDATE,M.B_CREDATE)) AS UPDATED -- Last updated date on Manifestation record, all other entities are reference or linking\n" +
             "FROM GD_PRODUCT_MANIFESTATION M\n" +
             "JOIN GD_PRODUCT_WORK W ON M.F_PRODUCT_WORK = W.PRODUCT_WORK_ID\n" +
             "LEFT JOIN GD_PRODUCT_SUBSTATUS SS ON M.F_MANIFESTATION_SUBSTATUS = SS.PRODUCT_SUBSTATUS_ID\n" +
             "JOIN GD_PRODUCT_TYPE T ON W.F_PRODUCT_TYPE = T.PRODUCT_TYPE_ID\n" +
-            "WHERE T.PRODUCT_TYPE_CODE NOT IN ('COMPENDIUM','JCOLSC','ADVERTISING','FS','DUES') \n" +
+            "WHERE T.PRODUCT_TYPE_CODE NOT IN ('COMPENDIUM','JCOLSC','ADVERTISING','FS','DUES')\n" +
             "AND M.PRODUCT_MANIFESTATION_ID IN ('%s')\n" +
             "ORDER BY M.PRODUCT_MANIFESTATION_ID";
 
 
-    public static final String SELECT_MANIFESTATIONS_DATA_IN_PMX_STG = "SELECT " +
-//             "\"MANIFESTATION_ELS_PROD_ID\" as MANIFESTATION_ELS_PROD_ID,\n" +
+    public static final String SELECT_MANIFESTATIONS_DATA_IN_PMX_STG = "SELECT \n" +
             "\"MANIFESTATION_ID\" as MANIFESTATION_ID,\n" +
             "\"MANIFESTATION_KEY_TITLE\",\n" +
             "\"ISBN\" as ISBN,\n" +
@@ -187,9 +191,9 @@ public class WorkExtractSQL {
             "\"WORK_TYPE_ID\" as WORK_TYPE_ID,\n" +
             "\"MANIFESTATION_SUBTYPE\" as MANIFESTATION_SUBTYPE,\n" +
             "\"COMMODITY\" as COMMODITY,\n" +
-            "\"MANIFESTATION_SUBSTATUS\" as MANIFESTATION_SUBSTATUS\n" +
+            "\"MANIFESTATION_SUBSTATUS\" as MANIFESTATION_SUBSTATUS,\n" +
+            "\"UPDATED\" as \"UPDATED\"\n" +
             "from ephsit_talend_owner.stg_10_pmx_manifestation\n" +
-//            "WHERE \"ISBN\" IN ('%s')";
             "WHERE \"MANIFESTATION_ID\" IN ('%s') order by \"MANIFESTATION_ID\"";
 
     public static final String SELECT_RANDOM_ISBN_IDS_PHB =
@@ -303,6 +307,14 @@ public class WorkExtractSQL {
             "stg.\"%s\" is not null  and \n" +
             "   stg.\"PRODUCT_MANIFESTATION_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n" +
             "   \n";
+
+    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_DELTA = "select count(*) AS count \n" +
+            "from ephsit_talend_owner.stg_10_pmx_manifestation stg ,\n" +
+            "ephsit_talend_owner.stg_10_pmx_manifestation_dq  mdq\n" +
+            "where \n" +
+            "stg.\"%s\" is not null  and \n" +
+            "   stg.\"PRODUCT_MANIFESTATION_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n" +
+            "   and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')";
 
     public static final String COUNT_OF_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE ="SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation_identifier\n" +
             "where f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier\n" +

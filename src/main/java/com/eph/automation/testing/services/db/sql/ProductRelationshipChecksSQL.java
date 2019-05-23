@@ -33,6 +33,10 @@ public class ProductRelationshipChecksSQL {
 
     public static String GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from ephsit.ephsit_talend_owner.stg_pmx_product_pack_rel\n";
 
+    public static String GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT_DELTA = "select count(*) as count from ephsit.ephsit_talend_owner.stg_pmx_product_pack_rel\n" +
+            "where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')";
+
+
     public static String GET_EPH_SA_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from semarchy_eph_mdm.sa_product_rel_package\n" +
             "where f_event = (select max (f_event) from semarchy_eph_mdm.sa_product_rel_package\n" +
             "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
@@ -43,39 +47,43 @@ public class ProductRelationshipChecksSQL {
 
     public static String GET_EPH_GD_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from semarchy_eph_mdm.gd_product_rel_package";
 
-    public static String GET_PMX_PRODUCT_RELATIONSHIPS_DATA = "SELECT \n" +
-            "\t WL.PRODUCT_WORK_LINK_ID AS RELATIONSHIP_PMX_SOURCEREF \n" +
+    public static String GET_PMX_PRODUCT_RELATIONSHIPS_DATA = " \t SELECT\n" +
+            "\t WL.PRODUCT_WORK_LINK_ID AS RELATIONSHIP_PMX_SOURCEREF\n" +
             "\t,W1.PRODUCT_WORK_ID || '-PKG' AS OWNER_PMX_SOURCE\n" +
             "\t,M2.PRODUCT_MANIFESTATION_ID || '-SUB' AS COMPONENT_PMX_SOURCE\n" +
             "\t,'CON' AS F_RELATIONSHIP_TYPE\n" +
             "\t,CASE WHEN W1.F_WORK_STATUS = 81 AND EFFFROM_DATE IS NULL THEN TO_DATE('2019-01-01', 'YYYY-MM-DD')\n" +
             "\t      WHEN W1.F_WORK_STATUS = 81 AND EFFFROM_DATE IS NOT NULL THEN EFFFROM_DATE\n" +
             "\t      ELSE NULL END AS EFFECTIVE_START_DATE  -- available work (81)\n" +
-            "\t,NVL(W1.EFFECTIVE_TO_DATE, NVL(M2.EFFECTIVE_TO_DATE, WL.EFFTO_DATE)) AS ENDON\n" +
-            "FROM \n" +
+            "\t,NVL(WL.EFFTO_DATE,\n" +
+            "\t\tCASE WHEN W1.EFFECTIVE_TO_DATE IS NULL AND W2.EFFECTIVE_TO_DATE IS NULL THEN NULL \n" +
+            "\t\tELSE GREATEST(NVL(W1.EFFECTIVE_TO_DATE,TO_DATE('1900-01-01', 'YYYY-MM-DD')),NVL(W2.EFFECTIVE_TO_DATE,TO_DATE('1900-01-01', 'YYYY-MM-DD'))) END) AS ENDON\n" +
+            "\t,TO_CHAR(NVL(WL.B_UPDDATE,WL.B_CREDATE)) AS UPDATED\n" +
+            "FROM\n" +
             "\tGD_PRODUCT_WORK_LINK WL,\n" +
             "\tGD_PRODUCT_WORK W1,\n" +
             "\tGD_PRODUCT_WORK W2,\n" +
             "\tGD_PRODUCT_MANIFESTATION M2\n" +
             "WHERE\n" +
             "\tWL.F_PRODUCT_WORK = W1.PRODUCT_WORK_ID\n" +
-            "AND\t\n" +
+            "AND\n" +
             "\tWL.F_RELATED_PRODUCT_WORK = W2.PRODUCT_WORK_ID\n" +
             "AND\n" +
             "\tW2.PRODUCT_WORK_ID = M2.F_PRODUCT_WORK\n" +
             "AND\n" +
             "\tW1.F_PRODUCT_TYPE IN (21,143)\t\t-- full sets & subject collections\n" +
-            "AND\t\n" +
+            "AND\n" +
             "\tW2.F_PRODUCT_TYPE = 4\t\t\t-- journals\n" +
             "AND\n" +
-            "\tM2.F_PRODUCT_MANIFESTATION_TYP = 2  \t-- electronic \n" +
+            "\tM2.F_PRODUCT_MANIFESTATION_TYP = 2  \t-- electronic\n" +
             "AND\n" +
             "\tNVL(W1.EFFECTIVE_TO_DATE, NVL(M2.EFFECTIVE_TO_DATE, WL.EFFTO_DATE)) IS NULL\n" +
             "AND\n" +
             "\tW1.F_WORK_STATUS = 81\n" +
             "AND\n" +
             "\tWL.F_PRODUCT_WORK_LINK_TYPE = 42\t-- includes\n" +
-            "\t AND PRODUCT_WORK_LINK_ID in ('%s')";
+            "\tAND PRODUCT_WORK_LINK_ID in ('%s')\n" +
+            "\n";
 
     public static String GET_EPH_STG_PRODUCT_RELATIONSHIPS_DATA = "select\n" +
             "   \"RELATIONSHIP_PMX_SOURCEREF\" as RELATIONSHIP_PMX_SOURCEREF,\n" +
@@ -83,7 +91,8 @@ public class ProductRelationshipChecksSQL {
             "   \"COMPONENT_PMX_SOURCE\" as COMPONENT_PMX_SOURCE,\n" +
             "   \"F_RELATIONSHIP_TYPE\" as F_RELATIONSHIP_TYPE,\n" +
             "   \"EFFECTIVE_START_DATE\" as EFFECTIVE_START_DATE,\n" +
-            "   \"ENDON\" as ENDON \n" +
+            "   \"ENDON\" as ENDON,\n" +
+            "   \"UPDATED\" as UPDATED \n" +
             "   from ephsit.ephsit_talend_owner.stg_pmx_product_pack_rel\n" +
             "   where \"RELATIONSHIP_PMX_SOURCEREF\"  in ('%s')";
 

@@ -35,6 +35,7 @@ public class ProductDataSQL {
             "\tEND AS AVAILABILITY_STATUS\n" +
             "\t,WT.WORK_TITLE\n" +
             "\t,WT.WORK_TYPE\n" +
+            "\t,TO_CHAR(NVL(M.B_UPDDATE,M.B_CREDATE)) AS UPDATED -- Manifestation last updated date as all other tables are linking or reference\n" +
             "FROM GD_PRODUCT_MANIFESTATION M\n" +
             "LEFT JOIN GD_PRODUCT_SUBSTATUS MSS ON M.F_MANIFESTATION_SUBSTATUS = MSS.PRODUCT_SUBSTATUS_ID\n" +
             "JOIN (SELECT\n" +
@@ -74,7 +75,8 @@ public class ProductDataSQL {
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
-            "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
+            "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND,\n" +
+            "            \"UPDATED\" as UPDATED\n" +
             "            FROM ephsit_talend_owner.stg_10_pmx_product\n" +
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s')\n" +
              "           order by \"PRODUCT_MANIFESTATION_ID\"";

@@ -5,6 +5,8 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ManifestationDataObject;
+import com.eph.automation.testing.models.dao.WorkDataObject;
+import com.eph.automation.testing.services.db.sql.WorkCountSQL;
 import com.eph.automation.testing.services.db.sql.WorkExtractSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
@@ -35,6 +37,7 @@ public class ManifestationDataQualityCheckSteps {
     private List<Map<?, ?>> manifestationIds;
     private static List<String> ids;
     private static List<String> isbns;
+    private static String refreshDate;
 
 
 //    @StaticInjection
@@ -54,12 +57,23 @@ public class ManifestationDataQualityCheckSteps {
     @When("We get the count of the manifestations records in EPH STG$")
     public void getCountManifestationsEphStg() {
         Log.info("When We get the count of the manifestations records in EPH STG ..");
-        sql = WorkExtractSQL.COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE;
-        Log.info(sql);
-        List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        countManifestationsSTGPMX = ((Long) manifestationsNumber.get(0).get("count")).intValue();
-        Log.info("Count of manifestations in STG_PMX_MANIFESTATION table is: " + countManifestationsSTGPMX);
 
+        if (System.getProperty("LOAD") != null) {
+            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                sql = WorkExtractSQL.COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE;
+                Log.info(sql);
+            } else {
+                sql = WorkCountSQL.GET_REFRESH_DATE;
+                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                refreshDate = (String) refreshDateNumber.get(0).get("refresh_timestamp");
+                sql = String.format(WorkExtractSQL.COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE_DELTA, refreshDate );
+            }
+        }
+
+
+            List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            countManifestationsSTGPMX = ((Long) manifestationsNumber.get(0).get("count")).intValue();
+            Log.info("Count of manifestations in STG_PMX_MANIFESTATION table is: " + countManifestationsSTGPMX);
     }
 
     @When("We get the count of the manifestations records in EPH DQ$")
@@ -160,7 +174,7 @@ public class ManifestationDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-       numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
 
@@ -358,6 +372,24 @@ public class ManifestationDataQualityCheckSteps {
             Log.info("Manifestation substatus in EPH Staging: " + manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_SUBSTATUS());
 
             assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ",manifestationDataObjectsFromPMX.get(i).getMANIFESTATION_SUBSTATUS(), manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_SUBSTATUS());
+
+            //UPDATED
+            Log.info("UPDATED in PMX: " + manifestationDataObjectsFromPMX.get(i).getUPDATED());
+            Log.info("UPDATED in EPH Staging: " + manifestationDataObjectsFromEPHSTG.get(i).getUPDATED());
+
+            Log.info("Expecting UPDATED in PMX and EPH Staging are consistent for " );
+
+
+            try {
+                Date pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(manifestationDataObjectsFromPMX.get(i).getUPDATED());
+                Date ephUpdatedDate = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS aaa").parse(manifestationDataObjectsFromEPHSTG.get(i).getUPDATED());
+
+                assertEquals("UPDATED in PMX and EPH STG is not equal ", pmxUpdatedDate, ephUpdatedDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+
         });
 
     }
