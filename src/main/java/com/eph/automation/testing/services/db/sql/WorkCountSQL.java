@@ -12,19 +12,20 @@ public class WorkCountSQL {
     "LEFT JOIN PMX.GD_IMPRINT I ON W.F_IMPRINT = I.IMPRINT_ID\n" +
     "WHERE T.PRODUCT_TYPE_CODE NOT IN ('COMPENDIUM','JCOLSC','ADVERTISING','FS','DUES')";
 
-    public static String PMX_STG_WORKS_COUNT = "select count (*) as workCountPMXSTG from ephsit_talend_owner.stg_10_pmx_wwork";
+    public static String PMX_STG_WORKS_COUNT = "select count (*) as workCountPMXSTG from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork";
 
-    public static String GET_REFRESH_DATE = "select refresh_value as refresh_timestamp from ephsit_talend_owner.etl_run \n" +
+    public static String GET_REFRESH_DATE = "select refresh_value as refresh_timestamp from "+GetEPHDBUser.getDBUser()+".etl_run \n" +
+            " where loadset_code='10_PMX_FULL'\n"+
             "order by TO_DATE(refresh_value,'YYYYMMDDHH24MI') desc";
 
-    public static String PMX_STG_WORKS_COUNT_DELTA = "select count(distinct \"PRODUCT_WORK_ID\") as workCountPMXSTG from ephsit_talend_owner.stg_10_pmx_wwork\n" +
+    public static String PMX_STG_WORKS_COUNT_DELTA = "select count(distinct \"PRODUCT_WORK_ID\") as workCountPMXSTG from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork\n" +
             "where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
-    public static String PMX_STG_WORKS_COUNT_Distinct = "  select count(distinct \"PRODUCT_WORK_ID\") as workCountPMXSTG from ephsit_talend_owner.stg_10_pmx_wwork";
+    public static String PMX_STG_WORKS_COUNT_Distinct = "  select count(distinct \"PRODUCT_WORK_ID\") as workCountPMXSTG from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork";
 
-    public static String PMX_STG_DQ_WORKS_COUNT = "select count (*) as workCountDQSTG from ephsit_talend_owner.stg_10_pmx_wwork_dq";
+    public static String PMX_STG_DQ_WORKS_COUNT = "select count (*) as workCountDQSTG from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq";
 
-    public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count (*) as workCountDQSTGnoError from ephsit_talend_owner.stg_10_pmx_wwork_dq where dq_err='N'";
+    public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count (*) as workCountDQSTGnoError from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq where dq_err='N'";
 
     public static String EPH_SA_WORKS_COUNT = "select count (distinct pmx_source_reference) as workCountEPH from ephsit.semarchy_eph_mdm.sa_wwork "+
             " where f_event =  (select max (f_event) from\n" +

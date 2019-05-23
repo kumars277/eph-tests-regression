@@ -2,7 +2,7 @@ package com.eph.automation.testing.services.db.sql;
 
 public class FinAttrSQL {
     public static String gettingSourceRef="SELECT PMX_SOURCE_REFERENCE as random_value\n" +
-            " FROM ephsit_talend_owner.stg_10_pmx_wwork_dq \n" +
+            " FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq \n" +
             "where \"dq_err\" = 'N'\n" +
             "and opco is  not null and resp_centre is not null\n" +
             "ORDER BY RANDOM()\n" +
@@ -15,7 +15,7 @@ public class FinAttrSQL {
             " PMX_SOURCE_REFERENCE as PMX_SOURCE_REFERENCE " +
             "  ,opco as opco\n" +
             "  ,resp_centre as resp_centre\n" +
-            "  FROM ephsit_talend_owner.stg_10_pmx_wwork_dq \n"+
+            "  FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq \n"+
             "  WHERE pmx_source_reference in ('%s') ORDER BY resp_centre,opco,PMX_SOURCE_REFERENCE";
 
     public static String GET_SA_FinAttr_DATA ="SELECT \n" +
@@ -70,10 +70,10 @@ public class FinAttrSQL {
             "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )\n"+
             "  AND f_wwork in ('%s') order by fin_attribs_id";
 
-    public static String GET_FinnAttr_ID = "select numeric_id as fin_attribs_id from ephsit_talend_owner.map_sourceref_2_numericid " +
+    public static String GET_FinnAttr_ID = "select numeric_id as fin_attribs_id from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid " +
             "where source_ref = 'PARAM1'";
 
-    public static String Get_work_id = "select eph_id as workID from ephsit_talend_owner.map_sourceref_2_ephid " +
+    public static String Get_work_id = "select eph_id as workID from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid " +
             "where ref_type = 'WORK' and source_ref='PARAM1'";
 
     public static String Get_SA_count = "select count (*) as saCount " +
@@ -108,5 +108,5 @@ public class FinAttrSQL {
             "and e.f_workflow_source = 'PMX' )";
 
 
-    public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count (*) as dqCount from ephsit_talend_owner.stg_10_pmx_wwork_dq where dq_err='N' and opco is not null and resp_centre is not null";
+    public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count (*) as dqCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq where dq_err='N' and opco is not null and resp_centre is not null";
 }
