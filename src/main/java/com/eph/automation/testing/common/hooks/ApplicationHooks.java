@@ -13,8 +13,8 @@ import org.openqa.selenium.WebDriver;
  * Created by RAVIVARMANS on 11/24/2018.
  */
 public class ApplicationHooks {
-    @Inject
-    private Provider<WebDriver> driverProvider;
+//    @Inject
+//    private Provider<WebDriver> driverProvider;
 
     @Before
     public void setUp() {
@@ -22,12 +22,12 @@ public class ApplicationHooks {
         Log.startLog("Test is starting ...");
 
     }
-    @After(order = 99)
-    public void closeDriver() {
-        Log.endLog("Test is ending ...");
-        if (TestContext.getValues().gridRun && null != driverProvider) {
-            driverProvider.get().quit();
-        }
-    }
+//    @After(order = 99)
+//    public void closeDriver() {
+//        Log.endLog("Test is ending ...");
+//        if (TestContext.getValues().gridRun && null != driverProvider) {
+//            driverProvider.get().quit();
+//        }
+//    }
 
 }

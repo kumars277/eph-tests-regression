@@ -9,16 +9,19 @@ class WorkPersonsApiObject {
     public WorkPersonsApiObject() {
     }
 
-    private int workPersonId;
+    public void compareWithDB(){
+
+    }
+    private int id;
     private HashMap<String, Object> role;
     private HashMap<String, Object> person;
 
-    public int getWorkPersonId() {
-        return workPersonId;
+    public int getId() {
+        return id;
     }
 
-    public void setWorkPersonId(int workPersonId) {
-        this.workPersonId = workPersonId;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public HashMap<String, Object> getRole() {

@@ -60,13 +60,50 @@ public class APIService {
 
     }
 
+    public static WorksMatchedApiObject searchForWorkByPMCResult(String pmcCode) {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
+                .when()
+                .get("/works/pmcCode/" + pmcCode)
+                .thenReturn().as(WorksMatchedApiObject.class);
+
+    }
+
+    public static ProductsMatchedApiObject searchForProductsByPMCResult(String pmcCode) {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
+                .when()
+                .get("/products/pmcCode/" + pmcCode)
+                .thenReturn().as(ProductsMatchedApiObject.class);
+
+    }
+
+    public static WorksMatchedApiObject searchForWorkByPMGResult(String pmgCode) {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
+                .when()
+                .get("/works/pmgCode/" + pmgCode)
+                .thenReturn().as(WorksMatchedApiObject.class);
+    }
+
+    public static ProductsMatchedApiObject searchForProductsByPMGResult(String pmgCode) {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
+                .when()
+                .get("/works/pmgCode/" + pmgCode)
+                .thenReturn().as(ProductsMatchedApiObject.class);
+    }
+
     public static WorksMatchedApiObject searchForWorkByTitleResult(String title) {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
-                .param("title", title)
                 .when()
-                .get("/works")
+                .get("/works/title/"+title)
                 .thenReturn().as(WorksMatchedApiObject.class);
 
     }
@@ -75,9 +112,8 @@ public class APIService {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
-                .param("identifier", identifier)
                 .when()
-                .get("/works")
+                .get("/works/identifier/"+identifier)
                 .thenReturn().as(WorksMatchedApiObject.class);
 
     }
@@ -86,21 +122,45 @@ public class APIService {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
-                .param("identifier", identifier)
                 .param("identifierType", identifierType)
                 .when()
-                .get("/works").thenReturn().as(WorksMatchedApiObject.class);
+                .get("/works/identifier/"+identifier).thenReturn().as(WorksMatchedApiObject.class);
+    }
+
+    public static WorksMatchedApiObject searchForWorksByPersonIDResult(String identifier) {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
+                .when()
+                .get("/works/personId/"+identifier)
+                .thenReturn().as(WorksMatchedApiObject.class);
+    }
+
+    public static ProductsMatchedApiObject searchForProductsByPersonIDResult(String identifier) {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
+                .when()
+                .get("/products/personId/"+identifier)
+                .thenReturn().as(ProductsMatchedApiObject.class);
     }
 
     public static WorksMatchedApiObject searchForWorksBySearchOptionResult(String searchFor) {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
-                .param("search", searchFor)
                 .when()
-                .get("/works")
+                .get("/works/search/"+searchFor)
                 .thenReturn().as(WorksMatchedApiObject.class);
+    }
 
+    public static ProductsMatchedApiObject searchForProductsByPackageResult(String packageID) {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
+                .when()
+                .get("/products/isInPackages/"+packageID)
+                .thenReturn().as(ProductsMatchedApiObject.class);
     }
 
     public static ProductApiObject searchForProductResult(String productID) {
@@ -117,9 +177,8 @@ public class APIService {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
-                .param("identifier", identifier)
                 .when()
-                .get("/products")
+                .get("/products/identifier/"+identifier)
                 .thenReturn().as(ProductsMatchedApiObject.class);
 
     }
@@ -128,10 +187,9 @@ public class APIService {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
-                .param("identifier", identifier)
                 .param("identifierType", identifierType)
                 .when()
-                .get("/products")
+                .get("/products/identifier/"+identifier)
                 .thenReturn().as(ProductsMatchedApiObject.class);
 
     }
@@ -140,9 +198,8 @@ public class APIService {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
-                .param("search", searchOption)
                 .when()
-                .get("/products")
+                .get("/products/search/"+searchOption)
                 .thenReturn().as(ProductsMatchedApiObject.class);
     }
 
@@ -150,20 +207,25 @@ public class APIService {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
-                .param("title", title)
+                .param("name", title)
                 .when()
-                .get("/products")
+                .get("/products/name")
                 .thenReturn().as(ProductsMatchedApiObject.class);
-
     }
 
-    public static int checkProductExists(String productID) {
-        return given()
+    public static boolean checkProductExists(String productID) {
+        int statusCode = given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
                 .when()
                 .get("/product/" + productID)
                 .thenReturn().statusCode();
+
+        if(statusCode==200){
+            return true;
+        } else {
+            return false;
+        }
 
     }
 
@@ -171,9 +233,8 @@ public class APIService {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
-                .param("title", title)
                 .when()
-                .get("/products")
+                .get("/products/title/"+title)
                 .thenReturn().as(ProductsMatchedApiObject.class);
 
     }

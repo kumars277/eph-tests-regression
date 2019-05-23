@@ -1,39 +1,67 @@
 package com.eph.automation.testing.models.api;
 
+import com.eph.automation.testing.configuration.Constants;
+import com.eph.automation.testing.configuration.DBManager;
+import com.eph.automation.testing.models.dao.WorkDataObject;
+import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.base.Joiner;
+import org.junit.Assert;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WorkApiObject {
+    private List<WorkDataObject> workDataObjectsFromEPHGD;
 
     public WorkApiObject() {
     }
 
-    private String workId;
-    private String workTitle;
+    private String id;
+    private String title;
     private String electronicRightsInd;
+    private HashMap<String,Object> language;
     private String editionNumber;
     private String volume;
     private String copyrightYear;
-    private WorkIdentifiersApiObject[] workIdentifiers;
-    private HashMap<String,Object> workType;
-    private HashMap<String,Object> workStatus;
+    private WorkIdentifiersApiObject[] identifiers;
+    private HashMap<String,Object> type;
+    private HashMap<String,Object> status;
     private HashMap<String,Object> imprint;
     private PMCApiObject pmc;
-
-    public WorkPersonsApiObject[] getWorkPersons() {
-        return workPersons;
-    }
-
-    public void setWorkPersons(WorkPersonsApiObject[] workPersons) {
-        this.workPersons = workPersons;
-    }
-
-    private WorkPersonsApiObject[] workPersons;
+    private AccountableProductApiObject accountableProduct;
+    private FinancialAttributesApiObject[] financialAttributes;
+    private WorkPersonsApiObject[] persons;
     private CopyrightOwnersApiObject[] copyrightOwner;
+    private SubjectAreasApiObject[] subjectAreas;
     public WorkManifestationApiObject[] manifestations;
 
+    public void compareWithDB(){
+        getWorkDataFromEPHGD(this.id);
+        Assert.assertEquals(this.title, this.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+        Assert.assertEquals(Integer.valueOf(this.volume), Integer.valueOf(this.workDataObjectsFromEPHGD.get(0).getVOLUME()));
+        Assert.assertEquals(Integer.valueOf(this.editionNumber), Integer.valueOf(this.workDataObjectsFromEPHGD.get(0).getEDITION_NUMBER()));
+        Assert.assertEquals(Integer.valueOf(this.copyrightYear), Integer.valueOf(this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR()));
+        Assert.assertEquals(Boolean.valueOf(this.electronicRightsInd), Boolean.valueOf(this.workDataObjectsFromEPHGD.get(0).getWORK_TITLE()));
+//        for (WorkIdentifiersApiObject workId : this.identifiers){workId.compareWithDB();}
+//        Assert.assertEquals(this.type.get("workTypeCode"), this.workDataObjectsFromEPHGD.get(0).getF_TYPE());
+//        Assert.assertEquals(this.status.get("workStatusCode"), this.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
+//        Assert.assertEquals(this.imprint.get("imprintCode"), this.workDataObjectsFromEPHGD.get(0).getIMPRINT());
+//        this.pmc.compareWithDB();
+//        for (WorkPersonsApiObject person : persons){person.compareWithDB();}
+//        for (CopyrightOwnersApiObject cOwner : copyrightOwner){cOwner.compareWithDB();}
+//        for (WorkManifestationApiObject manifestation : manifestations){manifestation.compareWithDB();}
+    }
+
+
+    public WorkPersonsApiObject[] getPersons() {
+        return persons;
+    }
+    public void setPersons(WorkPersonsApiObject[] persons) {
+        this.persons = persons;
+    }
 
     public PMCApiObject getPmc() {
         return pmc;
@@ -43,28 +71,20 @@ public class WorkApiObject {
         this.pmc = pmc;
     }
 
-    public WorkManifestationApiObject[] getManifestations() {
-        return manifestations;
+    public String getId() {
+        return id;
     }
 
-    public void setManifestations(WorkManifestationApiObject[] manifestations) {
-        this.manifestations = manifestations;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getWorkId() {
-        return workId;
+    public String getTitle() {
+        return title;
     }
 
-    public void setWorkId(String workId) {
-        this.workId = workId;
-    }
-
-    public String getWorkTitle() {
-        return workTitle;
-    }
-
-    public void setWorkTitle(String workTitle) {
-        this.workTitle = workTitle;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getElectronicRightsInd() {
@@ -99,20 +119,20 @@ public class WorkApiObject {
         this.copyrightYear = copyrightYear;
     }
 
-    public HashMap<String, Object> getWorkType() {
-        return workType;
+    public HashMap<String, Object> getType() {
+        return type;
     }
 
-    public void setWorkType(HashMap<String, Object> workType) {
-        this.workType = workType;
+    public void setType(HashMap<String, Object> type) {
+        this.type = type;
     }
 
-    public HashMap<String, Object> getWorkStatus() {
-        return workStatus;
+    public HashMap<String, Object> getStatus() {
+        return status;
     }
 
-    public void setWorkStatus(HashMap<String, Object> workStatus) {
-        this.workStatus = workStatus;
+    public void setStatus(HashMap<String, Object> status) {
+        this.status = status;
     }
 
     public HashMap<String, Object> getImprint() {
@@ -123,12 +143,12 @@ public class WorkApiObject {
         this.imprint = imprint;
     }
 
-    public WorkIdentifiersApiObject[] getWorkIdentifiers() {
-        return workIdentifiers;
+    public WorkIdentifiersApiObject[] getIdentifiers() {
+        return identifiers;
     }
 
-    public void setWorkIdentifiers(WorkIdentifiersApiObject[] workIdentifiers) {
-        this.workIdentifiers = workIdentifiers;
+    public void setIdentifiers(WorkIdentifiersApiObject[] identifiers) {
+        this.identifiers = identifiers;
     }
 
     public CopyrightOwnersApiObject[] getCopyrightOwner() {
@@ -138,4 +158,22 @@ public class WorkApiObject {
     public void setCopyrightOwner(CopyrightOwnersApiObject[] copyrightOwner) {
         this.copyrightOwner = copyrightOwner;
     }
+
+
+    public WorkManifestationApiObject[] getManifestations() {
+        return manifestations;
+    }
+
+    public void setManifestations(WorkManifestationApiObject[] manifestations) {
+        this.manifestations = manifestations;
+    }
+
+    private void getWorkDataFromEPHGD(String workID) {
+        List<String> ids = new ArrayList<>();
+        ids.add(workID);
+        String sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, Joiner.on("','").join(ids));
+        workDataObjectsFromEPHGD = DBManager
+                .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+    }
+
 }

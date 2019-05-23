@@ -5,6 +5,9 @@ import java.util.HashMap;
 public class CopyrightOwnersApiObject {
     public CopyrightOwnersApiObject() {
     }
+    public void compareWithDB(){
+
+    }
     private HashMap<String, Object> copyrightOwner;
     private String effectiveStartDate;
     private String effectiveEndDate;

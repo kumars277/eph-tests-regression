@@ -9,19 +9,22 @@ public class ProductApiObject {
     public ProductApiObject() {
     }
 
-    private String productId;
-    private String productName;
-    private ProductIdentifiersApiObject[] productIdentifierApiObjects;
-    private String productShortName;
-    private Boolean separatelySaleableIndicator;
-    private Boolean trialAllowedIndicator;
+    private String id;
+    private String name;
+    private String shortName;
+    private Boolean separatelySaleableInd;
+    private Boolean trialAllowedInd;
     private String launchDate;
-    private HashMap<String,Object> productType;
-    private HashMap<String,Object> productStatus;
+    private HashMap<String,Object> type;
+    private HashMap<String,Object> status;
     private PricesApiObject[] prices;
     private HashMap<String,Object> revenueModel;
     private HashMap<String,Object> etaxProductCode;
+    private WorkPersonsApiObject[] persons;
+    private WorkApiObject work;
+
     public ProductManifestationApiObject manifestation;
+    private ProductIdentifiersApiObject[] productIdentifierApiObjects;
 
     public ProductIdentifiersApiObject[] getProductIdentifierApiObjects() {
         return productIdentifierApiObjects;
@@ -47,52 +50,52 @@ public class ProductApiObject {
         this.manifestation = manifestation;
     }
 
-    public HashMap<String, Object> getProductStatus() {
-        return productStatus;
+    public HashMap<String, Object> getStatus() {
+        return status;
     }
 
-    public void setProductStatus(HashMap<String, Object> productStatus) {
-        this.productStatus = productStatus;
+    public void setStatus(HashMap<String, Object> status) {
+        this.status = status;
     }
 
-    public String getProductId() {
-        return productId;
+    public String getId() {
+        return id;
     }
 
-    public void setProductId(String productId) {
-        this.productId = productId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getName() {
+        return name;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getProductShortName() {
-        return productShortName;
+    public String getShortName() {
+        return shortName;
     }
 
-    public void setProductShortName(String productShortName) {
-        this.productShortName = productShortName;
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
-    public Boolean getSeparatelySaleableIndicator() {
-        return separatelySaleableIndicator;
+    public Boolean getSeparatelySaleableInd() {
+        return separatelySaleableInd;
     }
 
-    public void setSeparatelySaleableIndicator(Boolean separatelySaleableIndicator) {
-        this.separatelySaleableIndicator = separatelySaleableIndicator;
+    public void setSeparatelySaleableInd(Boolean separatelySaleableInd) {
+        this.separatelySaleableInd = separatelySaleableInd;
     }
 
-    public Boolean getTrialAllowedIndicator() {
-        return trialAllowedIndicator;
+    public Boolean getTrialAllowedInd() {
+        return trialAllowedInd;
     }
 
-    public void setTrialAllowedIndicator(Boolean trialAllowedIndicator) {
-        this.trialAllowedIndicator = trialAllowedIndicator;
+    public void setTrialAllowedInd(Boolean trialAllowedInd) {
+        this.trialAllowedInd = trialAllowedInd;
     }
 
     public String getLaunchDate() {
@@ -103,12 +106,12 @@ public class ProductApiObject {
         this.launchDate = launchDate;
     }
 
-    public HashMap<String, Object> getProductType() {
-        return productType;
+    public HashMap<String, Object> getType() {
+        return type;
     }
 
-    public void setProductType(HashMap<String, Object> productType) {
-        this.productType = productType;
+    public void setType(HashMap<String, Object> type) {
+        this.type = type;
     }
 
     public HashMap<String, Object> getRevenueModel() {

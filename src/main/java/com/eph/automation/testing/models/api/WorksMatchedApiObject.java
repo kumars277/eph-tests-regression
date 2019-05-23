@@ -31,12 +31,18 @@ public class WorksMatchedApiObject {
     public void verifyWorksAreReturned(){
         Assert.assertNotEquals(0, totalMatchCount);
     }
+
+    public void verifyWorksReturned(int worksInDB){
+        Assert.assertEquals(totalMatchCount, worksInDB);
+    }
+
     public void verifyWorkWithIdIsReturned(String workID){
         int i=0;
         boolean found=false;
         while(i<items.length&&!found){
-            if(items[i].getWorkId().equals(workID)){
+            if(items[i].getId().equals(workID)){
                 found=true;
+                items[i].compareWithDB();
             }
             i++;
         }
