@@ -193,12 +193,22 @@ public class AccountableProductDataQualityCheckSteps {
         Log.info(sql);
     }
 
+    @Then("^We get the accountable product data from EPH DQ$")
+    public void getAccountableProductsDataEPHDQ() {
+        Log.info("Get the accountable product data from EPH STG  ..");
+        sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_DQ, Joiner.on("','").join(idsPMX));
+        Log.info(sql);
+
+        dataQualityContext.accountableProductDataObjectsFromSTGDQ = DBManager
+                .getDBResultAsBeanList(sql, AccountableProductDataObject.class, Constants.EPH_URL);
+        Log.info(sql);
+    }
+
     @Then("^We get the accountable product data from EPH SA$")
     public void getAccountableProductsDataEPHSA() {
         Log.info("Get the accountable product ids from the lookup table  ..");
         idsSourceRef = new ArrayList<>(ids);
         IntStream.range(0, idsSourceRef.size()).forEach(i -> idsSourceRef.set(i, idsSourceRef.get(i).concat(dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD())));
-
 
         sql = String.format(AccountableProductSQL.GET_NUMERIC_ID_FROM_LOOKUP_AP, Joiner.on("','").join(idsSourceRef));
         Log.info(sql);
@@ -294,32 +304,59 @@ public class AccountableProductDataQualityCheckSteps {
             assertEquals(updated,dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getUPDATED());
 
         });
-
-
     }
 
+    @And("^Compare the accountable product data in EPH STG and EPH DQ$")
+    public void compareAccountableProductsDataSTGAndDQ() {
+        Log.info("And the accountable product data in STG and DQ ..");
+
+        IntStream.range(0, dataQualityContext.accountableProductDataObjectsFromSTG.size()).forEach(i -> {
+            Log.info("Get the dq data  ..");
+            String pmxSourceRef = dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_ID().concat(dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD());
+            sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_DQ, pmxSourceRef);
+            Log.info(sql);
+
+            dataQualityContext.accountableProductDataObjectsFromSTGDQ = DBManager
+                    .getDBResultAsBeanList(sql, AccountableProductDataObject.class, Constants.EPH_URL);
+
+            //ACC_PROD_ID
+            Log.info("ACC_PROD_ID in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_ID());
+            Log.info("ACC_PROD_ID in EPH DQ: " + dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getACC_PROD_ID());
+
+            assertEquals(dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_ID(),dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getACC_PROD_ID());
+
+
+            //ACC_PROD_NAME
+            Log.info("ACC_PROD_NAME in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_NAME());
+            Log.info("ACC_PROD_NAME in EPH DQ: " + dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getACC_PROD_NAME());
+
+            assertEquals(dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_NAME(),dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getACC_PROD_NAME());
+
+
+            //PARENT_ACC_PROD
+            Log.info("PARENT_ACC_PROD in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD());
+            Log.info("PARENT_ACC_PROD in EPH DQ: " + dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getPARENT_ACC_PROD());
+
+            assertEquals(dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD(),dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getPARENT_ACC_PROD());
+
+            //DQ_ERR
+            Log.info("DQ_ERR in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getDQ_ERR());
+
+            assertEquals('N',dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getPARENT_ACC_PROD());
+
+        });
+    }
+
+
     @And("^Compare the accountable product data in EPH STG and EPH SA$")
-    public void compareAccountableProductsDataSTGAndSA() {
+    public void compareAccountableProductsDataDQAndSA() {
         Log.info("And the accountable product data in STG and SA ..");
-        dataQualityContext.accountableProductDataObjectsFromSTG.sort(Comparator.comparing(AccountableProductDataObject::getPRODUCT_WORK_ID));
-        dataQualityContext.accountableProductDataObjectsFromSA.sort(Comparator.comparing(AccountableProductDataObject::getPRODUCT_WORK_ID));
+        dataQualityContext.accountableProductDataObjectsFromSTGDQ.sort(Comparator.comparing(AccountableProductDataObject::getACCOUNTABLE_PRODUCT_ID));
+        dataQualityContext.accountableProductDataObjectsFromSA.sort(Comparator.comparing(AccountableProductDataObject::getACCOUNTABLE_PRODUCT_ID));
 
 
         IntStream.range(0, dataQualityContext.accountableProductDataObjectsFromSTG.size()).forEach(i -> {
-            Log.info("Get the accountable product ids from the lookup table  ..");
-            String idsSourceRef = dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_ID().concat(dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD());
-            sql = String.format(AccountableProductSQL.GET_NUMERIC_ID_FROM_LOOKUP_AP, idsSourceRef);
-            Log.info(sql);
-            List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            idsSA = lookupResults.stream().map(m -> (BigDecimal) m.get("NUMERIC_ID")).map(String::valueOf).collect(Collectors.toList());
-            Log.info("numeric ids :" + idsSA.toString());
 
-            Log.info("Get the accountable product data from EPH SA  ..");
-            sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_SA, Joiner.on("','").join(idsSA));
-            Log.info(sql);
-
-            dataQualityContext.accountableProductDataObjectsFromSA = DBManager
-                    .getDBResultAsBeanList(sql, AccountableProductDataObject.class, Constants.EPH_URL);
 
             //B_CLASSNAME
             Log.info("B_CLASSNAME in EPH: " + dataQualityContext.accountableProductDataObjectsFromSA.get(0).getB_CLASSNAME());

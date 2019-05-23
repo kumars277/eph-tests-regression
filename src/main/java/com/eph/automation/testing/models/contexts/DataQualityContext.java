@@ -59,6 +59,7 @@ public class DataQualityContext {
 
     public static List<AccountableProductDataObject> accountableProductDataObjectsFromPMX;
     public static List<AccountableProductDataObject> accountableProductDataObjectsFromSTG;
+    public static List<AccountableProductDataObject> accountableProductDataObjectsFromSTGDQ;
     public static List<AccountableProductDataObject> accountableProductDataObjectsFromSA;
     public static List<AccountableProductDataObject> accountableProductDataObjectsFromGD;
 

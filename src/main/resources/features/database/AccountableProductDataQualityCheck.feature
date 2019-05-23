@@ -28,11 +28,21 @@ Feature: Entity - ACCOUNTABLE PRODUCT - Count And Data Mapping Check - Validate 
       | countOfRandomIds |
       | 10               |
 
+  @Regression
+  Scenario Outline: Validate accountable product data is transferred from EPH STG to EPH DQ
+    Given We get <countOfRandomIds> random ids of accountable product
+    When We get the accountable product data from EPH STG
+    Then Compare the accountable product data in EPH STG and EPH DQ
+    Examples:
+      | countOfRandomIds |
+      | 10               |
+
+
 
   @Regression
   Scenario Outline: Check mandatory columns are populated in SA
     Given We get <countOfRandomIds> random ids of accountable product
-    When We get the accountable product data from EPH STG
+    When We get the accountable product data from EPH DQ
     Then We get the accountable product data from EPH SA
     And Check the mandatory columns are populated for accountable products role
     Examples:
@@ -42,7 +52,7 @@ Feature: Entity - ACCOUNTABLE PRODUCT - Count And Data Mapping Check - Validate 
   @Regression
   Scenario Outline: Validate accountable product data is transferred from EPH STG to EPH SA
     Given We get <countOfRandomIds> random ids of accountable product
-    When We get the accountable product data from EPH STG
+    When We get the accountable product data from EPH DQ
     Then We get the accountable product data from EPH SA
     And Compare the accountable product data in EPH STG and EPH SA
     Examples:
