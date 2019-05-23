@@ -9,7 +9,7 @@ public class GetEPHDBUser {
                 dbUser = "ephsit_talend_owner";
             }else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbUser = "ephuat_talend_owner";
-        }
+            }
 
         }else {
             dbUser = "ephsit_talend_owner";
