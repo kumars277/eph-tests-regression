@@ -11,9 +11,9 @@ public class GetEPHDBUser {
                 dbUser = "ephuat_talend_owner";
         }
 
-    }else {
-        dbUser = "ephsit_talend_owner";
+        }else {
+            dbUser = "ephsit_talend_owner";
+        }
+        return dbUser;
     }
-    return dbUser;
-}
 }
