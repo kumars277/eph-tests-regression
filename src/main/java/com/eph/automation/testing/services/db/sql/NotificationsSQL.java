@@ -1,7 +1,7 @@
 package com.eph.automation.testing.services.db.sql;
 
 public class NotificationsSQL {
-    public static String EPH_GD_PRODUCT_Count = "select count (*) as ephGDCount from ephsit.semarchy_eph_mdm.gd_PARAM1";
+    public static String EPH_GD_PRODUCT_Count = "select count (*) as ephGDCount from semarchy_eph_mdm.gd_PARAM1";
 /*            " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.gd_PARAM1 join \n"+
             "semarchy_eph_mdm.gd_event on f_event = event_id\n"+
