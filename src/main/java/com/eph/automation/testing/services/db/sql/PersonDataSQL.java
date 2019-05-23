@@ -16,15 +16,15 @@ public class PersonDataSQL {
             "    SELECT ROLE_TYPE_ID FROM GD_ROLE_TYPE WHERE ROLE_TYPE_CODE IN \n" +
             "        ('PPC','PUB','A01','A02','B01','B13','B09','B11','PUBDIR')))";
 
-    public static String GET_COUNT_PERSONS_EPHSTG = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_person";
+    public static String GET_COUNT_PERSONS_EPHSTG = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person";
 
-    public static String GET_COUNT_PERSONS_EPHSTG_DELTA = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_person\n" +
+    public static String GET_COUNT_PERSONS_EPHSTG_DELTA = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person\n" +
             "where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')";
 
 
-    public static String GET_COUNT_PERSONS_EPHDQ = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_person_dq";
+    public static String GET_COUNT_PERSONS_EPHDQ = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq";
 
-    public static String GET_COUNT_PERSONS_EPHDQ_TO_SA = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_person_dq where dq_err != 'Y'";
+    public static String GET_COUNT_PERSONS_EPHDQ_TO_SA = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq where dq_err != 'Y'";
 
 
     public static String GET_COUNT_PERSONS_EPHSA = "select count(*) as count from semarchy_eph_mdm.sa_person p\n" +
@@ -61,7 +61,7 @@ public class PersonDataSQL {
             "\"PERSON_FAMILY_NAME\" as PERSON_FAMILY_NAME,\n" +
             "\"PEOPLEHUB_ID\" as PEOPLEHUB_ID\n" +
             "\"UPDATED\" as UPDATED\n" +
-            "from ephsit_talend_owner.stg_10_pmx_person\n" +
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person\n" +
             "where \"PERSON_SOURCE_REF\" in ('%s')\n";
 
     public static String GET_DATA_PERSONS_EPHDQ = "select distinct\n" +
@@ -70,7 +70,7 @@ public class PersonDataSQL {
             " PERSON_FAMILY_NAME as PERSON_FAMILY_NAME,\n" +
             " PEOPLEHUB_ID as PEOPLEHUB_ID,\n" +
             " DQ_ERR as DQ_ERR\n" +
-            " from ephsit_talend_owner.stg_10_pmx_person_dq\n" +
+            " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq\n" +
             " where PERSON_SOURCE_REF in ('%s')";
 
     public static String GET_DATA_PERSONS_EPHSA = "select\n" +
@@ -100,14 +100,14 @@ public class PersonDataSQL {
 
     public static String GET_RANDOM_PERSON_IDS = "select   \n" +
             "\"PERSON_SOURCE_REF\" AS PERSON_SOURCE_REF\n" +
-            "from ephsit_talend_owner.stg_10_pmx_person p\n" +
-            "join ephsit_talend_owner.stg_10_pmx_person_dq dq on p.\"PERSON_SOURCE_REF\" = dq.person_source_ref\n" +
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person p\n" +
+            "join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq dq on p.\"PERSON_SOURCE_REF\" = dq.person_source_ref\n" +
             "where dq.dq_err != 'Y'\n" +
             "order by random() limit '%s'";
 
-    public static String GET_IDS_FROM_LOOKUP_TABLE = "select numeric_id as PERSON_ID from ephsit_talend_owner.map_sourceref_2_numericid\n" +
+    public static String GET_IDS_FROM_LOOKUP_TABLE = "select numeric_id as PERSON_ID from " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_numericid\n" +
             "where source_ref IN ('%s')";
 
-    public static String GET_IDS_FROM_LOOKUP_TABLE_EPH = "select eph_id as PERSON_ID from ephsit_talend_owner.map_sourceref_2_ephid\n" +
+    public static String GET_IDS_FROM_LOOKUP_TABLE_EPH = "select eph_id as PERSON_ID from " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid\n" +
             "where ref_type = '%s' and source_ref IN ('%s')";
 }
