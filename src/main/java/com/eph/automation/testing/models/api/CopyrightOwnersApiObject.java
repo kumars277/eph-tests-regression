@@ -1,5 +1,7 @@
 package com.eph.automation.testing.models.api;
-
+/**
+ * Created by GVLAYKOV
+ */
 import java.util.HashMap;
 
 public class CopyrightOwnersApiObject {

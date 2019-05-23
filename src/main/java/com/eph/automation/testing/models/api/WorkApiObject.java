@@ -1,5 +1,7 @@
 package com.eph.automation.testing.models.api;
-
+/**
+ * Created by GVLAYKOV
+ */
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.models.dao.WorkDataObject;

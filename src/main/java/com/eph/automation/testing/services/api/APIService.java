@@ -1,5 +1,7 @@
 package com.eph.automation.testing.services.api;
-
+/**
+ * Created by GVLAYKOV
+ */
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.RESTEndPoints;
 import com.eph.automation.testing.models.api.ProductApiObject;

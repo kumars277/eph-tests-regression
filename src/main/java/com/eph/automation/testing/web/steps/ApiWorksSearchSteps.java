@@ -1,5 +1,7 @@
 package com.eph.automation.testing.web.steps;
-
+/**
+ * Created by GVLAYKOV
+ */
 import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;

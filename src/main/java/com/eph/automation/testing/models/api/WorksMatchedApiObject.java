@@ -1,5 +1,7 @@
 package com.eph.automation.testing.models.api;
-
+/**
+ * Created by GVLAYKOV
+ */
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.junit.Assert;
 

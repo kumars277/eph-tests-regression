@@ -1,4 +1,4 @@
-Feature: EMS - Customer Service - Customer Search API
+Feature: Customer Search API: Works
   As an EIP-MS Integration User
   I would like to search works from Enterprise Customer Hub using EIP Search
   So that I can use the details to validate business needs

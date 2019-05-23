@@ -2,7 +2,9 @@
  * Copyright (C) Estafet Ltd
  */
 package com.eph.automation.testing.models.ui;
-
+/**
+ * Created by GVLAYKOV
+ */
 import com.google.inject.Inject;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;

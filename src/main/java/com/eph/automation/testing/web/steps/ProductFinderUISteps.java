@@ -13,9 +13,8 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-
 /**
- * Created by Georgi Vlaykov on 11/02/2019
+ * Created by GVLAYKOV
  */
 public class ProductFinderUISteps {
 

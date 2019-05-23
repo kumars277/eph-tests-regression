@@ -2,7 +2,9 @@
  * Copyright (C) Estafet Ltd
  */
 package com.eph.automation.testing.models.ui;
-
+/**
+ * Created by GVLAYKOV
+ */
 import com.eph.automation.testing.configuration.MarionetteDriver;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

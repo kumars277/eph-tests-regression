@@ -2,7 +2,9 @@
  * Copyright (C) Estafet Ltd
  */
 package com.eph.automation.testing.models.ui;
-
+/**
+ * Created by GVLAYKOV
+ */
 
 public final class SearchConstants {
 

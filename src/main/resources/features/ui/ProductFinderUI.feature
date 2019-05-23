@@ -18,14 +18,14 @@ Feature: Product Finder Selenium tests
     Then Search for works by title
     And Analyze results
 
-  @UI
-  Scenario: search work by keyword
-    Given We get 1 random search ids for works
-    And We get the work search data from EPH GD
-    When user is on search page
-    And wants to search for "Works"
-    Then Search for works by title
-    And Analyze results
+#  @UI
+#  Scenario: search work by keyword
+#    Given We get 1 random search ids for works
+#    And We get the work search data from EPH GD
+#    When user is on search page
+#    And wants to search for "Works"
+#    Then Search for works by title
+#    And Analyze results
 
 
   @Search
