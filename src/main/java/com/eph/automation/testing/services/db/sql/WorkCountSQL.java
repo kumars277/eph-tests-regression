@@ -12,7 +12,13 @@ public class WorkCountSQL {
     "LEFT JOIN PMX.GD_IMPRINT I ON W.F_IMPRINT = I.IMPRINT_ID\n" +
     "WHERE T.PRODUCT_TYPE_CODE NOT IN ('COMPENDIUM','JCOLSC','ADVERTISING','FS','DUES')";
 
-    public static String PMX_STG_WORKS_COUNT = "select count (*) as workCountPMXSTG from ephsit.ephsit_talend_owner.stg_10_pmx_wwork";
+    public static String PMX_STG_WORKS_COUNT = "select count (*) as workCountPMXSTG from ephsit_talend_owner.stg_10_pmx_wwork";
+
+    public static String GET_REFRESH_DATE = "select refresh_value as refresh_timestamp from ephsit_talend_owner.etl_run \n" +
+            "order by TO_DATE(refresh_value,'YYYYMMDDHH24MI') desc";
+
+    public static String PMX_STG_WORKS_COUNT_DELTA = "select count(distinct \"PRODUCT_WORK_ID\") as workCountPMXSTG from ephsit_talend_owner.stg_10_pmx_wwork\n" +
+            "where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
     public static String PMX_STG_WORKS_COUNT_Distinct = "  select count(distinct \"PRODUCT_WORK_ID\") as workCountPMXSTG from ephsit_talend_owner.stg_10_pmx_wwork";
 

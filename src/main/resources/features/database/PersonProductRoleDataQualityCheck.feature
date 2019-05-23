@@ -1,16 +1,16 @@
 Feature: Entity - PERSON PRODUCT ROLE - Validate data between PMX and EPH - Talend Full Load
 
   @Regression
-  Scenario: Count check of persons product role between EPH STG Can and EPH Stg
-    Given Get the count of records for persons product role in EPH STG Canonical
+  Scenario: Count check of persons product role between EPH STG DQ and EPH Stg
+    Given Get the count of records for persons product role in EPH STG Product DQ
     When Get the count of records for persons product role in EPH Staging
     Then Compare the count on records for persons product role in PMX and EPH Staging
 
   @Regression
-  Scenario: Count check of persons product role between EPH Staging and EPH SA
-    Given Get the count of records for persons product role in EPH Staging
+  Scenario: Count check of persons product role between EPH Staging with DQ and EPH SA
+    Given Get the count of records for persons product role in EPH Staging with DQ
     When Get the count of records for persons product role in EPH SA
-    Then Compare the count on records for persons product role in EPH Staging and EPH SA
+    Then Compare the count on records for persons product role in EPH Staging with DQ and EPH SA
 
 
   @Regression
@@ -20,7 +20,7 @@ Feature: Entity - PERSON PRODUCT ROLE - Validate data between PMX and EPH - Tale
     Then Compare the count on records for persons product role in EPH SA and EPH GD
 
   @Regression
-  Scenario Outline: Validate data is transferred from EPH STG CAN to EPH STG
+  Scenario Outline: Validate data is transferred from EPH STG DQ to EPH STG
     Given We get <countOfRandomIds> random ids of persons product role
     When We get the person product role records from EPH STG Can
     Then We get the person product role records from EPH STG

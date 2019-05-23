@@ -78,6 +78,8 @@ public class WorksDataCheck {
         dataQualityContext.workDataObjectsFromPMXSTG = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
         sql =  String.format(WorkDataCheckSQL.GET_STG_DQ_WORKS_DATA, Joiner.on("','").join(ids));
+        Log.info
+                (sql);
         dataQualityContext.workDataObjectsFromSTGDQ = DBManager
                 .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
@@ -263,6 +265,20 @@ public class WorksDataCheck {
                         dataQualityContext.workDataObjectsFromSource.get(i).OWNERSHIP
                                 .equals(dataQualityContext.workDataObjectsFromPMXSTG.get(i).OWNERSHIP));
             }
+
+            if (dataQualityContext.workDataObjectsFromSource.get(i).LANGUAGE_CODE != null
+                    || dataQualityContext.workDataObjectsFromPMXSTG.get(i).LANGUAGE_CODE != null) {
+                assertTrue("Expecting the Language code details from PMX and EPH Consistent for id=" + ids.get(i),
+                        dataQualityContext.workDataObjectsFromSource.get(i).LANGUAGE_CODE
+                                .equals(dataQualityContext.workDataObjectsFromPMXSTG.get(i).LANGUAGE_CODE));
+            }
+
+            if (dataQualityContext.workDataObjectsFromSource.get(i).UPDATED != null
+                    || dataQualityContext.workDataObjectsFromPMXSTG.get(i).UPDATED != null) {
+                assertTrue("Expecting the UPDATED details from PMX and EPH Consistent for id=" + ids.get(i),
+                        dataQualityContext.workDataObjectsFromSource.get(i).UPDATED
+                                .equals(dataQualityContext.workDataObjectsFromPMXSTG.get(i).UPDATED));
+            }
         }
     }
     
@@ -364,16 +380,16 @@ public class WorksDataCheck {
                         "UNK", dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_STATUS);
             } else if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).WORK_SUBSTATUS.equalsIgnoreCase("DIVESTED")) {
                 Assert.assertEquals("The Work status is incorrect for id=" + ids.get(i),
-                        "WDI", dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_STATUS);
+                        "WDV", dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_STATUS);
             } else if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).WORK_STATUS.equalsIgnoreCase("1")) {
                 Assert.assertEquals("The Work status is incorrect for id=" + ids.get(i),
-                        "WAS", dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_STATUS);
+                        "WLA", dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_STATUS);
             } else if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).WORK_STATUS.equalsIgnoreCase("3")) {
                 Assert.assertEquals("The Work status is incorrect for id=" + ids.get(i)
                         , "WAP", dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_STATUS);
             } else {
                 Assert.assertEquals("The Work status is incorrect for id=" + ids.get(i),
-                        "WST", dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_STATUS);
+                        "WDI", dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_STATUS);
             }
 
             if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).IMPRINT != null
@@ -408,6 +424,13 @@ public class WorksDataCheck {
                 assertTrue("Expecting the resp centre details from STG and DQ Consistent for id=" + ids.get(i),
                         dataQualityContext.workDataObjectsFromPMXSTG.get(i).F_RESPONSIBILITY_CENTRE
                                 .equals(dataQualityContext.workDataObjectsFromSTGDQ.get(i).F_RESPONSIBILITY_CENTRE));
+            }
+
+            if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).LANGUAGE_CODE != null
+                    || dataQualityContext.workDataObjectsFromSTGDQ.get(i).LANGUAGE_CODE != null) {
+                assertTrue("Expecting the Language code details from STG and DQ Consistent for id=" + ids.get(i),
+                        dataQualityContext.workDataObjectsFromPMXSTG.get(i).LANGUAGE_CODE
+                                .equals(dataQualityContext.workDataObjectsFromSTGDQ.get(i).LANGUAGE_CODE));
             }
         }
     }
@@ -529,6 +552,14 @@ public class WorksDataCheck {
                         workDataObjectsAccProd.get(0).f_accountable_product
                                 .equals(dataQualityContext.workDataObjectsFromEPH.get(i).f_accountable_product));
             }
+
+            if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).LANGUAGE_CODE != null
+                    || dataQualityContext.workDataObjectsFromEPH.get(i).LANGUAGE_CODE != null) {
+                assertTrue("Expecting the Language code details from DQ and SA Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPH.get(i).LANGUAGE_CODE,
+                        dataQualityContext.workDataObjectsFromSTGDQ.get(i).LANGUAGE_CODE
+                                .equals(dataQualityContext.workDataObjectsFromEPH.get(i).LANGUAGE_CODE));
+            }
         }
     }
 
@@ -638,6 +669,14 @@ public class WorksDataCheck {
                                 dataQualityContext.workDataObjectsFromEPHGD.get(i).PMX_SOURCE_REFERENCE,
                         dataQualityContext.workDataObjectsFromEPH.get(i).f_accountable_product
                                 .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).f_accountable_product));
+            }
+
+            if (dataQualityContext.workDataObjectsFromEPH.get(i).LANGUAGE_CODE != null
+                    || dataQualityContext.workDataObjectsFromEPHGD.get(i).LANGUAGE_CODE != null) {
+                assertTrue("Expecting the Language code details from SA and GD Consistent for id=" +
+                                dataQualityContext.workDataObjectsFromEPHGD.get(i).LANGUAGE_CODE,
+                        dataQualityContext.workDataObjectsFromEPH.get(i).LANGUAGE_CODE
+                                .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).LANGUAGE_CODE));
             }
         }
     }

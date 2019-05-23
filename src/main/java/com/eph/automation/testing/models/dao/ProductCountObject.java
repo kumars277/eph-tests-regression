@@ -120,6 +120,16 @@ public class ProductCountObject {
     public int ephSACount;
     public int ephGDCount;
 
+    public int getEphCanDqCount() {
+        return ephCanDqCount;
+    }
+
+    public void setEphCanDqCount(int ephCanDqCount) {
+        this.ephCanDqCount = ephCanDqCount;
+    }
+
+    public int ephCanDqCount;
+
     public int getAeCount() {
         return aeCount;
     }

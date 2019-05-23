@@ -21,6 +21,7 @@ public class WorksCountCheckSteps {
     private static List<WorkDataObject> workCountEPH;
     private static List<WorkDataObject> workCountEPHGD;
     private static List<WorkDataObject> errorsCount;
+    private static List<WorkDataObject> refreshDate;
     private static String sqlPMX;
     private static String sqlPMXSTG;
     private static String sqlPMXSTGDistinct;
@@ -50,7 +51,6 @@ public class WorksCountCheckSteps {
     public void getPMXStagingWorks(){
 
         // Run the Talend job
-
         sqlPMXSTG = WorkCountSQL.PMX_STG_WORKS_COUNT;
         workCountPMXSTG =DBManager.getDBResultAsBeanList(sqlPMXSTG, WorkDataObject.class,
                 Constants.EPH_URL);
@@ -96,7 +96,18 @@ public class WorksCountCheckSteps {
         ephWorkGD = workCountEPHGD.get(0).workCountEPHGD;
         Log.info("Works in EPH GD are: " + ephWorkGD);
 
-        sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_Distinct;
+        if (System.getProperty("LOAD") != null) {
+            if(System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
+                sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_Distinct;
+            }else {
+                sql = WorkCountSQL.GET_REFRESH_DATE;
+                refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                        Constants.EPH_URL);
+                sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_DELTA.replace("PARAM1",refreshDate.get(0).refresh_timestamp);
+            }
+        }else{
+            sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_Distinct;
+        }
         workCountPMXSTGDistinct =DBManager.getDBResultAsBeanList(sqlPMXSTGDistinct, WorkDataObject.class,
                 Constants.EPH_URL);
         pmxSTGWorkDistinct = workCountPMXSTGDistinct.get(0).workCountPMXSTG;
