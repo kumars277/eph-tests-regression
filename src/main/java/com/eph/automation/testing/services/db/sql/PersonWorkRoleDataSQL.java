@@ -44,13 +44,13 @@ public class PersonWorkRoleDataSQL {
             ")";
 
 
-    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTG = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_work_person_role" ;
+    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTG = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role" ;
 
-    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTG_DELTA = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_work_person_role where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')\n" ;
+    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTG_DELTA = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')\n" ;
 
 
-    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTGDQ = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_work_person_role wpr  join  ephsit_talend_owner.stg_10_pmx_person_dq perd  on wpr.\"PMX_PARTY_SOURCE_REF\" = perd.person_source_ref \n" +
-            "join ephsit_talend_owner.stg_10_pmx_wwork_dq word on wpr.\"PMX_WORK_SOURCE_REF\" = word.pmx_source_reference \n" +
+    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTGDQ = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role wpr  join  " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq perd  on wpr.\"PMX_PARTY_SOURCE_REF\" = perd.person_source_ref \n" +
+            "join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq word on wpr.\"PMX_WORK_SOURCE_REF\" = word.pmx_source_reference \n" +
             "where perd.dq_err != 'Y' and word.dq_err != 'Y'" ;
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHAE = "select count(distinct work_person_role_id) as count from semarchy_eph_mdm.ae_work_person_role\n";
@@ -130,9 +130,9 @@ public class PersonWorkRoleDataSQL {
             "wpr.\"START_DATE\" as START_DATE,\n" +
             "wpr.\"END_DATE\" as END_DATE,\n" +
             "wpr.\"UPDATED\" as UPDATED\n" +
-            "from ephsit_talend_owner.stg_10_pmx_work_person_role wpr\n" +
-            "join ephsit_talend_owner.stg_10_pmx_person_dq perd  on wpr.\"PMX_PARTY_SOURCE_REF\" = perd.\"person_source_ref\" \n" +
-            "join ephsit_talend_owner.stg_10_pmx_wwork_dq word on wpr.\"PMX_WORK_SOURCE_REF\" = word.\"pmx_source_reference\" \n" +
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role wpr\n" +
+            "join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq perd  on wpr.\"PMX_PARTY_SOURCE_REF\" = perd.\"person_source_ref\" \n" +
+            "join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq word on wpr.\"PMX_WORK_SOURCE_REF\" = word.\"pmx_source_reference\" \n" +
             "where \"WORK_PERSON_ROLE_SOURCE_REF\" in ('%s') and perd.dq_err != 'Y' and word.dq_err != 'Y'";
 
     public static String GET_DATA_PERSONS_WORK_ROLE_EPHSA = "select \n" +
@@ -170,7 +170,7 @@ public class PersonWorkRoleDataSQL {
 
     public static String GET_RANDOM_PERSON_WORK_ROLE_IDS = "select \n" +
             "\"WORK_PERSON_ROLE_SOURCE_REF\" as WORK_PERSON_ROLE_SOURCE_REF\n" +
-            "from ephsit_talend_owner.stg_10_pmx_work_person_role\n" +
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role\n" +
             "where \"WORK_PERSON_ROLE_SOURCE_REF\" like '%%%s'\n" +
             "order by random() limit '%s'";
 
@@ -189,7 +189,7 @@ public class PersonWorkRoleDataSQL {
             "order by random() limit '%s'";
 
 
-    public static String GET_IDS_FROM_LOOKUP_TABLE = "select source_ref as WORK_PERSON_ROLE_SOURCE_REF from ephsit_talend_owner.map_sourceref_2_numericid\n" +
+    public static String GET_IDS_FROM_LOOKUP_TABLE = "select source_ref as WORK_PERSON_ROLE_SOURCE_REF from " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_numericid\n" +
             "where numeric_id IN ('%s')";
 }
 

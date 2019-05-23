@@ -31,9 +31,9 @@ public class ProductRelationshipChecksSQL {
             "AND\n"+
             "\tWL.F_PRODUCT_WORK_LINK_TYPE = 42\t-- includes\n";
 
-    public static String GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from ephsit.ephsit_talend_owner.stg_pmx_product_pack_rel\n";
+    public static String GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_pmx_product_pack_rel\n";
 
-    public static String GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT_DELTA = "select count(*) as count from ephsit.ephsit_talend_owner.stg_pmx_product_pack_rel\n" +
+    public static String GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT_DELTA = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_pmx_product_pack_rel\n" +
             "where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')";
 
 
@@ -93,19 +93,19 @@ public class ProductRelationshipChecksSQL {
             "   \"EFFECTIVE_START_DATE\" as EFFECTIVE_START_DATE,\n" +
             "   \"ENDON\" as ENDON,\n" +
             "   \"UPDATED\" as UPDATED \n" +
-            "   from ephsit.ephsit_talend_owner.stg_pmx_product_pack_rel\n" +
+            "   from " + GetEPHDBUser.getDBUser() + ".stg_pmx_product_pack_rel\n" +
             "   where \"RELATIONSHIP_PMX_SOURCEREF\"  in ('%s')";
 
-    public static String SELECT_RANDOM_RELATIONSHIP_PMX_SOURCEREF = "select \"RELATIONSHIP_PMX_SOURCEREF\" as RELATIONSHIP_PMX_SOURCEREF from ephsit_talend_owner.stg_pmx_product_pack_rel order by random() limit '%s'";
+    public static String SELECT_RANDOM_RELATIONSHIP_PMX_SOURCEREF = "select \"RELATIONSHIP_PMX_SOURCEREF\" as RELATIONSHIP_PMX_SOURCEREF from " + GetEPHDBUser.getDBUser() + ".stg_pmx_product_pack_rel order by random() limit '%s'";
 
     public static String GET_PRODUCT_REL_PACK_ID_FROM_LOOKUP_TABLE = "select numeric_id as PRODUCT_REL_PACK_ID\n" +
-            "FROM ephsit_talend_owner.map_sourceref_2_numericid where source_ref in ('%s')";
+            "FROM " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_numericid where source_ref in ('%s')";
 
     public static String GET_RELATIONSHIP_PMX_SOURCEREF_FROM_LOOKUP_TABLE = "select numeric_id as PRODUCT_REL_PACK_ID\n" +
-            "FROM ephsit_talend_owner.map_sourceref_2_numericid where source_ref in ('%s')";
+            "FROM " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_numericid where source_ref in ('%s')";
 
     public static String GET_ID_FROM_SOURCEREF_LOOKUP_TABLE = "SELECT eph_id as eph_id\n" +
-            "FROM ephsit_talend_owner.map_sourceref_2_ephid where source_ref in ('%s')";
+            "FROM " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid where source_ref in ('%s')";
 
     public static String GET_EPH_SA_PRODUCT_RELATIONSHIPS_DATA = "select \n" +
             "sa.b_loadid as B_LOADID,\n" +

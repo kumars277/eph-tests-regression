@@ -77,7 +77,7 @@ public class ProductDataSQL {
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND,\n" +
             "            \"UPDATED\" as UPDATED\n" +
-            "            FROM ephsit_talend_owner.stg_10_pmx_product\n" +
+            "            FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product\n" +
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s')\n" +
              "           order by \"PRODUCT_MANIFESTATION_ID\"";
 
@@ -98,7 +98,7 @@ public class ProductDataSQL {
             "       ult_work_ref as ULT_WORK_REF,\n" +
             "       tax_code as TAX_CODE,\n" +
             "       dq_err as DQ_ERR\n" +
-            "FROM ephsit_talend_owner.stg_10_pmx_product_dq\n" +
+            "FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq\n" +
             "where pmx_source_reference in ('%s')\n" +
             " and dq_err != 'Y' ";
 
@@ -119,7 +119,7 @@ public class ProductDataSQL {
             "       ult_work_ref as ULT_WORK_REF,\n" +
             "       tax_code as TAX_CODE,\n" +
             "       dq_err as DQ_ERR\n" +
-            "FROM ephsit_talend_owner.stg_10_pmx_product_dq\n" +
+            "FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq\n" +
             "where pmx_source_reference similar to '%s' and pmx_source_reference not like '%%OOA'\n" +
             "and dq_err !='Y' ";
 
@@ -144,7 +144,7 @@ public class ProductDataSQL {
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
-            "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
+            "            FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product\n" +
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" = '%s'";
 
     public static String EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC = "SELECT\n" +
@@ -168,7 +168,7 @@ public class ProductDataSQL {
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
-            "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
+            "            FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product\n" +
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" not in (1,2)";
 
     public static String EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_JAS = "SELECT\n" +
@@ -192,7 +192,7 @@ public class ProductDataSQL {
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
-            "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
+            "            FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product\n" +
             "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" = '%s' ";
 
     public static String EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_OAA = "SELECT\n" +
@@ -216,14 +216,14 @@ public class ProductDataSQL {
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
-            "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
+            "            FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product\n" +
             "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" = '%s' ";
 
-    public static String EPH_STG_GET_COUNT_OF_RECORDS_WITH_GIVEN_F_PRODUCT_WORK = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_product where \"SUBSCRIPTION\" ='Y' and \"F_PRODUCT_WORK\"  = '%s' group by \"F_PRODUCT_WORK\"";
+    public static String EPH_STG_GET_COUNT_OF_RECORDS_WITH_GIVEN_F_PRODUCT_WORK = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product where \"SUBSCRIPTION\" ='Y' and \"F_PRODUCT_WORK\"  = '%s' group by \"F_PRODUCT_WORK\"";
 
-    public static String EPH_STG_GET_COUNT_OF_RECORDS_WITH_OAA_GIVEN_F_PRODUCT_WORK = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_product where \"SUBSCRIPTION\" ='Y' and \"F_PRODUCT_WORK\"  = '%s' and \"OPEN_ACCESS\" ='Y'  group by \"F_PRODUCT_WORK\"";
+    public static String EPH_STG_GET_COUNT_OF_RECORDS_WITH_OAA_GIVEN_F_PRODUCT_WORK = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product where \"SUBSCRIPTION\" ='Y' and \"F_PRODUCT_WORK\"  = '%s' and \"OPEN_ACCESS\" ='Y'  group by \"F_PRODUCT_WORK\"";
 
-    public static String EPH_STG_GET_COUNT_OF_RECORDS_WITH_JAS_GIVEN_F_PRODUCT_WORK = "select count(*) as count from ephsit_talend_owner.stg_10_pmx_product where \"SUBSCRIPTION\" ='Y' and \"F_PRODUCT_WORK\"  = '%s' and \"AUTHOR_CHARGES\" ='Y'  group by \"F_PRODUCT_WORK\"";
+    public static String EPH_STG_GET_COUNT_OF_RECORDS_WITH_JAS_GIVEN_F_PRODUCT_WORK = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product where \"SUBSCRIPTION\" ='Y' and \"F_PRODUCT_WORK\"  = '%s' and \"AUTHOR_CHARGES\" ='Y'  group by \"F_PRODUCT_WORK\"";
 
     public static String EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_NOT_PRINT_OR_ELECTRONIC_JAS = "SELECT\n" +
             "           \"PRODUCT_ID\" as PRODUCT_ID,\n" +
@@ -246,7 +246,7 @@ public class ProductDataSQL {
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
-            "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
+            "            FROM " + GetEPHDBUser.getDBUser()  + ".stg_10_pmx_product\n" +
             "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" NOT IN (1, 2) AND \"AUTHOR_CHARGES\" = 'Y'";
 
     public static String EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_NOT_PRINT_OR_ELECTRONIC_OAA = "SELECT\n" +
@@ -270,7 +270,7 @@ public class ProductDataSQL {
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
-            "            FROM ephsit.ephsit_talend_owner.stg_10_pmx_product\n" +
+            "            FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product\n" +
             "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" NOT IN (1, 2) AND \"OPEN_ACCESS\" = 'Y'";
 
 
@@ -291,7 +291,7 @@ public class ProductDataSQL {
             "  ,f_wwork AS F_PRODUCT_WORK\n" +
             "  ,f_manifestation AS F_PRODUCT_MANIFESTATION_TYP\n" +
             "  ,f_tax_code as TAX_CODE\n" +
-            "  FROM ephsit.semarchy_eph_mdm.sa_product sa where f_event =  (\n" +
+            "  FROM semarchy_eph_mdm.sa_product sa where f_event =  (\n" +
             "select max (f_event) from \n" +
             "semarchy_eph_mdm.sa_product   \n" +
             "join \n" +
@@ -317,7 +317,7 @@ public class ProductDataSQL {
             "  ,f_wwork AS F_PRODUCT_WORK\n" +
             "  ,f_manifestation AS F_PRODUCT_MANIFESTATION_TYP\n" +
             "  ,f_tax_code as TAX_CODE\n" +
-            "  FROM ephsit.semarchy_eph_mdm.gd_product" +
+            "  FROM semarchy_eph_mdm.gd_product" +
             "  WHERE pmx_source_reference IN ('%s')\n" ;
 
     public static String EPH_SA_PRODUCT_EXTRACT_JOURNALS_OR_PACKAGES = "SELECT \n" +
@@ -337,7 +337,7 @@ public class ProductDataSQL {
             "  ,f_wwork AS F_PRODUCT_WORK\n" +
             "  ,f_manifestation AS F_PRODUCT_MANIFESTATION_TYP\n" +
             "  ,f_tax_code as TAX_CODE\n" +
-            "  FROM ephsit.semarchy_eph_mdm.sa_product sa where f_event =  (\n" +
+            "  FROM semarchy_eph_mdm.sa_product sa where f_event =  (\n" +
             "select max (f_event) from \n" +
             "semarchy_eph_mdm.sa_product   \n" +
             "join \n" +
@@ -364,21 +364,21 @@ public class ProductDataSQL {
             "  ,f_wwork AS F_PRODUCT_WORK\n" +
             "  ,f_manifestation AS F_PRODUCT_MANIFESTATION_TYP\n" +
             "  ,f_tax_code as TAX_CODE\n" +
-            "  FROM ephsit.semarchy_eph_mdm.gd_product\n" +
+            "  FROM semarchy_eph_mdm.gd_product\n" +
             "  where pmx_source_reference similar to '%s' and pmx_source_reference not like '%%OOA'";
 
 
-    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_JOURNALS = "select distinct PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID from (select  \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from ephsit_talend_owner.stg_10_pmx_product stg \n " +
-            "left join ephsit_talend_owner.stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int \n" +
+    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_JOURNALS = "select distinct PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID from (select  \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product stg \n " +
+            "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int \n" +
             "left join semarchy_eph_mdm.sa_product sa on dq.pmx_source_reference = sa.pmx_source_reference\n" +
             " where \"SUBSCRIPTION\" = 'Y' \n" +
             "and dq.dq_err != 'Y'  \n" +
             "order by random() limit '%s') A ";
 
-    public static String SELECT_F_PRODUCT_WORK_IDS_FOR_GIVEN_MANIFESTATION_IDS = "select \"F_PRODUCT_WORK\" as F_PRODUCT_WORK from ephsit_talend_owner.stg_10_pmx_product where \"PRODUCT_MANIFESTATION_ID\" IN ('%s')";
+    public static String SELECT_F_PRODUCT_WORK_IDS_FOR_GIVEN_MANIFESTATION_IDS = "select \"F_PRODUCT_WORK\" as F_PRODUCT_WORK from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product where \"PRODUCT_MANIFESTATION_ID\" IN ('%s')";
 
-    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PRINT_JOURNALS= "select distinct PRODUCT_MANIFESTATION_ID as  PRODUCT_MANIFESTATION_ID from  (select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID  from ephsit_talend_owner.stg_10_pmx_product stg\n" +
-            "left join ephsit_talend_owner.stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int \n" +
+    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PRINT_JOURNALS= "select distinct PRODUCT_MANIFESTATION_ID as  PRODUCT_MANIFESTATION_ID from  (select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID  from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product stg\n" +
+            "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int \n" +
             "left join semarchy_eph_mdm.sa_product sa on dq.pmx_source_reference = sa.pmx_source_reference\n" +
             "where \"SUBSCRIPTION\" = 'Y'\n" +
             "and \"F_PRODUCT_MANIFESTATION_TYP\" = '1' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = '%s' \n" +
@@ -386,8 +386,8 @@ public class ProductDataSQL {
             "and sa.b_error_status is null\n" +
             "order by random() limit '%s') A ";
 
-    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_ELECTRONIC_JOURNALS = "select distinct PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID from (select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID  from ephsit_talend_owner.stg_10_pmx_product stg\n" +
-            "left join ephsit_talend_owner.stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int \n" +
+    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_ELECTRONIC_JOURNALS = "select distinct PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID from (select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID  from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product stg\n" +
+            "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int \n" +
             "left join semarchy_eph_mdm.sa_product sa on dq.pmx_source_reference = sa.pmx_source_reference\n" +
             "where \"SUBSCRIPTION\" = 'Y'\n" +
             "and \"F_PRODUCT_MANIFESTATION_TYP\" = '2' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = '%s' \n" +
@@ -395,26 +395,26 @@ public class ProductDataSQL {
             "and sa.b_error_status is null\n" +
             "order by random() limit '%s') A ";
 
-    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_NON_PRINT_OR_ELECTRONIC_JOURNALS = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from ephsit_talend_owner.stg_10_pmx_product where \"SUBSCRIPTION\" = 'Y' and \"F_PRODUCT_MANIFESTATION_TYP\" NOT IN ('1', '2') and \"AUTHOR_CHARGES\" = '%s' order by random() limit '%s'";
+    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_NON_PRINT_OR_ELECTRONIC_JOURNALS = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product where \"SUBSCRIPTION\" = 'Y' and \"F_PRODUCT_MANIFESTATION_TYP\" NOT IN ('1', '2') and \"AUTHOR_CHARGES\" = '%s' order by random() limit '%s'";
 
     public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS = "select distinct PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID from (select  \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID \n" +
-            "from ephsit_talend_owner.stg_10_pmx_product stg \n" +
-            "left join ephsit_talend_owner.stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int \n" +
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product stg \n" +
+            "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int \n" +
             "left join semarchy_eph_mdm.sa_product sa on dq.pmx_source_reference = sa.pmx_source_reference\n" +
             "where \"ONE_OFF_ACCESS\" = 'Y' \n" +
             "and dq.dq_err != 'Y'  \n" +
             "and sa.b_error_status is null\n" +
             "order by random() limit '%s') A";
 
-    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PACKAGES = "select distinct PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID from (select  \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from ephsit_talend_owner.stg_10_pmx_product stg \n" +
-            "left join ephsit_talend_owner.stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int \n" +
+    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PACKAGES = "select distinct PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID from (select  \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product stg \n" +
+            "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int \n" +
             "left join semarchy_eph_mdm.sa_product sa on dq.pmx_source_reference = sa.pmx_source_reference\n" +
             "where \"PACKAGES\" = 'Y'\n" +
             "and dq.dq_err != 'Y' \n" +
             "and sa.b_error_status is null\n" +
             "order by random() limit '%s') A ";
 
-    public static String SELECT_DUPLICATE_PRODUCT_IDS = "select distinct \"PRODUCT_ID\" as PRODUCT_ID from ephsit_talend_owner.stg_10_pmx_product  where \"PRODUCT_ID\" in (select b.\"PRODUCT_ID\" from ephsit_talend_owner.stg_10_pmx_product B ,ephsit_talend_owner.stg_10_pmx_product C where B.\"PRODUCT_ID\" = C.\"PRODUCT_ID\" \n" +
+    public static String SELECT_DUPLICATE_PRODUCT_IDS = "select distinct \"PRODUCT_ID\" as PRODUCT_ID from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product  where \"PRODUCT_ID\" in (select b.\"PRODUCT_ID\" from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product B ," + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product C where B.\"PRODUCT_ID\" = C.\"PRODUCT_ID\" \n" +
             "and b.\"F_PRODUCT_WORK\" != c.\"F_PRODUCT_WORK\" and B.\"SUBSCRIPTION\" = 'Y' and C.\"SUBSCRIPTION\" ='Y');\n";
 
 }

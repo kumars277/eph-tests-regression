@@ -24,19 +24,19 @@ public class AccountableProductSQL {
             "\"ACC_PROD_ID\"\n" +
             ",\"ACC_PROD_NAME\"\n" +
             ",\"PARENT_ACC_PROD\"\n" +
-            "from ephsit_talend_owner.stg_10_pmx_accountable_product) A " ;
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_accountable_product) A " ;
 
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_THAT_WILL_BE_PROCESSED_TO_SA_DELTA = "select count(*) from \n" +
             "(select distinct\n" +
             "\"ACC_PROD_ID\"\n" +
             ",\"ACC_PROD_NAME\"\n" +
             ",\"PARENT_ACC_PROD\"\n" +
-            "from ephsit_talend_owner.stg_10_pmx_accountable_product) A \n" +
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_accountable_product) A \n" +
             "where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')";
 
-    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX = "select count(*) from ephsit_talend_owner.stg_10_pmx_accountable_product";
+    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX = "select count(*) from "+ GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product";
 
-    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX_DELTA = "select count(*) from ephsit_talend_owner.stg_10_pmx_accountable_product \n" +
+    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX_DELTA = "select count(*) from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_accountable_product \n" +
             "where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')";
 
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_SA = "select \n" +
@@ -88,7 +88,7 @@ public class AccountableProductSQL {
             ",\"PARENT_ACC_PROD\" as PARENT_ACC_PROD\n" +
             ",\"PRODUCT_GROUP_TYPE_NAME\" as PRODUCT_GROUP_TYPE_NAME\n" +
             ",\"UPDATED\" as UPDATED\n" +
-            "from ephsit_talend_owner.STG_10_PMX_ACCOUNTABLE_PRODUCT\n" +
+            "from " + GetEPHDBUser.getDBUser() +".STG_10_PMX_ACCOUNTABLE_PRODUCT\n" +
             "where \"PRODUCT_WORK_ID\" in ('%s')";
 
 
@@ -99,12 +99,12 @@ public class AccountableProductSQL {
             ",ACC_PROD_NAME as ACC_PROD_NAME\n" +
             ",PARENT_ACC_PROD as PARENT_ACC_PROD\n" +
             ",DQ_ERR as DQ_ERR\n" +
-            "from ephsit_talend_owner.stg_10_pmx_accountable_product_dq\n" +
+            "from " + GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product_dq\n" +
             "where PMX_SOURCE_REFERENCE in ('%s')";
 
     public static String SELECT_IDS_STG = "select \n" +
             "\"ACC_PROD_ID\" as ACC_PROD_ID\n" +
-            "from ephsit_talend_owner.STG_10_PMX_ACCOUNTABLE_PRODUCT\n" +
+            "from " + GetEPHDBUser.getDBUser() +".STG_10_PMX_ACCOUNTABLE_PRODUCT\n" +
             "where \"PRODUCT_WORK_ID\" in ('%s')";
 
     public static String SELECT_DATA_ACCOUNTABLE_PRODUCT_SA = "select \n" +
@@ -170,16 +170,16 @@ public class AccountableProductSQL {
 
     public static String GET_RANDOM_IDS_FROM_STG = "select \n" +
             "\"ACC_PROD_ID\" as ACC_PROD_ID\n" +
-            "from ephsit_talend_owner.STG_10_PMX_ACCOUNTABLE_PRODUCT pp\n" +
-            "left join ephsit_talend_owner.map_sourceref_2_numericid mp on mp.source_ref = concat(pp.\"ACC_PROD_ID\", pp.\"PARENT_ACC_PROD\")\n" +
+            "from " + GetEPHDBUser.getDBUser() + ".STG_10_PMX_ACCOUNTABLE_PRODUCT pp\n" +
+            "left join " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_numericid mp on mp.source_ref = concat(pp.\"ACC_PROD_ID\", pp.\"PARENT_ACC_PROD\")\n" +
             "left join semarchy_eph_mdm.sa_accountable_product sa on sa.ACCOUNTABLE_PRODUCT_ID = mp.numeric_id\n" +
             "where sa.b_error_status is null \n" +
             "order by random() limit '%s'";
 
     public static String GET_RANDOM_WORK_IDS_FROM_STG = "select \n" +
             "s.\"PRODUCT_WORK_ID\" as PRODUCT_WORK_ID\n" +
-            "from ephsit_talend_owner.stg_10_pmx_accountable_product s\n" +
-            "left join ephsit_talend_owner.map_sourceref_2_numericid m on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = m.source_ref\n" +
+            "from " + GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product s\n" +
+            "left join " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_numericid m on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = m.source_ref\n" +
             "left join semarchy_eph_mdm.sa_accountable_product g on m.numeric_id = g.accountable_product_id\n" +
             "where not (\n" +
             "        coalesce(g.gl_product_segment_code,'') = s.\"ACC_PROD_ID\" and\n" +
@@ -188,5 +188,5 @@ public class AccountableProductSQL {
             "and g.b_error_status is null \n" +
             "order by random() limit '%s'";
 
-    public static String GET_NUMERIC_ID_FROM_LOOKUP_AP = "select numeric_id as NUMERIC_ID from ephsit_talend_owner.map_sourceref_2_numericid where source_ref in ('%s')";
+    public static String GET_NUMERIC_ID_FROM_LOOKUP_AP = "select numeric_id as NUMERIC_ID from " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_numericid where source_ref in ('%s')";
 }
