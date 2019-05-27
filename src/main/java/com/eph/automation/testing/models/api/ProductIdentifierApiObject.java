@@ -8,21 +8,20 @@ import java.util.HashMap;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class ManifestationIdentifiersApiObject {
+class ProductIdentifierApiObject {
+    private class ProductIdentifier {
+        public ProductIdentifier() {
+        }
 
-    private String manifestationIdentifier;
-    private HashMap<String, Object> identifierType;
+        private String productIdentifier;
+        private HashMap<String, Object> identifierType;
 
-    public String getManifestationIdentifier() {
-        return manifestationIdentifier;
-    }
+        public String getProductId() {
+            return productIdentifier;
+        }
 
-    public void setManifestationIdentifier(String manifestationIdentifier) {
-        this.manifestationIdentifier = manifestationIdentifier;
-    }
-
-
-        public ManifestationIdentifiersApiObject() {
+        public void setProductId(String productIdentifier) {
+            this.productIdentifier = productIdentifier;
         }
 
         public HashMap<String, Object> getIdentifierType() {
@@ -32,5 +31,5 @@ class ManifestationIdentifiersApiObject {
         public void setIdentifierType(HashMap<String, Object> identifierType) {
             this.identifierType = identifierType;
         }
-
+    }
 }
