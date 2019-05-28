@@ -1,7 +1,5 @@
 package com.eph.automation.testing.models.api;
-/**
- * Created by GVLAYKOV
- */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.HashMap;
@@ -11,22 +9,19 @@ public class ProductApiObject {
     public ProductApiObject() {
     }
 
-    private String id;
-    private String name;
-    private String shortName;
-    private Boolean separatelySaleableInd;
-    private Boolean trialAllowedInd;
+    private String productId;
+    private String productName;
+    private ProductIdentifiersApiObject[] productIdentifierApiObjects;
+    private String productShortName;
+    private Boolean separatelySaleableIndicator;
+    private Boolean trialAllowedIndicator;
     private String launchDate;
-    private HashMap<String,Object> type;
-    private HashMap<String,Object> status;
+    private HashMap<String,Object> productType;
+    private HashMap<String,Object> productStatus;
     private PricesApiObject[] prices;
     private HashMap<String,Object> revenueModel;
     private HashMap<String,Object> etaxProductCode;
-    private WorkPersonsApiObject[] persons;
-    private WorkApiObject work;
-
     public ProductManifestationApiObject manifestation;
-    private ProductIdentifiersApiObject[] productIdentifierApiObjects;
 
     public ProductIdentifiersApiObject[] getProductIdentifierApiObjects() {
         return productIdentifierApiObjects;
@@ -52,52 +47,52 @@ public class ProductApiObject {
         this.manifestation = manifestation;
     }
 
-    public HashMap<String, Object> getStatus() {
-        return status;
+    public HashMap<String, Object> getProductStatus() {
+        return productStatus;
     }
 
-    public void setStatus(HashMap<String, Object> status) {
-        this.status = status;
+    public void setProductStatus(HashMap<String, Object> productStatus) {
+        this.productStatus = productStatus;
     }
 
-    public String getId() {
-        return id;
+    public String getProductId() {
+        return productId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
 
-    public String getName() {
-        return name;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
-    public String getShortName() {
-        return shortName;
+    public String getProductShortName() {
+        return productShortName;
     }
 
-    public void setShortName(String shortName) {
-        this.shortName = shortName;
+    public void setProductShortName(String productShortName) {
+        this.productShortName = productShortName;
     }
 
-    public Boolean getSeparatelySaleableInd() {
-        return separatelySaleableInd;
+    public Boolean getSeparatelySaleableIndicator() {
+        return separatelySaleableIndicator;
     }
 
-    public void setSeparatelySaleableInd(Boolean separatelySaleableInd) {
-        this.separatelySaleableInd = separatelySaleableInd;
+    public void setSeparatelySaleableIndicator(Boolean separatelySaleableIndicator) {
+        this.separatelySaleableIndicator = separatelySaleableIndicator;
     }
 
-    public Boolean getTrialAllowedInd() {
-        return trialAllowedInd;
+    public Boolean getTrialAllowedIndicator() {
+        return trialAllowedIndicator;
     }
 
-    public void setTrialAllowedInd(Boolean trialAllowedInd) {
-        this.trialAllowedInd = trialAllowedInd;
+    public void setTrialAllowedIndicator(Boolean trialAllowedIndicator) {
+        this.trialAllowedIndicator = trialAllowedIndicator;
     }
 
     public String getLaunchDate() {
@@ -108,12 +103,12 @@ public class ProductApiObject {
         this.launchDate = launchDate;
     }
 
-    public HashMap<String, Object> getType() {
-        return type;
+    public HashMap<String, Object> getProductType() {
+        return productType;
     }
 
-    public void setType(HashMap<String, Object> type) {
-        this.type = type;
+    public void setProductType(HashMap<String, Object> productType) {
+        this.productType = productType;
     }
 
     public HashMap<String, Object> getRevenueModel() {

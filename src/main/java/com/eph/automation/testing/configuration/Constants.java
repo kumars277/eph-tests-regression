@@ -9,13 +9,12 @@ public class Constants {
     public static String SIT_EPH_UI = "https://sit-eph.app.science.regn.net/semarchy/welcome";
     public static String THREE_S_BUCKET_UI = "https://federation.reedelsevier.com/adfs/ls/IdpInitiatedSignOn.aspx?loginToRp=urn:amazon:webservices";
     public static String PRODUCT_FINDER_EPH_DEV_UI = "https://activitidev.ephdev.tio.systems/product-finder-app/search";
-    public static String PRODUCT_FINDER_EPH_SIT_UI = "https://activitisit.ephdev.tio.systems/product-finder-app/search";
 
     //SOAP EIP - SIT_CRM End point
     public static String EIP_CMX_CUSTOMER_MAINTENANCE_END_POINT = "https://enterprise-sit.api.elsevier.com/cxf/customerMaintenanceDS/v2/?wsdl";
     public static String EIP_CMX_CUSTOMER_MAINTENANCE_END_POINT_UAT = "https://enterprise-uat.api.elsevier.com/cxf/customerMaintenanceDS/v2/?wsdl";
     public static final String EIP_NOTIFICATION_WADL_END_POINT_SIT = "https://sit.ifp.elsevier.com/cxf/CustomerNotifications/?_wadl";
-    public static final String PRODUCT_SEARCH_END_POINT_SIT = "https://enterprise-sit.api.elsevier.com/v1/eph-product-search/api/";
+    public static final String PRODUCT_SEARCH_END_POINT_SIT = "https://enterprise-sit.api.elsevier.com/v1/eph-product-search";
     public static final String PRODUCT_SEARCH_END_POINT_DEV = "https://product-hub-search-eipci.apps.ose-nonprod.cp.tio.systems/api";
 
     //New SIT_CRM EMS Notification End points

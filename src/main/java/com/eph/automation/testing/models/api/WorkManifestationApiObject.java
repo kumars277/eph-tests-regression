@@ -1,15 +1,7 @@
 package com.eph.automation.testing.models.api;
-/**
- * Created by GVLAYKOV
- */
-import com.eph.automation.testing.configuration.Constants;
-import com.eph.automation.testing.configuration.DBManager;
-import com.eph.automation.testing.models.dao.ManifestationDataObject;
-import com.eph.automation.testing.services.db.sql.APIDataSQL;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.common.base.Joiner;
 
-import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,29 +9,23 @@ import java.util.List;
    public class WorkManifestationApiObject {
     public WorkManifestationApiObject() {
     }
-    private List<ManifestationDataObject> manifestationDataObjectFromEPHGD;
-    public void compareWithDB(){
-        getManifestationsByWorkID(this.id);
-    }
 
-    private String id;
-    private String keyTitle;
+    private String manifestationId;
+    private String manifestationKeyTitle;
     private Boolean internationalEditionFlag;
     private String firstPubDate;
-    private List<ManifestationIdentifiersApiObject> identifiers;
-    private HashMap<String, Object> type;
-    private HashMap<String, Object> status;
-    private Products[] products;
 
-    public List<ManifestationIdentifiersApiObject> getIdentifiers() {
-        return identifiers;
+    public List<ManifestationIdentifiersApiObject> getManifestationIdentifiers() {
+        return manifestationIdentifiers;
     }
 
-    public void setIdentifiers(List<ManifestationIdentifiersApiObject> identifiers) {
-        this.identifiers = identifiers;
+    public void setManifestationIdentifiers(List<ManifestationIdentifiersApiObject> manifestationIdentifiers) {
+        this.manifestationIdentifiers = manifestationIdentifiers;
     }
 
-
+    private List<ManifestationIdentifiersApiObject> manifestationIdentifiers;
+    private HashMap<String, Object> manifestationType;
+    private HashMap<String, Object> manifestationStatus;
 
     public Products[] getProducts() {
         return products;
@@ -49,23 +35,23 @@ import java.util.List;
         this.products = products;
     }
 
+    private Products[] products;
 
 
-
-    public String getId() {
-        return id;
+    public String getManifestationId() {
+        return manifestationId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setManifestationId(String manifestationId) {
+        this.manifestationId = manifestationId;
     }
 
-    public String getKeyTitle() {
-        return keyTitle;
+    public String getManifestationKeyTitle() {
+        return manifestationKeyTitle;
     }
 
-    public void setKeyTitle(String keyTitle) {
-        this.keyTitle = keyTitle;
+    public void setManifestationKeyTitle(String manifestationKeyTitle) {
+        this.manifestationKeyTitle = manifestationKeyTitle;
     }
 
     public Boolean getInternationalEditionFlag() {
@@ -84,20 +70,20 @@ import java.util.List;
         this.firstPubDate = firstPubDate;
     }
 
-    public HashMap<String, Object> getType() {
-        return type;
+    public HashMap<String, Object> getManifestationType() {
+        return manifestationType;
     }
 
-    public void setType(HashMap<String, Object> type) {
-        this.type = type;
+    public void setManifestationType(HashMap<String, Object> manifestationType) {
+        this.manifestationType = manifestationType;
     }
 
-    public HashMap<String, Object> getStatus() {
-        return status;
+    public HashMap<String, Object> getManifestationStatus() {
+        return manifestationStatus;
     }
 
-    public void setStatus(HashMap<String, Object> status) {
-        this.status = status;
+    public void setManifestationStatus(HashMap<String, Object> manifestationStatus) {
+        this.manifestationStatus = manifestationStatus;
     }
 
 
@@ -106,23 +92,15 @@ import java.util.List;
 
         }
 
-        public String getId() {
-            return id;
+        public String getProductId() {
+            return productId;
         }
 
-        public void setId(String id) {
-            this.id = id;
+        public void setProductId(String productId) {
+            this.productId = productId;
         }
 
-        String id;
-    }
-
-    private void getManifestationsByWorkID(String manifestationID) {
-        List<String> ids = new ArrayList<>();
-        ids.add(manifestationID);
-        String sql = String.format(APIDataSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_GD_BY_ID, Joiner.on("','").join(ids));
-        manifestationDataObjectFromEPHGD = DBManager
-                .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
+        String productId;
     }
 }
 
