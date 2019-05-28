@@ -1,7 +1,5 @@
 package com.eph.automation.testing.models.api;
-/**
- * Created by GVLAYKOV
- */
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.HashMap;
@@ -11,19 +9,16 @@ class WorkPersonsApiObject {
     public WorkPersonsApiObject() {
     }
 
-    public void compareWithDB(){
-
-    }
-    private int id;
+    private int workPersonId;
     private HashMap<String, Object> role;
     private HashMap<String, Object> person;
 
-    public int getId() {
-        return id;
+    public int getWorkPersonId() {
+        return workPersonId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setWorkPersonId(int workPersonId) {
+        this.workPersonId = workPersonId;
     }
 
     public HashMap<String, Object> getRole() {

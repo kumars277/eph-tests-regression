@@ -1,73 +1,73 @@
-Feature: Customer Search API: Works
+Feature: EMS - Customer Service - Customer Search API
   As an EIP-MS Integration User
   I would like to search works from Enterprise Customer Hub using EIP Search
   So that I can use the details to validate business needs
 
-  @API
-  Scenario: search work by ID
-    Given We get 10 random search ids for works
+  @API @new
+  Scenario Outline: search work by ID
+    Given We get <countOfRandomIds> random search ids for works
     And We get the work search data from EPH GD
     Then the work details are retrieved and compared
+    Examples:
+      | countOfRandomIds |
+      | 1               |
 
-  @API
-  Scenario: search work by title
-    Given We get 1 random search ids for works
+
+    @API @new
+  Scenario Outline: search work by title
+    Given We get <countOfRandomIds> random search ids for works
     And We get the work search data from EPH GD
     Then the work details are retrieved by title and compared
+    Examples:
+      | countOfRandomIds |
+      | 10               |
+#
 
-
-  @API
+  @API @new
   Scenario Outline: Search works by identifier
-    Given We get 1 random search ids for works
+    Given We get <countOfRandomIds> random search ids for works
     And We get the work search data from EPH GD
     Then the works search by identifier <idType> details are retrieved and compared
     Examples:
-      | idType                        |
-      | WORK_IDENTIFIER               |
-      | WORK_MANIFESTATION_IDENTIFIER |
-      | WORK_ID                       |
-      | WORK_MANIFESTATION_ID         |
+      | countOfRandomIds | idType                        |
+      | 1                | WORK_IDENTIFIER               |
+      | 1                | WORK_MANIFESTATION_IDENTIFIER |
+      | 1                | WORK_ID                       |
+      | 1                | WORK_MANIFESTATION_ID         |
 
-  @API
+  @API @new
   Scenario Outline: Search works by identifier and Type
-    Given We get 1 random search ids for works
+    Given We get <countOfRandomIds> random search ids for works
     And We get the work search data from EPH GD
     Then the work search by identifier <idType> and type details are retrieved and compared
     Examples:
-      | idType                        |
-      | WORK_IDENTIFIER               |
-      | WORK_MANIFESTATION_IDENTIFIER |
+      | countOfRandomIds | idType                        |
+      | 1                | WORK_IDENTIFIER               |
+      | 1                | WORK_MANIFESTATION_IDENTIFIER |
 
 
-  @API
+  @API @new
   Scenario Outline: Search works by search option
-    Given We get 1 random search ids for works
+    Given We get <countOfRandomIds> random search ids for works
     And We get the work search data from EPH GD
     Then the works retrieved by search <option> details are retrieved and compared
     Examples:
-      | option                        |
-      | WORK_IDENTIFIER               |
-      | WORK_ID                       |
-      | WORK_MANIFESTATION_ID         |
-      | WORK_MANIFESTATION_IDENTIFIER |
-      | WORK_PRODUCT_ID               |
-      | WORK_MANIFESTATION_TITLE      |
-      | WORK_TITLE                    |
+      | countOfRandomIds | option                        |
+      | 1                | WORK_IDENTIFIER               |
+      | 1                | WORK_ID                       |
+      | 1                | WORK_MANIFESTATION_ID         |
+      | 1                | WORK_MANIFESTATION_IDENTIFIER |
+      | 1                | WORK_PRODUCT_ID               |
+#      | 1               | WORK_MANIFESTATION_TITLE      |
+#      | 1               | WORK_TITLE                    |
 
 
-  @API
-  Scenario: search work by PMC Code
-    Given We get 1 random search ids for works
-    And We get the work search data from EPH GD
-    Then the work details are retrieved by PMC Code and compared
 
-  @API
-  Scenario: search work by PMG Code
-    Given We get 1 random search ids for works
-    And We get the work search data from EPH GD
-    Then the work details are retrieved by PMG Code and compared
 
-  @API
-  Scenario: search work by Person roles
-    Given We get 1 random search ids for person roles
-    Then the work response count is compared with the count in the DB for person ID
+
+
+
+
+
+
+
