@@ -352,39 +352,66 @@ public class WorkExtractSQL {
             "from semarchy_eph_mdm.gd_manifestation_identifier \n" +
             "where identifier in ('%s')";
 
-    public static final String SELECT_RANDOM_ISBNS_PHB = "select \"ISBN\" as ISBN from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation stg,\n" +
-            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq  \n" +
-            "where stg.\"PRODUCT_MANIFESTATION_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n" +
+    public static final String SELECT_RANDOM_ISBNS_PHB = "select \"ISBN\" as ISBN\n" +
+            "from \n" +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation stg,\n" +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq,\n" +
+            GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid sid,   \n" +
+            "semarchy_eph_mdm.sa_manifestation_identifier  sa\n" +
+            "where stg.\"PRODUCT_MANIFESTATION_ID\" = mdq.PMX_SOURCE_REFERENCE\n" +
+            "and stg.\"MANIFESTATION_ID\"::varchar = sid.source_ref\n" +
+            "and mdq.dq_err != 'Y' \n" +
+            "and sa.effective_end_date is null\n" +
             "and  \"%s\" is not null and \"MANIFESTATION_SUBTYPE\" = 424 order by random() limit '%s'";
 
-    public static final String SELECT_RANDOM_ISBNS_PSB = "select \"ISBN\" as ISBN from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation  stg,\n" +
-            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq\n" +
+    public static final String SELECT_RANDOM_ISBNS_PSB = "select \"ISBN\" as ISBN\n" +
+            "from \n" +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation stg,\n" +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq,\n" +
+            GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid sid,   \n" +
+            "semarchy_eph_mdm.sa_manifestation_identifier  sa\n" +
             "where stg.\"PRODUCT_MANIFESTATION_ID\" = mdq.PMX_SOURCE_REFERENCE\n" +
-            "and mdq.dq_err != 'Y' and  \"%s\" is not null \n" +
-            "and \"MANIFESTATION_SUBTYPE\" = 425 \n" +
-            "order by random() \n" +
-            "limit '%s'";
+            "and stg.\"MANIFESTATION_ID\"::varchar = sid.source_ref\n" +
+            "and mdq.dq_err != 'Y' \n" +
+            "and sa.effective_end_date is null\n" +
+            "and  \"%s\" is not null and \"MANIFESTATION_SUBTYPE\" = 425 order by random() limit '%s'";
 
-    public static final String SELECT_RANDOM_ISBNS_EBK = "select \"ISBN\" as ISBN from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation  stg,\n" +
-            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq \n" +
-            "where stg.\"PRODUCT_MANIFESTATION_ID\" = mdq.PMX_SOURCE_REFERENCE \n" +
-            "and mdq.dq_err != 'Y' and  \"%s\" is not null\n" +
-            "and \"COMMODITY\" = 'EB'\n" +
-            "order by random() \n" +
-            "limit '%s'";
+    public static final String SELECT_RANDOM_ISBNS_EBK = "select \"ISBN\" as ISBN\n" +
+            "from \n" +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation stg,\n" +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq,\n" +
+            GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid sid,   \n" +
+            "semarchy_eph_mdm.sa_manifestation_identifier  sa\n" +
+            "where stg.\"PRODUCT_MANIFESTATION_ID\" = mdq.PMX_SOURCE_REFERENCE\n" +
+            "and stg.\"MANIFESTATION_ID\"::varchar = sid.source_ref\n" +
+            "and mdq.dq_err != 'Y' \n" +
+            "and sa.effective_end_date is null\n" +
+            "and  \"%s\" is not null and \"COMMODITY\" = 'EB' order by random() limit '%s'";
 
-    public static final String SELECT_RANDOM_ISSNS_JPR_IDS = "select \"ISSN\" as ISSN\n" +
-            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation stg,\n" +
-            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq\n" +
-            "where stg.\"PRODUCT_MANIFESTATION_ID\" = mdq.PMX_SOURCE_REFERENCE \n" +
+    public static final String SELECT_RANDOM_ISSNS_JPR_IDS =  "select \"ISSN\" as ISSN\n" +
+            "from \n" +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation stg,\n" +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq,\n" +
+            GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid sid,   \n" +
+            "semarchy_eph_mdm.sa_manifestation_identifier  sa\n" +
+            "where stg.\"PRODUCT_MANIFESTATION_ID\" = mdq.PMX_SOURCE_REFERENCE\n" +
+            "and stg.\"MANIFESTATION_ID\"::varchar = sid.source_ref\n" +
+            "and mdq.dq_err != 'Y' \n" +
+            "and sa.effective_end_date is null\n" +
             "and mdq.dq_err != 'Y' and  \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" = 1 \n" +
             "order by random() limit '%s'";
 
-    public static final String SELECT_RANDOM_ISSNS_JEL_IDS = "select \"ISSN\" as ISSN from " + ".stg_10_pmx_manifestation stg,\n" +
-            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq\n" +
+    public static final String SELECT_RANDOM_ISSNS_JEL_IDS = "select \"ISSN\" as ISSN\n" +
+            "from \n" +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation stg,\n" +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq,\n" +
+            GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid sid,   \n" +
+            "semarchy_eph_mdm.sa_manifestation_identifier  sa\n" +
             "where stg.\"PRODUCT_MANIFESTATION_ID\" = mdq.PMX_SOURCE_REFERENCE\n" +
-            "and mdq.dq_err != 'Y'\n" +
-            "and  \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" != 1 \n" +
+            "and stg.\"MANIFESTATION_ID\"::varchar = sid.source_ref\n" +
+            "and mdq.dq_err != 'Y' \n" +
+            "and sa.effective_end_date is null\n" +
+            "and mdq.dq_err != 'Y' and  \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" != 1 \n" +
             "order by random() limit '%s'";
 
     public static final String SELECT_RECORDS_STG_MANIF_IDENTIFIER_ISBN = " select \"ISBN\" as identifier,sid.eph_id as f_manifestation,mid.ident_id as manif_identifier_id\n" +
