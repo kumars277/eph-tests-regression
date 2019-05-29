@@ -316,16 +316,17 @@ public class WorkExtractSQL {
             "   stg.\"PRODUCT_MANIFESTATION_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n" +
             "   and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')";
 
-    public static final String COUNT_OF_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE ="SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation_identifier\n" +
+    public static final String COUNT_OF_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation_identifier\n" +
             "where f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier\n" +
             "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
             "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n" +
             "and f_type = '%s' \n" +
-            "and identifier is not null";
+            "and identifier is not null\n" +
+            "and effective_end_date is null";
 
-    public static final String COUNT_OF_RECORDS_IN_EPH_GD_MANIFESTATION_TABLE = "select count(*) as count from semarchy_eph_mdm.gd_manifestation_identifier where f_type = '%s'";
+    public static final String COUNT_OF_RECORDS_IN_EPH_GD_MANIFESTATION_TABLE = "select count(*) as count from semarchy_eph_mdm.gd_manifestation_identifier where f_type = '%s' and effective_end_date is null";
 
     public static final String SELECT_RECORDS_SA_MANIFESTATION_IDENTIFIER = "SELECT sa.b_loadid as b_loadid,\n" +
             "f_event as f_event,\n" +
