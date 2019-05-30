@@ -27,7 +27,8 @@ public class WorksIdentifierSQL {
             "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n"+
-            " AND  f_wwork='PARAM1'";
+            " AND  f_wwork='PARAM1'\n" +
+            "AND effective_end_date is null";
 
     /*
      // old logic
@@ -71,7 +72,8 @@ public class WorksIdentifierSQL {
             " ,F_TYPE AS F_TYPE -- WORK IDENTIFIER\n" +
             " ,F_WWORK AS F_WWORK -- WORK IDENTIFIER\n" +
             "  FROM semarchy_eph_mdm.gd_work_identifier\n" +
-            "  WHERE f_wwork='PARAM1'";
+            "  WHERE f_wwork='PARAM1'\n" +
+            "  AND effective_end_date is null";
 
     public static String getTypeId="SELECT \n" +
             "   F_TYPE AS F_TYPE -- Identifier type\n" +
@@ -84,16 +86,81 @@ public class WorksIdentifierSQL {
             "            and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
             "            and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n" +
             "  WHERE f_wwork='PARAM1'"+
-            "  AND F_TYPE='PARAM2'";
+            "  AND F_TYPE='PARAM2'\n" +
+            "AND effective_end_date is null";
 
     public static String getTypeIdGD="SELECT \n" +
             "  F_TYPE AS F_TYPE -- WORK IDENTIFIER\n" +
             " ,identifier AS IDENTIFER -- identifier value \n" +
             "  FROM  semarchy_eph_mdm.gd_work_identifier\n" +
             "  WHERE f_wwork='PARAM1'"+
-            "  AND F_TYPE='PARAM2'";
+            "  AND F_TYPE='PARAM2'\n" +
+            "AND effective_end_date is null";
 
 
     public static String GET_F_WWORK = "select eph_id as F_WWORK from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid  where ref_type= 'WORK' and source_ref = '%s' ";
+
+    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE = "select count(distinct \"PRODUCT_WORK_ID\") AS count \n" +
+            " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork stg ,\n" +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq  mdq\n" +
+            "where \n" +
+            "stg.\"PARAM1\" is not null  and \n" +
+            "   stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n" +
+            "   \n";
+
+    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA = "select count(distinct \"PRODUCT_WORK_ID\") AS count \n" +
+            " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation stg ,\n" +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq  mdq\n" +
+            "where \n" +
+            "stg.\"PARAM1\" is not null  and \n" +
+            "   stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n" +
+            "   and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM2','YYYYMMDDHH24MI')";
+
+    public static String COUNT_SA_WORK_IDENTIFIER = "select count(*) AS count from semarchy_eph_mdm.sa_work_identifier where f_type = 'PARAM1'" +
+            " and effective_end_date is null\n" +
+            " and f_event =  (select max (f_event) from\n" +
+            "semarchy_eph_mdm.sa_work_identifier join \n"+
+            "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
+            "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )";
+
+    public static String COUNT_GD_WORK_IDENTIFIER = "select count(*) AS count from semarchy_eph_mdm.gd_work_identifier where f_type = 'PARAM1'"+
+            " and effective_end_date is null\n" +
+            " and f_event =  (select max (f_event) from\n" +
+            "semarchy_eph_mdm.gd_work_identifier join \n"+
+            "semarchy_eph_mdm.gd_event on f_event = event_id\n"+
+            "where  semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n"+
+            "and semarchy_eph_mdm.gd_event.workflow_id = 'talend'\n"+
+            "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )";
+
+    public static String getEndDatedIdentifierDataFromGD="SELECT \n" +
+            " F_EVENT as F_EVENT\n" +
+            " ,B_CLASSNAME as B_CLASSNAME\n" +
+            " ,WORK_IDENTIFIER_ID AS WORK_IDENTIFIER_ID -- WORK IDENTIFIER\n" +
+            " ,IDENTIFIER AS IDENTIFIER --  IDENTIFIER\n" +
+            " ,F_TYPE AS F_TYPE -- WORK IDENTIFIER\n" +
+            " ,F_WWORK AS F_WWORK -- WORK IDENTIFIER\n" +
+            "  FROM semarchy_eph_mdm.gd_work_identifier\n" +
+            "  where effective_end_date is not null\n"+
+            " AND f_event =  (select max (f_event) from\n" +
+            "semarchy_eph_mdm.gd_work_identifier join \n"+
+            "semarchy_eph_mdm.gd_event on f_event = event_id\n"+
+            "where  semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n"+
+            "and semarchy_eph_mdm.gd_event.workflow_id = 'talend'\n"+
+            "AND semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n"+
+            "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )";
+
+
+    public static String getPmxSourceRef="SELECT \n" +
+            "PMX_SOURCE_REFERENCE as WORK_ID FROM semarchy_eph_mdm.gd_wwork\n"  +
+            " where f_event =  (select max (f_event) from\n" +
+            "semarchy_eph_mdm.gd_wwork join \n"+
+            "semarchy_eph_mdm.gd_event on f_event = event_id\n"+
+            "where  semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n"+
+            "and semarchy_eph_mdm.gd_event.workflow_id = 'talend'\n"+
+            "AND semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n"+
+            "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )"+
+            " AND work_id='PARAM1'";
 
 }
