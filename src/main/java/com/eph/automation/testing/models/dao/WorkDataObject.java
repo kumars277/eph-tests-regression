@@ -478,6 +478,16 @@ public class WorkDataObject {
 
     public String IDENTIFER;
 
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
+    }
+
+    public String count;
+
     public String F_WWORK;
 
     public String getRefresh_timestamp() {
