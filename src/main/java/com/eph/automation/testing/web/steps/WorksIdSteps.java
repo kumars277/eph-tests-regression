@@ -6,6 +6,7 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.WorkDataObject;
+import com.eph.automation.testing.services.db.sql.WorkCountSQL;
 import com.eph.automation.testing.services.db.sql.WorksIdentifierSQL;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -30,6 +31,13 @@ public class WorksIdSteps {
     private static List<WorkDataObject> dataFromSAFtype;
     private static List<WorkDataObject> dataFromGDFtype;
     private static List<WorkDataObject> dataFromGDId;
+    private static List<WorkDataObject> stgCount;
+    private static List<WorkDataObject> saCount;
+    private static List<WorkDataObject> gdCount;
+    private static List<WorkDataObject> refreshDate;
+    private static List<WorkDataObject> endDatedID;
+    private static List<WorkDataObject> pmxSource;
+    private static List<WorkDataObject> stgNewID;
 
     @Given("^We have a work from type (.*) to check$")
     public void getProductNum(String type){
@@ -198,7 +206,7 @@ public class WorksIdSteps {
 
     @And("^The identifiers data between SA and GD is identical$")
     public void checkIdDataSAGD(){
-        //Assert.assertEquals("There are missing identifiers", dataFromGDId.size(),dataFromSAId.size());
+        Assert.assertEquals("There are missing identifiers", dataFromGDId.size(),dataFromSAId.size());
 
         assertTrue("Expecting the Product details from PMX and EPH Consistent ",
                 dataFromSAId.get(0).F_EVENT
@@ -280,4 +288,140 @@ public class WorksIdSteps {
 
         }
     }
+
+    @Given("^We know the work identifiers count in staging from (.*)$")
+    public void getSTGCount(String type){
+        if (System.getProperty("LOAD") != null) {
+            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE
+                        .replace("PARAM1", type);
+                System.out.print(sql);
+                stgCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                Log.info("\n The count in stg for " + type + " is " + stgCount.get(0).count);
+            }else {
+                sql = WorkCountSQL.GET_REFRESH_DATE;
+                refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                        Constants.EPH_URL);
+
+                sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA
+                        .replace("PARAM1", type)
+                        .replace("PARAM2",refreshDate.get(0).refresh_timestamp);
+                System.out.print(sql);
+                stgCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                Log.info("\n The count in stg for " + type + " is " + stgCount.get(0).count);
+            }
+        }else{
+            sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE
+                    .replace("PARAM1", type);
+            System.out.print(sql);
+            stgCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+            Log.info("\n The count in stg for " + type + " is" + stgCount.get(0).count);
+        }
+    }
+
+    @When("^We get the work identifier count from SA and GD (.*)$")
+    public void getSACount(String type){
+        sql = WorksIdentifierSQL.COUNT_SA_WORK_IDENTIFIER
+                .replace("PARAM1", type);
+        System.out.print(sql);
+        saCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+        Log.info("\n The count in SA for " + type + " is " + saCount.get(0).count);
+
+        sql = WorksIdentifierSQL.COUNT_GD_WORK_IDENTIFIER
+                .replace("PARAM1", type);
+        System.out.print(sql);
+        gdCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+        Log.info("\n The count in GD for " + type + " is " + gdCount.get(0).count);
+    }
+
+    @Then("^The counts between staging and SA are matching$")
+    public void compareSTGtoSA(){
+        Assert.assertEquals("The counts between STG and SA do not match!",
+                stgCount.get(0).count,saCount.get(0).count);
+    }
+
+
+    @And("^The counts between SA and GD are matching$")
+    public void compareSAtoGD(){
+        Assert.assertEquals("The counts between SA and GD do not match!",
+                saCount.get(0).count,gdCount.get(0).count);
+    }
+
+    @Given("^We have an end-dated identifier in GD$")
+    public void getEndDatedID() {
+        if (System.getProperty("LOAD") != null) {
+            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                Log.info("There is no delta load performed");
+            } else {
+                sql = WorksIdentifierSQL.getEndDatedIdentifierDataFromGD;
+                endDatedID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                        Constants.EPH_URL);
+                if (endDatedID.isEmpty()){
+                    Log.info("No identifiers were updated");
+                } else {
+                    sql = WorksIdentifierSQL.getPmxSourceRef.replace("PARAM1",
+                            endDatedID.get(0).F_WWORK);
+                    pmxSource = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                            Constants.EPH_URL);
+
+                }
+            }
+        }else{
+                Log.info("There is no delta load performed");
+            }
+    }
+
+
+    @When("^We get the data for the identifier from staging$")
+    public void getNewStgData(){
+        if (System.getProperty("LOAD") != null) {
+            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                Log.info("There is no delta load performed");
+            } else {
+                if (endDatedID.isEmpty()){
+                    Log.info("No identifiers were updated");
+                } else {
+                    sql = WorksIdentifierSQL.getIdentifiers.replace("PARAM1",
+                            pmxSource.get(0).WORK_ID);
+                    stgNewID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                            Constants.EPH_URL);
+                }
+            }
+        }else{
+            Log.info("There is no delta load performed");
+        }
+    }
+
+    @Then("^There is a change to the work identifier$")
+    public void compareNewId(){
+        if (System.getProperty("LOAD") != null) {
+        if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            Log.info("There is no delta load performed");
+        } else {
+            if (endDatedID.isEmpty()){
+                Log.info("No identifiers were updated");
+            } else {
+                if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("ISSN-L")){
+                    Assert.assertNotEquals("The identifiers are the same",endDatedID.get(0).IDENTIFIER,
+                            stgNewID.get(0).ISSN_L);
+                } else if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("PROJECT-NUM")){
+                    Assert.assertNotEquals("The identifiers are the same",endDatedID.get(0).IDENTIFIER,
+                            stgNewID.get(0).PROJECT_NUM);
+                }else if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("ELSEVIER JOURNAL NUMBER")){
+                    Assert.assertNotEquals("The identifiers are the same",endDatedID.get(0).IDENTIFIER,
+                            stgNewID.get(0).JOURNAL_NUMBER);
+                }else if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("JOURNAL ACRONYM")){
+                    Assert.assertNotEquals("The identifiers are the same",endDatedID.get(0).IDENTIFIER,
+                            stgNewID.get(0).JOURNAL_ACRONYM);
+                } else{
+                    Assert.assertNotEquals("The identifiers are the same",endDatedID.get(0).IDENTIFIER,
+                            stgNewID.get(0).DAC_KEY);
+                }
+            }
+        }
+    }else{
+        Log.info("There is no delta load performed");
+    }
+    }
+
 }
