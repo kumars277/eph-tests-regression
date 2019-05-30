@@ -57,18 +57,18 @@ public class PersonWorkRoleDataSQL {
 
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSA = "select count(*) as count from semarchy_eph_mdm.sa_work_person_role sa\n" +
-            "where f_event =  (\n" +
+            "where effective_end_date is null and f_event =  (\n" +
             "select max (f_event) from \n" +
             "semarchy_eph_mdm.sa_work_person_role   \n" +
             "join \n" +
             "semarchy_eph_mdm.sa_event on f_event = event_id \n" +
-            "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "where semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )";
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHGD = "select count(*) as count from semarchy_eph_mdm.gd_work_person_role \n" +
-            "join  semarchy_eph_mdm.gd_event on f_event = event_id  \n " +
-            " where  semarchy_eph_mdm.gd_event.f_event_type = 'PMX' \n" +
+            "join  semarchy_eph_mdm.gd_event on f_event = event_id  \n" +
+            " where  effective_end_date is null and semarchy_eph_mdm.gd_event.f_event_type = 'PMX' \n" +
             " and semarchy_eph_mdm.gd_event.workflow_id = 'talend' \n" +
             " and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX'";
 
@@ -174,17 +174,18 @@ public class PersonWorkRoleDataSQL {
             "where \"WORK_PERSON_ROLE_SOURCE_REF\" like '%%%s'\n" +
             "order by random() limit '%s'";
 
-    public static String GET_RANDOM_PERSON_WORK_ROLE_IDS_FROM_SA_WITH_NO_ERROR = "select  \n" +
+    public static String GET_RANDOM_PERSON_WORK_ROLE_IDS_FROM_SA_WITH_NO_ERROR = " select  \n" +
             "work_person_role_id as WORK_PERSON_ROLE_ID\n" +
             "from semarchy_eph_mdm.sa_work_person_role p\n" +
-            "where p.b_loadid =  (\n" +
+            "where  p.effective_end_date is null \n" +
+            "and p.b_loadid =  (\n" +
             "select max (p1.b_loadid) from \n" +
             "semarchy_eph_mdm.sa_work_person_role p1\n" +
             "join \n" +
             "semarchy_eph_mdm.sa_event sa on sa.b_loadid = p1.b_loadid \n" +
             "where  sa.f_event_type = 'PMX'\n" +
             "and sa.workflow_id = 'talend'\n" +
-            "and sa.f_workflow_source = 'PMX' )\n" +
+            "and sa.f_workflow_source = 'PMX')\n" +
             "and F_ROLE like '%s' and b_error_status is null\n" +
             "order by random() limit '%s'";
 
