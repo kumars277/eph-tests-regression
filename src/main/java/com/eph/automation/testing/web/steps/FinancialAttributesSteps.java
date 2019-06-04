@@ -6,6 +6,7 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.FinancialAttribsContext;
 import com.eph.automation.testing.models.dao.FinancialAttribsDataObject;
+import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.FinAttrSQL;
 import com.eph.automation.testing.services.db.sql.WorkCountSQL;
 import com.google.common.base.Joiner;
@@ -36,17 +37,34 @@ public class FinancialAttributesSteps {
     private static List<String> workid;
     private static List<String> isbns;
     public String fWorkID;
+    private static List<WorkDataObject> refreshDate;
+
+    public static List<FinancialAttribsDataObject> endDatedFinAttr;
+    public static List<FinancialAttribsDataObject> stgNewRecord;
 
     @Given("^We know the number of financial attributes in DQ$")
     public void getFinAttrCountDQ(){
-        sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr;
-        financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
-        Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr_Full;
+            Log.info(sql);
+            financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+            Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
+        }else {
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            refreshDate = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                    Constants.EPH_URL);
+
+            sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr.replace("PARAM1", refreshDate.get(1).refresh_timestamp);
+            Log.info(sql);
+            financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+            Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
+        }
     }
 
     @When("^We get the financial attributes from SA$")
     public void getFinAttrCountSA(){
         sql = FinAttrSQL.Get_SA_count;
+        Log.info(sql);
         financialAttribs.saCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
         Log.info("The SA count is: " + financialAttribs.saCount.get(0).saCount);
     }
@@ -222,6 +240,97 @@ public class FinancialAttributesSteps {
                         financialAttribs.financialDataFromSAAll.get(i).revenue_resp_centre
                                 .equals(financialAttribs.financialDataFromGD.get(i).revenue_resp_centre));
             }
+        }
+    }
+
+    @Given("^We have end-dated financial attribute in GD$")
+    public void getEndDatedFA() {
+        if (System.getProperty("LOAD") != null) {
+            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                Log.info("There is no delta load performed");
+            } else {
+                sql = FinAttrSQL.GET_GD_FinnAttr_DATA_End_Date;
+                endDatedFinAttr = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class,
+                        Constants.EPH_URL);
+                if (endDatedFinAttr.isEmpty()){
+                    Log.info("No records were updated");
+                } else {
+                    Log.info("There are end dated records");
+                }
+            }
+        }else{
+            sql = FinAttrSQL.GET_GD_FinnAttr_DATA_End_Date;
+            endDatedFinAttr = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class,
+                    Constants.EPH_URL);
+            if (endDatedFinAttr.isEmpty()){
+                Log.info("No records were updated");
+            } else {
+                Log.info("There are end dated records");
+            }
+         //   Log.info("There is no delta load performed");
+        }
+    }
+
+    @When("^We get the new data for the same record from STG$")
+    public void getNewStgData(){
+        if (System.getProperty("LOAD") != null) {
+            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                Log.info("There is no delta load performed");
+            } else {
+                if (endDatedFinAttr.isEmpty()){
+                    Log.info("No financial attributes were updated");
+                } else {
+                    sql = FinAttrSQL.GET_STG_DQ_WORKS_DATA_Delta.replace("PARAM1",
+                            endDatedFinAttr.get(0).PMX_SOURCE_REFERENCE);
+                    stgNewRecord = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class,
+                            Constants.EPH_URL);
+                }
+            }
+        }else{
+            if (endDatedFinAttr.isEmpty()){
+                Log.info("No financial attributes were updated");
+            } else {
+                sql = FinAttrSQL.GET_STG_DQ_WORKS_DATA_Delta.replace("PARAM1",
+                        endDatedFinAttr.get(0).PMX_SOURCE_REFERENCE);
+                stgNewRecord = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class,
+                        Constants.EPH_URL);
+            }
+           // Log.info("There is no delta load performed");
+        }
+    }
+
+    @Then("^There is difference in the record values$")
+    public void compareNewId(){
+        if (System.getProperty("LOAD") != null) {
+            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                Log.info("There is no delta load performed");
+            } else {
+                if (endDatedFinAttr.isEmpty()){
+                    Log.info("No identifiers were updated");
+                } else {
+                    if (stgNewRecord.get(0).opco.equalsIgnoreCase(endDatedFinAttr.get(0).gl_company)){
+                        Log.info("OPCO details are the same. Checking resp_centre data...");
+                        Assert.assertNotEquals("There is no data change!",stgNewRecord.get(0).resp_centre,
+                                endDatedFinAttr.get(0).cost_resp_centre);
+
+                    } else {
+                        Log.info("There is a change in the OPCO data");
+                    }
+                }
+            }
+        }else{
+            if (endDatedFinAttr.isEmpty()){
+                Log.info("No identifiers were updated");
+            } else {
+                if (stgNewRecord.get(0).opco.equalsIgnoreCase(endDatedFinAttr.get(0).gl_company)){
+                    Log.info("OPCO details are the same. Checking resp_centre data...");
+                    Assert.assertNotEquals("There is no data change!",stgNewRecord.get(0).resp_centre,
+                            endDatedFinAttr.get(0).cost_resp_centre);
+                } else {
+                    Log.info("There is a change in the OPCO data");
+                }
+            }
+           // Log.info("There is no delta load performed");
         }
     }
 }

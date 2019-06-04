@@ -82,18 +82,28 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
                         Constants.EPH_URL);
 
                 sql = WorkSubjectAreaLinkDataSQL.SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ_Delta.replace("PARAM1"
-                        ,refreshDate.get(0).refresh_timestamp);
+                        ,refreshDate.get(1).refresh_timestamp);
                 Log.info(sql);
                 List<Map<String, Object>> workSubjectAreaNumberDQ = DBManager.getDBResultMap(sql, Constants.EPH_URL);
                 countWorkSubjectAreaRecordsEPHSTGDQ = ((Long) workSubjectAreaNumberDQ.get(0).get("count")).intValue();
                 Log.info("Count of work subject area data in EPH STG with DQ is: " + countWorkSubjectAreaRecordsEPHSTGDQ);
             }
         }else{
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                    Constants.EPH_URL);
+
+            sql = WorkSubjectAreaLinkDataSQL.SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ_Delta.replace("PARAM1"
+                    ,refreshDate.get(1).refresh_timestamp);
+            Log.info(sql);
+            List<Map<String, Object>> workSubjectAreaNumberDQ = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            countWorkSubjectAreaRecordsEPHSTGDQ = ((Long) workSubjectAreaNumberDQ.get(0).get("count")).intValue();
+            Log.info("Count of work subject area data in EPH STG with DQ is: " + countWorkSubjectAreaRecordsEPHSTGDQ);/*
             sql = WorkSubjectAreaLinkDataSQL.SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ;
             Log.info(sql);
             List<Map<String, Object>> workSubjectAreaNumberDQ = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             countWorkSubjectAreaRecordsEPHSTGDQ = ((Long) workSubjectAreaNumberDQ.get(0).get("count")).intValue();
-            Log.info("Count of work subject area data in EPH STG with DQ is: " + countWorkSubjectAreaRecordsEPHSTGDQ);
+            Log.info("Count of work subject area data in EPH STG with DQ is: " + countWorkSubjectAreaRecordsEPHSTGDQ);*/
         }
     }
 

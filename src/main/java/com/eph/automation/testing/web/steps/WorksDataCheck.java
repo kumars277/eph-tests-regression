@@ -276,14 +276,14 @@ public class WorksDataCheck {
                                 .equals(dataQualityContext.workDataObjectsFromPMXSTG.get(i).LANGUAGE_CODE));
             }
 
-            Date pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(dataQualityContext.workDataObjectsFromSource.get(i).UPDATED);
-            Date stgDate = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS aaa").parse(dataQualityContext.workDataObjectsFromPMXSTG.get(i).UPDATED);
+/*            Date pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(dataQualityContext.workDataObjectsFromSource.get(i).UPDATED);
+            Date stgDate = new SimpleDateFormat("YYYYMMDDHH24MM").parse(dataQualityContext.workDataObjectsFromPMXSTG.get(i).UPDATED);*/
 
             if (dataQualityContext.workDataObjectsFromSource.get(i).UPDATED != null
                     || dataQualityContext.workDataObjectsFromPMXSTG.get(i).UPDATED != null) {
                 assertTrue("Expecting the UPDATED details from PMX and EPH Consistent for id=" + ids.get(i),
-                        pmxUpdatedDate
-                                .equals(stgDate));
+                        dataQualityContext.workDataObjectsFromSource.get(i).UPDATED
+                                .equals(dataQualityContext.workDataObjectsFromPMXSTG.get(i).UPDATED));
             }
         }
     }

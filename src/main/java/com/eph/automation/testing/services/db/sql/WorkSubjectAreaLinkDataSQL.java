@@ -23,9 +23,8 @@ public class WorkSubjectAreaLinkDataSQL {
 
 
     public static String SELECT_COUNT_WORK_SUBJECT_AREA_SA = "select count(*) as count from semarchy_eph_mdm.sa_work_subject_area_link s"+
-            " where s.b_loadid =  (select max (s.b_loadid) from\n" +
-            "semarchy_eph_mdm.sa_work_subject_area_link s join \n" +
-            "semarchy_eph_mdm.sa_event e on e.b_loadid = s.b_loadid\n" +
+            " where s.b_loadid =  (select max (event_id) from\n" +
+            "semarchy_eph_mdm.sa_event e\n" +
             "where  e.f_event_type = 'PMX'\n" +
             "and e.workflow_id = 'talend'\n" +
             "AND e.f_event_type = 'PMX'\n" +
@@ -38,7 +37,7 @@ public class WorkSubjectAreaLinkDataSQL {
 
     public static String SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ_Delta = "select count(*) as count from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_WORK_SUBJECT_AREA where \"F_SUBJECT_AREA\"  is not null and \n" +
             "\"F_PRODUCT_WORK\" in (select pmx_source_reference from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq where dq_err!= 'Y')\n"+
-            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
     public static String SELECT_COUNT_WORK_SUBJECT_AREA_GD = "select count(*) as count from semarchy_eph_mdm.gd_work_subject_area_link s"+
             " where s.b_batchid =  (select max (s.b_batchid) from\n" +
