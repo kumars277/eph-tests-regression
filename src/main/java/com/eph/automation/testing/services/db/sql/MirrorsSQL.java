@@ -10,7 +10,7 @@ public class MirrorsSQL {
     public static String GET_STG_Mirrors_COUNT_Updated ="select count(*) as stgCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel " +
             "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq d1 on STG_10_PMX_WORK_REL.\"PARENT_PMX_SOURCE\"::varchar = d1.pmx_source_reference::varchar\n" +
             "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq d2 on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.pmx_source_reference::varchar\n" +
-            "where \"F_RELATIONSHIP_TYPE\"='MIR' and d1.dq_err != 'Y' and d2.dq_err != 'Y' and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+            "where \"F_RELATIONSHIP_TYPE\"='MIR' and d1.dq_err != 'Y' and d2.dq_err != 'Y' and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
     public static String GET_SA_Mirrors_COUNT ="select count(*) as saCount from semarchy_eph_mdm.sa_work_relationship_mirror sa\n"+
             " where f_event =  (select max (f_event) from\n" +

@@ -2,7 +2,7 @@ package com.eph.automation.testing.services.db.sql;
 
 public class TranslationsSQL {
 
-    public static String GET_PMX_TRANSLATIONS_COUNT ="SELECT\n" +
+    public static String GET_PMX_TRANSLATIONS_COUNT ="SELECT count(*) as pmxCount FROM (SELECT\n" +
             "\t WL.PRODUCT_WORK_LINK_ID AS RELATIONSHIP_PMX_SOURCEREF\n" +
             "\t,W1.PRODUCT_WORK_ID AS CHILD_PMX_SOURCE\n" +
             "\t,W2.PRODUCT_WORK_ID AS PARENT_PMX_SOURCE\n" +
@@ -14,7 +14,7 @@ public class TranslationsSQL {
             "\t,NVL(WL.EFFTO_DATE,\n" +
             "\t\tCASE WHEN W1.EFFECTIVE_TO_DATE IS NULL AND W2.EFFECTIVE_TO_DATE IS NULL THEN NULL \n" +
             "\t\tELSE GREATEST(NVL(W1.EFFECTIVE_TO_DATE,TO_DATE('1900-01-01', 'YYYY-MM-DD')),NVL(W2.EFFECTIVE_TO_DATE,TO_DATE('1900-01-01', 'YYYY-MM-DD'))) END) AS ENDON\n" +
-            "\t,TO_CHAR(NVL(WL.B_UPDDATE,WL.B_CREDATE)) AS UPDATED\n" +
+            "\t,TO_CHAR(NVL(WL.B_UPDDATE,WL.B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
             "FROM\n" +
             "\tGD_PRODUCT_WORK_LINK WL,\n" +
             "\tGD_PRODUCT_WORK W1,\n" +
@@ -24,11 +24,12 @@ public class TranslationsSQL {
             "AND\n" +
             "\tWL.F_RELATED_PRODUCT_WORK = W2.PRODUCT_WORK_ID\n" +
             "AND\n" +
-            "\tNVL(W1.EFFECTIVE_TO_DATE, NVL(W2.EFFECTIVE_TO_DATE, WL.EFFTO_DATE)) IS NULL\n" +
+            "\tNVL(W1.EFFECTIVE_TO_DATE, W2.EFFECTIVE_TO_DATE) IS NULL\n" +
             "AND\n" +
             "\tW1.F_WORK_STATUS = 81\n" +
             "AND\n" +
-            "\tWL.F_PRODUCT_WORK_LINK_TYPE IN (51,21)";
+            "\tWL.F_PRODUCT_WORK_LINK_TYPE IN (51,21)\t-- 51 = translation, 21 = mirror\n" +
+            "\t)";
 
     public static String GET_STG_ALL_COUNT ="select count(*) as stgCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel";
 
@@ -43,9 +44,8 @@ public class TranslationsSQL {
             "where \"F_RELATIONSHIP_TYPE\"='TRS' and d1.dq_err != 'Y' and d2.dq_err != 'Y' and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
     public static String GET_SA_TRANSLATIONS_COUNT ="select count(*) as saCount from semarchy_eph_mdm.sa_work_rel_translation sa\n"+
-            " where f_event =  (select max (f_event) from\n" +
-            "semarchy_eph_mdm.sa_work_rel_translation join \n"+
-            "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
+            " where f_event =  (select max (event_id) from\n" +
+            "semarchy_eph_mdm.sa_event\n"+
             "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
             "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+

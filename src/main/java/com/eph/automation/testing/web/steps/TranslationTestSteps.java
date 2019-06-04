@@ -43,6 +43,7 @@ public class TranslationTestSteps {
     @Given("^We know the number of translations in PMX$")
     public void getTranslationsCountDQ(){
         sql = TranslationsSQL.GET_PMX_TRANSLATIONS_COUNT;
+        Log.info(sql);
         translationContext.pmxCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.PMX_URL);
         Log.info("The PMX count is: " + translationContext.pmxCount.get(0).pmxCount);
     }
@@ -63,14 +64,22 @@ public class TranslationTestSteps {
                 refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                         Constants.EPH_URL);
 
-                sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT_Updated.replace("PARAM1",refreshDate.get(0).refresh_timestamp);
+                sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
                 translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
                 Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
             }
         }else {
-            sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT;
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                    Constants.EPH_URL);
+
+            sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
+            Log.info(sql);
             translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
-            Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
+//            Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
+/*            sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT;
+            translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
+            Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);*/
         }
     }
 

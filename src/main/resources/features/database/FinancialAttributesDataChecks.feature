@@ -24,3 +24,9 @@ Feature: Entity - Financial Attributes - Data Mapping Check - Validate data betw
     When We get the data for financial attributes
     Then The data between DQ and SA is identical
     And The data between SA and GD is identical
+
+  @Regression
+  Scenario: Verify that the correct record was end-dated
+    Given We have end-dated financial attribute in GD
+    When We get the new data for the same record from STG
+    Then There is difference in the record values
