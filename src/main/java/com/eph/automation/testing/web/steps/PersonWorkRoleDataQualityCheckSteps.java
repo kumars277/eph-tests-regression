@@ -70,7 +70,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
             } else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
                 List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                String refreshDate = (String) refreshDateNumber.get(0).get("refresh_timestamp");
+                String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
                 sql = String.format( PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHSTG_DELTA, refreshDate );
             }
         }
@@ -460,7 +460,6 @@ public class PersonWorkRoleDataQualityCheckSteps {
     public void getPersonWorkRoleRecordsEPHGD() {
         Log.info("Get the person work role records from EPH GD  ..");
         sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHGD, Joiner.on("','").join(idsSA));
-//        sql = PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHGD;
 
         Log.info(sql);
 

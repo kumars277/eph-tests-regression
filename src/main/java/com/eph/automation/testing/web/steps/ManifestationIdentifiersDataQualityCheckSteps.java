@@ -14,6 +14,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  * Created by Bistra Drazheva on 23/01/2019
@@ -41,21 +43,20 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
     @Given("We get the count of records with (.*) in STG_PMX_MANIFESTATION$")
     public void getCountOfRecordsWithISBNInSTGPMX(String identifier) {
-        if (System.getProperty("LOAD") != null) {
-            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE, identifier);
-                Log.info(sql);
-            } else {
-                Log.info(sql);
-                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                String refreshDate = (String) refreshDateNumber.get(0).get("refresh_timestamp");
-                sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_DELTA, refreshDate );
-            }
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE, identifier);
+            Log.info(sql);
+        } else {
+            Log.info(sql);
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+            sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_DELTA, refreshDate);
         }
 
         List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countISBNSTGPMX = ((Long) numberOfISBNs.get(0).get("count")).intValue();
         Log.info("Count of of records in STG_PMX_MANIFESTATION table is: " + countISBNSTGPMX);
+
     }
 
     @When("^We get the count of records with (.*) in SA_MANIFESTATION_IDENTIFIER$")
@@ -145,6 +146,75 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
         }
     }
 
+    @Given("^We get the manifestation ids of all records with set updated effective_end_date in SA for (.*)$")
+    public void getRecordsWithEndDate(String identifier) {
+
+        if (identifier.equals("ISBN")) {
+            sql = String.format(WorkExtractSQL.SELECT_MANIFESTATION_IDS_ISBN);
+            Log.info(sql);
+        } else if (identifier.equals("ISSN"))
+            sql = String.format(WorkExtractSQL.SELECT_MANIFESTATION_IDS_ISSN);
+        Log.info(sql);
+
+        List<Map<?, ?>> manifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+
+        ids =    manifestationIds.stream().map(m -> (BigDecimal) m.get("MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
+
+        Log.info("manifestation ids : " + ids);
+
+        if (identifier.equals("ISBN")) {
+            sql = String.format(WorkExtractSQL.SELECT_RECORDS_STG_MANIF_IDENTIFIER_ISBN_GIVEN_MANIF_ID, Joiner.on("','").join(ids));
+            Log.info(sql);
+        } else if (identifier.equals("ISSN"))
+            sql = String.format(WorkExtractSQL.SELECT_RECORDS_STG_MANIF_IDENTIFIER_ISSN_GIVEN_MAN_ID, Joiner.on("','").join(ids));
+
+
+        dataQualityContext.manifestationIdentifiersDataObjectsFromSTG = DBManager
+                .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
+
+    }
+
+    @Then("^Check the manifestation identifiers are updated for (.*)$")
+    public void checkIdentifiersAreUpdated(String identifier) {
+        IntStream.range(0, dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.size()).forEach(i -> {
+            //get eph_id from ephsit_talend_owner.map_sourceref_2_ephid for current record
+            sql = String.format(WorkExtractSQL.GET_EPH_ID, dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getManif_identifier_id());
+            Log.info(sql);
+
+            List<Map<String, Object>> listEphIDs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+
+            String eph_id = listEphIDs.get(0).get("eph_id").toString();
+            Log.info(sql);
+
+            //get the ident_id
+            if (identifier.equals("ISBN"))
+                sql = String.format(WorkExtractSQL.GET_IDENT_ID, eph_id, dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getIdentifier());
+            else
+                sql = String.format(WorkExtractSQL.GET_IDENT_ID_ISSN, eph_id, dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getIdentifier());
+
+            Log.info(sql);
+
+            List<Map<String, Object>> listIdentIDs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+
+            String ident_id = listIdentIDs.get(0).get("ident_id").toString();
+            Log.info(sql);
+
+            //get data from GD for the current record from STG
+
+            sql = String.format(WorkExtractSQL.SELECT_RECORDS_GD_MANIFESTATION_IDENTIFIER_GIVEN_MANIF_ID, ident_id);
+            Log.info(sql);
+
+            dataQualityContext.manifestationIdentifiersDataObjectsFromGD = DBManager
+                    .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
+
+
+            //assert identifier value is not equal
+            assertNotEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getIdentifier(), dataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(0).getIdentifier());
+
+
+        });
+    }
+
     @When("^We get the records from SA_MANIFESTATION_IDENTIFIER$")
     public void getEPHStagingManifestationIdentifiersData() {
 
@@ -179,19 +249,19 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
             Log.info("MANIF_IDENFIER_ID  in EPH STG : " + dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getManif_identifier_id());
             Log.info("MANIF_IDENFIER_ID  in EPH SА: " + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getManif_identifier_id());
 
-            assertEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getManif_identifier_id(),dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getManif_identifier_id());
+            assertEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getManif_identifier_id(), dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getManif_identifier_id());
 
             //f_manifestation
             Log.info("F_MANIFESTATION  in EPH STG : " + dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getF_manifestation());
             Log.info("F_MANIFESTATION  in EPH SА: " + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
 
-            assertEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getF_manifestation(),dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
+            assertEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getF_manifestation(), dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
 
             //identifier
             Log.info("IDENTIFIER  in EPH STG : " + dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getIdentifier());
             Log.info("IDENTIFIER  in EPH SА: " + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getIdentifier());
 
-            assertEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getIdentifier(),dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getIdentifier());
+            assertEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getIdentifier(), dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getIdentifier());
 
         });
     }
@@ -203,7 +273,18 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
         dataQualityContext.manifestationIdentifiersDataObjectsFromGD = DBManager
                 .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
+
     }
+
+    @Given("^We have identifiers in GD with set effective_end_date$")
+    public void getEPHGDManifestationIdentifiersDataWithUpdatedEndDate() {
+        sql = String.format(WorkExtractSQL.SELECT_RECORDS_GD_MANIFESTATION_IDENTIFIER, Joiner.on("','").join(ids));
+        Log.info(sql);
+
+        dataQualityContext.manifestationIdentifiersDataObjectsFromGD = DBManager
+                .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
+    }
+
 
     @And("^Verify the data in SA_MANIFESTATION_IDENTIFIER and GD_MANIFESTATION_IDENTIFIER is equal for (.*)$")
     public void verifyDataInSAAndGDIsEqual(String identifier) {
@@ -225,11 +306,11 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
             assertEquals(identifier, dataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(i).getF_type());
 
 
-            Log.info("F_MANIFESTATION  in EPH SА: "  + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
+            Log.info("F_MANIFESTATION  in EPH SА: " + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
             Log.info("F_MANIFESTATION  in EPH GD : " + dataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(i).getF_manifestation());
 
             //f_manifestation
-            assertEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation(),dataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(i).getF_manifestation());
+            assertEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation(), dataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(i).getF_manifestation());
 
 
 

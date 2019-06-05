@@ -15,7 +15,7 @@ public class PersonProductRoleDataSQL {
 
     public static String GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_person_role";
 
-    public static String GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG_DELTA = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_person_role where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')\n";
+    public static String GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG_DELTA = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_person_role where TO_DATE(UPDATED,'YYYYMMDDHH24MI') >= TO_DATE('%s','YYYYMMDDHH24MI')\n";
 
 
     public static String GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTGDQ = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_person_role ppr \n " +
@@ -68,6 +68,18 @@ public class PersonProductRoleDataSQL {
             "where PRODUCT_SOURCE_REF in ('%s') \n" +
             "and perd.dq_err !='Y' and prod.dq_err != 'Y' \n" ;
 
+    public static String GET_DATA_PERSONS_PRODUCT_ROLE_EPHSTG_BY_PROD_PER_ROLE_SOURCE_REF = "select \n" +
+            "ppr.PROD_PER_ROLE_SOURCE_REF as PROD_PER_ROLE_SOURCE_REF,\n" +
+            "ppr.PRODUCT_SOURCE_REF as PRODUCT_SOURCE_REF,\n" +
+            "ppr.PERSON_SOURCE_REF as PERSON_SOURCE_REF,\n" +
+            "ppr.F_ROLE as F_ROLE,\n" +
+            "ppr.WORK_ROLE as WORK_ROLE\n" +
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_person_role ppr\n" +
+            "join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq perd on ppr.person_source_ref = perd.person_source_ref \n"+
+            "join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq prod on ppr.product_source_ref = prod.pmx_source_reference \n" +
+            "where PROD_PER_ROLE_SOURCE_REF in ('%s') \n" +
+            "and perd.dq_err !='Y' and prod.dq_err != 'Y' \n";
+
     public static String GET_DATA_PERSONS_PRODUCT_ROLE_EPHSA = "select \n" +
             "b_loadid as B_LOADID,\n" +
             "f_event as F_EVENT,\n" +
@@ -113,8 +125,10 @@ public class PersonProductRoleDataSQL {
             "order by random() limit '%s'";
 
     public static String GET_RANDOM_PERSON_PRODUCT_ROLE_IDS_FROM_SA = "select \n" +
-            "product_person_role_id as PRODUCT_PERSON_ROLE_ID\n" +
-            "from semarchy_eph_mdm.sa_product_person_role p\n" +
+            "from semarchy_eph_mdm.sa_product_person_role p,\n" +
+            "ephsit_talend_owner.stg_10_pmx_product_person_role stg,\n" +
+            "ephsit_talend_owner.stg_10_pmx_person_dq perd,\n" +
+            "ephsit_talend_owner.stg_10_pmx_product_dq prod\n" +
             "where p.b_loadid =  (\n" +
             "select max (p1.b_loadid) from \n" +
             "semarchy_eph_mdm.sa_product_person_role p1\n" +
@@ -123,7 +137,30 @@ public class PersonProductRoleDataSQL {
             "where  sa.f_event_type = 'PMX'\n" +
             "and sa.workflow_id = 'talend'\n" +
             "and sa.f_workflow_source = 'PMX' )\n" +
+            "and stg.\"person_source_ref\" = perd.person_source_ref\n" +
+            "and stg.\"product_source_ref\" = prod.pmx_source_reference\n" +
+            "and perd.dq_err != 'Y' and  prod.dq_err != 'Y'\t\n" +
             "order by random() limit '%s'";
 
+    public static String GET_END_DATED_RECORDS_FROM_GD = "select \n" +
+            "gd.product_person_role_id as PRODUCT_PERSON_ROLE_ID\n" +
+            "from semarchy_eph_mdm.gd_product_person_role gd, \n" +
+            "semarchy_eph_mdm.sa_product_person_role p,\n" +
+            "ephsit_talend_owner.stg_10_pmx_product_person_role stg,\n" +
+            "ephsit_talend_owner.stg_10_pmx_person_dq perd,\n" +
+            "ephsit_talend_owner.stg_10_pmx_product_dq prod\n" +
+            "where p.b_loadid =  (\n" +
+            "select max (p1.b_loadid) from \n" +
+            "semarchy_eph_mdm.sa_product_person_role p1\n" +
+            "join \n" +
+            "semarchy_eph_mdm.sa_event sa on sa.b_loadid = p1.b_loadid \n" +
+            "where  sa.f_event_type = 'PMX'\n" +
+            "and sa.workflow_id = 'talend'\n" +
+            "and sa.f_workflow_source = 'PMX' )\n" +
+            "and stg.\"person_source_ref\" = perd.person_source_ref\n" +
+            "and stg.\"product_source_ref\" = prod.pmx_source_reference\n" +
+            "and perd.dq_err != 'Y' and  prod.dq_err != 'Y'\t\n" +
+            "and gd.effective_end_date is not null";
 
+    public static String GET_SOURCE_REF = "select source_ref as source_ref from ephsit_talend_owner.map_sourceref_2_numericid where numeric_id = '%s'";
 }

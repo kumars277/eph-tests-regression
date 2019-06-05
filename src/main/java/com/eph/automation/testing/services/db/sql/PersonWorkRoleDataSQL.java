@@ -46,7 +46,7 @@ public class PersonWorkRoleDataSQL {
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTG = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role" ;
 
-    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTG_DELTA = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')\n" ;
+    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTG_DELTA = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')\n" ;
 
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTGDQ = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role wpr  join  " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq perd  on wpr.\"PMX_PARTY_SOURCE_REF\" = perd.person_source_ref \n" +

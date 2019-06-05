@@ -24,8 +24,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * Created by Bistra Drazheva on 14/03/2019
@@ -58,17 +57,16 @@ public class PersonProductRoleDataQualityCheckSteps {
     public void getCountPersonsProductRolePHSTG() {
         Log.info("When We get the count of persons product role records in EPH STG ..");
 
-        if (System.getProperty("LOAD") != null) {
-            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
                 sql = PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG;
                 Log.info(sql);
             } else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
                 List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                String refreshDate = (String) refreshDateNumber.get(0).get("refresh_timestamp");
+                String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
                 sql = String.format(PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG_DELTA, refreshDate );
             }
-        }
+
 
 
         List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -511,5 +509,59 @@ public class PersonProductRoleDataQualityCheckSteps {
 
         });
 
+    }
+
+
+    @Given("^We get the ids of all person product role records with set updated effective_end_date in GD$")
+    public void getRecordsWithSetEndDate() {
+
+
+        sql = String.format(PersonProductRoleDataSQL.GET_END_DATED_RECORDS_FROM_GD);
+        Log.info(sql);
+
+
+        List<Map<?, ?>> endDatedPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+
+        ids = endDatedPersons.stream().map(m -> (BigDecimal) m.get("PRODUCT_PERSON_ROLE_ID")).map(String::valueOf).collect(Collectors.toList());
+        Log.info(ids.toString());
+
+        Log.info("Product person role ids with set effective end date : " + ids);
+
+
+
+
+    }
+
+    @Then("^Check the person product role records are updated$")
+    public void checkProductPersonRoleRecordsAreUpdated(String identifier) {
+        IntStream.range(0, dataQualityContext.personProductRoleDataObjectsFromEPHGD.size()).forEach(i -> {
+
+            //get source_ref from ephsit_talend_owner.map_sourceref_2_numeric id for current record
+            sql = String.format(PersonProductRoleDataSQL.GET_SOURCE_REF, dataQualityContext.personProductRoleDataObjectsFromEPHGD.get(i).getPRODUCT_PERSON_ROLE_ID());
+            Log.info(sql);
+
+            List<Map<String, Object>> listSourceRefIDs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+
+            String source_ref = listSourceRefIDs.get(0).get("source_ref").toString();
+            Log.info(sql);
+
+            //get the prod_per_role_source_ref from source ref
+            String prod_per_role_source_ref = source_ref.replace("PPR-","");
+
+
+            //get data from STG for the current record from STG
+
+            sql = String.format(PersonProductRoleDataSQL.GET_DATA_PERSONS_PRODUCT_ROLE_EPHSTG_BY_PROD_PER_ROLE_SOURCE_REF, prod_per_role_source_ref);
+            Log.info(sql);
+
+            dataQualityContext.personProductRoleDataObjectsFromEPHSTG = DBManager
+                    .getDBResultAsBeanList(sql, PersonProductRoleDataObject.class, Constants.EPH_URL);
+
+
+            //assert identifier value is not equal
+            assertNotEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getF_ROLE(), dataQualityContext.personProductRoleDataObjectsFromEPHGD.get(i).getF_ROLE());
+
+
+        });
     }
 }

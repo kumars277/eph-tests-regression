@@ -57,8 +57,8 @@ public class PersonDataQualityCheckSteps {
     public void getCountPersonsEPHSTG() {
         Log.info("When We get the count of persons records in PMX STG ..");
 
-        if (System.getProperty("LOAD") != null) {
-            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+
+            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
                 sql = PersonDataSQL.GET_COUNT_PERSONS_EPHSTG;
                 Log.info(sql);
             } else {
@@ -66,11 +66,10 @@ public class PersonDataQualityCheckSteps {
                 Log.info(sql);
 
                 List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                String refreshDate = (String) refreshDateNumber.get(0).get("refresh_timestamp");
+                String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
 
                 sql = String.format( PersonDataSQL.GET_COUNT_PERSONS_EPHSTG_DELTA, refreshDate );
                 Log.info(sql);
-            }
         }
 
         List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);

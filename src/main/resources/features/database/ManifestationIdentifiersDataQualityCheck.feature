@@ -38,6 +38,14 @@ Feature: Entity - Manifestation Identifier - Count & Data Mapping Check - Valida
       | 2               | ISSN       | JPR  |
       | 2               | ISSN       | JEL  |
 
+  @Regression
+  Scenario Outline: Verify that existing records end-dated properly
+    Given We get the manifestation ids of all records with set updated effective_end_date in SA for <identifier>
+    Then Check the manifestation identifiers are updated for <identifier>
+    Examples:
+      | identifier |
+      | ISBN       |
+      | ISSN       |
 
 
 
