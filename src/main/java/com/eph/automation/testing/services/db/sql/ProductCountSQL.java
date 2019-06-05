@@ -20,52 +20,52 @@ public class ProductCountSQL {
             "(select \"F_PRODUCT_WORK\" from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where  \"WORK_TYPE\" = 'JOURNAL' and  \"OPEN_ACCESS\" = 'Y' group by \"F_PRODUCT_WORK\" having count(*) = 1) a";
 
     public static String EPH_STG_PRODUCT_Count_OA_More="select count(*) as oaMoreCount from \n" +
-            "(select \"F_PRODUCT_WORK\" from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where \"WORK_TYPE\" = 'JOURNAL' and \"OPEN_ACCESS\" = 'Y'  group by \"F_PRODUCT_WORK\" having count(*) > 1) a";
+            "(select \"F_PRODUCT_WORK\" from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where \"WORK_TYPE\" = 'JOURNAL' and \"OPEN_ACCESS\" = 'Y'  group by \"F_PRODUCT_WORK\" having count(*) >= 1) a";
 
     public static String EPH_STG_PRODUCT_Count_AC="select count(*) as acCount from \n" +
             "(select \"F_PRODUCT_WORK\" from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where  \"WORK_TYPE\" = 'JOURNAL' and  \"AUTHOR_CHARGES\" = 'Y' group by \"F_PRODUCT_WORK\" having count(*) = 1) a";
 
     public static String EPH_STG_PRODUCT_Count_AC_More="select count(*) as acMoreCount from \n" +
-            "(select \"F_PRODUCT_WORK\" from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where  \"WORK_TYPE\" = 'JOURNAL' and  \"AUTHOR_CHARGES\" = 'Y' group by \"F_PRODUCT_WORK\" having count(*) > 1) a";
+            "(select \"F_PRODUCT_WORK\" from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where  \"WORK_TYPE\" = 'JOURNAL' and  \"AUTHOR_CHARGES\" = 'Y' group by \"F_PRODUCT_WORK\" having count(*) >= 1) a";
 
     public static String EPH_STG_PRODUCT_Packages="select count(*) as packagesCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where \"PACKAGES\" = 'Y'";
 
     public static String EPH_STG_PRODUCT_Count_Updated="select count(*) as stgCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product " +
-            "where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+            "where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
     public static String EPH_STG_PRODUCT_Count_BOOKS_Updated="select count(*) as booksCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where \"ONE_OFF_ACCESS\" = 'Y' " +
-            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
     public static String EPH_STG_PRODUCT_Count_Sub_Updated = "select count(*) as subCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where \"SUBSCRIPTION\" = 'Y' " +
-            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
     public static String EPH_STG_PRODUCT_Count_Bulk_Updated="select count(*) as bulkCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where \"WORK_TYPE\" = 'JOURNAL' and \"BULK_SALES\" = 'Y' " +
-            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
     public static String EPH_STG_PRODUCT_Count_Reprint_Updated="select count(*) as reprintCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where \"WORK_TYPE\" = 'JOURNAL' and \"REPRINTS\" = 'Y' " +
-            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
     public static String EPH_STG_PRODUCT_Count_Back_Updated="select count(*) as backCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where \"WORK_TYPE\" = 'JOURNAL' and \"BACK_FILES\" = 'Y' " +
-            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
     public static String EPH_STG_PRODUCT_Count_OA_Updated="select count(*) as oaCount from \n" +
             "(select \"F_PRODUCT_WORK\" from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where  \"WORK_TYPE\" = 'JOURNAL' and  \"OPEN_ACCESS\" = 'Y' " +
-            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI') group by \"F_PRODUCT_WORK\" having count(*) = 1) a ";
+            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('PARAM1','YYYYMMDDHH24MI') group by \"F_PRODUCT_WORK\" having count(*) = 1) a ";
 
     public static String EPH_STG_PRODUCT_Count_OA_More_Updated="select count(*) as oaMoreCount from \n" +
             "(select \"F_PRODUCT_WORK\" from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where \"WORK_TYPE\" = 'JOURNAL' and \"OPEN_ACCESS\" = 'Y' " +
-            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI') group by \"F_PRODUCT_WORK\" having count(*) > 1) a ";
+            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('PARAM1','YYYYMMDDHH24MI') group by \"F_PRODUCT_WORK\" having count(*) >= 1) a ";
 
     public static String EPH_STG_PRODUCT_Count_AC_Updated="select count(*) as acCount from \n" +
             "(select \"F_PRODUCT_WORK\" from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where  \"WORK_TYPE\" = 'JOURNAL' and  \"AUTHOR_CHARGES\" = 'Y' " +
-            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI') group by \"F_PRODUCT_WORK\" having count(*) = 1) a ";
+            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('PARAM1','YYYYMMDDHH24MI') group by \"F_PRODUCT_WORK\" having count(*) = 1) a ";
 
     public static String EPH_STG_PRODUCT_Count_AC_More_Updated="select count(*) as acMoreCount from \n" +
             "(select \"F_PRODUCT_WORK\" from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where  \"WORK_TYPE\" = 'JOURNAL' and  \"AUTHOR_CHARGES\" = 'Y' " +
-            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI') group by \"F_PRODUCT_WORK\" having count(*) > 1) a " ;
+            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('PARAM1','YYYYMMDDHH24MI') group by \"F_PRODUCT_WORK\" having count(*) >= 1) a " ;
 
     public static String EPH_STG_PRODUCT_Packages_Updated="select count(*) as packagesCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where \"PACKAGES\" = 'Y' " +
-            "and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
     public static String EPH_STG_CAN_Count = "SELECT count(*) as ephCanCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product_dq";
 
@@ -74,9 +74,8 @@ public class ProductCountSQL {
             "where pdq.dq_err != 'Y'";
 
     public static String EPH_SA_PRODUCT_Count="select count(*) as ephSACount FROM semarchy_eph_mdm.sa_product sa\n" +
-           " where f_event =  (select max (f_event) from\n" +
-    "semarchy_eph_mdm.sa_product join \n"+
-   "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
+           " where f_event =  (select max (event_id) from\n" +
+   "semarchy_eph_mdm.sa_event\n"+
     "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
     "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
     "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+

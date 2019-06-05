@@ -32,7 +32,7 @@ public class WorkExtractSQL {
             "  ,W.PRODUCT_WORK_PUB_DATE -- Work Publication Date\n" +
             "  ,W.JOURNAL_ACRONYM_PTS AS JOURNAL_ACRONYM -- PTS Journal Acronym (may go in IDs table, depending on implementation of data model)\n" +
             "    ,O.OWNERSHIP_SUB_TYPE_CODE AS OWNERSHIP -- This is the Ownership Sub Type Code in PMX for mapping to EPH Ownership Type Code\n" +
-            "    ,TO_CHAR(GREATEST(NVL(W.B_UPDDATE,W.B_CREDATE),CASE WHEN PO.B_UPDDATE IS NULL AND PO.B_CREDATE IS NULL THEN TO_DATE('01-01-1900','DD-MM-YYYY') ELSE NVL(PO.B_UPDDATE,PO.B_CREDATE) END)) AS UPDATED\n" +
+            "    ,TO_CHAR(GREATEST(NVL(W.B_UPDDATE,W.B_CREDATE),CASE WHEN PO.B_UPDDATE IS NULL AND PO.B_CREDATE IS NULL THEN TO_DATE('01-01-1900','DD-MM-YYYY') ELSE NVL(PO.B_UPDDATE,PO.B_CREDATE) END),'YYYYMMDDHH24MI') AS UPDATED\n" +
             "    ,LANGUAGE_CODE -- Includes dummy code for multi-langauge titles\n" +
             "  FROM GD_PRODUCT_WORK W\n" +
             "--  JOIN GD_PRODUCT_MANIFESTATION M ON W.PRODUCT_WORK_ID = M.F_PRODUCT_WORK\n" +

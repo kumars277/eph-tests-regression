@@ -1,9 +1,14 @@
 package com.eph.automation.testing.models.api;
-
+/**
+ * Created by GVLAYKOV
+ */
 import java.util.HashMap;
 
 public class CopyrightOwnersApiObject {
     public CopyrightOwnersApiObject() {
+    }
+    public void compareWithDB(){
+
     }
     private HashMap<String, Object> copyrightOwner;
     private String effectiveStartDate;

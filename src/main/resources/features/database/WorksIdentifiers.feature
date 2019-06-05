@@ -19,7 +19,7 @@ Feature: Entity - Work Identifier - Count & Data Mapping Check - Validate data b
       |CABS       |
 
     Scenario Outline: Verify count of Work Identifier records
-      Given We know the work identifiers count in staging from <stg_type>
+      Given We know the work identifiers count in staging from column <stg_type> and <type>
       When We get the work identifier count from SA and GD <type>
       Then The counts between staging and SA are matching
       And The counts between SA and GD are matching

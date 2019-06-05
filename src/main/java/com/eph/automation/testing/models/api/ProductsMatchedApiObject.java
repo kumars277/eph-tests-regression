@@ -1,5 +1,7 @@
 package com.eph.automation.testing.models.api;
-
+/**
+ * Created by GVLAYKOV
+ */
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.junit.Assert;
 
@@ -31,12 +33,17 @@ public class ProductsMatchedApiObject {
     public void verifyProductsAreReturned(){
         Assert.assertNotEquals(0, totalMatchCount);
     }
+
+    public void verifyProductsReturned(int productsInDB){
+        Assert.assertEquals(totalMatchCount, productsInDB);
+    }
+
     public void verifyProductWithIdIsReturned(String productID){
         int i=0;
         boolean found=false;
         int bound = items.length;
         while(i<bound&&!found){
-            if(items[i].getProductId().equals(productID)){
+            if(items[i].getId().equals(productID)){
                 found=true;
             }
             i++;
