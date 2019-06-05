@@ -36,6 +36,7 @@ public class AccountableProductDataQualityCheckSteps {
     private String sql;
     private static int countAccountableProductsPMX;
     private static int countAccountableProductsEPHSTG;
+    private static int countAccountableProductsEPHDQ;
     private static int countAccountableProductsEPHSA;
     private static int countAccountableProductsEPHGD;
     private static List<String> ids;
@@ -57,43 +58,55 @@ public class AccountableProductDataQualityCheckSteps {
     public void getCountAccountableProductsEPHSTGFromPMX() {
         Log.info("When We get the count of accountable product data in EPH STG ..");
 
-        if (System.getProperty("LOAD") != null) {
-            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                sql = AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX;
-                Log.info(sql);
-            } else {
-                sql = WorkCountSQL.GET_REFRESH_DATE;
-                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                String refreshDate = (String) refreshDateNumber.get(0).get("refresh_timestamp");
-                sql = String.format(AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX_DELTA, refreshDate );
-            }
-        }
-
+         sql = AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX;
+         Log.info(sql);
 
         List<Map<String, Object>> accountableProductsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countAccountableProductsEPHSTG = ((Long) accountableProductsNumber.get(0).get("count")).intValue();
         Log.info("Count of accountable product data in EPH STG is: " + countAccountableProductsEPHSTG);
     }
 
-    @When("^We get the count of accountable product data from EPH STG processed to SA$")
-    public void getCountAccountableProductsEPHSTG() {
-        Log.info("When We get the count of accountable product data in EPH STG ..");
 
-        if (System.getProperty("LOAD") != null) {
-            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                sql = AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_THAT_WILL_BE_PROCESSED_TO_SA;
+    @When("^We get the count of accountable product data from EPH STG going to DQ$")
+    public void getCountAccountableProductsEPHSTGGoingToDQ() {
+        Log.info("When We get the count of accountable product data in EPH STG going to DQ..");
+            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                sql = AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ;
                 Log.info(sql);
             } else {
-                sql = WorkCountSQL.GET_REFRESH_DATE;
-                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                String refreshDate = (String) refreshDateNumber.get(0).get("refresh_timestamp");
-                sql = String.format(AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_THAT_WILL_BE_PROCESSED_TO_SA_DELTA, refreshDate );
+        sql = WorkCountSQL.GET_REFRESH_DATE;
+        List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+        sql = String.format(AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX_DELTA, refreshDate );
             }
-        }
 
         List<Map<String, Object>> accountableProductsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countAccountableProductsEPHSTG = ((Long) accountableProductsNumber.get(0).get("count")).intValue();
         Log.info("Count of accountable product data in EPH STG is: " + countAccountableProductsEPHSTG);
+    }
+
+
+    @When("^We get the count of accountable product data from EPH DQ$")
+    public void getCountAccountableProductsEPHDQ() {
+        Log.info("When We get the count of accountable product data in EPH GD ..");
+        sql = AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_DQ;
+        Log.info(sql);
+        List<Map<String, Object>> accountableProductsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countAccountableProductsEPHDQ = ((Long) accountableProductsNumber.get(0).get("count")).intValue();
+        Log.info("Count of accountable product data in EPH DQ is: " + countAccountableProductsEPHDQ);
+    }
+
+
+
+    @When("^We get the count of accountable product data from EPH DQ processed to SA$")
+    public void getCountAccountableProductsEPHSTG() {
+        Log.info("When We get the count of accountable product data in EPH DQ going to SA ..");
+        sql = AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_DQ_GOING_TO_SA;
+        Log.info(sql);
+
+        List<Map<String, Object>> accountableProductsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countAccountableProductsEPHDQ = ((Long) accountableProductsNumber.get(0).get("count")).intValue();
+        Log.info("Count of accountable product data in EPH DQ going to SA is: " + countAccountableProductsEPHDQ);
     }
 
     @When("^We check the count of accountable product data received from PMX to EPH STG$")
@@ -132,9 +145,15 @@ public class AccountableProductDataQualityCheckSteps {
 
     }
 
-    @Then("^Compare the count of accountable product data in EPH STG and EPH SA$")
-    public void compareCountAccountableProductsBetweenEPHSTGAndEPHSA() {
-        Assert.assertEquals("\nAccountable product data count in EPH STG and EPH SA is not equal", countAccountableProductsEPHSTG, countAccountableProductsEPHSA);
+    @Then("^Compare the count of accountable product data in EPH STG and EPH DQ$")
+    public void compareCountAccountableProductsBetweenEPHSTGAndEPHDQ() {
+        Assert.assertEquals("\nAccountable product data count in EPH STG and EPH DQ is not equal", countAccountableProductsEPHSTG, countAccountableProductsEPHDQ);
+
+    }
+
+    @Then("^Compare the count of accountable product data in EPH DQ and EPH SA$")
+    public void compareCountAccountableProductsBetweenEPHDQAndEPHSA() {
+        Assert.assertEquals("\nAccountable product data count in EPH DQ and EPH SA is not equal", countAccountableProductsEPHDQ, countAccountableProductsEPHSA);
 
     }
 
@@ -348,14 +367,14 @@ public class AccountableProductDataQualityCheckSteps {
     }
 
 
-    @And("^Compare the accountable product data in EPH STG and EPH SA$")
+    @And("^Compare the accountable product data in EPH DQ and EPH SA$")
     public void compareAccountableProductsDataDQAndSA() {
-        Log.info("And the accountable product data in STG and SA ..");
+        Log.info("And the accountable product data in DQ and SA ..");
         dataQualityContext.accountableProductDataObjectsFromSTGDQ.sort(Comparator.comparing(AccountableProductDataObject::getACCOUNTABLE_PRODUCT_ID));
         dataQualityContext.accountableProductDataObjectsFromSA.sort(Comparator.comparing(AccountableProductDataObject::getACCOUNTABLE_PRODUCT_ID));
 
 
-        IntStream.range(0, dataQualityContext.accountableProductDataObjectsFromSTG.size()).forEach(i -> {
+        IntStream.range(0, dataQualityContext.accountableProductDataObjectsFromSTGDQ.size()).forEach(i -> {
 
 
             //B_CLASSNAME
@@ -367,19 +386,19 @@ public class AccountableProductDataQualityCheckSteps {
             //GL_PRODUCT_SEGMENT_CODE
             Log.info("GL_PRODUCT_SEGMENT_CODE in EPH SА: " + dataQualityContext.accountableProductDataObjectsFromSA.get(0).getGL_PRODUCT_SEGMENT_CODE());
 
-                assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(0).getGL_PRODUCT_SEGMENT_CODE(),dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_ID());
+                assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(0).getGL_PRODUCT_SEGMENT_CODE(),dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getACC_PROD_ID());
 
 
             //GL_PRODUCT_SEGMENT_NAME
             Log.info("GL_PRODUCT_SEGMENT_NAME in EPH SA: " + dataQualityContext.accountableProductDataObjectsFromSA.get(0).getGL_PRODUCT_SEGMENT_NAME());
 
-                assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(0).getGL_PRODUCT_SEGMENT_NAME(),dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_NAME());
+                assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(0).getGL_PRODUCT_SEGMENT_NAME(),dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getACC_PROD_NAME());
 
 
             //F_GL_PRODUCT_SEGMENT_PARENT
             Log.info("F_GL_PRODUCT_SEGMENT_PARENT in EPH SA: " + dataQualityContext.accountableProductDataObjectsFromSA.get(0).getF_GL_PRODUCT_SEGMENT_PARENT());
 
-                assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(0).getF_GL_PRODUCT_SEGMENT_PARENT(),dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD());
+                assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(0).getF_GL_PRODUCT_SEGMENT_PARENT(),dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getPARENT_ACC_PROD());
 
         });
     }
