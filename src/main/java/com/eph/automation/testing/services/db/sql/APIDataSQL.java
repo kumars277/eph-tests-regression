@@ -15,6 +15,16 @@ public class APIDataSQL {
             "WHERE semarchy_eph_mdm.gd_wwork.work_id = semarchy_eph_stg.st_out_notification.notification_id and semarchy_eph_stg.st_out_notification.status='PROCESSED')" +
             "order by random() limit '%s'";
 
+    public static String SELECT_RANDOM_WORK_INPACKAGE_IDS_FOR_SEARCH = "select f_component from semarchy_eph_mdm.gd_product_rel_package group by f_component order by random() limit '%s';";
+
+    public static String SELECT_RANDOM_PRODUCT_PERSON_ROLES_FOR_SEARCH = "select f_person from semarchy_eph_mdm.gd_product_person_role group by f_person order by random() limit '%s';";
+
+    public static String SELECT_RANDOM_WORK_PERSON_ROLES_FOR_SEARCH = "select f_person from semarchy_eph_mdm.gd_work_person_role group by f_person order by random() limit '%s'";
+
+    public static String SELECT_COUNT_PERSONID_FOR_WORKS = "select count (*) from semarchy_eph_mdm.gd_work_person_role where f_person='%s'";
+
+    public static String SELECT_COUNT_PERSONID_FOR_PRODUCTS = "select count (*) from semarchy_eph_mdm.gd_product_person_role where f_person='%s'";
+
     public static String EPH_GD_PRODUCT_EXTRACT_FOR_SEARCH = "SELECT \n" +
             "              product_id AS PRODUCT_ID -- Title\n" +
             "              ,name as PRODUCT_NAME\n" +
@@ -27,7 +37,7 @@ public class APIDataSQL {
             "              ,f_revenue_model AS F_REVENUE_MODEL\n" +
             "              ,f_wwork AS F_PRODUCT_WORK\n" +
             "              ,f_manifestation AS F_PRODUCT_MANIFESTATION_TYP\n" +
-            "              FROM ephsit.semarchy_eph_mdm.gd_product\n" +
+            "              FROM ephsit.semarchy_eph_mdm.gd_product \n" +
             "  WHERE product_id IN ('%s')";
 
     public static String EPH_GD_WORK_EXTRACT_FOR_SEARCH = "SELECT \n" +
@@ -47,6 +57,11 @@ public class APIDataSQL {
             "              FROM ephsit.semarchy_eph_mdm.gd_wwork " +
             "  WHERE work_id IN ('%s')";
 
+    public static String EPH_GD_WORK_EXTRACT_AMOUNT_BYPMC ="SELECT COUNT (f_pmc) FROM semarchy_eph_mdm.gd_wwork where f_pmc='%s';";
+    public static String EPH_GD_PMG_CODE_EXTRACT_BYPMC ="select f_pmg from semarchy_eph_mdm.gd_x_lov_pmc where code='%s'";
+    public static String EPH_GD_PACKAGEID_EXTRACT_BY_PRODUCTID ="select f_package_owner from semarchy_eph_mdm.gd_product_rel_package where f_component='%s' limit 1";
+    public static String EPH_GD_WORK_EXTRACT_AMOUNT_BYPMG ="select count (*) from semarchy_eph_mdm.gd_wwork where f_pmc in ( select code from semarchy_eph_mdm.gd_x_lov_pmc where f_pmg in (select code from semarchy_eph_mdm.gd_x_lov_pmg where code='%s'));";
+    public static String EPH_GD_PRODUCT_PACKAGE_COUNT_EXTRACT = "select count (*) from semarchy_eph_mdm.gd_product_rel_package where f_package_owner='%s';";
     public static String EPH_GD_WORK_EXTRACT_FOR_SEARCH_BY_MANIFESTATIONID = "SELECT \n" +
             "               work_id AS WORK_ID,\n" +
             "               work_title AS WORK_TITLE,\n" +
@@ -94,4 +109,14 @@ public class APIDataSQL {
             " ,F_WWORK AS WORK_ID -- WORK IDENTIFIER\n" +
             "  FROM ephsit.semarchy_eph_mdm.gd_work_identifier\n" +
             "  WHERE f_wwork='PARAM1'";
+
+    public static String getWorkIdentifiersDataFromGDByID="SELECT \n" +
+            " F_EVENT as F_EVENT\n" +
+            " ,B_CLASSNAME as B_CLASSNAME\n" +
+            " ,WORK_IDENTIFIER_ID AS WORK_IDENTIFIER_ID -- WORK IDENTIFIER\n" +
+            " ,IDENTIFIER AS IDENTIFIER --  IDENTIFIER\n" +
+            " ,F_TYPE AS F_TYPE -- WORK IDENTIFIER\n" +
+            " ,F_WWORK AS WORK_ID -- WORK IDENTIFIER\n" +
+            "  FROM ephsit.semarchy_eph_mdm.gd_work_identifier\n" +
+            "  WHERE identifier='PARAM1'";
 }

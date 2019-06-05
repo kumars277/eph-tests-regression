@@ -7,20 +7,20 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.HashMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class ManifestationIdentifiersApiObject {
+class ProductIdentifierApiObject {
+    private class ProductIdentifier {
+        public ProductIdentifier() {
+        }
 
-    public String getManifestationIdentifier() {
-        return manifestationIdentifier;
-    }
-
-    public void setManifestationIdentifier(String manifestationIdentifier) {
-        this.manifestationIdentifier = manifestationIdentifier;
-    }
-
-    private String manifestationIdentifier;
+        private String productIdentifier;
         private HashMap<String, Object> identifierType;
 
-        public ManifestationIdentifiersApiObject() {
+        public String getProductId() {
+            return productIdentifier;
+        }
+
+        public void setProductId(String productIdentifier) {
+            this.productIdentifier = productIdentifier;
         }
 
         public HashMap<String, Object> getIdentifierType() {
@@ -30,5 +30,5 @@ class ManifestationIdentifiersApiObject {
         public void setIdentifierType(HashMap<String, Object> identifierType) {
             this.identifierType = identifierType;
         }
-
+    }
 }
