@@ -1,4 +1,4 @@
-Feature: Entity - WORK SUBJECT AREA - Count And Data Mapping Check - Validate data between PMX and EPH - Talend Full Load
+Feature: Entity - WORK SUBJECT AREA - Count And Data Mapping Check - Validate data between PMX and EPH - Talend Load
 
   @Regression
   Scenario: Compare count of work subject area data between PMX and EPH STG

@@ -120,12 +120,14 @@ public class WorkExtractSQL {
 
     public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation";
 
-    public static String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE_DELTA = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation\n" +
-            "where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')";
+    public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_GOING_TO_DQ = "SELECT count(distinct \"MANIFESTATION_ID\") AS count FROM  "+ GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation where \"MANIFESTATION_ID\" is not null\n";
+
+    public static String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE_DELTA = "select count(distinct \"MANIFESTATION_ID\") as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation\n" +
+            "where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('%s','YYYYMMDDHH24MI')";
 
     public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_DQ_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq";
 
-    public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_TO_SA = "SELECT count(*) AS count FROM " + GetEPHDBUser.getDBUser() +".stg_10_pmx_manifestation_dq dq\n" +
+    public static final String COUNT_MANIFESTATIONS_IN_EPH_DQ_TO_SA = "SELECT count(*) AS count FROM " + GetEPHDBUser.getDBUser() +".stg_10_pmx_manifestation_dq dq\n" +
             "join  " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
             "where dq.dq_err != 'Y' and w.dq_err != 'Y'";
 
@@ -161,7 +163,8 @@ public class WorkExtractSQL {
             "\t,M.F_PRODUCT_DISTRIBUTION_TYPE AS MANIFESTATION_SUBTYPE -- Manifestation Distribution Type for mapping manifestation type\n" +
             "\t,M.F_COMMODITY_CODE AS COMMODITY --  Commodity Code for mapping manifestation type\n" +
             "\t,SS.SUBSTATUS_NAME AS MANIFESTATION_SUBSTATUS -- Manifestation Substatus for mapping Status\n" +
-            "\t,TO_CHAR(NVL(M.B_UPDDATE,M.B_CREDATE)) AS UPDATED -- Last updated date on Manifestation record, all other entities are reference or linking\n" +
+            "\t,TO_CHAR(NVL(M.B_UPDDATE,M.B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED -- Last updated date on Manifestation record, all other entities are reference or linking\n" +
+            "\t,M.EFFECTIVE_TO_DATE AS RECORD_END_DATE\n" +
             "FROM GD_PRODUCT_MANIFESTATION M\n" +
             "JOIN GD_PRODUCT_WORK W ON M.F_PRODUCT_WORK = W.PRODUCT_WORK_ID\n" +
             "LEFT JOIN GD_PRODUCT_SUBSTATUS SS ON M.F_MANIFESTATION_SUBSTATUS = SS.PRODUCT_SUBSTATUS_ID\n" +
@@ -193,8 +196,9 @@ public class WorkExtractSQL {
             "\"MANIFESTATION_SUBTYPE\" as MANIFESTATION_SUBTYPE,\n" +
             "\"COMMODITY\" as COMMODITY,\n" +
             "\"MANIFESTATION_SUBSTATUS\" as MANIFESTATION_SUBSTATUS,\n" +
-            "\"UPDATED\" as \"UPDATED\"\n" +
-            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation\n" +
+            "\"UPDATED\" as \"UPDATED\",\n" +
+            "\"RECORD_END_DATE\" as RECORD_END_DATE\n" +
+            "from  "+ GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation\n" +
             "WHERE \"MANIFESTATION_ID\" IN ('%s') order by \"MANIFESTATION_ID\"";
 
     public static final String SELECT_RANDOM_ISBN_IDS_PHB =
@@ -315,7 +319,7 @@ public class WorkExtractSQL {
             "where \n" +
             "stg.\"%s\" is not null  and \n" +
             "   stg.\"PRODUCT_MANIFESTATION_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n" +
-            "   and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')";
+            "   and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('%s','YYYYMMDDHH24MI')";
 
     public static final String COUNT_OF_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation_identifier\n" +
             "where f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier\n" +

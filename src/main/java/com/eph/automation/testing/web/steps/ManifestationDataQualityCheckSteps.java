@@ -5,7 +5,6 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ManifestationDataObject;
-import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.WorkCountSQL;
 import com.eph.automation.testing.services.db.sql.WorkExtractSQL;
 import com.google.common.base.Joiner;
@@ -58,22 +57,34 @@ public class ManifestationDataQualityCheckSteps {
     public void getCountManifestationsEphStg() {
         Log.info("When We get the count of the manifestations records in EPH STG ..");
 
-        if (System.getProperty("LOAD") != null) {
-            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                sql = WorkExtractSQL.COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE;
+        sql = WorkExtractSQL.COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE;
+        Log.info(sql);
+
+        List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countManifestationsSTGPMX = ((Long) manifestationsNumber.get(0).get("count")).intValue();
+        Log.info("Count of manifestations in STG_PMX_MANIFESTATION table is: " + countManifestationsSTGPMX);
+    }
+
+    @When("We get the count of the manifestations records in EPH STG going to DQ$")
+    public void getCountManifestationsEphStgGoingToDQ() {
+        Log.info("When We get the count of the manifestations records in EPH STG going to DQ..");
+
+
+            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                sql = WorkExtractSQL.COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_GOING_TO_DQ;
                 Log.info(sql);
             } else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
                 List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                refreshDate = (String) refreshDateNumber.get(0).get("refresh_timestamp");
-                sql = String.format(WorkExtractSQL.COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE_DELTA, refreshDate );
+                refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+                sql = String.format(WorkExtractSQL.COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE_DELTA, refreshDate);
             }
-        }
 
 
-            List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            countManifestationsSTGPMX = ((Long) manifestationsNumber.get(0).get("count")).intValue();
-            Log.info("Count of manifestations in STG_PMX_MANIFESTATION table is: " + countManifestationsSTGPMX);
+
+        List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countManifestationsSTGPMX = ((Long) manifestationsNumber.get(0).get("count")).intValue();
+        Log.info("Count of manifestations in STG_PMX_MANIFESTATION table is: " + countManifestationsSTGPMX);
     }
 
     @When("We get the count of the manifestations records in EPH DQ$")
@@ -90,7 +101,7 @@ public class ManifestationDataQualityCheckSteps {
     @When("We get the count of the manifestations records in EPH DQ going to SA$")
     public void getCountManifestationsEphDQtoSA() {
         Log.info("When We get the count of the manifestations records in EPH DQ ..");
-        sql = WorkExtractSQL.COUNT_MANIFESTATIONS_IN_EPH_STG_TO_SA;
+        sql = WorkExtractSQL.COUNT_MANIFESTATIONS_IN_EPH_DQ_TO_SA;
         Log.info(sql);
         List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countManifestationsDQ = ((Long) manifestationsNumber.get(0).get("count")).intValue();
@@ -300,7 +311,7 @@ public class ManifestationDataQualityCheckSteps {
             Log.info("CARTON_QTY in PMX: " + manifestationDataObjectsFromPMX.get(i).getCARTON_QTY());
             Log.info("CARTON_QTY in EPH Staging: " + manifestationDataObjectsFromEPHSTG.get(i).getCARTON_QTY());
 
-            assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ",manifestationDataObjectsFromPMX.get(i).getCARTON_QTY(), manifestationDataObjectsFromEPHSTG.get(i).getCARTON_QTY());
+            assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ", manifestationDataObjectsFromPMX.get(i).getCARTON_QTY(), manifestationDataObjectsFromEPHSTG.get(i).getCARTON_QTY());
 
             //INTERNATIONAL_EDITION_IND
             Log.info("INTERNATIONAL_EDITION_IND in PMX: " + manifestationDataObjectsFromPMX.get(i).getINTERNATIONAL_EDITION_IND());
@@ -353,13 +364,13 @@ public class ManifestationDataQualityCheckSteps {
             Log.info("F_PRODUCT_TYPE in PMX: " + manifestationDataObjectsFromPMX.get(i).getF_PRODUCT_MANIFESTATION_TYP());
             Log.info("F_PRODUCT_TYPE in EPH Staging: " + manifestationDataObjectsFromEPHSTG.get(i).getF_PRODUCT_MANIFESTATION_TYP());
 
-            assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ",manifestationDataObjectsFromPMX.get(i).getF_PRODUCT_MANIFESTATION_TYP(), manifestationDataObjectsFromEPHSTG.get(i).getF_PRODUCT_MANIFESTATION_TYP());
+            assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ", manifestationDataObjectsFromPMX.get(i).getF_PRODUCT_MANIFESTATION_TYP(), manifestationDataObjectsFromEPHSTG.get(i).getF_PRODUCT_MANIFESTATION_TYP());
 
             //MANIFESTATION_SUBTYPE
             Log.info("MANIFESTATION_SUBTYPE in PMX: " + manifestationDataObjectsFromPMX.get(i).getMANIFESTATION_SUBTYPE());
             Log.info("MANIFESTATION_SUBTYPE in EPH Staging: " + manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_SUBTYPE());
 
-            assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ",manifestationDataObjectsFromPMX.get(i).getMANIFESTATION_SUBTYPE(), manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_SUBTYPE());
+            assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ", manifestationDataObjectsFromPMX.get(i).getMANIFESTATION_SUBTYPE(), manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_SUBTYPE());
 
             //COMMODITY
             Log.info("COMMODITY in PMX: " + manifestationDataObjectsFromPMX.get(i).getCOMMODITY());
@@ -371,13 +382,13 @@ public class ManifestationDataQualityCheckSteps {
             Log.info("Manifestation substatus in PMX: " + manifestationDataObjectsFromPMX.get(i).getMANIFESTATION_SUBSTATUS());
             Log.info("Manifestation substatus in EPH Staging: " + manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_SUBSTATUS());
 
-            assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ",manifestationDataObjectsFromPMX.get(i).getMANIFESTATION_SUBSTATUS(), manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_SUBSTATUS());
+            assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ", manifestationDataObjectsFromPMX.get(i).getMANIFESTATION_SUBSTATUS(), manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_SUBSTATUS());
 
             //UPDATED
             Log.info("UPDATED in PMX: " + manifestationDataObjectsFromPMX.get(i).getUPDATED());
             Log.info("UPDATED in EPH Staging: " + manifestationDataObjectsFromEPHSTG.get(i).getUPDATED());
 
-            Log.info("Expecting UPDATED in PMX and EPH Staging are consistent for " );
+            Log.info("Expecting UPDATED in PMX and EPH Staging are consistent for ");
 
 
             try {
@@ -388,6 +399,12 @@ public class ManifestationDataQualityCheckSteps {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
+
+            //RECORD_END_DATE
+            Log.info("RECORD_END_DATE in PMX: " + manifestationDataObjectsFromPMX.get(i).getMANIFESTATION_SUBSTATUS());
+            Log.info("RECORD_END_DATE in EPH Staging: " + manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_SUBSTATUS());
+
+            assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ", manifestationDataObjectsFromPMX.get(i).getRECORD_END_DATE(), manifestationDataObjectsFromEPHSTG.get(i).getRECORD_END_DATE());
 
 
         });
@@ -415,7 +432,7 @@ public class ManifestationDataQualityCheckSteps {
         Log.info(sql);
 
 
-       manifestationDataObjectsFromEPHSA = DBManager
+        manifestationDataObjectsFromEPHSA = DBManager
                 .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
     }
 
@@ -480,10 +497,10 @@ public class ManifestationDataQualityCheckSteps {
             if (Objects.equals(manifestationDataObjectsFromEPHSTG.get(i).getINTERNATIONAL_EDITION_IND(), "Y")) {
                 assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are not consistent ", "t", manifestationDataObjectsFromEPHDQ.get(i).getINTER_EDITION_FLAG());
             } else
-                assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are not consistent ", "f",manifestationDataObjectsFromEPHDQ.get(i).getINTER_EDITION_FLAG());
+                assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are not consistent ", "f", manifestationDataObjectsFromEPHDQ.get(i).getINTER_EDITION_FLAG());
 
             //FIRST_PUB_DATE
-            if (manifestationDataObjectsFromEPHSTG.get(i).getCOPYRIGHT_DATE() != null ||manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE() != null) {
+            if (manifestationDataObjectsFromEPHSTG.get(i).getCOPYRIGHT_DATE() != null || manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE() != null) {
                 try {
                     Date stgCopyrightDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHSTG.get(i).getCOPYRIGHT_DATE());
                     Log.info("FIRST_PUB_DATE in stg :" + stgCopyrightDate);
@@ -516,9 +533,12 @@ public class ManifestationDataQualityCheckSteps {
                     assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", "MDI", manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS());
                 } else if (manifestationStatus == null)
                     assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", "UNK", manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS());
-                else
-                    assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", "MST", manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS());
-            }
+            } else if (manifestationDataObjectsFromEPHSTG.get(i).getRECORD_END_DATE() == null) {
+                Log.info("RECORD_END_DATE in staging : " + manifestationDataObjectsFromEPHSTG.get(i).getRECORD_END_DATE());
+                assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", "UNK", manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS());
+            } else
+                assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", "MST", manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS());
+
 
             //F_WWORK
             Log.info("F_WWORK in stg_pmx_manifestation : " + manifestationDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
@@ -531,7 +551,7 @@ public class ManifestationDataQualityCheckSteps {
             //DQ_ERR
             Log.info("DQ_ERR in DQ: " + manifestationDataObjectsFromEPHDQ.get(i).getDQ_ERR());
 
-            assertEquals("N",  manifestationDataObjectsFromEPHDQ.get(i).getDQ_ERR());
+            assertEquals("N", manifestationDataObjectsFromEPHDQ.get(i).getDQ_ERR());
 
 
         });
@@ -560,7 +580,7 @@ public class ManifestationDataQualityCheckSteps {
 
             assertEquals("Expecting the Product details from EPH DQ and SA_MANIFESTATION are consistent ",
                     manifestationDataObjectsFromEPHDQ.get(i).getPMX_SOURCE_REFERENCE(),
-                   manifestationDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE());
+                    manifestationDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE());
 
             //MANIFESTATION_KEY_TITLE
             Log.info("Manifestation key title in sa_manifestation: " + manifestationDataObjectsFromEPHSA.get(i).getMANIFESTATION_KEY_TITLE());
@@ -581,7 +601,7 @@ public class ManifestationDataQualityCheckSteps {
 
 
             //FIRST_PUB_DATE
-            if (manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE() != null ||manifestationDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE() != null) {
+            if (manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE() != null || manifestationDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE() != null) {
                 try {
                     Date dqCopyrightDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE());
                     Log.info("FIRST_PUB_DATE in dq :" + dqCopyrightDate);
@@ -667,7 +687,7 @@ public class ManifestationDataQualityCheckSteps {
             Log.info("MANIFESTATION_ID in gd_manifestation : " + manifestationDataObjectsFromEPHGD.get(i).getMANIFESTATION_ID());
 
             assertEquals("Expecting the Product details from SA and GD are consistent ",
-                  manifestationDataObjectsFromEPHSA.get(i).getMANIFESTATION_ID(),
+                    manifestationDataObjectsFromEPHSA.get(i).getMANIFESTATION_ID(),
                     manifestationDataObjectsFromEPHGD.get(i).getMANIFESTATION_ID());
 
             //PMX_SOURCE_REFERENCE
@@ -676,20 +696,20 @@ public class ManifestationDataQualityCheckSteps {
 
 
             assertEquals("Expecting the Product details from  SA and GD  are consistent ",
-                  manifestationDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE(),
-                  manifestationDataObjectsFromEPHGD.get(i).getPMX_SOURCE_REFERENCE());
+                    manifestationDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE(),
+                    manifestationDataObjectsFromEPHGD.get(i).getPMX_SOURCE_REFERENCE());
 
             //MANIFESTATION_KEY_TITLE
             Log.info("\nMANIFESTATION_KEY_TITLE in sa_manifestation : " + manifestationDataObjectsFromEPHSA.get(i).getMANIFESTATION_KEY_TITLE());
-            Log.info("\nMANIFESTATION_KEY_TITLE in gd_manifestation : " +manifestationDataObjectsFromEPHGD.get(i).getMANIFESTATION_KEY_TITLE());
+            Log.info("\nMANIFESTATION_KEY_TITLE in gd_manifestation : " + manifestationDataObjectsFromEPHGD.get(i).getMANIFESTATION_KEY_TITLE());
 
-            assertEquals("Expecting the Product details from  SA and GD are consistent ",manifestationDataObjectsFromEPHSA.get(i).getMANIFESTATION_KEY_TITLE(), manifestationDataObjectsFromEPHGD.get(i).getMANIFESTATION_KEY_TITLE());
+            assertEquals("Expecting the Product details from  SA and GD are consistent ", manifestationDataObjectsFromEPHSA.get(i).getMANIFESTATION_KEY_TITLE(), manifestationDataObjectsFromEPHGD.get(i).getMANIFESTATION_KEY_TITLE());
 
             //INTER_EDITION_FLAG
             Log.info("INTER_EDITION_FLAG in sa_manifestation : " + manifestationDataObjectsFromEPHSA.get(i).getINTERNATIONAL_EDITION_IND());
             Log.info("INTER_EDITION_FLAG in gd_manifestation : " + manifestationDataObjectsFromEPHGD.get(i).getINTERNATIONAL_EDITION_IND());
 
-            assertEquals("Expecting the Product details from  SA and GD are consistent ",manifestationDataObjectsFromEPHSA.get(i).getINTERNATIONAL_EDITION_IND(), manifestationDataObjectsFromEPHGD.get(i).getINTERNATIONAL_EDITION_IND());
+            assertEquals("Expecting the Product details from  SA and GD are consistent ", manifestationDataObjectsFromEPHSA.get(i).getINTERNATIONAL_EDITION_IND(), manifestationDataObjectsFromEPHGD.get(i).getINTERNATIONAL_EDITION_IND());
 
             //FIRST_PUB_DATE
             if (manifestationDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE() != null)

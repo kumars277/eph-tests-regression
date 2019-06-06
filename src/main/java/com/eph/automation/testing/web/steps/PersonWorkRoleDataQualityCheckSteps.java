@@ -36,7 +36,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
     private String sql;
     private static int countPersonsWorkRolePMX;
     private static int countPersonsWorkRoleEPHSTG;
-    private static int countPersonsWorkRoleEPHSTGDQ;
+    private static int countPersonsWorkRoleEPHSTGGoingToSA;
     private static int countPersonsWorkRoleEPHSA;
     private static int countPersonsWorkRoleEPHAE;
     private static int countPersonsWorkRoleEPHGD;
@@ -82,14 +82,14 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info("Count of persons work role in EPH STG is: " + countPersonsWorkRoleEPHSTG);
     }
 
-    @When("^Get the count of records for persons work role in EPH Staging with DQ$")
-    public void getCountPersonsProductRoleEPHSTG_DQ() {
-        Log.info("When We get the count of persons work role records in EPH STG with DQ ..");
-        sql = PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHSTGDQ;
+    @When("^Get the count of records for persons work role in EPH Staging going to SA$")
+    public void getCountPersonsProductRoleEPHSTGGoingTOSA() {
+        Log.info("When We get the count of persons work role records in EPH STG going to SA ..");
+        sql = PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHSTGGoingToSA;
         Log.info(sql);
         List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        countPersonsWorkRoleEPHSTGDQ = ((Long) personsNumber.get(0).get("count")).intValue();
-        Log.info("Count of persons work role in EPH STG with DQ is: " + countPersonsWorkRoleEPHSTGDQ);
+        countPersonsWorkRoleEPHSTGGoingToSA = ((Long) personsNumber.get(0).get("count")).intValue();
+        Log.info("Count of persons work role in EPH STG going to SA is: " + countPersonsWorkRoleEPHSTGGoingToSA);
     }
 
 
@@ -120,9 +120,9 @@ public class PersonWorkRoleDataQualityCheckSteps {
     }
 
 
-    @Then("^Compare the count on records for persons work role in EPH Staging with DQ and EPH SA$")
+    @Then("^Compare the count on records for persons work role in EPH Staging and EPH SA$")
     public void verifyCountOfPersonsProductRoleInEPHSTGAndEPHSAIsEqual() {
-        Assert.assertEquals("\nPersons work role count in EPH STG with DQ and EPH SA is not equal", countPersonsWorkRoleEPHSTGDQ, countPersonsWorkRoleEPHSA);
+        Assert.assertEquals("\nPersons work role count in EPH STG and EPH SA is not equal", countPersonsWorkRoleEPHSTGGoingToSA, countPersonsWorkRoleEPHSA);
     }
 
     @When("^Get the count of records for persons work role in EPH GD$")
@@ -215,6 +215,9 @@ public class PersonWorkRoleDataQualityCheckSteps {
             Log.info(sql);
         } if(type.equals("PU")) {
             sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_PU, Joiner.on("','").join(idsPMX));
+            Log.info(sql);
+        } if(type.equals("AE")) {
+            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_AE, Joiner.on("','").join(idsPMX));
             Log.info(sql);
         }
 

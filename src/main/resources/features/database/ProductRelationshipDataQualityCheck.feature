@@ -15,7 +15,7 @@ Feature: Entity - PRODUCT RELATIONSHIP - Data Mapping Check - Validate data betw
 
   @Regression
   Scenario: Verify count of product relationship records in EPH staging and EPH SA is equal
-    Given We get the count of the product relationship records in EPH STG
+    Given We get the count of the product relationship records in EPH STG going to SA
     When We get the count of product relationship records in EPH SA
     Then The count of the product relationship records in EPH staging table and EPH SA is equal
 

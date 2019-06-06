@@ -10,16 +10,18 @@ public class WorkSubjectAreaLinkDataSQL {
             "     PSA.PRODUCT_SUBJECT_AREA_ID\n" +
             "    ,PSA.F_SUBJECT_AREA\n" +
             "    ,PSA.F_PRODUCT_WORK\n" +
-            "FROM GD_PRODUCT_SUBJECT_AREA PSA \n" +
-            "JOIN GD_SUBJECT_AREA SA ON F_SUBJECT_AREA = SUBJECT_AREA_ID\n " +
-            "WHERE PSA.F_PRODUCT_WORK IN \n" +
+            "    ,NVL(PSA.EFFFROM_DATE,TO_DATE('2016-01-01','YYYY-MM-DD')) AS START_DATE\n" +
+            "    ,PSA.EFFTO_DATE AS END_DATE\n" +
+            "    ,TO_CHAR(NVL(PSA.B_UPDDATE,PSA.B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
+            "FROM GD_PRODUCT_SUBJECT_AREA PSA\n" +
+            "JOIN GD_SUBJECT_AREA SA ON F_SUBJECT_AREA = SUBJECT_AREA_ID\n" +
+            "WHERE F_PRODUCT_WORK IN \n" +
             "    (SELECT PRODUCT_WORK_ID FROM GD_PRODUCT_WORK WHERE F_PRODUCT_TYPE IN \n" +
             "        (SELECT PRODUCT_TYPE_ID FROM GD_PRODUCT_TYPE WHERE F_PRODUCT_GROUP_TYPE = 2\n" +
             "            )\n" +
             "        )\n" +
-            "AND PSA.EFFTO_DATE IS NULL\n" +
             "AND SA.F_SUBJECT_AREA_TYPE = 181\n" +
-            "    ) ";
+            "    )";
 
 
     public static String SELECT_COUNT_WORK_SUBJECT_AREA_SA = "select count(*) as count from semarchy_eph_mdm.sa_work_subject_area_link s"+
@@ -55,7 +57,7 @@ public class WorkSubjectAreaLinkDataSQL {
             "    ,PSA.F_PRODUCT_WORK\n" +
             "    ,NVL(PSA.EFFFROM_DATE,TO_DATE('2016-01-01','YYYY-MM-DD')) AS START_DATE\n" +
             "    ,PSA.EFFTO_DATE AS END_DATE\n" +
-            "    ,TO_CHAR(NVL(PSA.B_UPDDATE,PSA.B_CREDATE)) AS UPDATED\n" +
+            "    ,TO_CHAR(NVL(PSA.B_UPDDATE,PSA.B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
             "FROM GD_PRODUCT_SUBJECT_AREA PSA\n" +
             "JOIN GD_SUBJECT_AREA SA ON F_SUBJECT_AREA = SUBJECT_AREA_ID\n" +
             "WHERE F_PRODUCT_WORK IN \n" +
@@ -63,7 +65,7 @@ public class WorkSubjectAreaLinkDataSQL {
             "        (SELECT PRODUCT_TYPE_ID FROM GD_PRODUCT_TYPE WHERE F_PRODUCT_GROUP_TYPE = 2\n" +
             "            )\n" +
             "        )\n" +
-            "AND PSA.EFFTO_DATE IS NULL\n" +
+            "--AND PSA.EFFTO_DATE IS NULL -- removing this filter as we need to include end dated records\n" +
             "AND SA.F_SUBJECT_AREA_TYPE = 181\n" +
             "    ) WHERE PRODUCT_SUBJECT_AREA_ID IN ('%s')";
 

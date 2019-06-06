@@ -34,7 +34,7 @@ public class PersonProductRoleDataQualityCheckSteps {
     public DataQualityContext dataQualityContext;
     private String sql;
     private static int countPersonsEPHSTG;
-    private static int countPersonsEPHSTGDQ;
+    private static int countPersonsEPHSTGGoingToSA;
     private static int countPersonsEPHSA;
     private static int countPersonsEPHGD;
     private static List<String> idsSourceRef;
@@ -48,8 +48,8 @@ public class PersonProductRoleDataQualityCheckSteps {
         sql = PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPH_STG_DQ;
         Log.info(sql);
         List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        countPersonsEPHSTGDQ = ((Long) personsNumber.get(0).get("count")).intValue();
-        Log.info("Count of persons product role in DQ is: " + countPersonsEPHSTGDQ);
+        countPersonsEPHSTGGoingToSA = ((Long) personsNumber.get(0).get("count")).intValue();
+        Log.info("Count of persons product role in DQ is: " + countPersonsEPHSTGGoingToSA);
     }
 
 
@@ -57,17 +57,8 @@ public class PersonProductRoleDataQualityCheckSteps {
     public void getCountPersonsProductRolePHSTG() {
         Log.info("When We get the count of persons product role records in EPH STG ..");
 
-            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                sql = PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG;
-                Log.info(sql);
-            } else {
-                sql = WorkCountSQL.GET_REFRESH_DATE;
-                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
-                sql = String.format(PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG_DELTA, refreshDate );
-            }
-
-
+        sql = PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG;
+        Log.info(sql);
 
         List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countPersonsEPHSTG = ((Long) personsNumber.get(0).get("count")).intValue();
@@ -75,19 +66,31 @@ public class PersonProductRoleDataQualityCheckSteps {
     }
 
 
-    @When("^Get the count of records for persons product role in EPH Staging with DQ$")
-    public void getCountPersonsProductRolePHSTGDQ() {
-        Log.info("When We get the count of persons product role records in EPH STG with DQ..");
-        sql = PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTGDQ;
-        Log.info(sql);
+    @When("^Get the count of records for persons product role in EPH Staging going to SA$")
+    public void getCountPersonsProductRolePHSTGGoingToSA() {
+        Log.info("When We get the count of persons product role records in EPH STG going to SA..");
+
+
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            sql = PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG_GOING_TO_SA;
+            Log.info(sql);
+        } else {
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+            sql = String.format(PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG_GOING_TO_SA_DELTA, refreshDate );
+            Log.info(sql);
+
+        }
+
         List<Map<String, Object>> personsNumberDQ = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        countPersonsEPHSTGDQ = ((Long) personsNumberDQ.get(0).get("count")).intValue();
-        Log.info("Count of persons product role in EPH STG with DQ is: " + countPersonsEPHSTGDQ);
+        countPersonsEPHSTGGoingToSA = ((Long) personsNumberDQ.get(0).get("count")).intValue();
+        Log.info("Count of persons product role in EPH STG going to SA is: " + countPersonsEPHSTGGoingToSA);
     }
 
     @Then("^Compare the count on records for persons product role in EPH STG DQ and EPH Staging$")
     public void verifyCountOfPersonsProductRoleInPMXAndEPHSTGIsEqual() {
-        Assert.assertEquals("\nPersons product role count in DQ and STG is not equal", countPersonsEPHSTGDQ, countPersonsEPHSTG);
+        Assert.assertEquals("\nPersons product role count in DQ and STG is not equal", countPersonsEPHSTGGoingToSA, countPersonsEPHSTG);
     }
 
 
@@ -104,7 +107,7 @@ public class PersonProductRoleDataQualityCheckSteps {
 
     @Then("^Compare the count on records for persons product role in EPH Staging with DQ and EPH SA$")
     public void verifyCountOfPersonsProductRoleInEPHSTGAndEPHSAIsEqual() {
-        Assert.assertEquals("\nPersons product role count in PMX and EPH STG is not equal", countPersonsEPHSTGDQ, countPersonsEPHSA);
+        Assert.assertEquals("\nPersons product role count in PMX and EPH STG is not equal", countPersonsEPHSTGGoingToSA, countPersonsEPHSA);
     }
 
     @When("^Get the count of records for persons product role in EPH GD$")
@@ -533,7 +536,7 @@ public class PersonProductRoleDataQualityCheckSteps {
     }
 
     @Then("^Check the person product role records are updated$")
-    public void checkProductPersonRoleRecordsAreUpdated(String identifier) {
+    public void checkProductPersonRoleRecordsAreUpdated() {
         IntStream.range(0, dataQualityContext.personProductRoleDataObjectsFromEPHGD.size()).forEach(i -> {
 
             //get source_ref from ephsit_talend_owner.map_sourceref_2_numeric id for current record

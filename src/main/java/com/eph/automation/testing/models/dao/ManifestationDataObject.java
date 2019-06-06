@@ -26,6 +26,7 @@ public class  ManifestationDataObject {
     private String MANIFESTATION_SUBSTATUS;
     private String DQ_ERR;
     private String UPDATED;
+    private String RECORD_END_DATE;
 
     //SA_MANIFESTATION columns
     private String F_EVENT;
@@ -38,6 +39,15 @@ public class  ManifestationDataObject {
     private String F_STATUS;
     private String F_FORMAT_TYPE;
     private String F_WWORK;
+
+
+    public String getRECORD_END_DATE() {
+        return RECORD_END_DATE;
+    }
+
+    public void setRECORD_END_DATE(String RECORD_END_DATE) {
+        this.RECORD_END_DATE = RECORD_END_DATE;
+    }
 
     public String getUPDATED() {
         return UPDATED;

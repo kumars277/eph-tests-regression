@@ -5,49 +5,7 @@ package com.eph.automation.testing.services.db.sql;
  */
 public class ProductRelationshipChecksSQL {
 
-    public static String GET_PMX_PRODUCT_RELATIONSHIPS_COUNT = "SELECT \n" +
-            "\t count(*)\n as count\n" +
-            "FROM \n" +
-            "\tGD_PRODUCT_WORK_LINK WL,\n"+
-            "\tGD_PRODUCT_WORK W1,\n"+
-            "\tGD_PRODUCT_WORK W2,\n"+
-            "\tGD_PRODUCT_MANIFESTATION M2\n"+
-            "WHERE\n"+
-            "\tWL.F_PRODUCT_WORK = W1.PRODUCT_WORK_ID\n"+
-            "AND\t\n"+
-            "\tWL.F_RELATED_PRODUCT_WORK = W2.PRODUCT_WORK_ID\n"+
-            "AND\n"+
-            "\tW2.PRODUCT_WORK_ID = M2.F_PRODUCT_WORK\n"+
-            "AND\n"+
-            "\tW1.F_PRODUCT_TYPE IN (21,143)\t\t-- full sets & subject collections\n"+
-            "AND\t\n"+
-            "\tW2.F_PRODUCT_TYPE = 4\t\t\t-- journals\n"+
-            "AND\n"+
-            "\tM2.F_PRODUCT_MANIFESTATION_TYP = 2  \t-- electronic \n"+
-            "AND\n"+
-            "\tWL.EFFTO_DATE IS NULL\n"+
-            "AND\n"+
-            "\tW1.F_WORK_STATUS = 81\n"+
-            "AND\n"+
-            "\tWL.F_PRODUCT_WORK_LINK_TYPE = 42\t-- includes\n";
-
-    public static String GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_pmx_product_pack_rel\n";
-
-    public static String GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT_DELTA = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_pmx_product_pack_rel\n" +
-            "where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('%s','YYYYMMDDHH24MI')";
-
-
-    public static String GET_EPH_SA_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from semarchy_eph_mdm.sa_product_rel_package\n" +
-            "where f_event = (select max (f_event) from semarchy_eph_mdm.sa_product_rel_package\n" +
-            "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
-            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
-            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
-            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
-            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')";
-
-    public static String GET_EPH_GD_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from semarchy_eph_mdm.gd_product_rel_package";
-
-    public static String GET_PMX_PRODUCT_RELATIONSHIPS_DATA = " \t SELECT\n" +
+    public static String GET_PMX_PRODUCT_RELATIONSHIPS_COUNT = "SELECT count(*) as count FROM (SELECT\n" +
             "\t WL.PRODUCT_WORK_LINK_ID AS RELATIONSHIP_PMX_SOURCEREF\n" +
             "\t,W1.PRODUCT_WORK_ID || '-PKG' AS OWNER_PMX_SOURCE\n" +
             "\t,M2.PRODUCT_MANIFESTATION_ID || '-SUB' AS COMPONENT_PMX_SOURCE\n" +
@@ -58,7 +16,7 @@ public class ProductRelationshipChecksSQL {
             "\t,NVL(WL.EFFTO_DATE,\n" +
             "\t\tCASE WHEN W1.EFFECTIVE_TO_DATE IS NULL AND W2.EFFECTIVE_TO_DATE IS NULL THEN NULL \n" +
             "\t\tELSE GREATEST(NVL(W1.EFFECTIVE_TO_DATE,TO_DATE('1900-01-01', 'YYYY-MM-DD')),NVL(W2.EFFECTIVE_TO_DATE,TO_DATE('1900-01-01', 'YYYY-MM-DD'))) END) AS ENDON\n" +
-            "\t,TO_CHAR(NVL(WL.B_UPDDATE,WL.B_CREDATE)) AS UPDATED\n" +
+            "\t,TO_CHAR(NVL(WL.B_UPDDATE,WL.B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
             "FROM\n" +
             "\tGD_PRODUCT_WORK_LINK WL,\n" +
             "\tGD_PRODUCT_WORK W1,\n" +
@@ -77,13 +35,98 @@ public class ProductRelationshipChecksSQL {
             "AND\n" +
             "\tM2.F_PRODUCT_MANIFESTATION_TYP = 2  \t-- electronic\n" +
             "AND\n" +
-            "\tNVL(W1.EFFECTIVE_TO_DATE, NVL(M2.EFFECTIVE_TO_DATE, WL.EFFTO_DATE)) IS NULL\n" +
+            "\tW1.F_WORK_STATUS = 81\n" +
+            "AND\n" +
+            "\tWL.F_PRODUCT_WORK_LINK_TYPE = 42\t-- includes\n" +
+            "\t)\n";
+
+    public static String GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_pack_rel\n";
+
+    public static String GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT_GOING_TO_SA = "select  count(*) as count \n" +
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_pack_rel\n" +
+            "join (\n" +
+            "select s.pmx_source_reference as stage,\n" +
+            "g.pmx_source_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.pmx_source_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
+            "from semarchy_eph_mdm.gd_product g \n" +
+            "full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq s on g.pmx_source_reference = s.pmx_source_reference::varchar) d1 \n" +
+            "on STG_10_PMX_PRODUCT_PACK_REL.\"OWNER_PMX_SOURCE\" = d1.consol\n" +
+            "join (select s.pmx_source_reference as stage,\n" +
+            "g.pmx_source_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.pmx_source_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
+            "from semarchy_eph_mdm.gd_product g \n" +
+            "full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq s \n" +
+            "on g.pmx_source_reference = s.pmx_source_reference::varchar) d2\n" +
+            "on STG_10_PMX_PRODUCT_PACK_REL.\"COMPONENT_PMX_SOURCE\" = d2.consol where d1.dq_err!= 'Y' and d2.dq_err!= 'Y'\t\n";
+
+
+    public static String GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT_DELTA = "select  count(*) as count \n" +
+            "from ephsit_talend_owner.stg_10_pmx_product_pack_rel\n" +
+            "join (\n" +
+            "select s.pmx_source_reference as stage,\n" +
+            "g.pmx_source_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.pmx_source_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
+            "from semarchy_eph_mdm.gd_product g \n" +
+            "full outer join ephsit_talend_owner.stg_10_pmx_product_dq s on g.pmx_source_reference = s.pmx_source_reference::varchar) d1 \n" +
+            "on STG_10_PMX_PRODUCT_PACK_REL.\"OWNER_PMX_SOURCE\" = d1.consol\n" +
+            "join (select s.pmx_source_reference as stage,\n" +
+            "g.pmx_source_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.pmx_source_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
+            "from semarchy_eph_mdm.gd_product g \n" +
+            "full outer join ephsit_talend_owner.stg_10_pmx_product_dq s \n" +
+            "on g.pmx_source_reference = s.pmx_source_reference::varchar) d2\n" +
+            "on STG_10_PMX_PRODUCT_PACK_REL.\"COMPONENT_PMX_SOURCE\" = d2.consol where d1.dq_err!= 'Y' and d2.dq_err!= 'Y'\n" +
+            "where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('%s','YYYYMMDDHH24MI')";
+
+
+    public static String GET_EPH_SA_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from semarchy_eph_mdm.sa_product_rel_package\n" +
+            "where f_event = (select max (f_event) from semarchy_eph_mdm.sa_product_rel_package\n" +
+            "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
+            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
+            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')";
+
+    public static String GET_EPH_GD_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from semarchy_eph_mdm.gd_product_rel_package";
+
+    public static String GET_PMX_PRODUCT_RELATIONSHIPS_DATA = "SELECT * FROM (SELECT\n" +
+            "\t WL.PRODUCT_WORK_LINK_ID AS RELATIONSHIP_PMX_SOURCEREF\n" +
+            "\t,W1.PRODUCT_WORK_ID || '-PKG' AS OWNER_PMX_SOURCE\n" +
+            "\t,M2.PRODUCT_MANIFESTATION_ID || '-SUB' AS COMPONENT_PMX_SOURCE\n" +
+            "\t,'CON' AS F_RELATIONSHIP_TYPE\n" +
+            "\t,CASE WHEN W1.F_WORK_STATUS = 81 AND EFFFROM_DATE IS NULL THEN TO_DATE('2019-01-01', 'YYYY-MM-DD')\n" +
+            "\t      WHEN W1.F_WORK_STATUS = 81 AND EFFFROM_DATE IS NOT NULL THEN EFFFROM_DATE\n" +
+            "\t      ELSE NULL END AS EFFECTIVE_START_DATE  -- available work (81)\n" +
+            "\t,NVL(WL.EFFTO_DATE,\n" +
+            "\t\tCASE WHEN W1.EFFECTIVE_TO_DATE IS NULL AND W2.EFFECTIVE_TO_DATE IS NULL THEN NULL \n" +
+            "\t\tELSE GREATEST(NVL(W1.EFFECTIVE_TO_DATE,TO_DATE('1900-01-01', 'YYYY-MM-DD')),NVL(W2.EFFECTIVE_TO_DATE,TO_DATE('1900-01-01', 'YYYY-MM-DD'))) END) AS ENDON\n" +
+            "\t,TO_CHAR(NVL(WL.B_UPDDATE,WL.B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
+            "FROM\n" +
+            "\tGD_PRODUCT_WORK_LINK WL,\n" +
+            "\tGD_PRODUCT_WORK W1,\n" +
+            "\tGD_PRODUCT_WORK W2,\n" +
+            "\tGD_PRODUCT_MANIFESTATION M2\n" +
+            "WHERE\n" +
+            "\tWL.F_PRODUCT_WORK = W1.PRODUCT_WORK_ID\n" +
+            "AND\n" +
+            "\tWL.F_RELATED_PRODUCT_WORK = W2.PRODUCT_WORK_ID\n" +
+            "AND\n" +
+            "\tW2.PRODUCT_WORK_ID = M2.F_PRODUCT_WORK\n" +
+            "AND\n" +
+            "\tW1.F_PRODUCT_TYPE IN (21,143)\t\t-- full sets & subject collections\n" +
+            "AND\n" +
+            "\tW2.F_PRODUCT_TYPE = 4\t\t\t-- journals\n" +
+            "AND\n" +
+            "\tM2.F_PRODUCT_MANIFESTATION_TYP = 2  \t-- electronic\n" +
             "AND\n" +
             "\tW1.F_WORK_STATUS = 81\n" +
             "AND\n" +
             "\tWL.F_PRODUCT_WORK_LINK_TYPE = 42\t-- includes\n" +
-            "\tAND PRODUCT_WORK_LINK_ID in ('%s')\n" +
-            "\n";
+            "\t)\n";
 
     public static String GET_EPH_STG_PRODUCT_RELATIONSHIPS_DATA = "select\n" +
             "   \"RELATIONSHIP_PMX_SOURCEREF\" as RELATIONSHIP_PMX_SOURCEREF,\n" +
