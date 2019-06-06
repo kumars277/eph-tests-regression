@@ -16,9 +16,9 @@ public class PersonDataSQL {
             "    SELECT ROLE_TYPE_ID FROM GD_ROLE_TYPE WHERE ROLE_TYPE_CODE IN \n" +
             "        ('PPC','PUB','A01','A02','B01','B13','B09','B11','PUBDIR')))";
 
-    public static String GET_COUNT_PERSONS_EPHSTG = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person";
+    public static String GET_COUNT_PERSONS_EPHSTG = "select distinct count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person";
 
-    public static String GET_COUNT_PERSONS_EPHSTG_DELTA = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person\n" +
+    public static String GET_COUNT_PERSONS_EPHSTG_DELTA = "select distinct count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person\n" +
             "where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('201905311054','YYYYMMDDHH24MI')";
 
 

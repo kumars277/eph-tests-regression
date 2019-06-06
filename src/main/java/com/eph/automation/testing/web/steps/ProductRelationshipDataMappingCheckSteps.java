@@ -31,6 +31,7 @@ public class ProductRelationshipDataMappingCheckSteps {
     private String sql;
     private static int countProductsRelPMX;
     private static int countProductsRelEPHSTG;
+    private static int countProductsRelEPHDQ;
     private static int countProductsRelEPHSA;
     private static int countProductsRelEPHGD;
     private List<Map<?, ?>> productRelIds;
@@ -55,21 +56,14 @@ public class ProductRelationshipDataMappingCheckSteps {
         assertTrue("No data found in PMX for product relationships", countProductsRelPMX != 0);
     }
 
+
     @When("We get the count of the product relationship records in EPH STG$")
     public void getCountProductRelEPHSTG() {
         Log.info("When We get the count of the product relationship records in EPH STG ..");
 
-        if (System.getProperty("LOAD") != null) {
-            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                sql = ProductRelationshipChecksSQL.GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT;
-                Log.info(sql);
-            } else {
-                sql = WorkCountSQL.GET_REFRESH_DATE;
-                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                String refreshDate = (String) refreshDateNumber.get(0).get("refresh_timestamp");
-                sql = String.format( ProductRelationshipChecksSQL.GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT_DELTA, refreshDate );
-            }
-        }
+
+        sql = ProductRelationshipChecksSQL.GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT;
+        Log.info(sql);
 
         List<Map<String, Object>> productsRelNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countProductsRelEPHSTG = ((Long) productsRelNumber.get(0).get("count")).intValue();
@@ -78,6 +72,53 @@ public class ProductRelationshipDataMappingCheckSteps {
         Log.info("Assert count of records is not null");
 
         assertTrue("No data found in EPH STG for product relationships", countProductsRelEPHSTG != 0);
+
+
+    }
+
+
+    @When("We get the count of the product relationship records in EPH STG going to SA$")
+    public void getCountProductRelEPHSTGGoingToSA() {
+        Log.info("When We get the count of the product relationship records in EPH STG going to SA..");
+
+            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                sql = ProductRelationshipChecksSQL.GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT_GOING_TO_SA;
+                Log.info(sql);
+            } else {
+                sql = WorkCountSQL.GET_REFRESH_DATE;
+                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+                sql = String.format( ProductRelationshipChecksSQL.GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT_DELTA, refreshDate );
+            }
+
+
+        List<Map<String, Object>> productsRelNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countProductsRelEPHSTG = ((Long) productsRelNumber.get(0).get("count")).intValue();
+        Log.info("Count of product relationship records in EPH STG is: " + countProductsRelEPHSTG);
+
+        Log.info("Assert count of records is not null");
+
+        assertTrue("No data found in EPH STG for product relationships", countProductsRelEPHSTG != 0);
+
+
+    }
+
+
+    @When("We get the count of the product relationship records in EPH DQ$")
+    public void getCountProductRelEPHDQ() {
+        Log.info("When We get the count of the product relationship records in EPH DQ ..");
+
+
+        sql = ProductRelationshipChecksSQL.GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT;
+        Log.info(sql);
+
+        List<Map<String, Object>> productsRelNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countProductsRelEPHDQ = ((Long) productsRelNumber.get(0).get("count")).intValue();
+        Log.info("Count of product relationship records in EPH DQ is: " + countProductsRelEPHDQ);
+
+        Log.info("Assert count of records is not null");
+
+        assertTrue("No data found in EPH STG for product relationships", countProductsRelEPHDQ != 0);
 
 
     }
@@ -122,7 +163,7 @@ public class ProductRelationshipDataMappingCheckSteps {
     @Then("^The count of the product relationship records in EPH staging table and EPH SA is equal$")
     public void verifyCountOfManifestationDataInEPHSTGAndEPHSAIsEqual() {
         Log.info("Then Check number of the product relationship records in EPH STG and EPH SA is equal .. ");
-        Assert.assertEquals("\nThe number of product relationship records in PMX and EPH STG is not equal", countProductsRelEPHSTG, countProductsRelEPHSA);
+        Assert.assertEquals("\nThe number of product relationship records in EPH STG and EPH SA is not equal", countProductsRelEPHSTG, countProductsRelEPHSA);
     }
 
     @Then("^The count of the product relationship records in in EPH SA and EPH GD is equal$")

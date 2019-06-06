@@ -5,20 +5,21 @@ package com.eph.automation.testing.services.db.sql;
  */
 public class SubjectAreaDataSQL {
 
-    public static String SELECT_COUNT_SUBJECT_AREA_PMX = "SELECT count(*) as count FROM (\n" +
+    public static String SELECT_COUNT_SUBJECT_AREA_PMX = "SELECT count(*) AS count FROM (\n" +
             "SELECT \n" +
             "     SUBJECT_AREA_ID AS PMX_SOURCE_REF\n" +
             "    ,SUBJECT_AREA_CODE\n" +
             "    ,SUBJECT_AREA_NAME\n" +
             "    ,F_PARENT_SUBJECT_AREA AS PARENT_SUBJECT_AREA_REF\n" +
-            "    ,'SD' AS SUBJECT_AREA_TYPE \n" +
+            "    ,'SD' AS SUBJECT_AREA_TYPE\n" +
+            "    ,TO_CHAR(NVL(B_UPDDATE,B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
             "FROM GD_SUBJECT_AREA WHERE F_SUBJECT_AREA_TYPE = 181 --Science Direct Subject Areas\n" +
-            "    )\n";
+            "    )";
 
     public static String SELECT_COUNT_SUBJECT_AREA_STG = "select count(*) as count from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_SUBJECT_AREA";
 
     public static String SELECT_COUNT_SUBJECT_AREA_STG_Delta = "select count(*) as count from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_SUBJECT_AREA\n"+
-            "where TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+            "where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
     public static String SELECT_COUNT_SUBJECT_AREA_SA = "select count(*) from semarchy_eph_mdm.sa_subject_area s\n" +
             " where s.b_loadid =  (select max (s.b_loadid) from\n" +
@@ -42,10 +43,11 @@ public class SubjectAreaDataSQL {
     public static String EXTRACT_DATA_SUBJECT_AREA_PMX = "SELECT * FROM (\n" +
             "SELECT \n" +
             "     SUBJECT_AREA_ID AS PMX_SOURCE_REF\n" +
-            "    ,SUBJECT_AREA_CODE AS SUBJECT_AREA_CODE\n" +
-            "    ,SUBJECT_AREA_NAME AS SUBJECT_AREA_NAME\n" +
+            "    ,SUBJECT_AREA_CODE\n" +
+            "    ,SUBJECT_AREA_NAME\n" +
             "    ,F_PARENT_SUBJECT_AREA AS PARENT_SUBJECT_AREA_REF\n" +
-            "    ,'SD' AS SUBJECT_AREA_TYPE \n" +
+            "    ,'SD' AS SUBJECT_AREA_TYPE\n" +
+            "    ,TO_CHAR(NVL(B_UPDDATE,B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
             "FROM GD_SUBJECT_AREA WHERE F_SUBJECT_AREA_TYPE = 181 --Science Direct Subject Areas\n" +
             "AND SUBJECT_AREA_ID IN ('%s')\n" +
             "    )";
@@ -56,6 +58,7 @@ public class SubjectAreaDataSQL {
             ",\"SUBJECT_AREA_NAME\" as SUBJECT_AREA_NAME\n" +
             ",\"PARENT_SUBJECT_AREA_REF\" as PARENT_SUBJECT_AREA_REF\n" +
             ",\"SUBJECT_AREA_TYPE\" as SUBJECT_AREA_TYPE\n" +
+            ",\"UPDATED\" as UPDATED\n" +
             "from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_SUBJECT_AREA\n" +
             "where \"PMX_SOURCE_REF\" in ('%s')\n";
 

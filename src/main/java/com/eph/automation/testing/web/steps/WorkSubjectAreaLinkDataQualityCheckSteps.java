@@ -69,8 +69,8 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
     @When("^We get the count of work subject area data from EPH STG With DQ$")
     public void getCountWorkSubjectAreaRecordsEPHSTGDQ() {
         Log.info("When We get the count of work subject area data in EPH STG with DQ ..");
-        if (System.getProperty("LOAD") != null) {
-            if(System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+
+            if(System.getProperty("LOAD") != null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
                 sql = WorkSubjectAreaLinkDataSQL.SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ;
                 Log.info(sql);
                 List<Map<String, Object>> workSubjectAreaNumberDQ = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -88,23 +88,6 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
                 countWorkSubjectAreaRecordsEPHSTGDQ = ((Long) workSubjectAreaNumberDQ.get(0).get("count")).intValue();
                 Log.info("Count of work subject area data in EPH STG with DQ is: " + countWorkSubjectAreaRecordsEPHSTGDQ);
             }
-        }else{
-            sql = WorkCountSQL.GET_REFRESH_DATE;
-            refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                    Constants.EPH_URL);
-
-            sql = WorkSubjectAreaLinkDataSQL.SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ_Delta.replace("PARAM1"
-                    ,refreshDate.get(1).refresh_timestamp);
-            Log.info(sql);
-            List<Map<String, Object>> workSubjectAreaNumberDQ = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            countWorkSubjectAreaRecordsEPHSTGDQ = ((Long) workSubjectAreaNumberDQ.get(0).get("count")).intValue();
-            Log.info("Count of work subject area data in EPH STG with DQ is: " + countWorkSubjectAreaRecordsEPHSTGDQ);/*
-            sql = WorkSubjectAreaLinkDataSQL.SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ;
-            Log.info(sql);
-            List<Map<String, Object>> workSubjectAreaNumberDQ = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            countWorkSubjectAreaRecordsEPHSTGDQ = ((Long) workSubjectAreaNumberDQ.get(0).get("count")).intValue();
-            Log.info("Count of work subject area data in EPH STG with DQ is: " + countWorkSubjectAreaRecordsEPHSTGDQ);*/
-        }
     }
 
     @When("^We get the count of work subject area data from EPH SA$")

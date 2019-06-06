@@ -11,6 +11,10 @@ public class SubjectAreaDataObject {
     private String SUBJECT_AREA_NAME;
     private String PARENT_SUBJECT_AREA_REF;
     private String SUBJECT_AREA_TYPE;
+    private String UPDATED;
+    private String EFFECTIVE_START_DATE;
+    private String EFFECTIVE_END_DATE;
+
 
     //SA
     private String B_LOADID;
@@ -18,6 +22,30 @@ public class SubjectAreaDataObject {
     private String SUBJECT_AREA_ID;
     private int F_PARENT_SUBJECT_AREA;
 
+
+    public String getEFFECTIVE_START_DATE() {
+        return EFFECTIVE_START_DATE;
+    }
+
+    public void setEFFECTIVE_START_DATE(String EFFECTIVE_START_DATE) {
+        this.EFFECTIVE_START_DATE = EFFECTIVE_START_DATE;
+    }
+
+    public String getEFFECTIVE_END_DATE() {
+        return EFFECTIVE_END_DATE;
+    }
+
+    public void setEFFECTIVE_END_DATE(String EFFECTIVE_END_DATE) {
+        this.EFFECTIVE_END_DATE = EFFECTIVE_END_DATE;
+    }
+
+    public String getUPDATED() {
+        return UPDATED;
+    }
+
+    public void setUPDATED(String UPDATED) {
+        this.UPDATED = UPDATED;
+    }
 
     public String getPMX_SOURCE_REF() {
         return PMX_SOURCE_REF;

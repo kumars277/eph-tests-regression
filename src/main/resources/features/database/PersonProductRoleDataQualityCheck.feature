@@ -8,7 +8,7 @@ Feature: Entity - PERSON PRODUCT ROLE - Validate data between PMX and EPH - Tale
 
   @Regression
   Scenario: Count check of persons product role between EPH Staging with DQ and EPH SA
-    Given Get the count of records for persons product role in EPH Staging with DQ
+    Given Get the count of records for persons product role in EPH Staging going to SA
     When Get the count of records for persons product role in EPH SA
     Then Compare the count on records for persons product role in EPH Staging with DQ and EPH SA
 

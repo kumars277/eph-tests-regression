@@ -49,9 +49,25 @@ public class PersonWorkRoleDataSQL {
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTG_DELTA = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')\n" ;
 
 
-    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTGDQ = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role wpr  join  " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq perd  on wpr.\"PMX_PARTY_SOURCE_REF\" = perd.person_source_ref \n" +
-            "join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq word on wpr.\"PMX_WORK_SOURCE_REF\" = word.pmx_source_reference \n" +
+    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTGGoingToSA = "select count(*) from ephsit_talend_owner.STG_10_PMX_WORK_PERSON_ROLE\n" +
+            "join (\n" +
+            "select s.person_source_ref as stage,\n" +
+            "replace(m.source_ref,'PERSON-','') as gold,\n" +
+            "coalesce(s.person_source_ref::varchar,replace(m.source_ref,'PERSON-','')) as consol,\n" +
+            "case when s.person_source_ref is null then 'N' else s.dq_err end as dq_err\n" +
+            "from semarchy_eph_mdm.gd_person g join ephsit_talend_owner.map_sourceref_2_numericid m on g.person_id = m.numeric_id\n" +
+            "full outer join ephsit_talend_owner.stg_10_pmx_person_dq s on replace(m.source_ref,'PERSON-','') = s.person_source_ref::varchar)  perd\n" +
+            "on ephsit_talend_owner.STG_10_PMX_WORK_PERSON_ROLE.\"PMX_PARTY_SOURCE_REF\" \n" +
+            "join  (\n" +
+            "select s.pmx_source_reference as stage,\n" +
+            "g.pmx_source_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.pmx_source_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
+            "from semarchy_eph_mdm.gd_wwork g \n" +
+            "full outer join ephsit_talend_owner.stg_10_pmx_wwork_dq s on g.pmx_source_reference = s.pmx_source_reference::varchar) word\n" +
+            "on ephsit_talend_owner.STG_10_PMX_WORK_PERSON_ROLE.\"PMX_WORK_SOURCE_REF\" = word.consol\n" +
             "where perd.dq_err != 'Y' and word.dq_err != 'Y'" ;
+
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHAE = "select count(distinct work_person_role_id) as count from semarchy_eph_mdm.ae_work_person_role\n";
 
@@ -80,7 +96,7 @@ public class PersonWorkRoleDataSQL {
             "    ,'PD' AS F_ROLE\n" +
             "    ,CURRENT_DATE AS START_DATE\n" +
             "    ,NULL AS END_DATE\n" +
-            "    ,TO_CHAR(PMG.B_UPDDATE) AS UPDATED\n" +
+            "    ,TO_CHAR(PMG.B_UPDDATE,'YYYYMMDDHH24MI') AS UPDATED\n" +
             "FROM\n" +
             "    GD_PRODUCT_WORK W\n" +
             "JOIN\n" +
@@ -89,7 +105,7 @@ public class PersonWorkRoleDataSQL {
             "    GD_PMG PMG ON PMC.F_PMG = PMG.PMGCODE\n" +
             "WHERE\n" +
             "    PMG.F_PARTY IS NOT NULL\n" +
-            "\t      AND W.PRODUCT_WORK_ID||PMG.F_PARTY IN ('%s')";
+            "    AND W.PRODUCT_WORK_ID||PMG.F_PARTY IN ('%s')";
 
     public static String GET_DATA_PERSONS_WORK_ROLE_PMX_AU = "SELECT\n" +
             "\t P.PARTY_IN_PRODUCT_ID||'-AU' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
@@ -98,12 +114,11 @@ public class PersonWorkRoleDataSQL {
             "\t,'AU' AS F_ROLE\n" +
             "\t,P.EFFFROM_DATE AS START_DATE\n" +
             "\t,P.EFFTO_DATE AS END_DATE\n" +
-            "\t,TO_CHAR(NVL(P.B_UPDDATE,P.B_CREDATE)) AS UPDATED\n" +
+            "\t,TO_CHAR(NVL(P.B_UPDDATE,P.B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
             "FROM\n" +
             "\tGD_PARTY_IN_PRODUCT P\n" +
             "WHERE\n" +
             "\tP.F_ROLE_TYPE = 1\n" +
-            "AND P.EFFTO_DATE IS NULL\n" +
             "\tAND P.PARTY_IN_PRODUCT_ID IN ('%s')";
 
     public static String GET_DATA_PERSONS_WORK_ROLE_PMX_PU = "SELECT\n" +
@@ -113,13 +128,26 @@ public class PersonWorkRoleDataSQL {
             "\t,'PU' AS F_ROLE\n" +
             "\t,P.EFFFROM_DATE AS START_DATE\n" +
             "\t,P.EFFTO_DATE AS END_DATE\n" +
-            "\t,TO_CHAR(NVL(P.B_UPDDATE,P.B_CREDATE)) AS UPDATED\n" +
+            "\t,TO_CHAR(NVL(P.B_UPDDATE,P.B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
             "FROM\n" +
             "\tGD_PARTY_IN_PRODUCT P\n" +
             "WHERE\n" +
             "\tP.F_ROLE_TYPE IN (1120,1126)\n" +
-            "AND P.EFFTO_DATE IS NULL\n" +
-            "\tAND P.PARTY_IN_PRODUCT_ID IN ('%s')";
+            "\t\tAND P.PARTY_IN_PRODUCT_ID IN ('%s')\n";
+
+    public static String GET_DATA_PERSONS_WORK_ROLE_PMX_AE = "SELECT\n" +
+            "\t P.PARTY_IN_PRODUCT_ID||'-AE' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
+            "\t,P.F_PARTY AS PMX_PARTY_SOURCE_REF\n" +
+            "\t,P.F_PRODUCT_WORK  AS PMX_WORK_SOURCE_REF\n" +
+            "\t,'AE' AS F_ROLE\n" +
+            "\t,P.EFFFROM_DATE AS START_DATE\n" +
+            "\t,P.EFFTO_DATE AS END_DATE\n" +
+            "\t,TO_CHAR(NVL(P.B_UPDDATE,P.B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
+            "FROM\n" +
+            "\tGD_PARTY_IN_PRODUCT P\n" +
+            "WHERE\n" +
+            "\tP.F_ROLE_TYPE IN (1103,1104)\n" +
+            "\t\tAND P.PARTY_IN_PRODUCT_ID IN ('%s')";
 
 
     public static String GET_DATA_PERSONS_WORK_ROLE_EPHSTG = "select \n" +
