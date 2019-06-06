@@ -3,13 +3,29 @@ package com.eph.automation.testing.services.db.sql;
 public class MirrorsSQL {
 
     public static String GET_STG_Mirrors_COUNT ="select count(*) as stgCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel \n" +
-            "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq d1 on STG_10_PMX_WORK_REL.\"PARENT_PMX_SOURCE\"::varchar = d1.pmx_source_reference::varchar\n" +
-            "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq d2 on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.pmx_source_reference::varchar\n" +
+            "  join  (select s.pmx_source_reference as stage, g.pmx_source_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.pmx_source_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
+            "from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s on g.pmx_source_reference = s.pmx_source_reference::varchar)  d1\n" +
+            "on STG_10_PMX_WORK_REL.\"PARENT_PMX_SOURCE\"::varchar = d1.consol\n" +
+            "join  (select s.pmx_source_reference as stage, g.pmx_source_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.pmx_source_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
+            "from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s on g.pmx_source_reference = s.pmx_source_reference::varchar) d2\n" +
+            "on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.consol\n"+
             "where \"F_RELATIONSHIP_TYPE\"='MIR' and d1.dq_err != 'Y' and d2.dq_err != 'Y'";
 
     public static String GET_STG_Mirrors_COUNT_Updated ="select count(*) as stgCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel " +
-            "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq d1 on STG_10_PMX_WORK_REL.\"PARENT_PMX_SOURCE\"::varchar = d1.pmx_source_reference::varchar\n" +
-            "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq d2 on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.pmx_source_reference::varchar\n" +
+            "  join  (select s.pmx_source_reference as stage, g.pmx_source_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.pmx_source_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
+            "from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s on g.pmx_source_reference = s.pmx_source_reference::varchar)  d1\n" +
+            "on STG_10_PMX_WORK_REL.\"PARENT_PMX_SOURCE\"::varchar = d1.consol\n" +
+            "join  (select s.pmx_source_reference as stage, g.pmx_source_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.pmx_source_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
+            "from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s on g.pmx_source_reference = s.pmx_source_reference::varchar) d2\n" +
+            "on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.consol\n"+
             "where \"F_RELATIONSHIP_TYPE\"='MIR' and d1.dq_err != 'Y' and d2.dq_err != 'Y' and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
     public static String GET_SA_Mirrors_COUNT ="select count(*) as saCount from semarchy_eph_mdm.sa_work_relationship_mirror sa\n"+
@@ -41,8 +57,16 @@ public class MirrorsSQL {
 
     public static String gettingNumberOfIds="SELECT \"RELATIONSHIP_PMX_SOURCEREF\"  as random_value\n" +
             " FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel\n" +
-            "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq d1 on STG_10_PMX_WORK_REL.\"PARENT_PMX_SOURCE\"::varchar = d1.pmx_source_reference::varchar\n" +
-            "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq d2 on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.pmx_source_reference::varchar\n" +
+            "  join  (select s.pmx_source_reference as stage, g.pmx_source_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.pmx_source_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
+            "from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s on g.pmx_source_reference = s.pmx_source_reference::varchar)  d1\n" +
+            "on STG_10_PMX_WORK_REL.\"PARENT_PMX_SOURCE\"::varchar = d1.consol\n" +
+            "join  (select s.pmx_source_reference as stage, g.pmx_source_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.pmx_source_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
+            "from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s on g.pmx_source_reference = s.pmx_source_reference::varchar) d2\n" +
+            "on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.consol\n"+
             "WHERE \"F_RELATIONSHIP_TYPE\"='MIR' and d1.dq_err != 'Y' and d2.dq_err != 'Y' ORDER BY RANDOM()\n" +
             " LIMIT PARAM1;";
 
@@ -93,7 +117,8 @@ public class MirrorsSQL {
             "  ,f_mirrored as CHILD_PMX_SOURCE\n" +
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
             "  ,effective_start_date as EFFECTIVE_START_DATE"+
-            "  ,effective_to_date as ENDON"+
+            "  ,effective_to_date as ENDON" +
+            "  ,f_relationship_type as f_relationship_type"+
             "  FROM semarchy_eph_mdm.sa_work_relationship_mirror sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_relationship_mirror join \n"+
@@ -111,6 +136,7 @@ public class MirrorsSQL {
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
             "  ,effective_start_date as EFFECTIVE_START_DATE"+
             "  ,effective_to_date as ENDON"+
+            "  ,f_relationship_type as f_relationship_type"+
             "  FROM semarchy_eph_mdm.sa_work_relationship_mirror sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_relationship_mirror join \n"+
@@ -128,6 +154,7 @@ public class MirrorsSQL {
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
             "  ,effective_start_date as EFFECTIVE_START_DATE"+
             "  ,effective_to_date as ENDON"+
+            "  ,f_relationship_type as f_relationship_type"+
             "  FROM semarchy_eph_mdm.gd_work_relationship_mirror sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.gd_work_relationship_mirror join \n"+

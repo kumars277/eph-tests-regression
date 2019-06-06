@@ -28,7 +28,8 @@ public class WorkDataCheckSQL {
             "  ,\"JOURNAL_ACRONYM\" AS JOURNAL_ACRONYM -- PTS Journal Acronym (may go in IDs table, depending on implementation of data model)\n" +
             "  ,\"SOC_OWNERSHIP\" AS OWNERSHIP \n" +
             "  ,\"UPDATED\" as UPDATED\n" +
-            "  ,\"LANGUAGE_CODE\" as LANGUAGE_CODE\n"+
+            "  ,\"LANGUAGE_CODE\" as LANGUAGE_CODE\n" +
+            "  ,\"EFFECTIVE_TO_DATE\" AS RECORD_END_DATE\"\n"+
             "  FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork\n" +
             "  WHERE \"PRODUCT_WORK_ID\" IN ('%s') ORDER BY \"PRODUCT_WORK_ID\"";
 
