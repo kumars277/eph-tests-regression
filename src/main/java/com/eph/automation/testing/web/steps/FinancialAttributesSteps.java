@@ -44,12 +44,24 @@ public class FinancialAttributesSteps {
 
     @Given("^We know the number of financial attributes in DQ$")
     public void getFinAttrCountDQ(){
-        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-            sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr_Full;
-            Log.info(sql);
-            financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
-            Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
-        }else {
+        if (System.getProperty("LOAD") != null) {
+            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+                sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr_Full;
+                Log.info(sql);
+                financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+                Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
+            } else {
+                sql = WorkCountSQL.GET_REFRESH_DATE;
+                refreshDate = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                        Constants.EPH_URL);
+
+                sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr.replace("PARAM1", refreshDate.get(1).refresh_timestamp);
+                Log.info(sql);
+                financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+                Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
+            }
+        }
+        else{
             sql = WorkCountSQL.GET_REFRESH_DATE;
             refreshDate = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                     Constants.EPH_URL);
@@ -58,7 +70,8 @@ public class FinancialAttributesSteps {
             Log.info(sql);
             financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
             Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
-        }
+            }
+
     }
 
     @When("^We get the financial attributes from SA$")

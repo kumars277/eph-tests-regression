@@ -285,6 +285,13 @@ public class WorksDataCheck {
                         dataQualityContext.workDataObjectsFromSource.get(i).UPDATED
                                 .equals(dataQualityContext.workDataObjectsFromPMXSTG.get(i).UPDATED));
             }
+
+            if (dataQualityContext.workDataObjectsFromSource.get(i).RECORD_END_DATE != null
+                    || dataQualityContext.workDataObjectsFromPMXSTG.get(i).RECORD_END_DATE != null) {
+                assertTrue("Expecting the UPDATED details from PMX and EPH Consistent for id=" + ids.get(i),
+                        dataQualityContext.workDataObjectsFromSource.get(i).RECORD_END_DATE
+                                .equals(dataQualityContext.workDataObjectsFromPMXSTG.get(i).RECORD_END_DATE));
+            }
         }
     }
     

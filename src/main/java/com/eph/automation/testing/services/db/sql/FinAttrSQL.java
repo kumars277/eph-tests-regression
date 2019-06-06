@@ -5,6 +5,10 @@ public class FinAttrSQL {
             " FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq \n" +
             "where \"dq_err\" = 'N'\n" +
             "and opco is  not null and resp_centre is not null\n" +
+            "and and not (\n" +
+            "         s.opco = coalesce(g.company,'')\n" +
+            "    and  s.resp_centre = coalesce(g.cost_rc,'')\n" +
+            "    and  s.resp_centre = coalesce(g.rev_rc,'')))" +
             "ORDER BY RANDOM()\n" +
             " LIMIT PARAM1;";
 
@@ -26,15 +30,14 @@ public class FinAttrSQL {
             "  ,f_gl_revenue_resp_centre as revenue_resp_centre\n" +
             "  ,f_wwork as work_id\n" +
             "  FROM semarchy_eph_mdm.sa_work_financial_attribs sa\n"+
-/*            " where f_event =  (select max (f_event) from\n" +
-            "semarchy_eph_mdm.sa_work_financial_attribs join \n"+
-            "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
+            " where f_event =  (select max (event_id) from\n" +
+            "semarchy_eph_mdm.sa_event\n"+
             "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
             "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n"+
-            "and effective_end_date is null\n"+*/
-            "  where f_wwork ='PARAM1'";
+            "and effective_end_date is null\n"+
+            "  and f_wwork ='PARAM1'";
 
     public static String GET_SA_FinAttr_DATA_All ="SELECT \n" +
             "  sa.B_CLASSNAME as B_CLASSNAME\n" +
@@ -44,16 +47,15 @@ public class FinAttrSQL {
             "  ,f_gl_revenue_resp_centre as revenue_resp_centre\n" +
             "  ,f_wwork as work_id\n" +
             "  FROM semarchy_eph_mdm.sa_work_financial_attribs sa\n"+
-/*            " where f_event =  (select max (f_event) from\n" +
-            "semarchy_eph_mdm.sa_work_financial_attribs join \n"+
-            "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
+            " where f_event =  (select max (event_id) from\n" +
+            "semarchy_eph_mdm.sa_event\n"+
             "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
             "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n" +
             "and b_error_status is null\n"+
-            "and effective_end_date is null\n"+*/
-            "  where f_wwork in ('%s') order by fin_attribs_id";
+            "and effective_end_date is null\n"+
+            "  and f_wwork in ('%s') order by fin_attribs_id";
 
     public static String GET_GD_FinnAttr_DATA ="SELECT \n" +
             "  sa.B_CLASSNAME as B_CLASSNAME\n" +
@@ -63,15 +65,14 @@ public class FinAttrSQL {
             "  ,f_gl_revenue_resp_centre as revenue_resp_centre\n" +
             "  ,f_wwork as work_id\n" +
             "  FROM semarchy_eph_mdm.gd_work_financial_attribs sa\n"+
-/*            " where f_event =  (select max (f_event) from\n" +
-            "semarchy_eph_mdm.gd_work_financial_attribs join \n"+
-            "semarchy_eph_mdm.gd_event on f_event = event_id\n"+
+            " where f_event =  (select max (event_id) from\n" +
+            "semarchy_eph_mdm.gd_event\n"+
             "where  semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.gd_event.workflow_id = 'talend'\n"+
             "AND semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )\n"+
-            "and gd.effective_end_date is null"+*/
-            "  where f_wwork in ('%s') order by fin_attribs_id";
+            "and gd.effective_end_date is null"+
+            "  and f_wwork in ('%s') order by fin_attribs_id";
 
     public static String GET_FinnAttr_ID = "select numeric_id as fin_attribs_id from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid " +
             "where source_ref = 'PARAM1'";

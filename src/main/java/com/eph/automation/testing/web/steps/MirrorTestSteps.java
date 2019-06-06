@@ -48,7 +48,7 @@ public class MirrorTestSteps {
                 refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                         Constants.EPH_URL);
 
-                sql = MirrorsSQL.GET_STG_Mirrors_COUNT_Updated.replace("PARAM1",refreshDate.get(0).refresh_timestamp);
+                sql = MirrorsSQL.GET_STG_Mirrors_COUNT_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
                 mirrorContext.stgCount = DBManager.getDBResultAsBeanList(sql, MirrorsDataObject.class, Constants.EPH_URL);
                 Log.info("The STG count is: " + mirrorContext.stgCount.get(0).stgCount);
             }
