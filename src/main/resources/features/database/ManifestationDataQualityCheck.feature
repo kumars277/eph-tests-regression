@@ -8,7 +8,7 @@ Feature: Entity - Manifestations - Count & Data Mapping Check - Validate data be
 
   @Regression
   Scenario: Verify count of manifestations records in EPH staging and EPH DQ is equal
-    Given We get the count of the manifestations records in EPH STG
+    Given We get the count of the manifestations records in EPH STG going to DQ
     When We get the count of the manifestations records in EPH DQ
     Then The number of the records in EPH staging and EPH DQ is equal
 

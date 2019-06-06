@@ -25,6 +25,7 @@ public class ProductDataSQL {
             "\t,CASE WHEN WT.WORK_TYPE = 'BOOK' THEN 'Y' ELSE 'N' END AS ONE_OFF_ACCESS\n" +
             "\t,CASE WHEN WT.WORK_TYPE = 'PACKAGE' THEN 'Y' ELSE 'N' END AS PACKAGES\n" +
             "\t,CASE\n" +
+            "\t    WHEN M.EFFECTIVE_TO_DATE IS NOT NULL THEN 'NVP'\n" +
             "\t\tWHEN (MSS.SUBSTATUS_DESC IN ('Planned to be available','Planned to be available (secret)'))  THEN 'PPL'\n" +
             "\t\tWHEN (MSS.SUBSTATUS_DESC = 'Available for customer sale') THEN 'PAS'\n" +
             "\t\tWHEN (MSS.SUBSTATUS_DESC = 'Available but item not for sale') THEN 'PNS'\n" +
@@ -35,7 +36,7 @@ public class ProductDataSQL {
             "\tEND AS AVAILABILITY_STATUS\n" +
             "\t,WT.WORK_TITLE\n" +
             "\t,WT.WORK_TYPE\n" +
-            "\t,TO_CHAR(NVL(M.B_UPDDATE,M.B_CREDATE)) AS UPDATED -- Manifestation last updated date as all other tables are linking or reference\n" +
+            "\t,TO_CHAR(NVL(M.B_UPDDATE,M.B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED -- Manifestation last updated date as all other tables are linking or reference\n" +
             "FROM GD_PRODUCT_MANIFESTATION M\n" +
             "LEFT JOIN GD_PRODUCT_SUBSTATUS MSS ON M.F_MANIFESTATION_SUBSTATUS = MSS.PRODUCT_SUBSTATUS_ID\n" +
             "JOIN (SELECT\n" +
@@ -50,9 +51,9 @@ public class ProductDataSQL {
             "      JOIN GD_PRODUCT_TYPE T ON W.F_PRODUCT_TYPE = T.PRODUCT_TYPE_ID\n" +
             "      JOIN (SELECT FMAN.F_PRODUCT_WORK, MIN(FMAN.PRODUCT_MANIFESTATION_ID) AS FIRST_MANIFESTATION\n" +
             "\t        FROM GD_PRODUCT_MANIFESTATION FMAN GROUP BY FMAN.F_PRODUCT_WORK) FIR ON MAN.F_PRODUCT_WORK = FIR.F_PRODUCT_WORK\n" +
-            "\t   ) WT ON WT.PRODUCT_MANIFESTATION_ID = M.PRODUCT_MANIFESTATION_ID\n" +
-            "\t WHERE  M.PRODUCT_MANIFESTATION_ID IN ('%s')\n" +
-            "\t order by  M.PRODUCT_MANIFESTATION_ID";
+            "\t   ) WT ON WT.PRODUCT_MANIFESTATION_ID = M.PRODUCT_MANIFESTATION_ID)\n" +
+            "\t   WHERE  M.PRODUCT_MANIFESTATION_ID IN ('%s')\n" +
+            "\t order by  M.PRODUCT_MANIFESTATION_ID\n";
 
     public static String EPH_STG_PRODUCT_EXTRACT = "SELECT\n" +
             "           \"PRODUCT_ID\" as PRODUCT_ID,\n" +
