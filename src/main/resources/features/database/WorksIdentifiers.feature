@@ -13,7 +13,7 @@ Feature: Entity - Work Identifier - Count & Data Mapping Check - Validate data b
       |STAB       |
       |SERMEM     |
       |BOOKSET    |
-      |BOOKSERIES |
+      #|BOOKSERIES |
       |CONT       |
       |JNL        |
       |CABS       |

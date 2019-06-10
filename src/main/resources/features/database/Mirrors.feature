@@ -1,18 +1,18 @@
 Feature: Entity - Work Relationship Mirrors - Data Mapping Check - Validate data between PMX and EPH - Talend Full Load
 
-  @Regression
+  @WIP
   Scenario: Checking the count of mirrors between STG and EPH SA
     Given We know the mirrors from STG
     When We get the mirrors from SA
     Then The mirrors between STG and SA are equal
 
-  @Regression
+  @WIP
   Scenario: Checking the count of mirrors between EPH SA and EPH GD
     Given We get the mirrors from SA
     When We get the mirrors from GD
     Then The mirrors between SA and GD are equal
 
-  @Regression
+  @WIP
   Scenario: Checking the count of mirrors between EPH SA and EPH GD + AE
     Given We get the mirrors from SA
     When We get the mirrors from AE

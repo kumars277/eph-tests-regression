@@ -189,7 +189,7 @@ public class MirrorTestSteps {
             mirrorContext.mirrorDataFromSA = DBManager.getDBResultAsBeanList(sql, MirrorsDataObject.class, Constants.EPH_URL);
 
             Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + mirrorContext.workID.get(0).workID,
-                    "WorkRelationshipMirror",
+                    "WorkRelationship",
                     mirrorContext.mirrorDataFromSA.get(0).B_CLASSNAME);
 
             if (mirrorContext.mirrorDataFromStg.get(i).EFFECTIVE_START_DATE != null
@@ -198,7 +198,7 @@ public class MirrorTestSteps {
                         mirrorContext.mirrorDataFromStg.get(i).EFFECTIVE_START_DATE,
                         mirrorContext.mirrorDataFromSA.get(0).EFFECTIVE_START_DATE);
             }
-            sql=MirrorsSQL.Get_mirror_id.replace("PARAM1", "WORK_TRANS-"+
+            /*sql=MirrorsSQL.Get_mirror_id.replace("PARAM1", "WORK_TRANS-"+
                     mirrorContext.mirrorDataFromStg.get(i).RELATIONSHIP_PMX_SOURCEREF);
             Log.info(sql);
             mirrorContext.mirrorID = DBManager.getDBResultAsBeanList(sql, MirrorsDataObject.class, Constants.EPH_URL);
@@ -210,7 +210,7 @@ public class MirrorTestSteps {
             Assert.assertEquals("The F_RELATIONSHIP_TYPE is incorrect for id=" + mirrorContext.workID.get(0).workID,
                     mirrorContext.childID.get(0).workID,
                     mirrorContext.mirrorDataFromSA.get(0).CHILD_PMX_SOURCE);
-
+*/
             if (mirrorContext.mirrorDataFromStg.get(i).ENDON != null
                     || mirrorContext.mirrorDataFromSA.get(0).ENDON != null) {
                 Assert.assertEquals("The ENDON is incorrect for id=" + mirrorContext.workID,
