@@ -320,16 +320,16 @@ public class ManifestationDataQualityCheckSteps {
             assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ", manifestationDataObjectsFromPMX.get(i).getINTERNATIONAL_EDITION_IND(), manifestationDataObjectsFromEPHSTG.get(i).getINTERNATIONAL_EDITION_IND());
 
 
-            //COPYRIGHT_DATE
-            if (manifestationDataObjectsFromPMX.get(i).getCOPYRIGHT_DATE() != null || manifestationDataObjectsFromEPHSTG.get(i).getCOPYRIGHT_DATE() != null) {
+            //FIRST_PUB_DATE
+            if (manifestationDataObjectsFromPMX.get(i).getFIRST_PUB_DATE() != null || manifestationDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE() != null) {
                 try {
-                    Date pmxCopyrightDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.s").parse(manifestationDataObjectsFromPMX.get(i).getCOPYRIGHT_DATE());
-                    Log.info("COPYRIGHT_DATE in PMX: " + pmxCopyrightDate);
+                    Date pmxFirstPubDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.s").parse(manifestationDataObjectsFromPMX.get(i).getFIRST_PUB_DATE());
+                    Log.info("FIRST_PUB_DATE in PMX: " + pmxFirstPubDate);
 
-                    Date ephCopyrightDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHSTG.get(i).getCOPYRIGHT_DATE());
-                    Log.info("COPYRIGHT_DATE in EPH Staging: " + ephCopyrightDate);
+                    Date ephFirstPubDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE());
+                    Log.info("FIRST_PUB_DATE in EPH Staging: " + ephFirstPubDate);
 
-                    assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ", pmxCopyrightDate, ephCopyrightDate);
+                    assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ", pmxFirstPubDate, ephFirstPubDate);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -391,14 +391,9 @@ public class ManifestationDataQualityCheckSteps {
             Log.info("Expecting UPDATED in PMX and EPH Staging are consistent for ");
 
 
-            try {
-                Date pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(manifestationDataObjectsFromPMX.get(i).getUPDATED());
-                Date ephUpdatedDate = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS aaa").parse(manifestationDataObjectsFromEPHSTG.get(i).getUPDATED());
+            assertEquals("UPDATED in PMX and EPH STG is not equal ", manifestationDataObjectsFromPMX.get(i).getUPDATED(), manifestationDataObjectsFromEPHSTG.get(i).getUPDATED());
 
-                assertEquals("UPDATED in PMX and EPH STG is not equal ", pmxUpdatedDate, ephUpdatedDate);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+
 
             //RECORD_END_DATE
             Log.info("RECORD_END_DATE in PMX: " + manifestationDataObjectsFromPMX.get(i).getMANIFESTATION_SUBSTATUS());
@@ -500,15 +495,15 @@ public class ManifestationDataQualityCheckSteps {
                 assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are not consistent ", "f", manifestationDataObjectsFromEPHDQ.get(i).getINTER_EDITION_FLAG());
 
             //FIRST_PUB_DATE
-            if (manifestationDataObjectsFromEPHSTG.get(i).getCOPYRIGHT_DATE() != null || manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE() != null) {
+            if (manifestationDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE() != null || manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE() != null) {
                 try {
-                    Date stgCopyrightDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHSTG.get(i).getCOPYRIGHT_DATE());
-                    Log.info("FIRST_PUB_DATE in stg :" + stgCopyrightDate);
+                    Date stgFirstPubDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE());
+                    Log.info("FIRST_PUB_DATE in stg :" + stgFirstPubDate);
 
                     Date saFirstPubDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE());
                     Log.info("FIRST_PUB_DATE in sa :" + saFirstPubDate);
 
-                    assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", stgCopyrightDate, saFirstPubDate);
+                    assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", stgFirstPubDate, saFirstPubDate);
 
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -603,13 +598,13 @@ public class ManifestationDataQualityCheckSteps {
             //FIRST_PUB_DATE
             if (manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE() != null || manifestationDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE() != null) {
                 try {
-                    Date dqCopyrightDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE());
-                    Log.info("FIRST_PUB_DATE in dq :" + dqCopyrightDate);
+                    Date dqFirstPubDateDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE());
+                    Log.info("FIRST_PUB_DATE in dq :" + dqFirstPubDateDate);
 
                     Date saFirstPubDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE());
                     Log.info("FIRST_PUB_DATE in sa :" + saFirstPubDate);
 
-                    assertEquals("Expecting the Product details from EPH DQ and SA_MANIFESTATION are consistent ", dqCopyrightDate, saFirstPubDate);
+                    assertEquals("Expecting the Product details from EPH DQ and SA_MANIFESTATION are consistent ", dqFirstPubDateDate, saFirstPubDate);
 
                 } catch (ParseException e) {
                     e.printStackTrace();
