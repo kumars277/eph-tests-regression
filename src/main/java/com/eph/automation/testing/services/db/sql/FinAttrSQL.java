@@ -25,6 +25,7 @@ public class FinAttrSQL {
             "  ,f_gl_cost_resp_centre as cost_resp_centre\n" +
             "  ,f_gl_revenue_resp_centre as revenue_resp_centre\n" +
             "  ,f_wwork as work_id\n" +
+            "  ,external_reference as external_reference\n" +
             "  FROM semarchy_eph_mdm.sa_work_financial_attribs sa\n"+
             " where f_event =  (select max (event_id) from\n" +
             "semarchy_eph_mdm.sa_event\n"+
@@ -42,6 +43,7 @@ public class FinAttrSQL {
             "  ,f_gl_cost_resp_centre as cost_resp_centre\n" +
             "  ,f_gl_revenue_resp_centre as revenue_resp_centre\n" +
             "  ,f_wwork as work_id\n" +
+            "  ,external_reference as external_reference\n" +
             "  FROM semarchy_eph_mdm.sa_work_financial_attribs sa\n"+
             " where f_event =  (select max (event_id) from\n" +
             "semarchy_eph_mdm.sa_event\n"+
@@ -60,6 +62,7 @@ public class FinAttrSQL {
             "  ,f_gl_cost_resp_centre as cost_resp_centre\n" +
             "  ,f_gl_revenue_resp_centre as revenue_resp_centre\n" +
             "  ,f_wwork as work_id\n" +
+            "  ,external_reference as external_reference" +
             "  FROM semarchy_eph_mdm.gd_work_financial_attribs sa\n"+
             " where f_event =  (select max (event_id) from\n" +
             "semarchy_eph_mdm.gd_event\n"+
