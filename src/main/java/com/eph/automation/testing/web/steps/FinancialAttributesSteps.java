@@ -61,12 +61,17 @@ public class FinancialAttributesSteps {
                 Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
             }
         }
-        else{
+        else{/*
             sql = WorkCountSQL.GET_REFRESH_DATE;
             refreshDate = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                     Constants.EPH_URL);
 
             sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr.replace("PARAM1", refreshDate.get(1).refresh_timestamp);
+            Log.info(sql);
+            financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+            Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);*/
+
+            sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr_Full;
             Log.info(sql);
             financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
             Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);

@@ -68,18 +68,18 @@ public class TranslationTestSteps {
                 translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
                 Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
             }
-        }else {
+        }else {/*
             sql = WorkCountSQL.GET_REFRESH_DATE;
             refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                     Constants.EPH_URL);
 
             sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
             Log.info(sql);
-            translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
+            translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);*/
 //            Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
-/*            sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT;
+            sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT;
             translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
-            Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);*/
+            Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
         }
     }
 
@@ -195,18 +195,18 @@ public class TranslationTestSteps {
             if (translationContext.translationDataFromPMX.get(i).ENDON != null
                     || translationContext.translationDataFromStg.get(i).ENDON != null) {
                 Assert.assertEquals("The ENDON is incorrect for id=" + ids.get(i),
-                        translationContext.translationDataFromPMX.get(i).ENDON,
+                        translationContext.translationDataFromPMX.get(i).ENDON.substring(0,10),
                         translationContext.translationDataFromStg.get(i).ENDON);
             }
-
+/*
             Date pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(translationContext.translationDataFromPMX.get(i).UPDATED);
-            Date stgDate = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS aaa").parse(translationContext.translationDataFromStg.get(i).UPDATED);
+            Date stgDate = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS aaa").parse(translationContext.translationDataFromStg.get(i).UPDATED);*/
 
             if (translationContext.translationDataFromPMX.get(i).UPDATED != null
                     ||translationContext.translationDataFromStg.get(i).UPDATED != null) {
                 assertTrue("Expecting the UPDATED details from PMX and EPH Consistent for id=" + ids.get(i),
-                        pmxUpdatedDate
-                                .equals(stgDate));
+                        translationContext.translationDataFromPMX.get(i).UPDATED
+                                .equals(translationContext.translationDataFromStg.get(i).UPDATED));
             }
         }
     }
@@ -229,7 +229,7 @@ public class TranslationTestSteps {
             translationContext.translationDataFromSA = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
 
             Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + translationContext.workID.get(0).workID,
-                    "WorkRelationshipTranslation",
+                    "WorkRelationship",
                     translationContext.translationDataFromSA.get(0).B_CLASSNAME);
 
             if (translationContext.translationDataFromStg.get(i).EFFECTIVE_START_DATE != null
@@ -238,7 +238,7 @@ public class TranslationTestSteps {
                         translationContext.translationDataFromStg.get(i).EFFECTIVE_START_DATE,
                         translationContext.translationDataFromSA.get(0).EFFECTIVE_START_DATE);
             }
-            sql=TranslationsSQL.Get_translation_id.replace("PARAM1", "WORK_TRANS-"+
+     /*       sql=TranslationsSQL.Get_translation_id.replace("PARAM1", "WORK_TRANS-"+
                     translationContext.translationDataFromStg.get(i).RELATIONSHIP_PMX_SOURCEREF);
             Log.info(sql);
             translationContext.translationID = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
@@ -251,7 +251,7 @@ public class TranslationTestSteps {
             Assert.assertEquals("The F_RELATIONSHIP_TYPE is incorrect for id=" + translationContext.workID.get(0).workID,
                     translationContext.childID.get(0).workID,
                     translationContext.translationDataFromSA.get(0).CHILD_PMX_SOURCE);
-
+*/
             if (translationContext.translationDataFromStg.get(i).ENDON != null
                     || translationContext.translationDataFromSA.get(0).ENDON != null) {
                 Assert.assertEquals("The ENDON is incorrect for id=" + translationContext.workID,

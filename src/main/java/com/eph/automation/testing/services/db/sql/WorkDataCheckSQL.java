@@ -29,7 +29,7 @@ public class WorkDataCheckSQL {
             "  ,\"SOC_OWNERSHIP\" AS OWNERSHIP \n" +
             "  ,\"UPDATED\" as UPDATED\n" +
             "  ,\"LANGUAGE_CODE\" as LANGUAGE_CODE\n" +
-            "  ,\"EFFECTIVE_TO_DATE\" AS RECORD_END_DATE\"\n"+
+            "  ,\"RECORD_END_DATE\" AS RECORD_END_DATE\n"+
             "  FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork\n" +
             "  WHERE \"PRODUCT_WORK_ID\" IN ('%s') ORDER BY \"PRODUCT_WORK_ID\"";
 
@@ -53,12 +53,12 @@ public class WorkDataCheckSQL {
             "  ,ap.\"PARENT_ACC_PROD\" as PARENT_ACC_PROD\n" +
             "  ,ww.LANGUAGE_CODE as LANGUAGE_CODE\n"+
             "  FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq ww\n"+
-            "  left join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_accountable_product ap on ww.pmx_source_reference = ap.\"PRODUCT_WORK_ID\"\n"+
-            "  WHERE pmx_source_reference IN ('%s') ORDER BY pmx_source_reference";
+            "  left join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_accountable_product ap on ww.PMX_SOURCE_REFERENCE = ap.\"PRODUCT_WORK_ID\"\n"+
+            "  WHERE PMX_SOURCE_REFERENCE IN ('%s') ORDER BY PMX_SOURCE_REFERENCE";
 
     public static String GET_EPH_WORKS_DATA ="SELECT \n" +
             "   WORK_ID AS WORK_ID\n" +
-            "  ,PMX_SOURCE_REFERENCE AS PMX_SOURCE_REFERENCE\n" +
+            "  ,external_reference AS PMX_SOURCE_REFERENCE\n" +
             "  ,sa.B_CLASSNAME as B_CLASSNAME\n" +
             "  ,WORK_TITLE AS WORK_TITLE -- Title\n" +
             "  ,WORK_SUB_TITLE AS WORK_SUBTITLE -- Subtitle\n" +
@@ -83,12 +83,12 @@ public class WorkDataCheckSQL {
             "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n" +
             "and b_error_status is null\n"+
-            "  AND pmx_source_reference IN ('%s')";
+            "  AND external_reference IN ('%s')";
 
 
     public static String GET_EPH_GD_WORKS_DATA ="SELECT \n" +
             "   WORK_ID AS WORK_ID\n" +
-            "  ,PMX_SOURCE_REFERENCE AS PMX_SOURCE_REFERENCE\n" +
+            "  ,external_reference AS PMX_SOURCE_REFERENCE\n" +
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
             "  ,WORK_TITLE AS WORK_TITLE -- Title\n" +
             "  ,WORK_SUB_TITLE AS WORK_SUBTITLE -- Subtitle\n" +
@@ -105,7 +105,7 @@ public class WorkDataCheckSQL {
             "  ,f_accountable_product as f_accountable_product\n" +
             "  ,f_llanguage as LANGUAGE_CODE\n"+
             "  FROM semarchy_eph_mdm.gd_wwork\n" +
-            "  WHERE pmx_source_reference IN ('%s')";
+            "  WHERE external_reference IN ('%s')";
 
     public static String GET_Acc_Prod ="SELECT \n" +
             "numeric_id as f_accountable_product from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid " +

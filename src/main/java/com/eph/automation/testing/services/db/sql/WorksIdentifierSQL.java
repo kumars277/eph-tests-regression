@@ -10,7 +10,7 @@ public class WorksIdentifierSQL {
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
             "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )"+
-            " AND PMX_SOURCE_REFERENCE='PARAM1'";
+            " AND external_reference='PARAM1'";
 
     public static String getIdentifierDataFromSA="SELECT \n" +
             " wi.B_LOADID as B_LOADID\n" +
@@ -179,7 +179,7 @@ public class WorksIdentifierSQL {
 
 
     public static String getPmxSourceRef="SELECT \n" +
-            "PMX_SOURCE_REFERENCE as WORK_ID FROM semarchy_eph_mdm.gd_wwork\n"  +
+            "external_reference as WORK_ID FROM semarchy_eph_mdm.gd_wwork\n"  +
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.gd_wwork join \n"+
             "semarchy_eph_mdm.gd_event on f_event = event_id\n"+
