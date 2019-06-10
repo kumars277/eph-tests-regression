@@ -147,7 +147,7 @@ public class ProductsCountCheckSteps {
                 Log.info("\nThe number of products in Staging for Canonical compare is: " + stgToCanonical);
             }
         }else {
-            sql = WorkCountSQL.GET_REFRESH_DATE;
+/*            sql = WorkCountSQL.GET_REFRESH_DATE;
             refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                     Constants.EPH_URL);
 
@@ -212,8 +212,8 @@ public class ProductsCountCheckSteps {
                             productsCountContext.productCountStgACMore.get(0).acMoreCount +
                             productsCountContext.productCountStgPackages.get(0).packagesCount;
 
-            Log.info("\nThe number of products in Staging for Canonical compare is: " + stgToCanonical);
-/*            sql = ProductCountSQL.EPH_STG_PRODUCT_Count;
+            Log.info("\nThe number of products in Staging for Canonical compare is: " + stgToCanonical);*/
+            sql = ProductCountSQL.EPH_STG_PRODUCT_Count;
             productsCountContext.productCountStg = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
             Log.info("\nThe number of products in Staging is: " + productsCountContext.productCountStg.get(0).stgCount);
 
@@ -259,7 +259,7 @@ public class ProductsCountCheckSteps {
                             productsCountContext.productCountStgACMore.get(0).acMoreCount +
                             productsCountContext.productCountStgPackages.get(0).packagesCount;
 
-            Log.info("\nThe number of products in Staging for Canonical compare is: " + stgToCanonical);*/
+            Log.info("\nThe number of products in Staging for Canonical compare is: " + stgToCanonical);
         }
 
     }

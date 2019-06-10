@@ -69,7 +69,8 @@
 		"title": "The Status Schema",
 		"required": [
 			"code",
-			"name"
+			"name",
+			"statusRollUp"
 		],
 		"properties": {
 			"code": {
@@ -77,6 +78,15 @@
 			},
 			"name": {
 				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+			},
+			"statusRollUp": {
+				"$id": "#/properties/type/properties/statusRollUp",
+				"type": "string",
+				"title": "The Statusrollup Schema",
+				"examples": [
+					"Journal"
+				],
+				"pattern": "^(.*)$"
 			}
 		},
 		"additionalProperties": false
@@ -98,6 +108,88 @@
 			"2018-12-20"
 		],
 		"pattern": "^(.*)$"
+	},
+	"relationships": {
+		"$id": "#/properties/relationships",
+		"type": "object",
+		"title": "The Relationships Schema",
+		"properties": {
+			"parent": {
+				"$id": "#/properties/relationships/properties/parent",
+				"type": "array",
+				"default": null,
+				"title": "The Parent Schema",
+				"items": {
+					"$id": "#/properties/relationships/properties/parent/items",
+					"type": "object",
+					"title": "The Items Schema",
+					"required": [
+						"type",
+						"id"
+					],
+					"properties": {
+			  			"type": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/type"
+			  			},
+						"id": {
+							"$id": "#/properties/relationships/properties/parent/items/properties/id",
+							"type": "string",
+							"title": "The Id Schema",
+							"default": "",
+							"examples": [
+				  				"EPR-W-000001"
+							],
+							"pattern": "^(.*)$"
+			  			},
+						"effectiveStartDate": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
+						},
+						"effectiveEndDate": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
+						}
+					},
+					"additionalProperties": false
+		  		}
+			},
+			"child": {
+				"$id": "#/properties/relationships/properties/child",
+				"type": "array",
+				"default": null,
+				"title": "The Child Schema",
+				"items": {
+					"$id": "#/properties/relationships/properties/child/items",
+					"type": "object",
+					"title": "The Items Schema",
+					"required": [
+			  			"type",
+			  			"id"
+					],
+					"properties": {
+			  			"type": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/type"
+			  			},
+			  			"id": {
+							"$id": "#/properties/relationships/properties/child/items/properties/id",
+							"type": "string",
+							"title": "The Id Schema",
+							"default": "",
+							"examples": [
+				  				"EPR-W-000020"
+							],
+							"pattern": "^(.*)$"
+			  			},
+						"effectiveStartDate": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
+						},
+						"effectiveEndDate": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
+						}
+					},
+					"additionalProperties": false
+		  		}
+			}
+	  	},
+		"additionalProperties": false
 	},
 	"identifiers": {
 		"$id": "#/properties/identifiers",
@@ -337,6 +429,15 @@
 				"title": "The Lastname Schema",
 				"examples": [
 					"Binks"
+				],
+				"pattern": "^(.*)$"
+			},
+			"peoplehubId": {
+				"$id": "#/properties/person/properties/peoplehubId",
+				"type": "string",
+				"title": "The Peoplehubid Schema",
+				"examples": [
+					"00000194001"
 				],
 				"pattern": "^(.*)$"
 			}
