@@ -94,9 +94,6 @@
 		"pmc": {
 			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/pmc"
 		},
-		"translations": {
-			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/translations"
-		},
 		"editions": {
 			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/editions"
 		},
@@ -112,8 +109,8 @@
 		"subjectAreas": {
 			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/subjectAreas"
 		},
-		"mirrors": {
-			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/mirrors"
+		"relationships": {
+			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/relationships"
 		},
 		"manifestations": {
 			"$id": "#/properties/manifestations",

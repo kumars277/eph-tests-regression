@@ -139,6 +139,7 @@ public class TranslationTestSteps {
         Log.info("numberOfRecords = " + numberOfRecords);
 
         sql = TranslationsSQL.gettingNumberOfIds.replace("PARAM1", numberOfRecords);
+        Log.info(sql);
         List<Map<?, ?>> randomISBNIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         ids = randomISBNIds.stream().map(m -> (BigDecimal) m.get("random_value")).map(String::valueOf).collect(Collectors.toList());

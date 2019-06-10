@@ -391,7 +391,10 @@ public class WorksDataCheck {
                     || dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_STATUS == null) {
                 Assert.assertEquals("The Work status is incorrect for id=" + ids.get(i),
                         "UNK", dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_STATUS);
-            } else if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).WORK_SUBSTATUS.equalsIgnoreCase("DIVESTED")) {
+            }else if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).RECORD_END_DATE !=null){
+                Assert.assertEquals("The Work status is incorrect for id=" + ids.get(i),
+                        "NVW", dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_STATUS);
+            }else if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).WORK_SUBSTATUS.equalsIgnoreCase("DIVESTED")) {
                 Assert.assertEquals("The Work status is incorrect for id=" + ids.get(i),
                         "WDV", dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_STATUS);
             } else if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).WORK_STATUS.equalsIgnoreCase("1")) {

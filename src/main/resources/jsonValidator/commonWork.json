@@ -223,72 +223,6 @@
 		},
 		"additionalProperties": false
 	},
-	"translations": {
-		"$id": "#/properties/translations",
-		"type": "object",
-		"title": "The Translations Schema",
-		"properties": {
-			"isTranslatedFrom": {
-				"$id": "#/properties/translations/properties/isTranslatedFrom",
-				"type": "array",
-				"default": null,
-				"title": "The Istranslatedfrom Schema",
-				"items": {
-					"$id": "#/properties/translations/properties/isTranslatedFrom/items",
-					"type": "object",
-					"title": "The Items Schema",
-					"required": [
-					"workId"
-					],
-					"properties": {
-						"workId": {
-							"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/id"
-						},
-						"language": {
-							"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/language"
-						},
-						"effectiveStartDate": {
-							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
-						},
-						"effectiveEndDate": {
-							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
-						}
-					},
-					"additionalProperties": false
-				}
-			},
-			"isTranslatedInto": {
-				"$id": "#/properties/translations/properties/isTranslatedInto",
-				"type": "array",
-				"default": null,
-				"title": "The Istranslatedinto Schema",
-				"items": {
-					"$id": "#/properties/translations/properties/isTranslatedInto/items",
-					"type": "object",
-					"title": "The Items Schema",
-					"required": [
-						"workId"
-					],
-					"properties": {
-						"workId": {
-							"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/id"
-						},
-						"language": {
-							"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/language"
-						},
-						"effectiveStartDate": {
-							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
-						},
-						"effectiveEndDate": {
-							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
-						}
-					},
-					"additionalProperties": false
-				}
-			}
-		},
-		"additionalProperties": false
-	},
 	"editions": {
 		"$id": "#/properties/editions",
 		"type": "array",
@@ -370,10 +304,10 @@
 					},
 					"additionalProperties": false
 				},
-          		"primary": {
-            		"$id": "#/properties/workSubjectAreas/items/properties/primary",
+          		"primaryInd": {
+            		"$id": "#/properties/workSubjectAreas/items/properties/primaryInd",
             		"type": "boolean",
-            		"title": "The Primary Schema",
+            		"title": "The Primaryind Schema",
             		"default": false,
             		"examples": [
               			false
@@ -388,73 +322,5 @@
         	},
 			"additionalProperties": false
       	}
-    },
-    "mirrors": {
-		"$id": "#/properties/mirrors",
-      	"type": "object",
-      	"title": "The Mirrors Schema",
-      	"oneOf": [
-      		{ "required":
-      			["isMirroredFrom"] },
-      		{ "required": 
-      			["isMirroredInto"] }
-      	],
-      	"properties": {
-        	"isMirroredFrom": {
-          		"$id": "#/properties/mirrors/properties/isMirroredFrom",
-          		"type": "object",
-          		"title": "The Ismirroredfrom Schema",
-          		"required": [
-            		"workId"
-	        	],
-				"properties": {
-            		"workId": {
-              			"$id": "#/properties/mirrors/properties/isMirroredFrom/properties/workId",
-              			"type": "string",
-              			"title": "The Workid Schema",
-              			"default": "",
-              			"examples": [
-                			"EPR-W-000050"
-              			],
-              			"pattern": "^(.*)$"
-					},
-		    		"effectiveStartDate": {
-						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
-					},
-		    		"effectiveEndDate": {
-						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
-					}
-          		},
-				"additionalProperties": false
-        	},
-        	"isMirroredInto": {
-          		"$id": "#/properties/mirrors/properties/isMirroredInto",
-          		"type": "object",
-          		"title": "The Ismirroredinto Schema",
-          		"required": [
-            		"workId"
-				],
-          		"properties": {
-            		"workId": {
-              			"$id": "#/properties/mirrors/properties/isMirroredInto/properties/workId",
-              			"type": "string",
-              			"title": "The Workid Schema",
-              			"default": "",
-              			"examples": [
-                			"EPR-W-000060"
-              			],
-              			"pattern": "^(.*)$"
-            		},
-		    		"effectiveStartDate": {
-						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
-					},
-		    		"effectiveEndDate": {
-						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
-					}
-				},
-				"additionalProperties": false
-			}
-		},
-		"additionalProperties": false
     }	
 }
