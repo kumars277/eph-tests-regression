@@ -112,11 +112,19 @@ public class WorkExtractSQL {
             "where SAMI.s_identifier = 'PARAM1'\n" +
             "and SAM.manifestation_id = SAMI.f_manifestation";
 
-    public static String COUNT_MANIFESTATIONS_IN_PMX_GD_PRODUCT_MANIFESTATION_TABLE = "SELECT DISTINCT count(*) AS count FROM GD_PRODUCT_MANIFESTATION M\n" +
+    public static String COUNT_MANIFESTATIONS_IN_PMX_GD_PRODUCT_MANIFESTATION_TABLE = "SELECT DISTINCT count(*) AS count \n" +
+            "FROM GD_PRODUCT_MANIFESTATION M\n" +
             "JOIN GD_PRODUCT_WORK W ON M.F_PRODUCT_WORK = W.PRODUCT_WORK_ID\n" +
             "LEFT JOIN GD_PRODUCT_SUBSTATUS SS ON M.F_MANIFESTATION_SUBSTATUS = SS.PRODUCT_SUBSTATUS_ID\n" +
             "JOIN GD_PRODUCT_TYPE T ON W.F_PRODUCT_TYPE = T.PRODUCT_TYPE_ID\n" +
-            "WHERE T.PRODUCT_TYPE_CODE NOT IN ('COMPENDIUM','JCOLSC','ADVERTISING','FS','DUES') ";
+            "LEFT JOIN\n" +
+            "    (SELECT\n" +
+            "         F_PRODUCT_MANIFESTATION\n" +
+            "        ,MIN(AVAILABILITY_START_DATE) FIRST_PUB_DATE\n" +
+            "     FROM\n" +
+            "        GD_PRODUCT_AVAILABILITY\n" +
+            "     GROUP BY F_PRODUCT_MANIFESTATION) PD ON M.PRODUCT_MANIFESTATION_ID = PD.F_PRODUCT_MANIFESTATION\n" +
+            "WHERE T.PRODUCT_TYPE_CODE NOT IN ('COMPENDIUM','JCOLSC','ADVERTISING','FS','DUES')";
 
     public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation";
 
@@ -153,7 +161,7 @@ public class WorkExtractSQL {
             "\t,M.WEIGHT_AMOUNT AS WEIGHT -- Weight for Format sub entity\n" +
             "\t,M.CARTON_QTY AS CARTON_QTY -- Carton Quantity for Format sub entity\n" +
             "\t,M.INTERNATIONAL_EDITION_IND -- International Edition Indicator\n" +
-            "\t,M.COPYRIGHT_DATE -- Manifestation First Publication Date\n" +
+            "\t,PD.FIRST_PUB_DATE -- Manifestation First Publication Date\n" +
             "\t,M.F_PRODUCT_MANIFESTATION_TYP -- 1 = Print, 2 = Electronic. Will have to map to Manifestation Type (logic TBC)\n" +
             "\t,M.FORMAT_TXT -- Additional Format info (may feed Format Entity, may feed logic for Manifestation Type\n" +
             "\t,M.F_MANIFESTATION_STATUS AS MANIFESTATION_STATUS -- Manifestation Level Status to link to LOV table (this will need mapping to new values, logic TBC)\n" +
@@ -169,6 +177,13 @@ public class WorkExtractSQL {
             "JOIN GD_PRODUCT_WORK W ON M.F_PRODUCT_WORK = W.PRODUCT_WORK_ID\n" +
             "LEFT JOIN GD_PRODUCT_SUBSTATUS SS ON M.F_MANIFESTATION_SUBSTATUS = SS.PRODUCT_SUBSTATUS_ID\n" +
             "JOIN GD_PRODUCT_TYPE T ON W.F_PRODUCT_TYPE = T.PRODUCT_TYPE_ID\n" +
+            "LEFT JOIN\n" +
+            "    (SELECT\n" +
+            "         F_PRODUCT_MANIFESTATION\n" +
+            "        ,MIN(AVAILABILITY_START_DATE) FIRST_PUB_DATE\n" +
+            "     FROM\n" +
+            "        GD_PRODUCT_AVAILABILITY\n" +
+            "     GROUP BY F_PRODUCT_MANIFESTATION) PD ON M.PRODUCT_MANIFESTATION_ID = PD.F_PRODUCT_MANIFESTATION\n" +
             "WHERE T.PRODUCT_TYPE_CODE NOT IN ('COMPENDIUM','JCOLSC','ADVERTISING','FS','DUES')\n" +
             "AND M.PRODUCT_MANIFESTATION_ID IN ('%s')\n" +
             "ORDER BY M.PRODUCT_MANIFESTATION_ID";
@@ -186,7 +201,7 @@ public class WorkExtractSQL {
             "\"WEIGHT\" as WEIGHT, \n" +
             "\"CARTON_QTY\" as CARTON_QTY, \n" +
             "\"INTERNATIONAL_EDITION_IND\" as INTERNATIONAL_EDITION_IND,\n" +
-            "\"COPYRIGHT_DATE\" as COPYRIGHT_DATE,\n" +
+            "\"FIRST_PUB_DATE\" as FIRST_PUB_DATE,\n" +
             "\"F_PRODUCT_MANIFESTATION_TYP\" as F_PRODUCT_MANIFESTATION_TYP,\n" +
             "\"FORMAT_TXT\" as FORMAT_TXT,\n" +
             "\"MANIFESTATION_STATUS\" as MANIFESTATION_STATUS,\n" +
@@ -264,11 +279,12 @@ public class WorkExtractSQL {
             " dq.pmx_source_reference IN ('%s')";
 
 
-    public static final String SELECT_MANIFESTATIONS_DATA_IN_EPH_SA = "select distinct sa.b_loadid as B_LOADID,\n" +
+    public static final String SELECT_MANIFESTATIONS_DATA_IN_EPH_SA = "select distinct \n" +
+            "sa.b_loadid as B_LOADID,\n" +
             "sa.F_EVENT  as F_EVENT,\n" +
             "sa.B_CLASSNAME as B_CLASSNAME,\n" +
             "sa.MANIFESTATION_ID as MANIFESTATION_ID,\n" +
-            "sa.PMX_SOURCE_REFERENCE as PMX_SOURCE_REFERENCE,\n" +
+            "sa.external_reference as PMX_SOURCE_REFERENCE,\n" +
             "sa.MANIFESTATION_KEY_TITLE as MANIFESTATION_KEY_TITLE,\n" +
             "sa.INTER_EDITION_FLAG as INTER_EDITION_FLAG,\n" +
             "sa.FIRST_PUB_DATE as FIRST_PUB_DATE,\n" +
@@ -284,12 +300,12 @@ public class WorkExtractSQL {
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
             "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n" +
-            "and pmx_source_reference IN ('%s')";
+            "and external_reference IN ('%s')";
 
     public static final String SELECT_MANIFESTATIONS_DATA_IN_EPH_GD = "select F_EVENT  as F_EVENT,\n" +
             "B_CLASSNAME as B_CLASSNAME,\n" +
             "MANIFESTATION_ID as MANIFESTATION_ID,\n" +
-            "PMX_SOURCE_REFERENCE as PMX_SOURCE_REFERENCE,\n" +
+            "EXTERNAL_REFERENCE as PMX_SOURCE_REFERENCE,\n" +
             "MANIFESTATION_KEY_TITLE as MANIFESTATION_KEY_TITLE,\n" +
             "INTER_EDITION_FLAG as INTER_EDITION_FLAG,\n" +
             "FIRST_PUB_DATE as FIRST_PUB_DATE,\n" +
@@ -298,7 +314,7 @@ public class WorkExtractSQL {
             "F_STATUS as F_STATUS, \n" +
             "F_FORMAT_TYPE as F_FORMAT_TYPE, \n" +
             "F_WWORK as F_WWORK\n" +
-            "FROM semarchy_eph_mdm.gd_manifestation WHERE pmx_source_reference IN ('%s')";
+            "FROM semarchy_eph_mdm.gd_manifestation WHERE EXTERNAL_REFERENCE IN ('%s')";
 
     /* Old logic
     public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "select count(*) AS count from ephsit_talend_owner.stg_10_pmx_manifestation  where \"%s\" is not null";
