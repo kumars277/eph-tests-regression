@@ -5,6 +5,16 @@ public class FinancialAttribsDataObject {
     public String opco;
     public String resp_centre;
 
+    public String getExternal_reference() {
+        return external_reference;
+    }
+
+    public void setExternal_reference(String external_reference) {
+        this.external_reference = external_reference;
+    }
+
+    public String external_reference;
+
 
     public String getPMX_SOURCE_REFERENCE() {
         return PMX_SOURCE_REFERENCE;

@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class FinancialAttributesSteps {
@@ -222,6 +223,15 @@ public class FinancialAttributesSteps {
                         financialAttribs.financialDataFromStg.get(i).resp_centre
                                 .equals(financialAttribs.financialDataFromSA.get(0).revenue_resp_centre));
             }
+
+            if (financialAttribs.financialDataFromStg.get(i).getPMX_SOURCE_REFERENCE() != null
+                    || financialAttribs.financialDataFromSA.get(0).external_reference != null) {
+                assertEquals("Expecting the revenue resp centre details from STG and SA Consistent for id=" + ids.get(i),
+                        financialAttribs.financialDataFromStg.get(i).getPMX_SOURCE_REFERENCE()+
+                                financialAttribs.financialDataFromStg.get(i).opco+
+                                financialAttribs.financialDataFromStg.get(i).resp_centre,
+                        financialAttribs.financialDataFromSA.get(0).external_reference);
+            }
         }
     }
 
@@ -257,6 +267,13 @@ public class FinancialAttributesSteps {
                 assertTrue("Expecting the revenue resp centre details from SA and GD Consistent for id=" + financialAttribs.financialDataFromSAAll.get(i).fin_attribs_id,
                         financialAttribs.financialDataFromSAAll.get(i).revenue_resp_centre
                                 .equals(financialAttribs.financialDataFromGD.get(i).revenue_resp_centre));
+            }
+
+            if (financialAttribs.financialDataFromSAAll.get(i).external_reference != null
+                    || financialAttribs.financialDataFromGD.get(i).external_reference != null) {
+                assertTrue("Expecting the revenue resp centre details from SA and GD Consistent for id=" + financialAttribs.financialDataFromSAAll.get(i).fin_attribs_id,
+                        financialAttribs.financialDataFromSAAll.get(i).external_reference
+                                .equals(financialAttribs.financialDataFromGD.get(i).external_reference));
             }
         }
     }
