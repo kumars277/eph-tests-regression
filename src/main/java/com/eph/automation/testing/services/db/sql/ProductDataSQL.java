@@ -23,7 +23,7 @@ public class ProductDataSQL {
             "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND M.F_PRODUCT_MANIFESTATION_TYP = 1 THEN 'Y' ELSE 'N' END AS REPRINTS\n" +
             "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND M.PRODUCT_MANIFESTATION_ID = WT.FIRST_MANIFESTATION THEN 'Y' ELSE 'N' END AS AUTHOR_CHARGES\n" +
             "\t,CASE WHEN WT.WORK_TYPE = 'BOOK' THEN 'Y' ELSE 'N' END AS ONE_OFF_ACCESS\n" +
-            "\t,CASE WHEN WT.WORK_TYPE = 'PACKAGE' THEN 'Y' ELSE 'N' END AS PACKAGES\n" +
+            "\t,CASE WHEN WT.WORK_TYPE = 'PACKAGE' AND M.F_PRODUCT_MANIFESTATION_TYP = 21 THEN 'Y' ELSE 'N' END AS PACKAGES\n" +
             "\t,CASE\n" +
             "\t    WHEN M.EFFECTIVE_TO_DATE IS NOT NULL THEN 'NVP'\n" +
             "\t\tWHEN (MSS.SUBSTATUS_DESC IN ('Planned to be available','Planned to be available (secret)'))  THEN 'PPL'\n" +
@@ -51,9 +51,12 @@ public class ProductDataSQL {
             "      JOIN GD_PRODUCT_TYPE T ON W.F_PRODUCT_TYPE = T.PRODUCT_TYPE_ID\n" +
             "      JOIN (SELECT FMAN.F_PRODUCT_WORK, MIN(FMAN.PRODUCT_MANIFESTATION_ID) AS FIRST_MANIFESTATION\n" +
             "\t        FROM GD_PRODUCT_MANIFESTATION FMAN GROUP BY FMAN.F_PRODUCT_WORK) FIR ON MAN.F_PRODUCT_WORK = FIR.F_PRODUCT_WORK\n" +
-            "\t   ) WT ON WT.PRODUCT_MANIFESTATION_ID = M.PRODUCT_MANIFESTATION_ID)\n" +
-            "\t   WHERE  M.PRODUCT_MANIFESTATION_ID IN ('%s')\n" +
-            "\t order by  M.PRODUCT_MANIFESTATION_ID\n";
+            "\t   ) WT ON WT.PRODUCT_MANIFESTATION_ID = M.PRODUCT_MANIFESTATION_ID\n" +
+            "\t     WHERE  M.PRODUCT_MANIFESTATION_ID IN ('%s')\n" +
+            "\t order by  M.PRODUCT_MANIFESTATION_ID\n" +
+            "\t   \n" +
+            "\t   \n" +
+            "\t  \n";
 
     public static String EPH_STG_PRODUCT_EXTRACT = "SELECT\n" +
             "           \"PRODUCT_ID\" as PRODUCT_ID,\n" +
@@ -280,7 +283,7 @@ public class ProductDataSQL {
             "  ,F_EVENT AS F_EVENT\n" +
             "  ,sa.B_CLASSNAME as B_CLASSNAME\n" +
             "  ,product_id AS PRODUCT_ID -- Title\n" +
-            "  ,pmx_source_reference AS PMX_SOURCE_REFERENCE -- Subtitle\n" +
+            "  ,external_reference AS PMX_SOURCE_REFERENCE -- Subtitle\n" +
             "  ,name as PRODUCT_NAME\n" +
             "  ,short_name as PRODUCT_SHORT_NAME\n" +
             "  ,separately_sale_indicator as SEPARATELY_SALEABLE_IND\n" +
@@ -369,47 +372,48 @@ public class ProductDataSQL {
             "  where pmx_source_reference similar to '%s' and pmx_source_reference not like '%%OOA'";
 
 
-    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_JOURNALS = "select distinct PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID from (select  \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product stg \n " +
+    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_JOURNALS = "select distinct PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID from\n" +
+            "(select  \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product stg \n" +
             "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int \n" +
-            "left join semarchy_eph_mdm.sa_product sa on dq.pmx_source_reference = sa.pmx_source_reference\n" +
+            "left join (select distinct external_reference, b_error_status from semarchy_eph_mdm.sa_product ) sa on dq.pmx_source_reference = sa.external_reference\n" +
             " where \"SUBSCRIPTION\" = 'Y' \n" +
             "and dq.dq_err != 'Y'  \n" +
-            "order by random() limit '%s') A ";
+            "order by random() limit '%s') A \n";
 
     public static String SELECT_F_PRODUCT_WORK_IDS_FOR_GIVEN_MANIFESTATION_IDS = "select \"F_PRODUCT_WORK\" as F_PRODUCT_WORK from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product where \"PRODUCT_MANIFESTATION_ID\" IN ('%s')";
 
-    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PRINT_JOURNALS= "select distinct PRODUCT_MANIFESTATION_ID as  PRODUCT_MANIFESTATION_ID from  (select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID  from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product stg\n" +
+    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PRINT_JOURNALS="select distinct PRODUCT_MANIFESTATION_ID as  PRODUCT_MANIFESTATION_ID from  (select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID  from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product stg\n" +
             "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int \n" +
-            "left join semarchy_eph_mdm.sa_product sa on dq.pmx_source_reference = sa.pmx_source_reference\n" +
+            "left join (select distinct external_reference, b_error_status from semarchy_eph_mdm.sa_product ) sa on dq.pmx_source_reference = sa.external_reference\n" +
             "where \"SUBSCRIPTION\" = 'Y'\n" +
             "and \"F_PRODUCT_MANIFESTATION_TYP\" = '1' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = '%s' \n" +
-            "and dq.dq_err != 'Y' " +
+            "and dq.dq_err != 'Y' \n" +
             "and sa.b_error_status is null\n" +
             "order by random() limit '%s') A ";
 
     public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_ELECTRONIC_JOURNALS = "select distinct PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID from (select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID  from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product stg\n" +
             "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int \n" +
-            "left join semarchy_eph_mdm.sa_product sa on dq.pmx_source_reference = sa.pmx_source_reference\n" +
+            "left join (select distinct external_reference, b_error_status from semarchy_eph_mdm.sa_product ) sa on dq.pmx_source_reference = sa.external_reference\n" +
             "where \"SUBSCRIPTION\" = 'Y'\n" +
             "and \"F_PRODUCT_MANIFESTATION_TYP\" = '2' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = '%s' \n" +
-            "and dq.dq_err != 'Y' " +
+            "and dq.dq_err != 'Y' \n" +
             "and sa.b_error_status is null\n" +
             "order by random() limit '%s') A ";
 
     public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_NON_PRINT_OR_ELECTRONIC_JOURNALS = "select \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product where \"SUBSCRIPTION\" = 'Y' and \"F_PRODUCT_MANIFESTATION_TYP\" NOT IN ('1', '2') and \"AUTHOR_CHARGES\" = '%s' order by random() limit '%s'";
 
-    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS = "select distinct PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID from (select  \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID \n" +
-            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product stg \n" +
-            "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int \n" +
-            "left join semarchy_eph_mdm.sa_product sa on dq.pmx_source_reference = sa.pmx_source_reference\n" +
-            "where \"ONE_OFF_ACCESS\" = 'Y' \n" +
+    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS = "select distinct PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID from \n" +
+            "(select  \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from "  + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product stg \n" +
+            "left join"  + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int \n" +
+            "left join (select distinct external_reference from semarchy_eph_mdm.sa_product ) sa on dq.pmx_source_reference = sa.external_reference\n" +
+            " where \"SUBSCRIPTION\" = 'Y' \n" +
             "and dq.dq_err != 'Y'  \n" +
-            "and sa.b_error_status is null\n" +
-            "order by random() limit '%s') A";
+            "order by random() limit '%s') A ";
 
-    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PACKAGES = "select distinct PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID from (select  \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product stg \n" +
+    public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PACKAGES = "select distinct PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID from \n" +
+            "(select  \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from "  + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product stg \n" +
             "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int \n" +
-            "left join semarchy_eph_mdm.sa_product sa on dq.pmx_source_reference = sa.pmx_source_reference\n" +
+            "left join (select distinct external_reference, b_error_status from semarchy_eph_mdm.sa_product ) sa on dq.pmx_source_reference = sa.external_reference\n" +
             "where \"PACKAGES\" = 'Y'\n" +
             "and dq.dq_err != 'Y' \n" +
             "and sa.b_error_status is null\n" +

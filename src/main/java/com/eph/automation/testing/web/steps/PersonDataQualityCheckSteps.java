@@ -38,7 +38,7 @@ public class PersonDataQualityCheckSteps {
     private static int countPersonsEPHSA;
     private static int countPersonsEPHGD;
     private static List<String> ids;
-    private static List<String> idsLookup;
+    private static List<String> personId;
     private static List<String> idsSourceRef;
 
 
@@ -145,7 +145,7 @@ public class PersonDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
 
@@ -304,27 +304,21 @@ public class PersonDataQualityCheckSteps {
     }
 
 
-    @Then("^We get the ids of the records in EPH SA from the lookup table$")
-    public void getIdsFromLookupTable() {
-        Log.info("Get the ids of the records in EPH SA from the lookup table ..");
-        idsSourceRef = new ArrayList<>(ids);
 
-
-        IntStream.range(0, idsSourceRef.size()).forEach(i -> idsSourceRef.set(i, "PERSON-" + idsSourceRef.get(i)));
-        sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE, Joiner.on("','").join(idsSourceRef));
-        Log.info(sql);
-
-
-        List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-
-        idsLookup = lookupResults.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
-        Log.info(idsLookup.toString());
-    }
 
     @Then("^We get the person records from EPH SA$")
     public void getPersonDataFromEPHSA() {
         Log.info("In Then method");
-        sql = String.format(PersonDataSQL.GET_DATA_PERSONS_EPHSA, Joiner.on("','").join(idsLookup));
+
+        //get person ids
+        sql = String.format(PersonDataSQL.GET_PERSON_IDS_FROM_SA, Joiner.on("','").join(ids));
+        Log.info(sql);
+
+        List<Map<?, ?>> results = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        personId = results.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
+
+        sql = String.format(PersonDataSQL.GET_DATA_PERSONS_EPHSA, Joiner.on("','").join(personId));
+
         Log.info(sql);
 
         dataQualityContext.personDataObjectsFromEPHSA = DBManager
@@ -340,14 +334,13 @@ public class PersonDataQualityCheckSteps {
         IntStream.range(0, dataQualityContext.personDataObjectsFromEPHDQ.size()).forEach(i -> {
 
             //get data from SA for the current record from DQ
-            String currentId = "PERSON-" + dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_SOURCE_REF();
-            sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE, currentId);
+            sql = String.format(PersonDataSQL.GET_PERSON_IDS_FROM_SA, dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_SOURCE_REF());
             Log.info(sql);
 
-            List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            idsLookup = lookupResults.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
+            List<Map<?, ?>> results = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            personId = results.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
 
-            sql = String.format(PersonDataSQL.GET_DATA_PERSONS_EPHSA, Joiner.on("','").join(idsLookup));
+            sql = String.format(PersonDataSQL.GET_DATA_PERSONS_EPHSA, Joiner.on("','").join(personId));
             Log.info(sql);
 
             dataQualityContext.personDataObjectsFromEPHSA = DBManager
@@ -381,7 +374,7 @@ public class PersonDataQualityCheckSteps {
     @Then("^We get the person records from EPH GD$")
     public void getPersonDataFromEPHGD() {
         Log.info("In Then method");
-        sql = String.format(PersonDataSQL.GET_DATA_PERSONS_EPHGD, Joiner.on("','").join(idsLookup));
+        sql = String.format(PersonDataSQL.GET_DATA_PERSONS_EPHGD, Joiner.on("','").join(personId));
         Log.info(sql);
 
         dataQualityContext.personDataObjectsFromEPHGD = DBManager

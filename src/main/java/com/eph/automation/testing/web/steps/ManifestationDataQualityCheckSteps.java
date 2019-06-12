@@ -396,11 +396,19 @@ public class ManifestationDataQualityCheckSteps {
 
 
             //RECORD_END_DATE
-            Log.info("RECORD_END_DATE in PMX: " + manifestationDataObjectsFromPMX.get(i).getMANIFESTATION_SUBSTATUS());
-            Log.info("RECORD_END_DATE in EPH Staging: " + manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_SUBSTATUS());
+            if (manifestationDataObjectsFromPMX.get(i).getRECORD_END_DATE() != null || manifestationDataObjectsFromEPHSTG.get(i).getRECORD_END_DATE() != null) {
+                try {
+                    Date pmxRecordEndDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromPMX.get(i).getRECORD_END_DATE());
+                    Log.info("RECORD_END_DATE in PMX: " + pmxRecordEndDate);
 
-            assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ", manifestationDataObjectsFromPMX.get(i).getRECORD_END_DATE(), manifestationDataObjectsFromEPHSTG.get(i).getRECORD_END_DATE());
+                    Date ephRecordEndDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHSTG.get(i).getRECORD_END_DATE());
+                    Log.info("RECORD_END_DATE in EPH Staging: " + ephRecordEndDate);
 
+                    assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ", pmxRecordEndDate, ephRecordEndDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
 
         });
 

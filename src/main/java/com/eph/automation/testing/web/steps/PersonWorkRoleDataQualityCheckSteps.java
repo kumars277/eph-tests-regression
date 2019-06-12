@@ -63,8 +63,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
     public void getCountPersonsProductRolePHSTG() {
         Log.info("When We get the count of persons work role records in EPH STG ..");
 
-        if (System.getProperty("LOAD") != null) {
-            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
                 sql = PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHSTG;
                 Log.info(sql);
             } else {
@@ -73,8 +72,6 @@ public class PersonWorkRoleDataQualityCheckSteps {
                 String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
                 sql = String.format( PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHSTG_DELTA, refreshDate );
             }
-        }
-
 
 
         List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -108,6 +105,8 @@ public class PersonWorkRoleDataQualityCheckSteps {
         countPersonsWorkRoleEPHSA = ((Long) personsNumber.get(0).get("count")).intValue();
         Log.info("Count of persons work role in EPH SA is: " + countPersonsWorkRoleEPHSA);
     }
+
+
 
     @Given("^Get the count of records for persons work role in EPH AE$")
     public void getCountPersonsProductRoleEPHAE() {
@@ -152,7 +151,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         switch(type) {
@@ -171,6 +170,11 @@ public class PersonWorkRoleDataQualityCheckSteps {
                 sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS_FROM_SA_WITH_NO_ERROR, type, numberOfRecords);
                 Log.info(sql);
                 break;
+            case "AE":
+//                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, type, numberOfRecords);
+                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS_FROM_SA_WITH_NO_ERROR, type, numberOfRecords);
+                Log.info(sql);
+                break;
             default:
                 break;
         }
@@ -185,9 +189,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info("Get the ids of the records in EPH STG from the lookup table ..");
         idsSourceRef = new ArrayList<>(idsSA);
 
-
-//        IntStream.range(0, idsSourceRef.size()).forEach(i -> idsSourceRef.set(i, "WPR-" + idsSourceRef.get(i)));
-        sql = String.format(PersonWorkRoleDataSQL.GET_IDS_FROM_LOOKUP_TABLE, Joiner.on("','").join(idsSA));
+        sql = String.format(PersonWorkRoleDataSQL.GET_IDS_FROM_STG_FOR_GIVEN_IDS_IN_SA, Joiner.on("','").join(idsSA));
         Log.info(sql);
 
 
@@ -204,7 +206,9 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
         //prepare ids
         idsPMX = new ArrayList<>(ids);
-        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).substring(idsPMX.get(i).indexOf("-")+1, idsPMX.get(i).lastIndexOf("-"))));
+//        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).substring(idsPMX.get(i).indexOf("-")+1, idsPMX.get(i).lastIndexOf("-"))));
+
+        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).replace("-" + type, "")));
 
 
         if(type.equals("PD")) {
@@ -291,13 +295,13 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
             assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getSTART_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getSTART_DATE());
 
-            //END_DATE
-            Log.info("END_DATE in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getEND_DATE());
-            Log.info("END_DATE in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEND_DATE());
-
-            Log.info("Expecting END_DATE in PMX and EPH STG is consistent");
-
-            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getEND_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEND_DATE());
+//            //END_DATE
+//            Log.info("END_DATE in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getEND_DATE());
+//            Log.info("END_DATE in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEND_DATE());
+//
+//            Log.info("Expecting END_DATE in PMX and EPH STG is consistent");
+//
+//            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getEND_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEND_DATE());
 
 
             //UPDATED

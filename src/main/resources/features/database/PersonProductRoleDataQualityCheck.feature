@@ -1,4 +1,4 @@
-Feature: Entity - PERSON PRODUCT ROLE - Validate data between PMX and EPH - Talend Full Load
+Feature: Entity - PERSON PRODUCT ROLE - Validate data between PMX and EPH - Talend Load
 
   @Regression
   Scenario: Count check of persons product role between EPH STG DQ and EPH Stg
@@ -64,8 +64,8 @@ Feature: Entity - PERSON PRODUCT ROLE - Validate data between PMX and EPH - Tale
       | countOfRandomIds |
       | 10               |
 
-  @Regression
-  Scenario: Verify that existing product person role records are end-dated properly
-    Given We get the ids of all person product role records with set updated effective_end_date in GD
-    Then We get the person product role records from EPH GD
-    Then Check the person product role records are updated
+#  @Regression - Should be rewritten same way as in the manifestation identifiers
+#  Scenario: Verify that existing product person role records are end-dated properly
+#    Given We get the ids of all person product role records with set updated effective_end_date in GD
+#    Then We get the person product role records from EPH GD
+#    Then Check the person product role records are updated

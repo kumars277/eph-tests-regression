@@ -474,23 +474,15 @@ public class WorkExtractSQL {
             "map1.eph_id as f_manifestation,\n" +
             "concat(map1.eph_id,'ISBN',man.\"ISBN\") as external_reference\n" +
             "from\n" +
-            "ephsit_talend_owner.stg_10_pmx_manifestation man, \n" +
-            "ephsit_talend_owner.stg_10_pmx_manifestation_dq mdq ,\n" +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n" +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq ,\n" +
             "semarchy_eph_mdm.sa_manifestation_identifier sman , \n" +
-            "ephsit_talend_owner.map_sourceref_2_ephid map1 \n" +
+            GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n" +
             "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n" +
             "and map1.source_ref = mdq.pmx_source_reference::text\n" +
             "and concat(map1.eph_id,'ISBN',man.\"ISBN\") = sman.external_reference\n" +
             "and \"ISBN\" IN ('%s')";
 
-    public static final String SELECT_RECORDS_STG_MANIF_IDENTIFIER_ISBN_GIVEN_MANIF_ID = "select \"ISBN\" as identifier,sid.eph_id as f_manifestation,mid.ident_id as manif_identifier_id\n" +
-            "   from \n" +
-            "ephsit_talend_owner.stg_10_pmx_manifestation stg,\n" +
-            "ephsit_talend_owner.map_identref_2_identid mid,\n" +
-            "ephsit_talend_owner.map_sourceref_2_ephid sid   \n" +
-            " where stg.\"MANIFESTATION_ID\"::varchar = sid.source_ref\n" +
-            "and concat(sid.eph_id,'+','ISBN', '+', stg.\"ISBN\") = mid.ident_ref\n" +
-            "and stg.\"MANIFESTATION_ID\" IN ('%s')";
 
 
 
@@ -498,23 +490,16 @@ public class WorkExtractSQL {
             "map1.eph_id as f_manifestation,\n" +
             "concat(map1.eph_id,'ISSN',man.\"ISSN\") as external_reference\n" +
             "from\n" +
-            "ephsit_talend_owner.stg_10_pmx_manifestation man, \n" +
-            "ephsit_talend_owner.stg_10_pmx_manifestation_dq mdq ,\n" +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n" +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq ,\n" +
             "semarchy_eph_mdm.sa_manifestation_identifier sman , \n" +
-            "ephsit_talend_owner.map_sourceref_2_ephid map1 \n" +
+            GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n" +
             "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n" +
             "and map1.source_ref = mdq.pmx_source_reference::text\n" +
             "and concat(map1.eph_id,'ISSN',man.\"ISSN\") = sman.external_reference\n" +
             "and \"ISSN\" IN ('%s')";
 
-    public static final String SELECT_RECORDS_STG_MANIF_IDENTIFIER_ISSN_GIVEN_MAN_ID = "select \"ISSN\" as identifier,sid.eph_id as f_manifestation,mid.ident_id as manif_identifier_id\n" +
-            "   from \n" +
-            "ephsit_talend_owner.stg_10_pmx_manifestation stg,\n" +
-            "ephsit_talend_owner.map_identref_2_identid mid,\n" +
-            "ephsit_talend_owner.map_sourceref_2_ephid sid   \n" +
-            " where stg.\"MANIFESTATION_ID\"::varchar = sid.source_ref\n" +
-            "and concat(sid.eph_id,'+','ISBN', '+', stg.\"ISSN\") = mid.ident_ref\n" +
-            "and stg.\"MANIFESTATION_ID\" IN ('%s')";
+
 
 
     public static final String SELECT_MANIFESTATION_IDS_ISBN = "select \"MANIFESTATION_ID\" as MANIFESTATION_ID\n" +
@@ -556,28 +541,16 @@ public class WorkExtractSQL {
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')";
 
     public static final String SELECT_ISBNS_FROM_STG_AND_SA_FOR_END_DATED_RECORDS  = "select sman.external_reference as \"SA\" , concat(map1.eph_id,'ISBN',man.\"ISBN\") as \"STG\" \n" +
-            "from ephsit_talend_owner.stg_10_pmx_manifestation man, \n" +
-            "ephsit_talend_owner.stg_10_pmx_manifestation_dq mdq ,\n" +
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n" +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq ,\n" +
             "semarchy_eph_mdm.gd_manifestation_identifier sman ,\n" +
-            "ephsit_talend_owner.map_sourceref_2_ephid map1 \n" +
+            GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n" +
             "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n" +
             "and map1.source_ref = mdq.pmx_source_reference::text\n" +
             "and concat(map1.eph_id,'ISBN',man.\"ISBN\") = sman.external_reference\n" +
             "and sman.effective_end_date is not null\n";
 
 
-    public static final String GET_EPH_ID = "select eph_id as eph_id from ephsit_talend_owner.map_sourceref_2_ephid where source_ref ='%s' and ref_type = 'MANIFESTATION'";
 
-    public static final String GET_IDENT_ID = "select ident_id as ident_id from ephsit_talend_owner.map_identref_2_identid where ident_ref = concat('%s','+','ISBN','+','%s')";
-    public static final String GET_IDENT_ID_ISSN = "select ident_id as ident_id from ephsit_talend_owner.map_identref_2_identid where ident_ref = concat('%s','+','ISSN','+','%s')";
-
-
-    public static final String SELECT_RECORDS_GD_MANIFESTATION_IDENTIFIER_GIVEN_MANIF_ID = "select f_event as f_event,\n" +
-            "b_classname as b_classname, \n" +
-            "manif_identifier_id as manif_identifier_id, \n" +
-            "f_type as f_type, \n" +
-            "f_manifestation as f_manifestation \n" +
-            "from semarchy_eph_mdm.gd_manifestation_identifier \n" +
-            "where manif_identifier_id in ('%s')";
 
 }

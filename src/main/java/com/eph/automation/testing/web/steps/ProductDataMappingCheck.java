@@ -44,7 +44,7 @@ public class ProductDataMappingCheck {
     public void getRandomProductManifestationIds(String numberOfRecords, String type) {
         Log.info("Get random ids ..");
         //Get property when run with jenkins
-       // numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         switch (type) {
@@ -74,7 +74,7 @@ public class ProductDataMappingCheck {
     public void getRandomProductManifestationIdsForJournals(String numberOfRecords, String type, String open_access, String author_charges) {
         Log.info("In Given method get random product manifestation ids for journals");
         //Get property when run with jenkins
-       // numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("Number of random records = " + numberOfRecords);
 
 
@@ -338,14 +338,14 @@ public class ProductDataMappingCheck {
             Log.info("Expecting UPDATED in PMX and EPH Staging are consistent for " + type);
 
 
-            try {
-               Date pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(dataQualityContext.productDataObjectsFromPMX.get(i).getUPDATED());
-               Date ephUpdatedDate = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS aaa").parse(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getUPDATED());
+//            try {
+//               Date pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(dataQualityContext.productDataObjectsFromPMX.get(i).getUPDATED());
+//               Date ephUpdatedDate = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS aaa").parse(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getUPDATED());
 
-            assertEquals("UPDATED in PMX and EPH STG is not equal ", pmxUpdatedDate, ephUpdatedDate);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            assertEquals("UPDATED in PMX and EPH STG is not equal ", dataQualityContext.productDataObjectsFromPMX.get(i).getUPDATED(), dataQualityContext.productDataObjectsFromEPHSTG.get(i).getUPDATED());
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
 
         });
     }
