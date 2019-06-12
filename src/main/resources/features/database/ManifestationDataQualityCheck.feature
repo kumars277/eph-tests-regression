@@ -1,4 +1,4 @@
-Feature: Entity - Manifestations - Count & Data Mapping Check - Validate data between PMX and EPH - Talend Full Load
+Feature: Entity - Manifestations - Count & Data Mapping Check - Validate data between PMX and EPH - Talend Load
 
   @Regression
   Scenario: Verify count of manifestations records in PMX and EPH staging is equal
@@ -58,8 +58,8 @@ Feature: Entity - Manifestations - Count & Data Mapping Check - Validate data be
     And We compare the manifestations in EPH SA and EPH golden data
     Examples:
       | numberOfRecords | journal_type |
-      | 5               | JPR          |
-      | 5               | JEL          |
+      | 20               | JPR          |
+      | 20              | JEL          |
 
 
 #1)	JPR – Print Journal   - WORK_TYPE_ID IN (4,3,102) F_PRODUCT_MANIFESTATION_TYP = 1

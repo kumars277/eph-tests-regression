@@ -59,7 +59,7 @@ public class PersonDataSQL {
             "\"PERSON_SOURCE_REF\" as PERSON_SOURCE_REF,\n" +
             "\"PERSON_FIRST_NAME\" as PERSON_FIRST_NAME,\n" +
             "\"PERSON_FAMILY_NAME\" as PERSON_FAMILY_NAME,\n" +
-            "\"PEOPLEHUB_ID\" as PEOPLEHUB_ID\n" +
+            "\"PEOPLEHUB_ID\" as PEOPLEHUB_ID,\n" +
             "\"UPDATED\" as UPDATED\n" +
             "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person\n" +
             "where \"PERSON_SOURCE_REF\" in ('%s')\n";
@@ -102,6 +102,7 @@ public class PersonDataSQL {
             "\"PERSON_SOURCE_REF\" AS PERSON_SOURCE_REF\n" +
             "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person p\n" +
             "join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq dq on p.\"PERSON_SOURCE_REF\" = dq.person_source_ref\n" +
+            "left join (select distinct external_reference, person_id from semarchy_eph_mdm.sa_person) a on dq.person_source_ref::varchar = a.external_reference\n" +
             "where dq.dq_err != 'Y'\n" +
             "order by random() limit '%s'";
 
@@ -110,4 +111,11 @@ public class PersonDataSQL {
 
     public static String GET_IDS_FROM_LOOKUP_TABLE_EPH = "select eph_id as PERSON_ID from " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid\n" +
             "where ref_type = '%s' and source_ref IN ('%s')";
+
+    public static String GET_PERSON_IDS_FROM_SA  = "select  a.person_id as PERSON_ID\n" +
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person p\n" +
+            "join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq dq on p.\"PERSON_SOURCE_REF\" = dq.person_source_ref\n" +
+            "left join (select distinct external_reference, person_id from semarchy_eph_mdm.sa_person sa) a on dq.person_source_ref::varchar = a.external_reference\n" +
+            "where dq.dq_err != 'Y'\n" +
+            "and p.\"PERSON_SOURCE_REF\" in ('%s')\n";
 }

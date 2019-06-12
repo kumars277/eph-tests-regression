@@ -1,4 +1,4 @@
-Feature: Entity - PERSON  - Validate data between PMX and EPH - Talend Full Load
+Feature: Entity - PERSON  - Validate data between PMX and EPH - Talend Load
 
   @Regression
   Scenario: Count check between PMX and EPH Staging
@@ -43,8 +43,6 @@ Feature: Entity - PERSON  - Validate data between PMX and EPH - Talend Full Load
     When We get the person records from EPH STG
     Then We get the person records from EPH DQ
     Then Compare person records in EPH STG and EPH DQ
-    Then We get the ids of the records in EPH SA from the lookup table
-    Then We get the person records from EPH SA
     And Compare person records in EPH DQ and EPH SA
     Examples:
       | countOfRandomIds |
@@ -54,7 +52,6 @@ Feature: Entity - PERSON  - Validate data between PMX and EPH - Talend Full Load
   @Regression
   Scenario Outline: Validate data is transferred from EPH SA to EPH GD
     Given We get <countOfRandomIds> random ids of persons
-    Then We get the ids of the records in EPH SA from the lookup table
     Then We get the person records from EPH SA
     Then We get the person records from EPH GD
     And Compare person records in EPH SA and EPH GD

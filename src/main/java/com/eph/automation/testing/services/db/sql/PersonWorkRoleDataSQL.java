@@ -7,10 +7,13 @@ public class PersonWorkRoleDataSQL {
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_PMX = "SELECT count(*) as count FROM (\n" +
             "SELECT\n" +
-            "     W.PRODUCT_WORK_ID||'-PD' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
+            "     W.PRODUCT_WORK_ID||PMG.F_PARTY||'-PD' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
             "    ,PMG.F_PARTY AS PMX_PARTY_SOURCE_REF\n" +
             "    ,W.PRODUCT_WORK_ID AS PMX_WORK_SOURCE_REF\n" +
             "    ,'PD' AS F_ROLE\n" +
+            "    ,CURRENT_DATE AS START_DATE\n" +
+            "    ,NULL AS END_DATE\n" +
+            "    ,TO_CHAR(PMG.B_UPDDATE,'YYYYMMDDHH24MI') AS UPDATED\n" +
             "FROM\n" +
             "    GD_PRODUCT_WORK W\n" +
             "JOIN\n" +
@@ -25,23 +28,42 @@ public class PersonWorkRoleDataSQL {
             "\t,P.F_PARTY AS PMX_PARTY_SOURCE_REF\n" +
             "\t,P.F_PRODUCT_WORK  AS PMX_WORK_SOURCE_REF\n" +
             "\t,'AU' AS F_ROLE\n" +
+            "\t,P.EFFFROM_DATE AS START_DATE\n" +
+            "\t,P.EFFTO_DATE AS END_DATE\n" +
+            "\t,TO_CHAR(NVL(P.B_UPDDATE,P.B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
             "FROM\n" +
             "\tGD_PARTY_IN_PRODUCT P\n" +
             "WHERE\n" +
             "\tP.F_ROLE_TYPE = 1\n" +
-            "AND P.EFFTO_DATE IS NULL\n" +
+            "--AND P.EFFTO_DATE IS NULL\n" +
             "UNION\n" +
             "SELECT\n" +
             "\t P.PARTY_IN_PRODUCT_ID||'-PU' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
             "\t,P.F_PARTY AS PMX_PARTY_SOURCE_REF\n" +
             "\t,P.F_PRODUCT_WORK  AS PMX_WORK_SOURCE_REF\n" +
             "\t,'PU' AS F_ROLE\n" +
+            "\t,P.EFFFROM_DATE AS START_DATE\n" +
+            "\t,P.EFFTO_DATE AS END_DATE\n" +
+            "\t,TO_CHAR(NVL(P.B_UPDDATE,P.B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
             "FROM\n" +
             "\tGD_PARTY_IN_PRODUCT P\n" +
             "WHERE\n" +
             "\tP.F_ROLE_TYPE IN (1120,1126)\n" +
-            "AND P.EFFTO_DATE IS NULL\n" +
-            ")";
+            "--AND P.EFFTO_DATE IS NULL\n" +
+            "UNION\n" +
+            "SELECT\n" +
+            "\t P.PARTY_IN_PRODUCT_ID||'-AE' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
+            "\t,P.F_PARTY AS PMX_PARTY_SOURCE_REF\n" +
+            "\t,P.F_PRODUCT_WORK  AS PMX_WORK_SOURCE_REF\n" +
+            "\t,'AE' AS F_ROLE\n" +
+            "\t,P.EFFFROM_DATE AS START_DATE\n" +
+            "\t,P.EFFTO_DATE AS END_DATE\n" +
+            "\t,TO_CHAR(NVL(P.B_UPDDATE,P.B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
+            "FROM\n" +
+            "\tGD_PARTY_IN_PRODUCT P\n" +
+            "WHERE\n" +
+            "\tP.F_ROLE_TYPE IN (1103,1104)\n" +
+            ")\n";
 
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTG = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role" ;
@@ -49,24 +71,24 @@ public class PersonWorkRoleDataSQL {
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTG_DELTA = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')\n" ;
 
 
-    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTGGoingToSA = "select count(*) from ephsit_talend_owner.STG_10_PMX_WORK_PERSON_ROLE\n" +
-            "join (\n" +
-            "select s.person_source_ref as stage,\n" +
-            "replace(m.source_ref,'PERSON-','') as gold,\n" +
-            "coalesce(s.person_source_ref::varchar,replace(m.source_ref,'PERSON-','')) as consol,\n" +
+    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTGGoingToSA = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role\n" +
+            "join  ((select s.person_source_ref as stage, aa.external_reference as gold,\n" +
+            "coalesce(s.person_source_ref::varchar,aa.external_reference) as consol,\n" +
             "case when s.person_source_ref is null then 'N' else s.dq_err end as dq_err\n" +
-            "from semarchy_eph_mdm.gd_person g join ephsit_talend_owner.map_sourceref_2_numericid m on g.person_id = m.numeric_id\n" +
-            "full outer join ephsit_talend_owner.stg_10_pmx_person_dq s on replace(m.source_ref,'PERSON-','') = s.person_source_ref::varchar)  perd\n" +
-            "on ephsit_talend_owner.STG_10_PMX_WORK_PERSON_ROLE.\"PMX_PARTY_SOURCE_REF\" \n" +
-            "join  (\n" +
-            "select s.pmx_source_reference as stage,\n" +
-            "g.pmx_source_reference as gold,\n" +
-            "coalesce(s.pmx_source_reference::varchar,g.pmx_source_reference) as consol,\n" +
+            "from (select distinct external_reference, person_id from semarchy_eph_mdm.sa_person) aa\n" +
+            "full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq s on aa.external_reference = s.person_source_ref::varchar))  perd\n" +
+            "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_PARTY_SOURCE_REF\"::varchar = perd.consol\n" +
+            "join  (select s.pmx_source_reference as stage, g.external_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
             "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
-            "from semarchy_eph_mdm.gd_wwork g \n" +
-            "full outer join ephsit_talend_owner.stg_10_pmx_wwork_dq s on g.pmx_source_reference = s.pmx_source_reference::varchar) word\n" +
-            "on ephsit_talend_owner.STG_10_PMX_WORK_PERSON_ROLE.\"PMX_WORK_SOURCE_REF\" = word.consol\n" +
-            "where perd.dq_err != 'Y' and word.dq_err != 'Y'" ;
+            "from semarchy_eph_mdm.gd_wwork g full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq s on g.external_reference = s.pmx_source_reference::varchar) word\n" +
+            "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_WORK_SOURCE_REF\"::varchar = word.consol\n" +
+            "join (select distinct person_id, external_reference from sa_person) p \n" +
+            "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_PARTY_SOURCE_REF\"::varchar = p.external_reference\n" +
+            "left join\n" +
+            "    (select distinct external_reference, work_person_role_id from semarchy_eph_mdm.sa_work_person_role) a\n" +
+            "    on STG_10_PMX_WORK_PERSON_ROLE.\"WORK_PERSON_ROLE_SOURCE_REF\" = a.external_reference\n" +
+            "where perd.dq_err != 'Y' and word.dq_err != 'Y'";
 
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHAE = "select count(distinct work_person_role_id) as count from semarchy_eph_mdm.ae_work_person_role\n";
@@ -150,18 +172,33 @@ public class PersonWorkRoleDataSQL {
             "\t\tAND P.PARTY_IN_PRODUCT_ID IN ('%s')";
 
 
-    public static String GET_DATA_PERSONS_WORK_ROLE_EPHSTG = "select \n" +
-            "wpr.\"WORK_PERSON_ROLE_SOURCE_REF\" as WORK_PERSON_ROLE_SOURCE_REF,\n" +
-            "wpr.\"PMX_PARTY_SOURCE_REF\" as PMX_PARTY_SOURCE_REF,\n" +
-            "wpr.\"PMX_WORK_SOURCE_REF\" as PMX_WORK_SOURCE_REF,\n" +
-            "wpr.\"F_ROLE\" as F_ROLE,\n" +
-            "wpr.\"START_DATE\" as START_DATE,\n" +
-            "wpr.\"END_DATE\" as END_DATE,\n" +
-            "wpr.\"UPDATED\" as UPDATED\n" +
-            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role wpr\n" +
-            "join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq perd  on wpr.\"PMX_PARTY_SOURCE_REF\" = perd.\"person_source_ref\" \n" +
-            "join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq word on wpr.\"PMX_WORK_SOURCE_REF\" = word.\"pmx_source_reference\" \n" +
-            "where \"WORK_PERSON_ROLE_SOURCE_REF\" in ('%s') and perd.dq_err != 'Y' and word.dq_err != 'Y'";
+    public static String GET_DATA_PERSONS_WORK_ROLE_EPHSTG = "select\n" +
+            "\"WORK_PERSON_ROLE_SOURCE_REF\" as WORK_PERSON_ROLE_SOURCE_REF,\n" +
+            "\"PMX_PARTY_SOURCE_REF\" as PMX_PARTY_SOURCE_REF,\n" +
+            "\"PMX_WORK_SOURCE_REF\" as PMX_WORK_SOURCE_REF,\n" +
+            "\"F_ROLE\" as F_ROLE,\n" +
+            "\"START_DATE\" as START_DATE,\n" +
+            "\"END_DATE\" as END_DATE,\n" +
+            "\"UPDATED\" as UPDATED\n" +
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role\n" +
+            "join  ((select s.person_source_ref as stage, aa.external_reference as gold,\n" +
+            "coalesce(s.person_source_ref::varchar,aa.external_reference) as consol,\n" +
+            "case when s.person_source_ref is null then 'N' else s.dq_err end as dq_err\n" +
+            "from (select distinct external_reference, person_id from semarchy_eph_mdm.sa_person) aa\n" +
+            "full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq s on aa.external_reference = s.person_source_ref::varchar))  perd\n" +
+            "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_PARTY_SOURCE_REF\"::varchar = perd.consol\n" +
+            "join  (select s.pmx_source_reference as stage, g.external_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
+            "from semarchy_eph_mdm.gd_wwork g full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq s on g.external_reference = s.pmx_source_reference::varchar) word\n" +
+            "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_WORK_SOURCE_REF\"::varchar = word.consol\n" +
+            "join (select distinct person_id, external_reference from sa_person) p \n" +
+            "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_PARTY_SOURCE_REF\"::varchar = p.external_reference\n" +
+            "left join\n" +
+            "    (select distinct external_reference, work_person_role_id from semarchy_eph_mdm.sa_work_person_role) a\n" +
+            "    on STG_10_PMX_WORK_PERSON_ROLE.\"WORK_PERSON_ROLE_SOURCE_REF\" = a.external_reference\n" +
+            "where perd.dq_err != 'Y' and word.dq_err != 'Y'\t\n" +
+            "and \"WORK_PERSON_ROLE_SOURCE_REF\" in ('%s') ";
 
     public static String GET_DATA_PERSONS_WORK_ROLE_EPHSA = "select \n" +
             "b_loadid as B_LOADID,\n" +
@@ -220,6 +257,28 @@ public class PersonWorkRoleDataSQL {
 
     public static String GET_IDS_FROM_LOOKUP_TABLE = "select source_ref as WORK_PERSON_ROLE_SOURCE_REF from " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_numericid\n" +
             "where numeric_id IN ('%s')";
+
+    public static String GET_IDS_FROM_STG_FOR_GIVEN_IDS_IN_SA = "select\n" +
+            "\"WORK_PERSON_ROLE_SOURCE_REF\" as WORK_PERSON_ROLE_SOURCE_REF\n" +
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role\n" +
+            "join  ((select s.person_source_ref as stage, aa.external_reference as gold,\n" +
+            "coalesce(s.person_source_ref::varchar,aa.external_reference) as consol,\n" +
+            "case when s.person_source_ref is null then 'N' else s.dq_err end as dq_err\n" +
+            "from (select distinct external_reference, person_id from semarchy_eph_mdm.sa_person) aa\n" +
+            "full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq s on aa.external_reference = s.person_source_ref::varchar))  perd\n" +
+            "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_PARTY_SOURCE_REF\"::varchar = perd.consol\n" +
+            "join  (select s.pmx_source_reference as stage, g.external_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
+            "from semarchy_eph_mdm.gd_wwork g full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq s on g.external_reference = s.pmx_source_reference::varchar) word\n" +
+            "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_WORK_SOURCE_REF\"::varchar = word.consol\n" +
+            "join semarchy_eph_mdm.sa_person p \n" +
+            "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_PARTY_SOURCE_REF\"::varchar = p.external_reference\n" +
+            "left join\n" +
+            "    (select distinct external_reference, work_person_role_id from semarchy_eph_mdm.sa_work_person_role ) a\n" +
+            "    on STG_10_PMX_WORK_PERSON_ROLE.\"WORK_PERSON_ROLE_SOURCE_REF\" = a.external_reference\n" +
+            "where perd.dq_err != 'Y' and word.dq_err != 'Y'\t\n" +
+            "and work_person_role_id in ('%s') ";
 }
 
 

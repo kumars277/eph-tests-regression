@@ -1,4 +1,4 @@
-Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend Full Load
+Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend  Load
 
 
   @Regression

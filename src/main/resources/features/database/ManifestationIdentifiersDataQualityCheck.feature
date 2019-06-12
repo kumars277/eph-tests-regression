@@ -1,4 +1,4 @@
-Feature: Entity - Manifestation Identifier - Count & Data Mapping Check - Validate data between PMX and EPH - Talend Full Load
+Feature: Entity - Manifestation Identifier - Count & Data Mapping Check - Validate data between PMX and EPH - Talend Load
 
   @Regression
   Scenario Outline: Verify count of records in STG_PMX_MANIFESTATION and SA_MANIFESTATION_IDENTIFIER is equal
@@ -22,7 +22,7 @@ Feature: Entity - Manifestation Identifier - Count & Data Mapping Check - Valida
       | ISBN       |
       | ISSN       |
 
-#  @Regression
+  @Regression
   Scenario Outline: Check the mapping of data between STG_PMX_MANIFESTATION and SA_MANIFESTATION_IDENTIFIER
     Given We get the manifestation ids of <numberOfRecords> random records from STG_PMX_MANIFESTATION that have <identifier> for <type>
     When We get the records from SA_MANIFESTATION_IDENTIFIER
@@ -38,14 +38,10 @@ Feature: Entity - Manifestation Identifier - Count & Data Mapping Check - Valida
       | 2               | ISSN       | JPR  |
       | 2               | ISSN       | JEL  |
 
-#  @Regression
-  Scenario Outline: Verify that existing records end-dated properly
-    Given We get the manifestation ids of all records with set updated effective_end_date in SA for <identifier>
-    Then Check the manifestation identifiers are updated for <identifier>
-    Examples:
-      | identifier |
-      | ISBN       |
-      | ISSN       |
+  @Regression
+  Scenario: Verify that existing records end-dated properly
+    Given Get ISBN from STG and GD for end dated records in GD
+    Then Check the manifestation identifiers are updated properly
 
 
 

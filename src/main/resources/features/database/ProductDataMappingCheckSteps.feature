@@ -1,4 +1,4 @@
-Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and EPH - Talend Full Load
+Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and EPH - Talend Load
 
 
   @Regression
@@ -83,6 +83,6 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
 
 
 
-#  @WIP
-  #Scenario: Check if a product is linked to different works and manifestations (duplicate product with different product id and manifestation ids)
-  #Given Check the db for duplicate products
+#  @Regression
+#  Scenario: Check if a product is linked to different works and manifestations (duplicate product with different product id and manifestation ids)
+#  Given Check the db for duplicate products
