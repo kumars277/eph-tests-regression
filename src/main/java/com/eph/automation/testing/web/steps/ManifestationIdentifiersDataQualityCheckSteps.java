@@ -35,6 +35,8 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
     private static int countISBNSA;
     private static int countISBNGD;
     private static List<String> ids;
+    private static List<Map<String, String>> manifestationIdentifiersDataObjects;
+
 
 
     @StaticInjection
@@ -91,8 +93,8 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
     @Given("^We get the manifestation ids of (.*) random records from STG_PMX_MANIFESTATION that have (.*) for (.*)$")
     public void getRandomRecords(String numberOfRecords, String identifier, String type) {
-        //Get property when run with jenkins
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        //Get property when run with jenkins.
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         switch (type) {
@@ -109,11 +111,11 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
                 Log.info(sql);
                 break;
             case "JPR":
-                sql = String.format(WorkExtractSQL.SELECT_RANDOM_ISSNS_JPR_IDS, numberOfRecords);
+                sql = String.format(WorkExtractSQL.SELECT_RANDOM_ISSNS_JPR_IDS, identifier, numberOfRecords);
                 Log.info(sql);
                 break;
             case "JEL":
-                sql = String.format(WorkExtractSQL.SELECT_RANDOM_ISSNS_JEL_IDS, numberOfRecords);
+                sql = String.format(WorkExtractSQL.SELECT_RANDOM_ISSNS_JEL_IDS, identifier, numberOfRecords);
                 Log.info(sql);
                 break;
             default:
@@ -146,74 +148,107 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
         }
     }
 
-    @Given("^We get the manifestation ids of all records with set updated effective_end_date in SA for (.*)$")
-    public void getRecordsWithEndDate(String identifier) {
 
-        if (identifier.equals("ISBN")) {
-            sql = String.format(WorkExtractSQL.SELECT_MANIFESTATION_IDS_ISBN);
-            Log.info(sql);
-        } else if (identifier.equals("ISSN"))
-            sql = String.format(WorkExtractSQL.SELECT_MANIFESTATION_IDS_ISSN);
+    @Given("^Get ISBN from STG and GD for end dated records in GD$")
+    public void getISBNSForENDDATEDRecords() {
+
+        sql = WorkExtractSQL.SELECT_ISBNS_FROM_STG_AND_SA_FOR_END_DATED_RECORDS;
         Log.info(sql);
 
-        List<Map<?, ?>> manifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-
-        ids =    manifestationIds.stream().map(m -> (BigDecimal) m.get("MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
-
-        Log.info("manifestation ids : " + ids);
-
-        if (identifier.equals("ISBN")) {
-            sql = String.format(WorkExtractSQL.SELECT_RECORDS_STG_MANIF_IDENTIFIER_ISBN_GIVEN_MANIF_ID, Joiner.on("','").join(ids));
-            Log.info(sql);
-        } else if (identifier.equals("ISSN"))
-            sql = String.format(WorkExtractSQL.SELECT_RECORDS_STG_MANIF_IDENTIFIER_ISSN_GIVEN_MAN_ID, Joiner.on("','").join(ids));
-
-
-        dataQualityContext.manifestationIdentifiersDataObjectsFromSTG = DBManager
+        manifestationIdentifiersDataObjects = DBManager
                 .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
 
     }
 
-    @Then("^Check the manifestation identifiers are updated for (.*)$")
-    public void checkIdentifiersAreUpdated(String identifier) {
-        IntStream.range(0, dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.size()).forEach(i -> {
-            //get eph_id from ephsit_talend_owner.map_sourceref_2_ephid for current record
-            sql = String.format(WorkExtractSQL.GET_EPH_ID, dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getManif_identifier_id());
-            Log.info(sql);
+//    @Given("^We get the manifestation ids of all records with set updated effective_end_date in SA for (.*)$")
+//    public void getRecordsWithEndDate(String identifier) {
+//
+//        if (identifier.equals("ISBN")) {
+//            sql = String.format(WorkExtractSQL.SELECT_MANIFESTATION_IDS_ISBN);
+//            Log.info(sql);
+//        } else if (identifier.equals("ISSN"))
+//            sql = String.format(WorkExtractSQL.SELECT_MANIFESTATION_IDS_ISSN);
+//        Log.info(sql);
+//
+//        List<Map<?, ?>> manifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+//
+//        ids = manifestationIds.stream().map(m -> (BigDecimal) m.get("MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
+//
+//        Log.info("manifestation ids : " + ids);
+//
+//        if (identifier.equals("ISBN")) {
+//            sql = String.format(WorkExtractSQL.SELECT_RECORDS_STG_MANIF_IDENTIFIER_ISBN_GIVEN_MANIF_ID, Joiner.on("','").join(ids));
+//            Log.info(sql);
+//        } else if (identifier.equals("ISSN"))
+//            sql = String.format(WorkExtractSQL.SELECT_RECORDS_STG_MANIF_IDENTIFIER_ISSN_GIVEN_MAN_ID, Joiner.on("','").join(ids));
+//
+//
+//        dataQualityContext.manifestationIdentifiersDataObjectsFromSTG = DBManager
+//                .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
+//
+//    }
 
-            List<Map<String, Object>> listEphIDs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+//    @Then("^Check the manifestation identifiers are updated for (.*)$")
+//    public void checkIdentifiersAreUpdated(String identifier) {
+//        IntStream.range(0, dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.size()).forEach(i -> {
+//            //get eph_id from ephsit_talend_owner.map_sourceref_2_ephid for current record
+//            sql = String.format(WorkExtractSQL.GET_EPH_ID, dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getManif_identifier_id());
+//            Log.info(sql);
+//
+//            List<Map<String, Object>> listEphIDs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+//
+//            String eph_id = listEphIDs.get(0).get("eph_id").toString();
+//            Log.info(sql);
+//
+//            //get the ident_id
+//            if (identifier.equals("ISBN"))
+//                sql = String.format(WorkExtractSQL.GET_IDENT_ID, eph_id, dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getIdentifier());
+//            else
+//                sql = String.format(WorkExtractSQL.GET_IDENT_ID_ISSN, eph_id, dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getIdentifier());
+//
+//            Log.info(sql);
+//
+//            List<Map<String, Object>> listIdentIDs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+//
+//            String ident_id = listIdentIDs.get(0).get("ident_id").toString();
+//            Log.info(sql);
+//
+//            //get data from GD for the current record from STG
+//
+//            sql = String.format(WorkExtractSQL.SELECT_RECORDS_GD_MANIFESTATION_IDENTIFIER_GIVEN_MANIF_ID, ident_id);
+//            Log.info(sql);
+//
+//            List manifestationIdentifiersDataObjectsFromGD = DBManager
+//                    .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
+//
+//
+//            //assert identifier value is not equal
+//            assertNotEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getIdentifier(), dataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(0).getIdentifier());
+//
+//
+//        });
+//    }
 
-            String eph_id = listEphIDs.get(0).get("eph_id").toString();
-            Log.info(sql);
+    @Then("^Check the manifestation identifiers are updated properly$")
+    public void checkIdentifiersAreUpdatedProperly() {
 
-            //get the ident_id
-            if (identifier.equals("ISBN"))
-                sql = String.format(WorkExtractSQL.GET_IDENT_ID, eph_id, dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getIdentifier());
-            else
-                sql = String.format(WorkExtractSQL.GET_IDENT_ID_ISSN, eph_id, dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getIdentifier());
+        if (manifestationIdentifiersDataObjects.size() != 0) {
+            IntStream.range(0, manifestationIdentifiersDataObjects.size()).forEach(i -> {
+                //assert identifier value is not equal
 
-            Log.info(sql);
+                String STG = manifestationIdentifiersDataObjects.get(i).get("STG");
+                Log.info("ISBN in STG : " + STG);
+                String GD = manifestationIdentifiersDataObjects.get(i).get("GD");
+                Log.info("ISBN in GD : " + GD);
 
-            List<Map<String, Object>> listIdentIDs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                assertNotEquals("ISBNS are not updated!",STG, GD);
 
-            String ident_id = listIdentIDs.get(0).get("ident_id").toString();
-            Log.info(sql);
-
-            //get data from GD for the current record from STG
-
-            sql = String.format(WorkExtractSQL.SELECT_RECORDS_GD_MANIFESTATION_IDENTIFIER_GIVEN_MANIF_ID, ident_id);
-            Log.info(sql);
-
-            dataQualityContext.manifestationIdentifiersDataObjectsFromGD = DBManager
-                    .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
-
-
-            //assert identifier value is not equal
-            assertNotEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getIdentifier(), dataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(0).getIdentifier());
-
-
-        });
+            });
+        } else
+            Log.info("No records with set end date in GD!");
     }
+
+
 
     @When("^We get the records from SA_MANIFESTATION_IDENTIFIER$")
     public void getEPHStagingManifestationIdentifiersData() {
@@ -231,25 +266,17 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
         Log.info("And the identifier data in STG and SA ..");
 
-        dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.sort(Comparator.comparing(ManifestationIdentifierObject::getManif_identifier_id));
-        dataQualityContext.manifestationIdentifiersDataObjectsFromSA.sort(Comparator.comparing(ManifestationIdentifierObject::getManif_identifier_id));
+        dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.sort(Comparator.comparing(ManifestationIdentifierObject::getExternal_reference));
+        dataQualityContext.manifestationIdentifiersDataObjectsFromSA.sort(Comparator.comparing(ManifestationIdentifierObject::getExternal_reference));
 
         IntStream.range(0, dataQualityContext.manifestationIdentifiersDataObjectsFromSA.size()).forEach(i -> {
 
             //b_classname
             assertEquals("ManifestationIdentifier", dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getB_classname());
-//            assertEquals(ids.get(i) + "-" + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_type(), DataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getManif_identifier_id());
 
             //f_type
             assertEquals(identifier, dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_type());
 
-//          assertEquals(ids.get(i), dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
-
-            //Manif_identifier_id
-            Log.info("MANIF_IDENFIER_ID  in EPH STG : " + dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getManif_identifier_id());
-            Log.info("MANIF_IDENFIER_ID  in EPH SА: " + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getManif_identifier_id());
-
-            assertEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getManif_identifier_id(), dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getManif_identifier_id());
 
             //f_manifestation
             Log.info("F_MANIFESTATION  in EPH STG : " + dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getF_manifestation());

@@ -41,6 +41,7 @@ public class DataQualityContext {
     public static List<ManifestationIdentifierObject> manifestationIdentifiersDataObjectsFromSA;
     public static List<ManifestationIdentifierObject> manifestationIdentifiersDataObjectsFromGD;
 
+
     public static List<PersonDataObject> personDataObjectsFromPMX;
     public static List<PersonDataObject> personDataObjectsFromEPHSTG;
     public static List<PersonDataObject> personDataObjectsFromEPHDQ;

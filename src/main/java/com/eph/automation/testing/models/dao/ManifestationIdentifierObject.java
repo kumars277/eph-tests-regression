@@ -15,7 +15,16 @@ public class ManifestationIdentifierObject {
    private String f_manifestation;
    private String effective_start_date;
    private String effective_end_date;
+   private String external_reference;
 
+
+    public String getExternal_reference() {
+        return external_reference;
+    }
+
+    public void setExternal_reference(String external_reference) {
+        this.external_reference = external_reference;
+    }
 
     public String getIdentifier() {
         return identifier;
