@@ -199,4 +199,11 @@ public class WorksIdentifierSQL {
             "  FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork\n" +
             "  WHERE \"PRODUCT_WORK_ID\" = 'PARAM1'";
 
+    public static String getIdentifierID ="select sman.external_reference as \"SA\" , concat(map1.eph_id,'PARAM1',man.\"PARAM2\") as \"STG\"   from " + GetEPHDBUser.getDBUser() +".stg_10_pmx_wwork man, " + GetEPHDBUser.getDBUser() +".stg_10_pmx_wwork_dq mdq , semarchy_eph_mdm.sa_work_identifier sman \n" +
+            ", " + GetEPHDBUser.getDBUser() +".map_sourceref_2_ephid map1 \n" +
+            "where man.\"PRODUCT_WORK_ID\" = mdq.pmx_source_reference\n" +
+            "and map1.source_ref = mdq.pmx_source_reference::text\n" +
+            "and concat(map1.eph_id,'PARAM1',man.\"PARAM2\") = sman.external_reference\n" +
+            "and f_wwork = 'PARAM3'";
+
 }

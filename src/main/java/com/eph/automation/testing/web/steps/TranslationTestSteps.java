@@ -40,7 +40,7 @@ public class TranslationTestSteps {
     public String fWorkID;
     private static List<WorkDataObject> refreshDate;
 
-    @Given("^We know the number of translations in PMX$")
+    @Given("^We know the number of work relationship records in PMX$")
     public void getTranslationsCountDQ(){
         sql = TranslationsSQL.GET_PMX_TRANSLATIONS_COUNT;
         Log.info(sql);
@@ -48,7 +48,7 @@ public class TranslationTestSteps {
         Log.info("The PMX count is: " + translationContext.pmxCount.get(0).pmxCount);
     }
 
-    @When("^We know the translations from STG$")
+    @When("^We know the work relationship records from STG$")
     public void getTranslationsCountSTG(){
         sql = TranslationsSQL.GET_STG_ALL_COUNT;
         translationContext.stgAllCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
@@ -83,21 +83,21 @@ public class TranslationTestSteps {
         }
     }
 
-    @When("^We get the translations from SA$")
+    @When("^We get the work relationship records from SA$")
     public void getTranslationsCountSA(){
         sql = TranslationsSQL.GET_SA_TRANSLATIONS_COUNT;
         translationContext.saCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
         Log.info("The SA count is: " + translationContext.saCount.get(0).saCount);
     }
 
-    @When("^We get the translations from GD$")
+    @When("^We get the work relationship records from GD$")
     public void getTranslationsCountGD(){
         sql = TranslationsSQL.GET_GD_TRANSLATIONS_COUNT;
         translationContext.gdCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
         Log.info("The GD count is: " + translationContext.gdCount.get(0).gdCount);
     }
 
-    @When("^We get the translations from AE$")
+    @When("^We get the work relationship records from AE$")
     public void getTranslationsCountAE(){
         sql = TranslationsSQL.GET_GD_TRANSLATIONS_COUNT;
         translationContext.gdCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
@@ -108,7 +108,7 @@ public class TranslationTestSteps {
         Log.info("The AE count is: " + translationContext.aeCount.get(0).aeCount);
     }
 
-    @Then("^The translations between (.*) and (.*) are equal$")
+    @Then("^The work relationship records between (.*) and (.*) are equal$")
     public void compareCount(String source, String target){
         if (source.equalsIgnoreCase("pmx")){
             Assert.assertEquals("The count between PMX and STG does not match!", translationContext.pmxCount.get(0).pmxCount,
@@ -239,25 +239,36 @@ public class TranslationTestSteps {
                         translationContext.translationDataFromStg.get(i).EFFECTIVE_START_DATE,
                         translationContext.translationDataFromSA.get(0).EFFECTIVE_START_DATE);
             }
-     /*       sql=TranslationsSQL.Get_translation_id.replace("PARAM1", "WORK_TRANS-"+
+/*            sql=TranslationsSQL.Get_translation_id.replace("PARAM1", "WORK_TRANS-"+
                     translationContext.translationDataFromStg.get(i).RELATIONSHIP_PMX_SOURCEREF);
             Log.info(sql);
             translationContext.translationID = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
 
             Assert.assertEquals("The WORK_REL_TRANSLATION_ID is incorrect for id=" + translationContext.workID.get(0).workID,
                     translationContext.translationID.get(0).translationId,
-                    translationContext.translationDataFromSA.get(0).WORK_REL_TRANSLATION_ID);
+                    translationContext.translationDataFromSA.get(0).WORK_REL_TRANSLATION_ID);*/
 
 
-            Assert.assertEquals("The F_RELATIONSHIP_TYPE is incorrect for id=" + translationContext.workID.get(0).workID,
+            Assert.assertEquals("The child id is incorrect for id=" + translationContext.workID.get(0).workID,
                     translationContext.childID.get(0).workID,
                     translationContext.translationDataFromSA.get(0).CHILD_PMX_SOURCE);
-*/
+
             if (translationContext.translationDataFromStg.get(i).ENDON != null
                     || translationContext.translationDataFromSA.get(0).ENDON != null) {
                 Assert.assertEquals("The ENDON is incorrect for id=" + translationContext.workID,
                         translationContext.translationDataFromStg.get(i).ENDON,
                         translationContext.translationDataFromSA.get(0).ENDON);
+            }
+
+                Assert.assertEquals("The relationship type is incorrect for id=" + translationContext.workID,
+                        translationContext.translationDataFromStg.get(i).getF_RELATIONSHIP_TYPE(),
+                        translationContext.translationDataFromSA.get(0).getF_RELATIONSHIP_TYPE());
+
+            if (translationContext.translationDataFromStg.get(i).getRELATIONSHIP_PMX_SOURCEREF() != null
+                    || translationContext.translationDataFromSA.get(0).getRELATIONSHIP_PMX_SOURCEREF() != null) {
+                Assert.assertEquals("The ENDON is incorrect for id=" + translationContext.workID,
+                        translationContext.translationDataFromStg.get(i).getRELATIONSHIP_PMX_SOURCEREF(),
+                        translationContext.translationDataFromSA.get(0).getRELATIONSHIP_PMX_SOURCEREF());
             }
         }
     }
@@ -292,6 +303,17 @@ public class TranslationTestSteps {
                 Assert.assertEquals("The ENDON is incorrect for id=" + translationContext.translationDataFromSAall.get(i).WORK_REL_TRANSLATION_ID,
                         translationContext.translationDataFromSAall.get(i).ENDON,
                         translationContext.translationDataFromGD.get(i).ENDON);
+            }
+
+            Assert.assertEquals("The relationship type is incorrect for id=" + translationContext.workID,
+                    translationContext.translationDataFromSAall.get(i).getF_RELATIONSHIP_TYPE(),
+                    translationContext.translationDataFromGD.get(i).getF_RELATIONSHIP_TYPE());
+
+            if (translationContext.translationDataFromSAall.get(i).getRELATIONSHIP_PMX_SOURCEREF() != null
+                    || translationContext.translationDataFromGD.get(i).getRELATIONSHIP_PMX_SOURCEREF() != null) {
+                Assert.assertEquals("The ENDON is incorrect for id=" + translationContext.workID,
+                        translationContext.translationDataFromSAall.get(i).getRELATIONSHIP_PMX_SOURCEREF(),
+                        translationContext.translationDataFromGD.get(i).getRELATIONSHIP_PMX_SOURCEREF());
             }
         }
     }

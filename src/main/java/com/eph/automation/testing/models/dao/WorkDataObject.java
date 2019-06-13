@@ -153,6 +153,26 @@ public class WorkDataObject {
     public String f_accountable_product;
     public String UPDATED;
 
+    public String getSA() {
+        return SA;
+    }
+
+    public void setSA(String SA) {
+        this.SA = SA;
+    }
+
+    public String SA;
+
+    public String getSTG() {
+        return STG;
+    }
+
+    public void setSTG(String STG) {
+        this.STG = STG;
+    }
+
+    public String STG;
+
     public String getRECORD_END_DATE() {
         return RECORD_END_DATE;
     }

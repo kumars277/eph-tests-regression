@@ -23,13 +23,13 @@ public class TranslationsSQL {
             "\tWL.F_PRODUCT_WORK = W1.PRODUCT_WORK_ID\n" +
             "AND\n" +
             "\tWL.F_RELATED_PRODUCT_WORK = W2.PRODUCT_WORK_ID\n" +
-            "AND\n" +
-            "\tNVL(W1.EFFECTIVE_TO_DATE, W2.EFFECTIVE_TO_DATE) IS NULL\n" +
+            "--AND\n" +
+            "--\tNVL(W1.EFFECTIVE_TO_DATE, W2.EFFECTIVE_TO_DATE) IS NULL -- removing this filter as we need to include end dated records\n" +
             "AND\n" +
             "\tW1.F_WORK_STATUS = 81\n" +
             "AND\n" +
             "\tWL.F_PRODUCT_WORK_LINK_TYPE IN (51,21)\t-- 51 = translation, 21 = mirror\n" +
-            "\t)";
+            "\t)\n";
 
     public static String GET_STG_ALL_COUNT ="select count(*) as stgCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel";
 
@@ -44,6 +44,8 @@ public class TranslationsSQL {
             "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
             "from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s on g.external_reference = s.pmx_source_reference::varchar) d2\n" +
             "on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.consol\n"+
+            "left join   (select distinct external_reference, work_relationship_id from semarchy_eph_mdm.sa_work_relationship) a on\n" +
+            GetEPHDBUser.getDBUser()+".STG_10_PMX_WORK_REL.\"RELATIONSHIP_PMX_SOURCEREF\"::varchar = a.external_reference\n"+
             "where d1.dq_err != 'Y' and d2.dq_err != 'Y'";
 
     public static String GET_STG_TRANSLATIONS_COUNT_Updated ="select count(*) as stgCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel " +
@@ -56,7 +58,9 @@ public class TranslationsSQL {
             "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
             "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
             "from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s on g.external_reference = s.pmx_source_reference::varchar) d2\n" +
-            "on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.consol\n"+
+            "on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.consol\n" +
+            "left join   (select distinct external_reference, work_relationship_id from semarchy_eph_mdm.sa_work_relationship) a on\n" +
+            GetEPHDBUser.getDBUser()+".STG_10_PMX_WORK_REL.\"RELATIONSHIP_PMX_SOURCEREF\"::varchar = a.external_reference"+
             "where d1.dq_err != 'Y' and d2.dq_err != 'Y' and TO_DATE(\"UPDATED\",'DD-MON-YY HH.MI.SS') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
     public static String GET_SA_TRANSLATIONS_COUNT ="select count(*) as saCount from semarchy_eph_mdm.sa_work_relationship sa\n"+
@@ -97,6 +101,8 @@ public class TranslationsSQL {
             "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
             "from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s on g.external_reference = s.pmx_source_reference::varchar) d2\n" +
             "on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.consol\n"+
+            "left join   (select distinct external_reference, work_relationship_id from semarchy_eph_mdm.sa_work_relationship) a on\n" +
+            GetEPHDBUser.getDBUser()+".STG_10_PMX_WORK_REL.\"RELATIONSHIP_PMX_SOURCEREF\"::varchar = a.external_reference"+
             " where \"F_RELATIONSHIP_TYPE\"='TRS' and d1.dq_err != 'Y' and d2.dq_err != 'Y' ORDER BY RANDOM()\n" +
             " LIMIT PARAM1;";
 
@@ -153,6 +159,7 @@ public class TranslationsSQL {
             "  ,effective_start_date as EFFECTIVE_START_DATE"+
             "  ,effective_end_date as ENDON"+
             "  ,f_relationship_type as f_relationship_type"+
+            "  ,external_reference as RELATIONSHIP_PMX_SOURCEREF\n"+
             "  FROM semarchy_eph_mdm.sa_work_relationship sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_relationship join \n"+
@@ -170,7 +177,8 @@ public class TranslationsSQL {
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
             "  ,effective_start_date as EFFECTIVE_START_DATE"+
             "  ,effective_end_date as ENDON"+
-            "  ,f_relationship_type as f_relationship_type"+
+            "  ,f_relationship_type as f_relationship_type\n"+
+            "  ,external_reference as RELATIONSHIP_PMX_SOURCEREF\n"+
             "  FROM semarchy_eph_mdm.sa_work_relationship sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_relationship join \n"+
@@ -190,6 +198,7 @@ public class TranslationsSQL {
             "  ,effective_start_date as EFFECTIVE_START_DATE"+
             "  ,effective_end_date as ENDON"+
             "  ,f_relationship_type as f_relationship_type"+
+            "  ,external_reference as RELATIONSHIP_PMX_SOURCEREF\n"+
             "  FROM semarchy_eph_mdm.gd_work_relationship sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.gd_work_relationship join \n"+
