@@ -43,6 +43,7 @@ public class WorksIdSteps {
     private static List<WorkDataObject> endDatedID;
     private static List<WorkDataObject> pmxSource;
     private static List<WorkDataObject> stgNewID;
+    private static List<WorkDataObject> identifierID;
     private static List<String> workid;
 
     @Given("^We have a work from type (.*) to check$")
@@ -139,6 +140,15 @@ public class WorksIdSteps {
                 Log.info("The value in SA is : " +  dataFromSAFtype.get(0).IDENTIFER);
 
                 Log.info("Journal number is correct");
+                sql = WorksIdentifierSQL.getIdentifierID
+                        .replace("PARAM1", "ELSEVIER JOURNAL NUMBER")
+                        .replace("PARAM2", "JOURNAL_NUMBER")
+                        .replace("PARAM3",dataFromSA.get(0).WORK_ID);
+                Log.info(sql);
+                identifierID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                Assert.assertEquals("The id is not as expected",identifierID.get(0).getSTG()
+                        ,identifierID.get(0).getSA());
+
             }
             if (dataFromSTG.get(0).ISSN_L != null) {
                 sql = WorksIdentifierSQL.getTypeId
@@ -154,6 +164,15 @@ public class WorksIdSteps {
 
                 Log.info("The value in STG is : " + dataFromSTG.get(0).ISSN_L);
                 Log.info("The value in SA is : " + dataFromSAFtype.get(0).IDENTIFER);
+
+                sql = WorksIdentifierSQL.getIdentifierID
+                        .replace("PARAM1", "ISSN-L")
+                        .replace("PARAM2", "ISSN_L")
+                        .replace("PARAM3",dataFromSA.get(0).WORK_ID);
+                Log.info(sql);
+                identifierID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                Assert.assertEquals("The id is not as expected",identifierID.get(0).getSTG()
+                        ,identifierID.get(0).getSA());
 
                 Log.info("ISSN_L is correct");
             }
@@ -171,6 +190,15 @@ public class WorksIdSteps {
 
                 Log.info("The value in STG is : " + dataFromSTG.get(0).JOURNAL_ACRONYM);
                 Log.info("The value in SA is : " + dataFromSAFtype.get(0).IDENTIFER);
+
+                sql = WorksIdentifierSQL.getIdentifierID
+                        .replace("PARAM1", "JOURNAL ACRONYM")
+                        .replace("PARAM2", "JOURNAL_ACRONYM")
+                        .replace("PARAM3",dataFromSA.get(0).WORK_ID);
+                Log.info(sql);
+                identifierID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                Assert.assertEquals("The id is not as expected",identifierID.get(0).getSTG()
+                        ,identifierID.get(0).getSA());
                 Log.info("Journal acronym is correct");
             }
             if (dataFromSTG.get(0).DAC_KEY != null) {
@@ -187,6 +215,14 @@ public class WorksIdSteps {
 
                 Log.info("The value in STG is : " + dataFromSTG.get(0).DAC_KEY);
                 Log.info("The value in SA is : " + dataFromSAFtype.get(0).IDENTIFER);
+                sql = WorksIdentifierSQL.getIdentifierID
+                        .replace("PARAM1", "DAC-K")
+                        .replace("PARAM2", "DAC_KEY")
+                        .replace("PARAM3",dataFromSA.get(0).WORK_ID);
+                Log.info(sql);
+                identifierID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                Assert.assertEquals("The id is not as expected",identifierID.get(0).getSTG()
+                        ,identifierID.get(0).getSA());
                 Log.info("DAC_KEY is correct");
             }
             if (dataFromSTG.get(0).PROJECT_NUM != null) {
@@ -204,7 +240,14 @@ public class WorksIdSteps {
 
                 Log.info("The value in STG is : " + dataFromSTG.get(0).PROJECT_NUM);
                 Log.info("The value in SA is : " + dataFromSAFtype.get(0).IDENTIFER);
-
+                sql = WorksIdentifierSQL.getIdentifierID
+                        .replace("PARAM1", "PROJECT-NUM")
+                        .replace("PARAM2", "PROJECT_NUM")
+                        .replace("PARAM3",dataFromSA.get(0).WORK_ID);
+                Log.info(sql);
+                identifierID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                Assert.assertEquals("The id is not as expected",identifierID.get(0).getSTG()
+                        ,identifierID.get(0).getSA());
                 Log.info("PROJECT_NUM is correct");
             }
 

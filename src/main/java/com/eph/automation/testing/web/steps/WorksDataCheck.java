@@ -49,7 +49,7 @@ public class WorksDataCheck {
         if (System.getProperty("dbRandomRecordsNumber")!=null) {
             numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         }else {
-            numberOfRecords = "50";
+            numberOfRecords = "10";
         }
         Log.info("numberOfRecords = " + numberOfRecords);
 
@@ -553,23 +553,22 @@ public class WorksDataCheck {
                                 .equals(dataQualityContext.workDataObjectsFromEPH.get(i).OWNERSHIP));
             }
 
-            Log.info(dataQualityContext.workDataObjectsFromSTGDQ.get(i).ACC_PROD_ID);
-
-/*
-            if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).ACC_PROD_ID !=null ||
-                    dataQualityContext.workDataObjectsFromSTGDQ.get(i).PARENT_ACC_PROD != null) {
+                Log.info(dataQualityContext.workDataObjectsFromSTGDQ.get(i).ACC_PROD_ID);
                 sql = WorkDataCheckSQL.GET_Acc_Prod.replace("PARAM1", dataQualityContext.workDataObjectsFromSTGDQ.get(i).ACC_PROD_ID +
                         dataQualityContext.workDataObjectsFromSTGDQ.get(i).PARENT_ACC_PROD);
                 Log.info(sql);
                 workDataObjectsAccProd = DBManager
                         .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-
+                if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).PRODUCT_WORK_ID ==null) {
+                    Assert.assertTrue("The accountable product is not null",
+                            workDataObjectsAccProd.get(0).f_accountable_product==null);
+                }else {
                 assertTrue("Expecting the Acc prod details from DQ and SA Consistent for id="+
                                 dataQualityContext.workDataObjectsFromEPH.get(i).PMX_SOURCE_REFERENCE,
                         workDataObjectsAccProd.get(0).f_accountable_product
                                 .equals(dataQualityContext.workDataObjectsFromEPH.get(i).f_accountable_product));
             }
-*/
+
 
             if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).LANGUAGE_CODE != null
                     || dataQualityContext.workDataObjectsFromEPH.get(i).LANGUAGE_CODE != null) {

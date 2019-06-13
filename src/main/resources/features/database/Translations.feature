@@ -1,28 +1,28 @@
 Feature: Entity - Work Relationship Translation - Data Mapping Check - Validate data between PMX and EPH - Talend Full Load
 
   @Regression
-  Scenario: Checking the count of translations between PMX and STG
-    Given We know the number of translations in PMX
-    When We know the translations from STG
-    Then The translations between PMX and STG are equal
+  Scenario: Checking the count of work relationship records between PMX and STG
+    Given We know the number of work relationship records in PMX
+    When We know the work relationship records from STG
+    Then The work relationship records between PMX and STG are equal
 
   @Regression
-  Scenario: Checking the count of translations between STG and EPH SA
-    Given We know the translations from STG
-    When We get the translations from SA
-    Then The translations between STG and SA are equal
+  Scenario: Checking the count of work relationship records between STG and EPH SA
+    Given We know the work relationship records from STG
+    When We get the work relationship records from SA
+    Then The work relationship records between STG and SA are equal
 
   @Regression
-  Scenario: Checking the count of translations between EPH SA and EPH GD
-    Given We get the translations from SA
-    When We get the translations from GD
-    Then The translations between SA and GD are equal
+  Scenario: Checking the count of work relationship records between EPH SA and EPH GD
+    Given We get the work relationship records from SA
+    When We get the work relationship records from GD
+    Then The work relationship records between SA and GD are equal
 
   @Regression
-  Scenario: Checking the count of translations between EPH SA and EPH GD + AE
-    Given We get the translations from SA
-    When We get the translations from AE
-    Then The translations between SA and GD with AE are equal
+  Scenario: Checking the count of work relationship records between EPH SA and EPH GD + AE
+    Given We get the work relationship records from SA
+    When We get the work relationship records from AE
+    Then The work relationship records between SA and GD with AE are equal
 
   @Regression
   Scenario: Checking the translations data between PMX and EPH

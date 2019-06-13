@@ -206,16 +206,27 @@ public class MirrorTestSteps {
             Assert.assertEquals("The WORK_REL_mirror_ID is incorrect for id=" + mirrorContext.workID.get(0).workID,
                     mirrorContext.mirrorID.get(0).mirrorId,
                     mirrorContext.mirrorDataFromSA.get(0).WORK_REL_mirror_ID);
-
+*/
             Assert.assertEquals("The F_RELATIONSHIP_TYPE is incorrect for id=" + mirrorContext.workID.get(0).workID,
                     mirrorContext.childID.get(0).workID,
                     mirrorContext.mirrorDataFromSA.get(0).CHILD_PMX_SOURCE);
-*/
+
             if (mirrorContext.mirrorDataFromStg.get(i).ENDON != null
                     || mirrorContext.mirrorDataFromSA.get(0).ENDON != null) {
                 Assert.assertEquals("The ENDON is incorrect for id=" + mirrorContext.workID,
                         mirrorContext.mirrorDataFromStg.get(i).ENDON,
                         mirrorContext.mirrorDataFromSA.get(0).ENDON);
+            }
+
+                Assert.assertEquals("The Relationship type is incorrect for id=" + mirrorContext.workID,
+                        mirrorContext.mirrorDataFromStg.get(i).getF_RELATIONSHIP_TYPE(),
+                        mirrorContext.mirrorDataFromSA.get(0).getF_RELATIONSHIP_TYPE());
+
+            if (mirrorContext.mirrorDataFromStg.get(i).getRELATIONSHIP_PMX_SOURCEREF() != null
+                    || mirrorContext.mirrorDataFromSA.get(0).getRELATIONSHIP_PMX_SOURCEREF() != null) {
+                Assert.assertEquals("The source reference is incorrect for id=" + mirrorContext.workID,
+                        mirrorContext.mirrorDataFromStg.get(i).getRELATIONSHIP_PMX_SOURCEREF(),
+                        mirrorContext.mirrorDataFromSA.get(0).getRELATIONSHIP_PMX_SOURCEREF());
             }
         }
     }

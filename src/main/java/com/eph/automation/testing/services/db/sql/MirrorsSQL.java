@@ -119,9 +119,10 @@ public class MirrorsSQL {
             "  ,f_parent as RELATIONSHIP_PMX_SOURCEREF\n" +
             "  ,f_child as CHILD_PMX_SOURCE\n" +
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
-            "  ,effective_start_date as EFFECTIVE_START_DATE"+
-            "  ,effective_end_date as ENDON" +
-            "  ,f_relationship_type as f_relationship_type"+
+            "  ,effective_start_date as EFFECTIVE_START_DATE\n"+
+            "  ,effective_end_date as ENDON\n" +
+            "  ,f_relationship_type as f_relationship_type\n"+
+            "  ,external_reference as RELATIONSHIP_PMX_SOURCEREF\n"+
             "  FROM semarchy_eph_mdm.sa_work_relationship sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_relationship join \n"+
@@ -138,8 +139,9 @@ public class MirrorsSQL {
             "  ,f_child as CHILD_PMX_SOURCE\n" +
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
             "  ,effective_start_date as EFFECTIVE_START_DATE"+
-            "  ,effective_end_date as ENDON"+
-            "  ,f_relationship_type as f_relationship_type"+
+            "  ,effective_end_date as ENDON\n"+
+            "  ,f_relationship_type as f_relationship_type\n"+
+            "  ,external_reference as RELATIONSHIP_PMX_SOURCEREF\n"+
             "  FROM semarchy_eph_mdm.sa_work_relationship sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.sa_work_relationship join \n"+
@@ -156,8 +158,9 @@ public class MirrorsSQL {
             "  ,f_child as CHILD_PMX_SOURCE\n" +
             "  ,B_CLASSNAME as B_CLASSNAME\n" +
             "  ,effective_start_date as EFFECTIVE_START_DATE"+
-            "  ,effective_end_date as ENDON"+
-            "  ,f_relationship_type as f_relationship_type"+
+            "  ,effective_end_date as ENDON\n"+
+            "  ,f_relationship_type as f_relationship_type\n"+
+            "  ,external_reference as RELATIONSHIP_PMX_SOURCEREF\n"+
             "  FROM semarchy_eph_mdm.gd_work_relationship_mirror sa\n"+
             " where f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.gd_work_relationship_mirror join \n"+
