@@ -25,7 +25,7 @@ public class WorkSubjectAreaLinkDataSQL {
 
 
     public static String SELECT_COUNT_WORK_SUBJECT_AREA_SA = "select count(*) as count from semarchy_eph_mdm.sa_work_subject_area_link s"+
-            " where s.b_loadid =  (select max (event_id) from\n" +
+            " where s.b_loadid =  (select max (e.b_loadid) from\n" +
             "semarchy_eph_mdm.sa_event e\n" +
             "where  e.f_event_type = 'PMX'\n" +
             "and e.workflow_id = 'talend'\n" +
@@ -56,7 +56,7 @@ public class WorkSubjectAreaLinkDataSQL {
             "    ,PSA.F_SUBJECT_AREA\n" +
             "    ,PSA.F_PRODUCT_WORK\n" +
             "    ,NVL(PSA.EFFFROM_DATE,TO_DATE('2016-01-01','YYYY-MM-DD')) AS START_DATE\n" +
-            "    ,PSA.EFFTO_DATE AS END_DATE\n" +
+            "    ,PSA.EFFTO_DATE AS EFFTO_DATE\n" +
             "    ,TO_CHAR(NVL(PSA.B_UPDDATE,PSA.B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
             "FROM GD_PRODUCT_SUBJECT_AREA PSA\n" +
             "JOIN GD_SUBJECT_AREA SA ON F_SUBJECT_AREA = SUBJECT_AREA_ID\n" +
@@ -93,8 +93,7 @@ public class WorkSubjectAreaLinkDataSQL {
             "select mp.numeric_id from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid mp \n" +
             "left join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_subject_area on mp.source_ref = concat('WORK_SUBJ_AREA-',\"PRODUCT_SUBJECT_AREA_ID\")\n" +
             "where  \"PRODUCT_SUBJECT_AREA_ID\" in ('%s')\n" +
-            ")\n" +
-            " ";
+            ")\n";
 
     public static String EXTRACT_DATA_WORK_SUBJECT_AREA_GD = "select  \n" +
             "B_CLASSNAME as B_CLASSNAME\n" +
