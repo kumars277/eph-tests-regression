@@ -286,12 +286,12 @@ public class WorksDataCheck {
                                 .equals(dataQualityContext.workDataObjectsFromPMXSTG.get(i).UPDATED));
             }
 
-/*            if (dataQualityContext.workDataObjectsFromSource.get(i).RECORD_END_DATE != null
+            if (dataQualityContext.workDataObjectsFromSource.get(i).RECORD_END_DATE != null
                     || dataQualityContext.workDataObjectsFromPMXSTG.get(i).RECORD_END_DATE != null) {
                 assertTrue("Expecting the UPDATED details from PMX and EPH Consistent for id=" + ids.get(i),
                         dataQualityContext.workDataObjectsFromSource.get(i).RECORD_END_DATE
                                 .equals(dataQualityContext.workDataObjectsFromPMXSTG.get(i).RECORD_END_DATE));
-            }*/
+            }
         }
     }
     
@@ -553,21 +553,10 @@ public class WorksDataCheck {
                                 .equals(dataQualityContext.workDataObjectsFromEPH.get(i).OWNERSHIP));
             }
 
-                Log.info(dataQualityContext.workDataObjectsFromSTGDQ.get(i).ACC_PROD_ID);
-                sql = WorkDataCheckSQL.GET_Acc_Prod.replace("PARAM1", dataQualityContext.workDataObjectsFromSTGDQ.get(i).ACC_PROD_ID +
-                        dataQualityContext.workDataObjectsFromSTGDQ.get(i).PARENT_ACC_PROD);
-                Log.info(sql);
-                workDataObjectsAccProd = DBManager
-                        .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-                if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).PRODUCT_WORK_ID ==null) {
-                    Assert.assertTrue("The accountable product is not null",
-                            workDataObjectsAccProd.get(0).f_accountable_product==null);
-                }else {
-                assertTrue("Expecting the Acc prod details from DQ and SA Consistent for id="+
+                assertEquals("Expecting the Acc prod details from DQ and SA Consistent for id="+
                                 dataQualityContext.workDataObjectsFromEPH.get(i).PMX_SOURCE_REFERENCE,
-                        workDataObjectsAccProd.get(0).f_accountable_product
-                                .equals(dataQualityContext.workDataObjectsFromEPH.get(i).f_accountable_product));
-            }
+                        dataQualityContext.workDataObjectsFromSTGDQ.get(i).f_accountable_product
+                                ,dataQualityContext.workDataObjectsFromEPH.get(i).f_accountable_product);
 
 
             if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).LANGUAGE_CODE != null

@@ -361,14 +361,8 @@ public class WorksIdSteps {
                 Log.info("\n The count in stg for " + column + " is " + stgCount.get(0).count);
             }
         }else{
-            sql = WorkCountSQL.GET_REFRESH_DATE;
-            refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                    Constants.EPH_URL);
-
-            sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA
-                    .replace("PARAM1", column)
-                    .replace("PARAM2",refreshDate.get(1).refresh_timestamp)
-                    .replace("PARAM3",type);
+            sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE
+                    .replace("PARAM1", column);
             System.out.print(sql);
             stgCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
             Log.info("\n The count in stg for " + column + " is " + stgCount.get(0).count);

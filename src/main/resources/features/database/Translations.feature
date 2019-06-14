@@ -1,4 +1,4 @@
-Feature: Entity - Work Relationship Translation - Data Mapping Check - Validate data between PMX and EPH - Talend Full Load
+Feature: Entity - Work Relationship Translation - Data Mapping Check - Validate data between PMX and EPH - Talend Load
 
   @Regression
   Scenario: Checking the count of work relationship records between PMX and STG

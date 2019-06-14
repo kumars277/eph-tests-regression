@@ -1,4 +1,4 @@
-Feature: Entity - Financial Attributes - Data Mapping Check - Validate data between PMX and EPH - Talend Full Load
+Feature: Entity - Financial Attributes - Data Mapping Check - Validate data between PMX and EPH - Talend Load
 
   @Regression
   Scenario: Checking the count of financial attributes between STG and EPH SA

@@ -1,4 +1,4 @@
-Feature: Entity - WORK - Count Check - Validate data count between PMX and EPH - Talend Full Load
+Feature: Entity - WORK - Count Check - Validate data count between PMX and EPH - Talend Load
 
 
   @Regression

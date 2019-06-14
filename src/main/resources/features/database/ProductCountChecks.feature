@@ -1,4 +1,4 @@
-Feature: Entity - PRODUCT - Count Check - Validate data count between PMX and EPH - Talend Full Load
+Feature: Entity - PRODUCT - Count Check - Validate data count between PMX and EPH - Talend Load
 
   @Regression
   Scenario: Count check between PMX and PMX Staging

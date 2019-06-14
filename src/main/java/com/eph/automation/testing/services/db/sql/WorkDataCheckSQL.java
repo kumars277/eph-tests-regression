@@ -34,7 +34,7 @@ public class WorkDataCheckSQL {
             "  WHERE \"PRODUCT_WORK_ID\" IN ('%s') ORDER BY \"PRODUCT_WORK_ID\"";
 
     public static String GET_STG_DQ_WORKS_DATA ="SELECT \n" +
-            "  ww.PMX_SOURCE_REFERENCE AS PMX_SOURCE_REFERENCE\n" +
+            "  ww.PMX_SOURCE_REFERENCE AS EXTERNAL_REFERENCE\n" +
             "  ,ww.WORK_TITLE AS WORK_TITLE -- Title\n" +
             "  ,ww.WORK_SUBTITLE AS WORK_SUBTITLE -- Subtitle\n" +
             "  ,ww.ELECTRO_RIGHTS_INDICATOR as ELECTRONIC_RIGHTS_IND\n" +
@@ -49,14 +49,14 @@ public class WorkDataCheckSQL {
             "  ,ww.F_SOCIETY_OWNERSHIP AS OWNERSHIP\n" +
             "  ,ww.opco AS F_OPCO_R12\n" +
             "  ,ww.resp_centre AS F_RESPONSIBILITY_CENTRE\n" +
-            "  ,ap.accountable_product_id as ACC_PROD_ID" +
+            "  ,ap.accountable_product_id as f_accountable_product" +
             "  --,ap.\"PARENT_ACC_PROD\" as PARENT_ACC_PROD\n" +
             "  ,ww.LANGUAGE_CODE as LANGUAGE_CODE\n"+
             "  FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq ww\n"+
             "  left join \n" +
-            "\t(select distinct s.\"PRODUCT_WORK_ID\", a.external_reference, a.accountable_product_id \n" +
-            "\t from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_accountable_product s join semarchy_eph_mdm.sa_accountable_product a on\n" +
-            "\t concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = a.external_reference) ap on ww.pmx_source_reference::varchar = ap.external_reference\n"+
+            "(select distinct s.product_work_id, a.external_reference, a.accountable_product_id \n" +
+            "\t from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_accountable_product_dq s join semarchy_eph_mdm.sa_accountable_product a on\n" +
+            "\t s.pmx_source_reference = a.external_reference where s.dq_err != 'Y') ap on ww.pmx_source_reference::varchar = ap.product_work_id::varchar\n"+
             "  WHERE PMX_SOURCE_REFERENCE IN ('%s') ORDER BY PMX_SOURCE_REFERENCE";
 
     public static String GET_EPH_WORKS_DATA ="SELECT \n" +
