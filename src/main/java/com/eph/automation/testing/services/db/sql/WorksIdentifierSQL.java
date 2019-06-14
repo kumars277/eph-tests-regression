@@ -105,10 +105,7 @@ public class WorksIdentifierSQL {
             GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq  mdq\n" +
             "where \n" +
             "stg.\"PARAM1\" is not null  and \n" +
-            "   stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n" +
-            "   and  \"PRODUCT_WORK_ID\" \n" +
-            "   not in (select stg1.\"PRODUCT_WORK_ID\" from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork stg1,"+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork stg2 " +
-            " where stg2.\"PRODUCT_WORK_ID\" = stg1.\"PRODUCT_WORK_ID\" and stg2.\"PROJECT_NUM\" != stg1.\"PROJECT_NUM\")\n";
+            "   stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n";
 
     public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA = "select count(*) as count\n" +
             "from  "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork stg \n" +
@@ -124,7 +121,7 @@ public class WorksIdentifierSQL {
             "   and  \"PRODUCT_WORK_ID\" \n" +
             "   not in (select distinct stg1.\"PRODUCT_WORK_ID\" from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork stg1,"+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork stg2  where stg2.\"PRODUCT_WORK_ID\" = stg1.\"PRODUCT_WORK_ID\" and stg2.\"PROJECT_NUM\" != stg1.\"PROJECT_NUM\");";
 
-    public static String COUNT_SA_WORK_IDENTIFIER = "select count(*) AS count from semarchy_eph_mdm.sa_work_identifier where f_type = 'PARAM1'" +
+    public static String COUNT_SA_WORK_IDENTIFIER = "select count(distinct f_wwork) AS count from semarchy_eph_mdm.sa_work_identifier where f_type = 'PARAM1'" +
             " and effective_end_date is null\n" +
             " and f_event =  (select max (event_id) from\n" +
             "semarchy_eph_mdm.sa_event\n"+
@@ -132,7 +129,7 @@ public class WorksIdentifierSQL {
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )";
 
-    public static String COUNT_GD_WORK_IDENTIFIER = "select count(*) AS count from semarchy_eph_mdm.gd_work_identifier where f_type = 'PARAM1'"+
+    public static String COUNT_GD_WORK_IDENTIFIER = "select count(distinct f_wwork) AS count from semarchy_eph_mdm.gd_work_identifier where f_type = 'PARAM1'"+
             " and effective_end_date is null\n" +
             " and f_event =  (select max (f_event) from\n" +
             "semarchy_eph_mdm.gd_work_identifier join \n"+
