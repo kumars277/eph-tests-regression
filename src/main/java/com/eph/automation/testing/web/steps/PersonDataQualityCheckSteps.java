@@ -361,7 +361,7 @@ public class PersonDataQualityCheckSteps {
 
             //FAMILY_NAME
             Log.info("FAMILY_NAME in EPH DQ : " + dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_FAMILY_NAME());
-            Log.info("FAMILY_NAME in EPH SA: " + dataQualityContext.personDataObjectsFromEPHSA.get(0).getPERSON_FIRST_NAME());
+            Log.info("FAMILY_NAME in EPH SA: " + dataQualityContext.personDataObjectsFromEPHSA.get(0).getPERSON_FAMILY_NAME());
 
             Log.info("Expecting FAMILY_NAME in EPH DQ and EPH SA is consistent");
 
