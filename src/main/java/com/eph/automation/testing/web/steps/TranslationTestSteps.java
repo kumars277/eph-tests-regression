@@ -78,6 +78,7 @@ public class TranslationTestSteps {
             translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);*/
 //            Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
             sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT;
+            Log.info(sql);
             translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
             Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
         }
@@ -234,7 +235,7 @@ public class TranslationTestSteps {
                     translationContext.translationDataFromSA.get(0).B_CLASSNAME);
 
             if (translationContext.translationDataFromStg.get(i).EFFECTIVE_START_DATE != null
-                    || translationContext.translationDataFromSA.get(i).EFFECTIVE_START_DATE != null) {
+                    || translationContext.translationDataFromSA.get(0).EFFECTIVE_START_DATE != null) {
                 Assert.assertEquals("The EFFECTIVE_START_DATE is incorrect for id=" + translationContext.workID.get(0).workID,
                         translationContext.translationDataFromStg.get(i).EFFECTIVE_START_DATE,
                         translationContext.translationDataFromSA.get(0).EFFECTIVE_START_DATE);

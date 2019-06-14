@@ -1,4 +1,4 @@
-Feature: Entity - WORK - Data Mapping Check - Validate data between PMX and EPH - Talend Full Load
+Feature: Entity - WORK - Data Mapping Check - Validate data between PMX and EPH - Talend Load
 
   @Regression
   Scenario: Checking the Works data between PMX and EPH
