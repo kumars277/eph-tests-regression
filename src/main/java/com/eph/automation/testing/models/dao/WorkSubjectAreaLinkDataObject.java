@@ -48,6 +48,15 @@ public class WorkSubjectAreaLinkDataObject {
 
     private String EFFTO_DATE;
 
+    public String external_reference;
+
+    public String getExternal_reference() {
+        return external_reference;
+    }
+
+    public void setExternal_reference(String external_reference) {
+        this.external_reference = external_reference;
+    }
 
     public String getPRODUCT_SUBJECT_AREA_ID() {
         return PRODUCT_SUBJECT_AREA_ID;

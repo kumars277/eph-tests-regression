@@ -76,10 +76,13 @@ public class WorkSubjectAreaLinkDataSQL {
             ",\"START_DATE\" as START_DATE\n" +
             ",\"END_DATE\" as EFFTO_DATE\n" +
             ",\"UPDATED\" as UPDATED\n" +
-            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_subject_area\t\n" +
-            "left join "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid mp on mp.source_ref = concat('WORK_SUBJ_AREA-',\"PRODUCT_SUBJECT_AREA_ID\")\n" +
+            "from ephsit_talend_owner.stg_10_pmx_work_subject_area\t\n" +
+            "left join ephsit_talend_owner.map_sourceref_2_numericid mp on mp.source_ref = concat('WORK_SUBJ_AREA-',\"PRODUCT_SUBJECT_AREA_ID\")\n" +
             "left join semarchy_eph_mdm.sa_work_subject_area_link sa on sa.work_subject_area_link_id = mp.numeric_id\n" +
-            "where sa.b_error_status is null\n" +
+            "join (select distinct subject_area_id, external_reference from semarchy_eph_mdm.sa_subject_area) g on stg_10_pmx_work_subject_area.\"F_SUBJECT_AREA\"::varchar = g.external_reference\n" +
+            "left join\n" +
+            "    (select distinct external_reference, work_subject_area_link_id from semarchy_eph_mdm.sa_work_subject_area_link) a on stg_10_pmx_work_subject_area.\"PRODUCT_SUBJECT_AREA_ID\"::varchar = a.external_reference\n" +
+            "where sa.b_error_status is null " +
             "and \"PRODUCT_SUBJECT_AREA_ID\" in ('%s')\n";
 
     public static String EXTRACT_DATA_WORK_SUBJECT_AREA_SA = "select  \n" +
@@ -88,6 +91,7 @@ public class WorkSubjectAreaLinkDataSQL {
             ",WORK_SUBJECT_AREA_LINK_ID as WORK_SUBJECT_AREA_LINK_ID\n" +
             ",F_SUBJECT_AREA as F_SUBJECT_AREA\n" +
             ",F_WWORK as F_WWORK\n" +
+            ",external_reference as external_reference "+
             "from semarchy_eph_mdm.sa_work_subject_area_link \n" +
             "where WORK_SUBJECT_AREA_LINK_ID in (\n" +
             "select mp.numeric_id from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid mp \n" +
@@ -100,6 +104,7 @@ public class WorkSubjectAreaLinkDataSQL {
             ",WORK_SUBJECT_AREA_LINK_ID as WORK_SUBJECT_AREA_LINK_ID\n" +
             ",F_SUBJECT_AREA as F_SUBJECT_AREA\n" +
             ",F_WWORK as F_WWORK\n" +
+            ",external_reference as external_reference "+
             "from semarchy_eph_mdm.gd_work_subject_area_link \n" +
             "where WORK_SUBJECT_AREA_LINK_ID in (\n" +
             "select mp.numeric_id from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid mp \n" +

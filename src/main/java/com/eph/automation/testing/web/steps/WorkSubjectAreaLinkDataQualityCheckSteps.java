@@ -297,6 +297,10 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
             Log.info("F_WWORK in SA: " + dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK());
 
             assertEquals(F_WWORK, dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK());
+
+            assertEquals("External reference is different",
+                    dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getPRODUCT_SUBJECT_AREA_ID(),
+                    dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getExternal_reference());
         });
 
     }
@@ -329,6 +333,8 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
             Log.info("F_WWORK in GD: " + dataQualityContext.workSubjectAreaDataObjectsFromGD.get(i).getF_WWORK());
 
             assertEquals(dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK(), dataQualityContext.workSubjectAreaDataObjectsFromGD.get(i).getF_WWORK());
+
+            assertEquals(dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getExternal_reference(), dataQualityContext.workSubjectAreaDataObjectsFromGD.get(i).getExternal_reference());
 
         });
 
