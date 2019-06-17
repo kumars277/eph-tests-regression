@@ -34,7 +34,6 @@ Feature: Entity - PERSON PRODUCT ROLE - Validate data between PMX and EPH - Tale
   Scenario Outline: Validate mandatory columns are populated in EPH SA
     Given We get <countOfRandomIds> random ids of persons product role
     Given We get the person product role records from EPH STG
-    When We get the ids of the person product role records in EPH SA from the lookup table
     Then We get the person product role records from EPH SA
     And Check the mandatory columns are populated
     Examples:
@@ -46,7 +45,6 @@ Feature: Entity - PERSON PRODUCT ROLE - Validate data between PMX and EPH - Tale
   Scenario Outline: Validate data is transferred from EPH STG to EPH SA
     Given We get <countOfRandomIds> random ids of persons product role
     When We get the person product role records from EPH STG
-    Then We get the ids of the person product role records in EPH SA from the lookup table
     Then We get the person product role records from EPH SA
     And Compare person product role records in EPH STG and EPH SA
     Examples:
@@ -56,7 +54,7 @@ Feature: Entity - PERSON PRODUCT ROLE - Validate data between PMX and EPH - Tale
 
   @Regression
   Scenario Outline: Validate data is transferred from EPH SA to EPH GD
-    Given We get <countOfRandomIds> random ids of persons product role from SA
+    Given We get <countOfRandomIds> random ids of persons product role
     Then We get the random person product role records from EPH SA
     Then We get the person product role records from EPH GD
     And Compare person product role records in EPH SA and EPH GD
@@ -64,8 +62,9 @@ Feature: Entity - PERSON PRODUCT ROLE - Validate data between PMX and EPH - Tale
       | countOfRandomIds |
       | 10               |
 
-#  @Regression - Should be rewritten same way as in the manifestation identifiers
-#  Scenario: Verify that existing product person role records are end-dated properly
-#    Given We get the ids of all person product role records with set updated effective_end_date in GD
-#    Then We get the person product role records from EPH GD
-#    Then Check the person product role records are updated
+
+
+  @Regression
+  Scenario: Verify that existing product person role records are end-dated properly
+    Given Get person product role ids from STG and GD for end dated records in GD
+    Then  Check the person product role records are updated

@@ -503,6 +503,7 @@ public class WorkExtractSQL {
 
 
 
+
     public static final String SELECT_MANIFESTATION_IDS_ISBN = "select \"MANIFESTATION_ID\" as MANIFESTATION_ID\n" +
             "   from \n" +
             GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation stg,\n" +

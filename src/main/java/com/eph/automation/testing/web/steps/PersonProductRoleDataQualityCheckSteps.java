@@ -16,8 +16,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -37,9 +35,9 @@ public class PersonProductRoleDataQualityCheckSteps {
     private static int countPersonsEPHSTGGoingToSA;
     private static int countPersonsEPHSA;
     private static int countPersonsEPHGD;
-    private static List<String> idsSourceRef;
     private static List<String> ids;
-    private static List<String> idsLookup;
+
+
 
 
     @Given("^Get the count of records for persons product role in EPH STG DQ")
@@ -140,28 +138,28 @@ public class PersonProductRoleDataQualityCheckSteps {
 
         List<Map<?, ?>> randomPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
-        ids = randomPersons.stream().map(m -> (String) m.get("PRODUCT_SOURCE_REF")).map(String::valueOf).collect(Collectors.toList());
+        ids = randomPersons.stream().map(m -> (String) m.get("PROD_PER_ROLE_SOURCE_REF")).map(String::valueOf).collect(Collectors.toList());
         Log.info(ids.toString());
     }
 
-    @Given("^We get (.*) random ids of persons product role from SA$")
-    public void getRandomIdsSA(String numberOfRecords) {
-        Log.info("Get random records ..");
-
-        //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
-        Log.info("numberOfRecords = " + numberOfRecords);
-
-
-        sql = String.format(PersonProductRoleDataSQL.GET_RANDOM_PERSON_PRODUCT_ROLE_IDS_FROM_SA, numberOfRecords);
-        Log.info(sql);
-
-
-        List<Map<?, ?>> randomPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-
-        ids = randomPersons.stream().map(m -> (BigDecimal) m.get("PRODUCT_PERSON_ROLE_ID")).map(String::valueOf).collect(Collectors.toList());
-        Log.info(ids.toString());
-    }
+//    @Given("^We get (.*) random ids of persons product role from SA$")
+//    public void getRandomIdsSA(String numberOfRecords) {
+//        Log.info("Get random records ..");
+//
+//        //Get property when run with jenkins
+////        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+//        Log.info("numberOfRecords = " + numberOfRecords);
+//
+//
+//        sql = String.format(PersonProductRoleDataSQL.GET_RANDOM_PERSON_PRODUCT_ROLE_IDS_FROM_SA, numberOfRecords);
+//        Log.info(sql);
+//
+//
+//        List<Map<?, ?>> randomPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+//
+//        ids = randomPersons.stream().map(m -> (BigDecimal) m.get("PRODUCT_PERSON_ROLE_ID")).map(String::valueOf).collect(Collectors.toList());
+//        Log.info(ids.toString());
+//    }
 
     @When("^We get the person product role records from EPH DQ$")
     public void getPersonProductRoleRecordsEphDQ() {
@@ -260,29 +258,29 @@ public class PersonProductRoleDataQualityCheckSteps {
 
     }
 
-    @Then("^We get the ids of the person product role records in EPH SA from the lookup table$")
-    public void getIdsFromLookupTable() {
-        Log.info("Get the ids of the records in EPH SA from the lookup table ..");
-        idsSourceRef = new ArrayList<>();
-
-        IntStream.range(0, dataQualityContext.personProductRoleDataObjectsFromEPHSTG.size()).forEach(i -> idsSourceRef.add(i, "PPR-" + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPROD_PER_ROLE_SOURCE_REF()));
-
-
-        sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE, Joiner.on("','").join(idsSourceRef));
-        Log.info(sql);
-
-
-        List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-
-        idsLookup = lookupResults.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
-        Log.info(idsLookup.toString());
-    }
+//old    @Then("^We get the ids of the person product role records in EPH SA from the lookup table$")
+//    public void getIdsFromLookupTable() {
+//        Log.info("Get the ids of the records in EPH SA from the lookup table ..");
+//        idsSourceRef = new ArrayList<>();
+//
+//        IntStream.range(0, dataQualityContext.personProductRoleDataObjectsFromEPHSTG.size()).forEach(i -> idsSourceRef.add(i, "PPR-" + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPROD_PER_ROLE_SOURCE_REF()));
+//
+//
+//        sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE, Joiner.on("','").join(idsSourceRef));
+//        Log.info(sql);
+//
+//
+//        List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+//
+//        idsLookup = lookupResults.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
+//        Log.info(idsLookup.toString());
+//    }
 
 
     @Then("^We get the person product role records from EPH SA$")
     public void getPersonProductRoleRecordsEPHSA() {
         Log.info("Get the person product role records from EPH SA  ..");
-        sql = String.format(PersonProductRoleDataSQL.GET_DATA_PERSONS_PRODUCT_ROLE_EPHSA, Joiner.on("','").join(idsLookup));
+        sql = String.format(PersonProductRoleDataSQL.GET_DATA_PERSONS_PRODUCT_ROLE_EPHSA, Joiner.on("','").join(ids));
         Log.info(sql);
 
         dataQualityContext.personProductRoleDataObjectsFromEPHSA = DBManager
@@ -328,59 +326,61 @@ public class PersonProductRoleDataQualityCheckSteps {
     public void comparePersonProductRolesRecordsInSTGAndSA() {
         Log.info("And compare product role records in EPH STG and EPH SA ..");
 
+        dataQualityContext.personProductRoleDataObjectsFromEPHSTG.sort(Comparator.comparing(PersonProductRoleDataObject::getPROD_PER_ROLE_SOURCE_REF));
+        dataQualityContext.personProductRoleDataObjectsFromEPHSA.sort(Comparator.comparing(PersonProductRoleDataObject::getEXTERNAL_REFERENCE));
 
         IntStream.range(0, dataQualityContext.personProductRoleDataObjectsFromEPHSTG.size()).forEach(i -> {
 
-            //get data from SA for the current record from STG
-            String currentId = "PPR-" + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPROD_PER_ROLE_SOURCE_REF();
-            sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE, currentId);
-            Log.info(sql);
-
-            List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            idsLookup = lookupResults.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
-
-            Log.info("The id's are : " +idsLookup);
-
-            sql = String.format(PersonProductRoleDataSQL.GET_DATA_PERSONS_PRODUCT_ROLE_EPHSA, Joiner.on("','").join(idsLookup));
-            Log.info(sql);
-
-            dataQualityContext.personProductRoleDataObjectsFromEPHSA = DBManager
-                    .getDBResultAsBeanList(sql, PersonProductRoleDataObject.class, Constants.EPH_URL);
+//            //get data from SA for the current record from STG
+//            String currentId = "PPR-" + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPROD_PER_ROLE_SOURCE_REF();
+//            sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE, currentId);
+//            Log.info(sql);
+//
+//            List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+//            idsLookup = lookupResults.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
+//
+//            Log.info("The id's are : " +idsLookup);
+//
+//            sql = String.format(PersonProductRoleDataSQL.GET_DATA_PERSONS_PRODUCT_ROLE_EPHSA, Joiner.on("','").join(idsLookup));
+//            Log.info(sql);
+//
+//            dataQualityContext.personProductRoleDataObjectsFromEPHSA = DBManager
+//                    .getDBResultAsBeanList(sql, PersonProductRoleDataObject.class, Constants.EPH_URL);
 
 
             //B_CLASSNAME
-            Log.info("B_CLASSNAME in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(0).getB_CLASSNAME());
-            assertEquals("ProductPersonRole", dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(0).getB_CLASSNAME());
+            Log.info("B_CLASSNAME in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
+            assertEquals("ProductPersonRole", dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
 
 
             //EFFECTIVE_START_DATE
             Log.info("EFFECTIVE_START_DATE in EPH STG : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE());
-            Log.info("EFFECTIVE_START_DATE in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_START_DATE());
+            Log.info("EFFECTIVE_START_DATE in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_START_DATE());
 
             Log.info("Expecting EFFECTIVE_START_DATE in EPH STG and EPH SA to be consistent");
 
-            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_START_DATE());
+            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_START_DATE());
 
 
             //EFFECTIVE_END_DATE
             Log.info("EFFECTIVE_END_DATE in EPH STG : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_END_DATE());
-            Log.info("EFFECTIVE_END_DATE in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_END_DATE());
+            Log.info("EFFECTIVE_END_DATE in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_END_DATE());
 
             Log.info("Expecting EFFECTIVE_END_DATE in EPH STG and EPH SA to be consistent");
 
-            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_END_DATE(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_END_DATE());
+            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_END_DATE(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_END_DATE());
 
 
             //F_ROLE
             Log.info("F_ROLE in EPH STG : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
-            Log.info("F_ROLE in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(0).getF_ROLE());
+            Log.info("F_ROLE in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_ROLE());
 
             Log.info("Expecting F_ROLE in EPH STG and EPH SA is consistent");
 
-            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getF_ROLE(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(0).getF_ROLE());
+            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getF_ROLE(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_ROLE());
 
             //F_PRODUCT
-            String currentF_PRODUCT = dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(0).getF_PRODUCT();
+            String currentF_PRODUCT = dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_PRODUCT();
             Log.info("F_PRODUCT in EPH SA: " + currentF_PRODUCT);
 
 
@@ -400,19 +400,13 @@ public class PersonProductRoleDataQualityCheckSteps {
 
             //F_PERSON
 
-            String currentF_PERSON = dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(0).getF_PERSON();
-            Log.info("F_PERSON in EPH SA: " + currentF_PERSON);
+            Log.info("F_PERSON in EPH STG : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getF_PERSON());
+            Log.info("F_PERSON in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_PERSON());
 
+            Log.info("Expecting F_PERSON in EPH STG and EPH SA is consistent");
 
-            idL = "PERSON-" + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPERSON_SOURCE_REF();
-            sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE, idL);
-            Log.info(sql);
+            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getF_PERSON(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_PERSON());
 
-            String expectedF_PERSON;
-            results = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            expectedF_PERSON = String.valueOf(results.get(0).get("PERSON_ID"));
-
-            assertEquals(currentF_PERSON, expectedF_PERSON);
 
         });
 
@@ -514,57 +508,7 @@ public class PersonProductRoleDataQualityCheckSteps {
 
     }
 
-
-    @Given("^We get the ids of all person product role records with set updated effective_end_date in GD$")
-    public void getRecordsWithSetEndDate() {
-
-
-        sql = String.format(PersonProductRoleDataSQL.GET_END_DATED_RECORDS_FROM_GD);
-        Log.info(sql);
-
-
-        List<Map<?, ?>> endDatedPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-
-        ids = endDatedPersons.stream().map(m -> (BigDecimal) m.get("PRODUCT_PERSON_ROLE_ID")).map(String::valueOf).collect(Collectors.toList());
-        Log.info(ids.toString());
-
-        Log.info("Product person role ids with set effective end date : " + ids);
-
-
-
-
     }
 
-    @Then("^Check the person product role records are updated$")
-    public void checkProductPersonRoleRecordsAreUpdated() {
-        IntStream.range(0, dataQualityContext.personProductRoleDataObjectsFromEPHGD.size()).forEach(i -> {
-
-            //get source_ref from ephsit_talend_owner.map_sourceref_2_numeric id for current record
-            sql = String.format(PersonProductRoleDataSQL.GET_SOURCE_REF, dataQualityContext.personProductRoleDataObjectsFromEPHGD.get(i).getPRODUCT_PERSON_ROLE_ID());
-            Log.info(sql);
-
-            List<Map<String, Object>> listSourceRefIDs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-
-            String source_ref = listSourceRefIDs.get(0).get("source_ref").toString();
-            Log.info(sql);
-
-            //get the prod_per_role_source_ref from source ref
-            String prod_per_role_source_ref = source_ref.replace("PPR-","");
 
 
-            //get data from STG for the current record from STG
-
-            sql = String.format(PersonProductRoleDataSQL.GET_DATA_PERSONS_PRODUCT_ROLE_EPHSTG_BY_PROD_PER_ROLE_SOURCE_REF, prod_per_role_source_ref);
-            Log.info(sql);
-
-            dataQualityContext.personProductRoleDataObjectsFromEPHSTG = DBManager
-                    .getDBResultAsBeanList(sql, PersonProductRoleDataObject.class, Constants.EPH_URL);
-
-
-            //assert identifier value is not equal
-            assertNotEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getF_ROLE(), dataQualityContext.personProductRoleDataObjectsFromEPHGD.get(i).getF_ROLE());
-
-
-        });
-    }
-}

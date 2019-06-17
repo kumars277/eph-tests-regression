@@ -95,6 +95,16 @@ public class PersonWorkRoleDataSQL {
 
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSA = "select count(*) as count from semarchy_eph_mdm.sa_work_person_role sa\n" +
+            "where f_event =  (\n" +
+            "select max (f_event) from \n" +
+            "semarchy_eph_mdm.sa_work_person_role   \n" +
+            "join \n" +
+            "semarchy_eph_mdm.sa_event on f_event = event_id \n" +
+            "where semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )";
+
+    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSATOGD = "select count(*) as count from semarchy_eph_mdm.sa_work_person_role sa\n" +
             "where effective_end_date is null and f_event =  (\n" +
             "select max (f_event) from \n" +
             "semarchy_eph_mdm.sa_work_person_role   \n" +

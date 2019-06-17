@@ -14,6 +14,7 @@ public class PersonProductRoleDataObject {
     private String START_DATE;
     private String END_DATE;
     private String UPDATED;
+    private String EXTERNAL_REFERENCE;
 
     //SA_PRODUCT_PERSON_ROLE
     private String B_LOADID;
@@ -25,6 +26,14 @@ public class PersonProductRoleDataObject {
     private String F_PRODUCT;
     private String F_PERSON;
 
+
+    public String getEXTERNAL_REFERENCE() {
+        return EXTERNAL_REFERENCE;
+    }
+
+    public void setEXTERNAL_REFERENCE(String EXTERNAL_REFERENCE) {
+        this.EXTERNAL_REFERENCE = EXTERNAL_REFERENCE;
+    }
 
     public String getSTART_DATE() {
         return START_DATE;
