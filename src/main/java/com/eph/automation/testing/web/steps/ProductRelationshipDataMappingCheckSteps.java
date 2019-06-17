@@ -185,7 +185,7 @@ public class ProductRelationshipDataMappingCheckSteps {
         Log.info(sql);
 
         productRelIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        ids = productRelIds.stream().map(m -> (BigDecimal) m.get("RELATIONSHIP_PMX_SOURCEREF")).map(String::valueOf).collect(Collectors.toList());
+        ids = productRelIds.stream().map(m -> m.get("RELATIONSHIP_PMX_SOURCEREF")).map(String::valueOf).collect(Collectors.toList());
         Log.info("ids : " + ids);
     }
 
@@ -212,9 +212,9 @@ public class ProductRelationshipDataMappingCheckSteps {
     }
 
     @And("^Compare the product relationship records in PMX and EPH STG$")
-    public void compareProductRelationshipDataInPMXAndEPHSTG() {
+    public void compareProductRelationshipDataInPMXAndEPHSTG() {/*
         dataQualityContext.productRelationshipDataObjectsFromPMX.sort(Comparator.comparing(ProductRelationshipDataObject::getRELATIONSHIP_PMX_SOURCEREF));
-        dataQualityContext.productRelationshipDataObjectsFromEPHSTG.sort(Comparator.comparing(ProductRelationshipDataObject::getRELATIONSHIP_PMX_SOURCEREF));
+        dataQualityContext.productRelationshipDataObjectsFromEPHSTG.sort(Comparator.comparing(ProductRelationshipDataObject::getRELATIONSHIP_PMX_SOURCEREF));*/
 
         IntStream.range(0, dataQualityContext.productRelationshipDataObjectsFromPMX.size()).forEach(i -> {
 
@@ -275,14 +275,8 @@ public class ProductRelationshipDataMappingCheckSteps {
             Log.info("Expecting UPDATED in PMX and EPH Staging are consistent for ");
 
 
-            try {
-                Date pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(dataQualityContext.productRelationshipDataObjectsFromPMX.get(i).getENDON());
-                Date ephUpdatedDate = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS aaa").parse(dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getENDON());
+               assertEquals("UPDATED in PMX and EPH STG is not equal ", dataQualityContext.productRelationshipDataObjectsFromPMX.get(i).getENDON(), dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getENDON());
 
-                assertEquals("UPDATED in PMX and EPH STG is not equal ", pmxUpdatedDate, ephUpdatedDate);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
 
 
             //UPDATED
@@ -308,7 +302,7 @@ public class ProductRelationshipDataMappingCheckSteps {
 
     @Then("^We get the product relationship records from EPH SA$")
     public void getProductRelationshipDataEPHSA() {
-        Log.info("Get PRODUCT_REL_PACK_ID from the lookup table map_identref_2_identid : ");
+  /*      Log.info("Get PRODUCT_REL_PACK_ID from the lookup table map_identref_2_identid : ");
         idsSA = new ArrayList<>(ids);
 
         IntStream.range(0, idsSA.size()).forEach(i -> idsSA.set(i, "PROD_PACK-" + idsSA.get(i)));
@@ -317,9 +311,9 @@ public class ProductRelationshipDataMappingCheckSteps {
 
         List<Map<?, ?>> productRelIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         idsSA = productRelIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_REL_PACK_ID")).map(String::valueOf).collect(Collectors.toList());
-
+*/
         Log.info("Get data from EPH SA ..");
-        sql = String.format(ProductRelationshipChecksSQL.GET_EPH_SA_PRODUCT_RELATIONSHIPS_DATA, Joiner.on("','").join(idsSA));
+        sql = String.format(ProductRelationshipChecksSQL.GET_EPH_SA_PRODUCT_RELATIONSHIPS_DATA, Joiner.on("','").join(ids));
         Log.info(sql);
 
         dataQualityContext.productRelationshipDataObjectsFromEPHSA = DBManager
@@ -331,7 +325,7 @@ public class ProductRelationshipDataMappingCheckSteps {
     public void getProductRelationshipDataEPHGD() {
         Log.info("Get data from EPH GD ..");
 
-        sql = String.format(ProductRelationshipChecksSQL.GET_EPH_GD_PRODUCT_RELATIONSHIPS_DATA, Joiner.on("','").join(idsSA));
+        sql = String.format(ProductRelationshipChecksSQL.GET_EPH_GD_PRODUCT_RELATIONSHIPS_DATA, Joiner.on("','").join(ids));
         Log.info(sql);
 
         dataQualityContext.productRelationshipDataObjectsFromEPHGD = DBManager
@@ -361,6 +355,7 @@ public class ProductRelationshipDataMappingCheckSteps {
         Log.info("Compare the product relationship data between EPH STG and EPH SA ...");
 
         IntStream.range(0, dataQualityContext.productRelationshipDataObjectsFromEPHSTG.size()).forEach(i -> {
+/*
 
             String c = "PROD_PACK-"  + dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getRELATIONSHIP_PMX_SOURCEREF();
 
@@ -374,17 +369,20 @@ public class ProductRelationshipDataMappingCheckSteps {
             sql = String.format(ProductRelationshipChecksSQL.GET_EPH_SA_PRODUCT_RELATIONSHIPS_DATA, Joiner.on("','").join(idsSA));
             Log.info(sql);
 
+*/
+/*
             dataQualityContext.productRelationshipDataObjectsFromEPHSA = DBManager
                     .getDBResultAsBeanList(sql, ProductRelationshipDataObject.class, Constants.EPH_URL);
+*/
 
 
 
             //B_CLASSNAME
-            Log.info("B_CLASSNAME in EPH SA : " + dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(0).getB_CLASSNAME());
+            Log.info("B_CLASSNAME in EPH SA : " + dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
 
             Log.info("Expecting B_CLASSNAME in EPH SA to be correctly added");
 
-            assertEquals("ProductRelationshipPackage",dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(0).getB_CLASSNAME());
+            assertEquals("ProductRelationshipPackage",dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
 
             //Get relationship_pmx_sourceref for the current PRODUCT_REL_PACK_ID from the lookup table
             Log.info("Get relationship_pmx_sourceref for the current PRODUCT_REL_PACK_ID from the lookup table ..");
@@ -402,7 +400,7 @@ public class ProductRelationshipDataMappingCheckSteps {
             expectedF_PACKAGE_OWNER =  productRelIds.get(0).get("eph_id").toString();
 
             Log.info("Verify F_PACKAGE_OWNER is correctly populated");
-            assertEquals(expectedF_PACKAGE_OWNER,  dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(0).getF_PACKAGE_OWNER());
+            assertEquals(expectedF_PACKAGE_OWNER,  dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getF_PACKAGE_OWNER());
 
             //F_COMPONENT
 //            map_sourceref_2_ephid('PRODUCT'::varchar, component_pmx_source )
@@ -416,33 +414,40 @@ public class ProductRelationshipDataMappingCheckSteps {
             expectedF_COMPONENT =  productRelIds.get(0).get("eph_id").toString();
 
             Log.info("Verify F_COMPONENT is correctly populated");
-            assertEquals(expectedF_COMPONENT,  dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(0).getF_COMPONENT());
+            assertEquals(expectedF_COMPONENT,  dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getF_COMPONENT());
 
             //F_RELATIONSHIP_TYPE
             Log.info("F_RELATIONSHIP_TYPE in EPH STG : " + dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getF_RELATIONSHIP_TYPE());
-            Log.info("F_RELATIONSHIP_TYPE in EPH SA : " + dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(0).getF_RELATIONSHIP_TYPE());
+            Log.info("F_RELATIONSHIP_TYPE in EPH SA : " + dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getF_RELATIONSHIP_TYPE());
 
             Log.info("Expecting F_RELATIONSHIP_TYPE in EPH STG and EPH SA to be equal");
 
-            assertEquals(dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getF_RELATIONSHIP_TYPE(), dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(0).getF_RELATIONSHIP_TYPE());
+            assertEquals(dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getF_RELATIONSHIP_TYPE(), dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getF_RELATIONSHIP_TYPE());
 
 
             //EFFECTIVE_START_DATE
             Log.info("EFFECTIVE_START_DATE in EPH STG : " + dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE());
-            Log.info("EFFECTIVE_START_DATE in EPH SA : " + dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(0).getEFFECTIVE_START_DATE());
+            Log.info("EFFECTIVE_START_DATE in EPH SA : " + dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getEFFECTIVE_START_DATE());
 
             Log.info("Expecting EFFECTIVE_START_DATE in EPH STG and EPH SA to be equal");
 
-            assertEquals(dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE(), dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(0).getEFFECTIVE_START_DATE());
+            assertEquals(dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE(), dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getEFFECTIVE_START_DATE());
 
             //EFFECTIVE_END_DATE
             Log.info("EFFECTIVE_END_DATE in EPH STG : " + dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getENDON());
-            Log.info("EFFECTIVE_END_DATE in EPH SA : " + dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(0).getEFFECTIVE_END_DATE());
+            Log.info("EFFECTIVE_END_DATE in EPH SA : " + dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getEFFECTIVE_END_DATE());
 
             Log.info("Expecting EFFECTIVE_END_DATE in EPH STG and EPH SA to be equal");
 
-            assertEquals(dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getENDON(), dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(0).getEFFECTIVE_END_DATE());
+            if(dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getStatus1().equalsIgnoreCase("PST") ||
+                    dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getStatus1().equalsIgnoreCase("NVP")
+                    ||dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getStatus2().equalsIgnoreCase("PST") ||
+                    dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getStatus2().equalsIgnoreCase("NVP")){
+                assertNotNull(dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getEFFECTIVE_END_DATE());
 
+            }else {
+                assertEquals(dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getENDON(), dataQualityContext.productRelationshipDataObjectsFromEPHSA.get(i).getEFFECTIVE_END_DATE());
+            }
         });
     }
 

@@ -1,4 +1,4 @@
-Feature: Entity - PRODUCT RELATIONSHIP - Data Mapping Check - Validate data between PMX and EPH - Talend Full Load
+Feature: Entity - PRODUCT RELATIONSHIP - Data Mapping Check - Validate data between PMX and EPH - Talend Load
 
   @BeforeAll @Regression
   Scenario: Check if data is loaded in the db

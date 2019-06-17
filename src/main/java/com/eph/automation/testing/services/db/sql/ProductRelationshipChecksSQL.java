@@ -46,39 +46,39 @@ public class ProductRelationshipChecksSQL {
             "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_pack_rel\n" +
             "join (\n" +
             "select s.pmx_source_reference as stage,\n" +
-            "g.pmx_source_reference as gold,\n" +
-            "coalesce(s.pmx_source_reference::varchar,g.pmx_source_reference) as consol,\n" +
+            "g.external_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
             "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
             "from semarchy_eph_mdm.gd_product g \n" +
-            "full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq s on g.pmx_source_reference = s.pmx_source_reference::varchar) d1 \n" +
+            "full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq s on g.external_reference = s.pmx_source_reference::varchar) d1 \n" +
             "on STG_10_PMX_PRODUCT_PACK_REL.\"OWNER_PMX_SOURCE\" = d1.consol\n" +
             "join (select s.pmx_source_reference as stage,\n" +
-            "g.pmx_source_reference as gold,\n" +
-            "coalesce(s.pmx_source_reference::varchar,g.pmx_source_reference) as consol,\n" +
+            "g.external_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
             "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
             "from semarchy_eph_mdm.gd_product g \n" +
             "full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq s \n" +
-            "on g.pmx_source_reference = s.pmx_source_reference::varchar) d2\n" +
+            "on g.external_reference = s.pmx_source_reference::varchar) d2\n" +
             "on STG_10_PMX_PRODUCT_PACK_REL.\"COMPONENT_PMX_SOURCE\" = d2.consol where d1.dq_err!= 'Y' and d2.dq_err!= 'Y'\t\n";
 
 
     public static String GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT_DELTA = "select  count(*) as count \n" +
-            "from ephsit_talend_owner.stg_10_pmx_product_pack_rel\n" +
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_pack_rel\n" +
             "join (\n" +
             "select s.pmx_source_reference as stage,\n" +
-            "g.pmx_source_reference as gold,\n" +
-            "coalesce(s.pmx_source_reference::varchar,g.pmx_source_reference) as consol,\n" +
+            "g.external_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
             "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
             "from semarchy_eph_mdm.gd_product g \n" +
-            "full outer join ephsit_talend_owner.stg_10_pmx_product_dq s on g.pmx_source_reference = s.pmx_source_reference::varchar) d1 \n" +
+            "full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq s on g.external_reference = s.pmx_source_reference::varchar) d1 \n" +
             "on STG_10_PMX_PRODUCT_PACK_REL.\"OWNER_PMX_SOURCE\" = d1.consol\n" +
             "join (select s.pmx_source_reference as stage,\n" +
-            "g.pmx_source_reference as gold,\n" +
-            "coalesce(s.pmx_source_reference::varchar,g.pmx_source_reference) as consol,\n" +
+            "g.external_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
             "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
             "from semarchy_eph_mdm.gd_product g \n" +
-            "full outer join ephsit_talend_owner.stg_10_pmx_product_dq s \n" +
-            "on g.pmx_source_reference = s.pmx_source_reference::varchar) d2\n" +
+            "full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq s \n" +
+            "on g.external_reference = s.pmx_source_reference::varchar) d2\n" +
             "on STG_10_PMX_PRODUCT_PACK_REL.\"COMPONENT_PMX_SOURCE\" = d2.consol where d1.dq_err!= 'Y' and d2.dq_err!= 'Y'\n" +
             "where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('%s','YYYYMMDDHH24MI')";
 
@@ -94,7 +94,7 @@ public class ProductRelationshipChecksSQL {
     public static String GET_EPH_GD_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from semarchy_eph_mdm.gd_product_rel_package";
 
     public static String GET_PMX_PRODUCT_RELATIONSHIPS_DATA = "SELECT * FROM (SELECT\n" +
-            "\t WL.PRODUCT_WORK_LINK_ID AS RELATIONSHIP_PMX_SOURCEREF\n" +
+            "\t WL.PRODUCT_WORK_LINK_ID || M2.PRODUCT_MANIFESTATION_ID || '-SUB' AS RELATIONSHIP_PMX_SOURCEREF\n" +
             "\t,W1.PRODUCT_WORK_ID || '-PKG' AS OWNER_PMX_SOURCE\n" +
             "\t,M2.PRODUCT_MANIFESTATION_ID || '-SUB' AS COMPONENT_PMX_SOURCE\n" +
             "\t,'CON' AS F_RELATIONSHIP_TYPE\n" +
@@ -126,7 +126,7 @@ public class ProductRelationshipChecksSQL {
             "\tW1.F_WORK_STATUS = 81\n" +
             "AND\n" +
             "\tWL.F_PRODUCT_WORK_LINK_TYPE = 42\t-- includes\n" +
-            "\t)\n";
+            "\t) where RELATIONSHIP_PMX_SOURCEREF in ('%s') order by RELATIONSHIP_PMX_SOURCEREF desc";
 
     public static String GET_EPH_STG_PRODUCT_RELATIONSHIPS_DATA = "select\n" +
             "   \"RELATIONSHIP_PMX_SOURCEREF\" as RELATIONSHIP_PMX_SOURCEREF,\n" +
@@ -135,11 +135,46 @@ public class ProductRelationshipChecksSQL {
             "   \"F_RELATIONSHIP_TYPE\" as F_RELATIONSHIP_TYPE,\n" +
             "   \"EFFECTIVE_START_DATE\" as EFFECTIVE_START_DATE,\n" +
             "   \"ENDON\" as ENDON,\n" +
-            "   \"UPDATED\" as UPDATED \n" +
-            "   from " + GetEPHDBUser.getDBUser() + ".stg_pmx_product_pack_rel\n" +
-            "   where \"RELATIONSHIP_PMX_SOURCEREF\"  in ('%s')";
+            "   \"UPDATED\" as UPDATED, \n" +
+            "   d1.status as status1,\n" +
+            "   d2.status as status2" +
+            "   from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_pack_rel\n" +
+            "join  (select s.pmx_source_reference as stage, g.external_reference  as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err,\n" +
+            "coalesce(s.f_status,g.f_status) as status\n" +
+            "from semarchy_eph_mdm.gd_product g full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq s on g.external_reference = s.pmx_source_reference::varchar) d1\n" +
+            "on STG_10_PMX_PRODUCT_PACK_REL.\"OWNER_PMX_SOURCE\" = d1.consol\n" +
+            "join  (select s.pmx_source_reference as stage, g.external_reference  as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err,\n" +
+            "coalesce(s.f_status,g.f_status) as status\n" +
+            "from semarchy_eph_mdm.gd_product g full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq s on g.external_reference = s.pmx_source_reference::varchar) d2\n" +
+            "on STG_10_PMX_PRODUCT_PACK_REL.\"COMPONENT_PMX_SOURCE\" = d2.consol\n" +
+            "left join\n" +
+            "    (select distinct external_reference, product_rel_pack_id from semarchy_eph_mdm.sa_product_rel_package) a \n" +
+            "    on STG_10_PMX_PRODUCT_PACK_REL.\"RELATIONSHIP_PMX_SOURCEREF\"::varchar = a.external_reference\n"+
+            "   where \"RELATIONSHIP_PMX_SOURCEREF\"  in ('%s') " +
+            " order by RELATIONSHIP_PMX_SOURCEREF desc";
 
-    public static String SELECT_RANDOM_RELATIONSHIP_PMX_SOURCEREF = "select \"RELATIONSHIP_PMX_SOURCEREF\" as RELATIONSHIP_PMX_SOURCEREF from " + GetEPHDBUser.getDBUser() + ".stg_pmx_product_pack_rel order by random() limit '%s'";
+    public static String SELECT_RANDOM_RELATIONSHIP_PMX_SOURCEREF = "select \"RELATIONSHIP_PMX_SOURCEREF\" as RELATIONSHIP_PMX_SOURCEREF from \n" +
+            "" + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_pack_rel \n" +
+            "join  (select s.pmx_source_reference as stage, g.external_reference  as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err,\n" +
+            "coalesce(s.f_status,g.f_status) as status\n" +
+            "from semarchy_eph_mdm.gd_product g full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq s on g.external_reference = s.pmx_source_reference::varchar) d1\n" +
+            "on STG_10_PMX_PRODUCT_PACK_REL.\"OWNER_PMX_SOURCE\" = d1.consol\n" +
+            "join  (select s.pmx_source_reference as stage, g.external_reference  as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err,\n" +
+            "coalesce(s.f_status,g.f_status) as status\n" +
+            "from semarchy_eph_mdm.gd_product g full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq s on g.external_reference = s.pmx_source_reference::varchar) d2\n" +
+            "on STG_10_PMX_PRODUCT_PACK_REL.\"COMPONENT_PMX_SOURCE\" = d2.consol\n" +
+            "left join\n" +
+            "    (select distinct external_reference, product_rel_pack_id from semarchy_eph_mdm.sa_product_rel_package) a \n" +
+            "    on STG_10_PMX_PRODUCT_PACK_REL.\"RELATIONSHIP_PMX_SOURCEREF\"::varchar = a.external_reference\n" +
+            "order by random() limit '%s'";
 
     public static String GET_PRODUCT_REL_PACK_ID_FROM_LOOKUP_TABLE = "select numeric_id as PRODUCT_REL_PACK_ID\n" +
             "FROM " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_numericid where source_ref in ('%s')";
@@ -167,7 +202,8 @@ public class ProductRelationshipChecksSQL {
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
             "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n" +
-            "and \"product_rel_pack_id\"  in ('%s')";
+            "and \"external_reference\"  in ('%s')\n" +
+            "order by external_reference desc";
 
 
     public static String GET_EPH_GD_PRODUCT_RELATIONSHIPS_DATA = "select \n" +
@@ -180,7 +216,8 @@ public class ProductRelationshipChecksSQL {
             "effective_start_date as EFFECTIVE_START_DATE,\n" +
             "effective_end_date as EFFECTIVE_END_DATE\n" +
             "from semarchy_eph_mdm.gd_product_rel_package\n" +
-            "where \"product_rel_pack_id\"  in ('%s')";
+            "where \"external_reference\"  in ('%s')\n" +
+            "order by external_reference desc";
 
 
 }

@@ -14,6 +14,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.junit.Assert;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -116,7 +117,11 @@ public class SubjectAreaDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        if (System.getProperty("dbRandomRecordsNumber") == null){
+            numberOfRecords = "5";
+        }else {
+            numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        }
         Log.info("numberOfRecords = " + numberOfRecords);
 
         Log.info("Get the ids from stg ...");
@@ -275,7 +280,7 @@ public class SubjectAreaDataQualityCheckSteps {
             Log.info("F_PARENT_SUBJECT_AREA in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getF_PARENT_SUBJECT_AREA());
 
             if (dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPARENT_SUBJECT_AREA_REF() == null)
-                assertNull(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_TYPE());
+                assertNull(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getF_PARENT_SUBJECT_AREA());
             else {
                 sql = String.format(SubjectAreaDataSQL.GET_F_PARENT_SUBJECT_AREA, dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPARENT_SUBJECT_AREA_REF());
                 Log.info(sql);
