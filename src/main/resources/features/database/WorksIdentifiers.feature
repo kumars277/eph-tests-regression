@@ -18,6 +18,7 @@ Feature: Entity - Work Identifier - Count & Data Mapping Check - Validate data b
       |JNL        |
       |CABS       |
 
+    @Regression
     Scenario Outline: Verify count of Work Identifier records
       Given We know the work identifiers count in staging from column <stg_type> and <type>
       When We get the work identifier count from SA and GD <type>
@@ -32,6 +33,7 @@ Feature: Entity - Work Identifier - Count & Data Mapping Check - Validate data b
       |JOURNAL ACRONYM        |JOURNAL_ACRONYM        |
       |DAC-K                  |DAC_KEY                |
 
+     @Regression
       Scenario: Verify that an old entry is end-dated properly
         Given We have an end-dated identifier in GD
         When We get the data for the identifier from staging

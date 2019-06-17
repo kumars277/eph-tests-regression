@@ -113,8 +113,8 @@ public class FinAttrSQL {
 
 
     public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count(*) as dqCount \n" +
-            "from ephsit_talend_owner.stg_10_pmx_wwork ww \n" +
-            "join ephsit_talend_owner.stg_10_pmx_wwork_dq dq on dq.PMX_SOURCE_REFERENCE=ww.\"PRODUCT_WORK_ID\"\n" +
+            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork ww \n" +
+            "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq dq on dq.PMX_SOURCE_REFERENCE=ww.\"PRODUCT_WORK_ID\"\n" +
             "left join semarchy_eph_mdm.gd_wwork gdw on gdw.external_reference = dq.pmx_source_reference::text\n" +
             "left join semarchy_eph_mdm.gd_work_financial_attribs wfa on wfa.f_wwork = gdw.work_id\n" +
             "where \"F_OPCO_R12\" is not null and \"F_RESPONSIBILITY_CENTRE\" is not null \n" +
@@ -124,7 +124,7 @@ public class FinAttrSQL {
             "and wfa.effective_end_date  is null;\n";
 
     public static String PMX_STG_DQ_WORKS_COUNT_NoErr_Full = "select count(*) as dqCount\n" +
-            "from ephsit_talend_owner.stg_10_pmx_wwork_dq dq\n" +
+            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq dq\n" +
             "where opco is not null and resp_centre is not null \n" +
             "and dq.dq_err!='Y';";
 

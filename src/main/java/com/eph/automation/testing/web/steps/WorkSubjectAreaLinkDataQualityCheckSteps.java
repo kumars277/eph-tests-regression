@@ -70,7 +70,7 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
     public void getCountWorkSubjectAreaRecordsEPHSTGDQ() {
         Log.info("When We get the count of work subject area data in EPH STG with DQ ..");
 
-            if(System.getProperty("LOAD") != null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
                 sql = WorkSubjectAreaLinkDataSQL.SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ;
                 Log.info(sql);
                 List<Map<String, Object>> workSubjectAreaNumberDQ = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -244,24 +244,12 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
                     , dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getEFFTO_DATE());
             }
 
-            Date pmxUpdatedDate = null;
-            try {
-                pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(dataQualityContext.workSubjectAreaDataObjectsFromPMX.get(i).getUPDATED());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            Date stgDate = null;
-            try {
-                stgDate = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS aaa").parse(dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getUPDATED());
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
 
             if (dataQualityContext.workSubjectAreaDataObjectsFromPMX.get(i).getUPDATED()!=null
                     || dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getUPDATED() != null) {
                 assertTrue("Expecting the UPDATED details from PMX and EPH Consistent for id=" + ids.get(i),
-                        pmxUpdatedDate
-                                .equals(stgDate));
+                        dataQualityContext.workSubjectAreaDataObjectsFromPMX.get(i).getUPDATED()
+                                .equalsIgnoreCase(dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getUPDATED()));
             }
 
         });
@@ -309,6 +297,10 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
             Log.info("F_WWORK in SA: " + dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK());
 
             assertEquals(F_WWORK, dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK());
+
+            assertEquals("External reference is different",
+                    dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getPRODUCT_SUBJECT_AREA_ID(),
+                    dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getExternal_reference());
         });
 
     }
@@ -341,6 +333,8 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
             Log.info("F_WWORK in GD: " + dataQualityContext.workSubjectAreaDataObjectsFromGD.get(i).getF_WWORK());
 
             assertEquals(dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK(), dataQualityContext.workSubjectAreaDataObjectsFromGD.get(i).getF_WWORK());
+
+            assertEquals(dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getExternal_reference(), dataQualityContext.workSubjectAreaDataObjectsFromGD.get(i).getExternal_reference());
 
         });
 
