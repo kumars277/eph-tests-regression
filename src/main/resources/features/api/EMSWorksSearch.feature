@@ -5,7 +5,7 @@ Feature: Customer Search API: Works
 
   @API @test
   Scenario: search work by ID
-    Given We get 10 random search ids for works
+    Given We get 1 random search ids for works
     And We get the work search data from EPH GD
     Then the work details are retrieved and compared
 
@@ -71,3 +71,12 @@ Feature: Customer Search API: Works
   Scenario: search work by Person roles
     Given We get 1 random search ids for person roles
     Then the work response count is compared with the count in the DB for person ID
+
+  @API
+  Scenario Outline: Search E2E
+    Given We get id for work search <id>
+    And We get the work search data from EPH GD
+    Then the work details are retrieved and compared
+    Examples:
+      | id                        |
+      | EPR-W-TSTW01              |

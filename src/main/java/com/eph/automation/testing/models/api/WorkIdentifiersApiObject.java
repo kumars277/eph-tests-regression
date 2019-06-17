@@ -18,7 +18,7 @@ class WorkIdentifiersApiObject {
 
     public void compareWithDB(){
         getWorkIdentifierByID(this.identifier);
-        Assert.assertEquals(this.identifierType.get("identifierTypeCode"), this.DBworkIdentifier.get(0).getF_TYPE());
+        Assert.assertEquals(this.identifierType.get("code"), this.DBworkIdentifier.get(0).getF_TYPE());
     }
 
     public String getIdentifier() {

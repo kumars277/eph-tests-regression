@@ -20,6 +20,7 @@ import cucumber.api.java.en.When;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,7 @@ public class ApiWorksSearchSteps {
     private static List<String> manifestationIdentifiers_Ids;
     private WorkApiObject workApi_response;
     private static List<WorkDataObject> workIdentifiers;
+    private List<WorkDataObject> workDataObjectsFromEPHGD;
 
     @Given("^We get (.*) random search ids for works")
     public void getRandomWorkIds(String numberOfRecords) {
@@ -52,6 +54,7 @@ public class ApiWorksSearchSteps {
 
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
+        Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
     @Given("^We get (.*) random search ids for person roles")
@@ -62,6 +65,7 @@ public class ApiWorksSearchSteps {
 
         ids = randomPersonSearchIds.stream().map(m -> (BigDecimal) m.get("f_person")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
+        Assert.assertFalse("Verify That list with random person roles is not empty.", ids.isEmpty());
     }
 
     @And("^We get the work search data from EPH GD$")
@@ -73,18 +77,22 @@ public class ApiWorksSearchSteps {
         dataQualityContext.workDataObjectsFromEPHGD = DBManager
                 .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
         dataQualityContext.workDataObjectsFromEPHGD.sort(Comparator.comparing(WorkDataObject::getWORK_ID));
+
+        Assert.assertFalse("Verify that list with work objects from DB is not empty", dataQualityContext.workDataObjectsFromEPHGD.isEmpty());
     }
 
 
     @When("^the work details are retrieved and compared$")
     public void compareWorkSearchResultsWithDB() {
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
-        System.out.println("Missing entries:\n");
+
         for (int i = 0; i < bound; i++) {
             Assert.assertTrue("Verify that the searched work exists and is accessible trough the API", checkWorkExists(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID()));
 
             workApi_response = searchForWorkByIDResult(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-            compareWorkApiResponseWithDB(i);
+                getManifestationsByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                getEPHGDManifestationIdentifiersByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+            workApi_response.compareWithDB();
         }
     }
 
@@ -92,12 +100,14 @@ public class ApiWorksSearchSteps {
     public void compareWorkSearchByTitleResultsWithDB() {
         WorksMatchedApiObject returnedWorks = null;
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
-        System.out.println("Missing entries:\n");
+        
         for (int i = 0; i < bound; i++) {
             Assert.assertTrue("Verify that the searched work exists and is accessible trough the API", checkWorkExists(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID()));
             returnedWorks = searchForWorkByTitleResult(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TITLE());
-            returnedWorks.verifyWorkWithIdIsReturned(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+
+            Log.info(returnedWorks.toString());
             returnedWorks.verifyWorksAreReturned();
+            returnedWorks.verifyWorkWithIdIsReturned(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
         }
     }
 
@@ -107,12 +117,11 @@ public class ApiWorksSearchSteps {
 
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
         for (int i = 0; i < bound; i++) {
-
             returnedWorks = searchForWorkByPMCResult(dataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
 
+            Log.info(returnedWorks.toString());
             returnedWorks.verifyWorksAreReturned();
             returnedWorks.verifyWorksReturned(getNumberOfWorksByPMC(dataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC()));
-
         }
     }
 
@@ -152,7 +161,7 @@ public class ApiWorksSearchSteps {
         for (int i = 0; i < bound; i++) {
 
             returnedWorks = searchForWorkByPMGResult(getPMGcodeByPMC(dataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC()));
-
+            Log.info(returnedWorks.toString());
             returnedWorks.verifyWorksAreReturned();
             returnedWorks.verifyWorksReturned(getNumberOfWorksByPMG(getPMGcodeByPMC(dataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC())));
 
@@ -184,9 +193,9 @@ public class ApiWorksSearchSteps {
                 returnedWorks = searchForWorksByIdentifierResult(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
             } else if (identifierType.equals("WORK_MANIFESTATION_ID")){
                 getManifestationsByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-                returnedWorks = searchForWorksByIdentifierResult(dataQualityContext.manifestationDataObjectsFromEPHGD.get(i).getMANIFESTATION_ID());
+                returnedWorks = searchForWorksByIdentifierResult(dataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_ID());
             }
-            
+            Log.info(returnedWorks.toString());
             returnedWorks.verifyWorksAreReturned();
             returnedWorks.verifyWorkWithIdIsReturned(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
 
@@ -204,7 +213,7 @@ public class ApiWorksSearchSteps {
                 returnedWorks = searchForWorksBySearchOptionResult(workIdentifiers.get(i).getIDENTIFIER());
             } else if (identifierType.equals("WORK_MANIFESTATION_IDENTIFIER")){
                 List<Map<String, Object>> manifIdentifiers = getEPHGDManifestationIdentifiersByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-                returnedWorks = searchForWorksBySearchOptionResult(manifIdentifiers.get(i).get("identifier").toString());
+                returnedWorks = searchForWorksBySearchOptionResult(manifIdentifiers.get(0).get("identifier").toString());
             } else if (identifierType.equals("WORK_ID")){
                 returnedWorks = searchForWorksBySearchOptionResult(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
             } else if (identifierType.equals("WORK_MANIFESTATION_ID")){
@@ -217,7 +226,7 @@ public class ApiWorksSearchSteps {
             } else if (identifierType.equals("WORK_TITLE")){
                 returnedWorks = searchForWorksBySearchOptionResult(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TITLE());
             }
-
+            Log.info(returnedWorks.toString());
             returnedWorks.verifyWorksAreReturned();
             returnedWorks.verifyWorkWithIdIsReturned(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
         }
@@ -236,6 +245,7 @@ public class ApiWorksSearchSteps {
                 List<Map<String, Object>> manifIdentifiers = getEPHGDManifestationIdentifiersByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
                 returnedWorks = searchForWorksByIdentifierAndTypeResult(manifIdentifiers.get(i).get("identifier").toString(),manifIdentifiers.get(i).get("f_type").toString());
             }
+            Log.info(returnedWorks.toString());
             returnedWorks.verifyWorksAreReturned();
             returnedWorks.verifyWorkWithIdIsReturned(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
         }
@@ -248,29 +258,11 @@ public class ApiWorksSearchSteps {
         int bound = ids.size();
         for (int i = 0; i < bound; i++) {
             returnedWorks = searchForWorksByPersonIDResult(ids.get(i));
+            Log.info(returnedWorks.toString());
             returnedWorks.verifyWorksAreReturned();
             returnedWorks.verifyWorksReturned(getNumberOfWorksByPersonIDs(ids.get(i)));
         }
     }
-
-
-    public void compareWorkApiResponseWithDB(int DataObjectNumber){
-        Assert.assertEquals(workApi_response.getId(), dataQualityContext.workDataObjectsFromEPHGD.get(DataObjectNumber).getWORK_ID());
-        Assert.assertEquals(workApi_response.getTitle(), dataQualityContext.workDataObjectsFromEPHGD.get(DataObjectNumber).getWORK_TITLE());
-        Assert.assertTrue(workApi_response.getElectronicRightsInd().contains(
-                dataQualityContext.workDataObjectsFromEPHGD.get(DataObjectNumber).getELECTRONIC_RIGHTS_IND()));
-//        Assert.assertTrue(Integer.valueOf(workApi_response.getEditionNumber()).equals(dataQualityContext.workDataObjectsFromEPHGD.get(DataObjectNumber).getEDITION_NUMBER()));
-//        Assert.assertTrue(Integer.valueOf(workApi_response.getVolume()).equals(dataQualityContext.workDataObjectsFromEPHGD.get(DataObjectNumber).getVOLUME()));
-//        Assert.assertTrue(Integer.valueOf(workApi_response.getCopyrightYear()).equals(dataQualityContext.workDataObjectsFromEPHGD.get(DataObjectNumber).getCOPYRIGHT_YEAR()));
-
-        Assert.assertEquals(workApi_response.getType().get("code"),dataQualityContext.workDataObjectsFromEPHGD.get(DataObjectNumber).getF_TYPE());
-        Assert.assertEquals(workApi_response.getStatus().get("code"),dataQualityContext.workDataObjectsFromEPHGD.get(DataObjectNumber).getWORK_STATUS());
-        Assert.assertEquals(workApi_response.getImprint().get("code"),dataQualityContext.workDataObjectsFromEPHGD.get(DataObjectNumber).getIMPRINT());
-        Assert.assertEquals(workApi_response.getPmc().getCode(),dataQualityContext.workDataObjectsFromEPHGD.get(DataObjectNumber).getPMC());
-        // TODO: PMG compare
-//        Assert.assertEquals(workApi_response.getPmc().getPmg().get("pmgCode"),dataQualityContext.workDataObjectsFromEPHGD.get(DataObjectNumber).getPMG());
-    }
-
 
     public List<String> getManifestationIdsForWorkID(String workID) {
         Log.info("Get manifestationApiObject ids ..");
@@ -281,17 +273,19 @@ public class ApiWorksSearchSteps {
         List<Map<?, ?>> manifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         List<String> ids = manifestationIds.stream().map(m -> (String) m.get("manifestation_id")).map(String::valueOf).collect(Collectors.toList());
         Log.info("ids : " + ids);
+        Assert.assertFalse("Verify that manifestation ids can be successfully extracted from db by work ids", ids.isEmpty());
 
         return ids;
     }
 
     public void getManifestationsByWorkID(String workID) {
         Log.info("And get the manifestations in EPH GD ..");
-        sql = String.format(APIDataSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_GD_BY_ID, Joiner.on("','").join(getManifestationIdsForWorkID(workID)));
+        sql = String.format(APIDataSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_GD_BY_WORKID, workID);
         Log.info(sql);
 
         manifestationDataObjectsFromEPHGD = DBManager
                 .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
+        Assert.assertFalse("Verify that manifestaion by work id is extracted successfully from the DB",manifestationDataObjectsFromEPHGD.isEmpty());
     }
 
     public List getEPHGDManifestationIdentifiersByWorkID(String workID) {
@@ -308,6 +302,15 @@ public class ApiWorksSearchSteps {
         workIdentifiers = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
     }
 
+    @Given("^We get id for work search (.*)$")
+    public void getWorkDataFromEPHGD(String workID) {
+        sql = String.format(APIDataSQL.SELECT_WORK_BY_ID_FOR_SEARCH, workID);
+        Log.info(sql);
+        List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
+        ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("Selected random work ids  : " + ids);
+        Assert.assertFalse("Verify that list with work ids is not empty",ids.isEmpty());
+    }
 
 }
