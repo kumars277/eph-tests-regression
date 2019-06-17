@@ -8,7 +8,6 @@ import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.AccountableProductDataObject;
 import com.eph.automation.testing.services.db.sql.AccountableProductSQL;
 import com.eph.automation.testing.services.db.sql.WorkCountSQL;
-import com.eph.automation.testing.services.db.sql.WorkExtractSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -25,7 +24,6 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by Bistra Drazheva on 03/04/2019
@@ -167,7 +165,7 @@ public class AccountableProductDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+     //   numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         Log.info("Get the product work ids for given random ids from Staging ..");
@@ -227,16 +225,21 @@ public class AccountableProductDataQualityCheckSteps {
     public void getAccountableProductsDataEPHSA() {
         Log.info("Get the accountable product ids from the lookup table  ..");
         idsSourceRef = new ArrayList<>(ids);
-        IntStream.range(0, idsSourceRef.size()).forEach(i -> idsSourceRef.set(i, idsSourceRef.get(i).concat(dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD())));
+     //   IntStream.range(0, idsSourceRef.size()).forEach(i -> idsSourceRef.set(i, idsSourceRef.get(i).concat(dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD())));
 
-        sql = String.format(AccountableProductSQL.GET_NUMERIC_ID_FROM_LOOKUP_AP, Joiner.on("','").join(idsSourceRef));
+        IntStream.range(0, idsSourceRef.size()).forEach(i -> idsSourceRef.set(i, dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_ID().concat(dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD())));
+
+      /*  sql = String.format(AccountableProductSQL.GET_NUMERIC_ID_FROM_LOOKUP_AP, Joiner.on("','").join(idsSourceRef));
         Log.info(sql);
         List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         idsSA = lookupResults.stream().map(m -> (BigDecimal) m.get("NUMERIC_ID")).map(String::valueOf).collect(Collectors.toList());
-        Log.info("numeric ids :" + idsSA.toString());
+        Log.info("numeric ids :" + idsSA.toString());*/
+
+
+        Log.info("External Reference  :" + idsSourceRef.toString());
 
         Log.info("Get the accountable product data from EPH SA  ..");
-        sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_SA, Joiner.on("','").join(idsSA));
+        sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_SA, Joiner.on("','").join(idsSourceRef));
         Log.info(sql);
 
         dataQualityContext.accountableProductDataObjectsFromSA = DBManager
@@ -280,6 +283,7 @@ public class AccountableProductDataQualityCheckSteps {
             //ACC_PROD_NAME
             Log.info("ACC_PROD_NAME in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_NAME());
 
+
             if(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_GROUP_TYPE_NAME().equals("Journals"))
                 assertEquals(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_WORK_TITLE(),dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_NAME());
             else
@@ -317,7 +321,7 @@ public class AccountableProductDataQualityCheckSteps {
 
 
             sql = String.format(AccountableProductSQL.SELЕCT_UPDATED_VALUE, dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_WORK_ID());
-            List<Map<String, Object>> updatedNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            List<Map<String, Object>> updatedNumber = DBManager.getDBResultMap(sql, Constants.PMX_URL);
             String updated = (String) updatedNumber.get(0).get("UPDATED");
 
             assertEquals(updated,dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getUPDATED());
@@ -329,14 +333,22 @@ public class AccountableProductDataQualityCheckSteps {
     public void compareAccountableProductsDataSTGAndDQ() {
         Log.info("And the accountable product data in STG and DQ ..");
 
-        IntStream.range(0, dataQualityContext.accountableProductDataObjectsFromSTG.size()).forEach(i -> {
-            Log.info("Get the dq data  ..");
-            String pmxSourceRef = dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_ID().concat(dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD());
-            sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_DQ, pmxSourceRef);
-            Log.info(sql);
+        dataQualityContext.accountableProductDataObjectsFromSTG.sort(Comparator.comparing(AccountableProductDataObject::getPRODUCT_WORK_ID));
+        dataQualityContext.accountableProductDataObjectsFromSTGDQ.sort(Comparator.comparing(AccountableProductDataObject::getPRODUCT_WORK_ID));
 
-            dataQualityContext.accountableProductDataObjectsFromSTGDQ = DBManager
-                    .getDBResultAsBeanList(sql, AccountableProductDataObject.class, Constants.EPH_URL);
+        IntStream.range(0, dataQualityContext.accountableProductDataObjectsFromSTG.size()).forEach(i -> {
+
+         //   Log.info("Get the dq data  ..");
+        //    String pmxSourceRef = dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_ID().concat(dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD());
+
+         //   sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_DQ, Joiner.on("','").join(idsPMX));
+
+           // sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_DQ, pmxSourceRef);
+
+        //    Log.info(sql);
+
+          //  dataQualityContext.accountableProductDataObjectsFromSTGDQ = DBManager
+           //         .getDBResultAsBeanList(sql, AccountableProductDataObject.class, Constants.EPH_URL);
 
             //ACC_PROD_ID
             Log.info("ACC_PROD_ID in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_ID());
@@ -361,7 +373,7 @@ public class AccountableProductDataQualityCheckSteps {
             //DQ_ERR
             Log.info("DQ_ERR in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getDQ_ERR());
 
-            assertEquals('N',dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getPARENT_ACC_PROD());
+            assertEquals(Character.toString('N'),dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getDQ_ERR());
 
         });
     }
