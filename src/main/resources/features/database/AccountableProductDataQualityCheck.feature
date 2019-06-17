@@ -39,10 +39,11 @@ Feature: Entity - ACCOUNTABLE PRODUCT - Count And Data Mapping Check - Validate 
   Scenario Outline: Validate accountable product data is transferred from EPH STG to EPH DQ
     Given We get <countOfRandomIds> random ids of accountable product
     When We get the accountable product data from EPH STG
-    Then Compare the accountable product data in EPH STG and EPH DQ
+    Then We get the accountable product data from EPH DQ
+    And  Compare the accountable product data in EPH STG and EPH DQ
     Examples:
       | countOfRandomIds |
-      | 10               |
+      | 10             |
 
 
 
