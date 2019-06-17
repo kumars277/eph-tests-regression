@@ -239,7 +239,7 @@ public class PersonDataQualityCheckSteps {
             Log.info("Expecting UPDATED in PMX and EPH Staging are consistent for ");
 
 
-            try {
+         try {
                 Date pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(dataQualityContext.personDataObjectsFromPMX.get(i).getUPDATED());
                 Date ephUpdatedDate = new SimpleDateFormat("dd-MMM-yy hh.mm.ss.SSSSSS aaa").parse(dataQualityContext.personDataObjectsFromEPHSTG.get(i).getUPDATED());
 
@@ -255,7 +255,7 @@ public class PersonDataQualityCheckSteps {
 
     @And("^Compare person records in EPH STG and EPH DQ$")
     public void comparePersonRecordsInEPHSTGAndEPHDQ() {
-        Log.info("And compare the person records in EPH STG and PEH DQ ..");//sort data in the lists
+        Log.info("And compare the person records in EPH STG and EPH DQ ..");//sort data in the lists
         dataQualityContext.personDataObjectsFromEPHSTG.sort(Comparator.comparing(PersonDataObject::getPERSON_SOURCE_REF));
         dataQualityContext.personDataObjectsFromEPHDQ.sort(Comparator.comparing(PersonDataObject::getPERSON_SOURCE_REF));
 

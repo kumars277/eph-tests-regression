@@ -83,7 +83,7 @@ public class PersonWorkRoleDataSQL {
             "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
             "from semarchy_eph_mdm.gd_wwork g full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq s on g.external_reference = s.pmx_source_reference::varchar) word\n" +
             "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_WORK_SOURCE_REF\"::varchar = word.consol\n" +
-            "join (select distinct person_id, external_reference from sa_person) p \n" +
+            "join (select distinct person_id, external_reference from semarchy_eph_mdm.sa_person) p \n" +
             "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_PARTY_SOURCE_REF\"::varchar = p.external_reference\n" +
             "left join\n" +
             "    (select distinct external_reference, work_person_role_id from semarchy_eph_mdm.sa_work_person_role) a\n" +
@@ -95,6 +95,16 @@ public class PersonWorkRoleDataSQL {
 
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSA = "select count(*) as count from semarchy_eph_mdm.sa_work_person_role sa\n" +
+            "where f_event =  (\n" +
+            "select max (f_event) from \n" +
+            "semarchy_eph_mdm.sa_work_person_role   \n" +
+            "join \n" +
+            "semarchy_eph_mdm.sa_event on f_event = event_id \n" +
+            "where semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )";
+
+    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSATOGD = "select count(*) as count from semarchy_eph_mdm.sa_work_person_role sa\n" +
             "where effective_end_date is null and f_event =  (\n" +
             "select max (f_event) from \n" +
             "semarchy_eph_mdm.sa_work_person_role   \n" +
@@ -192,7 +202,7 @@ public class PersonWorkRoleDataSQL {
             "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
             "from semarchy_eph_mdm.gd_wwork g full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq s on g.external_reference = s.pmx_source_reference::varchar) word\n" +
             "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_WORK_SOURCE_REF\"::varchar = word.consol\n" +
-            "join (select distinct person_id, external_reference from sa_person) p \n" +
+            "join (select distinct person_id, external_reference from semarchy_eph_mdm.sa_person) p \n" +
             "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_PARTY_SOURCE_REF\"::varchar = p.external_reference\n" +
             "left join\n" +
             "    (select distinct external_reference, work_person_role_id from semarchy_eph_mdm.sa_work_person_role) a\n" +

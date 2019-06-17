@@ -37,7 +37,12 @@ public class PersonDataSQL {
             "and sa.workflow_id = 'talend'\n" +
             "and sa.f_workflow_source = 'PMX' )";
 
-    public static String GET_COUNT_PERSONS_EPHGD = "select count(*) as count from semarchy_eph_mdm.gd_person";
+    public static String GET_COUNT_PERSONS_EPHGD = "select count(*) from semarchy_eph_mdm.gd_person where b_batchid = (select max (b_batchid) from \n" +
+            "          semarchy_eph_mdm.gd_event\n" +
+            "            where  f_event_type = 'PMX'\n" +
+            "            and workflow_id = 'talend'\n" +
+            "            AND f_event_type = 'PMX'\n" +
+            "            and f_workflow_source = 'PMX' ) ";
 
 
     public static String GET_DATA_PERSONS_PMX = "SELECT DISTINCT\n" +

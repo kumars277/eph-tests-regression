@@ -98,7 +98,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
     @When("^Get the count of records for persons work role in EPH SA$")
     public void getCountPersonsProductRoleEPHSA() {
-        Log.info("When We get the count of persons records in PMX STG ..");
+        Log.info("When We get the count of persons records in EPH SA..");
         sql = PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHSA;
         Log.info(sql);
         List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -106,7 +106,15 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info("Count of persons work role in EPH SA is: " + countPersonsWorkRoleEPHSA);
     }
 
-
+    @When("^Get the count of records for persons work role in EPH SA going to GD$")
+    public void getCountPersonsProductRoleEPHSAGoingToGD() {
+        Log.info("When We get the count of persons records in EPH SA ..");
+        sql = PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHSATOGD;
+        Log.info(sql);
+        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countPersonsWorkRoleEPHSA = ((Long) personsNumber.get(0).get("count")).intValue();
+        Log.info("Count of persons work role in EPH SA is: " + countPersonsWorkRoleEPHSA);
+    }
 
     @Given("^Get the count of records for persons work role in EPH AE$")
     public void getCountPersonsProductRoleEPHAE() {
