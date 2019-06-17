@@ -73,8 +73,8 @@ public class SubjectAreaDataSQL {
             "from semarchy_eph_mdm.sa_subject_area\n" +
             "where SUBJECT_AREA_ID in (\n" +
             "select mp.numeric_id from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid mp\n" +
-            "left join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_subject_area on mp.source_ref = concat('SUBJ_AREA-',\"PMX_SOURCE_REF\") \n" +
-            "where \"PMX_SOURCE_REF\" in ('%s')\n" +
+            "--left join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_subject_area on mp.source_ref = concat('SUBJ_AREA-',\"PMX_SOURCE_REF\") \n" +
+            "where \"external_reference\" in ('%s')\n" +
             ")";
 
 
@@ -88,8 +88,8 @@ public class SubjectAreaDataSQL {
             "from semarchy_eph_mdm.gd_subject_area\n" +
             "where SUBJECT_AREA_ID in (\n" +
             "select mp.numeric_id from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid mp\n" +
-            "left join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_subject_area on mp.source_ref = concat('SUBJ_AREA-',\"PMX_SOURCE_REF\") \n" +
-            "where \"PMX_SOURCE_REF\" in ('%s')\n" +
+            "--left join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_subject_area on mp.source_ref = concat('SUBJ_AREA-',\"PMX_SOURCE_REF\") \n" +
+            "where \"external_reference\" in ('%s')\n" +
             ")";
 
     public static String SELECT_RANDOM_SUBJECT_DATA = "select \n" +
@@ -102,6 +102,6 @@ public class SubjectAreaDataSQL {
             "limit '%s'";
 
 
-    public static String GET_F_PARENT_SUBJECT_AREA = "select numeric_id as F_PARENT_SUBJECT_AREA from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid where source_ref = concat('SUBJ_AREA-', '%s')";
+    public static String GET_F_PARENT_SUBJECT_AREA = "select numeric_id as F_PARENT_SUBJECT_AREA from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid where source_ref = '%s'";
 
 }
