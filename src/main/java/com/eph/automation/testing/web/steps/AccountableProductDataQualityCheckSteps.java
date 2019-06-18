@@ -165,7 +165,7 @@ public class AccountableProductDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-     //   numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         Log.info("Get the product work ids for given random ids from Staging ..");
@@ -213,7 +213,7 @@ public class AccountableProductDataQualityCheckSteps {
     @Then("^We get the accountable product data from EPH DQ$")
     public void getAccountableProductsDataEPHDQ() {
         Log.info("Get the accountable product data from EPH STG  ..");
-        sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_DQ, Joiner.on("','").join(idsPMX));
+        sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_DQ, Joiner.on("','").join(ids));
         Log.info(sql);
 
         dataQualityContext.accountableProductDataObjectsFromSTGDQ = DBManager

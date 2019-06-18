@@ -91,7 +91,12 @@ public class PersonWorkRoleDataSQL {
             "where perd.dq_err != 'Y' and word.dq_err != 'Y'";
 
 
-    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHAE = "select count(distinct work_person_role_id) as count from semarchy_eph_mdm.ae_work_person_role\n";
+    public static String GET_COUNT_PERSONS_WORK_ROLE_EPHAE = "select count(distinct work_person_role_id) as count from semarchy_eph_mdm.ae_work_person_role where b_batchid = (select max (b_batchid) from \n" +
+            "          semarchy_eph_mdm.gd_event\n" +
+            "            where  f_event_type = 'PMX'\n" +
+            "            and workflow_id = 'talend'\n" +
+            "            AND f_event_type = 'PMX'\n" +
+            "            and f_workflow_source = 'PMX' ) \n";
 
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSA = "select count(*) as count from semarchy_eph_mdm.sa_work_person_role sa\n" +
