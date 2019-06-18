@@ -64,7 +64,3 @@ Feature: Entity - PERSON PRODUCT ROLE - Validate data between PMX and EPH - Tale
 
 
 
-  @Regression
-  Scenario: Verify that existing product person role records are end-dated properly
-    Given Get person product role ids from STG and GD for end dated records in GD
-    Then  Check the person product role records are updated
