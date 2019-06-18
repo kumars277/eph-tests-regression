@@ -44,7 +44,7 @@ public class ProductDataMappingCheck {
     public void getRandomProductManifestationIds(String numberOfRecords, String type) {
         Log.info("Get random ids ..");
         //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         switch (type) {
@@ -74,7 +74,7 @@ public class ProductDataMappingCheck {
     public void getRandomProductManifestationIdsForJournals(String numberOfRecords, String type, String open_access, String author_charges) {
         Log.info("In Given method get random product manifestation ids for journals");
         //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("Number of random records = " + numberOfRecords);
 
 
@@ -660,7 +660,7 @@ public class ProductDataMappingCheck {
                 assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
 
             } else if (pmxSourceReference.contains("OAA")) {
-                suffix = " Open Access";
+                suffix = " Article Publication Charge";
                 String name = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_TITLE();
                 if (name.contains("(Print)")) {
                     assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
