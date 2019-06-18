@@ -340,7 +340,7 @@ public class WorkExtractSQL {
             "where \n" +
             "stg.\"%s\" is not null  and \n" +
             "   stg.\"PRODUCT_MANIFESTATION_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n" +
-            "   and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('%s','YYYYMMDDHH24MI')";
+            "   and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
 
     public static final String COUNT_OF_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation_identifier\n" +
             "where f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier\n" +

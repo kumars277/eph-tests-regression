@@ -120,7 +120,7 @@ public class PersonWorkRoleDataSQL {
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )";
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHGD = "select count(*) as count from semarchy_eph_mdm.gd_work_person_role \n" +
-            "where b_batchid = (select max (b_batchid) from \n" +
+            "where effective_end_date is null and b_batchid = (select max (b_batchid) from \n" +
             "          semarchy_eph_mdm.gd_event\n" +
             "            where  f_event_type = 'PMX'\n" +
             "            and workflow_id = 'talend'\n" +

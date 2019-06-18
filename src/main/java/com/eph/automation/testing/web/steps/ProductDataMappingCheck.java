@@ -660,7 +660,7 @@ public class ProductDataMappingCheck {
                 assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
 
             } else if (pmxSourceReference.contains("OAA")) {
-                suffix = " Open Access";
+                suffix = " Article Publication Charge";
                 String name = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_TITLE();
                 if (name.contains("(Print)")) {
                     assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
