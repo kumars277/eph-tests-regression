@@ -114,6 +114,7 @@ public class NotificationNegativeTestSteps {
         }
 
         sql = NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1", "EPR-W-TSTW10:RBK");
+        Log.info(sql);
         notificationCountContext.getWriteAttemptsAfterNegWork =
                 DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
         Log.info("The work attempts after update are: " + notificationCountContext.getWriteAttemptsAfterNegWork.get(0).attempts);
@@ -122,6 +123,7 @@ public class NotificationNegativeTestSteps {
                 > notificationCountContext.getWriteAttemptsBeforeNegWork.get(0).attempts);
 
         sql = NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1", "EPR-TSTP10:OOA");
+        Log.info(sql);
         notificationCountContext.getWriteAttemptsAfterNegProduct1 =
                 DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
         if (notificationCountContext.getWriteAttemptsAfterNegProduct1.isEmpty()) {
@@ -131,8 +133,8 @@ public class NotificationNegativeTestSteps {
         }
         Log.info("The product 1 attempts after update are: " + attemptsAfter);
 
-        Assert.assertEquals("The product was updated", notificationCountContext.getWriteAttemptsBeforeNegProduct1.get(0).attempts,
-                notificationCountContext.getWriteAttemptsBeforeNegProduct1.get(0).attempts);
+        Assert.assertEquals("The product was updated", attemptsBefore,
+                attemptsAfter);
 
         sql = NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1", "EPR-TSTP20:OOA");
         notificationCountContext.getWriteAttemptsAfterNegProduct2 =
@@ -144,8 +146,8 @@ public class NotificationNegativeTestSteps {
         }
         Log.info("The product 1 attempts after update are: " + attemptsAfter);
 
-        Assert.assertEquals("The product was updated", notificationCountContext.getWriteAttemptsBeforeNegProduct2.get(0).attempts,
-                notificationCountContext.getWriteAttemptsBeforeNegProduct2.get(0).attempts);
+        Assert.assertEquals("The product was updated", attemptsBefore,
+                attemptsAfter);
     }
 
 
@@ -352,8 +354,8 @@ public class NotificationNegativeTestSteps {
         }
         Log.info("The product 1 attempts after update are: " + attemptsAfter);
 
-        Assert.assertEquals("The product was updated", notificationCountContext.getWriteAttemptsBeforeNegProduct1.get(0).attempts,
-                notificationCountContext.getWriteAttemptsBeforeNegProduct1.get(0).attempts);
+        Assert.assertEquals("The product was updated", attemptsBefore,
+                attemptsAfter);
 
     }
 }
