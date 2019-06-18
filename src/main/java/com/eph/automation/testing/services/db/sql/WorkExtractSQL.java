@@ -147,7 +147,12 @@ public class WorkExtractSQL {
                     "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
                     "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')";
 
-    public static final String COUNT_MANIFESTATIONS_IN_GD_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.gd_manifestation";
+    public static final String COUNT_MANIFESTATIONS_IN_GD_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.gd_manifestation where b_batchid = (select max (b_batchid) from \n" +
+            "          semarchy_eph_mdm.gd_event\n" +
+            "            where  f_event_type = 'PMX'\n" +
+            "            and workflow_id = 'talend'\n" +
+            "            AND f_event_type = 'PMX'\n" +
+            "            and f_workflow_source = 'PMX' ) ";
 
     public static final String SELECT_MANIFESTATIONS_DATA_IN_PMX = "SELECT\n" +
             "\t M.PRODUCT_MANIFESTATION_ID AS MANIFESTATION_ID -- Product Manifestation Reference,  not needed in EPH but extracted for record linking purposes\n" +
@@ -352,7 +357,12 @@ public class WorkExtractSQL {
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')";
 
-    public static final String COUNT_OF_RECORDS_IN_EPH_GD_MANIFESTATION_TABLE = "select count(*) as count from semarchy_eph_mdm.gd_manifestation_identifier where f_type = '%s' and effective_end_date is null";
+    public static final String COUNT_OF_RECORDS_IN_EPH_GD_MANIFESTATION_TABLE = "select count(*) as count from semarchy_eph_mdm.gd_manifestation_identifier where f_type = '%s' and effective_end_date is null and b_batchid = (select max (b_batchid) from \n" +
+            "          semarchy_eph_mdm.gd_event\n" +
+            "            where  f_event_type = 'PMX'\n" +
+            "            and workflow_id = 'talend'\n" +
+            "            AND f_event_type = 'PMX'\n" +
+            "            and f_workflow_source = 'PMX' ) ";
 
     public static final String SELECT_RECORDS_SA_MANIFESTATION_IDENTIFIER = "SELECT sa.b_loadid as b_loadid,\n" +
             "f_event as f_event,\n" +

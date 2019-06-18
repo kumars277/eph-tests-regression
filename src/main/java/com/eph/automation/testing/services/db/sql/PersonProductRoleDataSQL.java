@@ -99,14 +99,18 @@ public class PersonProductRoleDataSQL {
             "    case when pr.work_type = 'JOURNAL' and wp.\"F_ROLE\" = 'PU' then true\n" +
             "         when pr.work_type = 'BOOK' and wp.\"F_ROLE\" = 'AE' then true\n" +
             "         else false end = true\n" +
-            "         and pr.pmx_source_reference in ('%s')";
+            "         and concat(pr.pmx_source_reference,'-',wp.\"WORK_PERSON_ROLE_SOURCE_REF\",'-PO')  in ('%s')";
 
     public static String GET_DATA_PERSONS_PRODUCT_ROLE_EPHSTG = "select \n" +
             "PROD_PER_ROLE_SOURCE_REF as PROD_PER_ROLE_SOURCE_REF,\n" +
             "PRODUCT_SOURCE_REF as PRODUCT_SOURCE_REF,\n" +
             "PERSON_SOURCE_REF as PERSON_SOURCE_REF,\n" +
             "F_ROLE as F_ROLE,\n" +
-            "p.PERSON_ID as F_PERSON\n" +
+            "p.PERSON_ID as F_PERSON,\n" +
+            "WORK_ROLE as WORK_ROLE,\n" +
+            "START_DATE as START_DATE,\n" +
+            "END_DATE as END_DATE,\n" +
+            "UPDATED as UPDATED\n" +
             "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_person_role\n" +
             "join  (select s.pmx_source_reference as stage, g.external_reference as gold,\n" +
             "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +

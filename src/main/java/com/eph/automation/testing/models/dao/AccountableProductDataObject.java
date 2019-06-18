@@ -17,6 +17,8 @@ public class AccountableProductDataObject {
     private String WORK_ELS_PROD_ID;
     private String UPDATED;
     private String DQ_ERR;
+    private String PMX_SOURCE_REFERENCE;
+    private String EXTERNAL_REFERENCE;
 
     //SA
     private String B_LOADID;
@@ -27,6 +29,21 @@ public class AccountableProductDataObject {
     private String GL_PRODUCT_SEGMENT_NAME;
     private String F_GL_PRODUCT_SEGMENT_PARENT;
 
+    public String getEXTERNAL_REFERENCE() {
+        return EXTERNAL_REFERENCE;
+    }
+
+    public void setEXTERNAL_REFERENCE(String EXTERNAL_REFERENCE) {
+        this.EXTERNAL_REFERENCE = EXTERNAL_REFERENCE;
+    }
+
+    public String getPMX_SOURCE_REFERENCE() {
+        return PMX_SOURCE_REFERENCE;
+    }
+
+    public void setPMX_SOURCE_REFERENCE(String PMX_SOURCE_REFERENCE) {
+        this.PMX_SOURCE_REFERENCE = PMX_SOURCE_REFERENCE;
+    }
 
     public String getDQ_ERR() {
         return DQ_ERR;

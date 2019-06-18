@@ -177,12 +177,12 @@ public class AccountableProductDataQualityCheckSteps {
         idsPMX = productWorkIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info(idsPMX.toString());
 
-        Log.info("Get the ids from stg ...");
-        sql = String.format(AccountableProductSQL.SELECT_IDS_STG, Joiner.on("','").join(idsPMX));
-        Log.info(sql);
+//        Log.info("Get the ids from stg ...");
+//        sql = String.format(AccountableProductSQL.SELECT_IDS_STG, Joiner.on("','").join(idsPMX));
+//        Log.info(sql);
 
-        List<Map<?, ?>> randomIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        ids = randomIds.stream().map(m -> (String) m.get("ACC_PROD_ID")).map(String::valueOf).collect(Collectors.toList());
+//        List<Map<?, ?>> randomIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        ids = productWorkIds.stream().map(m -> m.get("PMX_SOURCE_REFERENCE")).map(String::valueOf).collect(Collectors.toList());
         Log.info(ids.toString());
 
     }
@@ -223,23 +223,8 @@ public class AccountableProductDataQualityCheckSteps {
 
     @Then("^We get the accountable product data from EPH SA$")
     public void getAccountableProductsDataEPHSA() {
-        Log.info("Get the accountable product ids from the lookup table  ..");
-        idsSourceRef = new ArrayList<>(ids);
-     //   IntStream.range(0, idsSourceRef.size()).forEach(i -> idsSourceRef.set(i, idsSourceRef.get(i).concat(dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD())));
-
-        IntStream.range(0, idsSourceRef.size()).forEach(i -> idsSourceRef.set(i, dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_ID().concat(dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD())));
-
-      /*  sql = String.format(AccountableProductSQL.GET_NUMERIC_ID_FROM_LOOKUP_AP, Joiner.on("','").join(idsSourceRef));
-        Log.info(sql);
-        List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        idsSA = lookupResults.stream().map(m -> (BigDecimal) m.get("NUMERIC_ID")).map(String::valueOf).collect(Collectors.toList());
-        Log.info("numeric ids :" + idsSA.toString());*/
-
-
-        Log.info("External Reference  :" + idsSourceRef.toString());
-
         Log.info("Get the accountable product data from EPH SA  ..");
-        sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_SA, Joiner.on("','").join(idsSourceRef));
+        sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_SA, Joiner.on("','").join(ids));
         Log.info(sql);
 
         dataQualityContext.accountableProductDataObjectsFromSA = DBManager
@@ -248,8 +233,8 @@ public class AccountableProductDataQualityCheckSteps {
 
     @Then("^We get the accountable product data from EPH GD$")
     public void getAccountableProductsDataEPHGD() {
-        Log.info("Get the accountable product data from EPH SA  ..");
-        sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_GD, Joiner.on("','").join(idsSA));
+        Log.info("Get the accountable product data from EPH GD  ..");
+        sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_GD, Joiner.on("','").join(ids));
         Log.info(sql);
 
         dataQualityContext.accountableProductDataObjectsFromGD = DBManager
@@ -382,35 +367,35 @@ public class AccountableProductDataQualityCheckSteps {
     @And("^Compare the accountable product data in EPH DQ and EPH SA$")
     public void compareAccountableProductsDataDQAndSA() {
         Log.info("And the accountable product data in DQ and SA ..");
-        dataQualityContext.accountableProductDataObjectsFromSTGDQ.sort(Comparator.comparing(AccountableProductDataObject::getACCOUNTABLE_PRODUCT_ID));
-        dataQualityContext.accountableProductDataObjectsFromSA.sort(Comparator.comparing(AccountableProductDataObject::getACCOUNTABLE_PRODUCT_ID));
+        dataQualityContext.accountableProductDataObjectsFromSTGDQ.sort(Comparator.comparing(AccountableProductDataObject::getPMX_SOURCE_REFERENCE));
+        dataQualityContext.accountableProductDataObjectsFromSA.sort(Comparator.comparing(AccountableProductDataObject::getEXTERNAL_REFERENCE));
 
 
         IntStream.range(0, dataQualityContext.accountableProductDataObjectsFromSTGDQ.size()).forEach(i -> {
 
 
             //B_CLASSNAME
-            Log.info("B_CLASSNAME in EPH: " + dataQualityContext.accountableProductDataObjectsFromSA.get(0).getB_CLASSNAME());
+            Log.info("B_CLASSNAME in EPH: " + dataQualityContext.accountableProductDataObjectsFromSA.get(i).getB_CLASSNAME());
 
-            assertEquals("AccountableProduct",dataQualityContext.accountableProductDataObjectsFromSA.get(0).getB_CLASSNAME());
+            assertEquals("AccountableProduct",dataQualityContext.accountableProductDataObjectsFromSA.get(i).getB_CLASSNAME());
 
 
             //GL_PRODUCT_SEGMENT_CODE
-            Log.info("GL_PRODUCT_SEGMENT_CODE in EPH SА: " + dataQualityContext.accountableProductDataObjectsFromSA.get(0).getGL_PRODUCT_SEGMENT_CODE());
+            Log.info("GL_PRODUCT_SEGMENT_CODE in EPH SА: " + dataQualityContext.accountableProductDataObjectsFromSA.get(i).getGL_PRODUCT_SEGMENT_CODE());
 
-                assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(0).getGL_PRODUCT_SEGMENT_CODE(),dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getACC_PROD_ID());
+                assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(i).getGL_PRODUCT_SEGMENT_CODE(),dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getACC_PROD_ID());
 
 
             //GL_PRODUCT_SEGMENT_NAME
-            Log.info("GL_PRODUCT_SEGMENT_NAME in EPH SA: " + dataQualityContext.accountableProductDataObjectsFromSA.get(0).getGL_PRODUCT_SEGMENT_NAME());
+            Log.info("GL_PRODUCT_SEGMENT_NAME in EPH SA: " + dataQualityContext.accountableProductDataObjectsFromSA.get(i).getGL_PRODUCT_SEGMENT_NAME());
 
-                assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(0).getGL_PRODUCT_SEGMENT_NAME(),dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getACC_PROD_NAME());
+                assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(i).getGL_PRODUCT_SEGMENT_NAME(),dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getACC_PROD_NAME());
 
 
             //F_GL_PRODUCT_SEGMENT_PARENT
-            Log.info("F_GL_PRODUCT_SEGMENT_PARENT in EPH SA: " + dataQualityContext.accountableProductDataObjectsFromSA.get(0).getF_GL_PRODUCT_SEGMENT_PARENT());
+            Log.info("F_GL_PRODUCT_SEGMENT_PARENT in EPH SA: " + dataQualityContext.accountableProductDataObjectsFromSA.get(i).getF_GL_PRODUCT_SEGMENT_PARENT());
 
-                assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(0).getF_GL_PRODUCT_SEGMENT_PARENT(),dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getPARENT_ACC_PROD());
+                assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(i).getF_GL_PRODUCT_SEGMENT_PARENT(),dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getPARENT_ACC_PROD());
 
         });
     }
