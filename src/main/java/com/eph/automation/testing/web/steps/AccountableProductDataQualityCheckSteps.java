@@ -165,27 +165,30 @@ public class AccountableProductDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         Log.info("Get the product work ids for given random ids from Staging ..");
 
-        sql = String.format(AccountableProductSQL.GET_RANDOM_WORK_IDS_FROM_STG, numberOfRecords);
+        sql = String.format(AccountableProductSQL.GET_RANDOM_WORK_IDS_FROM_GD, numberOfRecords);
+        Log.info(sql);
+
+
+        List<Map<?, ?>> pmxSourceRef = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        ids = pmxSourceRef.stream().map(m -> m.get("PMX_SOURCE_REFERENCE")).map(String::valueOf).collect(Collectors.toList());
+        Log.info(ids.toString());
+
+        Log.info("Get the product work ids from stg ...");
+        sql = String.format(AccountableProductSQL.SELECT_IDS_STG, Joiner.on("','").join(ids));
         Log.info(sql);
 
         List<Map<?, ?>> productWorkIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         idsPMX = productWorkIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info(idsPMX.toString());
 
-//        Log.info("Get the ids from stg ...");
-//        sql = String.format(AccountableProductSQL.SELECT_IDS_STG, Joiner.on("','").join(idsPMX));
-//        Log.info(sql);
-
-//        List<Map<?, ?>> randomIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        ids = productWorkIds.stream().map(m -> m.get("PMX_SOURCE_REFERENCE")).map(String::valueOf).collect(Collectors.toList());
-        Log.info(ids.toString());
-
     }
+
+
 
 
     @When("^We get the accountable product data from PMX$")
@@ -202,7 +205,7 @@ public class AccountableProductDataQualityCheckSteps {
     @Then("^We get the accountable product data from EPH STG$")
     public void getAccountableProductsDataEPHSTG() {
         Log.info("Get the accountable product data from EPH STG  ..");
-        sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_STG, Joiner.on("','").join(idsPMX));
+        sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_STG, Joiner.on("','").join(ids));
         Log.info(sql);
 
         dataQualityContext.accountableProductDataObjectsFromSTG = DBManager
