@@ -31,7 +31,7 @@ public class WorksMatchedApiObject {
     WorkApiObject[] items;
 
     public void verifyWorksAreReturned(){
-        Assert.assertNotEquals(0, totalMatchCount);
+        Assert.assertNotEquals("Verify that more than 0 items are returned from the API", 0, totalMatchCount);
     }
 
     public void verifyWorksReturned(int worksInDB){

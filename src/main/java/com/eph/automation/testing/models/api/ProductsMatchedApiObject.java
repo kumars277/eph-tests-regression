@@ -31,11 +31,11 @@ public class ProductsMatchedApiObject {
     ProductApiObject[] items;
 
     public void verifyProductsAreReturned(){
-        Assert.assertNotEquals(0, totalMatchCount);
+        Assert.assertNotEquals("Verify that more than zero items are returned from the API",0, totalMatchCount);
     }
 
     public void verifyProductsReturned(int productsInDB){
-        Assert.assertEquals(totalMatchCount, productsInDB);
+        Assert.assertEquals("Verify that returned products count match whats in the database", totalMatchCount, productsInDB);
     }
 
     public void verifyProductWithIdIsReturned(String productID){
@@ -45,6 +45,7 @@ public class ProductsMatchedApiObject {
         while(i<bound&&!found){
             if(items[i].getId().equals(productID)){
                 found=true;
+                items[i].compareWithDB();
             }
             i++;
         }

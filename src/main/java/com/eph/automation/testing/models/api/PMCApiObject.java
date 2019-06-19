@@ -16,9 +16,6 @@ public class PMCApiObject {
     private String sql;
     private static List<String> ids;
 
-    public void compareWithDB(){
-
-    }
     public PMCApiObject() {
     }
 
