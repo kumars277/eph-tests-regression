@@ -78,7 +78,7 @@ public class AccountableProductSQL {
             "        coalesce(g.f_gl_product_segment_parent,'') = s.\"PARENT_ACC_PROD\")"; */   //old logic
 
 
-    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_DQ = "select count(*) as count from "+ GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product_dq where dq_err != 'Y'";
+    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_DQ = "select count(*) as count from "+ GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product_dq";
 
 
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_DQ_GOING_TO_SA = "select count(*)  as count from \n" +
@@ -92,9 +92,9 @@ public class AccountableProductSQL {
 
     //public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_DQ_GOING_TO_SA = "select count(*) as count from "+ GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product_dq where dq_err != 'Y'";
 
-    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX_DELTA = "select count(*) as count from  " + GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product s \n" +
-            " \"left join semarchy_eph_mdm.gd_accountable_product g on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = g.external_reference " +
-            "where  TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('%s','YYYYMMDDHH24MI')";
+    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX_DELTA = "select count(*) as count from  "+ GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product s \n" +
+            "left join semarchy_eph_mdm.gd_accountable_product g on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = g.external_reference \n" +
+            "where  TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
 
     /*
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX_DELTA = "select count(distinct s.\"PRODUCT_WORK_ID\" ) as count \n" +

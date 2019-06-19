@@ -48,20 +48,24 @@ public class PersonProductRoleDataSQL {
             "    where perd.dq_err != 'Y' and  prod.dq_err != 'Y'";
 
 
-    public static String GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG_GOING_TO_SA_DELTA ="select count(*) as count\n" +
-            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_person_role \n" +
-            "join  (select s.pmx_source_reference as stage, g.pmx_source_reference as gold,\n" +
-            "coalesce(s.pmx_source_reference::varchar,g.pmx_source_reference) as consol,\n" +
+    public static String GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG_GOING_TO_SA_DELTA ="select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_person_role\n" +
+            "join  (select s.pmx_source_reference as stage, g.external_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
             "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
-            "from semarchy_eph_mdm.gd_product g full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq s on g.pmx_source_reference = s.pmx_source_reference::varchar)  perd\n" +
-            "on " + GetEPHDBUser.getDBUser() + ".STG_10_PMX_PRODUCT_PERSON_ROLE.\"person_source_ref\" = perd.consol\n" +
-            "join  (select s.person_source_ref as stage, replace(m.source_ref,'PERSON-','') as gold,\n" +
-            "coalesce(s.person_source_ref::varchar,replace(m.source_ref,'PERSON-','')) as consol,\n" +
+            "from semarchy_eph_mdm.gd_product g full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq s on g.external_reference = s.pmx_source_reference::varchar)  prod\n" +
+            "      on STG_10_PMX_PRODUCT_PERSON_ROLE.\"product_source_ref\" = prod.consol\n" +
+            "join  (select s.person_source_ref as stage, aa.external_reference as gold,\n" +
+            "coalesce(s.person_source_ref::varchar,aa.external_reference) as consol,\n" +
             "case when s.person_source_ref is null then 'N' else s.dq_err end as dq_err\n" +
-            "from gd_person g join map_sourceref_2_numericid m on g.person_id = m.numeric_id\n" +
-            "full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq s on replace(m.source_ref,'PERSON-','') = s.person_source_ref::varchar)  prod\n" +
-            "on " + GetEPHDBUser.getDBUser() + ".STG_10_PMX_PRODUCT_PERSON_ROLE.\"product_source_ref\" = prod.consol\n" +
-            "where perd.dq_err != 'Y' and  prod.dq_err != 'Y' and TO_DATE(UPDATED,'YYYYMMDDHH24MI') >= TO_DATE('%s','YYYYMMDDHH24MI')";
+            "from (select distinct external_reference, person_id from semarchy_eph_mdm.sa_person) aa\n" +
+            "full outer join "  + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq s on aa.external_reference = s.person_source_ref::varchar)  perd\n" +
+            "     on STG_10_PMX_PRODUCT_PERSON_ROLE.\"person_source_ref\"::varchar = perd.consol\n" +
+            "join semarchy_eph_mdm.sa_person p\n" +
+            "     on STG_10_PMX_PRODUCT_PERSON_ROLE.person_source_ref::varchar = p.external_reference\n" +
+            "left join\n" +
+            "    (select distinct external_reference, product_person_role_id from semarchy_eph_mdm.sa_product_person_role) a\n" +
+            "    on STG_10_PMX_PRODUCT_PERSON_ROLE.prod_per_role_source_ref::varchar = a.external_reference\n" +
+            "where perd.dq_err != 'Y' and  prod.dq_err != 'Y' and TO_DATE(UPDATED,'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
 
 
     public static String GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSA = "select count(*) as count from semarchy_eph_mdm.sa_product_person_role sa\n" +

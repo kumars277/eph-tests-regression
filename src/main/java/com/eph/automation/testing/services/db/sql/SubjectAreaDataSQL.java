@@ -19,7 +19,7 @@ public class SubjectAreaDataSQL {
     public static String SELECT_COUNT_SUBJECT_AREA_STG = "select count(*) as count from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_SUBJECT_AREA";
 
     public static String SELECT_COUNT_SUBJECT_AREA_STG_Delta = "select count(*) as count from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_SUBJECT_AREA\n"+
-            "where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+            "where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
     public static String SELECT_COUNT_SUBJECT_AREA_SA = "select count(*) from semarchy_eph_mdm.sa_subject_area s\n" +
             " where s.b_loadid =  (select max (s.b_loadid) from\n" +

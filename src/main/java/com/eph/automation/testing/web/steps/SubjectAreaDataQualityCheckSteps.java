@@ -61,15 +61,17 @@ public class SubjectAreaDataQualityCheckSteps {
             countSubjectAreaRecordsEPHSTG = ((Long) subjectAreaNumber.get(0).get("count")).intValue();
             Log.info("Count of subject area data in EPH STG is: " + countSubjectAreaRecordsEPHSTG);
         } else {
-            sql = WorkCountSQL.GET_REFRESH_DATE;
-            refreshDate = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                    Constants.EPH_URL);
+        sql = WorkCountSQL.GET_REFRESH_DATE;
+        refreshDate = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                Constants.EPH_URL);
+        Log.info("refresh date : " + refreshDate);
 
-            sql = SubjectAreaDataSQL.SELECT_COUNT_SUBJECT_AREA_STG_Delta.replace("PARAM1", refreshDate.get(1).refresh_timestamp);
-            Log.info(sql);
-            List<Map<String, Object>> subjectAreaNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            countSubjectAreaRecordsEPHSTG = ((Long) subjectAreaNumber.get(0).get("count")).intValue();
-            Log.info("Count of subject area data in EPH STG is: " + countSubjectAreaRecordsEPHSTG);
+
+        sql = SubjectAreaDataSQL.SELECT_COUNT_SUBJECT_AREA_STG_Delta.replace("PARAM1", refreshDate.get(1).refresh_timestamp);
+        Log.info(sql);
+        List<Map<String, Object>> subjectAreaNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countSubjectAreaRecordsEPHSTG = ((Long) subjectAreaNumber.get(0).get("count")).intValue();
+        Log.info("Count of subject area data in EPH STG is: " + countSubjectAreaRecordsEPHSTG);
         }
     }
 
@@ -117,9 +119,9 @@ public class SubjectAreaDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-        if (System.getProperty("dbRandomRecordsNumber") == null){
+        if (System.getProperty("dbRandomRecordsNumber") == null) {
             numberOfRecords = "5";
-        }else {
+        } else {
             numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         }
         Log.info("numberOfRecords = " + numberOfRecords);
