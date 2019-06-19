@@ -74,6 +74,7 @@ public class PersonProductRoleDataQualityCheckSteps {
             Log.info(sql);
         } else {
             sql = WorkCountSQL.GET_REFRESH_DATE;
+            Log.info(sql);
             List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
             sql = String.format(PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG_GOING_TO_SA_DELTA, refreshDate );

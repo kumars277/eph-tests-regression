@@ -38,7 +38,6 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
     private static List<Map<String, String>> manifestationIdentifiersDataObjects;
 
 
-
     @StaticInjection
     public DataQualityContext dataQualityContext;
 
@@ -49,10 +48,13 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
             sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE, identifier);
             Log.info(sql);
         } else {
-            Log.info(sql);
-            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
-            sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_DELTA, refreshDate);
+        sql = WorkCountSQL.GET_REFRESH_DATE;
+        Log.info(sql);
+        List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+        Log.info("refreshDate" + refreshDate);
+        sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_DELTA, identifier, refreshDate);
+        Log.info(sql);
         }
 
         List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -241,13 +243,12 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
                 String GD = manifestationIdentifiersDataObjects.get(i).get("GD");
                 Log.info("ISBN in GD : " + GD);
 
-                assertNotEquals("ISBNS are not updated!",STG, GD);
+                assertNotEquals("ISBNS are not updated!", STG, GD);
 
             });
         } else
             Log.info("No records with set end date in GD!");
     }
-
 
 
     @When("^We get the records from SA_MANIFESTATION_IDENTIFIER$")

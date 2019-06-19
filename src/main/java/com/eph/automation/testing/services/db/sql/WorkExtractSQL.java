@@ -131,7 +131,7 @@ public class WorkExtractSQL {
     public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_GOING_TO_DQ = "SELECT count(distinct \"MANIFESTATION_ID\") AS count FROM  "+ GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation where \"MANIFESTATION_ID\" is not null\n";
 
     public static String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE_DELTA = "select count(distinct \"MANIFESTATION_ID\") as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation\n" +
-            "where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('%s','YYYYMMDDHH24MI')";
+            "where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
 
     public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_DQ_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq";
 

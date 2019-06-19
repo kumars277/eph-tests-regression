@@ -63,16 +63,8 @@ public class PersonWorkRoleDataQualityCheckSteps {
     public void getCountPersonsProductRolePHSTG() {
         Log.info("When We get the count of persons work role records in EPH STG ..");
 
-            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                sql = PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHSTG;
-                Log.info(sql);
-            } else {
-                sql = WorkCountSQL.GET_REFRESH_DATE;
-                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
-                sql = String.format( PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHSTG_DELTA, refreshDate );
-            }
-
+        sql = PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHSTG;
+        Log.info(sql);
 
         List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countPersonsWorkRoleEPHSTG = ((Long) personsNumber.get(0).get("count")).intValue();
@@ -82,8 +74,18 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @When("^Get the count of records for persons work role in EPH Staging going to SA$")
     public void getCountPersonsProductRoleEPHSTGGoingTOSA() {
         Log.info("When We get the count of persons work role records in EPH STG going to SA ..");
-        sql = PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHSTGGoingToSA;
+
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            sql = PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHSTGGoingToSA;
         Log.info(sql);
+        } else {
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+            sql = String.format( PersonWorkRoleDataSQL.GET_COUNT_PERSONS_WORK_ROLE_EPHSTG_DELTA, refreshDate );
+            Log.info(sql);
+        }
+
         List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countPersonsWorkRoleEPHSTGGoingToSA = ((Long) personsNumber.get(0).get("count")).intValue();
         Log.info("Count of persons work role in EPH STG going to SA is: " + countPersonsWorkRoleEPHSTGGoingToSA);

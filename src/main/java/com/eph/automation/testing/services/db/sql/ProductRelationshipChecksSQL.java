@@ -80,7 +80,7 @@ public class ProductRelationshipChecksSQL {
             "full outer join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq s \n" +
             "on g.external_reference = s.pmx_source_reference::varchar) d2\n" +
             "on STG_10_PMX_PRODUCT_PACK_REL.\"COMPONENT_PMX_SOURCE\" = d2.consol where d1.dq_err!= 'Y' and d2.dq_err!= 'Y'\n" +
-            "where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('%s','YYYYMMDDHH24MI')";
+            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
 
 
     public static String GET_EPH_SA_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from semarchy_eph_mdm.sa_product_rel_package\n" +

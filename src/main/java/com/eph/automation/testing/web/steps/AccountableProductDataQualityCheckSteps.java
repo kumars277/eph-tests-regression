@@ -73,9 +73,14 @@ public class AccountableProductDataQualityCheckSteps {
                 Log.info(sql);
             } else {
         sql = WorkCountSQL.GET_REFRESH_DATE;
+        Log.info(sql);
         List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+        Log.info("refreshDate : " + refreshDate);
+
         sql = String.format(AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX_DELTA, refreshDate );
+        Log.info(sql);
+
             }
 
         List<Map<String, Object>> accountableProductsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -86,7 +91,7 @@ public class AccountableProductDataQualityCheckSteps {
 
     @When("^We get the count of accountable product data from EPH DQ$")
     public void getCountAccountableProductsEPHDQ() {
-        Log.info("When We get the count of accountable product data in EPH GD ..");
+        Log.info("When We get the count of accountable product data in EPH DQ ..");
         sql = AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_DQ;
         Log.info(sql);
         List<Map<String, Object>> accountableProductsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -165,7 +170,7 @@ public class AccountableProductDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         Log.info("Get the product work ids for given random ids from Staging ..");

@@ -78,8 +78,11 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
                 Log.info("Count of work subject area data in EPH STG with DQ is: " + countWorkSubjectAreaRecordsEPHSTGDQ);
             }else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
+                Log.info(sql);
+
                 refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                         Constants.EPH_URL);
+                Log.info("refresh date : " + refreshDate);
 
                 sql = WorkSubjectAreaLinkDataSQL.SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ_Delta.replace("PARAM1"
                         ,refreshDate.get(1).refresh_timestamp);

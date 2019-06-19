@@ -86,9 +86,11 @@ public class ProductRelationshipDataMappingCheckSteps {
                 Log.info(sql);
             } else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
+                Log.info(sql);
                 List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
                 String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
                 sql = String.format( ProductRelationshipChecksSQL.GET_EPH_STG_PRODUCT_RELATIONSHIPS_COUNT_DELTA, refreshDate );
+                Log.info(sql);
             }
 
 
