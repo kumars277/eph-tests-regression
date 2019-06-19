@@ -153,7 +153,7 @@ public class APIService {
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
                 .when()
-                .get("/works/search/?query="+searchFor)
+                .get("/works/search?query="+searchFor)
                 .thenReturn().as(WorksMatchedApiObject.class);
     }
 
@@ -211,7 +211,7 @@ public class APIService {
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
                 .when()
-                .get("/products/search/?query="+searchOption)
+                .get("/products/search?query="+searchOption)
                 .thenReturn().as(ProductsMatchedApiObject.class);
     }
 
@@ -246,7 +246,7 @@ public class APIService {
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
                 .when()
-                .get("/products/title/?title="+title)
+                .get("/products/title?title="+title)
                 .thenReturn().as(ProductsMatchedApiObject.class);
 
     }
