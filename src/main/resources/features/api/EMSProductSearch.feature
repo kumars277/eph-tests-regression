@@ -9,9 +9,8 @@ Feature: Search API: Products
     And We get the search data from EPH GD for products
     Then the product details are retrieved and compared
 
-
   @API
-  Scenario Outline: search product by title
+  Scenario Outline: search product by name
     Given We get 1 random search ids for products
     And We get the search data from EPH GD for products
     Then the product details are retrieved when searched by <title> and compared
@@ -66,6 +65,12 @@ Feature: Search API: Products
     And We get the search data from EPH GD for products
     Then the product response returned when searched by packages is verified
 
+#  @API
+#  Scenario: search work by components
+#    Given We get 1 random search ids for products in packages
+#    And We get the search data from EPH GD for products
+#    Then the product response returned when searched by components is verified
+
   @API
   Scenario: search product by PMC
     Given We get 1 random search ids for products
@@ -82,3 +87,19 @@ Feature: Search API: Products
   Scenario: search product by person ID
     Given We get 1 search ids from the db for person roles of products
     Then the product response returned when searched by personID is verified
+
+  @API
+  Scenario Outline: Product search E2E
+    Given We get product by ID <id>
+    And We get the search data from EPH GD for products
+    Then the product details are retrieved and compared
+    Examples:
+      | id                                   |
+      | EPR-TSTP01                           |
+      | EPR-TSTP02                           |
+      | EPR-TSTP03                           |
+      | EPR-TSTP04                           |
+      | EPR-TSTP05                           |
+      | EPR-TSTP06                           |
+      | EPR-TSTP07                           |
+

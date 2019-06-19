@@ -10,6 +10,11 @@ class PricesApiObject {
     public PricesApiObject() {
     }
 
+    // TODO:
+    public void compareWithDB(){
+
+    }
+
     private float price;
     private String currencyCode;
 

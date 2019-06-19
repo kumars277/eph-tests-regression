@@ -11,9 +11,6 @@ class SubjectAreaApiObject {
 
     public SubjectAreaApiObject() {
     }
-    public void compareWithDB(){
-
-    }
 
     public HashMap<String, Object> getType() {
         return type;

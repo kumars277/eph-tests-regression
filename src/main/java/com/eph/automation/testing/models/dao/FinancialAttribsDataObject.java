@@ -15,7 +15,6 @@ public class FinancialAttribsDataObject {
 
     public String external_reference;
 
-
     public String getPMX_SOURCE_REFERENCE() {
         return PMX_SOURCE_REFERENCE;
     }

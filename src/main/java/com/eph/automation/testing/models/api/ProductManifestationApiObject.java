@@ -2,37 +2,74 @@ package com.eph.automation.testing.models.api;
 /**
  * Created by GVLAYKOV
  */
+import com.eph.automation.testing.configuration.Constants;
+import com.eph.automation.testing.configuration.DBManager;
+import com.eph.automation.testing.models.dao.ManifestationDataObject;
+import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.base.Joiner;
+import org.junit.Assert;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
    public class ProductManifestationApiObject {
     public ProductManifestationApiObject() {
     }
+    private List<ManifestationDataObject> manifestationDataObjectFromEPHGD;
 
-    public String getManifestationId() {
-        return manifestationId;
+    public void compareWithDB(){
+
+        getManifestationByID(this.id);
+        Assert.assertEquals(this.keyTitle, manifestationDataObjectFromEPHGD.get(0).getMANIFESTATION_KEY_TITLE());
+        if(!(manifestationDataObjectFromEPHGD.get(0).getINTERNATIONAL_EDITION_IND()==null)||!(this.internationalEditionInd==null)) {
+            Assert.assertEquals(Boolean.valueOf(this.internationalEditionInd), Boolean.valueOf(manifestationDataObjectFromEPHGD.get(0).getINTERNATIONAL_EDITION_IND()));
+        }
+        Assert.assertEquals(this.firstPubDate, manifestationDataObjectFromEPHGD.get(0).getFIRST_PUB_DATE());
+        Assert.assertEquals(this.type.get("code"), manifestationDataObjectFromEPHGD.get(0).getF_TYPE());
+        Assert.assertEquals(this.status.get("code"), manifestationDataObjectFromEPHGD.get(0).getF_STATUS());
+        if(this.identifiers!=null){
+            for (ManifestationIdentifiersApiObject identif : identifiers){identif.compareWithDB();}
+        }
+        work.compareWithDB();
+
     }
 
-    public void setManifestationId(String manifestationId) {
-        this.manifestationId = manifestationId;
+    private void getManifestationByID(String manifestationID) {
+        List<String> ids = new ArrayList<>();
+        ids.add(manifestationID);
+        String sql = String.format(APIDataSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_GD_BY_ID, Joiner.on("','").join(ids));
+        if(manifestationDataObjectFromEPHGD!=null){
+            manifestationDataObjectFromEPHGD.clear();
+        }
+        manifestationDataObjectFromEPHGD = DBManager
+                .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
     }
 
-    public String getManifestationKeyTitle() {
-        return manifestationKeyTitle;
+    public String getId() {
+        return id;
     }
 
-    public void setManifestationKeyTitle(String manifestationKeyTitle) {
-        this.manifestationKeyTitle = manifestationKeyTitle;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public Boolean getInternationalEditionFlag() {
-        return internationalEditionFlag;
+    public String getKeyTitle() {
+        return keyTitle;
     }
 
-    public void setInternationalEditionFlag(Boolean internationalEditionFlag) {
-        this.internationalEditionFlag = internationalEditionFlag;
+    public void setKeyTitle(String keyTitle) {
+        this.keyTitle = keyTitle;
+    }
+
+    public Boolean getInternationalEditionInd() {
+        return internationalEditionInd;
+    }
+
+    public void setInternationalEditionInd(Boolean internationalEditionInd) {
+        this.internationalEditionInd = internationalEditionInd;
     }
 
     public String getFirstPubDate() {
@@ -43,28 +80,28 @@ import java.util.HashMap;
         this.firstPubDate = firstPubDate;
     }
 
-    public ManifestationIdentifiersApiObject[] getManifestationIdentifiers() {
-        return manifestationIdentifiers;
+    public ManifestationIdentifiersApiObject[] getIdentifiers() {
+        return identifiers;
     }
 
-    public void setManifestationIdentifiers(ManifestationIdentifiersApiObject[] manifestationIdentifiers) {
-        this.manifestationIdentifiers = manifestationIdentifiers;
+    public void setIdentifiers(ManifestationIdentifiersApiObject[] identifiers) {
+        this.identifiers = identifiers;
     }
 
-    public HashMap<String, Object> getManifestationType() {
-        return manifestationType;
+    public HashMap<String, Object> getType() {
+        return type;
     }
 
-    public void setManifestationType(HashMap<String, Object> manifestationType) {
-        this.manifestationType = manifestationType;
+    public void setType(HashMap<String, Object> type) {
+        this.type = type;
     }
 
-    public HashMap<String, Object> getManifestationStatus() {
-        return manifestationStatus;
+    public HashMap<String, Object> getStatus() {
+        return status;
     }
 
-    public void setManifestationStatus(HashMap<String, Object> manifestationStatus) {
-        this.manifestationStatus = manifestationStatus;
+    public void setStatus(HashMap<String, Object> status) {
+        this.status = status;
     }
 
     public HashMap<String, Object> getManifestationFormat() {
@@ -83,13 +120,13 @@ import java.util.HashMap;
         this.work = work;
     }
 
-    private String manifestationId;
-    private String manifestationKeyTitle;
-    private Boolean internationalEditionFlag;
+    private String id;
+    private String keyTitle;
+    private Boolean internationalEditionInd;
     private String firstPubDate;
-    private ManifestationIdentifiersApiObject[] manifestationIdentifiers;
-    private HashMap<String, Object> manifestationType;
-    private HashMap<String, Object> manifestationStatus;
+    private ManifestationIdentifiersApiObject[] identifiers;
+    private HashMap<String, Object> type;
+    private HashMap<String, Object> status;
     
     private HashMap<String, Object> manifestationFormat;
     private ManifestationWorkApiObject work;

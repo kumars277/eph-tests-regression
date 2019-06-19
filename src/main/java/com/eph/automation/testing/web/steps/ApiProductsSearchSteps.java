@@ -19,6 +19,7 @@ import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.When;
+import org.junit.Assert;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -41,14 +42,14 @@ public class ApiProductsSearchSteps {
 
     private String sql;
     private static List<String> ids;
-    private static List<String> manifestation_Ids;
+    private static List<String> manifestationIds;
     private static List<String> manifestationIdentifiers_Ids;
     private ProductApiObject response;
     private WorkApiObject workApi_response;
     private static List<WorkDataObject> workIdentifiers;
     private static List<ProductDataObject> productDataObjects;
-
     List<ManifestationDataObject> manifestationDataObjects;
+
 
     @Given("^We get (.*) random search ids for products$")
     public void getRandomProductIds(String numberOfRecords) {
@@ -64,6 +65,8 @@ public class ApiProductsSearchSteps {
 
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random product manifestationApiObject ids  : " + ids);
+
+        Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
     @Given("^We get (.*) search ids from the db for person roles of products$")
@@ -74,6 +77,7 @@ public class ApiProductsSearchSteps {
 
         ids = randomPersonSearchIds.stream().map(m -> (BigDecimal) m.get("f_person")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
+        Assert.assertFalse("Verify That list with random person ids is not empty.", ids.isEmpty());
     }
 
     @And("^We get the search data from EPH GD for products$")
@@ -85,18 +89,18 @@ public class ApiProductsSearchSteps {
        productDataObjects = DBManager
                 .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
        productDataObjects.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
+        Assert.assertFalse("Verify That product objects list from DB is not empty.", productDataObjects.isEmpty());
     }
 
     @When("^the product details are retrieved and compared$")
     public void compareSearchResultsWithDB() throws IOException {
         int bound =productDataObjects.size();
-        System.out.println("Missing entries:\n");
+        
         for (int i = 0; i < bound; i++) {
             boolean code = checkProductExists(productDataObjects.get(i).getPRODUCT_ID());
             if (code) {
-                System.out.println(i + ") Checking: " +productDataObjects.get(i).getPRODUCT_ID());
-
                 response = searchForProductResult(productDataObjects.get(i).getPRODUCT_ID());
+                response.compareWithDB();
 
             }
         }
@@ -105,6 +109,7 @@ public class ApiProductsSearchSteps {
     @When("^the product details are retrieved when searched by (.*) and compared$")
     public void productSearchByTitleAndCompare(String title) throws IOException {
         ProductsMatchedApiObject returnedProducts = null;
+        Log.info("And we get the products data from the API ...");
         int bound = productDataObjects.size();
         for (int i = 0; i < bound; i++) {
             if (title.equals("PRODUCT_PRODUCT_TITLE")) {
@@ -117,6 +122,7 @@ public class ApiProductsSearchSteps {
                 getWorkByManifestationID(productDataObjects.get(i).getF_PRODUCT_MANIFESTATION_TYP());
                 returnedProducts = searchForProductsByTitleResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
             }
+            Log.info(returnedProducts.toString());
             returnedProducts.verifyProductsAreReturned();
             returnedProducts.verifyProductWithIdIsReturned(productDataObjects.get(i).getPRODUCT_ID());
         }
@@ -125,6 +131,7 @@ public class ApiProductsSearchSteps {
     @When("^the product details are retrieved and compared when searched by (.*)$")
     public void productSearchByIdentifiersAndCompare(String identifierType) throws IOException {
         ProductsMatchedApiObject returnedProducts = null;
+        Log.info("And we get the products data from the API ...");
         int bound =productDataObjects.size();
         for (int i = 0; i < bound; i++) {
             if (identifierType.equals("PRODUCT_ID")) {
@@ -142,6 +149,7 @@ public class ApiProductsSearchSteps {
             } else if (identifierType.equals("PRODUCT_MANIFESTATION_ID")) {
                 returnedProducts = searchForProductsByIdentifierResult(String.valueOf(productDataObjects.get(i).getF_PRODUCT_MANIFESTATION_TYP()));
             }
+            Log.info(returnedProducts.toString());
             returnedProducts.verifyProductsAreReturned();
             returnedProducts.verifyProductWithIdIsReturned(productDataObjects.get(i).getPRODUCT_ID());
         }
@@ -150,6 +158,7 @@ public class ApiProductsSearchSteps {
     @When("^the product details are retrieved and compared when search option is used with (.*)$")
     public void productSearchBySearchOptionAndCompare(String identifierType) throws IOException {
         ProductsMatchedApiObject returnedProducts = null;
+        Log.info("And we get the products data from the API ...");
         int bound =productDataObjects.size();
         for (int i = 0; i < bound; i++) {
             if (identifierType.equals("PRODUCT_ID")) {
@@ -175,6 +184,7 @@ public class ApiProductsSearchSteps {
                 getWorkByManifestationID(productDataObjects.get(i).getF_PRODUCT_MANIFESTATION_TYP());
                 returnedProducts = searchForProductsByTitleResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
             }
+            Log.info(returnedProducts.toString());
             returnedProducts.verifyProductsAreReturned();
             returnedProducts.verifyProductWithIdIsReturned(productDataObjects.get(i).getPRODUCT_ID());
         }
@@ -183,6 +193,7 @@ public class ApiProductsSearchSteps {
     @When("^the products detail are retrieved and compared when searched by type and (.*)$")
     public void productSearchByIdentifierWithTypeAndCompare(String identifierType) throws IOException {
         ProductsMatchedApiObject returnedProducts = null;
+        Log.info("And we get the products data from the API ...");
         int bound =productDataObjects.size();
         for (int i = 0; i < bound; i++) {
             if (identifierType.equals("PRODUCT_WORK_IDENTIFIER")) {
@@ -193,6 +204,7 @@ public class ApiProductsSearchSteps {
                 List<Map<String, Object>> manifestationIdentifiers = getManifestationIdentifierByManifestationID(productDataObjects.get(i).getF_PRODUCT_MANIFESTATION_TYP());
                 returnedProducts = searchForProductssByIdentifierAndTypeResult(manifestationIdentifiers.get(0).get("identifier").toString(), manifestationIdentifiers.get(0).get("f_type").toString());
             }
+            Log.info(returnedProducts.toString());
             returnedProducts.verifyProductsAreReturned();
             returnedProducts.verifyProductWithIdIsReturned(productDataObjects.get(i).getPRODUCT_ID());
         }
@@ -252,16 +264,29 @@ public class ApiProductsSearchSteps {
 
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("f_component")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
+        Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
 
     @When("^the product response returned when searched by packages is verified$")
-    public void compareProductsRetrievdByIsInPackagesOptionWithDB() {
+    public void compareProductsRetrievedByIsInPackagesOptionWithDB() {
         ProductsMatchedApiObject returnedProducts = null;
 
         int bound = productDataObjects.size();
         for (int i = 0; i < bound; i++) {
             returnedProducts = searchForProductsByPackageResult(getProductPackageByID(productDataObjects.get(i).getPRODUCT_ID()));
+            returnedProducts.verifyProductsAreReturned();
+            returnedProducts.verifyProductsReturned(getNumberOfPackageComponents(getProductPackageByID(productDataObjects.get(i).getPRODUCT_ID())));
+        }
+    }
+
+    @When("^the product response returned when searched by components is verified$")
+    public void compareProductsRetrievedByhasComponentsOptionWithDB() {
+        ProductsMatchedApiObject returnedProducts = null;
+
+        int bound = productDataObjects.size();
+        for (int i = 0; i < bound; i++) {
+            returnedProducts = searchForProductsByComponentsResult(productDataObjects.get(i).getPRODUCT_ID());
             returnedProducts.verifyProductsAreReturned();
             returnedProducts.verifyProductsReturned(getNumberOfPackageComponents(getProductPackageByID(productDataObjects.get(i).getPRODUCT_ID())));
         }
@@ -296,21 +321,14 @@ public class ApiProductsSearchSteps {
     }
 
     public int getNumberOfProductsByPersonIDs(String personID) {
-        sql = String.format(APIDataSQL.SELECT_COUNT_PERSONID_FOR_WORKS, personID);
-        Log.info(sql);
-        List<Map<String, Object>> getCountWorks = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        int countWorks = ((Long) getCountWorks.get(0).get("count")).intValue();
-
-        sql = String.format(APIDataSQL.SELECT_COUNT_PERSONID_FOR_PRODUCTS, personID);
+                sql = String.format(APIDataSQL.SELECT_COUNT_PERSONID_FOR_PRODUCTS, personID);
         Log.info(sql);
         List<Map<String, Object>> getCountProd = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         int countProd = ((Long) getCountProd.get(0).get("count")).intValue();
-
-        int count = countProd + countWorks;
-        return count;
+        return countProd;
     }
     @When("^the product details are retrieved by PMC Code and compared$")
-    public void compareWorkSearchByPMCResultsWithDB() {
+    public void compareProductSearchByPMCResultsWithDB() {
         ProductsMatchedApiObject returnedProducts = null;
 
         int bound = productDataObjects.size();
@@ -324,13 +342,94 @@ public class ApiProductsSearchSteps {
         }
     }
 
-    public int getNumberOfProductsByPMC(String pmcCode) {
-        sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_AMOUNT_BYPMC, pmcCode);
+
+    public int getNumberOfProductsByPMG(String pmgCode) {
+        sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_AMOUNT_BYPMG, pmgCode);
         Log.info("When We get the count of works with that PMC code ..");
         Log.info(sql);
-        List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        int count = ((Long) getCount.get(0).get("count")).intValue();
+        List<Map<String, Object>> countPMG = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        int count = ((Long) countPMG.get(0).get("count")).intValue();
         return count;
+    }
+
+    @When("^the product details are retrieved by PMG Code and compared$")
+    public void compareProductSearchByPMGResultsWithDB() {
+        ProductsMatchedApiObject returnedProducts = null;
+
+        int bound = productDataObjects.size();
+        for (int i = 0; i < bound; i++) {
+
+            getWorkByManifestationID(productDataObjects.get(i).getF_PRODUCT_MANIFESTATION_TYP());
+            returnedProducts = searchForProductsByPMGResult(getPMGcodeByPMC(dataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC()));
+
+            returnedProducts.verifyProductsAreReturned();
+            returnedProducts.verifyProductsReturned(getProductsCountByPMGandPMC(dataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC()));
+        }
+    }
+
+    @Given("^We get product by ID (.*)$")
+    public void getProductById(String productID) {
+        Log.info("Get random ids ..");
+        //Get property when run with jenkins
+//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        Log.info("numberOfRecords = " + productID);
+
+        sql = String.format(APIDataSQL.SELECT_PRODUCT_BY_ID, productID);
+        Log.info(sql);
+
+        List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+
+        ids = randomProductSearchIds.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("Selected random product manifestationApiObject ids  : " + ids);
+    }
+
+
+    public void getWorksByPMC(String pmcCode){
+        sql = String.format(APIDataSQL.SELECT_WORKS_BY_PMC_CODE, pmcCode);
+        Log.info(sql);
+        List<Map<?, ?>> workIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+
+        ids = workIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
+        Assert.assertFalse("Verify That list with work ids by pmc is not empty.", ids.isEmpty());
+    }
+
+    public void getPMGWorksByPMC(String pmcCode){
+        sql = String.format(APIDataSQL.EPH_GD_PMG_CODE_WORKS_EXTRACT_BY_PMC, pmcCode);
+        Log.info(sql);
+        List<Map<?, ?>> workIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+
+        ids = workIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
+        Assert.assertFalse("Verify That list with work ids by pmc is not empty.", ids.isEmpty());
+    }
+
+    public void getManifestationsByWorks(){
+        sql = String.format(APIDataSQL.SELECT_MANIFESTATIONS_IDS_BY_WORKS, Joiner.on("','").join(ids));
+        Log.info(sql);
+        List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+
+        manifestationIds = randomProductSearchIds.stream().map(m -> (String) m.get("MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
+        Assert.assertFalse("Verify That list with manifestation ids by work ids is not empty.", ids.isEmpty());
+    }
+
+    public int getProductsCountByManifestations(){
+        sql = String.format(APIDataSQL.SELECT_COUNT_PRODUCTS_BY_MANIFESTATIONS, Joiner.on("','").join(manifestationIds));
+        Log.info(sql);
+
+        List<Map<String, Object>> productsCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        int count = ((Long) productsCount.get(0).get("count")).intValue();
+        return count;
+    }
+
+    public int getNumberOfProductsByPMC(String pmcCode) {
+        getWorksByPMC(pmcCode);
+        getManifestationsByWorks();
+        return getProductsCountByManifestations();
+    }
+
+    public int getProductsCountByPMGandPMC(String pmcCode) {
+        getPMGWorksByPMC(pmcCode);
+        getManifestationsByWorks();
+        return getProductsCountByManifestations();
     }
 
     public String getPMGcodeByPMC(String pmcCode) {
@@ -341,27 +440,5 @@ public class ApiProductsSearchSteps {
         return pmgCode;
     }
 
-    public int getNumberOfProductsByPMG(String pmgCode) {
-        sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_AMOUNT_BYPMG, pmgCode);
-        Log.info("When We get the count of works with that PMC code ..");
-        Log.info(sql);
-        List<Map<String, Object>> subjectAreaNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        int count = ((Long) subjectAreaNumber.get(0).get("count")).intValue();
-        return count;
-    }
 
-    @When("^the product details are retrieved by PMG Code and compared$")
-    public void compareWorkSearchByPMGResultsWithDB() {
-        ProductsMatchedApiObject returnedProducts = null;
-
-        int bound = productDataObjects.size();
-        for (int i = 0; i < bound; i++) {
-
-            getWorkByManifestationID(productDataObjects.get(i).getF_PRODUCT_MANIFESTATION_TYP());
-            returnedProducts = searchForProductsByPMGResult(getPMGcodeByPMC(dataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC()));
-
-            returnedProducts.verifyProductsAreReturned();
-            returnedProducts.verifyProductsReturned(getNumberOfProductsByPMG(getPMGcodeByPMC(dataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC())));
-        }
-    }
 }

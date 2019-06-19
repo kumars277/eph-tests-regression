@@ -106,7 +106,7 @@ public class APIService {
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
                 .when()
-                .get("/works/title/"+title)
+                .get("/works/title/?title="+title)
                 .thenReturn().as(WorksMatchedApiObject.class);
 
     }
@@ -163,6 +163,15 @@ public class APIService {
                 .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
                 .when()
                 .get("/products/isInPackages/"+packageID)
+                .thenReturn().as(ProductsMatchedApiObject.class);
+    }
+
+    public static ProductsMatchedApiObject searchForProductsByComponentsResult(String componentID) {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER, Constants.SIT_GATEWAY_AUTHORIZATION_HEADER + AuthorizationService.getAuthToken())
+                .when()
+                .get("/products/hasComponents?ids="+componentID)
                 .thenReturn().as(ProductsMatchedApiObject.class);
     }
 

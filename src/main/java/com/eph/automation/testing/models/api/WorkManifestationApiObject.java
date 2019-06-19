@@ -8,6 +8,7 @@ import com.eph.automation.testing.models.dao.ManifestationDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
+import org.junit.Assert;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,12 +20,20 @@ import java.util.List;
     }
     private List<ManifestationDataObject> manifestationDataObjectFromEPHGD;
     public void compareWithDB(){
-        getManifestationsByWorkID(this.id);
+        getManifestationByID(this.id);
+        Assert.assertEquals(this.keyTitle, manifestationDataObjectFromEPHGD.get(0).getMANIFESTATION_KEY_TITLE());
+        if(!(manifestationDataObjectFromEPHGD.get(0).getINTERNATIONAL_EDITION_IND()==null)||!(this.internationalEditionInd==null)) {
+            Assert.assertEquals(Boolean.valueOf(this.internationalEditionInd), Boolean.valueOf(manifestationDataObjectFromEPHGD.get(0).getINTERNATIONAL_EDITION_IND()));
+        }
+        Assert.assertEquals(this.firstPubDate, manifestationDataObjectFromEPHGD.get(0).getFIRST_PUB_DATE());
+        Assert.assertEquals(this.type.get("code"), manifestationDataObjectFromEPHGD.get(0).getF_TYPE());
+        Assert.assertEquals(this.status.get("code"), manifestationDataObjectFromEPHGD.get(0).getF_STATUS());
+
     }
 
     private String id;
     private String keyTitle;
-    private Boolean internationalEditionFlag;
+    private Boolean internationalEditionInd;
     private String firstPubDate;
     private List<ManifestationIdentifiersApiObject> identifiers;
     private HashMap<String, Object> type;
@@ -68,12 +77,12 @@ import java.util.List;
         this.keyTitle = keyTitle;
     }
 
-    public Boolean getInternationalEditionFlag() {
-        return internationalEditionFlag;
+    public Boolean getInternationalEditionInd() {
+        return internationalEditionInd;
     }
 
-    public void setInternationalEditionFlag(Boolean internationalEditionFlag) {
-        this.internationalEditionFlag = internationalEditionFlag;
+    public void setInternationalEditionInd(Boolean internationalEditionInd) {
+        this.internationalEditionInd = internationalEditionInd;
     }
 
     public String getFirstPubDate() {
@@ -117,10 +126,13 @@ import java.util.List;
         String id;
     }
 
-    private void getManifestationsByWorkID(String manifestationID) {
+    private void getManifestationByID(String manifestationID) {
         List<String> ids = new ArrayList<>();
         ids.add(manifestationID);
         String sql = String.format(APIDataSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_GD_BY_ID, Joiner.on("','").join(ids));
+        if(manifestationDataObjectFromEPHGD!=null){
+            manifestationDataObjectFromEPHGD.clear();
+        }
         manifestationDataObjectFromEPHGD = DBManager
                 .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
     }
