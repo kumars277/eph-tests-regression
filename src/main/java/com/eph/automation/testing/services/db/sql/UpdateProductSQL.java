@@ -80,9 +80,9 @@ public class UpdateProductSQL {
 
     //updated the child work/translated work id
     public static String Insert_work_translation= "INSERT INTO semarchy_eph_mdm.sa_work_relationship (b_loadid, work_relationship_id, b_classname, effective_start_date," +
-            " f_parent,f_child, f_event)\n" +
-            " VALUES ('LOADID','77777777777','WorkRelationshipW','2017-05-04'," +
-            "'EPR-W-TSTW01','EPR-W-TSTW02','EVENT')";
+            " f_parent,f_child, f_relationship_type, f_event)\n" +
+            " VALUES ('LOADID','77777777777','WorkRelationship','2017-05-04'," +
+            "'EPR-W-TSTW01','EPR-W-TSTW02','TRS','EVENT')";
 
     public static String Insert_person= "INSERT INTO semarchy_eph_mdm.sa_person (b_loadid, person_id, b_classname, given_name," +
             " family_name)\n" +
@@ -95,9 +95,9 @@ public class UpdateProductSQL {
             "'EPR-W-TSTW01','666666666','EVENT')";
 
     public static String Insert_mirror= "INSERT INTO semarchy_eph_mdm.sa_work_relationship (b_loadid, work_relationship_id, b_classname, effective_start_date," +
-            " f_parent,f_child, f_event)\n" +
+            " f_parent,f_child, f_relationship_type, f_event)\n" +
             " VALUES ('LOADID','555555555','WorkRelationship','2017-05-04'," +
-            "'EPR-W-TSTW01','EPR-W-TSTW03','EVENT')";
+            "'EPR-W-TSTW01','EPR-W-TSTW03','MIR','EVENT')";
 
     public static String Insert_financial_attr= "INSERT INTO semarchy_eph_mdm.sa_work_financial_attribs (b_loadid, work_fin_attribs_id, b_classname, f_gl_company," +
             " f_event,f_gl_cost_resp_centre,f_gl_revenue_resp_centre,f_wwork)\n" +

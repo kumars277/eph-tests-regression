@@ -5,7 +5,7 @@ public class NegativeTestNotificationSQL {
     // Test 1 Scenario : Work - Succeeds , Product - Fails
     public static String WORK_Negative_1 = "INSERT INTO semarchy_eph_mdm.sa_wwork (b_loadid, work_id, b_classname, \n"+
             "work_title,f_type,f_status,f_pmc,f_oa_type,f_imprint,f_event)\n"+
-            "VALUES ('LOADID','EPR-W-TSTW10','Work','Big Data and Smart Service Systems test','RBK','WAS','355','N','ACADPR','EVENT')";
+            "VALUES ('LOADID','EPR-W-TSTW10','Work','Big Data and Smart Service Systems test','RBK','WAP','355','N','ACADPR','EVENT')";
 
     public static String Manifestation_1_Negative_1 = "INSERT INTO semarchy_eph_mdm.sa_manifestation (b_loadid, manifestation_id,\n" +
             " b_classname,manifestation_key_title,f_type,f_status,f_wwork,f_event)\n"+
@@ -33,7 +33,7 @@ public class NegativeTestNotificationSQL {
             "VALUES ('LOADID','EPR-W-TSTW20','Work','The Human Body test','Linking Structure and Function " +
             "\t\n"+
             "\t\n"+
-            "','RBK','WAS','946','N','ACADPR','EVENT')";
+            "','RBK','WAP','946','N','ACADPR','EVENT')";
 
     public static String Manifestation_1_Negative_2 = "INSERT INTO semarchy_eph_mdm.sa_manifestation " +
             "(b_loadid, manifestation_id, b_classname,manifestation_key_title,f_type,f_status,f_wwork,f_event)\n" +

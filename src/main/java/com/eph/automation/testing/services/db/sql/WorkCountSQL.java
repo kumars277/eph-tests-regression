@@ -28,7 +28,7 @@ public class WorkCountSQL {
             "order by TO_DATE(refresh_value,'YYYYMMDDHH24MI') desc";
 
     public static String PMX_STG_WORKS_COUNT_DELTA = "select count(distinct \"PRODUCT_WORK_ID\") as workCountPMXSTG from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork\n" +
-            "where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+            "where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
 
     public static String PMX_STG_WORKS_COUNT_Distinct = "  select count(distinct \"PRODUCT_WORK_ID\") as workCountPMXSTG from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork";

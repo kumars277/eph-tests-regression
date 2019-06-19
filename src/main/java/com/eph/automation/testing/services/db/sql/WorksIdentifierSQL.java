@@ -114,8 +114,8 @@ public class WorksIdentifierSQL {
             " left join semarchy_eph_mdm.gd_work_identifier gwd on gwd.f_wwork = map1.eph_id\n" +
             "where \n" +
             "stg.\"PARAM1\" is not null  and  mdq.dq_err != 'Y'\n" +
-            "   and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('PARAM2','YYYYMMDDHH24MI')\n" +
-            "   and effective_start_date >= TO_DATE('PARAM2','YYYYMMDDHH24MI')\n" +
+            "   and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('PARAM2','YYYYMMDDHH24MI')\n" +
+            "   and effective_start_date > TO_DATE('PARAM2','YYYYMMDDHH24MI')\n" +
             "   and gwd.f_type = 'PARAM3'\n" +
             "   and gwd.identifier = stg.\"PARAM1\"\n" +
             "   and  \"PRODUCT_WORK_ID\" \n" +
