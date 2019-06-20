@@ -14,7 +14,6 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -44,10 +43,10 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
     @Given("We get the count of records with (.*) in STG_PMX_MANIFESTATION$")
     public void getCountOfRecordsWithISBNInSTGPMX(String identifier) {
-        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-            sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE, identifier);
-            Log.info(sql);
-        } else {
+//        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+//            sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE, identifier);
+//            Log.info(sql);
+//        } else {
         sql = WorkCountSQL.GET_REFRESH_DATE;
         Log.info(sql);
         List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -55,7 +54,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
         Log.info("refreshDate" + refreshDate);
         sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_DELTA, identifier, refreshDate);
         Log.info(sql);
-        }
+//        }
 
         List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countISBNSTGPMX = ((Long) numberOfISBNs.get(0).get("count")).intValue();
@@ -157,8 +156,17 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
         sql = WorkExtractSQL.SELECT_ISBNS_FROM_STG_AND_SA_FOR_END_DATED_RECORDS;
         Log.info(sql);
 
-        manifestationIdentifiersDataObjects = DBManager
-                .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
+        manifestationIdentifiersDataObjects = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+
+    }
+
+    @Given("^Get ISSN from STG and GD for end dated records in GD$")
+    public void getISSNSForENDDATEDRecords() {
+
+        sql = WorkExtractSQL.SELECT_ISSNS_FROM_STG_AND_SA_FOR_END_DATED_RECORDS;
+        Log.info(sql);
+
+        manifestationIdentifiersDataObjects =  DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
     }
 
@@ -238,12 +246,32 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
             IntStream.range(0, manifestationIdentifiersDataObjects.size()).forEach(i -> {
                 //assert identifier value is not equal
 
-                String STG = manifestationIdentifiersDataObjects.get(i).get("STG");
+                String STG = manifestationIdentifiersDataObjects.get(i).get("gd_old_identifier");
                 Log.info("ISBN in STG : " + STG);
-                String GD = manifestationIdentifiersDataObjects.get(i).get("GD");
+                String GD = manifestationIdentifiersDataObjects.get(i).get("new_identifier");
                 Log.info("ISBN in GD : " + GD);
 
                 assertNotEquals("ISBNS are not updated!", STG, GD);
+
+            });
+        } else
+            Log.info("No records with set end date in GD!");
+    }
+
+
+    @Then("^Check the manifestation identifiers are updated properly for ISSN$")
+    public void checkIdentifiersAreUpdatedProperlyISSN() {
+
+        if (manifestationIdentifiersDataObjects.size() != 0) {
+            IntStream.range(0, manifestationIdentifiersDataObjects.size()).forEach(i -> {
+                //assert identifier value is not equal
+
+                String STG = manifestationIdentifiersDataObjects.get(i).get("gd_old_identifier");
+                Log.info("ISSN in STG : " + STG);
+                String GD = manifestationIdentifiersDataObjects.get(i).get("new_identifier");
+                Log.info("ISSN in GD : " + GD);
+
+                assertNotEquals("ISSN are not updated!", STG, GD);
 
             });
         } else

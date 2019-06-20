@@ -91,7 +91,12 @@ public class ProductRelationshipChecksSQL {
             "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')";
 
-    public static String GET_EPH_GD_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from semarchy_eph_mdm.gd_product_rel_package";
+    public static String GET_EPH_GD_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from semarchy_eph_mdm.gd_product_rel_package where b_batchid = (select max (b_batchid) from \n" +
+            "          semarchy_eph_mdm.gd_event\n" +
+            "            where  f_event_type = 'PMX'\n" +
+            "            and workflow_id = 'talend'\n" +
+            "            AND f_event_type = 'PMX'\n" +
+            "            and f_workflow_source = 'PMX' ) ";
 
     public static String GET_PMX_PRODUCT_RELATIONSHIPS_DATA = "SELECT * FROM (SELECT\n" +
             "\t WL.PRODUCT_WORK_LINK_ID || M2.PRODUCT_MANIFESTATION_ID || '-SUB' AS RELATIONSHIP_PMX_SOURCEREF\n" +
