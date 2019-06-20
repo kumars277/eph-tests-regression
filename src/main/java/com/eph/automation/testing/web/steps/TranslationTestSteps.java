@@ -68,20 +68,20 @@ public class TranslationTestSteps {
                 translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
                 Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
             }
-        }else {/*
+        }else {
             sql = WorkCountSQL.GET_REFRESH_DATE;
             refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                     Constants.EPH_URL);
 
             sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
             Log.info(sql);
-            translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);*/
-//            Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
-            sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT;
+            translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
+            Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
+            /*sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT;
             Log.info(sql);
             translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
             Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
-        }
+*/        }
     }
 
     @When("^We get the work relationship records from SA$")
@@ -214,32 +214,34 @@ public class TranslationTestSteps {
     }
 
     @And("^The translations data between STG and SA is identical$")
-    public void checkTranslationSAData(){
-        for (int i=0; i<translationContext.translationDataFromStg.size();i++) {
-            sql=TranslationsSQL.Get_work_id.replace("PARAM1", translationContext.translationDataFromStg.get(i).PARENT_PMX_SOURCE);
+    public void checkTranslationSAData() {
+        for (int i = 0; i < translationContext.translationDataFromStg.size(); i++) {
+            sql = TranslationsSQL.Get_work_id.replace("PARAM1", translationContext.translationDataFromStg.get(i).PARENT_PMX_SOURCE);
             Log.info(sql);
             translationContext.workID = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
             fWorkID = translationContext.workID.get(0).workID;
 
-            sql=TranslationsSQL.Get_child_id.replace("PARAM1", translationContext.translationDataFromStg.get(i).CHILD_PMX_SOURCE);
+            sql = TranslationsSQL.Get_child_id.replace("PARAM1", translationContext.translationDataFromStg.get(i).CHILD_PMX_SOURCE);
             Log.info(sql);
             translationContext.childID = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
 
-            sql = String.format(TranslationsSQL.GET_SA_Translation_DATA.replace("PARAM1",fWorkID)
-                    .replace("PARAM2",translationContext.childID.get(0).workID));
+            sql = String.format(TranslationsSQL.GET_SA_Translation_DATA.replace("PARAM1", fWorkID)
+                    .replace("PARAM2", translationContext.childID.get(0).workID));
             Log.info(sql);
             translationContext.translationDataFromSA = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
+            if (translationContext.translationDataFromSA.isEmpty()) {
+                Log.info("There is no loaded data for Translations in SA");
+            } else {
+                Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + translationContext.workID.get(0).workID,
+                        "WorkRelationship",
+                        translationContext.translationDataFromSA.get(0).B_CLASSNAME);
 
-            Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + translationContext.workID.get(0).workID,
-                    "WorkRelationship",
-                    translationContext.translationDataFromSA.get(0).B_CLASSNAME);
-
-            if (translationContext.translationDataFromStg.get(i).EFFECTIVE_START_DATE != null
-                    || translationContext.translationDataFromSA.get(0).EFFECTIVE_START_DATE != null) {
-                Assert.assertEquals("The EFFECTIVE_START_DATE is incorrect for id=" + translationContext.workID.get(0).workID,
-                        translationContext.translationDataFromStg.get(i).EFFECTIVE_START_DATE,
-                        translationContext.translationDataFromSA.get(0).EFFECTIVE_START_DATE);
-            }
+                if (translationContext.translationDataFromStg.get(i).EFFECTIVE_START_DATE != null
+                        || translationContext.translationDataFromSA.get(0).EFFECTIVE_START_DATE != null) {
+                    Assert.assertEquals("The EFFECTIVE_START_DATE is incorrect for id=" + translationContext.workID.get(0).workID,
+                            translationContext.translationDataFromStg.get(i).EFFECTIVE_START_DATE,
+                            translationContext.translationDataFromSA.get(0).EFFECTIVE_START_DATE);
+                }
 /*            sql=TranslationsSQL.Get_translation_id.replace("PARAM1", "WORK_TRANS-"+
                     translationContext.translationDataFromStg.get(i).RELATIONSHIP_PMX_SOURCEREF);
             Log.info(sql);
@@ -250,71 +252,75 @@ public class TranslationTestSteps {
                     translationContext.translationDataFromSA.get(0).WORK_REL_TRANSLATION_ID);*/
 
 
-            Assert.assertEquals("The child id is incorrect for id=" + translationContext.workID.get(0).workID,
-                    translationContext.childID.get(0).workID,
-                    translationContext.translationDataFromSA.get(0).CHILD_PMX_SOURCE);
+                Assert.assertEquals("The child id is incorrect for id=" + translationContext.workID.get(0).workID,
+                        translationContext.childID.get(0).workID,
+                        translationContext.translationDataFromSA.get(0).CHILD_PMX_SOURCE);
 
-            if (translationContext.translationDataFromStg.get(i).ENDON != null
-                    || translationContext.translationDataFromSA.get(0).ENDON != null) {
-                Assert.assertEquals("The ENDON is incorrect for id=" + translationContext.workID,
-                        translationContext.translationDataFromStg.get(i).ENDON,
-                        translationContext.translationDataFromSA.get(0).ENDON);
-            }
+                if (translationContext.translationDataFromStg.get(i).ENDON != null
+                        || translationContext.translationDataFromSA.get(0).ENDON != null) {
+                    Assert.assertEquals("The ENDON is incorrect for id=" + translationContext.workID,
+                            translationContext.translationDataFromStg.get(i).ENDON,
+                            translationContext.translationDataFromSA.get(0).ENDON);
+                }
 
                 Assert.assertEquals("The relationship type is incorrect for id=" + translationContext.workID,
                         translationContext.translationDataFromStg.get(i).getF_RELATIONSHIP_TYPE(),
                         translationContext.translationDataFromSA.get(0).getF_RELATIONSHIP_TYPE());
 
-            if (translationContext.translationDataFromStg.get(i).getRELATIONSHIP_PMX_SOURCEREF() != null
-                    || translationContext.translationDataFromSA.get(0).getRELATIONSHIP_PMX_SOURCEREF() != null) {
-                Assert.assertEquals("The ENDON is incorrect for id=" + translationContext.workID,
-                        translationContext.translationDataFromStg.get(i).getRELATIONSHIP_PMX_SOURCEREF(),
-                        translationContext.translationDataFromSA.get(0).getRELATIONSHIP_PMX_SOURCEREF());
+                if (translationContext.translationDataFromStg.get(i).getRELATIONSHIP_PMX_SOURCEREF() != null
+                        || translationContext.translationDataFromSA.get(0).getRELATIONSHIP_PMX_SOURCEREF() != null) {
+                    Assert.assertEquals("The ENDON is incorrect for id=" + translationContext.workID,
+                            translationContext.translationDataFromStg.get(i).getRELATIONSHIP_PMX_SOURCEREF(),
+                            translationContext.translationDataFromSA.get(0).getRELATIONSHIP_PMX_SOURCEREF());
+                }
             }
         }
     }
-
     @And("^The translations data between SA and GD is identical$")
-    public void checkTranslationGDData(){
-        for (int i=0; i<translationContext.translationDataFromSAall.size();i++) {
-            Assert.assertEquals("The WORK_REL_TRANSLATION_ID is incorrect for id=" + translationContext.translationDataFromSAall.get(i).WORK_REL_TRANSLATION_ID,
-                    translationContext.translationDataFromSAall.get(i).WORK_REL_TRANSLATION_ID,
-                    translationContext.translationDataFromGD.get(i).WORK_REL_TRANSLATION_ID);
+    public void checkTranslationGDData() {
+        if (translationContext.translationDataFromGD.isEmpty()) {
+            Log.info("There is no loaded data for Translations in GD");
+        } else {
+            for (int i = 0; i < translationContext.translationDataFromSAall.size(); i++) {
+                Assert.assertEquals("The WORK_REL_TRANSLATION_ID is incorrect for id=" + translationContext.translationDataFromSAall.get(i).WORK_REL_TRANSLATION_ID,
+                        translationContext.translationDataFromSAall.get(i).WORK_REL_TRANSLATION_ID,
+                        translationContext.translationDataFromGD.get(i).WORK_REL_TRANSLATION_ID);
 
-            Assert.assertEquals("The RELATIONSHIP_PMX_SOURCEREF is incorrect for id=" + translationContext.translationDataFromSAall.get(i).WORK_REL_TRANSLATION_ID,
-                    translationContext.translationDataFromSAall.get(i).RELATIONSHIP_PMX_SOURCEREF,
-                    translationContext.translationDataFromGD.get(i).RELATIONSHIP_PMX_SOURCEREF);
+                Assert.assertEquals("The RELATIONSHIP_PMX_SOURCEREF is incorrect for id=" + translationContext.translationDataFromSAall.get(i).WORK_REL_TRANSLATION_ID,
+                        translationContext.translationDataFromSAall.get(i).RELATIONSHIP_PMX_SOURCEREF,
+                        translationContext.translationDataFromGD.get(i).RELATIONSHIP_PMX_SOURCEREF);
 
-            Assert.assertEquals("The CHILD_PMX_SOURCE is incorrect for id=" + translationContext.translationDataFromSAall.get(i).WORK_REL_TRANSLATION_ID,
-                    translationContext.translationDataFromSAall.get(i).CHILD_PMX_SOURCE,
-                    translationContext.translationDataFromGD.get(i).CHILD_PMX_SOURCE);
+                Assert.assertEquals("The CHILD_PMX_SOURCE is incorrect for id=" + translationContext.translationDataFromSAall.get(i).WORK_REL_TRANSLATION_ID,
+                        translationContext.translationDataFromSAall.get(i).CHILD_PMX_SOURCE,
+                        translationContext.translationDataFromGD.get(i).CHILD_PMX_SOURCE);
 
-            Assert.assertEquals("The B_CLASSNAME is incorrect for id=" +translationContext.translationDataFromSAall.get(i).WORK_REL_TRANSLATION_ID,
-                    translationContext.translationDataFromSAall.get(i).B_CLASSNAME,
-                    translationContext.translationDataFromGD.get(i).B_CLASSNAME);
+                Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + translationContext.translationDataFromSAall.get(i).WORK_REL_TRANSLATION_ID,
+                        translationContext.translationDataFromSAall.get(i).B_CLASSNAME,
+                        translationContext.translationDataFromGD.get(i).B_CLASSNAME);
 
-            if (translationContext.translationDataFromSAall.get(i).EFFECTIVE_START_DATE != null
-                    || translationContext.translationDataFromGD.get(i).EFFECTIVE_START_DATE != null) {
-                Assert.assertEquals("The EFFECTIVE_START_DATE is incorrect for id=" + translationContext.translationDataFromSAall.get(i).WORK_REL_TRANSLATION_ID,
-                        translationContext.translationDataFromSAall.get(i).EFFECTIVE_START_DATE,
-                        translationContext.translationDataFromGD.get(i).EFFECTIVE_START_DATE);
-            }
-            if (translationContext.translationDataFromSAall.get(i).ENDON != null
-                    || translationContext.translationDataFromGD.get(i).ENDON != null) {
-                Assert.assertEquals("The ENDON is incorrect for id=" + translationContext.translationDataFromSAall.get(i).WORK_REL_TRANSLATION_ID,
-                        translationContext.translationDataFromSAall.get(i).ENDON,
-                        translationContext.translationDataFromGD.get(i).ENDON);
-            }
+                if (translationContext.translationDataFromSAall.get(i).EFFECTIVE_START_DATE != null
+                        || translationContext.translationDataFromGD.get(i).EFFECTIVE_START_DATE != null) {
+                    Assert.assertEquals("The EFFECTIVE_START_DATE is incorrect for id=" + translationContext.translationDataFromSAall.get(i).WORK_REL_TRANSLATION_ID,
+                            translationContext.translationDataFromSAall.get(i).EFFECTIVE_START_DATE,
+                            translationContext.translationDataFromGD.get(i).EFFECTIVE_START_DATE);
+                }
+                if (translationContext.translationDataFromSAall.get(i).ENDON != null
+                        || translationContext.translationDataFromGD.get(i).ENDON != null) {
+                    Assert.assertEquals("The ENDON is incorrect for id=" + translationContext.translationDataFromSAall.get(i).WORK_REL_TRANSLATION_ID,
+                            translationContext.translationDataFromSAall.get(i).ENDON,
+                            translationContext.translationDataFromGD.get(i).ENDON);
+                }
 
-            Assert.assertEquals("The relationship type is incorrect for id=" + translationContext.workID,
-                    translationContext.translationDataFromSAall.get(i).getF_RELATIONSHIP_TYPE(),
-                    translationContext.translationDataFromGD.get(i).getF_RELATIONSHIP_TYPE());
+                Assert.assertEquals("The relationship type is incorrect for id=" + translationContext.workID,
+                        translationContext.translationDataFromSAall.get(i).getF_RELATIONSHIP_TYPE(),
+                        translationContext.translationDataFromGD.get(i).getF_RELATIONSHIP_TYPE());
 
-            if (translationContext.translationDataFromSAall.get(i).getRELATIONSHIP_PMX_SOURCEREF() != null
-                    || translationContext.translationDataFromGD.get(i).getRELATIONSHIP_PMX_SOURCEREF() != null) {
-                Assert.assertEquals("The ENDON is incorrect for id=" + translationContext.workID,
-                        translationContext.translationDataFromSAall.get(i).getRELATIONSHIP_PMX_SOURCEREF(),
-                        translationContext.translationDataFromGD.get(i).getRELATIONSHIP_PMX_SOURCEREF());
+                if (translationContext.translationDataFromSAall.get(i).getRELATIONSHIP_PMX_SOURCEREF() != null
+                        || translationContext.translationDataFromGD.get(i).getRELATIONSHIP_PMX_SOURCEREF() != null) {
+                    Assert.assertEquals("The ENDON is incorrect for id=" + translationContext.workID,
+                            translationContext.translationDataFromSAall.get(i).getRELATIONSHIP_PMX_SOURCEREF(),
+                            translationContext.translationDataFromGD.get(i).getRELATIONSHIP_PMX_SOURCEREF());
+                }
             }
         }
     }
