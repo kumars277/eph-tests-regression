@@ -62,7 +62,7 @@ public class FinancialAttributesSteps {
                 Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
             }
         }
-        else{/*
+        else{
             sql = WorkCountSQL.GET_REFRESH_DATE;
             refreshDate = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                     Constants.EPH_URL);
@@ -70,12 +70,12 @@ public class FinancialAttributesSteps {
             sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr.replace("PARAM1", refreshDate.get(1).refresh_timestamp);
             Log.info(sql);
             financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
-            Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);*/
+            Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
 
-            sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr_Full;
+/*            sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr_Full;
             Log.info(sql);
             financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
-            Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
+            Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);*/
             }
 
     }
@@ -172,7 +172,9 @@ public class FinancialAttributesSteps {
             sql = String.format(FinAttrSQL.GET_SA_FinAttr_DATA.replace("PARAM1",fWorkID));
             financialAttribs.financialDataFromSA = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
 
-
+            if (financialAttribs.financialDataFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+                Log.info("There is no changed data for Financial attributes");
+            }else{
             Assert.assertEquals("The classname is incorrect for id=" + financialAttribs.id,
                     "WorkFinancialAttributes", financialAttribs.financialDataFromSA.get(0).B_CLASSNAME);
 
@@ -234,11 +236,15 @@ public class FinancialAttributesSteps {
             }
         }
     }
+    }
 
     @And("^The data between SA and GD is identical$")
     public void checkFinancialDataGD(){
         for (int i=0; i<financialAttribs.financialDataFromSAAll.size();i++) {
-            Assert.assertEquals("The classname is incorrect for id=" + financialAttribs.financialDataFromSAAll.get(i).fin_attribs_id,
+            if (financialAttribs.financialDataFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+                Log.info("There is no changed data for Financial attributes");
+            }else{
+                Assert.assertEquals("The classname is incorrect for id=" + financialAttribs.financialDataFromSAAll.get(i).fin_attribs_id,
                     "WorkFinancialAttributes", financialAttribs.financialDataFromGD.get(i).B_CLASSNAME);
 
             Log.info("Fin attr in sa is: " + financialAttribs.financialDataFromSAAll.get(i).fin_attribs_id);
@@ -275,6 +281,7 @@ public class FinancialAttributesSteps {
                         financialAttribs.financialDataFromSAAll.get(i).external_reference
                                 .equals(financialAttribs.financialDataFromGD.get(i).external_reference));
             }
+        }
         }
     }
 

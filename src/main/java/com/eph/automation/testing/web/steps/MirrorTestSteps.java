@@ -204,7 +204,10 @@ public class MirrorTestSteps {
                     .replace("PARAM2",mirrorContext.childID.get(0).workID));
             mirrorContext.mirrorDataFromSA = DBManager.getDBResultAsBeanList(sql, MirrorsDataObject.class, Constants.EPH_URL);
 
-            Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + mirrorContext.workID.get(0).workID,
+            if (mirrorContext.mirrorDataFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+                    Log.info("There is no changed data for Mirrors");
+            }else{
+                Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + mirrorContext.workID.get(0).workID,
                     "WorkRelationship",
                     mirrorContext.mirrorDataFromSA.get(0).B_CLASSNAME);
 
@@ -246,37 +249,42 @@ public class MirrorTestSteps {
             }
         }
     }
+    }
 
     @And("^The mirror data between SA and GD is identical$")
-    public void checkmirrorGDData(){
-        for (int i=0; i<mirrorContext.mirrorDataFromSAall.size();i++) {
-            Assert.assertEquals("The WORK_REL_mirror_ID is incorrect for id=" + mirrorContext.mirrorDataFromSAall.get(i).WORK_REL_mirror_ID,
-                    mirrorContext.mirrorDataFromSAall.get(i).WORK_REL_mirror_ID,
-                    mirrorContext.mirrorDataFromGD.get(i).WORK_REL_mirror_ID);
+    public void checkmirrorGDData() {
+        for (int i = 0; i < mirrorContext.mirrorDataFromSAall.size(); i++) {
+            if (mirrorContext.mirrorDataFromGD.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+                Log.info("There is no changed data for Mirrors");
+            } else {
+                Assert.assertEquals("The WORK_REL_mirror_ID is incorrect for id=" + mirrorContext.mirrorDataFromSAall.get(i).WORK_REL_mirror_ID,
+                        mirrorContext.mirrorDataFromSAall.get(i).WORK_REL_mirror_ID,
+                        mirrorContext.mirrorDataFromGD.get(i).WORK_REL_mirror_ID);
 
-            Assert.assertEquals("The RELATIONSHIP_PMX_SOURCEREF is incorrect for id=" + mirrorContext.mirrorDataFromSAall.get(i).WORK_REL_mirror_ID,
-                    mirrorContext.mirrorDataFromSAall.get(i).RELATIONSHIP_PMX_SOURCEREF,
-                    mirrorContext.mirrorDataFromGD.get(i).RELATIONSHIP_PMX_SOURCEREF);
+                Assert.assertEquals("The RELATIONSHIP_PMX_SOURCEREF is incorrect for id=" + mirrorContext.mirrorDataFromSAall.get(i).WORK_REL_mirror_ID,
+                        mirrorContext.mirrorDataFromSAall.get(i).RELATIONSHIP_PMX_SOURCEREF,
+                        mirrorContext.mirrorDataFromGD.get(i).RELATIONSHIP_PMX_SOURCEREF);
 
-            Assert.assertEquals("The CHILD_PMX_SOURCE is incorrect for id=" + mirrorContext.mirrorDataFromSAall.get(i).WORK_REL_mirror_ID,
-                    mirrorContext.mirrorDataFromSAall.get(i).CHILD_PMX_SOURCE,
-                    mirrorContext.mirrorDataFromGD.get(i).CHILD_PMX_SOURCE);
+                Assert.assertEquals("The CHILD_PMX_SOURCE is incorrect for id=" + mirrorContext.mirrorDataFromSAall.get(i).WORK_REL_mirror_ID,
+                        mirrorContext.mirrorDataFromSAall.get(i).CHILD_PMX_SOURCE,
+                        mirrorContext.mirrorDataFromGD.get(i).CHILD_PMX_SOURCE);
 
-            Assert.assertEquals("The B_CLASSNAME is incorrect for id=" +mirrorContext.mirrorDataFromSAall.get(i).WORK_REL_mirror_ID,
-                    mirrorContext.mirrorDataFromSAall.get(i).B_CLASSNAME,
-                    mirrorContext.mirrorDataFromGD.get(i).B_CLASSNAME);
+                Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + mirrorContext.mirrorDataFromSAall.get(i).WORK_REL_mirror_ID,
+                        mirrorContext.mirrorDataFromSAall.get(i).B_CLASSNAME,
+                        mirrorContext.mirrorDataFromGD.get(i).B_CLASSNAME);
 
-            if (mirrorContext.mirrorDataFromSAall.get(i).EFFECTIVE_START_DATE != null
-                    || mirrorContext.mirrorDataFromGD.get(i).EFFECTIVE_START_DATE != null) {
-                Assert.assertEquals("The EFFECTIVE_START_DATE is incorrect for id=" + mirrorContext.mirrorDataFromSAall.get(i).WORK_REL_mirror_ID,
-                        mirrorContext.mirrorDataFromSAall.get(i).EFFECTIVE_START_DATE,
-                        mirrorContext.mirrorDataFromGD.get(i).EFFECTIVE_START_DATE);
-            }
-            if (mirrorContext.mirrorDataFromSAall.get(i).ENDON != null
-                    || mirrorContext.mirrorDataFromGD.get(i).ENDON != null) {
-                Assert.assertEquals("The ENDON is incorrect for id=" + mirrorContext.mirrorDataFromSAall.get(i).WORK_REL_mirror_ID,
-                        mirrorContext.mirrorDataFromSAall.get(i).ENDON,
-                        mirrorContext.mirrorDataFromGD.get(i).ENDON);
+                if (mirrorContext.mirrorDataFromSAall.get(i).EFFECTIVE_START_DATE != null
+                        || mirrorContext.mirrorDataFromGD.get(i).EFFECTIVE_START_DATE != null) {
+                    Assert.assertEquals("The EFFECTIVE_START_DATE is incorrect for id=" + mirrorContext.mirrorDataFromSAall.get(i).WORK_REL_mirror_ID,
+                            mirrorContext.mirrorDataFromSAall.get(i).EFFECTIVE_START_DATE,
+                            mirrorContext.mirrorDataFromGD.get(i).EFFECTIVE_START_DATE);
+                }
+                if (mirrorContext.mirrorDataFromSAall.get(i).ENDON != null
+                        || mirrorContext.mirrorDataFromGD.get(i).ENDON != null) {
+                    Assert.assertEquals("The ENDON is incorrect for id=" + mirrorContext.mirrorDataFromSAall.get(i).WORK_REL_mirror_ID,
+                            mirrorContext.mirrorDataFromSAall.get(i).ENDON,
+                            mirrorContext.mirrorDataFromGD.get(i).ENDON);
+                }
             }
         }
     }
