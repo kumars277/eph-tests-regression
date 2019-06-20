@@ -75,6 +75,24 @@ public class MirrorsSQL {
             "WHERE \"F_RELATIONSHIP_TYPE\"='MIR' and d1.dq_err != 'Y' and d2.dq_err != 'Y' ORDER BY RANDOM()\n" +
             " LIMIT PARAM1;";
 
+    public static String gettingNumberOfIdsDelta="SELECT \"RELATIONSHIP_PMX_SOURCEREF\"  as random_value\n" +
+            " FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel\n" +
+            "  join  (select s.pmx_source_reference as stage, g.external_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
+            "from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s on g.external_reference = s.pmx_source_reference::varchar)  d1\n" +
+            "on STG_10_PMX_WORK_REL.\"PARENT_PMX_SOURCE\"::varchar = d1.consol\n" +
+            "join  (select s.pmx_source_reference as stage, g.external_reference as gold,\n" +
+            "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
+            "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
+            "from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s on g.external_reference = s.pmx_source_reference::varchar) d2\n" +
+            "on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.consol\n"+
+            "left join   (select distinct external_reference, work_relationship_id from semarchy_eph_mdm.sa_work_relationship) a on\n" +
+            GetEPHDBUser.getDBUser()+".STG_10_PMX_WORK_REL.\"RELATIONSHIP_PMX_SOURCEREF\"::varchar = a.external_reference\n"+
+            "WHERE \"F_RELATIONSHIP_TYPE\"='MIR' and d1.dq_err != 'Y' and d2.dq_err != 'Y' and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('PARAM2','YYYYMMDDHH24MI')" +
+            " ORDER BY RANDOM()\n" +
+            " LIMIT PARAM1;";
+
     public static String gettingWorkID="SELECT work_id as work_id from semarchy_eph_mdm.sa_wwork where external_reference \n" +
             "in ('%s') ORDER BY external_reference";
 
@@ -114,7 +132,7 @@ public class MirrorsSQL {
             "  ,\"ENDON\" as ENDON\n"+
             "  FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel \n"+
             "  WHERE \"RELATIONSHIP_PMX_SOURCEREF\" in ('%s')"+
-            "  AND \"F_RELATIONSHIP_TYPE\"='MIR' order by RELATIONSHIP_PMX_SOURCEREF";
+            "  AND \"F_RELATIONSHIP_TYPE\"='MIR' order by RELATIONSHIP_PMX_SOURCEREF desc";
 
     public static String GET_SA_mirror_DATA ="SELECT \n" +
             " WORK_RELATIONSHIP_ID as WORK_REL_mirror_ID " +
@@ -152,7 +170,7 @@ public class MirrorsSQL {
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
             "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n"+
-            "  AND f_parent in ('%s') order by WORK_RELATIONSHIP_ID";
+            "  AND f_parent in ('%s') order by external_reference desc";
 
     public static String GET_GD_Mirror_DATA ="SELECT \n" +
             " WORK_RELATIONSHIP_ID as WORK_REL_mirror_ID " +

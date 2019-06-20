@@ -111,7 +111,23 @@ public class MirrorTestSteps {
         }
         Log.info("numberOfRecords = " + numberOfRecords);
 
-        sql = MirrorsSQL.gettingNumberOfIds.replace("PARAM1", numberOfRecords);
+        if (System.getProperty("LOAD") != null) {
+            if(System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
+                sql = MirrorsSQL.gettingNumberOfIds.replace("PARAM1", numberOfRecords);
+            }else {
+                sql = WorkCountSQL.GET_REFRESH_DATE;
+                refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                        Constants.EPH_URL);
+                sql = MirrorsSQL.gettingNumberOfIdsDelta.replace("PARAM1", numberOfRecords)
+                        .replace("PARAM2",refreshDate.get(1).refresh_timestamp);
+            }
+        }else {
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                    Constants.EPH_URL);
+            sql = MirrorsSQL.gettingNumberOfIdsDelta.replace("PARAM1", numberOfRecords)
+                    .replace("PARAM2",refreshDate.get(1).refresh_timestamp);
+        }
         List<Map<?, ?>> randomISBNIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         ids = randomISBNIds.stream().map(m -> (BigDecimal) m.get("random_value")).map(String::valueOf).collect(Collectors.toList());
