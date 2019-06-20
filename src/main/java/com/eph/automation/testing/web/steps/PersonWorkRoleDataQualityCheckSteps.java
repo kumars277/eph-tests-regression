@@ -191,52 +191,63 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
         List<Map<?, ?>> randomPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
+        if (randomPersons.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There are no records found for Person Work Role");
+        } else {
+
 //        ids = randomPersons.stream().map(m -> (String) m.get("WORK_PERSON_ROLE_SOURCE_REF")).map(String::valueOf).collect(Collectors.toList());
-        idsSA = randomPersons.stream().map(m -> (BigDecimal) m.get("WORK_PERSON_ROLE_ID")).map(String::valueOf).collect(Collectors.toList());
-        Log.info(idsSA.toString());
+            idsSA = randomPersons.stream().map(m -> (BigDecimal) m.get("WORK_PERSON_ROLE_ID")).map(String::valueOf).collect(Collectors.toList());
+            Log.info(idsSA.toString());
 
-        //get ids (WORK_PERSON_SOURCE_REF)
-        Log.info("Get the ids of the records in EPH STG from the lookup table ..");
-        idsSourceRef = new ArrayList<>(idsSA);
+            //get ids (WORK_PERSON_SOURCE_REF)
+            Log.info("Get the ids of the records in EPH STG from the lookup table ..");
+            idsSourceRef = new ArrayList<>(idsSA);
 
-        sql = String.format(PersonWorkRoleDataSQL.GET_IDS_FROM_STG_FOR_GIVEN_IDS_IN_SA, Joiner.on("','").join(idsSA));
-        Log.info(sql);
+            sql = String.format(PersonWorkRoleDataSQL.GET_IDS_FROM_STG_FOR_GIVEN_IDS_IN_SA, Joiner.on("','").join(idsSA));
+            Log.info(sql);
 
 
-        List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
-        ids = lookupResults.stream().map(m -> (String) m.get("WORK_PERSON_ROLE_SOURCE_REF")).map(String::valueOf).collect(Collectors.toList());
-        Log.info(ids.toString());
+            ids = lookupResults.stream().map(m -> (String) m.get("WORK_PERSON_ROLE_SOURCE_REF")).map(String::valueOf).collect(Collectors.toList());
+            Log.info(ids.toString());
+        }
     }
 
 
     @When("^We get the person work role records with (.*) from PMX$")
     public void getPersonWorkRoleRecordsPMX(String type) {
         Log.info("Get the person work role records with type from PMX ..");
-
-        //prepare ids
-        idsPMX = new ArrayList<>(ids);
+        if (idsPMX.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There is no updated data for Person Work Role");
+        } else {
+            //prepare ids
+            idsPMX = new ArrayList<>(ids);
 //        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).substring(idsPMX.get(i).indexOf("-")+1, idsPMX.get(i).lastIndexOf("-"))));
 
-        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).replace("-" + type, "")));
+            IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).replace("-" + type, "")));
 
 
-        if(type.equals("PD")) {
-            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_PD, Joiner.on("','").join(idsPMX));
-            Log.info(sql);
-        } if(type.equals("AU")) {
-            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_AU, Joiner.on("','").join(idsPMX));
-            Log.info(sql);
-        } if(type.equals("PU")) {
-            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_PU, Joiner.on("','").join(idsPMX));
-            Log.info(sql);
-        } if(type.equals("AE")) {
-            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_AE, Joiner.on("','").join(idsPMX));
-            Log.info(sql);
+            if (type.equals("PD")) {
+                sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_PD, Joiner.on("','").join(idsPMX));
+                Log.info(sql);
+            }
+            if (type.equals("AU")) {
+                sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_AU, Joiner.on("','").join(idsPMX));
+                Log.info(sql);
+            }
+            if (type.equals("PU")) {
+                sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_PU, Joiner.on("','").join(idsPMX));
+                Log.info(sql);
+            }
+            if (type.equals("AE")) {
+                sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_AE, Joiner.on("','").join(idsPMX));
+                Log.info(sql);
+            }
+
+            dataQualityContext.personWorkRoleDataObjectsFromPMX = DBManager
+                    .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.PMX_URL);
         }
-
-        dataQualityContext.personWorkRoleDataObjectsFromPMX = DBManager
-                .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.PMX_URL);
     }
 
     @Then("^We get the person work role records from EPH STG$")
@@ -257,53 +268,55 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @And("^Compare person work role records in PMX and EPH STG for (.*)$")
     public void comparePersonWorkRolesRecordsInPMXAndEPHSTG(String type) {
         Log.info("And compare work role records in PMX and EPH STG ..");
+        if (dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There is no updated data for Person Work Role");
+        } else {
+            //sort the lists before comparison
+            dataQualityContext.personWorkRoleDataObjectsFromPMX.sort(Comparator.comparing(PersonWorkRoleDataObject::getWORK_PERSON_ROLE_SOURCE_REF));
+            dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.sort(Comparator.comparing(PersonWorkRoleDataObject::getWORK_PERSON_ROLE_SOURCE_REF));
 
-        //sort the lists before comparison
-        dataQualityContext.personWorkRoleDataObjectsFromPMX.sort(Comparator.comparing(PersonWorkRoleDataObject::getWORK_PERSON_ROLE_SOURCE_REF));
-        dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.sort(Comparator.comparing(PersonWorkRoleDataObject::getWORK_PERSON_ROLE_SOURCE_REF));
-
-        IntStream.range(0, dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.size()).forEach(i -> {
-
-
-            //WORK_PERSON_ROLE_SOURCE_REF
-            Log.info("WORK_PERSON_ROLE_SOURCE_REF in PMX: " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getWORK_PERSON_ROLE_SOURCE_REF());
-            Log.info("WORK_PERSON_ROLE_SOURCE_REF in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getWORK_PERSON_ROLE_SOURCE_REF());
-
-            Log.info("Expecting WORK_PERSON_ROLE_SOURCE_REF in PMX and EPH STG is consistent");
-
-            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getWORK_PERSON_ROLE_SOURCE_REF(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getWORK_PERSON_ROLE_SOURCE_REF());
+            IntStream.range(0, dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.size()).forEach(i -> {
 
 
-            //PMX_PARTY_SOURCE_REF
-            Log.info("PMX_PARTY_SOURCE_REF in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getWORK_PERSON_ROLE_SOURCE_REF());
-            Log.info("PMX_PARTY_SOURCE_REF in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getWORK_PERSON_ROLE_SOURCE_REF());
+                //WORK_PERSON_ROLE_SOURCE_REF
+                Log.info("WORK_PERSON_ROLE_SOURCE_REF in PMX: " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getWORK_PERSON_ROLE_SOURCE_REF());
+                Log.info("WORK_PERSON_ROLE_SOURCE_REF in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getWORK_PERSON_ROLE_SOURCE_REF());
 
-            Log.info("Expecting PMX_PARTY_SOURCE_REF in PMX and EPH STG is consistent");
+                Log.info("Expecting WORK_PERSON_ROLE_SOURCE_REF in PMX and EPH STG is consistent");
 
-            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getWORK_PERSON_ROLE_SOURCE_REF(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getWORK_PERSON_ROLE_SOURCE_REF());
-
-            //PMX_WORK_SOURCE_REF
-            Log.info("PMX_WORK_SOURCE_REF in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getPMX_WORK_SOURCE_REF());
-            Log.info("PMX_WORK_SOURCE_REF in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getPMX_WORK_SOURCE_REF());
-
-            Log.info("Expecting PMX_WORK_SOURCE_REF in PMX and EPH STG is consistent");
-
-            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getPMX_WORK_SOURCE_REF(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getPMX_WORK_SOURCE_REF());
+                assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getWORK_PERSON_ROLE_SOURCE_REF(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getWORK_PERSON_ROLE_SOURCE_REF());
 
 
-            //F_ROLE
-            Log.info("F_ROLE in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
+                //PMX_PARTY_SOURCE_REF
+                Log.info("PMX_PARTY_SOURCE_REF in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getWORK_PERSON_ROLE_SOURCE_REF());
+                Log.info("PMX_PARTY_SOURCE_REF in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getWORK_PERSON_ROLE_SOURCE_REF());
 
-            assertEquals(type , dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
+                Log.info("Expecting PMX_PARTY_SOURCE_REF in PMX and EPH STG is consistent");
+
+                assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getWORK_PERSON_ROLE_SOURCE_REF(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getWORK_PERSON_ROLE_SOURCE_REF());
+
+                //PMX_WORK_SOURCE_REF
+                Log.info("PMX_WORK_SOURCE_REF in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getPMX_WORK_SOURCE_REF());
+                Log.info("PMX_WORK_SOURCE_REF in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getPMX_WORK_SOURCE_REF());
+
+                Log.info("Expecting PMX_WORK_SOURCE_REF in PMX and EPH STG is consistent");
+
+                assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getPMX_WORK_SOURCE_REF(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getPMX_WORK_SOURCE_REF());
 
 
-            //START_DATE
-            Log.info("START_DATE in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getSTART_DATE());
-            Log.info("START_DATE in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getSTART_DATE());
+                //F_ROLE
+                Log.info("F_ROLE in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
 
-            Log.info("Expecting START_DATE in PMX and EPH STG is consistent");
+                assertEquals(type, dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
 
-            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getSTART_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getSTART_DATE());
+
+                //START_DATE
+                Log.info("START_DATE in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getSTART_DATE());
+                Log.info("START_DATE in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getSTART_DATE());
+
+                Log.info("Expecting START_DATE in PMX and EPH STG is consistent");
+
+                assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getSTART_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getSTART_DATE());
 
 //            //END_DATE
 //            Log.info("END_DATE in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getEND_DATE());
@@ -314,17 +327,17 @@ public class PersonWorkRoleDataQualityCheckSteps {
 //            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getEND_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEND_DATE());
 
 
-            //UPDATED
-            Log.info("UPDATED in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getUPDATED());
-            Log.info("UPDATED in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getUPDATED());
+                //UPDATED
+                Log.info("UPDATED in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getUPDATED());
+                Log.info("UPDATED in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getUPDATED());
 
-            Log.info("Expecting UPDATED in PMX and EPH STG is consistent");
+                Log.info("Expecting UPDATED in PMX and EPH STG is consistent");
 
-            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getUPDATED(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getUPDATED());
+                assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getUPDATED(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getUPDATED());
 
 
-        });
-
+            });
+        }
     }
 
 //    @Then("^We get the ids of the person work role records in EPH SA from the lookup table$")
@@ -360,116 +373,120 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @And("^Check the mandatory columns are populated for persons work role$")
     public void checkMandatoryColumnsForPersonsWorkRoleInSAArePopulated() {
         Log.info("We check that mandatory columns are populated ...");
+        if (dataQualityContext.personWorkRoleDataObjectsFromEPHSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There are no records found for Person Work Role");
+        } else {
+            IntStream.range(0, dataQualityContext.personWorkRoleDataObjectsFromEPHSA.size()).forEach(i -> {
+                //verify F_EVENT is not null
+                assertNotNull(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_EVENT());
+                //verify WORK_PERSON_ROLE_ID is not null
+                assertNotNull(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getWORK_PERSON_ROLE_ID());
+                //verify F_ROLE
+                assertNotNull(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_ROLE());
+                //verify F_WWORK
+                assertNotNull(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_WWORK());
+                //verify F_PERSON
+                assertNotNull(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_PERSON());
 
-        IntStream.range(0, dataQualityContext.personWorkRoleDataObjectsFromEPHSA.size()).forEach(i -> {
-            //verify F_EVENT is not null
-            assertNotNull(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_EVENT());
-            //verify WORK_PERSON_ROLE_ID is not null
-            assertNotNull(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getWORK_PERSON_ROLE_ID());
-            //verify F_ROLE
-            assertNotNull(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_ROLE());
-            //verify F_WWORK
-            assertNotNull(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_WWORK());
-            //verify F_PERSON
-            assertNotNull(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_PERSON());
 
-
-        });
+            });
+        }
     }
 
     @And("^Compare person work role records in EPH STG and EPH SA$")
     public void comparePersonWorkRolesRecordsInSTGAndSA() {
         Log.info("And compare work role records in EPH STG and EPH SA ..");
+        if (dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There are no records found for Person Work Role");
+        } else {
+
+            IntStream.range(0, dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.size()).forEach(i -> {
+
+                //get data from SA for the current record from STG
+                String currentId = "WPR-" + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getWORK_PERSON_ROLE_SOURCE_REF();
+                sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE, currentId);
+                Log.info(sql);
+
+                List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                idsSA = lookupResults.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
+
+                sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHSA, Joiner.on("','").join(idsSA));
+                Log.info(sql);
+
+                dataQualityContext.personWorkRoleDataObjectsFromEPHSA = DBManager
+                        .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
 
 
-        IntStream.range(0, dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.size()).forEach(i -> {
-
-            //get data from SA for the current record from STG
-            String currentId = "WPR-" + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getWORK_PERSON_ROLE_SOURCE_REF();
-            sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE, currentId);
-            Log.info(sql);
-
-            List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            idsSA = lookupResults.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
-
-            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHSA, Joiner.on("','").join(idsSA));
-            Log.info(sql);
-
-            dataQualityContext.personWorkRoleDataObjectsFromEPHSA = DBManager
-                    .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
+                //B_CLASSNAME
+                Log.info("B_CLASSNAME in EPH SA: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getB_CLASSNAME());
+                assertEquals("WorkPersonRole", dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getB_CLASSNAME());
 
 
-            //B_CLASSNAME
-            Log.info("B_CLASSNAME in EPH SA: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getB_CLASSNAME());
-            assertEquals("WorkPersonRole", dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getB_CLASSNAME());
+                //EFFECTIVE_START_DATE
+                Log.info("EFFECTIVE_START_DATE in EPH STG : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE());
+                Log.info("EFFECTIVE_START_DATE in EPH SA: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_START_DATE());
+
+                Log.info("Expecting EFFECTIVE_START_DATE in EPH STG and EPH SA to be consistent");
+
+                assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_START_DATE());
 
 
-            //EFFECTIVE_START_DATE
-            Log.info("EFFECTIVE_START_DATE in EPH STG : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE());
-            Log.info("EFFECTIVE_START_DATE in EPH SA: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_START_DATE());
+                //EFFECTIVE_END_DATE
+                Log.info("EFFECTIVE_END_DATE in EPH STG : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_END_DATE());
+                Log.info("EFFECTIVE_END_DATE in EPH SA: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_END_DATE());
 
-            Log.info("Expecting EFFECTIVE_START_DATE in EPH STG and EPH SA to be consistent");
+                Log.info("Expecting EFFECTIVE_END_DATE in EPH STG and EPH SA to be consistent");
 
-            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_START_DATE());
-
-
-            //EFFECTIVE_END_DATE
-            Log.info("EFFECTIVE_END_DATE in EPH STG : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_END_DATE());
-            Log.info("EFFECTIVE_END_DATE in EPH SA: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_END_DATE());
-
-            Log.info("Expecting EFFECTIVE_END_DATE in EPH STG and EPH SA to be consistent");
-
-            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_END_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_END_DATE());
+                assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_END_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getEFFECTIVE_END_DATE());
 
 
-            //F_ROLE
-            Log.info("F_ROLE in EPH STG : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
-            Log.info("F_ROLE in EPH SA: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getF_ROLE());
+                //F_ROLE
+                Log.info("F_ROLE in EPH STG : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
+                Log.info("F_ROLE in EPH SA: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getF_ROLE());
 
-            Log.info("Expecting F_ROLE in EPH STG and EPH SA to be consistent");
+                Log.info("Expecting F_ROLE in EPH STG and EPH SA to be consistent");
 
-            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getF_ROLE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getF_ROLE());
+                assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getF_ROLE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getF_ROLE());
 
-            //F_WWORK
-            String currentF_WWORK = dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getF_WWORK();
-            Log.info("F_WWORK in EPH SA: " + currentF_WWORK);
-
-
-            String idL = dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getPMX_WORK_SOURCE_REF();
-            sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE_EPH, "WORK", idL);
-            Log.info(sql);
+                //F_WWORK
+                String currentF_WWORK = dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getF_WWORK();
+                Log.info("F_WWORK in EPH SA: " + currentF_WWORK);
 
 
-            String expectedF_WWORK;
+                String idL = dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getPMX_WORK_SOURCE_REF();
+                sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE_EPH, "WORK", idL);
+                Log.info(sql);
 
 
-            List<Map<String, Object>> results = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            expectedF_WWORK = ((String) results.get(0).get("PERSON_ID"));
-
-            assertEquals("Expecting F_WWORK in EPH STG and EPH SA to be consistent", expectedF_WWORK, currentF_WWORK);
+                String expectedF_WWORK;
 
 
-            //F_PERSON
+                List<Map<String, Object>> results = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                expectedF_WWORK = ((String) results.get(0).get("PERSON_ID"));
 
-            String currentF_PERSON = dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getF_PERSON();
+                assertEquals("Expecting F_WWORK in EPH STG and EPH SA to be consistent", expectedF_WWORK, currentF_WWORK);
 
 
+                //F_PERSON
 
-            idL = "PERSON-" + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getPMX_PARTY_SOURCE_REF();
-            sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE, idL);
-            Log.info(sql);
+                String currentF_PERSON = dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(0).getF_PERSON();
 
-            String expectedF_PERSON;
-            List<Map<String,Object>> p_results = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            expectedF_PERSON = (p_results.get(0).get("PERSON_ID")).toString();
 
-            Log.info("F_PERSON in EPH STG: " + expectedF_PERSON);
-            Log.info("F_PERSON in EPH SA: " + currentF_PERSON);
+                idL = "PERSON-" + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getPMX_PARTY_SOURCE_REF();
+                sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE, idL);
+                Log.info(sql);
 
-            assertEquals("Expecting F_PERSON in EPH STG and EPH SA to be consistent",currentF_PERSON, expectedF_PERSON);
+                String expectedF_PERSON;
+                List<Map<String, Object>> p_results = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                expectedF_PERSON = (p_results.get(0).get("PERSON_ID")).toString();
 
-        });
+                Log.info("F_PERSON in EPH STG: " + expectedF_PERSON);
+                Log.info("F_PERSON in EPH SA: " + currentF_PERSON);
 
+                assertEquals("Expecting F_PERSON in EPH STG and EPH SA to be consistent", currentF_PERSON, expectedF_PERSON);
+
+            });
+        }
     }
 
 
@@ -489,85 +506,88 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @And("^Compare person work role records in EPH SA and EPH GD$")
     public void comparePersonWorkRolesRecordsInSAAndGD() {
         Log.info("And compare work role records in EPH SA and EPH GD ..");
+        if (dataQualityContext.personWorkRoleDataObjectsFromEPHSA.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There are no records found for Person Work Role");
+        } else {
+            dataQualityContext.personWorkRoleDataObjectsFromEPHSA.sort(Comparator.comparing(PersonWorkRoleDataObject::getWORK_PERSON_ROLE_ID));
+            dataQualityContext.personWorkRoleDataObjectsFromEPHGD.sort(Comparator.comparing(PersonWorkRoleDataObject::getWORK_PERSON_ROLE_ID));
 
-        dataQualityContext.personWorkRoleDataObjectsFromEPHSA.sort(Comparator.comparing(PersonWorkRoleDataObject::getWORK_PERSON_ROLE_ID));
-        dataQualityContext.personWorkRoleDataObjectsFromEPHGD.sort(Comparator.comparing(PersonWorkRoleDataObject::getWORK_PERSON_ROLE_ID));
-
-        IntStream.range(0, dataQualityContext.personWorkRoleDataObjectsFromEPHSA.size()).forEach(i -> {
-
-
-            //F_EVENT
-            Log.info("F_EVENT in EPH SA : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_EVENT());
-            Log.info("F_EVENT in EPH GD: " + dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getF_EVENT());
-
-            Log.info("Expecting F_EVENT in EPH SA and EPH GD is consistent");
-
-            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_EVENT(), dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getF_EVENT());
+            IntStream.range(0, dataQualityContext.personWorkRoleDataObjectsFromEPHSA.size()).forEach(i -> {
 
 
-            //B_CLASSNAME
-            Log.info("B_CLASSNAME in EPH SA : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
-            Log.info("B_CLASSNAME in EPH GD: " + dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getB_CLASSNAME());
+                //F_EVENT
+                Log.info("F_EVENT in EPH SA : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_EVENT());
+                Log.info("F_EVENT in EPH GD: " + dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getF_EVENT());
 
-            Log.info("Expecting B_CLASSNAME in EPH SA and EPH GD is consistent");
+                Log.info("Expecting F_EVENT in EPH SA and EPH GD is consistent");
 
-            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getB_CLASSNAME(), dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getB_CLASSNAME());
-
-
-            //WORK_PERSON_ROLE_ID
-            Log.info("WORK_PERSON_ROLE_ID in EPH SA : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getWORK_PERSON_ROLE_ID());
-            Log.info("WORK_PERSON_ROLE_ID in EPH GD: " + dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getWORK_PERSON_ROLE_ID());
-
-            Log.info("Expecting WORK_PERSON_ROLE_ID in EPH SA and EPH GD is consistent");
-
-            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getWORK_PERSON_ROLE_ID(), dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getWORK_PERSON_ROLE_ID());
+                assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_EVENT(), dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getF_EVENT());
 
 
-            //EFFECTIVE_START_DATE
-            Log.info("EFFECTIVE_START_DATE in EPH SA : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_START_DATE());
-            Log.info("EFFECTIVE_START_DATE in EPH GD: " + dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getEFFECTIVE_START_DATE());
+                //B_CLASSNAME
+                Log.info("B_CLASSNAME in EPH SA : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
+                Log.info("B_CLASSNAME in EPH GD: " + dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getB_CLASSNAME());
 
-            Log.info("Expecting EFFECTIVE_START_DATE in EPH SA and EPH GD is consistent");
+                Log.info("Expecting B_CLASSNAME in EPH SA and EPH GD is consistent");
 
-            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_START_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getEFFECTIVE_START_DATE());
-
-
-            //EFFECTIVE_END_DATE
-            Log.info("EFFECTIVE_END_DATE in EPH SA : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_END_DATE());
-            Log.info("EFFECTIVE_END_DATE in EPH GD: " + dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getEFFECTIVE_END_DATE());
-
-            Log.info("Expecting EFFECTIVE_END_DATE in EPH SA and EPH GD is consistent");
-
-            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_END_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getEFFECTIVE_END_DATE());
+                assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getB_CLASSNAME(), dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getB_CLASSNAME());
 
 
-            //F_ROLE
-            Log.info("F_ROLE in EPH SA : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_ROLE());
-            Log.info("F_ROLE in EPH GD: " + dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getF_ROLE());
+                //WORK_PERSON_ROLE_ID
+                Log.info("WORK_PERSON_ROLE_ID in EPH SA : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getWORK_PERSON_ROLE_ID());
+                Log.info("WORK_PERSON_ROLE_ID in EPH GD: " + dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getWORK_PERSON_ROLE_ID());
 
-            Log.info("Expecting F_ROLE in EPH SA and EPH GD is consistent");
+                Log.info("Expecting WORK_PERSON_ROLE_ID in EPH SA and EPH GD is consistent");
 
-            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_ROLE(), dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getF_ROLE());
+                assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getWORK_PERSON_ROLE_ID(), dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getWORK_PERSON_ROLE_ID());
 
 
-            //F_WWORK
-            Log.info("F_WWORK in EPH SA : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_WWORK());
-            Log.info("F_WWORK in EPH GD: " + dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getF_WWORK());
+                //EFFECTIVE_START_DATE
+                Log.info("EFFECTIVE_START_DATE in EPH SA : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_START_DATE());
+                Log.info("EFFECTIVE_START_DATE in EPH GD: " + dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getEFFECTIVE_START_DATE());
 
-            Log.info("Expecting F_WWORK in EPH SA and EPH GD is consistent");
+                Log.info("Expecting EFFECTIVE_START_DATE in EPH SA and EPH GD is consistent");
 
-            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_WWORK(), dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getF_WWORK());
+                assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_START_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getEFFECTIVE_START_DATE());
 
-            //F_PERSON
-            Log.info("F_PERSON in EPH SA : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_PERSON());
-            Log.info("F_PERSON in EPH GD: " + dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getF_PERSON());
 
-            Log.info("Expecting F_PERSON in EPH SA and EPH GD is consistent");
+                //EFFECTIVE_END_DATE
+                Log.info("EFFECTIVE_END_DATE in EPH SA : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_END_DATE());
+                Log.info("EFFECTIVE_END_DATE in EPH GD: " + dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getEFFECTIVE_END_DATE());
 
-            assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_PERSON(), dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getF_PERSON());
+                Log.info("Expecting EFFECTIVE_END_DATE in EPH SA and EPH GD is consistent");
 
-        });
+                assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_END_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getEFFECTIVE_END_DATE());
 
+
+                //F_ROLE
+                Log.info("F_ROLE in EPH SA : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_ROLE());
+                Log.info("F_ROLE in EPH GD: " + dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getF_ROLE());
+
+                Log.info("Expecting F_ROLE in EPH SA and EPH GD is consistent");
+
+                assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_ROLE(), dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getF_ROLE());
+
+
+                //F_WWORK
+                Log.info("F_WWORK in EPH SA : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_WWORK());
+                Log.info("F_WWORK in EPH GD: " + dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getF_WWORK());
+
+                Log.info("Expecting F_WWORK in EPH SA and EPH GD is consistent");
+
+                assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_WWORK(), dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getF_WWORK());
+
+                //F_PERSON
+                Log.info("F_PERSON in EPH SA : " + dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_PERSON());
+                Log.info("F_PERSON in EPH GD: " + dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getF_PERSON());
+
+                Log.info("Expecting F_PERSON in EPH SA and EPH GD is consistent");
+
+                assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getF_PERSON(), dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(i).getF_PERSON());
+
+            });
+
+        }
     }
 
 }

@@ -552,15 +552,30 @@ public class WorkExtractSQL {
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')";
 
-    public static final String SELECT_ISBNS_FROM_STG_AND_SA_FOR_END_DATED_RECORDS  = "select sman.external_reference as \"SA\" , concat(map1.eph_id,'ISBN',man.\"ISBN\") as \"STG\" \n" +
-            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n" +
-            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq ,\n" +
-            "semarchy_eph_mdm.gd_manifestation_identifier sman ,\n" +
-            GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n" +
-            "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n" +
-            "and map1.source_ref = mdq.pmx_source_reference::text\n" +
-            "and concat(map1.eph_id,'ISBN',man.\"ISBN\") = sman.external_reference\n" +
-            "and sman.effective_end_date is not null\n";
+    public static final String SELECT_ISBNS_FROM_STG_AND_SA_FOR_END_DATED_RECORDS  = "select gdm.manifestation_id as GD_MANIG_ID ,gdm.external_reference as GD_PMX_SOURCE_REFERENCE ,gid.f_type as typ ,gid.identifier as gd_old_identifier ,gid.effective_start_date,gid.effective_end_date,mdq.f_type as typ_1,man.\"ISBN\" as new_identifier from \n" +
+            "semarchy_eph_mdm.gd_manifestation_identifier gid ,semarchy_eph_mdm.gd_manifestation gdm ," +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq," +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man \n" +
+            "where  gid.f_manifestation = gdm.manifestation_id\n" +
+            "and    gdm.external_reference = mdq.pmx_source_reference::text\n" +
+            "and    mdq.pmx_source_reference = man.\"PRODUCT_MANIFESTATION_ID\"\n" +
+            "and    mdq.dq_err = 'N'\n" +
+            "and gid.b_batchid in (select max(b_batchid) from semarchy_eph_mdm.gd_event where description = 'PMX Talend Load' and workflow_id = 'talend' and f_workflow_source = 'PMX') \n" +
+            "and gid.f_type ='ISBN' \n" +
+            "and gid.effective_end_date is not null;\n";
+
+
+    public static final String SELECT_ISSNS_FROM_STG_AND_SA_FOR_END_DATED_RECORDS  =  "select gdm.manifestation_id as GD_MANIG_ID ,gdm.external_reference as GD_PMX_SOURCE_REFERENCE ,gid.f_type as typ ,gid.identifier as gd_old_identifier ,gid.effective_start_date,gid.effective_end_date,mdq.f_type as typ_1,man.\"ISSN\" as new_identifier from \n" +
+            "semarchy_eph_mdm.gd_manifestation_identifier gid ,semarchy_eph_mdm.gd_manifestation gdm ," +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq," +
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man \n" +
+            "where  gid.f_manifestation = gdm.manifestation_id\n" +
+            "and    gdm.external_reference = mdq.pmx_source_reference::text\n" +
+            "and    mdq.pmx_source_reference = man.\"PRODUCT_MANIFESTATION_ID\"\n" +
+            "and    mdq.dq_err = 'N'\n" +
+            "and gid.b_batchid in (select max(b_batchid) from semarchy_eph_mdm.gd_event where description = 'PMX Talend Load' and workflow_id = 'talend' and f_workflow_source = 'PMX') \n" +
+            "and gid.f_type ='ISSN' \n" +
+            "and gid.effective_end_date is not null;\n";
 
 
 

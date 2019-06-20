@@ -68,10 +68,10 @@ public class AccountableProductDataQualityCheckSteps {
     @When("^We get the count of accountable product data from EPH STG going to DQ$")
     public void getCountAccountableProductsEPHSTGGoingToDQ() {
         Log.info("When We get the count of accountable product data in EPH STG going to DQ..");
-            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                sql = AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ;
-                Log.info(sql);
-            } else {
+//            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+//                sql = AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ;
+//                Log.info(sql);
+//            } else {
         sql = WorkCountSQL.GET_REFRESH_DATE;
         Log.info(sql);
         List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -81,7 +81,7 @@ public class AccountableProductDataQualityCheckSteps {
         sql = String.format(AccountableProductSQL.SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX_DELTA, refreshDate );
         Log.info(sql);
 
-            }
+//            }
 
         List<Map<String, Object>> accountableProductsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countAccountableProductsEPHSTG = ((Long) accountableProductsNumber.get(0).get("count")).intValue();
@@ -170,7 +170,7 @@ public class AccountableProductDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         Log.info("Get the product work ids for given random ids from Staging ..");

@@ -39,9 +39,14 @@ Feature: Entity - Manifestation Identifier - Count & Data Mapping Check - Valida
       | 2               | ISSN       | JEL  |
 
   @Regression
-  Scenario: Verify that existing records end-dated properly
+  Scenario: Verify that existing records end-dated properly for books
     Given Get ISBN from STG and GD for end dated records in GD
     Then Check the manifestation identifiers are updated properly
 
+
+  @Regression
+  Scenario: Verify that existing records end-dated properly for journals
+    Given Get ISSN from STG and GD for end dated records in GD
+    Then Check the manifestation identifiers are updated properly for ISSN
 
 
