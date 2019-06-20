@@ -8,6 +8,20 @@ public class FinAttrSQL {
             "ORDER BY RANDOM()\n" +
             " LIMIT PARAM1;";
 
+    public static String gettingSourceRefDelta="SELECT PMX_SOURCE_REFERENCE as random_value\n" +
+            "from ephsit_talend_owner.stg_10_pmx_wwork ww \n" +
+            "join ephsit_talend_owner.stg_10_pmx_wwork_dq dq on dq.PMX_SOURCE_REFERENCE=ww.\"PRODUCT_WORK_ID\"\n" +
+            "left join semarchy_eph_mdm.gd_wwork gdw on gdw.external_reference = dq.pmx_source_reference::text\n" +
+            "left join semarchy_eph_mdm.gd_work_financial_attribs wfa on wfa.f_wwork = gdw.work_id\n" +
+            "where \"F_OPCO_R12\" is not null and \"F_RESPONSIBILITY_CENTRE\" is not null \n" +
+            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('PARAM2','YYYYMMDDHH24MI')\n" +
+            "and dq.dq_err!='Y'\n" +
+            "and (wfa.f_gl_company = dq.opco and wfa.f_gl_cost_resp_centre = dq.resp_centre and wfa.f_gl_revenue_resp_centre  = dq.resp_centre) \n" +
+            "and wfa.effective_end_date  is  null\n" +
+            "and wfa.b_batchid in (select max(b_batchid) from semarchy_eph_mdm.gd_event where description = 'PMX Talend Load' and workflow_id = 'talend' and f_workflow_source = 'PMX')\n" +
+            "ORDER BY RANDOM()"+
+            " LIMIT PARAM1;";
+
     public static String gettingWorkID="SELECT work_id as work_id from semarchy_eph_mdm.sa_wwork where external_reference \n" +
             "in ('%s') ORDER BY external_reference";
 
@@ -112,7 +126,7 @@ public class FinAttrSQL {
             "and e.f_workflow_source = 'PMX' )";
 
 
-    public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count(*) as dqCount \n" +
+    public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count(*) as dqCount\n" +
             "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork ww \n" +
             "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq dq on dq.PMX_SOURCE_REFERENCE=ww.\"PRODUCT_WORK_ID\"\n" +
             "left join semarchy_eph_mdm.gd_wwork gdw on gdw.external_reference = dq.pmx_source_reference::text\n" +
@@ -120,8 +134,9 @@ public class FinAttrSQL {
             "where \"F_OPCO_R12\" is not null and \"F_RESPONSIBILITY_CENTRE\" is not null \n" +
             "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('PARAM1','YYYYMMDDHH24MI')\n" +
             "and dq.dq_err!='Y'\n" +
-            "and (wfa.f_gl_company != dq.opco and wfa.f_gl_cost_resp_centre != dq.resp_centre and wfa.f_gl_revenue_resp_centre  != dq.resp_centre) \n" +
-            "and wfa.effective_end_date  is null;\n";
+            "and (wfa.f_gl_company = dq.opco and wfa.f_gl_cost_resp_centre = dq.resp_centre and wfa.f_gl_revenue_resp_centre  = dq.resp_centre) \n" +
+            "and wfa.effective_end_date  is  null\n" +
+            "and wfa.b_batchid in (select max(b_batchid) from semarchy_eph_mdm.gd_event where description = 'PMX Talend Load' and workflow_id = 'talend' and f_workflow_source = 'PMX')\n";
 
     public static String PMX_STG_DQ_WORKS_COUNT_NoErr_Full = "select count(*) as dqCount\n" +
             "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq dq\n" +

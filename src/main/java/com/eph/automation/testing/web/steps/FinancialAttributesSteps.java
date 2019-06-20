@@ -135,7 +135,23 @@ public class FinancialAttributesSteps {
         }
         Log.info("numberOfRecords = " + numberOfRecords);
 
-        sql = FinAttrSQL.gettingSourceRef.replace("PARAM1", numberOfRecords);
+        if (System.getProperty("LOAD") != null) {
+            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            sql = FinAttrSQL.gettingSourceRef.replace("PARAM1", numberOfRecords);
+            }else {
+                sql = WorkCountSQL.GET_REFRESH_DATE;
+                refreshDate = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                        Constants.EPH_URL);
+                sql = FinAttrSQL.gettingSourceRefDelta.replace("PARAM1", numberOfRecords)
+                .replace("PARAM2",refreshDate.get(1).refresh_timestamp);
+            }
+        }else{
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            refreshDate = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+                    Constants.EPH_URL);
+            sql = FinAttrSQL.gettingSourceRefDelta.replace("PARAM1", numberOfRecords)
+                    .replace("PARAM2",refreshDate.get(1).refresh_timestamp);
+        }
         List<Map<?, ?>> randomISBNIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         ids = randomISBNIds.stream().map(m -> (BigDecimal) m.get("random_value")).map(String::valueOf).collect(Collectors.toList());
@@ -168,8 +184,9 @@ public class FinancialAttributesSteps {
             Log.info(sql);
             financialAttribs.workID = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
             fWorkID = financialAttribs.workID.get(0).workID;
-
+            Log.info(sql);
             sql = String.format(FinAttrSQL.GET_SA_FinAttr_DATA.replace("PARAM1",fWorkID));
+            Log.info(sql);
             financialAttribs.financialDataFromSA = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
 
             if (financialAttribs.financialDataFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
@@ -190,7 +207,7 @@ public class FinancialAttributesSteps {
                 );
                 Log.info(sql);
                 financialAttribs.financialID = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
-                if (financialAttribs.financialID.isEmpty()) {
+                if (financialAttribs.financialID.isEmpty() ) {
                     Log.info("No financial Id found!");
                 }else {
                     Log.info("Financial attribute in dq is: " + financialAttribs.financialID.get(0).fin_attribs_id);
@@ -241,7 +258,7 @@ public class FinancialAttributesSteps {
     @And("^The data between SA and GD is identical$")
     public void checkFinancialDataGD(){
         for (int i=0; i<financialAttribs.financialDataFromSAAll.size();i++) {
-            if (financialAttribs.financialDataFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            if (financialAttribs.financialDataFromSA.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
                 Log.info("There is no changed data for Financial attributes");
             }else{
                 Assert.assertEquals("The classname is incorrect for id=" + financialAttribs.financialDataFromSAAll.get(i).fin_attribs_id,
