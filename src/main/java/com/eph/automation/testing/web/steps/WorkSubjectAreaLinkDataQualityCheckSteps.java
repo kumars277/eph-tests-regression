@@ -154,7 +154,7 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
 
             sql = String.format(WorkSubjectAreaLinkDataSQL.SELECT_RANDOM_IDS_DELTA, refreshDate, numberOfRecords);
             Log.info(sql);
-//        }
+        }
 
             List<Map<?, ?>> randomIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_SUBJECT_AREA_ID")).map(String::valueOf).collect(Collectors.toList());
