@@ -122,6 +122,15 @@ public class WorkSubjectAreaLinkDataSQL {
         "order by random()\n" +
         "limit '%s'";
 
+    public static String SELECT_RANDOM_IDS_DELTA = "select  \n" +
+            "\"PRODUCT_SUBJECT_AREA_ID\" as PRODUCT_SUBJECT_AREA_ID\n" +
+            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_subject_area\t\n" +
+            "left join "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid mp on mp.source_ref = concat('WORK_SUBJ_AREA-',\"PRODUCT_SUBJECT_AREA_ID\")\n" +
+            "left join semarchy_eph_mdm.sa_work_subject_area_link sa on sa.work_subject_area_link_id = mp.numeric_id\n" +
+            "where sa.b_error_status is null and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')\n\n" +
+            "order by random()\n" +
+            "limit '%s'";
+
     public static String SELECT_DATA_FROM_STG_FOR_CURRENT_RECORD_FROM_SA = "select \"PRODUCT_SUBJECT_AREA_ID\" as PRODUCT_SUBJECT_AREA_ID \n" +
             ",\"F_SUBJECT_AREA\" as F_SUBJECT_AREA  \n" +
             ",\"F_PRODUCT_WORK\" as F_PRODUCT_WORK \n " +

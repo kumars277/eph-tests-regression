@@ -127,8 +127,19 @@ public class SubjectAreaDataQualityCheckSteps {
         Log.info("numberOfRecords = " + numberOfRecords);
 
         Log.info("Get the ids from stg ...");
-        sql = String.format(SubjectAreaDataSQL.SELECT_RANDOM_SUBJECT_DATA, numberOfRecords);
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            sql = String.format(SubjectAreaDataSQL.SELECT_RANDOM_SUBJECT_DATA, numberOfRecords);
         Log.info(sql);
+        } else {
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            Log.info(sql);
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+            Log.info("refreshDate : " + refreshDate);
+
+            sql = String.format(SubjectAreaDataSQL.SELECT_RANDOM_DATA_DELTA, refreshDate, numberOfRecords);
+            Log.info(sql);
+        }
 
         List<Map<?, ?>> randomIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomIds.stream().map(m -> (BigDecimal) m.get("PMX_SOURCE_REF")).map(String::valueOf).collect(Collectors.toList());
@@ -287,9 +298,10 @@ public class SubjectAreaDataQualityCheckSteps {
                 Log.info("PARENT_SUBJECT_AREA_REF in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPARENT_SUBJECT_AREA_REF());
                 Log.info("F_PARENT_SUBJECT_AREA in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getF_PARENT_SUBJECT_AREA());
 
-                if (dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPARENT_SUBJECT_AREA_REF() == null)
-                    assertNull(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getF_PARENT_SUBJECT_AREA());
-                else {
+                if (dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPARENT_SUBJECT_AREA_REF() != null)
+//                    assertNull(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getF_PARENT_SUBJECT_AREA());
+//                else
+                                    {
                     sql = String.format(SubjectAreaDataSQL.GET_F_PARENT_SUBJECT_AREA, dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPARENT_SUBJECT_AREA_REF());
                     Log.info(sql);
                     List<Map<String, Object>> subjectAreaObject = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -307,41 +319,44 @@ public class SubjectAreaDataQualityCheckSteps {
         dataQualityContext.subjectAreaDataObjectsFromSA.sort(Comparator.comparing(SubjectAreaDataObject::getSUBJECT_AREA_ID));
         dataQualityContext.subjectAreaDataObjectsFromGD.sort(Comparator.comparing(SubjectAreaDataObject::getSUBJECT_AREA_ID));
 
-        IntStream.range(0, dataQualityContext.subjectAreaDataObjectsFromSA.size()).forEach(i -> {
+        if (dataQualityContext.subjectAreaDataObjectsFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There are no records found for Subject Area ");
+        } else {
+            IntStream.range(0, dataQualityContext.subjectAreaDataObjectsFromSA.size()).forEach(i -> {
 
-            //B_CLASSNAME
-            Log.info("B_CLASSNAME in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getB_CLASSNAME());
-            Log.info("B_CLASSNAME in GD: " + dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getB_CLASSNAME());
+                //B_CLASSNAME
+                Log.info("B_CLASSNAME in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getB_CLASSNAME());
+                Log.info("B_CLASSNAME in GD: " + dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getB_CLASSNAME());
 
-            assertEquals(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getB_CLASSNAME(), dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getB_CLASSNAME());
+                assertEquals(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getB_CLASSNAME(), dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getB_CLASSNAME());
 
-            //SUBJECT_AREA_CODE
-            Log.info("SUBJECT_AREA_CODE in EPH GD: " + dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getSUBJECT_AREA_CODE());
-            Log.info("SUBJECT_AREA_CODE in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_CODE());
+                //SUBJECT_AREA_CODE
+                Log.info("SUBJECT_AREA_CODE in EPH GD: " + dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getSUBJECT_AREA_CODE());
+                Log.info("SUBJECT_AREA_CODE in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_CODE());
 
-            assertEquals(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_CODE(), dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getSUBJECT_AREA_CODE());
+                assertEquals(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_CODE(), dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getSUBJECT_AREA_CODE());
 
-            //SUBJECT_AREA_NAME
-            Log.info("SUBJECT_AREA_NAME in EPH GD: " + dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getSUBJECT_AREA_NAME());
-            Log.info("SUBJECT_AREA_NAME in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_NAME());
+                //SUBJECT_AREA_NAME
+                Log.info("SUBJECT_AREA_NAME in EPH GD: " + dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getSUBJECT_AREA_NAME());
+                Log.info("SUBJECT_AREA_NAME in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_NAME());
 
-            assertEquals(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_NAME(), dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getSUBJECT_AREA_NAME());
-
-
-            //SUBJECT_AREA_TYPE
-            Log.info("SUBJECT_AREA_TYPE in EPH GD: " + dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getSUBJECT_AREA_TYPE());
-            Log.info("SUBJECT_AREA_TYPE in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_TYPE());
+                assertEquals(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_NAME(), dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getSUBJECT_AREA_NAME());
 
 
-            assertEquals(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_TYPE(), dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getSUBJECT_AREA_TYPE());
+                //SUBJECT_AREA_TYPE
+                Log.info("SUBJECT_AREA_TYPE in EPH GD: " + dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getSUBJECT_AREA_TYPE());
+                Log.info("SUBJECT_AREA_TYPE in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_TYPE());
 
-            //F_PARENT_SUBJECT_AREA
-            Log.info("PARENT_SUBJECT_AREA_REF in EPH GD: " + dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getF_PARENT_SUBJECT_AREA());
-            Log.info("F_PARENT_SUBJECT_AREA in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getF_PARENT_SUBJECT_AREA());
 
-            assertEquals(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getF_PARENT_SUBJECT_AREA(), dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getF_PARENT_SUBJECT_AREA());
+                assertEquals(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_TYPE(), dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getSUBJECT_AREA_TYPE());
 
-        });
+                //F_PARENT_SUBJECT_AREA
+                Log.info("PARENT_SUBJECT_AREA_REF in EPH GD: " + dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getF_PARENT_SUBJECT_AREA());
+                Log.info("F_PARENT_SUBJECT_AREA in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getF_PARENT_SUBJECT_AREA());
 
+                assertEquals(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getF_PARENT_SUBJECT_AREA(), dataQualityContext.subjectAreaDataObjectsFromGD.get(i).getF_PARENT_SUBJECT_AREA());
+
+            });
+        }
     }
 }

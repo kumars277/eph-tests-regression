@@ -101,6 +101,16 @@ public class SubjectAreaDataSQL {
             "order by random()\n" +
             "limit '%s'";
 
+    public static String SELECT_RANDOM_DATA_DELTA = "select \n" +
+            "\"PMX_SOURCE_REF\" as PMX_SOURCE_REF\n" +
+            "from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_SUBJECT_AREA\n" +
+            "left join "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid mp on mp.source_ref = concat('SUBJ_AREA-',\"PMX_SOURCE_REF\")\n" +
+            "left join semarchy_eph_mdm.SA_SUBJECT_AREA sa on mp.numeric_id = sa.subject_area_id\n" +
+            "where sa.b_error_status is null\n" +
+            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')\n" +
+            "order by random()\n" +
+            "limit '%s'";
+
 
     public static String GET_F_PARENT_SUBJECT_AREA = "select numeric_id as F_PARENT_SUBJECT_AREA from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid where source_ref = '%s'";
 
