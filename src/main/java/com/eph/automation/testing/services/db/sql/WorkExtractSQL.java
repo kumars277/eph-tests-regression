@@ -136,8 +136,7 @@ public class WorkExtractSQL {
     public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_DQ_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq";
 
     public static final String COUNT_MANIFESTATIONS_IN_EPH_DQ_TO_SA = "SELECT count(*) AS count FROM " + GetEPHDBUser.getDBUser() +".stg_10_pmx_manifestation_dq dq\n" +
-            "join  " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
-            "where dq.dq_err != 'Y' and w.dq_err != 'Y'";
+            "join  " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n";
 
     public static final String COUNT_MANIFESTATIONS_IN_SA_MANIFESTATION_TABLE =
             "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation sa where f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation\n" +
@@ -334,13 +333,43 @@ public class WorkExtractSQL {
             "   stg.\"PRODUCT_MANIFESTATION_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n" +
             "   \n";
 
-    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_DELTA = "select count(*) AS count \n" +
-            " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation stg ,\n" +
-            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq  mdq\n" +
-            "where \n" +
-            "stg.\"%s\" is not null  and \n" +
-            "   stg.\"PRODUCT_MANIFESTATION_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n" +
-            "   and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
+    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_DELTA =
+
+    "select count(*)\n"+
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n"+
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq , \n"+
+            "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
+            ", " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n"+
+            "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
+            "and map1.source_ref = mdq.pmx_source_reference::text\n"+
+            "and concat(map1.eph_id,'ISBN',man.\"ISBN\") = sman.external_reference\n"+
+            "and f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier \n"+
+            "join semarchy_eph_mdm.sa_event on f_event = event_id \n"+
+            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
+            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n"+
+            "and  \"ISBN\" is not null\n"+
+            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
+
+    public static final String COUNT_OF_RECORDS_WITH_ISSN_IN_EPH_STG_PMX_MANIFESTATION_DELTA =
+
+            "select count(*)\n"+
+                    "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n"+
+                    GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq , \n"+
+                    "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
+                    ", " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n"+
+                    "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
+                    "and map1.source_ref = mdq.pmx_source_reference::text\n"+
+                    "and concat(map1.eph_id,'ISSN',man.\"ISSN\") = sman.external_reference\n"+
+                    "and f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier \n"+
+                    "join semarchy_eph_mdm.sa_event on f_event = event_id \n"+
+                    "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+                    "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
+                    "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+                    "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n"+
+                    "and  \"ISSN\" is not null\n"+
+                    "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
 
     public static final String COUNT_OF_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation_identifier\n" +
             "where f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier\n" +
@@ -348,7 +377,7 @@ public class WorkExtractSQL {
             "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n" +
-            "and f_type = '%s' \n" +
+            "and f_type = 'ISBN' \n" +
             "and identifier is not null\n" +
             "and effective_end_date is null\n" +
             "and f_event = (select max (event_id) from \n" +

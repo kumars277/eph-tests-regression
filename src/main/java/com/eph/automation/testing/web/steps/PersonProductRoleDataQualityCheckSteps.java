@@ -132,9 +132,19 @@ public class PersonProductRoleDataQualityCheckSteps {
         numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
-
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
         sql = String.format(PersonProductRoleDataSQL.GET_RANDOM_PERSON_PRODUCT_ROLE_IDS, numberOfRecords);
-        Log.info(sql);
+            Log.info(sql);
+        } else {
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            Log.info(sql);
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+            sql = String.format(PersonProductRoleDataSQL.GET_RANDOM_PERSON_PRODUCT_ROLE_IDS_DELTA, refreshDate, numberOfRecords );
+            Log.info(sql);
+
+        }
+
 
 
         List<Map<?, ?>> randomPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -306,20 +316,24 @@ public class PersonProductRoleDataQualityCheckSteps {
     public void checkMandatoryColumnsForPersonsInSAArePopulated() {
         Log.info("We check that mandatory columns are populated ...");
 
-        IntStream.range(0, dataQualityContext.personProductRoleDataObjectsFromEPHSA.size()).forEach(i -> {
-            //verify F_EVENT is not null
-            assertNotNull(dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_EVENT());
-            //verify PRODUCT_PERSON_ROLE_ID is not null
-            assertNotNull(dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getPRODUCT_PERSON_ROLE_ID());
-            //verify F_ROLE
-            assertNotNull(dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_ROLE());
-            //verify F_PRODUCT
-            assertNotNull(dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_PRODUCT());
-            //verify F_PERSON
-            assertNotNull(dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_PERSON());
+        if (dataQualityContext.personProductRoleDataObjectsFromEPHSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There is no updated data for Person Product Role data");
+        } else {
+            IntStream.range(0, dataQualityContext.personProductRoleDataObjectsFromEPHSA.size()).forEach(i -> {
+                //verify F_EVENT is not null
+                assertNotNull(dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_EVENT());
+                //verify PRODUCT_PERSON_ROLE_ID is not null
+                assertNotNull(dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getPRODUCT_PERSON_ROLE_ID());
+                //verify F_ROLE
+                assertNotNull(dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_ROLE());
+                //verify F_PRODUCT
+                assertNotNull(dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_PRODUCT());
+                //verify F_PERSON
+                assertNotNull(dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_PERSON());
 
 
-        });
+            });
+        }
     }
 
 
@@ -330,7 +344,10 @@ public class PersonProductRoleDataQualityCheckSteps {
         dataQualityContext.personProductRoleDataObjectsFromEPHSTG.sort(Comparator.comparing(PersonProductRoleDataObject::getPROD_PER_ROLE_SOURCE_REF));
         dataQualityContext.personProductRoleDataObjectsFromEPHSA.sort(Comparator.comparing(PersonProductRoleDataObject::getEXTERNAL_REFERENCE));
 
-        IntStream.range(0, dataQualityContext.personProductRoleDataObjectsFromEPHSTG.size()).forEach(i -> {
+        if (dataQualityContext.personProductRoleDataObjectsFromEPHSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There is no updated data for Person Product Role data");
+        } else {
+            IntStream.range(0, dataQualityContext.personProductRoleDataObjectsFromEPHSTG.size()).forEach(i -> {
 
 //            //get data from SA for the current record from STG
 //            String currentId = "PPR-" + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPROD_PER_ROLE_SOURCE_REF();
@@ -349,67 +366,68 @@ public class PersonProductRoleDataQualityCheckSteps {
 //                    .getDBResultAsBeanList(sql, PersonProductRoleDataObject.class, Constants.EPH_URL);
 
 
-            //B_CLASSNAME
-            Log.info("B_CLASSNAME in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
-            assertEquals("ProductPersonRole", dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
+                //B_CLASSNAME
+                Log.info("B_CLASSNAME in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
+                assertEquals("ProductPersonRole", dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
 
 
-            //EFFECTIVE_START_DATE
-            Log.info("EFFECTIVE_START_DATE in EPH STG : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE());
-            Log.info("EFFECTIVE_START_DATE in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_START_DATE());
+                //EFFECTIVE_START_DATE
+                Log.info("EFFECTIVE_START_DATE in EPH STG : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE());
+                Log.info("EFFECTIVE_START_DATE in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_START_DATE());
 
-            Log.info("Expecting EFFECTIVE_START_DATE in EPH STG and EPH SA to be consistent");
+                Log.info("Expecting EFFECTIVE_START_DATE in EPH STG and EPH SA to be consistent");
 
-            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_START_DATE());
-
-
-            //EFFECTIVE_END_DATE
-            Log.info("EFFECTIVE_END_DATE in EPH STG : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_END_DATE());
-            Log.info("EFFECTIVE_END_DATE in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_END_DATE());
-
-            Log.info("Expecting EFFECTIVE_END_DATE in EPH STG and EPH SA to be consistent");
-
-            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_END_DATE(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_END_DATE());
+                assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_START_DATE());
 
 
-            //F_ROLE
-            Log.info("F_ROLE in EPH STG : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
-            Log.info("F_ROLE in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_ROLE());
+                //EFFECTIVE_END_DATE
+                Log.info("EFFECTIVE_END_DATE in EPH STG : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_END_DATE());
+                Log.info("EFFECTIVE_END_DATE in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_END_DATE());
 
-            Log.info("Expecting F_ROLE in EPH STG and EPH SA is consistent");
+                Log.info("Expecting EFFECTIVE_END_DATE in EPH STG and EPH SA to be consistent");
 
-            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getF_ROLE(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_ROLE());
-
-            //F_PRODUCT
-            String currentF_PRODUCT = dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_PRODUCT();
-            Log.info("F_PRODUCT in EPH SA: " + currentF_PRODUCT);
+                assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_END_DATE(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_END_DATE());
 
 
-            String idL = dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPRODUCT_SOURCE_REF();
-            sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE_EPH, "PRODUCT", idL);
-            Log.info(sql);
+                //F_ROLE
+                Log.info("F_ROLE in EPH STG : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getF_ROLE());
+                Log.info("F_ROLE in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_ROLE());
+
+                Log.info("Expecting F_ROLE in EPH STG and EPH SA is consistent");
+
+                assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getF_ROLE(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_ROLE());
+
+                //F_PRODUCT
+                String currentF_PRODUCT = dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_PRODUCT();
+                Log.info("F_PRODUCT in EPH SA: " + currentF_PRODUCT);
 
 
-            String expectedF_PRODUCT;
+                String idL = dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getPRODUCT_SOURCE_REF();
+                sql = String.format(PersonDataSQL.GET_IDS_FROM_LOOKUP_TABLE_EPH, "PRODUCT", idL);
+                Log.info(sql);
 
 
-            List<Map<String, Object>> results = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            expectedF_PRODUCT = ((String) results.get(0).get("PERSON_ID"));
-
-            assertEquals(expectedF_PRODUCT, currentF_PRODUCT);
+                String expectedF_PRODUCT;
 
 
-            //F_PERSON
+                List<Map<String, Object>> results = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                expectedF_PRODUCT = ((String) results.get(0).get("PERSON_ID"));
 
-            Log.info("F_PERSON in EPH STG : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getF_PERSON());
-            Log.info("F_PERSON in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_PERSON());
-
-            Log.info("Expecting F_PERSON in EPH STG and EPH SA is consistent");
-
-            assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getF_PERSON(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_PERSON());
+                assertEquals(expectedF_PRODUCT, currentF_PRODUCT);
 
 
-        });
+                //F_PERSON
+
+                Log.info("F_PERSON in EPH STG : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getF_PERSON());
+                Log.info("F_PERSON in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_PERSON());
+
+                Log.info("Expecting F_PERSON in EPH STG and EPH SA is consistent");
+
+                assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getF_PERSON(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getF_PERSON());
+
+
+            });
+        }
 
     }
 

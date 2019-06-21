@@ -471,96 +471,99 @@ public class ManifestationDataQualityCheckSteps {
         manifestationDataObjectsFromEPHDQ.sort(Comparator.comparing(ManifestationDataObject::getPMX_SOURCE_REFERENCE));
 
 //        assertThat("Data for manifestations in EPH Staging and EPH SA is equal without order", dataQualityContext.manifestationDataObjectsFromEPHSTG, containsInAnyOrder(dataQualityContext.manifestationDataObjectsFromEPHSA.toArray()));
+        if (manifestationDataObjectsFromEPHSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There is no updated data for Manifestations");
+        } else {
+            IntStream.range(0, manifestationDataObjectsFromEPHSTG.size()).forEach(i -> {
 
-        IntStream.range(0, manifestationDataObjectsFromEPHSTG.size()).forEach(i -> {
+                //PMX_SOURCE_REFERENCE
+                Log.info("PMX_SOURCE_REFERENCE in stg_pmx_manifestation : " + manifestationDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID());
+                Log.info("PMX_SOURCE_REFERENCE in DQ: " + manifestationDataObjectsFromEPHDQ.get(i).getPMX_SOURCE_REFERENCE());
 
-            //PMX_SOURCE_REFERENCE
-            Log.info("PMX_SOURCE_REFERENCE in stg_pmx_manifestation : " + manifestationDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID());
-            Log.info("PMX_SOURCE_REFERENCE in DQ: " + manifestationDataObjectsFromEPHDQ.get(i).getPMX_SOURCE_REFERENCE());
+                assertEquals("Expecting the Product details from EPH Staging and DQ are consistent ",
+                        manifestationDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID(),
+                        manifestationDataObjectsFromEPHDQ.get(i).getPMX_SOURCE_REFERENCE());
 
-            assertEquals("Expecting the Product details from EPH Staging and DQ are consistent ",
-                    manifestationDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID(),
-                    manifestationDataObjectsFromEPHDQ.get(i).getPMX_SOURCE_REFERENCE());
-
-            //MANIFESTATION_KEY_TITLE
-            Log.info("Manifestation key title in DQ: " + manifestationDataObjectsFromEPHDQ.get(i).getMANIFESTATION_KEY_TITLE());
-            Log.info("Manifestation key title in staging: " + manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_KEY_TITLE());
-
-
-            if (Objects.equals(type, "JPR"))
-                assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are not consistent ", manifestationDataObjectsFromEPHDQ.get(i).getMANIFESTATION_KEY_TITLE(), manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_KEY_TITLE() + " " + "(Print)");
-            else if (Objects.equals(type, "JEL"))
-                assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are not consistent ", manifestationDataObjectsFromEPHDQ.get(i).getMANIFESTATION_KEY_TITLE(), manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_KEY_TITLE() + " " + "(Online)");
-            else
-                assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are not consistent ", manifestationDataObjectsFromEPHDQ.get(i).getMANIFESTATION_KEY_TITLE(), manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_KEY_TITLE());
+                //MANIFESTATION_KEY_TITLE
+                Log.info("Manifestation key title in DQ: " + manifestationDataObjectsFromEPHDQ.get(i).getMANIFESTATION_KEY_TITLE());
+                Log.info("Manifestation key title in staging: " + manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_KEY_TITLE());
 
 
-            //INTER_EDITION_FLAG
-            Log.info("INTER_EDITION_FLAG in stg : " + manifestationDataObjectsFromEPHSTG.get(i).getINTERNATIONAL_EDITION_IND());
-            Log.info("INTER_EDITION_FLAG in DQ : " + manifestationDataObjectsFromEPHDQ.get(i).getINTER_EDITION_FLAG());
+                if (Objects.equals(type, "JPR"))
+                    assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are not consistent ", manifestationDataObjectsFromEPHDQ.get(i).getMANIFESTATION_KEY_TITLE(), manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_KEY_TITLE() + " " + "(Print)");
+                else if (Objects.equals(type, "JEL"))
+                    assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are not consistent ", manifestationDataObjectsFromEPHDQ.get(i).getMANIFESTATION_KEY_TITLE(), manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_KEY_TITLE() + " " + "(Online)");
+                else
+                    assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are not consistent ", manifestationDataObjectsFromEPHDQ.get(i).getMANIFESTATION_KEY_TITLE(), manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_KEY_TITLE());
 
 
-            if (Objects.equals(manifestationDataObjectsFromEPHSTG.get(i).getINTERNATIONAL_EDITION_IND(), "Y")) {
-                assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are not consistent ", "t", manifestationDataObjectsFromEPHDQ.get(i).getINTER_EDITION_FLAG());
-            } else
-                assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are not consistent ", "f", manifestationDataObjectsFromEPHDQ.get(i).getINTER_EDITION_FLAG());
-
-            //FIRST_PUB_DATE
-            if (manifestationDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE() != null || manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE() != null) {
-                try {
-                    Date stgFirstPubDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE());
-                    Log.info("FIRST_PUB_DATE in stg :" + stgFirstPubDate);
-
-                    Date saFirstPubDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE());
-                    Log.info("FIRST_PUB_DATE in sa :" + saFirstPubDate);
-
-                    assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", stgFirstPubDate, saFirstPubDate);
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                //F_TYPE
-                assertEquals("Expecting correct F_TYPE is populated in STG_10_PMX_MANIFESTATION_DQ ", manifestationDataObjectsFromEPHDQ.get(i).getF_TYPE(), type);
-
-                //F_STATUS
-                String manifestationStatus = manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_STATUS();
-                Log.info("ManifestationStatus in DQ : " + manifestationDataObjectsFromEPHDQ.get(i).getMANIFESTATION_STATUS());
-
-                String manifestationSubStatus = manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_SUBSTATUS();
-                Log.info("ManifestationSubStatus in staging : " + manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_SUBSTATUS());
+                //INTER_EDITION_FLAG
+                Log.info("INTER_EDITION_FLAG in stg : " + manifestationDataObjectsFromEPHSTG.get(i).getINTERNATIONAL_EDITION_IND());
+                Log.info("INTER_EDITION_FLAG in DQ : " + manifestationDataObjectsFromEPHDQ.get(i).getINTER_EDITION_FLAG());
 
 
-                if (Objects.equals(manifestationStatus, "81")) {
-                    assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", "MPU", manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS());
-                } else if (Objects.equals(manifestationStatus, "83")) {
-                    assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", "MAP", manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS());
-                } else if (Objects.equals(manifestationSubStatus, "Divested")) {
-                    assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", "MDI", manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS());
-                } else if (manifestationStatus == null)
+                if (Objects.equals(manifestationDataObjectsFromEPHSTG.get(i).getINTERNATIONAL_EDITION_IND(), "Y")) {
+                    assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are not consistent ", "t", manifestationDataObjectsFromEPHDQ.get(i).getINTER_EDITION_FLAG());
+                } else
+                    assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are not consistent ", "f", manifestationDataObjectsFromEPHDQ.get(i).getINTER_EDITION_FLAG());
+
+                //FIRST_PUB_DATE
+                if (manifestationDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE() != null || manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE() != null) {
+                    try {
+                        Date stgFirstPubDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE());
+                        Log.info("FIRST_PUB_DATE in stg :" + stgFirstPubDate);
+
+                        Date saFirstPubDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE());
+                        Log.info("FIRST_PUB_DATE in sa :" + saFirstPubDate);
+
+                        assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", stgFirstPubDate, saFirstPubDate);
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    //F_TYPE
+                    assertEquals("Expecting correct F_TYPE is populated in STG_10_PMX_MANIFESTATION_DQ ", manifestationDataObjectsFromEPHDQ.get(i).getF_TYPE(), type);
+
+                    //F_STATUS
+                    String manifestationStatus = manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_STATUS();
+                    Log.info("ManifestationStatus in DQ : " + manifestationDataObjectsFromEPHDQ.get(i).getMANIFESTATION_STATUS());
+
+                    String manifestationSubStatus = manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_SUBSTATUS();
+                    Log.info("ManifestationSubStatus in staging : " + manifestationDataObjectsFromEPHSTG.get(i).getMANIFESTATION_SUBSTATUS());
+
+
+                    if (Objects.equals(manifestationStatus, "81")) {
+                        assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", "MPU", manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS());
+                    } else if (Objects.equals(manifestationStatus, "83")) {
+                        assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", "MAP", manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS());
+                    } else if (Objects.equals(manifestationSubStatus, "Divested")) {
+                        assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", "MDI", manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS());
+                    } else if (manifestationStatus == null)
+                        assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", "UNK", manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS());
+                } else if (manifestationDataObjectsFromEPHSTG.get(i).getRECORD_END_DATE() == null) {
+                    Log.info("RECORD_END_DATE in staging : " + manifestationDataObjectsFromEPHSTG.get(i).getRECORD_END_DATE());
                     assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", "UNK", manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS());
-            } else if (manifestationDataObjectsFromEPHSTG.get(i).getRECORD_END_DATE() == null) {
-                Log.info("RECORD_END_DATE in staging : " + manifestationDataObjectsFromEPHSTG.get(i).getRECORD_END_DATE());
-                assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", "UNK", manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS());
-            } else
-                assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", "MST", manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS());
+                } else
+                    assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are consistent ", "MST", manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS());
 
 
-            //F_WWORK
-            Log.info("F_WWORK in stg_pmx_manifestation : " + manifestationDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
-            Log.info("F_WWORK in DQ: " + manifestationDataObjectsFromEPHDQ.get(i).getF_WWORK());
+                //F_WWORK
+                Log.info("F_WWORK in stg_pmx_manifestation : " + manifestationDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
+                Log.info("F_WWORK in DQ: " + manifestationDataObjectsFromEPHDQ.get(i).getF_WWORK());
 
-            assertEquals("Expecting the Product details from EPH Staging and DQ are consistent ",
-                    manifestationDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK(),
-                    manifestationDataObjectsFromEPHDQ.get(i).getF_WWORK());
+                assertEquals("Expecting the Product details from EPH Staging and DQ are consistent ",
+                        manifestationDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK(),
+                        manifestationDataObjectsFromEPHDQ.get(i).getF_WWORK());
 
-            //DQ_ERR
-            Log.info("DQ_ERR in DQ: " + manifestationDataObjectsFromEPHDQ.get(i).getDQ_ERR());
+                //DQ_ERR
+                Log.info("DQ_ERR in DQ: " + manifestationDataObjectsFromEPHDQ.get(i).getDQ_ERR());
 
-            assertEquals("N", manifestationDataObjectsFromEPHDQ.get(i).getDQ_ERR());
+                assertEquals("N", manifestationDataObjectsFromEPHDQ.get(i).getDQ_ERR());
 
 
-        });
+            });
+        }
     }
 
 
@@ -572,83 +575,86 @@ public class ManifestationDataQualityCheckSteps {
         manifestationDataObjectsFromEPHSA.sort(Comparator.comparing(ManifestationDataObject::getPMX_SOURCE_REFERENCE));
 
 //        assertThat("Data for manifestations in EPH Staging and EPH SA is equal without order", dataQualityContext.manifestationDataObjectsFromEPHSTG, containsInAnyOrder(dataQualityContext.manifestationDataObjectsFromEPHSA.toArray()));
+        if (manifestationDataObjectsFromEPHDQ.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There is no updated data for Manifestations");
+        } else {
+            IntStream.range(0, manifestationDataObjectsFromEPHDQ.size()).forEach(i -> {
 
-        IntStream.range(0, manifestationDataObjectsFromEPHDQ.size()).forEach(i -> {
-
-            //B_CLASSNAME
-            Log.info("B_CLASSNAME in sa_manifestation: " + manifestationDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
-            assertEquals("Manifestation", manifestationDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
-
-
-            //PMX_SOURCE_REFERENCE
-            Log.info("PMX_SOURCE_REFERENCE in DQ : " + manifestationDataObjectsFromEPHDQ.get(i).getPMX_SOURCE_REFERENCE());
-            Log.info("PMX_SOURCE_REFERENCE in sa_manifestation: " + manifestationDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE());
-
-            assertEquals("Expecting the Product details from EPH DQ and SA_MANIFESTATION are consistent ",
-                    manifestationDataObjectsFromEPHDQ.get(i).getPMX_SOURCE_REFERENCE(),
-                    manifestationDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE());
-
-            //MANIFESTATION_KEY_TITLE
-            Log.info("Manifestation key title in sa_manifestation: " + manifestationDataObjectsFromEPHSA.get(i).getMANIFESTATION_KEY_TITLE());
-            Log.info("Manifestation key title in DQ: " + manifestationDataObjectsFromEPHDQ.get(i).getMANIFESTATION_KEY_TITLE());
-
-            assertEquals("Expecting the Product details from EPH DQ and SA_MANIFESTATION are consistent ",
-                    manifestationDataObjectsFromEPHDQ.get(i).getMANIFESTATION_KEY_TITLE(),
-                    manifestationDataObjectsFromEPHSA.get(i).getMANIFESTATION_KEY_TITLE());
+                //B_CLASSNAME
+                Log.info("B_CLASSNAME in sa_manifestation: " + manifestationDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
+                assertEquals("Manifestation", manifestationDataObjectsFromEPHSA.get(i).getB_CLASSNAME());
 
 
-            //INTER_EDITION_FLAG
-            Log.info("INTER_EDITION_FLAG in SA : " + manifestationDataObjectsFromEPHDQ.get(i).getINTERNATIONAL_EDITION_IND());
-            Log.info("INTER_EDITION_FLAG in DQ : " + manifestationDataObjectsFromEPHSA.get(i).getINTER_EDITION_FLAG());
+                //PMX_SOURCE_REFERENCE
+                Log.info("PMX_SOURCE_REFERENCE in DQ : " + manifestationDataObjectsFromEPHDQ.get(i).getPMX_SOURCE_REFERENCE());
+                Log.info("PMX_SOURCE_REFERENCE in sa_manifestation: " + manifestationDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE());
 
-            assertEquals("Expecting the Product details from EPH DQ and SA_MANIFESTATION are consistent ",
-                    manifestationDataObjectsFromEPHDQ.get(i).getINTERNATIONAL_EDITION_IND(),
-                    manifestationDataObjectsFromEPHSA.get(i).getINTERNATIONAL_EDITION_IND());
+                assertEquals("Expecting the Product details from EPH DQ and SA_MANIFESTATION are consistent ",
+                        manifestationDataObjectsFromEPHDQ.get(i).getPMX_SOURCE_REFERENCE(),
+                        manifestationDataObjectsFromEPHSA.get(i).getPMX_SOURCE_REFERENCE());
+
+                //MANIFESTATION_KEY_TITLE
+                Log.info("Manifestation key title in sa_manifestation: " + manifestationDataObjectsFromEPHSA.get(i).getMANIFESTATION_KEY_TITLE());
+                Log.info("Manifestation key title in DQ: " + manifestationDataObjectsFromEPHDQ.get(i).getMANIFESTATION_KEY_TITLE());
+
+                assertEquals("Expecting the Product details from EPH DQ and SA_MANIFESTATION are consistent ",
+                        manifestationDataObjectsFromEPHDQ.get(i).getMANIFESTATION_KEY_TITLE(),
+                        manifestationDataObjectsFromEPHSA.get(i).getMANIFESTATION_KEY_TITLE());
 
 
-            //FIRST_PUB_DATE
-            if (manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE() != null || manifestationDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE() != null) {
-                try {
-                    Date dqFirstPubDateDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE());
-                    Log.info("FIRST_PUB_DATE in dq :" + dqFirstPubDateDate);
+                //INTER_EDITION_FLAG
+                Log.info("INTER_EDITION_FLAG in SA : " + manifestationDataObjectsFromEPHDQ.get(i).getINTERNATIONAL_EDITION_IND());
+                Log.info("INTER_EDITION_FLAG in DQ : " + manifestationDataObjectsFromEPHSA.get(i).getINTER_EDITION_FLAG());
 
-                    Date saFirstPubDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE());
-                    Log.info("FIRST_PUB_DATE in sa :" + saFirstPubDate);
+                assertEquals("Expecting the Product details from EPH DQ and SA_MANIFESTATION are consistent ",
+                        manifestationDataObjectsFromEPHDQ.get(i).getINTERNATIONAL_EDITION_IND(),
+                        manifestationDataObjectsFromEPHSA.get(i).getINTERNATIONAL_EDITION_IND());
 
-                    assertEquals("Expecting the Product details from EPH DQ and SA_MANIFESTATION are consistent ", dqFirstPubDateDate, saFirstPubDate);
 
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                //FIRST_PUB_DATE
+                if (manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE() != null || manifestationDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE() != null) {
+                    try {
+                        Date dqFirstPubDateDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHDQ.get(i).getFIRST_PUB_DATE());
+                        Log.info("FIRST_PUB_DATE in dq :" + dqFirstPubDateDate);
+
+                        Date saFirstPubDate = new SimpleDateFormat("yyyy-MM-dd").parse(manifestationDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE());
+                        Log.info("FIRST_PUB_DATE in sa :" + saFirstPubDate);
+
+                        assertEquals("Expecting the Product details from EPH DQ and SA_MANIFESTATION are consistent ", dqFirstPubDateDate, saFirstPubDate);
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    //F_TYPE
+                    Log.info("F_TYPE in DQ : " + manifestationDataObjectsFromEPHDQ.get(i).getF_TYPE());
+                    Log.info("F_TYPE in SA : " + manifestationDataObjectsFromEPHSA.get(i).getF_TYPE());
+
+                    assertEquals("Expecting the Product details from EPH DQ and SA_MANIFESTATION are consistent ",
+                            manifestationDataObjectsFromEPHDQ.get(i).getF_TYPE(),
+                            manifestationDataObjectsFromEPHSA.get(i).getF_TYPE());
+
+
+                    //F_STATUS
+                    Log.info("F_STATUS in DQ : " + manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS());
+                    Log.info("F_STATUS in SA : " + manifestationDataObjectsFromEPHSA.get(i).getF_STATUS());
+
+                    assertEquals("Expecting the Product details from EPH DQ and SA_MANIFESTATION are consistent ",
+                            manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS(),
+                            manifestationDataObjectsFromEPHSA.get(i).getF_STATUS());
+
+                    //F_FORMAT_TYPE
+                    Log.info("F_FORMAT_TYPE in DQ : " + manifestationDataObjectsFromEPHDQ.get(i).getF_FORMAT_TYPE());
+                    Log.info("F_FORMAT_TYPE in SA : " + manifestationDataObjectsFromEPHSA.get(i).getF_FORMAT_TYPE());
+
+                    assertEquals("Expecting the Product details from EPH DQ and SA_MANIFESTATION are consistent ",
+                            manifestationDataObjectsFromEPHDQ.get(i).getF_FORMAT_TYPE(),
+                            manifestationDataObjectsFromEPHSA.get(i).getF_FORMAT_TYPE());
+
+
                 }
-
-                //F_TYPE
-                Log.info("F_TYPE in DQ : " + manifestationDataObjectsFromEPHDQ.get(i).getF_TYPE());
-                Log.info("F_TYPE in SA : " + manifestationDataObjectsFromEPHSA.get(i).getF_TYPE());
-
-                assertEquals("Expecting the Product details from EPH DQ and SA_MANIFESTATION are consistent ",
-                        manifestationDataObjectsFromEPHDQ.get(i).getF_TYPE(),
-                        manifestationDataObjectsFromEPHSA.get(i).getF_TYPE());
-
-
-                //F_STATUS
-                Log.info("F_STATUS in DQ : " + manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS());
-                Log.info("F_STATUS in SA : " + manifestationDataObjectsFromEPHSA.get(i).getF_STATUS());
-
-                assertEquals("Expecting the Product details from EPH DQ and SA_MANIFESTATION are consistent ",
-                        manifestationDataObjectsFromEPHDQ.get(i).getF_STATUS(),
-                        manifestationDataObjectsFromEPHSA.get(i).getF_STATUS());
-
-                //F_FORMAT_TYPE
-                Log.info("F_FORMAT_TYPE in DQ : " + manifestationDataObjectsFromEPHDQ.get(i).getF_FORMAT_TYPE());
-                Log.info("F_FORMAT_TYPE in SA : " + manifestationDataObjectsFromEPHSA.get(i).getF_FORMAT_TYPE());
-
-                assertEquals("Expecting the Product details from EPH DQ and SA_MANIFESTATION are consistent ",
-                        manifestationDataObjectsFromEPHDQ.get(i).getF_FORMAT_TYPE(),
-                        manifestationDataObjectsFromEPHSA.get(i).getF_FORMAT_TYPE());
-
-
-            }
-        });
+            });
+        }
     }
 
 

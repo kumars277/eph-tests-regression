@@ -137,7 +137,7 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         Log.info("Get the ids from stg ...");
@@ -183,17 +183,21 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
     public void checkMandatoryColumnsForWorkSubjectAreaLinkInSAArePopulated() {
         Log.info("We check that mandatory columns are populated ...");
 
-        IntStream.range(0, dataQualityContext.workSubjectAreaDataObjectsFromSA.size()).forEach(i -> {
+        if (dataQualityContext.workSubjectAreaDataObjectsFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There are no records found for Work Subject Area ");
+        } else {
+            IntStream.range(0, dataQualityContext.workSubjectAreaDataObjectsFromSA.size()).forEach(i -> {
 
-            //verify WORK_SUBJECT_AREA_LINK_ID is not null
-            assertNotNull(dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getWORK_SUBJECT_AREA_LINK_ID());
-            //verify f_subject_area is not null
-            assertNotNull(dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_SUBJECT_AREA());
-            //verify f_wwork
-            assertNotNull(dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK());
+                //verify WORK_SUBJECT_AREA_LINK_ID is not null
+                assertNotNull(dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getWORK_SUBJECT_AREA_LINK_ID());
+                //verify f_subject_area is not null
+                assertNotNull(dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_SUBJECT_AREA());
+                //verify f_wwork
+                assertNotNull(dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK());
 
 
-        });
+            });
+        }
     }
 
     @When("^We get the work subject area data from EPH GD$")
@@ -264,47 +268,50 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
 
 
         Log.info("The Size of SA list is : " +  dataQualityContext.workSubjectAreaDataObjectsFromSA.size() );
+        if (dataQualityContext.workSubjectAreaDataObjectsFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There are no records found for Work Subject Area ");
+        } else {
+            IntStream.range(0, dataQualityContext.workSubjectAreaDataObjectsFromSA.size()).forEach(i -> {
+                sql = String.format(WorkSubjectAreaLinkDataSQL.SELECT_DATA_FROM_STG_FOR_CURRENT_RECORD_FROM_SA, dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getWORK_SUBJECT_AREA_LINK_ID());
+                Log.info(sql);
 
-        IntStream.range(0, dataQualityContext.workSubjectAreaDataObjectsFromSA.size()).forEach(i -> {
-            sql = String.format(WorkSubjectAreaLinkDataSQL.SELECT_DATA_FROM_STG_FOR_CURRENT_RECORD_FROM_SA, dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getWORK_SUBJECT_AREA_LINK_ID());
-            Log.info(sql);
+                dataQualityContext.workSubjectAreaDataObjectsFromSTG = DBManager
+                        .getDBResultAsBeanList(sql, WorkSubjectAreaLinkDataObject.class, Constants.EPH_URL);
 
-            dataQualityContext.workSubjectAreaDataObjectsFromSTG = DBManager
-                    .getDBResultAsBeanList(sql, WorkSubjectAreaLinkDataObject.class, Constants.EPH_URL);
+                //B_CLASSNAME
+                Log.info("B_CLASSNAME in SA: " + dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getB_CLASSNAME());
 
-            //B_CLASSNAME
-            Log.info("B_CLASSNAME in SA: " + dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getB_CLASSNAME());
-
-            assertEquals("WorkSubjectAreaLink", dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getB_CLASSNAME());
-
-
-            sql = String.format(WorkSubjectAreaLinkDataSQL.GET_F_SUBJECT_AREA, dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(0).getF_SUBJECT_AREA());
-            Log.info(sql);
-            List<Map<String, Object>> subjectAreaObject = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            int F_SUBJECT_AREA = ((BigDecimal) subjectAreaObject.get(0).get("F_SUBJECT_AREA")).intValue();
-
-            //F_SUBJECT_AREA
-            Log.info("F_SUBJECT_AREA in EPH STG: " + F_SUBJECT_AREA);
-            Log.info("F_SUBJECT_AREA in SA: " + dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_SUBJECT_AREA());
-
-            assertEquals(String.valueOf(F_SUBJECT_AREA), dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_SUBJECT_AREA());
-
-            sql = String.format(WorkSubjectAreaLinkDataSQL.GET_F_WWORK, dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(0).getF_PRODUCT_WORK());
-            Log.info(sql);
-            List<Map<String, Object>> fWworkObject = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            String F_WWORK = fWworkObject.get(0).get("F_WWORK").toString();
+                assertEquals("WorkSubjectAreaLink", dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getB_CLASSNAME());
 
 
-            //F_WWORK
-            Log.info("F_WWORK in EPH STG: " + F_WWORK);
-            Log.info("F_WWORK in SA: " + dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK());
+                sql = String.format(WorkSubjectAreaLinkDataSQL.GET_F_SUBJECT_AREA, dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(0).getF_SUBJECT_AREA());
+                Log.info(sql);
+                List<Map<String, Object>> subjectAreaObject = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                int F_SUBJECT_AREA = ((BigDecimal) subjectAreaObject.get(0).get("F_SUBJECT_AREA")).intValue();
 
-            assertEquals(F_WWORK, dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK());
+                //F_SUBJECT_AREA
+                Log.info("F_SUBJECT_AREA in EPH STG: " + F_SUBJECT_AREA);
+                Log.info("F_SUBJECT_AREA in SA: " + dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_SUBJECT_AREA());
 
-            assertEquals("External reference is different",
-                    dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getPRODUCT_SUBJECT_AREA_ID(),
-                    dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getExternal_reference());
-        });
+                assertEquals(String.valueOf(F_SUBJECT_AREA), dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_SUBJECT_AREA());
+
+                sql = String.format(WorkSubjectAreaLinkDataSQL.GET_F_WWORK, dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(0).getF_PRODUCT_WORK());
+                Log.info(sql);
+                List<Map<String, Object>> fWworkObject = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                String F_WWORK = fWworkObject.get(0).get("F_WWORK").toString();
+
+
+                //F_WWORK
+                Log.info("F_WWORK in EPH STG: " + F_WWORK);
+                Log.info("F_WWORK in SA: " + dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK());
+
+                assertEquals(F_WWORK, dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK());
+
+                assertEquals("External reference is different",
+                        dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getPRODUCT_SUBJECT_AREA_ID(),
+                        dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getExternal_reference());
+            });
+        }
 
     }
 

@@ -57,19 +57,32 @@ public class PersonDataQualityCheckSteps {
     public void getCountPersonsEPHSTG() {
         Log.info("When We get the count of persons records in PMX STG ..");
 
+        sql = PersonDataSQL.GET_COUNT_PERSONS_EPHSTG;
+        Log.info(sql);
 
-            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                sql = PersonDataSQL.GET_COUNT_PERSONS_EPHSTG;
-                Log.info(sql);
-            } else {
-                sql = WorkCountSQL.GET_REFRESH_DATE;
-                Log.info(sql);
 
-                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countPersonsEPHSTG = ((Long) personsNumber.get(0).get("count")).intValue();
+        Log.info("Count of persons in EPH STG is: " + countPersonsEPHSTG);
+    }
 
-                sql = String.format( PersonDataSQL.GET_COUNT_PERSONS_EPHSTG_DELTA, refreshDate );
-                Log.info(sql);
+    @When("^Get the count of records for persons in EPH Staging going to DQ$")
+    public void getCountPersonsEPHSTGGoingToDQ() {
+        Log.info("When We get the count of persons records in PMX STG going to dq  ..");
+
+
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            sql = PersonDataSQL.GET_COUNT_PERSONS_EPHSTG;
+            Log.info(sql);
+        } else {
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            Log.info(sql);
+
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+
+            sql = String.format( PersonDataSQL.GET_COUNT_PERSONS_EPHSTG_DELTA, refreshDate );
+            Log.info(sql);
         }
 
         List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -331,44 +344,47 @@ public class PersonDataQualityCheckSteps {
     public void comparePersonRecordsInEPHDQAndEPHSA() {
         Log.info("And compare the person records in EPH DQ and EPH SA ..");
 
-        IntStream.range(0, dataQualityContext.personDataObjectsFromEPHDQ.size()).forEach(i -> {
+        if (dataQualityContext.personDataObjectsFromEPHDQ.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There is no updated data for Person data");
+        } else {
+            IntStream.range(0, dataQualityContext.personDataObjectsFromEPHDQ.size()).forEach(i -> {
 
-            //get data from SA for the current record from DQ
-            sql = String.format(PersonDataSQL.GET_PERSON_IDS_FROM_SA, dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_SOURCE_REF());
-            Log.info(sql);
+                //get data from SA for the current record from DQ
+                sql = String.format(PersonDataSQL.GET_PERSON_IDS_FROM_SA, dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_SOURCE_REF());
+                Log.info(sql);
 
-            List<Map<?, ?>> results = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            personId = results.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
+                List<Map<?, ?>> results = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                personId = results.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
 
-            sql = String.format(PersonDataSQL.GET_DATA_PERSONS_EPHSA, Joiner.on("','").join(personId));
-            Log.info(sql);
+                sql = String.format(PersonDataSQL.GET_DATA_PERSONS_EPHSA, Joiner.on("','").join(personId));
+                Log.info(sql);
 
-            dataQualityContext.personDataObjectsFromEPHSA = DBManager
-                    .getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
+                dataQualityContext.personDataObjectsFromEPHSA = DBManager
+                        .getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
 
 
-            //B_CLASSNAME
-            Log.info("B_CLASSNAME in EPH SA: " + dataQualityContext.personDataObjectsFromEPHSA.get(0).getB_CLASSNAME());
-            assertEquals("Person", dataQualityContext.personDataObjectsFromEPHSA.get(0).getB_CLASSNAME());
+                //B_CLASSNAME
+                Log.info("B_CLASSNAME in EPH SA: " + dataQualityContext.personDataObjectsFromEPHSA.get(0).getB_CLASSNAME());
+                assertEquals("Person", dataQualityContext.personDataObjectsFromEPHSA.get(0).getB_CLASSNAME());
 
-            //FIRST_NAME
-            Log.info("FIRST_NAME in EPH DQ : " + dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_FIRST_NAME());
-            Log.info("FIRST_NAME in EPH SA: " + dataQualityContext.personDataObjectsFromEPHSA.get(0).getPERSON_FIRST_NAME());
+                //FIRST_NAME
+                Log.info("FIRST_NAME in EPH DQ : " + dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_FIRST_NAME());
+                Log.info("FIRST_NAME in EPH SA: " + dataQualityContext.personDataObjectsFromEPHSA.get(0).getPERSON_FIRST_NAME());
 
-            Log.info("Expecting FIRST_NAME in EPH DQ and EPH SA is consistent");
+                Log.info("Expecting FIRST_NAME in EPH DQ and EPH SA is consistent");
 
-            assertEquals(dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_FIRST_NAME(), dataQualityContext.personDataObjectsFromEPHSA.get(0).getPERSON_FIRST_NAME());
+                assertEquals(dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_FIRST_NAME(), dataQualityContext.personDataObjectsFromEPHSA.get(0).getPERSON_FIRST_NAME());
 
-            //FAMILY_NAME
-            Log.info("FAMILY_NAME in EPH DQ : " + dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_FAMILY_NAME());
-            Log.info("FAMILY_NAME in EPH SA: " + dataQualityContext.personDataObjectsFromEPHSA.get(0).getPERSON_FAMILY_NAME());
+                //FAMILY_NAME
+                Log.info("FAMILY_NAME in EPH DQ : " + dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_FAMILY_NAME());
+                Log.info("FAMILY_NAME in EPH SA: " + dataQualityContext.personDataObjectsFromEPHSA.get(0).getPERSON_FAMILY_NAME());
 
-            Log.info("Expecting FAMILY_NAME in EPH DQ and EPH SA is consistent");
+                Log.info("Expecting FAMILY_NAME in EPH DQ and EPH SA is consistent");
 
-            assertEquals(dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_FAMILY_NAME(), dataQualityContext.personDataObjectsFromEPHSA.get(0).getPERSON_FAMILY_NAME());
+                assertEquals(dataQualityContext.personDataObjectsFromEPHDQ.get(i).getPERSON_FAMILY_NAME(), dataQualityContext.personDataObjectsFromEPHSA.get(0).getPERSON_FAMILY_NAME());
 
-        });
-
+            });
+        }
     }
 
     @Then("^We get the person records from EPH GD$")
