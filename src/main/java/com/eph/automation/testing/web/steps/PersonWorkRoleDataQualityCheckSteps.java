@@ -164,63 +164,49 @@ public class PersonWorkRoleDataQualityCheckSteps {
         numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
-        switch(type) {
-            case "PD":
-//                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, type, numberOfRecords);
-                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS_FROM_SA_WITH_NO_ERROR, type, numberOfRecords);
-                Log.info(sql);
-                break;
-            case "AU":
-//                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, type, numberOfRecords);
-                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS_FROM_SA_WITH_NO_ERROR, type, numberOfRecords);
-                Log.info(sql);
-                break;
-            case "PU":
-//                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, type, numberOfRecords);
-                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS_FROM_SA_WITH_NO_ERROR, type, numberOfRecords);
-                Log.info(sql);
-                break;
-            case "AE":
-//                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS, type, numberOfRecords);
-                sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS_FROM_SA_WITH_NO_ERROR, type, numberOfRecords);
-                Log.info(sql);
-                break;
-            default:
-                break;
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_PERSON_WORK_ROLE_IDS_FROM_STG_WITH_NO_ERROR, type, numberOfRecords);
+        } else {
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+            sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_DELTA, type, refreshDate, numberOfRecords);
+            Log.info(sql);
         }
+
 
         List<Map<?, ?>> randomPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
-        if (randomPersons.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
-            Log.info("There are no records found for Person Work Role");
-        } else {
+//      old  if (randomPersons.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+//            Log.info("There are no records found for Person Work Role");
+//        } else {
 
 //        ids = randomPersons.stream().map(m -> (String) m.get("WORK_PERSON_ROLE_SOURCE_REF")).map(String::valueOf).collect(Collectors.toList());
-            idsSA = randomPersons.stream().map(m -> (BigDecimal) m.get("WORK_PERSON_ROLE_ID")).map(String::valueOf).collect(Collectors.toList());
-            Log.info(idsSA.toString());
+//            idsSA = randomPersons.stream().map(m -> (BigDecimal) m.get("WORK_PERSON_ROLE_ID")).map(String::valueOf).collect(Collectors.toList());
+//            Log.info(idsSA.toString());
+//
+//            //get ids (WORK_PERSON_SOURCE_REF)
+//            Log.info("Get the ids of the records in EPH STG from the lookup table ..");
+//            idsSourceRef = new ArrayList<>(idsSA);
+//
+//            sql = String.format(PersonWorkRoleDataSQL.GET_IDS_FROM_STG_FOR_GIVEN_IDS_IN_SA, Joiner.on("','").join(idsSA));
+//            Log.info(sql);
+//
+//
+//            List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
-            //get ids (WORK_PERSON_SOURCE_REF)
-            Log.info("Get the ids of the records in EPH STG from the lookup table ..");
-            idsSourceRef = new ArrayList<>(idsSA);
-
-            sql = String.format(PersonWorkRoleDataSQL.GET_IDS_FROM_STG_FOR_GIVEN_IDS_IN_SA, Joiner.on("','").join(idsSA));
-            Log.info(sql);
-
-
-            List<Map<?, ?>> lookupResults = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-
-            ids = lookupResults.stream().map(m -> (String) m.get("WORK_PERSON_ROLE_SOURCE_REF")).map(String::valueOf).collect(Collectors.toList());
+            ids = randomPersons.stream().map(m -> (String) m.get("WORK_PERSON_ROLE_SOURCE_REF")).map(String::valueOf).collect(Collectors.toList());
             Log.info(ids.toString());
-        }
+//        }
     }
 
 
     @When("^We get the person work role records with (.*) from PMX$")
     public void getPersonWorkRoleRecordsPMX(String type) {
         Log.info("Get the person work role records with type from PMX ..");
-        if (idsPMX.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
-            Log.info("There is no updated data for Person Work Role");
-        } else {
+//        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+//            Log.info("There is no updated data for Person Work Role");
+//        } else {
             //prepare ids
             idsPMX = new ArrayList<>(ids);
 //        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).substring(idsPMX.get(i).indexOf("-")+1, idsPMX.get(i).lastIndexOf("-"))));
@@ -247,17 +233,17 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
             dataQualityContext.personWorkRoleDataObjectsFromPMX = DBManager
                     .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.PMX_URL);
-        }
+//        }
     }
 
     @Then("^We get the person work role records from EPH STG$")
     public void getPersonWorkRoleRecordsEphStg() {
         Log.info("Get the person work role records from EPH STG  ..");
 
-        idsEPHstg = new ArrayList<>(ids);
-        IntStream.range(0,idsEPHstg.size()).forEach(i -> idsEPHstg.set(i,idsEPHstg.get(i).substring(idsEPHstg.get(i).indexOf("-")+1)));
+//        idsEPHstg = new ArrayList<>(ids);
+//        IntStream.range(0,idsEPHstg.size()).forEach(i -> idsEPHstg.set(i,idsEPHstg.get(i).substring(idsEPHstg.get(i).indexOf("-")+1)));
 
-        sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHSTG, Joiner.on("','").join(idsEPHstg));
+        sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHSTG, Joiner.on("','").join(ids));
         Log.info(sql);
 
         dataQualityContext.personWorkRoleDataObjectsFromEPHSTG = DBManager
@@ -361,7 +347,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @Then("^We get the person work role records from EPH SA$")
     public void getPersonWorkRoleRecordsEPHSA() {
         Log.info("Get the person product role records from EPH SA  ..");
-        sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHSA, Joiner.on("','").join(idsSA));
+        sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHSA, Joiner.on("','").join(ids));
 //        sql = PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHSA;
         Log.info(sql);
 
@@ -396,7 +382,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @And("^Compare person work role records in EPH STG and EPH SA$")
     public void comparePersonWorkRolesRecordsInSTGAndSA() {
         Log.info("And compare work role records in EPH STG and EPH SA ..");
-        if (dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if (dataQualityContext.personWorkRoleDataObjectsFromEPHSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There are no records found for Person Work Role");
         } else {
 

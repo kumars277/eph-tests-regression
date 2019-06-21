@@ -92,12 +92,20 @@ public class AccountableProductSQL {
 
     //public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_DQ_GOING_TO_SA = "select count(*) as count from "+ GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product_dq where dq_err != 'Y'";
 
-    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX_DELTA = "select count(*) as count from  "+ GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product s \n" +
-            "left join semarchy_eph_mdm.gd_accountable_product g on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = g.external_reference \n" +
-            "where  TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
+    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ_DELTA =
+            "select count(*) as count from  \n"+
+            GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product s \n"+
+            "left join semarchy_eph_mdm.gd_accountable_product g on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = g.external_reference \n"+
+            "where b_batchid = (select max (b_batchid) from \n"+
+            "          semarchy_eph_mdm.gd_event\n"+
+            "            where  f_event_type = 'PMX'\n"+
+            "            and workflow_id = 'talend'\n"+
+            "            AND f_event_type = 'PMX'\n"+
+            "            and f_workflow_source = 'PMX' )\n"+
+            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
 
     /*
-    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX_DELTA = "select count(distinct s.\"PRODUCT_WORK_ID\" ) as count \n" +
+    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ_DELTA = "select count(distinct s.\"PRODUCT_WORK_ID\" ) as count \n" +
             "from ephsit_talend_owner.stg_10_pmx_accountable_product s\n" +
             "left join ephsit_talend_owner.map_sourceref_2_numericid m on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = m.source_ref\n" +
             "left join semarchy_eph_mdm.gd_accountable_product g on m.numeric_id = g.accountable_product_id\n" +
@@ -194,16 +202,17 @@ public class AccountableProductSQL {
 //            " on STG_10_PMX_ACCOUNTABLE_PRODUCT_DQ.pmx_source_reference = a.external_reference\n" +
 //            "where dq_err != 'Y' and PRODUCT_WORK_ID in ('%s')";
 
-    public static String GET_RANDOM_IDS_STG = "\n" +
-            "select\n" +
+    public static String GET_RANDOM_IDS_STG = "select\n" +
             "\"PRODUCT_WORK_ID\" as PRODUCT_WORK_ID,\n" +
-            "concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") as PMX_SOURCE_REFERENCE\n"+
-            "from " + GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product s\n" +
+            "concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") as PMX_SOURCE_REFERENCE\n" +
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_accountable_product s\n" +
             "left join semarchy_eph_mdm.gd_accountable_product g on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = g.external_reference\n" +
-            "and not (\n" +
-            "        coalesce(g.gl_product_segment_code,'') = s.\"ACC_PROD_ID\" and\n" +
-            "        coalesce(g.gl_product_segment_name,'') = s.\"ACC_PROD_NAME\" and\n" +
-            "        coalesce(g.f_gl_product_segment_parent,'') = s.\"PARENT_ACC_PROD\")\n" +
+            "where b_batchid = (select max (b_batchid) from \n" +
+            "          semarchy_eph_mdm.gd_event\n" +
+            "            where  f_event_type = 'PMX'\n" +
+            "            and workflow_id = 'talend'\n" +
+            "            AND f_event_type = 'PMX'\n" +
+            "            and f_workflow_source = 'PMX' )\n" +
             "order by random() \n" +
             "limit '%s'";
 

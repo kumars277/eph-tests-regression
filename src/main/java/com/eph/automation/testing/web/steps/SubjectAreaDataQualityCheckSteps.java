@@ -178,19 +178,22 @@ public class SubjectAreaDataQualityCheckSteps {
     @And("^Check the mandatory columns are populated for subject link$")
     public void checkMandatoryColumnsForSubjectAreaInSAArePopulated() {
         Log.info("We check that mandatory columns are populated ...");
+        if (dataQualityContext.subjectAreaDataObjectsFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There are no records found for Subject Area ");
+        } else {
+            IntStream.range(0, dataQualityContext.subjectAreaDataObjectsFromSA.size()).forEach(i -> {
 
-        IntStream.range(0, dataQualityContext.subjectAreaDataObjectsFromSA.size()).forEach(i -> {
+                //verify SUBJECT_AREA_ID is not null
+                assertNotNull(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_ID());
+                //verify SUBJECT_AREA_CODE is not null
+                assertNotNull(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_CODE());
+                //verify SUBJECT_AREA_NAME
+                assertNotNull(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_TYPE());
+                //verify SUBJECT_AREA_TYPE
+                assertNotNull(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_TYPE());
 
-            //verify SUBJECT_AREA_ID is not null
-            assertNotNull(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_ID());
-            //verify SUBJECT_AREA_CODE is not null
-            assertNotNull(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_CODE());
-            //verify SUBJECT_AREA_NAME
-            assertNotNull(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_TYPE());
-            //verify SUBJECT_AREA_TYPE
-            assertNotNull(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_TYPE());
-
-        });
+            });
+        }
     }
 
     @And("^Compare the subject area data in PMX and EPH STG$")
@@ -250,47 +253,51 @@ public class SubjectAreaDataQualityCheckSteps {
         dataQualityContext.subjectAreaDataObjectsFromSTG.sort(Comparator.comparing(SubjectAreaDataObject::getSUBJECT_AREA_CODE));
         dataQualityContext.subjectAreaDataObjectsFromSA.sort(Comparator.comparing(SubjectAreaDataObject::getSUBJECT_AREA_CODE));
 
-        IntStream.range(0, dataQualityContext.subjectAreaDataObjectsFromSTG.size()).forEach(i -> {
+        if (dataQualityContext.subjectAreaDataObjectsFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There are no records found for Subject Area ");
+        } else {
+            IntStream.range(0, dataQualityContext.subjectAreaDataObjectsFromSTG.size()).forEach(i -> {
 
-            //B_CLASSNAME
-            Log.info("B_CLASSNAME in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getB_CLASSNAME());
+                //B_CLASSNAME
+                Log.info("B_CLASSNAME in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getB_CLASSNAME());
 
-            assertEquals("SubjectArea", dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getB_CLASSNAME());
+                assertEquals("SubjectArea", dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getB_CLASSNAME());
 
-            //SUBJECT_AREA_CODE
-            Log.info("SUBJECT_AREA_CODE in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_CODE());
-            Log.info("SUBJECT_AREA_CODE in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_CODE());
+                //SUBJECT_AREA_CODE
+                Log.info("SUBJECT_AREA_CODE in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_CODE());
+                Log.info("SUBJECT_AREA_CODE in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_CODE());
 
-            assertEquals(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_CODE(), dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_CODE());
+                assertEquals(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_CODE(), dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_CODE());
 
-            //SUBJECT_AREA_NAME
-            Log.info("SUBJECT_AREA_NAME in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_NAME());
-            Log.info("SUBJECT_AREA_NAME in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_NAME());
+                //SUBJECT_AREA_NAME
+                Log.info("SUBJECT_AREA_NAME in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_NAME());
+                Log.info("SUBJECT_AREA_NAME in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_NAME());
 
-            assertEquals(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_NAME(), dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_NAME());
-
-
-            //SUBJECT_AREA_TYPE
-            Log.info("SUBJECT_AREA_TYPE in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_TYPE());
-            Log.info("SUBJECT_AREA_TYPE in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_TYPE());
+                assertEquals(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_NAME(), dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_NAME());
 
 
-            assertEquals(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_TYPE(), dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_TYPE());
+                //SUBJECT_AREA_TYPE
+                Log.info("SUBJECT_AREA_TYPE in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_TYPE());
+                Log.info("SUBJECT_AREA_TYPE in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_TYPE());
 
-            //F_PARENT_SUBJECT_AREA
-            Log.info("PARENT_SUBJECT_AREA_REF in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPARENT_SUBJECT_AREA_REF());
-            Log.info("F_PARENT_SUBJECT_AREA in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getF_PARENT_SUBJECT_AREA());
 
-            if (dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPARENT_SUBJECT_AREA_REF() == null)
-                assertNull(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getF_PARENT_SUBJECT_AREA());
-            else {
-                sql = String.format(SubjectAreaDataSQL.GET_F_PARENT_SUBJECT_AREA, dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPARENT_SUBJECT_AREA_REF());
-                Log.info(sql);
-                List<Map<String, Object>> subjectAreaObject = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                int F_PARENT_SUBJECT_AREA_SA = ((BigDecimal) subjectAreaObject.get(0).get("F_PARENT_SUBJECT_AREA")).intValue();
-                assertEquals(F_PARENT_SUBJECT_AREA_SA, dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getF_PARENT_SUBJECT_AREA());
-            }
-        });
+                assertEquals(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_TYPE(), dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_TYPE());
+
+                //F_PARENT_SUBJECT_AREA
+                Log.info("PARENT_SUBJECT_AREA_REF in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPARENT_SUBJECT_AREA_REF());
+                Log.info("F_PARENT_SUBJECT_AREA in SA: " + dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getF_PARENT_SUBJECT_AREA());
+
+                if (dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPARENT_SUBJECT_AREA_REF() == null)
+                    assertNull(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getF_PARENT_SUBJECT_AREA());
+                else {
+                    sql = String.format(SubjectAreaDataSQL.GET_F_PARENT_SUBJECT_AREA, dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPARENT_SUBJECT_AREA_REF());
+                    Log.info(sql);
+                    List<Map<String, Object>> subjectAreaObject = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                    int F_PARENT_SUBJECT_AREA_SA = ((BigDecimal) subjectAreaObject.get(0).get("F_PARENT_SUBJECT_AREA")).intValue();
+                    assertEquals(F_PARENT_SUBJECT_AREA_SA, dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getF_PARENT_SUBJECT_AREA());
+                }
+            });
+        }
 
     }
 

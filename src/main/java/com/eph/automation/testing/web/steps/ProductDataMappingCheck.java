@@ -7,6 +7,7 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ProductDataObject;
 import com.eph.automation.testing.services.db.sql.ProductDataSQL;
+import com.eph.automation.testing.services.db.sql.WorkCountSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -47,22 +48,50 @@ public class ProductDataMappingCheck {
         numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
-        switch (type) {
-            case "journal":
-                sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_JOURNALS, numberOfRecords);
-                Log.info(sql);
-                break;
-            case "book":
-                sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS, numberOfRecords);
-                Log.info(sql);
-                break;
-            case "package":
-                sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PACKAGES, numberOfRecords);
-                Log.info(sql);
-                break;
-            default:
-                break;
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            switch (type) {
+                case "journal":
+                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_JOURNALS, numberOfRecords);
+                    Log.info(sql);
+                    break;
+                case "book":
+                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS, numberOfRecords);
+                    Log.info(sql);
+                    break;
+                case "package":
+                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PACKAGES, numberOfRecords);
+                    Log.info(sql);
+                    break;
+                default:
+                    break;
+            }
+        }else {
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            Log.info(sql);
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+            Log.info("refreshDate : " + refreshDate);
+
+            switch (type) {
+                case "journal":
+                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_JOURNALS_DELTA, refreshDate, numberOfRecords);
+                    Log.info(sql);
+                    break;
+                case "book":
+                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS_DELTA, refreshDate, numberOfRecords);
+                    Log.info(sql);
+                    break;
+                case "package":
+                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PACKAGES_DELTA, refreshDate, numberOfRecords);
+                    Log.info(sql);
+                    break;
+                default:
+                    break;
+            }
         }
+
+
+
         List<Map<?, ?>> randomProductManifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         ids = randomProductManifestationIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
@@ -77,22 +106,44 @@ public class ProductDataMappingCheck {
         numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("Number of random records = " + numberOfRecords);
 
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
 
-        switch (type) {
-            case "print_journal":
-                sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PRINT_JOURNALS, open_access, author_charges, numberOfRecords);
-                Log.info(sql);
-                break;
-            case "electronic_journal":
-                sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_ELECTRONIC_JOURNALS, open_access, author_charges, numberOfRecords);
-                Log.info(sql);
-                break;
+            switch (type) {
+                case "print_journal":
+                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PRINT_JOURNALS, open_access, author_charges, numberOfRecords);
+                    Log.info(sql);
+                    break;
+                case "electronic_journal":
+                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_ELECTRONIC_JOURNALS, open_access, author_charges, numberOfRecords);
+                    Log.info(sql);
+                    break;
 //            case "non_print_or_electronic_journal":
 //                sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_NON_PRINT_OR_ELECTRONIC_JOURNALS, numberOfRecords);
 //                Log.info(sql);
 //                break;
-            default:
-                break;
+                default:
+                    break;
+            }
+        } else {
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            Log.info(sql);
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+            Log.info("refreshDate : " + refreshDate);
+
+            switch (type) {
+                case "print_journal":
+                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PRINT_JOURNALS_delta, open_access, author_charges, refreshDate, numberOfRecords);
+                    Log.info(sql);
+                    break;
+                case "electronic_journal":
+                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_ELECTRONIC_JOURNALS_delta, open_access, author_charges, refreshDate, numberOfRecords);
+                    Log.info(sql);
+                    break;
+                default:
+                    break;
+            }
+
         }
 
         List<Map<?, ?>> randomProductManifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -136,15 +187,19 @@ public class ProductDataMappingCheck {
             Log.info(sql);
         } else {
             List<String> workIds = new ArrayList<>();
-            for (int i = 0; i < dataQualityContext.productDataObjectsFromEPHSTG.size(); i++) {
-                if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getOPEN_ACCESS().equals("Y") )
-                    workIds.add(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
-                if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getAUTHOR_CHARGES().equals("Y"))
-                    workIds.add(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
-                if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPACKAGES().equals("Y"))
-                    workIds.add(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
-            }
 
+            if (dataQualityContext.productDataObjectsFromEPHSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+                Log.info("There is no updated data for Product Data");
+            } else {
+                for (int i = 0; i < dataQualityContext.productDataObjectsFromEPHSTG.size(); i++) {
+                    if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getOPEN_ACCESS().equals("Y"))
+                        workIds.add(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
+                    if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getAUTHOR_CHARGES().equals("Y"))
+                        workIds.add(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
+                    if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPACKAGES().equals("Y"))
+                        workIds.add(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
+                }
+            }
 
             //concatenate the ids used for pmx_source_reference in SA
             idsDQ = Stream.concat(ids.stream(), workIds.stream()).collect(Collectors.toList());
@@ -158,7 +213,6 @@ public class ProductDataMappingCheck {
 
         dataQualityContext.productDataObjectsFromEPHSTGDQ = DBManager
                 .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
-        sql.length();
     }
 
     @And("^Compare the records in PMX and EPH STG for (.*)$")
@@ -380,7 +434,6 @@ public class ProductDataMappingCheck {
 
         dataQualityContext.productDataObjectsFromEPHSA = DBManager
                 .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
-        sql.length();
 
     }
 
@@ -425,38 +478,41 @@ public class ProductDataMappingCheck {
 
         int expectedNumberOfRecordsInDQ = 0;
 
+        if (dataQualityContext.productDataObjectsFromEPHSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There is no updated data for Product Data");
+        } else {
+            for (int i = 0; i < dataQualityContext.productDataObjectsFromEPHSTG.size(); i++) {
 
-        for (int i = 0; i < dataQualityContext.productDataObjectsFromEPHSTG.size(); i++) {
 
+                // subscription flag
+                if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getSUBSCRIPTION().equals("Y"))
+                    expectedNumberOfRecordsInDQ++;
 
-            // subscription flag
-            if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getSUBSCRIPTION().equals("Y"))
-                expectedNumberOfRecordsInDQ++;
+                // bulk_sale flag
+                if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getBULK_SALES().equals("Y"))
+                    expectedNumberOfRecordsInDQ++;
 
-            // bulk_sale flag
-            if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getBULK_SALES().equals("Y"))
-                expectedNumberOfRecordsInDQ++;
+                // back_files flag
+                if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getBACK_FILES().equals("Y"))
+                    expectedNumberOfRecordsInDQ++;
 
-            // back_files flag
-            if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getBACK_FILES().equals("Y"))
-                expectedNumberOfRecordsInDQ++;
+                //open_access flag
+                if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getOPEN_ACCESS().equals("Y"))
+                    expectedNumberOfRecordsInDQ++;
 
-            //open_access flag
-            if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getOPEN_ACCESS().equals("Y"))
-                expectedNumberOfRecordsInDQ++;
+                //reprints flag
+                if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getREPRINTS().equals("Y"))
+                    expectedNumberOfRecordsInDQ++;
 
-            //reprints flag
-            if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getREPRINTS().equals("Y"))
-                expectedNumberOfRecordsInDQ++;
+                //author_charges flag
+                if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getAUTHOR_CHARGES().equals("Y"))
+                    expectedNumberOfRecordsInDQ++;
 
-            //author_charges flag
-            if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getAUTHOR_CHARGES().equals("Y"))
-                expectedNumberOfRecordsInDQ++;
+                //packages flag
+                if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPACKAGES().equals("Y"))
+                    expectedNumberOfRecordsInDQ++;
 
-            //packages flag
-            if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPACKAGES().equals("Y"))
-                expectedNumberOfRecordsInDQ++;
-
+            }
         }
 
         Log.info("Expected number of records in EPH STG DQ is : " + expectedNumberOfRecordsInDQ);
@@ -471,432 +527,432 @@ public class ProductDataMappingCheck {
     public void compareProductsDataBetweenSTGAndDQ(String type) {
         Log.info("Compare the records in EPH STG and EPH STG DQ for " + type + " ..");
 
-        dataQualityContext.productDataObjectsFromEPHSTG.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
-        dataQualityContext.productDataObjectsFromEPHSTGDQ.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
+        dataQualityContext.productDataObjectsFromEPHSTG.sort(Comparator.comparing(ProductDataObject::getPRODUCT_MANIFESTATION_ID));
+        dataQualityContext.productDataObjectsFromEPHSTGDQ.sort(Comparator.comparing(ProductDataObject::getPMX_SOURCE_REFERENCE));
 
-        IntStream.range(0, dataQualityContext.productDataObjectsFromEPHSTGDQ.size()).forEach(i -> {
+        if (dataQualityContext.productDataObjectsFromEPHSTGDQ.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There is no updated data for Product Data");
+        } else {
+            IntStream.range(0, dataQualityContext.productDataObjectsFromEPHSTGDQ.size()).forEach(i -> {
 
-            //verify PMX_SOURCE_REFERENCE and get the manifestation or work id
-            String id;
-            String pmxSourceReference = dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPMX_SOURCE_REFERENCE();
-            Log.info("PMX_SOURCE_REFERENCE in EPH STG DQ is " + pmxSourceReference);
+                //verify PMX_SOURCE_REFERENCE and get the manifestation or work id
+                String id;
+                String pmxSourceReference = dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPMX_SOURCE_REFERENCE();
+                Log.info("PMX_SOURCE_REFERENCE in EPH STG DQ is " + pmxSourceReference);
 
 
-            if (pmxSourceReference.contains("SUB")) {
-                //get the id
-                id = pmxSourceReference.replace("-SUB", "");
+                if (pmxSourceReference.contains("SUB")) {
+                    //get the id
+                    id = pmxSourceReference.replace("-SUB", "");
 
-                if (type.equals("print_journal")) {
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
-                    Log.info(sql);
-                } else if (type.equals("electronic_journal")) {
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2);
-                    Log.info(sql);
-                } else if (type.equals("non_print_or_electronic_journal")) {
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC, id);
-                    Log.info(sql);
+                    if (type.equals("print_journal")) {
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
+                        Log.info(sql);
+                    } else if (type.equals("electronic_journal")) {
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2);
+                        Log.info(sql);
+                    } else if (type.equals("non_print_or_electronic_journal")) {
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC, id);
+                        Log.info(sql);
+                    }
+
+
+                    dataQualityContext.productDataObjectsFromEPHSTG = DBManager
+                            .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
+                    Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
+
+                    Log.info("Assert pmxSourceReference value is correct ...");
+
+                    //assert pmxSourceReference value is correct
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID() + "-SUB", pmxSourceReference);
+
+                } else if (pmxSourceReference.contains("RPR")) {
+                    //get the id
+                    id = pmxSourceReference.replace("-RPR", "");
+
+                    if (type.equals("print_journal")) {
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
+                        Log.info(sql);
+                    } else if (type.equals("electronic_journal")) {
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2);
+                        Log.info(sql);
+                    } else if (type.equals("non_print_or_electronic_journal")) {
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC, id);
+                        Log.info(sql);
+                    }
+
+                    dataQualityContext.productDataObjectsFromEPHSTG = DBManager
+                            .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
+                    Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
+
+                    Log.info("Assert pmxSourceReference value is correct");
+
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID() + "-RPR", pmxSourceReference);
+
+                } else if (pmxSourceReference.contains("JBS")) {
+
+                    //get the id
+                    id = pmxSourceReference.replace("-JBS", "");
+
+                    if (type.equals("print_journal")) {
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
+                        Log.info(sql);
+                    } else if (type.equals("electronic_journal")) {
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2);
+                        Log.info(sql);
+                    } else if (type.equals("non_print_or_electronic_journal")) {
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC, id);
+                        Log.info(sql);
+                    }
+
+                    dataQualityContext.productDataObjectsFromEPHSTG = DBManager
+                            .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
+                    Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
+
+                    Log.info("Assert pmxSourceReference value is correct ...");
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID() + "-JBS", pmxSourceReference);
+
+                } else if (pmxSourceReference.contains("BKF")) {
+
+                    //get the id
+                    id = pmxSourceReference.replace("-BKF", "");
+
+                    if (type.equals("print_journal")) {
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
+                        Log.info(sql);
+                    } else if (type.equals("electronic_journal")) {
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2);
+                        Log.info(sql);
+                    } else if (type.equals("non_print_or_electronic_journal")) {
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC, id);
+                        Log.info(sql);
+                    }
+
+                    dataQualityContext.productDataObjectsFromEPHSTG = DBManager
+                            .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
+                    Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
+
+                    Log.info("Assert pmxSourceReference value is correct ...");
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID() + "-BKF", pmxSourceReference);
+
+                } else if (pmxSourceReference.contains("JAS")) {
+                    //get the id
+                    id = pmxSourceReference.replace("-JAS", "");
+
+                    if (type.equals("print_journal")) {
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_JAS, id, 1);
+                        Log.info(sql);
+                    } else if (type.equals("electronic_journal")) {
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_JAS, id, 2);
+                        Log.info(sql);
+                    } else if (type.equals("non_print_or_electronic_journal")) {
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_NOT_PRINT_OR_ELECTRONIC_JAS, id);
+                        Log.info(sql);
+                    }
+
+
+                    dataQualityContext.productDataObjectsFromEPHSTG = DBManager
+                            .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
+                    Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK());
+
+                    Log.info("Assert pmxSourceReference value is correct ...");
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK() + "-JAS", pmxSourceReference);
+
+                } else if (pmxSourceReference.contains("OAA")) {
+
+                    //get the id
+                    id = pmxSourceReference.replace("-OAA", "");
+
+                    if (type.equals("print_journal")) {
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_OAA, id, 1);
+                        Log.info(sql);
+                    } else if (type.equals("electronic_journal")) {
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_OAA, id, 2);
+                        Log.info(sql);
+                    } else if (type.equals("non_print_or_electronic_journal")) {
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_NOT_PRINT_OR_ELECTRONIC_JAS, id);
+                        Log.info(sql);
+                    }
+
+
+                    dataQualityContext.productDataObjectsFromEPHSTG = DBManager
+                            .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
+                    Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK());
+
+                    Log.info("Assert pmxSourceReference value is correct ..");
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK() + "-OAA", pmxSourceReference);
+                } else if (pmxSourceReference.contains("OOA")) {
+                    Log.info("PRODUCT_MANIFESTATION_ID in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID());
+                    Log.info("Expecting PMX_SOURCE_REFERENCE in EPH Staging and EPH STG DQ are consistent for ");
+
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID() + "-OOA", pmxSourceReference);
+                } else if (pmxSourceReference.contains("PKG")) {
+                    Log.info("F_PRODUCT_WORK in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
+                    Log.info("Expecting PMX_SOURCE_REFERENCE in EPH Staging and EPH STG DQ are consistent for ");
+
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK() + "-PKG", pmxSourceReference);
+
                 }
 
 
-                dataQualityContext.productDataObjectsFromEPHSTG = DBManager
-                        .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
-                Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
+                //PRODUCT_NAME
+                Log.info("PRODUCT_NAME in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME());
+                Log.info("PRODUCT_NAME in EPH STG DQ: " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
 
-                Log.info("Assert pmxSourceReference value is correct ...");
+                Log.info("Expecting PRODUCT_NAME in EPH STH and EPH STG DQ is consistent");
 
-                //assert pmxSourceReference value is correct
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID() + "-SUB", pmxSourceReference);
+                String suffix;
+                if (pmxSourceReference.contains("SUB")) {
+                    suffix = "Subscription";
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
+                } else if (pmxSourceReference.contains("JBS")) {
+                    suffix = " Bulk Sales";
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
+                } else if (pmxSourceReference.contains("BKF")) {
+                    suffix = " Back Files";
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
+                } else if (pmxSourceReference.contains("RPR")) {
+                    suffix = " Reprints";
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
+                } else if (pmxSourceReference.contains("OOA")) {
+                    suffix = " Purchase";
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
 
-            } else if (pmxSourceReference.contains("RPR")) {
-                //get the id
-                id = pmxSourceReference.replace("-RPR", "");
+                } else if (pmxSourceReference.contains("OAA")) {
+                    suffix = " Article Publication Charge";
+                    String name = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_TITLE();
+                    if (name.contains("(Print)")) {
+                        assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
+                    } else if (name.contains("(Online)")) {
 
-                if (type.equals("print_journal")) {
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
-                    Log.info(sql);
-                } else if (type.equals("electronic_journal")) {
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2);
-                    Log.info(sql);
-                } else if (type.equals("non_print_or_electronic_journal")) {
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC, id);
-                    Log.info(sql);
-                }
+                        assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
+                    }
+                } else if (pmxSourceReference.contains("JAS")) {
+                    suffix = " Author Charges";
+                    String name = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_TITLE();
 
-                dataQualityContext.productDataObjectsFromEPHSTG = DBManager
-                        .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
-                Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
+                    if (name.contains("(Print)")) {
+                        assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
+                    } else if (name.contains("(Online)")) {
+                        assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
+                    }
+                } else if (pmxSourceReference.contains("PKG")) {
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getWORK_TITLE(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
 
-                Log.info("Assert pmxSourceReference value is correct");
-
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID() + "-RPR", pmxSourceReference);
-
-            } else if (pmxSourceReference.contains("JBS")) {
-
-                //get the id
-                id = pmxSourceReference.replace("-JBS", "");
-
-                if (type.equals("print_journal")) {
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
-                    Log.info(sql);
-                } else if (type.equals("electronic_journal")) {
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2);
-                    Log.info(sql);
-                } else if (type.equals("non_print_or_electronic_journal")) {
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC, id);
-                    Log.info(sql);
-                }
-
-                dataQualityContext.productDataObjectsFromEPHSTG = DBManager
-                        .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
-                Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
-
-                Log.info("Assert pmxSourceReference value is correct ...");
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID() + "-JBS", pmxSourceReference);
-
-            } else if (pmxSourceReference.contains("BKF")) {
-
-                //get the id
-                id = pmxSourceReference.replace("-BKF", "");
-
-                if (type.equals("print_journal")) {
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
-                    Log.info(sql);
-                } else if (type.equals("electronic_journal")) {
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2);
-                    Log.info(sql);
-                } else if (type.equals("non_print_or_electronic_journal")) {
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC, id);
-                    Log.info(sql);
-                }
-
-                dataQualityContext.productDataObjectsFromEPHSTG = DBManager
-                        .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
-                Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
-
-                Log.info("Assert pmxSourceReference value is correct ...");
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID() + "-BKF", pmxSourceReference);
-
-            } else if (pmxSourceReference.contains("JAS")) {
-                //get the id
-                id = pmxSourceReference.replace("-JAS", "");
-
-                if (type.equals("print_journal")) {
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_JAS, id, 1);
-                    Log.info(sql);
-                } else if (type.equals("electronic_journal")) {
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_JAS, id, 2);
-                    Log.info(sql);
-                } else if (type.equals("non_print_or_electronic_journal")) {
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_NOT_PRINT_OR_ELECTRONIC_JAS, id);
-                    Log.info(sql);
                 }
 
 
-                dataQualityContext.productDataObjectsFromEPHSTG = DBManager
-                        .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
-                Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK());
+                //PRODUCT_SHORT_NAME
+                Log.info("PRODUCT_SHORT_NAME in EPH STG DQ: " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_SHORT_NAME());
 
-                Log.info("Assert pmxSourceReference value is correct ...");
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK() + "-JAS", pmxSourceReference);
-
-            } else if (pmxSourceReference.contains("OAA")) {
-
-                //get the id
-                id = pmxSourceReference.replace("-OAA", "");
-
-                if (type.equals("print_journal")) {
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_OAA, id, 1);
-                    Log.info(sql);
-                } else if (type.equals("electronic_journal")) {
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_OAA, id, 2);
-                    Log.info(sql);
-                } else if (type.equals("non_print_or_electronic_journal")) {
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_NOT_PRINT_OR_ELECTRONIC_JAS, id);
-                    Log.info(sql);
-                }
-
-
-                dataQualityContext.productDataObjectsFromEPHSTG = DBManager
-                        .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
-                Log.info("PMX_SOURCE_REFERENCE in EPH STG for journal is " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK());
-
-                Log.info("Assert pmxSourceReference value is correct ..");
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK() + "-OAA", pmxSourceReference);
-            } else if (pmxSourceReference.contains("OOA")) {
-                Log.info("PRODUCT_MANIFESTATION_ID in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID());
-                Log.info("Expecting PMX_SOURCE_REFERENCE in EPH Staging and EPH STG DQ are consistent for ");
-
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID() + "-OOA", pmxSourceReference);
-            } else if (pmxSourceReference.contains("PKG")) {
-                Log.info("F_PRODUCT_WORK in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
-                Log.info("Expecting PMX_SOURCE_REFERENCE in EPH Staging and EPH STG DQ are consistent for ");
-
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK() + "-PKG", pmxSourceReference);
-
-            }
-
-
-            //PRODUCT_NAME
-            Log.info("PRODUCT_NAME in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME());
-            Log.info("PRODUCT_NAME in EPH STG DQ: " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
-
-            Log.info("Expecting PRODUCT_NAME in EPH STH and EPH STG DQ is consistent");
-
-            String suffix;
-            if (pmxSourceReference.contains("SUB")) {
-                suffix = "Subscription";
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
-            } else if (pmxSourceReference.contains("JBS")) {
-                suffix = " Bulk Sales";
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
-            } else if (pmxSourceReference.contains("BKF")) {
-                suffix = " Back Files";
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
-            } else if (pmxSourceReference.contains("RPR")) {
-                suffix = " Reprints";
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
-            } else if (pmxSourceReference.contains("OOA")) {
-                suffix = " Purchase";
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
-
-            } else if (pmxSourceReference.contains("OAA")) {
-                suffix = " Article Publication Charge";
-                String name = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_TITLE();
-                if (name.contains("(Print)")) {
-                    assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
-                } else if (name.contains("(Online)")) {
-
-                    assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
-                }
-            } else if (pmxSourceReference.contains("JAS")) {
-                suffix = " Author Charges";
-                String name = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_TITLE();
-
-                if (name.contains("(Print)")) {
-                    assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
-                } else if (name.contains("(Online)")) {
-                    assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
-                }
-            } else if (pmxSourceReference.contains("PKG")) {
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getWORK_TITLE(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
-
-            }
-
-
-            //PRODUCT_SHORT_NAME
-            Log.info("PRODUCT_SHORT_NAME in EPH STG DQ: " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_SHORT_NAME());
-
-            if (type.equals("book") || type.equals("package")) {
-                Log.info("PRODUCT_SHORT_NAME in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_SHORT_NAME());
-
-                Log.info("Expecting PRODUCT_SHORT_NAME in EPH STH and EPH STG DQ is consistent");
-
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_SHORT_NAME(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_SHORT_NAME());
-            } else {
-                Log.info("PRODUCT_SHORT_NAME in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_SHORT_NAME());
-
-                Log.info("Expecting PRODUCT_SHORT_NAME in EPH STH and EPH STG DQ is consistent");
-
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_SHORT_NAME(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_SHORT_NAME());
-            }
-
-            //SEPARATELY_SALE_IND
-            String availability_status;
-            String index;
-            if (type.equals("book") || type.equals("package")) {
-                availability_status = dataQualityContext.productDataObjectsFromEPHSTG.get(i).getAVAILABILITY_STATUS();
-                index = dataQualityContext.productDataObjectsFromEPHSTG.get(i).getSEPARATELY_SALEABLE_IND();
-
-            } else {
-                availability_status = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getAVAILABILITY_STATUS();
-                index = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getSEPARATELY_SALEABLE_IND();
-
-
-            }
-            Log.info("Availability status: " + availability_status);
-            Log.info("SEPARATELY_SALE_IND : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getSEPARATELY_SALEABLE_IND());
-
-            Log.info("Expecting SEPARATELY_SALE_IND in EPH STG DQ is correct");
-
-
-            if (availability_status.equals("PNS") || index.equals("N"))
-                assertEquals("f", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getSEPARATELY_SALEABLE_IND());
-            else
-                assertEquals("t", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getSEPARATELY_SALEABLE_IND());
-
-            //verify TRIAL_ALLOWED_IND
-            if (type.equals("book") || type.equals("package")) {
-                Log.info("TRIAL_ALLOWED_IND in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND());
-                Log.info("TRIAL_ALLOWED_IND in EPH STG DQ: " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getTRIAL_ALLOWED_IND());
-
-                Log.info("Expecting TRIAL_ALLOWED_IND in EPH Staging and EPH STG DQ are consistent for ");
-
-                if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND() == null)
-                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getTRIAL_ALLOWED_IND());
-            } else {
-                Log.info("TRIAL_ALLOWED_IND in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getTRIAL_ALLOWED_IND());
-                Log.info("TRIAL_ALLOWED_IND in EPH STG DQ: " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getTRIAL_ALLOWED_IND());
-
-                Log.info("Expecting TRIAL_ALLOWED_IND in EPH Staging and EPH STG DQ are consistent for ");
-
-                if (dataQualityContext.productDataObjectsFromEPHSTG.get(0).getTRIAL_ALLOWED_IND() == null)
-                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getTRIAL_ALLOWED_IND());
-
-            }
-
-            //verify FIRST_PUB_DATE
-            if (type.equals("book") || type.equals("package")) {
-                Log.info("FIRST_PUB_DATE in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE());
-                Log.info("FIRST_PUB_DATE in EPH STG DQ : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getFIRST_PUB_DATE());
-
-                Log.info("Expecting FIRST_PUB_DATE in EPH Staging And EPH STG DQ are consistent for ");
-
-                if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE() != null)
-                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getFIRST_PUB_DATE());
-            } else {
-                Log.info("FIRST_PUB_DATE in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getFIRST_PUB_DATE());
-                Log.info("FIRST_PUB_DATE in EPH STG DQ : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getFIRST_PUB_DATE());
-
-                Log.info("Expecting FIRST_PUB_DATE in EPH Staging And EPH STG DQ are consistent for ");
-
-                if (dataQualityContext.productDataObjectsFromEPHSTG.get(0).getFIRST_PUB_DATE() != null)
-                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getFIRST_PUB_DATE(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getFIRST_PUB_DATE());
-
-            }
-
-            //verify F_TYPE
-            String pmx_source_reference = dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPMX_SOURCE_REFERENCE();
-            Log.info("pmx_source_reference : " + pmx_source_reference);
-
-            Log.info("F_TYPE in EPH STG DQ: " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_TYPE());
-
-            Log.info("Expecting F_TYPE in EPH STG DQ is correct");
-
-            assertEquals(pmx_source_reference.substring(pmx_source_reference.length() - 3), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_TYPE());
-
-
-            //F_STATUS
-            Log.info("F_STATUS in EPH STG DQ: " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS());
-
-            Log.info("Expecting F_STATUS in EPH STG DQ is correct");
-            if (pmxSourceReference.contains("SUB") || pmxSourceReference.contains("JBS") || pmxSourceReference.contains("OAA") || pmxSourceReference.contains("JAS") || pmxSourceReference.contains("OOA") || pmxSourceReference.contains("PKG")) {
-                if (availability_status.equals("PSTB"))
-                    assertEquals("PST", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS());
-                else
-                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS(), availability_status);
-            } else if (pmxSourceReference.contains("BKF") || pmxSourceReference.contains("RPR")) {
-                if (availability_status.equals("PSTB"))
-                    assertEquals("PAS", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS());
-                else
-                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS(), availability_status);
-            }
-
-            //F_REVENUE_MODEL
-            Log.info("F_TYPE : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_TYPE());
-            String fType = dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_TYPE();
-
-            Log.info("Expecting F_REVENUE_MODEL in EPH STG DQ is correct");
-
-            if (fType.equals("OOA") || fType.equals("JAS") || fType.equals("JBS") || fType.equals("JBF") || fType.equals("RPR"))
-                assertEquals("ONE", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_REVENUE_MODEL());
-            else if (fType.equals("OAA"))
-                assertEquals("EVE", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_REVENUE_MODEL());
-            else if (fType.equals("SUB") && type.equals("print_journal"))
-                assertEquals("EVE", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_REVENUE_MODEL());
-            else
-                assertEquals("SUB", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_REVENUE_MODEL());
-
-
-            //verify F_WWORK (F_PRODUCT_WORK)
-            Log.info("F_PRODUCT_WORK in EPH STG DQ : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_PRODUCT_WORK());
-
-            if (pmxSourceReference.contains("OAA") || pmxSourceReference.contains("JAS"))
                 if (type.equals("book") || type.equals("package")) {
-                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_PRODUCT_WORK());
-                } else
-                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_PRODUCT_WORK());
-            else
-                assertNull(dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_PRODUCT_WORK());
+                    Log.info("PRODUCT_SHORT_NAME in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_SHORT_NAME());
 
+                    Log.info("Expecting PRODUCT_SHORT_NAME in EPH STH and EPH STG DQ is consistent");
 
-            //verify F_MANIFESTATION (F_PRODUCT_MANIFESTATION_TYP)
-
-            Log.info("F_PRODUCT_MANIFESTATION_TYP in EPH STG DQ : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_PRODUCT_MANIFESTATION_TYP());
-
-
-            if (pmxSourceReference.contains("SUB") || pmxSourceReference.contains("JBS") || pmxSourceReference.contains("BKF") || pmxSourceReference.contains("RPR") || pmxSourceReference.contains("OOA")) {
-                if (type.equals("book") || type.equals("package")) {
-                    Log.info("F_PRODUCT_MANIFESTATION_TYP in EPH STG  : " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID());
-
-                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID(), Integer.parseInt(dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_PRODUCT_MANIFESTATION_TYP()));
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_SHORT_NAME(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_SHORT_NAME());
                 } else {
-                    Log.info("F_PRODUCT_MANIFESTATION_TYP in EPH STG  : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
-                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID(), Integer.parseInt(dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_PRODUCT_MANIFESTATION_TYP()));
+                    Log.info("PRODUCT_SHORT_NAME in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_SHORT_NAME());
+
+                    Log.info("Expecting PRODUCT_SHORT_NAME in EPH STH and EPH STG DQ is consistent");
+
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_SHORT_NAME(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_SHORT_NAME());
                 }
-            }else {
+
+                //SEPARATELY_SALE_IND
+                String availability_status;
+                String index;
+                if (type.equals("book") || type.equals("package")) {
+                    availability_status = dataQualityContext.productDataObjectsFromEPHSTG.get(i).getAVAILABILITY_STATUS();
+                    index = dataQualityContext.productDataObjectsFromEPHSTG.get(i).getSEPARATELY_SALEABLE_IND();
+
+                } else {
+                    availability_status = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getAVAILABILITY_STATUS();
+                    index = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getSEPARATELY_SALEABLE_IND();
+
+
+                }
+                Log.info("Availability status: " + availability_status);
+                Log.info("SEPARATELY_SALE_IND : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getSEPARATELY_SALEABLE_IND());
+
+                Log.info("Expecting SEPARATELY_SALE_IND in EPH STG DQ is correct");
+
+
+                if (availability_status.equals("PNS") || index.equals("N"))
+                    assertEquals("f", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getSEPARATELY_SALEABLE_IND());
+                else
+                    assertEquals("t", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getSEPARATELY_SALEABLE_IND());
+
+                //verify TRIAL_ALLOWED_IND
+                if (type.equals("book") || type.equals("package")) {
+                    Log.info("TRIAL_ALLOWED_IND in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND());
+                    Log.info("TRIAL_ALLOWED_IND in EPH STG DQ: " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getTRIAL_ALLOWED_IND());
+
+                    Log.info("Expecting TRIAL_ALLOWED_IND in EPH Staging and EPH STG DQ are consistent for ");
+
+                    if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND() == null)
+                        assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getTRIAL_ALLOWED_IND());
+                } else {
+                    Log.info("TRIAL_ALLOWED_IND in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getTRIAL_ALLOWED_IND());
+                    Log.info("TRIAL_ALLOWED_IND in EPH STG DQ: " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getTRIAL_ALLOWED_IND());
+
+                    Log.info("Expecting TRIAL_ALLOWED_IND in EPH Staging and EPH STG DQ are consistent for ");
+
+                    if (dataQualityContext.productDataObjectsFromEPHSTG.get(0).getTRIAL_ALLOWED_IND() == null)
+                        assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getTRIAL_ALLOWED_IND(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getTRIAL_ALLOWED_IND());
+
+                }
+
+                //verify FIRST_PUB_DATE
+                if (type.equals("book") || type.equals("package")) {
+                    Log.info("FIRST_PUB_DATE in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE());
+                    Log.info("FIRST_PUB_DATE in EPH STG DQ : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getFIRST_PUB_DATE());
+
+                    Log.info("Expecting FIRST_PUB_DATE in EPH Staging And EPH STG DQ are consistent for ");
+
+                    if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE() != null)
+                        assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getFIRST_PUB_DATE(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getFIRST_PUB_DATE());
+                } else {
+                    Log.info("FIRST_PUB_DATE in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getFIRST_PUB_DATE());
+                    Log.info("FIRST_PUB_DATE in EPH STG DQ : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getFIRST_PUB_DATE());
+
+                    Log.info("Expecting FIRST_PUB_DATE in EPH Staging And EPH STG DQ are consistent for ");
+
+                    if (dataQualityContext.productDataObjectsFromEPHSTG.get(0).getFIRST_PUB_DATE() != null)
+                        assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getFIRST_PUB_DATE(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getFIRST_PUB_DATE());
+
+                }
+
+                //verify F_TYPE
+                String pmx_source_reference = dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPMX_SOURCE_REFERENCE();
+                Log.info("pmx_source_reference : " + pmx_source_reference);
+
+                Log.info("F_TYPE in EPH STG DQ: " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_TYPE());
+
+                Log.info("Expecting F_TYPE in EPH STG DQ is correct");
+
+                assertEquals(pmx_source_reference.substring(pmx_source_reference.length() - 3), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_TYPE());
+
+
+                //F_STATUS
+                Log.info("F_STATUS in EPH STG DQ: " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS());
+
+                Log.info("Expecting F_STATUS in EPH STG DQ is correct");
+                if (pmxSourceReference.contains("SUB") || pmxSourceReference.contains("JBS") || pmxSourceReference.contains("OAA") || pmxSourceReference.contains("JAS") || pmxSourceReference.contains("OOA") || pmxSourceReference.contains("PKG")) {
+                    if (availability_status.equals("PSTB"))
+                        assertEquals("PST", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS());
+                    else
+                        assertEquals(dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS(), availability_status);
+                } else if (pmxSourceReference.contains("BKF") || pmxSourceReference.contains("RPR")) {
+                    if (availability_status.equals("PSTB"))
+                        assertEquals("PAS", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS());
+                    else
+                        assertEquals(dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS(), availability_status);
+                }
+
+                //F_REVENUE_MODEL
+                Log.info("F_TYPE : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_TYPE());
+                String fType = dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_TYPE();
+
+                Log.info("Expecting F_REVENUE_MODEL in EPH STG DQ is correct");
+
+                if (fType.equals("OOA") || fType.equals("JAS") || fType.equals("JBS") || fType.equals("JBF") || fType.equals("RPR"))
+                    assertEquals("ONE", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_REVENUE_MODEL());
+                else if (fType.equals("OAA"))
+                    assertEquals("EVE", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_REVENUE_MODEL());
+                else if (fType.equals("SUB") && type.equals("print_journal"))
+                    assertEquals("EVE", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_REVENUE_MODEL());
+                else
+                    assertEquals("SUB", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_REVENUE_MODEL());
+
+
+                //verify F_WWORK (F_PRODUCT_WORK)
+                Log.info("F_PRODUCT_WORK in EPH STG DQ : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_PRODUCT_WORK());
+
+                if (pmxSourceReference.contains("OAA") || pmxSourceReference.contains("JAS"))
+                    if (type.equals("book") || type.equals("package")) {
+                        assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_PRODUCT_WORK());
+                    } else
+                        assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_PRODUCT_WORK());
+                else
+                    assertNull(dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_PRODUCT_WORK());
+
+
+                //verify F_MANIFESTATION (F_PRODUCT_MANIFESTATION_TYP)
+
+                Log.info("F_PRODUCT_MANIFESTATION_TYP in EPH STG DQ : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_PRODUCT_MANIFESTATION_TYP());
+
+
+                if (pmxSourceReference.contains("SUB") || pmxSourceReference.contains("JBS") || pmxSourceReference.contains("BKF") || pmxSourceReference.contains("RPR") || pmxSourceReference.contains("OOA")) {
+                    if (type.equals("book") || type.equals("package")) {
+                        Log.info("F_PRODUCT_MANIFESTATION_TYP in EPH STG  : " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID());
+
+                        assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_MANIFESTATION_ID(), Integer.parseInt(dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_PRODUCT_MANIFESTATION_TYP()));
+                    } else {
+                        Log.info("F_PRODUCT_MANIFESTATION_TYP in EPH STG  : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID());
+                        assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID(), Integer.parseInt(dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_PRODUCT_MANIFESTATION_TYP()));
+                    }
+                } else {
                     assertNull(dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_PRODUCT_MANIFESTATION_TYP());
                 }
 
 
+                //WORK_TYPE
+                Log.info("WORK_TYPE in EPH STG DQ : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getWORK_TYPE());
 
-            //WORK_TYPE
-            Log.info("WORK_TYPE in EPH STG DQ : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getWORK_TYPE());
+                if (type.equals("book") || type.equals("package")) {
+                    Log.info("WORK_TYPE in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getWORK_TYPE());
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getWORK_TYPE(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getWORK_TYPE());
+                } else {
+                    Log.info("WORK_TYPE in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_TYPE());
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_TYPE(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getWORK_TYPE());
 
-            if (type.equals("book") || type.equals("package")) {
-                Log.info("WORK_TYPE in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getWORK_TYPE());
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getWORK_TYPE(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getWORK_TYPE());
-            } else {
-                Log.info("WORK_TYPE in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_TYPE());
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_TYPE(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getWORK_TYPE());
-
-            }
-
+                }
 
 
+                //ULT_WORK_REF
+                Log.info("ULT_WORK_REF in EPH STG DQ : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getULT_WORK_REF());
 
-            //ULT_WORK_REF
-            Log.info("ULT_WORK_REF in EPH STG DQ : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getULT_WORK_REF());
-
-            if (type.equals("book") || type.equals("package")) {
-                Log.info("F_PRODUCT_WORK in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getULT_WORK_REF());
-            } else {
-                Log.info("F_PRODUCT_WORK in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK());
-                assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getULT_WORK_REF());
-            }
-
-
-            //TAX_CODE
-            Log.info("TAX_CODE in EPH STG DQ : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getTAX_CODE());
-
-            if (fType.equals("PKG"))
-                assertNull(dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getTAX_CODE());
-            else if (fType.equals("OAA") || fType.equals("JAS"))
-                assertEquals("S001", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getTAX_CODE());
-            else if (fType.equals("SUB") || fType.equals("JBS") || fType.equals("BKF") || fType.equals("RPR")) {
-                if (type.equals("book"))
-                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getELSEVIER_TAX_CODE(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getTAX_CODE());
-                else
-                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getELSEVIER_TAX_CODE(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getTAX_CODE());
-            }
+                if (type.equals("book") || type.equals("package")) {
+                    Log.info("F_PRODUCT_WORK in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getULT_WORK_REF());
+                } else {
+                    Log.info("F_PRODUCT_WORK in EPH STG : " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK());
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getULT_WORK_REF());
+                }
 
 
+                //TAX_CODE
+                Log.info("TAX_CODE in EPH STG DQ : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getTAX_CODE());
 
-           //DQ_ERR
-            Log.info("DQ_ERR in EPH STG DQ : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getDQ_ERR());
+                if (fType.equals("PKG"))
+                    assertNull(dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getTAX_CODE());
+                else if (fType.equals("OAA") || fType.equals("JAS"))
+                    assertEquals("S001", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getTAX_CODE());
+                else if (fType.equals("SUB") || fType.equals("JBS") || fType.equals("BKF") || fType.equals("RPR")) {
+                    if (type.equals("book"))
+                        assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getELSEVIER_TAX_CODE(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getTAX_CODE());
+                    else
+                        assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getELSEVIER_TAX_CODE(), dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getTAX_CODE());
+                }
 
-            assertEquals("N", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getDQ_ERR());
-        });
+
+                //DQ_ERR
+                Log.info("DQ_ERR in EPH STG DQ : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getDQ_ERR());
+
+                assertEquals("N", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getDQ_ERR());
+            });
+        }
     }
 
     @And("^Compare the records in EPH STG DQ and EPH SA for (.*)$")
     public void compareProductsDataBetweenSTGDQAndSA(String type) {
         Log.info("Compare the records in EPH STG DQ and EPH SA for " + type + " ..");
 
-        dataQualityContext.productDataObjectsFromEPHSTGDQ.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
-        dataQualityContext.productDataObjectsFromEPHSA.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
+        dataQualityContext.productDataObjectsFromEPHSTGDQ.sort(Comparator.comparing(ProductDataObject::getPMX_SOURCE_REFERENCE));
+        dataQualityContext.productDataObjectsFromEPHSA.sort(Comparator.comparing(ProductDataObject::getPMX_SOURCE_REFERENCE));
 
-        assertTrue(dataQualityContext.productDataObjectsFromEPHSTGDQ.size() == dataQualityContext.productDataObjectsFromEPHSA.size());
+        assertEquals(dataQualityContext.productDataObjectsFromEPHSTGDQ.size(), dataQualityContext.productDataObjectsFromEPHSA.size());
 
         IntStream.range(0, dataQualityContext.productDataObjectsFromEPHSA.size()).forEach(i -> {
 
@@ -1026,8 +1082,8 @@ public class ProductDataMappingCheck {
         Log.info("Compare the products data between EPH SA and EPH GD for " + type);
 
         //sort the lists before comparison
-        dataQualityContext.productDataObjectsFromEPHSA.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
-        dataQualityContext.productDataObjectsFromEPHGD.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
+        dataQualityContext.productDataObjectsFromEPHSA.sort(Comparator.comparing(ProductDataObject::getPMX_SOURCE_REFERENCE));
+        dataQualityContext.productDataObjectsFromEPHGD.sort(Comparator.comparing(ProductDataObject::getPMX_SOURCE_REFERENCE));
 
         int bound = dataQualityContext.productDataObjectsFromEPHSA.size();
 

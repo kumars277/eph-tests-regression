@@ -8,7 +8,7 @@ Feature: Entity - PERSON  - Validate data between PMX and EPH - Talend Load
 
   @Regression
   Scenario: Count check between EPH Staging and EPH DQ
-    Given Get the count of records for persons in EPH Staging
+    Given Get the count of records for persons in EPH Staging going to DQ
     When Get the count of records for persons in EPH DQ
     Then Compare the count on records for persons in EPH Staging and EPH DQ
 
