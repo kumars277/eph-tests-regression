@@ -16,7 +16,6 @@ import cucumber.api.java.en.When;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -175,21 +174,16 @@ public class AccountableProductDataQualityCheckSteps {
 
         Log.info("Get the product work ids for given random ids from Staging ..");
 
-        sql = String.format(AccountableProductSQL.GET_RANDOM_WORK_IDS_FROM_GD, numberOfRecords);
-        Log.info(sql);
-
-
-        List<Map<?, ?>> pmxSourceRef = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        ids = pmxSourceRef.stream().map(m -> m.get("PMX_SOURCE_REFERENCE")).map(String::valueOf).collect(Collectors.toList());
-        Log.info(ids.toString());
-
-        Log.info("Get the product work ids from stg ...");
-        sql = String.format(AccountableProductSQL.SELECT_IDS_STG, Joiner.on("','").join(ids));
+        sql = String.format(AccountableProductSQL.GET_RANDOM_IDS_STG, numberOfRecords);
         Log.info(sql);
 
         List<Map<?, ?>> productWorkIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        idsPMX = productWorkIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_WORK_ID")).map(String::valueOf).collect(Collectors.toList());
-        Log.info(idsPMX.toString());
+        idsPMX = productWorkIds.stream().map(m ->  m.get("PRODUCT_WORK_ID")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("Product work ids : " + idsPMX.toString());
+
+        ids = productWorkIds.stream().map(m ->  m.get("PMX_SOURCE_REFERENCE")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("External ref : "  + ids.toString());
+
 
     }
 
@@ -378,34 +372,37 @@ public class AccountableProductDataQualityCheckSteps {
         dataQualityContext.accountableProductDataObjectsFromSTGDQ.sort(Comparator.comparing(AccountableProductDataObject::getPMX_SOURCE_REFERENCE));
         dataQualityContext.accountableProductDataObjectsFromSA.sort(Comparator.comparing(AccountableProductDataObject::getEXTERNAL_REFERENCE));
 
-
-        IntStream.range(0, dataQualityContext.accountableProductDataObjectsFromSTGDQ.size()).forEach(i -> {
-
-
-            //B_CLASSNAME
-            Log.info("B_CLASSNAME in EPH: " + dataQualityContext.accountableProductDataObjectsFromSA.get(i).getB_CLASSNAME());
-
-            assertEquals("AccountableProduct",dataQualityContext.accountableProductDataObjectsFromSA.get(i).getB_CLASSNAME());
+        if (dataQualityContext.accountableProductDataObjectsFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There is no updated data for Accountable products in SA");
+        } else {
+            IntStream.range(0, dataQualityContext.accountableProductDataObjectsFromSTGDQ.size()).forEach(i -> {
 
 
-            //GL_PRODUCT_SEGMENT_CODE
-            Log.info("GL_PRODUCT_SEGMENT_CODE in EPH SА: " + dataQualityContext.accountableProductDataObjectsFromSA.get(i).getGL_PRODUCT_SEGMENT_CODE());
+                //B_CLASSNAME
+                Log.info("B_CLASSNAME in EPH: " + dataQualityContext.accountableProductDataObjectsFromSA.get(i).getB_CLASSNAME());
 
-                assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(i).getGL_PRODUCT_SEGMENT_CODE(),dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getACC_PROD_ID());
-
-
-            //GL_PRODUCT_SEGMENT_NAME
-            Log.info("GL_PRODUCT_SEGMENT_NAME in EPH SA: " + dataQualityContext.accountableProductDataObjectsFromSA.get(i).getGL_PRODUCT_SEGMENT_NAME());
-
-                assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(i).getGL_PRODUCT_SEGMENT_NAME(),dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getACC_PROD_NAME());
+                assertEquals("AccountableProduct", dataQualityContext.accountableProductDataObjectsFromSA.get(i).getB_CLASSNAME());
 
 
-            //F_GL_PRODUCT_SEGMENT_PARENT
-            Log.info("F_GL_PRODUCT_SEGMENT_PARENT in EPH SA: " + dataQualityContext.accountableProductDataObjectsFromSA.get(i).getF_GL_PRODUCT_SEGMENT_PARENT());
+                //GL_PRODUCT_SEGMENT_CODE
+                Log.info("GL_PRODUCT_SEGMENT_CODE in EPH SА: " + dataQualityContext.accountableProductDataObjectsFromSA.get(i).getGL_PRODUCT_SEGMENT_CODE());
 
-                assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(i).getF_GL_PRODUCT_SEGMENT_PARENT(),dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getPARENT_ACC_PROD());
+                assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(i).getGL_PRODUCT_SEGMENT_CODE(), dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getACC_PROD_ID());
 
-        });
+
+                //GL_PRODUCT_SEGMENT_NAME
+                Log.info("GL_PRODUCT_SEGMENT_NAME in EPH SA: " + dataQualityContext.accountableProductDataObjectsFromSA.get(i).getGL_PRODUCT_SEGMENT_NAME());
+
+                assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(i).getGL_PRODUCT_SEGMENT_NAME(), dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getACC_PROD_NAME());
+
+
+                //F_GL_PRODUCT_SEGMENT_PARENT
+                Log.info("F_GL_PRODUCT_SEGMENT_PARENT in EPH SA: " + dataQualityContext.accountableProductDataObjectsFromSA.get(i).getF_GL_PRODUCT_SEGMENT_PARENT());
+
+                assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(i).getF_GL_PRODUCT_SEGMENT_PARENT(), dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getPARENT_ACC_PROD());
+
+            });
+        }
     }
 
 
