@@ -141,10 +141,22 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
         Log.info("numberOfRecords = " + numberOfRecords);
 
         Log.info("Get the ids from stg ...");
-        sql = String.format(WorkSubjectAreaLinkDataSQL.SELECT_RANDOM_IDS, numberOfRecords);
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            sql = String.format(WorkSubjectAreaLinkDataSQL.SELECT_RANDOM_IDS, numberOfRecords);
         Log.info(sql);
 
-        List<Map<?, ?>> randomIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        } else {
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            Log.info(sql);
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+            Log.info("refreshDate : " + refreshDate);
+
+            sql = String.format(WorkSubjectAreaLinkDataSQL.SELECT_RANDOM_IDS_DELTA, refreshDate, numberOfRecords);
+            Log.info(sql);
+        }
+
+            List<Map<?, ?>> randomIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_SUBJECT_AREA_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info(ids.toString());
     }
