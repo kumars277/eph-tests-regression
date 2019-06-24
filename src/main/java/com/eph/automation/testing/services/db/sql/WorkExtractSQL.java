@@ -135,8 +135,10 @@ public class WorkExtractSQL {
 
     public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_DQ_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq";
 
-    public static final String COUNT_MANIFESTATIONS_IN_EPH_DQ_TO_SA = "SELECT count(*) AS count FROM " + GetEPHDBUser.getDBUser() +".stg_10_pmx_manifestation_dq dq\n" +
-            "join  " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n";
+    public static final String COUNT_MANIFESTATIONS_IN_EPH_DQ_TO_SA =
+    "select count(*) from ephsit_talend_owner.stg_10_pmx_manifestation_dq mdq\n"+
+            "left join " + GetEPHDBUser.getDBUser() +".stg_10_pmx_wwork_dq wdq on mdq.f_wwork = wdq.pmx_source_reference and wdq.dq_err !='Y' \n"+
+            "where mdq.dq_err != 'Y'";
 
     public static final String COUNT_MANIFESTATIONS_IN_SA_MANIFESTATION_TABLE =
             "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation sa where f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation\n" +

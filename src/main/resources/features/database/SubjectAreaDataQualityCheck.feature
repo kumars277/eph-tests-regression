@@ -8,7 +8,7 @@ Feature: Entity - SUBJECT AREA - Count And Data Mapping Check - Validate data be
 
   @Regression
   Scenario: Compare count of subject area data between EPH STG and EPH SA
-    Given We get the count of subject area data from EPH STG
+    Given We get the count of subject area data from EPH STG going to SA
     When We get the count of subject area data from EPH SA
     Then Compare the count of subject area data in EPH STG and EPH SA
 

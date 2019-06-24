@@ -382,7 +382,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @And("^Compare person work role records in EPH STG and EPH SA$")
     public void comparePersonWorkRolesRecordsInSTGAndSA() {
         Log.info("And compare work role records in EPH STG and EPH SA ..");
-        if (dataQualityContext.personWorkRoleDataObjectsFromEPHSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if (dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There are no records found for Person Work Role");
         } else {
 
@@ -479,7 +479,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @Then("^We get the person work role records from EPH GD$")
     public void getPersonWorkRoleRecordsEPHGD() {
         Log.info("Get the person work role records from EPH GD  ..");
-        sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHGD, Joiner.on("','").join(idsSA));
+        sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHGD, Joiner.on("','").join(ids));
 
         Log.info(sql);
 
