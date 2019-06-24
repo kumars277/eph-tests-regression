@@ -207,9 +207,9 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @When("^We get the person work role records with (.*) from PMX$")
     public void getPersonWorkRoleRecordsPMX(String type) {
         Log.info("Get the person work role records with type from PMX ..");
-//        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
-//            Log.info("There is no updated data for Person Work Role");
-//        } else {
+        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There is no updated data for Person Work Role");
+        } else {
             //prepare ids
             idsPMX = new ArrayList<>(ids);
 //        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).substring(idsPMX.get(i).indexOf("-")+1, idsPMX.get(i).lastIndexOf("-"))));
@@ -236,7 +236,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
             dataQualityContext.personWorkRoleDataObjectsFromPMX = DBManager
                     .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.PMX_URL);
-//        }
+        }
     }
 
     @Then("^We get the person work role records from EPH STG$")
@@ -248,9 +248,12 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
         sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHSTG, Joiner.on("','").join(ids));
         Log.info(sql);
-
-        dataQualityContext.personWorkRoleDataObjectsFromEPHSTG = DBManager
-                .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
+        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There are no records found for Person Work Role");
+        } else {
+            dataQualityContext.personWorkRoleDataObjectsFromEPHSTG = DBManager
+                    .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
+        }
     }
 
 
@@ -353,10 +356,13 @@ public class PersonWorkRoleDataQualityCheckSteps {
         sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHSA, Joiner.on("','").join(ids));
 //        sql = PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHSA;
         Log.info(sql);
-
-        dataQualityContext.personWorkRoleDataObjectsFromEPHSA = DBManager
-                .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
-        sql.length();
+        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There are no records found for Person Work Role");
+        } else {
+            dataQualityContext.personWorkRoleDataObjectsFromEPHSA = DBManager
+                    .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
+            sql.length();
+        }
     }
 
     @And("^Check the mandatory columns are populated for persons work role$")
@@ -485,10 +491,13 @@ public class PersonWorkRoleDataQualityCheckSteps {
         sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHGD, Joiner.on("','").join(ids));
 
         Log.info(sql);
-
-        dataQualityContext.personWorkRoleDataObjectsFromEPHGD = DBManager
-                .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
-        sql.length();
+        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There are no records found for Person Work Role");
+        } else {
+            dataQualityContext.personWorkRoleDataObjectsFromEPHGD = DBManager
+                    .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
+            sql.length();
+        }
     }
 
 
