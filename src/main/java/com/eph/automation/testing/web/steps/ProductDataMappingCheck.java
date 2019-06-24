@@ -153,12 +153,10 @@ public class ProductDataMappingCheck {
 
         List<Map<?, ?>> randomProductManifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
-        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
-            Log.info("There is no updated data for Product Data");
-        } else {
+
             ids = randomProductManifestationIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
             Log.info("Selected product manifestation ids : " + ids);
-        }
+
 
 
 
