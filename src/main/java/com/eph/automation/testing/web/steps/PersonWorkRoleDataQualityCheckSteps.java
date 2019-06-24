@@ -161,7 +161,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
@@ -385,7 +385,8 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @And("^Compare person work role records in EPH STG and EPH SA$")
     public void comparePersonWorkRolesRecordsInSTGAndSA() {
         Log.info("And compare work role records in EPH STG and EPH SA ..");
-
+        dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.sort(Comparator.comparing(PersonWorkRoleDataObject::getWORK_PERSON_ROLE_SOURCE_REF));
+        dataQualityContext.personWorkRoleDataObjectsFromEPHSA.sort(Comparator.comparing(PersonWorkRoleDataObject::getWORK_PERSON_ROLE_SOURCE_REF));
 
             IntStream.range(0, dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.size()).forEach(i -> {
 
@@ -492,9 +493,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @And("^Compare person work role records in EPH SA and EPH GD$")
     public void comparePersonWorkRolesRecordsInSAAndGD() {
         Log.info("And compare work role records in EPH SA and EPH GD ..");
-        if (dataQualityContext.personWorkRoleDataObjectsFromEPHGD.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
-            Log.info("There are no records found for Person Work Role");
-        } else {
+
             dataQualityContext.personWorkRoleDataObjectsFromEPHSA.sort(Comparator.comparing(PersonWorkRoleDataObject::getWORK_PERSON_ROLE_ID));
             dataQualityContext.personWorkRoleDataObjectsFromEPHGD.sort(Comparator.comparing(PersonWorkRoleDataObject::getWORK_PERSON_ROLE_ID));
 
@@ -573,7 +572,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
             });
 
-        }
+
     }
 
 }
