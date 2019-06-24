@@ -381,8 +381,8 @@ public class ProductDataSQL {
             "order by random() limit '%s') A \n";
 
     public static String SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_JOURNALS_DELTA = "select distinct PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID from\n"+
-            "(select  \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from ephsit_talend_owner.stg_10_pmx_product stg \n"+
-            "join ephsit_talend_owner.stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int \n"+
+            "(select  \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product stg \n"+
+            "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int \n"+
             "join (select distinct external_reference, b_error_status from semarchy_eph_mdm.sa_product ) sa on dq.pmx_source_reference = sa.external_reference\n"+
             " where \"SUBSCRIPTION\" = 'Y' \n"+
             "and dq.dq_err != 'Y'   and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')\n"+
