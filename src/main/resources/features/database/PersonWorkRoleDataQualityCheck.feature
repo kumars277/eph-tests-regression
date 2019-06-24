@@ -74,7 +74,7 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
   Scenario Outline: Validate data is transferred from EPH SA to EPH GD
     Given We get <countOfRandomIds> random ids of persons work role with <type>
     Then We get the person work role records from EPH SA
-    Then We get the person work role records from EPH GD
+    Then We get the person work role records from EPH GD with <type>
     And Compare person work role records in EPH SA and EPH GD
     Examples:
       | countOfRandomIds | type |

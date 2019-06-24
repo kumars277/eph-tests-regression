@@ -104,8 +104,7 @@ public class ProductDataMappingCheck {
 
 
     @Given("^We get (.*) ids of journals for (.*) with (.*) and (.*)$")
-    public void
-    getRandomProductManifestationIdsForJournals(String numberOfRecords, String type, String open_access, String author_charges) {
+    public void getRandomProductManifestationIdsForJournals(String numberOfRecords, String type, String open_access, String author_charges) {
         Log.info("In Given method get random product manifestation ids for journals");
         //Get property when run with jenkins
         numberOfRecords = System.getProperty("dbRandomRecordsNumber");
@@ -153,9 +152,8 @@ public class ProductDataMappingCheck {
 
         List<Map<?, ?>> randomProductManifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
-
-            ids = randomProductManifestationIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
-            Log.info("Selected product manifestation ids : " + ids);
+        ids = randomProductManifestationIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("Selected product manifestation ids : " + ids);
 
 
 
@@ -183,12 +181,13 @@ public class ProductDataMappingCheck {
 
             dataQualityContext.productDataObjectsFromEPHSTG = DBManager
                     .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
-
+        
     }
 
     @Then("^We get the data from EPH STG DQ for (.*)$")
     public void getProductsDataFromEPHSTGDQ(String type) {
         Log.info("In Then method");
+
 
         if (type.equals("book")) {
             idsDQ = new ArrayList<>(ids);
@@ -199,7 +198,9 @@ public class ProductDataMappingCheck {
         } else {
             List<String> workIds = new ArrayList<>();
 
-
+            if (dataQualityContext.productDataObjectsFromEPHSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+                Log.info("There is no updated data for Product Data");
+            } else {
                 for (int i = 0; i < dataQualityContext.productDataObjectsFromEPHSTG.size(); i++) {
                     if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getOPEN_ACCESS().equals("Y"))
                         workIds.add(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
@@ -208,7 +209,7 @@ public class ProductDataMappingCheck {
                     if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPACKAGES().equals("Y"))
                         workIds.add(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
                 }
-
+            }
 
             //concatenate the ids used for pmx_source_reference in SA
             idsDQ = Stream.concat(ids.stream(), workIds.stream()).collect(Collectors.toList());
