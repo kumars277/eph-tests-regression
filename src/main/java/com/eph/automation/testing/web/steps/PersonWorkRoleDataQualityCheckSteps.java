@@ -418,7 +418,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
                     Log.info("Expecting EFFECTIVE_START_DATE in EPH STG and EPH SA to be consistent");
 
-                    assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_START_DATE());
+                    assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getSTART_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_START_DATE());
 
 
                     //EFFECTIVE_END_DATE
@@ -427,7 +427,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
                     Log.info("Expecting EFFECTIVE_END_DATE in EPH STG and EPH SA to be consistent");
 
-                    assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_END_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_END_DATE());
+                    assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getEND_DATE(), dataQualityContext.personWorkRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_END_DATE());
 
 
                     //F_ROLE
@@ -481,13 +481,11 @@ public class PersonWorkRoleDataQualityCheckSteps {
         sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHGD, Joiner.on("','").join(idsPMX));
 
         Log.info(sql);
-        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
-            Log.info("There are no records found for Person Work Role");
-        } else {
+
             dataQualityContext.personWorkRoleDataObjectsFromEPHGD = DBManager
                     .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
             sql.length();
-        }
+
     }
 
 
