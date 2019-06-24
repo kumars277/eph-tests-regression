@@ -153,8 +153,15 @@ public class ProductDataMappingCheck {
 
         List<Map<?, ?>> randomProductManifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
-        ids = randomProductManifestationIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
-        Log.info("Selected product manifestation ids : " + ids);
+        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There is no updated data for Product Data");
+        } else {
+            ids = randomProductManifestationIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
+            Log.info("Selected product manifestation ids : " + ids);
+        }
+
+
+
 
 
     }
@@ -187,7 +194,9 @@ public class ProductDataMappingCheck {
     public void getProductsDataFromEPHSTGDQ(String type) {
         Log.info("In Then method");
 
-
+        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There is no updated data for Product Data");
+        } else {
         if (type.equals("book")) {
             idsDQ = new ArrayList<>(ids);
 
@@ -197,7 +206,7 @@ public class ProductDataMappingCheck {
         } else {
             List<String> workIds = new ArrayList<>();
 
-            if (dataQualityContext.productDataObjectsFromEPHSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            if (dataQualityContext.productDataObjectsFromEPHSTG.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
                 Log.info("There is no updated data for Product Data");
             } else {
                 for (int i = 0; i < dataQualityContext.productDataObjectsFromEPHSTG.size(); i++) {
@@ -217,7 +226,7 @@ public class ProductDataMappingCheck {
 
             sql = String.format(ProductDataSQL.EPH_STG_DQ_PRODUCT_EXTRACT_JOURNALS_OR_PACKAGES, Joiner.on("|").join(idsDQ));
             Log.info(sql);
-
+        }
         }
 
         dataQualityContext.productDataObjectsFromEPHSTGDQ = DBManager
