@@ -291,17 +291,17 @@ public class PersonWorkRoleDataSQL {
     public static String GET_RANDOM_PERSON_WORK_ROLE_IDS_FROM_STG_WITH_NO_ERROR = "\n" +
             "select \n" +
             "\"WORK_PERSON_ROLE_SOURCE_REF\" as WORK_PERSON_ROLE_SOURCE_REF\n" +
-            "from ephsit_talend_owner.stg_10_pmx_work_person_role\n" +
+            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_person_role\n" +
             "join  ((select s.person_source_ref as stage, aa.external_reference as gold,\n" +
             "coalesce(s.person_source_ref::varchar,aa.external_reference) as consol,\n" +
             "case when s.person_source_ref is null then 'N' else s.dq_err end as dq_err\n" +
             "from (select distinct external_reference, person_id from semarchy_eph_mdm.sa_person) aa\n" +
-            "full outer join ephsit_talend_owner.stg_10_pmx_person_dq s on aa.external_reference = s.person_source_ref::varchar))  perd\n" +
+            "full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_person_dq s on aa.external_reference = s.person_source_ref::varchar))  perd\n" +
             "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_PARTY_SOURCE_REF\"::varchar = perd.consol\n" +
             "join  (select s.pmx_source_reference as stage, g.external_reference as gold,\n" +
             "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
             "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
-            "from semarchy_eph_mdm.gd_wwork g full outer join ephsit_talend_owner.stg_10_pmx_wwork_dq s on g.external_reference = s.pmx_source_reference::varchar) word\n" +
+            "from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s on g.external_reference = s.pmx_source_reference::varchar) word\n" +
             "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_WORK_SOURCE_REF\"::varchar = word.consol\n" +
             "join (select distinct person_id, external_reference from semarchy_eph_mdm.sa_person ) p \n" +
             "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_PARTY_SOURCE_REF\"::varchar = p.external_reference\n" +
@@ -324,17 +324,17 @@ public class PersonWorkRoleDataSQL {
             "\n" +
             "select \n" +
             "\"WORK_PERSON_ROLE_SOURCE_REF\" as WORK_PERSON_ROLE_SOURCE_REF\n" +
-            "from ephsit_talend_owner.stg_10_pmx_work_person_role\n" +
+            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_person_role\n" +
             "join  ((select s.person_source_ref as stage, aa.external_reference as gold,\n" +
             "coalesce(s.person_source_ref::varchar,aa.external_reference) as consol,\n" +
             "case when s.person_source_ref is null then 'N' else s.dq_err end as dq_err\n" +
             "from (select distinct external_reference, person_id from semarchy_eph_mdm.sa_person) aa\n" +
-            "full outer join ephsit_talend_owner.stg_10_pmx_person_dq s on aa.external_reference = s.person_source_ref::varchar))  perd\n" +
+            "full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_person_dq s on aa.external_reference = s.person_source_ref::varchar))  perd\n" +
             "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_PARTY_SOURCE_REF\"::varchar = perd.consol\n" +
             "join  (select s.pmx_source_reference as stage, g.external_reference as gold,\n" +
             "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
             "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
-            "from semarchy_eph_mdm.gd_wwork g full outer join ephsit_talend_owner.stg_10_pmx_wwork_dq s on g.external_reference = s.pmx_source_reference::varchar) word\n" +
+            "from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s on g.external_reference = s.pmx_source_reference::varchar) word\n" +
             "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_WORK_SOURCE_REF\"::varchar = word.consol\n" +
             "join (select distinct person_id, external_reference from semarchy_eph_mdm.sa_person ) p \n" +
             "     on STG_10_PMX_WORK_PERSON_ROLE.\"PMX_PARTY_SOURCE_REF\"::varchar = p.external_reference\n" +

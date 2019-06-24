@@ -263,8 +263,8 @@ public class PersonProductRoleDataSQL {
 //            "and perd.dq_err != 'Y' and  prod.dq_err != 'Y'\t\n" +
 //            "and gd.effective_end_date is not null";
 
-    public static final String SELECT_END_DATED_RECORDS_STG_AND_GD = "select ephsit_talend_owner.stg_10_pmx_product_person_role.F_ROLE as \"STG\", gd.f_role as \"GD\"\n" +
-            "from ephsit_talend_owner.stg_10_pmx_product_person_role\n" +
+    public static final String SELECT_END_DATED_RECORDS_STG_AND_GD = "select "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product_person_role.F_ROLE as \"STG\", gd.f_role as \"GD\"\n" +
+            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product_person_role\n" +
             "join  (select s.pmx_source_reference as stage, g.external_reference as gold,\n" +
             "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
             "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +

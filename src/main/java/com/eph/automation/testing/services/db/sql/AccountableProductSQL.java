@@ -106,8 +106,8 @@ public class AccountableProductSQL {
 
     /*
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ_DELTA = "select count(distinct s.\"PRODUCT_WORK_ID\" ) as count \n" +
-            "from ephsit_talend_owner.stg_10_pmx_accountable_product s\n" +
-            "left join ephsit_talend_owner.map_sourceref_2_numericid m on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = m.source_ref\n" +
+            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_accountable_product s\n" +
+            "left join "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid m on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = m.source_ref\n" +
             "left join semarchy_eph_mdm.gd_accountable_product g on m.numeric_id = g.accountable_product_id\n" +
             "where not (\n" +
             "        coalesce(g.gl_product_segment_code,'') = s.\"ACC_PROD_ID\" and\n" +
@@ -182,7 +182,7 @@ public class AccountableProductSQL {
             ",s.\"PARENT_ACC_PROD\" as parent_acc_prod\n" +
             ",'N' as dq_err\n" +
             ",\"PRODUCT_WORK_ID\" as product_work_id\n" +
-            "from ephsit_talend_owner.stg_10_pmx_accountable_product s\n" +
+            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_accountable_product s\n" +
             "left join semarchy_eph_mdm.gd_accountable_product g on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = g.external_reference\n" +
             "and not (\n" +
             "        coalesce(g.gl_product_segment_code,'') = s.\"ACC_PROD_ID\" and\n" +
@@ -197,7 +197,7 @@ public class AccountableProductSQL {
 //            ",ACC_PROD_NAME as ACC_PROD_NAME\n" +
 //            ",PARENT_ACC_PROD as PARENT_ACC_PROD\n" +
 //            ",DQ_ERR as DQ_ERR\n" +
-//            "from ephsit_talend_owner.stg_10_pmx_accountable_product_dq\n" +
+//            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_accountable_product_dq\n" +
 //            "left join  (select distinct external_reference, accountable_product_id from semarchy_eph_mdm.sa_accountable_product) a\n" +
 //            " on STG_10_PMX_ACCOUNTABLE_PRODUCT_DQ.pmx_source_reference = a.external_reference\n" +
 //            "where dq_err != 'Y' and PRODUCT_WORK_ID in ('%s')";
@@ -292,17 +292,17 @@ public class AccountableProductSQL {
 
 //    public static String GET_RANDOM_WORK_IDS_FROM_STG = "select  \"PRODUCT_WORK_ID\" as PRODUCT_WORK_ID,\n" +
 //            "concat(STG_10_PMX_ACCOUNTABLE_PRODUCT.\"ACC_PROD_ID\",STG_10_PMX_ACCOUNTABLE_PRODUCT.\"PARENT_ACC_PROD\") as PMX_SOURCE_REFERENCE\n" +
-//            "from ephsit_talend_owner.stg_10_pmx_accountable_product \n" +
+//            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_accountable_product \n" +
 //            " where  concat(\"ACC_PROD_ID\",\"PARENT_ACC_PROD\")  in \n" +
-//            "(select distinct concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") from  ephsit_talend_owner.stg_10_pmx_accountable_product s\n" +
+//            "(select distinct concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") from  "+GetEPHDBUser.getDBUser()+".stg_10_pmx_accountable_product s\n" +
 //            "join semarchy_eph_mdm.sa_accountable_product sa on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = sa.external_reference\n" +
 //            "where sa.b_error_status is null)\n" +
 //            "order by random() limit '%s'";
 
     public static String GET_RANDOM_WORK_IDS_FROM_STG = "select  \"PRODUCT_WORK_ID\" as PRODUCT_WORK_ID,\n" +
             "concat(\"ACC_PROD_ID\",\"PARENT_ACC_PROD\") as PMX_SOURCE_REFERENCE\n" +
-            "from ephsit_talend_owner.stg_10_pmx_accountable_product s\n" +
-            "join ephsit_talend_owner.STG_10_PMX_ACCOUNTABLE_PRODUCT_DQ dq on \"PRODUCT_WORK_ID\" = dq.PRODUCT_WORK_ID\n" +
+            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_accountable_product s\n" +
+            "join "+GetEPHDBUser.getDBUser()+".STG_10_PMX_ACCOUNTABLE_PRODUCT_DQ dq on \"PRODUCT_WORK_ID\" = dq.PRODUCT_WORK_ID\n" +
             "left join semarchy_eph_mdm.gd_accountable_product g on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = g.external_reference\n" +
             "and not (\n" +
             "        coalesce(g.gl_product_segment_code,'') = s.\"ACC_PROD_ID\" and\n" +
@@ -322,8 +322,8 @@ public class AccountableProductSQL {
     /*
     public static String GET_RANDOM_WORK_IDS_FROM_STG = "select distinct\n" +
             "s.\"PRODUCT_WORK_ID\" as PRODUCT_WORK_ID\n" +
-            "from ephsit_talend_owner.stg_10_pmx_accountable_product s\n" +
-            "left join ephsit_talend_owner.map_sourceref_2_numericid m on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = m.source_ref\n" +
+            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_accountable_product s\n" +
+            "left join "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid m on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = m.source_ref\n" +
             "left join semarchy_eph_mdm.gd_accountable_product g on m.numeric_id = g.accountable_product_id\n" +
             "where not (\n" +
             "        coalesce(g.gl_product_segment_code,'') = s.\"ACC_PROD_ID\" and\n" +

@@ -321,7 +321,7 @@ public class WorkExtractSQL {
             "FROM semarchy_eph_mdm.gd_manifestation WHERE EXTERNAL_REFERENCE IN ('%s')";
 
     /* Old logic
-    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "select count(*) AS count from ephsit_talend_owner.stg_10_pmx_manifestation  where \"%s\" is not null";
+    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "select count(*) AS count from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_manifestation  where \"%s\" is not null";
     */
 
     //EPH - 366 - Change to introduce DQ layer
@@ -478,10 +478,10 @@ public class WorkExtractSQL {
 
     public static final String SELECT_RANDOM_ISBNS_EBK =
             "select \"ISBN\" as ISBN, sman.external_reference \n"+
-                    "from ephsit_talend_owner.stg_10_pmx_manifestation man, \n"+
-                    "ephsit_talend_owner.stg_10_pmx_manifestation_dq mdq , \n"+
+                    "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_manifestation man, \n"+
+                    ""+GetEPHDBUser.getDBUser()+".stg_10_pmx_manifestation_dq mdq , \n"+
                     "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
-                    ", ephsit_talend_owner.map_sourceref_2_ephid map1 \n"+
+                    ", "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid map1 \n"+
                     "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
                     "and map1.source_ref = mdq.pmx_source_reference::text\n"+
                     "and concat(map1.eph_id,'ISBN',man.\"ISBN\") = sman.external_reference\n"+
@@ -495,10 +495,10 @@ public class WorkExtractSQL {
 
     public static final String SELECT_RANDOM_ISSNS_JPR_IDS =
       "select \"ISBN\" as ISBN, sman.external_reference \n"+
-              "from ephsit_talend_owner.stg_10_pmx_manifestation man, \n"+
-              "ephsit_talend_owner.stg_10_pmx_manifestation_dq mdq , \n"+
+              "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_manifestation man, \n"+
+              ""+GetEPHDBUser.getDBUser()+".stg_10_pmx_manifestation_dq mdq , \n"+
               "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
-              ", ephsit_talend_owner.map_sourceref_2_ephid map1 \n"+
+              ", "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid map1 \n"+
               "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
               "and map1.source_ref = mdq.pmx_source_reference::text\n"+
               "and concat(map1.eph_id,'ISBN',man.\"ISBN\") = sman.external_reference\n"+
@@ -512,10 +512,10 @@ public class WorkExtractSQL {
 
 
     public static final String SELECT_RANDOM_ISSNS_JEL_IDS =  "select \"ISBN\" as ISBN, sman.external_reference \n"+
-            "from ephsit_talend_owner.stg_10_pmx_manifestation man, \n"+
-            "ephsit_talend_owner.stg_10_pmx_manifestation_dq mdq , \n"+
+            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_manifestation man, \n"+
+            ""+GetEPHDBUser.getDBUser()+".stg_10_pmx_manifestation_dq mdq , \n"+
             "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
-            ", ephsit_talend_owner.map_sourceref_2_ephid map1 \n"+
+            ", "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid map1 \n"+
             "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
             "and map1.source_ref = mdq.pmx_source_reference::text\n"+
             "and concat(map1.eph_id,'ISBN',man.\"ISBN\") = sman.external_reference\n"+
