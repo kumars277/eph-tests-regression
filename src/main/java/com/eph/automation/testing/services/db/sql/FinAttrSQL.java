@@ -9,8 +9,8 @@ public class FinAttrSQL {
             " LIMIT PARAM1;";
 
     public static String gettingSourceRefDelta="SELECT PMX_SOURCE_REFERENCE as random_value\n" +
-            "from" +GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork ww \n" +
-            "join" +GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq dq on dq.PMX_SOURCE_REFERENCE=ww.\"PRODUCT_WORK_ID\"\n" +
+            "from " +GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork ww \n" +
+            "join " +GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq dq on dq.PMX_SOURCE_REFERENCE=ww.\"PRODUCT_WORK_ID\"\n" +
             "left join semarchy_eph_mdm.gd_wwork gdw on gdw.external_reference = dq.pmx_source_reference::text\n" +
             "left join semarchy_eph_mdm.gd_work_financial_attribs wfa on wfa.f_wwork = gdw.work_id\n" +
             "where \"F_OPCO_R12\" is not null and \"F_RESPONSIBILITY_CENTRE\" is not null \n" +
