@@ -62,10 +62,10 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
     And Compare person work role records in EPH STG and EPH SA
     Examples:
       | countOfRandomIds | type |
-#      | 10               | PD   |
-#      | 10               | AU   |
+      | 10               | PD   |
+      | 10               | AU   |
       | 10               | PU   |
-#      | 10               | AE   |
+      | 10               | AE   |
 
 
 
