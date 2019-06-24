@@ -75,6 +75,13 @@ public class SubjectAreaDataSQL {
             "select mp.numeric_id from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid mp\n" +
             "--left join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_subject_area on mp.source_ref = concat('SUBJ_AREA-',\"PMX_SOURCE_REF\") \n" +
             "where \"external_reference\" in ('%s')\n" +
+            " and b_loadid =  (select max (s.b_loadid) from\n" +
+            "semarchy_eph_mdm.sa_subject_area s join \n" +
+            "semarchy_eph_mdm.sa_event e on e.b_loadid = s.b_loadid\n" +
+            "where  e.f_event_type = 'PMX'\n" +
+            "and e.workflow_id = 'talend'\n" +
+            "AND e.f_event_type = 'PMX'\n" +
+            "and e.f_workflow_source = 'PMX' )" +
             ")";
 
 

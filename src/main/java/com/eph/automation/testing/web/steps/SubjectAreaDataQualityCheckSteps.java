@@ -54,6 +54,18 @@ public class SubjectAreaDataQualityCheckSteps {
     public void getCountSubjectAreaRecordsEPHSTG() {
         Log.info("When We get the count of subject area data in EPH STG ..");
 
+            sql = SubjectAreaDataSQL.SELECT_COUNT_SUBJECT_AREA_STG;
+            Log.info(sql);
+            List<Map<String, Object>> subjectAreaNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            countSubjectAreaRecordsEPHSTG = ((Long) subjectAreaNumber.get(0).get("count")).intValue();
+            Log.info("Count of subject area data in EPH STG is: " + countSubjectAreaRecordsEPHSTG);
+
+    }
+
+    @When("^We get the count of subject area data from EPH STG going to SA$")
+    public void getCountSubjectAreaRecordsEPHSTGtoSA() {
+        Log.info("When We get the count of subject area data in EPH STG ..");
+
         if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
             sql = SubjectAreaDataSQL.SELECT_COUNT_SUBJECT_AREA_STG;
             Log.info(sql);
@@ -128,9 +140,10 @@ public class SubjectAreaDataQualityCheckSteps {
 
         Log.info("Get the ids from stg ...");
         if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-            sql = String.format(SubjectAreaDataSQL.SELECT_RANDOM_SUBJECT_DATA, numberOfRecords);
-        Log.info(sql);
+           sql = String.format(SubjectAreaDataSQL.SELECT_RANDOM_SUBJECT_DATA, numberOfRecords);
+       Log.info(sql);
         } else {
+
             sql = WorkCountSQL.GET_REFRESH_DATE;
             Log.info(sql);
             List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -139,7 +152,7 @@ public class SubjectAreaDataQualityCheckSteps {
 
             sql = String.format(SubjectAreaDataSQL.SELECT_RANDOM_DATA_DELTA, refreshDate, numberOfRecords);
             Log.info(sql);
-        }
+      }
 
         List<Map<?, ?>> randomIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomIds.stream().map(m -> (BigDecimal) m.get("PMX_SOURCE_REF")).map(String::valueOf).collect(Collectors.toList());
