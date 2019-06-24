@@ -243,7 +243,7 @@ public class PersonWorkRoleDataSQL {
             "effective_end_date as EFFECTIVE_END_DATE,\n" +
             "f_role as F_ROLE,\n" +
             "f_wwork as F_WWORK,\n" +
-            "f_person as F_PERSON\n" +
+            "f_person as F_PERSON,\n" +
             "external_reference as WORK_PERSON_ROLE_SOURCE_REF\n" +
             "from semarchy_eph_mdm.sa_work_person_role p\n" +
             "where p.b_loadid =  (\n" +
