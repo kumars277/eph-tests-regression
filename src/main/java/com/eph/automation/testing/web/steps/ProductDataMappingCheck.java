@@ -196,9 +196,7 @@ public class ProductDataMappingCheck {
         } else {
             List<String> workIds = new ArrayList<>();
 
-            if (dataQualityContext.productDataObjectsFromEPHSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
-                Log.info("There is no updated data for Product Data");
-            } else {
+
                 for (int i = 0; i < dataQualityContext.productDataObjectsFromEPHSTG.size(); i++) {
                     if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getOPEN_ACCESS().equals("Y"))
                         workIds.add(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
@@ -207,7 +205,7 @@ public class ProductDataMappingCheck {
                     if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPACKAGES().equals("Y"))
                         workIds.add(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
                 }
-            }
+
 
             //concatenate the ids used for pmx_source_reference in SA
             idsDQ = Stream.concat(ids.stream(), workIds.stream()).collect(Collectors.toList());
