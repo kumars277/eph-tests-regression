@@ -56,9 +56,9 @@ public class WorksIdentifierSQL {
     public static String getRandomProductNumDelta="SELECT   \n" +
             "stg.\"PRODUCT_WORK_ID\" as random_value\n" +
             "from \n" +
-            "ephsit_talend_owner.stg_10_pmx_wwork stg\n" +
-            " join ephsit_talend_owner.stg_10_pmx_wwork_dq  mdq on stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE  \n" +
-            " left join ephsit_talend_owner.map_sourceref_2_ephid map1  on mdq.pmx_source_reference::text = map1.source_ref \n" +
+            " "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork stg\n" +
+            " join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq  mdq on stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE  \n" +
+            " left join "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid map1  on mdq.pmx_source_reference::text = map1.source_ref \n" +
             " left join semarchy_eph_mdm.gd_work_identifier gwd on gwd.f_wwork = map1.eph_id\n" +
             "where \n" +
             "stg.\"WORK_TYPE\" = 'PARAM1' and \n" +
@@ -67,7 +67,7 @@ public class WorksIdentifierSQL {
             "   and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('PARAM2','YYYYMMDDHH24MI')\n" +
             "   and effective_start_date > TO_DATE('PARAM2','YYYYMMDDHH24MI')\n" +
             "   and  \"PRODUCT_WORK_ID\" \n" +
-            "   not in (select distinct stg1.\"PRODUCT_WORK_ID\" from ephsit_talend_owner.stg_10_pmx_wwork stg1,ephsit_talend_owner.stg_10_pmx_wwork stg2  where stg2.\"PRODUCT_WORK_ID\" = stg1.\"PRODUCT_WORK_ID\" and stg2.\"PROJECT_NUM\" != stg1.\"PROJECT_NUM\")\n" +
+            "   not in (select distinct stg1.\"PRODUCT_WORK_ID\" from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork stg1,"+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork stg2  where stg2.\"PRODUCT_WORK_ID\" = stg1.\"PRODUCT_WORK_ID\" and stg2.\"PROJECT_NUM\" != stg1.\"PROJECT_NUM\")\n" +
             "   ORDER BY RANDOM()  LIMIT 1 ";
 
     //No need to check for DQ error as it is checked while determining the random ID

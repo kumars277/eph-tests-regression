@@ -76,8 +76,8 @@ public class WorkSubjectAreaLinkDataSQL {
             ",\"START_DATE\" as START_DATE\n" +
             ",\"END_DATE\" as EFFTO_DATE\n" +
             ",\"UPDATED\" as UPDATED\n" +
-            "from ephsit_talend_owner.stg_10_pmx_work_subject_area\t\n" +
-            "left join ephsit_talend_owner.map_sourceref_2_numericid mp on mp.source_ref = concat('WORK_SUBJ_AREA-',\"PRODUCT_SUBJECT_AREA_ID\")\n" +
+            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_subject_area\t\n" +
+            "left join "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid mp on mp.source_ref = concat('WORK_SUBJ_AREA-',\"PRODUCT_SUBJECT_AREA_ID\")\n" +
             "left join semarchy_eph_mdm.sa_work_subject_area_link sa on sa.work_subject_area_link_id = mp.numeric_id\n" +
             "join (select distinct subject_area_id, external_reference from semarchy_eph_mdm.sa_subject_area) g on stg_10_pmx_work_subject_area.\"F_SUBJECT_AREA\"::varchar = g.external_reference\n" +
             "left join\n" +
