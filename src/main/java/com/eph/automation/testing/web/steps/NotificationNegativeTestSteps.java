@@ -104,6 +104,9 @@ public class NotificationNegativeTestSteps {
             Log.info("The notification was processed");
         }
 
+        Log.info("Waiting the timestamp to be printed...");
+        Thread.sleep(60*1000);
+
         sql = NotificationsSQL.EPH_GET_Notification_Neg.replace("PARAM1", loadBatchContext.batchId);
         notificationCountContext.getStatusSTNotification = DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
 
@@ -212,6 +215,8 @@ public class NotificationNegativeTestSteps {
                     "ERROR",
                     notificationCountContext.getStatusSTNotification.get(i).status);
         }
+        Log.info("Waiting the timestamp to be printed...");
+        Thread.sleep(60*1000);
 
         sql = NotificationsSQL.GET_FAILED_NOT_PAYLOAD;
         notificationCountContext.getFailedPayloadNot =
@@ -284,7 +289,7 @@ public class NotificationNegativeTestSteps {
     }
 
     @Given("^An incorrect product is updated connected to correct work$")
-    public void productUpdate() {
+    public void productUpdate() throws InterruptedException {
         sql = NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1", "EPR-W-TSTW10:RBK");
         notificationCountContext.getWriteAttemptsBeforeNegWork =
                 DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -294,6 +299,9 @@ public class NotificationNegativeTestSteps {
             attemptsBefore = notificationCountContext.getWriteAttemptsBeforeNegWork.get(0).attempts;
         }
         Log.info("The work attempts before update are: " + attemptsBefore);
+
+        Log.info("Waiting the timestamp to be printed...");
+        Thread.sleep(60*1000);
 
         sql = NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1", "EPR-TSTP10:OOA");
         notificationCountContext.getWriteAttemptsBeforeNegProduct1 =
@@ -343,6 +351,9 @@ public class NotificationNegativeTestSteps {
                     "ERROR",
                     notificationCountContext.getStatusSTNotification.get(i).status);
         }
+
+        Log.info("Waiting the timestamp to be printed...");
+        Thread.sleep(60*1000);
 
         sql = NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1", "EPR-TSTP10:OOA");
         notificationCountContext.getWriteAttemptsAfterNegProduct1 =
