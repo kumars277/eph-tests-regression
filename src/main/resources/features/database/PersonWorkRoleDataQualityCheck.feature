@@ -1,32 +1,32 @@
 Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend  Load
 
 
-  @Regression
+  @Regression @WP
   Scenario: Count check of persons work role  between PMX and EPH Staging
     Given Get the count of records for persons work role in PMX
     When Get the count of records for persons work role in EPH Staging
     Then Compare the count on records for persons work role in PMX and EPH Staging
 
-  @Regression
+  @Regression @WP
   Scenario: Count check of persons work role between EPH Staging and EPH SA
     Given Get the count of records for persons work role in EPH Staging going to SA
     When Get the count of records for persons work role in EPH SA
     Then Compare the count on records for persons work role in EPH Staging and EPH SA
 
-  @Regression
+  @Regression @WP
   Scenario: Count check of persons work role between EPH SA and EPH GD
     Given Get the count of records for persons work role in EPH SA going to GD
     When Get the count of records for persons work role in EPH GD
     Then Compare the count on records for persons work role in EPH SA and EPH GD
 
-  @Regression
+  @Regression @WP
   Scenario: Verify sum of counts of persons work role in EPH GD and EPH AE is equal to count of persons work role in EPH SA
     Given Get the count of records for persons work role in EPH SA going to GD
     Given Get the count of records for persons work role in EPH AE
     When Get the count of records for persons work role in EPH GD
     Then Verify sum of records for persons work role in EPH GD and EPH AE is equal to number of records in EPH SA
 
-  @Regression
+  @Regression @WP
   Scenario Outline: Validate data is transferred from PMX to EPH STG
     Given We get <countOfRandomIds> random ids of persons work role with <type>
     When We get the person work role records with <type> from PMX
@@ -40,7 +40,7 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
       | 10               | AE   |
 
 
-  @Regression
+  @Regression @WP
   Scenario Outline: Validate mandatory columns are populated in EPH SA for persons work role
     Given We get <countOfRandomIds> random ids of persons work role with <type>
     Then We get the person work role records from EPH SA
@@ -54,7 +54,7 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
 
 
 
-  @Regression
+  @Regression @WP
   Scenario Outline: Validate data is transferred from EPH STG to EPH SA
     Given We get <countOfRandomIds> random ids of persons work role with <type>
     When We get the person work role records from EPH STG
@@ -70,7 +70,7 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
 
 
 
-  @Regression
+  @Regression @WP
   Scenario Outline: Validate data is transferred from EPH SA to EPH GD
     Given We get <countOfRandomIds> random ids of persons work role with <type>
     Then We get the person work role records from EPH SA

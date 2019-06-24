@@ -26,7 +26,7 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
       | 10               | package |
 
 
-  @Regression
+  @Regression @WP
   Scenario Outline: Validate data is transferred from EPH STG to EPH STG DQ for journals
     Given We get <countOfRandomIds> ids of journals for <type> with <open_access> and <author_charges>
     When We get the data from EPH STG
@@ -44,7 +44,7 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
 #      | 10              | non_print_or_electronic_journal  | N           |  ##covered from packages scenario
 
 
-  @Regression
+  @Regression @WP
   Scenario Outline: Validate data is transferred from EPH STG DQ and EPH SA and GD for books
     Given We get <countOfRandomIds> random ids for <type>
     When We get the data from EPH STG
@@ -59,7 +59,7 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
       | 10               | book |
       | 10               | package |
 
-  @Regression
+  @Regression @WP
   Scenario Outline: Validate data is transferred from EPH STG DQ and EPH SA and GD for journals
     Given We get <countOfRandomIds> ids of journals for <type> with <open_access> and <author_charges>
     When We get the data from EPH STG
