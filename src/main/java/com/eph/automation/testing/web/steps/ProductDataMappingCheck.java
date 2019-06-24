@@ -180,21 +180,16 @@ public class ProductDataMappingCheck {
         sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT, Joiner.on("','").join(ids));
         Log.info(sql);
 
-        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
-            Log.info("There is no updated data for Product Data");
-        } else {
+
             dataQualityContext.productDataObjectsFromEPHSTG = DBManager
                     .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
-        }
+
     }
 
     @Then("^We get the data from EPH STG DQ for (.*)$")
     public void getProductsDataFromEPHSTGDQ(String type) {
         Log.info("In Then method");
 
-        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
-            Log.info("There is no updated data for Product Data");
-        } else {
         if (type.equals("book")) {
             idsDQ = new ArrayList<>(ids);
 
@@ -204,9 +199,7 @@ public class ProductDataMappingCheck {
         } else {
             List<String> workIds = new ArrayList<>();
 
-            if (dataQualityContext.productDataObjectsFromEPHSTG.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
-                Log.info("There is no updated data for Product Data");
-            } else {
+
                 for (int i = 0; i < dataQualityContext.productDataObjectsFromEPHSTG.size(); i++) {
                     if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getOPEN_ACCESS().equals("Y"))
                         workIds.add(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
@@ -215,7 +208,7 @@ public class ProductDataMappingCheck {
                     if (dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPACKAGES().equals("Y"))
                         workIds.add(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getF_PRODUCT_WORK());
                 }
-            }
+
 
             //concatenate the ids used for pmx_source_reference in SA
             idsDQ = Stream.concat(ids.stream(), workIds.stream()).collect(Collectors.toList());
@@ -225,7 +218,7 @@ public class ProductDataMappingCheck {
             sql = String.format(ProductDataSQL.EPH_STG_DQ_PRODUCT_EXTRACT_JOURNALS_OR_PACKAGES, Joiner.on("|").join(idsDQ));
             Log.info(sql);
         }
-        }
+
 
         dataQualityContext.productDataObjectsFromEPHSTGDQ = DBManager
                 .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
