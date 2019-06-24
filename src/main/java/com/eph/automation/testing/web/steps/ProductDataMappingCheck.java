@@ -156,10 +156,6 @@ public class ProductDataMappingCheck {
         Log.info("Selected product manifestation ids : " + ids);
 
 
-
-
-
-
     }
 
     @When("^We get the corresponding records from PMX$")
@@ -178,10 +174,12 @@ public class ProductDataMappingCheck {
         sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT, Joiner.on("','").join(ids));
         Log.info(sql);
 
-
+        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There is no updated data for Product Data");
+        } else {
             dataQualityContext.productDataObjectsFromEPHSTG = DBManager
                     .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
-        
+        }
     }
 
     @Then("^We get the data from EPH STG DQ for (.*)$")
@@ -218,8 +216,8 @@ public class ProductDataMappingCheck {
 
             sql = String.format(ProductDataSQL.EPH_STG_DQ_PRODUCT_EXTRACT_JOURNALS_OR_PACKAGES, Joiner.on("|").join(idsDQ));
             Log.info(sql);
-        }
 
+        }
 
         dataQualityContext.productDataObjectsFromEPHSTGDQ = DBManager
                 .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
