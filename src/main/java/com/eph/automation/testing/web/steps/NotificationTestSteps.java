@@ -329,8 +329,11 @@ public class NotificationTestSteps {
     }
 
     @Then("^The (.*) notification is in the payload table$")
-    public void checkPayloadTable(String notType){
+    public void checkPayloadTable(String notType) throws InterruptedException {
         Gson gson = new Gson();
+
+        Log.info("Waiting the timestamp to be printed...");
+        Thread.sleep(60*1000);
 
         if(notType.equalsIgnoreCase("product")){
             sql= NotificationsSQL.EPH_GET_Payload_Notif_Product;
