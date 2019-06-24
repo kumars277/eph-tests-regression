@@ -96,11 +96,16 @@ public class ProductDataMappingCheck {
 
         ids = randomProductManifestationIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random product manifestation ids  : " + ids);
+
+        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There are no records found for Product Role");
+        }
     }
 
 
     @Given("^We get (.*) ids of journals for (.*) with (.*) and (.*)$")
-    public void getRandomProductManifestationIdsForJournals(String numberOfRecords, String type, String open_access, String author_charges) {
+    public void
+    getRandomProductManifestationIdsForJournals(String numberOfRecords, String type, String open_access, String author_charges) {
         Log.info("In Given method get random product manifestation ids for journals");
         //Get property when run with jenkins
         numberOfRecords = System.getProperty("dbRandomRecordsNumber");
