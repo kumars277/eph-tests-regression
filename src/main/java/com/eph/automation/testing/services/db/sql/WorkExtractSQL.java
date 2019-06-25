@@ -112,6 +112,13 @@ public class WorkExtractSQL {
             "where SAMI.s_identifier = 'PARAM1'\n" +
             "and SAM.manifestation_id = SAMI.f_manifestation";
 
+    public static String GET_COUNT_MANIFESTATIONS_EPHAE = "select count(*) as count from semarchy_eph_mdm.ae_manifestation where b_batchid = (select max (b_batchid) from \n" +
+            "          semarchy_eph_mdm.gd_event\n" +
+            "            where  f_event_type = 'PMX'\n" +
+            "            and workflow_id = 'talend'\n" +
+            "            AND f_event_type = 'PMX'\n" +
+            "            and f_workflow_source = 'PMX' ) ";
+
     public static String COUNT_MANIFESTATIONS_IN_PMX_GD_PRODUCT_MANIFESTATION_TABLE = "SELECT DISTINCT count(*) AS count \n" +
             "FROM GD_PRODUCT_MANIFESTATION M\n" +
             "JOIN GD_PRODUCT_WORK W ON M.F_PRODUCT_WORK = W.PRODUCT_WORK_ID\n" +
@@ -128,7 +135,8 @@ public class WorkExtractSQL {
 
     public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation";
 
-    public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_GOING_TO_DQ = "SELECT count(distinct \"MANIFESTATION_ID\") AS count FROM  "+ GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation where \"MANIFESTATION_ID\" is not null\n";
+    public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_GOING_TO_DQ = "SELECT count(distinct \"MANIFESTATION_ID\") AS count FROM  "+
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation where \"MANIFESTATION_ID\" is not null\n";
 
     public static String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE_DELTA = "select count(distinct \"MANIFESTATION_ID\") as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation\n" +
             "where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
@@ -379,7 +387,7 @@ public class WorkExtractSQL {
             "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n" +
-            "and f_type = 'ISBN' \n" +
+            "and f_type = '%s' \n" +
             "and identifier is not null\n" +
             "and effective_end_date is null\n" +
             "and f_event = (select max (event_id) from \n" +

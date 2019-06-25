@@ -19,6 +19,13 @@ Feature: Entity - WORK SUBJECT AREA - Count And Data Mapping Check - Validate da
     Then Compare the count of work subject area data in EPH SA and EPH GD
 
   @Regression
+  Scenario: Verify sum of counts of work subject area in EPH GD and EPH AE is equal to count of work subject area in EPH SA
+    Given We get the count of work subject area data from EPH SA
+    Given Get the count of records for work subject area data in EPH AE
+    When We get the count of work subject area data from EPH GD
+    Then Verify sum of records for work subject area data in EPH GD and EPH AE is equal to number of records in EPH SA
+
+  @Regression
   Scenario Outline: Validate work subject area data is transferred from PMX to EPH STG
     Given We get <countOfRandomIds> random ids of work subject area data
     When We get the work subject area data from PMX

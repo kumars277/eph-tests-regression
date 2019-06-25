@@ -78,6 +78,13 @@ public class PersonProductRoleDataSQL {
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n";
 
+    public static String GET_COUNT_PERSONS_PRODUCT_ROLE_EPHAE = "select count(distinct product_person_role_id) as count from semarchy_eph_mdm.ae_product_person_role where b_batchid = (select max (b_batchid) from \n" +
+            "          semarchy_eph_mdm.gd_event\n" +
+            "            where  f_event_type = 'PMX'\n" +
+            "            and workflow_id = 'talend'\n" +
+            "            AND f_event_type = 'PMX'\n" +
+            "            and f_workflow_source = 'PMX' )";
+
     public static String GET_COUNT_PERSONS_PRODUCT_ROLE_EPHGD = "select count(*) as count from semarchy_eph_mdm.gd_product_person_role where b_batchid = (select max (b_batchid) from \n" +
             "          semarchy_eph_mdm.gd_event\n" +
             "            where  f_event_type = 'PMX'\n" +

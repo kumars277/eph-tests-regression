@@ -7,7 +7,7 @@ import java.util.Objects;
  */
 public class PersonWorkRoleDataObject {
     private String WORK_PERSON_ROLE_SOURCE_REF;
-    private String PMX_PARTY_SOURCE_REF;
+    private int PMX_PARTY_SOURCE_REF;
     private String PMX_WORK_SOURCE_REF;
     private String F_ROLE;
     private String START_DATE;
@@ -59,11 +59,11 @@ public class PersonWorkRoleDataObject {
         this.WORK_PERSON_ROLE_SOURCE_REF = WORK_PERSON_ROLE_SOURCE_REF;
     }
 
-    public String getPMX_PARTY_SOURCE_REF() {
+    public int getPMX_PARTY_SOURCE_REF() {
         return PMX_PARTY_SOURCE_REF;
     }
 
-    public void setPMX_PARTY_SOURCE_REF(String PMX_PARTY_SOURCE_REF) {
+    public void setPMX_PARTY_SOURCE_REF(int PMX_PARTY_SOURCE_REF) {
         this.PMX_PARTY_SOURCE_REF = PMX_PARTY_SOURCE_REF;
     }
 
