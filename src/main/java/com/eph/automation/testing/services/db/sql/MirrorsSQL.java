@@ -121,7 +121,7 @@ public class MirrorsSQL {
             "\tW1.F_WORK_STATUS = 81\n" +
             "AND\n" +
             "\tWL.F_PRODUCT_WORK_LINK_TYPE IN (51,21)\t-- 51 = mirror, 21 = mirror\n" +
-            "\tAND WL.PRODUCT_WORK_LINK_ID in ('%s') order by RELATIONSHIP_PMX_SOURCEREF";
+            "\tAND WL.PRODUCT_WORK_LINK_ID in ('%s') order by RELATIONSHIP_PMX_SOURCEREF desc";
 
     public static String GET_STG_Mirror_DATA ="SELECT \n" +
             " \"RELATIONSHIP_PMX_SOURCEREF\" as RELATIONSHIP_PMX_SOURCEREF " +
@@ -170,7 +170,7 @@ public class MirrorsSQL {
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
             "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n"+
-            "  AND f_parent in ('%s') order by external_reference desc";
+            "  AND f_parent in ('%s') order by WORK_RELATIONSHIP_ID";
 
     public static String GET_GD_Mirror_DATA ="SELECT \n" +
             " WORK_RELATIONSHIP_ID as WORK_REL_mirror_ID " +

@@ -122,11 +122,7 @@ public class MirrorTestSteps {
                         .replace("PARAM2",refreshDate.get(1).refresh_timestamp);
             }
         }else {
-            sql = WorkCountSQL.GET_REFRESH_DATE;
-            refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                    Constants.EPH_URL);
-            sql = MirrorsSQL.gettingNumberOfIdsDelta.replace("PARAM1", numberOfRecords)
-                    .replace("PARAM2",refreshDate.get(1).refresh_timestamp);
+            sql = MirrorsSQL.gettingNumberOfIds.replace("PARAM1", numberOfRecords);
         }
         List<Map<?, ?>> randomISBNIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
