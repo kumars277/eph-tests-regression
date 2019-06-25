@@ -32,6 +32,13 @@ public class WorkSubjectAreaLinkDataSQL {
             "AND e.f_event_type = 'PMX'\n" +
             "and e.f_workflow_source = 'PMX' )";
 
+    public static String GET_COUNT_WORK_SUBJECT_AREA_EPHAE = "select count(*) as count from semarchy_eph_mdm.ae_work_subject_area_link where b_batchid = (select max (b_batchid) from \n" +
+            "          semarchy_eph_mdm.gd_event\n" +
+            "            where  f_event_type = 'PMX'\n" +
+            "            and workflow_id = 'talend'\n" +
+            "            AND f_event_type = 'PMX'\n" +
+            "            and f_workflow_source = 'PMX' ) ";
+
     public static String SELECT_COUNT_WORK_SUBJECT_AREA_STG = "select count(*) as count from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_WORK_SUBJECT_AREA ";
 
     public static String SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ = "select count(*) as count from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_WORK_SUBJECT_AREA where \"F_SUBJECT_AREA\"  is not null and \n" +

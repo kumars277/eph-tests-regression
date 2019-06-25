@@ -35,6 +35,7 @@ public class PersonProductRoleDataQualityCheckSteps {
     private static int countPersonsEPHSTGGoingToSA;
     private static int countPersonsEPHSA;
     private static int countPersonsEPHGD;
+    private static int countPersonsProductRoleEPHAE;
     private static List<String> ids;
 
 
@@ -103,6 +104,21 @@ public class PersonProductRoleDataQualityCheckSteps {
         Log.info("Count of persons product role in EPH SA is: " + countPersonsEPHSA);
     }
 
+    @Given("^Get the count of records for persons product role in EPH AE$")
+    public void getCountPersonsProductRoleEPHAE() {
+        Log.info("When We get the count of persons records in PMX STG ..");
+        sql = PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPHAE;
+        Log.info(sql);
+        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countPersonsProductRoleEPHAE = ((Long) personsNumber.get(0).get("count")).intValue();
+        Log.info("Count of persons product role in EPH AE is: " + countPersonsProductRoleEPHAE);
+    }
+
+    @Then("^Verify sum of records for persons product role in EPH GD and EPH AE is equal to number of records in EPH SA$")
+    public void verifyCountOfPersonsProductRoleInEPHGDAndEPHAEIsEqualToEPHSA() {
+        int sumOFRecords = countPersonsProductRoleEPHAE + countPersonsEPHGD;
+        Assert.assertEquals("\nSum of the records for persons product role in EPH GD and EPH AE is NOT equal to number of records in EPH SA", sumOFRecords, countPersonsEPHSA);
+    }
 
     @Then("^Compare the count on records for persons product role in EPH Staging with DQ and EPH SA$")
     public void verifyCountOfPersonsProductRoleInEPHSTGAndEPHSAIsEqual() {

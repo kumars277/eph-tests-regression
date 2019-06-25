@@ -20,6 +20,13 @@ Feature: Entity - PERSON PRODUCT ROLE - Validate data between PMX and EPH - Tale
     Then Compare the count on records for persons product role in EPH SA and EPH GD
 
   @Regression
+  Scenario: Verify sum of counts of persons product role in EPH GD and EPH AE is equal to count of persons product role in EPH SA
+    Given Get the count of records for persons product role in EPH SA
+    Given Get the count of records for persons product role in EPH AE
+    When Get the count of records for persons product role in EPH GD
+    Then Verify sum of records for persons product role in EPH GD and EPH AE is equal to number of records in EPH SA
+
+  @Regression
   Scenario Outline: Validate data is transferred from EPH STG DQ to EPH STG
     Given We get <countOfRandomIds> random ids of persons product role
     When We get the person product role records from EPH DQ

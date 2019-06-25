@@ -112,6 +112,13 @@ public class WorkExtractSQL {
             "where SAMI.s_identifier = 'PARAM1'\n" +
             "and SAM.manifestation_id = SAMI.f_manifestation";
 
+    public static String GET_COUNT_MANIFESTATIONS_EPHAE = "select count(*) as count from semarchy_eph_mdm.ae_manifestation where b_batchid = (select max (b_batchid) from \n" +
+            "          semarchy_eph_mdm.gd_event\n" +
+            "            where  f_event_type = 'PMX'\n" +
+            "            and workflow_id = 'talend'\n" +
+            "            AND f_event_type = 'PMX'\n" +
+            "            and f_workflow_source = 'PMX' ) ";
+
     public static String COUNT_MANIFESTATIONS_IN_PMX_GD_PRODUCT_MANIFESTATION_TABLE = "SELECT DISTINCT count(*) AS count \n" +
             "FROM GD_PRODUCT_MANIFESTATION M\n" +
             "JOIN GD_PRODUCT_WORK W ON M.F_PRODUCT_WORK = W.PRODUCT_WORK_ID\n" +
@@ -128,7 +135,8 @@ public class WorkExtractSQL {
 
     public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation";
 
-    public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_GOING_TO_DQ = "SELECT count(distinct \"MANIFESTATION_ID\") AS count FROM  "+ GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation where \"MANIFESTATION_ID\" is not null\n";
+    public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_GOING_TO_DQ = "SELECT count(distinct \"MANIFESTATION_ID\") AS count FROM  "+
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation where \"MANIFESTATION_ID\" is not null\n";
 
     public static String COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE_DELTA = "select count(distinct \"MANIFESTATION_ID\") as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation\n" +
             "where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
@@ -136,7 +144,7 @@ public class WorkExtractSQL {
     public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_DQ_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq";
 
     public static final String COUNT_MANIFESTATIONS_IN_EPH_DQ_TO_SA =
-    "select count(*) from ephsit_talend_owner.stg_10_pmx_manifestation_dq mdq\n"+
+    "select count(*) from " + GetEPHDBUser.getDBUser() +".stg_10_pmx_manifestation_dq mdq\n"+
             "left join " + GetEPHDBUser.getDBUser() +".stg_10_pmx_wwork_dq wdq on mdq.f_wwork = wdq.pmx_source_reference and wdq.dq_err !='Y' \n"+
             "where mdq.dq_err != 'Y'";
 
@@ -226,7 +234,7 @@ public class WorkExtractSQL {
             "select \"ISBN\" AS ISBN \n" +
                     " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man\n" +
                     " join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq dq on man.\"PRODUCT_MANIFESTATION_ID\" = dq.pmx_source_reference\n" +
-                    " join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
+                    "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
                     " where dq.dq_err != 'Y' and w.dq_err != 'Y' \n" +
                     " and man.\"MANIFESTATION_SUBTYPE\" = 424 \n" +
                     " and \"ISBN\" is not null order by random() limit '%s'";
@@ -234,7 +242,7 @@ public class WorkExtractSQL {
     public static final String SELECT_RANDOM_ISBN_IDS_PSB = "select \"ISBN\" AS ISBN \n" +
             " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man\n" +
             " join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq dq on man.\"PRODUCT_MANIFESTATION_ID\" = dq.pmx_source_reference\n" +
-            " join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
+            " left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
             " where dq.dq_err != 'Y' and w.dq_err != 'Y' \n" +
             " and man.\"MANIFESTATION_SUBTYPE\" = 425 \n" +
             " and \"ISBN\" is not null order by random() limit '%s'\n";
@@ -243,7 +251,7 @@ public class WorkExtractSQL {
             " select \"ISBN\" AS ISBN \n" +
             " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man\n" +
             " join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq dq on man.\"PRODUCT_MANIFESTATION_ID\" = dq.pmx_source_reference\n" +
-            " join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
+            " left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
             " where dq.dq_err != 'Y' and w.dq_err != 'Y' \n" +
             " and man.\"COMMODITY\" = 'EB'\n" +
             " and \"ISBN\" is not null order by random() limit '%s'\n" +
@@ -252,7 +260,7 @@ public class WorkExtractSQL {
     public static final String SELECT_RANDOM_MANIFESTATION_IDS_JPR = "select \"MANIFESTATION_ID\" AS manifestation_id \n" +
             " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man\n" +
             " join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq dq on man.\"PRODUCT_MANIFESTATION_ID\" = dq.pmx_source_reference\n" +
-            " join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
+            " left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
             " where dq.dq_err != 'Y' and w.dq_err != 'Y' \n" +
             " and  man.\"WORK_TYPE_ID\" IN (4,3,102) and man.\"F_PRODUCT_MANIFESTATION_TYP\" = 1 \n" +
             " order by random() limit '%s'";
@@ -260,7 +268,7 @@ public class WorkExtractSQL {
     public static final String SELECT_RANDOM_MANIFESTATION_IDS_JEL = "select \"MANIFESTATION_ID\" AS manifestation_id \n" +
             " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man\n" +
             " join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq dq on man.\"PRODUCT_MANIFESTATION_ID\" = dq.pmx_source_reference\n" +
-            " join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
+            " left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
             " where dq.dq_err != 'Y' and w.dq_err != 'Y' \n" +
             " and  man.\"WORK_TYPE_ID\" IN (4,3,102) and man.\"F_PRODUCT_MANIFESTATION_TYP\" != 1 \n" +
             " order by random() limit '%s'";
@@ -379,7 +387,7 @@ public class WorkExtractSQL {
             "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n" +
-            "and f_type = 'ISBN' \n" +
+            "and f_type = '%s' \n" +
             "and identifier is not null\n" +
             "and effective_end_date is null\n" +
             "and f_event = (select max (event_id) from \n" +

@@ -16,6 +16,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.junit.Assert;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -42,6 +43,7 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
     private static int countWorkSubjectAreaRecordsEPHSTGDQ;
     private static int countWorkSubjectAreaRecordsEPHSA;
     private static int countWorkSubjectAreaRecordsEPHGD;
+    private static int countWorkSubjectAreaRecordsEPHAE;
     private static List<String> ids;
     private static List<WorkDataObject> refreshDate;
 
@@ -101,6 +103,22 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
         List<Map<String, Object>> workSubjectAreaNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countWorkSubjectAreaRecordsEPHSA = ((Long) workSubjectAreaNumber.get(0).get("count")).intValue();
         Log.info("Count of work subject area data in EPH SA is: " + countWorkSubjectAreaRecordsEPHSA);
+    }
+
+    @Given("^Get the count of records for work subject area data in EPH AE$")
+    public void getCountManifestationsEPHAE() {
+        Log.info("When We get the count of work subject area in PMX STG ..");
+        sql = WorkSubjectAreaLinkDataSQL.GET_COUNT_WORK_SUBJECT_AREA_EPHAE;
+        Log.info(sql);
+        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countWorkSubjectAreaRecordsEPHAE = ((Long) personsNumber.get(0).get("count")).intValue();
+        Log.info("Count of work subject area in EPH AE is: " + countWorkSubjectAreaRecordsEPHAE);
+    }
+
+    @Then("^Verify sum of records for work subject area data in EPH GD and EPH AE is equal to number of records in EPH SA$")
+    public void verifyCountOfManifestationsInEPHGDAndEPHAEIsEqualToEPHSA() {
+        int sumOFRecords = countWorkSubjectAreaRecordsEPHAE + countWorkSubjectAreaRecordsEPHGD;
+        Assert.assertEquals("\nSum of the records for work subject area in EPH GD and EPH AE is NOT equal to number of records in EPH SA", sumOFRecords, countWorkSubjectAreaRecordsEPHSA);
     }
 
     @Then("^We get the count of work subject area data from EPH GD$")

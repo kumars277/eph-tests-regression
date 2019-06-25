@@ -25,6 +25,12 @@ Feature: Entity - PRODUCT RELATIONSHIP - Data Mapping Check - Validate data betw
     When We get the count of product relationship records in EPH GD
     Then The count of the product relationship records in in EPH SA and EPH GD is equal
 
+  @Regression
+  Scenario: Verify sum of counts of product relationship records in EPH GD and EPH AE is equal to count of product relationship records in EPH SA
+    Given We get the count of product relationship records in EPH SA
+    Given Get the count of records for product relationship records in EPH AE
+    When We get the count of product relationship records in EPH GD
+    Then Verify sum of records for product relationships in EPH GD and EPH AE is equal to number of records in EPH SA
 
   @Regression
   Scenario Outline: Validate product relationship data is transferred from PMX to EPH STG

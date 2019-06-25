@@ -34,6 +34,7 @@ public class ProductRelationshipDataMappingCheckSteps {
     private static int countProductsRelEPHDQ;
     private static int countProductsRelEPHSA;
     private static int countProductsRelEPHGD;
+    private static int countProductRelationshipsEPHAE;
     private List<Map<?, ?>> productRelIds;
     private static List<String> ids;
     private static List<String> idsSA;
@@ -139,6 +140,22 @@ public class ProductRelationshipDataMappingCheckSteps {
 
         assertTrue("No data found in EPH SA for product relationships", countProductsRelEPHSA != 0);
 
+    }
+
+    @Given("^Get the count of records for product relationship records in EPH AE$")
+    public void getCountProductRelationshipRecordsEPHAE() {
+        Log.info("When We get the count of product relationship records in EPH AE ..");
+        sql = ProductRelationshipChecksSQL.GET_COUNT_PRODUCT_RELATIONSHIP_EPHAE;
+        Log.info(sql);
+        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countProductRelationshipsEPHAE = ((Long) personsNumber.get(0).get("count")).intValue();
+        Log.info("Count of product relationship records in EPH AE is: " + countProductRelationshipsEPHAE);
+    }
+
+    @Then("^Verify sum of records for product relationships in EPH GD and EPH AE is equal to number of records in EPH SA$")
+    public void verifyCountOfManifestationsInEPHGDAndEPHAEIsEqualToEPHSA() {
+        int sumOFRecords = countProductRelationshipsEPHAE + countProductsRelEPHGD;
+        Assert.assertEquals("\nSum of the records for product relationships in EPH GD and EPH AE is NOT equal to number of records in EPH SA", sumOFRecords, countProductsRelEPHSA);
     }
 
     @When("^We get the count of product relationship records in EPH GD")
