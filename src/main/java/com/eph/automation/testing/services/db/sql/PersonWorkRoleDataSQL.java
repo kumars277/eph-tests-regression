@@ -266,7 +266,7 @@ public class PersonWorkRoleDataSQL {
             "f_wwork as F_WWORK,\n" +
             "f_person as F_PERSON\n" +
             "from semarchy_eph_mdm.gd_work_person_role \n" +
-            "where work_person_role_id in ('%s')";
+            "where external_reference in ('%s')";
 
     public static String GET_RANDOM_PERSON_WORK_ROLE_IDS = "select \n" +
             "\"WORK_PERSON_ROLE_SOURCE_REF\" as WORK_PERSON_ROLE_SOURCE_REF\n" +

@@ -161,7 +161,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
@@ -198,9 +198,9 @@ public class PersonWorkRoleDataQualityCheckSteps {
             ids = randomPersons.stream().map(m -> (String) m.get("WORK_PERSON_ROLE_SOURCE_REF")).map(String::valueOf).collect(Collectors.toList());
             Log.info(ids.toString());
 
-        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
-            Log.info("There are no records found for Person Work Role");
-        }
+//        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+//            Log.info("There are no records found for Person Work Role");
+//        }
     }
 
 
@@ -386,7 +386,8 @@ public class PersonWorkRoleDataQualityCheckSteps {
     public void comparePersonWorkRolesRecordsInSTGAndSA() {
         Log.info("And compare work role records in EPH STG and EPH SA ..");
 
-
+        dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.sort(Comparator.comparing(PersonWorkRoleDataObject::getWORK_PERSON_ROLE_SOURCE_REF));
+        dataQualityContext.personWorkRoleDataObjectsFromEPHSA.sort(Comparator.comparing(PersonWorkRoleDataObject::getWORK_PERSON_ROLE_SOURCE_REF));
             IntStream.range(0, dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.size()).forEach(i -> {
 
                 //get data from SA for the current record from STG
@@ -474,11 +475,14 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @Then("^We get the person work role records from EPH GD with (.*)$")
     public void getPersonWorkRoleRecordsEPHGD(String type) {
         Log.info("Get the person work role records from EPH GD  ..");
-        idsPMX = new ArrayList<>(ids);
+//        idsPMX = new ArrayList<>(ids);
 //        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).substring(idsPMX.get(i).indexOf("-")+1, idsPMX.get(i).lastIndexOf("-"))));
 
-        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).replace("-" + type, "")));
-        sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHGD, Joiner.on("','").join(idsPMX));
+//        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).replace("-" + type, "")));
+        if(ids.isEmpty()) {
+            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHGD, '0');
+        } else
+            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHGD, Joiner.on("','").join(ids));
 
         Log.info(sql);
 
@@ -492,7 +496,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @And("^Compare person work role records in EPH SA and EPH GD$")
     public void comparePersonWorkRolesRecordsInSAAndGD() {
         Log.info("And compare work role records in EPH SA and EPH GD ..");
-        if (dataQualityContext.personWorkRoleDataObjectsFromEPHGD.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if (dataQualityContext.personWorkRoleDataObjectsFromEPHSA.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There are no records found for Person Work Role");
         } else {
             dataQualityContext.personWorkRoleDataObjectsFromEPHSA.sort(Comparator.comparing(PersonWorkRoleDataObject::getWORK_PERSON_ROLE_ID));

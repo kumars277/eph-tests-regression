@@ -171,15 +171,19 @@ public class ProductDataMappingCheck {
     @Then("^We get the data from EPH STG$")
     public void getProductsDataFromEPHSTG() {
         Log.info("In Then method");
-        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT, Joiner.on("','").join(ids));
+        if(ids.isEmpty())
+            sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT, '0');
+        else
+            sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT, Joiner.on("','").join(ids));
+
         Log.info(sql);
 
-        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
-            Log.info("There is no updated data for Product Data");
-        } else {
+//        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+//            Log.info("There is no updated data for Product Data");
+//        } else {
             dataQualityContext.productDataObjectsFromEPHSTG = DBManager
                     .getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
-        }
+//        }
     }
 
     @Then("^We get the data from EPH STG DQ for (.*)$")
