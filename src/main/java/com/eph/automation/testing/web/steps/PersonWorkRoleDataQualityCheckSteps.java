@@ -475,14 +475,14 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @Then("^We get the person work role records from EPH GD with (.*)$")
     public void getPersonWorkRoleRecordsEPHGD(String type) {
         Log.info("Get the person work role records from EPH GD  ..");
-        idsPMX = new ArrayList<>(ids);
+//        idsPMX = new ArrayList<>(ids);
 //        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).substring(idsPMX.get(i).indexOf("-")+1, idsPMX.get(i).lastIndexOf("-"))));
 
-        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).replace("-" + type, "")));
-        if(idsPMX.isEmpty()) {
+//        IntStream.range(0, idsPMX.size()).forEach(i -> idsPMX.set(i, idsPMX.get(i).replace("-" + type, "")));
+        if(ids.isEmpty()) {
             sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHGD, '0');
         } else
-            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHGD, Joiner.on("','").join(idsPMX));
+            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHGD, Joiner.on("','").join(ids));
 
         Log.info(sql);
 
