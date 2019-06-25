@@ -207,6 +207,10 @@ public class AccountableProductSQL {
             "concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") as PMX_SOURCE_REFERENCE\n" +
             "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_accountable_product s\n" +
             "left join semarchy_eph_mdm.gd_accountable_product g on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = g.external_reference\n" +
+            "and not (\n" +
+            "        coalesce(g.gl_product_segment_code,'') = s.\"ACC_PROD_ID\" and\n" +
+            "        coalesce(g.gl_product_segment_name,'') = s.\"ACC_PROD_NAME\" and\n" +
+            "        coalesce(g.f_gl_product_segment_parent,'') = s.\"PARENT_ACC_PROD\")\n" +
             "where b_batchid = (select max (b_batchid) from \n" +
             "          semarchy_eph_mdm.gd_event\n" +
             "            where  f_event_type = 'PMX'\n" +
