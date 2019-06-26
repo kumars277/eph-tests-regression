@@ -1,4 +1,22 @@
 {
+	"createdDate": {
+		"$id": "#/properties/createdDate",
+		"type": "string",
+		"title": "The UTC Createddate Schema - date and time the product or work was created in Semarchy",
+		"examples": [
+			"2019-02-07T13:20:30.001Z"
+		],
+		"pattern": "^(.*)$"
+	},
+	"updatedDate": {
+		"$id": "#/properties/updatedDate",
+		"type": "string",
+		"title": "The UTC Updateddate Schema - date and time the JSON message was generated",
+		"examples": [
+			"2019-02-07T13:20:30.001Z"
+		],
+		"pattern": "^(.*)$"
+	},
 	"code": {
 		"$id": "#/properties/code",
 		"type": "string",

@@ -299,16 +299,27 @@ public class WorksDataCheck {
     public void checkPMXSTGandDQData() {
         for (int i=0; i<dataQualityContext.workDataObjectsFromSource.size();i++) {
 
-
-            assertTrue("Expecting the Work title details from PMX Staging and STG DQ Consistent for id=" + ids.get(i),
-                    dataQualityContext.workDataObjectsFromPMXSTG.get(i).WORK_TITLE
-                            .equals(dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_TITLE));
+            if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).WORK_TITLE.length()>200) {
+                assertTrue("Expecting the Work title details from PMX Staging and STG DQ Consistent for id=" + ids.get(i),
+                        dataQualityContext.workDataObjectsFromPMXSTG.get(i).WORK_TITLE.substring(0, 200)
+                                .equals(dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_TITLE));
+            }else {
+                assertTrue("Expecting the Work title details from PMX Staging and STG DQ Consistent for id=" + ids.get(i),
+                dataQualityContext.workDataObjectsFromPMXSTG.get(i).WORK_TITLE
+                        .equals(dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_TITLE));
+            }
 
             if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).WORK_SUBTITLE != null
                     || dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_SUBTITLE != null) {
-                assertTrue("Expecting the WORK_SUBTITLE details from PMX STG and DQ Consistent for id=" + ids.get(i),
-                        dataQualityContext.workDataObjectsFromPMXSTG.get(i).WORK_SUBTITLE
-                                .equals(dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_SUBTITLE));
+                if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).WORK_SUBTITLE.length()>200) {
+                    assertTrue("Expecting the Work title details from PMX Staging and STG DQ Consistent for id=" + ids.get(i),
+                            dataQualityContext.workDataObjectsFromPMXSTG.get(i).WORK_SUBTITLE.substring(0, 200)
+                                    .equals(dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_SUBTITLE));
+                }else {
+                    assertTrue("Expecting the Work title details from PMX Staging and STG DQ Consistent for id=" + ids.get(i),
+                            dataQualityContext.workDataObjectsFromPMXSTG.get(i).WORK_SUBTITLE
+                                    .equals(dataQualityContext.workDataObjectsFromSTGDQ.get(i).WORK_SUBTITLE));
+                }
             }
 
             if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).PRODUCT_WORK_PUB_DATE != null
