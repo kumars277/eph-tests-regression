@@ -319,7 +319,7 @@ public class NotificationTestSteps {
             Thread.sleep(1000);
             i++;
             status= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
-        }while(status.get(0).status.equalsIgnoreCase("UNPROCESSED") && i<30);
+        }while(status.get(0).status.equalsIgnoreCase("UNPROCESSED") && i<300);
         currentTime=ManageDatesService.currentDate();
         if (status.get(0).status.equalsIgnoreCase("UNPROCESSED")){
             Assert.fail("The notification was not processed!");
@@ -333,7 +333,7 @@ public class NotificationTestSteps {
         Gson gson = new Gson();
 
         Log.info("Waiting the timestamp to be printed...");
-        Thread.sleep(90*1000);
+        Thread.sleep(120*1000);
 
         if(notType.equalsIgnoreCase("product")){
             sql= NotificationsSQL.EPH_GET_Payload_Notif_Product;
