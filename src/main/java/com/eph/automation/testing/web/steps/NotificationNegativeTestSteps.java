@@ -97,15 +97,12 @@ public class NotificationNegativeTestSteps {
             Thread.sleep(1000);
             j++;
             status= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
-        }while(status.get(0).status.equalsIgnoreCase("UNPROCESSED") && j<30);
+        }while(status.get(0).status.equalsIgnoreCase("UNPROCESSED") && j<300);
         if (status.get(0).status.equalsIgnoreCase("UNPROCESSED")){
             Assert.fail("The notification was not processed!");
         }else{
             Log.info("The notification was processed");
         }
-
-        Log.info("Waiting the timestamp to be printed...");
-        Thread.sleep(120*1000);
 
         sql = NotificationsSQL.EPH_GET_Notification_Neg.replace("PARAM1", loadBatchContext.batchId);
         notificationCountContext.getStatusSTNotification = DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -116,6 +113,9 @@ public class NotificationNegativeTestSteps {
                     notificationCountContext.getStatusSTNotification.get(i).status);
         }
 
+        Log.info("Waiting the timestamp to be printed...");
+        Thread.sleep(120*1000);
+
         sql = NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1", "EPR-W-TSTW10:RBK");
         Log.info(sql);
         notificationCountContext.getWriteAttemptsAfterNegWork =
@@ -124,6 +124,7 @@ public class NotificationNegativeTestSteps {
 
         Assert.assertTrue("The work was not updated!", notificationCountContext.getWriteAttemptsAfterNegWork.get(0).attempts
                 > notificationCountContext.getWriteAttemptsBeforeNegWork.get(0).attempts);
+
 
         sql = NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1", "EPR-TSTP10:OOA");
         Log.info(sql);
@@ -200,7 +201,7 @@ public class NotificationNegativeTestSteps {
             Thread.sleep(1000);
             j++;
             status= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
-        }while(status.get(0).status.equalsIgnoreCase("UNPROCESSED") && j<30);
+        }while(status.get(0).status.equalsIgnoreCase("UNPROCESSED") && j<300);
         if (status.get(0).status.equalsIgnoreCase("UNPROCESSED")){
             Assert.fail("The notification was not processed!");
         }else{
@@ -336,7 +337,7 @@ public class NotificationNegativeTestSteps {
             Thread.sleep(1000);
             j++;
             status= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
-        }while(status.get(0).status.equalsIgnoreCase("UNPROCESSED") && j<30);
+        }while(status.get(0).status.equalsIgnoreCase("UNPROCESSED") && j<300);
         if (status.get(0).status.equalsIgnoreCase("UNPROCESSED")){
             Assert.fail("The notification was not processed!");
         }else{

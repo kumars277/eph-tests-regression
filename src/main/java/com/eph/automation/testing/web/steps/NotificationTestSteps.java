@@ -319,7 +319,7 @@ public class NotificationTestSteps {
             Thread.sleep(1000);
             i++;
             status= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
-        }while(status.get(0).status.equalsIgnoreCase("UNPROCESSED") && i<30);
+        }while(status.get(0).status.equalsIgnoreCase("UNPROCESSED") && i<300);
         currentTime=ManageDatesService.currentDate();
         if (status.get(0).status.equalsIgnoreCase("UNPROCESSED")){
             Assert.fail("The notification was not processed!");
