@@ -163,7 +163,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
@@ -302,15 +302,18 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
                 //START_DATE
                 Log.info("START_DATE in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getSTART_DATE());
-                LocalDate pmxStartDate = LocalDate.parse(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getSTART_DATE(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"));
-
                 Log.info("START_DATE in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getSTART_DATE());
-                LocalDate ephStartDate = LocalDate.parse(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getSTART_DATE(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-                Log.info("Expecting START_DATE in PMX and EPH STG is consistent");
+                if(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getSTART_DATE() !=null &&  dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getSTART_DATE() != null) {
+                    LocalDate pmxStartDate = LocalDate.parse(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getSTART_DATE(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"));
 
-                if(!type.equals("PD"))
-                assertEquals(pmxStartDate, ephStartDate);
+                    LocalDate ephStartDate = LocalDate.parse(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getSTART_DATE(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+                    Log.info("Expecting START_DATE in PMX and EPH STG is consistent");
+
+                    if (!type.equals("PD"))
+                        assertEquals(pmxStartDate, ephStartDate);
+                }
 
 //                //END_DATE
 //                Log.info("END_DATE in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getEND_DATE());
