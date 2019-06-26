@@ -106,7 +106,10 @@ public class MirrorsSQL {
             "\t,CASE WHEN W1.F_WORK_STATUS = 81 AND EFFFROM_DATE IS NULL THEN TO_DATE('2019-01-01', 'YYYY-MM-DD')\n" +
             "\t      WHEN W1.F_WORK_STATUS = 81 AND EFFFROM_DATE IS NOT NULL THEN EFFFROM_DATE\n" +
             "\t      ELSE NULL END AS EFFECTIVE_START_DATE  -- available work (81)\n" +
-            "\t,NVL(W1.EFFECTIVE_TO_DATE, NVL(W2.EFFECTIVE_TO_DATE, WL.EFFTO_DATE)) AS ENDON\n" +
+            "\t,NVL(WL.EFFTO_DATE,\n" +
+            "\t\tCASE WHEN W1.EFFECTIVE_TO_DATE IS NULL AND W2.EFFECTIVE_TO_DATE IS NULL THEN NULL \n" +
+            "\t\tELSE GREATEST(NVL(W1.EFFECTIVE_TO_DATE,TO_DATE('1900-01-01', 'YYYY-MM-DD')),NVL(W2.EFFECTIVE_TO_DATE,TO_DATE('1900-01-01', 'YYYY-MM-DD'))) END) AS ENDON\n" +
+            "\t,TO_CHAR(NVL(WL.B_UPDDATE,WL.B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
             "FROM\n" +
             "\tGD_PRODUCT_WORK_LINK WL,\n" +
             "\tGD_PRODUCT_WORK W1,\n" +
@@ -115,13 +118,13 @@ public class MirrorsSQL {
             "\tWL.F_PRODUCT_WORK = W1.PRODUCT_WORK_ID\n" +
             "AND\n" +
             "\tWL.F_RELATED_PRODUCT_WORK = W2.PRODUCT_WORK_ID\n" +
-            "AND\n" +
-            "\tNVL(W1.EFFECTIVE_TO_DATE, NVL(W2.EFFECTIVE_TO_DATE, WL.EFFTO_DATE)) IS NULL\n" +
+            "--AND\n" +
+            "\t--NVL(W1.EFFECTIVE_TO_DATE, NVL(W2.EFFECTIVE_TO_DATE, WL.EFFTO_DATE)) IS NULL\n" +
             "AND\n" +
             "\tW1.F_WORK_STATUS = 81\n" +
             "AND\n" +
-            "\tWL.F_PRODUCT_WORK_LINK_TYPE IN (51,21)\t-- 51 = mirror, 21 = mirror\n" +
-            "\tAND WL.PRODUCT_WORK_LINK_ID in ('%s') order by RELATIONSHIP_PMX_SOURCEREF desc";
+            "\tWL.F_PRODUCT_WORK_LINK_TYPE IN (51,21)"+
+            "\tAND WL.PRODUCT_WORK_LINK_ID in ('%s') order by RELATIONSHIP_PMX_SOURCEREF";
 
     public static String GET_STG_Mirror_DATA ="SELECT \n" +
             " \"RELATIONSHIP_PMX_SOURCEREF\" as RELATIONSHIP_PMX_SOURCEREF " +
@@ -130,9 +133,10 @@ public class MirrorsSQL {
             "  ,\"F_RELATIONSHIP_TYPE\" as F_RELATIONSHIP_TYPE\n" +
             "  ,\"EFFECTIVE_START_DATE\" as EFFECTIVE_START_DATE\n"+
             "  ,\"ENDON\" as ENDON\n"+
-            "  FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel \n"+
+            "  ,\"UPDATED\" as UPDATED\n"+
+            "  FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel \n" +
             "  WHERE \"RELATIONSHIP_PMX_SOURCEREF\" in ('%s')"+
-            "  AND \"F_RELATIONSHIP_TYPE\"='MIR' order by RELATIONSHIP_PMX_SOURCEREF desc";
+            "  AND \"F_RELATIONSHIP_TYPE\"='MIR' order by RELATIONSHIP_PMX_SOURCEREF";
 
     public static String GET_SA_mirror_DATA ="SELECT \n" +
             " WORK_RELATIONSHIP_ID as WORK_REL_mirror_ID " +
