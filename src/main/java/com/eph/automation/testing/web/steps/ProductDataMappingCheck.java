@@ -537,8 +537,8 @@ public class ProductDataMappingCheck {
     public void compareProductsDataBetweenSTGAndDQ(String type) {
         Log.info("Compare the records in EPH STG and EPH STG DQ for " + type + " ..");
 
-        dataQualityContext.productDataObjectsFromEPHSTG.sort(Comparator.comparing(ProductDataObject::getPRODUCT_MANIFESTATION_ID));
-        dataQualityContext.productDataObjectsFromEPHSTGDQ.sort(Comparator.comparing(ProductDataObject::getPMX_SOURCE_REFERENCE));
+        dataQualityContext.productDataObjectsFromEPHSTG.sort(Comparator.comparing(ProductDataObject::getF_PRODUCT_WORK));
+        dataQualityContext.productDataObjectsFromEPHSTGDQ.sort(Comparator.comparing(ProductDataObject::getULT_WORK_REF));
 
         if (dataQualityContext.productDataObjectsFromEPHSTGDQ.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Product Data");
@@ -852,12 +852,12 @@ public class ProductDataMappingCheck {
                     if (availability_status.equals("PSTB"))
                         assertEquals("PST", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS());
                     else
-                        assertEquals(dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS(), availability_status);
+                        assertEquals(availability_status, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS());
                 } else if (pmxSourceReference.contains("BKF") || pmxSourceReference.contains("RPR")) {
                     if (availability_status.equals("PSTB"))
                         assertEquals("PAS", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS());
                     else
-                        assertEquals(dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS(), availability_status);
+                        assertEquals(availability_status, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS());
                 }
 
                 //F_REVENUE_MODEL
