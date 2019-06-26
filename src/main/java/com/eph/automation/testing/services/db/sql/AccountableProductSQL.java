@@ -63,7 +63,7 @@ public class AccountableProductSQL {
 
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX = "select count(*) as count from "+ GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product";
 
-    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ = "select count(*) as count from  " + GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product s \n" +
+    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ = "select count(distinct \"PRODUCT_WORK_ID\") as count from  " + GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product s \n" +
             "left join semarchy_eph_mdm.gd_accountable_product g on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = g.external_reference";
 
 
