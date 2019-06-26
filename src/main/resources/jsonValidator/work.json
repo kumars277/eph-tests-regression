@@ -35,6 +35,8 @@
 	"required": [
 		"schemaVersion",
 		"id",
+		"createdDate",
+		"updatedDate",
 		"title",
 		"type",
 		"status"
@@ -48,6 +50,12 @@
 		},
 		"id": {
 			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/id"
+		},
+		"createdDate": {
+			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/createdDate"
+		},
+		"updatedDate": {
+			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/updatedDate"
 		},
 		"title": {
 			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/title"

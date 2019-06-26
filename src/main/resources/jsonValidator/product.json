@@ -175,6 +175,8 @@
 	"required": [
 		"schemaVersion",
 		"id",
+		"createdDate",
+		"updatedDate",
 		"name",
 		"type",   
 		"status"
@@ -194,6 +196,12 @@
 				"EPR-1234AF"
 			],
 			"pattern": "^(.*)$"
+		},
+		"createdDate": {
+			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/createdDate"
+		},
+		"updatedDate": {
+			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/updatedDate"
 		},
 		"name": {
 			"$id": "#/properties/name",
