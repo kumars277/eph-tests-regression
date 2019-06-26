@@ -149,7 +149,7 @@ public class ProductDataSQL {
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product\n" +
-            "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" = '%s'";
+            "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" = '%s' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = '%s' ";
 
     public static String EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC = "SELECT\n" +
             "           \"PRODUCT_ID\" as PRODUCT_ID,\n" +
@@ -197,7 +197,7 @@ public class ProductDataSQL {
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product\n" +
-            "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" = '%s' ";
+            "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" = '%s' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = '%s'";
 
     public static String EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_OAA = "SELECT\n" +
             "           \"PRODUCT_ID\" as PRODUCT_ID,\n" +
@@ -221,7 +221,7 @@ public class ProductDataSQL {
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product\n" +
-            "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" = '%s' ";
+            "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" = '%s' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = '%s'";
 
     public static String EPH_STG_GET_COUNT_OF_RECORDS_WITH_GIVEN_F_PRODUCT_WORK = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product where \"SUBSCRIPTION\" ='Y' and \"F_PRODUCT_WORK\"  = '%s' group by \"F_PRODUCT_WORK\"";
 
