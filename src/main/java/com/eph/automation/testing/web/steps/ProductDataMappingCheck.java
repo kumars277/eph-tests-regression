@@ -533,8 +533,8 @@ public class ProductDataMappingCheck {
     }
 
 
-    @And("^Compare the records in EPH STG and EPH STG DQ for (.*)$")
-    public void compareProductsDataBetweenSTGAndDQ(String type) {
+    @And("^Compare the records in EPH STG and EPH STG DQ for (.*) with (.*) and (.*)$")
+    public void compareProductsDataBetweenSTGAndDQ(String type,String open_access, String author_charges) {
         Log.info("Compare the records in EPH STG and EPH STG DQ for " + type + " ..");
 
         dataQualityContext.productDataObjectsFromEPHSTG.sort(Comparator.comparing(ProductDataObject::getF_PRODUCT_WORK));
@@ -556,10 +556,10 @@ public class ProductDataMappingCheck {
                     id = pmxSourceReference.replace("-SUB", "");
 
                     if (type.equals("print_journal")) {
-                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1, open_access, author_charges);
                         Log.info(sql);
                     } else if (type.equals("electronic_journal")) {
-                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2);
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2, open_access, author_charges);
                         Log.info(sql);
                     } else if (type.equals("non_print_or_electronic_journal")) {
                         sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC, id);
@@ -581,10 +581,10 @@ public class ProductDataMappingCheck {
                     id = pmxSourceReference.replace("-RPR", "");
 
                     if (type.equals("print_journal")) {
-                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1, open_access, author_charges);
                         Log.info(sql);
                     } else if (type.equals("electronic_journal")) {
-                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2);
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2, open_access, author_charges);
                         Log.info(sql);
                     } else if (type.equals("non_print_or_electronic_journal")) {
                         sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC, id);
@@ -605,10 +605,10 @@ public class ProductDataMappingCheck {
                     id = pmxSourceReference.replace("-JBS", "");
 
                     if (type.equals("print_journal")) {
-                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1, open_access, author_charges);
                         Log.info(sql);
                     } else if (type.equals("electronic_journal")) {
-                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2);
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2, open_access, author_charges);
                         Log.info(sql);
                     } else if (type.equals("non_print_or_electronic_journal")) {
                         sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC, id);
@@ -628,10 +628,10 @@ public class ProductDataMappingCheck {
                     id = pmxSourceReference.replace("-BKF", "");
 
                     if (type.equals("print_journal")) {
-                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1);
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 1, open_access, author_charges);
                         Log.info(sql);
                     } else if (type.equals("electronic_journal")) {
-                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2);
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL, id, 2, open_access, author_charges);
                         Log.info(sql);
                     } else if (type.equals("non_print_or_electronic_journal")) {
                         sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_JOURNAL_NOT_PRINT_OR_ELECTRONIC, id);
@@ -650,10 +650,10 @@ public class ProductDataMappingCheck {
                     id = pmxSourceReference.replace("-JAS", "");
 
                     if (type.equals("print_journal")) {
-                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_JAS, id, 1);
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_JAS, id, 1, open_access, author_charges);
                         Log.info(sql);
                     } else if (type.equals("electronic_journal")) {
-                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_JAS, id, 2);
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_JAS, id, 2, open_access, author_charges);
                         Log.info(sql);
                     } else if (type.equals("non_print_or_electronic_journal")) {
                         sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_NOT_PRINT_OR_ELECTRONIC_JAS, id);
@@ -674,10 +674,10 @@ public class ProductDataMappingCheck {
                     id = pmxSourceReference.replace("-OAA", "");
 
                     if (type.equals("print_journal")) {
-                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_OAA, id, 1);
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_OAA, id, 1, open_access, author_charges);
                         Log.info(sql);
                     } else if (type.equals("electronic_journal")) {
-                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_OAA, id, 2);
+                        sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_OAA, id, 2, open_access, author_charges);
                         Log.info(sql);
                     } else if (type.equals("non_print_or_electronic_journal")) {
                         sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_BY_GIVEN_F_PRODUCT_WORK_NOT_PRINT_OR_ELECTRONIC_JAS, id);
