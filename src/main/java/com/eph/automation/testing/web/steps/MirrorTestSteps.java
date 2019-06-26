@@ -19,6 +19,7 @@ import cucumber.api.java.en.When;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -107,7 +108,7 @@ public class MirrorTestSteps {
         if (System.getProperty("dbRandomRecordsNumber")!=null) {
             numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         }else {
-            numberOfRecords = "5";
+            numberOfRecords = "20";
         }
         Log.info("numberOfRecords = " + numberOfRecords);
 
@@ -152,7 +153,9 @@ public class MirrorTestSteps {
     }
 
     @Then("^The mirror data between PMX and STG is identical$")
-    public void checkmirrorData(){
+    public void checkmirrorData(){/*
+        mirrorContext.mirrorDataFromPMX.sort(Comparator.comparing(MirrorsDataObject::getRELATIONSHIP_PMX_SOURCEREF));
+        mirrorContext.mirrorDataFromStg.sort(Comparator.comparing(MirrorsDataObject::getRELATIONSHIP_PMX_SOURCEREF));*/
         for (int i=0; i<mirrorContext.mirrorDataFromPMX.size();i++) {
             Assert.assertEquals("The RELATIONSHIP_PMX_SOURCEREF is incorrect for id=" + ids.get(i),
                     mirrorContext.mirrorDataFromPMX.get(i).RELATIONSHIP_PMX_SOURCEREF,
@@ -179,7 +182,7 @@ public class MirrorTestSteps {
             if (mirrorContext.mirrorDataFromPMX.get(i).ENDON != null
                     || mirrorContext.mirrorDataFromStg.get(i).ENDON != null) {
                 Assert.assertEquals("The ENDON is incorrect for id=" + ids.get(i),
-                        mirrorContext.mirrorDataFromPMX.get(i).ENDON,
+                        mirrorContext.mirrorDataFromPMX.get(i).ENDON.substring(0,10),
                         mirrorContext.mirrorDataFromStg.get(i).ENDON);
             }
         }
