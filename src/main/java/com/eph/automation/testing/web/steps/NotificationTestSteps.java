@@ -333,7 +333,7 @@ public class NotificationTestSteps {
         Gson gson = new Gson();
 
         Log.info("Waiting the timestamp to be printed...");
-        Thread.sleep(90*1000);
+        Thread.sleep(120*1000);
 
         if(notType.equalsIgnoreCase("product")){
             sql= NotificationsSQL.EPH_GET_Payload_Notif_Product;

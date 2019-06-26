@@ -105,7 +105,7 @@ public class NotificationNegativeTestSteps {
         }
 
         Log.info("Waiting the timestamp to be printed...");
-        Thread.sleep(90*1000);
+        Thread.sleep(120*1000);
 
         sql = NotificationsSQL.EPH_GET_Notification_Neg.replace("PARAM1", loadBatchContext.batchId);
         notificationCountContext.getStatusSTNotification = DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -216,7 +216,7 @@ public class NotificationNegativeTestSteps {
                     notificationCountContext.getStatusSTNotification.get(i).status);
         }
         Log.info("Waiting the timestamp to be printed...");
-        Thread.sleep(90*1000);
+        Thread.sleep(120*1000);
 
         sql = NotificationsSQL.GET_FAILED_NOT_PAYLOAD;
         notificationCountContext.getFailedPayloadNot =
@@ -301,7 +301,7 @@ public class NotificationNegativeTestSteps {
         Log.info("The work attempts before update are: " + attemptsBefore);
 
         Log.info("Waiting the timestamp to be printed...");
-        Thread.sleep(90*1000);
+        Thread.sleep(120*1000);
 
         sql = NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1", "EPR-TSTP10:OOA");
         notificationCountContext.getWriteAttemptsBeforeNegProduct1 =
@@ -353,7 +353,7 @@ public class NotificationNegativeTestSteps {
         }
 
         Log.info("Waiting the timestamp to be printed...");
-        Thread.sleep(90*1000);
+        Thread.sleep(120*1000);
 
         sql = NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1", "EPR-TSTP10:OOA");
         notificationCountContext.getWriteAttemptsAfterNegProduct1 =
