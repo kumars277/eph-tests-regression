@@ -187,6 +187,27 @@ public class AccountableProductDataQualityCheckSteps {
 
     }
 
+    @Given("^We get (.*) random pmx source ref ids of accountable product$")
+    public void getRandomAccountableProductsPMXSourceRef(String numberOfRecords) {
+        Log.info("Get random records ..");
+
+        //Get property when run with jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        Log.info("numberOfRecords = " + numberOfRecords);
+
+        Log.info("Get the product work ids for given random ids from Staging ..");
+
+        sql = String.format(AccountableProductSQL.GET_RANDOM_PMX_SOURCE_REF_IDS_STG, numberOfRecords);
+        Log.info(sql);
+
+        List<Map<?, ?>> productWorkIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+
+        ids = productWorkIds.stream().map(m ->  m.get("PMX_SOURCE_REFERENCE")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("External ref : "  + ids.toString());
+
+
+    }
+
 
 
 
@@ -205,6 +226,17 @@ public class AccountableProductDataQualityCheckSteps {
     public void getAccountableProductsDataEPHSTG() {
         Log.info("Get the accountable product data from EPH STG  ..");
         sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_STG, Joiner.on("','").join(ids));
+        Log.info(sql);
+
+        dataQualityContext.accountableProductDataObjectsFromSTG = DBManager
+                .getDBResultAsBeanList(sql, AccountableProductDataObject.class, Constants.EPH_URL);
+        Log.info(sql);
+    }
+
+    @Then("^We get the accountable product data from EPH STG coming from PMX$")
+    public void getAccountableProductsDataEPHSTGComingFromPMX() {
+        Log.info("Get the accountable product data from EPH STG  ..");
+        sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_STG_PMX, Joiner.on("','").join(idsPMX));
         Log.info(sql);
 
         dataQualityContext.accountableProductDataObjectsFromSTG = DBManager
