@@ -172,6 +172,16 @@ public class AccountableProductSQL {
             "from " + GetEPHDBUser.getDBUser() +".STG_10_PMX_ACCOUNTABLE_PRODUCT\n" +
             "where concat(\"ACC_PROD_ID\",\"PARENT_ACC_PROD\") in ('%s')";
 
+    public static String SELECT_DATA_ACCOUNTABLE_PRODUCT_STG_PMX = "select \n" +
+            "\"PRODUCT_WORK_ID\" as PRODUCT_WORK_ID\n" +
+            ",\"ACC_PROD_ID\" as ACC_PROD_ID\n" +
+            ",\"ACC_PROD_NAME\" as ACC_PROD_NAME\n" +
+            ",\"PARENT_ACC_PROD\" as PARENT_ACC_PROD\n" +
+            ",\"PRODUCT_GROUP_TYPE_NAME\" as PRODUCT_GROUP_TYPE_NAME\n" +
+            ",\"UPDATED\" as UPDATED\n" +
+            "from " + GetEPHDBUser.getDBUser() +".STG_10_PMX_ACCOUNTABLE_PRODUCT\n" +
+            "where \"PRODUCT_WORK_ID\" in ('%s')";
+
 //
 //
     public static String SELECT_DATA_ACCOUNTABLE_PRODUCT_DQ = "select\n" +
@@ -219,6 +229,24 @@ public class AccountableProductSQL {
             "            and f_workflow_source = 'PMX' )\n" +
             "order by random() \n" +
             "limit '%s'";
+
+    public static String GET_RANDOM_PMX_SOURCE_REF_IDS_STG = "select\n" +
+            "concat(sdq.acc_prod_id,sdq.PARENT_ACC_PROD) as PMX_SOURCE_REFERENCE\n" +
+            "from \n" +
+            "(select distinct\n" +
+            "              s.pmx_source_reference\n" +
+            "              ,s.acc_prod_id\n" +
+            "              ,s.acc_prod_name\n" +
+            "              ,s.parent_acc_prod\n" +
+            "       from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_accountable_product_dq s\n" +
+            "       where dq_err != 'Y')  sdq \n" +
+            "join (select external_reference from semarchy_eph_mdm.sa_accountable_product sa where sa.b_loadid = (select max (b_loadid) from \n" +
+            "          semarchy_eph_mdm.sa_event\n" +
+            "            where  f_event_type = 'PMX'\n" +
+            "            and workflow_id = 'talend'\n" +
+            "            AND f_event_type = 'PMX'\n" +
+            "            and f_workflow_source = 'PMX' ) and sa.b_error_status is null) SA on sdq.pmx_source_reference = sa.external_reference\n" +
+            "order by random() limit '%s';\n";
 
     public static String SELECT_DATA_ACCOUNTABLE_PRODUCT_SA = "select distinct \n" +
             "B_LOADID as B_LOADID\n" +
