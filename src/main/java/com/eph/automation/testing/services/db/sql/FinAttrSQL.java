@@ -115,15 +115,17 @@ public class FinAttrSQL {
             "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )\n"+
             "and gd.effective_end_date is null";
 
-    public static String Get_AE_count = "select count (distinct work_fin_attribs_id ) as aeCount " +
-            "  FROM semarchy_eph_mdm.ae_work_financial_attribs ae\n"+
+    public static String Get_AE_count = "select count (distinct ae.work_fin_attribs_id ) as aeCount \n" +
+            "  FROM semarchy_eph_mdm.ae_work_financial_attribs ae\n" +
+            "  join semarchy_eph_mdm.sa_work_financial_attribs sa on sa.work_fin_attribs_id=ae.work_fin_attribs_id\n" +
             " where ae.b_batchid =  (select max (ae.b_batchid) from\n" +
-            "semarchy_eph_mdm.ae_work_financial_attribs ae join \n"+
-            "semarchy_eph_mdm.gd_event e on ae.b_batchid = e.b_batchid\n"+
-            "where  e.f_event_type = 'PMX'\n"+
-            "and e.workflow_id = 'talend'\n"+
-            "AND e.f_event_type = 'PMX'\n"+
-            "and e.f_workflow_source = 'PMX' )";
+            "semarchy_eph_mdm.ae_work_financial_attribs ae join \n" +
+            "semarchy_eph_mdm.gd_event e on ae.b_batchid = e.b_batchid\n" +
+            "where  e.f_event_type = 'PMX'\n" +
+            "and e.workflow_id = 'talend'\n" +
+            "AND e.f_event_type = 'PMX'\n" +
+            "and e.f_workflow_source = 'PMX' )\n" +
+            "and sa.effective_end_date is null";
 
 
     public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count(*) as dqCount\n" +
