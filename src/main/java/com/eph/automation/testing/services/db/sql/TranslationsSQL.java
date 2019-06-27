@@ -80,14 +80,16 @@ public class TranslationsSQL {
             "AND semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )\n" ;
 
-    public static String GET_AE_TRANSLATIONS_COUNT ="select count(distinct work_relationship_id) as aeCount from semarchy_eph_mdm.ae_work_relationship ae\n"+
+    public static String GET_AE_TRANSLATIONS_COUNT ="select count(distinct ae.work_relationship_id) as aeCount from semarchy_eph_mdm.ae_work_relationship ae\n" +
+            "join semarchy_eph_mdm.sa_work_relationship sa on sa.work_relationship_id=ae.work_relationship_id\n" +
             " where ae.b_batchid =  (select max (ae.b_batchid) from\n" +
-            "semarchy_eph_mdm.ae_work_relationship ae join \n"+
-            "semarchy_eph_mdm.gd_event e on ae.b_batchid = e.b_batchid\n"+
-            "where  e.f_event_type = 'PMX'\n"+
-            "and e.workflow_id = 'talend'\n"+
-            "AND e.f_event_type = 'PMX'\n"+
-            "and e.f_workflow_source = 'PMX' )\n";
+            "semarchy_eph_mdm.ae_work_relationship ae join \n" +
+            "semarchy_eph_mdm.gd_event e on ae.b_batchid = e.b_batchid\n" +
+            "where  e.f_event_type = 'PMX'\n" +
+            "and e.workflow_id = 'talend'\n" +
+            "AND e.f_event_type = 'PMX'\n" +
+            "and e.f_workflow_source = 'PMX' )\n" +
+            "and sa.effective_end_date is null";
 
     public static String gettingNumberOfIds="SELECT \"RELATIONSHIP_PMX_SOURCEREF\"  as random_value\n" +
             " FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel \n" +
