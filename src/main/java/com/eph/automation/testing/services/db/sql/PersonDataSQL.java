@@ -27,15 +27,21 @@ public class PersonDataSQL {
     public static String GET_COUNT_PERSONS_EPHDQ_TO_SA = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq where dq_err != 'Y'";
 
 
+// old   public static String GET_COUNT_PERSONS_EPHSA = "select count(*) as count from semarchy_eph_mdm.sa_person p\n" +
+//            "where p.b_loadid =  (\n" +
+//            "select max (p1.b_loadid) from \n" +
+//            "semarchy_eph_mdm.sa_person p1\n" +
+//            "join \n" +
+//            "semarchy_eph_mdm.sa_event sa on sa.b_loadid = p1.b_loadid \n" +
+//            "where  sa.f_event_type = 'PMX'\n" +
+//            "and sa.workflow_id = 'talend'\n" +
+//            "and sa.f_workflow_source = 'PMX' )";
+
     public static String GET_COUNT_PERSONS_EPHSA = "select count(*) as count from semarchy_eph_mdm.sa_person p\n" +
             "where p.b_loadid =  (\n" +
-            "select max (p1.b_loadid) from \n" +
-            "semarchy_eph_mdm.sa_person p1\n" +
-            "join \n" +
-            "semarchy_eph_mdm.sa_event sa on sa.b_loadid = p1.b_loadid \n" +
-            "where  sa.f_event_type = 'PMX'\n" +
-            "and sa.workflow_id = 'talend'\n" +
-            "and sa.f_workflow_source = 'PMX' )";
+            "select  max(b_loadid) from semarchy_eph_mdm.sa_event sa2  where sa2.f_event_type = 'PMX'\n" +
+            "and sa2.workflow_id = 'talend'\n" +
+            "and sa2.f_workflow_source = 'PMX' )";
 
     public static String GET_COUNT_PERSONS_EPHGD = "select count(*) from semarchy_eph_mdm.gd_person where b_batchid = (select max (b_batchid) from \n" +
             "          semarchy_eph_mdm.gd_event\n" +

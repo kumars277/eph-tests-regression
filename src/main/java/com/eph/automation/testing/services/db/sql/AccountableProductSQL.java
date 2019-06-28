@@ -115,17 +115,25 @@ public class AccountableProductSQL {
             "        coalesce(g.f_gl_product_segment_parent,'') = s.\"PARENT_ACC_PROD\")\n" +
             "where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') >= TO_DATE('%s','YYYYMMDDHH24MI')";  */
 
+// old   public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_SA = "select \n" +
+//            " distinct count(*) as count\n" +
+//            "from semarchy_eph_mdm.sa_accountable_product sa\n" +
+//            "where sa.b_loadid =  (\n" +
+//            "select max (sa1.b_loadid) from \n" +
+//            "semarchy_eph_mdm.sa_accountable_product sa1\n" +
+//            "join \n" +
+//            "semarchy_eph_mdm.sa_event sa2 on sa2.b_loadid = sa1.b_loadid \n" +
+//            "where  sa2.f_event_type = 'PMX'\n" +
+//            "and sa2.workflow_id = 'talend'\n" +
+//            "and sa2.f_workflow_source = 'PMX' )";
+
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_SA = "select \n" +
             " distinct count(*) as count\n" +
             "from semarchy_eph_mdm.sa_accountable_product sa\n" +
             "where sa.b_loadid =  (\n" +
-            "select max (sa1.b_loadid) from \n" +
-            "semarchy_eph_mdm.sa_accountable_product sa1\n" +
-            "join \n" +
-            "semarchy_eph_mdm.sa_event sa2 on sa2.b_loadid = sa1.b_loadid \n" +
-            "where  sa2.f_event_type = 'PMX'\n" +
+            "select  max(b_loadid) from semarchy_eph_mdm.sa_event sa2  where sa2.f_event_type = 'PMX'\n" +
             "and sa2.workflow_id = 'talend'\n" +
-            "and sa2.f_workflow_source = 'PMX' )";
+            "and sa2.f_workflow_source = 'PMX')";
 
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_GD = "select \n" +
             "count(*)\n" +
