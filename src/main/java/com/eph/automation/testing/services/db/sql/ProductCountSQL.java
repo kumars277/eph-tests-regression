@@ -82,18 +82,16 @@ public class ProductCountSQL {
     "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )";
 
     public static String EPH_GD_PRODUCT_Count="select count(*) as ephGDCount FROM semarchy_eph_mdm.gd_product\n" +
-            "     where f_event =  (select max (f_event) from\n" +
-            "    semarchy_eph_mdm.gd_product join\n" +
-            "   semarchy_eph_mdm.gd_event on f_event = event_id\n" +
+            "     where f_event =  (select max (event_id) from\n" +
+            "   semarchy_eph_mdm.gd_event\n" +
             "    where  semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n" +
             "    and semarchy_eph_mdm.gd_event.workflow_id = 'talend'\n" +
             "    AND semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n" +
             "    and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )";
 
     public static String EPH_AE_PRODUCT_Count="select count(distinct product_id) as aeCount FROM semarchy_eph_mdm.ae_product ae\n" +
-            "     where ae.b_batchid =  (select max (ae.b_batchid) from\n" +
-            "    semarchy_eph_mdm.ae_product ae join\n" +
-            "   semarchy_eph_mdm.gd_event e on ae.b_batchid = e.b_batchid\n" +
+            "     where ae.b_batchid =  (select max (b_batchid) from\n" +
+            "   semarchy_eph_mdm.gd_event e\n" +
             "    where  e.f_event_type = 'PMX'\n" +
             "    and e.workflow_id = 'talend'\n" +
             "    AND e.f_event_type = 'PMX'\n" +

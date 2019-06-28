@@ -106,9 +106,8 @@ public class FinAttrSQL {
 
     public static String Get_GD_count = "select count (*) as gdCount " +
             "  FROM semarchy_eph_mdm.gd_work_financial_attribs gd\n"+
-            " where f_event =  (select max (f_event) from\n" +
-            "semarchy_eph_mdm.gd_work_financial_attribs join \n"+
-            "semarchy_eph_mdm.gd_event on f_event = event_id\n"+
+            " where f_event =  (select max (event_id) from\n" +
+            "semarchy_eph_mdm.gd_event\n"+
             "where  semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.gd_event.workflow_id = 'talend'\n"+
             "AND semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n"+
@@ -118,9 +117,8 @@ public class FinAttrSQL {
     public static String Get_AE_count = "select count (distinct ae.work_fin_attribs_id ) as aeCount \n" +
             "  FROM semarchy_eph_mdm.ae_work_financial_attribs ae\n" +
             "  join semarchy_eph_mdm.sa_work_financial_attribs sa on sa.work_fin_attribs_id=ae.work_fin_attribs_id\n" +
-            " where ae.b_batchid =  (select max (ae.b_batchid) from\n" +
-            "semarchy_eph_mdm.ae_work_financial_attribs ae join \n" +
-            "semarchy_eph_mdm.gd_event e on ae.b_batchid = e.b_batchid\n" +
+            " where ae.b_batchid =  (select max (b_batchid) from\n" +
+            "semarchy_eph_mdm.gd_event e\n" +
             "where  e.f_event_type = 'PMX'\n" +
             "and e.workflow_id = 'talend'\n" +
             "AND e.f_event_type = 'PMX'\n" +
