@@ -83,13 +83,19 @@ public class ProductRelationshipChecksSQL {
             "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
 
 
+//  old  public static String GET_EPH_SA_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from semarchy_eph_mdm.sa_product_rel_package\n" +
+//            "where f_event = (select max (f_event) from semarchy_eph_mdm.sa_product_rel_package\n" +
+//            "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
+//            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+//            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
+//            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+//            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')";
+
     public static String GET_EPH_SA_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from semarchy_eph_mdm.sa_product_rel_package\n" +
-            "where f_event = (select max (f_event) from semarchy_eph_mdm.sa_product_rel_package\n" +
-            "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
-            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
-            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
-            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
-            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')";
+            "where f_event = (select  max(event_id) from semarchy_eph_mdm.sa_event sa2  \n" +
+            "where sa2.f_event_type = 'PMX'\n" +
+            "and sa2.workflow_id = 'talend'\n" +
+            "and sa2.f_workflow_source = 'PMX')";
 
     public static String GET_EPH_GD_PRODUCT_RELATIONSHIPS_COUNT = "select count(*) as count from semarchy_eph_mdm.gd_product_rel_package where b_batchid = (select max (b_batchid) from \n" +
             "          semarchy_eph_mdm.gd_event\n" +

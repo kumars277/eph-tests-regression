@@ -21,14 +21,19 @@ public class SubjectAreaDataSQL {
     public static String SELECT_COUNT_SUBJECT_AREA_STG_Delta = "select count(*) as count from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_SUBJECT_AREA\n"+
             "where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
+//  old  public static String SELECT_COUNT_SUBJECT_AREA_SA = "select count(*) from semarchy_eph_mdm.sa_subject_area s\n" +
+//            " where s.b_loadid =  (select max (s.b_loadid) from\n" +
+//            "semarchy_eph_mdm.sa_subject_area s join \n" +
+//            "semarchy_eph_mdm.sa_event e on e.b_loadid = s.b_loadid\n" +
+//            "where  e.f_event_type = 'PMX'\n" +
+//            "and e.workflow_id = 'talend'\n" +
+//            "AND e.f_event_type = 'PMX'\n" +
+//            "and e.f_workflow_source = 'PMX' )";
+
     public static String SELECT_COUNT_SUBJECT_AREA_SA = "select count(*) from semarchy_eph_mdm.sa_subject_area s\n" +
-            " where s.b_loadid =  (select max (s.b_loadid) from\n" +
-            "semarchy_eph_mdm.sa_subject_area s join \n" +
-            "semarchy_eph_mdm.sa_event e on e.b_loadid = s.b_loadid\n" +
-            "where  e.f_event_type = 'PMX'\n" +
-            "and e.workflow_id = 'talend'\n" +
-            "AND e.f_event_type = 'PMX'\n" +
-            "and e.f_workflow_source = 'PMX' )";
+            " where s.b_loadid =  (select  max(b_loadid) from semarchy_eph_mdm.sa_event sa2  where sa2.f_event_type = 'PMX'\n" +
+            "and sa2.workflow_id = 'talend'\n" +
+            "and sa2.f_workflow_source = 'PMX' )";
 
     public static String SELECT_COUNT_SUBJECT_AREA_GD = "select count(*) from semarchy_eph_mdm.gd_subject_area s\n" +
             " where s.b_batchid =  (select max (s.b_batchid) from\n" +

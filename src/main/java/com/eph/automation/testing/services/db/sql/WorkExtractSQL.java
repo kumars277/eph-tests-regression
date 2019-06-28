@@ -149,12 +149,11 @@ public class WorkExtractSQL {
             "where mdq.dq_err != 'Y'";
 
     public static final String COUNT_MANIFESTATIONS_IN_SA_MANIFESTATION_TABLE =
-            "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation sa where f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation\n" +
-                    "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
-                    "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
-                    "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
-                    "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
-                    "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')";
+           "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation sa \n" +
+                   "where sa.f_event = (select  max(event_id) from semarchy_eph_mdm.sa_event sa2  \n" +
+                   "where sa2.f_event_type = 'PMX'\n" +
+                   "and sa2.workflow_id = 'talend'\n" +
+                   "and sa2.f_workflow_source = 'PMX')";
 
     public static final String COUNT_MANIFESTATIONS_IN_GD_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.gd_manifestation where b_batchid = (select max (b_batchid) from \n" +
             "          semarchy_eph_mdm.gd_event\n" +
@@ -382,12 +381,12 @@ public class WorkExtractSQL {
                     "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
 
     public static final String COUNT_OF_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation_identifier\n" +
-            "where f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier\n" +
-            "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
-            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
-            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
-            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n" +
-            "and f_type = '%s' \n" +
+//            "where f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier\n" +
+//            "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
+//            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+//            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
+//            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n" +
+            "where f_type = '%s' \n" +
             "and identifier is not null\n" +
             "and effective_end_date is null\n" +
             "and f_event = (select max (event_id) from \n" +

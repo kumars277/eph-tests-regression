@@ -68,15 +68,21 @@ public class PersonProductRoleDataSQL {
             "where perd.dq_err != 'Y' and  prod.dq_err != 'Y' and TO_DATE(UPDATED,'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
 
 
+//  old  public static String GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSA = "select count(*) as count from semarchy_eph_mdm.sa_product_person_role sa\n" +
+//            "where f_event =  (\n" +
+//            "select max (f_event) from \n" +
+//            "semarchy_eph_mdm.sa_product   \n" +
+//            "join \n" +
+//            "semarchy_eph_mdm.sa_event on f_event = event_id \n" +
+//            "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+//            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
+//            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n";
+
     public static String GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSA = "select count(*) as count from semarchy_eph_mdm.sa_product_person_role sa\n" +
-            "where f_event =  (\n" +
-            "select max (f_event) from \n" +
-            "semarchy_eph_mdm.sa_product   \n" +
-            "join \n" +
-            "semarchy_eph_mdm.sa_event on f_event = event_id \n" +
-            "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
-            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
-            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n";
+            "where f_event =  (select  max(event_id) from semarchy_eph_mdm.sa_event sa2  \n" +
+            "where sa2.f_event_type = 'PMX'\n" +
+            "and sa2.workflow_id = 'talend'\n" +
+            "and sa2.f_workflow_source = 'PMX')";
 
     public static String GET_COUNT_PERSONS_PRODUCT_ROLE_EPHAE = "select count(distinct product_person_role_id) as count from semarchy_eph_mdm.ae_product_person_role where b_batchid = (select max (b_batchid) from \n" +
             "          semarchy_eph_mdm.gd_event\n" +

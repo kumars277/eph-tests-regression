@@ -24,13 +24,18 @@ public class WorkSubjectAreaLinkDataSQL {
             "    )";
 
 
-    public static String SELECT_COUNT_WORK_SUBJECT_AREA_SA = "select count(*) as count from semarchy_eph_mdm.sa_work_subject_area_link s"+
-            " where s.b_loadid =  (select max (e.b_loadid) from\n" +
-            "semarchy_eph_mdm.sa_event e\n" +
-            "where  e.f_event_type = 'PMX'\n" +
-            "and e.workflow_id = 'talend'\n" +
-            "AND e.f_event_type = 'PMX'\n" +
-            "and e.f_workflow_source = 'PMX' )";
+//   old public static String SELECT_COUNT_WORK_SUBJECT_AREA_SA = "select count(*) as count from semarchy_eph_mdm.sa_work_subject_area_link s"+
+//            " where s.b_loadid =  (select max (e.b_loadid) from\n" +
+//            "semarchy_eph_mdm.sa_event e\n" +
+//            "where  e.f_event_type = 'PMX'\n" +
+//            "and e.workflow_id = 'talend'\n" +
+//            "AND e.f_event_type = 'PMX'\n" +
+//            "and e.f_workflow_source = 'PMX' )";
+
+    public static String SELECT_COUNT_WORK_SUBJECT_AREA_SA = "select count(*) as count from semarchy_eph_mdm.sa_work_subject_area_link s\n" +
+            " where s.b_loadid =  (select  max(b_loadid) from semarchy_eph_mdm.sa_event sa2  where sa2.f_event_type = 'PMX'\n" +
+            "and sa2.workflow_id = 'talend'\n" +
+            "and sa2.f_workflow_source = 'PMX' )";
 
     public static String GET_COUNT_WORK_SUBJECT_AREA_EPHAE = "select count(*) as count from semarchy_eph_mdm.ae_work_subject_area_link where b_batchid = (select max (b_batchid) from \n" +
             "          semarchy_eph_mdm.gd_event\n" +
