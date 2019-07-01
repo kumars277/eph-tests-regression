@@ -416,7 +416,9 @@ public class WorksDataCheck {
             }
 
             if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).OWNERSHIP != null) {
-                if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).OWNERSHIP.equalsIgnoreCase("EFO")) {
+                if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).OWNERSHIP.equalsIgnoreCase("EFO")
+                        || dataQualityContext.workDataObjectsFromPMXSTG.get(i).OWNERSHIP.equalsIgnoreCase("SCAF")
+                        || dataQualityContext.workDataObjectsFromPMXSTG.get(i).OWNERSHIP.equalsIgnoreCase("SCCT")) {
                     Assert.assertEquals("The Ownership is incorrect for id=" + ids.get(i)
                             , dataQualityContext.workDataObjectsFromSTGDQ.get(i).OWNERSHIP, "ELSOWN");
                 } else if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).OWNERSHIP.equalsIgnoreCase("SFO")) {
