@@ -63,9 +63,14 @@ public class AccountableProductSQL {
 
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_FROM_PMX = "select count(*) as count from "+ GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product";
 
-    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ = "select count(distinct \"PRODUCT_WORK_ID\") as count from  " + GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product s \n" +
-            "left join semarchy_eph_mdm.gd_accountable_product g on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = g.external_reference";
-
+    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ =
+    "select count(distinct \"PRODUCT_WORK_ID\") as count from  " + GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product s \n"+
+            "left join semarchy_eph_mdm.gd_accountable_product g on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = g.external_reference\n"+
+            "join semarchy_eph_mdm.sa_accountable_product sa on sa.external_reference = g.external_reference\n"+
+            "where b_loadid =  (\n"+
+            "select  max(b_loadid) from semarchy_eph_mdm.sa_event sa2  where sa2.f_event_type = 'PMX'\n"+
+            "and sa2.workflow_id = 'talend'\n"+
+            "and sa2.f_workflow_source = 'PMX') ";
 
     /*
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ = "select count(distinct s.\"PRODUCT_WORK_ID\" ) as count \n" +
