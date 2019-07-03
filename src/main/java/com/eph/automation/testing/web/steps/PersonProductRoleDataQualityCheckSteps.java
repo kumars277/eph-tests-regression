@@ -122,7 +122,7 @@ public class PersonProductRoleDataQualityCheckSteps {
 
     @Then("^Compare the count on records for persons product role in EPH Staging with DQ and EPH SA$")
     public void verifyCountOfPersonsProductRoleInEPHSTGAndEPHSAIsEqual() {
-        Assert.assertEquals("\nPersons product role count in PMX and EPH STG is not equal", countPersonsEPHSTGGoingToSA, countPersonsEPHSA);
+        Assert.assertEquals("\nPersons product role count in EPH STG and EPH SA is not equal", countPersonsEPHSTGGoingToSA, countPersonsEPHSA);
     }
 
     @When("^Get the count of records for persons product role in EPH GD$")
@@ -388,21 +388,21 @@ public class PersonProductRoleDataQualityCheckSteps {
 
 
                 //EFFECTIVE_START_DATE
-                Log.info("EFFECTIVE_START_DATE in EPH STG : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE());
+                Log.info("EFFECTIVE_START_DATE in EPH STG : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getSTART_DATE());
                 Log.info("EFFECTIVE_START_DATE in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_START_DATE());
 
                 Log.info("Expecting EFFECTIVE_START_DATE in EPH STG and EPH SA to be consistent");
 
-                assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_START_DATE(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_START_DATE());
+                assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getSTART_DATE(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_START_DATE());
 
 
                 //EFFECTIVE_END_DATE
-                Log.info("EFFECTIVE_END_DATE in EPH STG : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_END_DATE());
+                Log.info("EFFECTIVE_END_DATE in EPH STG : " + dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEND_DATE());
                 Log.info("EFFECTIVE_END_DATE in EPH SA: " + dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_END_DATE());
 
                 Log.info("Expecting EFFECTIVE_END_DATE in EPH STG and EPH SA to be consistent");
 
-                assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEFFECTIVE_END_DATE(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_END_DATE());
+                assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHSTG.get(i).getEND_DATE(), dataQualityContext.personProductRoleDataObjectsFromEPHSA.get(i).getEFFECTIVE_END_DATE());
 
 
                 //F_ROLE
