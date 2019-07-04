@@ -13,6 +13,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.junit.Assert;
 
 import java.util.Comparator;
 import java.util.List;
@@ -30,9 +31,10 @@ import static org.junit.Assert.assertNotEquals;
 
 public class ManifestationIdentifiersDataQualityCheckSteps {
     private String sql;
-    private static int countISBNSTGPMX;
-    private static int countISBNSA;
-    private static int countISBNGD;
+    private static int countIdentifiersSTGPMX;
+    private static int countIdentifiersSA;
+    private static int countIdentifiersGD;
+    private static int countManifestationIdentifiersEPHAE;
     private static List<String> ids;
     private static List<Map<String, String>> manifestationIdentifiersDataObjects;
 
@@ -62,39 +64,73 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
         }
 
         List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        countISBNSTGPMX = ((Long) numberOfISBNs.get(0).get("count")).intValue();
-        Log.info("Count of of records in STG_PMX_MANIFESTATION table is: " + countISBNSTGPMX);
+        countIdentifiersSTGPMX = ((Long) numberOfISBNs.get(0).get("count")).intValue();
+        Log.info("Count of of records in STG_PMX_MANIFESTATION table is: " + countIdentifiersSTGPMX);
 
     }
 
     @When("^We get the count of records with (.*) in SA_MANIFESTATION_IDENTIFIER$")
     public void getCountOfRecordsInEPHSA(String identifier) {
-        sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE, identifier);
+        if(identifier == null)
+            sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE, identifier);
+        else
+            sql = WorkExtractSQL.COUNT_OF_ALL_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE;
         Log.info(sql);
 
         List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        countISBNSA = ((Long) numberOfISBNs.get(0).get("count")).intValue();
-        Log.info("Count of of records in SA_MANIFESTATION_IDENTIFIER table is: " + countISBNSA);
+        countIdentifiersSA = ((Long) numberOfISBNs.get(0).get("count")).intValue();
+        Log.info("Count of of records in SA_MANIFESTATION_IDENTIFIER table is: " + countIdentifiersSA);
     }
+
+//    @When("^We get the count of all manifestation idenfieirs in SA_MANIFESTATION_IDENTIFIER$")
+//    public void getCountOfAllRecordsInEPHSA() {
+//
+//        sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE);
+//        Log.info(sql);
+//
+//        List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+//        countIdentifiersSA = ((Long) numberOfISBNs.get(0).get("count")).intValue();
+//        Log.info("Count of of records in SA_MANIFESTATION_IDENTIFIER table is: " + countIdentifiersSA);
+//    }
+
 
     @Then("^Check the count of the records in STG_PMX_MANIFESTATION and SA_MANIFESTATION_IDENTIFIER is equal for (.*)$")
     public void verifyCountOfRecordsIsEqualInSTGAndSA(String identifier) {
-        assertEquals("\nThe number of records in STG_PMX_MANIFESTATION and SA_MANIFESTATION_IDENTIFIER is not equal for " + identifier, countISBNSTGPMX, countISBNSA);
+        assertEquals("\nThe number of records in STG_PMX_MANIFESTATION and SA_MANIFESTATION_IDENTIFIER is not equal for " + identifier, countIdentifiersSTGPMX, countIdentifiersSA);
     }
 
     @When("^We get the count of records with (.*) in GD_MANIFESTATION_IDENTIFIER$")
     public void getCountOfRecordsInEPHGD(String identifier) {
-        sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_IN_EPH_GD_MANIFESTATION_TABLE, identifier);
+        if(identifier == null)
+            sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_IN_EPH_GD_MANIFESTATION_TABLE, identifier);
+        else
+            sql = WorkExtractSQL.COUNT_OF_ALL_RECORDS_IN_EPH_GD_MANIFESTATION_TABLE;
         Log.info(sql);
 
         List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        countISBNGD = ((Long) numberOfISBNs.get(0).get("count")).intValue();
-        Log.info("Count of of records in GD_MANIFESTATION_IDENTIFIER table is: " + countISBNGD);
+        countIdentifiersGD = ((Long) numberOfISBNs.get(0).get("count")).intValue();
+        Log.info("Count of of records in GD_MANIFESTATION_IDENTIFIER table is: " + countIdentifiersGD);
+    }
+
+    @Given("^Get the count of records for manifestation identifiers in EPH AE$")
+    public void getCountManifestationIdentifiersEPHAE() {
+        Log.info("When We get the count of manifestation identifiers in PMX STG ..");
+        sql = WorkExtractSQL.GET_COUNT_MANIFESTATIONS_IDENTIFIERS_EPHAE;
+        Log.info(sql);
+        List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countManifestationIdentifiersEPHAE = ((Long) personsNumber.get(0).get("count")).intValue();
+        Log.info("Count of manifestation identifiers in EPH AE is: " + countManifestationIdentifiersEPHAE);
+    }
+
+    @Then("^Verify sum of records for manifestation identifiers in EPH GD and EPH AE is equal to number of records in EPH SA$")
+    public void verifyCountOfManifestationIdentifiersInEPHGDAndEPHAEIsEqualToEPHSA() {
+        int sumOFRecords = countManifestationIdentifiersEPHAE + countIdentifiersGD;
+        Assert.assertEquals("\nSum of the records for manifestation identifiers in EPH GD and EPH AE is NOT equal to number of records in EPH SA", sumOFRecords, countIdentifiersSA);
     }
 
     @Then("^Check the count of the records in SA_MANIFESTATION_IDENTIFIER and GD_MANIFESTATION_IDENTIFIER is equal for (.*)$")
     public void verifyCountOfRecordsWithISBNIsEqualInSAndGD(String identifier) {
-        assertEquals("\nThe number of records in SA_MANIFESTATION_IDENTIFIER and GD_MANIFESTATION_IDENTIFIER is not equal for " + identifier, countISBNSA, countISBNGD);
+        assertEquals("\nThe number of records in SA_MANIFESTATION_IDENTIFIER and GD_MANIFESTATION_IDENTIFIER is not equal for " + identifier, countIdentifiersSA, countIdentifiersGD);
     }
 
     @Given("^We get the manifestation ids of (.*) random records from STG_PMX_MANIFESTATION that have (.*) for (.*)$")

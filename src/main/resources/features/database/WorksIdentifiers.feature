@@ -28,7 +28,7 @@ Feature: Entity - Work Identifier - Count & Data Mapping Check - Validate data b
       Examples:
       |type                   | stg_type              |
       |ISSN-L                 |ISSN_L                 |
-      |PROJECT-NUM            |PROJECT_NUM            |
+      |PPM-PART               |PROJECT_NUM            |
       |ELSEVIER JOURNAL NUMBER|JOURNAL_NUMBER         |
       |JOURNAL ACRONYM        |JOURNAL_ACRONYM        |
       |DAC-K                  |DAC_KEY                |
