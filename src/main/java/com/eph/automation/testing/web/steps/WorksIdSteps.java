@@ -68,12 +68,8 @@ public class WorksIdSteps {
                         .replace("PARAM2", refreshDate.get(1).refresh_timestamp);*/
             }
         }else {
-            sql = WorkCountSQL.GET_REFRESH_DATE;
-            refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                    Constants.EPH_URL);
-            sql = WorksIdentifierSQL.getRandomProductNumDelta
-                    .replace("PARAM1", type)
-                    .replace("PARAM2", refreshDate.get(1).refresh_timestamp);
+            sql = WorksIdentifierSQL.getRandomProductNum
+                    .replace("PARAM1", type);
 
             data = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
             System.out.print(sql);
