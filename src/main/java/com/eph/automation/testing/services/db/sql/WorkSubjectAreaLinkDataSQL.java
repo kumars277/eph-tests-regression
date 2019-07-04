@@ -53,10 +53,9 @@ public class WorkSubjectAreaLinkDataSQL {
             "\"F_PRODUCT_WORK\" in (select pmx_source_reference from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq where dq_err!= 'Y')\n"+
             "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
 
-    public static String SELECT_COUNT_WORK_SUBJECT_AREA_GD = "select count(*) as count from semarchy_eph_mdm.gd_work_subject_area_link s"+
-            " where s.b_batchid =  (select max (s.b_batchid) from\n" +
-            "semarchy_eph_mdm.gd_work_subject_area_link s join \n" +
-            "semarchy_eph_mdm.gd_event e on e.b_batchid = s.b_batchid\n" +
+    public static String SELECT_COUNT_WORK_SUBJECT_AREA_GD = "select count(*) as count from semarchy_eph_mdm.gd_work_subject_area_link \n" +
+            " where b_batchid =  (select max (b_batchid) from\n" +
+            "semarchy_eph_mdm.gd_event e \n" +
             "where  e.f_event_type = 'PMX'\n" +
             "and e.workflow_id = 'talend'\n" +
             "AND e.f_event_type = 'PMX'\n" +

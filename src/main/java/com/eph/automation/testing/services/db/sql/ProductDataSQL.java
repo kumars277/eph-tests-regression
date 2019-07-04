@@ -16,9 +16,10 @@ public class ProductDataSQL {
             "\t,M.PRODUCT_MANIFESTATION_ID -- Internal PMX ID, not needed in EPH but extracted for record linking purposes\n" +
             "\t,M.F_PRODUCT_WORK -- Internal PMX Work ID, not needed in EPH but extracted for record linking purposes\n" +
             "\t,M.F_PRODUCT_MANIFESTATION_TYP --Print (1) or Electronic (2)\n" +
-            "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND WT.F_OPEN_ACCESS_JOURNAL_TYPE NOT IN (10,12) THEN 'Y' ELSE 'N' END AS SUBSCRIPTION\n" +
-            "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND WT.F_OPEN_ACCESS_JOURNAL_TYPE NOT IN (10,12) AND M.F_PRODUCT_MANIFESTATION_TYP = 1 THEN 'Y' ELSE 'N' END AS BULK_SALES\n" +
-            "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND WT.F_OPEN_ACCESS_JOURNAL_TYPE NOT IN (10,12) AND M.F_PRODUCT_MANIFESTATION_TYP = 2 THEN 'Y' ELSE 'N' END AS BACK_FILES\n" +
+            "\t,WT.F_OPEN_ACCESS_JOURNAL_TYPE\n" +
+            "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND NVL(WT.F_OPEN_ACCESS_JOURNAL_TYPE,99) NOT IN (10,12) THEN 'Y' ELSE 'N' END AS SUBSCRIPTION\n" +
+            "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND NVL(WT.F_OPEN_ACCESS_JOURNAL_TYPE,99) NOT IN (10,12) AND M.F_PRODUCT_MANIFESTATION_TYP = 1 THEN 'Y' ELSE 'N' END AS BULK_SALES\n" +
+            "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND NVL(WT.F_OPEN_ACCESS_JOURNAL_TYPE,99) NOT IN (10,12) AND M.F_PRODUCT_MANIFESTATION_TYP = 2 THEN 'Y' ELSE 'N' END AS BACK_FILES\n" +
             "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND WT.OA_TYPE = 'Y' THEN 'Y' ELSE 'N' END AS OPEN_ACCESS\n" +
             "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND M.F_PRODUCT_MANIFESTATION_TYP = 1 THEN 'Y' ELSE 'N' END AS REPRINTS\n" +
             "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND M.PRODUCT_MANIFESTATION_ID = WT.FIRST_MANIFESTATION THEN 'Y' ELSE 'N' END AS AUTHOR_CHARGES\n" +
@@ -34,6 +35,16 @@ public class ProductDataSQL {
             "\t\tWHEN (MSS.SUBSTATUS_DESC = 'Currently unavailable') THEN 'PST'\n" +
             "\t\tELSE 'UNK'\n" +
             "\tEND AS AVAILABILITY_STATUS\n" +
+            "    ,CASE\n" +
+            "\t    WHEN WT.EFFECTIVE_TO_DATE IS NOT NULL THEN 'NVP'\n" +
+            "\t\tWHEN (WT.SUBSTATUS_DESC IN ('Planned to be available','Planned to be available (secret)'))  THEN 'PPL'\n" +
+            "\t\tWHEN (WT.SUBSTATUS_DESC = 'Available for customer sale') THEN 'PAS'\n" +
+            "\t\tWHEN (WT.SUBSTATUS_DESC = 'Available but item not for sale') THEN 'PNS'\n" +
+            "\t\tWHEN (WT.SUBSTATUS_DESC IN ('Elsevier owned content, no longer published','No longer published by Elsevier. Old content can still be on SD'))\n" +
+            "\t\t\tTHEN 'PSTB'\n" +
+            "\t\tWHEN (WT.SUBSTATUS_DESC = 'Currently unavailable') THEN 'PST'\n" +
+            "\t\tELSE 'UNK'\n" +
+            "\tEND AS WORK_STATUS\n" +
             "\t,WT.WORK_TITLE\n" +
             "\t,WT.WORK_TYPE\n" +
             "\t,TO_CHAR(NVL(M.B_UPDDATE,M.B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED -- Manifestation last updated date as all other tables are linking or reference\n" +
@@ -46,17 +57,20 @@ public class ProductDataSQL {
             "\t    ,W.PRODUCT_WORK_TITLE AS WORK_TITLE\n" +
             "\t    ,FIR.FIRST_MANIFESTATION\n" +
             "\t    ,W.F_OPEN_ACCESS_JOURNAL_TYPE\n" +
+            "        ,WSS.SUBSTATUS_DESC\n" +
+            "        ,W.EFFECTIVE_TO_DATE\n" +
             "      FROM GD_PRODUCT_MANIFESTATION MAN\n" +
             "      JOIN GD_PRODUCT_WORK W ON MAN.F_PRODUCT_WORK = W.PRODUCT_WORK_ID\n" +
             "      JOIN GD_PRODUCT_TYPE T ON W.F_PRODUCT_TYPE = T.PRODUCT_TYPE_ID\n" +
             "      JOIN (SELECT FMAN.F_PRODUCT_WORK, MIN(FMAN.PRODUCT_MANIFESTATION_ID) AS FIRST_MANIFESTATION\n" +
             "\t        FROM GD_PRODUCT_MANIFESTATION FMAN GROUP BY FMAN.F_PRODUCT_WORK) FIR ON MAN.F_PRODUCT_WORK = FIR.F_PRODUCT_WORK\n" +
-            "\t   ) WT ON WT.PRODUCT_MANIFESTATION_ID = M.PRODUCT_MANIFESTATION_ID\n" +
-            "\t     WHERE  M.PRODUCT_MANIFESTATION_ID IN ('%s')\n" +
-            "\t order by  M.PRODUCT_MANIFESTATION_ID\n" +
+            "      LEFT JOIN GD_PRODUCT_SUBSTATUS WSS ON W.F_WORK_SUBSTATUS = WSS.PRODUCT_SUBSTATUS_ID\n" +
+            "\t   ) WT ON WT.PRODUCT_MANIFESTATION_ID = M.PRODUCT_MANIFESTATION_ID \n" +
+            "\t   WHERE  M.PRODUCT_MANIFESTATION_ID IN ('%s')\n" +
+            "\t   order by  M.PRODUCT_MANIFESTATION_ID\n" +
+            "--\t   \n" +
             "\t   \n" +
-            "\t   \n" +
-            "\t  \n";
+            "\t  ";
 
     public static String EPH_STG_PRODUCT_EXTRACT = "SELECT\n" +
             "           \"PRODUCT_ID\" as PRODUCT_ID,\n" +
@@ -386,7 +400,7 @@ public class ProductDataSQL {
             "join (select distinct external_reference, b_error_status from semarchy_eph_mdm.sa_product ) sa on dq.pmx_source_reference = sa.external_reference\n"+
             " where \"SUBSCRIPTION\" = 'Y' \n"+
             "and dq.dq_err != 'Y'   and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')\n"+
-            "--order by random() limit '%s'\n"+
+            "order by random() limit '%s'\n"+
             ") A ";
 
     public static String SELECT_F_PRODUCT_WORK_IDS_FOR_GIVEN_MANIFESTATION_IDS = "select \"F_PRODUCT_WORK\" as F_PRODUCT_WORK from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product where \"PRODUCT_MANIFESTATION_ID\" IN ('%s')";

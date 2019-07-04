@@ -65,29 +65,29 @@ public class ProductDataMappingCheck {
                 default:
                     break;
             }
-        }else {
-            sql = WorkCountSQL.GET_REFRESH_DATE;
-            Log.info(sql);
-            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
-            Log.info("refreshDate : " + refreshDate);
-
-            switch (type) {
-                case "journal":
-                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_JOURNALS_DELTA, refreshDate, numberOfRecords);
-                    Log.info(sql);
-                    break;
-                case "book":
-                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS_DELTA, refreshDate, numberOfRecords);
-                    Log.info(sql);
-                    break;
-                case "package":
-                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PACKAGES_DELTA, refreshDate, numberOfRecords);
-                    Log.info(sql);
-                    break;
-                default:
-                    break;
-            }
+//        }else {
+//            sql = WorkCountSQL.GET_REFRESH_DATE;
+//            Log.info(sql);
+//            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+//            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+//            Log.info("refreshDate : " + refreshDate);
+//
+//            switch (type) {
+//                case "journal":
+//                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_JOURNALS_DELTA, refreshDate, numberOfRecords);
+//                    Log.info(sql);
+//                    break;
+//                case "book":
+//                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS_DELTA, refreshDate, numberOfRecords);
+//                    Log.info(sql);
+//                    break;
+//                case "package":
+//                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PACKAGES_DELTA, refreshDate, numberOfRecords);
+//                    Log.info(sql);
+//                    break;
+//                default:
+//                    break;
+//            }
         }
 
 
@@ -716,20 +716,20 @@ public class ProductDataMappingCheck {
                     suffix = "Subscription";
                     assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
                 } else if (pmxSourceReference.contains("JBS")) {
-                    suffix = " Bulk Sales";
+                    suffix = "Bulk Sales";
                     assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
                 } else if (pmxSourceReference.contains("BKF")) {
-                    suffix = " Back Files";
+                    suffix = "Back Files";
                     assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
                 } else if (pmxSourceReference.contains("RPR")) {
-                    suffix = " Reprints";
+                    suffix = "Reprints";
                     assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
                 } else if (pmxSourceReference.contains("OOA")) {
-                    suffix = " Purchase";
+                    suffix = "Purchase";
                     assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(i).getPRODUCT_NAME() + " " + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
 
                 } else if (pmxSourceReference.contains("OAA")) {
-                    suffix = " Article Publication Charge";
+                    suffix = "Article Publication Charge";
                     String name = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_TITLE();
                     if (name.contains("(Print)")) {
                         assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
@@ -738,7 +738,7 @@ public class ProductDataMappingCheck {
                         assertEquals(name + suffix, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPRODUCT_NAME());
                     }
                 } else if (pmxSourceReference.contains("JAS")) {
-                    suffix = " Author Charges";
+                    suffix = "Author Charges";
                     String name = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_TITLE();
 
                     if (name.contains("(Print)")) {

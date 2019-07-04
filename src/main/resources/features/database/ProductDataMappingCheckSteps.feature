@@ -22,8 +22,8 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
     And Compare the records in EPH STG and EPH STG DQ for <type> with <open_access> and <author_charges>
     Examples:
       | countOfRandomIds | type    |
-      | 10               | book    |
-      | 10               | package |
+      | 50               | book    |
+      | 50               | package |
 
 
   @Regression @WP
@@ -34,13 +34,13 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
     And Depends on the flags of every record from Staging check if we have the expected number of records in EPH STG DQ
     And Compare the records in EPH STG and EPH STG DQ for <type> with <open_access> and <author_charges>
     Examples:
-      | countOfRandomIds | type                            | open_access | author_charges  |
-     # | 10               | print_journal                   | N           |       Y         |
-       | 20               | print_journal                   | N           |       N         |
-       | 20               | print_journal                   | Y           |       Y         |
-#      | 10               | electronic_journal              | N           |       Y         |
-       | 20               | electronic_journal              | N           |       N         |
-       | 20               | electronic_journal              | Y           |       Y         |
+      | countOfRandomIds | type               | open_access | author_charges |
+      | 10               | print_journal      | N           | Y              |
+      | 20               | print_journal      | N           | N              |
+      | 20               | print_journal      | Y           | Y              |
+      | 10               | electronic_journal | N           | Y              |
+      | 20               | electronic_journal | N           | N              |
+      | 20               | electronic_journal | Y           | Y              |
 #      | 10              | non_print_or_electronic_journal  | N           |  ##covered from packages scenario
 
 
@@ -55,8 +55,8 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
     And We get the data from EPH GD for <type>
     And Compare the products data between EPH SA and EPH GD for <type>
     Examples:
-      | countOfRandomIds | type |
-      | 10               | book |
+      | countOfRandomIds | type    |
+      | 10               | book    |
       | 10               | package |
 
   @Regression @WP
@@ -71,13 +71,13 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
     And Compare the products data between EPH SA and EPH GD for <type>
 
     Examples:
-      | countOfRandomIds | type                            | open_access | author_charges  |
-#     | 10               | print_journal                   | N           |       Y         |
-      | 10               | print_journal                   | N           |       N         |
-      | 30               | print_journal                   | Y           |       Y         |
-#     | 10               | electronic_journal              | N           |       Y         |
-      | 10               | electronic_journal              | N           |       N         |
-      | 10               | electronic_journal              | Y           |       Y         |
+      | countOfRandomIds | type               | open_access | author_charges |
+      | 10               | print_journal      | N           | Y              |
+      | 10               | print_journal      | N           | N              |
+      | 30               | print_journal      | Y           | Y              |
+      | 10               | electronic_journal | N           | Y              |
+      | 10               | electronic_journal | N           | N              |
+      | 10               | electronic_journal | Y           | Y              |
 #     | 10               | non_print_or_electronic_journal | N           |  ##covered from packages scenario
 
 
