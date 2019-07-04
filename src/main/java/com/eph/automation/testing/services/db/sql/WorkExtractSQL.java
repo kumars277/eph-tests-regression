@@ -395,7 +395,33 @@ public class WorkExtractSQL {
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')";
 
-    public static final String COUNT_OF_RECORDS_IN_EPH_GD_MANIFESTATION_TABLE = "select count(*) as count from semarchy_eph_mdm.gd_manifestation_identifier where f_type = '%s' and effective_end_date is null and b_batchid = (select max (b_batchid) from \n" +
+    public static final String COUNT_OF_ALL_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation_identifier\n" +
+            "where identifier is not null\n" +
+            "and effective_end_date is null\n" +
+            "and f_event = (select max (event_id) from \n" +
+            "semarchy_eph_mdm.sa_event\n" +
+            "where semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')";
+
+    public static final String COUNT_OF_RECORDS_IN_EPH_GD_MANIFESTATION_TABLE = "select count(*) as count from semarchy_eph_mdm.gd_manifestation_identifier " +
+            "where f_type = '%s'" +
+            " and effective_end_date is null and b_batchid = (select max (b_batchid) from \n" +
+            "          semarchy_eph_mdm.gd_event\n" +
+            "            where  f_event_type = 'PMX'\n" +
+            "            and workflow_id = 'talend'\n" +
+            "            AND f_event_type = 'PMX'\n" +
+            "            and f_workflow_source = 'PMX' ) ";
+
+    public static final String COUNT_OF_ALL_RECORDS_IN_EPH_GD_MANIFESTATION_TABLE = "select count(*) as count from semarchy_eph_mdm.gd_manifestation_identifier " +
+            " where effective_end_date is null and b_batchid = (select max (b_batchid) from \n" +
+            "          semarchy_eph_mdm.gd_event\n" +
+            "            where  f_event_type = 'PMX'\n" +
+            "            and workflow_id = 'talend'\n" +
+            "            AND f_event_type = 'PMX'\n" +
+            "            and f_workflow_source = 'PMX' ) ";
+
+    public static String GET_COUNT_MANIFESTATIONS_IDENTIFIERS_EPHAE = "select count(*) as count from semarchy_eph_mdm.ae_manifestation_identifier where b_batchid = (select max (b_batchid) from \n" +
             "          semarchy_eph_mdm.gd_event\n" +
             "            where  f_event_type = 'PMX'\n" +
             "            and workflow_id = 'talend'\n" +

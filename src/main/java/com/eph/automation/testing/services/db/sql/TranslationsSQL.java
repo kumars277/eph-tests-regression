@@ -71,14 +71,13 @@ public class TranslationsSQL {
             "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n";
 
-    public static String GET_GD_TRANSLATIONS_COUNT ="select count(*) as gdCount from semarchy_eph_mdm.gd_work_relationship gd\n"+
-            " where f_event =  (select max (f_event) from\n" +
-            "semarchy_eph_mdm.gd_work_relationship join \n"+
-            "semarchy_eph_mdm.gd_event on f_event = event_id\n"+
-            "where  semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n"+
-            "and semarchy_eph_mdm.gd_event.workflow_id = 'talend'\n"+
-            "AND semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n"+
-            "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )\n" ;
+    public static String GET_GD_TRANSLATIONS_COUNT =
+            "select count(*) as gdCount from semarchy_eph_mdm.gd_work_relationship \n" +
+            " where b_batchid =  (select max (b_batchid) from\n" +
+            "semarchy_eph_mdm.gd_event where  semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.gd_event.workflow_id = 'talend'\n" +
+            "AND semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )" ;
 
     public static String GET_AE_TRANSLATIONS_COUNT ="select count(distinct ae.work_relationship_id) as aeCount from semarchy_eph_mdm.ae_work_relationship ae\n" +
             "join semarchy_eph_mdm.sa_work_relationship sa on sa.work_relationship_id=ae.work_relationship_id\n" +

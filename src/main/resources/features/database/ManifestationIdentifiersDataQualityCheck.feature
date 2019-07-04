@@ -23,6 +23,15 @@ Feature: Entity - Manifestation Identifier - Count & Data Mapping Check - Valida
       | ISSN       |
 
   @Regression
+  Scenario: Verify sum of counts of manifestations in EPH GD and EPH AE is equal to count of manifestation idenfintifiers in EPH SA
+    Given We get the count of records with <identifier> in SA_MANIFESTATION_IDENTIFIER
+    Given Get the count of records for manifestation identifiers in EPH AE
+    When We get the count of records with <identifier> in GD_MANIFESTATION_IDENTIFIER
+    Then Verify sum of records for manifestation identifiers in EPH GD and EPH AE is equal to number of records in EPH SA
+
+
+
+  @Regression
   Scenario Outline: Check the mapping of data between STG_PMX_MANIFESTATION and SA_MANIFESTATION_IDENTIFIER
     Given We get the manifestation ids of <numberOfRecords> random records from STG_PMX_MANIFESTATION that have <identifier> for <type>
     When We get the records from SA_MANIFESTATION_IDENTIFIER

@@ -277,7 +277,7 @@ public class WorksIdSteps {
                 Log.info("The value in STG is : " + dataFromSTG.get(0).PROJECT_NUM);
                 Log.info("The value in SA is : " + dataFromSAFtype.get(0).IDENTIFER);
                 sql = WorksIdentifierSQL.getIdentifierID
-                        .replace("PARAM1", "PROJECT-NUM")
+                        .replace("PARAM1", "PPM-PART")
                         .replace("PARAM2", "PROJECT_NUM")
                         .replace("PARAM3", dataFromSA.get(0).WORK_ID);
                 Log.info(sql);
@@ -364,12 +364,12 @@ public class WorksIdSteps {
         if (dataFromSTG.get(0).PROJECT_NUM!=null) {
             sql = WorksIdentifierSQL.getTypeIdGD
                     .replace("PARAM1", dataFromSA.get(0).WORK_ID)
-                    .replace("PARAM2", "PROJECT-NUM");
+                    .replace("PARAM2", "PPM-PART");
 
             dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
             Assert.assertEquals("The type is incorrect for id=" + dataFromSA.get(0).WORK_ID,
-                    "PROJECT-NUM", dataFromGDFtype.get(0).F_TYPE);
+                    "PPM-PART", dataFromGDFtype.get(0).F_TYPE);
 
             Assert.assertEquals("The PROJECT_NUM is incorrect for id=" + dataFromSA.get(0).WORK_ID,
                     dataFromSTG.get(0).PROJECT_NUM, dataFromGDFtype.get(0).IDENTIFER);
@@ -540,7 +540,7 @@ public class WorksIdSteps {
                     if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("ISSN-L")) {
                         Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
                                 stgNewID.get(0).ISSN_L);
-                    } else if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("PROJECT-NUM")) {
+                    } else if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("PPM-PART")) {
                         Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
                                 stgNewID.get(0).PROJECT_NUM);
                     } else if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("ELSEVIER JOURNAL NUMBER")) {
@@ -576,7 +576,7 @@ public class WorksIdSteps {
                 if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("ISSN-L")) {
                     Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
                             stgNewID.get(0).ISSN_L);
-                } else if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("PROJECT-NUM")) {
+                } else if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("PPM-PART")) {
                     Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
                             stgNewID.get(0).PROJECT_NUM);
                 } else if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("ELSEVIER JOURNAL NUMBER")) {
