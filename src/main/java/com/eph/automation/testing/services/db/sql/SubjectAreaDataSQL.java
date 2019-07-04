@@ -40,9 +40,8 @@ public class SubjectAreaDataSQL {
             "and f_workflow_source = 'PMX' )";
 
     public static String SELECT_COUNT_SUBJECT_AREA_GD = "select count(*) from semarchy_eph_mdm.gd_subject_area s\n" +
-            " where s.b_batchid =  (select max (s.b_batchid) from\n" +
-            "semarchy_eph_mdm.gd_subject_area s join \n" +
-            "semarchy_eph_mdm.gd_event e on e.b_batchid = s.b_batchid\n" +
+            " where b_batchid =  (select max (b_batchid) from\n" +
+            "semarchy_eph_mdm.gd_event e\n" +
             "where  e.f_event_type = 'PMX'\n" +
             "and e.workflow_id = 'talend'\n" +
             "AND e.f_event_type = 'PMX'\n" +

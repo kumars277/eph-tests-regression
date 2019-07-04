@@ -12,12 +12,6 @@ Feature: Entity - Manifestations - Count & Data Mapping Check - Validate data be
     When We get the count of the manifestations records in EPH DQ
     Then The number of the records in EPH staging and EPH DQ is equal
 
-  @Regression
-  Scenario: Verify sum of counts of manifestations in EPH GD and EPH AE is equal to count of manifestations in EPH SA
-    Given The manifestations are transferred to EPH SA
-    Given Get the count of records for manifestations in EPH AE
-    When The manifestations are transferred to the golden data table
-    Then Verify sum of records for manifestations in EPH GD and EPH AE is equal to number of records in EPH SA
 
   @Regression
   Scenario: Verify count of manifestations records in EPH DQ and EPH SA is equal
@@ -30,6 +24,13 @@ Feature: Entity - Manifestations - Count & Data Mapping Check - Validate data be
     Given The manifestations are transferred to EPH SA
     When The manifestations are transferred to the golden data table
     Then The number of the records in EPH SA and GD_MANIFESTATION is equal
+
+  @Regression
+  Scenario: Verify sum of counts of manifestations in EPH GD and EPH AE is equal to count of manifestations in EPH SA
+    Given The manifestations are transferred to EPH SA
+    Given Get the count of records for manifestations in EPH AE
+    When The manifestations are transferred to the golden data table
+    Then Verify sum of records for manifestations in EPH GD and EPH AE is equal to number of records in EPH SA
 
   @Regression
   Scenario Outline: Verify db records for manifestations for books in PMX and EPH is equal

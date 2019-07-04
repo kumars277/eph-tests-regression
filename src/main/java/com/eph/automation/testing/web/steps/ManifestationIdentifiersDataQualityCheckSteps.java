@@ -71,7 +71,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
     @When("^We get the count of records with (.*) in SA_MANIFESTATION_IDENTIFIER$")
     public void getCountOfRecordsInEPHSA(String identifier) {
-        if(identifier == null)
+        if(identifier != null)
             sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE, identifier);
         else
             sql = WorkExtractSQL.COUNT_OF_ALL_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE;
@@ -101,7 +101,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
     @When("^We get the count of records with (.*) in GD_MANIFESTATION_IDENTIFIER$")
     public void getCountOfRecordsInEPHGD(String identifier) {
-        if(identifier == null)
+        if(identifier != null)
             sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_IN_EPH_GD_MANIFESTATION_TABLE, identifier);
         else
             sql = WorkExtractSQL.COUNT_OF_ALL_RECORDS_IN_EPH_GD_MANIFESTATION_TABLE;
