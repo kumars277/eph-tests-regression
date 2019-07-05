@@ -48,8 +48,8 @@ public class WorksIdSteps {
 
     @Given("^We have a work from type (.*) to check$")
     public void getProductNum(String type){
-        if (System.getProperty("LOAD") != null) {
-            if(System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+
+            if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
                 sql = WorksIdentifierSQL.getRandomProductNum
                         .replace("PARAM1", type);
 
@@ -67,20 +67,20 @@ public class WorksIdSteps {
                         .replace("PARAM1", type)
                         .replace("PARAM2", refreshDate.get(1).refresh_timestamp);*/
             }
-        }else {
-            sql = WorksIdentifierSQL.getRandomProductNum
-                    .replace("PARAM1", type);
-
-            data = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-            System.out.print(sql);
-            dataQualityContext.productIdFromStg = data.get(0).random_value;
-            Log.info("\n The product number is " + dataQualityContext.productIdFromStg);
-        }
+//        }else {
+//            sql = WorksIdentifierSQL.getRandomProductNum
+//                    .replace("PARAM1", type);
+//
+//            data = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+//            System.out.print(sql);
+//            dataQualityContext.productIdFromStg = data.get(0).random_value;
+//            Log.info("\n The product number is " + dataQualityContext.productIdFromStg);
+//        }
     }
 
     @When("^We get the data from Staging, SA and Work Identifiers")
     public void getIdentifiers(){
-        if(System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
+        if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
             sql = WorksIdentifierSQL.getIdentifiers
                 .replace("PARAM1", dataQualityContext.productIdFromStg);
         dataFromSTG = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
@@ -106,7 +106,7 @@ public class WorksIdSteps {
 
     @Then("^All of the identifiers are stored")
     public void checkIdCount(){
-        if(System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
+        if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
         ArrayList<String> dataFromSTGCount = new ArrayList<String>();
 
         if (dataFromSTG.get(0).JOURNAL_NUMBER!=null){
@@ -136,7 +136,7 @@ public class WorksIdSteps {
 
     @And("^The identifiers data is correct$")
     public void checkIdData(){
-        if(System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+        if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
             Assert.assertTrue("Load ID is empty!", dataFromSAId.get(0).B_LOADID != null);
 
             Assert.assertTrue("F_EVENT is empty!", dataFromSAId.get(0).F_EVENT != null);
@@ -260,12 +260,12 @@ public class WorksIdSteps {
             if (dataFromSTG.get(0).PROJECT_NUM != null) {
                 sql = WorksIdentifierSQL.getTypeId
                         .replace("PARAM1", dataFromSA.get(0).WORK_ID)
-                        .replace("PARAM2", "PROJECT-NUM");
+                        .replace("PARAM2", "PPM-PART");
 
                 dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
                 Assert.assertEquals("The type is incorrect for id=" + dataQualityContext.productIdFromStg,
-                        "PROJECT-NUM", dataFromSAFtype.get(0).F_TYPE);
+                        "PPM-PART", dataFromSAFtype.get(0).F_TYPE);
 
                 Assert.assertEquals("The PROJECT_NUM is incorrect for id=" + dataQualityContext.productIdFromStg,
                         dataFromSTG.get(0).PROJECT_NUM, dataFromSAFtype.get(0).IDENTIFER);
@@ -289,7 +289,7 @@ public class WorksIdSteps {
 
     @And("^The identifiers data between SA and GD is identical$")
     public void checkIdDataSAGD(){
-        if(System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
+        if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
             Assert.assertEquals("There are missing identifiers", dataFromGDId.size(),dataFromSAId.size());
 
         assertTrue("Expecting the Product details from PMX and EPH Consistent ",
@@ -377,8 +377,8 @@ public class WorksIdSteps {
 
     @Given("^We know the work identifiers count in staging from column (.*) and (.*)$")
     public void getSTGCount(String column, String type){
-        if (System.getProperty("LOAD") != null) {
-            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+//
+            if ((System.getProperty("LOAD") == null) || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
                 sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE
                         .replace("PARAM1", column);
                 System.out.print(sql);
@@ -397,25 +397,25 @@ public class WorksIdSteps {
                 stgCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
                 Log.info("\n The count in stg for " + column + " is " + stgCount.get(0).count);
             }
-        }else{/*
-            sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE
-                    .replace("PARAM1", column);
-            System.out.print(sql);
-            stgCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-            Log.info("\n The count in stg for " + column + " is " + stgCount.get(0).count);*/
+//        }else{
+//            sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE
+//                    .replace("PARAM1", column);
+//            System.out.print(sql);
+//            stgCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+//            Log.info("\n The count in stg for " + column + " is " + stgCount.get(0).count);
 
-            sql = WorkCountSQL.GET_REFRESH_DATE;
-            refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                    Constants.EPH_URL);
-
-            sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA
-                    .replace("PARAM1", column)
-                    .replace("PARAM2",refreshDate.get(1).refresh_timestamp)
-                    .replace("PARAM3",type);
-            System.out.print(sql);
-            stgCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-            Log.info("\n The count in stg for " + column + " is " + stgCount.get(0).count);
-        }
+//            sql = WorkCountSQL.GET_REFRESH_DATE;
+//            refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+//                    Constants.EPH_URL);
+//
+//            sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA
+//                    .replace("PARAM1", column)
+//                    .replace("PARAM2",refreshDate.get(1).refresh_timestamp)
+//                    .replace("PARAM3",type);
+//            System.out.print(sql);
+//            stgCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+//            Log.info("\n The count in stg for " + column + " is " + stgCount.get(0).count);
+//        }
     }
 
     @When("^We get the work identifier count from SA and GD (.*)$")
@@ -457,8 +457,7 @@ public class WorksIdSteps {
             numberOfRecords = "5";
         }
         Log.info("numberOfRecords = " + numberOfRecords);
-        if (System.getProperty("LOAD") != null) {
-            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            if ((System.getProperty("LOAD") == null) || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
                 Log.info("There is no delta load performed");
             } else {
                 sql = WorksIdentifierSQL.getEndDatedIdentifierDataFromGD.replace("PARAM1",numberOfRecords);
@@ -473,27 +472,26 @@ public class WorksIdSteps {
                     Log.info("There are "+workid.size()+" updated identifiers");
                 }
             }
-        }else{
-            sql = WorksIdentifierSQL.getEndDatedIdentifierDataFromGD.replace("PARAM1",numberOfRecords);
-            Log.info(sql);
-            List<Map<?, ?>> randomWorkID = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-
-            workid = randomWorkID.stream().map(m -> (String) m.get("F_WWORK")).collect(Collectors.toList());
-            Log.info(workid.toString());
-            if (workid.isEmpty()){
-                Log.info("No identifiers were updated");
-            } else {
-                Log.info("There are "+workid.size()+" updated identifiers");
-            }
-                //Log.info("There is no delta load performed");
-            }
+//        }else{
+//            sql = WorksIdentifierSQL.getEndDatedIdentifierDataFromGD.replace("PARAM1",numberOfRecords);
+//            Log.info(sql);
+//            List<Map<?, ?>> randomWorkID = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+//
+//            workid = randomWorkID.stream().map(m -> (String) m.get("F_WWORK")).collect(Collectors.toList());
+//            Log.info(workid.toString());
+//            if (workid.isEmpty()){
+//                Log.info("No identifiers were updated");
+//            } else {
+//                Log.info("There are "+workid.size()+" updated identifiers");
+//            }
+//                //Log.info("There is no delta load performed");
+//            }
     }
 
 
     @When("^We get the data for the identifier from staging$")
     public void getNewStgData(){
-        if (System.getProperty("LOAD") != null) {
-            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
                 Log.info("There is no delta load performed");
             } else {
                 if (workid.isEmpty()) {
@@ -503,21 +501,21 @@ public class WorksIdSteps {
                 }
             }
 
-        }else {
-            Log.info("There is no delta load performed");
-        }
+//        }else {
+//            Log.info("There is no delta load performed");
+//        }
     }
 
     @Then("^There is a change to the work identifier$")
-    public void compareNewId(){
-        if (System.getProperty("LOAD") != null) {
-        if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+    public void compareNewId() {
+
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
             Log.info("There is no delta load performed");
         } else {
-            if (workid.isEmpty()){
+            if (workid.isEmpty()) {
                 Log.info("No identifiers were updated");
             } else {
-                for (int i=0;i<workid.size();i++) {
+                for (int i = 0; i < workid.size(); i++) {
                     sql = WorksIdentifierSQL.getPmxSourceRef.replace("PARAM1", workid.get(i));
                     Log.info(sql);
                     pmxSource = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
@@ -552,42 +550,42 @@ public class WorksIdSteps {
                 }
             }
         }
-    }else{
-            for (int i=0;i<workid.size();i++) {
-                sql = WorksIdentifierSQL.getPmxSourceRef.replace("PARAM1", workid.get(i));
-                Log.info(sql);
-                pmxSource = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                        Constants.EPH_URL);
-
-                sql = WorksIdentifierSQL.getIdentifiersDelta.replace("PARAM1", pmxSource.get(0).WORK_ID);
-                Log.info(sql);
-                stgNewID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                        Constants.EPH_URL);
-
-                sql = String.format(WorksIdentifierSQL.getEndDatedIdentifierData.replace("PARAM1", workid.get(i)));
-                Log.info(sql);
-                endDatedID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                        Constants.EPH_URL);
-
-                if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("ISSN-L")) {
-                    Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
-                            stgNewID.get(0).ISSN_L);
-                } else if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("PPM-PART")) {
-                    Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
-                            stgNewID.get(0).PROJECT_NUM);
-                } else if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("ELSEVIER JOURNAL NUMBER")) {
-                    Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
-                            stgNewID.get(0).JOURNAL_NUMBER);
-                } else if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("JOURNAL ACRONYM")) {
-                    Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
-                            stgNewID.get(0).JOURNAL_ACRONYM);
-                } else {
-                    Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
-                            stgNewID.get(0).DAC_KEY);
-                }
-            }
-        Log.info("There is no delta load performed");
-    }
+//    }else{
+//            for (int i=0;i<workid.size();i++) {
+//                sql = WorksIdentifierSQL.getPmxSourceRef.replace("PARAM1", workid.get(i));
+//                Log.info(sql);
+//                pmxSource = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+//                        Constants.EPH_URL);
+//
+//                sql = WorksIdentifierSQL.getIdentifiersDelta.replace("PARAM1", pmxSource.get(0).WORK_ID);
+//                Log.info(sql);
+//                stgNewID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+//                        Constants.EPH_URL);
+//
+//                sql = String.format(WorksIdentifierSQL.getEndDatedIdentifierData.replace("PARAM1", workid.get(i)));
+//                Log.info(sql);
+//                endDatedID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+//                        Constants.EPH_URL);
+//
+//                if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("ISSN-L")) {
+//                    Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
+//                            stgNewID.get(0).ISSN_L);
+//                } else if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("PPM-PART")) {
+//                    Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
+//                            stgNewID.get(0).PROJECT_NUM);
+//                } else if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("ELSEVIER JOURNAL NUMBER")) {
+//                    Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
+//                            stgNewID.get(0).JOURNAL_NUMBER);
+//                } else if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("JOURNAL ACRONYM")) {
+//                    Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
+//                            stgNewID.get(0).JOURNAL_ACRONYM);
+//                } else {
+//                    Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
+//                            stgNewID.get(0).DAC_KEY);
+//                }
+//            }
+//        Log.info("There is no delta load performed");
+//    }
     }
 
 }
