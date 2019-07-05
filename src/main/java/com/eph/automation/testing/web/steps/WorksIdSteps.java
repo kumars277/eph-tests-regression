@@ -509,7 +509,7 @@ public class WorksIdSteps {
     @Then("^There is a change to the work identifier$")
     public void compareNewId() {
 
-        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no delta load performed");
         } else {
             if (workid.isEmpty()) {
