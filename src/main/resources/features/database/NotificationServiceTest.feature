@@ -29,15 +29,15 @@ Feature: Entity - Notifications - Validate a notification is created for every c
 
       Examples:
        | type                     |
-       #| work                     |
+       | work                     |
        | product                  |
-#       | manifestation            |
-#       | work_identifier          |
-#       | manifestation_identifier |
-#       | translation              |
-#       | person_role              |
-#       | mirror                   |
-#       | financial_attribute      |
+       | manifestation            |
+       | work_identifier          |
+       | manifestation_identifier |
+       | translation              |
+       | person_role              |
+       | mirror                   |
+       | financial_attribute      |
 
       ######## Negative Tests
   @Regression
