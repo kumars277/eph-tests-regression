@@ -19,7 +19,10 @@ public class SubjectAreaDataSQL {
     public static String SELECT_COUNT_SUBJECT_AREA_STG = "select count(*) as count from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_SUBJECT_AREA";
 
     public static String SELECT_COUNT_SUBJECT_AREA_STG_Delta = "select count(*) as count from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_SUBJECT_AREA\n"+
-            "where TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')";
+//            "where TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')";
+            "where TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
+
+
 
 //  old  public static String SELECT_COUNT_SUBJECT_AREA_SA = "select count(*) from semarchy_eph_mdm.sa_subject_area s\n" +
 //            " where s.b_loadid =  (select max (s.b_loadid) from\n" +
@@ -122,7 +125,8 @@ public class SubjectAreaDataSQL {
             "left join "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid mp on mp.source_ref = concat('SUBJ_AREA-',\"PMX_SOURCE_REF\")\n" +
             "left join semarchy_eph_mdm.SA_SUBJECT_AREA sa on mp.numeric_id = sa.subject_area_id\n" +
             "where sa.b_error_status is null\n" +
-            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')\n" +
+//            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')\n" +
+            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n" +
             "order by random()\n" +
             "limit '%s'";
 
