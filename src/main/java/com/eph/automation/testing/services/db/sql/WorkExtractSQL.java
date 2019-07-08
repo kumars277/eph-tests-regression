@@ -352,14 +352,16 @@ public class WorkExtractSQL {
             "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
             "and map1.source_ref = mdq.pmx_source_reference::text\n"+
             "and concat(map1.eph_id,'ISBN',man.\"ISBN\") = sman.external_reference\n"+
-            "and f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier \n"+
-            "join semarchy_eph_mdm.sa_event on f_event = event_id \n"+
-            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
-            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
-            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
-            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n"+
+            "and  b_loadid = (select max(b_loadid) from \n"+
+            "          semarchy_eph_mdm.sa_event\n"+
+            "            where  f_event_type = 'PMX'\n"+
+            "            and workflow_id = 'talend'\n"+
+            "            AND f_event_type = 'PMX'\n"+
+            "            and f_workflow_source = 'PMX' )\n"+
             "and  \"ISBN\" is not null\n"+
             "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
+
+
 
     public static final String COUNT_OF_RECORDS_WITH_ISSN_IN_EPH_STG_PMX_MANIFESTATION_DELTA =
 
@@ -371,12 +373,12 @@ public class WorkExtractSQL {
                     "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
                     "and map1.source_ref = mdq.pmx_source_reference::text\n"+
                     "and concat(map1.eph_id,'ISSN',man.\"ISSN\") = sman.external_reference\n"+
-                    "and f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier \n"+
-                    "join semarchy_eph_mdm.sa_event on f_event = event_id \n"+
-                    "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
-                    "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
-                    "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
-                    "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n"+
+                    "and  b_loadid = (select max(b_loadid) from \n"+
+                    "          semarchy_eph_mdm.sa_event\n"+
+                    "            where  f_event_type = 'PMX'\n"+
+                    "            and workflow_id = 'talend'\n"+
+                    "            AND f_event_type = 'PMX'\n"+
+                    "            and f_workflow_source = 'PMX' )\n"+
                     "and  \"ISSN\" is not null\n"+
                     "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
 

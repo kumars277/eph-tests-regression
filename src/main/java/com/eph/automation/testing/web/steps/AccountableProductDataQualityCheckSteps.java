@@ -85,6 +85,10 @@ public class AccountableProductDataQualityCheckSteps {
         List<Map<String, Object>> accountableProductsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countAccountableProductsEPHSTG = ((Long) accountableProductsNumber.get(0).get("count")).intValue();
         Log.info("Count of accountable product data in EPH STG is: " + countAccountableProductsEPHSTG);
+
+//        Log.info("Assert count of records is not null");
+//
+//        assertTrue("No data found in EPH STG for product relationships", countAccountableProductsEPHSTG != 0);
     }
 
 
@@ -278,86 +282,91 @@ public class AccountableProductDataQualityCheckSteps {
     @And("^Compare the accountable product data in PMX and EPH STG$")
     public void compareAccountableProductsDataPMXAndSTG() {
         Log.info("And the accountable product data in PMX and EPH STG ..");
-        dataQualityContext.accountableProductDataObjectsFromPMX.sort(Comparator.comparing(AccountableProductDataObject::getPRODUCT_WORK_ID));
-        dataQualityContext.accountableProductDataObjectsFromSTG.sort(Comparator.comparing(AccountableProductDataObject::getPRODUCT_WORK_ID));
+        if (dataQualityContext.accountableProductDataObjectsFromSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There is no updated data for Accountable Products");
+        } else {
+            dataQualityContext.accountableProductDataObjectsFromPMX.sort(Comparator.comparing(AccountableProductDataObject::getPRODUCT_WORK_ID));
+            dataQualityContext.accountableProductDataObjectsFromSTG.sort(Comparator.comparing(AccountableProductDataObject::getPRODUCT_WORK_ID));
 
 
-        IntStream.range(0, dataQualityContext.accountableProductDataObjectsFromSTG.size()).forEach(i -> {
+            IntStream.range(0, dataQualityContext.accountableProductDataObjectsFromSTG.size()).forEach(i -> {
 
-            //PRODUCT_WORK_ID
-            Log.info("PRODUCT_WORK_ID in PMX: " + dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_WORK_ID());
-            Log.info("PRODUCT_WORK_ID in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPRODUCT_WORK_ID());
+                //PRODUCT_WORK_ID
+                Log.info("PRODUCT_WORK_ID in PMX: " + dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_WORK_ID());
+                Log.info("PRODUCT_WORK_ID in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPRODUCT_WORK_ID());
 
-            assertEquals(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_WORK_ID(),dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPRODUCT_WORK_ID());
+                assertEquals(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_WORK_ID(), dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPRODUCT_WORK_ID());
 
-            //ACC_PROD_ID
-            Log.info("ACC_PROD_ID in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_ID());
+                //ACC_PROD_ID
+                Log.info("ACC_PROD_ID in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_ID());
 
-            if(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_GROUP_TYPE_NAME().equals("Journals"))
-                assertEquals(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getWORK_ELS_PROD_ID(),dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_ID());
-            else
-                assertEquals(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getAC_ELS_PROD_ID(),dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_ID());
-
-
-            //ACC_PROD_NAME
-            Log.info("ACC_PROD_NAME in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_NAME());
+                if (dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_GROUP_TYPE_NAME().equals("Journals"))
+                    assertEquals(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getWORK_ELS_PROD_ID(), dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_ID());
+                else
+                    assertEquals(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getAC_ELS_PROD_ID(), dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_ID());
 
 
-            if(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_GROUP_TYPE_NAME().equals("Journals"))
-                assertEquals(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_WORK_TITLE(),dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_NAME());
-            else
-                assertEquals(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getACC_PROD_NAME(),dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_NAME());
+                //ACC_PROD_NAME
+                Log.info("ACC_PROD_NAME in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_NAME());
 
 
-            //PARENT_ACC_PROD
-            Log.info("PARENT_ACC_PROD in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD());
-
-            if(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_GROUP_TYPE_NAME().equals("Journals"))
-                assertEquals(dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD(),dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getACC_PROD_HIERARHY());
-            else if(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getAC_ELS_PROD_ID().equals("1000000"))
-                assertEquals("PBKSOTH",dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD());
-            else if(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getAC_ELS_PROD_ID().equals("1000001"))
-                assertEquals("PBKSTEX",dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD());
-            else if(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getAC_ELS_PROD_ID().equals("1000002"))
-                assertEquals("PBKSSER",dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD());
-            else if(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getAC_ELS_PROD_ID().equals("1000003"))
-                assertEquals("PBKSMRW",dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD());
-            else if(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getAC_ELS_PROD_ID().equals("1000004"))
-                assertEquals("PBKSREF",dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD());
-            else
-                assertTrue(dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD() == null);
+                if (dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_GROUP_TYPE_NAME().equals("Journals"))
+                    assertEquals(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_WORK_TITLE(), dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_NAME());
+                else
+                    assertEquals(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getACC_PROD_NAME(), dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getACC_PROD_NAME());
 
 
-            //PRODUCT_GROUP_TYPE_NAME
-            Log.info("PRODUCT_GROUP_TYPE_NAME in PMX: " + dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_GROUP_TYPE_NAME());
-            Log.info("PRODUCT_GROUP_TYPE_NAME in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPRODUCT_GROUP_TYPE_NAME());
+                //PARENT_ACC_PROD
+                Log.info("PARENT_ACC_PROD in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD());
 
-            assertEquals(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_WORK_ID(),dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPRODUCT_WORK_ID());
+                if (dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_GROUP_TYPE_NAME().equals("Journals"))
+                    assertEquals(dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD(), dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getACC_PROD_HIERARHY());
+                else if (dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getAC_ELS_PROD_ID().equals("1000000"))
+                    assertEquals("PBKSOTH", dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD());
+                else if (dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getAC_ELS_PROD_ID().equals("1000001"))
+                    assertEquals("PBKSTEX", dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD());
+                else if (dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getAC_ELS_PROD_ID().equals("1000002"))
+                    assertEquals("PBKSSER", dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD());
+                else if (dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getAC_ELS_PROD_ID().equals("1000003"))
+                    assertEquals("PBKSMRW", dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD());
+                else if (dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getAC_ELS_PROD_ID().equals("1000004"))
+                    assertEquals("PBKSREF", dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD());
+                else
+                    assertTrue(dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPARENT_ACC_PROD() == null);
 
 
-            //UPDATED
-            Log.info("UPDATED in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getUPDATED());
+                //PRODUCT_GROUP_TYPE_NAME
+                Log.info("PRODUCT_GROUP_TYPE_NAME in PMX: " + dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_GROUP_TYPE_NAME());
+                Log.info("PRODUCT_GROUP_TYPE_NAME in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPRODUCT_GROUP_TYPE_NAME());
+
+                assertEquals(dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_WORK_ID(), dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getPRODUCT_WORK_ID());
 
 
-            sql = String.format(AccountableProductSQL.SELЕCT_UPDATED_VALUE, dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_WORK_ID());
-            List<Map<String, Object>> updatedNumber = DBManager.getDBResultMap(sql, Constants.PMX_URL);
-            String updated = (String) updatedNumber.get(0).get("UPDATED");
+                //UPDATED
+                Log.info("UPDATED in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getUPDATED());
 
-            assertEquals(updated,dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getUPDATED());
 
-        });
+                sql = String.format(AccountableProductSQL.SELЕCT_UPDATED_VALUE, dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_WORK_ID());
+                List<Map<String, Object>> updatedNumber = DBManager.getDBResultMap(sql, Constants.PMX_URL);
+                String updated = (String) updatedNumber.get(0).get("UPDATED");
+
+                assertEquals(updated, dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getUPDATED());
+
+            });
+        }
     }
 
     @And("^Compare the accountable product data in EPH STG and EPH DQ$")
     public void compareAccountableProductsDataSTGAndDQ() {
         Log.info("And the accountable product data in STG and DQ ..");
 
-        dataQualityContext.accountableProductDataObjectsFromSTG.sort(Comparator.comparing(AccountableProductDataObject::getPRODUCT_WORK_ID));
-        dataQualityContext.accountableProductDataObjectsFromSTGDQ.sort(Comparator.comparing(AccountableProductDataObject::getPRODUCT_WORK_ID));
 
         if (dataQualityContext.accountableProductDataObjectsFromSTGDQ.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Accountable products in DQ");
         } else {
+            dataQualityContext.accountableProductDataObjectsFromSTG.sort(Comparator.comparing(AccountableProductDataObject::getPRODUCT_WORK_ID));
+            dataQualityContext.accountableProductDataObjectsFromSTGDQ.sort(Comparator.comparing(AccountableProductDataObject::getPRODUCT_WORK_ID));
+
             IntStream.range(0, dataQualityContext.accountableProductDataObjectsFromSTG.size()).forEach(i -> {
 
                 //   Log.info("Get the dq data  ..");
@@ -405,12 +414,14 @@ public class AccountableProductDataQualityCheckSteps {
     @And("^Compare the accountable product data in EPH DQ and EPH SA$")
     public void compareAccountableProductsDataDQAndSA() {
         Log.info("And the accountable product data in DQ and SA ..");
-        dataQualityContext.accountableProductDataObjectsFromSTGDQ.sort(Comparator.comparing(AccountableProductDataObject::getPMX_SOURCE_REFERENCE));
-        dataQualityContext.accountableProductDataObjectsFromSA.sort(Comparator.comparing(AccountableProductDataObject::getEXTERNAL_REFERENCE));
+
 
         if (dataQualityContext.accountableProductDataObjectsFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Accountable products in SA");
         } else {
+            dataQualityContext.accountableProductDataObjectsFromSTGDQ.sort(Comparator.comparing(AccountableProductDataObject::getPMX_SOURCE_REFERENCE));
+            dataQualityContext.accountableProductDataObjectsFromSA.sort(Comparator.comparing(AccountableProductDataObject::getEXTERNAL_REFERENCE));
+
             IntStream.range(0, dataQualityContext.accountableProductDataObjectsFromSTGDQ.size()).forEach(i -> {
 
 
@@ -445,12 +456,14 @@ public class AccountableProductDataQualityCheckSteps {
     @And("^Compare the accountable product data in EPH SA and EPH GD$")
     public void compareAccountableProductsDataSAAndGD() {
         Log.info("And the accountable product data in SA and EPH GD ..");
-        dataQualityContext.accountableProductDataObjectsFromSA.sort(Comparator.comparing(AccountableProductDataObject::getACCOUNTABLE_PRODUCT_ID));
-        dataQualityContext.accountableProductDataObjectsFromGD.sort(Comparator.comparing(AccountableProductDataObject::getACCOUNTABLE_PRODUCT_ID));
+
 
         if (dataQualityContext.accountableProductDataObjectsFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Accountable Product Data");
         } else {
+            dataQualityContext.accountableProductDataObjectsFromSA.sort(Comparator.comparing(AccountableProductDataObject::getACCOUNTABLE_PRODUCT_ID));
+            dataQualityContext.accountableProductDataObjectsFromGD.sort(Comparator.comparing(AccountableProductDataObject::getACCOUNTABLE_PRODUCT_ID));
+
             IntStream.range(0, dataQualityContext.accountableProductDataObjectsFromSA.size()).forEach(i -> {
 
                 //B_CLASSNAME

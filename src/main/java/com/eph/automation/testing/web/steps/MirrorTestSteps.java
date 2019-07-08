@@ -190,6 +190,9 @@ public class MirrorTestSteps {
 
     @And("^The mirror data between STG and SA is identical$")
     public void checkmirrorSAData(){
+        if (mirrorContext.mirrorDataFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There is no changed data for Mirrors");
+        }else{
         for (int i=0; i<mirrorContext.mirrorDataFromStg.size();i++) {
             sql=MirrorsSQL.Get_work_id.replace("PARAM1", mirrorContext.mirrorDataFromStg.get(i).PARENT_PMX_SOURCE);
             Log.info(sql);
@@ -203,9 +206,7 @@ public class MirrorTestSteps {
                     .replace("PARAM2",mirrorContext.childID.get(0).workID));
             mirrorContext.mirrorDataFromSA = DBManager.getDBResultAsBeanList(sql, MirrorsDataObject.class, Constants.EPH_URL);
 
-            if (mirrorContext.mirrorDataFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
-                    Log.info("There is no changed data for Mirrors");
-            }else{
+
                 Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + mirrorContext.workID.get(0).workID,
                     "WorkRelationship",
                     mirrorContext.mirrorDataFromSA.get(0).B_CLASSNAME);

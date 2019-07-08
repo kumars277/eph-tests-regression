@@ -179,80 +179,81 @@ public class FinancialAttributesSteps {
 
     @Then("^The data between DQ and SA is identical$")
     public void checkFinancialData(){
-        for (int i=0; i<financialAttribs.financialDataFromStg.size();i++) {
-            sql=FinAttrSQL.Get_work_id.replace("PARAM1", financialAttribs.financialDataFromStg.get(i).PMX_SOURCE_REFERENCE);
-            Log.info(sql);
-            financialAttribs.workID = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
-            fWorkID = financialAttribs.workID.get(0).workID;
-            Log.info(sql);
-            sql = String.format(FinAttrSQL.GET_SA_FinAttr_DATA.replace("PARAM1",fWorkID));
-            Log.info(sql);
-            financialAttribs.financialDataFromSA = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
-
-            if (financialAttribs.financialDataFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
-                Log.info("There is no changed data for Financial attributes");
-            }else{
-            Assert.assertEquals("The classname is incorrect for id=" + financialAttribs.id,
-                    "WorkFinancialAttributes", financialAttribs.financialDataFromSA.get(0).B_CLASSNAME);
-
-            Log.info(ids.get(i));
-            Log.info(financialAttribs.financialDataFromStg.get(i).opco);
-            Log.info(financialAttribs.financialDataFromStg.get(i).resp_centre);
-
-            if (financialAttribs.financialDataFromStg.get(i).opco != null
-                    && financialAttribs.financialDataFromStg.get(i).resp_centre != null) {
-                sql = FinAttrSQL.GET_FinnAttr_ID.replace("PARAM1", ids.get(i) +
-                        financialAttribs.financialDataFromStg.get(i).opco +
-                        financialAttribs.financialDataFromStg.get(i).resp_centre
-                );
+        if (financialAttribs.financialDataFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There is no changed data for Financial attributes");
+        }else {
+            for (int i = 0; i < financialAttribs.financialDataFromStg.size(); i++) {
+                sql = FinAttrSQL.Get_work_id.replace("PARAM1", financialAttribs.financialDataFromStg.get(i).PMX_SOURCE_REFERENCE);
                 Log.info(sql);
-                financialAttribs.financialID = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
-                if (financialAttribs.financialID.isEmpty() ) {
-                    Log.info("No financial Id found!");
-                }else {
-                    Log.info("Financial attribute in dq is: " + financialAttribs.financialID.get(0).fin_attribs_id);
-                    Log.info("Financial attribute in sa is: " + financialAttribs.financialDataFromSA.get(0).fin_attribs_id);
-                    Assert.assertEquals("Expecting the financial attribute id details from STG and SA Consistent for id=" + ids.get(i),
-                            financialAttribs.financialID.get(0).fin_attribs_id
-                                    ,(financialAttribs.financialDataFromSA.get(0).fin_attribs_id));
+                financialAttribs.workID = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+                fWorkID = financialAttribs.workID.get(0).workID;
+                Log.info(sql);
+                sql = String.format(FinAttrSQL.GET_SA_FinAttr_DATA.replace("PARAM1", fWorkID));
+                Log.info(sql);
+                financialAttribs.financialDataFromSA = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+
+
+                Assert.assertEquals("The classname is incorrect for id=" + financialAttribs.id,
+                        "WorkFinancialAttributes", financialAttribs.financialDataFromSA.get(0).B_CLASSNAME);
+
+                Log.info(ids.get(i));
+                Log.info(financialAttribs.financialDataFromStg.get(i).opco);
+                Log.info(financialAttribs.financialDataFromStg.get(i).resp_centre);
+
+                if (financialAttribs.financialDataFromStg.get(i).opco != null
+                        && financialAttribs.financialDataFromStg.get(i).resp_centre != null) {
+                    sql = FinAttrSQL.GET_FinnAttr_ID.replace("PARAM1", ids.get(i) +
+                            financialAttribs.financialDataFromStg.get(i).opco +
+                            financialAttribs.financialDataFromStg.get(i).resp_centre
+                    );
+                    Log.info(sql);
+                    financialAttribs.financialID = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+                    if (financialAttribs.financialID.isEmpty()) {
+                        Log.info("No financial Id found!");
+                    } else {
+                        Log.info("Financial attribute in dq is: " + financialAttribs.financialID.get(0).fin_attribs_id);
+                        Log.info("Financial attribute in sa is: " + financialAttribs.financialDataFromSA.get(0).fin_attribs_id);
+                        Assert.assertEquals("Expecting the financial attribute id details from STG and SA Consistent for id=" + ids.get(i),
+                                financialAttribs.financialID.get(0).fin_attribs_id
+                                , (financialAttribs.financialDataFromSA.get(0).fin_attribs_id));
+                    }
+                }
+
+                if (financialAttribs.financialDataFromStg.get(i).opco != null
+                        || financialAttribs.financialDataFromSA.get(0).gl_company != null) {
+                    Log.info(financialAttribs.financialDataFromStg.get(i).opco);
+                    Log.info(financialAttribs.financialDataFromSA.get(0).gl_company);
+                    assertTrue("Expecting the OPCO details from STG and SA Consistent for id=" + ids.get(i),
+                            financialAttribs.financialDataFromStg.get(i).opco
+                                    .equals(financialAttribs.financialDataFromSA.get(0).gl_company));
+                }
+
+                if (financialAttribs.financialDataFromStg.get(i).resp_centre != null
+                        || financialAttribs.financialDataFromSA.get(0).cost_resp_centre != null) {
+                    Log.info(financialAttribs.financialDataFromStg.get(i).resp_centre);
+                    Log.info(financialAttribs.financialDataFromSA.get(0).cost_resp_centre);
+                    assertTrue("Expecting the cost resp centre details from STG and SA Consistent for id=" + ids.get(i),
+                            financialAttribs.financialDataFromStg.get(i).resp_centre
+                                    .equals(financialAttribs.financialDataFromSA.get(0).cost_resp_centre));
+                }
+
+                if (financialAttribs.financialDataFromStg.get(i).resp_centre != null
+                        || financialAttribs.financialDataFromSA.get(0).revenue_resp_centre != null) {
+                    assertTrue("Expecting the revenue resp centre details from STG and SA Consistent for id=" + ids.get(i),
+                            financialAttribs.financialDataFromStg.get(i).resp_centre
+                                    .equals(financialAttribs.financialDataFromSA.get(0).revenue_resp_centre));
+                }
+
+                if (financialAttribs.financialDataFromStg.get(i).getPMX_SOURCE_REFERENCE() != null
+                        || financialAttribs.financialDataFromSA.get(0).external_reference != null) {
+                    assertEquals("Expecting the revenue resp centre details from STG and SA Consistent for id=" + ids.get(i),
+                            financialAttribs.financialDataFromStg.get(i).getPMX_SOURCE_REFERENCE() +
+                                    financialAttribs.financialDataFromStg.get(i).opco +
+                                    financialAttribs.financialDataFromStg.get(i).resp_centre,
+                            financialAttribs.financialDataFromSA.get(0).external_reference);
                 }
             }
-
-            if (financialAttribs.financialDataFromStg.get(i).opco != null
-                    || financialAttribs.financialDataFromSA.get(0).gl_company != null) {
-                Log.info(financialAttribs.financialDataFromStg.get(i).opco);
-                Log.info(financialAttribs.financialDataFromSA.get(0).gl_company);
-                assertTrue("Expecting the OPCO details from STG and SA Consistent for id=" + ids.get(i),
-                        financialAttribs.financialDataFromStg.get(i).opco
-                                .equals(financialAttribs.financialDataFromSA.get(0).gl_company));
-            }
-
-            if (financialAttribs.financialDataFromStg.get(i).resp_centre != null
-                    || financialAttribs.financialDataFromSA.get(0).cost_resp_centre != null) {
-                Log.info(financialAttribs.financialDataFromStg.get(i).resp_centre);
-                Log.info(financialAttribs.financialDataFromSA.get(0).cost_resp_centre );
-                assertTrue("Expecting the cost resp centre details from STG and SA Consistent for id=" + ids.get(i),
-                        financialAttribs.financialDataFromStg.get(i).resp_centre
-                                .equals(financialAttribs.financialDataFromSA.get(0).cost_resp_centre));
-            }
-
-            if (financialAttribs.financialDataFromStg.get(i).resp_centre != null
-                    || financialAttribs.financialDataFromSA.get(0).revenue_resp_centre != null) {
-                assertTrue("Expecting the revenue resp centre details from STG and SA Consistent for id=" + ids.get(i),
-                        financialAttribs.financialDataFromStg.get(i).resp_centre
-                                .equals(financialAttribs.financialDataFromSA.get(0).revenue_resp_centre));
-            }
-
-            if (financialAttribs.financialDataFromStg.get(i).getPMX_SOURCE_REFERENCE() != null
-                    || financialAttribs.financialDataFromSA.get(0).external_reference != null) {
-                assertEquals("Expecting the revenue resp centre details from STG and SA Consistent for id=" + ids.get(i),
-                        financialAttribs.financialDataFromStg.get(i).getPMX_SOURCE_REFERENCE()+
-                                financialAttribs.financialDataFromStg.get(i).opco+
-                                financialAttribs.financialDataFromStg.get(i).resp_centre,
-                        financialAttribs.financialDataFromSA.get(0).external_reference);
-            }
         }
-    }
     }
 
     @And("^The data between SA and GD is identical$")
