@@ -105,7 +105,8 @@ public class PersonWorkRoleDataSQL {
             "    (select distinct external_reference, work_person_role_id from semarchy_eph_mdm.sa_work_person_role) a\n" +
             "    on STG_10_PMX_WORK_PERSON_ROLE.\"WORK_PERSON_ROLE_SOURCE_REF\" = a.external_reference\n" +
             "where perd.dq_err != 'Y' and word.dq_err != 'Y'\n" +
-            " and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')\n" ;
+//            " and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')\n" ;
+            " and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n" ;
 
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHAE = "select count(distinct ae.work_person_role_id) as count from semarchy_eph_mdm.ae_work_person_role ae\n" +
@@ -361,7 +362,8 @@ public class PersonWorkRoleDataSQL {
             "and b_error_status is null) a\n" +
             "    on STG_10_PMX_WORK_PERSON_ROLE.\"WORK_PERSON_ROLE_SOURCE_REF\" = a.external_reference\n" +
             "where perd.dq_err != 'Y' and word.dq_err != 'Y' and \"F_ROLE\" = '%s'\n" +
-            " and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')\n" +
+//            " and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')\n" +
+            " and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n" +
             "order by random() limit '%s' ";
 
 

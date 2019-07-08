@@ -19,7 +19,8 @@ public class PersonDataSQL {
     public static String GET_COUNT_PERSONS_EPHSTG = "select distinct count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person";
 
     public static String GET_COUNT_PERSONS_EPHSTG_DELTA = "select distinct count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person\n" +
-            "where TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
+//            "where TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')";
+            "where TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
 
 
     public static String GET_COUNT_PERSONS_EPHDQ = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq";

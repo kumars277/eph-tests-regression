@@ -80,9 +80,9 @@ public class AccountableProductSQL {
                     "          semarchy_eph_mdm.gd_event\n"+
                     "            where  f_event_type = 'PMX'\n"+
                     "            and workflow_id = 'talend'\n"+
-                    "            AND f_event_type = 'PMX'\n"+
                     "            and f_workflow_source = 'PMX' )\n"+
-                    "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
+//                    "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')";
+                    "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
 
     /*
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ = "select count(distinct s.\"PRODUCT_WORK_ID\" ) as count \n" +
@@ -148,7 +148,6 @@ public class AccountableProductSQL {
             "          semarchy_eph_mdm.gd_event\n" +
             "            where  f_event_type = 'PMX'\n" +
             "            and workflow_id = 'talend'\n" +
-            "            AND f_event_type = 'PMX'\n" +
             "            and f_workflow_source = 'PMX')";
 
     public static String SELECT_DATA_ACCOUNTABLE_PRODUCT_PMX = "SELECT\n" +
@@ -240,7 +239,6 @@ public class AccountableProductSQL {
             "          semarchy_eph_mdm.gd_event\n" +
             "            where  f_event_type = 'PMX'\n" +
             "            and workflow_id = 'talend'\n" +
-            "            AND f_event_type = 'PMX'\n" +
             "            and f_workflow_source = 'PMX' )\n" +
             "order by random() \n" +
             "limit '%s'";
@@ -259,7 +257,6 @@ public class AccountableProductSQL {
             "          semarchy_eph_mdm.sa_event\n" +
             "            where  f_event_type = 'PMX'\n" +
             "            and workflow_id = 'talend'\n" +
-            "            AND f_event_type = 'PMX'\n" +
             "            and f_workflow_source = 'PMX' ) and sa.b_error_status is null) SA on sdq.pmx_source_reference = sa.external_reference\n" +
             "order by random() limit '%s';\n";
 
