@@ -274,12 +274,13 @@ public class SubjectAreaDataQualityCheckSteps {
     @And("^Compare the subject area data in EPH STG and EPH SA$")
     public void compareSubjectAreaDataEPHSTGAndEPHSA() {
         Log.info("And compare the subject area data in EPH STG and EPH SA..");
-        dataQualityContext.subjectAreaDataObjectsFromSTG.sort(Comparator.comparing(SubjectAreaDataObject::getSUBJECT_AREA_CODE));
-        dataQualityContext.subjectAreaDataObjectsFromSA.sort(Comparator.comparing(SubjectAreaDataObject::getSUBJECT_AREA_CODE));
-
         if (dataQualityContext.subjectAreaDataObjectsFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There are no records found for Subject Area ");
         } else {
+        dataQualityContext.subjectAreaDataObjectsFromSTG.sort(Comparator.comparing(SubjectAreaDataObject::getSUBJECT_AREA_CODE));
+        dataQualityContext.subjectAreaDataObjectsFromSA.sort(Comparator.comparing(SubjectAreaDataObject::getSUBJECT_AREA_CODE));
+
+
             IntStream.range(0, dataQualityContext.subjectAreaDataObjectsFromSTG.size()).forEach(i -> {
 
                 //B_CLASSNAME

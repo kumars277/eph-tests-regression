@@ -72,6 +72,18 @@ public class AccountableProductSQL {
             "and sa2.workflow_id = 'talend'\n"+
             "and sa2.f_workflow_source = 'PMX') ";
 
+    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ_DELTA =
+            "select count(*) as count from  \n"+
+                    GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product s \n"+
+                    "left join semarchy_eph_mdm.gd_accountable_product g on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = g.external_reference \n"+
+                    "where b_batchid = (select max (b_batchid) from \n"+
+                    "          semarchy_eph_mdm.gd_event\n"+
+                    "            where  f_event_type = 'PMX'\n"+
+                    "            and workflow_id = 'talend'\n"+
+                    "            AND f_event_type = 'PMX'\n"+
+                    "            and f_workflow_source = 'PMX' )\n"+
+                    "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
+
     /*
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ = "select count(distinct s.\"PRODUCT_WORK_ID\" ) as count \n" +
             "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_accountable_product s\n" +
@@ -97,17 +109,7 @@ public class AccountableProductSQL {
 
     //public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_DQ_GOING_TO_SA = "select count(*) as count from "+ GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product_dq where dq_err != 'Y'";
 
-    public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ_DELTA =
-            "select count(*) as count from  \n"+
-            GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product s \n"+
-            "left join semarchy_eph_mdm.gd_accountable_product g on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = g.external_reference \n"+
-            "where b_batchid = (select max (b_batchid) from \n"+
-            "          semarchy_eph_mdm.gd_event\n"+
-            "            where  f_event_type = 'PMX'\n"+
-            "            and workflow_id = 'talend'\n"+
-            "            AND f_event_type = 'PMX'\n"+
-            "            and f_workflow_source = 'PMX' )\n"+
-            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
+
 
     /*
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ_DELTA = "select count(distinct s.\"PRODUCT_WORK_ID\" ) as count \n" +
