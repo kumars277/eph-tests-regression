@@ -65,29 +65,29 @@ public class ProductDataMappingCheck {
                 default:
                     break;
             }
-//        }else {
-//            sql = WorkCountSQL.GET_REFRESH_DATE;
-//            Log.info(sql);
-//            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-//            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
-//            Log.info("refreshDate : " + refreshDate);
-//
-//            switch (type) {
-//                case "journal":
-//                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_JOURNALS_DELTA, refreshDate, numberOfRecords);
-//                    Log.info(sql);
-//                    break;
-//                case "book":
-//                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS_DELTA, refreshDate, numberOfRecords);
-//                    Log.info(sql);
-//                    break;
-//                case "package":
-//                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PACKAGES_DELTA, refreshDate, numberOfRecords);
-//                    Log.info(sql);
-//                    break;
-//                default:
-//                    break;
-//            }
+        }else {
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            Log.info(sql);
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+            Log.info("refreshDate : " + refreshDate);
+
+            switch (type) {
+                case "journal":
+                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_JOURNALS_DELTA, refreshDate, numberOfRecords);
+                    Log.info(sql);
+                    break;
+                case "book":
+                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS_DELTA, refreshDate, numberOfRecords);
+                    Log.info(sql);
+                    break;
+                case "package":
+                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PACKAGES_DELTA, refreshDate, numberOfRecords);
+                    Log.info(sql);
+                    break;
+                default:
+                    break;
+            }
         }
 
 

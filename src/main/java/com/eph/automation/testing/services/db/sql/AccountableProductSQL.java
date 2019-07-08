@@ -82,7 +82,7 @@ public class AccountableProductSQL {
                     "            and workflow_id = 'talend'\n"+
                     "            AND f_event_type = 'PMX'\n"+
                     "            and f_workflow_source = 'PMX' )\n"+
-                    "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
+                    "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')";
 
     /*
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ = "select count(distinct s.\"PRODUCT_WORK_ID\" ) as count \n" +
