@@ -78,15 +78,13 @@ public class WorkDataCheckSQL {
             "  ,f_accountable_product as f_accountable_product\n" +
             "  ,f_llanguage as LANGUAGE_CODE\n"+
             "  FROM semarchy_eph_mdm.sa_wwork sa\n"+
-            " where f_event =  (select max (f_event) from\n" +
-            "semarchy_eph_mdm.sa_wwork join \n"+
-            "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
+            "where f_event =  (select max (event_id) from\n" +
+            "semarchy_eph_mdm.sa_event\n"+
             "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
             "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n" +
-            "and b_error_status is null\n"+
-            "  AND external_reference IN ('%s')";
+            "AND external_reference IN ('%s')";
 
 
     public static String GET_EPH_GD_WORKS_DATA ="SELECT \n" +

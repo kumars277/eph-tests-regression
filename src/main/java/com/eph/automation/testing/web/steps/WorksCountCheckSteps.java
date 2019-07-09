@@ -96,8 +96,8 @@ public class WorksCountCheckSteps {
         ephWorkGD = workCountEPHGD.get(0).workCountEPHGD;
         Log.info("Works in EPH GD are: " + ephWorkGD);
 
-        if (System.getProperty("LOAD") != null) {
-            if(System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
+
+            if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
                 sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_Distinct;
             }else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
@@ -105,15 +105,15 @@ public class WorksCountCheckSteps {
                         Constants.EPH_URL);
                 sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_DELTA.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
             }
-        }else{
+//        }else{
 
 /*            sql = WorkCountSQL.GET_REFRESH_DATE;
             refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                     Constants.EPH_URL);
             sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_DELTA.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
             Log.info(sqlPMXSTGDistinct);*/
-            sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_Distinct;
-        }
+//            sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_Distinct;
+//        }
         workCountPMXSTGDistinct =DBManager.getDBResultAsBeanList(sqlPMXSTGDistinct, WorkDataObject.class,
                 Constants.EPH_URL);
         pmxSTGWorkDistinct = workCountPMXSTGDistinct.get(0).workCountPMXSTG;

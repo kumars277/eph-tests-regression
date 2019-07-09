@@ -566,10 +566,10 @@ public class WorksDataCheck {
                                 .equals(dataQualityContext.workDataObjectsFromEPH.get(i).OWNERSHIP));
             }
 
-                assertEquals("Expecting the Acc prod details from DQ and SA Consistent for id="+
-                                dataQualityContext.workDataObjectsFromEPH.get(i).PMX_SOURCE_REFERENCE,
-                        dataQualityContext.workDataObjectsFromSTGDQ.get(i).f_accountable_product
-                                ,dataQualityContext.workDataObjectsFromEPH.get(i).f_accountable_product);
+//                assertEquals("Expecting the Acc prod details from DQ and SA Consistent for id="+
+//                                dataQualityContext.workDataObjectsFromEPH.get(i).PMX_SOURCE_REFERENCE,
+//                        dataQualityContext.workDataObjectsFromSTGDQ.get(i).f_accountable_product
+//                                ,dataQualityContext.workDataObjectsFromEPH.get(i).f_accountable_product);
 
 
             if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).LANGUAGE_CODE != null
