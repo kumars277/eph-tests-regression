@@ -112,8 +112,7 @@ public class MirrorTestSteps {
         }
         Log.info("numberOfRecords = " + numberOfRecords);
 
-        if (System.getProperty("LOAD") != null) {
-            if(System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
+            if(System.getProperty("LOAD") == null ||System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
                 sql = MirrorsSQL.gettingNumberOfIds.replace("PARAM1", numberOfRecords);
             }else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
@@ -122,9 +121,9 @@ public class MirrorTestSteps {
                 sql = MirrorsSQL.gettingNumberOfIdsDelta.replace("PARAM1", numberOfRecords)
                         .replace("PARAM2",refreshDate.get(1).refresh_timestamp);
             }
-        }else {
-            sql = MirrorsSQL.gettingNumberOfIds.replace("PARAM1", numberOfRecords);
-        }
+//        }else {
+//            sql = MirrorsSQL.gettingNumberOfIds.replace("PARAM1", numberOfRecords);
+//        }
         List<Map<?, ?>> randomISBNIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         ids = randomISBNIds.stream().map(m -> (BigDecimal) m.get("random_value")).map(String::valueOf).collect(Collectors.toList());
@@ -190,7 +189,7 @@ public class MirrorTestSteps {
 
     @And("^The mirror data between STG and SA is identical$")
     public void checkmirrorSAData(){
-        if (mirrorContext.mirrorDataFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if (mirrorContext.mirrorDataFromStg.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no changed data for Mirrors");
         }else{
         for (int i=0; i<mirrorContext.mirrorDataFromStg.size();i++) {

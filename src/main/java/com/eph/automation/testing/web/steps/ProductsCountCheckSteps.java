@@ -34,8 +34,8 @@ public class ProductsCountCheckSteps {
     @When("^The products are in PMX Staging$")
     public void getStgProducts(){
 
-        if (System.getProperty("LOAD") != null) {
-            if(System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+
+            if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
                 sql = ProductCountSQL.EPH_STG_PRODUCT_Count;
                 productsCountContext.productCountStg = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
                 Log.info("\nThe number of products in Staging is: " + productsCountContext.productCountStg.get(0).stgCount);
@@ -88,9 +88,9 @@ public class ProductsCountCheckSteps {
                 refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                         Constants.EPH_URL);
 
-//                sql = ProductCountSQL.EPH_STG_PRODUCT_Count;
-//                productsCountContext.productCountStg = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
-//                Log.info("\nThe number of products in Staging is: " + productsCountContext.productCountStg.get(0).stgCount);
+                sql = ProductCountSQL.EPH_STG_PRODUCT_Count;
+                productsCountContext.productCountStgFromPMX = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
+                Log.info("\nThe number of products in Staging is: " + productsCountContext.productCountStgFromPMX.get(0).stgCount);
 
                 sql = ProductCountSQL.EPH_STG_PRODUCT_Count_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
                 Log.info(sql);
@@ -261,7 +261,7 @@ public class ProductsCountCheckSteps {
 //                            productsCountContext.productCountStgPackages.get(0).packagesCount;
 //
 //            Log.info("\nThe number of products in Staging for Canonical compare is: " + stgToCanonical);
-        }
+//        }
 
     }
 
@@ -296,7 +296,7 @@ public class ProductsCountCheckSteps {
     public void comparePMXtoEPHCount(String source, String target){
         if (source.contentEquals("PMX")) {
             Assert.assertEquals("The number of products in PMX and PMX Staging is not equal!", productsCountContext.productCountPMX.get(0).pmxCount,
-                    productsCountContext.productCountStg.get(0).stgCount);
+                    productsCountContext.productCountStgFromPMX.get(0).stgCount);
            }else if (target.contentEquals("SA")){
             Assert.assertEquals("\nThe number of products in EPH DQ and EPH SA is not equal!", productsCountContext.productCountStgCanDQ.get(0).ephCanDqCount,
                     productsCountContext.productCountEPHSA.get(0).ephSACount);
