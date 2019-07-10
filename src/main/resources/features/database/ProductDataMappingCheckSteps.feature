@@ -23,7 +23,7 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
     Examples:
       | countOfRandomIds | type    |
       | 50               | book    |
-      | 50               | package |
+#      | 50               | package |
 
 
   @Regression @WP

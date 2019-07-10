@@ -66,11 +66,11 @@ public class AccountableProductSQL {
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ =
     "select count(distinct \"PRODUCT_WORK_ID\") as count from  " + GetEPHDBUser.getDBUser() +".stg_10_pmx_accountable_product s \n"+
             "left join semarchy_eph_mdm.gd_accountable_product g on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = g.external_reference\n"+
-            "join semarchy_eph_mdm.sa_accountable_product sa on sa.external_reference = g.external_reference\n"+
-            "where b_loadid =  (\n"+
-            "select  max(b_loadid) from semarchy_eph_mdm.sa_event sa2  where sa2.f_event_type = 'PMX'\n"+
-            "and sa2.workflow_id = 'talend'\n"+
-            "and sa2.f_workflow_source = 'PMX') ";
+            "where b_batchid = (select max (b_batchid) from \n"+
+            "          semarchy_eph_mdm.gd_event\n"+
+            "            where  f_event_type = 'PMX'\n"+
+            "            and workflow_id = 'talend'\n"+
+            "            and f_workflow_source = 'PMX' )\n";
 
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ_DELTA =
             "select count(*) as count from  \n"+
@@ -81,8 +81,8 @@ public class AccountableProductSQL {
                     "            where  f_event_type = 'PMX'\n"+
                     "            and workflow_id = 'talend'\n"+
                     "            and f_workflow_source = 'PMX' )\n"+
-//                    "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')";
-                    "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
+                    "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')";
+//                    "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
 
     /*
     public static String SELECT_COUNT_ACCOUNTABLE_PRODUCT_STG_GOING_TO_DQ = "select count(distinct s.\"PRODUCT_WORK_ID\" ) as count \n" +
@@ -208,10 +208,10 @@ public class AccountableProductSQL {
             ",\"PRODUCT_WORK_ID\" as product_work_id\n" +
             "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_accountable_product s\n" +
             "left join semarchy_eph_mdm.gd_accountable_product g on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = g.external_reference\n" +
-            "and not (\n" +
-            "        coalesce(g.gl_product_segment_code,'') = s.\"ACC_PROD_ID\" and\n" +
-            "        coalesce(g.gl_product_segment_name,'') = s.\"ACC_PROD_NAME\" and\n" +
-            "        coalesce(g.f_gl_product_segment_parent,'') = s.\"PARENT_ACC_PROD\")\n" +
+//            "and not (\n" +
+//            "        coalesce(g.gl_product_segment_code,'') = s.\"ACC_PROD_ID\" and\n" +
+//            "        coalesce(g.gl_product_segment_name,'') = s.\"ACC_PROD_NAME\" and\n" +
+//            "        coalesce(g.f_gl_product_segment_parent,'') = s.\"PARENT_ACC_PROD\")\n" +
             "where concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") in ('%s')";
 
 //    public static String SELECT_DATA_ACCOUNTABLE_PRODUCT_DQ ="select \n" +
@@ -348,10 +348,10 @@ public class AccountableProductSQL {
             "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_accountable_product s\n" +
             "join "+GetEPHDBUser.getDBUser()+".STG_10_PMX_ACCOUNTABLE_PRODUCT_DQ dq on \"PRODUCT_WORK_ID\" = dq.PRODUCT_WORK_ID\n" +
             "left join semarchy_eph_mdm.gd_accountable_product g on concat(s.\"ACC_PROD_ID\",s.\"PARENT_ACC_PROD\") = g.external_reference\n" +
-            "and not (\n" +
-            "        coalesce(g.gl_product_segment_code,'') = s.\"ACC_PROD_ID\" and\n" +
-            "        coalesce(g.gl_product_segment_name,'') = s.\"ACC_PROD_NAME\" and\n" +
-            "        coalesce(g.f_gl_product_segment_parent,'') = s.\"PARENT_ACC_PROD\")\n" +
+//            "and not (\n" +
+//            "        coalesce(g.gl_product_segment_code,'') = s.\"ACC_PROD_ID\" and\n" +
+//            "        coalesce(g.gl_product_segment_name,'') = s.\"ACC_PROD_NAME\" and\n" +
+//            "        coalesce(g.f_gl_product_segment_parent,'') = s.\"PARENT_ACC_PROD\")\n" +
             "left join  (select distinct external_reference, accountable_product_id from semarchy_eph_mdm.sa_accountable_product) a on dq.pmx_source_reference = a.external_reference\n" +
             " where dq.dq_err != 'Y'\n" +
             " order by random() limit '%s'";

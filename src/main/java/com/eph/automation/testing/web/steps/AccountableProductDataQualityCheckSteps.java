@@ -243,6 +243,9 @@ public class AccountableProductDataQualityCheckSteps {
     @Then("^We get the accountable product data from EPH STG coming from PMX$")
     public void getAccountableProductsDataEPHSTGComingFromPMX() {
         Log.info("Get the accountable product data from EPH STG  ..");
+        if(ids.isEmpty())
+            sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_STG_PMX, '0');
+        else
         sql = String.format(AccountableProductSQL.SELECT_DATA_ACCOUNTABLE_PRODUCT_STG_PMX, Joiner.on("','").join(idsPMX));
         Log.info(sql);
 

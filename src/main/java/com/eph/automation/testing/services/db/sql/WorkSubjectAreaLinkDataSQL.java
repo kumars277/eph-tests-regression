@@ -51,8 +51,8 @@ public class WorkSubjectAreaLinkDataSQL {
 
     public static String SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ_Delta = "select count(*) as count from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_WORK_SUBJECT_AREA where \"F_SUBJECT_AREA\"  is not null and \n" +
             "\"F_PRODUCT_WORK\" in (select pmx_source_reference from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq where dq_err!= 'Y')\n"+
-//            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')";
-            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
+            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')";
+//            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
 
 
     public static String SELECT_COUNT_WORK_SUBJECT_AREA_GD = "select count(*) as count from semarchy_eph_mdm.gd_work_subject_area_link \n" +
@@ -140,8 +140,8 @@ public class WorkSubjectAreaLinkDataSQL {
             "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_subject_area\t\n" +
             "left join "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid mp on mp.source_ref = concat('WORK_SUBJ_AREA-',\"PRODUCT_SUBJECT_AREA_ID\")\n" +
             "left join semarchy_eph_mdm.sa_work_subject_area_link sa on sa.work_subject_area_link_id = mp.numeric_id\n" +
-//            "where sa.b_error_status is null and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')\n\n" +
-            "where sa.b_error_status is null and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n\n" +
+            "where sa.b_error_status is null and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')\n\n" +
+//            "where sa.b_error_status is null and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n\n" +
             "order by random()\n" +
             "limit '%s'";
 
