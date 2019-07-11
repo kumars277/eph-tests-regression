@@ -47,6 +47,7 @@ public class ProductDataSQL {
             "\tEND AS WORK_STATUS\n" +
             "\t,WT.WORK_TITLE\n" +
             "\t,WT.WORK_TYPE\n" +
+            "\t,WT.WORK_TYPE\n" +
             "\t,TO_CHAR(NVL(M.B_UPDDATE,M.B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED -- Manifestation last updated date as all other tables are linking or reference\n" +
             "FROM GD_PRODUCT_MANIFESTATION M\n" +
             "LEFT JOIN GD_PRODUCT_SUBSTATUS MSS ON M.F_MANIFESTATION_SUBSTATUS = MSS.PRODUCT_SUBSTATUS_ID\n" +
@@ -65,12 +66,9 @@ public class ProductDataSQL {
             "      JOIN (SELECT FMAN.F_PRODUCT_WORK, MIN(FMAN.PRODUCT_MANIFESTATION_ID) AS FIRST_MANIFESTATION\n" +
             "\t        FROM GD_PRODUCT_MANIFESTATION FMAN GROUP BY FMAN.F_PRODUCT_WORK) FIR ON MAN.F_PRODUCT_WORK = FIR.F_PRODUCT_WORK\n" +
             "      LEFT JOIN GD_PRODUCT_SUBSTATUS WSS ON W.F_WORK_SUBSTATUS = WSS.PRODUCT_SUBSTATUS_ID\n" +
-            "\t   ) WT ON WT.PRODUCT_MANIFESTATION_ID = M.PRODUCT_MANIFESTATION_ID \n" +
-            "\t   WHERE  M.PRODUCT_MANIFESTATION_ID IN ('%s')\n" +
-            "\t   order by  M.PRODUCT_MANIFESTATION_ID\n" +
-            "--\t   \n" +
-            "\t   \n" +
-            "\t  ";
+            "\t   ) WT ON WT.PRODUCT_MANIFESTATION_ID = M.PRODUCT_MANIFESTATION_ID)\n" +
+            "  WHERE  M.PRODUCT_MANIFESTATION_ID IN ('%s')\n" +
+            "\t   order by  M.PRODUCT_MANIFESTATION_ID";
 
     public static String EPH_STG_PRODUCT_EXTRACT = "SELECT\n" +
             "           \"PRODUCT_ID\" as PRODUCT_ID,\n" +
@@ -93,6 +91,7 @@ public class ProductDataSQL {
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
+            "            \"WORK_STATUS\" as WORK_STATUS,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND,\n" +
             "            \"UPDATED\" as UPDATED\n" +
             "            FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product\n" +

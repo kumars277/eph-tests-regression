@@ -168,6 +168,9 @@ public class FinancialAttributesSteps {
         sql = String.format(FinAttrSQL.GET_STG_DQ_WORKS_DATA, Joiner.on("','").join(ids));
         financialAttribs.financialDataFromStg = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
 
+        sql = String.format(FinAttrSQL.GET_SA_FinAttr_DATA, Joiner.on("','").join(workid));
+        financialAttribs.financialDataFromSA = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+
         sql = String.format(FinAttrSQL.GET_SA_FinAttr_DATA_All, Joiner.on("','").join(workid));
         financialAttribs.financialDataFromSAAll = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
 

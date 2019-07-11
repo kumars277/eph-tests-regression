@@ -27,6 +27,7 @@ public class ProductDataObject {
     private String AVAILABILITY_STATUS;
     private String WORK_TITLE;
     private String WORK_TYPE;
+    private String WORK_STATUS;
     private String ULT_WORK_REF;
     private String TAX_CODE;
     private String DQ_ERR;
@@ -39,6 +40,15 @@ public class ProductDataObject {
     private String PMX_SOURCE_REFERENCE;
     private String F_TYPE;
     private String F_STATUS;
+
+
+    public String getWORK_STATUS() {
+        return WORK_STATUS;
+    }
+
+    public void setWORK_STATUS(String WORK_STATUS) {
+        this.WORK_STATUS = WORK_STATUS;
+    }
 
     public String getUPDATED() {
         return UPDATED;

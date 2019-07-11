@@ -845,10 +845,21 @@ public class ProductDataMappingCheck {
 
 
                 //F_STATUS
+                String work_status;
+                if (type.equals("book") || type.equals("package")) {
+                    work_status = dataQualityContext.productDataObjectsFromEPHSTG.get(i).getWORK_STATUS();
+
+                } else {
+                    work_status = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_STATUS();
+
+
+                }
+                Log.info("Wprk status: " + work_status);
+
                 Log.info("F_STATUS in EPH STG DQ: " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS());
 
                 Log.info("Expecting F_STATUS in EPH STG DQ is correct");
-                if (pmxSourceReference.contains("SUB") || pmxSourceReference.contains("JBS") || pmxSourceReference.contains("OAA") || pmxSourceReference.contains("JAS") || pmxSourceReference.contains("OOA") || pmxSourceReference.contains("PKG")) {
+                if (pmxSourceReference.contains("SUB") || pmxSourceReference.contains("JBS") || pmxSourceReference.contains("OOA") ) {
                     if (availability_status.equals("PSTB"))
                         assertEquals("PST", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS());
                     else
@@ -858,6 +869,12 @@ public class ProductDataMappingCheck {
                         assertEquals("PAS", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS());
                     else
                         assertEquals(availability_status, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS());
+                } else if(pmxSourceReference.contains("OAA") ||  pmxSourceReference.contains("JAS") || pmxSourceReference.contains("PKG")) {
+                    if (work_status.equals("PSTB"))
+                        assertEquals("PST", dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS());
+                    else
+                        assertEquals(work_status, dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS());
+
                 }
 
                 //F_REVENUE_MODEL
