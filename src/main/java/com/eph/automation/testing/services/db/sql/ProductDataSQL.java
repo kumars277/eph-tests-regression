@@ -398,8 +398,8 @@ public class ProductDataSQL {
             "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product_dq dq on dq.ult_work_ref::int = stg.\"F_PRODUCT_WORK\"::int and stg.\"PRODUCT_MANIFESTATION_ID\"::int = dq.f_manifestation_source_ref::int\n"+
             "join (select distinct external_reference, b_error_status from semarchy_eph_mdm.sa_product ) sa on dq.pmx_source_reference = sa.external_reference\n"+
             " where \"SUBSCRIPTION\" = 'Y' \n"+
-            "and dq.dq_err != 'Y'   and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')\n"+
-//            "and dq.dq_err != 'Y'   and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n"+
+//            "and dq.dq_err != 'Y'   and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')\n"+
+            "and dq.dq_err != 'Y'   and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n"+
             "order by random() limit '%s'\n"+
             ") A ";
 
@@ -421,8 +421,8 @@ public class ProductDataSQL {
             "where \"SUBSCRIPTION\" = 'Y'\n" +
             "and \"F_PRODUCT_MANIFESTATION_TYP\" = '1' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = '%s' \n" +
             "and dq.dq_err != 'Y' \n" +
-            "and sa.b_error_status is null\n and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')" +
-//            "and sa.b_error_status is null\n and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')" +
+//            "and sa.b_error_status is null\n and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')" +
+            "and sa.b_error_status is null\n and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')" +
             "order by random() limit '%s') A ";
 
 
@@ -441,8 +441,8 @@ public class ProductDataSQL {
             "where \"SUBSCRIPTION\" = 'Y'\n" +
             "and \"F_PRODUCT_MANIFESTATION_TYP\" = '2' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = '%s' \n" +
             "and dq.dq_err != 'Y' \n" +
-            "and sa.b_error_status is null and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')\n\n" +
-//            "and sa.b_error_status is null and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n\n" +
+//            "and sa.b_error_status is null and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')\n\n" +
+            "and sa.b_error_status is null and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n\n" +
             "order by random() limit '%s') A ";
 
 
@@ -482,8 +482,8 @@ public class ProductDataSQL {
             "join (select distinct external_reference, b_error_status from semarchy_eph_mdm.sa_product ) sa on dq.pmx_source_reference = sa.external_reference\n" +
             "where \"PACKAGES\" = 'Y'\n" +
             "and dq.dq_err != 'Y' \n" +
-            "and sa.b_error_status is null and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')\n" +
-//            "and sa.b_error_status is null and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n" +
+//            "and sa.b_error_status is null and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')\n" +
+            "and sa.b_error_status is null and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n" +
             "order by random() limit '%s') A ";
 
     public static String SELECT_DUPLICATE_PRODUCT_IDS = "select distinct \"PRODUCT_ID\" as PRODUCT_ID from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product  where \"PRODUCT_ID\" in (select b.\"PRODUCT_ID\" from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product B ," + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product C where B.\"PRODUCT_ID\" = C.\"PRODUCT_ID\" \n" +

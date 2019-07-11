@@ -45,27 +45,27 @@ public class ProductDataMappingCheck {
     public void getRandomProductManifestationIds(String numberOfRecords, String type) {
         Log.info("Get random ids ..");
         //Get property when run with jenkins
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
-//        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-//            switch (type) {
-//                case "journal":
-//                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_JOURNALS, numberOfRecords);
-//                    Log.info(sql);
-//                    break;
-//                case "book":
-//                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS, numberOfRecords);
-//                    Log.info(sql);
-//                    break;
-//                case "package":
-//                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PACKAGES, numberOfRecords);
-//                    Log.info(sql);
-//                    break;
-//                default:
-//                    break;
-//            }
-//        }else {
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            switch (type) {
+                case "journal":
+                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_JOURNALS, numberOfRecords);
+                    Log.info(sql);
+                    break;
+                case "book":
+                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_BOOKS, numberOfRecords);
+                    Log.info(sql);
+                    break;
+                case "package":
+                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PACKAGES, numberOfRecords);
+                    Log.info(sql);
+                    break;
+                default:
+                    break;
+            }
+        }else {
             sql = WorkCountSQL.GET_REFRESH_DATE;
             Log.info(sql);
             List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -88,7 +88,7 @@ public class ProductDataMappingCheck {
                 default:
                     break;
             }
-//        }
+        }
 
 
 

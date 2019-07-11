@@ -298,8 +298,8 @@ public class PersonProductRoleDataSQL {
             "join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq p on ppr.product_source_ref  = p.pmx_source_reference\n" +
             "join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq pp on ppr.person_source_ref = pp.person_source_ref\n" +
             "where p.dq_err != 'Y' and pp.dq_err != 'Y'  and \n" +
-            "TO_TIMESTAMP(UPDATED,'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')\n" +
-//            "TO_TIMESTAMP(UPDATED,'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n" +
+//            "TO_TIMESTAMP(UPDATED,'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')\n" +
+            "TO_TIMESTAMP(UPDATED,'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n" +
             "order by random() limit '%s'";
 
     public static String GET_RANDOM_PERSON_PRODUCT_ROLE_IDS_FROM_SA = "select \n" +
