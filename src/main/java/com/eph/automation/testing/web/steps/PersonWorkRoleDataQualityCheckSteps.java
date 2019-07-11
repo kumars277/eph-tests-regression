@@ -172,7 +172,8 @@ public class PersonWorkRoleDataQualityCheckSteps {
             sql = WorkCountSQL.GET_REFRESH_DATE;
             List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
-            sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_DELTA, type, refreshDate, numberOfRecords);
+//            sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_DELTA, type, refreshDate, numberOfRecords);  -- uncomment when hardcoded value for refresh date is removed
+            sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_DELTA, type, numberOfRecords);
             Log.info(sql);
         }
 
@@ -278,12 +279,12 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
 
                 //PMX_PARTY_SOURCE_REF
-                Log.info("PMX_PARTY_SOURCE_REF in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getWORK_PERSON_ROLE_SOURCE_REF());
-                Log.info("PMX_PARTY_SOURCE_REF in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getWORK_PERSON_ROLE_SOURCE_REF());
+                Log.info("PMX_PARTY_SOURCE_REF in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getPMX_PARTY_SOURCE_REF());
+                Log.info("PMX_PARTY_SOURCE_REF in EPH STG: " + dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getPMX_PARTY_SOURCE_REF());
 
                 Log.info("Expecting PMX_PARTY_SOURCE_REF in PMX and EPH STG is consistent");
 
-                assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getWORK_PERSON_ROLE_SOURCE_REF(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getWORK_PERSON_ROLE_SOURCE_REF());
+                assertEquals(dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getPMX_PARTY_SOURCE_REF(), dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.get(i).getPMX_PARTY_SOURCE_REF());
 
                 //PMX_WORK_SOURCE_REF
                 Log.info("PMX_WORK_SOURCE_REF in PMX : " + dataQualityContext.personWorkRoleDataObjectsFromPMX.get(i).getPMX_WORK_SOURCE_REF());

@@ -37,7 +37,15 @@ public class WorkCountSQL {
 
     public static String PMX_STG_WORKS_COUNT_Distinct = "  select count(distinct \"PRODUCT_WORK_ID\") as workCountPMXSTG from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork";
 
-    public static String PMX_STG_DQ_WORKS_COUNT = "select count (*) as workCountDQSTG from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq";
+    public static String PMX_STG_DQ_WORKS_COUNT = "select count(*) from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq ww\n" +
+            "left join semarchy_eph_mdm.gd_wwork gw on ww.pmx_source_reference::varchar = gw.external_reference::varchar\n" +
+            "where b_batchid =  (select max (b_batchid) from\n" +
+            "semarchy_eph_mdm.gd_event\n" +
+            "where  semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.gd_event.workflow_id = 'talend'\n" +
+            "AND semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n" +
+            "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )\n" +
+            "and dq_err != 'Y'";
 
     public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count (*) as workCountDQSTGnoError from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq where dq_err='N'";
 
