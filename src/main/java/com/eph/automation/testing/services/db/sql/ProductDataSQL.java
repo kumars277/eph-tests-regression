@@ -66,7 +66,7 @@ public class ProductDataSQL {
             "      JOIN (SELECT FMAN.F_PRODUCT_WORK, MIN(FMAN.PRODUCT_MANIFESTATION_ID) AS FIRST_MANIFESTATION\n" +
             "\t        FROM GD_PRODUCT_MANIFESTATION FMAN GROUP BY FMAN.F_PRODUCT_WORK) FIR ON MAN.F_PRODUCT_WORK = FIR.F_PRODUCT_WORK\n" +
             "      LEFT JOIN GD_PRODUCT_SUBSTATUS WSS ON W.F_WORK_SUBSTATUS = WSS.PRODUCT_SUBSTATUS_ID\n" +
-            "\t   ) WT ON WT.PRODUCT_MANIFESTATION_ID = M.PRODUCT_MANIFESTATION_ID)\n" +
+            "\t   ) WT ON WT.PRODUCT_MANIFESTATION_ID = M.PRODUCT_MANIFESTATION_ID\n" +
             "  WHERE  M.PRODUCT_MANIFESTATION_ID IN ('%s')\n" +
             "\t   order by  M.PRODUCT_MANIFESTATION_ID";
 
@@ -160,6 +160,7 @@ public class ProductDataSQL {
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
+            "            \"WORK_STATUS\" as WORK_STATUS,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product\n" +
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" = '%s' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = '%s' ";
@@ -184,6 +185,7 @@ public class ProductDataSQL {
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
+            "            \"WORK_STATUS\" as WORK_STATUS,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product\n" +
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" not in (1,2)";
@@ -208,6 +210,7 @@ public class ProductDataSQL {
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
+            "            \"WORK_STATUS\" as WORK_STATUS,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product\n" +
             "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" = '%s' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = '%s'";
@@ -232,6 +235,7 @@ public class ProductDataSQL {
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
+            "            \"WORK_STATUS\" as WORK_STATUS,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product\n" +
             "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" = '%s' and \"OPEN_ACCESS\" = '%s' and \"AUTHOR_CHARGES\" = '%s'";
@@ -262,6 +266,7 @@ public class ProductDataSQL {
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
+            "            \"WORK_STATUS\" as WORK_STATUS,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM " + GetEPHDBUser.getDBUser()  + ".stg_10_pmx_product\n" +
             "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" NOT IN (1, 2) AND \"AUTHOR_CHARGES\" = 'Y'";
@@ -286,6 +291,7 @@ public class ProductDataSQL {
             "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
             "            \"WORK_TITLE\" as WORK_TITLE,\n" +
             "            \"WORK_TYPE\" as WORK_TYPE,\n" +
+            "            \"WORK_STATUS\" as WORK_STATUS,\n" +
             "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND\n" +
             "            FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product\n" +
             "            WHERE \"F_PRODUCT_WORK\" IN ('%s') AND \"SUBSCRIPTION\" = 'Y' AND \"F_PRODUCT_MANIFESTATION_TYP\" NOT IN (1, 2) AND \"OPEN_ACCESS\" = 'Y'";

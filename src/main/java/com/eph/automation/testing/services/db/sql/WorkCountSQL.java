@@ -37,7 +37,7 @@ public class WorkCountSQL {
 
     public static String PMX_STG_WORKS_COUNT_Distinct = "  select count(distinct \"PRODUCT_WORK_ID\") as workCountPMXSTG from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork";
 
-    public static String PMX_STG_DQ_WORKS_COUNT = "select count(*) from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq ww\n" +
+    public static String PMX_STG_DQ_WORKS_COUNT = "select count(*) as workCountDQSTG from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq ww\n" +
             "left join semarchy_eph_mdm.gd_wwork gw on ww.pmx_source_reference::varchar = gw.external_reference::varchar\n" +
             "where b_batchid =  (select max (b_batchid) from\n" +
             "semarchy_eph_mdm.gd_event\n" +
