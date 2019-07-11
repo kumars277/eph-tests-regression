@@ -848,13 +848,10 @@ public class ProductDataMappingCheck {
                 String work_status;
                 if (type.equals("book") || type.equals("package")) {
                     work_status = dataQualityContext.productDataObjectsFromEPHSTG.get(i).getWORK_STATUS();
-
                 } else {
                     work_status = dataQualityContext.productDataObjectsFromEPHSTG.get(0).getWORK_STATUS();
-
-
                 }
-                Log.info("Wprk status: " + work_status);
+                Log.info("Work status: " + work_status);
 
                 Log.info("F_STATUS in EPH STG DQ: " + dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getF_STATUS());
 
