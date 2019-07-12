@@ -34,20 +34,20 @@ public class WorkCountSQL {
 //            "where TO_TIMESTAMP(greatest(\"UPDATED\",coalesce(\"MANIFESTATION_UPDATE\",'190001010000')),'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI') ";
             "where TO_TIMESTAMP(greatest(\"UPDATED\",coalesce(\"MANIFESTATION_UPDATE\",'190001010000')),'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200 ','YYYYMMDDHH24MI') ";
 
-
     public static String PMX_STG_WORKS_COUNT_Distinct = "  select count(distinct \"PRODUCT_WORK_ID\") as workCountPMXSTG from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork";
 
     public static String PMX_STG_DQ_WORKS_COUNT = "select count(*) as workCountDQSTG from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq ww\n" +
-            "left join semarchy_eph_mdm.gd_wwork gw on ww.pmx_source_reference::varchar = gw.external_reference::varchar\n" +
-            "where b_batchid =  (select max (b_batchid) from\n" +
-            "semarchy_eph_mdm.gd_event\n" +
-            "where  semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n" +
-            "and semarchy_eph_mdm.gd_event.workflow_id = 'talend'\n" +
-            "AND semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n" +
-            "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )\n" +
-            "and dq_err != 'Y'";
+            "left join semarchy_eph_mdm.gd_wwork gw on ww.pmx_source_reference::varchar = gw.external_reference::varchar\n";
 
-    public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count (*) as workCountDQSTGnoError from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq where dq_err='N'";
+    public static String PMX_STG_DQ_WORKS_COUNT_NoErr =
+         "select count(*)  as workCountDQSTGnoError FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq ww\n"+
+        "left join semarchy_eph_mdm.gd_wwork gw on ww.pmx_source_reference::varchar = gw.external_reference::varchar\n"+
+        "left join \n"+
+        "\t(select distinct s.product_work_id, a.external_reference, a.accountable_product_id \n"+
+        "\t from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_accountable_product_dq s join (select distinct * from semarchy_eph_mdm.sa_accountable_product) a on\n"+
+        "\t s.pmx_source_reference = a.external_reference where s.dq_err != 'Y') ap on ww.pmx_source_reference::varchar = ap.product_work_id::varchar\n"+
+        "WHERE ww.dq_err != 'Y'\n"+
+        "and TO_TIMESTAMP(ww.work_updated,'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
 
     public static String EPH_SA_WORKS_COUNT = "select count (distinct external_reference) as workCountEPH from semarchy_eph_mdm.sa_wwork "+
             " where f_event =  (select max (event_id) from\n" +
