@@ -1,6 +1,6 @@
 Feature: Entity - WORK - Data Mapping Check - Validate data between PMX and EPH - Talend Load
 
-  @Regression
+  @Regression @W
   Scenario: Checking the Works data between PMX and EPH
     Given We have a number of works to check
     When We get the product data from PMX, EPH Staging and EPH

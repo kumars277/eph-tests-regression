@@ -103,6 +103,9 @@ public class WorksDataCheck {
 
     @Then("^The work data between PMX and EPH STG is identical$")
     public void checkPMXtoPMGSTGData() throws ParseException {
+        if (dataQualityContext.workDataObjectsFromPMXSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There is no updated data for Works");
+        } else {
         for (int i=0; i<dataQualityContext.workDataObjectsFromSource.size();i++) {
             Log.info(dataQualityContext.workDataObjectsFromSource.get(i).WORK_TITLE);
             assertTrue("Expecting the Work title details from PMX and PMX Staging Consistent for id=" + ids.get(i),
@@ -292,6 +295,7 @@ public class WorksDataCheck {
                         dataQualityContext.workDataObjectsFromSource.get(i).RECORD_END_DATE
                                 .equals(dataQualityContext.workDataObjectsFromPMXSTG.get(i).RECORD_END_DATE));
             }
+        }
         }
     }
     
