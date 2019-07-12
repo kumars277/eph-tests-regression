@@ -133,7 +133,7 @@ public class FinAttrSQL {
             "left join semarchy_eph_mdm.gd_work_financial_attribs wfa on wfa.f_wwork = gdw.work_id\n" +
             "where \"F_OPCO_R12\" is not null and \"F_RESPONSIBILITY_CENTRE\" is not null \n" +
 //            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('PARAM1','YYYYMMDDHH24MI')\n" +
-            "and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('PARAM1','YYYYMMDDHH24MI')\n" +
+            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n" +
             "and dq.dq_err!='Y'\n" +
             "and (wfa.f_gl_company = dq.opco and wfa.f_gl_cost_resp_centre = dq.resp_centre and wfa.f_gl_revenue_resp_centre  = dq.resp_centre) \n" +
             "and wfa.effective_end_date  is  null\n" +

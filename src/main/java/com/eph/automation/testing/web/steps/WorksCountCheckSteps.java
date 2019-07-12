@@ -105,14 +105,14 @@ public class WorksCountCheckSteps {
                         Constants.EPH_URL);
                 sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_DELTA.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
             }
-//        }else{
-
-/*            sql = WorkCountSQL.GET_REFRESH_DATE;
-            refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                    Constants.EPH_URL);
-            sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_DELTA.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
-            Log.info(sqlPMXSTGDistinct);*/
-//            sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_Distinct;
+//       }else{
+//
+//            sql = WorkCountSQL.GET_REFRESH_DATE;
+//            refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
+//                    Constants.EPH_URL);
+//            sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_DELTA.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
+//            Log.info(sqlPMXSTGDistinct);
+//           sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_Distinct;
 //        }
         workCountPMXSTGDistinct =DBManager.getDBResultAsBeanList(sqlPMXSTGDistinct, WorkDataObject.class,
                 Constants.EPH_URL);
