@@ -325,13 +325,13 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
                     sql = String.format(WorkSubjectAreaLinkDataSQL.GET_F_SUBJECT_AREA, dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(0).getF_SUBJECT_AREA());
                     Log.info(sql);
                     List<Map<String, Object>> subjectAreaObject = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                    int F_SUBJECT_AREA = ((BigDecimal) subjectAreaObject.get(0).get("F_SUBJECT_AREA")).intValue();
+                    String F_SUBJECT_AREA = subjectAreaObject.get(0).get("F_SUBJECT_AREA").toString();
 
                     //F_SUBJECT_AREA
                     Log.info("F_SUBJECT_AREA in EPH STG: " + F_SUBJECT_AREA);
                     Log.info("F_SUBJECT_AREA in SA: " + dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_SUBJECT_AREA());
 
-                    assertEquals(String.valueOf(F_SUBJECT_AREA), dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_SUBJECT_AREA());
+                    assertEquals(F_SUBJECT_AREA, dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_SUBJECT_AREA());
 
                     sql = String.format(WorkSubjectAreaLinkDataSQL.GET_F_WWORK, dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(0).getF_PRODUCT_WORK());
                     Log.info(sql);
@@ -345,8 +345,9 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
 
                     assertEquals(F_WWORK, dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getF_WWORK());
 
+                    //EXTERNAL_REFERENCE
                     assertEquals("External reference is different",
-                            dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(i).getPRODUCT_SUBJECT_AREA_ID(),
+                            dataQualityContext.workSubjectAreaDataObjectsFromSTG.get(0).getPRODUCT_SUBJECT_AREA_ID(),
                             dataQualityContext.workSubjectAreaDataObjectsFromSA.get(i).getExternal_reference());
                 });
             }
