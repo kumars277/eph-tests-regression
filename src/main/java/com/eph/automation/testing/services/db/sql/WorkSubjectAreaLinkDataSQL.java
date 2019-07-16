@@ -46,12 +46,17 @@ public class WorkSubjectAreaLinkDataSQL {
 
     public static String SELECT_COUNT_WORK_SUBJECT_AREA_STG = "select count(*) as count from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_WORK_SUBJECT_AREA ";
 
-    public static String SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ = "select count(*) as count from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_WORK_SUBJECT_AREA where \"F_SUBJECT_AREA\"  is not null and \n" +
-            "\"F_PRODUCT_WORK\" in (select pmx_source_reference from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq where dq_err!= 'Y')";
+    public static String SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ =
+    "select count(*) as count from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_WORK_SUBJECT_AREA where \"F_SUBJECT_AREA\"  is not null and \n"+
+            "\"F_PRODUCT_WORK\"::varchar in (select coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol\n" +
+            " from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s \n" +
+            "on g.external_reference = s.pmx_source_reference::varchar where dq_err != 'Y')";
 
     public static String SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ_Delta = "select count(*) as count from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_WORK_SUBJECT_AREA where \"F_SUBJECT_AREA\"  is not null and \n" +
-            "\"F_PRODUCT_WORK\" in (select pmx_source_reference from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq where dq_err!= 'Y')\n"+
-//            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')";
+            "\"F_PRODUCT_WORK\"::varchar in (select coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol\n" +
+            " from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s \n" +
+            "on g.external_reference = s.pmx_source_reference::varchar where dq_err != 'Y')\n" +
+        //            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')";
             "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
 
 
@@ -98,33 +103,31 @@ public class WorkSubjectAreaLinkDataSQL {
             "where sa.b_error_status is null " +
             "and \"PRODUCT_SUBJECT_AREA_ID\" in ('%s')\n";
 
-    public static String EXTRACT_DATA_WORK_SUBJECT_AREA_SA = "select  \n" +
+    public static String EXTRACT_DATA_WORK_SUBJECT_AREA_SA ="select  \n" +
             "B_LOADID as B_LOADID\n" +
             ",B_CLASSNAME as B_CLASSNAME\n" +
             ",WORK_SUBJECT_AREA_LINK_ID as WORK_SUBJECT_AREA_LINK_ID\n" +
             ",F_SUBJECT_AREA as F_SUBJECT_AREA\n" +
             ",F_WWORK as F_WWORK\n" +
-            ",external_reference as external_reference "+
+            ",external_reference as external_reference\n" +
             "from semarchy_eph_mdm.sa_work_subject_area_link \n" +
-            "where WORK_SUBJECT_AREA_LINK_ID in (\n" +
-            "select mp.numeric_id from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid mp \n" +
-            "left join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_subject_area on mp.source_ref = concat('WORK_SUBJ_AREA-',\"PRODUCT_SUBJECT_AREA_ID\")\n" +
-            "where  \"PRODUCT_SUBJECT_AREA_ID\" in ('%s')\n" +
-            ")\n";
+            "join " +GetEPHDBUser.getDBUser()+ ".stg_10_pmx_work_subject_area on \"PRODUCT_SUBJECT_AREA_ID\"::varchar = external_reference\n" +
+            "where  \"PRODUCT_SUBJECT_AREA_ID\" in ('%s') \n"+
+            "and b_loadid =  (select  max(b_loadid) from semarchy_eph_mdm.sa_event sa2  \n"+
+            "where sa2.f_event_type = 'PMX'\n"+
+            "and sa2.workflow_id = 'talend'\n"+
+            "and sa2.f_workflow_source = 'PMX')";
+
 
     public static String EXTRACT_DATA_WORK_SUBJECT_AREA_GD = "select  \n" +
             "B_CLASSNAME as B_CLASSNAME\n" +
             ",WORK_SUBJECT_AREA_LINK_ID as WORK_SUBJECT_AREA_LINK_ID\n" +
             ",F_SUBJECT_AREA as F_SUBJECT_AREA\n" +
             ",F_WWORK as F_WWORK\n" +
-            ",external_reference as external_reference "+
+            ",external_reference as external_reference\n" +
             "from semarchy_eph_mdm.gd_work_subject_area_link \n" +
-            "where WORK_SUBJECT_AREA_LINK_ID in (\n" +
-            "select mp.numeric_id from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid mp \n" +
-            "left join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_subject_area on mp.source_ref = concat('WORK_SUBJ_AREA-',\"PRODUCT_SUBJECT_AREA_ID\")\n" +
-            "where  \"PRODUCT_SUBJECT_AREA_ID\" in ('%s')\n" +
-            ")\n" +
-            " ";
+            "join " +GetEPHDBUser.getDBUser()+ ".stg_10_pmx_work_subject_area on \"PRODUCT_SUBJECT_AREA_ID\"::varchar = external_reference\n" +
+            "where  \"PRODUCT_SUBJECT_AREA_ID\" in ('%s')";
 
     public static String SELECT_RANDOM_IDS = "select  \n" +
         "\"PRODUCT_SUBJECT_AREA_ID\" as PRODUCT_SUBJECT_AREA_ID\n" +
@@ -148,14 +151,18 @@ public class WorkSubjectAreaLinkDataSQL {
 
     public static String SELECT_DATA_FROM_STG_FOR_CURRENT_RECORD_FROM_SA = "select \"PRODUCT_SUBJECT_AREA_ID\" as PRODUCT_SUBJECT_AREA_ID \n" +
             ",\"F_SUBJECT_AREA\" as F_SUBJECT_AREA  \n" +
-            ",\"F_PRODUCT_WORK\" as F_PRODUCT_WORK \n " +
-            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_subject_area\t\n" +
-            "left join "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid mp on mp.source_ref = concat('WORK_SUBJ_AREA-',\"PRODUCT_SUBJECT_AREA_ID\")\n" +
-            "left join semarchy_eph_mdm.sa_work_subject_area_link sa on sa.work_subject_area_link_id = mp.numeric_id\n" +
-            "where sa.work_subject_area_link_id = '%s'";
+            ",\"F_PRODUCT_WORK\" as F_PRODUCT_WORK \n" +
+            " from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_subject_area\ts\n" +
+            " join\n" +
+            "    (select distinct subject_area_id, external_reference from semarchy_eph_mdm.sa_subject_area) g on s.\"F_SUBJECT_AREA\"::varchar = g.external_reference\n" +
+            "left join\n" +
+            "    (select distinct external_reference, work_subject_area_link_id from semarchy_eph_mdm.sa_work_subject_area_link) a on s.\"PRODUCT_SUBJECT_AREA_ID\"::varchar = a.external_reference\n" +
+            "where \"F_PRODUCT_WORK\"::varchar in (select coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s on g.external_reference = s.pmx_source_reference::varchar where dq_err != 'Y')\n" +
+            "and work_subject_area_link_id = '%s'";
 
 
-    public static String GET_F_SUBJECT_AREA = "select numeric_id as F_SUBJECT_AREA from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid where source_ref = concat('SUBJ_AREA-', '%s')";
+    public static String GET_F_SUBJECT_AREA = "select subject_area_id as F_SUBJECT_AREA from semarchy_eph_mdm.sa_subject_area g\n" +
+            " join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_subject_area s on s.\"F_SUBJECT_AREA\"::varchar = g.external_reference where \"F_SUBJECT_AREA\" in ('%s')";
 
     public static String GET_F_WWORK = "select eph_id as F_WWORK from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid where ref_type = 'WORK' and source_ref = '%s'";
 
