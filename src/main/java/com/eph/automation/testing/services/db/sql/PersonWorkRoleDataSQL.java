@@ -162,7 +162,7 @@ public class PersonWorkRoleDataSQL {
             "    ,'PD' AS F_ROLE\n" +
             "    ,CURRENT_DATE AS START_DATE\n" +
             "    ,NULL AS END_DATE\n" +
-            "    ,TO_CHAR(PMG.B_UPDDATE,'YYYYMMDDHH24MI') AS UPDATED\n" +
+            "    ,TO_CHAR(greatest(W.B_CREDATE,PMG.B_UPDDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
             "FROM\n" +
             "    GD_PRODUCT_WORK W\n" +
             "JOIN\n" +

@@ -215,7 +215,6 @@ public class SubjectAreaDataQualityCheckSteps {
                 assertNotNull(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_TYPE());
                 //verify SUBJECT_AREA_TYPE
                 assertNotNull(dataQualityContext.subjectAreaDataObjectsFromSA.get(i).getSUBJECT_AREA_TYPE());
-
             });
         }
     }
