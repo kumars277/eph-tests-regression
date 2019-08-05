@@ -103,4 +103,14 @@ public class UpdateProductSQL {
             " f_event,f_gl_cost_resp_centre,f_gl_revenue_resp_centre,f_wwork)\n" +
             " VALUES ('LOADID','44444444','WorkFinancialAttributes','401'," +
             "'EVENT','10014','10014','EPR-W-TSTW01')";
+
+    public static String Insert_ProductPersonRole = "insert into semarchy_eph_mdm.sa_product_person_role (b_loadid, product_person_role_id, b_classname, f_product, f_person, f_role, f_event)\n" +
+            "values ('LOADID', '44444444', 'ProductPersonRole', 'EPR-TSTP03'  ,'666666666','PO', 'EVENT' )";
+
+    public static String Insert_prod_pack_rel = "insert into semarchy_eph_mdm.sa_product_rel_package (b_loadid, product_rel_pack_id, b_classname, f_package_owner, f_component, f_relationship_type, f_event) \n" +
+            "values ('LOADID', '44444444', 'ProductRelationshipPackage', 'EPR-TSTP03', 'EPR-TSTP02', 'CON', 'EVENT')";
+
+    public static String Insert_work_subject_area_link= "INSERT INTO semarchy_eph_mdm.sa_work_subject_area_link \n" +
+            "(b_loadid, work_subject_area_link_id, b_classname, effective_start_date, effective_end_date, f_wwork)\n" +
+            "values ('LOADID', '55555555', 'WorkSubjectAreaLink', '2017-02-10', null, 'EPR-W-TSTW01')";
 }
