@@ -38,16 +38,59 @@ public class WorkCountSQL {
 
     public static String PMX_STG_DQ_WORKS_COUNT = "select count(*) as workCountDQSTG from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq ww\n" +
             "left join semarchy_eph_mdm.gd_wwork gw on ww.pmx_source_reference::varchar = gw.external_reference::varchar\n";
+//old
+//    public static String PMX_STG_DQ_WORKS_COUNT_NoErr =
+//         "select count(*)  as workCountDQSTGnoError FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq ww\n"+
+//        "left join semarchy_eph_mdm.gd_wwork gw on ww.pmx_source_reference::varchar = gw.external_reference::varchar\n"+
+//        "left join \n"+
+//        "\t(select distinct s.product_work_id, a.external_reference, a.accountable_product_id \n"+
+//        "\t from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_accountable_product_dq s join (select distinct * from semarchy_eph_mdm.sa_accountable_product) a on\n"+
+//        "\t s.pmx_source_reference = a.external_reference where s.dq_err != 'Y') ap on ww.pmx_source_reference::varchar = ap.product_work_id::varchar\n"+
+//        "WHERE ww.dq_err != 'Y'\n";
+////        "and TO_TIMESTAMP(ww.work_updated,'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
 
-    public static String PMX_STG_DQ_WORKS_COUNT_NoErr =
-         "select count(*)  as workCountDQSTGnoError FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq ww\n"+
-        "left join semarchy_eph_mdm.gd_wwork gw on ww.pmx_source_reference::varchar = gw.external_reference::varchar\n"+
-        "left join \n"+
-        "\t(select distinct s.product_work_id, a.external_reference, a.accountable_product_id \n"+
-        "\t from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_accountable_product_dq s join (select distinct * from semarchy_eph_mdm.sa_accountable_product) a on\n"+
-        "\t s.pmx_source_reference = a.external_reference where s.dq_err != 'Y') ap on ww.pmx_source_reference::varchar = ap.product_work_id::varchar\n"+
-        "WHERE ww.dq_err != 'Y'\n"+
-        "and TO_TIMESTAMP(ww.work_updated,'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
+    public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count(*) from (\n" +
+            "select h1.external_reference, concat(h1.external_reference||coalesce(work_title,'')||coalesce(work_subtitle,'')||''||\n" +
+            "coalesce(electro_rights_indicator::varchar,'')||coalesce(volume::varchar,'')||coalesce(copyright_year::varchar,'')||coalesce(edition_number::varchar,'')||\n" +
+            "coalesce(f_type::varchar,'')||coalesce(f_status::varchar,'')||coalesce(f_accountable_product::varchar,'')||coalesce(f_pmc,'')||coalesce(f_oa_journal_type,'')||coalesce(f_imprint,'')||\n" +
+            "coalesce(f_society_ownership,'')||coalesce(language_code,'')) as string from \n" +
+            "(select\n" +
+            "distinct\n" +
+            "-- {loadid} b_loadid\n" +
+            "--,{eventid} f_event\n" +
+            "map_sourceref_2_ephid('WORK'::varchar, ww.pmx_source_reference::varchar) work_id\n" +
+            ",ww.pmx_source_reference as external_reference\n" +
+            ",'Work' b_classname\n" +
+            ",ww.work_title\n" +
+            ",ww.work_subtitle\n" +
+            ",ww.electro_rights_indicator\n" +
+            ",ww.volume\n" +
+            ",ww.copyright_year\n" +
+            ",ww.edition_number\n" +
+            ",ww.f_pmc\n" +
+            ",ww.f_oa_journal_type\n" +
+            ",ww.f_type\n" +
+            ",ww.f_status\n" +
+            ",ww.f_imprint\n" +
+            ",ww.f_society_ownership\n" +
+            ",case when coalesce(ap.accountable_product_id,gw.f_accountable_product) is null then null else \n" +
+            " coalesce(ap.accountable_product_id,gw.f_accountable_product) end as f_accountable_product\n" +
+            ",ww.language_code\n" +
+            "FROM stg_10_pmx_wwork_dq ww\n" +
+            "left join semarchy_eph_mdm.gd_wwork gw on ww.pmx_source_reference::varchar = gw.external_reference::varchar\n" +
+            "left join \n" +
+            "\t(select distinct s.product_work_id, a.external_reference, a.accountable_product_id \n" +
+            "\t from stg_10_pmx_accountable_product_dq s join (select distinct * from semarchy_eph_mdm.sa_accountable_product) a on\n" +
+            "\t s.pmx_source_reference = a.external_reference where s.dq_err != 'Y') ap on ww.pmx_source_reference::varchar = ap.product_work_id::varchar\n" +
+            "WHERE ww.dq_err != 'Y'\n" +
+            ")  as h1\n" +
+            "left join \n" +
+            "(select external_reference, concat(external_reference||coalesce(work_title,'')||coalesce(work_sub_title,'')||coalesce(work_key_title,'')||\n" +
+            "coalesce(electro_rights_indicator::varchar,'')||coalesce(volume::varchar,'')||coalesce(copyright_year::varchar,'')||coalesce(edition_number::varchar,'')||\n" +
+            "coalesce(f_type::varchar,'')||coalesce(f_status::varchar,'')||coalesce(f_accountable_product::varchar,'')||coalesce(f_pmc,'')||coalesce(f_oa_type,'')||coalesce(f_imprint,'')||\n" +
+            "coalesce(f_society_ownership,'')||coalesce(f_llanguage,'')) as string from semarchy_eph_mdm.gd_wwork ) as h2\n" +
+            "on h1.external_reference::varchar = h2.external_reference::varchar\n" +
+            "where md5(string) != md5(h2.string) ) r";
 
     public static String EPH_SA_WORKS_COUNT = "select count (distinct external_reference) as workCountEPH from semarchy_eph_mdm.sa_wwork "+
             " where f_event =  (select max (event_id) from\n" +

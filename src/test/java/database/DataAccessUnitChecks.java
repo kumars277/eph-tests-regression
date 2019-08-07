@@ -6,6 +6,7 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.configuration.LoadProperties;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.WorkDataObject;
+import com.eph.automation.testing.services.db.sql.GetEPHDBUser;
 import com.eph.automation.testing.services.db.sql.WorkExtractSQL;
 import com.eph.automation.testing.services.security.DecryptionService;
 import org.junit.Ignore;

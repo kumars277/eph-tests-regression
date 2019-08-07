@@ -150,9 +150,24 @@ public class WorkExtractSQL {
     public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_DQ_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq";
 
     public static final String COUNT_MANIFESTATIONS_IN_EPH_DQ_TO_SA =
-    "select count(*) from " + GetEPHDBUser.getDBUser() +".stg_10_pmx_manifestation_dq mdq\n"+
-            "left join " + GetEPHDBUser.getDBUser() +".stg_10_pmx_wwork_dq wdq on mdq.f_wwork = wdq.pmx_source_reference and wdq.dq_err !='Y' \n"+
-            "where mdq.dq_err != 'Y'";
+    "select count(*)  \n" +
+            "from ephsit_talend_owner.stg_10_pmx_manifestation_dq s\n" +
+            "join (select pmx_source_reference as external_reference, concat(pmx_source_reference\n" +
+            "||coalesce(manifestation_key_title,'')\n" +
+            "||coalesce(inter_edition_flag,false)\n" +
+            "||coalesce(first_pub_date,current_date)\n" +
+            "||coalesce(f_type,'')\n" +
+            "||coalesce(f_status,'')\n" +
+            "||coalesce(f_format_type,'')  \n" +
+            "--)as string\n" +
+            "||coalesce(map_sourceref_2_ephid('WORK'::varchar,f_wwork::varchar),'')) as string\n" +
+            "from ephsit_talend_owner.stg_10_pmx_manifestation_dq) h \n" +
+            "on s.pmx_source_reference::varchar = h.external_reference::varchar \n" +
+            "left join (select external_reference, concat(external_reference||coalesce(manifestation_key_title,'')||coalesce(inter_edition_flag,false)||coalesce(first_pub_date,current_date)\n" +
+            "||coalesce(f_type,'')||coalesce(f_status,'')||coalesce(f_format_type,'')||coalesce(f_wwork,'')) as string\n" +
+            "from semarchy_eph_mdm.gd_manifestation) e on h.external_reference::varchar = e.external_reference::varchar\n" +
+            "where md5(e.string) != md5(h.string)\n" +
+            "and dq_err != 'Y'  ";
 
     public static final String COUNT_MANIFESTATIONS_IN_SA_MANIFESTATION_TABLE =
            "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation sa \n" +

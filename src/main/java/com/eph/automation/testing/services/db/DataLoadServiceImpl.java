@@ -4,6 +4,7 @@ import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.configuration.LoadProperties;
+import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.LoadBatchContext;
 import com.eph.automation.testing.models.contexts.NotificationCountContext;
 import com.eph.automation.testing.services.db.sql.NegativeTestNotificationSQL;
@@ -120,7 +121,7 @@ public class DataLoadServiceImpl {
         System.out.println(saProductWorkInsertSQL);
         int updateStatus = queryRunner.update(conn, saProductWorkInsertSQL);
 
-        System.out.println(updateStatus);
+        Log.info("UpdateStatus = " + updateStatus);
 
 
 
@@ -132,9 +133,11 @@ public class DataLoadServiceImpl {
         int updateStatus;
 
         updateProduct = UpdateProductSQL.Insert_product;
+        Log.info(updateProduct);
+
 
         updateStatus = queryRunner.update(conn, updateProduct.replace("LOADID", loadID).replace("EVENT", eventID));
-        System.out.println(updateStatus);
+        Log.info("UpdateStatus = " + updateStatus);
 
     }
 
@@ -168,7 +171,8 @@ public class DataLoadServiceImpl {
             String loadID = String.valueOf(loadId);
             loadBatchContext.loadId = loadID;
 
-            System.out.println(loadID);
+            Log.info("loadID = " + loadID);
+
 
 //            //Need to gete New Event IDeventtype text, description text,
 // thirdparty text, workflowid text, workflowsource text, loadid integer)
@@ -188,7 +192,9 @@ public class DataLoadServiceImpl {
 
             loadBatchContext.eventId = eventID;
 
-            System.out.println(eventID);
+            Log.info("eventID = " + eventID);
+
+
 
             QueryRunner queryRunner = new QueryRunner();
             UpdateWork(loadID, queryRunner, conn, eventID);
@@ -199,7 +205,8 @@ public class DataLoadServiceImpl {
             statement.setString(4, "EPH Regression Test");
             statement.execute();
             batchID = String.valueOf(statement.getLong(1));
-            System.out.println(batchID);
+            Log.info("batchID = " + batchID);
+
             loadBatchContext.batchId = batchID;
             statement.close();
         } catch (SQLException exception) {
@@ -220,7 +227,9 @@ public class DataLoadServiceImpl {
         updateWork = UpdateProductSQL.Insert_work;
 
         updateStatus = queryRunner.update(conn, updateWork.replace("LOADID", loadID).replace("EVENT", eventID));
-        System.out.println(updateStatus);
+        Log.info("updateStatus = " + updateStatus);
+
+
 
     }
 
@@ -255,7 +264,8 @@ public class DataLoadServiceImpl {
             String loadID = String.valueOf(loadId);
             loadBatchContext.loadId = loadID;
 
-            System.out.println(loadID);
+            Log.info("loadID = " + loadID);
+
 
 //            //Need to gete New Event IDeventtype text, description text,
 // thirdparty text, workflowid text, workflowsource text, loadid integer)
@@ -275,7 +285,8 @@ public class DataLoadServiceImpl {
 
             loadBatchContext.eventId = eventID;
 
-            System.out.println(eventID);
+            Log.info("eventID = " + eventID);
+
 
             QueryRunner queryRunner = new QueryRunner();
             UpdateManifestation(loadID, queryRunner, conn, eventID);
@@ -286,7 +297,8 @@ public class DataLoadServiceImpl {
             statement.setString(4, "EPH Regression Test");
             statement.execute();
             batchID = String.valueOf(statement.getLong(1));
-            System.out.println(batchID);
+            Log.info("batchID = " + batchID);
+
             loadBatchContext.batchId = batchID;
             statement.close();
         } catch (SQLException exception) {
@@ -307,7 +319,8 @@ public class DataLoadServiceImpl {
         updateManifestation = UpdateProductSQL.Insert_manifestation;
 
         updateStatus = queryRunner.update(conn, updateManifestation.replace("LOADID", loadID).replace("EVENT", eventID));
-        System.out.println(updateStatus);
+
+        Log.info("updateStatus = " + updateStatus);
 
     }
 
@@ -341,7 +354,9 @@ public class DataLoadServiceImpl {
             String loadID = String.valueOf(loadId);
             loadBatchContext.loadId = loadID;
 
-            System.out.println(loadID);
+            Log.info("loadID = " + loadID);
+
+
 
 //            //Need to gete New Event IDeventtype text, description text,
 // thirdparty text, workflowid text, workflowsource text, loadid integer)
@@ -361,7 +376,8 @@ public class DataLoadServiceImpl {
 
             loadBatchContext.eventId = eventID;
 
-            System.out.println(eventID);
+            Log.info("eventID = " + eventID);
+
 
             QueryRunner queryRunner = new QueryRunner();
             CreateTestData(loadID, queryRunner, conn, eventID);
@@ -372,7 +388,9 @@ public class DataLoadServiceImpl {
             statement.setString(4, "EPH Regression Test");
             statement.execute();
             batchID = String.valueOf(statement.getLong(1));
-            System.out.println(batchID);
+
+            Log.info("batchID = " + batchID);
+
             loadBatchContext.batchId = batchID;
             statement.close();
         } catch (SQLException exception) {
@@ -415,29 +433,42 @@ public class DataLoadServiceImpl {
         updateProduct7 = UpdateProductSQL.Insert_product_7;
 
         updateStatus = queryRunner.update(conn, updateWork.replace("LOADID", loadID).replace("EVENT", eventID));
-        System.out.println(updateStatus);
+        Log.info("updateStatus = " + updateStatus);
+
+
         updateStatus = queryRunner.update(conn,updateWork1.replace("LOADID", loadID).replace("EVENT", eventID));
-        System.out.println(updateStatus);
+        Log.info("updateStatus = " + updateStatus);
+
         updateStatus = queryRunner.update(conn,updateWork2.replace("LOADID", loadID).replace("EVENT", eventID));
-        System.out.println(updateStatus);
+        Log.info("updateStatus = " + updateStatus);
+
         updateStatus = queryRunner.update(conn, updateManifestation.replace("LOADID", loadID).replace("EVENT", eventID));
-        System.out.println(updateStatus);
+        Log.info("updateStatus = " + updateStatus);
+
         updateStatus = queryRunner.update(conn, updateManifestation1.replace("LOADID", loadID).replace("EVENT", eventID));
-        System.out.println(updateStatus);
+        Log.info("updateStatus = " + updateStatus);
+
         updateStatus = queryRunner.update(conn, updateProduct1.replace("LOADID", loadID).replace("EVENT", eventID));
-        System.out.println(updateStatus);
+        Log.info("updateStatus = " + updateStatus);
+
         updateStatus = queryRunner.update(conn, updateProduct2.replace("LOADID", loadID).replace("EVENT", eventID));
-        System.out.println(updateStatus);
+        Log.info("updateStatus = " + updateStatus);
+
         updateStatus = queryRunner.update(conn, updateProduct3.replace("LOADID", loadID).replace("EVENT", eventID));
-        System.out.println(updateStatus);
+        Log.info("updateStatus = " + updateStatus);
+
         updateStatus = queryRunner.update(conn, updateProduct4.replace("LOADID", loadID).replace("EVENT", eventID));
-        System.out.println(updateStatus);
+        Log.info("updateStatus = " + updateStatus);
+
         updateStatus = queryRunner.update(conn, updateProduct5.replace("LOADID", loadID).replace("EVENT", eventID));
-        System.out.println(updateStatus);
+        Log.info("updateStatus = " + updateStatus);
+
         updateStatus = queryRunner.update(conn, updateProduct6.replace("LOADID", loadID).replace("EVENT", eventID));
-        System.out.println(updateStatus);
+        Log.info("updateStatus = " + updateStatus);
+
         updateStatus = queryRunner.update(conn, updateProduct7.replace("LOADID", loadID).replace("EVENT", eventID));
-        System.out.println(updateStatus);
+        Log.info("updateStatus = " + updateStatus);
+
 
     }
 
@@ -997,6 +1028,22 @@ public class DataLoadServiceImpl {
             System.out.println(updateStatus);
         }else if (NotificationCountContext.finAttribute){
             updateIdentifier = UpdateProductSQL.Insert_financial_attr;
+
+            updateStatus = queryRunner.update(conn, updateIdentifier.replace("LOADID", loadID).replace("EVENT", eventID));
+            System.out.println(updateStatus);
+        } else if (NotificationCountContext.productPersonRole){
+            updateIdentifier = UpdateProductSQL.Insert_ProductPersonRole;
+
+            updateStatus = queryRunner.update(conn, updateIdentifier.replace("LOADID", loadID).replace("EVENT", eventID));
+            System.out.println(updateStatus);
+        }  else if (NotificationCountContext.productPackRel){
+        updateIdentifier = UpdateProductSQL.Insert_prod_pack_rel;
+
+        updateStatus = queryRunner.update(conn, updateIdentifier.replace("LOADID", loadID).replace("EVENT", eventID));
+        System.out.println(updateStatus);
+    }
+        else if (NotificationCountContext.workSubjectAreaLink){
+            updateIdentifier = UpdateProductSQL.Insert_work_subject_area_link;
 
             updateStatus = queryRunner.update(conn, updateIdentifier.replace("LOADID", loadID).replace("EVENT", eventID));
             System.out.println(updateStatus);

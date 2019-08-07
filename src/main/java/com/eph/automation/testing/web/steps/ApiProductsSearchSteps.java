@@ -59,7 +59,7 @@ public class ApiProductsSearchSteps {
         Log.info("numberOfRecords = " + numberOfRecords);
 
         sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_FOR_SEARCH_BOOKS, numberOfRecords);
-        Log.info(sql);
+
 
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 

@@ -2,6 +2,7 @@ package com.eph.automation.testing.configuration;
 
 import com.eph.automation.testing.models.EnumConstants;
 import com.eph.automation.testing.models.TestContext;
+import com.eph.automation.testing.services.db.sql.GetEPHDBUser;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.MapListHandler;
@@ -91,6 +92,7 @@ public class DBManager {
                 DbUtils.loadDriver(driver);
             }
             connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
+            connection.setSchema(GetEPHDBUser.getDBUser());
             QueryRunner query = new QueryRunner();
             mapList = (List) query.query(connection, sql, new MapListHandler());
         } catch (SQLException sqlException) {

@@ -165,8 +165,10 @@ public class FinancialAttributesSteps {
 
     @When("^We get the data for financial attributes$")
     public void getFinancialData(){
-        sql = String.format(FinAttrSQL.GET_STG_DQ_WORKS_DATA, Joiner.on("','").join(ids));
-        financialAttribs.financialDataFromStg = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+        if(!ids.isEmpty()) {
+            sql = String.format(FinAttrSQL.GET_STG_DQ_WORKS_DATA, Joiner.on("','").join(ids));
+            financialAttribs.financialDataFromStg = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+        }
 
         sql = String.format(FinAttrSQL.GET_SA_FinAttr_DATA, Joiner.on("','").join(workid));
         financialAttribs.financialDataFromSA = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
@@ -182,7 +184,9 @@ public class FinancialAttributesSteps {
 
     @Then("^The data between DQ and SA is identical$")
     public void checkFinancialData(){
-        if (financialAttribs.financialDataFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if (financialAttribs.financialDataFromStg == null) {
+            Log.info("No new records added in Financial attributes");
+        }else if (financialAttribs.financialDataFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no changed data for Financial attributes");
         }else {
             for (int i = 0; i < financialAttribs.financialDataFromStg.size(); i++) {

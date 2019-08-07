@@ -2,6 +2,13 @@ package com.eph.automation.testing.models.dao;
 
 public class DQErrorChecksDataObject {
 
+    private String eph_id;
+    private String pmx_id;
+    private String dq_err;
+    private String person_source_ref;
+    private String manifestation_id;
+
+
     public String getEph_id() {
         return eph_id;
     }
@@ -9,8 +16,6 @@ public class DQErrorChecksDataObject {
     public void setEph_id(String eph_id) {
         this.eph_id = eph_id;
     }
-
-    public String eph_id;
 
     public String getPmx_id() {
         return pmx_id;
@@ -20,7 +25,6 @@ public class DQErrorChecksDataObject {
         this.pmx_id = pmx_id;
     }
 
-    public String pmx_id;
 
     public String getDq_err() {
         return dq_err;
@@ -30,17 +34,13 @@ public class DQErrorChecksDataObject {
         this.dq_err = dq_err;
     }
 
-    public String dq_err;
-
-    public String getPmx_source() {
-        return pmx_source;
+    public String getPerson_source_ref() {
+        return person_source_ref;
     }
 
-    public void setPmx_source(String pmx_source) {
-        this.pmx_source = pmx_source;
+    public void setPerson_source_ref(String person_source_ref) {
+        this.person_source_ref = person_source_ref;
     }
-
-    public String pmx_source;
 
     public String getManifestation_id() {
         return manifestation_id;
@@ -50,5 +50,4 @@ public class DQErrorChecksDataObject {
         this.manifestation_id = manifestation_id;
     }
 
-    public String manifestation_id;
 }
