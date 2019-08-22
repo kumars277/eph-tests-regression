@@ -92,7 +92,7 @@ public class DBManager {
                 DbUtils.loadDriver(driver);
             }
             connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
-            connection.setSchema(GetEPHDBUser.getDBUser());
+//            connection.setSchema(GetEPHDBUser.getDBUser());
             QueryRunner query = new QueryRunner();
             mapList = (List) query.query(connection, sql, new MapListHandler());
         } catch (SQLException sqlException) {
