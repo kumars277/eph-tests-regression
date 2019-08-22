@@ -39,4 +39,7 @@ public class NotificationCountContext {
     public static boolean personRole=false;
     public static boolean mirror=false;
     public static boolean finAttribute =false;
+    public static boolean productPersonRole =false;
+    public static boolean productPackRel =false;
+    public static boolean workSubjectAreaLink=false;
 }
