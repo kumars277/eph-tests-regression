@@ -36,7 +36,9 @@ public class WorkCountSQL {
 
     public static String PMX_STG_WORKS_COUNT_Distinct = "  select count(distinct \"PRODUCT_WORK_ID\") as workCountPMXSTG from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork";
 
-    public static String PMX_STG_DQ_WORKS_COUNT = "select count(*) as workCountDQSTG from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq ww\n" +
+    public static String PMX_STG_DQ_WORKS_COUNT =
+
+            "select count(*) as workCountDQSTG from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq ww\n" +
             "left join semarchy_eph_mdm.gd_wwork gw on ww.pmx_source_reference::varchar = gw.external_reference::varchar\n";
 //old
 //    public static String PMX_STG_DQ_WORKS_COUNT_NoErr =
@@ -49,33 +51,33 @@ public class WorkCountSQL {
 //        "WHERE ww.dq_err != 'Y'\n";
 ////        "and TO_TIMESTAMP(ww.work_updated,'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
 
-    public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count(*) from (\n" +
-            "select h1.external_reference, concat(h1.external_reference||coalesce(work_title,'')||coalesce(work_subtitle,'')||''||\n" +
+    public static String PMX_STG_DQ_WORKS_COUNT_NoErr = " with existing_hash as (select external_reference, concat(external_reference||coalesce(work_title,'')||coalesce(work_sub_title,'')||coalesce(work_key_title,'')||\n" +
             "coalesce(electro_rights_indicator::varchar,'')||coalesce(volume::varchar,'')||coalesce(copyright_year::varchar,'')||coalesce(edition_number::varchar,'')||\n" +
-            "coalesce(f_type::varchar,'')||coalesce(f_status::varchar,'')||coalesce(f_accountable_product::varchar,'')||coalesce(f_pmc,'')||coalesce(f_oa_journal_type,'')||coalesce(f_imprint,'')||\n" +
-            "coalesce(f_society_ownership,'')||coalesce(language_code,'')) as string from \n" +
+            "coalesce(f_type::varchar,'')||coalesce(f_status::varchar,'')||coalesce(f_accountable_product::varchar,'')||coalesce(f_pmc,'')||coalesce(f_oa_type,'')||coalesce(f_imprint,'')||\n" +
+            "coalesce(f_society_ownership,'')||coalesce(f_llanguage,'')) as string from semarchy_eph_mdm.gd_wwork),\n" +
+            "base as\n" +
             "(select\n" +
             "distinct\n" +
             "-- {loadid} b_loadid\n" +
             "--,{eventid} f_event\n" +
             "map_sourceref_2_ephid('WORK'::varchar, ww.pmx_source_reference::varchar) work_id\n" +
-            ",ww.pmx_source_reference as external_reference\n" +
-            ",'Work' b_classname\n" +
-            ",ww.work_title\n" +
-            ",ww.work_subtitle\n" +
-            ",ww.electro_rights_indicator\n" +
-            ",ww.volume\n" +
-            ",ww.copyright_year\n" +
-            ",ww.edition_number\n" +
-            ",ww.f_pmc\n" +
-            ",ww.f_oa_journal_type\n" +
-            ",ww.f_type\n" +
-            ",ww.f_status\n" +
-            ",ww.f_imprint\n" +
-            ",ww.f_society_ownership\n" +
+            ",ww.pmx_source_reference as EXTERNAL_REFERENCE\n" +
+            "--,'Work' b_classname as B_CLASSNAME\n" +
+            ",ww.work_title as WORK_TITLE\n" +
+            ",ww.work_subtitle as WORK_SUBTITLE\n" +
+            ",ww.electro_rights_indicator as ELECTRONIC_RIGHTS_IND\n" +
+            ",ww.volume as BOOK_VOLUME_NAME\n" +
+            ",ww.copyright_year as PRODUCT_WORK_PUB_DATE\n" +
+            ",ww.edition_number as BOOK_EDITION_NAME\n" +
+            ",ww.f_pmc as PMC\n" +
+            ",ww.f_oa_journal_type AS OPEN_ACCESS_JNL_TYPE_CODE\n" +
+            ",ww.f_type  AS WORK_TYPE\n" +
+            ",ww.f_status  AS WORK_STATUS\n" +
+            ",ww.f_imprint  AS IMPRINT\n" +
+            ",ww.f_society_ownership  AS OWNERSHIP\n" +
             ",case when coalesce(ap.accountable_product_id,gw.f_accountable_product) is null then null else \n" +
             " coalesce(ap.accountable_product_id,gw.f_accountable_product) end as f_accountable_product\n" +
-            ",ww.language_code\n" +
+            ",ww.language_code as LANGUAGE_CODE\n" +
             "FROM stg_10_pmx_wwork_dq ww\n" +
             "left join semarchy_eph_mdm.gd_wwork gw on ww.pmx_source_reference::varchar = gw.external_reference::varchar\n" +
             "left join \n" +
@@ -83,14 +85,16 @@ public class WorkCountSQL {
             "\t from stg_10_pmx_accountable_product_dq s join (select distinct * from semarchy_eph_mdm.sa_accountable_product) a on\n" +
             "\t s.pmx_source_reference = a.external_reference where s.dq_err != 'Y') ap on ww.pmx_source_reference::varchar = ap.product_work_id::varchar\n" +
             "WHERE ww.dq_err != 'Y'\n" +
-            ")  as h1\n" +
-            "left join \n" +
-            "(select external_reference, concat(external_reference||coalesce(work_title,'')||coalesce(work_sub_title,'')||coalesce(work_key_title,'')||\n" +
-            "coalesce(electro_rights_indicator::varchar,'')||coalesce(volume::varchar,'')||coalesce(copyright_year::varchar,'')||coalesce(edition_number::varchar,'')||\n" +
-            "coalesce(f_type::varchar,'')||coalesce(f_status::varchar,'')||coalesce(f_accountable_product::varchar,'')||coalesce(f_pmc,'')||coalesce(f_oa_type,'')||coalesce(f_imprint,'')||\n" +
-            "coalesce(f_society_ownership,'')||coalesce(f_llanguage,'')) as string from semarchy_eph_mdm.gd_wwork ) as h2\n" +
-            "on h1.external_reference::varchar = h2.external_reference::varchar\n" +
-            "where md5(string) != md5(h2.string) ) r";
+            "--and (TO_TIMESTAMP(ww.work_updated,'YYYYMMDDHH24MI') > TO_TIMESTAMP('{LAST_REFRESH_VALUE}','YYYYMMDDHH24MI') or {full_load} = true)\n" +
+            ")\n" +
+            ",inbound_hash as (select external_reference, concat(external_reference||coalesce(work_title,'')||coalesce(work_subtitle,'')||''||\n" +
+            "coalesce(ELECTRONIC_RIGHTS_IND::varchar,'')||coalesce(BOOK_VOLUME_NAME::varchar,'')||coalesce(PRODUCT_WORK_PUB_DATE::varchar,'')||coalesce(BOOK_EDITION_NAME::varchar,'')||\n" +
+            "coalesce(WORK_TYPE::varchar,'')||coalesce(WORK_STATUS::varchar,'')||coalesce(f_accountable_product::varchar,'')||coalesce(PMC,'')||coalesce(OPEN_ACCESS_JNL_TYPE_CODE,'')||coalesce(IMPRINT,'')||\n" +
+            "coalesce(OWNERSHIP,'')||coalesce(LANGUAGE_CODE,'')) as string from base)\n" +
+            "select \n" +
+            "count(*)\n" +
+            "from base b join inbound_hash h on b.external_reference = h.external_reference left join existing_hash e on h.external_reference::varchar = e.external_reference::varchar\n" +
+            "where md5(e.string) != md5(h.string)";
 
     public static String EPH_SA_WORKS_COUNT = "select count (distinct external_reference) as workCountEPH from semarchy_eph_mdm.sa_wwork "+
             " where f_event =  (select max (event_id) from\n" +

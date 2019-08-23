@@ -5,7 +5,7 @@ package com.eph.automation.testing.services.db.sql;
  */
 public class WorkExtractSQL {
 
-    public static String PMX_WORK_EXTRACT= "  SELECT * FROM (\n" +
+    public static String PMX_WORK_EXTRACT= "  \n" +
             " SELECT\n" +
             "--\t M.ELSEVIER_PRODUCT_ID AS PRODUCT_ID -- Product Manifestation Reference,  not needed in EPH but extracted for record linking purposes\n" +
             "  \t W.PRODUCT_WORK_TITLE AS WORK_TITLE -- Title\n" +
@@ -57,8 +57,8 @@ public class WorkExtractSQL {
             "  \t\t\t,MAX(TO_CHAR(NVL(NVL(M.B_UPDDATE,M.B_CREDATE),TO_DATE('01-01-1900','DD-MM-YYYY')),'YYYYMMDDHH24MI')) AS MAN_UPDATED \n" +
             "  \t\t\tFROM GD_PRODUCT_MANIFESTATION M GROUP BY M.F_PRODUCT_WORK) MU ON W.PRODUCT_WORK_ID = MU.F_PRODUCT_WORK\n" +
             "  WHERE T.PRODUCT_TYPE_CODE NOT IN ('COMPENDIUM','JCOLSC','ADVERTISING','FS','DUES')\n" +
-            "  )\n" +
-            "  WHERE PRODUCT_WORK_ID IN ('%s') ORDER BY PRODUCT_WORK_ID";
+            "  and    PRODUCT_WORK_ID IN ('%s') ORDER BY PRODUCT_WORK_ID\n" +
+            "  \n";
 
     public static String GET_PRODUCT_EXPORT_FROM_PMX_BY_PMC = "  select distinct * from\n" +
             "  (SELECT \n" +
@@ -355,13 +355,22 @@ public class WorkExtractSQL {
     */
 
     //EPH - 366 - Change to introduce DQ layer
-    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE = "select count(*) AS count \n" +
-            " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation stg ,\n" +
-            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq  mdq\n" +
-            "where \n" +
-            "stg.\"%s\" is not null  and \n" +
-            "   stg.\"PRODUCT_MANIFESTATION_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n" +
-            "   \n";
+    public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE =
+     "select count(*)\n"+
+             "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n"+
+             GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq , \n"+
+             "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
+             ", " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n"+
+             "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
+             "and map1.source_ref = mdq.pmx_source_reference::text\n"+
+             "and concat(map1.eph_id,'ISBN',man.\"ISBN\") = sman.external_reference\n"+
+             "and  b_loadid = (select max(b_loadid) from \n"+
+             "          semarchy_eph_mdm.sa_event\n"+
+             "            where  f_event_type = 'PMX'\n"+
+             "            and workflow_id = 'talend'\n"+
+             "            AND f_event_type = 'PMX'\n"+
+             "            and f_workflow_source = 'PMX' )\n"+
+             "and  \"%s\" is not null\n";
 
     public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_DELTA =
 
