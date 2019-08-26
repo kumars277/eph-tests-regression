@@ -108,7 +108,7 @@ public class ManifestationDataQualityCheckSteps {
         Log.info("When We get the count of the manifestations records in EPH DQ ..");
         sql = WorkExtractSQL.COUNT_MANIFESTATIONS_IN_EPH_DQ_TO_SA;
         Log.info(sql);
-        List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
         countManifestationsDQ = ((Long) manifestationsNumber.get(0).get("count")).intValue();
         Log.info("Count of manifestations in DQ table is: " + countManifestationsDQ);
 
@@ -125,7 +125,7 @@ public class ManifestationDataQualityCheckSteps {
         com.eph.automation.testing.helper.Log.info("When The manifestations are transferred to EPH SA ..");
         sql = WorkExtractSQL.COUNT_MANIFESTATIONS_IN_SA_MANIFESTATION_TABLE;
         Log.info(sql);
-        List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
         countManifestationsEPH = ((Long) manifestationsNumber.get(0).get("count")).intValue();
         Log.info("Count of manifestations in EPH SA table is: " + countManifestationsEPH);
 

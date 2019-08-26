@@ -28,8 +28,11 @@ public class DBManager {
     public static List getDBResultAsBeanList(String sql, Class klass, String dbEndPoint) {
         Properties dbProps = new Properties();
         dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(getDatabaseEnvironmentKey(dbEndPoint)));
-//        Yank.setupDataSource(dbProps);
+
+
+//        Yank.setupConnectionPool("pool", dbProps);
         Yank.setupDefaultConnectionPool(dbProps);
+
         List klassList = Yank.queryBeanList(sql,klass, null);
 //        Yank.releaseDataSource();
         Yank.releaseDefaultConnectionPool();
@@ -92,7 +95,24 @@ public class DBManager {
                 DbUtils.loadDriver(driver);
             }
             connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
-//            connection.setSchema(GetEPHDBUser.getDBUser());
+            QueryRunner query = new QueryRunner();
+            mapList = (List) query.query(connection, sql, new MapListHandler());
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } finally {
+            DbUtils.closeQuietly(connection);
+        }
+        return mapList;
+    }
+
+    public static List getDBResultMapWithSetSchema(String sql, String URL) {
+        List mapList = null;
+        try {
+            if (connection == null) {
+                DbUtils.loadDriver(driver);
+            }
+            connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
+            connection.setSchema(GetEPHDBUser.getDBUser());
             QueryRunner query = new QueryRunner();
             mapList = (List) query.query(connection, sql, new MapListHandler());
         } catch (SQLException sqlException) {
