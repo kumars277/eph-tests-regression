@@ -29,9 +29,9 @@ public class DBManager {
         Properties dbProps = new Properties();
         dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(getDatabaseEnvironmentKey(dbEndPoint)));
 
-
 //        Yank.setupConnectionPool("pool", dbProps);
         Yank.setupDefaultConnectionPool(dbProps);
+
 
         List klassList = Yank.queryBeanList(sql,klass, null);
 //        Yank.releaseDataSource();

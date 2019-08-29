@@ -92,7 +92,7 @@ public class WorkCountSQL {
             "coalesce(WORK_TYPE::varchar,'')||coalesce(WORK_STATUS::varchar,'')||coalesce(f_accountable_product::varchar,'')||coalesce(PMC,'')||coalesce(OPEN_ACCESS_JNL_TYPE_CODE,'')||coalesce(IMPRINT,'')||\n" +
             "coalesce(OWNERSHIP,'')||coalesce(LANGUAGE_CODE,'')) as string from base)\n" +
             "select \n" +
-            "count(*)\n" +
+            "count(*) as count\n" +
             "from base b join inbound_hash h on b.external_reference = h.external_reference left join existing_hash e on h.external_reference::varchar = e.external_reference::varchar\n" +
             "where md5(e.string) != md5(h.string)";
 
