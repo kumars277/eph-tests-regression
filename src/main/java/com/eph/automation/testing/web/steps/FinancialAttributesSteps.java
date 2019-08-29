@@ -135,8 +135,8 @@ public class FinancialAttributesSteps {
         }
         Log.info("numberOfRecords = " + numberOfRecords);
 
-        if (System.getProperty("LOAD") != null) {
-            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+
+            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
             sql = FinAttrSQL.gettingSourceRef.replace("PARAM1", numberOfRecords);
             }else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
@@ -145,13 +145,7 @@ public class FinancialAttributesSteps {
                 sql = FinAttrSQL.gettingSourceRefDelta.replace("PARAM1", numberOfRecords)
                 .replace("PARAM2",refreshDate.get(1).refresh_timestamp);
             }
-        }else{
-            sql = WorkCountSQL.GET_REFRESH_DATE;
-            refreshDate = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                    Constants.EPH_URL);
-            sql = FinAttrSQL.gettingSourceRefDelta.replace("PARAM1", numberOfRecords)
-                    .replace("PARAM2",refreshDate.get(1).refresh_timestamp);
-        }
+
         List<Map<?, ?>> randomISBNIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         ids = randomISBNIds.stream().map(m -> (BigDecimal) m.get("random_value")).map(String::valueOf).collect(Collectors.toList());
@@ -186,7 +180,7 @@ public class FinancialAttributesSteps {
     public void checkFinancialData(){
         if (financialAttribs.financialDataFromStg == null) {
             Log.info("No new records added in Financial attributes");
-        }else if (financialAttribs.financialDataFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        }else if (financialAttribs.financialDataFromSA.isEmpty()) {
             Log.info("There is no changed data for Financial attributes");
         }else {
             for (int i = 0; i < financialAttribs.financialDataFromStg.size(); i++) {
