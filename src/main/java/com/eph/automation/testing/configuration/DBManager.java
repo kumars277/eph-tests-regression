@@ -32,7 +32,6 @@ public class DBManager {
 //        Yank.setupConnectionPool("pool", dbProps);
         Yank.setupDefaultConnectionPool(dbProps);
 
-
         List klassList = Yank.queryBeanList(sql,klass, null);
 //        Yank.releaseDataSource();
         Yank.releaseDefaultConnectionPool();
@@ -121,6 +120,20 @@ public class DBManager {
             DbUtils.closeQuietly(connection);
         }
         return mapList;
+    }
+
+    public static List getDBResultAsBeanListWithSetSchema(String sql, Class klass, String dbEndPoint) {
+        Properties dbProps = new Properties();
+
+        dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(getDatabaseEnvironmentKey(dbEndPoint)));
+
+//        Yank.setupConnectionPool("pool", dbProps);
+        Yank.setupDefaultConnectionPool(dbProps);
+
+        List klassList = Yank.queryBeanList(sql,klass, null);
+//        Yank.releaseDataSource();
+        Yank.releaseDefaultConnectionPool();
+        return klassList;
     }
 
 }

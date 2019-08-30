@@ -36,15 +36,14 @@ public class WorksIdSteps {
     private static List<WorkDataObject> dataFromSAFtype;
     private static List<WorkDataObject> dataFromGDFtype;
     private static List<WorkDataObject> dataFromGDId;
-    private static List<WorkDataObject> stgCount;
-    private static List<WorkDataObject> saCount;
-    private static List<WorkDataObject> gdCount;
-    private static List<WorkDataObject> refreshDate;
     private static List<WorkDataObject> endDatedID;
     private static List<WorkDataObject> pmxSource;
     private static List<WorkDataObject> stgNewID;
     private static List<WorkDataObject> identifierID;
     private static List<String> workid;
+    private static int stgCount;
+    private static int saCount;
+    private static int gdCount;
 
     @Given("^We have a work from type (.*) to check$")
     public void getProductNum(String type){
@@ -382,40 +381,25 @@ public class WorksIdSteps {
                 sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE
                         .replace("PARAM1", column);
                 System.out.print(sql);
-                stgCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-                Log.info("\n The count in stg for " + column + " is " + stgCount.get(0).count);
+                List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
+                stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
+
+                Log.info("\n The count in stg for " + column + " is " + stgCount);
             }else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
-                refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                        Constants.EPH_URL);
+                Log.info(sql);
+                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
 
                 sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA
                         .replace("PARAM1", column)
-                        .replace("PARAM2",refreshDate.get(1).refresh_timestamp)
+                        .replace("PARAM2",refreshDate)
                         .replace("PARAM3",type);
                 System.out.print(sql);
-                stgCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-                Log.info("\n The count in stg for " + column + " is " + stgCount.get(0).count);
+                List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
+                Log.info("\n The count in stg for " + column + " is " + stgCount);
             }
-//        }else{
-//            sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE
-//                    .replace("PARAM1", column);
-//            System.out.print(sql);
-//            stgCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-//            Log.info("\n The count in stg for " + column + " is " + stgCount.get(0).count);
-
-//            sql = WorkCountSQL.GET_REFRESH_DATE;
-//            refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-//                    Constants.EPH_URL);
-//
-//            sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA
-//                    .replace("PARAM1", column)
-//                    .replace("PARAM2",refreshDate.get(1).refresh_timestamp)
-//                    .replace("PARAM3",type);
-//            System.out.print(sql);
-//            stgCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-//            Log.info("\n The count in stg for " + column + " is " + stgCount.get(0).count);
-//        }
     }
 
     @When("^We get the work identifier count from SA and GD (.*)$")
@@ -423,27 +407,29 @@ public class WorksIdSteps {
         sql = WorksIdentifierSQL.COUNT_SA_WORK_IDENTIFIER
                 .replace("PARAM1", type);
         System.out.print(sql);
-        saCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-        Log.info("\n The count in SA for " + type + " is " + saCount.get(0).count);
+        List<Map<String, Object>> saCountNumber = DBManager.getDBResultMap(sql,  Constants.EPH_URL);
+        saCount = ((Long) saCountNumber.get(0).get("count")).intValue();
+        Log.info("\n The count in SA for " + type + " is " + saCount);
 
         sql = WorksIdentifierSQL.COUNT_GD_WORK_IDENTIFIER
                 .replace("PARAM1", type);
         System.out.print(sql);
-        gdCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-        Log.info("\n The count in GD for " + type + " is " + gdCount.get(0).count);
+        List<Map<String, Object>> gdCountNumber = DBManager.getDBResultMap(sql,  Constants.EPH_URL);
+        gdCount = ((Long) gdCountNumber.get(0).get("count")).intValue();
+        Log.info("\n The count in GD for " + type + " is " + gdCount);
     }
 
     @Then("^The counts between staging and SA are matching$")
     public void compareSTGtoSA(){
         Assert.assertEquals("The counts between STG and SA do not match!",
-                stgCount.get(0).count,saCount.get(0).count);
+                stgCount,saCount);
     }
 
 
     @And("^The counts between SA and GD are matching$")
     public void compareSAtoGD(){
         Assert.assertEquals("The counts between SA and GD do not match!",
-                saCount.get(0).count,gdCount.get(0).count);
+                saCount,gdCount);
     }
 
     @Given("^We have an end-dated identifier in GD$")

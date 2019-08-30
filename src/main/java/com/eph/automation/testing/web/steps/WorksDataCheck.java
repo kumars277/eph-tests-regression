@@ -81,6 +81,7 @@ public class WorksDataCheck {
          (sql);
         dataQualityContext.workDataObjectsFromPMXSTG = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
+
         sql =  String.format(WorkDataCheckSQL.GET_STG_DQ_WORKS_DATA, Joiner.on("','").join(ids));
         Log.info
                 (sql);

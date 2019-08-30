@@ -33,6 +33,7 @@ public class WorkDataCheckSQL {
             "  FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork\n" +
             "  WHERE \"PRODUCT_WORK_ID\" IN ('%s') ORDER BY \"PRODUCT_WORK_ID\"";
 
+
     public static String GET_STG_DQ_WORKS_DATA =
             //old
 //            "SELECT \n" +
@@ -61,7 +62,7 @@ public class WorkDataCheckSQL {
 //            "\t s.pmx_source_reference = a.external_reference where s.dq_err != 'Y') ap on ww.pmx_source_reference::varchar = ap.product_work_id::varchar\n"+
 //            "  WHERE PMX_SOURCE_REFERENCE IN ('%s') ORDER BY PMX_SOURCE_REFERENCE";
             //NEW
-            " with existing_hash as (select external_reference, concat(external_reference||coalesce(work_title,'')||coalesce(work_sub_title,'')||coalesce(work_key_title,'')||\n"+
+            "  with existing_hash as (select external_reference, concat(external_reference||coalesce(work_title,'')||coalesce(work_sub_title,'')||coalesce(work_key_title,'')||\n"+
                     "coalesce(electro_rights_indicator::varchar,'')||coalesce(volume::varchar,'')||coalesce(copyright_year::varchar,'')||coalesce(edition_number::varchar,'')||\n"+
                     "coalesce(f_type::varchar,'')||coalesce(f_status::varchar,'')||coalesce(f_accountable_product::varchar,'')||coalesce(f_pmc,'')||coalesce(f_oa_type,'')||coalesce(f_imprint,'')||\n"+
                     "coalesce(f_society_ownership,'')||coalesce(f_llanguage,'')) as string from semarchy_eph_mdm.gd_wwork),\n"+

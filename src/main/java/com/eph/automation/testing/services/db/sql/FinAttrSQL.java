@@ -140,7 +140,7 @@ public class FinAttrSQL {
             "and wfa.b_batchid in (select max(b_batchid) from semarchy_eph_mdm.gd_event where description = 'PMX Talend Load' and workflow_id = 'talend' and f_workflow_source = 'PMX')\n";
 
     public static String PMX_STG_DQ_WORKS_COUNT_NoErr_Full = " select count(*) as dqCount\n" +
-            "from ephsit_talend_owner.stg_10_pmx_wwork_dq s\n" +
+            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s\n" +
             "left join (\n" +
             "\tselect \n" +
             "\t\t f.f_gl_company as company\n" +
