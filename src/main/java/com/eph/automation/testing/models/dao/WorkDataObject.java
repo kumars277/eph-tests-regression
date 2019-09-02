@@ -7,15 +7,52 @@ import java.util.Objects;
  */
 public class WorkDataObject {
 
-    //ProductWork Entities
-    public String PRIMARY_ISBN;
+    private String PARENT_ACC_PROD;
+    private String PRIMARY_ISBN;
+    private String WORK_TITLE;
+    private String WORK_SUBTITLE;
+    private String PRODUCT_ID;
+    private String IDENTIFIER;
+    private String DAC_KEY;
+    private String PROJECT_NUM;
+    private String ISSN_L;
+    private String JOURNAL_NUMBER;
+    private String ELECTRONIC_RIGHTS_IND;
+    private String BOOK_EDITION_NAME;
+    private String BOOK_VOLUME_NAME;
+    private String PMC;
+    private String PMG;
+    private String WORK_ID;
+    private String WORK_STATUS;
+    private String WORK_SUBSTATUS;
+    private String WORK_TYPE;
+    private String IMPRINT;
+    private String OPEN_ACCESS_JNL_TYPE_CODE;
+    private String PRODUCT_WORK_ID;
+    private String F_ACC_PROD_HIERARCHY;
+    private String F_RESPONSIBILITY_CENTRE;
+    private String F_OPCO_R12;
+    private String PRODUCT_WORK_PUB_DATE;
+    private String JOURNAL_ACRONYM;
+    private String f_accountable_product;
+    private String UPDATED;
+    private int VOLUME;
+    private int EDITION_NUMBER;
+    private int COPYRIGHT_YEAR;
+    private String ACC_PROD_ID;
+    private String B_LOADID;
+    private String F_EVENT;
+    private String B_CLASSNAME;
+    private String F_WWORK;
+    private String IDENTIFER;
+    private String SA;
+    private String STG;
+    private String RECORD_END_DATE;
+    private String LANGUAGE_CODE;
+    private int PMX_SOURCE_REFERENCE;
+    private String OWNERSHIP;
+    private String F_TYPE;
 
-    public String WORK_TITLE;
-    public String WORK_SUBTITLE;
-
-    //ProductManifestation Entites
-
-    public String PRODUCT_ID;
 
     public String getIDENTIFIER() {
         return IDENTIFIER;
@@ -25,11 +62,6 @@ public class WorkDataObject {
         this.IDENTIFIER = IDENTIFIER;
     }
 
-    public String IDENTIFIER;
-
-
-    public String DAC_KEY;
-    public String PROJECT_NUM;
 
     public String getPRIMARY_ISBN() {
         return PRIMARY_ISBN;
@@ -131,27 +163,6 @@ public class WorkDataObject {
         return JOURNAL_ACRONYM;
     }
 
-    public String ISSN_L;
-    public String JOURNAL_NUMBER;
-    public String ELECTRONIC_RIGHTS_IND;
-    public String BOOK_EDITION_NAME;
-    public String BOOK_VOLUME_NAME;
-    public String PMC;
-    public String PMG;
-    public String WORK_ID;
-    public String WORK_STATUS;
-    public String WORK_SUBSTATUS;
-    public String WORK_TYPE;
-    public String IMPRINT;
-    public String OPEN_ACCESS_JNL_TYPE_CODE;
-    public String PRODUCT_WORK_ID;
-    public String F_ACC_PROD_HIERARCHY;
-    public String F_RESPONSIBILITY_CENTRE;
-    public String F_OPCO_R12;
-    public String PRODUCT_WORK_PUB_DATE;
-    public String JOURNAL_ACRONYM;
-    public String f_accountable_product;
-    public String UPDATED;
 
     public String getSA() {
         return SA;
@@ -161,7 +172,6 @@ public class WorkDataObject {
         this.SA = SA;
     }
 
-    public String SA;
 
     public String getSTG() {
         return STG;
@@ -171,7 +181,6 @@ public class WorkDataObject {
         this.STG = STG;
     }
 
-    public String STG;
 
     public String getRECORD_END_DATE() {
         return RECORD_END_DATE;
@@ -181,7 +190,6 @@ public class WorkDataObject {
         this.RECORD_END_DATE = RECORD_END_DATE;
     }
 
-    public String RECORD_END_DATE;
 
     public String getUPDATED() {
         return UPDATED;
@@ -199,7 +207,6 @@ public class WorkDataObject {
         this.LANGUAGE_CODE = LANGUAGE_CODE;
     }
 
-    public String LANGUAGE_CODE;
 
     public int getVOLUME() {
         return VOLUME;
@@ -225,10 +232,6 @@ public class WorkDataObject {
         this.COPYRIGHT_YEAR = COPYRIGHT_YEAR;
     }
 
-    public int VOLUME;
-    public int EDITION_NUMBER;
-    public int COPYRIGHT_YEAR;
-
 
     public int getPMX_SOURCE_REFERENCE() {
         return PMX_SOURCE_REFERENCE;
@@ -238,7 +241,6 @@ public class WorkDataObject {
         this.PMX_SOURCE_REFERENCE = PMX_SOURCE_REFERENCE;
     }
 
-    public int PMX_SOURCE_REFERENCE;
 
     public String getF_accountable_product() {
         return f_accountable_product;
@@ -264,9 +266,6 @@ public class WorkDataObject {
         this.PARENT_ACC_PROD = PARENT_ACC_PROD;
     }
 
-    public String ACC_PROD_ID;
-    public String PARENT_ACC_PROD;
-
 
     public String getOWNERSHIP() {
         return OWNERSHIP;
@@ -276,7 +275,6 @@ public class WorkDataObject {
         this.OWNERSHIP = OWNERSHIP;
     }
 
-    public String OWNERSHIP;
 
     public String getF_TYPE() {
         return F_TYPE;
@@ -286,7 +284,6 @@ public class WorkDataObject {
         F_TYPE = f_TYPE;
     }
 
-    public String F_TYPE;
 
     public String getB_LOADID() {
         return B_LOADID;
@@ -296,7 +293,6 @@ public class WorkDataObject {
         B_LOADID = b_LOADID;
     }
 
-    public String B_LOADID;
 
     public String getF_EVENT() {
         return F_EVENT;
@@ -306,7 +302,6 @@ public class WorkDataObject {
         F_EVENT = f_EVENT;
     }
 
-    public String F_EVENT;
 
     public String getB_CLASSNAME() {
         return B_CLASSNAME;
@@ -316,86 +311,6 @@ public class WorkDataObject {
         B_CLASSNAME = b_CLASSNAME;
     }
 
-    public String B_CLASSNAME;
-
-    public Integer getWorkCountPmx() {
-        return workCountPmx;
-    }
-
-    public void setWorkCountPmx(Integer workCountPmx) {
-        this.workCountPmx = workCountPmx;
-    }
-
-    public Integer workCountPmx;
-
-    public Integer getWorkCountPMXSTG() {
-        return workCountPMXSTG;
-    }
-
-    public void setWorkCountPMXSTG(Integer workCountPMXSTG) {
-        this.workCountPMXSTG = workCountPMXSTG;
-    }
-
-    public Integer workCountPMXSTG;
-
-    public Integer getWorkCountEPH() {
-        return workCountEPH;
-    }
-
-    public void setWorkCountEPH(Integer workCountEPH) {
-        this.workCountEPH = workCountEPH;
-    }
-
-    public Integer workCountEPH;
-
-    public Integer getWorkCountEPHGD() {
-        return workCountEPHGD;
-    }
-
-    public void setWorkCountEPHGD(Integer workCountEPHGD) {
-        this.workCountEPHGD = workCountEPHGD;
-    }
-
-    public Integer workCountEPHGD;
-
-    public Integer getWorkCountDQSTG() {
-        return workCountDQSTG;
-    }
-
-    public void setWorkCountDQSTG(Integer workCountDQSTG) {
-        this.workCountDQSTG = workCountDQSTG;
-    }
-
-    public Integer getWorkCountDQSTGnoError() {
-        return workCountDQSTGnoError;
-    }
-
-    public void setWorkCountDQSTGnoError(Integer workCountDQSTGnoError) {
-        this.workCountDQSTGnoError = workCountDQSTGnoError;
-    }
-
-    public Integer getErrorsCountEPH() {
-        return errorsCountEPH;
-    }
-
-    public void setErrorsCountEPH(Integer errorsCountEPH) {
-        this.errorsCountEPH = errorsCountEPH;
-    }
-
-    public Integer errorsCountEPH;
-
-    public Integer workCountDQSTG;
-    public Integer workCountDQSTGnoError;
-
-    public String getRandom_value() {
-        return random_value;
-    }
-
-    public void setRandom_value(String random_value) {
-        this.random_value = random_value;
-    }
-
-    public String random_value;
 
     public void setPRODUCT_ID(String PRODUCT_ID) {
         this.PRODUCT_ID = PRODUCT_ID;
@@ -506,29 +421,6 @@ public class WorkDataObject {
         this.IDENTIFER = IDENTIFER;
     }
 
-    public String IDENTIFER;
-
-    public String getCount() {
-        return count;
-    }
-
-    public void setCount(String count) {
-        this.count = count;
-    }
-
-    public String count;
-
-    public String F_WWORK;
-
-    public String getRefresh_timestamp() {
-        return refresh_timestamp;
-    }
-
-    public void setRefresh_timestamp(String refresh_timestamp) {
-        this.refresh_timestamp = refresh_timestamp;
-    }
-
-    public String refresh_timestamp;
 
     public String getF_WWORK() {
         return F_WWORK;
@@ -573,7 +465,7 @@ public class WorkDataObject {
                 Objects.equals(F_ACC_PROD_HIERARCHY, that.F_ACC_PROD_HIERARCHY) &&
                 Objects.equals(F_RESPONSIBILITY_CENTRE, that.F_RESPONSIBILITY_CENTRE) &&
                 Objects.equals(F_OPCO_R12, that.F_OPCO_R12) &&
-                Objects.equals(PRODUCT_WORK_PUB_DATE.substring(0,10), that.PRODUCT_WORK_PUB_DATE.substring(0,10)) &&
+                Objects.equals(PRODUCT_WORK_PUB_DATE.substring(0, 10), that.PRODUCT_WORK_PUB_DATE.substring(0, 10)) &&
                 Objects.equals(JOURNAL_ACRONYM, that.JOURNAL_ACRONYM);
     }
 

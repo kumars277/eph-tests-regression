@@ -5,7 +5,6 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.models.contexts.ProductsCountContext;
 import com.eph.automation.testing.models.dao.ProductCountObject;
-import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.ProductCountSQL;
 import com.eph.automation.testing.services.db.sql.WorkCountSQL;
 import cucumber.api.java.en.Given;
@@ -15,13 +14,14 @@ import org.junit.Assert;
 import com.eph.automation.testing.helper.Log;
 
 import java.util.List;
+import java.util.Map;
 
 public class ProductsCountCheckSteps {
     @StaticInjection
     public ProductsCountContext productsCountContext;
     private String sql;
     private static int stgToCanonical;
-    private static List<WorkDataObject> refreshDate;
+    private static String refreshDate;
 
     @Given("^We know the products count in PMX$")
     public void getPmxProducts() {
@@ -133,51 +133,53 @@ public class ProductsCountCheckSteps {
                 Log.info("\nThe number of products in Staging for Canonical compare is: " + stgToCanonical);
             }else{
                 sql = WorkCountSQL.GET_REFRESH_DATE;
-                refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                        Constants.EPH_URL);
+                Log.info(sql);
+                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+                Log.info("refresh date: " + refreshDate);
 
                 sql = ProductCountSQL.EPH_STG_PRODUCT_Count;
                 productsCountContext.productCountStgFromPMX = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
                 Log.info("\nThe number of products in Staging is: " + productsCountContext.productCountStgFromPMX.get(0).stgCount);
 
-                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
+                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_Updated.replace("PARAM1",refreshDate);
                 Log.info(sql);
                 productsCountContext.productCountStg = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
                 Log.info("\nThe number of products in Staging is: " + productsCountContext.productCountStg.get(0).stgCount);
 
-                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_BOOKS_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
+                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_BOOKS_Updated.replace("PARAM1",refreshDate);
                 Log.info(sql);
                 productsCountContext.productCountStgBooks = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
-                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_Sub_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
+                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_Sub_Updated.replace("PARAM1",refreshDate);
                 Log.info(sql);
                 productsCountContext.productCountStgSubscription = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
-                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_Bulk_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
+                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_Bulk_Updated.replace("PARAM1",refreshDate);
                 Log.info(sql);
                 productsCountContext.productCountStgBulk = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
-                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_Reprint_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
+                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_Reprint_Updated.replace("PARAM1",refreshDate);
                 Log.info(sql);
                 productsCountContext.productCountStgReprints = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
-                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_Back_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
+                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_Back_Updated.replace("PARAM1",refreshDate);
                 productsCountContext.productCountStgBack = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
-                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_OA_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
+                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_OA_Updated.replace("PARAM1",refreshDate);
                 Log.info(sql);
                 productsCountContext.productCountStgOA = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
-                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_OA_More_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
+                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_OA_More_Updated.replace("PARAM1",refreshDate);
                 productsCountContext.productCountStgOAMore = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
-                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_AC_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
+                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_AC_Updated.replace("PARAM1",refreshDate);
                 productsCountContext.productCountStgAC = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
-                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_AC_More_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
+                sql = ProductCountSQL.EPH_STG_PRODUCT_Count_AC_More_Updated.replace("PARAM1",refreshDate);
                 productsCountContext.productCountStgACMore = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
-                sql = ProductCountSQL.EPH_STG_PRODUCT_Packages_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
+                sql = ProductCountSQL.EPH_STG_PRODUCT_Packages_Updated.replace("PARAM1",refreshDate);
                 productsCountContext.productCountStgPackages = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
 
                 stgToCanonical =
@@ -196,76 +198,7 @@ public class ProductsCountCheckSteps {
 
 
             }
-//        }else {
-/*            sql = WorkCountSQL.GET_REFRESH_DATE;
-            refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                    Constants.EPH_URL);
 
-            sql = ProductCountSQL.EPH_STG_PRODUCT_Count;
-            productsCountContext.productCountStg = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
-            Log.info("\nThe number of products in Staging is: " + productsCountContext.productCountStg.get(0).stgCount);
-
-            sql = ProductCountSQL.EPH_STG_PRODUCT_Count_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
-            Log.info(sql);
-            productsCountContext.productCountStgDelta = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
-            Log.info("\nThe number of products in Staging is: " + productsCountContext.productCountStg.get(0).stgCount);
-
-            sql = ProductCountSQL.EPH_STG_PRODUCT_Count_BOOKS_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
-            Log.info(sql);
-            productsCountContext.productCountStgBooks = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
-
-            sql = ProductCountSQL.EPH_STG_PRODUCT_Count_Sub_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
-            Log.info(sql);
-            productsCountContext.productCountStgSubscription = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
-
-            sql = ProductCountSQL.EPH_STG_PRODUCT_Count_Bulk_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
-            Log.info(sql);
-            productsCountContext.productCountStgBulk = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
-
-            sql = ProductCountSQL.EPH_STG_PRODUCT_Count_Reprint_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
-            Log.info(sql);
-            productsCountContext.productCountStgReprints = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
-
-            sql = ProductCountSQL.EPH_STG_PRODUCT_Count_Back_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
-            Log.info(sql);
-            productsCountContext.productCountStgBack = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
-
-            sql = ProductCountSQL.EPH_STG_PRODUCT_Count_OA_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
-            Log.info(sql);
-            productsCountContext.productCountStgOA = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
-
-            sql = ProductCountSQL.EPH_STG_PRODUCT_Count_OA_More_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
-            Log.info(sql);
-            productsCountContext.productCountStgOAMore = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
-
-            sql = ProductCountSQL.EPH_STG_PRODUCT_Count_AC_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
-            Log.info(sql);
-            productsCountContext.productCountStgAC = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
-
-            sql = ProductCountSQL.EPH_STG_PRODUCT_Count_AC_More_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
-            Log.info(sql);
-            productsCountContext.productCountStgACMore = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
-
-            sql = ProductCountSQL.EPH_STG_PRODUCT_Packages_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
-            Log.info(sql);
-            productsCountContext.productCountStgPackages = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
-
-            stgToCanonical =
-                    productsCountContext.productCountStgBooks.get(0).booksCount +
-                            productsCountContext.productCountStgSubscription.get(0).subCount +
-                            productsCountContext.productCountStgBulk.get(0).bulkCount +
-                            productsCountContext.productCountStgReprints.get(0).reprintCount +
-                            productsCountContext.productCountStgBack.get(0).backCount +
-                            productsCountContext.productCountStgOA.get(0).oaCount +
-                            productsCountContext.productCountStgOAMore.get(0).oaMoreCount +
-                            productsCountContext.productCountStgAC.get(0).acCount +
-                            productsCountContext.productCountStgACMore.get(0).acMoreCount +
-                            productsCountContext.productCountStgPackages.get(0).packagesCount;
-
-            Log.info("\nThe number of products in Staging for Canonical compare is: " + stgToCanonical);*/
-
-
-//        }
 
     }
 

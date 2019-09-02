@@ -18,7 +18,6 @@ import static sun.security.krb5.Confounder.intValue;
 
 public class WorksCountCheckSteps {
 
-    private static List<WorkDataObject> refreshDate;
     private static String sqlPMX;
     private static String sqlPMXSTG;
     private static String sqlPMXSTGDistinct;
@@ -32,6 +31,7 @@ public class WorksCountCheckSteps {
     private static int dqWorks;
     private static int dqNoErrorWorks;
     private static int aeCount;
+    private static String refreshDate;
 
     @Given("^We know the number of Works in PMX$")
     public void getPmxWorks() {
@@ -96,24 +96,17 @@ public class WorksCountCheckSteps {
             sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_Distinct;
         } else {
             sql = WorkCountSQL.GET_REFRESH_DATE;
-            refreshDate = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                    Constants.EPH_URL);
-            sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_DELTA.replace("PARAM1", refreshDate.get(1).refresh_timestamp);
+            Log.info(sql);
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+            Log.info("refresh date: " + refreshDate);
+            sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_DELTA.replace("PARAM1", refreshDate);
         }
 
         List<Map<String, Object>> workCountPMXSTGDistinct = DBManager.getDBResultMap(sqlPMXSTGDistinct, Constants.EPH_URL);
         pmxSTGWorkDistinct = ((Long) workCountPMXSTGDistinct.get(0).get("workCountPMXSTG")).intValue();
         Log.info("Distinct works in PMX staging are: " + pmxSTGWorkDistinct);
-//
-//       }else{
-//
-//            sql = WorkCountSQL.GET_REFRESH_DATE;
-//            refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-//                    Constants.EPH_URL);
-//            sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_DELTA.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
-//            Log.info(sqlPMXSTGDistinct);
-//           sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_Distinct;
-//        }
+
 
 
         sql = WorkCountSQL.PMX_STG_DQ_WORKS_COUNT;

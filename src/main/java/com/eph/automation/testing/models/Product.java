@@ -78,8 +78,8 @@ public class Product {
         List<WorkDataObject> productWorkFromPMX = DBManager.getDBResultAsBeanList(SQL,
                 WorkDataObject.class, Constants.PMX_URL);
         WorkDataObject productFromPMX = productWorkFromPMX.get(0);
-        productWork.workID = productFromPMX.PRODUCT_WORK_ID;
-        productWork.workTitle = productFromPMX.WORK_TITLE;
+        productWork.workID = productFromPMX.getPRODUCT_WORK_ID();
+        productWork.workTitle = productFromPMX.getWORK_TITLE();
         return productWork;
     }
 }

@@ -40,7 +40,7 @@ public class DataAccessUnitChecks {
     public void testPMXDBAccess() {
         String SQL = WorkExtractSQL.PMX_WORK_EXTRACT.replace("PARAM1","9781416049722");
         dataQualityContext.workDataObjectsFromSource = DBManager.getDBResultAsBeanList(SQL, WorkDataObject.class, Constants.PMX_URL);
-        System.out.println(dataQualityContext.workDataObjectsFromSource.get(0).PRIMARY_ISBN);
+        System.out.println(dataQualityContext.workDataObjectsFromSource.get(0).getPRIMARY_ISBN());
     }
 
     @Test
@@ -49,7 +49,7 @@ public class DataAccessUnitChecks {
         String SQL = WorkExtractSQL.PRODUCT_MANIFESTATION_FROM_EPH_SA.replace("PARAM1","9781416049722");
         dataQualityContext.workDataObjectsFromSource =
                 DBManager.getDBResultAsBeanList(SQL, WorkDataObject.class, Constants.EPH_URL);
-        System.out.println(dataQualityContext.workDataObjectsFromSource.get(0).PRIMARY_ISBN
+        System.out.println(dataQualityContext.workDataObjectsFromSource.get(0).getPRIMARY_ISBN()
         );
     }
 }

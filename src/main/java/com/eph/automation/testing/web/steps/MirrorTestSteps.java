@@ -34,7 +34,7 @@ public class MirrorTestSteps {
     private static List<String> workid;
     private static List<String> isbns;
     public String fWorkID;
-    private static List<WorkDataObject> refreshDate;
+    private static String refreshDate;
 
     @Given("^We know the mirrors from STG$")
     public void getMirrorsCountSTG(){
@@ -46,10 +46,12 @@ public class MirrorTestSteps {
                 Log.info("The STG count is: " + mirrorContext.stgCount.get(0).stgCount);
             }else{
                 sql = WorkCountSQL.GET_REFRESH_DATE;
-                refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                        Constants.EPH_URL);
+                Log.info(sql);
+                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+                Log.info("refresh date: " + refreshDate);
 
-                sql = MirrorsSQL.GET_STG_Mirrors_COUNT_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
+                sql = MirrorsSQL.GET_STG_Mirrors_COUNT_Updated.replace("PARAM1", refreshDate);
                 mirrorContext.stgCount = DBManager.getDBResultAsBeanList(sql, MirrorsDataObject.class, Constants.EPH_URL);
                 Log.info("The STG count is: " + mirrorContext.stgCount.get(0).stgCount);
             }
@@ -116,14 +118,13 @@ public class MirrorTestSteps {
                 sql = MirrorsSQL.gettingNumberOfIds.replace("PARAM1", numberOfRecords);
             }else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
-                refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                        Constants.EPH_URL);
-                sql = MirrorsSQL.gettingNumberOfIdsDelta.replace("PARAM1", numberOfRecords)
-                        .replace("PARAM2",refreshDate.get(1).refresh_timestamp);
+                Log.info(sql);
+                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+                Log.info("refresh date: " + refreshDate);
             }
-//        }else {
-//            sql = MirrorsSQL.gettingNumberOfIds.replace("PARAM1", numberOfRecords);
-//        }
+
+
         List<Map<?, ?>> randomISBNIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         ids = randomISBNIds.stream().map(m -> (BigDecimal) m.get("random_value")).map(String::valueOf).collect(Collectors.toList());

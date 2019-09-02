@@ -45,7 +45,7 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
     private static int countWorkSubjectAreaRecordsEPHGD;
     private static int countWorkSubjectAreaRecordsEPHAE;
     private static List<String> ids;
-    private static List<WorkDataObject> refreshDate;
+    private static String refreshDate;
 
     @Given("^We get the count of work subject area data from PMX$")
     public void getCountWorkSubjectAreaRecordsPMX() {
@@ -81,13 +81,13 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
             }else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
                 Log.info(sql);
-
-                refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                        Constants.EPH_URL);
-                Log.info("refresh date : " + refreshDate);
+                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+                Log.info("refresh date: " + refreshDate);
 
                 sql = WorkSubjectAreaLinkDataSQL.SELECT_COUNT_WORK_SUBJECT_AREA_STG_DQ_Delta.replace("PARAM1"
-                        ,refreshDate.get(1).refresh_timestamp);
+                        ,refreshDate);
+
                 Log.info(sql);
                 List<Map<String, Object>> workSubjectAreaNumberDQ = DBManager.getDBResultMap(sql, Constants.EPH_URL);
                 countWorkSubjectAreaRecordsEPHSTGDQ = ((Long) workSubjectAreaNumberDQ.get(0).get("count")).intValue();
@@ -167,8 +167,8 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
             sql = WorkCountSQL.GET_REFRESH_DATE;
             Log.info(sql);
             List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
-            Log.info("refreshDate : " + refreshDate);
+            refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+            Log.info("refresh date: " + refreshDate);
 
             sql = String.format(WorkSubjectAreaLinkDataSQL.SELECT_RANDOM_IDS_DELTA, refreshDate, numberOfRecords);
             Log.info(sql);
