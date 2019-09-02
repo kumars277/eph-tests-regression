@@ -38,7 +38,7 @@ public class FinancialAttributesSteps {
     private static List<String> workid;
     private static List<String> isbns;
     public String fWorkID;
-    private static List<WorkDataObject> refreshDate;
+    private static String refreshDate;
 
     public static List<FinancialAttribsDataObject> endDatedFinAttr;
     public static List<FinancialAttribsDataObject> stgNewRecord;
@@ -53,10 +53,12 @@ public class FinancialAttributesSteps {
                 Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
             } else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
-                refreshDate = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                        Constants.EPH_URL);
+                Log.info(sql);
+                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+                Log.info("refresh date: " + refreshDate);
 
-                sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr.replace("PARAM1", refreshDate.get(1).refresh_timestamp);
+                sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr.replace("PARAM1", refreshDate);
                 Log.info(sql);
                 financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
                 Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
@@ -64,10 +66,12 @@ public class FinancialAttributesSteps {
         }
         else{
             sql = WorkCountSQL.GET_REFRESH_DATE;
-            refreshDate = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                    Constants.EPH_URL);
+            Log.info(sql);
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+            Log.info("refresh date: " + refreshDate);
 
-            sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr.replace("PARAM1", refreshDate.get(1).refresh_timestamp);
+            sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr.replace("PARAM1", refreshDate);
             Log.info(sql);
             financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
             Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
@@ -135,23 +139,19 @@ public class FinancialAttributesSteps {
         }
         Log.info("numberOfRecords = " + numberOfRecords);
 
-        if (System.getProperty("LOAD") != null) {
-            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+
+            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
             sql = FinAttrSQL.gettingSourceRef.replace("PARAM1", numberOfRecords);
             }else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
-                refreshDate = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                        Constants.EPH_URL);
+                Log.info(sql);
+                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+                Log.info("refresh date: " + refreshDate);
                 sql = FinAttrSQL.gettingSourceRefDelta.replace("PARAM1", numberOfRecords)
-                .replace("PARAM2",refreshDate.get(1).refresh_timestamp);
+                .replace("PARAM2",refreshDate);
             }
-        }else{
-            sql = WorkCountSQL.GET_REFRESH_DATE;
-            refreshDate = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                    Constants.EPH_URL);
-            sql = FinAttrSQL.gettingSourceRefDelta.replace("PARAM1", numberOfRecords)
-                    .replace("PARAM2",refreshDate.get(1).refresh_timestamp);
-        }
+
         List<Map<?, ?>> randomISBNIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         ids = randomISBNIds.stream().map(m -> (BigDecimal) m.get("random_value")).map(String::valueOf).collect(Collectors.toList());
@@ -165,8 +165,10 @@ public class FinancialAttributesSteps {
 
     @When("^We get the data for financial attributes$")
     public void getFinancialData(){
-        sql = String.format(FinAttrSQL.GET_STG_DQ_WORKS_DATA, Joiner.on("','").join(ids));
-        financialAttribs.financialDataFromStg = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+        if(!ids.isEmpty()) {
+            sql = String.format(FinAttrSQL.GET_STG_DQ_WORKS_DATA, Joiner.on("','").join(ids));
+            financialAttribs.financialDataFromStg = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+        }
 
         sql = String.format(FinAttrSQL.GET_SA_FinAttr_DATA, Joiner.on("','").join(workid));
         financialAttribs.financialDataFromSA = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
@@ -182,7 +184,9 @@ public class FinancialAttributesSteps {
 
     @Then("^The data between DQ and SA is identical$")
     public void checkFinancialData(){
-        if (financialAttribs.financialDataFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if (financialAttribs.financialDataFromStg == null) {
+            Log.info("No new records added in Financial attributes");
+        }else if (financialAttribs.financialDataFromSA.isEmpty()) {
             Log.info("There is no changed data for Financial attributes");
         }else {
             for (int i = 0; i < financialAttribs.financialDataFromStg.size(); i++) {

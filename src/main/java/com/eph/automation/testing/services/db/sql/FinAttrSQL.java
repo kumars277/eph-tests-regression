@@ -139,10 +139,25 @@ public class FinAttrSQL {
             "and wfa.effective_end_date  is  null\n" +
             "and wfa.b_batchid in (select max(b_batchid) from semarchy_eph_mdm.gd_event where description = 'PMX Talend Load' and workflow_id = 'talend' and f_workflow_source = 'PMX')\n";
 
-    public static String PMX_STG_DQ_WORKS_COUNT_NoErr_Full = "select count(*) as dqCount\n" +
-            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq dq\n" +
-            "where opco is not null and resp_centre is not null \n" +
-            "and dq.dq_err!='Y';";
+    public static String PMX_STG_DQ_WORKS_COUNT_NoErr_Full = " select count(*) as dqCount\n" +
+            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s\n" +
+            "left join (\n" +
+            "\tselect \n" +
+            "\t\t f.f_gl_company as company\n" +
+            "\t\t,f.f_gl_cost_resp_centre as cost_rc\n" +
+            "\t\t,f.f_gl_revenue_resp_centre as rev_rc\n" +
+            "\t\t,w.external_reference\n" +
+            "\tfrom semarchy_eph_mdm.gd_work_financial_attribs f\n" +
+            "\tjoin semarchy_eph_mdm.gd_wwork w on f.f_wwork = w.work_id\n" +
+            "\twhere f.effective_end_date is null) as g on s.pmx_source_reference::varchar = g.external_reference\n" +
+            "left join (select distinct external_reference, work_fin_attribs_id from semarchy_eph_mdm.sa_work_financial_attribs) a on concat(s.pmx_source_reference,s.opco,s.resp_centre)::varchar = a.external_reference\n" +
+            "where dq_err != 'Y'\n" +
+            "and resp_centre is not null\n" +
+            "and opco is not null\n" +
+            "and not (\n" +
+            "         s.opco = coalesce(g.company,'')\n" +
+            "    and  s.resp_centre = coalesce(g.cost_rc,'')\n" +
+            "    and  s.resp_centre = coalesce(g.rev_rc,''))";
 
     public static String GET_GD_FinnAttr_DATA_End_Date ="SELECT \n" +
             "  sa.B_CLASSNAME as B_CLASSNAME\n" +

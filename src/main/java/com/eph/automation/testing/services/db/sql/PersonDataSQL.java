@@ -6,9 +6,11 @@ package com.eph.automation.testing.services.db.sql;
 public class PersonDataSQL {
 
     public static String GET_COUNT_PERSONS_PMX = "SELECT \n" +
-            "     count(*) AS count\n" +
+            " count(*) AS count\n" +
             "FROM \n" +
             "GD_PARTY P\n" +
+            "LEFT JOIN GD_PARTY_IN_PRODUCT PI ON P.PARTY_ID = PI.F_PARTY\n" +
+            "LEFT JOIN GD_PMG PM ON P.PARTY_ID = PM.F_PARTY\n" +
             "WHERE PARTY_ID IN (\n" +
             "SELECT F_PARTY FROM GD_PMG\n" +
             "UNION\n" +
@@ -57,8 +59,10 @@ public class PersonDataSQL {
             "    ,P.PERSON_FIRST_NAME\n" +
             "    ,P.PERSON_FAMILY_NAME\n" +
             "    ,P.PEOPLEHUB_ID\n" +
-            "    ,TO_CHAR(NVL(P.B_UPDDATE,P.B_CREDATE)) AS UPDATED\n" +
+            "    ,TO_CHAR(GREATEST(NVL(P.B_UPDDATE,P.B_CREDATE),NVL(NVL(PI.B_UPDDATE,PI.B_CREDATE),TO_DATE('01/01/1900','DD/MM/YYYY')),NVL(NVL(PM.B_UPDDATE,PM.B_CREDATE),TO_DATE('01/01/1900','DD/MM/YYYY'))),'YYYYMMDDHH24MI') AS UPDATED\n" +
             "FROM GD_PARTY P\n" +
+            "LEFT JOIN GD_PARTY_IN_PRODUCT PI ON P.PARTY_ID = PI.F_PARTY\n" +
+            "LEFT JOIN GD_PMG PM ON P.PARTY_ID = PM.F_PARTY\n" +
             "WHERE PARTY_ID IN (\n" +
             "SELECT F_PARTY FROM GD_PMG\n" +
             "UNION\n" +

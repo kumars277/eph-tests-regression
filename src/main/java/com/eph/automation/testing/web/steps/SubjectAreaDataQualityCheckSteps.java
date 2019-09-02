@@ -38,7 +38,7 @@ public class SubjectAreaDataQualityCheckSteps {
     private static int countSubjectAreaRecordsEPHSA;
     private static int countSubjectAreaRecordsEPHGD;
     private static List<String> ids;
-    private static List<WorkDataObject> refreshDate;
+    private static String refreshDate;
 
     @Given("^We get the count of subject area data from PMX$")
     public void getCountSubjectAreaRecordsPMX() {
@@ -73,13 +73,14 @@ public class SubjectAreaDataQualityCheckSteps {
             countSubjectAreaRecordsEPHSTG = ((Long) subjectAreaNumber.get(0).get("count")).intValue();
             Log.info("Count of subject area data in EPH STG is: " + countSubjectAreaRecordsEPHSTG);
         } else {
-        sql = WorkCountSQL.GET_REFRESH_DATE;
-        refreshDate = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                Constants.EPH_URL);
-        Log.info("refresh date : " + refreshDate);
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            Log.info(sql);
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+            Log.info("refresh date: " + refreshDate);
 
 
-        sql = SubjectAreaDataSQL.SELECT_COUNT_SUBJECT_AREA_STG_Delta.replace("PARAM1", refreshDate.get(1).refresh_timestamp);
+        sql = SubjectAreaDataSQL.SELECT_COUNT_SUBJECT_AREA_STG_Delta.replace("PARAM1", refreshDate);
         Log.info(sql);
         List<Map<String, Object>> subjectAreaNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countSubjectAreaRecordsEPHSTG = ((Long) subjectAreaNumber.get(0).get("count")).intValue();

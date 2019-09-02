@@ -38,7 +38,7 @@ public class TranslationTestSteps {
     private static List<String> workid;
     private static List<String> isbns;
     public String fWorkID;
-    private static List<WorkDataObject> refreshDate;
+    private static String refreshDate;
 
     @Given("^We know the number of work relationship records in PMX$")
     public void getTranslationsCountDQ(){
@@ -61,10 +61,12 @@ public class TranslationTestSteps {
                 Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
             }else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
-                refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                        Constants.EPH_URL);
+                Log.info(sql);
+                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+                Log.info("refresh date: " + refreshDate);
 
-                sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
+                sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT_Updated.replace("PARAM1",refreshDate);
                 translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
                 Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
             }

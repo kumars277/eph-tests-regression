@@ -6,6 +6,7 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.configuration.LoadProperties;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.WorkDataObject;
+import com.eph.automation.testing.services.db.sql.GetEPHDBUser;
 import com.eph.automation.testing.services.db.sql.WorkExtractSQL;
 import com.eph.automation.testing.services.security.DecryptionService;
 import org.junit.Ignore;
@@ -30,6 +31,7 @@ public class DataAccessUnitChecks {
     @Ignore
     public void testEncrypt() {
         String postgres = "jdbc:postgresql://eph-sit-eph-sit-rds.cnnrbgocj0xg.eu-west-1.rds.amazonaws.com/ephsit?user=rdsappadmin&password=e)NWt4)0dq&ssl=false";
+
         System.out.println(DecryptionService.encrypt(postgres));
     }
 
@@ -38,7 +40,7 @@ public class DataAccessUnitChecks {
     public void testPMXDBAccess() {
         String SQL = WorkExtractSQL.PMX_WORK_EXTRACT.replace("PARAM1","9781416049722");
         dataQualityContext.workDataObjectsFromSource = DBManager.getDBResultAsBeanList(SQL, WorkDataObject.class, Constants.PMX_URL);
-        System.out.println(dataQualityContext.workDataObjectsFromSource.get(0).PRIMARY_ISBN);
+        System.out.println(dataQualityContext.workDataObjectsFromSource.get(0).getPRIMARY_ISBN());
     }
 
     @Test
@@ -47,7 +49,7 @@ public class DataAccessUnitChecks {
         String SQL = WorkExtractSQL.PRODUCT_MANIFESTATION_FROM_EPH_SA.replace("PARAM1","9781416049722");
         dataQualityContext.workDataObjectsFromSource =
                 DBManager.getDBResultAsBeanList(SQL, WorkDataObject.class, Constants.EPH_URL);
-        System.out.println(dataQualityContext.workDataObjectsFromSource.get(0).PRIMARY_ISBN
+        System.out.println(dataQualityContext.workDataObjectsFromSource.get(0).getPRIMARY_ISBN()
         );
     }
 }

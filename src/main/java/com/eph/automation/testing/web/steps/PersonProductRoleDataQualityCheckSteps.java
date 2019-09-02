@@ -70,10 +70,10 @@ public class PersonProductRoleDataQualityCheckSteps {
         Log.info("When We get the count of persons product role records in EPH STG going to SA..");
 
 
-//        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-//            sql = PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG_GOING_TO_SA;
-//            Log.info(sql);
-//        } else {
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            sql = PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG_GOING_TO_SA;
+            Log.info(sql);
+        } else {
             sql = WorkCountSQL.GET_REFRESH_DATE;
             Log.info(sql);
             List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -81,7 +81,7 @@ public class PersonProductRoleDataQualityCheckSteps {
             sql = String.format(PersonProductRoleDataSQL.GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSTG_GOING_TO_SA_DELTA, refreshDate );
             Log.info(sql);
 
-//        }
+        }
 
         List<Map<String, Object>> personsNumberDQ = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countPersonsEPHSTGGoingToSA = ((Long) personsNumberDQ.get(0).get("count")).intValue();

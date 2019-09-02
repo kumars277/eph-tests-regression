@@ -2,8 +2,10 @@ package com.eph.automation.testing.configuration;
 
 import com.eph.automation.testing.models.EnumConstants;
 import com.eph.automation.testing.models.TestContext;
+import com.eph.automation.testing.services.db.sql.GetEPHDBUser;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
+import org.apache.commons.dbutils.handlers.BeanListHandler;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.knowm.yank.Yank;
@@ -27,8 +29,10 @@ public class DBManager {
     public static List getDBResultAsBeanList(String sql, Class klass, String dbEndPoint) {
         Properties dbProps = new Properties();
         dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(getDatabaseEnvironmentKey(dbEndPoint)));
-//        Yank.setupDataSource(dbProps);
+
+//        Yank.setupConnectionPool("pool", dbProps);
         Yank.setupDefaultConnectionPool(dbProps);
+
         List klassList = Yank.queryBeanList(sql,klass, null);
 //        Yank.releaseDataSource();
         Yank.releaseDefaultConnectionPool();
@@ -99,6 +103,42 @@ public class DBManager {
             DbUtils.closeQuietly(connection);
         }
         return mapList;
+    }
+
+    public static List getDBResultMapWithSetSchema(String sql, String URL) {
+        List mapList = null;
+        try {
+            if (connection == null) {
+                DbUtils.loadDriver(driver);
+            }
+            connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
+            connection.setSchema(GetEPHDBUser.getDBUser());
+            QueryRunner query = new QueryRunner();
+            mapList = (List) query.query(connection, sql, new MapListHandler());
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } finally {
+            DbUtils.closeQuietly(connection);
+        }
+        return mapList;
+    }
+
+    public static List getDBResultMapWithSetSchema(String sql,  Class klass, String URL) {
+        List klassList = null;
+        try {
+            if (connection == null) {
+                DbUtils.loadDriver(driver);
+            }
+            connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
+            connection.setSchema(GetEPHDBUser.getDBUser());
+            QueryRunner query = new QueryRunner();
+            klassList = (List) query.query(connection, sql, new BeanListHandler(klass));
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } finally {
+            DbUtils.closeQuietly(connection);
+        }
+        return klassList;
     }
 
 }

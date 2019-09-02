@@ -29,33 +29,47 @@ public class WorksIdSteps {
     public DataQualityContext dataQualityContext;
     public String sql;
     private String numberOfRecords;
-    private static List<WorkDataObject> data;
+//    private static List<WorkDataObject> data;
     private static List<WorkDataObject> dataFromSTG;
     private static List<WorkDataObject> dataFromSA;
     private static List<WorkDataObject> dataFromSAId;
     private static List<WorkDataObject> dataFromSAFtype;
     private static List<WorkDataObject> dataFromGDFtype;
     private static List<WorkDataObject> dataFromGDId;
-    private static List<WorkDataObject> stgCount;
-    private static List<WorkDataObject> saCount;
-    private static List<WorkDataObject> gdCount;
-    private static List<WorkDataObject> refreshDate;
     private static List<WorkDataObject> endDatedID;
     private static List<WorkDataObject> pmxSource;
     private static List<WorkDataObject> stgNewID;
     private static List<WorkDataObject> identifierID;
     private static List<String> workid;
+    private static List<String> ids;
+    private static int stgCount;
+    private static int saCount;
+    private static int gdCount;
 
     @Given("^We have a work from type (.*) to check$")
     public void getProductNum(String type){
+        if (System.getProperty("dbRandomRecordsNumber")!=null) {
+            numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        }else {
+            numberOfRecords = "1";
+        }
+        Log.info("numberOfRecords = " + numberOfRecords);
 
             if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                sql = WorksIdentifierSQL.getRandomProductNum
-                        .replace("PARAM1", type);
+                sql = String.format(WorksIdentifierSQL.getRandomProductNum, type, numberOfRecords);
 
-                data = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                List<Map<?, ?>> workIds = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
+                ids = workIds.stream().map(m -> (BigDecimal) m.get("random_value")).map(String::valueOf).collect(Collectors.toList());
+                Log.info("ids : " + ids);
+
+//                data = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
                 System.out.print(sql);
-                dataQualityContext.productIdFromStg = data.get(0).random_value;
+
+
+//                dataQualityContext.productIdFromStg = data.get(0).random_value;
+
+
+
                 Log.info("\n The product number is " + dataQualityContext.productIdFromStg);
             }else {
                 Log.info("Skipping test because Delta load is performed");
@@ -81,24 +95,25 @@ public class WorksIdSteps {
     @When("^We get the data from Staging, SA and Work Identifiers")
     public void getIdentifiers(){
         if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
-            sql = WorksIdentifierSQL.getIdentifiers
-                .replace("PARAM1", dataQualityContext.productIdFromStg);
-        dataFromSTG = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+            if (ids.isEmpty()) {
+                Log.info("No records found for searched criteria");
+            } else {
+                sql = String.format(WorksIdentifierSQL.getIdentifiers, Joiner.on("','").join(ids));
+                dataFromSTG = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
 
-        sql = WorksIdentifierSQL.getEphWorkID
-                .replace("PARAM1", dataFromSTG.get(0).PRODUCT_WORK_ID);
-        Log.info(sql);
-        dataFromSA = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                sql = String.format(WorksIdentifierSQL.getEphWorkID, Joiner.on("','").join(ids));
+                Log.info(sql);
+                dataFromSA = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
-        sql = WorksIdentifierSQL.getIdentifierDataFromSA
-                .replace("PARAM1", dataFromSA.get(0).WORK_ID);
-        Log.info(sql);
-        dataFromSAId = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                sql = String.format(WorksIdentifierSQL.getIdentifierDataFromSA, dataFromSA.get(0).getWORK_ID());
+                Log.info(sql);
+                dataFromSAId = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
-        sql = WorksIdentifierSQL.getIdentifierDataFromGD
-                .replace("PARAM1", dataFromSA.get(0).WORK_ID);
-        dataFromGDId = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                sql = String.format(WorksIdentifierSQL.getIdentifierDataFromGD
+                        , dataFromSA.get(0).getWORK_ID());
+                dataFromGDId = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+            }
     }else{
             Log.info("Skipping test because DELTA LOAD is performed");
         }
@@ -107,28 +122,32 @@ public class WorksIdSteps {
     @Then("^All of the identifiers are stored")
     public void checkIdCount(){
         if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
-        ArrayList<String> dataFromSTGCount = new ArrayList<String>();
+            if (ids.isEmpty()) {
+                Log.info("Skipping as there are no found records for searched criteria");
+            } else {
+                ArrayList<String> dataFromSTGCount = new ArrayList<String>();
 
-        if (dataFromSTG.get(0).JOURNAL_NUMBER!=null){
-            dataFromSTGCount.add(dataFromSTG.get(0).JOURNAL_NUMBER);
-        }
-        if (dataFromSTG.get(0).ISSN_L!=null){
-            dataFromSTGCount.add(dataFromSTG.get(0).ISSN_L);
-        }
-        if (dataFromSTG.get(0).JOURNAL_ACRONYM!=null){
-            dataFromSTGCount.add(dataFromSTG.get(0).JOURNAL_ACRONYM);
-        }
-        if (dataFromSTG.get(0).DAC_KEY!=null){
-            dataFromSTGCount.add(dataFromSTG.get(0).DAC_KEY);
-        }
-        if (dataFromSTG.get(0).PROJECT_NUM!=null){
-            dataFromSTGCount.add(dataFromSTG.get(0).PROJECT_NUM);
-        }
+                if (dataFromSTG.get(0).getJOURNAL_NUMBER() != null) {
+                    dataFromSTGCount.add(dataFromSTG.get(0).getJOURNAL_NUMBER());
+                }
+                if (dataFromSTG.get(0).getISSN_L() != null) {
+                    dataFromSTGCount.add(dataFromSTG.get(0).getISSN_L());
+                }
+                if (dataFromSTG.get(0).getJOURNAL_ACRONYM() != null) {
+                    dataFromSTGCount.add(dataFromSTG.get(0).getJOURNAL_ACRONYM());
+                }
+                if (dataFromSTG.get(0).getDAC_KEY() != null) {
+                    dataFromSTGCount.add(dataFromSTG.get(0).getDAC_KEY());
+                }
+                if (dataFromSTG.get(0).getPROJECT_NUM() != null) {
+                    dataFromSTGCount.add(dataFromSTG.get(0).getPROJECT_NUM());
+                }
 
-        Log.info("\nIdentifiers are "+dataFromSTGCount.size());
-        Log.info("\nIdentifiers are "+dataFromSAId.size());
+                Log.info("\nIdentifiers are " + dataFromSTGCount.size());
+                Log.info("\nIdentifiers are " + dataFromSAId.size());
 
-       Assert.assertEquals("The number of non-null identifiers don't match", dataFromSTGCount.size(),dataFromSAId.size());
+                Assert.assertEquals("The number of non-null identifiers don't match", dataFromSTGCount.size(), dataFromSAId.size());
+            }
     }else{
             Log.info("Skipping test because DELTA LOAD is performed");
         }
@@ -137,150 +156,154 @@ public class WorksIdSteps {
     @And("^The identifiers data is correct$")
     public void checkIdData(){
         if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-            Assert.assertTrue("Load ID is empty!", dataFromSAId.get(0).B_LOADID != null);
+            if (ids.isEmpty()) {
+                Log.info("Skipping as there are no found records for searched criteria");
+            } else {
+                Assert.assertTrue("Load ID is empty!", dataFromSAId.get(0).getB_LOADID() != null);
 
-            Assert.assertTrue("F_EVENT is empty!", dataFromSAId.get(0).F_EVENT != null);
+                Assert.assertTrue("F_EVENT is empty!", dataFromSAId.get(0).getF_EVENT() != null);
 
-            Assert.assertEquals("The classname is incorrect for id=" + dataQualityContext.productIdFromStg,
-                    "WorkIdentifier", dataFromSAId.get(0).B_CLASSNAME);
+                Assert.assertEquals("The classname is incorrect for id=" + dataQualityContext.productIdFromStg,
+                        "WorkIdentifier", dataFromSAId.get(0).getB_CLASSNAME());
 
-            sql = String.format(WorksIdentifierSQL.GET_F_WWORK, dataFromSTG.get(0).PRODUCT_WORK_ID);
-            Log.info(sql);
-
-            List<Map<String, Object>> workIdObject = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            String F_WORK = ((String) (workIdObject.get(0).get("F_WWORK")));
-
-            Log.info("The Work id in stage is " + dataFromSTG.get(0).PRODUCT_WORK_ID);
-            Log.info("The work id in Map table is " + F_WORK);
-            Log.info("The Work id in SA is " + dataFromSAId.get(0).F_WWORK);
-
-            Assert.assertEquals("The Work ID's don't match ", F_WORK, dataFromSAId.get(0).F_WWORK);
-
-            if (dataFromSTG.get(0).JOURNAL_NUMBER != null) {
-                sql = WorksIdentifierSQL.getTypeId
-                        .replace("PARAM1", dataFromSA.get(0).WORK_ID)
-                        .replace("PARAM2", "ELSEVIER JOURNAL NUMBER");
-
-                dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-                Assert.assertEquals("The  type is incorrect for id=" + dataQualityContext.productIdFromStg,
-                        "ELSEVIER JOURNAL NUMBER", dataFromSAFtype.get(0).F_TYPE);
-
-                Assert.assertEquals("The JOURNAL_NUMBER  is incorrect for id=" + dataQualityContext.productIdFromStg,
-                        dataFromSTG.get(0).JOURNAL_NUMBER, dataFromSAFtype.get(0).IDENTIFER);
-
-                Log.info("The value in STG is : " + dataFromSTG.get(0).JOURNAL_NUMBER);
-                Log.info("The value in SA is : " + dataFromSAFtype.get(0).IDENTIFER);
-
-                Log.info("Journal number is correct");
-                sql = WorksIdentifierSQL.getIdentifierID
-                        .replace("PARAM1", "ELSEVIER JOURNAL NUMBER")
-                        .replace("PARAM2", "JOURNAL_NUMBER")
-                        .replace("PARAM3", dataFromSA.get(0).WORK_ID);
+                sql = String.format(WorksIdentifierSQL.GET_F_WWORK, dataFromSTG.get(0).getPRODUCT_WORK_ID());
                 Log.info(sql);
-                identifierID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-                Assert.assertEquals("The id is not as expected", identifierID.get(0).getSTG()
-                        , identifierID.get(0).getSA());
 
-            }
-            if (dataFromSTG.get(0).ISSN_L != null) {
-                sql = WorksIdentifierSQL.getTypeId
-                        .replace("PARAM1", dataFromSA.get(0).WORK_ID)
-                        .replace("PARAM2", "ISSN-L");
+                List<Map<String, Object>> workIdObject = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                String F_WORK = ((String) (workIdObject.get(0).get("F_WWORK")));
 
-                dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-                Assert.assertEquals("The type is incorrect for id=" + dataQualityContext.productIdFromStg,
-                        "ISSN-L", dataFromSAFtype.get(0).F_TYPE);
+                Log.info("The Work id in stage is " + dataFromSTG.get(0).getPRODUCT_WORK_ID());
+                Log.info("The work id in Map table is " + F_WORK);
+                Log.info("The Work id in SA is " + dataFromSAId.get(0).getF_WWORK());
 
-                Assert.assertEquals("The ISSN_L is incorrect for id=" + dataQualityContext.productIdFromStg,
-                        dataFromSTG.get(0).ISSN_L, dataFromSAFtype.get(0).IDENTIFER);
+                Assert.assertEquals("The Work ID's don't match ", F_WORK, dataFromSAId.get(0).getF_WWORK());
 
-                Log.info("The value in STG is : " + dataFromSTG.get(0).ISSN_L);
-                Log.info("The value in SA is : " + dataFromSAFtype.get(0).IDENTIFER);
+                if (dataFromSTG.get(0).getJOURNAL_NUMBER() != null) {
+                    sql = WorksIdentifierSQL.getTypeId
+                            .replace("PARAM1", dataFromSA.get(0).getWORK_ID())
+                            .replace("PARAM2", "ELSEVIER JOURNAL NUMBER");
 
-                sql = WorksIdentifierSQL.getIdentifierID
-                        .replace("PARAM1", "ISSN-L")
-                        .replace("PARAM2", "ISSN_L")
-                        .replace("PARAM3", dataFromSA.get(0).WORK_ID);
-                Log.info(sql);
-                identifierID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-                Assert.assertEquals("The id is not as expected", identifierID.get(0).getSTG()
-                        , identifierID.get(0).getSA());
+                    dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                    Assert.assertEquals("The  type is incorrect for id=" + dataQualityContext.productIdFromStg,
+                            "ELSEVIER JOURNAL NUMBER", dataFromSAFtype.get(0).getF_TYPE());
 
-                Log.info("ISSN_L is correct");
-            }
-            if (dataFromSTG.get(0).JOURNAL_ACRONYM != null) {
-                sql = WorksIdentifierSQL.getTypeId
-                        .replace("PARAM1", dataFromSA.get(0).WORK_ID)
-                        .replace("PARAM2", "JOURNAL ACRONYM");
-                dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                    Assert.assertEquals("The JOURNAL_NUMBER  is incorrect for id=" + dataQualityContext.productIdFromStg,
+                            dataFromSTG.get(0).getJOURNAL_NUMBER(), dataFromSAFtype.get(0).getIDENTIFER());
 
-                Assert.assertEquals("The type is incorrect for id=" + dataQualityContext.productIdFromStg,
-                        "JOURNAL ACRONYM", dataFromSAFtype.get(0).F_TYPE);
+                    Log.info("The value in STG is : " + dataFromSTG.get(0).getJOURNAL_NUMBER());
+                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFER());
 
-                Assert.assertEquals("The JOURNAL_ACRONYM is incorrect for id=" + dataQualityContext.productIdFromStg,
-                        dataFromSTG.get(0).JOURNAL_ACRONYM, dataFromSAFtype.get(0).IDENTIFER);
+                    Log.info("Journal number is correct");
+                    sql = WorksIdentifierSQL.getIdentifierID
+                            .replace("PARAM1", "ELSEVIER JOURNAL NUMBER")
+                            .replace("PARAM2", "JOURNAL_NUMBER")
+                            .replace("PARAM3", dataFromSA.get(0).getWORK_ID());
+                    Log.info(sql);
+                    identifierID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                    Assert.assertEquals("The id is not as expected", identifierID.get(0).getSTG()
+                            , identifierID.get(0).getSA());
 
-                Log.info("The value in STG is : " + dataFromSTG.get(0).JOURNAL_ACRONYM);
-                Log.info("The value in SA is : " + dataFromSAFtype.get(0).IDENTIFER);
+                }
+                if (dataFromSTG.get(0).getISSN_L() != null) {
+                    sql = WorksIdentifierSQL.getTypeId
+                            .replace("PARAM1", dataFromSA.get(0).getWORK_ID())
+                            .replace("PARAM2", "ISSN-L");
 
-                sql = WorksIdentifierSQL.getIdentifierID
-                        .replace("PARAM1", "JOURNAL ACRONYM")
-                        .replace("PARAM2", "JOURNAL_ACRONYM")
-                        .replace("PARAM3", dataFromSA.get(0).WORK_ID);
-                Log.info(sql);
-                identifierID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-                Assert.assertEquals("The id is not as expected", identifierID.get(0).getSTG()
-                        , identifierID.get(0).getSA());
-                Log.info("Journal acronym is correct");
-            }
-            if (dataFromSTG.get(0).DAC_KEY != null) {
-                sql = WorksIdentifierSQL.getTypeId
-                        .replace("PARAM1", dataFromSA.get(0).WORK_ID)
-                        .replace("PARAM2", "DAC-K");
-                dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                    dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                    Assert.assertEquals("The type is incorrect for id=" + dataQualityContext.productIdFromStg,
+                            "ISSN-L", dataFromSAFtype.get(0).getF_TYPE());
 
-                Assert.assertEquals("The type is incorrect for id=" + dataQualityContext.productIdFromStg,
-                        "DAC-K", dataFromSAFtype.get(0).F_TYPE);
+                    Assert.assertEquals("The ISSN_L is incorrect for id=" + dataQualityContext.productIdFromStg,
+                            dataFromSTG.get(0).getISSN_L(), dataFromSAFtype.get(0).getIDENTIFER());
 
-                Assert.assertEquals("The DAC_KEY is incorrect for id=" + dataQualityContext.productIdFromStg,
-                        dataFromSTG.get(0).DAC_KEY, dataFromSAFtype.get(0).IDENTIFER);
+                    Log.info("The value in STG is : " + dataFromSTG.get(0).getISSN_L());
+                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFER());
 
-                Log.info("The value in STG is : " + dataFromSTG.get(0).DAC_KEY);
-                Log.info("The value in SA is : " + dataFromSAFtype.get(0).IDENTIFER);
-                sql = WorksIdentifierSQL.getIdentifierID
-                        .replace("PARAM1", "DAC-K")
-                        .replace("PARAM2", "DAC_KEY")
-                        .replace("PARAM3", dataFromSA.get(0).WORK_ID);
-                Log.info(sql);
-                identifierID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-                Assert.assertEquals("The id is not as expected", identifierID.get(0).getSTG()
-                        , identifierID.get(0).getSA());
-                Log.info("DAC_KEY is correct");
-            }
-            if (dataFromSTG.get(0).PROJECT_NUM != null) {
-                sql = WorksIdentifierSQL.getTypeId
-                        .replace("PARAM1", dataFromSA.get(0).WORK_ID)
-                        .replace("PARAM2", "PPM-PART");
+                    sql = WorksIdentifierSQL.getIdentifierID
+                            .replace("PARAM1", "ISSN-L")
+                            .replace("PARAM2", "ISSN_L")
+                            .replace("PARAM3", dataFromSA.get(0).getWORK_ID());
+                    Log.info(sql);
+                    identifierID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                    Assert.assertEquals("The id is not as expected", identifierID.get(0).getSTG()
+                            , identifierID.get(0).getSA());
 
-                dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                    Log.info("ISSN_L is correct");
+                }
+                if (dataFromSTG.get(0).getJOURNAL_ACRONYM() != null) {
+                    sql = WorksIdentifierSQL.getTypeId
+                            .replace("PARAM1", dataFromSA.get(0).getWORK_ID())
+                            .replace("PARAM2", "JOURNAL ACRONYM");
+                    dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
-                Assert.assertEquals("The type is incorrect for id=" + dataQualityContext.productIdFromStg,
-                        "PPM-PART", dataFromSAFtype.get(0).F_TYPE);
+                    Assert.assertEquals("The type is incorrect for id=" + dataQualityContext.productIdFromStg,
+                            "JOURNAL ACRONYM", dataFromSAFtype.get(0).getF_TYPE());
 
-                Assert.assertEquals("The PROJECT_NUM is incorrect for id=" + dataQualityContext.productIdFromStg,
-                        dataFromSTG.get(0).PROJECT_NUM, dataFromSAFtype.get(0).IDENTIFER);
+                    Assert.assertEquals("The JOURNAL_ACRONYM is incorrect for id=" + dataQualityContext.productIdFromStg,
+                            dataFromSTG.get(0).getJOURNAL_ACRONYM(), dataFromSAFtype.get(0).getIDENTIFER());
 
-                Log.info("The value in STG is : " + dataFromSTG.get(0).PROJECT_NUM);
-                Log.info("The value in SA is : " + dataFromSAFtype.get(0).IDENTIFER);
-                sql = WorksIdentifierSQL.getIdentifierID
-                        .replace("PARAM1", "PPM-PART")
-                        .replace("PARAM2", "PROJECT_NUM")
-                        .replace("PARAM3", dataFromSA.get(0).WORK_ID);
-                Log.info(sql);
-                identifierID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-                Assert.assertEquals("The id is not as expected", identifierID.get(0).getSTG()
-                        , identifierID.get(0).getSA());
-                Log.info("PROJECT_NUM is correct");
+                    Log.info("The value in STG is : " + dataFromSTG.get(0).getJOURNAL_ACRONYM());
+                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFER());
+
+                    sql = WorksIdentifierSQL.getIdentifierID
+                            .replace("PARAM1", "JOURNAL ACRONYM")
+                            .replace("PARAM2", "JOURNAL_ACRONYM")
+                            .replace("PARAM3", dataFromSA.get(0).getWORK_ID());
+                    Log.info(sql);
+                    identifierID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                    Assert.assertEquals("The id is not as expected", identifierID.get(0).getSTG()
+                            , identifierID.get(0).getSA());
+                    Log.info("Journal acronym is correct");
+                }
+                if (dataFromSTG.get(0).getDAC_KEY() != null) {
+                    sql = WorksIdentifierSQL.getTypeId
+                            .replace("PARAM1", dataFromSA.get(0).getWORK_ID())
+                            .replace("PARAM2", "DAC-K");
+                    dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+
+                    Assert.assertEquals("The type is incorrect for id=" + dataQualityContext.productIdFromStg,
+                            "DAC-K", dataFromSAFtype.get(0).getF_TYPE());
+
+                    Assert.assertEquals("The DAC_KEY is incorrect for id=" + dataQualityContext.productIdFromStg,
+                            dataFromSTG.get(0).getDAC_KEY(), dataFromSAFtype.get(0).getIDENTIFER());
+
+                    Log.info("The value in STG is : " + dataFromSTG.get(0).getDAC_KEY());
+                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFER());
+                    sql = WorksIdentifierSQL.getIdentifierID
+                            .replace("PARAM1", "DAC-K")
+                            .replace("PARAM2", "DAC_KEY")
+                            .replace("PARAM3", dataFromSA.get(0).getWORK_ID());
+                    Log.info(sql);
+                    identifierID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                    Assert.assertEquals("The id is not as expected", identifierID.get(0).getSTG()
+                            , identifierID.get(0).getSA());
+                    Log.info("DAC_KEY is correct");
+                }
+                if (dataFromSTG.get(0).getPROJECT_NUM() != null) {
+                    sql = WorksIdentifierSQL.getTypeId
+                            .replace("PARAM1", dataFromSA.get(0).getWORK_ID())
+                            .replace("PARAM2", "PPM-PART");
+
+                    dataFromSAFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+
+                    Assert.assertEquals("The type is incorrect for id=" + dataQualityContext.productIdFromStg,
+                            "PPM-PART", dataFromSAFtype.get(0).getF_TYPE());
+
+                    Assert.assertEquals("The PROJECT_NUM is incorrect for id=" + dataQualityContext.productIdFromStg,
+                            dataFromSTG.get(0).getPROJECT_NUM(), dataFromSAFtype.get(0).getIDENTIFER());
+
+                    Log.info("The value in STG is : " + dataFromSTG.get(0).getPROJECT_NUM());
+                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFER());
+                    sql = WorksIdentifierSQL.getIdentifierID
+                            .replace("PARAM1", "PPM-PART")
+                            .replace("PARAM2", "PROJECT_NUM")
+                            .replace("PARAM3", dataFromSA.get(0).getWORK_ID());
+                    Log.info(sql);
+                    identifierID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                    Assert.assertEquals("The id is not as expected", identifierID.get(0).getSTG()
+                            , identifierID.get(0).getSA());
+                    Log.info("PROJECT_NUM is correct");
+                }
             }
         }else{
             Log.info("Skipping test because DELTA LOAD is performed");
@@ -290,86 +313,90 @@ public class WorksIdSteps {
     @And("^The identifiers data between SA and GD is identical$")
     public void checkIdDataSAGD(){
         if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
-            Assert.assertEquals("There are missing identifiers", dataFromGDId.size(),dataFromSAId.size());
+            if (ids.isEmpty()) {
+                Log.info("Skipping as there are no found records for searched criteria");
+            } else {
+                Assert.assertEquals("There are missing identifiers", dataFromGDId.size(), dataFromSAId.size());
 
-        assertTrue("Expecting the Product details from PMX and EPH Consistent ",
-                dataFromSAId.get(0).F_EVENT
-                        .equals(dataFromGDId.get(0).F_EVENT));
-        assertTrue("Expecting the Product details from PMX and EPH Consistent ",
-                dataFromSAId.get(0).B_CLASSNAME
-                        .equals(dataFromGDId.get(0).B_CLASSNAME));
+                assertTrue("Expecting the Product details from PMX and EPH Consistent ",
+                        dataFromSAId.get(0).getF_EVENT()
+                                .equals(dataFromGDId.get(0).getF_EVENT()));
+                assertTrue("Expecting the Product details from PMX and EPH Consistent ",
+                        dataFromSAId.get(0).getB_CLASSNAME()
+                                .equals(dataFromGDId.get(0).getB_CLASSNAME()));
 
-        assertTrue("Expecting the EPH Work ID to be consistent  ",
-                dataFromSAId.get(0).F_WWORK.equals(dataFromGDId.get(0).F_WWORK));
+                assertTrue("Expecting the EPH Work ID to be consistent  ",
+                        dataFromSAId.get(0).getF_WWORK().equals(dataFromGDId.get(0).getF_WWORK()));
 
-        if (dataFromSTG.get(0).JOURNAL_NUMBER!=null){
-            sql=WorksIdentifierSQL.getTypeIdGD
-                    .replace("PARAM1",dataFromSA.get(0).WORK_ID)
-                    .replace("PARAM2","ELSEVIER JOURNAL NUMBER");
+                if (dataFromSTG.get(0).getJOURNAL_NUMBER() != null) {
+                    sql = WorksIdentifierSQL.getTypeIdGD
+                            .replace("PARAM1", dataFromSA.get(0).getWORK_ID())
+                            .replace("PARAM2", "ELSEVIER JOURNAL NUMBER");
 
-            dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                    dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
-            Assert.assertEquals("The type is incorrect for id="+dataFromSA.get(0).WORK_ID,
-                    "ELSEVIER JOURNAL NUMBER",dataFromGDFtype.get(0).F_TYPE);
+                    Assert.assertEquals("The type is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
+                            "ELSEVIER JOURNAL NUMBER", dataFromGDFtype.get(0).getF_TYPE());
 
-            Assert.assertEquals("The Journal Number is incorrect for id="+dataFromSA.get(0).WORK_ID,
-                    dataFromSTG.get(0).JOURNAL_NUMBER,dataFromGDFtype.get(0).IDENTIFER);
+                    Assert.assertEquals("The Journal Number is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
+                            dataFromSTG.get(0).getJOURNAL_NUMBER(), dataFromGDFtype.get(0).getIDENTIFER());
 
-        }
-        if (dataFromSTG.get(0).ISSN_L!=null){
-            sql=WorksIdentifierSQL.getTypeIdGD
-                    .replace("PARAM1",dataFromSA.get(0).WORK_ID)
-                    .replace("PARAM2","ISSN-L");
+                }
+                if (dataFromSTG.get(0).getISSN_L() != null) {
+                    sql = WorksIdentifierSQL.getTypeIdGD
+                            .replace("PARAM1", dataFromSA.get(0).getWORK_ID())
+                            .replace("PARAM2", "ISSN-L");
 
-            dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                    dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
-            Assert.assertEquals("The type is incorrect for id="+dataFromSA.get(0).WORK_ID,
-                    "ISSN-L",dataFromGDFtype.get(0).F_TYPE);
+                    Assert.assertEquals("The type is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
+                            "ISSN-L", dataFromGDFtype.get(0).getF_TYPE());
 
-            Assert.assertEquals("The ISSN_L is incorrect for id="+dataFromSA.get(0).WORK_ID,
-                    dataFromSTG.get(0).ISSN_L,dataFromGDFtype.get(0).IDENTIFER);
+                    Assert.assertEquals("The ISSN_L is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
+                            dataFromSTG.get(0).getISSN_L(), dataFromGDFtype.get(0).getIDENTIFER());
 
-        }
-        if (dataFromSTG.get(0).JOURNAL_ACRONYM!=null){
-            sql=WorksIdentifierSQL.getTypeIdGD
-                    .replace("PARAM1",dataFromSA.get(0).WORK_ID)
-                    .replace("PARAM2","JOURNAL ACRONYM");
+                }
+                if (dataFromSTG.get(0).getJOURNAL_ACRONYM() != null) {
+                    sql = WorksIdentifierSQL.getTypeIdGD
+                            .replace("PARAM1", dataFromSA.get(0).getWORK_ID())
+                            .replace("PARAM2", "JOURNAL ACRONYM");
 
-            dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                    dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
-            Assert.assertEquals("The type is incorrect for id="+dataFromSA.get(0).WORK_ID,
-                    "JOURNAL ACRONYM",dataFromGDFtype.get(0).F_TYPE);
+                    Assert.assertEquals("The type is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
+                            "JOURNAL ACRONYM", dataFromGDFtype.get(0).getF_TYPE());
 
-            Assert.assertEquals("The JOURNAL_ACRONYM is incorrect for id="+dataFromSA.get(0).WORK_ID,
-                    dataFromSTG.get(0).JOURNAL_ACRONYM,dataFromGDFtype.get(0).IDENTIFER);
-        }
-        if (dataFromSTG.get(0).DAC_KEY!=null){
-            sql=WorksIdentifierSQL.getTypeIdGD
-                    .replace("PARAM1",dataFromSA.get(0).WORK_ID)
-                    .replace("PARAM2","DAC-K");
+                    Assert.assertEquals("The JOURNAL_ACRONYM is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
+                            dataFromSTG.get(0).getJOURNAL_ACRONYM(), dataFromGDFtype.get(0).getIDENTIFER());
+                }
+                if (dataFromSTG.get(0).getDAC_KEY() != null) {
+                    sql = WorksIdentifierSQL.getTypeIdGD
+                            .replace("PARAM1", dataFromSA.get(0).getWORK_ID())
+                            .replace("PARAM2", "DAC-K");
 
-            dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                    dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
-            Assert.assertEquals("The type is incorrect for id="+dataFromSA.get(0).WORK_ID,
-                    "DAC-K",dataFromGDFtype.get(0).F_TYPE);
+                    Assert.assertEquals("The type is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
+                            "DAC-K", dataFromGDFtype.get(0).getF_TYPE());
 
-            Assert.assertEquals("The DAC_KEY is incorrect for id="+dataFromSA.get(0).WORK_ID,
-                    dataFromSTG.get(0).DAC_KEY,dataFromGDFtype.get(0).IDENTIFER);
+                    Assert.assertEquals("The DAC_KEY is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
+                            dataFromSTG.get(0).getDAC_KEY(), dataFromGDFtype.get(0).getIDENTIFER());
 
-        }
-        if (dataFromSTG.get(0).PROJECT_NUM!=null) {
-            sql = WorksIdentifierSQL.getTypeIdGD
-                    .replace("PARAM1", dataFromSA.get(0).WORK_ID)
-                    .replace("PARAM2", "PPM-PART");
+                }
+                if (dataFromSTG.get(0).getPROJECT_NUM() != null) {
+                    sql = WorksIdentifierSQL.getTypeIdGD
+                            .replace("PARAM1", dataFromSA.get(0).getWORK_ID())
+                            .replace("PARAM2", "PPM-PART");
 
-            dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                    dataFromGDFtype = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
-            Assert.assertEquals("The type is incorrect for id=" + dataFromSA.get(0).WORK_ID,
-                    "PPM-PART", dataFromGDFtype.get(0).F_TYPE);
+                    Assert.assertEquals("The type is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
+                            "PPM-PART", dataFromGDFtype.get(0).getF_TYPE());
 
-            Assert.assertEquals("The PROJECT_NUM is incorrect for id=" + dataFromSA.get(0).WORK_ID,
-                    dataFromSTG.get(0).PROJECT_NUM, dataFromGDFtype.get(0).IDENTIFER);
-        }
+                    Assert.assertEquals("The PROJECT_NUM is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
+                            dataFromSTG.get(0).getPROJECT_NUM(), dataFromGDFtype.get(0).getIDENTIFER());
+                }
+            }
         }else{
             Log.info("Skipping test because DELTA LOAD is performed");
         }
@@ -379,43 +406,27 @@ public class WorksIdSteps {
     public void getSTGCount(String column, String type){
 //
             if ((System.getProperty("LOAD") == null) || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE
-                        .replace("PARAM1", column);
+                sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE, type, column, column);
                 System.out.print(sql);
-                stgCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-                Log.info("\n The count in stg for " + column + " is " + stgCount.get(0).count);
+                List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
+                stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
+
+                Log.info("\n The count in stg for " + column + " is " + stgCount);
             }else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
-                refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-                        Constants.EPH_URL);
+                Log.info(sql);
+                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
 
                 sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA
                         .replace("PARAM1", column)
-                        .replace("PARAM2",refreshDate.get(1).refresh_timestamp)
+                        .replace("PARAM2",refreshDate)
                         .replace("PARAM3",type);
                 System.out.print(sql);
-                stgCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-                Log.info("\n The count in stg for " + column + " is " + stgCount.get(0).count);
+                List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
+                Log.info("\n The count in stg for " + column + " is " + stgCount);
             }
-//        }else{
-//            sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE
-//                    .replace("PARAM1", column);
-//            System.out.print(sql);
-//            stgCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-//            Log.info("\n The count in stg for " + column + " is " + stgCount.get(0).count);
-
-//            sql = WorkCountSQL.GET_REFRESH_DATE;
-//            refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-//                    Constants.EPH_URL);
-//
-//            sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA
-//                    .replace("PARAM1", column)
-//                    .replace("PARAM2",refreshDate.get(1).refresh_timestamp)
-//                    .replace("PARAM3",type);
-//            System.out.print(sql);
-//            stgCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-//            Log.info("\n The count in stg for " + column + " is " + stgCount.get(0).count);
-//        }
     }
 
     @When("^We get the work identifier count from SA and GD (.*)$")
@@ -423,27 +434,29 @@ public class WorksIdSteps {
         sql = WorksIdentifierSQL.COUNT_SA_WORK_IDENTIFIER
                 .replace("PARAM1", type);
         System.out.print(sql);
-        saCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-        Log.info("\n The count in SA for " + type + " is " + saCount.get(0).count);
+        List<Map<String, Object>> saCountNumber = DBManager.getDBResultMap(sql,  Constants.EPH_URL);
+        saCount = ((Long) saCountNumber.get(0).get("count")).intValue();
+        Log.info("\n The count in SA for " + type + " is " + saCount);
 
         sql = WorksIdentifierSQL.COUNT_GD_WORK_IDENTIFIER
                 .replace("PARAM1", type);
         System.out.print(sql);
-        gdCount = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-        Log.info("\n The count in GD for " + type + " is " + gdCount.get(0).count);
+        List<Map<String, Object>> gdCountNumber = DBManager.getDBResultMap(sql,  Constants.EPH_URL);
+        gdCount = ((Long) gdCountNumber.get(0).get("count")).intValue();
+        Log.info("\n The count in GD for " + type + " is " + gdCount);
     }
 
     @Then("^The counts between staging and SA are matching$")
     public void compareSTGtoSA(){
         Assert.assertEquals("The counts between STG and SA do not match!",
-                stgCount.get(0).count,saCount.get(0).count);
+                stgCount,saCount);
     }
 
 
     @And("^The counts between SA and GD are matching$")
     public void compareSAtoGD(){
         Assert.assertEquals("The counts between SA and GD do not match!",
-                saCount.get(0).count,gdCount.get(0).count);
+                saCount,gdCount);
     }
 
     @Given("^We have an end-dated identifier in GD$")
@@ -491,7 +504,7 @@ public class WorksIdSteps {
 
     @When("^We get the data for the identifier from staging$")
     public void getNewStgData(){
-            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
                 Log.info("There is no delta load performed");
             } else {
                 if (workid.isEmpty()) {
@@ -521,7 +534,7 @@ public class WorksIdSteps {
                     pmxSource = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                             Constants.EPH_URL);
 
-                    sql = WorksIdentifierSQL.getIdentifiersDelta.replace("PARAM1", pmxSource.get(0).WORK_ID);
+                    sql = WorksIdentifierSQL.getIdentifiersDelta.replace("PARAM1", pmxSource.get(0).getWORK_ID());
                     Log.info(sql);
                     stgNewID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                             Constants.EPH_URL);
@@ -531,21 +544,21 @@ public class WorksIdSteps {
                     endDatedID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                             Constants.EPH_URL);
 
-                    if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("ISSN-L")) {
-                        Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
-                                stgNewID.get(0).ISSN_L);
-                    } else if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("PPM-PART")) {
-                        Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
-                                stgNewID.get(0).PROJECT_NUM);
-                    } else if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("ELSEVIER JOURNAL NUMBER")) {
-                        Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
-                                stgNewID.get(0).JOURNAL_NUMBER);
-                    } else if (endDatedID.get(0).F_TYPE.equalsIgnoreCase("JOURNAL ACRONYM")) {
-                        Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
-                                stgNewID.get(0).JOURNAL_ACRONYM);
+                    if (endDatedID.get(0).getF_TYPE().equalsIgnoreCase("ISSN-L")) {
+                        Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).getIDENTIFIER(),
+                                stgNewID.get(0).getISSN_L());
+                    } else if (endDatedID.get(0).getF_TYPE().equalsIgnoreCase("PPM-PART")) {
+                        Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).getIDENTIFIER(),
+                                stgNewID.get(0).getPROJECT_NUM());
+                    } else if (endDatedID.get(0).getF_TYPE().equalsIgnoreCase("ELSEVIER JOURNAL NUMBER")) {
+                        Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).getIDENTIFIER(),
+                                stgNewID.get(0).getJOURNAL_NUMBER());
+                    } else if (endDatedID.get(0).getF_TYPE().equalsIgnoreCase("JOURNAL ACRONYM")) {
+                        Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).getIDENTIFIER(),
+                                stgNewID.get(0).getJOURNAL_ACRONYM());
                     } else {
-                        Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).IDENTIFIER,
-                                stgNewID.get(0).DAC_KEY);
+                        Assert.assertNotEquals("The identifiers are the same", endDatedID.get(0).getIDENTIFIER(),
+                                stgNewID.get(0).getDAC_KEY());
                     }
                 }
             }
