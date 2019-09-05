@@ -4,13 +4,12 @@ import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
-import com.eph.automation.testing.models.dao.ManifestationDataObject;
 import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.GeneratingRandomSQL;
+import com.eph.automation.testing.services.db.sql.WorkCountSQL;
 import com.eph.automation.testing.services.db.sql.WorkExtractSQL;
 import com.eph.automation.testing.services.db.sql.WorkDataCheckSQL;
 import com.google.common.base.Joiner;
-import com.jcraft.jsch.Logger;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -28,7 +27,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class WorksDataCheck {
@@ -36,11 +34,9 @@ public class WorksDataCheck {
     public DataQualityContext dataQualityContext;
     public String sql;
     private static List<WorkDataObject> isbn;
-    private List<WorkDataObject> workDataObjectsAccProd;
     private String numberOfRecords;
-    private List<Map<?, ?>> manifestationIds;
     private static List<String> ids;
-    private static List<String> isbns;
+    private String refreshDate;
 
     @Given("^We have a number of works to check$")
     public void setWorkID(){
@@ -54,16 +50,25 @@ public class WorksDataCheck {
         }
         Log.info("numberOfRecords = " + numberOfRecords);
 
-        sql = GeneratingRandomSQL.generatingValue
+
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            sql = GeneratingRandomSQL.generatingValue
                     .replace("PARAM1", numberOfRecords);
-        Log.info(sql);
-        isbn = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-/*
-        id.get(i = isbn.get(i).random_value;*/
+            Log.info(sql);
+        } else {
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            Log.info(sql);
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+            Log.info("refresh date: " + refreshDate);
+            sql = GeneratingRandomSQL.generatingValueDelta
+                    .replace("PARAM1", numberOfRecords);
+            Log.info(sql);
+        }
 
-        List<Map<?, ?>> randomISBNIds = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
+        List<Map<?, ?>> randomIds = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
 
-        ids = randomISBNIds.stream().map(m -> (BigDecimal) m.get("random_value")).map(String::valueOf).collect(Collectors.toList());
+        ids = randomIds.stream().map(m -> (BigDecimal) m.get("random_value")).map(String::valueOf).collect(Collectors.toList());
         Log.info(ids.toString());
     }
 

@@ -223,51 +223,54 @@ public class SubjectAreaDataQualityCheckSteps {
     @And("^Compare the subject area data in PMX and EPH STG$")
     public void compareSubjectAreaDataPMXAndSTG() {
         Log.info("And compare the subject area data in PMX and EPH STG ..");
-        dataQualityContext.subjectAreaDataObjectsFromPMX.sort(Comparator.comparing(SubjectAreaDataObject::getPMX_SOURCE_REF));
-        dataQualityContext.subjectAreaDataObjectsFromSTG.sort(Comparator.comparing(SubjectAreaDataObject::getPMX_SOURCE_REF));
+        if (dataQualityContext.subjectAreaDataObjectsFromSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            Log.info("There are no records found for Subject Area ");
+        } else {
+            dataQualityContext.subjectAreaDataObjectsFromPMX.sort(Comparator.comparing(SubjectAreaDataObject::getPMX_SOURCE_REF));
+            dataQualityContext.subjectAreaDataObjectsFromSTG.sort(Comparator.comparing(SubjectAreaDataObject::getPMX_SOURCE_REF));
 
 
-        IntStream.range(0, dataQualityContext.subjectAreaDataObjectsFromSTG.size()).forEach(i -> {
+            IntStream.range(0, dataQualityContext.subjectAreaDataObjectsFromSTG.size()).forEach(i -> {
 
-            //PMX_SOURCE_REF
-            Log.info("PMX_SOURCE_REF in PMX: " + dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getPMX_SOURCE_REF());
-            Log.info("PMX_SOURCE_REF in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPMX_SOURCE_REF());
+                //PMX_SOURCE_REF
+                Log.info("PMX_SOURCE_REF in PMX: " + dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getPMX_SOURCE_REF());
+                Log.info("PMX_SOURCE_REF in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPMX_SOURCE_REF());
 
-            assertEquals(dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getPMX_SOURCE_REF(), dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPMX_SOURCE_REF());
+                assertEquals(dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getPMX_SOURCE_REF(), dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPMX_SOURCE_REF());
 
-            //SUBJECT_AREA_CODE
-            Log.info("SUBJECT_AREA_CODE in PMX: " + dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getSUBJECT_AREA_CODE());
-            Log.info("SUBJECT_AREA_CODE in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_CODE());
+                //SUBJECT_AREA_CODE
+                Log.info("SUBJECT_AREA_CODE in PMX: " + dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getSUBJECT_AREA_CODE());
+                Log.info("SUBJECT_AREA_CODE in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_CODE());
 
-            assertEquals(dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getSUBJECT_AREA_CODE(), dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_CODE());
+                assertEquals(dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getSUBJECT_AREA_CODE(), dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_CODE());
 
-            //SUBJECT_AREA_NAME
-            Log.info("SUBJECT_AREA_NAME in PMX: " + dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getSUBJECT_AREA_NAME());
-            Log.info("SUBJECT_AREA_NAME in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_NAME());
+                //SUBJECT_AREA_NAME
+                Log.info("SUBJECT_AREA_NAME in PMX: " + dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getSUBJECT_AREA_NAME());
+                Log.info("SUBJECT_AREA_NAME in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_NAME());
 
-            assertEquals(dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getSUBJECT_AREA_NAME(), dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_NAME());
+                assertEquals(dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getSUBJECT_AREA_NAME(), dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_NAME());
 
-            //PARENT_SUBJECT_AREA_REF
-            Log.info("PARENT_SUBJECT_AREA_REF in PMX: " + dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getPARENT_SUBJECT_AREA_REF());
-            Log.info("PARENT_SUBJECT_AREA_REF in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPARENT_SUBJECT_AREA_REF());
+                //PARENT_SUBJECT_AREA_REF
+                Log.info("PARENT_SUBJECT_AREA_REF in PMX: " + dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getPARENT_SUBJECT_AREA_REF());
+                Log.info("PARENT_SUBJECT_AREA_REF in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPARENT_SUBJECT_AREA_REF());
 
-            assertEquals(dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getPARENT_SUBJECT_AREA_REF(), dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPARENT_SUBJECT_AREA_REF());
+                assertEquals(dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getPARENT_SUBJECT_AREA_REF(), dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getPARENT_SUBJECT_AREA_REF());
 
 
-            //SUBJECT_AREA_TYPE
-            Log.info("SUBJECT_AREA_TYPE in PMX: " + dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getSUBJECT_AREA_TYPE());
-            Log.info("SUBJECT_AREA_TYPE in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_TYPE());
+                //SUBJECT_AREA_TYPE
+                Log.info("SUBJECT_AREA_TYPE in PMX: " + dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getSUBJECT_AREA_TYPE());
+                Log.info("SUBJECT_AREA_TYPE in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_TYPE());
 
-            assertEquals(dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getSUBJECT_AREA_TYPE(), dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_TYPE());
+                assertEquals(dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getSUBJECT_AREA_TYPE(), dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getSUBJECT_AREA_TYPE());
 
-            //UPDATED
-            Log.info("UPDATED in PMX: " + dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getUPDATED());
-            Log.info("UPDATED in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getUPDATED());
+                //UPDATED
+                Log.info("UPDATED in PMX: " + dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getUPDATED());
+                Log.info("UPDATED in EPH STG: " + dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getUPDATED());
 
-            assertEquals(dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getUPDATED(), dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getUPDATED());
+                assertEquals(dataQualityContext.subjectAreaDataObjectsFromPMX.get(i).getUPDATED(), dataQualityContext.subjectAreaDataObjectsFromSTG.get(i).getUPDATED());
 
-        });
-
+            });
+        }
     }
 
 

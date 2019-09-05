@@ -2,7 +2,7 @@ package com.eph.automation.testing.services.db.sql;
 
 public class TranslationsSQL {
 
-    public static String GET_PMX_TRANSLATIONS_COUNT ="SELECT count(*) as pmxCount FROM (SELECT\n" +
+    public static String GET_PMX_TRANSLATIONS_COUNT ="SELECT count(*) as count FROM (SELECT\n" +
             "\t WL.PRODUCT_WORK_LINK_ID AS RELATIONSHIP_PMX_SOURCEREF\n" +
             "\t,W1.PRODUCT_WORK_ID AS CHILD_PMX_SOURCE\n" +
             "\t,W2.PRODUCT_WORK_ID AS PARENT_PMX_SOURCE\n" +
@@ -31,9 +31,9 @@ public class TranslationsSQL {
             "\tWL.F_PRODUCT_WORK_LINK_TYPE IN (51,21)\t-- 51 = translation, 21 = mirror\n" +
             "\t)\n";
 
-    public static String GET_STG_ALL_COUNT ="select count(*) as stgCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel";
+    public static String GET_STG_ALL_COUNT ="select count(*) as count from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel";
 
-    public static String GET_STG_TRANSLATIONS_COUNT ="select count(*) as stgCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel " +
+    public static String GET_STG_TRANSLATIONS_COUNT ="select count(*) as count from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel " +
             "  join  (select s.pmx_source_reference as stage, g.external_reference as gold,\n" +
             "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
             "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
@@ -48,7 +48,7 @@ public class TranslationsSQL {
             GetEPHDBUser.getDBUser()+".STG_10_PMX_WORK_REL.\"RELATIONSHIP_PMX_SOURCEREF\"::varchar = a.external_reference\n"+
             "where d1.dq_err != 'Y' and d2.dq_err != 'Y'";
 
-    public static String GET_STG_TRANSLATIONS_COUNT_Updated ="select count(*) as stgCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel " +
+    public static String GET_STG_TRANSLATIONS_COUNT_Updated ="select count(*) as count from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel " +
             "  join  (select s.pmx_source_reference as stage, g.external_reference as gold,\n" +
             "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
             "case when s.pmx_source_reference is null then 'N' else s.dq_err end as dq_err\n" +
@@ -62,10 +62,10 @@ public class TranslationsSQL {
             "left join   (select distinct external_reference, work_relationship_id from semarchy_eph_mdm.sa_work_relationship) a on\n" +
             GetEPHDBUser.getDBUser()+".STG_10_PMX_WORK_REL.\"RELATIONSHIP_PMX_SOURCEREF\"::varchar = a.external_reference "+
 //            "where d1.dq_err != 'Y' and d2.dq_err != 'Y' and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
-            "where d1.dq_err != 'Y' and d2.dq_err != 'Y' and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('201905201200','YYYYMMDDHH24MI')";
+            "where d1.dq_err != 'Y' and d2.dq_err != 'Y' and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('201908221200','YYYYMMDDHH24MI')";
 
 
-    public static String GET_SA_TRANSLATIONS_COUNT ="select count(*) as saCount from semarchy_eph_mdm.sa_work_relationship sa\n"+
+    public static String GET_SA_TRANSLATIONS_COUNT ="select count(*) as count from semarchy_eph_mdm.sa_work_relationship sa\n"+
             " where f_event =  (select max (event_id) from\n" +
             "semarchy_eph_mdm.sa_event\n"+
             "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
@@ -74,14 +74,14 @@ public class TranslationsSQL {
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n";
 
     public static String GET_GD_TRANSLATIONS_COUNT =
-            "select count(*) as gdCount from semarchy_eph_mdm.gd_work_relationship \n" +
+            "select count(*) as count from semarchy_eph_mdm.gd_work_relationship \n" +
             " where b_batchid =  (select max (b_batchid) from\n" +
             "semarchy_eph_mdm.gd_event where  semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n" +
             "and semarchy_eph_mdm.gd_event.workflow_id = 'talend'\n" +
             "AND semarchy_eph_mdm.gd_event.f_event_type = 'PMX'\n" +
             "and semarchy_eph_mdm.gd_event.f_workflow_source = 'PMX' )" ;
 
-    public static String GET_AE_TRANSLATIONS_COUNT ="select count(distinct ae.work_relationship_id) as aeCount from semarchy_eph_mdm.ae_work_relationship ae\n" +
+    public static String GET_AE_TRANSLATIONS_COUNT ="select count(distinct ae.work_relationship_id) as count from semarchy_eph_mdm.ae_work_relationship ae\n" +
             "join semarchy_eph_mdm.sa_work_relationship sa on sa.work_relationship_id=ae.work_relationship_id\n" +
             " where ae.b_batchid =  (select max (ae.b_batchid) from\n" +
             "semarchy_eph_mdm.ae_work_relationship ae join \n" +

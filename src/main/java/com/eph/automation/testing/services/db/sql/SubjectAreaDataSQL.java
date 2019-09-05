@@ -126,7 +126,7 @@ public class SubjectAreaDataSQL {
             "left join semarchy_eph_mdm.SA_SUBJECT_AREA sa on mp.numeric_id = sa.subject_area_id\n" +
             "where sa.b_error_status is null\n" +
 //            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')\n" +
-            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n" +
+            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201908221200','YYYYMMDDHH24MI')\n" +
             "order by random()\n" +
             "limit '%s'";
 

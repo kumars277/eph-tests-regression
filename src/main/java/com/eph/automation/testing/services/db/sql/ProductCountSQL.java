@@ -32,58 +32,58 @@ public class ProductCountSQL {
 
     public static String EPH_STG_PRODUCT_Count_Updated="select count(*) as stgCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product " +
 //            "where TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')";
-            "where TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
+            "where TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201908221200','YYYYMMDDHH24MI')";
 
 
     public static String EPH_STG_PRODUCT_Count_BOOKS_Updated="select count(*) as booksCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where \"ONE_OFF_ACCESS\" = 'Y' " +
 //            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')";
-            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
+            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201908221200','YYYYMMDDHH24MI')";
 
     public static String EPH_STG_PRODUCT_Count_Sub_Updated = "select count(*) as subCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where \"SUBSCRIPTION\" = 'Y' " +
 //            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')";
-            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
+            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201908221200','YYYYMMDDHH24MI')";
 
     public static String EPH_STG_PRODUCT_Count_Bulk_Updated="select count(*) as bulkCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where \"WORK_TYPE\" = 'JOURNAL' and \"BULK_SALES\" = 'Y' " +
 //            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')";
-            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
+            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201908221200','YYYYMMDDHH24MI')";
 
 
     public static String EPH_STG_PRODUCT_Count_Reprint_Updated="select count(*) as reprintCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where \"WORK_TYPE\" = 'JOURNAL' and \"REPRINTS\" = 'Y' " +
 //            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')";
-            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
+            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201908221200','YYYYMMDDHH24MI')";
 
 
     public static String EPH_STG_PRODUCT_Count_Back_Updated="select count(*) as backCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where \"WORK_TYPE\" = 'JOURNAL' and \"BACK_FILES\" = 'Y' " +
 //            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')";
-            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
+            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201908221200','YYYYMMDDHH24MI')";
 
     public static String EPH_STG_PRODUCT_Count_OA_Updated="select count(*) as oaCount from \n" +
             "(select \"F_PRODUCT_WORK\" from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where  \"WORK_TYPE\" = 'JOURNAL' and  \"OPEN_ACCESS\" = 'Y' " +
 //            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')\n" +
-            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')" +
+            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201908221200','YYYYMMDDHH24MI')" +
             " group by \"F_PRODUCT_WORK\" having count(*) = 1) a ";
 
     public static String EPH_STG_PRODUCT_Count_OA_More_Updated="select count(*) as oaMoreCount from \n" +
             "(select \"F_PRODUCT_WORK\" from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where \"WORK_TYPE\" = 'JOURNAL' and \"OPEN_ACCESS\" = 'Y' " +
 //            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')" +
-            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')" +
+            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201908221200','YYYYMMDDHH24MI')" +
             " group by \"F_PRODUCT_WORK\" having count(*) > 1) a ";
 
     public static String EPH_STG_PRODUCT_Count_AC_Updated="select count(*) as acCount from \n" +
             "(select \"F_PRODUCT_WORK\" from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where  \"WORK_TYPE\" = 'JOURNAL' and  \"AUTHOR_CHARGES\" = 'Y' " +
 //            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')" +
-            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')" +
+            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201908221200','YYYYMMDDHH24MI')" +
             " group by \"F_PRODUCT_WORK\" having count(*) = 1) a ";
 
     public static String EPH_STG_PRODUCT_Count_AC_More_Updated="select count(*) as acMoreCount from \n" +
             "(select \"F_PRODUCT_WORK\" from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where  \"WORK_TYPE\" = 'JOURNAL' and  \"AUTHOR_CHARGES\" = 'Y' " +
 //            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')" +
-            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')" +
+            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201908221200','YYYYMMDDHH24MI')" +
             " group by \"F_PRODUCT_WORK\" having count(*) > 1) a " ;
 
     public static String EPH_STG_PRODUCT_Packages_Updated="select count(*) as packagesCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product where \"PACKAGES\" = 'Y' " +
 //            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')";
-            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
+            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201908221200','YYYYMMDDHH24MI')";
 
     public static String EPH_STG_CAN_Count = "SELECT count(*) as ephCanCount from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product_dq";
 

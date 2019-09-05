@@ -122,6 +122,8 @@ public class MirrorTestSteps {
                 List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
                 refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
                 Log.info("refresh date: " + refreshDate);
+                sql = MirrorsSQL.gettingNumberOfIdsDelta.replace("PARAM1", numberOfRecords);
+
             }
 
 
