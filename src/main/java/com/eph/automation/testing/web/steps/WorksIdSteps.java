@@ -404,7 +404,7 @@ public class WorksIdSteps {
 
     @Given("^We know the work identifiers count in staging from column (.*) and (.*)$")
     public void getSTGCount(String column, String type){
-//
+
             if ((System.getProperty("LOAD") == null) || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
                 sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE, type, column, column);
                 System.out.print(sql);
@@ -423,7 +423,7 @@ public class WorksIdSteps {
                         .replace("PARAM2",refreshDate)
                         .replace("PARAM3",type);
                 System.out.print(sql);
-                List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
                 stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
                 Log.info("\n The count in stg for " + column + " is " + stgCount);
             }

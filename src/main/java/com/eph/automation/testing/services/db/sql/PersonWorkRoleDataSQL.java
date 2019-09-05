@@ -106,7 +106,7 @@ public class PersonWorkRoleDataSQL {
             "    on STG_10_PMX_WORK_PERSON_ROLE.\"WORK_PERSON_ROLE_SOURCE_REF\" = a.external_reference\n" +
             "where perd.dq_err != 'Y' and word.dq_err != 'Y'\n" +
 //            " and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')\n" ;
-            " and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n" ;
+            " and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201908221200','YYYYMMDDHH24MI')\n" ;
 
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHAE = "select count(distinct ae.work_person_role_id) as count from semarchy_eph_mdm.ae_work_person_role ae\n" +

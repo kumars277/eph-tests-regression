@@ -94,6 +94,7 @@ public class WorksCountCheckSteps {
 
         if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
             sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_Distinct;
+            Log.info(sql);
         } else {
             sql = WorkCountSQL.GET_REFRESH_DATE;
             Log.info(sql);
@@ -101,6 +102,7 @@ public class WorksCountCheckSteps {
             refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
             Log.info("refresh date: " + refreshDate);
             sqlPMXSTGDistinct = WorkCountSQL.PMX_STG_WORKS_COUNT_DELTA.replace("PARAM1", refreshDate);
+            Log.info(sqlPMXSTGDistinct);
         }
 
         List<Map<String, Object>> workCountPMXSTGDistinct = DBManager.getDBResultMap(sqlPMXSTGDistinct, Constants.EPH_URL);

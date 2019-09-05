@@ -78,7 +78,8 @@ public class MirrorsSQL {
             "WHERE \"F_RELATIONSHIP_TYPE\"='MIR' and d1.dq_err != 'Y' and d2.dq_err != 'Y' ORDER BY RANDOM()\n" +
             " LIMIT PARAM1;";
 
-    public static String gettingNumberOfIdsDelta="SELECT \"RELATIONSHIP_PMX_SOURCEREF\"  as random_value\n" +
+    public static String gettingNumberOfIdsDelta =
+    "SELECT \"RELATIONSHIP_PMX_SOURCEREF\"  as random_value\n" +
             " FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_rel\n" +
             "  join  (select s.pmx_source_reference as stage, g.external_reference as gold,\n" +
             "coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol,\n" +
@@ -92,8 +93,7 @@ public class MirrorsSQL {
             "on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.consol\n"+
             "left join   (select distinct external_reference, work_relationship_id from semarchy_eph_mdm.sa_work_relationship) a on\n" +
             GetEPHDBUser.getDBUser()+".STG_10_PMX_WORK_REL.\"RELATIONSHIP_PMX_SOURCEREF\"::varchar = a.external_reference\n"+
-            "WHERE \"F_RELATIONSHIP_TYPE\"='MIR' and d1.dq_err != 'Y' and d2.dq_err != 'Y'\n" +
-//            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM2','YYYYMMDDHH24MI')" +
+            "WHERE \"F_RELATIONSHIP_TYPE\"='MIR' and d1.dq_err != 'Y' and d2.dq_err != 'Y'" +
             "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')" +
             " ORDER BY RANDOM()\n" +
             " LIMIT PARAM1;";

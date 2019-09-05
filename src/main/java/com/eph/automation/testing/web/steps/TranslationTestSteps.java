@@ -33,32 +33,47 @@ public class TranslationTestSteps {
     public TranslationContext translationContext;
     public String sql;
 
+
     private String numberOfRecords;
     private static List<String> ids;
     private static List<String> workid;
-    private static List<String> isbns;
     public String fWorkID;
     private static String refreshDate;
+    private static int pmxCount;
+    private static int stgAllCount;
+    private static int stgCount;
+    private static int saCount;
+    private static int gdCount;
+    private static int aeCount;
+
+
 
     @Given("^We know the number of work relationship records in PMX$")
     public void getTranslationsCountDQ(){
         sql = TranslationsSQL.GET_PMX_TRANSLATIONS_COUNT;
         Log.info(sql);
-        translationContext.pmxCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.PMX_URL);
-        Log.info("The PMX count is: " + translationContext.pmxCount.get(0).pmxCount);
+        List<Map<String, Object>> translationsNumber = DBManager.getDBResultMap(sql, Constants.PMX_URL);
+        pmxCount = ((BigDecimal) translationsNumber.get(0).get("count")).intValue();
+        Log.info("The PMX count is: " + pmxCount);
     }
 
     @When("^We know the work relationship records from STG$")
     public void getTranslationsCountSTG(){
-        sql = TranslationsSQL.GET_STG_ALL_COUNT;
-        translationContext.stgAllCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
-        Log.info("The STG count is: " + translationContext.stgAllCount.get(0).stgCount);
+//        sql = TranslationsSQL.GET_STG_ALL_COUNT;
+//        Log.info(sql);
+//
+//        List<Map<String, Object>> stgAllCountNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+//        stgAllCount = ((Long) stgAllCountNumber.get(0).get("count")).intValue();
+//        Log.info("The STG count is: " + stgAllCount);
 
 
             if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
                 sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT;
-                translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
-                Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
+                Log.info(sql);
+
+                List<Map<String, Object>> countNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                stgCount = ((Long) countNumber.get(0).get("count")).intValue();
+                Log.info("The STG count is: " + stgCount);
             }else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
                 Log.info(sql);
@@ -67,64 +82,61 @@ public class TranslationTestSteps {
                 Log.info("refresh date: " + refreshDate);
 
                 sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT_Updated.replace("PARAM1",refreshDate);
-                translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
-                Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
+                Log.info(sql);
+
+                List<Map<String, Object>> countNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                stgCount = ((Long) countNumber.get(0).get("count")).intValue();
+                Log.info("The STG count is: " + stgCount);
             }
-//        }else {
-//            sql = WorkCountSQL.GET_REFRESH_DATE;
-//            refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
-//                    Constants.EPH_URL);
-//
-//            sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT_Updated.replace("PARAM1",refreshDate.get(1).refresh_timestamp);
-//            Log.info(sql);
-//            translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
-//            Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
-//            /*sql = TranslationsSQL.GET_STG_TRANSLATIONS_COUNT;
-//            Log.info(sql);
-//            translationContext.stgCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
-//            Log.info("The STG count is: " + translationContext.stgCount.get(0).stgCount);
-//*/        }
     }
 
     @When("^We get the work relationship records from SA$")
     public void getTranslationsCountSA(){
         sql = TranslationsSQL.GET_SA_TRANSLATIONS_COUNT;
-        translationContext.saCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
-        Log.info("The SA count is: " + translationContext.saCount.get(0).saCount);
+        Log.info(sql);
+
+        List<Map<String, Object>> countNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        saCount = ((Long) countNumber.get(0).get("count")).intValue();
+        Log.info("The SA count is: " + saCount);
     }
 
     @When("^We get the work relationship records from GD$")
     public void getTranslationsCountGD(){
         sql = TranslationsSQL.GET_GD_TRANSLATIONS_COUNT;
-        translationContext.gdCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
-        Log.info("The GD count is: " + translationContext.gdCount.get(0).gdCount);
+        Log.info(sql);
+
+        List<Map<String, Object>> countNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        gdCount = ((Long) countNumber.get(0).get("count")).intValue();
+        Log.info("The GD count is: " + gdCount);
     }
 
     @When("^We get the work relationship records from AE$")
     public void getTranslationsCountAE(){
         sql = TranslationsSQL.GET_GD_TRANSLATIONS_COUNT;
-        translationContext.gdCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
-        Log.info("The GD count is: " + translationContext.gdCount.get(0).gdCount);
+        Log.info(sql);
+
+        List<Map<String, Object>> countNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        gdCount = ((Long) countNumber.get(0).get("count")).intValue();
+        Log.info("The GD count is: " + gdCount);
 
         sql = TranslationsSQL.GET_AE_TRANSLATIONS_COUNT;
-        translationContext.aeCount = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
-        Log.info("The AE count is: " + translationContext.aeCount.get(0).aeCount);
+        Log.info(sql);
+
+        List<Map<String, Object>> aeCountNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        aeCount = ((Long) aeCountNumber.get(0).get("count")).intValue();
+        Log.info("The AE count is: " + aeCount);
     }
 
     @Then("^The work relationship records between (.*) and (.*) are equal$")
     public void compareCount(String source, String target){
         if (source.equalsIgnoreCase("pmx")){
-            Assert.assertEquals("The count between PMX and STG does not match!", translationContext.pmxCount.get(0).pmxCount,
-                    translationContext.stgAllCount.get(0).stgCount);
+            Assert.assertEquals("The count between PMX and STG does not match!", pmxCount, stgCount);
         }else if (target.equalsIgnoreCase("GD")){
-            Assert.assertEquals("The count between SA and GD does not match!", translationContext.saCount.get(0).saCount,
-                    translationContext.gdCount.get(0).gdCount);
+            Assert.assertEquals("The count between SA and GD does not match!", saCount, gdCount);
         }else if (source.equalsIgnoreCase("STG")){
-            Assert.assertEquals("The count between STG and SA does not match!", translationContext.stgCount.get(0).stgCount,
-                    translationContext.saCount.get(0).saCount);
+            Assert.assertEquals("The count between STG and SA does not match!", stgCount, saCount);
         }else {
-            Assert.assertEquals("The count between SA and GD + AE does not match!", translationContext.saCount.get(0).saCount,
-                    translationContext.gdCount.get(0).gdCount + translationContext.aeCount.get(0).aeCount);
+            Assert.assertEquals("The count between SA and GD + AE does not match!", saCount, gdCount + aeCount);
         }
     }
 
