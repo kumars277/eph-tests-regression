@@ -713,7 +713,7 @@ public class ProductDataMappingCheck {
                     Log.info("F_PRODUCT_WORK in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK());
                     Log.info("Expecting PMX_SOURCE_REFERENCE in EPH Staging and EPH STG DQ are consistent for ");
 
-                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK() + "-PKG", pmxSourceReference);
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID() + "-PKG", pmxSourceReference);
 
                 }
 

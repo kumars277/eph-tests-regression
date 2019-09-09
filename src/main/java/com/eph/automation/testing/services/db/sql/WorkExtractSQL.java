@@ -166,7 +166,7 @@ public class WorkExtractSQL {
             "left join (select external_reference, concat(external_reference||coalesce(manifestation_key_title,'')||coalesce(inter_edition_flag,false)||coalesce(first_pub_date,current_date)\n" +
             "||coalesce(f_type,'')||coalesce(f_status,'')||coalesce(f_format_type,'')||coalesce(f_wwork,'')) as string\n" +
             "from semarchy_eph_mdm.gd_manifestation) e on h.external_reference::varchar = e.external_reference::varchar\n" +
-            "where md5(e.string) != md5(h.string)\n" +
+            "where (md5(e.string) is null or md5(e.string) != md5(h.string)\n" +
             "and dq_err != 'Y'  ";
 
     public static final String COUNT_MANIFESTATIONS_IN_SA_MANIFESTATION_TABLE =
