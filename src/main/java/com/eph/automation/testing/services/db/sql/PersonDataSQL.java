@@ -5,10 +5,7 @@ package com.eph.automation.testing.services.db.sql;
  */
 public class PersonDataSQL {
 
-    public static String GET_COUNT_PERSONS_PMX = "SELECT \n" +
-            " count(*) AS count\n" +
-            "FROM \n" +
-            "GD_PARTY P\n" +
+    public static String GET_COUNT_PERSONS_PMX = "select count(*) FROM GD_PARTY P\n" +
             "LEFT JOIN GD_PARTY_IN_PRODUCT PI ON P.PARTY_ID = PI.F_PARTY\n" +
             "LEFT JOIN GD_PMG PM ON P.PARTY_ID = PM.F_PARTY\n" +
             "WHERE PARTY_ID IN (\n" +
@@ -20,7 +17,9 @@ public class PersonDataSQL {
 
     public static String GET_COUNT_PERSONS_EPHSTG = "select distinct count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person";
 
-    public static String GET_COUNT_PERSONS_EPHSTG_DELTA = "select distinct count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person\n" +
+    public static String GET_COUNT_PERSONS_EPHSTG_TO_DQ = "select count(distinct \"PERSON_SOURCE_REF\") from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person;";
+
+    public static String GET_COUNT_PERSONS_EPHSTG_TO_DQ_DELTA =  "select count(distinct \"PERSON_SOURCE_REF\") from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person\n"+
 //            "where TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')";
             "where TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
 

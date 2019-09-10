@@ -72,7 +72,7 @@ public class PersonDataQualityCheckSteps {
 
 
         if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-            sql = PersonDataSQL.GET_COUNT_PERSONS_EPHSTG;
+            sql = PersonDataSQL.GET_COUNT_PERSONS_EPHSTG_TO_DQ;
             Log.info(sql);
         } else {
             sql = WorkCountSQL.GET_REFRESH_DATE;
@@ -81,7 +81,7 @@ public class PersonDataQualityCheckSteps {
             List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
 
-            sql = String.format( PersonDataSQL.GET_COUNT_PERSONS_EPHSTG_DELTA, refreshDate );
+            sql = String.format( PersonDataSQL.GET_COUNT_PERSONS_EPHSTG_TO_DQ_DELTA, refreshDate );
             Log.info(sql);
         }
 

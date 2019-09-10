@@ -406,7 +406,7 @@ public class WorksIdSteps {
     public void getSTGCount(String column, String type){
 
             if ((System.getProperty("LOAD") == null) || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE, type, column, column);
+                sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE, column);
                 System.out.print(sql);
                 List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
                 stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();

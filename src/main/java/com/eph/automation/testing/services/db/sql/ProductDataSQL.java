@@ -98,6 +98,34 @@ public class ProductDataSQL {
             "            WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s')\n" +
              "           order by \"PRODUCT_MANIFESTATION_ID\"";
 
+    public static String EPH_STG_PRODUCT_EXTRACT_PACKAGE = "SELECT\n" +
+            "           \"PRODUCT_ID\" as PRODUCT_ID,\n" +
+            "            \"PRODUCT_NAME\" as PRODUCT_NAME,\n" +
+            "            \"PRODUCT_SHORT_NAME\" as PRODUCT_SHORT_NAME,\n" +
+            "            \"TRIAL_ALLOWED_IND\" as TRIAL_ALLOWED_IND,\n" +
+            "            \"FIRST_PUB_DATE\" as FIRST_PUB_DATE,\n" +
+            "            \"ELSEVIER_TAX_CODE\" as ELSEVIER_TAX_CODE,\n" +
+            "            \"PRODUCT_MANIFESTATION_ID\" as PRODUCT_MANIFESTATION_ID,\n" +
+            "            \"F_PRODUCT_WORK\" as F_PRODUCT_WORK,\n" +
+            "            \"F_PRODUCT_MANIFESTATION_TYP\" as F_PRODUCT_MANIFESTATION_TYP,\n" +
+            "            \"SUBSCRIPTION\" as SUBSCRIPTION,\n" +
+            "            \"BULK_SALES\" as BULK_SALES,\n" +
+            "            \"BACK_FILES\" as BACK_FILES,\n" +
+            "            \"OPEN_ACCESS\" as OPEN_ACCESS,\n" +
+            "            \"REPRINTS\" as REPRINTS,\n" +
+            "            \"AUTHOR_CHARGES\" as AUTHOR_CHARGES,\n" +
+            "            \"ONE_OFF_ACCESS\" as ONE_OFF_ACCESS,\n" +
+            "            \"PACKAGES\" as PACKAGES,\n" +
+            "            \"AVAILABILITY_STATUS\" as AVAILABILITY_STATUS,\n" +
+            "            \"WORK_TITLE\" as WORK_TITLE,\n" +
+            "            \"WORK_TYPE\" as WORK_TYPE,\n" +
+            "            \"WORK_STATUS\" as WORK_STATUS,\n" +
+            "            \"SEPARATELY_SALEABLE_IND\" as SEPARATELY_SALEABLE_IND,\n" +
+            "            \"UPDATED\" as UPDATED\n" +
+            "            FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product\n" +
+            "            WHERE \"F_PRODUCT_WORK\" IN ('%s')\n" +
+            "           order by \"F_PRODUCT_WORK\"";
+
     public static String EPH_STG_DQ_PRODUCT_EXTRACT_BOOKS = "SELECT \n" +
             "       pmx_source_reference as PMX_SOURCE_REFERENCE,\n" +
             "       name as PRODUCT_NAME,\n" +
@@ -118,6 +146,11 @@ public class ProductDataSQL {
             "FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_dq\n" +
             "where pmx_source_reference in ('%s')\n" +
             " and dq_err != 'Y' ";
+
+    public static String EPH_STG_IDS_PACKAGES_IDS_ = "SELECT \"F_PRODUCT_WORK\" as F_PRODUCT_WORK\n" +
+            "FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product\n" +
+            "WHERE \"PRODUCT_MANIFESTATION_ID\" IN ('%s')\n" ;
+
 
     public static String EPH_STG_DQ_PRODUCT_EXTRACT_JOURNALS_OR_PACKAGES = " SELECT \n" +
             "       pmx_source_reference as PMX_SOURCE_REFERENCE,\n" +

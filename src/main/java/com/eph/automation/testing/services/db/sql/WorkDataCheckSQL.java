@@ -61,68 +61,37 @@ public class WorkDataCheckSQL {
 //            "\t from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_accountable_product_dq s join semarchy_eph_mdm.sa_accountable_product a on\n" +
 //            "\t s.pmx_source_reference = a.external_reference where s.dq_err != 'Y') ap on ww.pmx_source_reference::varchar = ap.product_work_id::varchar\n"+
 //            "  WHERE PMX_SOURCE_REFERENCE IN ('%s') ORDER BY PMX_SOURCE_REFERENCE";
+
+
             //NEW
-            "  with existing_hash as (select external_reference, concat(external_reference||coalesce(work_title,'')||coalesce(work_sub_title,'')||coalesce(work_key_title,'')||\n"+
-                    "coalesce(electro_rights_indicator::varchar,'')||coalesce(volume::varchar,'')||coalesce(copyright_year::varchar,'')||coalesce(edition_number::varchar,'')||\n"+
-                    "coalesce(f_type::varchar,'')||coalesce(f_status::varchar,'')||coalesce(f_accountable_product::varchar,'')||coalesce(f_pmc,'')||coalesce(f_oa_type,'')||coalesce(f_imprint,'')||\n"+
-                    "coalesce(f_society_ownership,'')||coalesce(f_llanguage,'')) as string from semarchy_eph_mdm.gd_wwork),\n"+
-                    "base as\n"+
-                    "(select\n"+
-                    "distinct\n"+
-                    "-- {loadid} b_loadid\n"+
-                    "--,{eventid} f_event\n"+
-                    "map_sourceref_2_ephid('WORK'::varchar, ww.pmx_source_reference::varchar) work_id\n"+
-                    ",ww.pmx_source_reference as EXTERNAL_REFERENCE\n"+
-                    "--,'Work' b_classname as B_CLASSNAME\n"+
-                    ",ww.work_title as WORK_TITLE\n"+
-                    ",ww.work_subtitle as WORK_SUBTITLE\n"+
-                    ",ww.electro_rights_indicator as ELECTRONIC_RIGHTS_IND\n"+
-                    ",ww.volume as BOOK_VOLUME_NAME\n"+
-                    ",ww.copyright_year as PRODUCT_WORK_PUB_DATE\n"+
-                    ",ww.edition_number as BOOK_EDITION_NAME\n"+
-                    ",ww.f_pmc as PMC\n"+
-                    ",ww.f_oa_journal_type AS OPEN_ACCESS_JNL_TYPE_CODE\n"+
-                    ",ww.f_type  AS WORK_TYPE\n"+
-                    ",ww.f_status  AS WORK_STATUS\n"+
-                    ",ww.f_imprint  AS IMPRINT\n"+
-                    ",ww.f_society_ownership  AS OWNERSHIP\n"+
-                    ",case when coalesce(ap.accountable_product_id,gw.f_accountable_product) is null then null else \n"+
-                    " coalesce(ap.accountable_product_id,gw.f_accountable_product) end as f_accountable_product\n"+
-                    ",ww.language_code as LANGUAGE_CODE\n"+
-                    "FROM stg_10_pmx_wwork_dq ww\n"+
-                    "left join semarchy_eph_mdm.gd_wwork gw on ww.pmx_source_reference::varchar = gw.external_reference::varchar\n"+
-                    "left join \n"+
-                    "\t(select distinct s.product_work_id, a.external_reference, a.accountable_product_id \n"+
-                    "\t from stg_10_pmx_accountable_product_dq s join (select distinct * from semarchy_eph_mdm.sa_accountable_product) a on\n"+
-                    "\t s.pmx_source_reference = a.external_reference where s.dq_err != 'Y') ap on ww.pmx_source_reference::varchar = ap.product_work_id::varchar\n"+
-                    "WHERE ww.dq_err != 'Y'\n"+
-                    "--and (TO_TIMESTAMP(ww.work_updated,'YYYYMMDDHH24MI') > TO_TIMESTAMP('{LAST_REFRESH_VALUE}','YYYYMMDDHH24MI') or {full_load} = true)\n"+
-                    ")\n"+
-                    ",inbound_hash as (select external_reference, concat(external_reference||coalesce(work_title,'')||coalesce(work_subtitle,'')||''||\n"+
-                    "coalesce(ELECTRONIC_RIGHTS_IND::varchar,'')||coalesce(BOOK_VOLUME_NAME::varchar,'')||coalesce(PRODUCT_WORK_PUB_DATE::varchar,'')||coalesce(BOOK_EDITION_NAME::varchar,'')||\n"+
-                    "coalesce(WORK_TYPE::varchar,'')||coalesce(WORK_STATUS::varchar,'')||coalesce(f_accountable_product::varchar,'')||coalesce(PMC,'')||coalesce(OPEN_ACCESS_JNL_TYPE_CODE,'')||coalesce(IMPRINT,'')||\n"+
-                    "coalesce(OWNERSHIP,'')||coalesce(LANGUAGE_CODE,'')) as string from base)\n"+
-                    "select \n"+
-                    "  b.EXTERNAL_REFERENCE\n"+
-                    "  ,WORK_TITLE -- Title\n"+
-                    "  ,WORK_SUBTITLE -- Subtitle\n"+
-                    "  ,ELECTRONIC_RIGHTS_IND\n"+
-                    "  ,BOOK_VOLUME_NAME\n"+
-                    "  ,PRODUCT_WORK_PUB_DATE\n"+
-                    "  ,BOOK_EDITION_NAME\n"+
-                    "  ,PMC\n"+
-                    "  ,OPEN_ACCESS_JNL_TYPE_CODE\n"+
-                    "  ,WORK_TYPE\n"+
-                    "  ,WORK_STATUS\n"+
-                    "  ,IMPRINT\n"+
-                    "  ,OWNERSHIP\n"+
-                    "--  ,F_OPCO_R12\n"+
-                    "--  ,F_RESPONSIBILITY_CENTRE\n"+
-                    "  ,f_accountable_product\n"+
-                    "  ,LANGUAGE_CODE \n"+
-                    "from base b join inbound_hash h on b.external_reference = h.external_reference left join existing_hash e on h.external_reference::varchar = e.external_reference::varchar\n"+
-                    "where md5(e.string) != md5(h.string)\n"+
-                    "and    b.EXTERNAL_REFERENCE IN ('%s') ORDER BY  b.EXTERNAL_REFERENCE";
+            "SELECT \n" +
+                    "  ww.PMX_SOURCE_REFERENCE AS EXTERNAL_REFERENCE\n" +
+                    "  ,ww.WORK_TITLE AS WORK_TITLE -- Title\n" +
+                    "  ,ww.WORK_SUBTITLE AS WORK_SUBTITLE -- Subtitle\n" +
+                    "  ,ww.ELECTRO_RIGHTS_INDICATOR as ELECTRONIC_RIGHTS_IND\n" +
+                    "  ,ww.VOLUME as BOOK_VOLUME_NAME\n" +
+                    "  ,ww.COPYRIGHT_YEAR as PRODUCT_WORK_PUB_DATE\n" +
+                    "  ,ww.EDITION_NUMBER as BOOK_EDITION_NAME\n" +
+                    "  ,ww.F_PMC as PMC\n" +
+                    "  ,ww.F_OA_JOURNAL_TYPE AS OPEN_ACCESS_JNL_TYPE_CODE\n" +
+                    "  ,ww.F_TYPE AS WORK_TYPE\n" +
+                    "  ,ww.F_STATUS AS WORK_STATUS\n" +
+                    "  ,ww.F_IMPRINT AS IMPRINT\n" +
+                    "  ,ww.F_SOCIETY_OWNERSHIP AS OWNERSHIP\n" +
+                    "  ,ww.opco AS F_OPCO_R12\n" +
+                    "  ,ww.resp_centre AS F_RESPONSIBILITY_CENTRE\n" +
+                    "  ,ap.accountable_product_id as f_accountable_product\n" +
+                    "  --,ap.\"PARENT_ACC_PROD\" as PARENT_ACC_PROD\n" +
+                    "  ,ww.LANGUAGE_CODE as LANGUAGE_CODE\n" +
+                    "   FROM stg_10_pmx_wwork_dq ww\n" +
+                    "left join semarchy_eph_mdm.gd_wwork gw on ww.pmx_source_reference::varchar = gw.external_reference::varchar\n" +
+                    "left join \n" +
+                    "      (select distinct s.product_work_id, a.external_reference, a.accountable_product_id \n" +
+                    "       from stg_10_pmx_accountable_product_dq s join (select distinct * from semarchy_eph_mdm.sa_accountable_product) a on\n" +
+                    "      s.pmx_source_reference = a.external_reference where s.dq_err != 'Y') ap on ww.pmx_source_reference::varchar = ap.product_work_id::varchar\n" +
+                    "WHERE ww.dq_err != 'Y'\n" +
+                    "and PMX_SOURCE_REFERENCE IN ('%s') ORDER BY PMX_SOURCE_REFERENCE"
+            ;
 
     public static String GET_EPH_WORKS_DATA ="SELECT \n" +
             "   WORK_ID AS WORK_ID\n" +

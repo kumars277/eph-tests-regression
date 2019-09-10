@@ -45,8 +45,7 @@ public class FinancialAttributesSteps {
 
     @Given("^We know the number of financial attributes in DQ$")
     public void getFinAttrCountDQ(){
-        if (System.getProperty("LOAD") != null) {
-            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
                 sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr_Full;
                 Log.info(sql);
                 financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
@@ -62,24 +61,6 @@ public class FinancialAttributesSteps {
                 Log.info(sql);
                 financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
                 Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
-            }
-        }
-        else{
-            sql = WorkCountSQL.GET_REFRESH_DATE;
-            Log.info(sql);
-            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
-            Log.info("refresh date: " + refreshDate);
-
-            sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr.replace("PARAM1", refreshDate);
-            Log.info(sql);
-            financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
-            Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
-
-/*            sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr_Full;
-            Log.info(sql);
-            financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
-            Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);*/
             }
 
     }
