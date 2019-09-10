@@ -57,7 +57,7 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
     Examples:
       | countOfRandomIds | type    |
       | 10               | book    |
-      | 10               | package |
+      | 100               | package |
 
   @Regression @WP
   Scenario Outline: Validate data is transferred from EPH STG DQ and EPH SA and GD for journals

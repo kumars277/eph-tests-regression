@@ -195,6 +195,19 @@ public class ProductDataMappingCheck {
             IntStream.range(0, idsDQ.size()).forEach(i -> idsDQ.set(i, idsDQ.get(i) + "-OOA"));
             sql = String.format(ProductDataSQL.EPH_STG_DQ_PRODUCT_EXTRACT_BOOKS, Joiner.on("','").join(idsDQ));
             Log.info(sql);
+        }else if (type.equals("package")) {
+            sql = String.format(ProductDataSQL.EPH_STG_IDS_PACKAGES_IDS_, Joiner.on("','").join(ids));
+            Log.info(sql);
+
+            List<Map<?, ?>> idsPack = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+
+            idsDQ = idsPack.stream().map(m -> (BigDecimal) m.get("F_PRODUCT_WORK")).map(String::valueOf).collect(Collectors.toList());
+//                idsDQ = new ArrayList<>(ids);
+
+                IntStream.range(0, idsDQ.size()).forEach(i -> idsDQ.set(i, idsDQ.get(i) + "-PKG"));
+                sql = String.format(ProductDataSQL.EPH_STG_DQ_PRODUCT_EXTRACT_BOOKS, Joiner.on("','").join(idsDQ));
+                Log.info(sql);
+
         } else {
             List<String> workIds = new ArrayList<>();
 
@@ -704,7 +717,7 @@ public class ProductDataMappingCheck {
                     assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID() + "-OOA", pmxSourceReference);
                 } else if (pmxSourceReference.contains("PKG")) {
                     id = pmxSourceReference.replace("-PKG", "");
-                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT, id);
+                    sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT_PACKAGE, id);
                     Log.info(sql);
 
                     dataQualityContext.productDataObjectsFromEPHSTG = DBManager
@@ -713,7 +726,7 @@ public class ProductDataMappingCheck {
                     Log.info("F_PRODUCT_WORK in EPH STG: " + dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK());
                     Log.info("Expecting PMX_SOURCE_REFERENCE in EPH Staging and EPH STG DQ are consistent for ");
 
-                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getPRODUCT_MANIFESTATION_ID() + "-PKG", pmxSourceReference);
+                    assertEquals(dataQualityContext.productDataObjectsFromEPHSTG.get(0).getF_PRODUCT_WORK() + "-PKG", pmxSourceReference);
 
                 }
 
