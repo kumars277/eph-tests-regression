@@ -363,14 +363,14 @@ public class WorkExtractSQL {
              ", " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n"+
              "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
              "and map1.source_ref = mdq.pmx_source_reference::text\n"+
-             "and concat(map1.eph_id,'%s',man.\"%s\") = sman.external_reference\n"+
+             "and concat(map1.eph_id, '%s' ,man.\"%s\") = sman.external_reference\n"+
              "and  b_loadid = (select max(b_loadid) from \n"+
              "          semarchy_eph_mdm.sa_event\n"+
              "            where  f_event_type = 'PMX'\n"+
              "            and workflow_id = 'talend'\n"+
              "            AND f_event_type = 'PMX'\n"+
              "            and f_workflow_source = 'PMX' )\n"+
-             "and  \"%s\" is not null\n";
+             "and \"%s\"  is not null\n";
 
     public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_DELTA =
 

@@ -59,12 +59,12 @@ public class TranslationTestSteps {
 
     @When("^We know the work relationship records from STG$")
     public void getTranslationsCountSTG(){
-//        sql = TranslationsSQL.GET_STG_ALL_COUNT;
-//        Log.info(sql);
-//
-//        List<Map<String, Object>> stgAllCountNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-//        stgAllCount = ((Long) stgAllCountNumber.get(0).get("count")).intValue();
-//        Log.info("The STG count is: " + stgAllCount);
+        sql = TranslationsSQL.GET_STG_ALL_COUNT;
+        Log.info(sql);
+
+        List<Map<String, Object>> stgAllCountNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        stgAllCount = ((Long) stgAllCountNumber.get(0).get("count")).intValue();
+        Log.info("The STG count is: " + stgAllCount);
 
 
             if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
@@ -130,7 +130,7 @@ public class TranslationTestSteps {
     @Then("^The work relationship records between (.*) and (.*) are equal$")
     public void compareCount(String source, String target){
         if (source.equalsIgnoreCase("pmx")){
-            Assert.assertEquals("The count between PMX and STG does not match!", pmxCount, stgCount);
+            Assert.assertEquals("The count between PMX and STG does not match!", pmxCount, stgAllCount);
         }else if (target.equalsIgnoreCase("GD")){
             Assert.assertEquals("The count between SA and GD does not match!", saCount, gdCount);
         }else if (source.equalsIgnoreCase("STG")){

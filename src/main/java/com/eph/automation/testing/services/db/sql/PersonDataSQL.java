@@ -5,7 +5,14 @@ package com.eph.automation.testing.services.db.sql;
  */
 public class PersonDataSQL {
 
-    public static String GET_COUNT_PERSONS_PMX = "select count(*) FROM GD_PARTY P\n" +
+    public static String GET_COUNT_PERSONS_PMX = "SELECT count(*) as count FROM (\n" +
+            "SELECT DISTINCT\n" +
+            "     P.PARTY_ID AS PERSON_SOURCE_REF\n" +
+            "    ,P.PERSON_FIRST_NAME\n" +
+            "    ,P.PERSON_FAMILY_NAME\n" +
+            "    ,P.PEOPLEHUB_ID\n" +
+            "    ,TO_CHAR(GREATEST(NVL(P.B_UPDDATE,P.B_CREDATE),NVL(NVL(PI.B_UPDDATE,PI.B_CREDATE),TO_DATE('01/01/1900','DD/MM/YYYY')),NVL(NVL(PM.B_UPDDATE,PM.B_CREDATE),TO_DATE('01/01/1900','DD/MM/YYYY'))),'YYYYMMDDHH24MI') AS UPDATED\n" +
+            "FROM GD_PARTY P\n" +
             "LEFT JOIN GD_PARTY_IN_PRODUCT PI ON P.PARTY_ID = PI.F_PARTY\n" +
             "LEFT JOIN GD_PMG PM ON P.PARTY_ID = PM.F_PARTY\n" +
             "WHERE PARTY_ID IN (\n" +
@@ -13,9 +20,9 @@ public class PersonDataSQL {
             "UNION\n" +
             "SELECT F_PARTY FROM GD_PARTY_IN_PRODUCT WHERE F_ROLE_TYPE IN (\n" +
             "    SELECT ROLE_TYPE_ID FROM GD_ROLE_TYPE WHERE ROLE_TYPE_CODE IN \n" +
-            "        ('PPC','PUB','A01','A02','B01','B13','B09','B11','PUBDIR')))";
+            "        ('PPC','PUB','A01','A02','B01','B13','B09','B11','PUBDIR'))))";
 
-    public static String GET_COUNT_PERSONS_EPHSTG = "select distinct count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person";
+    public static String GET_COUNT_PERSONS_EPHSTG = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person";
 
     public static String GET_COUNT_PERSONS_EPHSTG_TO_DQ = "select count(distinct \"PERSON_SOURCE_REF\") from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person;";
 
