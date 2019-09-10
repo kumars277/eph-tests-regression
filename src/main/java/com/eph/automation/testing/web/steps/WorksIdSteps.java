@@ -485,20 +485,7 @@ public class WorksIdSteps {
                     Log.info("There are "+workid.size()+" updated identifiers");
                 }
             }
-//        }else{
-//            sql = WorksIdentifierSQL.getEndDatedIdentifierDataFromGD.replace("PARAM1",numberOfRecords);
-//            Log.info(sql);
-//            List<Map<?, ?>> randomWorkID = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-//
-//            workid = randomWorkID.stream().map(m -> (String) m.get("F_WWORK")).collect(Collectors.toList());
-//            Log.info(workid.toString());
-//            if (workid.isEmpty()){
-//                Log.info("No identifiers were updated");
-//            } else {
-//                Log.info("There are "+workid.size()+" updated identifiers");
-//            }
-//                //Log.info("There is no delta load performed");
-//            }
+
     }
 
 
@@ -514,15 +501,13 @@ public class WorksIdSteps {
                 }
             }
 
-//        }else {
-//            Log.info("There is no delta load performed");
-//        }
+//
     }
 
     @Then("^There is a change to the work identifier$")
     public void compareNewId() {
 
-        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
             Log.info("There is no delta load performed");
         } else {
             if (workid.isEmpty()) {
