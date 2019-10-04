@@ -16,6 +16,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
@@ -243,7 +244,7 @@ public class TranslationTestSteps {
                     .replace("PARAM2", translationContext.childID.get(0).workID));
             Log.info(sql);
             translationContext.translationDataFromSA = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.EPH_URL);
-            if (translationContext.translationDataFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            if ( CollectionUtils.isEmpty(translationContext.translationDataFromSA) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
                 Log.info("There is no loaded data for Translations in SA");
             } else {
                 Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + translationContext.workID.get(0).workID,

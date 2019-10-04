@@ -14,6 +14,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 import com.eph.automation.testing.helper.Log;
 
@@ -110,7 +111,7 @@ public class WorksDataCheck {
 
     @Then("^The work data between PMX and EPH STG is identical$")
     public void checkPMXtoPMGSTGData() throws ParseException {
-        if (dataQualityContext.workDataObjectsFromPMXSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.workDataObjectsFromPMXSTG) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Works");
         } else {
         for (int i=0; i<dataQualityContext.workDataObjectsFromSource.size();i++) {

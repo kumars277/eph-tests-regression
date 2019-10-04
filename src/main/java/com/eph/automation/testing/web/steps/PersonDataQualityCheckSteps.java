@@ -13,6 +13,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
@@ -345,7 +346,7 @@ public class PersonDataQualityCheckSteps {
     public void comparePersonRecordsInEPHDQAndEPHSA() {
         Log.info("And compare the person records in EPH DQ and EPH SA ..");
 
-        if (dataQualityContext.personDataObjectsFromEPHDQ.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.personDataObjectsFromEPHDQ)&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Person data");
         } else {
             IntStream.range(0, dataQualityContext.personDataObjectsFromEPHDQ.size()).forEach(i -> {

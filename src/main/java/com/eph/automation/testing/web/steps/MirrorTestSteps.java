@@ -16,6 +16,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
@@ -114,17 +115,17 @@ public class MirrorTestSteps {
         }
         Log.info("numberOfRecords = " + numberOfRecords);
 
-            if(System.getProperty("LOAD") == null ||System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
-                sql = MirrorsSQL.gettingNumberOfIds.replace("PARAM1", numberOfRecords);
-            }else {
+//            if(System.getProperty("LOAD") == null ||System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
+//                sql = MirrorsSQL.gettingNumberOfIds.replace("PARAM1", numberOfRecords);
+//            }else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
                 Log.info(sql);
                 List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
                 refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
                 Log.info("refresh date: " + refreshDate);
-                sql = MirrorsSQL.gettingNumberOfIdsDelta.replace("PARAM1", numberOfRecords);
-
-            }
+                sql = String.format(MirrorsSQL.gettingNumberOfIdsDelta, refreshDate, numberOfRecords);
+                Log.info(sql);
+//            }
 
 
         List<Map<?, ?>> randomISBNIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -137,22 +138,25 @@ public class MirrorTestSteps {
         List<Map<?, ?>> randomWorkID = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         workid = randomWorkID.stream().map(m -> (String) m.get("work_id")).collect(Collectors.toList());
         Log.info(workid.toString());
+
+
     }
 
     @When("^We get the data for mirrors$")
-    public void getmirrorData(){
-        sql = String.format(MirrorsSQL.GET_PMX_Mirror, Joiner.on("','").join(ids));
-        mirrorContext.mirrorDataFromPMX = DBManager.getDBResultAsBeanList(sql, MirrorsDataObject.class, Constants.PMX_URL);
+    public void getmirrorData() {
+            sql = String.format(MirrorsSQL.GET_PMX_Mirror, Joiner.on("','").join(ids));
+            mirrorContext.mirrorDataFromPMX = DBManager.getDBResultAsBeanList(sql, MirrorsDataObject.class, Constants.PMX_URL);
 
-        sql = String.format(MirrorsSQL.GET_STG_Mirror_DATA, Joiner.on("','").join(ids));
-        mirrorContext.mirrorDataFromStg = DBManager.getDBResultAsBeanList(sql, MirrorsDataObject.class, Constants.EPH_URL);
+            sql = String.format(MirrorsSQL.GET_STG_Mirror_DATA, Joiner.on("','").join(ids));
+            mirrorContext.mirrorDataFromStg = DBManager.getDBResultAsBeanList(sql, MirrorsDataObject.class, Constants.EPH_URL);
 
-        sql = String.format(MirrorsSQL.GET_SA_Mirror_DATA_All, Joiner.on("','").join(workid));
-        mirrorContext.mirrorDataFromSAall = DBManager.getDBResultAsBeanList(sql, MirrorsDataObject.class, Constants.EPH_URL);
+            sql = String.format(MirrorsSQL.GET_SA_Mirror_DATA_All, Joiner.on("','").join(workid));
+            mirrorContext.mirrorDataFromSAall = DBManager.getDBResultAsBeanList(sql, MirrorsDataObject.class, Constants.EPH_URL);
 
-        sql = String.format(MirrorsSQL.GET_GD_Mirror_DATA, Joiner.on("','").join(workid));
-        mirrorContext.mirrorDataFromGD = DBManager.getDBResultAsBeanList(sql, MirrorsDataObject.class, Constants.EPH_URL);
-    }
+            sql = String.format(MirrorsSQL.GET_GD_Mirror_DATA, Joiner.on("','").join(workid));
+            mirrorContext.mirrorDataFromGD = DBManager.getDBResultAsBeanList(sql, MirrorsDataObject.class, Constants.EPH_URL);
+        }
+
 
     @Then("^The mirror data between PMX and STG is identical$")
     public void checkmirrorData(){/*
@@ -192,7 +196,7 @@ public class MirrorTestSteps {
 
     @And("^The mirror data between STG and SA is identical$")
     public void checkmirrorSAData(){
-        if (mirrorContext.mirrorDataFromStg.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if (CollectionUtils.isEmpty(mirrorContext.mirrorDataFromStg) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no changed data for Mirrors");
         }else{
         for (int i=0; i<mirrorContext.mirrorDataFromStg.size();i++) {
@@ -256,7 +260,7 @@ public class MirrorTestSteps {
     @And("^The mirror data between SA and GD is identical$")
     public void checkmirrorGDData() {
         for (int i = 0; i < mirrorContext.mirrorDataFromSAall.size(); i++) {
-            if (mirrorContext.mirrorDataFromGD.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            if ( CollectionUtils.isEmpty(mirrorContext.mirrorDataFromGD) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
                 Log.info("There is no changed data for Mirrors");
             } else {
                 Assert.assertEquals("The WORK_REL_mirror_ID is incorrect for id=" + mirrorContext.mirrorDataFromSAall.get(i).WORK_REL_mirror_ID,

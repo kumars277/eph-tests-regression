@@ -13,6 +13,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 
 import java.util.Comparator;
@@ -136,7 +137,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
     @Given("^We get the manifestation ids of (.*) random records from STG_PMX_MANIFESTATION that have (.*) for (.*)$")
     public void getRandomRecords(String numberOfRecords, String identifier, String type) {
         //Get property when run with jenkins.
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         switch (type) {
@@ -176,7 +177,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
             dataQualityContext.manifestationIdentifiersDataObjectsFromSTG = DBManager
                     .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
 
-            if (dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            if ( CollectionUtils.isEmpty(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
                 Log.info("There are no records found for Manifestation identifiers");
 
             }
@@ -191,7 +192,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
             dataQualityContext.manifestationIdentifiersDataObjectsFromSTG = DBManager
                     .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
 
-            if (dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD"))
+            if ( CollectionUtils.isEmpty(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG)&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD"))
                 Log.info("There are no records found for Manifestation identifiers");
 
         }
@@ -345,7 +346,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
         dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.sort(Comparator.comparing(ManifestationIdentifierObject::getExternal_reference));
         dataQualityContext.manifestationIdentifiersDataObjectsFromSA.sort(Comparator.comparing(ManifestationIdentifierObject::getExternal_reference));
-        if (dataQualityContext.manifestationIdentifiersDataObjectsFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.manifestationIdentifiersDataObjectsFromSA) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Manifestations");
         } else {
             IntStream.range(0, dataQualityContext.manifestationIdentifiersDataObjectsFromSA.size()).forEach(i -> {

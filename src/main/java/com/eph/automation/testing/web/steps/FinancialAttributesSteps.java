@@ -14,6 +14,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
@@ -57,7 +58,7 @@ public class FinancialAttributesSteps {
                 refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
                 Log.info("refresh date: " + refreshDate);
 
-                sql = FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr.replace("PARAM1", refreshDate);
+                sql = String.format(FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr, refreshDate);
                 Log.info(sql);
                 financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
                 Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
@@ -247,7 +248,7 @@ public class FinancialAttributesSteps {
     @And("^The data between SA and GD is identical$")
     public void checkFinancialDataGD(){
         for (int i=0; i<financialAttribs.financialDataFromSAAll.size();i++) {
-            if (financialAttribs.financialDataFromSA.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            if ( CollectionUtils.isEmpty(financialAttribs.financialDataFromSA) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
                 Log.info("There is no changed data for Financial attributes");
             }else{
                 Assert.assertEquals("The classname is incorrect for id=" + financialAttribs.financialDataFromSAAll.get(i).fin_attribs_id,

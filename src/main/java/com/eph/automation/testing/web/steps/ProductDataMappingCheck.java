@@ -13,6 +13,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
@@ -97,7 +98,7 @@ public class ProductDataMappingCheck {
         ids = randomProductManifestationIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random product manifestation ids  : " + ids);
 
-        if (ids.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(ids)&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There are no records found for Product Role");
         }
     }
@@ -500,7 +501,7 @@ public class ProductDataMappingCheck {
 
         int expectedNumberOfRecordsInDQ = 0;
 
-        if (dataQualityContext.productDataObjectsFromEPHSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.productDataObjectsFromEPHSTG) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Product Data");
         } else {
             for (int i = 0; i < dataQualityContext.productDataObjectsFromEPHSTG.size(); i++) {
@@ -552,7 +553,7 @@ public class ProductDataMappingCheck {
         dataQualityContext.productDataObjectsFromEPHSTG.sort(Comparator.comparing(ProductDataObject::getF_PRODUCT_WORK));
         dataQualityContext.productDataObjectsFromEPHSTGDQ.sort(Comparator.comparing(ProductDataObject::getULT_WORK_REF));
 
-        if (dataQualityContext.productDataObjectsFromEPHSTGDQ.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.productDataObjectsFromEPHSTGDQ) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Product Data");
         } else {
             IntStream.range(0, dataQualityContext.productDataObjectsFromEPHSTGDQ.size()).forEach(i -> {

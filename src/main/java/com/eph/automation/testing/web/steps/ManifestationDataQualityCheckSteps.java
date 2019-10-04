@@ -12,6 +12,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
@@ -493,7 +494,7 @@ public class ManifestationDataQualityCheckSteps {
         manifestationDataObjectsFromEPHDQ.sort(Comparator.comparing(ManifestationDataObject::getPMX_SOURCE_REFERENCE));
 
 //        assertThat("Data for manifestations in EPH Staging and EPH SA is equal without order", dataQualityContext.manifestationDataObjectsFromEPHSTG, containsInAnyOrder(dataQualityContext.manifestationDataObjectsFromEPHSA.toArray()));
-        if (manifestationDataObjectsFromEPHSTG.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(manifestationDataObjectsFromEPHSTG) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Manifestations");
         } else {
             IntStream.range(0, manifestationDataObjectsFromEPHSTG.size()).forEach(i -> {
@@ -598,7 +599,7 @@ public class ManifestationDataQualityCheckSteps {
             manifestationDataObjectsFromEPHSA.sort(Comparator.comparing(ManifestationDataObject::getPMX_SOURCE_REFERENCE));
 
 //        assertThat("Data for manifestations in EPH Staging and EPH SA is equal without order", dataQualityContext.manifestationDataObjectsFromEPHSTG, containsInAnyOrder(dataQualityContext.manifestationDataObjectsFromEPHSA.toArray()));
-            if (manifestationDataObjectsFromEPHDQ.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            if ( CollectionUtils.isEmpty(manifestationDataObjectsFromEPHDQ) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
                 Log.info("There is no updated data for Manifestations");
             } else {
                 IntStream.range(0, manifestationDataObjectsFromEPHDQ.size()).forEach(i -> {

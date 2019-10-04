@@ -131,21 +131,22 @@ public class WorkSubjectAreaLinkDataSQL {
             "where  \"PRODUCT_SUBJECT_AREA_ID\" in ('%s')";
 
     public static String SELECT_RANDOM_IDS = "select  \n" +
-        "\"PRODUCT_SUBJECT_AREA_ID\" as PRODUCT_SUBJECT_AREA_ID\n" +
-        "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_subject_area\t\n" +
-        "left join "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid mp on mp.source_ref = concat('WORK_SUBJ_AREA-',\"PRODUCT_SUBJECT_AREA_ID\")\n" +
-        "left join semarchy_eph_mdm.sa_work_subject_area_link sa on sa.work_subject_area_link_id = mp.numeric_id\n" +
-        "where sa.b_error_status is null\n" +
-        "order by random()\n" +
-        "limit '%s'";
+            "\"PRODUCT_SUBJECT_AREA_ID\" as PRODUCT_SUBJECT_AREA_ID\n" +
+            "from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_WORK_SUBJECT_AREA where \"F_SUBJECT_AREA\"  is not null and \n" +
+            "\"F_PRODUCT_WORK\"::varchar in (select coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol\n" +
+            " from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s \n" +
+            "on g.external_reference = s.pmx_source_reference::varchar where dq_err != 'Y')\n" +
+            "--and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')" +
+            "order by random()\n" +
+            "limit '%s'";
 
     public static String SELECT_RANDOM_IDS_DELTA = "select  \n" +
             "\"PRODUCT_SUBJECT_AREA_ID\" as PRODUCT_SUBJECT_AREA_ID\n" +
-            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_subject_area\t\n" +
-            "left join "+GetEPHDBUser.getDBUser()+".map_sourceref_2_numericid mp on mp.source_ref = concat('WORK_SUBJ_AREA-',\"PRODUCT_SUBJECT_AREA_ID\")\n" +
-            "left join semarchy_eph_mdm.sa_work_subject_area_link sa on sa.work_subject_area_link_id = mp.numeric_id\n" +
-            "where sa.b_error_status is null and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')\n\n" +
-//            "where sa.b_error_status is null and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n\n" +
+            "from "+GetEPHDBUser.getDBUser()+".STG_10_PMX_WORK_SUBJECT_AREA where \"F_SUBJECT_AREA\"  is not null and \n" +
+            "\"F_PRODUCT_WORK\"::varchar in (select coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol\n" +
+            " from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s \n" +
+            "on g.external_reference = s.pmx_source_reference::varchar where dq_err != 'Y')\n" +
+            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')" +
             "order by random()\n" +
             "limit '%s'";
 
