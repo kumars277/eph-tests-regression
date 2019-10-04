@@ -10,22 +10,16 @@
 				"type": "object",
 				"title": "The Items Schema",
 				"required": [
-			        "id"				
-			    ],
+					"productSummary"
+				],
 				"properties": {
-					"id": {
-						"$id": "#/properties/id",
-						"type": "string",
-						"title": "The Id Schema",
-						"examples": [
-							"EPR-1234AF"
-						],
-						"pattern": "^(.*)$"
+					"productSummary": {
+						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/productSummary"
 					}
 				},
 				"additionalProperties": false
 			}
-		}	
+		}
 	},
 	"$schema": "http://json-schema.org/draft-07/schema#",
 	"$id": "https://elsevier.com/work.json",
@@ -63,11 +57,20 @@
 		"subTitle": {
 			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/subTitle"
 		},
+		"shortTitle": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/shortTitle"
+		},
 		"electronicRightsInd": {
 			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/electronicRightsInd"
 		},
 		"language": {
 			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/language"
+		},
+		"subscriptionType": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/subscriptionType"
+		},
+		"fulfilmentSystem": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/fulfilmentSystem"
 		},
 		"editionNumber": {
 			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/editionNumber"
@@ -114,11 +117,14 @@
 		"persons": {
 			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/persons"
 		},
+		"catalogueYears": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/catalogueYears"
+		},
 		"subjectAreas": {
 			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/subjectAreas"
 		},
 		"relationships": {
-			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/relationships"
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/relationships"
 		},
 		"manifestations": {
 			"$id": "#/properties/manifestations",
@@ -130,9 +136,9 @@
 				"type": "object",
 				"title": "The Items Schema",
 				"required": [
-			        "id",
-	    		    "keyTitle",
-	        		"type",
+					"id",
+					"keyTitle",
+					"type",
 					"status"
 				],
 				"properties": {
@@ -169,10 +175,10 @@
 				},
 				"additionalProperties": false
 			}
-		},	
+		},
 		"products": {
 			"$ref": "#/definitions/products"
 		}
-    },
+	},
 	"additionalProperties": false
 }

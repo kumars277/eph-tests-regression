@@ -102,8 +102,8 @@ public class WorksIdentifierSQL {
             "stg.\"WORK_TYPE\" = 'PARAM1' and \n" +
             "stg.\"PRODUCT_WORK_ID\" = mdq.pmx_source_reference and\n" +
             "mdq.dq_err != 'Y'\n" +
-//            "   and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM2','YYYYMMDDHH24MI')\n" +
-            "   and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n" +
+            "   and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM2','YYYYMMDDHH24MI')\n" +
+//            "   and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n" +
             "   and effective_start_date > TO_DATE('PARAM2','YYYYMMDDHH24MI')\n" +
             "   and  \"PRODUCT_WORK_ID\" \n" +
             "   not in (select distinct stg1.\"PRODUCT_WORK_ID\" from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork stg1,"+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork stg2  where stg2.\"PRODUCT_WORK_ID\" = stg1.\"PRODUCT_WORK_ID\" and stg2.\"PROJECT_NUM\" != stg1.\"PROJECT_NUM\")\n" +
@@ -187,7 +187,7 @@ public class WorksIdentifierSQL {
                     "FROM stg_10_pmx_wwork w\n" +
                     "join stg_10_pmx_wwork_dq dq on w.\"PRODUCT_WORK_ID\" = dq.pmx_source_reference\n" +
                     "where dq.dq_err != 'Y'\n" +
-                    "--and (TO_TIMESTAMP(w.\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI') \n" +
+//                    "and (TO_TIMESTAMP(w.\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI') \n" +
                     "    and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n" +
                     ")\n" +
                     ",crosstab_data as (\n" +
