@@ -172,38 +172,52 @@ public class WorksIdentifierSQL {
             "   stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n";
 
     public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA =
-            " with\n" +
-                    "base_data as (\n" +
-                    "select\n" +
-                    "   \"PRODUCT_WORK_ID\"  product_work_id\n" +
-                    "  ,\"ISSN_L\"           issn_l\n" +
-                    "  ,\"PRODUCT_WORK_ID\"  product_work_id\n" +
-                    "  ,\"JOURNAL_NUMBER\"   journal_number\n" +
-                    "  ,\"JOURNAL_ACRONYM\"  journal_acronym\n" +
-                    "  ,\"DAC_KEY\"          dac_key\n" +
-                    "  ,\"PROJECT_NUM\"      project_num\n" +
-                    "  ,map_sourceref_2_ephid('WORK'::varchar,\"PRODUCT_WORK_ID\"::varchar) work_id\n" +
-                    "  --work_identifier_id\n" +
-                    "FROM stg_10_pmx_wwork w\n" +
-                    "join stg_10_pmx_wwork_dq dq on w.\"PRODUCT_WORK_ID\" = dq.pmx_source_reference\n" +
-                    "where dq.dq_err != 'Y'\n" +
+            "select count(distinct \"PRODUCT_WORK_ID\") AS count \n" +
+                    " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork stg ,\n" +
+                    GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq  mdq\n" +
+                    "where \n" +
+                    "stg.\"%s\" is not null  and \n" +
+                    "   stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n" +
+                    "and (TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')) \n" ;
+
+
+//                    " with\n" +
+//                    "base_data as (\n" +
+//                    "select\n" + "select count(distinct \"PRODUCT_WORK_ID\") AS count \n" +
+//                    " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork stg ,\n" +
+//                    GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq  mdq\n" +
+//                    "where \n" +
+//                    "stg.\"%s\" is not null  and \n" +
+//                    "   stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n"
+//                    "   \"PRODUCT_WORK_ID\"  product_work_id\n" +
+//                    "  ,\"ISSN_L\"           issn_l\n" +
+//                    "  ,\"PRODUCT_WORK_ID\"  product_work_id\n" +
+//                    "  ,\"JOURNAL_NUMBER\"   journal_number\n" +
+//                    "  ,\"JOURNAL_ACRONYM\"  journal_acronym\n" +
+//                    "  ,\"DAC_KEY\"          dac_key\n" +
+//                    "  ,\"PROJECT_NUM\"      project_num\n" +
+//                    "  ,map_sourceref_2_ephid('WORK'::varchar,\"PRODUCT_WORK_ID\"::varchar) work_id\n" +
+//                    "  --work_identifier_id\n" +
+//                    "FROM stg_10_pmx_wwork w\n" +
+//                    "join stg_10_pmx_wwork_dq dq on w.\"PRODUCT_WORK_ID\" = dq.pmx_source_reference\n" +
+//                    "where dq.dq_err != 'Y'\n" +
 //                    "and (TO_TIMESTAMP(w.\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI') \n" +
-                    "    and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n" +
-                    ")\n" +
-                    ",crosstab_data as (\n" +
-                    "       select work_id,'%s'                  f_type,%s          identifier  FROM base_data where %s  is not null\n" +
-                    ")\n" +
-                    ",result_data as (\n" +
-                    "select\n" +
-                    "*\n" +
-                    "from crosstab_data c\n" +
-                    "left join semarchy_eph_mdm.gd_work_identifier w on c.work_id = w.f_wwork and c.f_type = w.f_type\n" +
-                    "left join (select distinct external_reference, work_identifier_id from semarchy_eph_mdm.sa_work_identifier) g on concat(c.work_id,c.f_type,c.identifier) = g.external_reference\n" +
-                    "where 1=1\n" +
-                    "and c.identifier != coalesce(w.identifier,'')\n" +
-                    ")\n" +
-                    "select count(*)\n" +
-                    "from result_data";
+////                    "    and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')\n" +
+//                    ")\n" +
+//                    ",crosstab_data as (\n" +
+//                    "       select work_id,'%s'                  f_type,%s          identifier  FROM base_data where %s  is not null\n" +
+//                    ")\n" +
+//                    ",result_data as (\n" +
+//                    "select\n" +
+//                    "*\n" +
+//                    "from crosstab_data c\n" +
+//                    "left join semarchy_eph_mdm.gd_work_identifier w on c.work_id = w.f_wwork and c.f_type = w.f_type\n" +
+//                    "left join (select distinct external_reference, work_identifier_id from semarchy_eph_mdm.sa_work_identifier) g on concat(c.work_id,c.f_type,c.identifier) = g.external_reference\n" +
+//                    "where 1=1\n" +
+//                    "and c.identifier != coalesce(w.identifier,'')\n" +
+//                    ")\n" +
+//                    "select count(*)\n" +
+//                    "from result_data";
             //old
 //            "select count(*) as count\n" +
 //            "from  "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork stg \n" +
