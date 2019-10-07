@@ -173,8 +173,8 @@ public class PersonWorkRoleDataQualityCheckSteps {
             sql = WorkCountSQL.GET_REFRESH_DATE;
             List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
-//            sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_DELTA, type, refreshDate, numberOfRecords);  -- uncomment when hardcoded value for refresh date is removed
-            sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_DELTA, type, numberOfRecords);
+            sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_DELTA, type, refreshDate, numberOfRecords);
+//            sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_DELTA, type, numberOfRecords);
             Log.info(sql);
         }
 

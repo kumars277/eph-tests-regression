@@ -405,28 +405,25 @@ public class WorksIdSteps {
     @Given("^We know the work identifiers count in staging from column (.*) and (.*)$")
     public void getSTGCount(String column, String type){
 
-            if ((System.getProperty("LOAD") == null) || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE, column);
-                System.out.print(sql);
-                List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
-                stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
-
-                Log.info("\n The count in stg for " + column + " is " + stgCount);
-            }else {
+//            if ((System.getProperty("LOAD") == null) || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+//                sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE, column);
+//                System.out.print(sql);
+//                List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
+//                stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
+//
+//                Log.info("\n The count in stg for " + column + " is " + stgCount);
+//            }else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
                 Log.info(sql);
                 List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
                 String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
 
-                sql = WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA
-                        .replace("PARAM1", column)
-                        .replace("PARAM2",refreshDate)
-                        .replace("PARAM3",type);
+                sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA, column,refreshDate,type);
                 System.out.print(sql);
                 List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
                 stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
                 Log.info("\n The count in stg for " + column + " is " + stgCount);
-            }
+//            }
     }
 
     @When("^We get the work identifier count from SA and GD (.*)$")

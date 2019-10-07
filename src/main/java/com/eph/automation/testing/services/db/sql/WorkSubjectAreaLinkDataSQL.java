@@ -146,7 +146,7 @@ public class WorkSubjectAreaLinkDataSQL {
             "\"F_PRODUCT_WORK\"::varchar in (select coalesce(s.pmx_source_reference::varchar,g.external_reference) as consol\n" +
             " from semarchy_eph_mdm.gd_wwork g full outer join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s \n" +
             "on g.external_reference = s.pmx_source_reference::varchar where dq_err != 'Y')\n" +
-            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('PARAM1','YYYYMMDDHH24MI')" +
+            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')" +
             "order by random()\n" +
             "limit '%s'";
 
