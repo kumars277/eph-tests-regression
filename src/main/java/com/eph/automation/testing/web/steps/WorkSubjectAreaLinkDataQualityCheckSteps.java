@@ -247,12 +247,13 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
     @And("^Compare the work subject area data in PMX and EPH STG$")
     public void compareWorkSubjectAreaDataPMXAndSTG() {
         Log.info("And compare the work subject area data in PMX and EPH STG ..");
-        dataQualityContext.workSubjectAreaDataObjectsFromPMX.sort(Comparator.comparing(WorkSubjectAreaLinkDataObject::getPRODUCT_SUBJECT_AREA_ID));
-        dataQualityContext.workSubjectAreaDataObjectsFromSTG.sort(Comparator.comparing(WorkSubjectAreaLinkDataObject::getPRODUCT_SUBJECT_AREA_ID));
 
         if ( CollectionUtils.isEmpty(dataQualityContext.workSubjectAreaDataObjectsFromSTG) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There are no records found for Work Subject Area ");
         } else {
+            dataQualityContext.workSubjectAreaDataObjectsFromPMX.sort(Comparator.comparing(WorkSubjectAreaLinkDataObject::getPRODUCT_SUBJECT_AREA_ID));
+            dataQualityContext.workSubjectAreaDataObjectsFromSTG.sort(Comparator.comparing(WorkSubjectAreaLinkDataObject::getPRODUCT_SUBJECT_AREA_ID));
+
             IntStream.range(0, dataQualityContext.workSubjectAreaDataObjectsFromSTG.size()).forEach(i -> {
 
                 //PRODUCT_SUBJECT_AREA_ID

@@ -22,7 +22,7 @@ Feature: Entity - PRODUCT - Data Mapping Check - Validate data between PMX and E
     And Compare the records in EPH STG and EPH STG DQ for <type> with <open_access> and <author_charges>
     Examples:
       | countOfRandomIds | type    |
-      | 50               | book    |
+#      | 50               | book    |
       | 50               | package |
 
 

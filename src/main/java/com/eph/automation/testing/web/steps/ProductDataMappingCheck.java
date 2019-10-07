@@ -98,7 +98,7 @@ public class ProductDataMappingCheck {
         ids = randomProductManifestationIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random product manifestation ids  : " + ids);
 
-        if ( CollectionUtils.isEmpty(ids)&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(ids)) {
             Log.info("There are no records found for Product Role");
         }
     }
@@ -197,17 +197,21 @@ public class ProductDataMappingCheck {
             sql = String.format(ProductDataSQL.EPH_STG_DQ_PRODUCT_EXTRACT_BOOKS, Joiner.on("','").join(idsDQ));
             Log.info(sql);
         }else if (type.equals("package")) {
-            sql = String.format(ProductDataSQL.EPH_STG_IDS_PACKAGES_IDS_, Joiner.on("','").join(ids));
-            Log.info(sql);
+            if ( CollectionUtils.isEmpty(ids)) {
+            Log.info("There are no packages found ");
+        } else {
+                sql = String.format(ProductDataSQL.EPH_STG_IDS_PACKAGES_IDS_, Joiner.on("','").join(ids));
+                Log.info(sql);
 
-            List<Map<?, ?>> idsPack = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                List<Map<?, ?>> idsPack = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
-            idsDQ = idsPack.stream().map(m -> (BigDecimal) m.get("F_PRODUCT_WORK")).map(String::valueOf).collect(Collectors.toList());
+                idsDQ = idsPack.stream().map(m -> (BigDecimal) m.get("F_PRODUCT_WORK")).map(String::valueOf).collect(Collectors.toList());
 //                idsDQ = new ArrayList<>(ids);
 
                 IntStream.range(0, idsDQ.size()).forEach(i -> idsDQ.set(i, idsDQ.get(i) + "-PKG"));
                 sql = String.format(ProductDataSQL.EPH_STG_DQ_PRODUCT_EXTRACT_BOOKS, Joiner.on("','").join(idsDQ));
                 Log.info(sql);
+            }
 
         } else {
             List<String> workIds = new ArrayList<>();
@@ -550,14 +554,14 @@ public class ProductDataMappingCheck {
     public void compareProductsDataBetweenSTGAndDQ(String type,String open_access, String author_charges) {
         Log.info("Compare the records in EPH STG and EPH STG DQ for " + type + " ..");
 
-        dataQualityContext.productDataObjectsFromEPHSTG.sort(Comparator.comparing(ProductDataObject::getF_PRODUCT_WORK));
-        dataQualityContext.productDataObjectsFromEPHSTGDQ.sort(Comparator.comparing(ProductDataObject::getULT_WORK_REF));
+
 
         if ( CollectionUtils.isEmpty(dataQualityContext.productDataObjectsFromEPHSTGDQ) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Product Data");
         } else {
             IntStream.range(0, dataQualityContext.productDataObjectsFromEPHSTGDQ.size()).forEach(i -> {
-
+                dataQualityContext.productDataObjectsFromEPHSTG.sort(Comparator.comparing(ProductDataObject::getF_PRODUCT_WORK));
+                dataQualityContext.productDataObjectsFromEPHSTGDQ.sort(Comparator.comparing(ProductDataObject::getULT_WORK_REF));
                 //verify PMX_SOURCE_REFERENCE and get the manifestation or work id
                 String id;
                 String pmxSourceReference = dataQualityContext.productDataObjectsFromEPHSTGDQ.get(i).getPMX_SOURCE_REFERENCE();

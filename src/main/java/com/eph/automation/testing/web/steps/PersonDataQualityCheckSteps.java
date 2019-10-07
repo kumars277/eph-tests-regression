@@ -163,9 +163,19 @@ public class PersonDataQualityCheckSteps {
         Log.info("numberOfRecords = " + numberOfRecords);
 
 
-        sql = String.format(PersonDataSQL.GET_RANDOM_PERSON_IDS, numberOfRecords);
-        Log.info(sql);
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            sql = String.format(PersonDataSQL.GET_RANDOM_PERSON_IDS, numberOfRecords);
+            Log.info(sql);
+        } else {
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            Log.info(sql);
 
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+
+            sql = String.format( PersonDataSQL.GET_RANDOM_PERSON_IDS_DELTA, refreshDate, numberOfRecords );
+            Log.info(sql);
+        }
 
         List<Map<?, ?>> randomPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
@@ -193,6 +203,9 @@ public class PersonDataQualityCheckSteps {
 
         dataQualityContext.personDataObjectsFromEPHSTG = DBManager
                 .getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
+
+
+
     }
 
     @Then("^We get the person records from EPH DQ$")

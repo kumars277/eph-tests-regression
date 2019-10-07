@@ -354,7 +354,7 @@ public class FinancialAttributesSteps {
             if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
                 Log.info("There is no delta load performed");
             } else {
-                if (endDatedFinAttr.isEmpty()){
+                if (CollectionUtils.isEmpty(endDatedFinAttr)){
                     Log.info("No identifiers were updated");
                 } else {
                     if (stgNewRecord.get(0).opco.equalsIgnoreCase(endDatedFinAttr.get(0).gl_company)){

@@ -489,14 +489,16 @@ public class ManifestationDataQualityCheckSteps {
     @And("^We compare the manifestations in EPH STG and EPH DQ for (.*)$")
     public void compareDataBetweenStagingAndDQ(String type) {
         Log.info("And compare the manifestations in EPH STG and EPH DQ ..");
-        //sort data in the lists
-        manifestationDataObjectsFromEPHSTG.sort(Comparator.comparing(ManifestationDataObject::getPRODUCT_MANIFESTATION_ID));
-        manifestationDataObjectsFromEPHDQ.sort(Comparator.comparing(ManifestationDataObject::getPMX_SOURCE_REFERENCE));
+
 
 //        assertThat("Data for manifestations in EPH Staging and EPH SA is equal without order", dataQualityContext.manifestationDataObjectsFromEPHSTG, containsInAnyOrder(dataQualityContext.manifestationDataObjectsFromEPHSA.toArray()));
         if ( CollectionUtils.isEmpty(manifestationDataObjectsFromEPHSTG) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Manifestations");
         } else {
+            //sort data in the lists
+            manifestationDataObjectsFromEPHSTG.sort(Comparator.comparing(ManifestationDataObject::getPRODUCT_MANIFESTATION_ID));
+            manifestationDataObjectsFromEPHDQ.sort(Comparator.comparing(ManifestationDataObject::getPMX_SOURCE_REFERENCE));
+
             IntStream.range(0, manifestationDataObjectsFromEPHSTG.size()).forEach(i -> {
 
                 //PMX_SOURCE_REFERENCE
