@@ -27,8 +27,8 @@ public class PersonDataSQL {
     public static String GET_COUNT_PERSONS_EPHSTG_TO_DQ = "select count(distinct \"PERSON_SOURCE_REF\") from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person;";
 
     public static String GET_COUNT_PERSONS_EPHSTG_TO_DQ_DELTA =  "select count(distinct \"PERSON_SOURCE_REF\") from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person\n"+
-//            "where TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')";
-            "where TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
+            "where TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')";
+//            "where TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('201905201200','YYYYMMDDHH24MI')";
 
 
     public static String GET_COUNT_PERSONS_EPHDQ = "select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq";
@@ -126,6 +126,15 @@ public class PersonDataSQL {
             "join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq dq on p.\"PERSON_SOURCE_REF\" = dq.person_source_ref\n" +
             "left join (select distinct external_reference, person_id from semarchy_eph_mdm.sa_person) a on dq.person_source_ref::varchar = a.external_reference\n" +
             "where dq.dq_err != 'Y'\n" +
+            "order by random() limit '%s'";
+
+    public static String GET_RANDOM_PERSON_IDS_DELTA = "select   \n" +
+            "\"PERSON_SOURCE_REF\" AS PERSON_SOURCE_REF\n" +
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person p\n" +
+            "join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_person_dq dq on p.\"PERSON_SOURCE_REF\" = dq.person_source_ref\n" +
+            "left join (select distinct external_reference, person_id from semarchy_eph_mdm.sa_person) a on dq.person_source_ref::varchar = a.external_reference\n" +
+            "where dq.dq_err != 'Y'\n" +
+            "and TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')\n" +
             "order by random() limit '%s'";
 
     public static String GET_IDS_FROM_LOOKUP_TABLE = "select numeric_id as PERSON_ID from " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_numericid\n" +

@@ -1,49 +1,48 @@
 {
-    "id": {
-      "$id": "#/properties/id", 
-      "type": "string",
-      "title": "The Id Schema",
-      "examples": [
-        "EPR-M-1458AF"
-      ],
-      "pattern": "^(.*)$"
-    },
-    "keyTitle": {
-      "$id": "#/properties/keyTitle",
-      "type": "string",
-      "title": "The Keytitle Schema",
-      "examples": [
-        "Sample Product (Online)"
-      ],
-      "pattern": "^(.*)$"
-    },
-    "internationalEditionInd": {
-      "$id": "#/properties/internationalEditionInd",
-      "type": "boolean",
-      "title": "The InternationaleditionIndicator Schema",
-      "examples": [
-        false
-      ]
-    },
-    "firstPubDate": {
-      "$id": "#/properties/firstPubDate",
-      "type": "string",
-      "format": "date",
-      "title": "The Firstpubdate Schema",
-      "examples": [
-        "2014-12-20"
-      ],
-      "pattern": "^(.*)$"
-    },
-    "lastPubDate": {
-      "$id": "#/properties/lastPubDate",
-      "type": "string",
-      "format": "date",
-      "title": "The Lastpubdate Schema",
-      "examples": [
-        "2014-12-20"
-      ]
-    },
+	"id": {
+		"$id": "#/properties/id",
+		"type": "string",
+		"title": "The Id Schema",
+		"examples": [
+			"EPR-M-1458AF"
+		],
+		"pattern": "^(.*)$"
+	},
+	"keyTitle": {
+		"$id": "#/properties/keyTitle",
+		"type": "string",
+		"title": "The Keytitle Schema",
+		"examples": [
+			"Sample Product (Online)"
+		]
+	},
+	"internationalEditionInd": {
+		"$id": "#/properties/internationalEditionInd",
+		"type": "boolean",
+		"title": "The InternationaleditionIndicator Schema",
+		"examples": [
+			false
+		]
+	},
+	"firstPubDate": {
+		"$id": "#/properties/firstPubDate",
+		"type": "string",
+		"format": "date",
+		"title": "The Firstpubdate Schema",
+		"examples": [
+			"2014-12-20"
+		],
+		"pattern": "^(.*)$"
+	},
+	"lastPubDate": {
+		"$id": "#/properties/lastPubDate",
+		"type": "string",
+		"format": "date",
+		"title": "The Lastpubdate Schema",
+		"examples": [
+			"2014-12-20"
+		]
+	},
 	"identifiers": {
 		"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/identifiers"
 	},
@@ -63,10 +62,10 @@
 		],
 		"properties": {
 			"code": {
-			 	"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 			},
 			"name": {
-			 	"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 			},
 			"lvl1": {
 				"$id": "#/properties/format/properties/lvl1",

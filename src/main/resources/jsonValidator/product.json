@@ -4,7 +4,7 @@
 			"$id": "#/properties/allocationPercentage",
 			"type": "number",
 			"title": "The Allocation% Schema",
-		"examples": [
+			"examples": [
 				15
 			]
 		},
@@ -23,20 +23,14 @@
 						"type": "object",
 						"title": "The Items Schema",
 						"required": [
-							"productId"
+							"productSummary"
 						],
 						"properties": {
-							"productId": {
-								"$id": "#/properties/isInPackages/items/properties/productId",
-								"type": "string",
-								"title": "The Productid Schema",
-								"examples": [
-									"EPR-123AAF"
-								],
-								"pattern": "^(.*)$"
+							"productSummary": {
+								"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/productSummary"
 							},
 							"allocationPercentage": {
-								"$ref": "#/definitions/allocationPercentage" 
+								"$ref": "#/definitions/allocationPercentage"
 							},
 							"effectiveStartDate": {
 								"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
@@ -58,20 +52,82 @@
 						"type": "object",
 						"title": "The Items Schema",
 						"required": [
-							"productId"
+							"productSummary"
 						],
 						"properties": {
-							"productId": {
-								"$id": "#/properties/hasComponents/items/properties/productId",
-								"type": "string",
-								"title": "The Productid Schema",
-								"examples": [
-									"EPR-123AAF"
-								],
-								"pattern": "^(.*)$"
+							"productSummary": {
+								"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/productSummary"
 							},
 							"allocationPercentage": {
-								"$ref": "#/definitions/allocationPercentage" 
+								"$ref": "#/definitions/allocationPercentage"
+							},
+							"effectiveStartDate": {
+								"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
+							},
+							"effectiveEndDate": {
+								"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
+							}
+						},
+						"additionalProperties": false
+					}
+				}
+			},
+			"additionalProperties": false
+		},
+		"relationships": {
+			"$id": "#/properties/relationships",
+			"type": "object",
+			"title": "The Relationships Schema",
+			"properties": {
+				"parent": {
+					"$id": "#/properties/relationships/properties/parent",
+					"type": "array",
+					"default": null,
+					"title": "The Parent Schema",
+					"items": {
+						"$id": "#/properties/relationships/properties/parent/items",
+						"type": "object",
+						"title": "The Items Schema",
+						"required": [
+							"type",
+							"productSummary"
+						],
+						"properties": {
+							"type": {
+								"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/type"
+							},
+							"productSummary": {
+								"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/productSummary"
+							},
+							"effectiveStartDate": {
+								"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
+							},
+							"effectiveEndDate": {
+								"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
+							}
+						},
+						"additionalProperties": false
+					}
+				},
+				"child": {
+					"$id": "#/properties/relationships/properties/child",
+					"type": "array",
+					"default": null,
+					"title": "The Child Schema",
+					"items": {
+						"$id": "#/properties/relationships/properties/child/items",
+						"type": "object",
+						"title": "The Items Schema",
+						"required": [
+							"type",
+							"productSummary"
+						],
+						"properties": {
+							"type": {
+								"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/type"
+							},
+							"productSummary": {
+								"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/productSummary"
 							},
 							"effectiveStartDate": {
 								"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
@@ -106,11 +162,20 @@
 				"subTitle": {
 					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/subTitle"
 				},
+				"shortTitle": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/shortTitle"
+				},
 				"electronicRightsInd": {
 					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/electronicRightsInd"
 				},
 				"language": {
 					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/language"
+				},
+				"subscriptionType": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/subscriptionType"
+				},
+				"fulfilmentSystem": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/fulfilmentSystem"
 				},
 				"editionNumber": {
 					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/editionNumber"
@@ -157,11 +222,14 @@
 				"persons": {
 					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/persons"
 				},
+				"catalogueYears": {
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/catalogueYears"
+				},
 				"subjectAreas": {
 					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/subjectAreas"
 				},
 				"relationships": {
-					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/relationships"
+					"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/relationships"
 				}
 			},
 			"additionalProperties": false
@@ -178,7 +246,7 @@
 		"createdDate",
 		"updatedDate",
 		"name",
-		"type",   
+		"type",
 		"status"
 	],
 	"properties": {
@@ -209,8 +277,7 @@
 			"title": "The Name Schema",
 			"examples": [
 				"Sample Product Open Access"
-			],
-			"pattern": "^(.*)$"
+			]
 		},
 		"shortName": {
 			"$id": "#/properties/shortName",
@@ -218,8 +285,7 @@
 			"title": "The Shortname Schema",
 			"examples": [
 				"Sample Prod"
-			],
-			"pattern": "^(.*)$"
+			]
 		},
 		"separatelySaleableInd": {
 			"$id": "#/properties/separatelySaleableInd",
@@ -277,7 +343,7 @@
 		},
 		"identifiers": {
 			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/identifiers"
-		},	
+		},
 		"type": {
 			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/type"
 		},
@@ -294,10 +360,10 @@
 			],
 			"properties": {
 				"code": {
-				 	"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 				},
 				"name": {
-				 	"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 				}
 			},
 			"additionalProperties": false
@@ -312,10 +378,10 @@
 			],
 			"properties": {
 				"code": {
-				 	"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 				},
 				"name": {
-				 	"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 				}
 			},
 			"additionalProperties": false
@@ -330,10 +396,10 @@
 			],
 			"properties": {
 				"code": {
-				 	"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 				},
 				"name": {
-				 	"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 				}
 			},
 			"additionalProperties": false
@@ -390,60 +456,60 @@
 		"persons": {
 			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/persons"
 		},
-		"packages": { 
-			"$ref": "#/definitions/packages" 
+		"packages": {
+			"$ref": "#/definitions/packages"
 		},
 		"relationships": {
-			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/relationships"
+			"$ref": "#/definitions/relationships"
 		},
-	    "manifestation": {
-	      "$id": "#/properties/manifestation",
-	      "type": "object",
-	      "title": "The Manifestation Schema",
-	      "required": [
-	        "id",
-	        "keyTitle",
-	        "type",
-			"status",
-	        "work"
-	      ],
-	      "properties": {
-			"id": {
-				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/id"
+		"manifestation": {
+			"$id": "#/properties/manifestation",
+			"type": "object",
+			"title": "The Manifestation Schema",
+			"required": [
+				"id",
+				"keyTitle",
+				"type",
+				"status",
+				"work"
+			],
+			"properties": {
+				"id": {
+					"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/id"
+				},
+				"keyTitle": {
+					"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/keyTitle"
+				},
+				"internationalEditionInd": {
+					"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/internationalEditionInd"
+				},
+				"firstPubDate": {
+					"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/firstPubDate"
+				},
+				"lastPubDate": {
+					"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/lastPubDate"
+				},
+				"identifiers": {
+					"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/identifiers"
+				},
+				"type": {
+					"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/type"
+				},
+				"status": {
+					"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/status"
+				},
+				"format": {
+					"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/format"
+				},
+				"work": {
+					"$ref": "#/definitions/work"
+				}
 			},
-			"keyTitle": {
-				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/keyTitle"
-			},
-			"internationalEditionInd": {
-				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/internationalEditionInd"
-			},
-			"firstPubDate": {
-				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/firstPubDate"
-			},
-			"lastPubDate": {
-				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/lastPubDate"
-			},
-			"identifiers": {
-				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/identifiers"
-			},
-			"type": {
-				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/type"
-			},
-			"status": {
-				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/status"
-			},
-			"format": {
-				"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/format"
-			},
-			"work": { 
-				"$ref": "#/definitions/work" 
-			}
-	      },
-	      "additionalProperties": false
-	    },
-	    "work": {
-			"$ref": "#/definitions/work" 
-	    }
-    },
+			"additionalProperties": false
+		},
+		"work": {
+			"$ref": "#/definitions/work"
+		}
+	},
 	"additionalProperties": false
 }

@@ -180,6 +180,7 @@ public class NotificationTestSteps {
             Log.info("The attempts before update are: " + attemptsBefore);
 
             loadBatchContext.batchId = DataLoadServiceImpl.createProductByStoreProcedure();
+
         } else if(type.equalsIgnoreCase("work")){
              sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
              notificationCountContext.writeAttemptsBefore= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -191,6 +192,7 @@ public class NotificationTestSteps {
             Log.info("The attempts before update are: " + attemptsBefore);
 
             loadBatchContext.batchId = DataLoadServiceImpl.createWorkByStoreProcedure();
+
         } else if (type.equalsIgnoreCase("manifestation")) {
             sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
             notificationCountContext.writeAttemptsBefore= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -201,7 +203,7 @@ public class NotificationTestSteps {
             }
             Log.info("The attempts before update are: " + attemptsBefore);
 
-            loadBatchContext.batchId = DataLoadServiceImpl.createManifestationByStoreProcedure();
+
         } else if (type.equalsIgnoreCase("work_identifier")) {
             sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
             notificationCountContext.writeAttemptsBefore= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -213,6 +215,7 @@ public class NotificationTestSteps {
             Log.info("The attempts before update are: " + attemptsBefore);
 
             loadBatchContext.batchId = DataLoadServiceImpl.createIdentifier();
+
         }  else if (type.equalsIgnoreCase("work_subject_area_link")) {
             sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
             notificationCountContext.writeAttemptsBefore= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -225,6 +228,7 @@ public class NotificationTestSteps {
 
             loadBatchContext.batchId = DataLoadServiceImpl.createIdentifier();
         }
+
         else if (type.equalsIgnoreCase("manifestation_identifier")) {
             sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
             notificationCountContext.writeAttemptsBefore= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -237,6 +241,7 @@ public class NotificationTestSteps {
 
             NotificationCountContext.manifestationIdentifier=true;
             loadBatchContext.batchId = DataLoadServiceImpl.createIdentifier();
+
         }else if (type.equalsIgnoreCase("translation")) {
             sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
             notificationCountContext.writeAttemptsBefore= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -249,6 +254,7 @@ public class NotificationTestSteps {
             NotificationCountContext.manifestationIdentifier=false;
             NotificationCountContext.translation=true;
             loadBatchContext.batchId = DataLoadServiceImpl.createIdentifier();
+
         }else if (type.equalsIgnoreCase("person_role")) {
             sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
             notificationCountContext.writeAttemptsBefore= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -262,6 +268,7 @@ public class NotificationTestSteps {
             NotificationCountContext.translation=false;
             NotificationCountContext.personRole=true;
             loadBatchContext.batchId = DataLoadServiceImpl.createIdentifier();
+
         }else if (type.equalsIgnoreCase("mirror")) {
             sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
             notificationCountContext.writeAttemptsBefore= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -276,6 +283,7 @@ public class NotificationTestSteps {
             NotificationCountContext.personRole=false;
             NotificationCountContext.mirror = true;
             loadBatchContext.batchId = DataLoadServiceImpl.createIdentifier();
+
         }else if (type.equalsIgnoreCase("financial_attribute")) {
             sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-W-TSTW01:JNL");
             notificationCountContext.writeAttemptsBefore= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -291,6 +299,7 @@ public class NotificationTestSteps {
             NotificationCountContext.mirror = false;
             NotificationCountContext.finAttribute = true;
             loadBatchContext.batchId = DataLoadServiceImpl.createIdentifier();
+
         } else if (type.equalsIgnoreCase("product_person_role")) {
             sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-TSTP03:BKF");
             notificationCountContext.writeAttemptsBefore= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -307,6 +316,7 @@ public class NotificationTestSteps {
             NotificationCountContext.finAttribute = false;
             NotificationCountContext.productPersonRole = true;
             loadBatchContext.batchId = DataLoadServiceImpl.createIdentifier();
+
         } else if (type.equalsIgnoreCase("product_package_relationship")) {
         sql= NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1","EPR-TSTP03:BKF");
         notificationCountContext.writeAttemptsBefore= DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -570,16 +580,6 @@ public class NotificationTestSteps {
                 Assert.fail("The notification timestamp for key:" + notificationCountContext.payloadResult.get(i).key + " was not updated");
             }
 
-//            if (notificationCountContext.payloadResult.get(0).timestamp.substring(0, 16).equalsIgnoreCase(currentTime)) {
-//                Log.info("The notification timestamp was updated");
-//                Log.info("The update time is: " + notificationCountContext.payloadResult.get(0).timestamp.substring(0, 16) +
-//                        " and the current time is: " + currentTime);
-//            } else {
-//                Log.info("The notification timestamp for key:" + notificationCountContext.payloadResult.get(0).key + " was not updated");
-//                Log.info("The update time was: " + notificationCountContext.payloadResult.get(0).timestamp.substring(0, 16) +
-//                        " but the current time is: " + currentTime);
-//                Assert.fail("The notification timestamp for key:" + notificationCountContext.payloadResult.get(0).key + " was not updated");
-//            }
         }
     }
 }

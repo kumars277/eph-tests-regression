@@ -14,6 +14,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 import com.eph.automation.testing.helper.Log;
 
@@ -61,8 +62,7 @@ public class WorksDataCheck {
             List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
             Log.info("refresh date: " + refreshDate);
-            sql = GeneratingRandomSQL.generatingValueDelta
-                    .replace("PARAM1", numberOfRecords);
+            sql = String.format(GeneratingRandomSQL.generatingValueDelta, refreshDate, numberOfRecords);
             Log.info(sql);
         }
 
@@ -110,7 +110,7 @@ public class WorksDataCheck {
 
     @Then("^The work data between PMX and EPH STG is identical$")
     public void checkPMXtoPMGSTGData() throws ParseException {
-        if (dataQualityContext.workDataObjectsFromPMXSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.workDataObjectsFromPMXSTG) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Works");
         } else {
         for (int i=0; i<dataQualityContext.workDataObjectsFromSource.size();i++) {

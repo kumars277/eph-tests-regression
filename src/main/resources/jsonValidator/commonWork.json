@@ -1,4 +1,4 @@
-	{
+{
 	"id": {
 		"$id": "#/properties/id",
 		"type": "string",
@@ -14,8 +14,7 @@
 		"title": "The Title Schema",
 		"examples": [
 			"Sample Product"
-		],
-		"pattern": "^(.*)$"
+		]
 	},
 	"subTitle": {
 		"$id": "#/properties/subTitle",
@@ -23,8 +22,15 @@
 		"title": "The Subtitle Schema",
 		"examples": [
 			"An Elsevier Journal"
-		],
-		"pattern": "^(.*)$"
+		]
+	},
+	"shortTitle": {
+		"$id": "#/properties/shortTitle",
+		"type": "string",
+		"title": "The Shorttitle Schema",
+		"examples": [
+			"An Elsevier Journal"
+		]
 	},
 	"electronicRightsInd": {
 		"$id": "#/properties/electronicRightsInd",
@@ -122,6 +128,42 @@
 		},
 		"additionalProperties": false
 	},
+	"subscriptionType": {
+		"$id": "#/properties/subscriptionType",
+		"type": "object",
+		"title": "The SubscriptionType Schema",
+		"required": [
+			"code",
+			"name"
+		],
+		"properties": {
+			"code": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+			},
+			"name": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+			}
+		},
+		"additionalProperties": false
+	},
+	"fulfilmentSystem": {
+		"$id": "#/properties/fulfilmentSystem",
+		"type": "object",
+		"title": "The FulfilmentSystem Schema",
+		"required": [
+			"code",
+			"name"
+		],
+		"properties": {
+			"code": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+			},
+			"name": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+			}
+		},
+		"additionalProperties": false
+	},
 	"copyrightOwners": {
 		"$id": "#/properties/copyrightOwners",
 		"type": "array",
@@ -144,7 +186,12 @@
 					],
 					"properties": {
 						"name": {
-							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+							"$id": "#/properties/copyrightOwners/items/properties/copyrightOwner/name",
+							"type": "string",
+							"title": "The Name Schema",
+							"examples": [
+								"Journal Backfiles"
+							]
 						}
 					},
 					"additionalProperties": false
@@ -251,76 +298,212 @@
 	"persons": {
 		"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/persons"
 	},
-    "subjectAreas": {
-     	"$id": "#/properties/subjectAreas",
-      	"type": "array",
+	"catalogueYears": {
+		"$id": "#/properties/catalogueYears",
+		"type": "array",
 		"default": null,
-      	"title": "The Subjectareas Schema",
-      	"items": {
-        	"$id": "#/properties/subjectAreas/items",
-        	"type": "object",
-        	"title": "The Items Schema",
-        	"required": [
-          	"subjectArea"
-        	],
-        	"properties": {
-          		"subjectArea": {
-            		"$id": "#/properties/workSubjectAreas/items/properties/subjectArea",
-            		"type": "object",
-            		"title": "The Subjectarea Schema",
-            		"required": [
-              			"code",
-              			"name",
-              			"type"
-            		],
-            		"properties": {
-              			"code": {
+		"title": "The CatalogueYears Schema",
+		"items": {
+			"$id": "#/properties/catalogueYears/items",
+			"type": "object",
+			"title": "The Items Schema",
+			"required": [
+				"year",
+				"numberOfVolumes",
+				"issuesPerVolume",
+				"issuesPerYear"
+			],
+			"properties": {
+				"year": {
+					"$id": "#/properties/copyrightOwners/items/properties/catalogueYear/year",
+					"type": "integer",
+					"title": "The Year Schema",
+					"examples": [
+						2019
+					]
+				},
+				"numberOfVolumes": {
+					"$id": "#/properties/copyrightOwners/items/properties/catalogueYear/numberOfVolumes",
+					"type": "integer",
+					"title": "The NumberOfVolumes Schema",
+					"examples": [
+						4
+					]
+				},
+				"issuesPerVolume": {
+					"$id": "#/properties/copyrightOwners/items/properties/catalogueYear/issuesPerVolume",
+					"type": "integer",
+					"title": "The IssuesPerVolume Schema",
+					"examples": [
+						3
+					]
+				},
+				"issuesPerYear": {
+					"$id": "#/properties/copyrightOwners/items/properties/catalogueYear/issuesPerYear",
+					"type": "integer",
+					"title": "The IssuesPerYear Schema",
+					"examples": [
+						12
+					]
+				},
+				"startVolume": {
+					"$id": "#/properties/copyrightOwners/items/properties/catalogueYear/startVolume",
+					"type": "string",
+					"title": "The StartVolume Schema",
+					"examples": [
+						"15"
+					]
+				},
+				"endVolume": {
+					"$id": "#/properties/copyrightOwners/items/properties/catalogueYear/endVolume",
+					"type": "string",
+					"title": "The EndVolume Schema",
+					"examples": [
+						"19"
+					]
+				}
+			},
+			"additionalProperties": false
+		}
+	},
+	"subjectAreas": {
+		"$id": "#/properties/subjectAreas",
+		"type": "array",
+		"default": null,
+		"title": "The Subjectareas Schema",
+		"items": {
+			"$id": "#/properties/subjectAreas/items",
+			"type": "object",
+			"title": "The Items Schema",
+			"required": [
+				"subjectArea"
+			],
+			"properties": {
+				"subjectArea": {
+					"$id": "#/properties/workSubjectAreas/items/properties/subjectArea",
+					"type": "object",
+					"title": "The Subjectarea Schema",
+					"required": [
+						"code",
+						"name",
+						"type"
+					],
+					"properties": {
+						"code": {
 							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
-              			},
-              			"name": {
+						},
+						"name": {
 							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 						},
-              			"type": {
+						"type": {
 							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/type"
 						},
-              			"parentSubjectArea": {
-                			"$id": "#/properties/workSubjectAreas/items/properties/subjectArea/properties/parentSubjectArea",
-                			"type": "object",
-                			"title": "The Parentsubjectarea Schema",
-                			"required": [
-                  				"code",
-                  				"name"
-                			],
-                			"properties": {
-                  				"code": {
+						"parentSubjectArea": {
+							"$id": "#/properties/workSubjectAreas/items/properties/subjectArea/properties/parentSubjectArea",
+							"type": "object",
+							"title": "The Parentsubjectarea Schema",
+							"required": [
+								"code",
+								"name"
+							],
+							"properties": {
+								"code": {
 									"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
 								},
-    	              			"name": {
+								"name": {
 									"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
 								}
-            	    		},
+							},
 							"additionalProperties": false
-              			}
+						}
 					},
 					"additionalProperties": false
 				},
-          		"primaryInd": {
-            		"$id": "#/properties/workSubjectAreas/items/properties/primaryInd",
-            		"type": "boolean",
-            		"title": "The Primaryind Schema",
-            		"default": false,
-            		"examples": [
-              			false
-            		]
-          		},
-          		"effectiveStartDate": {
+				"primaryInd": {
+					"$id": "#/properties/workSubjectAreas/items/properties/primaryInd",
+					"type": "boolean",
+					"title": "The Primaryind Schema",
+					"default": false,
+					"examples": [
+						false
+					]
+				},
+				"effectiveStartDate": {
 					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
 				},
-          		"effectiveEndDate": {
+				"effectiveEndDate": {
 					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
-          		}
-        	},
+				}
+			},
 			"additionalProperties": false
-      	}
-    }	
+		}
+	},
+	"relationships": {
+		"$id": "#/properties/relationships",
+		"type": "object",
+		"title": "The Relationships Schema",
+		"properties": {
+			"parent": {
+				"$id": "#/properties/relationships/properties/parent",
+				"type": "array",
+				"default": null,
+				"title": "The Parent Schema",
+				"items": {
+					"$id": "#/properties/relationships/properties/parent/items",
+					"type": "object",
+					"title": "The Items Schema",
+					"required": [
+						"type",
+						"workSummary"
+					],
+					"properties": {
+						"type": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/type"
+						},
+						"workSummary": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/workSummary"
+						},
+						"effectiveStartDate": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
+						},
+						"effectiveEndDate": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
+						}
+					},
+					"additionalProperties": false
+				}
+			},
+			"child": {
+				"$id": "#/properties/relationships/properties/child",
+				"type": "array",
+				"default": null,
+				"title": "The Child Schema",
+				"items": {
+					"$id": "#/properties/relationships/properties/child/items",
+					"type": "object",
+					"title": "The Items Schema",
+					"required": [
+						"type",
+						"workSummary"
+					],
+					"properties": {
+						"type": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/type"
+						},
+						"workSummary": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/workSummary"
+						},
+						"effectiveStartDate": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
+						},
+						"effectiveEndDate": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
+						}
+					},
+					"additionalProperties": false
+				}
+			}
+		},
+		"additionalProperties": false
+	}
 }

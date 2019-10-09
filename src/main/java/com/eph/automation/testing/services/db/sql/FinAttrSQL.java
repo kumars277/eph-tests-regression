@@ -142,7 +142,7 @@ public class FinAttrSQL {
 //            "and wfa.effective_end_date  is  null\n" +
 //            "and wfa.b_batchid in (select max(b_batchid) from semarchy_eph_mdm.gd_event where description = 'PMX Talend Load' and workflow_id = 'talend' and f_workflow_source = 'PMX')\n";
     "select count(*) as dqCount\n" +
-            "from ephsit_talend_owner.stg_10_pmx_wwork_dq s\n" +
+            "from " +GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s\n" +
             "--left join (\n" +
             "--      select \n" +
             "--             f.f_gl_company as company\n" +
@@ -206,5 +206,5 @@ public class FinAttrSQL {
             "  ,opco as opco\n" +
             "  ,resp_centre as resp_centre\n" +
             "  FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq \n"+
-            "  WHERE pmx_source_reference='PARAM1'";
+            "  WHERE pmx_source_reference='%s'";
 }

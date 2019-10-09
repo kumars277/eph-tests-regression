@@ -14,6 +14,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 
 import java.util.Comparator;
@@ -332,7 +333,7 @@ public class PersonProductRoleDataQualityCheckSteps {
     public void checkMandatoryColumnsForPersonsInSAArePopulated() {
         Log.info("We check that mandatory columns are populated ...");
 
-        if (dataQualityContext.personProductRoleDataObjectsFromEPHSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.personProductRoleDataObjectsFromEPHSA)&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Person Product Role data");
         } else {
             IntStream.range(0, dataQualityContext.personProductRoleDataObjectsFromEPHSA.size()).forEach(i -> {
@@ -360,7 +361,7 @@ public class PersonProductRoleDataQualityCheckSteps {
         dataQualityContext.personProductRoleDataObjectsFromEPHSTG.sort(Comparator.comparing(PersonProductRoleDataObject::getPROD_PER_ROLE_SOURCE_REF));
         dataQualityContext.personProductRoleDataObjectsFromEPHSA.sort(Comparator.comparing(PersonProductRoleDataObject::getEXTERNAL_REFERENCE));
 
-        if (dataQualityContext.personProductRoleDataObjectsFromEPHSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.personProductRoleDataObjectsFromEPHSA) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Person Product Role data");
         } else {
             IntStream.range(0, dataQualityContext.personProductRoleDataObjectsFromEPHSTG.size()).forEach(i -> {

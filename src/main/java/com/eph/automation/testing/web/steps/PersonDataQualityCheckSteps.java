@@ -13,6 +13,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
@@ -162,9 +163,19 @@ public class PersonDataQualityCheckSteps {
         Log.info("numberOfRecords = " + numberOfRecords);
 
 
-        sql = String.format(PersonDataSQL.GET_RANDOM_PERSON_IDS, numberOfRecords);
-        Log.info(sql);
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            sql = String.format(PersonDataSQL.GET_RANDOM_PERSON_IDS, numberOfRecords);
+            Log.info(sql);
+        } else {
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            Log.info(sql);
 
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+
+            sql = String.format( PersonDataSQL.GET_RANDOM_PERSON_IDS_DELTA, refreshDate, numberOfRecords );
+            Log.info(sql);
+        }
 
         List<Map<?, ?>> randomPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
@@ -192,6 +203,9 @@ public class PersonDataQualityCheckSteps {
 
         dataQualityContext.personDataObjectsFromEPHSTG = DBManager
                 .getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
+
+
+
     }
 
     @Then("^We get the person records from EPH DQ$")
@@ -345,7 +359,7 @@ public class PersonDataQualityCheckSteps {
     public void comparePersonRecordsInEPHDQAndEPHSA() {
         Log.info("And compare the person records in EPH DQ and EPH SA ..");
 
-        if (dataQualityContext.personDataObjectsFromEPHDQ.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.personDataObjectsFromEPHDQ)&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Person data");
         } else {
             IntStream.range(0, dataQualityContext.personDataObjectsFromEPHDQ.size()).forEach(i -> {

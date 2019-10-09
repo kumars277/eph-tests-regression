@@ -13,6 +13,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
@@ -288,12 +289,11 @@ public class AccountableProductDataQualityCheckSteps {
     @And("^Compare the accountable product data in PMX and EPH STG$")
     public void compareAccountableProductsDataPMXAndSTG() {
         Log.info("And the accountable product data in PMX and EPH STG ..");
-        if (dataQualityContext.accountableProductDataObjectsFromSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.accountableProductDataObjectsFromSTG) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Accountable Products");
         } else {
             dataQualityContext.accountableProductDataObjectsFromPMX.sort(Comparator.comparing(AccountableProductDataObject::getPRODUCT_WORK_ID));
             dataQualityContext.accountableProductDataObjectsFromSTG.sort(Comparator.comparing(AccountableProductDataObject::getPRODUCT_WORK_ID));
-
 
             IntStream.range(0, dataQualityContext.accountableProductDataObjectsFromSTG.size()).forEach(i -> {
 
@@ -367,7 +367,7 @@ public class AccountableProductDataQualityCheckSteps {
         Log.info("And the accountable product data in STG and DQ ..");
 
 
-        if (dataQualityContext.accountableProductDataObjectsFromSTGDQ.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.accountableProductDataObjectsFromSTGDQ) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Accountable products in DQ");
         } else {
             dataQualityContext.accountableProductDataObjectsFromSTG.sort(Comparator.comparing(AccountableProductDataObject::getPRODUCT_WORK_ID));
@@ -422,7 +422,7 @@ public class AccountableProductDataQualityCheckSteps {
         Log.info("And the accountable product data in DQ and SA ..");
 
 
-        if (dataQualityContext.accountableProductDataObjectsFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.accountableProductDataObjectsFromSA) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Accountable products in SA");
         } else {
             dataQualityContext.accountableProductDataObjectsFromSTGDQ.sort(Comparator.comparing(AccountableProductDataObject::getPMX_SOURCE_REFERENCE));
@@ -464,7 +464,7 @@ public class AccountableProductDataQualityCheckSteps {
         Log.info("And the accountable product data in SA and EPH GD ..");
 
 
-        if (dataQualityContext.accountableProductDataObjectsFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.accountableProductDataObjectsFromSA) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Accountable Product Data");
         } else {
             dataQualityContext.accountableProductDataObjectsFromSA.sort(Comparator.comparing(AccountableProductDataObject::getACCOUNTABLE_PRODUCT_ID));
@@ -505,7 +505,7 @@ public class AccountableProductDataQualityCheckSteps {
     @And("^Check the mandatory columns are populated for accountable products role$")
     public void checkMandatoryColumnsForAccountableProductsRoleInSAArePopulated() {
         Log.info("We check that mandatory columns are populated ...");
-        if (dataQualityContext.accountableProductDataObjectsFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.accountableProductDataObjectsFromSA) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Accountable Product Data");
         } else {
             IntStream.range(0, dataQualityContext.accountableProductDataObjectsFromSA.size()).forEach(i -> {

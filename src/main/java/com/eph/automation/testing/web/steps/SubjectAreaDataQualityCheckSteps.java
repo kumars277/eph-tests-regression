@@ -14,6 +14,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
@@ -203,7 +204,7 @@ public class SubjectAreaDataQualityCheckSteps {
     @And("^Check the mandatory columns are populated for subject link$")
     public void checkMandatoryColumnsForSubjectAreaInSAArePopulated() {
         Log.info("We check that mandatory columns are populated ...");
-        if (dataQualityContext.subjectAreaDataObjectsFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.subjectAreaDataObjectsFromSA) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There are no records found for Subject Area ");
         } else {
             IntStream.range(0, dataQualityContext.subjectAreaDataObjectsFromSA.size()).forEach(i -> {
@@ -223,7 +224,7 @@ public class SubjectAreaDataQualityCheckSteps {
     @And("^Compare the subject area data in PMX and EPH STG$")
     public void compareSubjectAreaDataPMXAndSTG() {
         Log.info("And compare the subject area data in PMX and EPH STG ..");
-        if (dataQualityContext.subjectAreaDataObjectsFromSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.subjectAreaDataObjectsFromSTG) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There are no records found for Subject Area ");
         } else {
             dataQualityContext.subjectAreaDataObjectsFromPMX.sort(Comparator.comparing(SubjectAreaDataObject::getPMX_SOURCE_REF));
@@ -277,7 +278,7 @@ public class SubjectAreaDataQualityCheckSteps {
     @And("^Compare the subject area data in EPH STG and EPH SA$")
     public void compareSubjectAreaDataEPHSTGAndEPHSA() {
         Log.info("And compare the subject area data in EPH STG and EPH SA..");
-        if (dataQualityContext.subjectAreaDataObjectsFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.subjectAreaDataObjectsFromSA)&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There are no records found for Subject Area ");
         } else {
         dataQualityContext.subjectAreaDataObjectsFromSTG.sort(Comparator.comparing(SubjectAreaDataObject::getSUBJECT_AREA_CODE));
@@ -336,7 +337,7 @@ public class SubjectAreaDataQualityCheckSteps {
         dataQualityContext.subjectAreaDataObjectsFromSA.sort(Comparator.comparing(SubjectAreaDataObject::getSUBJECT_AREA_ID));
         dataQualityContext.subjectAreaDataObjectsFromGD.sort(Comparator.comparing(SubjectAreaDataObject::getSUBJECT_AREA_ID));
 
-        if (dataQualityContext.subjectAreaDataObjectsFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.subjectAreaDataObjectsFromSA) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There are no records found for Subject Area ");
         } else {
             IntStream.range(0, dataQualityContext.subjectAreaDataObjectsFromSA.size()).forEach(i -> {

@@ -16,6 +16,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
@@ -155,7 +156,7 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         Log.info("Get the ids from stg ...");
@@ -212,10 +213,10 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
     @And("^Check the mandatory columns are populated for work subject link$")
     public void checkMandatoryColumnsForWorkSubjectAreaLinkInSAArePopulated() {
         Log.info("We check that mandatory columns are populated ...");
-        if (dataQualityContext.workSubjectAreaDataObjectsFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.workSubjectAreaDataObjectsFromSA)&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There are no records found for Work Subject Area ");
         } else {
-            if (dataQualityContext.workSubjectAreaDataObjectsFromSA.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            if ( CollectionUtils.isEmpty(dataQualityContext.workSubjectAreaDataObjectsFromSA) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
                 Log.info("There are no records found for Work Subject Area ");
             } else {
                 IntStream.range(0, dataQualityContext.workSubjectAreaDataObjectsFromSA.size()).forEach(i -> {
@@ -246,12 +247,14 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
     @And("^Compare the work subject area data in PMX and EPH STG$")
     public void compareWorkSubjectAreaDataPMXAndSTG() {
         Log.info("And compare the work subject area data in PMX and EPH STG ..");
-        dataQualityContext.workSubjectAreaDataObjectsFromPMX.sort(Comparator.comparing(WorkSubjectAreaLinkDataObject::getPRODUCT_SUBJECT_AREA_ID));
-        dataQualityContext.workSubjectAreaDataObjectsFromSTG.sort(Comparator.comparing(WorkSubjectAreaLinkDataObject::getPRODUCT_SUBJECT_AREA_ID));
 
-        if (dataQualityContext.workSubjectAreaDataObjectsFromSTG.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.workSubjectAreaDataObjectsFromSTG) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There are no records found for Work Subject Area ");
         } else {
+            dataQualityContext.workSubjectAreaDataObjectsFromPMX.sort(Comparator.comparing(WorkSubjectAreaLinkDataObject::getPRODUCT_SUBJECT_AREA_ID));
+            dataQualityContext.workSubjectAreaDataObjectsFromSTG.sort(Comparator.comparing(WorkSubjectAreaLinkDataObject::getPRODUCT_SUBJECT_AREA_ID));
+
+
             IntStream.range(0, dataQualityContext.workSubjectAreaDataObjectsFromSTG.size()).forEach(i -> {
 
                 //PRODUCT_SUBJECT_AREA_ID
@@ -302,11 +305,11 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
     public void compareWorkSubjectAreaDataSTGANDSA() {
         Log.info("And compare the work subject area data in EPH STG and EPH SA..");
 
-        if (dataQualityContext.workSubjectAreaDataObjectsFromSA.isEmpty()&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.workSubjectAreaDataObjectsFromSA) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There are no records found for Work Subject Area ");
         } else {
             Log.info("The Size of SA list is : " + dataQualityContext.workSubjectAreaDataObjectsFromSA.size());
-            if (dataQualityContext.workSubjectAreaDataObjectsFromSA.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            if ( CollectionUtils.isEmpty(dataQualityContext.workSubjectAreaDataObjectsFromSA) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
                 Log.info("There are no records found for Work Subject Area ");
             } else {
                 IntStream.range(0, dataQualityContext.workSubjectAreaDataObjectsFromSA.size()).forEach(i -> {
@@ -359,7 +362,7 @@ public class WorkSubjectAreaLinkDataQualityCheckSteps {
     @And("^Compare the work subject area data in EPH SA and EPH GD$")
     public void compareWorkSubjectAreaDataSAANDGD() {
         Log.info("And compare the work subject area data in SA and EPH GD ..");
-        if (dataQualityContext.workSubjectAreaDataObjectsFromSA.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.workSubjectAreaDataObjectsFromSA) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There are no records found for Work Subject Area ");
         } else {
             dataQualityContext.workSubjectAreaDataObjectsFromSA.sort(Comparator.comparing(WorkSubjectAreaLinkDataObject::getWORK_SUBJECT_AREA_LINK_ID));

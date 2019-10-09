@@ -14,6 +14,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
@@ -172,8 +173,8 @@ public class PersonWorkRoleDataQualityCheckSteps {
             sql = WorkCountSQL.GET_REFRESH_DATE;
             List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
-//            sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_DELTA, type, refreshDate, numberOfRecords);  -- uncomment when hardcoded value for refresh date is removed
-            sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_DELTA, type, numberOfRecords);
+            sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_DELTA, type, refreshDate, numberOfRecords);
+//            sql = String.format(PersonWorkRoleDataSQL.GET_RANDOM_DELTA, type, numberOfRecords);
             Log.info(sql);
         }
 
@@ -259,7 +260,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @And("^Compare person work role records in PMX and EPH STG for (.*)$")
     public void comparePersonWorkRolesRecordsInPMXAndEPHSTG(String type) {
         Log.info("And compare work role records in PMX and EPH STG ..");
-        if (dataQualityContext.personWorkRoleDataObjectsFromEPHSTG.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if (CollectionUtils.isEmpty(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Person Work Role");
         } else {
             //sort the lists before comparison
@@ -375,7 +376,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @And("^Check the mandatory columns are populated for persons work role$")
     public void checkMandatoryColumnsForPersonsWorkRoleInSAArePopulated() {
         Log.info("We check that mandatory columns are populated ...");
-        if (dataQualityContext.personWorkRoleDataObjectsFromEPHSA.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.personWorkRoleDataObjectsFromEPHSA) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There are no records found for Person Work Role");
         } else {
             IntStream.range(0, dataQualityContext.personWorkRoleDataObjectsFromEPHSA.size()).forEach(i -> {
@@ -509,7 +510,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @And("^Compare person work role records in EPH SA and EPH GD$")
     public void comparePersonWorkRolesRecordsInSAAndGD() {
         Log.info("And compare work role records in EPH SA and EPH GD ..");
-        if (dataQualityContext.personWorkRoleDataObjectsFromEPHSA.isEmpty() && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.personWorkRoleDataObjectsFromEPHSA) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There are no records found for Person Work Role");
         } else {
             dataQualityContext.personWorkRoleDataObjectsFromEPHSA.sort(Comparator.comparing(PersonWorkRoleDataObject::getWORK_PERSON_ROLE_ID));

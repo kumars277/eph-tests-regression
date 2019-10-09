@@ -28,8 +28,8 @@ public class GeneratingRandomSQL {
                     "       from stg_10_pmx_accountable_product_dq s join (select distinct * from semarchy_eph_mdm.sa_accountable_product) a on\n" +
                     "      s.pmx_source_reference = a.external_reference where s.dq_err != 'Y') ap on ww.pmx_source_reference::varchar = ap.product_work_id::varchar\n" +
                     "WHERE ww.dq_err != 'Y'\n" +
-                    "--and (TO_TIMESTAMP(ww.work_updated,'YYYYMMDDHH24MI') > TO_TIMESTAMP('{LAST_REFRESH_VALUE}','YYYYMMDDHH24MI'))\n" +
-                    "and (TO_TIMESTAMP(ww.work_updated,'YYYYMMDDHH24MI') > TO_TIMESTAMP('201908221200','YYYYMMDDHH24MI'))\n" +
+                    "and (TO_TIMESTAMP(ww.work_updated,'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI'))\n" +
+//                    "and (TO_TIMESTAMP(ww.work_updated,'YYYYMMDDHH24MI') > TO_TIMESTAMP('201908221200','YYYYMMDDHH24MI'))\n" +
                     "ORDER BY RANDOM()\n" +
-                    " LIMIT PARAM1;";
+                    " LIMIT '%s';";
 }

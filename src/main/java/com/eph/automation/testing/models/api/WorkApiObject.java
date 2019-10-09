@@ -42,8 +42,12 @@ public class WorkApiObject {
     private SubjectAreasApiObject[] subjectAreas;
     private WorkManifestationApiObject[] manifestations;
 
+
+
+
+
     public void compareWithDB(){
-        getWorkDataFromEPHGD(this.id);
+//        getWorkDataFromEPHGD(this.id);
         Assert.assertEquals(this.subTitle, this.workDataObjectsFromEPHGD.get(0).getWORK_SUBTITLE());
         Assert.assertEquals(Boolean.valueOf(this.electronicRightsInd), Boolean.valueOf(this.workDataObjectsFromEPHGD.get(0).getELECTRONIC_RIGHTS_IND()));
         if(!(this.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE()==null)) {

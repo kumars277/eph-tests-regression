@@ -42,7 +42,7 @@ Feature: Entity - PERSON  - Validate data between PMX and EPH - Talend Load
     Given We get <countOfRandomIds> random ids of persons
     When We get the person records from EPH STG
     Then We get the person records from EPH DQ
-    Then Compare person records in EPH STG and EPH DQ
+#    Then Compare person records in EPH STG and EPH DQ
     And Compare person records in EPH DQ and EPH SA
     Examples:
       | countOfRandomIds |
