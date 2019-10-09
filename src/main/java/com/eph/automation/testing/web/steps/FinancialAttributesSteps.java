@@ -294,92 +294,55 @@ public class FinancialAttributesSteps {
 
     @Given("^We have end-dated financial attribute in GD$")
     public void getEndDatedFA() {
-        if (System.getProperty("LOAD") != null) {
-            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+
+            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
                 Log.info("There is no delta load performed");
             } else {
                 sql = FinAttrSQL.GET_GD_FinnAttr_DATA_End_Date;
                 endDatedFinAttr = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class,
                         Constants.EPH_URL);
-                if (endDatedFinAttr.isEmpty()){
+                if (endDatedFinAttr.isEmpty()) {
                     Log.info("No records were updated");
                 } else {
                     Log.info("There are end dated records");
                 }
             }
-        }else{
-            sql = FinAttrSQL.GET_GD_FinnAttr_DATA_End_Date;
-            endDatedFinAttr = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class,
-                    Constants.EPH_URL);
-            if (endDatedFinAttr.isEmpty()){
-                Log.info("No records were updated");
-            } else {
-                Log.info("There are end dated records");
-            }
-         //   Log.info("There is no delta load performed");
         }
-    }
+
 
     @When("^We get the new data for the same record from STG$")
-    public void getNewStgData(){
-        if (System.getProperty("LOAD") != null) {
-            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                Log.info("There is no delta load performed");
-            } else {
-                if (endDatedFinAttr.isEmpty()){
-                    Log.info("No financial attributes were updated");
-                } else {
-                    sql = FinAttrSQL.GET_STG_DQ_WORKS_DATA_Delta.replace("PARAM1",
-                            endDatedFinAttr.get(0).PMX_SOURCE_REFERENCE);
-                    stgNewRecord = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class,
-                            Constants.EPH_URL);
-                }
-            }
-        }else{
-            if (endDatedFinAttr.isEmpty()){
+    public void getNewStgData() {
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            Log.info("There is no delta load performed");
+        } else {
+            if (endDatedFinAttr.isEmpty()) {
                 Log.info("No financial attributes were updated");
             } else {
-                sql = FinAttrSQL.GET_STG_DQ_WORKS_DATA_Delta.replace("PARAM1",
-                        endDatedFinAttr.get(0).PMX_SOURCE_REFERENCE);
+                sql = String.format(FinAttrSQL.GET_STG_DQ_WORKS_DATA_Delta,
+                        endDatedFinAttr.get(0).getPMX_SOURCE_REFERENCE());
                 stgNewRecord = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class,
                         Constants.EPH_URL);
             }
-           // Log.info("There is no delta load performed");
         }
     }
 
-    @Then("^There is difference in the record values$")
-    public void compareNewId(){
-        if (System.getProperty("LOAD") != null) {
-            if (System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                Log.info("There is no delta load performed");
-            } else {
-                if (CollectionUtils.isEmpty(endDatedFinAttr)){
-                    Log.info("No identifiers were updated");
-                } else {
-                    if (stgNewRecord.get(0).opco.equalsIgnoreCase(endDatedFinAttr.get(0).gl_company)){
-                        Log.info("OPCO details are the same. Checking resp_centre data...");
-                        Assert.assertNotEquals("There is no data change!",stgNewRecord.get(0).resp_centre,
-                                endDatedFinAttr.get(0).cost_resp_centre);
 
-                    } else {
-                        Log.info("There is a change in the OPCO data");
-                    }
-                }
-            }
-        }else{
-            if (endDatedFinAttr.isEmpty()){
+    @Then("^There is difference in the record values$")
+    public void compareNewId() {
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            Log.info("There is no delta load performed");
+        } else {
+            if (CollectionUtils.isEmpty(stgNewRecord)) {
                 Log.info("No identifiers were updated");
             } else {
-                if (stgNewRecord.get(0).opco.equalsIgnoreCase(endDatedFinAttr.get(0).gl_company)){
+                if (stgNewRecord.get(0).opco.equalsIgnoreCase(endDatedFinAttr.get(0).getGl_company())) {
                     Log.info("OPCO details are the same. Checking resp_centre data...");
-                    Assert.assertNotEquals("There is no data change!",stgNewRecord.get(0).resp_centre,
-                            endDatedFinAttr.get(0).cost_resp_centre);
+                    Assert.assertNotEquals("There is no data change!", stgNewRecord.get(0).resp_centre,
+                            endDatedFinAttr.get(0).getCost_resp_centre());
                 } else {
                     Log.info("There is a change in the OPCO data");
                 }
             }
-           // Log.info("There is no delta load performed");
         }
     }
 }

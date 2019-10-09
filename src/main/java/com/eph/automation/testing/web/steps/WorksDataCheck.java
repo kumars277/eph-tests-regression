@@ -62,7 +62,7 @@ public class WorksDataCheck {
             List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
             Log.info("refresh date: " + refreshDate);
-            sql = String.format(GeneratingRandomSQL.generatingValueDelta, numberOfRecords);
+            sql = String.format(GeneratingRandomSQL.generatingValueDelta, refreshDate, numberOfRecords);
             Log.info(sql);
         }
 

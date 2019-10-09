@@ -206,5 +206,5 @@ public class FinAttrSQL {
             "  ,opco as opco\n" +
             "  ,resp_centre as resp_centre\n" +
             "  FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq \n"+
-            "  WHERE pmx_source_reference='PARAM1'";
+            "  WHERE pmx_source_reference='%s'";
 }

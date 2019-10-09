@@ -31,5 +31,5 @@ public class GeneratingRandomSQL {
                     "and (TO_TIMESTAMP(ww.work_updated,'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI'))\n" +
 //                    "and (TO_TIMESTAMP(ww.work_updated,'YYYYMMDDHH24MI') > TO_TIMESTAMP('201908221200','YYYYMMDDHH24MI'))\n" +
                     "ORDER BY RANDOM()\n" +
-                    " LIMIT PARAM1;";
+                    " LIMIT '%s';";
 }
