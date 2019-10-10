@@ -41,7 +41,7 @@ public class WebDriverFactory implements Provider<WebDriver> {
             return null;
         } else {
             switch (TestContext.getValues().browserType.toLowerCase()) {
-                case "firefox":
+               /* case "firefox":
                     // set driver properties
                     File pathBinary = new File("C:\\Program Files\\Mozilla Firefox\\firefox.exe");
                     FirefoxBinary firefoxBinary = new FirefoxBinary(pathBinary);
@@ -54,7 +54,7 @@ public class WebDriverFactory implements Provider<WebDriver> {
                     //Allow geo location :
                     profile.setPreference("geo.prompt.testing", true);
                     profile.setPreference("geo.prompt.testing.allow", true);
-                    return new FirefoxDriver(firefoxBinary,profile);
+                    return new FirefoxDriver(firefoxBinary,profile);*/
                 case "ie":
                     InternetExplorerDriverManager.getInstance().setup();
                     DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();

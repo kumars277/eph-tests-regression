@@ -16,17 +16,17 @@
     </repositories>
 
     <properties>
-            <aspectj.version>1.8.5</aspectj.version>
-            <slf4j-api.version>1.7.21</slf4j-api.version>
-            <log4j.version>1.2.17</log4j.version>
-            <jdbcdriver.version>12.1.0.2.0</jdbcdriver.version>
-            <rest-assured.version>2.9.0</rest-assured.version>
-            <jackson.version>2.5.3</jackson.version>
-            <commondb.version>1.6</commondb.version>
+        <aspectj.version>1.8.5</aspectj.version>
+        <slf4j-api.version>1.7.21</slf4j-api.version>
+        <log4j.version>1.2.17</log4j.version>
+        <jdbcdriver.version>12.1.0.2.0</jdbcdriver.version>
+        <rest-assured.version>2.9.0</rest-assured.version>
+        <jackson.version>2.5.3</jackson.version>
+        <commondb.version>1.6</commondb.version>
 
 
-
-        <seleniumpom.version>2.0.5</seleniumpom.version>
+        <!--<seleniumpom.version>2.0.5</seleniumpom.version>-->
+        <seleniumpom.version>3.0.14</seleniumpom.version>
         <soapui.version>5.1.2</soapui.version>
         <cucumber.version>1.2.5</cucumber.version>
         <slf4j-api.version>1.7.21</slf4j-api.version>
@@ -36,7 +36,8 @@
         <javaxmail.version>1.4.7</javaxmail.version>
         <jdbcdriver.version>12.1.0.2.0</jdbcdriver.version>
         <thread.count>4</thread.count>
-        <test.browser>firefox</test.browser>
+        <!--<test.browser>firefox</test.browser>-->
+        <test.browser>chrome</test.browser>
         <poi.version>3.13</poi.version>
         <sonar-maven-plugin-version>3.2</sonar-maven-plugin-version>
         <jasypt.version>1.9.2</jasypt.version>
@@ -119,9 +120,9 @@
                         <gluePath>com.eph.automation.testing.common.hooks</gluePath>
                         <gluePath>com.eph.automation.testing.web</gluePath>
                     </gluePaths>
-                    <features>
-                        <feature>src/main/resources/features/EMSCustomerSearch.feature</feature>
-                    </features>
+               <!--     <features>
+                        <feature>src/main/resources/features/Research.feature</feature>
+                    </features>-->
                 </configuration>
             </plugin>
             <plugin>
@@ -130,8 +131,9 @@
                 <version>2.16</version>
                 <configuration>
                     <systemPropertyVariables>
-                        <browser>firefox</browser>
-                                <encryptionPassword>${encryptionPassword}</encryptionPassword>
+                        <!--<browser>firefox</browser>-->
+                        <browser>chrome</browser>
+                        <encryptionPassword>${encryptionPassword}</encryptionPassword>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
@@ -242,7 +244,14 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>2.53.0</version>
+            <!--<version>2.53.0</version>-->
+            <version>3.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.6-jre</version>
+            <classifier></classifier>
         </dependency>
         <dependency>
             <groupId>org.reflections</groupId>
