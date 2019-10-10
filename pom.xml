@@ -120,9 +120,9 @@
                         <gluePath>com.eph.automation.testing.common.hooks</gluePath>
                         <gluePath>com.eph.automation.testing.web</gluePath>
                     </gluePaths>
-                    <features>
-                        <feature>src/main/resources/features/ResearchPackagesUI.feature</feature>
-                    </features>
+               <!--     <features>
+                        <feature>src/main/resources/features/Research.feature</feature>
+                    </features>-->
                 </configuration>
             </plugin>
             <plugin>

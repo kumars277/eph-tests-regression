@@ -360,7 +360,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
                 //f_manifestation
                 Log.info("F_MANIFESTATION  in EPH STG : " + dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getF_manifestation());
-                Log.info("F_MANIFESTATION  in EPH SА: " + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
+                Log.info("F_MANIFESTATION  in EPH SА : " + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
 
                 assertEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getF_manifestation(), dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
 
