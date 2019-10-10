@@ -27,7 +27,7 @@ public class ResearchPackagesTasks {
         String methodName = "impersonateUser";
         try{
         tasks.click("XPATH", ResearchPackagesConstants.USER_LOGIN_ICON);
-        Thread.sleep(5000);
+        Thread.sleep(3000);
         tasks.click("XPATH", ResearchPackagesConstants.IMPERSONATE_BUTTON);
         tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_PRODUCT_OWNER);
         tasks.click("XPATH", ResearchPackagesConstants.SUBMIT_USER);}

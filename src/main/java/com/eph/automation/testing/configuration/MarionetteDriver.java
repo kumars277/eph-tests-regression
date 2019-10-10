@@ -54,7 +54,7 @@ public class MarionetteDriver implements Provider<WebDriver>{
             driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
             driver.manage().window().maximize();
             return driver;
-        }*/
+        }
 
         private void setGeckoDriver() {
             String pathToDriver = null;
@@ -69,7 +69,7 @@ public class MarionetteDriver implements Provider<WebDriver>{
             // This option hides all the annoying Selenium loging. It can be turned off but I've never
             // found anything useful in the extra logging so I suggest leaving it this way.
             System.setProperty(FirefoxDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
-        }
+        }*/
 
     @Override
     public WebDriver get() {

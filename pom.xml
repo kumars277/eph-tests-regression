@@ -121,7 +121,7 @@
                         <gluePath>com.eph.automation.testing.web</gluePath>
                     </gluePaths>
                     <features>
-                        <feature>src/main/resources/features/EMSCustomerSearch.feature</feature>
+                        <feature>src/main/resources/features/ResearchPackagesUI.feature</feature>
                     </features>
                 </configuration>
             </plugin>

@@ -20,7 +20,7 @@ public class DependencyInjection extends AbstractModule implements
 
     @Override
     protected void configure() {
-        bind(WebDriver.class).toProvider(WebDriverFactory.class).in(
+        bind(WebDriver.class).toProvider(MarionetteDriver.class).in(
                 ScenarioScoped.class);
 
     }
