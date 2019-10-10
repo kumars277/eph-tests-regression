@@ -296,7 +296,7 @@ public class ProductRelationshipDataMappingCheckSteps {
             Log.info("Expecting UPDATED in PMX and EPH Staging are consistent for ");
 
 
-               assertEquals("UPDATED in PMX and EPH STG is not equal ", dataQualityContext.productRelationshipDataObjectsFromPMX.get(i).getENDON(), dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getENDON());
+            assertEquals("UPDATED in PMX and EPH STG is not equal ", dataQualityContext.productRelationshipDataObjectsFromPMX.get(i).getENDON(), dataQualityContext.productRelationshipDataObjectsFromEPHSTG.get(i).getENDON());
 
 
 

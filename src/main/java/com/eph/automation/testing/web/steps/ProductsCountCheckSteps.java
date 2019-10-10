@@ -233,7 +233,7 @@ public class ProductsCountCheckSteps {
     public void comparePMXtoEPHCount(String source, String target){
         if (source.contentEquals("PMX")) {
             Assert.assertEquals("The number of products in PMX and PMX Staging is not equal!", productsCountContext.productCountPMX.get(0).pmxCount,
-                    productsCountContext.productCountStg.get(0).stgCount);
+                    productsCountContext.productCountStgFromPMX.get(0).stgCount);
            }else if (target.contentEquals("SA")){
             Assert.assertEquals("\nThe number of products in EPH DQ and EPH SA is not equal!", productsCountContext.productCountStgCanDQ.get(0).ephCanDqCount,
                     productsCountContext.productCountEPHSA.get(0).ephSACount);

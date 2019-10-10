@@ -93,7 +93,7 @@ public class PersonProductRoleDataSQL {
             "left join\n"+
             "    (select distinct external_reference, product_person_role_id from semarchy_eph_mdm.sa_product_person_role) a\n"+
             "       on STG_10_PMX_PRODUCT_PERSON_ROLE.prod_per_role_source_ref = a.external_reference\n"+
-            "where prod.dq_err != 'Y' and perd.dq_err != 'Y' and TO_DATE(UPDATED,'YYYYMMDDHH24MI') > TO_DATE('201905201200','YYYYMMDDHH24MI')";
+            "where prod.dq_err != 'Y' and perd.dq_err != 'Y' and TO_DATE(UPDATED,'YYYYMMDDHH24MI') > TO_DATE('%s','YYYYMMDDHH24MI')";
 
 
 //  old  public static String GET_COUNT_PERSONS_PRODUCT_ROLE_EPHSA = "select count(*) as count from semarchy_eph_mdm.sa_product_person_role sa\n" +

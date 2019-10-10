@@ -92,7 +92,7 @@ public class ProductCountSQL {
             "where pdq.dq_err != 'Y'";
 
     public static String EPH_SA_PRODUCT_Count="select count(*) as ephSACount FROM semarchy_eph_mdm.sa_product sa\n" +
-           " where f_event =  (select max (event_id) from\n" +
+           " where b_error_status is null and f_event =  (select max (event_id) from\n" +
    "semarchy_eph_mdm.sa_event\n"+
     "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
     "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+

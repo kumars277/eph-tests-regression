@@ -172,8 +172,9 @@ public class ProductDataMappingCheck {
     @Then("^We get the data from EPH STG$")
     public void getProductsDataFromEPHSTG() {
         Log.info("In Then method");
-        if(ids.isEmpty())
-            sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT, '0');
+        if ( CollectionUtils.isEmpty(ids)) {
+            Log.info("There are no records found for Product Role");
+        }
         else
             sql = String.format(ProductDataSQL.EPH_STG_PRODUCT_EXTRACT, Joiner.on("','").join(ids));
 
@@ -556,7 +557,7 @@ public class ProductDataMappingCheck {
 
 
 
-        if ( CollectionUtils.isEmpty(dataQualityContext.productDataObjectsFromEPHSTGDQ) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(ids) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Product Data");
         } else {
             IntStream.range(0, dataQualityContext.productDataObjectsFromEPHSTGDQ.size()).forEach(i -> {

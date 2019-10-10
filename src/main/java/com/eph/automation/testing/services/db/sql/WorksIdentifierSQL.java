@@ -237,6 +237,7 @@ public class WorksIdentifierSQL {
 
 
     public static String COUNT_SA_WORK_IDENTIFIER = "select count(distinct f_wwork) AS count from semarchy_eph_mdm.sa_work_identifier where f_type = 'PARAM1'" +
+            " and b_error_status is null\n" +
             " and effective_end_date is null\n" +
             " and f_event =  (select max (event_id) from\n" +
             "semarchy_eph_mdm.sa_event\n"+

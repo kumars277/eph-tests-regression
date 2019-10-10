@@ -424,6 +424,7 @@ public class WorkExtractSQL {
 //            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n" +
             "where f_type = '%s' \n" +
             "and identifier is not null\n" +
+            "and b_error_status is  null\n" +
             "and effective_end_date is null\n" +
             "and f_event = (select max (event_id) from \n" +
             "semarchy_eph_mdm.sa_event\n" +

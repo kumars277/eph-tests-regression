@@ -14,6 +14,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
@@ -95,7 +96,7 @@ public class WorksIdSteps {
     @When("^We get the data from Staging, SA and Work Identifiers")
     public void getIdentifiers(){
         if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
-            if (ids.isEmpty()) {
+            if(CollectionUtils.isEmpty(workid)) {
                 Log.info("No records found for searched criteria");
             } else {
                 sql = String.format(WorksIdentifierSQL.getIdentifiers, Joiner.on("','").join(ids));
@@ -122,7 +123,7 @@ public class WorksIdSteps {
     @Then("^All of the identifiers are stored")
     public void checkIdCount(){
         if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
-            if (ids.isEmpty()) {
+            if(CollectionUtils.isEmpty(workid)) {
                 Log.info("Skipping as there are no found records for searched criteria");
             } else {
                 ArrayList<String> dataFromSTGCount = new ArrayList<String>();
@@ -156,7 +157,7 @@ public class WorksIdSteps {
     @And("^The identifiers data is correct$")
     public void checkIdData(){
         if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-            if (ids.isEmpty()) {
+            if (CollectionUtils.isEmpty(workid)) {
                 Log.info("Skipping as there are no found records for searched criteria");
             } else {
                 Assert.assertTrue("Load ID is empty!", dataFromSAId.get(0).getB_LOADID() != null);
@@ -313,7 +314,7 @@ public class WorksIdSteps {
     @And("^The identifiers data between SA and GD is identical$")
     public void checkIdDataSAGD(){
         if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
-            if (ids.isEmpty()) {
+            if(CollectionUtils.isEmpty(workid)) {
                 Log.info("Skipping as there are no found records for searched criteria");
             } else {
                 Assert.assertEquals("There are missing identifiers", dataFromGDId.size(), dataFromSAId.size());
@@ -476,7 +477,7 @@ public class WorksIdSteps {
 
                 workid = randomWorkID.stream().map(m -> (String) m.get("F_WWORK")).collect(Collectors.toList());
                 Log.info(workid.toString());
-                if (workid.isEmpty()){
+                if (CollectionUtils.isEmpty(workid)){
                     Log.info("No identifiers were updated");
                 } else {
                     Log.info("There are "+workid.size()+" updated identifiers");
@@ -491,7 +492,7 @@ public class WorksIdSteps {
             if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
                 Log.info("There is no delta load performed");
             } else {
-                if (workid.isEmpty()) {
+                if (CollectionUtils.isEmpty(workid)) {
                     Log.info("No identifiers were updated");
                 } else {
                     Log.info("There are " + workid.size() + " updated identifiers");
@@ -507,7 +508,7 @@ public class WorksIdSteps {
         if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
             Log.info("There is no delta load performed");
         } else {
-            if (workid.isEmpty()) {
+            if (CollectionUtils.isEmpty(workid) || CollectionUtils.isEmpty(pmxSource)) {
                 Log.info("No identifiers were updated");
             } else {
                 for (int i = 0; i < workid.size(); i++) {
