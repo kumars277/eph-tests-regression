@@ -61,8 +61,8 @@ public class TranslationsSQL {
             "on STG_10_PMX_WORK_REL.\"CHILD_PMX_SOURCE\"::varchar = d2.consol\n" +
             "left join   (select distinct external_reference, work_relationship_id from semarchy_eph_mdm.sa_work_relationship) a on\n" +
             GetEPHDBUser.getDBUser()+".STG_10_PMX_WORK_REL.\"RELATIONSHIP_PMX_SOURCEREF\"::varchar = a.external_reference "+
-//            "where d1.dq_err != 'Y' and d2.dq_err != 'Y' and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
-            "where d1.dq_err != 'Y' and d2.dq_err != 'Y' and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('201908221200','YYYYMMDDHH24MI')";
+            "where d1.dq_err != 'Y' and d2.dq_err != 'Y' and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('PARAM1','YYYYMMDDHH24MI')";
+//            "where d1.dq_err != 'Y' and d2.dq_err != 'Y' and TO_DATE(\"UPDATED\",'YYYYMMDDHH24MI') > TO_DATE('201908221200','YYYYMMDDHH24MI')";
 
 
     public static String GET_SA_TRANSLATIONS_COUNT ="select count(*) as count from semarchy_eph_mdm.sa_work_relationship sa\n"+
