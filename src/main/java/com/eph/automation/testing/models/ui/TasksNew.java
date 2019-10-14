@@ -26,6 +26,18 @@ public class TasksNew {
         this.driver = new MarionetteDriver().getChromeDriver();
     }
 
+    public WebElement findElementByText(final String text) {
+        WebElement element = null;
+        try {
+            element = driver.findElement(By.xpath("//*[contains(text(), \'" + text + "\')]"));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return element;
+    }
+
     // Opens a page
     public void openPage(final String url) {
         driver.get(url);
@@ -39,12 +51,12 @@ public class TasksNew {
 
     public boolean verifyElementisDisplayed(String locatorType, final String locatorValue) throws InterruptedException {
        WebElement element = null;
-      // WebDriverWait wt = new WebDriverWait(driver,10);
+      WebDriverWait wait = new WebDriverWait(driver,10);
         try{
             switch (locatorType) {
                 case "XPATH":
                  element =  driver.findElement(By.xpath(locatorValue));
-
+                 wait.until(ExpectedConditions.visibilityOf(element));
            }
         }
        catch (Exception e){
@@ -102,57 +114,6 @@ public class TasksNew {
         driver.close();
     }
 
-
-    public void verifyElementContainsText(String locatorType, final String locatorValue, String text){
-        WebElement element = null;
-        String bodyText = null;
-        try{
-            WebDriverWait wait = new WebDriverWait(driver,10);
-            switch (locatorType) {
-                case "ID":
-                    element =  driver.findElement(By.id(locatorValue));
-                    wait.until(ExpectedConditions.visibilityOf(element));
-                    bodyText = element.getText();
-                    Assert.assertTrue("Not Found:" + text, bodyText.contains(text));
-                    break;
-                case "NAME":
-                    element = driver.findElement(By.name(locatorValue));
-                    wait.until(ExpectedConditions.visibilityOf(element));
-                    bodyText = element.getText();
-                    Assert.assertTrue("Not Found:" + text, bodyText.contains(text));
-                    break;
-                case "CSS":
-                    element = driver.findElement(By.cssSelector(locatorValue));
-                    wait.until(ExpectedConditions.visibilityOf(element));
-                    bodyText = element.getText();
-                    Assert.assertTrue("Not Found:" + text, bodyText.contains(text));
-                    break;
-                case "XPATH":
-                    element = driver.findElement(By.xpath(locatorValue));
-                    wait.until(ExpectedConditions.elementToBeClickable(element));
-                    wait.until(ExpectedConditions.visibilityOf(element));
-                    bodyText = element.getText();
-                    Assert.assertTrue("Not Found:" + text, bodyText.contains(text));
-                    break;
-                case "TAG":
-                    element = driver.findElement(By.tagName(locatorValue));
-                    wait.until(ExpectedConditions.elementToBeClickable(element));
-                    wait.until(ExpectedConditions.visibilityOf(element));
-                    bodyText = element.getText();
-                    Assert.assertTrue("Not Found:" + text, bodyText.contains(text));
-                    break;
-                case "CLASS":
-                    wait.until(ExpectedConditions.elementToBeClickable(element));
-                    wait.until(ExpectedConditions.visibilityOf(element));
-                    bodyText = element.getText();
-                    Assert.assertTrue("Not Found:" + text, bodyText.contains(text));
-                    break;
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
 
     public WebElement click(String locatorType, final String locatorValue ){
         WebElement element = null;
