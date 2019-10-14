@@ -1,6 +1,6 @@
 Feature: Product Finder Selenium tests
 
-  @UI
+  @PF
   Scenario Outline: Search the Work by Id
     Given We get the id for work search <id>
     And We get the work search data from the EPH GD
@@ -12,7 +12,7 @@ Feature: Product Finder Selenium tests
       | id                        |
       | EPR-W-TSTW01              |
 
-  @UI
+  @PF
   Scenario Outline: Search the work by title
     Given We get the id for work search <id>
     And We get the work search data from the EPH GD
@@ -24,7 +24,7 @@ Feature: Product Finder Selenium tests
       | id                        |
       | EPR-W-TSTW01              |
 
-  @UI
+  @PF
   Scenario Outline: Search the work by keyword
     Given We get the id for work search <id>
     And We get the work search data from the EPH GD
@@ -37,7 +37,7 @@ Feature: Product Finder Selenium tests
       | EPR-W-TSTW01              | Tetrahedron |
 
 
-  @UI
+  @PF
   Scenario Outline: When no product is found "There are no results that match your search" is displayed
     Given user is on search page
     When user is searching for "<keyword>"
