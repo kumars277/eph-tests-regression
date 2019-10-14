@@ -46,10 +46,10 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
     @Given("We get the count of records with (.*) in STG_PMX_MANIFESTATION$")
     public void getCountOfRecordsWithISBNInSTGPMX(String identifier) {
-        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-            sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE, identifier, identifier, identifier);
-            Log.info(sql);
-        } else {
+//        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+//            sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE, identifier, identifier, identifier);
+//            Log.info(sql);
+//        } else {
         sql = WorkCountSQL.GET_REFRESH_DATE;
         Log.info(sql);
         List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -62,12 +62,23 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
 
         Log.info(sql);
-        }
+//        }
 
         List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countIdentifiersSTGPMX = ((Long) numberOfISBNs.get(0).get("count")).intValue();
         Log.info("Count of of records in STG_PMX_MANIFESTATION table is: " + countIdentifiersSTGPMX);
 
+    }
+
+    @When("^We get the count of records with (.*) in SA_MANIFESTATION_IDENTIFIER coming from STG$")
+    public void getCountOfRecordsInEPHSAComingFromSTG(String identifier) {
+            sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE_From_STG, identifier);
+
+        Log.info(sql);
+
+        List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        countIdentifiersSA = ((Long) numberOfISBNs.get(0).get("count")).intValue();
+        Log.info("Count of of records in SA_MANIFESTATION_IDENTIFIER table is: " + countIdentifiersSA);
     }
 
     @When("^We get the count of records with (.*) in SA_MANIFESTATION_IDENTIFIER$")
