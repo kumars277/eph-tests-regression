@@ -108,28 +108,28 @@ public class ProductDataMappingCheck {
     public void getRandomProductManifestationIdsForJournals(String numberOfRecords, String type, String open_access, String author_charges) {
         Log.info("In Given method get random product manifestation ids for journals");
         //Get property when run with jenkins
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("Number of random records = " + numberOfRecords);
 
-//        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-//
-//            switch (type) {
-//                case "print_journal":
-//                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PRINT_JOURNALS, open_access, author_charges, numberOfRecords);
-//                    Log.info(sql);
-//                    break;
-//                case "electronic_journal":
-//                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_ELECTRONIC_JOURNALS, open_access, author_charges, numberOfRecords);
-//                    Log.info(sql);
-//                    break;
-////            case "non_print_or_electronic_journal":
-////                sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_NON_PRINT_OR_ELECTRONIC_JOURNALS, numberOfRecords);
-////                Log.info(sql);
-////                break;
-//                default:
-//                    break;
-//            }
-//        } else {
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+
+            switch (type) {
+                case "print_journal":
+                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_PRINT_JOURNALS, open_access, author_charges, numberOfRecords);
+                    Log.info(sql);
+                    break;
+                case "electronic_journal":
+                    sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_ELECTRONIC_JOURNALS, open_access, author_charges, numberOfRecords);
+                    Log.info(sql);
+                    break;
+//            case "non_print_or_electronic_journal":
+//                sql = String.format(ProductDataSQL.SELECT_RANDOM_PRODUCT_MANIFESTATION_IDS_FOR_NON_PRINT_OR_ELECTRONIC_JOURNALS, numberOfRecords);
+//                Log.info(sql);
+//                break;
+                default:
+                    break;
+            }
+        } else {
             sql = WorkCountSQL.GET_REFRESH_DATE;
             Log.info(sql);
             List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -149,7 +149,7 @@ public class ProductDataMappingCheck {
                     break;
             }
 
-//        }
+        }
 
         List<Map<?, ?>> randomProductManifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
@@ -566,13 +566,14 @@ public class ProductDataMappingCheck {
                     expectedNumberOfRecordsInDQ++;
 
             }
+
+            Log.info("Expected number of records in EPH STG DQ is : " + expectedNumberOfRecordsInDQ);
+            Log.info("Number of records in EPH STG DQ is : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.size());
+
+            Log.info("Assert the number of records in EPH STG DQ is as expected ..");
+            Assert.assertEquals(expectedNumberOfRecordsInDQ, dataQualityContext.productDataObjectsFromEPHSTGDQ.size());
+
         }
-
-        Log.info("Expected number of records in EPH STG DQ is : " + expectedNumberOfRecordsInDQ);
-        Log.info("Number of records in EPH STG DQ is : " + dataQualityContext.productDataObjectsFromEPHSTGDQ.size());
-
-        Log.info("Assert the number of records in EPH STG DQ is as expected ..");
-        Assert.assertEquals(expectedNumberOfRecordsInDQ, dataQualityContext.productDataObjectsFromEPHSTGDQ.size());
     }
 
 
