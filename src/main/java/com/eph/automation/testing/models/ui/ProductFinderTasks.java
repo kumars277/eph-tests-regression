@@ -16,7 +16,7 @@ public class ProductFinderTasks {
 
 
     public void openHomePage() {
-        tasks.openPage(Constants.PRODUCT_FINDER_EPH_UAT_UI);
+        tasks.openPage(Constants.PRODUCT_FINDER_EPH_SIT_UI);
     }
 
     public void loginByScienceAccount(String scienceEmailId) throws InterruptedException{
@@ -35,7 +35,7 @@ public class ProductFinderTasks {
     }
 
     public void goToNextPage(){
-        tasks.click("CLASS",ProductFinderConstants.nextPageButton);
+        tasks.click("XPATH",ProductFinderConstants.nextPageButton);
     }
 
     public WebElement getElementByTitle(String title){
@@ -43,9 +43,9 @@ public class ProductFinderTasks {
     }
 
     public boolean isUserOnWorkPage(String workID) {
-        String targetURL = Constants.PRODUCT_FINDER_EPH_UAT_UI + "work/"+workID+"/overview";
-        Log.info(targetURL);
-        if(targetURL.equalsIgnoreCase(tasks.getCurrentPage())){
+        String targetURL = Constants.PRODUCT_FINDER_EPH_SIT_UI+"work/"+workID+"/overview";
+        Log.info("Target URL "+targetURL);
+       if(targetURL.equalsIgnoreCase(tasks.getCurrentPage())){
             return true;
         } else {
             return false;
