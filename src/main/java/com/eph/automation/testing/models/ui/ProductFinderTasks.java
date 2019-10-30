@@ -30,6 +30,8 @@ public class ProductFinderTasks {
         tasks.click("XPATH",ProductFinderConstants.searchButton);
     }
 
+
+
     public boolean isPageContainingString(String text){
         return tasks.doesPageContainsText(text);
     }

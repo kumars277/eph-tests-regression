@@ -11,6 +11,7 @@ import com.eph.automation.testing.models.ui.ProductFinderConstants;
 import com.eph.automation.testing.models.ui.ProductFinderTasks;
 import com.eph.automation.testing.models.ui.TasksNew;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
+import com.eph.automation.testing.services.db.sql.ProductFinderSQL;
 import com.google.common.base.Joiner;
 import com.google.inject.Inject;
 import cucumber.api.java.en.And;
@@ -19,10 +20,7 @@ import cucumber.api.java.en.Then;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
@@ -49,42 +47,50 @@ public class ProductFinderUISteps {
     private String finalworkStatusCode;
     private static List<String>workStatusCodesofLaunchedToList,workStatusCodesofPlannedToList;
 
+    private static List<String> productIdList;
+    private static List<String>productTitleList;
+
+
+
     private ProductFinderTasks productFinderTasks;
     private TasksNew tasks;
-
+    private  static  List <String> workIdList;
     private static String searchingID;
+    private String workIds;
+    private  static List<String> booksworkIdList = new ArrayList<String>();
+    private static String[] Book_Types = {"Books Series","Major Ref Work","Other Book","Reference Book","Serial","Text Book"};
+    private static String[] Journal_Types = {"Abstracts Journal","B2B Journal","Journal","Newsletter"};
+    private static String[] Other_Types = {"Drug Monograph","Medical Procedure"};
+    private static List<Map<?, ?>> workTypesCodeAvailable;
+    private static List<Map<?, ?>> availableProduct;
+    private static String productId;
 
     @Inject
     public ProductFinderUISteps(ProductFinderTasks productFinderTasks, TasksNew tasks) {
           this.productFinderTasks = productFinderTasks;
             this.tasks = tasks;
-    }
+     }
 
 
     @Given("^We get the id for work search (.*)$")
     public void getWorkDataFromEPHGD(String workID) {
-        sql = String.format(APIDataSQL.SELECT_WORK_BY_ID_FOR_SEARCH, workID);
+        sql = String.format(ProductFinderSQL.SELECT_WORK_BY_ID_FOR_SEARCH, workID);
         Log.info(sql);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
     }
     @And("^We get the work search data from the EPH GD$")
-
     public void getWorksDataFromEPHGD() {
         Log.info("And We get the data from EPH GD for journals ...");
-        sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, Joiner.on("','").join(ids));
+        sql = String.format(ProductFinderSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, Joiner.on("','").join(ids));
         Log.info(sql);
         DataQualityContext.workDataObjectsFromEPHGD = DBManager
                 .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
         DataQualityContext.workDataObjectsFromEPHGD.sort(Comparator.comparing(WorkDataObject::getWORK_ID));
     }
 
-    @Given("^user is on search page$")
-    public void userOpensHomePage() throws InterruptedException {
-      productFinderTasks.openHomePage();
-      productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
-    }
+
 
     @Then("^Searches for works by ID$")
     public void search_for_ID() throws Throwable {
@@ -147,11 +153,12 @@ public class ProductFinderUISteps {
     public void verifyUserIsForwardedToWorksPage () {
         assertTrue(productFinderTasks.isUserOnWorkPage(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID()));
     }
-
+  /*
     @Given("^Filter the Search Result by \"([^\"]*)\"$")
-    public void filter_the_Search_Result_by(String workType) {
+    public void filter_the_Search_Result_by(String workType) throws InterruptedException {
             String buildWorkTypeFilterLocator = "//span[contains(text(),\'"+workType+"\')]";
             tasks.click("XPATH",buildWorkTypeFilterLocator);
+            Thread.sleep(1000);
      }
 
     @Given("^Filter the Search Result by work status \"([^\"]*)\"$")
@@ -246,9 +253,180 @@ public class ProductFinderUISteps {
         assertTrue(productFinderTasks.isUserOnWorkPage(workId));
     }
 
+  @Given("^Test$")
+    public void test() throws InterruptedException {
+        sql = String.format(ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_BOOK);
+        Log.info(sql);
+        List<Map<?, ?>> workTypesCodeAvailable = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        workTypeCode = workTypesCodeAvailable.stream().map(m -> (String) m.get("WORK_TYPE")).map(String::valueOf).collect(Collectors.toList());
+        for(String workTypeCodes: workTypeCode ){
+            sql = String.format(ProductFinderSQL.SELECT_WORKID_FOR_WORK_TYPE_BOOK,workTypeCodes);
+            Log.info(sql);
+            List<Map<?, ?>> workIdsAvailable = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            workIdList = workIdsAvailable.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
+            Thread.sleep(2000);
+            String workIds = workIdList.toString();
+            workIds =   workIds.replaceAll("\\[", "").replaceAll("\\]","");
+            productFinderTasks.searchFor(workIds);
+            Thread.sleep(2000);
+                while(!productFinderTasks.isPageContainingString(workIds)){
+                    productFinderTasks.goToNextPage();
+                    Thread.sleep(1000);
+                }
+            String buildWorkIdLocator = "//a[@href='/work/"+workIds+"/overview']";
+            tasks.click("XPATH",buildWorkIdLocator);
+            Thread.sleep(2000);
+            assertTrue(productFinderTasks.isUserOnWorkPage(workIds));
+            tasks.click("XPATH",ProductFinderConstants.previousPage);
+            tasks.click("XPATH",ProductFinderConstants.closeButtonSearchBar);
+            Thread.sleep(2000);
+
+        }
+    }*/
+
+    @Given("^We get the id and title for product search from DB$")
+    public void getProductId() throws Throwable {
+        sql = String.format(ProductFinderSQL.SELECT_PRODUCTID_TITLE_FOR_SEARCH);
+        Log.info(sql);
+        availableProduct = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        if(availableProduct.size() > 0){
+            productIdList       = availableProduct.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
+            productTitleList    = availableProduct.stream().map(m -> (String) m.get("PRODUCT_TITLE")).map(String::valueOf).collect(Collectors.toList());
+            Log.info("Product ID => "+productIdList +"\n");
+            Log.info("product Title =>"+productTitleList);
+        }
+    }
+
+    @And("^Searches for Product by id$")
+    public void searches_for_Product_by_id() throws Throwable {
+        productId = productIdList.toString();
+        productId =   productId.replaceAll("\\[", "").replaceAll("\\]", "");
+        productFinderTasks.searchFor(productId);
+    }
 
 
 
+    @Given("^Get the available Work Types from the DB \"([^\"]*)\"$")
+    public void get_the_available_Work_Types_from_the_DB(String chooseWorkType){
+        try {
+            if (chooseWorkType.equalsIgnoreCase("Book")) {
+                sql = String.format(ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_BOOK);
+            } else if (chooseWorkType.equalsIgnoreCase("Journal")) {
+                sql = String.format(ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_JOURNAL);
+            } else {
+                sql = String.format(ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_OTHER);
+            }
+            Log.info(sql);
+            workTypesCodeAvailable = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            if (workTypesCodeAvailable.size() > 0) {
+                workTypeCode = workTypesCodeAvailable.stream().map(m -> (String) m.get("WORK_TYPE")).map(String::valueOf).collect(Collectors.toList());
+                Log.info("Available Work Types in DB: " + workTypeCode);
+            } else {
 
+                Log.info("Records for the work Type => " + chooseWorkType + " not available in DB.");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Then("^Get a Work Id for each Work Types available in the DB$")
+    public void get_Work_Id_for_each_Work_Types_available_in_DB() {
+        try {
+            if (workTypesCodeAvailable.size() > 0) {
+                for (String workTypeCodes : workTypeCode) {
+                    sql = String.format(ProductFinderSQL.SELECT_WORKID_FOR_WORK_TYPE, workTypeCodes);
+                    Log.info(sql);
+                    List<Map<?, ?>> workIdsAvailableforWorkTypes = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                    workIdList = workIdsAvailableforWorkTypes.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
+                    workIds = workIdList.toString();
+                    workIds = workIds.replaceAll("\\[", "").replaceAll("\\]", "");
+                    booksworkIdList.add(workIds);
+                }
+                Thread.sleep(2000);
+                Log.info("Work Ids Used: " + booksworkIdList);
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Given("^user is on search page$")
+    public void userOpensHomePage() throws InterruptedException {
+        productFinderTasks.openHomePage();
+        productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
+
+    }
+
+    @Then("^Search for the Work by Work Ids Filter By \"([^\"]*)\"$")
+    public void search_for_the_Work_by_Work_Ids_Filter_By(String chooseWorkType) throws Throwable {
+        try {
+            if (workTypesCodeAvailable.size() > 0) {
+                for (String booksworkId : booksworkIdList) {
+                    productFinderTasks.searchFor(booksworkId);
+                    String buildWorkTypeFilterLocator = "//span[contains(text(),\'" + chooseWorkType + "\')]";
+                    tasks.click("XPATH", buildWorkTypeFilterLocator);
+                    Thread.sleep(2000);
+                    while (!productFinderTasks.isPageContainingString(booksworkId)) {
+                        productFinderTasks.goToNextPage();
+                        Thread.sleep(1000);
+                    }
+                    assertTrue(tasks.verifyElementTextisDisplayed(booksworkId));
+                    tasks.click("XPATH", ProductFinderConstants.closeButtonSearchBar);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Given("^Click on the result to verify the work Type is \"([^\"]*)\"$")
+    public void verify_the_result(String chooseWorkType) throws InterruptedException {
+        try{
+            if(workTypesCodeAvailable.size()>0) {
+                for (String booksworkId : booksworkIdList) {
+                    productFinderTasks.searchFor(booksworkId);
+                    String buildWorkTypeFilterLocator = "//span[contains(text(),\'" + chooseWorkType + "\')]";
+                    tasks.click("XPATH", buildWorkTypeFilterLocator);
+                    Thread.sleep(1000);
+                    while (!productFinderTasks.isPageContainingString(booksworkId)) {
+                        productFinderTasks.goToNextPage();
+                        Thread.sleep(1000);
+                    }
+                    String buildWorkIdLocator = "//a[@href='/work/" + booksworkId + "/overview']";
+                    tasks.click("XPATH", buildWorkIdLocator);
+                    Thread.sleep(1000);
+                    assertTrue(productFinderTasks.isUserOnWorkPage(booksworkId));
+                    if (chooseWorkType.equalsIgnoreCase("Book")) {
+                        for (int i = 0; i < Book_Types.length; i++) {
+                            if (productFinderTasks.isPageContainingString(Book_Types[i])) {
+                                Log.info("Work Id=> " + booksworkId + " and work Type: " + Book_Types[i]);
+                                assertTrue("Work Id " + booksworkId + " Successfully filtered by Work Type: " + chooseWorkType, productFinderTasks.isPageContainingString(Book_Types[i]));
+                            }
+                        }
+                    } else if (chooseWorkType.equalsIgnoreCase("Journal")) {
+                        for (int i = 0; i < Journal_Types.length; i++) {
+                            if (productFinderTasks.isPageContainingString(Journal_Types[i])) {
+                                Log.info("Work Id=> " + booksworkId + " and work Type: " + Journal_Types[i]);
+                                assertTrue("Work Id " + booksworkId + " Successfully filtered by Work Type: " + chooseWorkType, productFinderTasks.isPageContainingString(Journal_Types[i]));
+                            }
+                        }
+                    } else {
+                        for (int i = 0; i < Other_Types.length; i++) {
+                            if (productFinderTasks.isPageContainingString(Other_Types[i])) {
+                                Log.info("Work Id=> " + booksworkId + " and work Type: " + Other_Types[i]);
+                                assertTrue("Work Id " + booksworkId + " Successfully filtered by Work Type: " + chooseWorkType, productFinderTasks.isPageContainingString(Journal_Types[i]));
+                            }
+                        }
+                    }
+                    tasks.click("XPATH", ProductFinderConstants.previousPage);
+                    tasks.click("XPATH", ProductFinderConstants.closeButtonSearchBar);
+                }
+            }
+            booksworkIdList.clear();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
 }

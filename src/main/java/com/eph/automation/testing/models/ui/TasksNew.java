@@ -8,7 +8,6 @@ package com.eph.automation.testing.models.ui;
 import com.eph.automation.testing.configuration.MarionetteDriver;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import org.junit.Assert;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -81,6 +80,8 @@ public class TasksNew {
         return bodyText.contains(text);
     }
 
+
+
     // Finds multiple elements.
     public List<WebElement> findElementsByClass(final String classname) {
         List<WebElement> elements = null;
@@ -114,6 +115,22 @@ public class TasksNew {
         driver.close();
     }
 
+    public WebElement clearText(String locatorType, final String locatorValue){
+        WebDriverWait wait = new WebDriverWait(driver,10);
+        WebElement element = null;
+        try{
+            switch (locatorType){
+                case "XPATH":
+                    element = driver.findElement(By.xpath(locatorValue));
+                    wait.until(ExpectedConditions.visibilityOf(element));
+                    element.clear();
+                    break;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return element;
+    }
 
     public WebElement click(String locatorType, final String locatorValue ){
         WebElement element = null;
