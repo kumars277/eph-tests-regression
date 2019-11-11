@@ -20,13 +20,13 @@ Feature: Entity - Work Identifier - Count & Data Mapping Check - Validate data b
 
     @Regression
     Scenario Outline: Verify count of Work Identifier records
-      Given We know the work identifiers count in staging from column <stg_type> and <type>
+      Given We know the work identifiers count in staging from column <column> and <type>
       When We get the work identifier count from SA and GD <type>
       Then The counts between staging and SA are matching
       And The counts between SA and GD are matching
 
       Examples:
-      |type                   | stg_type              |
+      |type                   | column              |
       |ISSN-L                 |ISSN_L                 |
       |PPM-PART               |PROJECT_NUM            |
       |ELSEVIER JOURNAL NUMBER|JOURNAL_NUMBER         |

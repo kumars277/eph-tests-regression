@@ -172,13 +172,20 @@ public class WorksIdentifierSQL {
             "   stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n";
 
     public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA =
-            "select count(distinct \"PRODUCT_WORK_ID\") AS count \n" +
-                    " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork stg ,\n" +
-                    GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq  mdq\n" +
-                    "where \n" +
-                    "stg.\"%s\" is not null  and \n" +
-                    "   stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n" +
-                    "and (TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')) \n" ;
+            "select count(*) as count\n"+
+                    " from (select \"%s\" as s_project_num, \"PRODUCT_WORK_ID\"::varchar as s_work_ref \n"+
+                    "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork stg ,"+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq  mdq \n"+
+                    "where stg.\"%s\" is not null  and stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n"+
+                    "and (TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI'))) s \n"+
+                    "left join (select i.identifier as a_project_num, w.external_reference as a_work_ref \n"+
+                    "from semarchy_eph_mdm.sa_work_identifier i \n"+
+                    "join semarchy_eph_mdm.sa_wwork w on i.f_wwork = w.work_id \n"+
+                    "where i.f_type = '%s' and i.b_error_status is null and i.effective_end_date is null \n" +
+                    "and i.f_event !=  (select max (event_id) from semarchy_eph_mdm.sa_event \n" +
+                    "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX' \n" +
+                    "and semarchy_eph_mdm.sa_event.workflow_id = 'talend' \n" +
+                    "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )) a2 on a2.a_project_num = s.s_project_num and a2.a_work_ref = s.s_work_ref \n" +
+                    "where a2.a_project_num is null \n";
 
 
 //                    " with\n" +
