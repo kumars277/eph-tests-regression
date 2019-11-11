@@ -87,6 +87,29 @@ public class PersonWorkRoleDataSQL {
             "    on STG_10_PMX_WORK_PERSON_ROLE.\"WORK_PERSON_ROLE_SOURCE_REF\" = a.external_reference\n" +
             "where perd.dq_err != 'Y' and word.dq_err != 'Y'";
 
+    public static String GET_COUNT_PERSON_WORK_ROLE_PD = "with base as\n"+
+            "(select\n"+
+            "    g.work_person_role_id\n"+
+            ",   g.external_reference\n"+
+            ",   g.effective_start_date\n"+
+            ",   current_date as effective_end_date\n"+
+            ",   g.f_role\n"+
+            ",   g.f_wwork\n"+
+            ",   g.f_person\n"+
+            "from \n"+
+            "\tsemarchy_eph_mdm.gd_work_person_role g\n"+
+            "join\n"+
+            "    semarchy_eph_mdm.gd_wwork gw on g.f_wwork = gw.work_id\n"+
+            "join\n"+
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role wpr on gw.external_reference = wpr.\"PMX_WORK_SOURCE_REF\"::varchar\n"+
+            "and wpr.\"F_ROLE\" = 'PD'\n"+
+            "join\n"+
+            "    (select distinct external_reference, person_id from semarchy_eph_mdm.sa_person) sp on wpr.\"PMX_PARTY_SOURCE_REF\"::varchar = sp.external_reference\n"+
+            "where\n"+
+            "    g.f_person != sp.person_id\n"+
+            "and g.f_role = 'PD')\n"+
+            "select count(*) from base;";
+
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTG_DELTA ="select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role\n" +
             "join  ((select s.person_source_ref as stage, aa.external_reference as gold,\n" +
             "coalesce(s.person_source_ref::varchar,aa.external_reference) as consol,\n" +
