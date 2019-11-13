@@ -48,15 +48,28 @@ public class TasksNew {
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();",element);
     }
 
-    public boolean verifyElementisDisplayed(String locatorType, final String locatorValue) throws InterruptedException {
+    public boolean verifyElementisDisplayed(String locatorType, String locatorValue) throws InterruptedException {
        WebElement element = null;
       WebDriverWait wait = new WebDriverWait(driver,10);
         try{
             switch (locatorType) {
                 case "XPATH":
-                 element =  driver.findElement(By.xpath(locatorValue));
-                 wait.until(ExpectedConditions.visibilityOf(element));
-           }
+                    element =  driver.findElement(By.xpath(locatorValue));
+                    wait.until(ExpectedConditions.visibilityOf(element));
+                     break;
+                case "NAME":
+                    element = driver.findElement(By.name(locatorValue));
+                    wait.until(ExpectedConditions.visibilityOf(element));
+                    break;
+                case "ID":
+                    element = driver.findElement(By.id(locatorValue));
+                    wait.until(ExpectedConditions.visibilityOf(element));
+                    break;
+                case "TAG":
+                    element = driver.findElement(By.tagName(locatorValue));
+                    wait.until(ExpectedConditions.visibilityOf(element));
+                    break;
+            }
         }
        catch (Exception e){
             e.printStackTrace();
@@ -64,6 +77,23 @@ public class TasksNew {
        }
         return element.isDisplayed();
   }
+    public boolean verifyElementisClickable(String locatorType, String locatorValue){
+        WebElement element = null;
+        WebDriverWait wait = new WebDriverWait(driver,10);
+        try{
+            switch (locatorType) {
+                case "XPATH":
+                    element = driver.findElement(By.xpath(locatorValue));
+                    wait.until(ExpectedConditions.elementToBeClickable(element));
+                    break;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
     public boolean verifyElementTextisDisplayed(String text){
         boolean requiredText = Boolean.parseBoolean(null);
         try{
@@ -80,30 +110,53 @@ public class TasksNew {
         return bodyText.contains(text);
     }
 
+    public String getTextofElement(String locatorType, String locatorValue){
+        WebDriverWait wait = new WebDriverWait(driver,10);
+        WebElement element = null;
+        String getTextVal = null;
+        try{
+            switch (locatorType){
+                case "XPATH":
+                    element = driver.findElement(By.xpath(locatorValue));
+                    wait.until(ExpectedConditions.visibilityOf(element));
+                     getTextVal = element.getText();
+                    break;
+            }
+            return getTextVal;
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return  getTextVal;
+    }
 
 
-    // Finds multiple elements.
-    public List<WebElement> findElementsByClass(final String classname) {
+    public List<WebElement> multipleElements(String locatorType, String locatorValue){
         List<WebElement> elements = null;
-        try {
-             elements = driver.findElements(By.className(classname));
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
+        WebDriverWait wait = new WebDriverWait(driver,10);
+        try{
+            switch (locatorType){
+                case "XPATH":
+                    elements = driver.findElements(By.xpath(locatorValue));
+                    wait.until(ExpectedConditions.visibilityOfAllElements(elements));
+                    break;
+                case "CLASS":
+                    elements = driver.findElements(By.className(locatorValue));
+                    wait.until(ExpectedConditions.visibilityOfAllElements(elements));
+                    break;
+                case "TAG":
+                    elements = driver.findElements(By.tagName(locatorValue));
+                    wait.until(ExpectedConditions.visibilityOfAllElements(elements));
+                    break;
+            }
+        }catch (Exception e){
             e.printStackTrace();
         }
         return elements;
     }
 
-    public List<WebElement> findElementsByTagName(final String tagName) {
-        List<WebElement> elements = null;
-        try {
-            elements = driver.findElements(By.tagName(tagName));
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return elements;
-    }
+
+
 
     // Returns the current page URL
     public String getCurrentPage() {
@@ -122,6 +175,11 @@ public class TasksNew {
             switch (locatorType){
                 case "XPATH":
                     element = driver.findElement(By.xpath(locatorValue));
+                    wait.until(ExpectedConditions.visibilityOf(element));
+                    element.clear();
+                    break;
+                case "ID":
+                    element = driver.findElement(By.id(locatorValue));
                     wait.until(ExpectedConditions.visibilityOf(element));
                     element.clear();
                     break;
