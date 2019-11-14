@@ -164,12 +164,32 @@ public class WorksIdentifierSQL {
     public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE =
 
 
-            "select count(distinct \"PRODUCT_WORK_ID\") AS count \n" +
-            " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork stg ,\n" +
-            GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq  mdq\n" +
-            "where \n" +
-            "stg.\"%s\" is not null  and \n" +
-            "   stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n";
+//            "select count(distinct \"PRODUCT_WORK_ID\") AS count \n" +
+//            " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork stg ,\n" +
+//            GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq  mdq\n" +
+//            "where \n" +
+//            "stg.\"%s\" is not null  and \n" +
+//            "   stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n";
+
+
+    "select count(*) as count\n" +
+            " from (select \"%s\" as s_project_num, \"PRODUCT_WORK_ID\"::varchar as s_work_ref \n" +
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork stg \n" +
+            "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq  mdq on stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE\n" +
+            "left join semarchy_eph_mdm.gd_wwork g on stg.\"PRODUCT_WORK_ID\"::varchar = g.external_reference\n" +
+            "join " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1  on map1.source_ref = mdq.pmx_source_reference::text\n" +
+            "left join semarchy_eph_mdm.gd_work_identifier w on map1.eph_id = w.f_wwork and map1.ref_type = w.f_type and w.effective_end_date is null\n" +
+            "WHERE (mdq.dq_err = 'N' or (mdq.dq_err is null and g.work_id is not null)) and stg.\"%s\" is not null \n" +
+            ") s \n" +
+            "left join (select i.identifier as a_project_num, w.external_reference as a_work_ref \n" +
+            "from semarchy_eph_mdm.sa_work_identifier i \n" +
+            "join semarchy_eph_mdm.sa_wwork w on i.f_wwork = w.work_id \n" +
+            "where i.f_type = '%s' and i.b_error_status is null and i.effective_end_date is null \n" +
+            "and i.f_event !=  (select max (event_id) from semarchy_eph_mdm.sa_event \n" +
+            "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX' \n" +
+            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend' \n" +
+            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )) a2 on a2.a_project_num = s.s_project_num and a2.a_work_ref = s.s_work_ref \n" +
+            "where a2.a_project_num is null ";
 
     public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA =
             "select count(*) as count\n"+
