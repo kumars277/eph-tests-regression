@@ -149,7 +149,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
     public void getRandomRecords(String numberOfRecords, String identifier, String type) {
         //Get property when run with jenkins.
 //        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
-        Log.info("numberOfRecords = " + numberOfRecords);
+//        Log.info("numberOfRecords = " + numberOfRecords);
 
         switch (type) {
             case "PHB":
@@ -188,7 +188,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
             dataQualityContext.manifestationIdentifiersDataObjectsFromSTG = DBManager
                     .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
 
-            if ( CollectionUtils.isEmpty(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+            if ( CollectionUtils.isEmpty(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG) ) {
                 Log.info("There are no records found for Manifestation identifiers");
 
             }
@@ -203,7 +203,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
             dataQualityContext.manifestationIdentifiersDataObjectsFromSTG = DBManager
                     .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
 
-            if ( CollectionUtils.isEmpty(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG)&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD"))
+            if ( CollectionUtils.isEmpty(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG))
                 Log.info("There are no records found for Manifestation identifiers");
 
         }
@@ -357,7 +357,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
         dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.sort(Comparator.comparing(ManifestationIdentifierObject::getExternal_reference));
         dataQualityContext.manifestationIdentifiersDataObjectsFromSA.sort(Comparator.comparing(ManifestationIdentifierObject::getExternal_reference));
-        if ( CollectionUtils.isEmpty(dataQualityContext.manifestationIdentifiersDataObjectsFromSA) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.manifestationIdentifiersDataObjectsFromSA) ) {
             Log.info("There is no updated data for Manifestations");
         } else {
             IntStream.range(0, dataQualityContext.manifestationIdentifiersDataObjectsFromSA.size()).forEach(i -> {

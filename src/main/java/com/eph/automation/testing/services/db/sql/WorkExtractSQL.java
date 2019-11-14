@@ -356,21 +356,38 @@ public class WorkExtractSQL {
 
     //EPH - 366 - Change to introduce DQ layer
     public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_TABLE =
-     "select count(*)\n"+
-             "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n"+
-             GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq , \n"+
-             "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
-             ", " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n"+
-             "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
-             "and map1.source_ref = mdq.pmx_source_reference::text\n"+
-             "and concat(map1.eph_id, '%s' ,man.\"%s\") = sman.external_reference\n"+
-             "and  b_loadid = (select max(b_loadid) from \n"+
-             "          semarchy_eph_mdm.sa_event\n"+
-             "            where  f_event_type = 'PMX'\n"+
-             "            and workflow_id = 'talend'\n"+
-             "            AND f_event_type = 'PMX'\n"+
-             "            and f_workflow_source = 'PMX' )\n"+
-             "and \"%s\"  is not null\n";
+//     "select count(*)\n"+
+//             "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n"+
+//             GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq , \n"+
+//             "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
+//             ", " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n"+
+//             "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
+//             "and map1.source_ref = mdq.pmx_source_reference::text\n"+
+//             "and concat(map1.eph_id, '%s' ,man.\"%s\") = sman.external_reference\n"+
+//             "and  b_loadid = (select max(b_loadid) from \n"+
+//             "          semarchy_eph_mdm.sa_event\n"+
+//             "            where  f_event_type = 'PMX'\n"+
+//             "            and workflow_id = 'talend'\n"+
+//             "            AND f_event_type = 'PMX'\n"+
+//             "            and f_workflow_source = 'PMX' )\n"+
+//             "and \"%s\"  is not null\n";
+
+    //NEW - Related to the new etl logic
+    "select count(*) as count\n" +
+            "from " +  GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man\n" +
+            "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq on man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n" +
+            "join " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1  on map1.source_ref = mdq.pmx_source_reference::text\n" +
+            "left join semarchy_eph_mdm.gd_manifestation_identifier m on map1.eph_id = m.f_manifestation and mdq.f_type = m.f_type and m.effective_end_date is null\n" +
+            "left join semarchy_eph_mdm.gd_manifestation g on man.\"MANIFESTATION_ID\"::varchar = g.external_reference\n" +
+            "left join (select distinct external_reference, manif_identifier_id, b_loadid from semarchy_eph_mdm.sa_manifestation_identifier) sman on concat(map1.eph_id, '%s' ,man.\"%s\") = sman.external_reference\n" +
+            "where b_loadid = (select max(b_loadid) from \n" +
+            "          semarchy_eph_mdm.sa_event\n" +
+            "            where  f_event_type = 'PMX'\n" +
+            "            and workflow_id = 'talend'\n" +
+            "            AND f_event_type = 'PMX'\n" +
+            "            and f_workflow_source = 'PMX' )          \n" +
+            "and \"%s\"  is not null\n" +
+            "and (mdq.dq_err = 'N' or (mdq.dq_err is null and g.manifestation_id is not null))";
 
     public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_PMX_MANIFESTATION_DELTA =
 
@@ -520,21 +537,42 @@ public class WorkExtractSQL {
 //            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n" +
 //            "and  \"%s\" is not null and man.\"MANIFESTATION_SUBTYPE\" = 424 order by random() limit '%s' ";
 
-    "select   \"ISBN\" as ISBN, sman.external_reference \n"+
-            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n"+
-             GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq , \n"+
-            "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
-            ", " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n"+
-            "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
-            "and map1.source_ref = mdq.pmx_source_reference::text\n"+
-            "and concat(map1.eph_id,'ISBN',man.\"ISBN\") = sman.external_reference\n"+
-            "and  b_loadid = (select max(b_loadid) from \n"+
-            "          semarchy_eph_mdm.sa_event\n"+
-            "            where  f_event_type = 'PMX'\n"+
-            "            and workflow_id = 'talend'\n"+
-            "            AND f_event_type = 'PMX'\n"+
-            "            and f_workflow_source = 'PMX' )\n"+
-            "and  \"%s\" is not null and man.\"MANIFESTATION_SUBTYPE\" = 424 order by random() limit '%s' ";
+//    "select   \"ISBN\" as ISBN, sman.external_reference \n"+
+//            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n"+
+//             GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq , \n"+
+//            "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
+//            ", " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n"+
+//            "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
+//            "and map1.source_ref = mdq.pmx_source_reference::text\n"+
+//            "and concat(map1.eph_id,'ISBN',man.\"ISBN\") = sman.external_reference\n"+
+//            "and  b_loadid = (select max(b_loadid) from \n"+
+//            "          semarchy_eph_mdm.sa_event\n"+
+//            "            where  f_event_type = 'PMX'\n"+
+//            "            and workflow_id = 'talend'\n"+
+//            "            AND f_event_type = 'PMX'\n"+
+//            "            and f_workflow_source = 'PMX' )\n"+
+//            "and  \"%s\" is not null and man.\"MANIFESTATION_SUBTYPE\" = 424 order by random() limit '%s' ";
+
+   "select   \"ISBN\" as ISBN, sman.external_reference \n" +
+           "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man\n" +
+           "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq on man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n" +
+           "join " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1  on map1.source_ref = mdq.pmx_source_reference::text\n" +
+           "left join semarchy_eph_mdm.gd_manifestation_identifier m on map1.eph_id = m.f_manifestation and mdq.f_type = m.f_type and m.effective_end_date is null\n" +
+           "left join semarchy_eph_mdm.gd_manifestation g on man.\"MANIFESTATION_ID\"::varchar = g.external_reference\n" +
+           "left join (select distinct external_reference, manif_identifier_id, b_loadid from semarchy_eph_mdm.sa_manifestation_identifier) sman on concat(map1.eph_id, 'ISBN' ,man.\"ISBN\") = sman.external_reference\n" +
+           "where b_loadid = (select max(b_loadid) from \n" +
+           "          semarchy_eph_mdm.sa_event\n" +
+           "            where  f_event_type = 'PMX'\n" +
+           "            and workflow_id = 'talend'\n" +
+           "            AND f_event_type = 'PMX'\n" +
+           "            and f_workflow_source = 'PMX' )          \n" +
+           "and \"%s\"  is not null\n" +
+           "and (mdq.dq_err = 'N' or (mdq.dq_err is null and g.manifestation_id is not null))\n" +
+           "and man.\"MANIFESTATION_SUBTYPE\" = 424 \n" +
+           "order by random() limit '%s' ";
+
+
+
 
 
     public static final String SELECT_ISBN_FOR_RECORDS_WITH_SET_END_DATA =
@@ -561,169 +599,219 @@ public class WorkExtractSQL {
             "and sa.effective_end_date is not null";
 
     public static final String SELECT_RANDOM_ISBNS_PSB =
-            "select  \"ISBN\" as ISBN, sman.external_reference \n"+
-                    "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n"+
-                    GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq , \n"+
-                    "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
-                    ", " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n"+
-                    "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
-                    "and map1.source_ref = mdq.pmx_source_reference::text\n"+
-                    "and concat(map1.eph_id,'ISBN',man.\"ISBN\") = sman.external_reference\n"+
-                    "and  b_loadid = (select max(b_loadid) from \n"+
-                    "          semarchy_eph_mdm.sa_event\n"+
-                    "            where  f_event_type = 'PMX'\n"+
-                    "            and workflow_id = 'talend'\n"+
-                    "            AND f_event_type = 'PMX'\n"+
-                    "            and f_workflow_source = 'PMX' )\n"+
-                    "and  \"%s\" is not null and man.\"MANIFESTATION_SUBTYPE\" = 425 order by random() limit '%s' ";
-//            "select \"ISBN\" as ISBN, sman.external_reference \n" +
-//            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n" +
-//            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq , \n" +
-//            "semarchy_eph_mdm.sa_manifestation_identifier sman \n" +
-//            ", " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n" +
-//            "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n" +
-//            "and map1.source_ref = mdq.pmx_source_reference::text\n" +
-//            "and concat(map1.eph_id,'ISBN',man.\"ISBN\") = sman.external_reference\n" +
-//            "and f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier \n" +
-//            "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
-//            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
-//            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
-//            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
-//            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n" +
-//            "and  \"%s\" is not null and man.\"MANIFESTATION_SUBTYPE\" = 425 order by random() limit '%s' ";
-
-    public static final String SELECT_RANDOM_ISBNS_EBK =
-            "select  \"ISBN\" as ISBN, sman.external_reference \n"+
-                    "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n"+
-                    GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq , \n"+
-                    "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
-                    ", " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n"+
-                    "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
-                    "and map1.source_ref = mdq.pmx_source_reference::text\n"+
-                    "and concat(map1.eph_id,'ISBN',man.\"ISBN\") = sman.external_reference\n"+
-                    "and  b_loadid = (select max(b_loadid) from \n"+
-                    "          semarchy_eph_mdm.sa_event\n"+
-                    "            where  f_event_type = 'PMX'\n"+
-                    "            and workflow_id = 'talend'\n"+
-                    "            AND f_event_type = 'PMX'\n"+
-                    "            and f_workflow_source = 'PMX' )\n"+
-                    "and  \"%s\" is not null and man.\"COMMODITY\" = 'EB' order by random() limit '%s'";
-
-//            "select \"ISBN\" as ISBN, sman.external_reference \n"+
-//                    "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_manifestation man, \n"+
-//                    ""+GetEPHDBUser.getDBUser()+".stg_10_pmx_manifestation_dq mdq , \n"+
+//            "select  \"ISBN\" as ISBN, sman.external_reference \n"+
+//                    "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n"+
+//                    GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq , \n"+
 //                    "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
-//                    ", "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid map1 \n"+
+//                    ", " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n"+
 //                    "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
 //                    "and map1.source_ref = mdq.pmx_source_reference::text\n"+
 //                    "and concat(map1.eph_id,'ISBN',man.\"ISBN\") = sman.external_reference\n"+
-//                    "and f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier \n"+
-//                    "join semarchy_eph_mdm.sa_event on f_event = event_id \n"+
-//                    "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
-//                    "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
-//                    "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
-//                    "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n"+
+//                    "and  b_loadid = (select max(b_loadid) from \n"+
+//                    "          semarchy_eph_mdm.sa_event\n"+
+//                    "            where  f_event_type = 'PMX'\n"+
+//                    "            and workflow_id = 'talend'\n"+
+//                    "            AND f_event_type = 'PMX'\n"+
+//                    "            and f_workflow_source = 'PMX' )\n"+
+//                    "and  \"%s\" is not null and man.\"MANIFESTATION_SUBTYPE\" = 425 order by random() limit '%s' ";
+
+    "select   \"ISBN\" as ISBN, sman.external_reference \n" +
+            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man\n" +
+            "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq on man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n" +
+            "join " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1  on map1.source_ref = mdq.pmx_source_reference::text\n" +
+            "left join semarchy_eph_mdm.gd_manifestation_identifier m on map1.eph_id = m.f_manifestation and mdq.f_type = m.f_type and m.effective_end_date is null\n" +
+            "left join semarchy_eph_mdm.gd_manifestation g on man.\"MANIFESTATION_ID\"::varchar = g.external_reference\n" +
+            "left join (select distinct external_reference, manif_identifier_id, b_loadid from semarchy_eph_mdm.sa_manifestation_identifier) sman on concat(map1.eph_id, 'ISBN' ,man.\"ISBN\") = sman.external_reference\n" +
+            "where b_loadid = (select max(b_loadid) from \n" +
+            "          semarchy_eph_mdm.sa_event\n" +
+            "            where  f_event_type = 'PMX'\n" +
+            "            and workflow_id = 'talend'\n" +
+            "            AND f_event_type = 'PMX'\n" +
+            "            and f_workflow_source = 'PMX' )          \n" +
+            "and \"%s\"  is not null\n" +
+            "and (mdq.dq_err = 'N' or (mdq.dq_err is null and g.manifestation_id is not null))\n" +
+            "and man.\"MANIFESTATION_SUBTYPE\" = 425 \n" +
+            "order by random() limit '%s' ";
+
+
+    public static final String SELECT_RANDOM_ISBNS_EBK =
+//            "select  \"ISBN\" as ISBN, sman.external_reference \n"+
+//                    "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n"+
+//                    GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq , \n"+
+//                    "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
+//                    ", " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n"+
+//                    "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
+//                    "and map1.source_ref = mdq.pmx_source_reference::text\n"+
+//                    "and concat(map1.eph_id,'ISBN',man.\"ISBN\") = sman.external_reference\n"+
+//                    "and  b_loadid = (select max(b_loadid) from \n"+
+//                    "          semarchy_eph_mdm.sa_event\n"+
+//                    "            where  f_event_type = 'PMX'\n"+
+//                    "            and workflow_id = 'talend'\n"+
+//                    "            AND f_event_type = 'PMX'\n"+
+//                    "            and f_workflow_source = 'PMX' )\n"+
 //                    "and  \"%s\" is not null and man.\"COMMODITY\" = 'EB' order by random() limit '%s'";
 
-    public static final String SELECT_RANDOM_ISSNS_JPR_IDS =
-//      "select \"ISBN\" as ISBN, sman.external_reference \n"+
-//              "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_manifestation man, \n"+
-//              ""+GetEPHDBUser.getDBUser()+".stg_10_pmx_manifestation_dq mdq , \n"+
-//              "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
-//              ", "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid map1 \n"+
-//              "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
-//              "and map1.source_ref = mdq.pmx_source_reference::text\n"+
-//              "and concat(map1.eph_id,'ISSN',man.\"ISSN\") = sman.external_reference\n"+
-//              "and f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier \n"+
-//              "join semarchy_eph_mdm.sa_event on f_event = event_id \n"+
-//              "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
-//              "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
-//              "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
-//              "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n"+
-//              "and  \"%s\" is not null and  \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" = 1 order by random() limit '%s'";
+     "select   \"ISBN\" as ISBN, sman.external_reference \n" +
+             "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man\n" +
+             "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq on man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n" +
+             "join " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1  on map1.source_ref = mdq.pmx_source_reference::text\n" +
+             "left join semarchy_eph_mdm.gd_manifestation_identifier m on map1.eph_id = m.f_manifestation and mdq.f_type = m.f_type and m.effective_end_date is null\n" +
+             "left join semarchy_eph_mdm.gd_manifestation g on man.\"MANIFESTATION_ID\"::varchar = g.external_reference\n" +
+             "left join (select distinct external_reference, manif_identifier_id, b_loadid from semarchy_eph_mdm.sa_manifestation_identifier) sman on concat(map1.eph_id, 'ISBN' ,man.\"ISBN\") = sman.external_reference\n" +
+             "where b_loadid = (select max(b_loadid) from \n" +
+             "          semarchy_eph_mdm.sa_event\n" +
+             "            where  f_event_type = 'PMX'\n" +
+             "            and workflow_id = 'talend'\n" +
+             "            AND f_event_type = 'PMX'\n" +
+             "            and f_workflow_source = 'PMX' )          \n" +
+             "and \"%s\"  is not null\n" +
+             "and (mdq.dq_err = 'N' or (mdq.dq_err is null and g.manifestation_id is not null))\n" +
+             "and man.\"COMMODITY\" = 'EB' \n" +
+             "order by random() limit '%s' ";
 
-       "select   \"ISSN\" as ISSN, sman.external_reference \n"+
-               "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n"+
-               GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq , \n"+
-               "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
-               ", " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n"+
-               "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
-               "and map1.source_ref = mdq.pmx_source_reference::text\n"+
-               "and concat(map1.eph_id,'ISSN',man.\"ISSN\") = sman.external_reference\n"+
-               "and  b_loadid = (select max(b_loadid) from \n"+
-               "          semarchy_eph_mdm.sa_event\n"+
-               "            where  f_event_type = 'PMX'\n"+
-               "            and workflow_id = 'talend'\n"+
-               "            AND f_event_type = 'PMX'\n"+
-               "            and f_workflow_source = 'PMX' )\n"+
-               "and  \"%s\" is not null and  \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" = 1 order by random() limit '%s'";
+
+    public static final String SELECT_RANDOM_ISSNS_JPR_IDS =
+//       "select   \"ISSN\" as ISSN, sman.external_reference \n"+
+//               "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n"+
+//               GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq , \n"+
+//               "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
+//               ", " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n"+
+//               "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
+//               "and map1.source_ref = mdq.pmx_source_reference::text\n"+
+//               "and concat(map1.eph_id,'ISSN',man.\"ISSN\") = sman.external_reference\n"+
+//               "and  b_loadid = (select max(b_loadid) from \n"+
+//               "          semarchy_eph_mdm.sa_event\n"+
+//               "            where  f_event_type = 'PMX'\n"+
+//               "            and workflow_id = 'talend'\n"+
+//               "            AND f_event_type = 'PMX'\n"+
+//               "            and f_workflow_source = 'PMX' )\n"+
+//               "and  \"%s\" is not null and  \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" = 1 order by random() limit '%s'";
+
+     "select   \"ISSN\" as ISSN, sman.external_reference \n" +
+             "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man\n" +
+             "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq on man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n" +
+             "join " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1  on map1.source_ref = mdq.pmx_source_reference::text\n" +
+             "left join semarchy_eph_mdm.gd_manifestation_identifier m on map1.eph_id = m.f_manifestation and mdq.f_type = m.f_type and m.effective_end_date is null\n" +
+             "left join semarchy_eph_mdm.gd_manifestation g on man.\"MANIFESTATION_ID\"::varchar = g.external_reference\n" +
+             "left join (select distinct external_reference, manif_identifier_id, b_loadid from semarchy_eph_mdm.sa_manifestation_identifier) sman on concat(map1.eph_id, 'ISSN' ,man.\"ISSN\") = sman.external_reference\n" +
+             "where b_loadid = (select max(b_loadid) from \n" +
+             "          semarchy_eph_mdm.sa_event\n" +
+             "            where  f_event_type = 'PMX'\n" +
+             "            and workflow_id = 'talend'\n" +
+             "            AND f_event_type = 'PMX'\n" +
+             "            and f_workflow_source = 'PMX' )          \n" +
+             "and \"%s\"  is not null\n" +
+             "and (mdq.dq_err = 'N' or (mdq.dq_err is null and g.manifestation_id is not null))\n" +
+             "and  \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" = 1 \n" +
+             "order by random() limit '%s' ";
 
 
 
 
     public static final String SELECT_RANDOM_ISSNS_JEL_IDS =
-//            "select \"ISBN\" as ISBN, sman.external_reference \n"+
-//            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_manifestation man, \n"+
-//            ""+GetEPHDBUser.getDBUser()+".stg_10_pmx_manifestation_dq mdq , \n"+
-//            "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
-//            ", "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid map1 \n"+
-//            "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
-//            "and map1.source_ref = mdq.pmx_source_reference::text\n"+
-//            "and concat(map1.eph_id,'ISSN',man.\"ISSN\") = sman.external_reference\n"+
-//            "and f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier \n"+
-//            "join semarchy_eph_mdm.sa_event on f_event = event_id \n"+
-//            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
-//            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
-//            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
-//            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n"+
-//            "and  \"%s\" is not null and  \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" != 1 order by random() limit '%s'";;
+//               "select   \"ISSN\" as ISSN, sman.external_reference \n"+
+//                       "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n"+
+//                       GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq , \n"+
+//                       "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
+//                       ", " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n"+
+//                       "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
+//                       "and map1.source_ref = mdq.pmx_source_reference::text\n"+
+//                       "and concat(map1.eph_id,'ISSN',man.\"ISSN\") = sman.external_reference\n"+
+//                       "and  b_loadid = (select max(b_loadid) from \n"+
+//                       "          semarchy_eph_mdm.sa_event\n"+
+//                       "            where  f_event_type = 'PMX'\n"+
+//                       "            and workflow_id = 'talend'\n"+
+//                       "            AND f_event_type = 'PMX'\n"+
+//                       "            and f_workflow_source = 'PMX' )\n"+
+//                       "and  \"%s\" is not null and  \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" != 1 order by random() limit '%s'";
 
-               "select   \"ISSN\" as ISSN, sman.external_reference \n"+
-                       "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n"+
-                       GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq , \n"+
-                       "semarchy_eph_mdm.sa_manifestation_identifier sman \n"+
-                       ", " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n"+
-                       "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n"+
-                       "and map1.source_ref = mdq.pmx_source_reference::text\n"+
-                       "and concat(map1.eph_id,'ISSN',man.\"ISSN\") = sman.external_reference\n"+
-                       "and  b_loadid = (select max(b_loadid) from \n"+
-                       "          semarchy_eph_mdm.sa_event\n"+
-                       "            where  f_event_type = 'PMX'\n"+
-                       "            and workflow_id = 'talend'\n"+
-                       "            AND f_event_type = 'PMX'\n"+
-                       "            and f_workflow_source = 'PMX' )\n"+
-                       "and  \"%s\" is not null and  \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" != 1 order by random() limit '%s'";
-
-
-
-    public static final String SELECT_RECORDS_STG_MANIF_IDENTIFIER_ISBN = "select distinct \"ISBN\" as identifier,\n" +
-            "map1.eph_id as f_manifestation,\n" +
-            "concat(map1.eph_id,'ISBN',man.\"ISBN\") as external_reference\n" +
-            "from\n" +
-            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n" +
-            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq ,\n" +
-            "semarchy_eph_mdm.sa_manifestation_identifier sman , \n" +
-            GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n" +
-            "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n" +
-            "and map1.source_ref = mdq.pmx_source_reference::text\n" +
-            "and concat(map1.eph_id,'ISBN',man.\"ISBN\") = sman.external_reference\n" +
-            "and \"ISBN\" IN ('%s')";
+     "select   \"ISSN\" as ISSN, sman.external_reference \n" +
+             "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man\n" +
+             "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq on man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n" +
+             "join " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1  on map1.source_ref = mdq.pmx_source_reference::text\n" +
+             "left join semarchy_eph_mdm.gd_manifestation_identifier m on map1.eph_id = m.f_manifestation and mdq.f_type = m.f_type and m.effective_end_date is null\n" +
+             "left join semarchy_eph_mdm.gd_manifestation g on man.\"MANIFESTATION_ID\"::varchar = g.external_reference\n" +
+             "left join (select distinct external_reference, manif_identifier_id, b_loadid from semarchy_eph_mdm.sa_manifestation_identifier) sman on concat(map1.eph_id, 'ISSN' ,man.\"ISSN\") = sman.external_reference\n" +
+             "where b_loadid = (select max(b_loadid) from \n" +
+             "          semarchy_eph_mdm.sa_event\n" +
+             "            where  f_event_type = 'PMX'\n" +
+             "            and workflow_id = 'talend'\n" +
+             "            AND f_event_type = 'PMX'\n" +
+             "            and f_workflow_source = 'PMX' )          \n" +
+             "and \"%s\"  is not null\n" +
+             "and (mdq.dq_err = 'N' or (mdq.dq_err is null and g.manifestation_id is not null))\n" +
+             "and  \"WORK_TYPE_ID\" IN (4,3,102) and \"F_PRODUCT_MANIFESTATION_TYP\" != 1 \n" +
+             "order by random() limit '%s' ";
 
 
 
+    public static final String SELECT_RECORDS_STG_MANIF_IDENTIFIER_ISBN =
+//            "select distinct \"ISBN\" as identifier,\n" +
+//            "map1.eph_id as f_manifestation,\n" +
+//            "concat(map1.eph_id,'ISBN',man.\"ISBN\") as external_reference\n" +
+//            "from\n" +
+//            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n" +
+//            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq ,\n" +
+//            "semarchy_eph_mdm.sa_manifestation_identifier sman , \n" +
+//            GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n" +
+//            "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n" +
+//            "and map1.source_ref = mdq.pmx_source_reference::text\n" +
+//            "and concat(map1.eph_id,'ISBN',man.\"ISBN\") = sman.external_reference\n" +
+//            "and \"ISBN\" IN ('%s')";
 
-    public static final String SELECT_RECORDS_STG_MANIF_IDENTIFIER_ISSN ="select distinct \"ISSN\" as identifier,\n" +
-            "map1.eph_id as f_manifestation,\n" +
-            "concat(map1.eph_id,'ISSN',man.\"ISSN\") as external_reference\n" +
-            "from\n" +
-            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n" +
-            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq ,\n" +
-            "semarchy_eph_mdm.sa_manifestation_identifier sman , \n" +
-            GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n" +
-            "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n" +
-            "and map1.source_ref = mdq.pmx_source_reference::text\n" +
-            "and concat(map1.eph_id,'ISSN',man.\"ISSN\") = sman.external_reference\n" +
-            "and \"ISSN\" IN ('%s')";
+
+        "select distinct \"ISBN\" as identifier,\n" +
+        "map1.eph_id as f_manifestation,\n" +
+        "concat(map1.eph_id,'ISBN',man.\"ISBN\") as external_reference\n" +
+        "from " +  GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man\n" +
+            "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq on man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n" +
+            "join " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1  on map1.source_ref = mdq.pmx_source_reference::text\n" +
+            "left join semarchy_eph_mdm.gd_manifestation_identifier m on map1.eph_id = m.f_manifestation and mdq.f_type = m.f_type and m.effective_end_date is null\n" +
+            "left join semarchy_eph_mdm.gd_manifestation g on man.\"MANIFESTATION_ID\"::varchar = g.external_reference\n" +
+            "left join (select distinct external_reference, manif_identifier_id, b_loadid from semarchy_eph_mdm.sa_manifestation_identifier) sman on concat(map1.eph_id, 'ISBN' ,man.\"ISBN\") = sman.external_reference\n" +
+            "where b_loadid = (select max(b_loadid) from \n" +
+            "          semarchy_eph_mdm.sa_event\n" +
+            "            where  f_event_type = 'PMX'\n" +
+            "            and workflow_id = 'talend'\n" +
+            "            AND f_event_type = 'PMX'\n" +
+            "            and f_workflow_source = 'PMX' )          \n" +
+                "and \"ISBN\" IN ('%s')" +
+            "and (mdq.dq_err = 'N' or (mdq.dq_err is null and g.manifestation_id is not null))";
+
+
+
+
+    public static final String SELECT_RECORDS_STG_MANIF_IDENTIFIER_ISSN =
+//            "select distinct \"ISSN\" as identifier,\n" +
+//            "map1.eph_id as f_manifestation,\n" +
+//            "concat(map1.eph_id,'ISSN',man.\"ISSN\") as external_reference\n" +
+//            "from\n" +
+//            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man, \n" +
+//            GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq ,\n" +
+//            "semarchy_eph_mdm.sa_manifestation_identifier sman , \n" +
+//            GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1 \n" +
+//            "where man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n" +
+//            "and map1.source_ref = mdq.pmx_source_reference::text\n" +
+//            "and concat(map1.eph_id,'ISSN',man.\"ISSN\") = sman.external_reference\n" +
+//            "and \"ISSN\" IN ('%s')";
+
+            "select distinct \"ISSN\" as identifier,\n" +
+                    "map1.eph_id as f_manifestation,\n" +
+                    "concat(map1.eph_id,'ISSN',man.\"ISSN\") as external_reference\n" +
+                    "from " +  GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man\n" +
+                    "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq mdq on man.\"MANIFESTATION_ID\" = mdq.pmx_source_reference\n" +
+                    "join " + GetEPHDBUser.getDBUser() + ".map_sourceref_2_ephid map1  on map1.source_ref = mdq.pmx_source_reference::text\n" +
+                    "left join semarchy_eph_mdm.gd_manifestation_identifier m on map1.eph_id = m.f_manifestation and mdq.f_type = m.f_type and m.effective_end_date is null\n" +
+                    "left join semarchy_eph_mdm.gd_manifestation g on man.\"MANIFESTATION_ID\"::varchar = g.external_reference\n" +
+                    "left join (select distinct external_reference, manif_identifier_id, b_loadid from semarchy_eph_mdm.sa_manifestation_identifier) sman on concat(map1.eph_id, 'ISSN' ,man.\"ISSN\") = sman.external_reference\n" +
+                    "where b_loadid = (select max(b_loadid) from \n" +
+                    "          semarchy_eph_mdm.sa_event\n" +
+                    "            where  f_event_type = 'PMX'\n" +
+                    "            and workflow_id = 'talend'\n" +
+                    "            AND f_event_type = 'PMX'\n" +
+                    "            and f_workflow_source = 'PMX' )          \n" +
+                    "and \"ISSN\" IN ('%s')" +
+                    "and (mdq.dq_err = 'N' or (mdq.dq_err is null and g.manifestation_id is not null))";
 
 
 
