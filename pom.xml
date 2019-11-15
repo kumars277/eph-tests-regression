@@ -24,6 +24,12 @@
         <jackson.version>2.5.3</jackson.version>
         <commondb.version>1.6</commondb.version>
 
+        <!-- Spring versions -->
+        <spring.boot.version>2.1.0.RELEASE</spring.boot.version>
+        <org.apache.httpcomponents.httpclient.version>4.5.9</org.apache.httpcomponents.httpclient.version>
+
+        <!-- Internal dependency versions -->
+        <spring-boot-common.version>2.5.3</spring-boot-common.version>
 
         <!--<seleniumpom.version>2.0.5</seleniumpom.version>-->
         <seleniumpom.version>3.0.14</seleniumpom.version>
@@ -141,6 +147,12 @@
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${spring.boot.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>com.jayway.restassured</groupId>
             <artifactId>rest-assured</artifactId>
@@ -494,6 +506,18 @@
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
             <version>3.1.6</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>5.1.7.RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>5.1.7.RELEASE</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

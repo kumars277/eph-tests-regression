@@ -14,6 +14,7 @@ import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ManifestationDataObject;
 import com.eph.automation.testing.models.dao.ProductDataObject;
 import com.eph.automation.testing.models.dao.WorkDataObject;
+import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
@@ -93,7 +94,7 @@ public class ApiProductsSearchSteps {
     }
 
     @When("^the product details are retrieved and compared$")
-    public void compareSearchResultsWithDB() throws IOException {
+    public void compareSearchResultsWithDB() throws IOException, AzureOauthTokenFetchingException {
         int bound =productDataObjects.size();
         
         for (int i = 0; i < bound; i++) {
@@ -107,7 +108,7 @@ public class ApiProductsSearchSteps {
     }
 
     @When("^the product details are retrieved when searched by (.*) and compared$")
-    public void productSearchByTitleAndCompare(String title) throws IOException {
+    public void productSearchByTitleAndCompare(String title) throws IOException, AzureOauthTokenFetchingException {
         ProductsMatchedApiObject returnedProducts = null;
         Log.info("And we get the products data from the API ...");
         int bound = productDataObjects.size();
@@ -129,7 +130,7 @@ public class ApiProductsSearchSteps {
     }
 
     @When("^the product details are retrieved and compared when searched by (.*)$")
-    public void productSearchByIdentifiersAndCompare(String identifierType) throws IOException {
+    public void productSearchByIdentifiersAndCompare(String identifierType) throws IOException, AzureOauthTokenFetchingException {
         ProductsMatchedApiObject returnedProducts = null;
         Log.info("And we get the products data from the API ...");
         int bound =productDataObjects.size();
@@ -156,7 +157,7 @@ public class ApiProductsSearchSteps {
     }
 
     @When("^the product details are retrieved and compared when search option is used with (.*)$")
-    public void productSearchBySearchOptionAndCompare(String identifierType) throws IOException {
+    public void productSearchBySearchOptionAndCompare(String identifierType) throws IOException, AzureOauthTokenFetchingException {
         ProductsMatchedApiObject returnedProducts = null;
         Log.info("And we get the products data from the API ...");
         int bound =productDataObjects.size();
@@ -191,7 +192,7 @@ public class ApiProductsSearchSteps {
     }
 
     @When("^the products detail are retrieved and compared when searched by type and (.*)$")
-    public void productSearchByIdentifierWithTypeAndCompare(String identifierType) throws IOException {
+    public void productSearchByIdentifierWithTypeAndCompare(String identifierType) throws IOException, AzureOauthTokenFetchingException {
         ProductsMatchedApiObject returnedProducts = null;
         Log.info("And we get the products data from the API ...");
         int bound =productDataObjects.size();
@@ -269,7 +270,7 @@ public class ApiProductsSearchSteps {
 
 
     @When("^the product response returned when searched by packages is verified$")
-    public void compareProductsRetrievedByIsInPackagesOptionWithDB() {
+    public void compareProductsRetrievedByIsInPackagesOptionWithDB() throws AzureOauthTokenFetchingException {
         ProductsMatchedApiObject returnedProducts = null;
 
         int bound = productDataObjects.size();
@@ -281,7 +282,7 @@ public class ApiProductsSearchSteps {
     }
 
     @When("^the product response returned when searched by components is verified$")
-    public void compareProductsRetrievedByhasComponentsOptionWithDB() {
+    public void compareProductsRetrievedByhasComponentsOptionWithDB() throws AzureOauthTokenFetchingException {
         ProductsMatchedApiObject returnedProducts = null;
 
         int bound = productDataObjects.size();
@@ -293,7 +294,7 @@ public class ApiProductsSearchSteps {
     }
 
     @When("^the product response returned when searched by personID is verified$")
-    public void compareProductsRetrievdByPersonWithDB() {
+    public void compareProductsRetrievdByPersonWithDB() throws AzureOauthTokenFetchingException {
         ProductsMatchedApiObject returnedProducts = null;
 
         int bound = ids.size();
@@ -328,7 +329,7 @@ public class ApiProductsSearchSteps {
         return countProd;
     }
     @When("^the product details are retrieved by PMC Code and compared$")
-    public void compareProductSearchByPMCResultsWithDB() {
+    public void compareProductSearchByPMCResultsWithDB() throws AzureOauthTokenFetchingException {
         ProductsMatchedApiObject returnedProducts = null;
 
         int bound = productDataObjects.size();
@@ -353,7 +354,7 @@ public class ApiProductsSearchSteps {
     }
 
     @When("^the product details are retrieved by PMG Code and compared$")
-    public void compareProductSearchByPMGResultsWithDB() {
+    public void compareProductSearchByPMGResultsWithDB() throws AzureOauthTokenFetchingException {
         ProductsMatchedApiObject returnedProducts = null;
 
         int bound = productDataObjects.size();

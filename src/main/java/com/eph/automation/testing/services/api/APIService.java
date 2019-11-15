@@ -53,7 +53,7 @@ public class APIService {
                 .thenReturn();
     }
 
-    public static WorkApiObject searchForWorkByIDResult(String workID) {
+    public static WorkApiObject searchForWorkByIDResult(String workID) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
@@ -63,7 +63,7 @@ public class APIService {
 
     }
 
-    public static WorksMatchedApiObject searchForWorkByPMCResult(String pmcCode) {
+    public static WorksMatchedApiObject searchForWorkByPMCResult(String pmcCode) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
@@ -73,7 +73,7 @@ public class APIService {
 
     }
 
-    public static ProductsMatchedApiObject searchForProductsByPMCResult(String pmcCode) {
+    public static ProductsMatchedApiObject searchForProductsByPMCResult(String pmcCode) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,   AuthorizationService.getAuthToken())
@@ -83,7 +83,7 @@ public class APIService {
 
     }
 
-    public static WorksMatchedApiObject searchForWorkByPMGResult(String pmgCode) {
+    public static WorksMatchedApiObject searchForWorkByPMGResult(String pmgCode) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken())
@@ -92,7 +92,7 @@ public class APIService {
                 .thenReturn().as(WorksMatchedApiObject.class);
     }
 
-    public static ProductsMatchedApiObject searchForProductsByPMGResult(String pmgCode) {
+    public static ProductsMatchedApiObject searchForProductsByPMGResult(String pmgCode) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
@@ -101,7 +101,7 @@ public class APIService {
                 .thenReturn().as(ProductsMatchedApiObject.class);
     }
 
-    public static WorksMatchedApiObject searchForWorkByTitleResult(String title) {
+    public static WorksMatchedApiObject searchForWorkByTitleResult(String title) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
@@ -111,7 +111,7 @@ public class APIService {
 
     }
 
-    public static WorksMatchedApiObject searchForWorksByIdentifierResult(String identifier) {
+    public static WorksMatchedApiObject searchForWorksByIdentifierResult(String identifier) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
@@ -121,7 +121,7 @@ public class APIService {
 
     }
 
-    public static WorksMatchedApiObject searchForWorksByIdentifierAndTypeResult(String identifier, String identifierType) {
+    public static WorksMatchedApiObject searchForWorksByIdentifierAndTypeResult(String identifier, String identifierType) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
@@ -130,7 +130,7 @@ public class APIService {
                 .get("/works/identifier/"+identifier).thenReturn().as(WorksMatchedApiObject.class);
     }
 
-    public static WorksMatchedApiObject searchForWorksByPersonIDResult(String identifier) {
+    public static WorksMatchedApiObject searchForWorksByPersonIDResult(String identifier) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken())
@@ -139,7 +139,7 @@ public class APIService {
                 .thenReturn().as(WorksMatchedApiObject.class);
     }
 
-    public static ProductsMatchedApiObject searchForProductsByPersonIDResult(String identifier) {
+    public static ProductsMatchedApiObject searchForProductsByPersonIDResult(String identifier) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
@@ -148,7 +148,7 @@ public class APIService {
                 .thenReturn().as(ProductsMatchedApiObject.class);
     }
 
-    public static WorksMatchedApiObject searchForWorksBySearchOptionResult(String searchFor) {
+    public static WorksMatchedApiObject searchForWorksBySearchOptionResult(String searchFor) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
@@ -157,7 +157,7 @@ public class APIService {
                 .thenReturn().as(WorksMatchedApiObject.class);
     }
 
-    public static ProductsMatchedApiObject searchForProductsByPackageResult(String packageID) {
+    public static ProductsMatchedApiObject searchForProductsByPackageResult(String packageID) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
@@ -166,7 +166,7 @@ public class APIService {
                 .thenReturn().as(ProductsMatchedApiObject.class);
     }
 
-    public static ProductsMatchedApiObject searchForProductsByComponentsResult(String componentID) {
+    public static ProductsMatchedApiObject searchForProductsByComponentsResult(String componentID) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
@@ -175,7 +175,7 @@ public class APIService {
                 .thenReturn().as(ProductsMatchedApiObject.class);
     }
 
-    public static ProductApiObject searchForProductResult(String productID) {
+    public static ProductApiObject searchForProductResult(String productID) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
@@ -185,7 +185,7 @@ public class APIService {
 
     }
 
-    public static ProductsMatchedApiObject searchForProductsByIdentifierResult(String identifier) {
+    public static ProductsMatchedApiObject searchForProductsByIdentifierResult(String identifier) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
@@ -195,7 +195,7 @@ public class APIService {
 
     }
 
-    public static ProductsMatchedApiObject searchForProductssByIdentifierAndTypeResult(String identifier, String identifierType) {
+    public static ProductsMatchedApiObject searchForProductssByIdentifierAndTypeResult(String identifier, String identifierType) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
@@ -206,7 +206,7 @@ public class APIService {
 
     }
 
-    public static ProductsMatchedApiObject searchForProductsBySearchResult(String searchOption) {
+    public static ProductsMatchedApiObject searchForProductsBySearchResult(String searchOption) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
@@ -215,7 +215,7 @@ public class APIService {
                 .thenReturn().as(ProductsMatchedApiObject.class);
     }
 
-    public static ProductsMatchedApiObject searchForProductsByTitleResult(String title) {
+    public static ProductsMatchedApiObject searchForProductsByTitleResult(String title) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
@@ -225,7 +225,7 @@ public class APIService {
                 .thenReturn().as(ProductsMatchedApiObject.class);
     }
 
-    public static boolean checkProductExists(String productID) {
+    public static boolean checkProductExists(String productID) throws AzureOauthTokenFetchingException {
         int statusCode = given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
@@ -241,7 +241,7 @@ public class APIService {
 
     }
 
-    public static ProductsMatchedApiObject searchForProductByTitleResult(String title) {
+    public static ProductsMatchedApiObject searchForProductByTitleResult(String title) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
@@ -251,7 +251,7 @@ public class APIService {
 
     }
 
-    public static Boolean checkWorkExists(String workID) {
+    public static Boolean checkWorkExists(String workID) throws AzureOauthTokenFetchingException {
 
         int statusCode = given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)

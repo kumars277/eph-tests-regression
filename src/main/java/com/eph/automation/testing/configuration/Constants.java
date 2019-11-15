@@ -66,8 +66,7 @@ public class Constants {
     public static String WIRE_MOCK_END_POINT = "http://10.48.67.42:8080/api/";
 
     /*Authorization OATH2 constants*/
-//    public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String AUTHORIZATION_HEADER ="X-ADFS-JWT";
+    public static final String AUTHORIZATION_HEADER = "X-ADFS-JWT";
 
     public static final String CUSTOMER_GATEWAY_AUTHORIZATION_HEADER_VALUE = "Basic NUkyel9VTTRRSm5SSUlqZmZ4TVdVV0o0U013YTpSTmRnZDFUUTJLS2ZOTVliSm9fcEJNRHhPNlVh";
     public static final String GET_TOKEN_PATH = "/token";
@@ -77,4 +76,12 @@ public class Constants {
     public static final String CUSTOMER_SERVICE_URL="https://enterprise-sit.api.elsevier.com";
     public static final String APPLICATION_JSON_HEADER = "application/json";
 
+
+    public static String uriPrefix = "uriprefix";
+    public static String uriPostfix = "uripostfix";
+    public static String tenantId = "tenantid";
+    public static String httptimeoutmilliseconds = "httptimeoutmilliseconds";
+    public static String clientId = "clientid";
+    public static String clientSecret = "secret";
+    public static String expiryOffsetSeconds = "expiryoffsetseconds";
 }
