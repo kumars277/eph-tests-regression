@@ -28,6 +28,7 @@ public class ResearchPackagesConstants {
     public static String SAVE_COLLECTIONS = "//button[contains(text(),'Save')]";
     public static String NO_COLLECTIONS = "//div[contains(text(), 'There is currently no active collection')]";
     public static String CREATE_PROSPECTIVE_LIST = "//span[contains(text(),'Create Prospective List')]";
+    public static String CREATE_PROSPECTIVE_LIST_II = "//div[contains(text(),'Create Prospective List')]";
     public static String SEARCH_FILTER  = "mat-input-0";
     public static String CHECK_IS_EXCLUDE = "//*[@class='is-exclude']";
     public static String EXCLUDE_JOURNAL = "//div[@title='Exclude' and @class='clickable']";
@@ -40,15 +41,15 @@ public class ResearchPackagesConstants {
     public static String resultTable  = "tbody";
 //mat-checkbox[@id='mat-checkbox-212']//div[@class='mat-checkbox-inner-container mat-checkbox-inner-container-no-side-margin']
 
-public static String pendingFilterCheckbox = "//label[@for='mat-checkbox-8-input']";
-public static String excludeFilterCheckbox = "//label[@for='mat-checkbox-10-input']";
-public static String unsavedFilterCheckbox = "/html[1]/body[1]/eph-rp-root[1]/div[1]/div[1]/mat-sidenav-container[1]/mat-sidenav-content[1]/div[1]/div[1]/div[2]/div[1]/eph-rp-summary[1]/div[1]/div[1]/eph-rp-prospective-list[1]/div[1]/div[1]/div[2]/eph-rp-list-filter[1]/div[1]/div[3]/div[1]/div[2]/div[5]/div[1]/div[1]/mat-checkbox[1]/label[1]/div[1]";
-    public static String includeFilterCheckbox = "//label[@for='mat-checkbox-9-input']";
-public static String PubDirector_Filter_Rapes_Relaxed = "//label[@for='mat-checkbox-16-input']";
+public static String pendingFilterCheckbox = "//div[contains(text(),'Pending')]/preceding-sibling::div";
+public static String excludeFilterCheckbox = "//div[contains(text(),'Excluded')]/preceding-sibling::div";
+public static String unsavedFilterCheckbox = "//div[contains(text(),'Unsaved change')]/preceding-sibling::div";
+    public static String includeFilterCheckbox = "//div[contains(text(),'Included')]/preceding-sibling::div";
+public static String PubDirector_Filter_Rapes_Relaxed = "//div[contains(text(),'Rapes Relaxed')]/preceding-sibling::div";
 public static String PubDirector_Filter_Rapes_Relaxed_count = "//div[contains(text(),'Rapes Relaxed')]/following-sibling::div";
-public static String Ownership_Filter_ELSOWN = "//label[@for='mat-checkbox-24-input']";
+public static String Ownership_Filter_ELSOWN = "//div[contains(text(),'ELSOWN')]/preceding-sibling::div";
 public static String Ownership_Filter_ELSOWN_Count="//div[contains(text(),'ELSOWN')]/following-sibling::div";
-    public static String PMG_Filter_MCC = "//label[@for='mat-checkbox-20-input']";
+    public static String PMG_Filter_MCC = "//div[contains(text(),'600')]/preceding-sibling::div";
     public static String PMG_FILTER_MCC_COUNT="//div[contains(text(),'600')]/following-sibling::div";
     public static String PENDING_FILTER_COUNT="//div[contains(text(),'Pending')]/following-sibling::div";
     public static String EXCLUDE_FILTER_COUNT="//div[contains(text(),'Excluded')]/following-sibling::div";
@@ -59,7 +60,7 @@ public static String Ownership_Filter_ELSOWN_Count="//div[contains(text(),'ELSOW
     public static String IS_PENDING = "//div[@class='is-pending']";
     public static String IS_EXCLUDED = "//div[@class='is-exclude']";
     public static String IS_INCLUDED = "//div[@class='is-include']";
-    public static String ROW_RESULT = "//div[@class='mat-row ng-star-inserted']";
+    public static String ROW_RESULT = "//tr[@class='mat-row ng-star-inserted']";
     public static String ISSN_COLUMN = "//td[contains(@class,'cdk-column-issn')]";
     public static String PUBLISHER_COLUMN =    "//td[contains(@class,'cdk-column-publisher')]";
     public static String OWNER_COLUMN  = "//td[contains(@class,'cdk-column-ownershipType')]";
@@ -67,5 +68,11 @@ public static String Ownership_Filter_ELSOWN_Count="//div[contains(text(),'ELSOW
     public static String PUBDIRECTOR_COLUMN = "//td[contains(@class,'cdk-column-publishingDirector')]";
     public static String TITLE_COLUMN = "//td[contains(@class,'cdk-column-title')]";
     public static String JOURNALNO_COLUMN = "//td[contains(@class,'cdk-column-journalNumber')]";
+    public static String COMMENT_CLICKABLE = "//div[contains(@class,'clickable is-comment')]//i[@class='gm-ico-comment']";
+    public static String COMMENT_HIDDEN = "//div[contains(@class,'transparent hover-comment')]//i[@class='gm-ico-comment']";
+    public static String ADD_COMMENT_BOX = "//mat-dialog-container";
+    public static String CONFIRM_COLLECTION = "//span[contains(text(),'Confirm collection')]";
+    public static String SUBMIT_COLLECTION = "//span[contains(text(),'Submit completed collection')]";
+    public static String SUBMIT_LIST = "//button[contains(text(),'Submit list')]";
 
 }

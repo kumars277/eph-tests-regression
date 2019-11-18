@@ -39,6 +39,8 @@ Feature: Research Packages UI Selenium Tests
         |ISSN             |    STATUS |
         | 1558-1950       |    P      |
 
+
+
       @MCC
       Scenario Outline: Search Journal with ISSN
         Given User logged into the application as a Product Owner
@@ -58,6 +60,26 @@ Feature: Research Packages UI Selenium Tests
         Examples:
           |publisher            |
           | Demerges Enquired      |
+
+      @MCC
+      Scenario Outline: Search Journal with title
+        Given User logged into the application as a Product Owner
+        Then  Check for MCC availability and Click the same
+        Then  Search title keyword of the journal with "<title>" given
+        And   Verify the title of the journal with "<title>" is displayed
+        Examples:
+          |title            |
+          | Journal      |
+
+      @MCC
+      Scenario Outline: Search Journal with Journal No
+        Given User logged into the application as a Product Owner
+        Then  Check for MCC availability and Click the same
+        Then  Search journalno of the journal with "<journalno>" given
+        And   Verify the journalno of the journal with "<journalno>" is displayed
+        Examples:
+          |journalno            |
+          | 12003      |
 
       @MCC
       Scenario Outline: Filter Journal with Publishing director
@@ -90,25 +112,18 @@ Feature: Research Packages UI Selenium Tests
               |pmg            |
               | 600     |
 
-       @MCC
-        Scenario Outline: Search Journal with title
-          Given User logged into the application as a Product Owner
-          Then  Check for MCC availability and Click the same
-          Then  Search title keyword of the journal with "<title>" given
-          And   Verify the title of the journal with "<title>" is displayed
-          Examples:
-          |title            |
-          | Journal      |
-
-      @MCC
-      Scenario Outline: Search Journal with Journal No
-        Given User logged into the application as a Product Owner
-        Then  Check for MCC availability and Click the same
-        Then  Search journalno of the journal with "<journalno>" given
-        And   Verify the journalno of the journal with "<journalno>" is displayed
-        Examples:
-          |journalno            |
-          | 12005      |
+            @MCC
+            Scenario Outline: Adding Comment to the Journal
+              Given User logged into the application as a Product Owner
+              Then  Check for MCC availability and Click the same
+              Then  Search journalno of the journal with "<journalno>" given
+              And   Add "<comments>" to the "<journalno>" given
+              Then Save the Collections
+              Then  Search journalno of the journal with "<journalno>" given
+              Then  Verify the "<comments>" added in the history
+              Examples:
+                |journalno            |comments                    |
+                | 	12061               |Sample content for the comment|
 
        @MCC
         Scenario Outline: Change Status to Pending for a Journal in Math Core Collections (MCC)
@@ -218,7 +233,7 @@ Feature: Research Packages UI Selenium Tests
     Scenario Outline: Filtering the Journal with Multiple Filters
       Given User logged into the application as a Product Owner
       Then  Check for MCC availability and Click the same
-      And   Choose the filter with Included Status
+      Then   Choose the filter with Included Status
       And   Choose the "<publishing director>" filter
       And   Choose the PMG "<pmg>" filter
       And   Choose the Ownership Type "<ownership>" filter
@@ -232,12 +247,10 @@ Feature: Research Packages UI Selenium Tests
       Scenario: Submitting the Prospective Lists
         Given User logged into the application as a Product Owner
         Then  Check for MCC availability and Click the same
-        Then  Verify the Collection is displayed
-        And   Submit the First Prospective List
-        And   Verify the Message displayed for First Prospective List
-        And   Submit the Second Prospective List
-        And   Verify the Message displayed for Second Prospective List
-
+        And   Submit the Prospective First Lists
+        And   Verify the Message displayed for the Prospective List
+        Then  Submit the Second Prospective First Lists
+        And   Verify the Message displayed for the Prospective List
 
 
 

@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Singleton
 public class TasksNew {
@@ -30,8 +31,7 @@ public class TasksNew {
         try {
             element = driver.findElement(By.xpath("//*[contains(text(), \'" + text + "\')]"));
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return element;
@@ -46,6 +46,21 @@ public class TasksNew {
         WebElement element=null;
         //element = driver.findElement(By.xpath(AddJournalConstants.INCLUDE_JOURNAL));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();",element);
+    }
+    public boolean isSelected(String locatorType, String locatorValue){
+        WebElement element = null;
+        try {
+            switch (locatorType) {
+                case "XPATH":
+                    element = driver.findElement(By.xpath(locatorValue));
+                    element.isSelected();
+                    break;
+            }
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public boolean verifyElementisDisplayed(String locatorType, String locatorValue) throws InterruptedException {
@@ -155,6 +170,10 @@ public class TasksNew {
         return elements;
     }
 
+    public void waitTime(int seconds) throws InterruptedException {
+        TimeUnit.SECONDS.sleep(seconds);
+    }
+
 
 
 
@@ -188,6 +207,10 @@ public class TasksNew {
             e.printStackTrace();
         }
         return element;
+    }
+
+    public void acceptAlert(){
+        driver.switchTo().alert().accept();
     }
 
     public WebElement click(String locatorType, final String locatorValue ){
