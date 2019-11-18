@@ -125,7 +125,15 @@ Feature: Research Packages UI Selenium Tests
                 |journalno            |comments                    |
                 | 	12061               |Sample content for the comment|
 
-       @MCC
+     @MCC
+      Scenario: Filter Journal by Has Remarks
+          Given User logged into the application as a Product Owner
+          Then  Check for MCC availability and Click the same
+          Then  Choose the filter with Remarks
+          And   Verify the result displayed for the Remarks
+
+
+  @MCC
         Scenario Outline: Change Status to Pending for a Journal in Math Core Collections (MCC)
           Given User logged into the application as a Product Owner
           Then  Check for MCC availability and Click the same
@@ -149,12 +157,12 @@ Feature: Research Packages UI Selenium Tests
         Given User logged into the application as a Product Owner
         Then  Check for MCC availability and Click the same
         Then  Search for the journal with "<ISSN>" given
-        And   Exclude from the collection
+        And   change to Pending from the collection
         Then  Filter the journal with unsaved Status
         And   Verify the result displayed for the Unsaved Changes
         Examples:
           |ISSN            |
-          |1090-266X       |
+          |1095-9971 |
 
      @MCC
       Scenario Outline: Excluding a Journal in Math Core Collections (MCC)

@@ -42,14 +42,24 @@ public class ResearchPackagesConstants {
 //mat-checkbox[@id='mat-checkbox-212']//div[@class='mat-checkbox-inner-container mat-checkbox-inner-container-no-side-margin']
 
 public static String pendingFilterCheckbox = "//div[contains(text(),'Pending')]/preceding-sibling::div";
+    public static String pendingFilterIsChecked = "//div[contains(text(),'Pending')]/preceding-sibling::div//input[@aria-checked='true']";
 public static String excludeFilterCheckbox = "//div[contains(text(),'Excluded')]/preceding-sibling::div";
+    public static String remarksFilterCheckbox = "//div[contains(text(),'Has remarks')]/preceding-sibling::div";
+    public static String remarksCheckboxIsChecked = "//div[contains(text(),'Has remarks')]/preceding-sibling::div//input[@aria-checked='true']";
+    public static String excludeFilterCheckboxIsChecked = "//div[contains(text(),'Excluded')]/preceding-sibling::div//input[@aria-checked='true']";
 public static String unsavedFilterCheckbox = "//div[contains(text(),'Unsaved change')]/preceding-sibling::div";
+    public static String unsavedFilterIsChecked = "//div[contains(text(),'Unsaved change')]/preceding-sibling::div//input[@aria-checked='true']";
     public static String includeFilterCheckbox = "//div[contains(text(),'Included')]/preceding-sibling::div";
-public static String PubDirector_Filter_Rapes_Relaxed = "//div[contains(text(),'Rapes Relaxed')]/preceding-sibling::div";
+    public static String includeFilterIsChecked = "//div[contains(text(),'Included')]/preceding-sibling::div//input[@aria-checked='true']";
+public static String PubDirector_Filter_Rapes_Relaxed_IS_CHECKED = "//div[contains(text(),'Rapes Relaxed')]/preceding-sibling::div//input[@aria-checked='true']";
+    public static String PubDirector_Filter_Rapes_Relaxed = "//div[contains(text(),'Rapes Relaxed')]/preceding-sibling::div";
 public static String PubDirector_Filter_Rapes_Relaxed_count = "//div[contains(text(),'Rapes Relaxed')]/following-sibling::div";
 public static String Ownership_Filter_ELSOWN = "//div[contains(text(),'ELSOWN')]/preceding-sibling::div";
+    public static String Owner_Filter_ELSOWN_IS_CHECKED = "//div[contains(text(),'ELSOWN')]/preceding-sibling::div//input[@aria-checked='true']";
 public static String Ownership_Filter_ELSOWN_Count="//div[contains(text(),'ELSOWN')]/following-sibling::div";
+    public static String Remarks_Filter_Count="//div[contains(text(),'Has remarks')]/following-sibling::div";
     public static String PMG_Filter_MCC = "//div[contains(text(),'600')]/preceding-sibling::div";
+    public static String PMG_FILTER_IS_CHECKED = "//div[contains(text(),'600')]/preceding-sibling::div//input[@aria-checked='true']";
     public static String PMG_FILTER_MCC_COUNT="//div[contains(text(),'600')]/following-sibling::div";
     public static String PENDING_FILTER_COUNT="//div[contains(text(),'Pending')]/following-sibling::div";
     public static String EXCLUDE_FILTER_COUNT="//div[contains(text(),'Excluded')]/following-sibling::div";

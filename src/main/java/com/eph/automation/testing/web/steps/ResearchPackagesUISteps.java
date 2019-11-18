@@ -98,14 +98,15 @@ public class ResearchPackagesUISteps {
     }
 
     @Then("^Filter the journal with unsaved Status$")
-    public void chooseUnsavedFilter(){
-        //researchPackagesTasks.filterJournalsByStatus(ResearchPackagesConstants.unsavedFilterCheckbox);
-        tasks.click("XPATH",ResearchPackagesConstants.unsavedFilterCheckbox);
+    public void chooseUnsavedFilter() throws Throwable{
+        if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.unsavedFilterCheckbox)){
+            tasks.waitTime(2);
+            tasks.click("XPATH",ResearchPackagesConstants.unsavedFilterCheckbox);
+            Assert.assertTrue("Filter is Checked",tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.unsavedFilterIsChecked));
+        }
     }
 
-
-
-    @And("^Verify the result displayed for the Unsaved Changes$")
+   @And("^Verify the result displayed for the Unsaved Changes$")
      public void verifyUnsavedFilter() throws InterruptedException {
         if(tasks.verifyElementisDisplayed("TAG",ResearchPackagesConstants.resultTable)) {
             String getTextUnsavedJournals = tasks.getTextofElement("XPATH",ResearchPackagesConstants.UNSAVED_JOURNAL_TEXT);
@@ -121,6 +122,7 @@ public class ResearchPackagesUISteps {
                 Log.info("ISSN displayed in the Result => "+tasks.multipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+" is Unsaved");
             }
             tasks.click("XPATH","//div[@class='company-header']");
+            tasks.waitTime(2);
             researchPackagesTasks.isAlertPresent();
         }
     }
@@ -131,6 +133,7 @@ public class ResearchPackagesUISteps {
         if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.pendingFilterCheckbox)){
             tasks.waitTime(1);
             tasks.click("XPATH",ResearchPackagesConstants.pendingFilterCheckbox);
+            Assert.assertTrue("Include Filter is Checked",tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.pendingFilterIsChecked));
 
         }
     }
@@ -139,14 +142,25 @@ public class ResearchPackagesUISteps {
         if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.excludeFilterCheckbox)){
             tasks.waitTime(1);
             tasks.click("XPATH",ResearchPackagesConstants.excludeFilterCheckbox);
+            Assert.assertTrue("Include Filter is Checked",tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.excludeFilterCheckboxIsChecked));
         }
 
     }
+    @Then("^Choose the filter with Remarks$")
+    public void hasRemarks()throws InterruptedException{
+        if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.remarksFilterCheckbox)){
+            tasks.waitTime(1);
+            tasks.click("XPATH",ResearchPackagesConstants.remarksFilterCheckbox);
+            Assert.assertTrue("Remarks Filter is Checked",tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.remarksCheckboxIsChecked));
+        }
+    }
+
     @Then("^Choose the filter with Included Status$")
     public void chooseFilterIncluded() throws InterruptedException {
        if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.includeFilterCheckbox)){
            tasks.waitTime(1);
            tasks.click("XPATH",ResearchPackagesConstants.includeFilterCheckbox);
+           Assert.assertTrue("Include Filter is Checked",tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.includeFilterIsChecked));
        }
     }
     @Then("^Verify the result displayed from multiple filters$")
@@ -179,8 +193,25 @@ public class ResearchPackagesUISteps {
         }
     }
 
+    @And("^Verify the result displayed for the Remarks$")
+    public void verifyRemarksFilter() throws  InterruptedException{
+        if(tasks.verifyElementisDisplayed("TAG",ResearchPackagesConstants.resultTable)) {
+            String filterCountText  = tasks.getTextofElement("XPATH",ResearchPackagesConstants.Remarks_Filter_Count);
+            int filterCount = Integer.parseInt(filterCountText);
+            Log.info("Filter Count displayed for Remarks is => "+filterCount);
+            int totItems = tasks.multipleElements("XPATH",ResearchPackagesConstants.COMMENT_CLICKABLE).size();
+            Log.info("Total Result Displayed for Remarks is =>"+ totItems);
+            Assert.assertTrue("Results and count displayed are equal",filterCount==totItems);
+            for(int i=0;i<totItems;i++) {
+                Log.info("ISSN displayed in the Result => "+tasks.multipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+" has Remarks");
+            }
+        }
+    }
+
+
     @And("^Verify the result displayed for the Included Status$")
     public void verifyIncludedFilter() throws InterruptedException {
+
         if(tasks.verifyElementisDisplayed("TAG",ResearchPackagesConstants.resultTable)) {
             String filterCountText  = tasks.getTextofElement("XPATH",ResearchPackagesConstants.INCLUDE_FILTER_COUNT);
             int filterCount = Integer.parseInt(filterCountText);
@@ -247,6 +278,7 @@ public class ResearchPackagesUISteps {
     @Then("^Exclude from the collection$")
     public void excludeJournal() throws Throwable {
         researchPackagesTasks.excludeJournal();
+        tasks.clearText("ID",ResearchPackagesConstants.SEARCH_FILTER);
     }
 
     @Then("^Search for the journal with \"([^\"]*)\" given$")
@@ -304,6 +336,7 @@ public class ResearchPackagesUISteps {
                if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.PubDirector_Filter_Rapes_Relaxed)) {
                    tasks.waitTime(1);
                    tasks.click("XPATH", ResearchPackagesConstants.PubDirector_Filter_Rapes_Relaxed);
+                   Assert.assertTrue("Ownership Filter Selected",tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.PubDirector_Filter_Rapes_Relaxed_IS_CHECKED));
                }
                Log.info("Filter By Pub Director => "+pubDirectoVal);
     }
@@ -311,6 +344,7 @@ public class ResearchPackagesUISteps {
     public void chooseFilterForOwnership(String ownerShipVal) throws Throwable{
         if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.Ownership_Filter_ELSOWN)){
             tasks.click("XPATH",ResearchPackagesConstants.Ownership_Filter_ELSOWN);
+            Assert.assertTrue("Ownership Filter Selected",tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.Owner_Filter_ELSOWN_IS_CHECKED));
         }
         Log.info("Filter by Ownership => "+ ownerShipVal);
     }
@@ -338,6 +372,7 @@ public class ResearchPackagesUISteps {
         if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.PMG_Filter_MCC)){
            tasks.waitTime(1);
             tasks.click("XPATH",ResearchPackagesConstants.PMG_Filter_MCC);
+            Assert.assertTrue("PMG Filter Selected",tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.PMG_FILTER_IS_CHECKED));
         }
         Log.info("Filter by PMG => "+ pmgVal);
     }

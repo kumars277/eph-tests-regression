@@ -18,73 +18,181 @@ public class ResearchPackagesTasks {
     }
 
     public void loginByScienceAccount(String scienceEmailId) throws InterruptedException{
-        tasks.sendKeys("NAME", ResearchPackagesConstants.LoginByEmail,scienceEmailId);
-        tasks.click("ID", ResearchPackagesConstants.NextButton);
-
+        String methodName="loginByScienceAccount";
+        try{
+            if(tasks.verifyElementisDisplayed("NAME",ResearchPackagesConstants.LoginByEmail)){
+                tasks.sendKeys("NAME", ResearchPackagesConstants.LoginByEmail,scienceEmailId);
+                tasks.click("ID", ResearchPackagesConstants.NextButton);
+            }
+        }catch (Exception e){
+            Log.info("Exception in the method: "+methodName);
+        }
     }
 
     public void impersonateUser() throws InterruptedException {
         String methodName = "impersonateUser";
         try{
-        tasks.click("XPATH", ResearchPackagesConstants.USER_LOGIN_ICON);
-        Thread.sleep(3000);
-        tasks.click("XPATH", ResearchPackagesConstants.IMPERSONATE_BUTTON);
-        tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_PRODUCT_OWNER);
-        tasks.click("XPATH", ResearchPackagesConstants.SUBMIT_USER);}
-        catch (Exception e){
-            System.out.print("exception in"+methodName);
+            if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.USER_LOGIN_ICON)){
+                tasks.click("XPATH", ResearchPackagesConstants.USER_LOGIN_ICON);
+                tasks.waitTime(1);
+                tasks.click("XPATH", ResearchPackagesConstants.IMPERSONATE_BUTTON);
+            }
+
+            if(tasks.verifyElementisDisplayed("XPATH", ResearchPackagesConstants.CHOOSE_PRODUCT_OWNER)){
+                tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_PRODUCT_OWNER);
+                tasks.click("XPATH", ResearchPackagesConstants.SUBMIT_USER);
+            }
+
+        }catch (Exception e){
+            Log.info("Exception in the Method: "+methodName);
         }
 
     }
     public void specialCollectionJournals() throws InterruptedException {
         String methodName="specialCollectionJournals";
         try{
-            tasks.click("XPATH", ResearchPackagesConstants.SELECT_DJC);
-            tasks.click("XPATH", ResearchPackagesConstants.SELCT_SJC);
-            tasks.click("XPATH", ResearchPackagesConstants.SELECT_CC);
-            tasks.click("XPATH", ResearchPackagesConstants.SELECT_CC_BASIC);
-            Thread.sleep(2000);
+            if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.SELECT_DJC)){
+                tasks.click("XPATH", ResearchPackagesConstants.SELECT_DJC);
+            }
+            if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.SELCT_SJC)){
+                tasks.click("XPATH", ResearchPackagesConstants.SELCT_SJC);
+            }
+            if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.SELECT_CC)){
+                tasks.click("XPATH", ResearchPackagesConstants.SELECT_CC);
+                tasks.click("XPATH", ResearchPackagesConstants.SELECT_CC_BASIC);
+            }
         }catch (Exception e){
             Log.info("Exception in "+methodName);
-
         }
+    }
 
+    public boolean clickMathCoreCollections(){
+        String methodName = "clickMathCoreCollections";
+        boolean flag = false;
+            try {
+                if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.SELECT_DJC)) {
+                    tasks.click("XPATH", ResearchPackagesConstants.SELECT_DJC);
+                    if (tasks.verifyElementisDisplayed("XPATH", ResearchPackagesConstants.SELCT_MCC)) {
+                        tasks.click("XPATH", ResearchPackagesConstants.SELCT_MCC);
+                        flag = true;
+                        return flag;
+                    }
+                }
+
+            } catch (Exception e) {
+                Log.info("Exception in "+methodName);
+                flag=false;
+                return flag;
+            }
+            return flag;
     }
 
     public void addJournals(){
-        tasks.click("XPATH", ResearchPackagesConstants.ADD_JOURNAL);
-    }
-
-    public void searchJournals(String issnValue){
-        String methodname="specialCollectionJournals";
+        String methodName = "addJournals";
         try{
-            tasks.sendKeys("XPATH", ResearchPackagesConstants.SEARCH_VALUE,issnValue);
-            tasks.click("XPATH", ResearchPackagesConstants.SEARCH_SUBMIT);
+            if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.NO_COLLECTIONS)||
+                    (tasks.verifyElementTextisDisplayed("There is currently no active collection")) ){
+                tasks.click("XPATH", ResearchPackagesConstants.CREATE_PROSPECTIVE_LIST);
+            }
+            if(tasks.verifyElementisDisplayed("XPATH", ResearchPackagesConstants.ADD_JOURNAL)){
+                tasks.click("XPATH", ResearchPackagesConstants.ADD_JOURNAL);
+            }
         }catch (Exception e){
-            Log.info("Exception in "+ methodname);
+           Log.info("Exception in the Method :"+methodName);
         }
-
     }
 
-    public void includeJournal(){
-        String methodname="includeJournal";
+    public void searchJournalToAdd(String issnVal){
+        String methodName="searchJournalToAdd";
+        try{
+            if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.SEARCH_VALUE)){
+                tasks.sendKeys("XPATH", ResearchPackagesConstants.SEARCH_VALUE,issnVal);
+                tasks.click("XPATH", ResearchPackagesConstants.SEARCH_SUBMIT);
+                tasks.waitTime(1);
+            }
+        }catch (Exception e){
+            Log.info("Exception in the Method "+ methodName);
+        }
+    }
+
+
+    public boolean isAlertPresent()
+    {
+        try
+        {
+            tasks.acceptAlert();
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
+
+    public void includeJournalToAdd(String issnVal){
+        String methodname="includeJournalToAdd";
+        String buildLocatorVal = "//td[contains(text(),\'"+issnVal+"\')]";
         try {
-            tasks.click("XPATH", ResearchPackagesConstants.INCLUDE_JOURNAL);
-            tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_DROPDOWN);
-            tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_VALUE);
-            tasks.click("XPATH", ResearchPackagesConstants.ADD);
+            if(tasks.verifyElementisDisplayed("XPATH",buildLocatorVal)&&
+                    tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.INCLUDE_JOURNAL_POPUP)){
+                tasks.click("XPATH", ResearchPackagesConstants.INCLUDE_JOURNAL_POPUP);
+            }if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.CHOOSE_REASON_DROPDOWN)){
+                tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_DROPDOWN);
+                tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_INCLUDE);
+                tasks.click("XPATH", ResearchPackagesConstants.ADD);
+            }
         }catch (Exception e){
             Log.info("Exception in "+ methodname);
         }
     }
+
+    public void pendingJournalToAdd(String issnVal){
+        String methodname="pendingJournalToAdd";
+        String buildLocatorVal = "//td[contains(text(),\'"+issnVal+"\')]";
+        try {
+            if(tasks.verifyElementisDisplayed("XPATH",buildLocatorVal)&&
+                    tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.PENDING_JOURNAL_POPUP)){
+                    tasks.click("XPATH", ResearchPackagesConstants.PENDING_JOURNAL_POPUP);
+            }if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.CHOOSE_REASON_DROPDOWN)){
+                tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_DROPDOWN);
+                tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_PENDING);
+                tasks.sendKeys("XPATH",ResearchPackagesConstants.ADD_REMARKS,"test");
+                tasks.click("XPATH", ResearchPackagesConstants.ADD);
+            }
+        }catch (Exception e){
+            Log.info("Exception in "+ methodname);
+        }
+    }
+
+    public void searchJournal(String val){
+        String methodname="searchJournal";
+        try{
+            if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.NO_COLLECTIONS)){
+                tasks.click("XPATH", ResearchPackagesConstants.CREATE_PROSPECTIVE_LIST);
+               tasks.waitTime(2);
+            }
+            if(tasks.verifyElementisDisplayed("TAG",ResearchPackagesConstants.resultTable)){
+                if(tasks.verifyElementisDisplayed("ID",ResearchPackagesConstants.SEARCH_FILTER)){
+                    tasks.sendKeys("ID",ResearchPackagesConstants.SEARCH_FILTER,val);
+                    tasks.waitTime(2);
+                }
+            }
+        }catch (Exception e){
+            Log.info("Exception in "+ methodname);
+        }
+    }
+
 
     public void excludeJournal(){
         String methodname="excludeJournal";
         try{
-            tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_DROPDOWN);
-            tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_FOR_EXCLUDE_VALUE);
-            tasks.click("XPATH", ResearchPackagesConstants.EXCLUDE_ADD);
-
+            if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.EXCLUDE_JOURNAL)){
+                tasks.click("XPATH",ResearchPackagesConstants.EXCLUDE_JOURNAL);
+                tasks.waitTime(1);
+                tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_DROPDOWN);
+                tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_EXCLUDE);
+                tasks.click("XPATH", ResearchPackagesConstants.EXCLUDE_ADD);
+            }
         }catch (Exception e){
             Log.info("Exception in "+ methodname);
         }
@@ -93,22 +201,46 @@ public class ResearchPackagesTasks {
     public void pendingJournal(){
         String methodname="pendingJournal";
         try {
-           tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_DROPDOWN);
-           WebElement reqElement =  tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_FOR_PENDING_VALUE);
-           tasks.keyboardEvents(reqElement,"RETURN");
-           tasks.sendKeys("XPATH", ResearchPackagesConstants.ADD_REMARKS,"Sample Test");
-            tasks.click("XPATH", ResearchPackagesConstants.EXCLUDE_ADD);
+            if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.PENDING_JOURNAL)){
+                    tasks.click("XPATH",ResearchPackagesConstants.PENDING_JOURNAL);
+                    tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_DROPDOWN);
+                    WebElement reqElement = tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_PENDING);
+                    tasks.keyboardEvents(reqElement,"RETURN");
+                    tasks.sendKeys("XPATH", ResearchPackagesConstants.ADD_REMARKS,"Awaiting for the Response");
+                    tasks.click("XPATH", ResearchPackagesConstants.EXCLUDE_ADD);
+            }
+            tasks.clearText("ID",ResearchPackagesConstants.SEARCH_FILTER);
+
+        }catch (Exception e){
+            Log.info("Exception in "+ methodname);
+        }
+    }
+
+    public void includeJournal(){
+        String methodname="includeJournal";
+        try {
+            if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.INCLUDE_JOURNAL)){
+                tasks.click("XPATH",ResearchPackagesConstants.INCLUDE_JOURNAL);
+                tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_DROPDOWN);
+                WebElement reqElement = tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_INCLUDE);
+                tasks.keyboardEvents(reqElement,"RETURN");
+                tasks.sendKeys("XPATH", ResearchPackagesConstants.ADD_REMARKS,"Adding as New Journal");
+                tasks.click("XPATH", ResearchPackagesConstants.EXCLUDE_ADD);
+            }
+
         }catch (Exception e){
             Log.info("Exception in "+ methodname);
         }
     }
 
     public void saveCollections(){
-        String methodname="saveCollections";
+        String methodName="saveCollections";
         try{
-            tasks.click("XPATH", ResearchPackagesConstants.SAVE_COLLECTIONS);
+            if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.SAVE_COLLECTIONS)){
+                tasks.click("XPATH", ResearchPackagesConstants.SAVE_COLLECTIONS);
+            }
         }catch (Exception e){
-            Log.info("Exception in "+methodname);
+            Log.info("Exception in the method:  "+methodName);
         }
 
     }
