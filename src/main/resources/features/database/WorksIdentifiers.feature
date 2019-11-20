@@ -11,7 +11,7 @@ Feature: Entity - Work Identifier - Count & Data Mapping Check - Validate data b
     Examples:
       |type       |
       |STAB       |
-      |SERMEM     |da
+      |SERMEM     |
       |BOOKSET    |
 #      |BOOKSERIES |
       |CONT       |
