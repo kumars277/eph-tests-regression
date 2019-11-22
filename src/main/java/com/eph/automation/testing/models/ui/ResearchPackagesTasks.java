@@ -32,22 +32,22 @@ public class ResearchPackagesTasks {
     public void impersonateUser() throws InterruptedException {
         String methodName = "impersonateUser";
         try{
-            if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.USER_LOGIN_ICON)){
-                tasks.click("XPATH", ResearchPackagesConstants.USER_LOGIN_ICON);
-                tasks.waitTime(1);
-                tasks.click("XPATH", ResearchPackagesConstants.IMPERSONATE_BUTTON);
-            }
-
-            if(tasks.verifyElementisDisplayed("XPATH", ResearchPackagesConstants.CHOOSE_PRODUCT_OWNER)){
-                tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_PRODUCT_OWNER);
-                tasks.click("XPATH", ResearchPackagesConstants.SUBMIT_USER);
-            }
-
+         if(!tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.USER_ROLE)){
+             if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.USER_LOGIN_ICON)){
+                 tasks.click("XPATH", ResearchPackagesConstants.USER_LOGIN_ICON);
+                 tasks.waitTime(2);
+                 tasks.click("XPATH", ResearchPackagesConstants.IMPERSONATE_BUTTON);
+                 if(tasks.verifyElementisDisplayed("XPATH", ResearchPackagesConstants.CHOOSE_PRODUCT_OWNER)){
+                     tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_PRODUCT_OWNER);
+                     tasks.click("XPATH", ResearchPackagesConstants.SUBMIT_USER);
+                 }
+             }
+         }
         }catch (Exception e){
             Log.info("Exception in the Method: "+methodName);
         }
-
     }
+
     public void specialCollectionJournals() throws InterruptedException {
         String methodName="specialCollectionJournals";
         try{
@@ -87,7 +87,7 @@ public class ResearchPackagesTasks {
             return flag;
     }
 
-    public void addJournals(){
+    public void addJournals() throws InterruptedException {
         String methodName = "addJournals";
         try{
             if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.NO_COLLECTIONS)||
@@ -100,6 +100,7 @@ public class ResearchPackagesTasks {
         }catch (Exception e){
            Log.info("Exception in the Method :"+methodName);
         }
+        tasks.waitTime(2);
     }
 
     public void searchJournalToAdd(String issnVal){
@@ -108,7 +109,7 @@ public class ResearchPackagesTasks {
             if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.SEARCH_VALUE)){
                 tasks.sendKeys("XPATH", ResearchPackagesConstants.SEARCH_VALUE,issnVal);
                 tasks.click("XPATH", ResearchPackagesConstants.SEARCH_SUBMIT);
-                tasks.waitTime(1);
+                tasks.waitTime(2);
             }
         }catch (Exception e){
             Log.info("Exception in the Method "+ methodName);

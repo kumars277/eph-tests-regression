@@ -234,7 +234,7 @@ Feature: Research Packages UI Selenium Tests
         And   Verify the status of the journal "<ISSN>" is "<STATUS>" in DB
         Examples:
           |ISSN            | STATUS   |
-          |	1873-1376      |  I       |
+          |	1090-2465      |  I       |
 
 
     @MCC
@@ -251,7 +251,7 @@ Feature: Research Packages UI Selenium Tests
         | Rapes Relaxed      |600            |ELSOWN             |
 
 
-  @MCC
+  @MCCT
       Scenario: Submitting the Prospective Lists
         Given User logged into the application as a Product Owner
         Then  Check for MCC availability and Click the same

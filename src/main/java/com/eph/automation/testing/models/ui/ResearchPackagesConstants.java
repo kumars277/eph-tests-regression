@@ -84,5 +84,6 @@ public static String Ownership_Filter_ELSOWN_Count="//div[contains(text(),'ELSOW
     public static String CONFIRM_COLLECTION = "//span[contains(text(),'Confirm collection')]";
     public static String SUBMIT_COLLECTION = "//span[contains(text(),'Submit completed collection')]";
     public static String SUBMIT_LIST = "//button[contains(text(),'Submit list')]";
+    public static String USER_ROLE = "//div[contains(@class,'user-role')]";
 
 }

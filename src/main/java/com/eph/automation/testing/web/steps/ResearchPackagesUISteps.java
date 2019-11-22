@@ -102,7 +102,7 @@ public class ResearchPackagesUISteps {
         if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.unsavedFilterCheckbox)){
             tasks.waitTime(2);
             tasks.click("XPATH",ResearchPackagesConstants.unsavedFilterCheckbox);
-            Assert.assertTrue("Filter is Checked",tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.unsavedFilterIsChecked));
+           // Assert.assertTrue("Filter is Checked",tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.unsavedFilterIsChecked));
         }
     }
 
@@ -517,10 +517,10 @@ public class ResearchPackagesUISteps {
             }
             int totPendingJournal = tasks.multipleElements("XPATH",ResearchPackagesConstants.CHECK_IS_PENDING).size();
             if(totPendingJournal>0){
-                for(int i=0;i<totPendingJournal;i++){
+                for(int i=0;i<=totPendingJournal;i++){
                     tasks.click("XPATH",ResearchPackagesConstants.pendingFilterCheckbox);
+                    tasks.waitTime(2);
                     researchPackagesTasks.includeJournal();
-                    tasks.waitTime(1);
                 }
                 researchPackagesTasks.saveCollections();
                 tasks.waitTime(2);
