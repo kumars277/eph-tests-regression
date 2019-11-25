@@ -17,8 +17,14 @@ public class Constants {
     public static String EIP_CMX_CUSTOMER_MAINTENANCE_END_POINT = "https://enterprise-sit.api.elsevier.com/cxf/customerMaintenanceDS/v2/?wsdl";
     public static String EIP_CMX_CUSTOMER_MAINTENANCE_END_POINT_UAT = "https://enterprise-uat.api.elsevier.com/cxf/customerMaintenanceDS/v2/?wsdl";
     public static final String EIP_NOTIFICATION_WADL_END_POINT_SIT = "https://sit.ifp.elsevier.com/cxf/CustomerNotifications/?_wadl";
-    public static final String PRODUCT_SEARCH_END_POINT_SIT = "https://enterprise-sit.api.elsevier.com/v1/product-hub";
     public static final String PRODUCT_SEARCH_END_POINT_DEV = "https://product-hub-search-eipci.apps.ose-nonprod.cp.tio.systems/api";
+
+    //for search API v1
+    //public static final String PRODUCT_SEARCH_END_POINT_SIT = "https://enterprise-sit.api.elsevier.com/v1/product-hub";
+
+    //for search API v2
+    public static final String PRODUCT_SEARCH_END_POINT_SIT = "https://product-hub-search-v2-eipsit.apps.ose-nonprod.cp.tio.systems";
+
 
     //New SIT_CRM EMS Notification End points
     public static final String EIP_NOTIFICATION_ORG_CRM_END_POINT_SIT = "https://enterprise-sit.api.elsevier.com";
@@ -66,8 +72,8 @@ public class Constants {
     public static String WIRE_MOCK_END_POINT = "http://10.48.67.42:8080/api/";
 
     /*Authorization OATH2 constants*/
-    public static final String AUTHORIZATION_HEADER = "X-ADFS-JWT";
-
+    //public static final String AUTHORIZATION_HEADER = "X-ADFS-JWT"; //for v1 API
+    public static final String AUTHORIZATION_HEADER = "X-JWT-Assertion"; //for v2 API
     public static final String CUSTOMER_GATEWAY_AUTHORIZATION_HEADER_VALUE = "Basic NUkyel9VTTRRSm5SSUlqZmZ4TVdVV0o0U013YTpSTmRnZDFUUTJLS2ZOTVliSm9fcEJNRHhPNlVh";
     public static final String GET_TOKEN_PATH = "/token";
     public static final String GRANT_TYPE = "grant_type";
@@ -77,11 +83,12 @@ public class Constants {
     public static final String APPLICATION_JSON_HEADER = "application/json";
 
 
-    public static String uriPrefix = "uriprefix";
-    public static String uriPostfix = "uripostfix";
-    public static String tenantId = "tenantid";
-    public static String httptimeoutmilliseconds = "httptimeoutmilliseconds";
-    public static String clientId = "clientid";
-    public static String clientSecret = "secret";
-    public static String expiryOffsetSeconds = "expiryoffsetseconds";
+   //for search API v2 oauth token
+    public static String uriPrefix = "https://login.microsoftonline.com/";
+    public static String uriPostfix = "/oauth2/token";
+    public static String tenantId = "9274ee3f-9425-4109-a27f-9fb15c10675d";
+    public static String httptimeoutmilliseconds = "60000";
+    public static String clientId = "3753f9c9-2d69-4633-a3a0-bfa6b014792b";
+    public static String clientSecret = "r986MOW/5mntufAzD*IO=@s842cWnEqH";
+    public static String expiryOffsetSeconds = "300";
 }

@@ -84,7 +84,7 @@ public class WorkApiObject {
         }
         if(!(this.persons==null)&&!(this.persons.length==0)){
             for (PersonsApiObject person : persons) {
-                person.compareWithDB();
+                person.compareWithDB_work();
             }
         }
         if(!(this.subjectAreas==null)&&!(this.subjectAreas.length==0)){

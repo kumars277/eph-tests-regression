@@ -2,15 +2,16 @@ package com.eph.automation.testing.services.api;
 
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.api.AccessToken;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.ws.rs.core.Response.Status;
 
+import jdk.nashorn.internal.ir.ObjectNode;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.config.RequestConfig;
@@ -24,10 +25,8 @@ import org.apache.http.message.BasicNameValuePair;
 
 import static com.eph.automation.testing.configuration.Constants.*;
 
-
 public class AuthorizationService {
     private static AccessToken token;
-
 
 //    public static String getAuthToken() {
 //        RestAssured.useRelaxedHTTPSValidation();
@@ -41,6 +40,7 @@ public class AuthorizationService {
 //                .statusCode(200)
 //                .extract().path("access_token");
 //    }
+
 
 
     public static synchronized AccessToken getAuthToken() throws AzureOauthTokenFetchingException
@@ -73,7 +73,7 @@ public class AuthorizationService {
     }
 
     private static String makeRequestAndGetResponseBody() throws AzureOauthTokenFetchingException
-    {Data
+    {//Data
         String responseString = null;
         CloseableHttpClient client = null;
         CloseableHttpResponse response = null;
@@ -148,9 +148,16 @@ public class AuthorizationService {
     {
         AccessToken accessToken = null;
         ObjectMapper mapper = new ObjectMapper();
+
         try
         {
+            //updated by Nishant @ 20 Nov 2019
             accessToken = mapper.readValue(response, AccessToken.class);
+            JsonNode node = mapper.readTree(response);
+            String access_token = node.get("access_token").textValue();
+            System.out.println(access_token);
+            String temp = accessToken.getToken();
+            System.out.println(temp);
         }
         catch (IOException e)
         {
