@@ -52,7 +52,7 @@ public class WorksIdSteps {
         if (System.getProperty("dbRandomRecordsNumber")!=null) {
             numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         }else {
-            numberOfRecords = "10";
+            numberOfRecords = "1";
         }
         Log.info("numberOfRecords = " + numberOfRecords);
 
@@ -100,9 +100,7 @@ public class WorksIdSteps {
                 Log.info("No records found for searched criteria");
             } else {
                 sql = String.format(WorksIdentifierSQL.getIdentifiers, Joiner.on("','").join(ids));
-                Log.info(sql);
                 dataFromSTG = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-                Log.info("Data from STG: " + dataFromSTG);
 
 
                 sql = String.format(WorksIdentifierSQL.getEphWorkID, Joiner.on("','").join(ids));
@@ -421,7 +419,7 @@ public class WorksIdSteps {
                 List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
                 String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
 
-                sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA, column, column, refreshDate, type);
+                sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA, column,refreshDate,type);
                 System.out.print(sql);
                 List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
                 stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
@@ -433,14 +431,14 @@ public class WorksIdSteps {
     public void getSACount(String type){
         sql = WorksIdentifierSQL.COUNT_SA_WORK_IDENTIFIER
                 .replace("PARAM1", type);
-        Log.info(sql);
+        System.out.print(sql);
         List<Map<String, Object>> saCountNumber = DBManager.getDBResultMap(sql,  Constants.EPH_URL);
         saCount = ((Long) saCountNumber.get(0).get("count")).intValue();
         Log.info("\n The count in SA for " + type + " is " + saCount);
 
         sql = WorksIdentifierSQL.COUNT_GD_WORK_IDENTIFIER
                 .replace("PARAM1", type);
-        Log.info(sql);
+        System.out.print(sql);
         List<Map<String, Object>> gdCountNumber = DBManager.getDBResultMap(sql,  Constants.EPH_URL);
         gdCount = ((Long) gdCountNumber.get(0).get("count")).intValue();
         Log.info("\n The count in GD for " + type + " is " + gdCount);

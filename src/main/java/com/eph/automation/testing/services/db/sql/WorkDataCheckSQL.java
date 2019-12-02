@@ -3,8 +3,7 @@ package com.eph.automation.testing.services.db.sql;
 public class WorkDataCheckSQL {
 
     public static String GET_PMX_WORKS_STG_DATA ="SELECT \n" +
-            "   \"PRODUCT_WORK_ID\" AS PMX_SOURCE_REFERENCE -- PRODUCT WORK ID\n" +
-            "   ,\"WORK_TITLE\" AS WORK_TITLE -- Title\n" +
+            "   \"WORK_TITLE\" AS WORK_TITLE -- Title\n" +
             "  ,\"WORK_SUBTITLE\" AS WORK_SUBTITLE -- Subtitle\n" +
             "  ,\"DAC_KEY\" as DAC_KEY-- DAC Key (may go in IDs table, depending on implementation of data model)\n" +
             "  ,\"PRIMARY_ISBN\" AS PRIMARY_ISBN -- DAC ISBN (may go in IDs table, depending on implementation of data model)\n" +
@@ -81,17 +80,17 @@ public class WorkDataCheckSQL {
                     "  ,ww.F_SOCIETY_OWNERSHIP AS OWNERSHIP\n" +
                     "  ,ww.opco AS F_OPCO_R12\n" +
                     "  ,ww.resp_centre AS F_RESPONSIBILITY_CENTRE\n" +
-//                      " ,ap.accountable_product_id as f_accountable_product\n" +
-// Column no longer exists  "  ,ap.\"PARENT_ACC_PROD\" as PARENT_ACC_PROD\n" +
+                    "  ,ap.accountable_product_id as f_accountable_product\n" +
+                    "  --,ap.\"PARENT_ACC_PROD\" as PARENT_ACC_PROD\n" +
                     "  ,ww.LANGUAGE_CODE as LANGUAGE_CODE\n" +
                     "   FROM stg_10_pmx_wwork_dq ww\n" +
                     "left join semarchy_eph_mdm.gd_wwork gw on ww.pmx_source_reference::varchar = gw.external_reference::varchar\n" +
-// Old code                    "left join \n" +
-//                    "      (select distinct s.product_work_id, a.external_reference, a.accountable_product_id \n" +
-//                    "       from stg_10_pmx_accountable_product_dq s join (select distinct * from semarchy_eph_mdm.sa_accountable_product) a on\n" +
-//                    "      s.pmx_source_reference = a.external_reference where s.dq_err != 'Y') ap on ww.pmx_source_reference::varchar = ap.product_work_id::varchar\n" +
-//                    "WHERE ww.dq_err != 'Y'\n" +
-                    "WHERE PMX_SOURCE_REFERENCE IN ('%s') ORDER BY PMX_SOURCE_REFERENCE"
+                    "left join \n" +
+                    "      (select distinct s.product_work_id, a.external_reference, a.accountable_product_id \n" +
+                    "       from stg_10_pmx_accountable_product_dq s join (select distinct * from semarchy_eph_mdm.sa_accountable_product) a on\n" +
+                    "      s.pmx_source_reference = a.external_reference where s.dq_err != 'Y') ap on ww.pmx_source_reference::varchar = ap.product_work_id::varchar\n" +
+                    "WHERE ww.dq_err != 'Y'\n" +
+                    "and PMX_SOURCE_REFERENCE IN ('%s') ORDER BY PMX_SOURCE_REFERENCE"
             ;
 
     public static String GET_EPH_WORKS_DATA ="SELECT \n" +

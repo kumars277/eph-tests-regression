@@ -51,7 +51,7 @@ Feature: Entity - PRODUCT RELATIONSHIP - Data Mapping Check - Validate data betw
     And Compare the product relationship data between EPH STG and EPH SA
     Examples:
       | countOfRandomIds |
-      | 10               |
+      | 10            |
 
   @Regression
   Scenario Outline: Validate product relationship data is transferred from EPH SA and EPH GD

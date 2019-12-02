@@ -7,8 +7,6 @@ public class DQErrorChecksDataObject {
     private String dq_err;
     private String person_source_ref;
     private String manifestation_id;
-    private String pmx_source;
-
 
 
     public String getEph_id() {
@@ -23,18 +21,8 @@ public class DQErrorChecksDataObject {
         return pmx_id;
     }
 
-    public String getPmx_source() {
-        return pmx_source;
-    }
-
-
-
     public void setPmx_id(String pmx_id) {
         this.pmx_id = pmx_id;
-    }
-
-    public void setPmx_source(String pmx_source) {
-        this.pmx_source = pmx_source;
     }
 
 
