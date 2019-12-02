@@ -55,11 +55,11 @@ public class WebDriverFactory implements Provider<WebDriver> {
                     profile.setPreference("geo.prompt.testing", true);
                     profile.setPreference("geo.prompt.testing.allow", true);
                     return new FirefoxDriver(firefoxBinary,profile);*/
-                case "ie":
+               /* case "ie":
                     InternetExplorerDriverManager.getInstance().setup();
                     DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
                     capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
-                    return new InternetExplorerDriver(capabilities);
+                    return new InternetExplorerDriver(capabilities);*/
                 case "chrome":
                     ChromeDriverManager.getInstance().setup();
                     return new ChromeDriver();
