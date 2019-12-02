@@ -303,14 +303,6 @@ public class ProductFinderUISteps {
         productId =   productId.replaceAll("\\[", "").replaceAll("\\]", "");
         productFinderTasks.searchFor(productId);
     }
-<<<<<<< Updated upstream
-
-
-=======
-
-
->>>>>>> Stashed changes
-
     @Given("^Get the available Work Types from the DB \"([^\"]*)\"$")
     public void get_the_available_Work_Types_from_the_DB(String chooseWorkType){
         try {
@@ -377,7 +369,7 @@ public class ProductFinderUISteps {
                         Thread.sleep(1000);
                     }
                     assertTrue(tasks.verifyElementTextisDisplayed(booksworkId));
-                    tasks.click("XPATH", ProductFinderConstants.closeButtonSearchBar);
+                  //  tasks.click("XPATH", ProductFinderConstants.closeButtonSearchBar);
                 }
             }
         } catch (Exception e) {
@@ -424,8 +416,8 @@ public class ProductFinderUISteps {
                             }
                         }
                     }
-                    tasks.click("XPATH", ProductFinderConstants.previousPage);
-                    tasks.click("XPATH", ProductFinderConstants.closeButtonSearchBar);
+                    //tasks.click("XPATH", ProductFinderConstants.previousPage);
+                    //tasks.click("XPATH", ProductFinderConstants.closeButtonSearchBar);
                 }
             }
             booksworkIdList.clear();
