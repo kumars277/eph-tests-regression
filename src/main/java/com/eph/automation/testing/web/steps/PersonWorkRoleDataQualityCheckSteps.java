@@ -40,7 +40,6 @@ public class PersonWorkRoleDataQualityCheckSteps {
     private static int countPersonsWorkRolePMX;
     private static int countPersonsWorkRoleEPHSTG;
     private static int countPersonsWorkRoleEPHSTGGoingToSA;
-    private static int countPersonsWorkRoleEPHSTGGoingToSAEnd;
     private static int countPersonsWorkRoleEPHSA;
     private static int countPersonsWorkRoleEPHAE;
     private static int countPersonsWorkRoleEPHGD;
@@ -93,16 +92,6 @@ public class PersonWorkRoleDataQualityCheckSteps {
         List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countPersonsWorkRoleEPHSTGGoingToSA = ((Long) personsNumber.get(0).get("count")).intValue();
         Log.info("Count of persons work role in EPH STG going to SA is: " + countPersonsWorkRoleEPHSTGGoingToSA);
-
-        //Get count from second script that change the table
-        sql = PersonWorkRoleDataSQL.GET_COUNT_PERSON_WORK_ROLE_PD;
-        Log.info(sql);
-
-        personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        countPersonsWorkRoleEPHSTGGoingToSAEnd = ((Long) personsNumber.get(0).get("count")).intValue();
-        Log.info("Count of persons work role in EPH STG going to SA fro mthe second script is: " + countPersonsWorkRoleEPHSTGGoingToSAEnd);
-
-
     }
 
 
@@ -145,7 +134,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
     @Then("^Compare the count on records for persons work role in EPH Staging and EPH SA$")
     public void verifyCountOfPersonsProductRoleInEPHSTGAndEPHSAIsEqual() {
-        Assert.assertEquals("\nPersons work role count in EPH STG and EPH SA is not equal", countPersonsWorkRoleEPHSTGGoingToSA + countPersonsWorkRoleEPHSTGGoingToSAEnd, countPersonsWorkRoleEPHSA);
+        Assert.assertEquals("\nPersons work role count in EPH STG and EPH SA is not equal", countPersonsWorkRoleEPHSTGGoingToSA, countPersonsWorkRoleEPHSA);
     }
 
     @When("^Get the count of records for persons work role in EPH GD$")

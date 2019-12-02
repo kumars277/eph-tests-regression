@@ -70,17 +70,6 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
     }
 
-    @When("^We get the count of records with (.*) in SA_MANIFESTATION_IDENTIFIER coming from STG$")
-    public void getCountOfRecordsInEPHSAComingFromSTG(String identifier) {
-            sql = String.format(WorkExtractSQL.COUNT_OF_RECORDS_IN_EPH_SA_MANIFESTATION_TABLE_From_STG, identifier);
-
-        Log.info(sql);
-
-        List<Map<String, Object>> numberOfISBNs = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        countIdentifiersSA = ((Long) numberOfISBNs.get(0).get("count")).intValue();
-        Log.info("Count of of records in SA_MANIFESTATION_IDENTIFIER table is: " + countIdentifiersSA);
-    }
-
     @When("^We get the count of records with (.*) in SA_MANIFESTATION_IDENTIFIER$")
     public void getCountOfRecordsInEPHSA(String identifier) {
         if(identifier != null)
@@ -149,7 +138,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
     public void getRandomRecords(String numberOfRecords, String identifier, String type) {
         //Get property when run with jenkins.
 //        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
-//        Log.info("numberOfRecords = " + numberOfRecords);
+        Log.info("numberOfRecords = " + numberOfRecords);
 
         switch (type) {
             case "PHB":
@@ -188,7 +177,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
             dataQualityContext.manifestationIdentifiersDataObjectsFromSTG = DBManager
                     .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
 
-            if ( CollectionUtils.isEmpty(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG) ) {
+            if ( CollectionUtils.isEmpty(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
                 Log.info("There are no records found for Manifestation identifiers");
 
             }
@@ -203,7 +192,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
             dataQualityContext.manifestationIdentifiersDataObjectsFromSTG = DBManager
                     .getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
 
-            if ( CollectionUtils.isEmpty(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG))
+            if ( CollectionUtils.isEmpty(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG)&& System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD"))
                 Log.info("There are no records found for Manifestation identifiers");
 
         }
@@ -357,7 +346,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
         dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.sort(Comparator.comparing(ManifestationIdentifierObject::getExternal_reference));
         dataQualityContext.manifestationIdentifiersDataObjectsFromSA.sort(Comparator.comparing(ManifestationIdentifierObject::getExternal_reference));
-        if ( CollectionUtils.isEmpty(dataQualityContext.manifestationIdentifiersDataObjectsFromSA) ) {
+        if ( CollectionUtils.isEmpty(dataQualityContext.manifestationIdentifiersDataObjectsFromSA) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
             Log.info("There is no updated data for Manifestations");
         } else {
             IntStream.range(0, dataQualityContext.manifestationIdentifiersDataObjectsFromSA.size()).forEach(i -> {
