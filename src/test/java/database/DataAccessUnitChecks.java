@@ -32,7 +32,6 @@ public class DataAccessUnitChecks {
     public void testEncrypt() {
         String postgres = "jdbc:postgresql://eph-sit-eph-sit-rds.cnnrbgocj0xg.eu-west-1.rds.amazonaws.com/ephsit?user=rdsappadmin&password=e)NWt4)0dq&ssl=false";
 
-
         System.out.println(DecryptionService.encrypt(postgres));
     }
 

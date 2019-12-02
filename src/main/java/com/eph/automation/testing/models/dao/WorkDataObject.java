@@ -67,9 +67,9 @@ public class WorkDataObject {
         return PRIMARY_ISBN;
     }
 
-    public String getWORK_TITLE() {   return WORK_TITLE;   }
-
-
+    public String getWORK_TITLE() {
+        return WORK_TITLE;
+    }
 
     public String getWORK_SUBTITLE() {
         return WORK_SUBTITLE;
