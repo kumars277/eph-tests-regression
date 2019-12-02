@@ -1,34 +1,54 @@
 package com.eph.automation.testing.services.db.sql;
 
 public class WorksIdentifierSQL {
-    public static String getEphWorkID="SELECT \n" +
-            "WORK_ID as WORK_ID FROM semarchy_eph_mdm.sa_wwork\n"  +
-            " where f_event =  (select max (f_event) from\n" +
-            "semarchy_eph_mdm.sa_wwork join \n"+
-            "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
-            "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
-            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
-            "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
-            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )"+
-            " AND external_reference='%s'";
+    public static String getEphWorkID=
+//            "SELECT \n" +
+//            "WORK_ID as WORK_ID FROM semarchy_eph_mdm.sa_wwork\n"  +
+//            " where f_event =  (select max (f_event) from\n" +
+//            "semarchy_eph_mdm.sa_wwork join \n"+
+//            "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
+//            "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+//            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
+//            "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+//            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )"+
+//            " AND external_reference='%s'";
 
-    public static String getIdentifierDataFromSA="SELECT \n" +
-            " wi.B_LOADID as B_LOADID\n" +
-            " ,wi.F_EVENT as F_EVENT\n" +
-            " ,wi.B_CLASSNAME as B_CLASSNAME\n" +
-            " ,WORK_IDENTIFIER_ID AS WORK_IDENTIFIER_ID -- WORK IDENTIFIER\n" +
-            " ,IDENTIFIER AS IDENTIFIER --  IDENTIFIER\n" +
-            " ,F_TYPE AS F_TYPE -- WORK IDENTIFIER\n" +
-            " ,F_WWORK AS F_WWORK -- WORK IDENTIFIER\n" +
-            "  FROM semarchy_eph_mdm.sa_work_identifier wi\n" +
-            " where f_event =  (select max (f_event) from\n" +
-            "semarchy_eph_mdm.sa_work_identifier join \n"+
-            "semarchy_eph_mdm.sa_event on f_event = event_id\n"+
-            "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
-            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
-            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n"+
-            " AND  f_wwork='%s'\n" +
-            "AND effective_end_date is null";
+    "select eph_id as WORK_ID from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid where source_ref = '172418' and ref_type = 'WORK'; ";
+
+    public static String getIdentifierDataFromSA=
+            "SELECT \n" +
+                    " wi.B_LOADID as B_LOADID\n" +
+                    " ,wi.F_EVENT as F_EVENT\n" +
+                    " ,wi.B_CLASSNAME as B_CLASSNAME\n" +
+                    " ,WORK_IDENTIFIER_ID AS WORK_IDENTIFIER_ID -- WORK IDENTIFIER\n" +
+                    " ,IDENTIFIER AS IDENTIFIER --  IDENTIFIER\n" +
+                    " ,F_TYPE AS F_TYPE -- WORK IDENTIFIER\n" +
+                    " ,F_WWORK AS F_WWORK -- WORK IDENTIFIER\n" +
+                    "  FROM semarchy_eph_mdm.sa_work_identifier wi\n" +
+                    " where f_wwork='%s'  AND effective_end_date is null  and f_type = '%s'\n" +
+                    " and  f_event =  (select max (event_id) from\n" +
+                    "semarchy_eph_mdm.sa_event\n" +
+                    "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+                    "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
+                    "AND semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+                    "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )";
+
+//            "SELECT \n" +
+//            " wi.B_LOADID as B_LOADID\n" +
+//            " ,wi.F_EVENT as F_EVENT\n" +
+//            " ,wi.B_CLASSNAME as B_CLASSNAME\n" +
+//            " ,WORK_IDENTIFIER_ID AS WORK_IDENTIFIER_ID -- WORK IDENTIFIER\n" +
+//            " ,IDENTIFIER AS IDENTIFIER --  IDENTIFIER\n" +
+//            " ,F_TYPE AS F_TYPE -- WORK IDENTIFIER\n" +
+//            " ,F_WWORK AS F_WWORK -- WORK IDENTIFIER\n" +
+//            "  FROM semarchy_eph_mdm.sa_work_identifier wi\n" +
+//            " where f_event =  (select max (f_event) from\n" +
+//            "semarchy_eph_mdm.sa_event \n"+
+//            "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n"+
+//            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n"+
+//            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )\n"+
+//            " AND  f_wwork='%s'\n" +
+//            "AND effective_end_date is null";
 
     /*
      // old logic
@@ -55,41 +75,29 @@ public class WorksIdentifierSQL {
 //            "wdq.dq_err != 'Y'\n" +
 //            "ORDER BY RANDOM()  LIMIT %s";
 
-   "with\n" +
-           "base_data as (\n" +
-           "select\n" +
-           "   \"PRODUCT_WORK_ID\"  product_work_id\n" +
-           "  ,\"ISSN_L\"           issn_l\n" +
-           "  ,\"JOURNAL_NUMBER\"   journal_number\n" +
-           "  ,\"JOURNAL_ACRONYM\"  journal_acronym\n" +
-           "  ,\"DAC_KEY\"          dac_key\n" +
-           "  ,\"PROJECT_NUM\"      project_num\n" +
-           "  ,map_sourceref_2_ephid('WORK'::varchar,\"PRODUCT_WORK_ID\"::varchar) work_id\n" +
-           "  --work_identifier_id\n" +
-           "FROM stg_10_pmx_wwork w\n" +
-           "join stg_10_pmx_wwork_dq dq on w.\"PRODUCT_WORK_ID\" = dq.pmx_source_reference\n" +
-           "where dq.dq_err != 'Y' \n" +
-           "and w.\"WORK_TYPE\" = '%s'\n" +
-           ")\n" +
-           ",crosstab_data as (\n" +
-           "    select product_work_id, work_id,'ISSN-L'                  f_type,issn_l          identifier  FROM base_data where issn_l is not null\n" +
-           "   union select product_work_id, work_id,'ELSEVIER JOURNAL NUMBER' f_type,journal_number  identifier  FROM base_data where journal_number is not null\n" +
-           "   union select product_work_id, work_id,'JOURNAL ACRONYM'\t  f_type,journal_acronym identifier  FROM base_data where journal_acronym is not null\n" +
-           "   union select product_work_id, work_id,'DAC-K'  \t          f_type,dac_key         identifier  FROM base_data where dac_key is not null\n" +
-           "   union select product_work_id, work_id,'PPM-PART'\t          f_type,project_num     identifier  FROM base_data where project_num is not null\n" +
-           ")\n" +
-           ",result_data as (\n" +
-           "select *\n" +
-           "from crosstab_data c\n" +
-           "left join semarchy_eph_mdm.gd_work_identifier w on c.work_id = w.f_wwork and c.f_type = w.f_type\n" +
-           "left join (select distinct external_reference, work_identifier_id from semarchy_eph_mdm.sa_work_identifier) g on concat(c.work_id,c.f_type,c.identifier) = g.external_reference\n" +
-           "where 1=1\n" +
-           "and c.identifier != coalesce(w.identifier,'')\n" +
-           ")\n" +
-           "select product_work_id as random_value\n" +
-           "from result_data\n" +
-           "order by random()\n" +
-           "limit %s";
+             "select  *\n" +
+                     "from (\n" +
+                     "select \"%s\" as s_project_num, \"PRODUCT_WORK_ID\"::varchar as s_work_ref \n" +
+                     "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork stg \n" +
+                     "left join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq  mdq on stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE\n" +
+                     "left join semarchy_eph_mdm.gd_wwork g on stg.\"PRODUCT_WORK_ID\"::varchar = g.external_reference\n" +
+                     "join "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid map1  on map1.source_ref = mdq.pmx_source_reference::text and map1.ref_type = 'WORK'\n" +
+                     "left join semarchy_eph_mdm.gd_work_identifier w on map1.eph_id = w.f_wwork and map1.ref_type = w.f_type and w.effective_end_date is null\n" +
+                     "WHERE (mdq.dq_err = 'N' or (mdq.dq_err is null and g.work_id is not null)) and stg.\"%s\" is not null\n" +
+                     ") s \n" +
+                     "left join (select i.identifier as a_project_num, w.external_reference as a_work_ref \n" +
+                     "from semarchy_eph_mdm.sa_work_identifier i \n" +
+                     "join semarchy_eph_mdm.sa_wwork w on i.f_wwork = w.work_id \n" +
+                     "where i.f_type = '%s' and i.b_error_status is null and i.effective_end_date is null \n" +
+                     "and i.f_event !=  (select max (event_id) from semarchy_eph_mdm.sa_event \n" +
+                     "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX' \n" +
+                     "and semarchy_eph_mdm.sa_event.workflow_id = 'talend' \n" +
+                     "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )) a2 on a2.a_project_num = s.s_project_num and a2.a_work_ref = s.s_work_ref \n" +
+                     "where a2.a_project_num is null\n" +
+                     "order by random()\n" +
+                     "limit %s";
+
+
 
     public static String getRandomProductNumDelta="SELECT   \n" +
             "stg.\"PRODUCT_WORK_ID\" as random_value\n" +
@@ -128,7 +136,7 @@ public class WorksIdentifierSQL {
             " ,F_TYPE AS F_TYPE -- WORK IDENTIFIER\n" +
             " ,F_WWORK AS F_WWORK -- WORK IDENTIFIER\n" +
             "  FROM semarchy_eph_mdm.gd_work_identifier\n" +
-            "  WHERE f_wwork='PARAM1'\n" +
+            "  WHERE f_wwork='PARAM1' and f_type = '%s'\n" +
             "  AND effective_end_date is null\n" +
             "  and b_batchid =  (select max (b_batchid) from \n" +
             "semarchy_eph_mdm.gd_event\n" +
@@ -162,23 +170,50 @@ public class WorksIdentifierSQL {
     public static String GET_F_WWORK = "select eph_id as F_WWORK from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid  where ref_type= 'WORK' and source_ref = '%s' ";
 
     public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE =
-
-
-            "select count(distinct \"PRODUCT_WORK_ID\") AS count \n" +
-            " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork stg ,\n" +
-            GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq  mdq\n" +
-            "where \n" +
-            "stg.\"%s\" is not null  and \n" +
-            "   stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n";
+    "with all_event as (select distinct i.identifier as a_project_num, w.external_reference as a_work_ref , i.f_event\n" +
+            "from semarchy_eph_mdm.sa_work_identifier i \n" +
+            "join semarchy_eph_mdm.sa_wwork w on i.f_wwork = w.work_id \n" +
+            "where i.f_type = '%s'\n" +
+            "and i.b_error_status is null\n" +
+            "and i.effective_end_date is null\n" +
+            "and i.f_event != (select max (event_id) \n" +
+            "                        from semarchy_eph_mdm.sa_event \n" +
+            "                        where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX' \n" +
+            "                        and semarchy_eph_mdm.sa_event.workflow_id = 'talend' \n" +
+            "                        and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )),\n" +
+            "max_event as (select a_project_num, a_work_ref, max(f_event) as f_event\n" +
+            "from all_event\n" +
+            "group by a_project_num, a_work_ref),\n" +
+            "ref_record as (select a.* from all_event a join max_event m on a.a_project_num = m.a_project_num and a.a_work_ref = m.a_work_ref and a.f_event = m.f_event)\n" +
+            "select  \n" +
+            "count(*) as count\n" +
+            "from (\n" +
+            "select \"%s\" as s_project_num, \"PRODUCT_WORK_ID\"::varchar as s_work_ref \n" +
+            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork stg \n" +
+            "left join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq  mdq on stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE\n" +
+            "left join semarchy_eph_mdm.gd_wwork g on stg.\"PRODUCT_WORK_ID\"::varchar = g.external_reference\n" +
+            "join ephuat_talend_owner.map_sourceref_2_ephid map1  on map1.source_ref = mdq.pmx_source_reference::text and map1.ref_type = 'WORK'\n" +
+            "left join semarchy_eph_mdm.gd_work_identifier w on map1.eph_id = w.f_wwork and map1.ref_type = w.f_type and w.effective_end_date is null\n" +
+            "WHERE (mdq.dq_err = 'N' or (mdq.dq_err is null and g.work_id is not null)) and stg.\"%s\" is not null\n" +
+            ") s \n" +
+            "left join ref_record a2 on a2.a_project_num = s.s_project_num and a2.a_work_ref = s.s_work_ref \n" +
+            "where a2.a_project_num is null;";
 
     public static final String COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA =
-            "select count(distinct \"PRODUCT_WORK_ID\") AS count \n" +
-                    " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork stg ,\n" +
-                    GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq  mdq\n" +
-                    "where \n" +
-                    "stg.\"%s\" is not null  and \n" +
-                    "   stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n" +
-                    "and (TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')) \n" ;
+            "select count(*) as count\n"+
+                    " from (select \"%s\" as s_project_num, \"PRODUCT_WORK_ID\"::varchar as s_work_ref \n"+
+                    "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork stg ,"+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq  mdq \n"+
+                    "where stg.\"%s\" is not null  and stg.\"PRODUCT_WORK_ID\" = mdq.PMX_SOURCE_REFERENCE and mdq.dq_err != 'Y' \n"+
+                    "and (TO_TIMESTAMP(\"UPDATED\",'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI'))) s \n"+
+                    "left join (select i.identifier as a_project_num, w.external_reference as a_work_ref \n"+
+                    "from semarchy_eph_mdm.sa_work_identifier i \n"+
+                    "join semarchy_eph_mdm.sa_wwork w on i.f_wwork = w.work_id \n"+
+                    "where i.f_type = '%s' and i.b_error_status is null and i.effective_end_date is null \n" +
+                    "and i.f_event !=  (select max (event_id) from semarchy_eph_mdm.sa_event \n" +
+                    "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX' \n" +
+                    "and semarchy_eph_mdm.sa_event.workflow_id = 'talend' \n" +
+                    "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )) a2 on a2.a_project_num = s.s_project_num and a2.a_work_ref = s.s_work_ref \n" +
+                    "where a2.a_project_num is null \n";
 
 
 //                    " with\n" +

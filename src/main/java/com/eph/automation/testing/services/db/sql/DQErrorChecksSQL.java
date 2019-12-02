@@ -38,7 +38,8 @@ public class DQErrorChecksSQL {
     public static String GET_All_FAILED_Products = "select pmx_source_reference as pmx_id from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product_dq where dq_err='Y'";
 
     public static String GET_EPH_ID = "select eph_id as id from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid\n" +
-            "where ref_type = '%s' and source_ref in ('%s')";
+//            "where ref_type = '%s' and source_ref in ('%s')";
+            "where source_ref in ('%s')";
 
     public static String GET_RANDOM_RECORDS_FAILED_MANIFESTATIONS_DQ = "select pmx_source_reference as pmx_id from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_manifestation_dq where dq_err='Y'" +
             " ORDER BY RANDOM() limit PARAM1";
@@ -46,7 +47,7 @@ public class DQErrorChecksSQL {
     public static String GET_EPH_Manifestation_ID = "select eph_id as manifestation_id from "+GetEPHDBUser.getDBUser()+".map_sourceref_2_ephid\n" +
             "where ref_type = 'MANIFESTATION' and source_ref in ('%s')";
 
-    public static String GET_Product_DQ_Linked_manifestation = "select dq_err as dq_err, pmx_source_reference as pmx_source" +
+    public static String GET_Product_DQ_Linked_manifestation = "select dq_err as dq_err, pmx_source_reference as pmx_id" +
             " from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product_dq where " +
             " f_manifestation_source_ref in ('%s')";
 
@@ -63,19 +64,23 @@ public class DQErrorChecksSQL {
             "FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_product_dq p\n" +
             "left join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork w on case when p.f_type in ('PKG','JAS','OAA') then substring(p.pmx_source_reference,0,length(p.pmx_source_reference)-4) else '' end = w.\"PRODUCT_WORK_ID\"::varchar\n" +
             "left join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_manifestation m on case when p.f_type not in ('PKG','JAS','OAA') then substring(p.pmx_source_reference,0,length(p.pmx_source_reference)-4) else '' end = m.\"PRODUCT_MANIFESTATION_ID\"::varchar\n" +
-            "where coalesce(m.\"RECORD_END_DATE\", w.\"RECORD_END_DATE\") <= '2019-07-08' \n" +
+            "where coalesce(m.\"RECORD_END_DATE\", w.\"RECORD_END_DATE\") >= '2019-07-08' \n" +
             "order by random() limit '%s'";
 
     public static String GET_RANDOM_WORKS_FAILED_REC_END_DATE = "select pmx_source_reference as pmx_id from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork w on \n" +
-            "stg_10_pmx_wwork_dq.pmx_source_reference = w.\"PRODUCT_WORK_ID\" where w.\"RECORD_END_DATE\" <= '2019-07-08' \n" +
+            "stg_10_pmx_wwork_dq.pmx_source_reference = w.\"PRODUCT_WORK_ID\" where w.\"RECORD_END_DATE\" >= '2019-07-08' \n" +
             "order by random() limit '%s'";
 
     public static String GET_RANDOM_MANIFESTATIONS_FAILED_REC_END_DATE = "select pmx_source_reference as pmx_id from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_manifestation_dq dq join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_manifestation w on \n" +
-            "dq.pmx_source_reference = w.\"MANIFESTATION_ID\" where w.\"RECORD_END_DATE\" <= '2019-07-08'\n" +
+            "dq.pmx_source_reference = w.\"MANIFESTATION_ID\" where w.\"RECORD_END_DATE\" >= '2019-07-08'\n" +
             "order by random() limit '%s'";
 
     public static String GET_DQ_STATUS_PERSONS = "select dq_err as dq_err, person_source_ref as pmx_id from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_person_dq where " +
             " person_source_ref in ('%s')";
+
+//    Added below SQL statement
+    public static String GET_DQ_STATUS_WORKS = "select dq_err as dq_err, pmx_source_reference as pmx_id from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq where " +
+            "pmx_source_reference in ('%s') And dq_err like 'Y'";
 
     public static String GET_DQ_STATUS = "select dq_err as dq_err, pmx_source_reference as pmx_id from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_%s_dq where " +
             " pmx_source_reference in ('%s')";

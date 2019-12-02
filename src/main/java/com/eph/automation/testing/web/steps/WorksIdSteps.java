@@ -48,11 +48,11 @@ public class WorksIdSteps {
     private static int gdCount;
 
     @Given("^We have a work from type (.*) to check$")
-    public void getProductNum(String type){
+    public void getProductNum(String type, String column){
         if (System.getProperty("dbRandomRecordsNumber")!=null) {
             numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         }else {
-            numberOfRecords = "1";
+            numberOfRecords = "10";
         }
         Log.info("numberOfRecords = " + numberOfRecords);
 
@@ -60,18 +60,18 @@ public class WorksIdSteps {
                 sql = String.format(WorksIdentifierSQL.getRandomProductNum, type, numberOfRecords);
 
                 List<Map<?, ?>> workIds = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
-                ids = workIds.stream().map(m -> (BigDecimal) m.get("random_value")).map(String::valueOf).collect(Collectors.toList());
+                ids = workIds.stream().map(m ->  m.get("s_work_ref")).map(String::valueOf).collect(Collectors.toList());
                 Log.info("ids : " + ids);
 
 //                data = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-                System.out.print(sql);
+//                System.out.print(sql);
 
 
 //                dataQualityContext.productIdFromStg = data.get(0).random_value;
 
 
 
-                Log.info("\n The product number is " + dataQualityContext.productIdFromStg);
+//                Log.info("\n The product number is " + dataQualityContext.productIdFromStg);
             }else {
                 Log.info("Skipping test because Delta load is performed");
                 /*
@@ -93,26 +93,28 @@ public class WorksIdSteps {
 //        }
     }
 
-    @When("^We get the data from Staging, SA and Work Identifiers")
-    public void getIdentifiers(){
+    @When("^We get the data from Staging, SA and Work Identifiers for (.*)")
+    public void getIdentifiers(String type){
         if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
-            if(CollectionUtils.isEmpty(workid)) {
+            if(CollectionUtils.isEmpty(ids)) {
                 Log.info("No records found for searched criteria");
             } else {
                 sql = String.format(WorksIdentifierSQL.getIdentifiers, Joiner.on("','").join(ids));
+                Log.info(sql);
                 dataFromSTG = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+                Log.info("Data from STG: " + dataFromSTG);
 
 
                 sql = String.format(WorksIdentifierSQL.getEphWorkID, Joiner.on("','").join(ids));
                 Log.info(sql);
                 dataFromSA = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
-                sql = String.format(WorksIdentifierSQL.getIdentifierDataFromSA, dataFromSA.get(0).getWORK_ID());
+                sql = String.format(WorksIdentifierSQL.getIdentifierDataFromSA, dataFromSA.get(0).getWORK_ID(), type);
                 Log.info(sql);
                 dataFromSAId = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
 
                 sql = String.format(WorksIdentifierSQL.getIdentifierDataFromGD
-                        , dataFromSA.get(0).getWORK_ID());
+                        , dataFromSA.get(0).getWORK_ID(), type);
                 dataFromGDId = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
             }
     }else{
@@ -123,7 +125,7 @@ public class WorksIdSteps {
     @Then("^All of the identifiers are stored")
     public void checkIdCount(){
         if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
-            if(CollectionUtils.isEmpty(workid)) {
+            if(CollectionUtils.isEmpty(ids)) {
                 Log.info("Skipping as there are no found records for searched criteria");
             } else {
                 ArrayList<String> dataFromSTGCount = new ArrayList<String>();
@@ -157,7 +159,7 @@ public class WorksIdSteps {
     @And("^The identifiers data is correct$")
     public void checkIdData(){
         if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-            if (CollectionUtils.isEmpty(workid)) {
+            if (CollectionUtils.isEmpty(ids)) {
                 Log.info("Skipping as there are no found records for searched criteria");
             } else {
                 Assert.assertTrue("Load ID is empty!", dataFromSAId.get(0).getB_LOADID() != null);
@@ -314,7 +316,7 @@ public class WorksIdSteps {
     @And("^The identifiers data between SA and GD is identical$")
     public void checkIdDataSAGD(){
         if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
-            if(CollectionUtils.isEmpty(workid)) {
+            if(CollectionUtils.isEmpty(ids)) {
                 Log.info("Skipping as there are no found records for searched criteria");
             } else {
                 Assert.assertEquals("There are missing identifiers", dataFromGDId.size(), dataFromSAId.size());
@@ -407,7 +409,7 @@ public class WorksIdSteps {
     public void getSTGCount(String column, String type){
 
             if ((System.getProperty("LOAD") == null) || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE, column);
+                sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE, type, column, column);
                 System.out.print(sql);
                 List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
                 stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
@@ -419,7 +421,7 @@ public class WorksIdSteps {
                 List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
                 String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
 
-                sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA, column,refreshDate,type);
+                sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA, column, column, refreshDate, type);
                 System.out.print(sql);
                 List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
                 stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
@@ -431,14 +433,14 @@ public class WorksIdSteps {
     public void getSACount(String type){
         sql = WorksIdentifierSQL.COUNT_SA_WORK_IDENTIFIER
                 .replace("PARAM1", type);
-        System.out.print(sql);
+        Log.info(sql);
         List<Map<String, Object>> saCountNumber = DBManager.getDBResultMap(sql,  Constants.EPH_URL);
         saCount = ((Long) saCountNumber.get(0).get("count")).intValue();
         Log.info("\n The count in SA for " + type + " is " + saCount);
 
         sql = WorksIdentifierSQL.COUNT_GD_WORK_IDENTIFIER
                 .replace("PARAM1", type);
-        System.out.print(sql);
+        Log.info(sql);
         List<Map<String, Object>> gdCountNumber = DBManager.getDBResultMap(sql,  Constants.EPH_URL);
         gdCount = ((Long) gdCountNumber.get(0).get("count")).intValue();
         Log.info("\n The count in GD for " + type + " is " + gdCount);
@@ -492,7 +494,7 @@ public class WorksIdSteps {
             if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
                 Log.info("There is no delta load performed");
             } else {
-                if (CollectionUtils.isEmpty(workid)) {
+                if (CollectionUtils.isEmpty(ids)) {
                     Log.info("No identifiers were updated");
                 } else {
                     Log.info("There are " + workid.size() + " updated identifiers");
