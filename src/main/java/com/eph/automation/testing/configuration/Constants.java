@@ -10,7 +10,7 @@ public class Constants {
     public static String THREE_S_BUCKET_UI = "https://federation.reedelsevier.com/adfs/ls/IdpInitiatedSignOn.aspx?loginToRp=urn:amazon:webservices";
     public static String PRODUCT_FINDER_EPH_DEV_UI = "https://activitidev.ephdev.tio.systems/product-finder-app/search";
     public static String PRODUCT_FINDER_EPH_SIT_UI = "https://sit.productfinder.elsevier.net/";
-    public static String RESEARCH_PACKAGES_SIT_UI   = "https://activitisit.ephdev.tio.systems/research-packages-app";
+    public static String RESEARCH_PACKAGES_SIT_UI   = "https://activitisit.ephdev.tio.systems/research-packages-app/";
     public static String PRODUCT_FINDER_EPH_UAT_UI = "https://uat.productfinder.elsevier.net/";
 
 
