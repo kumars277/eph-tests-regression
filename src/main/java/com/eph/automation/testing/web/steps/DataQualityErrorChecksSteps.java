@@ -11,6 +11,7 @@ import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import org.apache.commons.collections.CollectionUtils;
 import org.junit.Assert;
 
 import java.math.BigDecimal;
@@ -194,7 +195,7 @@ public class DataQualityErrorChecksSteps {
         if (System.getProperty("dbRandomRecordsNumber") != null) {
             numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         } else {
-            numberOfRecords = "10";
+            numberOfRecords = "30";
         }
         Log.info("numberOfRecords = " + numberOfRecords);
 
@@ -259,14 +260,14 @@ public class DataQualityErrorChecksSteps {
 //            DQErrorContext.person_eph_id = DBManager.getDBResultAsBeanList(sql, DQErrorChecksDataObject.class, Constants.EPH_URL);
 //            Assert.assertTrue("There is eph id for failed person", DQErrorContext.person_eph_id.isEmpty());
 
-        Log.info("Check that failed persons are not going to SA table ..");
-        sql = String.format(DQErrorChecksSQL.GET_PERSONS_SA, Joiner.on("','").join(ids));
-        Log.info("Get persons from SA : " + sql);
+                Log.info("Check that failed persons are not going to SA table ..");
+                sql = String.format(DQErrorChecksSQL.GET_PERSONS_SA, Joiner.on("','").join(ids));
+                Log.info("Get persons from SA : " + sql);
 
-        DQErrorContext.saPersons = DBManager
-                .getDBResultAsBeanList(sql, DQErrorChecksDataObject.class, Constants.EPH_URL);
+                DQErrorContext.saPersons = DBManager
+                        .getDBResultAsBeanList(sql, DQErrorChecksDataObject.class, Constants.EPH_URL);
 
-        Assert.assertTrue("Found failed persons in SA", DQErrorContext.saPersons.isEmpty());
+                Assert.assertTrue("Found failed persons in SA", DQErrorContext.saPersons.isEmpty());
 
 //        }
     }
