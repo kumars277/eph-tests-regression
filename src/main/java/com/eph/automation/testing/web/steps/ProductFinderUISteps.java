@@ -67,9 +67,9 @@ public class ProductFinderUISteps {
 
     @Inject
     public ProductFinderUISteps(ProductFinderTasks productFinderTasks, TasksNew tasks) {
-          this.productFinderTasks = productFinderTasks;
-            this.tasks = tasks;
-     }
+        this.productFinderTasks = productFinderTasks;
+        this.tasks = tasks;
+    }
 
 
     @Given("^We get the id for work search (.*)$")
@@ -112,7 +112,7 @@ public class ProductFinderUISteps {
     @Then("^No results message is displayed for \"([^\"]*)\"$")
     public void no_results_message_is_displayed_for(String searchText) throws Throwable {
         if(tasks.verifyElementisDisplayed("XPATH",ProductFinderConstants.searchNoResults)){
-          Assert.assertTrue("No Records found for the keyword "+searchText,true);
+            Assert.assertTrue("No Records found for the keyword "+searchText,true);
         }
 
     }
@@ -132,7 +132,7 @@ public class ProductFinderUISteps {
     public void search_for_Keyword(String keyword) throws Throwable {
         Log.info("keyword is"+keyword);
         productFinderTasks.searchFor(keyword);
-           // TODO: add page counter
+        // TODO: add page counter
         while(!productFinderTasks.isPageContainingString(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE())){
             productFinderTasks.goToNextPage();
             Thread.sleep(1000);
@@ -303,8 +303,13 @@ public class ProductFinderUISteps {
         productId =   productId.replaceAll("\\[", "").replaceAll("\\]", "");
         productFinderTasks.searchFor(productId);
     }
+<<<<<<< Updated upstream
 
 
+=======
+
+
+>>>>>>> Stashed changes
 
     @Given("^Get the available Work Types from the DB \"([^\"]*)\"$")
     public void get_the_available_Work_Types_from_the_DB(String chooseWorkType){

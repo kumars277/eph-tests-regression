@@ -22,7 +22,7 @@ public class TasksNew {
 
     @Inject
     public TasksNew() {
-       // this.driver = new MarionetteDriver().getFirefoxDriver();
+        // this.driver = new MarionetteDriver().getFirefoxDriver();
         this.driver = new MarionetteDriver().getChromeDriver();
     }
 
@@ -64,14 +64,23 @@ public class TasksNew {
     }
 
     public boolean verifyElementisDisplayed(String locatorType, String locatorValue) throws InterruptedException {
+<<<<<<< Updated upstream
        WebElement element = null;
       WebDriverWait wait = new WebDriverWait(driver,10);
+=======
+        WebElement element = null;
+        WebDriverWait wait = new WebDriverWait(driver,10);
+>>>>>>> Stashed changes
         try{
             switch (locatorType) {
                 case "XPATH":
                     element =  driver.findElement(By.xpath(locatorValue));
                     wait.until(ExpectedConditions.visibilityOf(element));
+<<<<<<< Updated upstream
                      break;
+=======
+                    break;
+>>>>>>> Stashed changes
                 case "NAME":
                     element = driver.findElement(By.name(locatorValue));
                     wait.until(ExpectedConditions.visibilityOf(element));
@@ -86,12 +95,16 @@ public class TasksNew {
                     break;
             }
         }
-       catch (Exception e){
+        catch (Exception e){
             e.printStackTrace();
             return false;
-       }
+        }
         return element.isDisplayed();
+<<<<<<< Updated upstream
   }
+=======
+    }
+>>>>>>> Stashed changes
     public boolean verifyElementisClickable(String locatorType, String locatorValue){
         WebElement element = null;
         WebDriverWait wait = new WebDriverWait(driver,10);
@@ -134,7 +147,11 @@ public class TasksNew {
                 case "XPATH":
                     element = driver.findElement(By.xpath(locatorValue));
                     wait.until(ExpectedConditions.visibilityOf(element));
+<<<<<<< Updated upstream
                      getTextVal = element.getText();
+=======
+                    getTextVal = element.getText();
+>>>>>>> Stashed changes
                     break;
             }
             return getTextVal;
