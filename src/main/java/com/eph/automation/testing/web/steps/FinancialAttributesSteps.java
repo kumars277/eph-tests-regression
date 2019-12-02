@@ -66,6 +66,10 @@ public class FinancialAttributesSteps {
 
     }
 
+
+
+
+
     @When("^We get the financial attributes from SA$")
     public void getFinAttrCountSA(){
         sql = FinAttrSQL.Get_SA_count;
