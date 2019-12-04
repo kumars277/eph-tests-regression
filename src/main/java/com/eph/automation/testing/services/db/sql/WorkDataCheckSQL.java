@@ -30,6 +30,7 @@ public class WorkDataCheckSQL {
             "  ,\"SOC_OWNERSHIP\" AS OWNERSHIP \n" +
             "  ,\"UPDATED\" as UPDATED\n" +
             "  ,\"LANGUAGE_CODE\" as LANGUAGE_CODE\n" +
+            "  ,\"SUBSCRIPTION_TYPE\" as SUBSCRIPTION_TYPE\n" +
             "  ,\"RECORD_END_DATE\" AS RECORD_END_DATE\n"+
             "  FROM "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork\n" +
             "  WHERE \"PRODUCT_WORK_ID\" IN ('%s') ORDER BY \"PRODUCT_WORK_ID\"";
@@ -84,6 +85,7 @@ public class WorkDataCheckSQL {
 //                      " ,ap.accountable_product_id as f_accountable_product\n" +
 // Column no longer exists  "  ,ap.\"PARENT_ACC_PROD\" as PARENT_ACC_PROD\n" +
                     "  ,ww.LANGUAGE_CODE as LANGUAGE_CODE\n" +
+                    "  ,ww.SUBSCRIPTION_TYPE as SUBSCRIPTION_TYPE\n" +
                     "   FROM stg_10_pmx_wwork_dq ww\n" +
                     "left join semarchy_eph_mdm.gd_wwork gw on ww.pmx_source_reference::varchar = gw.external_reference::varchar\n" +
 // Old code                    "left join \n" +
@@ -112,6 +114,7 @@ public class WorkDataCheckSQL {
             "  ,F_SOCIETY_OWNERSHIP AS OWNERSHIP\n" +
             "  ,f_accountable_product as f_accountable_product\n" +
             "  ,f_llanguage as LANGUAGE_CODE\n"+
+            "  ,f_subscription_type as SUBSCRIPTION_TYPE\n"+
             "  FROM semarchy_eph_mdm.sa_wwork sa\n"+
             "where f_event =  (select max (event_id) from\n" +
             "semarchy_eph_mdm.sa_event\n"+
@@ -140,6 +143,7 @@ public class WorkDataCheckSQL {
             "  ,F_SOCIETY_OWNERSHIP AS OWNERSHIP\n" +
             "  ,f_accountable_product as f_accountable_product\n" +
             "  ,f_llanguage as LANGUAGE_CODE\n"+
+            "  ,f_subscription_type as SUBSCRIPTION_TYPE\n"+
             "  FROM semarchy_eph_mdm.gd_wwork\n" +
             "  WHERE external_reference IN ('%s')";
 

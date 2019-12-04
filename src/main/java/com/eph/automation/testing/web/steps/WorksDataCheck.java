@@ -47,7 +47,7 @@ public class WorksDataCheck {
         if (System.getProperty("dbRandomRecordsNumber")!=null) {
             numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         }else {
-            numberOfRecords = "10";
+            numberOfRecords = "500";
         }
         Log.info("numberOfRecords = " + numberOfRecords);
 
@@ -350,6 +350,15 @@ public class WorksDataCheck {
                                 .equals(dataQualityContext.workDataObjectsFromPMXSTG.get(i).getLANGUAGE_CODE()));
             }
 
+            Log.info("id = " + ids.get(i) + " PMX SUBCRIPTION_TYPE =" + dataQualityContext.workDataObjectsFromSource.get(i).getSUBSCRIPTION_TYPE());
+            Log.info("id = " + ids.get(i) + " STG SUBCRIPTION_TYPE =" + dataQualityContext.workDataObjectsFromPMXSTG.get(i).getSUBSCRIPTION_TYPE());
+            if (dataQualityContext.workDataObjectsFromSource.get(i).getSUBSCRIPTION_TYPE() != null
+                    || dataQualityContext.workDataObjectsFromPMXSTG.get(i).getSUBSCRIPTION_TYPE() != null) {
+                assertTrue("Expecting the subscription type details from PMX and EPH Consistent for id=" + ids.get(i),
+                        dataQualityContext.workDataObjectsFromSource.get(i).getSUBSCRIPTION_TYPE()
+                                .equals(dataQualityContext.workDataObjectsFromPMXSTG.get(i).getSUBSCRIPTION_TYPE()));
+            }
+
 /*            Date pmxUpdatedDate = new SimpleDateFormat("dd-MMM-yy HH.mm.ss.SSSSSS").parse(dataQualityContext.workDataObjectsFromSource.get(i).UPDATED);
             Date stgDate = new SimpleDateFormat("YYYYMMDDHH24MM").parse(dataQualityContext.workDataObjectsFromPMXSTG.get(i).UPDATED);*/
 
@@ -366,10 +375,10 @@ public class WorksDataCheck {
             Log.info("id = " + ids.get(i) + " STG RECORD_END_DATE =" + dataQualityContext.workDataObjectsFromPMXSTG.get(i).getRECORD_END_DATE());
             if (dataQualityContext.workDataObjectsFromSource.get(i).getRECORD_END_DATE() != null
                     || dataQualityContext.workDataObjectsFromPMXSTG.get(i).getRECORD_END_DATE() != null) {
-                Date pmxRecordEndOnDate = new SimpleDateFormat("dd-MM-yy").parse(dataQualityContext.workDataObjectsFromSource.get(i).getRECORD_END_DATE());
+                Date pmxRecordEndOnDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S").parse(dataQualityContext.workDataObjectsFromSource.get(i).getRECORD_END_DATE());
                 Date stgEndOnDate = new SimpleDateFormat("dd-MM-yy").parse(dataQualityContext.workDataObjectsFromPMXSTG.get(i).getRECORD_END_DATE());
                 assertTrue("Expecting the UPDATED details from PMX and EPH Consistent for id=" + ids.get(i),
-                        pmxRecordEndOnDate == (stgEndOnDate));
+                        pmxRecordEndOnDate.equals(stgEndOnDate));
             }
         }
         }
@@ -547,6 +556,13 @@ public class WorksDataCheck {
                         dataQualityContext.workDataObjectsFromPMXSTG.get(i).getLANGUAGE_CODE()
                                 .equals(dataQualityContext.workDataObjectsFromSTGDQ.get(i).getLANGUAGE_CODE()));
             }
+
+            if (dataQualityContext.workDataObjectsFromPMXSTG.get(i).getSUBSCRIPTION_TYPE() != null
+                    && dataQualityContext.workDataObjectsFromSTGDQ.get(i).getSUBSCRIPTION_TYPE() != null) {
+                assertTrue("Expecting the getSUBSCRIPTION_TYPE details from STG and DQ Consistent for id=" + ids.get(i),
+                        dataQualityContext.workDataObjectsFromPMXSTG.get(i).getSUBSCRIPTION_TYPE()
+                                .equals(dataQualityContext.workDataObjectsFromSTGDQ.get(i).getSUBSCRIPTION_TYPE()));
+            }
         }
     }
 
@@ -667,6 +683,14 @@ public class WorksDataCheck {
                                     dataQualityContext.workDataObjectsFromEPH.get(i).getLANGUAGE_CODE(),
                             dataQualityContext.workDataObjectsFromSTGDQ.get(i).getLANGUAGE_CODE()
                                     .equals(dataQualityContext.workDataObjectsFromEPH.get(i).getLANGUAGE_CODE()));
+                }
+
+                if (dataQualityContext.workDataObjectsFromSTGDQ.get(i).getSUBSCRIPTION_TYPE() != null
+                        || dataQualityContext.workDataObjectsFromEPH.get(i).getSUBSCRIPTION_TYPE() != null) {
+                    assertTrue("Expecting the subscription type details from DQ and SA Consistent for id=" +
+                                    dataQualityContext.workDataObjectsFromEPH.get(i).getSUBSCRIPTION_TYPE(),
+                            dataQualityContext.workDataObjectsFromSTGDQ.get(i).getSUBSCRIPTION_TYPE()
+                                    .equals(dataQualityContext.workDataObjectsFromEPH.get(i).getSUBSCRIPTION_TYPE()));
                 }
             }
         }
@@ -791,6 +815,15 @@ public class WorksDataCheck {
                             dataQualityContext.workDataObjectsFromEPH.get(i).getLANGUAGE_CODE()
                                     .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).getLANGUAGE_CODE()));
                 }
+
+                if (dataQualityContext.workDataObjectsFromEPH.get(i).getSUBSCRIPTION_TYPE() != null
+                        || dataQualityContext.workDataObjectsFromEPHGD.get(i).getSUBSCRIPTION_TYPE() != null) {
+                    assertTrue("Expecting the subscription type details from SA and GD Consistent for id=" +
+                                    dataQualityContext.workDataObjectsFromEPHGD.get(i).getSUBSCRIPTION_TYPE(),
+                            dataQualityContext.workDataObjectsFromEPH.get(i).getSUBSCRIPTION_TYPE()
+                                    .equals(dataQualityContext.workDataObjectsFromEPHGD.get(i).getSUBSCRIPTION_TYPE()));
+                }
+
             }
         }
     }

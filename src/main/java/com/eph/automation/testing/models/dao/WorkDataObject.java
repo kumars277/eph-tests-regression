@@ -49,10 +49,18 @@ public class WorkDataObject {
     private String STG;
     private String RECORD_END_DATE;
     private String LANGUAGE_CODE;
+    private String SUBSCRIPTION_TYPE;
     private int PMX_SOURCE_REFERENCE;
     private String OWNERSHIP;
     private String F_TYPE;
 
+    public String getSUBSCRIPTION_TYPE() {
+        return SUBSCRIPTION_TYPE;
+    }
+
+    public void setSUBSCRIPTION_TYPE(String SUBSCRIPTION_TYPE) {
+        this.SUBSCRIPTION_TYPE = SUBSCRIPTION_TYPE;
+    }
 
     public String getIDENTIFIER() {
         return IDENTIFIER;
