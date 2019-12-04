@@ -12,11 +12,11 @@ public class GeneratingRandomSQL {
 //            " LIMIT PARAM1;";
             "select pmx_source_reference as random_value  FROM stg_10_pmx_wwork_dq ww\n" +
                     "left join semarchy_eph_mdm.gd_wwork gw on ww.pmx_source_reference::varchar = gw.external_reference::varchar\n" +
-//                    "left join \n" +
-//                    "      (select distinct s.product_work_id, a.external_reference, a.accountable_product_id \n" +
-//                    "       from stg_10_pmx_accountable_product_dq s join (select distinct * from semarchy_eph_mdm.sa_accountable_product) a on\n" +
-//                    "      s.pmx_source_reference = a.external_reference where s.dq_err != 'Y') ap on ww.pmx_source_reference::varchar = ap.product_work_id::varchar\n" +
-//                    "WHERE ww.dq_err != 'Y'\n" +
+                    "left join \n" +
+                    "      (select distinct s.product_work_id, a.external_reference, a.accountable_product_id \n" +
+                    "       from stg_10_pmx_accountable_product_dq s join (select distinct * from semarchy_eph_mdm.sa_accountable_product) a on\n" +
+                    "      s.pmx_source_reference = a.external_reference where s.dq_err != 'Y') ap on ww.pmx_source_reference::varchar = ap.product_work_id::varchar\n" +
+                    "WHERE ww.dq_err != 'Y'\n" +
                     "ORDER BY RANDOM()\n" +
                     " LIMIT PARAM1;";
 

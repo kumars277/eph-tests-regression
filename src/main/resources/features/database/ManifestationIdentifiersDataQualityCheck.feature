@@ -3,7 +3,7 @@ Feature: Entity - Manifestation Identifier - Count & Data Mapping Check - Valida
   @Regression
   Scenario Outline: Verify count of records in STG_PMX_MANIFESTATION and SA_MANIFESTATION_IDENTIFIER is equal
     Given We get the count of records with <identifier> in STG_PMX_MANIFESTATION
-    When We get the count of records with <identifier> in SA_MANIFESTATION_IDENTIFIER coming from STG
+    When We get the count of records with <identifier> in SA_MANIFESTATION_IDENTIFIER
     Then Check the count of the records in STG_PMX_MANIFESTATION and SA_MANIFESTATION_IDENTIFIER is equal for <identifier>
 
     Examples:

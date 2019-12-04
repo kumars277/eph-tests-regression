@@ -23,7 +23,7 @@ public class MarionetteDriver implements Provider<WebDriver>{
         final String osName = System.getProperty("os.name").toLowerCase();
         if (osName.toLowerCase().contains("windows")) {
             directoryPath = System.getProperty("user.dir");
-            pathToDriver = directoryPath+"//src//main//resources//chromedriver.exe";
+            pathToDriver = "C://Users//sureshkumard//Downloads//Selenium//chromedriver.exe";
         }
         final File file = new File(pathToDriver);
         System.setProperty("webdriver.chrome.driver",file.getAbsolutePath());
