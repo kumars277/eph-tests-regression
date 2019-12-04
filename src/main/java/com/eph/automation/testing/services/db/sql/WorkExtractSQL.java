@@ -5,8 +5,7 @@ package com.eph.automation.testing.services.db.sql;
  */
 public class WorkExtractSQL {
 
-    public static String PMX_WORK_EXTRACT= "  \n" +
-            " SELECT\n" +
+    public static String PMX_WORK_EXTRACT= " SELECT\n" +
             "--\t M.ELSEVIER_PRODUCT_ID AS PRODUCT_ID -- Product Manifestation Reference,  not needed in EPH but extracted for record linking purposes\n" +
             "  \t W.PRODUCT_WORK_TITLE AS WORK_TITLE -- Title\n" +
             "  \t,W.PRODUCT_SUBTITLE AS WORK_SUBTITLE -- Subtitle\n" +
@@ -36,6 +35,7 @@ public class WorkExtractSQL {
             "    ,WL.LANGUAGE_CODE -- Includes dummy code for multi-langauge titles\n" +
             "    ,W.EFFECTIVE_TO_DATE AS RECORD_END_DATE\n" +
             "    ,MU.MAN_UPDATED AS MANIFESTATION_UPDATE\n" +
+            "    ,CASE WHEN MU.SUBSCRIPTION_TYPE = 1 THEN 'FY' WHEN MU.SUBSCRIPTION_TYPE = 2 THEN 'RY' ELSE NULL END AS SUBSCRIPTION_TYPE\n" +
             "  FROM GD_PRODUCT_WORK W\n" +
             "--  JOIN GD_PRODUCT_MANIFESTATION M ON W.PRODUCT_WORK_ID = M.F_PRODUCT_WORK\n" +
             "  LEFT JOIN GD_WORK_ALT_IDENTIFIER A ON W.PRODUCT_WORK_ID = A.F_PRODUCT_WORK AND A.F_ALTERNATIVE_IDENTIFIER_TY = 24\n" +
@@ -53,10 +53,10 @@ public class WorkExtractSQL {
             "\t            GD_PRODUCT_LANGUAGE P  ON C.F_PRODUCT_WORK = P.F_PRODUCT_WORK\n" +
             "             JOIN\n" +
             "\t            GD_LANGUAGES L ON P.F_LANGUAGES = L.LANGUAGES_ID) WL ON W.PRODUCT_WORK_ID = WL.F_PRODUCT_WORK\n" +
-            "  LEFT JOIN (SELECT M.F_PRODUCT_WORK\n" +
+            "  LEFT JOIN (SELECT M.F_PRODUCT_WORK, MAX(M.F_SUBSCRIPTION_TYPE) AS SUBSCRIPTION_TYPE\n" +
             "  \t\t\t,MAX(TO_CHAR(NVL(NVL(M.B_UPDDATE,M.B_CREDATE),TO_DATE('01-01-1900','DD-MM-YYYY')),'YYYYMMDDHH24MI')) AS MAN_UPDATED \n" +
             "  \t\t\tFROM GD_PRODUCT_MANIFESTATION M GROUP BY M.F_PRODUCT_WORK) MU ON W.PRODUCT_WORK_ID = MU.F_PRODUCT_WORK\n" +
-            "  WHERE T.PRODUCT_TYPE_CODE NOT IN ('COMPENDIUM','JCOLSC','ADVERTISING','FS','DUES')\n" +
+            "  WHERE T.PRODUCT_TYPE_CODE NOT IN ('COMPENDIUM','JCOLSC','ADVERTISING','FS','DUES') \n" +
             "  and    PRODUCT_WORK_ID IN ('%s') ORDER BY PRODUCT_WORK_ID\n" +
             "  \n";
 

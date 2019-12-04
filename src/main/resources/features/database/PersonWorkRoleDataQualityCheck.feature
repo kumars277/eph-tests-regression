@@ -38,6 +38,7 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
       | 10               | AU   |
       | 10               | PU   |
       | 10               | AE   |
+      | 10               | BC   |
 
 
   @Regression @WP
@@ -51,6 +52,7 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
       | 10               | AU   |
       | 10               | PU   |
       | 10               | AE   |
+      | 10               | BC   |
 
 
 
@@ -66,6 +68,7 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
       | 10               | AU   |
       | 10               | PU   |
       | 10               | AE   |
+      | 10               | BC   |
 
 
 
@@ -82,6 +85,7 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
       | 10               | AU   |
       | 10               | PU   |
       | 10               | AE   |
+      | 10               | BC   |
 
 
 

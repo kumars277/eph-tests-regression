@@ -235,6 +235,10 @@ public class PersonWorkRoleDataQualityCheckSteps {
             sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_AE, Joiner.on("','").join(idsPMX));
             Log.info(sql);
         }
+        if (type.equals("BC")) {
+            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_BC, Joiner.on("','").join(idsPMX));
+            Log.info(sql);
+        }
 
         dataQualityContext.personWorkRoleDataObjectsFromPMX = DBManager
                 .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.PMX_URL);
@@ -260,7 +264,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @And("^Compare person work role records in PMX and EPH STG for (.*)$")
     public void comparePersonWorkRolesRecordsInPMXAndEPHSTG(String type) {
         Log.info("And compare work role records in PMX and EPH STG ..");
-        if (CollectionUtils.isEmpty(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if (CollectionUtils.isEmpty(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG)) {
             Log.info("There is no updated data for Person Work Role");
         } else {
             //sort the lists before comparison
@@ -313,7 +317,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
                     Log.info("Expecting START_DATE in PMX and EPH STG is consistent");
 
-                    if (!type.equals("PD"))
+                    if (!type.equals("PD")&&!type.equals("BC"))
                         assertEquals(pmxStartDate, ephStartDate);
                 }
 

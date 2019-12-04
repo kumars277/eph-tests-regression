@@ -13,7 +13,7 @@ public class PersonWorkRoleDataSQL {
             "    ,'PD' AS F_ROLE\n" +
             "    ,CURRENT_DATE AS START_DATE\n" +
             "    ,NULL AS END_DATE\n" +
-            "    ,TO_CHAR(PMG.B_UPDDATE,'YYYYMMDDHH24MI') AS UPDATED\n" +
+            "    ,TO_CHAR(greatest(W.B_CREDATE,PMG.B_UPDDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
             "FROM\n" +
             "    GD_PRODUCT_WORK W\n" +
             "JOIN\n" +
@@ -22,6 +22,21 @@ public class PersonWorkRoleDataSQL {
             "    GD_PMG PMG ON PMC.F_PMG = PMG.PMGCODE\n" +
             "WHERE\n" +
             "    PMG.F_PARTY IS NOT NULL\n" +
+            "UNION\n" +
+            "SELECT\n" +
+            "     W.PRODUCT_WORK_ID||RC.F_PARTY||'-BC' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
+            "    ,RC.F_PARTY AS PMX_PARTY_SOURCE_REF\n" +
+            "    ,W.PRODUCT_WORK_ID AS PMX_WORK_SOURCE_REF\n" +
+            "    ,'BC' AS F_ROLE\n" +
+            "    ,CURRENT_DATE AS START_DATE\n" +
+            "    ,NULL AS END_DATE\n" +
+            "    ,TO_CHAR(greatest(W.B_CREDATE,RC.B_UPDDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
+            "FROM\n" +
+            "    GD_PRODUCT_WORK W\n" +
+            "JOIN\n" +
+            "    GD_RESPONSIBILITY_CENTRE RC ON W.F_RESPONSIBILITY_CENTRE = RC.RESPONSIBILITY_CENTRE_CD\n" +
+            "WHERE\n" +
+            "    RC.F_PARTY IS NOT NULL\n" +
             "UNION\n" +
             "SELECT\n" +
             "\t P.PARTY_IN_PRODUCT_ID||'-AU' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
@@ -86,6 +101,29 @@ public class PersonWorkRoleDataSQL {
             "    (select distinct external_reference, work_person_role_id from semarchy_eph_mdm.sa_work_person_role) a\n" +
             "    on STG_10_PMX_WORK_PERSON_ROLE.\"WORK_PERSON_ROLE_SOURCE_REF\" = a.external_reference\n" +
             "where perd.dq_err != 'Y' and word.dq_err != 'Y'";
+
+    public static String GET_COUNT_PERSON_WORK_ROLE_PD = "with base as\n"+
+            "(select\n"+
+            "    g.work_person_role_id\n"+
+            ",   g.external_reference\n"+
+            ",   g.effective_start_date\n"+
+            ",   current_date as effective_end_date\n"+
+            ",   g.f_role\n"+
+            ",   g.f_wwork\n"+
+            ",   g.f_person\n"+
+            "from \n"+
+            "\tsemarchy_eph_mdm.gd_work_person_role g\n"+
+            "join\n"+
+            "    semarchy_eph_mdm.gd_wwork gw on g.f_wwork = gw.work_id\n"+
+            "join\n"+
+            GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role wpr on gw.external_reference = wpr.\"PMX_WORK_SOURCE_REF\"::varchar\n"+
+            "and wpr.\"F_ROLE\" in ('PD','BC')\n"+
+            "join\n"+
+            "    (select distinct external_reference, person_id from semarchy_eph_mdm.sa_person) sp on wpr.\"PMX_PARTY_SOURCE_REF\"::varchar = sp.external_reference\n"+
+            "where\n"+
+            "    g.f_person != sp.person_id\n"+
+            "and g.f_role in ('PD','BC'))\n"+
+            "select count(*) from base;";
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTG_DELTA ="select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role\n" +
             "join  ((select s.person_source_ref as stage, aa.external_reference as gold,\n" +
@@ -214,6 +252,22 @@ public class PersonWorkRoleDataSQL {
             "WHERE\n" +
             "\tP.F_ROLE_TYPE IN (1103,1104)\n" +
             "\t\tAND P.PARTY_IN_PRODUCT_ID IN ('%s')";
+
+    public static String GET_DATA_PERSONS_WORK_ROLE_PMX_BC = "SELECT\n" +
+            "     W.PRODUCT_WORK_ID||RC.F_PARTY||'-BC' AS WORK_PERSON_ROLE_SOURCE_REF\n" +
+            "    ,RC.F_PARTY AS PMX_PARTY_SOURCE_REF\n" +
+            "    ,W.PRODUCT_WORK_ID AS PMX_WORK_SOURCE_REF\n" +
+            "    ,'BC' AS F_ROLE\n" +
+            "    ,CURRENT_DATE AS START_DATE\n" +
+            "    ,NULL AS END_DATE\n" +
+            "    ,TO_CHAR(greatest(W.B_CREDATE,RC.B_UPDDATE),'YYYYMMDDHH24MI') AS UPDATED\n" +
+            "FROM\n" +
+            "    GD_PRODUCT_WORK W\n" +
+            "JOIN\n" +
+            "    GD_RESPONSIBILITY_CENTRE RC ON W.F_RESPONSIBILITY_CENTRE = RC.RESPONSIBILITY_CENTRE_CD\n" +
+            "WHERE\n" +
+            "    RC.F_PARTY IS NOT NULL\n" +
+            "\t\tAND W.PRODUCT_WORK_ID||RC.F_PARTY IN ('%s')";
 
 
     public static String GET_DATA_PERSONS_WORK_ROLE_EPHSTG = "select\n" +
