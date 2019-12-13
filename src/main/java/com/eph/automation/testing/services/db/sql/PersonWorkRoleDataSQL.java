@@ -117,12 +117,13 @@ public class PersonWorkRoleDataSQL {
             "    semarchy_eph_mdm.gd_wwork gw on g.f_wwork = gw.work_id\n"+
             "join\n"+
             GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role wpr on gw.external_reference = wpr.\"PMX_WORK_SOURCE_REF\"::varchar\n"+
-            "and wpr.\"F_ROLE\" in ('PD','BC')\n"+
+            "and wpr.\"F_ROLE\" = g.f_role and g.f_role in ('PD','BC')"+
             "join\n"+
             "    (select distinct external_reference, person_id from semarchy_eph_mdm.sa_person) sp on wpr.\"PMX_PARTY_SOURCE_REF\"::varchar = sp.external_reference\n"+
             "where\n"+
             "    g.f_person != sp.person_id\n"+
-            "and g.f_role in ('PD','BC'))\n"+
+            "and g.f_role in ('PD','BC')\n"+
+            "and g.effective_end_date is null)\n" +
             "select count(*) from base;";
 
     public static String GET_COUNT_PERSONS_WORK_ROLE_EPHSTG_DELTA ="select count(*) as count from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_work_person_role\n" +
@@ -386,7 +387,6 @@ public class PersonWorkRoleDataSQL {
             "order by random() limit '%s' ";
 
     public static String GET_RANDOM_DELTA = "\n" +
-            "\n" +
             "select \n" +
             "\"WORK_PERSON_ROLE_SOURCE_REF\" as WORK_PERSON_ROLE_SOURCE_REF\n" +
             "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_work_person_role\n" +
