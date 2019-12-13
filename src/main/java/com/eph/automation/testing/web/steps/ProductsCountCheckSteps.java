@@ -22,9 +22,6 @@ public class ProductsCountCheckSteps {
     private String sql;
     private static int stgToCanonical;
     private static String refreshDate;
-    public int PMXCounter;
-    public int PMXStageCounter;
-
 
     @Given("^We know the products count in PMX$")
     public void getPmxProducts() {
@@ -32,7 +29,6 @@ public class ProductsCountCheckSteps {
         Log.info(sql);
         productsCountContext.productCountPMX= DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.PMX_URL);
         Log.info("\nThe number of products in PMX is: " + productsCountContext.productCountPMX.get(0).pmxCount);
-        PMXCounter = productsCountContext.productCountPMX.get(0).pmxCount;
     }
 
     @When("^The products are in PMX Staging$")
@@ -143,10 +139,8 @@ public class ProductsCountCheckSteps {
                 Log.info("refresh date: " + refreshDate);
 
                 sql = ProductCountSQL.EPH_STG_PRODUCT_Count;
-                Log.info(sql);
                 productsCountContext.productCountStgFromPMX = DBManager.getDBResultAsBeanList(sql, ProductCountObject.class, Constants.EPH_URL);
                 Log.info("\nThe number of products in Staging is: " + productsCountContext.productCountStgFromPMX.get(0).stgCount);
-                PMXStageCounter = productsCountContext.productCountStgFromPMX.get(0).stgCount;
 
                 sql = ProductCountSQL.EPH_STG_PRODUCT_Count_Updated.replace("PARAM1",refreshDate);
                 Log.info(sql);
@@ -238,11 +232,8 @@ public class ProductsCountCheckSteps {
     @Then("^The number of products between (.*) and (.*) is equal$")
     public void comparePMXtoEPHCount(String source, String target){
         if (source.contentEquals("PMX")) {
-            Assert.assertEquals("The number of products in PMX and PMX Staging is not equal!", PMXStageCounter, PMXCounter);
-
-//                    productsCountContext.productCountPMX.get(0).pmxCount,
-//            productsCountContext.productCountStgFromPMX.get(0).stgCount);
-
+            Assert.assertEquals("The number of products in PMX and PMX Staging is not equal!", productsCountContext.productCountPMX.get(0).pmxCount,
+                    productsCountContext.productCountStgFromPMX.get(0).stgCount);
            }else if (target.contentEquals("SA")){
             Assert.assertEquals("\nThe number of products in EPH DQ and EPH SA is not equal!", productsCountContext.productCountStgCanDQ.get(0).ephCanDqCount,
                     productsCountContext.productCountEPHSA.get(0).ephSACount);

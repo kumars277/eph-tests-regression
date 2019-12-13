@@ -49,11 +49,11 @@ public class WorksCountCheckSteps {
 
         // Run the Talend job
         sqlPMXSTG = WorkCountSQL.PMX_STG_WORKS_COUNT;
-        Log.info(sqlPMXSTG);
         List<Map<String, Object>> workCountPMXSTG = DBManager.getDBResultMap(sqlPMXSTG,
                 Constants.EPH_URL);
         pmxSTGWork = ((Long) workCountPMXSTG.get(0).get("workCountPMXSTG")).intValue();
         Log.info("Works in PMX staging are: " + pmxSTGWork);
+
     }
 
     @Then("^The work number between (.*) and (.*) is identical$")
@@ -82,13 +82,11 @@ public class WorksCountCheckSteps {
         // Run the Talend Job
 
         sqlEPH = WorkCountSQL.EPH_SA_WORKS_COUNT;
-        Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH, Constants.EPH_URL);
         ephWork = ((Long) workCountEPH.get(0).get("workCountEPH")).intValue();
         Log.info("Works in EPH SA are: " + ephWork);
 
         sqlEPH = WorkCountSQL.EPH_GD_WORKS_COUNT;
-        Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPHGD = DBManager.getDBResultMap(sqlEPH, Constants.EPH_URL);
         ephWorkGD = ((Long) workCountEPHGD.get(0).get("workCountEPHGD")).intValue();
         Log.info("Works in EPH GD are: " + ephWorkGD);
@@ -120,14 +118,12 @@ public class WorksCountCheckSteps {
         Log.info("The Works in DQ table are : " + dqWorks);
 
         sql = WorkCountSQL.PMX_STG_DQ_WORKS_COUNT_NoErr;
-        Log.info(sql);
         List<Map<String, Object>> workCountSTGDQNOERROR = DBManager.getDBResultMapWithSetSchema(sql,
                 Constants.EPH_URL);
         dqNoErrorWorks = ((Long) workCountSTGDQNOERROR.get(0).get("count")).intValue();
         Log.info("The Works in DQ table without error are : " + dqNoErrorWorks);
 
         sql = WorkCountSQL.EPH_AE_WORKS_COUNT;
-        Log.info(sql);
         List<Map<String, Object>> errorsCount = DBManager.getDBResultMap(sql,
                 Constants.EPH_URL);
         aeCount = ((Long) errorsCount.get(0).get("errorsCountEPH")).intValue();

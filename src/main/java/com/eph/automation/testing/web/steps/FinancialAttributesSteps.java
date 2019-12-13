@@ -36,9 +36,6 @@ public class FinancialAttributesSteps {
     private String numberOfRecords;
     private List<Map<?, ?>> manifestationIds;
     private static List<String> ids;
-    public static int financialAttribsFirstCount;
-    public static int financialAttribsSecondCount;
-    public static int financialAttribsdqCount;
     private static List<String> workid;
     private static List<String> isbns;
     public String fWorkID;
@@ -63,20 +60,8 @@ public class FinancialAttributesSteps {
 
                 sql = String.format(FinAttrSQL.PMX_STG_DQ_WORKS_COUNT_NoErr, refreshDate);
                 Log.info(sql);
-                List<Map<String, Object>> firstCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                financialAttribsFirstCount = ((Long) firstCount.get(0).get("dqCount")).intValue();
-                Log.info("Count1 = " + financialAttribsFirstCount);
-
-               sql = String.format(FinAttrSQL.PMX_STG_DQ_WORKS_BASE_COUNT_NoErr, refreshDate);
-               Log.info(sql);
-               List<Map<String, Object>> secondCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-               financialAttribsSecondCount = ((Long) secondCount.get(0).get("count")).intValue();
-               Log.info("Count2 = " + financialAttribsSecondCount);
-
-
-//     Old Code           financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
-                financialAttribsdqCount = financialAttribsFirstCount - financialAttribsSecondCount;
-                Log.info("The DQ count is: " + financialAttribsdqCount);
+                financialAttribs.dqCount = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
+                Log.info("The DQ count is: " + financialAttribs.dqCount.get(0).dqCount);
             }
 
     }
@@ -112,7 +97,7 @@ public class FinancialAttributesSteps {
     @Then("^The financial attributes between (.*) and (.*) are equal$")
     public void compareCount(String source, String target){
         if (source.equalsIgnoreCase("DQ")){
-           Assert.assertEquals("The count between DQ and SA does not match!", financialAttribsdqCount,
+           Assert.assertEquals("The count between DQ and SA does not match!", financialAttribs.dqCount.get(0).dqCount,
                    financialAttribs.saCount.get(0).saCount);
         }else if (target.equalsIgnoreCase("GD")){
             Assert.assertEquals("The count between SA and GD does not match!", financialAttribs.saCount.get(0).saCount,
@@ -137,9 +122,9 @@ public class FinancialAttributesSteps {
         Log.info("numberOfRecords = " + numberOfRecords);
 
 
-//            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-//            sql = FinAttrSQL.gettingSourceRef.replace("PARAM1", numberOfRecords);
-//            }else {
+            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            sql = FinAttrSQL.gettingSourceRef.replace("PARAM1", numberOfRecords);
+            }else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
                 Log.info(sql);
                 List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -147,7 +132,7 @@ public class FinancialAttributesSteps {
                 Log.info("refresh date: " + refreshDate);
                 sql = FinAttrSQL.gettingSourceRefDelta.replace("PARAM1", numberOfRecords)
                 .replace("PARAM2",refreshDate);
-//            }
+            }
 
         List<Map<?, ?>> randomISBNIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 

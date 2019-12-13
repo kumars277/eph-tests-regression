@@ -126,8 +126,9 @@ public class FinAttrSQL {
             "and sa.effective_end_date is null";
 
 
+    public static String PMX_STG_DQ_WORKS_COUNT_NoErr =
 
-    //old public static String PMX_STG_DQ_WORKS_COUNT_NoErr =
+            //old
 //            "select count(*) as dqCount\n" +
 //            "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork ww \n" +
 //            "join "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq dq on dq.PMX_SOURCE_REFERENCE=ww.\"PRODUCT_WORK_ID\"\n" +
@@ -140,96 +141,26 @@ public class FinAttrSQL {
 //            "and (wfa.f_gl_company = dq.opco and wfa.f_gl_cost_resp_centre = dq.resp_centre and wfa.f_gl_revenue_resp_centre  = dq.resp_centre) \n" +
 //            "and wfa.effective_end_date  is  null\n" +
 //            "and wfa.b_batchid in (select max(b_batchid) from semarchy_eph_mdm.gd_event where description = 'PMX Talend Load' and workflow_id = 'talend' and f_workflow_source = 'PMX')\n";
-
-
-//  Recent Old
-//    "select count(*) as dqCount\n" +
-//            "from " +GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s\n" +
-//            "--left join (\n" +
-//            "--      select \n" +
-//            "--             f.f_gl_company as company\n" +
-//            "--            ,f.f_gl_cost_resp_centre as cost_rc\n" +
-//            "--            ,f.f_gl_revenue_resp_centre as rev_rc\n" +
-//            "--            ,w.external_reference\n" +
-//            "--      from semarchy_eph_mdm.gd_work_financial_attribs f\n" +
-//            "--      join semarchy_eph_mdm.gd_wwork w on f.f_wwork = w.work_id\n" +
-//            "--      where f.effective_end_date is null) as g on s.pmx_source_reference::varchar = g.external_reference\n" +
-//            "left join (select distinct external_reference, work_fin_attribs_id from semarchy_eph_mdm.sa_work_financial_attribs) a on concat(s.pmx_source_reference,s.opco,s.resp_centre)::varchar = a.external_reference\n" +
-//            "where dq_err != 'Y'\n" +
-//            "and resp_centre is not null\n" +
-//            "and opco is not null\n" +
-//            "--and not (\n" +
-//            "--         s.opco = coalesce(g.company,'')\n" +
-//            "--    and  s.resp_centre = coalesce(g.cost_rc,'')\n" +
-//            "--    and  s.resp_centre = coalesce(g.rev_rc,''))\n" +
-//            "and (TO_TIMESTAMP(s.work_updated,'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI'))";
-
-    public static String PMX_STG_DQ_WORKS_COUNT_NoErr = "select count(*) as dqCount "+
-    "from ephuat_talend_owner.stg_10_pmx_wwork_dq s \n"+
-    "left join (select f.f_gl_company as company \n"+
-            ",f.f_gl_cost_resp_centre as cost_rc \n"+
-            ",f.f_gl_revenue_resp_centre as rev_rc \n"+
-           " ,w.external_reference \n"+
-                   " from semarchy_eph_mdm.sa_work_financial_attribs f \n"+
-                    "join semarchy_eph_mdm.gd_wwork w on f.f_wwork = w.work_id \n"+
-                    "where f.effective_end_date is null \n"+
-                    "and f.f_event !=  (select max (event_id) from \n"+
-    "semarchy_eph_mdm.sa_event \n"+
-    "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX' \n"+
-   " and semarchy_eph_mdm.sa_event.workflow_id = 'talend' \n"+
-   " and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )) as g on s.pmx_source_reference::varchar = g.external_reference \n"+
-    "left join (select distinct external_reference, work_fin_attribs_id from semarchy_eph_mdm.sa_work_financial_attribs) a on concat(s.pmx_source_reference,s.opco,s.resp_centre)::varchar = a.external_reference \n"+
-   " where dq_err != 'Y' \n"+
-   " and resp_centre is not null \n"+
-    "and opco is not null \n"+
-    "and not (s.opco = coalesce(g.company,'') \n"+
-   " and  s.resp_centre = coalesce(g.cost_rc,'') \n"+
-    "and  s.resp_centre = coalesce(g.rev_rc,'')) \n"+
-    "and (TO_TIMESTAMP(s.work_updated,'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI'))";
-
-
-    public static String PMX_STG_DQ_WORKS_BASE_COUNT_NoErr =  " --plus end dated records: \n"+
-    "with current_rec as (select f.f_gl_company as company \n"+
-            " ,f.f_gl_cost_resp_centre as cost_rc \n"+
-            ",f.f_gl_revenue_resp_centre as rev_rc \n"+
-            ",f.effective_start_date \n"+
-            ",f.f_wwork \n"+
-            ",f.external_reference \n"+
-            ",w.external_reference as work_reference \n"+
-            ",f.work_fin_attribs_id \n"+
-            "from semarchy_eph_mdm.sa_work_financial_attribs f \n"+
-            "join semarchy_eph_mdm.gd_wwork w on f.f_wwork = w.work_id \n"+
-            "where f.effective_end_date is null \n"+
-            "and f.f_event !=  (select max (event_id) from \n"+
-            "semarchy_eph_mdm.sa_event \n"+
-            "where  semarchy_eph_mdm.sa_event.f_event_type = 'PMX' \n"+
-            "and semarchy_eph_mdm.sa_event.workflow_id = 'talend' \n"+
-            "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX' )) \n"+
-            ",base as (select distinct \n"+
-            "--{loadid} b_loadid \n"+
-            "--,{eventid} f_event \n"+
-            "'WorkFinancialAttributes' \n"+
-            ",g.work_fin_attribs_id \n"+
-            ",g.external_reference \n"+
-            ",g.company \n"+
-            ",g.cost_rc \n"+
-            ",g.rev_rc \n"+
-            ",g.f_wwork \n"+
-            ",g.effective_start_date \n"+
-            ",current_date as effective_end_date \n"+
-            "from current_rec g \n"+
-            "join ephuat_talend_owner.stg_10_pmx_wwork_dq s on s.pmx_source_reference::varchar = g.work_reference::varchar \n"+
-            "where s.dq_err != 'Y' \n"+
-            "and (TO_TIMESTAMP(s.work_updated,'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI')) \n"+
-            " and s.resp_centre is not null \n"+
-            "and s.opco is not null \n"+
-            "and not ( s.opco = coalesce(g.company,'') \n"+
-            "and  s.resp_centre = coalesce(g.cost_rc,'') \n"+
-            "and  s.resp_centre = coalesce(g.rev_rc,''))) \n"+
-            " select count(*) from base \n";
-
-
-
+    "select count(*) as dqCount\n" +
+            "from " +GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s\n" +
+            "--left join (\n" +
+            "--      select \n" +
+            "--             f.f_gl_company as company\n" +
+            "--            ,f.f_gl_cost_resp_centre as cost_rc\n" +
+            "--            ,f.f_gl_revenue_resp_centre as rev_rc\n" +
+            "--            ,w.external_reference\n" +
+            "--      from semarchy_eph_mdm.gd_work_financial_attribs f\n" +
+            "--      join semarchy_eph_mdm.gd_wwork w on f.f_wwork = w.work_id\n" +
+            "--      where f.effective_end_date is null) as g on s.pmx_source_reference::varchar = g.external_reference\n" +
+            "left join (select distinct external_reference, work_fin_attribs_id from semarchy_eph_mdm.sa_work_financial_attribs) a on concat(s.pmx_source_reference,s.opco,s.resp_centre)::varchar = a.external_reference\n" +
+            "where dq_err != 'Y'\n" +
+            "and resp_centre is not null\n" +
+            "and opco is not null\n" +
+            "--and not (\n" +
+            "--         s.opco = coalesce(g.company,'')\n" +
+            "--    and  s.resp_centre = coalesce(g.cost_rc,'')\n" +
+            "--    and  s.resp_centre = coalesce(g.rev_rc,''))\n" +
+            "and (TO_TIMESTAMP(s.work_updated,'YYYYMMDDHH24MI') > TO_TIMESTAMP('%s','YYYYMMDDHH24MI'))";
 
     public static String PMX_STG_DQ_WORKS_COUNT_NoErr_Full = "select count(*) as dqCount\n" +
             "from "+GetEPHDBUser.getDBUser()+".stg_10_pmx_wwork_dq s\n" +
