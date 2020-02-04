@@ -48,11 +48,11 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
     And Check the mandatory columns are populated for persons work role
     Examples:
       | countOfRandomIds | type |
-      | 10               | PD   |
-      | 10               | AU   |
-      | 10               | PU   |
-      | 10               | AE   |
-      | 10               | BC   |
+      | 5               | PD   |
+      | 5               | AU   |
+      | 5               | PU   |
+      | 5               | AE   |
+      | 5               | BC   |
 
 
 
@@ -64,11 +64,11 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
     And Compare person work role records in EPH STG and EPH SA
     Examples:
       | countOfRandomIds | type |
-      | 10               | PD   |
-      | 10               | AU   |
-      | 10               | PU   |
-      | 10               | AE   |
-      | 10               | BC   |
+      | 5               | PD   |
+      | 5               | AU   |
+      | 5               | PU   |
+      | 5               | AE   |
+      | 5               | BC   |
 
 
 
@@ -81,11 +81,11 @@ Feature: Entity - PERSON WORK ROLE - Validate data between PMX and EPH - Talend 
     And Compare person work role records in EPH SA and EPH GD
     Examples:
       | countOfRandomIds | type |
-      | 10               | PD   |
-      | 10               | AU   |
-      | 10               | PU   |
-      | 10               | AE   |
-      | 10               | BC   |
+      | 3              | PD   |
+      | 3               | AU   |
+      | 3               | PU   |
+      | 3               | AE   |
+      | 3              | BC   |
 
 
 

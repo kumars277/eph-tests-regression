@@ -3,9 +3,9 @@ package com.eph.automation.testing.services.db.sql;
 public class ProductDataSQL {
     public static String PMX_PRODUCT_EXTRACT = "SELECT\n" +
             "\t M.ELSEVIER_PRODUCT_ID AS PRODUCT_ID -- Product Manifestation Reference,  not needed in EPH but extracted for record linking purposes\n" +
-            "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND M.F_PRODUCT_MANIFESTATION_TYP = 1 THEN CONCAT(M.PRODUCT_MANIFESTATION_TIT, ' (Print)')\n" +
-            "\t\t  WHEN WT.WORK_TYPE = 'JOURNAL' AND M.F_PRODUCT_MANIFESTATION_TYP = 2 THEN CONCAT(M.PRODUCT_MANIFESTATION_TIT, ' (Online)')\n" +
-            "\t\t  ELSE M.PRODUCT_MANIFESTATION_TIT END AS PRODUCT_NAME -- Title\n" +
+            "\t,CASE WHEN WT.WORK_TYPE = 'JOURNAL' AND M.F_PRODUCT_MANIFESTATION_TYP = 1 THEN CONCAT(WT.WORK_TITLE, ' (Print)')\n" +
+            "\t\t  WHEN WT.WORK_TYPE = 'JOURNAL' AND M.F_PRODUCT_MANIFESTATION_TYP = 2 THEN CONCAT(WT.WORK_TITLE, ' (Online)')\n" +
+            "\t\t  ELSE WT.WORK_TITLE END AS PRODUCT_NAME -- Title\n" +
             "\t,M.PRODUCT_MANIF_SHORT_TITLE AS PRODUCT_SHORT_NAME -- Short Title\n" +
             "\t,NVL(M.NONSALEABLE_ANCILLARY_IND,'Y') AS SEPARATELY_SALEABLE_IND -- Set flag as 'Y' when manifestation is not flagged as Nonsaleable Ancillary\n" +
             "\t,NVL(M.TRIAL_ALLOWED_IND, 'N') AS TRIAL_ALLOWED_IND -- Trial Allowed Indicator\n" +
@@ -46,7 +46,6 @@ public class ProductDataSQL {
             "\t\tELSE 'UNK'\n" +
             "\tEND AS WORK_STATUS\n" +
             "\t,WT.WORK_TITLE\n" +
-            "\t,WT.WORK_TYPE\n" +
             "\t,WT.WORK_TYPE\n" +
             "\t,TO_CHAR(NVL(M.B_UPDDATE,M.B_CREDATE),'YYYYMMDDHH24MI') AS UPDATED -- Manifestation last updated date as all other tables are linking or reference\n" +
             "FROM GD_PRODUCT_MANIFESTATION M\n" +

@@ -35,7 +35,7 @@ public class WorkExtractSQL {
             "    ,WL.LANGUAGE_CODE -- Includes dummy code for multi-langauge titles\n" +
             "    ,W.EFFECTIVE_TO_DATE AS RECORD_END_DATE\n" +
             "    ,MU.MAN_UPDATED AS MANIFESTATION_UPDATE\n" +
-            "    ,CASE WHEN MU.SUBSCRIPTION_TYPE = 1 THEN 'FY' WHEN MU.SUBSCRIPTION_TYPE = 2 THEN 'RY' ELSE NULL END AS SUBSCRIPTION_TYPE\n" +
+            "    ,CASE WHEN MU.SUBSCRIPTION_TYPE = 2 THEN 'FY' WHEN MU.SUBSCRIPTION_TYPE = 1 THEN 'RY' ELSE NULL END AS SUBSCRIPTION_TYPE\n" +
             "  FROM GD_PRODUCT_WORK W\n" +
             "--  JOIN GD_PRODUCT_MANIFESTATION M ON W.PRODUCT_WORK_ID = M.F_PRODUCT_WORK\n" +
             "  LEFT JOIN GD_WORK_ALT_IDENTIFIER A ON W.PRODUCT_WORK_ID = A.F_PRODUCT_WORK AND A.F_ALTERNATIVE_IDENTIFIER_TY = 24\n" +
@@ -150,24 +150,36 @@ public class WorkExtractSQL {
     public static final String COUNT_MANIFESTATIONS_IN_EPH_STG_DQ_MANIFESTATION_TABLE = "SELECT count(*) AS count FROM " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq";
 
     public static final String COUNT_MANIFESTATIONS_IN_EPH_DQ_TO_SA =
-   "select count(*)  \n" +
-           "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq s\n" +
-           "join (select pmx_source_reference as external_reference, concat(pmx_source_reference\n" +
-           "||coalesce(manifestation_key_title,'')\n" +
-           "||coalesce(inter_edition_flag,false)\n" +
-           "||coalesce(first_pub_date,current_date)\n" +
-           "||coalesce(f_type,'')\n" +
-           "||coalesce(f_status,'')\n" +
-           "||coalesce(f_format_type,'')  \n" +
-           "--)as string\n" +
-           "||coalesce(map_sourceref_2_ephid('WORK'::varchar,f_wwork::varchar),'')) as string\n" +
-           "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq) h \n" +
-           "on s.pmx_source_reference::varchar = h.external_reference::varchar \n" +
-           "--left join (select external_reference, concat(external_reference||coalesce(manifestation_key_title,'')||coalesce(inter_edition_flag,false)||coalesce(first_pub_date,current_date)\n" +
-           "--||coalesce(f_type,'')||coalesce(f_status,'')||coalesce(f_format_type,'')||coalesce(f_wwork,'')) as string\n" +
-           "--from semarchy_eph_mdm.gd_manifestation) e on h.external_reference::varchar = e.external_reference::varchar\n" +
-           "--where (md5(e.string) is null or md5(e.string) != md5(h.string))\n" +
-           "and dq_err != 'Y'  ";
+   "with \n" +
+           "max_previous as (\n" +
+           "\tselect external_reference, max(f_event) as f_event\n" +
+           "\tfrom semarchy_eph_mdm.sa_manifestation \n" +
+           "\twhere f_event < (\n" +
+           "\t\tselect  max(event_id) from semarchy_eph_mdm.sa_event sa2  \n" +
+           "\t\twhere sa2.f_event_type = 'PMX'\n" +
+           "\t\tand sa2.workflow_id = 'talend'\n" +
+           "\t\tand sa2.f_workflow_source = 'PMX')\n" +
+           "\tgroup by external_reference),\n" +
+           "existing_hash as (\n" +
+           "\tselect sm.external_reference,\n" +
+           "\t\tconcat(sm.external_reference||coalesce(sm.manifestation_key_title,'')||coalesce(sm.inter_edition_flag,false)||\n" +
+           "\t\tcoalesce(sm.first_pub_date,current_date)||coalesce(sm.f_type,'')||coalesce(sm.f_status,'')||coalesce(sm.f_format_type,'')||\n" +
+           "\t\tcoalesce(sm.f_wwork,'')) as string\n" +
+           "\tfrom semarchy_eph_mdm.sa_manifestation sm\n" +
+           "\tjoin max_previous mp on sm.external_reference = mp.external_reference and sm.f_event = mp.f_event),\n" +
+           "inbound_hash as (\n" +
+           "\tselect pmx_source_reference as external_reference,\n" +
+           "\t\tconcat(pmx_source_reference||coalesce(manifestation_key_title,'')||coalesce(inter_edition_flag,false)\n" +
+           "\t\t||coalesce(first_pub_date,current_date)||coalesce(f_type,'')||coalesce(f_status,'')||coalesce(f_format_type,'')\n" +
+           "\t\t||coalesce(map_sourceref_2_ephid('WORK'::varchar,f_wwork::varchar),'')) as string\n" +
+           "\tfrom stg_10_pmx_manifestation_dq)\n" +
+           "select\n" +
+           "count(1)\n" +
+           "from stg_10_pmx_manifestation_dq s\n" +
+           "join inbound_hash h on s.pmx_source_reference::varchar = h.external_reference::varchar\n" +
+           "left join existing_hash e on h.external_reference::varchar = e.external_reference::varchar\n" +
+           "where (md5(e.string) is null or md5(e.string) != md5(h.string))\n" +
+           "and dq_err != 'Y'; ";
 
     public static final String COUNT_MANIFESTATIONS_IN_SA_MANIFESTATION_TABLE =
            "SELECT count(*) AS count FROM semarchy_eph_mdm.sa_manifestation sa \n" +
@@ -185,7 +197,7 @@ public class WorkExtractSQL {
 
     public static final String SELECT_MANIFESTATIONS_DATA_IN_PMX = "SELECT\n" +
             "\t M.PRODUCT_MANIFESTATION_ID AS MANIFESTATION_ID -- Product Manifestation Reference,  not needed in EPH but extracted for record linking purposes\n" +
-            "\t,M.PRODUCT_MANIFESTATION_TIT AS MANIFESTATION_KEY_TITLE -- Manifestation Title\n" +
+            "\t,W.PRODUCT_WORK_TITLE AS MANIFESTATION_KEY_TITLE -- Manifestation Title\n" +
             "\t,M.ISBN_STRIPPED AS ISBN -- ISBN (may go in IDs table, depending on implementation of data model)\n" +
             "\t,M.ISSN AS ISSN -- ISSN (may go in IDs table, depending on implementation of data model)\n" +
             "\t,M.COVER_HEIGHT_AMOUNT AS COVER_HEIGHT -- Cover Height for Format sub entity\n" +
@@ -255,42 +267,73 @@ public class WorkExtractSQL {
                     " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man\n" +
                     " join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq dq on man.\"PRODUCT_MANIFESTATION_ID\" = dq.pmx_source_reference\n" +
                     "left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
+                    " join semarchy_eph_mdm.sa_manifestation sa on dq.pmx_source_reference::varchar = sa.external_reference\n" +
                     " where dq.dq_err != 'Y' and w.dq_err != 'Y' \n" +
                     " and man.\"MANIFESTATION_SUBTYPE\" = 424 \n" +
-                    " and \"ISBN\" is not null order by random() limit '%s'";
+                    "and f_event = (\n" +
+                    "\t\tselect  max(event_id) from semarchy_eph_mdm.sa_event sa2  \n" +
+                    "\t\twhere sa2.f_event_type = 'PMX'\n" +
+                    "\t\tand sa2.workflow_id = 'talend'\n" +
+                    "\t\tand sa2.f_workflow_source = 'PMX')\n" +
+                    "order by random() limit '%s'\n";
 
     public static final String SELECT_RANDOM_ISBN_IDS_PSB = "select \"ISBN\" AS ISBN \n" +
             " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man\n" +
             " join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq dq on man.\"PRODUCT_MANIFESTATION_ID\" = dq.pmx_source_reference\n" +
             " left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
+            " join semarchy_eph_mdm.sa_manifestation sa on dq.pmx_source_reference::varchar = sa.external_reference\n" +
             " where dq.dq_err != 'Y' and w.dq_err != 'Y' \n" +
             " and man.\"MANIFESTATION_SUBTYPE\" = 425 \n" +
-            " and \"ISBN\" is not null order by random() limit '%s'\n";
+            " and \"ISBN\" is not null \n" +
+            "and f_event = (\n" +
+            "\t\tselect  max(event_id) from semarchy_eph_mdm.sa_event sa2  \n" +
+            "\t\twhere sa2.f_event_type = 'PMX'\n" +
+            "\t\tand sa2.workflow_id = 'talend'\n" +
+            "\t\tand sa2.f_workflow_source = 'PMX')\n" +
+            "order by random() limit '%s'\n";
 
     public static final String SELECT_RANDOM_ISBN_IDS_EBK = "\n" +
             " select \"ISBN\" AS ISBN \n" +
             " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man\n" +
             " join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq dq on man.\"PRODUCT_MANIFESTATION_ID\" = dq.pmx_source_reference\n" +
             " left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
+            " join semarchy_eph_mdm.sa_manifestation sa on dq.pmx_source_reference::varchar = sa.external_reference\n" +
             " where dq.dq_err != 'Y' and w.dq_err != 'Y' \n" +
             " and man.\"COMMODITY\" = 'EB'\n" +
-            " and \"ISBN\" is not null order by random() limit '%s'\n" +
-            " ";
+            " and \"ISBN\" is not null \n" +
+            "and f_event = (\n" +
+            "\t\tselect  max(event_id) from semarchy_eph_mdm.sa_event sa2  \n" +
+            "\t\twhere sa2.f_event_type = 'PMX'\n" +
+            "\t\tand sa2.workflow_id = 'talend'\n" +
+            "\t\tand sa2.f_workflow_source = 'PMX')\n" +
+            "order by random() limit '%s'\n";
 
     public static final String SELECT_RANDOM_MANIFESTATION_IDS_JPR = "select \"MANIFESTATION_ID\" AS manifestation_id \n" +
             " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man\n" +
             " join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq dq on man.\"PRODUCT_MANIFESTATION_ID\" = dq.pmx_source_reference\n" +
             " left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
+            " join semarchy_eph_mdm.sa_manifestation sa on dq.pmx_source_reference::varchar = sa.external_reference\n" +
             " where dq.dq_err != 'Y' and w.dq_err != 'Y' \n" +
             " and  man.\"WORK_TYPE_ID\" IN (4,3,102) and man.\"F_PRODUCT_MANIFESTATION_TYP\" = 1 \n" +
+            "and f_event = (\n" +
+            "\t\tselect  max(event_id) from semarchy_eph_mdm.sa_event sa2  \n" +
+            "\t\twhere sa2.f_event_type = 'PMX'\n" +
+            "\t\tand sa2.workflow_id = 'talend'\n" +
+            "\t\tand sa2.f_workflow_source = 'PMX')\n" +
             " order by random() limit '%s'";
 
     public static final String SELECT_RANDOM_MANIFESTATION_IDS_JEL = "select \"MANIFESTATION_ID\" AS manifestation_id \n" +
             " from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation man\n" +
             " join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation_dq dq on man.\"PRODUCT_MANIFESTATION_ID\" = dq.pmx_source_reference\n" +
             " left join " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_wwork_dq w on dq.f_wwork = w.pmx_source_reference\n" +
+            " join semarchy_eph_mdm.sa_manifestation sa on dq.pmx_source_reference::varchar = sa.external_reference\n" +
             " where dq.dq_err != 'Y' and w.dq_err != 'Y' \n" +
             " and  man.\"WORK_TYPE_ID\" IN (4,3,102) and man.\"F_PRODUCT_MANIFESTATION_TYP\" != 1 \n" +
+            "and f_event = (\n" +
+            "\t\tselect  max(event_id) from semarchy_eph_mdm.sa_event sa2  \n" +
+            "\t\twhere sa2.f_event_type = 'PMX'\n" +
+            "\t\tand sa2.workflow_id = 'talend'\n" +
+            "\t\tand sa2.f_workflow_source = 'PMX')\n" +
             " order by random() limit '%s'";
 
     public static final String SELECT_MANIFESTATIONS_IDS_FOR_SPECIFIC_ISBN = "select \"MANIFESTATION_ID\" AS manifestation_id from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_manifestation where \"ISBN\" in ('%s')";
@@ -328,11 +371,10 @@ public class WorkExtractSQL {
             "sa.F_FORMAT_TYPE as F_FORMAT_TYPE, \n" +
             "sa.F_WWORK as F_WWORK\n" +
             "FROM semarchy_eph_mdm.sa_manifestation sa\n" +
-            "where f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation\n" +
-            "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
-            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "where f_event = (select max (event_id) from\n" +
+            "semarchy_eph_mdm.sa_event \n" +
+            "where semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
-            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n" +
             "and external_reference IN ('%s')";
 
@@ -474,11 +516,10 @@ public class WorkExtractSQL {
             "f_manifestation as f_manifestation,\n" +
             "external_reference as external_reference\n" +
             "FROM semarchy_eph_mdm.sa_manifestation_identifier sa\n" +
-            "where f_event = (select max (f_event) from semarchy_eph_mdm.sa_manifestation_identifier \n" +
-            "join semarchy_eph_mdm.sa_event on f_event = event_id \n" +
-            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
+            "where f_event = (select max (event_id) from\n" +
+            "semarchy_eph_mdm.sa_event \n" +
+            "where semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
             "and semarchy_eph_mdm.sa_event.workflow_id = 'talend'\n" +
-            "and semarchy_eph_mdm.sa_event.f_event_type = 'PMX'\n" +
             "and semarchy_eph_mdm.sa_event.f_workflow_source = 'PMX')\n" +
             "and identifier IN ('%s')";
 
