@@ -47,7 +47,7 @@ public class WorksDataCheck {
         if (System.getProperty("dbRandomRecordsNumber")!=null) {
             numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         }else {
-            numberOfRecords = "500";
+            numberOfRecords = "1000";
         }
         Log.info("numberOfRecords = " + numberOfRecords);
 
