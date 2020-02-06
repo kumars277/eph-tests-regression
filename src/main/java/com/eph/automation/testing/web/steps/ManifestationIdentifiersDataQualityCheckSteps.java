@@ -360,13 +360,13 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
 
                 //f_manifestation
                 Log.info("F_MANIFESTATION  in EPH STG : " + dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getF_manifestation());
-                Log.info("F_MANIFESTATION  in EPH SА : " + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
+                Log.info("F_MANIFESTATION  in EPH SA : " + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
 
                 assertEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getF_manifestation(), dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
 
                 //identifier
                 Log.info("IDENTIFIER  in EPH STG : " + dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getIdentifier());
-                Log.info("IDENTIFIER  in EPH SА: " + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getIdentifier());
+                Log.info("IDENTIFIER  in EPH SA: " + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getIdentifier());
 
                 assertEquals(dataQualityContext.manifestationIdentifiersDataObjectsFromSTG.get(i).getIdentifier(), dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getIdentifier());
 
@@ -414,7 +414,7 @@ public class ManifestationIdentifiersDataQualityCheckSteps {
             assertEquals(identifier, dataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(i).getF_type());
 
 
-            Log.info("F_MANIFESTATION  in EPH SА: " + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
+            Log.info("F_MANIFESTATION  in EPH SA: " + dataQualityContext.manifestationIdentifiersDataObjectsFromSA.get(i).getF_manifestation());
             Log.info("F_MANIFESTATION  in EPH GD : " + dataQualityContext.manifestationIdentifiersDataObjectsFromGD.get(i).getF_manifestation());
 
             //f_manifestation
