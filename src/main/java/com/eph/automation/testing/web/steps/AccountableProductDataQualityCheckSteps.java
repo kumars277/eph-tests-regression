@@ -352,7 +352,7 @@ public class AccountableProductDataQualityCheckSteps {
                 Log.info("UPDATED in EPH STG: " + dataQualityContext.accountableProductDataObjectsFromSTG.get(i).getUPDATED());
 
 
-                sql = String.format(AccountableProductSQL.SELЕCT_UPDATED_VALUE, dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_WORK_ID());
+                sql = String.format(AccountableProductSQL.SELECT_UPDATED_VALUE, dataQualityContext.accountableProductDataObjectsFromPMX.get(i).getPRODUCT_WORK_ID());
                 List<Map<String, Object>> updatedNumber = DBManager.getDBResultMap(sql, Constants.PMX_URL);
                 String updated = (String) updatedNumber.get(0).get("UPDATED");
 
@@ -438,7 +438,7 @@ public class AccountableProductDataQualityCheckSteps {
 
 
                 //GL_PRODUCT_SEGMENT_CODE
-                Log.info("GL_PRODUCT_SEGMENT_CODE in EPH SА: " + dataQualityContext.accountableProductDataObjectsFromSA.get(i).getGL_PRODUCT_SEGMENT_CODE());
+                Log.info("GL_PRODUCT_SEGMENT_CODE in EPH SA: " + dataQualityContext.accountableProductDataObjectsFromSA.get(i).getGL_PRODUCT_SEGMENT_CODE());
 
                 assertEquals(dataQualityContext.accountableProductDataObjectsFromSA.get(i).getGL_PRODUCT_SEGMENT_CODE(), dataQualityContext.accountableProductDataObjectsFromSTGDQ.get(i).getACC_PROD_ID());
 

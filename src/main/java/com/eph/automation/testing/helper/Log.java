@@ -40,7 +40,7 @@ public class Log {
     }
 
     //Debug Level Logs
-    public static void debug (String message) {
-        Log.debug(message);
-    }
+//    public static void debug (String message) {
+//        Log.debug(message);
+//    }
 }

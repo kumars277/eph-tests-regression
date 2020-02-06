@@ -319,7 +319,7 @@ public class AccountableProductSQL {
             "where EXTERNAL_REFERENCE in ('%s')";
 
 
-    public static String SELЕCT_UPDATED_VALUE = "SELECT GREATEST(W_UPDATED,A_UPDATED) AS UPDATED from \n" +
+    public static String SELECT_UPDATED_VALUE = "SELECT GREATEST(W_UPDATED,A_UPDATED) AS UPDATED from \n" +
             "(SELECT\n" +
             "        TO_CHAR(NVL(NVL(W.B_UPDDATE,W.B_CREDATE),TO_DATE('01-01-1900','DD-MM-YYYY')),'YYYYMMDDHH24MI') AS W_UPDATED \n" +
             "        ,TO_CHAR(NVL(NVL(A.B_UPDDATE,A.B_CREDATE),TO_DATE('01-01-1900','DD-MM-YYYY')),'YYYYMMDDHH24MI') AS A_UPDATED \n" +
