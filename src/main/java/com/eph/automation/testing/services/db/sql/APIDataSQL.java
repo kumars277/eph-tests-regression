@@ -55,6 +55,11 @@ public class APIDataSQL {
 
     public static String SELECT_COUNT_PRODUCTS_BY_MANIFESTATIONS = "select count (*) from semarchy_eph_mdm.gd_product where f_manifestation in ('%s')";
 
+    //added by Nishant @ 25 Nov 2019 to fix product by PMC code mismatch
+    public static String SELECT_COUNT_PRODUCTS_BY_WORK = "select count (*) from semarchy_eph_mdm.gd_product where f_wwork in ('%s')";
+
+
+
     public static String SELECT_WORK_BY_ID_FOR_SEARCH = "SELECT \"work_id\" as WORK_ID\n" +
             "FROM semarchy_eph_mdm.gd_wwork " +
             "WHERE work_id='%s'";
@@ -108,7 +113,7 @@ public class APIDataSQL {
     public static String EPH_GD_PMG_CODE_WORKS_EXTRACT_BY_PMC ="SELECT \"work_id\" as WORK_ID\n" +
             "FROM semarchy_eph_mdm.gd_wwork \n" +
             "WHERE f_pmc in (\n" +
-            "\tselect code from semarchy_eph_mdm.gd_x_lov_pmc where code in (\n" +
+            "\tselect code from semarchy_eph_mdm.gd_x_lov_pmc where f_pmg in (\n" +
             "\t\tselect f_pmg from semarchy_eph_mdm.gd_x_lov_pmc where code='%s'));";
     public static String EPH_GD_PACKAGEID_EXTRACT_BY_PRODUCTID ="select f_package_owner from semarchy_eph_mdm.gd_product_rel_package where f_component='%s' limit 1";
     public static String EPH_GD_WORK_EXTRACT_AMOUNT_BYPMG ="select count (*) from semarchy_eph_mdm.gd_wwork where f_pmc in ( select code from semarchy_eph_mdm.gd_x_lov_pmc where f_pmg in (select code from semarchy_eph_mdm.gd_x_lov_pmg where code='%s'));";

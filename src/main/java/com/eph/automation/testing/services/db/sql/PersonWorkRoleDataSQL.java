@@ -331,7 +331,21 @@ public class PersonWorkRoleDataSQL {
             "f_wwork as F_WWORK,\n" +
             "f_person as F_PERSON\n" +
             "from semarchy_eph_mdm.gd_work_person_role \n" +
-            "where external_reference in ('%s')";
+            "where work_person_role_id in ('%s')";
+
+
+    public static String GET_DATA_PERSONS_PRODUCT_ROLE_EPHGD = "select \n" +
+            "f_event as F_EVENT,\n" +
+            "b_classname as B_CLASSNAME,\n" +
+            "product_person_role_id as PRODUCT_PERSON_ROLE_ID,\n" +
+            "effective_start_date as EFFECTIVE_START_DATE,\n" +
+            "effective_end_date as EFFECTIVE_END_DATE,\n" +
+            "f_role as F_ROLE,\n" +
+            "f_product as F_PRODUCT,\n" +
+            "f_person as F_PERSON\n" +
+            "from semarchy_eph_mdm.gd_product_person_role \n" +
+            "where product_person_role_id in ('%s')";
+
 
     public static String GET_RANDOM_PERSON_WORK_ROLE_IDS = "select \n" +
             "\"WORK_PERSON_ROLE_SOURCE_REF\" as WORK_PERSON_ROLE_SOURCE_REF\n" +

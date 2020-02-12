@@ -17,39 +17,35 @@
 
     <properties>
         <aspectj.version>1.8.5</aspectj.version>
-        <slf4j-api.version>1.7.21</slf4j-api.version>
         <log4j.version>1.2.17</log4j.version>
+        <org.slf4j.version>1.7.25</org.slf4j.version>
+        <slf4j-api.version>1.7.21</slf4j-api.version>
         <jdbcdriver.version>12.1.0.2.0</jdbcdriver.version>
-        <rest-assured.version>2.9.0</rest-assured.version>
-        <jackson.version>2.5.3</jackson.version>
         <commondb.version>1.6</commondb.version>
-
-
-        <!--<seleniumpom.version>2.0.5</seleniumpom.version>-->
-        <seleniumpom.version>3.0.14</seleniumpom.version>
         <soapui.version>5.1.2</soapui.version>
-        <cucumber.version>1.2.5</cucumber.version>
-        <slf4j-api.version>1.7.21</slf4j-api.version>
-        <log4j.version>1.2.17</log4j.version>
-        <commondb.version>1.6</commondb.version>
+        <rest-assured.version>2.9.0</rest-assured.version>
+        <jackson.version>2.9.8</jackson.version>
         <javaassist.version>3.12.1.GA</javaassist.version>
         <javaxmail.version>1.4.7</javaxmail.version>
-        <jdbcdriver.version>12.1.0.2.0</jdbcdriver.version>
+        <json.schema.validator.version>2.2.10</json.schema.validator.version>
+        <!-- Spring versions -->
+        <spring.boot.version>2.1.0.RELEASE</spring.boot.version>
+        <spring-boot-common.version>2.5.3</spring-boot-common.version>
+        <org.apache.httpcomponents.httpclient.version>4.5.9</org.apache.httpcomponents.httpclient.version>
+        <!-- Internal dependency versions -->
+        <!--<seleniumpom.version>2.0.5</seleniumpom.version>-->
+        <seleniumpom.version>3.0.14</seleniumpom.version>
+        <cucumber.version>1.2.5</cucumber.version>
         <thread.count>4</thread.count>
         <!--<test.browser>firefox</test.browser>-->
         <test.browser>chrome</test.browser>
         <poi.version>3.13</poi.version>
         <sonar-maven-plugin-version>3.2</sonar-maven-plugin-version>
         <jasypt.version>1.9.2</jasypt.version>
-
         <!-- External dependency versions -->
+        <junit.version>4.12</junit.version>
         <commons.io.version>2.6</commons.io.version>
         <hamcrest.version>2.0.0.0</hamcrest.version>
-        <jackson.version>2.9.8</jackson.version>
-        <json.schema.validator.version>2.2.10</json.schema.validator.version>
-        <junit.version>4.12</junit.version>
-        <org.slf4j.version>1.7.25</org.slf4j.version>
-
     </properties>
 
     <profiles>
@@ -111,9 +107,9 @@
                         <gluePath>com.eph.automation.testing.common.hooks</gluePath>
                         <gluePath>com.eph.automation.testing.web</gluePath>
                     </gluePaths>
-               <!--     <features>
-                        <feature>src/main/resources/features/Research.feature</feature>
-                    </features>-->
+                    <!--     <features>
+                             <feature>src/main/resources/features/Research.feature</feature>
+                         </features>-->
                 </configuration>
             </plugin>
             <plugin>
@@ -134,7 +130,7 @@
     <dependencies>
 
 
-    <dependency>
+        <dependency>
             <groupId>com.jayway.restassured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>${rest-assured.version}</version>
@@ -271,11 +267,7 @@
             <artifactId>commons-lang</artifactId>
             <version>2.6</version>
         </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>${log4j.version}</version>
-        </dependency>
+
 
         <dependency>
             <groupId>com.fifesoft</groupId>
@@ -459,9 +451,21 @@
             <version>2.0.2</version>
         </dependency>
         <dependency>
-            <groupId>com.syncron.amazonaws</groupId>
-            <artifactId>simba-athena-jdbc-driver</artifactId>
-            <version>2.0.2</version>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>5.1.7.RELEASE</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>5.1.7.RELEASE</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

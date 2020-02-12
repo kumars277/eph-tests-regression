@@ -14,6 +14,7 @@ import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ManifestationDataObject;
 import com.eph.automation.testing.models.dao.ProductDataObject;
 import com.eph.automation.testing.models.dao.WorkDataObject;
+import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
@@ -30,7 +31,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.eph.automation.testing.services.api.APIService.*;
-
 
 /**
  * Created by Georgi Vlaykov on 11/02/2019
@@ -57,9 +57,7 @@ public class ApiProductsSearchSteps {
         //Get property when run with jenkins
 //        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
-
         sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_FOR_SEARCH_BOOKS, numberOfRecords);
-
 
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
@@ -93,21 +91,19 @@ public class ApiProductsSearchSteps {
     }
 
     @When("^the product details are retrieved and compared$")
-    public void compareSearchResultsWithDB() throws IOException {
+    public void compareSearchResultsWithDB() throws IOException, AzureOauthTokenFetchingException {
         int bound =productDataObjects.size();
-        
         for (int i = 0; i < bound; i++) {
             boolean code = checkProductExists(productDataObjects.get(i).getPRODUCT_ID());
             if (code) {
                 response = searchForProductResult(productDataObjects.get(i).getPRODUCT_ID());
                 response.compareWithDB();
-
             }
         }
     }
 
     @When("^the product details are retrieved when searched by (.*) and compared$")
-    public void productSearchByTitleAndCompare(String title) throws IOException {
+    public void productSearchByTitleAndCompare(String title) throws IOException, AzureOauthTokenFetchingException {
         ProductsMatchedApiObject returnedProducts = null;
         Log.info("And we get the products data from the API ...");
         int bound = productDataObjects.size();
@@ -129,7 +125,7 @@ public class ApiProductsSearchSteps {
     }
 
     @When("^the product details are retrieved and compared when searched by (.*)$")
-    public void productSearchByIdentifiersAndCompare(String identifierType) throws IOException {
+    public void productSearchByIdentifiersAndCompare(String identifierType) throws IOException, AzureOauthTokenFetchingException {
         ProductsMatchedApiObject returnedProducts = null;
         Log.info("And we get the products data from the API ...");
         int bound =productDataObjects.size();
@@ -156,7 +152,7 @@ public class ApiProductsSearchSteps {
     }
 
     @When("^the product details are retrieved and compared when search option is used with (.*)$")
-    public void productSearchBySearchOptionAndCompare(String identifierType) throws IOException {
+    public void productSearchBySearchOptionAndCompare(String identifierType) throws IOException, AzureOauthTokenFetchingException {
         ProductsMatchedApiObject returnedProducts = null;
         Log.info("And we get the products data from the API ...");
         int bound =productDataObjects.size();
@@ -191,7 +187,7 @@ public class ApiProductsSearchSteps {
     }
 
     @When("^the products detail are retrieved and compared when searched by type and (.*)$")
-    public void productSearchByIdentifierWithTypeAndCompare(String identifierType) throws IOException {
+    public void productSearchByIdentifierWithTypeAndCompare(String identifierType) throws IOException, AzureOauthTokenFetchingException {
         ProductsMatchedApiObject returnedProducts = null;
         Log.info("And we get the products data from the API ...");
         int bound =productDataObjects.size();
@@ -269,7 +265,7 @@ public class ApiProductsSearchSteps {
 
 
     @When("^the product response returned when searched by packages is verified$")
-    public void compareProductsRetrievedByIsInPackagesOptionWithDB() {
+    public void compareProductsRetrievedByIsInPackagesOptionWithDB() throws AzureOauthTokenFetchingException {
         ProductsMatchedApiObject returnedProducts = null;
 
         int bound = productDataObjects.size();
@@ -281,7 +277,7 @@ public class ApiProductsSearchSteps {
     }
 
     @When("^the product response returned when searched by components is verified$")
-    public void compareProductsRetrievedByhasComponentsOptionWithDB() {
+    public void compareProductsRetrievedByhasComponentsOptionWithDB() throws AzureOauthTokenFetchingException {
         ProductsMatchedApiObject returnedProducts = null;
 
         int bound = productDataObjects.size();
@@ -293,9 +289,8 @@ public class ApiProductsSearchSteps {
     }
 
     @When("^the product response returned when searched by personID is verified$")
-    public void compareProductsRetrievdByPersonWithDB() {
+    public void compareProductsRetrievdByPersonWithDB() throws AzureOauthTokenFetchingException {
         ProductsMatchedApiObject returnedProducts = null;
-
         int bound = ids.size();
         for (int i = 0; i < bound; i++) {
             returnedProducts = searchForProductsByPersonIDResult(ids.get(i));
@@ -321,14 +316,14 @@ public class ApiProductsSearchSteps {
     }
 
     public int getNumberOfProductsByPersonIDs(String personID) {
-                sql = String.format(APIDataSQL.SELECT_COUNT_PERSONID_FOR_PRODUCTS, personID);
+        sql = String.format(APIDataSQL.SELECT_COUNT_PERSONID_FOR_PRODUCTS, personID);
         Log.info(sql);
         List<Map<String, Object>> getCountProd = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         int countProd = ((Long) getCountProd.get(0).get("count")).intValue();
         return countProd;
     }
     @When("^the product details are retrieved by PMC Code and compared$")
-    public void compareProductSearchByPMCResultsWithDB() {
+    public void compareProductSearchByPMCResultsWithDB() throws AzureOauthTokenFetchingException {
         ProductsMatchedApiObject returnedProducts = null;
 
         int bound = productDataObjects.size();
@@ -353,7 +348,7 @@ public class ApiProductsSearchSteps {
     }
 
     @When("^the product details are retrieved by PMG Code and compared$")
-    public void compareProductSearchByPMGResultsWithDB() {
+    public void compareProductSearchByPMGResultsWithDB() throws AzureOauthTokenFetchingException {
         ProductsMatchedApiObject returnedProducts = null;
 
         int bound = productDataObjects.size();
@@ -420,6 +415,15 @@ public class ApiProductsSearchSteps {
         return count;
     }
 
+    public int getProductsCountByWork(){//created by Nishant @ 25 Nov 2019
+        sql = String.format(APIDataSQL.SELECT_COUNT_PRODUCTS_BY_WORK, Joiner.on("','").join(ids));
+        Log.info(sql);
+
+        List<Map<String, Object>> productsCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        int count = ((Long) productsCount.get(0).get("count")).intValue();
+        return count;
+    }
+
     public int getNumberOfProductsByPMC(String pmcCode) {
         getWorksByPMC(pmcCode);
         getManifestationsByWorks();
@@ -429,7 +433,7 @@ public class ApiProductsSearchSteps {
     public int getProductsCountByPMGandPMC(String pmcCode) {
         getPMGWorksByPMC(pmcCode);
         getManifestationsByWorks();
-        return getProductsCountByManifestations();
+        return getProductsCountByManifestations()+getProductsCountByWork();
     }
 
     public String getPMGcodeByPMC(String pmcCode) {

@@ -12,6 +12,7 @@ import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ManifestationDataObject;
 import com.eph.automation.testing.models.dao.ManifestationIdentifierObject;
 import com.eph.automation.testing.models.dao.WorkDataObject;
+import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 
 import static com.eph.automation.testing.models.contexts.DataQualityContext.manifestationDataObjectsFromEPHGD;
 import static com.eph.automation.testing.services.api.APIService.*;
+//import static com.eph.automation.testing.services.api.APIService.*;
 
 
 /**
@@ -83,7 +85,7 @@ public class ApiWorksSearchSteps {
 
 
     @When("^the work details are retrieved and compared$")
-    public void compareWorkSearchResultsWithDB() {
+    public void compareWorkSearchResultsWithDB() throws AzureOauthTokenFetchingException {
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
 
         for (int i = 0; i < bound; i++) {
@@ -97,7 +99,7 @@ public class ApiWorksSearchSteps {
     }
 
     @When("^the work details are retrieved by title and compared$")
-    public void compareWorkSearchByTitleResultsWithDB() {
+    public void compareWorkSearchByTitleResultsWithDB() throws AzureOauthTokenFetchingException {
         WorksMatchedApiObject returnedWorks = null;
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
         
@@ -112,7 +114,7 @@ public class ApiWorksSearchSteps {
     }
 
     @When("^the work details are retrieved by PMC Code and compared$")
-    public void compareWorkSearchByPMCResultsWithDB() {
+    public void compareWorkSearchByPMCResultsWithDB() throws AzureOauthTokenFetchingException {
         WorksMatchedApiObject returnedWorks = null;
 
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
@@ -154,7 +156,7 @@ public class ApiWorksSearchSteps {
 
 
     @When("^the work details are retrieved by PMG Code and compared$")
-    public void compareWorkSearchByPMGResultsWithDB() {
+    public void compareWorkSearchByPMGResultsWithDB() throws AzureOauthTokenFetchingException {
         WorksMatchedApiObject returnedWorks = null;
 
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
@@ -178,7 +180,7 @@ public class ApiWorksSearchSteps {
     }
 
     @When("^the works search by identifier (.*) details are retrieved and compared$")
-    public void compareWorkSearchByIdentifierResultsWithDB(String identifierType) {
+    public void compareWorkSearchByIdentifierResultsWithDB(String identifierType) throws AzureOauthTokenFetchingException {
         WorksMatchedApiObject returnedWorks = null;
 
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
@@ -203,7 +205,7 @@ public class ApiWorksSearchSteps {
     }
 
     @When("^the works retrieved by search (.*) details are retrieved and compared$")
-    public void compareWorksRetrievdBySearchOptionWithDB(String identifierType) {
+    public void compareWorksRetrievdBySearchOptionWithDB(String identifierType) throws AzureOauthTokenFetchingException {
         WorksMatchedApiObject returnedWorks = null;
 
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
@@ -233,7 +235,7 @@ public class ApiWorksSearchSteps {
     }
 
     @When("^the work search by identifier (.*) and type details are retrieved and compared$")
-    public void compareSearchByIdentifierAndTypeResultsWithDB(String identifierType) {
+    public void compareSearchByIdentifierAndTypeResultsWithDB(String identifierType) throws AzureOauthTokenFetchingException {
         WorksMatchedApiObject returnedWorks = null;
 
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
@@ -252,7 +254,7 @@ public class ApiWorksSearchSteps {
     }
 
     @When("^the work response count is compared with the count in the DB for person ID$")
-    public void compareSearchResultCountForPersonIdsresponse() {
+    public void compareSearchResultCountForPersonIdsresponse() throws AzureOauthTokenFetchingException {
         WorksMatchedApiObject returnedWorks = null;
 
         int bound = ids.size();
