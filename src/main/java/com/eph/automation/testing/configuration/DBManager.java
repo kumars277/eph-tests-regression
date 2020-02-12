@@ -25,6 +25,7 @@ public class DBManager {
     private static String driver = "oracle.jdbc.driver.OracleDriver";
     private static String mySQLDriver = "com.mysql.jdbc.Driver";
 
+    private static String athenaDriver = "com.simba.athena.jdbc.Driver";
 
     public static List getDBResultAsBeanList(String sql, Class klass, String dbEndPoint) {
         Properties dbProps = new Properties();
@@ -87,6 +88,25 @@ public class DBManager {
         }
         return updateStatus;
     }
+
+    public static List getDLResultMap(String sql, String URL) {
+        List mapList = null;
+        try {
+            if (connection == null) {
+                DbUtils.loadDriver(athenaDriver);
+            }
+            connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
+            QueryRunner query = new QueryRunner();
+            mapList = (List) query.query(connection, sql, new MapListHandler());
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } finally {
+            DbUtils.closeQuietly(connection);
+        }
+        return mapList;
+    }
+
+
 
     public static List getDBResultMap(String sql, String URL) {
         List mapList = null;

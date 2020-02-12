@@ -59,6 +59,7 @@ public class Constants {
     public static String EPH_URL = "EPH_URL";
     public static String MYSQL_DB_URL_KEY = "MYSQL_URL";
     public static String WFT_URL = "WFT_URL";
+    public static  String AWS_URL = "AWS_URL";
 
 
 
