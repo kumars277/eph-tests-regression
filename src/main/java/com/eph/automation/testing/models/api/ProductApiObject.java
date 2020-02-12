@@ -75,13 +75,14 @@ public class ProductApiObject {
         }
         if(!(this.persons==null)&&!(this.persons.length==0)) {
             for (PersonsApiObject person : persons) {
-                person.compareWithDB();
+                person.compareWithDB_product();
             }
         }
         if(manifestation!=null) {
             manifestation.compareWithDB();
         }
     }
+
     private void getProductDataFromEPHGD(String workID) {
         List<String> ids = new ArrayList<>();
         ids.add(workID);
