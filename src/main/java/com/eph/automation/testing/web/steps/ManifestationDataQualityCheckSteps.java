@@ -78,15 +78,14 @@ public class ManifestationDataQualityCheckSteps {
             sql = WorkExtractSQL.COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_GOING_TO_DQ;
             Log.info(sql);
         } else {
-        sql = WorkCountSQL.GET_REFRESH_DATE;
-        Log.info(sql);
-        List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
-        Log.info("refresh date: " + refreshDate);
-        sql = String.format(WorkExtractSQL.COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE_DELTA, refreshDate);
-        Log.info(sql);
-    }
-
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            Log.info(sql);
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+            Log.info("refresh date: " + refreshDate);
+            sql = String.format(WorkExtractSQL.COUNT_MANIFESTATIONS_IN_EPH_STG_PMX_MANIFESTATION_TABLE_DELTA, refreshDate);
+            Log.info(sql);
+        }
 
 
         List<Map<String, Object>> manifestationsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -208,7 +207,7 @@ public class ManifestationDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
 

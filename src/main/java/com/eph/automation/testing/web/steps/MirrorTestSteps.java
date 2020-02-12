@@ -115,9 +115,9 @@ public class MirrorTestSteps {
         }
         Log.info("numberOfRecords = " + numberOfRecords);
 
-            if(System.getProperty("LOAD") == null ||System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
-                sql = MirrorsSQL.gettingNumberOfIds.replace("PARAM1", numberOfRecords);
-            }else {
+//            if(System.getProperty("LOAD") == null ||System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")){
+//                sql = MirrorsSQL.gettingNumberOfIds.replace("PARAM1", numberOfRecords);
+//            }else {
                 sql = WorkCountSQL.GET_REFRESH_DATE;
                 Log.info(sql);
                 List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -125,7 +125,7 @@ public class MirrorTestSteps {
                 Log.info("refresh date: " + refreshDate);
                 sql = String.format(MirrorsSQL.gettingNumberOfIdsDelta, refreshDate, numberOfRecords);
                 Log.info(sql);
-            }
+//            }
 
 
         List<Map<?, ?>> randomISBNIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);

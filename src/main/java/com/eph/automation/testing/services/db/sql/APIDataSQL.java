@@ -192,4 +192,7 @@ public class APIDataSQL {
             " ,F_WWORK AS WORK_ID -- WORK IDENTIFIER\n" +
             "  FROM ephsit.semarchy_eph_mdm.gd_work_identifier\n" +
             "  WHERE WORK_IDENTIFIER_ID='PARAM1'";
+
+    public  static String SELECT_GD_WWORK_TYPE_STATUS = "select f_type as WORK_TYPE, f_status as WORK_STATUS from semarchy_eph_mdm.gd_wwork where work_id ='%s'";
+
 }

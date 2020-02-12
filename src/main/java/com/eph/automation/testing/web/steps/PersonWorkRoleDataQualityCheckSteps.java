@@ -40,7 +40,6 @@ public class PersonWorkRoleDataQualityCheckSteps {
     private static int countPersonsWorkRolePMX;
     private static int countPersonsWorkRoleEPHSTG;
     private static int countPersonsWorkRoleEPHSTGGoingToSA;
-    private static int countPersonsWorkRoleEPHSTGGoingToSAEnd;
     private static int countPersonsWorkRoleEPHSA;
     private static int countPersonsWorkRoleEPHAE;
     private static int countPersonsWorkRoleEPHGD;
@@ -93,16 +92,6 @@ public class PersonWorkRoleDataQualityCheckSteps {
         List<Map<String, Object>> personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         countPersonsWorkRoleEPHSTGGoingToSA = ((Long) personsNumber.get(0).get("count")).intValue();
         Log.info("Count of persons work role in EPH STG going to SA is: " + countPersonsWorkRoleEPHSTGGoingToSA);
-
-        //Get count from second script that change the table
-        sql = PersonWorkRoleDataSQL.GET_COUNT_PERSON_WORK_ROLE_PD;
-        Log.info(sql);
-
-        personsNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        countPersonsWorkRoleEPHSTGGoingToSAEnd = ((Long) personsNumber.get(0).get("count")).intValue();
-        Log.info("Count of persons work role in EPH STG going to SA fro mthe second script is: " + countPersonsWorkRoleEPHSTGGoingToSAEnd);
-
-
     }
 
 
@@ -145,7 +134,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
     @Then("^Compare the count on records for persons work role in EPH Staging and EPH SA$")
     public void verifyCountOfPersonsProductRoleInEPHSTGAndEPHSAIsEqual() {
-        Assert.assertEquals("\nPersons work role count in EPH STG and EPH SA is not equal", countPersonsWorkRoleEPHSTGGoingToSA + countPersonsWorkRoleEPHSTGGoingToSAEnd, countPersonsWorkRoleEPHSA);
+        Assert.assertEquals("\nPersons work role count in EPH STG and EPH SA is not equal", countPersonsWorkRoleEPHSTGGoingToSA, countPersonsWorkRoleEPHSA);
     }
 
     @When("^Get the count of records for persons work role in EPH GD$")
@@ -175,7 +164,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
         Log.info("Get random records ..");
 
         //Get property when run with jenkins
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
+//        numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         Log.info("numberOfRecords = " + numberOfRecords);
 
         if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
@@ -246,6 +235,10 @@ public class PersonWorkRoleDataQualityCheckSteps {
             sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_AE, Joiner.on("','").join(idsPMX));
             Log.info(sql);
         }
+        if (type.equals("BC")) {
+            sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_PMX_BC, Joiner.on("','").join(idsPMX));
+            Log.info(sql);
+        }
 
         dataQualityContext.personWorkRoleDataObjectsFromPMX = DBManager
                 .getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.PMX_URL);
@@ -271,7 +264,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
     @And("^Compare person work role records in PMX and EPH STG for (.*)$")
     public void comparePersonWorkRolesRecordsInPMXAndEPHSTG(String type) {
         Log.info("And compare work role records in PMX and EPH STG ..");
-        if (CollectionUtils.isEmpty(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG) && System.getProperty("LOAD").equalsIgnoreCase("DELTA_LOAD")) {
+        if (CollectionUtils.isEmpty(dataQualityContext.personWorkRoleDataObjectsFromEPHSTG)) {
             Log.info("There is no updated data for Person Work Role");
         } else {
             //sort the lists before comparison
@@ -324,7 +317,7 @@ public class PersonWorkRoleDataQualityCheckSteps {
 
                     Log.info("Expecting START_DATE in PMX and EPH STG is consistent");
 
-                    if (!type.equals("PD"))
+                    if (!type.equals("PD")&&!type.equals("BC"))
                         assertEquals(pmxStartDate, ephStartDate);
                 }
 
