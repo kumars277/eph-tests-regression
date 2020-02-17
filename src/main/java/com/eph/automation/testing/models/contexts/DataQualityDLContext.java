@@ -15,4 +15,13 @@ public class DataQualityDLContext {
     public static List<WorkDataDLObject> tbWorkDataObjectsFromEPH;
     public static List<WorkDataDLObject> tbWorkDataObjectsFromDL;
 
+    public static List<ProductDataDLObject> tbProductDataObjectsFromEPH;
+    public static List<ProductDataDLObject> tbProductDataObjectsFromDL;
+
+    public static List<ManifestationDataDLObject> tbManifestationDataObjectsFromEPH;
+    public static List<ManifestationDataDLObject> tbManifestationDataObjectsFromDL;
+
+    public static List<PersonDataDLObject> tbPersonDataObjectsFromEPH;
+    public static List<PersonDataDLObject> tbPersonDataObjectsFromDL;
+
 }
