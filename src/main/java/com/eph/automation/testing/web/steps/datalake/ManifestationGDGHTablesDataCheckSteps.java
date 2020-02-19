@@ -6,7 +6,7 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityDLContext;
 import com.eph.automation.testing.models.dao.datalake.ManifestationDataDLObject;
-import com.eph.automation.testing.services.db.DataLakeSql.ManifestationDataChecksSQL;
+import com.eph.automation.testing.services.db.DataLakeSql.ManifestationGDGHTablesDataChecksSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-public class ManifestationDataCheckSteps {
+public class ManifestationGDGHTablesDataCheckSteps {
 
     @StaticInjection
     public DataQualityDLContext dataQualityDLContext;
@@ -36,28 +36,35 @@ public class ManifestationDataCheckSteps {
         //Get property when running with jenkins
         //numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         //Log.info("numberOfRecords = " + numberOfRecords);
-        if(tableName.contentEquals("gd_manifestation")){
-            sql = String.format(ManifestationDataChecksSQL.GET_RANDOM_MANIFESTATION_ID, numberOfRecords);
-            Log.info(sql);
-            List<Map<?, ?>> randomManifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            Ids = randomManifestationIds.stream().map(m -> (String) m.get("MANIFESTATION_ID")).collect(Collectors.toList());
-        }else if(tableName.contentEquals("gh_manifestation")){
-            sql = String.format(ManifestationDataChecksSQL.GET_RANDOM_MANIFESTATION_ID_GH, numberOfRecords);
-            Log.info(sql);
-            List<Map<?, ?>> randomManifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            Ids = randomManifestationIds.stream().map(m -> (String) m.get("MANIFESTATION_ID")).collect(Collectors.toList());
-        }else if(tableName.contentEquals("gh_manifestation_identifier")){
-            sql = String.format(ManifestationDataChecksSQL.GET_RANDOM_MANI_IDENTIFIER_ID_GH, numberOfRecords);
-            Log.info(sql);
-            List<Map<?, ?>> randomManiIdentifierIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            Ids = randomManiIdentifierIds.stream().map(m -> (BigDecimal) m.get("MANIF_IDENTIFIER_ID")).map(String::valueOf).collect(Collectors.toList());
-        }else if(tableName.contentEquals("gd_manifestation_identifier")){
-        sql = String.format(ManifestationDataChecksSQL.GET_RANDOM_MANI_IDENTIFIER_ID_GD, numberOfRecords);
-        Log.info(sql);
-        List<Map<?, ?>> randomManiIdentifierIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        Ids = randomManiIdentifierIds.stream().map(m -> (BigDecimal) m.get("MANIF_IDENTIFIER_ID")).map(String::valueOf).collect(Collectors.toList());
-    }
 
+        switch (tableName){
+            case "gd_manifestation":
+                sql = String.format(ManifestationGDGHTablesDataChecksSQL.GET_RANDOM_MANIFESTATION_ID, numberOfRecords);
+                Log.info(sql);
+                List<Map<?, ?>> randomManifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomManifestationIds.stream().map(m -> (String) m.get("MANIFESTATION_ID")).collect(Collectors.toList());
+                break;
+            case "gh_manifestation":
+                sql = String.format(ManifestationGDGHTablesDataChecksSQL.GET_RANDOM_MANIFESTATION_ID_GH, numberOfRecords);
+                Log.info(sql);
+                List<Map<?, ?>> randomManifestationGHIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomManifestationGHIds.stream().map(m -> (String) m.get("MANIFESTATION_ID")).collect(Collectors.toList());
+                break;
+            case "gh_manifestation_identifier":
+                sql = String.format(ManifestationGDGHTablesDataChecksSQL.GET_RANDOM_MANI_IDENTIFIER_ID_GH, numberOfRecords);
+                Log.info(sql);
+                List<Map<?, ?>> randomManiIdentifierGHIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomManiIdentifierGHIds.stream().map(m -> (BigDecimal) m.get("MANIF_IDENTIFIER_ID")).map(String::valueOf).collect(Collectors.toList());
+                break;
+
+            case "gd_manifestation_identifier":
+                sql = String.format(ManifestationGDGHTablesDataChecksSQL.GET_RANDOM_MANI_IDENTIFIER_ID_GD, numberOfRecords);
+                Log.info(sql);
+                List<Map<?, ?>> randomManiIdentifierIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomManiIdentifierIds.stream().map(m -> (BigDecimal) m.get("MANIF_IDENTIFIER_ID")).map(String::valueOf).collect(Collectors.toList());
+                break;
+
+        }
 
         Log.info(Ids.toString());
     }
@@ -65,7 +72,7 @@ public class ManifestationDataCheckSteps {
     @When("^We get the gd manifestation records from EPH$")
     public void getManifestationEPH() {
         Log.info("We get the manifestation records from EPH..");
-        sql = String.format(ManifestationDataChecksSQL.GET_DATA_MANIFESTATION_EPH, Joiner.on("','").join(Ids));
+        sql = String.format(ManifestationGDGHTablesDataChecksSQL.GET_DATA_MANIFESTATION_EPH, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbManifestationDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, ManifestationDataDLObject.class, Constants.EPH_URL);
     }
@@ -74,7 +81,7 @@ public class ManifestationDataCheckSteps {
     @Then("^We get the gd manifestation records from DL$")
     public void getManifestationDL() {
         Log.info("We get the manifestation records from DL..");
-        sql = String.format(ManifestationDataChecksSQL.GET_DATA_MANIFESTATION_DL, Joiner.on("','").join(Ids));
+        sql = String.format(ManifestationGDGHTablesDataChecksSQL.GET_DATA_MANIFESTATION_DL, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbManifestationDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, ManifestationDataDLObject.class, Constants.AWS_URL);
     }
@@ -251,7 +258,7 @@ public class ManifestationDataCheckSteps {
     @When("^We get the gh manifestation records from EPH$")
     public void getGHManifestationEPH() {
         Log.info("We get the work records from EPH..");
-        sql = String.format(ManifestationDataChecksSQL.GET_DATA_GH_MANIFESTATION_EPH, Joiner.on("','").join(Ids));
+        sql = String.format(ManifestationGDGHTablesDataChecksSQL.GET_DATA_GH_MANIFESTATION_EPH, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbManifestationDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, ManifestationDataDLObject.class, Constants.EPH_URL);
     }
@@ -260,7 +267,7 @@ public class ManifestationDataCheckSteps {
     @Then("^We get the gh manifestation records from DL$")
     public void getGHManifestationDL() {
         Log.info("We get the work records from DL..");
-        sql = String.format(ManifestationDataChecksSQL.GET_DATA_GH_MANIFESTATION_DL, Joiner.on("','").join(Ids));
+        sql = String.format(ManifestationGDGHTablesDataChecksSQL.GET_DATA_GH_MANIFESTATION_DL, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbManifestationDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, ManifestationDataDLObject.class, Constants.AWS_URL);
     }
@@ -447,7 +454,7 @@ public class ManifestationDataCheckSteps {
     @When("^We get the gh manifestation identifier records from EPH$")
     public void getGHManiIdentifierEPH() {
         Log.info("We get the manifestation identifier records from EPH..");
-        sql = String.format(ManifestationDataChecksSQL.GET_DATA_GH_MANI_IDENTIFIER_EPH, Joiner.on("','").join(Ids));
+        sql = String.format(ManifestationGDGHTablesDataChecksSQL.GET_DATA_GH_MANI_IDENTIFIER_EPH, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbManifestationDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, ManifestationDataDLObject.class, Constants.EPH_URL);
     }
@@ -455,7 +462,7 @@ public class ManifestationDataCheckSteps {
     @Then ("^We get the gh manifestation identifier records from DL$")
     public void getGHManiIdentifierDL() {
         Log.info("We get the manifestation identifier records from DL..");
-        sql = String.format(ManifestationDataChecksSQL.GET_DATA_GH_MANI_IDENTIFIER_DL, Joiner.on("','").join(Ids));
+        sql = String.format(ManifestationGDGHTablesDataChecksSQL.GET_DATA_GH_MANI_IDENTIFIER_DL, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbManifestationDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, ManifestationDataDLObject.class, Constants.AWS_URL);
     }
@@ -591,7 +598,7 @@ public class ManifestationDataCheckSteps {
     @When("^We get the gd manifestation identifier records from EPH$")
     public void getManiIdentifierEPH() {
         Log.info("We get the manifestation identifier records from EPH..");
-        sql = String.format(ManifestationDataChecksSQL.GET_DATA_GD_MANI_IDENTIFIER_EPH, Joiner.on("','").join(Ids));
+        sql = String.format(ManifestationGDGHTablesDataChecksSQL.GET_DATA_GD_MANI_IDENTIFIER_EPH, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbManifestationDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, ManifestationDataDLObject.class, Constants.EPH_URL);
     }
@@ -599,7 +606,7 @@ public class ManifestationDataCheckSteps {
     @Then ("^We get the gd manifestation identifier records from DL$")
     public void getManiIdentifierDL() {
         Log.info("We get the manifestation identifier records from DL..");
-        sql = String.format(ManifestationDataChecksSQL.GET_DATA_GD_MANI_IDENTIFIER_DL, Joiner.on("','").join(Ids));
+        sql = String.format(ManifestationGDGHTablesDataChecksSQL.GET_DATA_GD_MANI_IDENTIFIER_DL, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbManifestationDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, ManifestationDataDLObject.class, Constants.AWS_URL);
     }

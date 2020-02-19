@@ -1,6 +1,6 @@
 package com.eph.automation.testing.services.db.DataLakeSql;
 
-public  class PersonDataChecksSQL {
+public  class PersonGDGHTablesDataChecksSQL {
 
     public static String GET_RANDOM_PERSON_ID = "select person_id as PERSON_ID from semarchy_eph_mdm.gd_person order by random() limit '%s'";
      public static String GET_RANDOM_GH_PERSON_ID = "select person_id as PERSON_ID from semarchy_eph_mdm.gh_person order by random() limit '%s'";

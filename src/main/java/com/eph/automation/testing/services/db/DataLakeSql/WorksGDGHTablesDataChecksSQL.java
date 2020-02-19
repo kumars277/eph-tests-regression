@@ -1,6 +1,6 @@
 package com.eph.automation.testing.services.db.DataLakeSql;
 
-public  class WorksDataChecksSQL {
+public  class WorksGDGHTablesDataChecksSQL {
 
     public static String GET_RANDOM_WORK_ID_GD = "select work_id as WORK_ID from semarchy_eph_mdm.gd_wwork order by random() limit '%s'";
 
@@ -103,7 +103,7 @@ public  class WorksDataChecksSQL {
             ",F_SELF_SIX as F_SELF_SIX\n" +
             ",F_SELF_SEVEN as F_SELF_SEVEN\n" +
             ",F_SELF_EIGHT as F_SELF_EIGHT\n" +
-            "from product_database_sit.gd_wwork \n" +
+            "from " + GetDLDBUser.getDataBase()+".gd_wwork \n" +
             "where WORK_ID in ('%s')";
 
     public static String GET_DATA_GH_WORKS_EPH = "select \n" +

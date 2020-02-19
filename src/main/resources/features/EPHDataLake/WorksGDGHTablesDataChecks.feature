@@ -12,7 +12,7 @@ Feature:Validate data for Work tables between EPH and Data Lake - Outbound
       | 10              | gd_wwork|
 
    @DL
-   Scenario Outline: Validate data is transferred from gh_wwork EPH to DL Outbound
+   Scenario Outline: Validate data is t ransferred from gh_wwork EPH to DL Outbound
      Given We get <countOfRandomIds> random work ids of <table>
      When We get the gh work records from EPH
      Then We get the gh work records from DL

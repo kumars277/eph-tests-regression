@@ -6,7 +6,7 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityDLContext;
 import com.eph.automation.testing.models.dao.datalake.ProductDataDLObject;
-import com.eph.automation.testing.services.db.DataLakeSql.ProductDataChecksSQL;
+import com.eph.automation.testing.services.db.DataLakeSql.ProductGDGHTablesDataChecksSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-public class ProductDataCheckSteps {
+public class ProductGDGHTablesDataCheckSteps {
 
     @StaticInjection
     public DataQualityDLContext dataQualityDLContext;
@@ -36,21 +36,28 @@ public class ProductDataCheckSteps {
         //Get property when running with jenkins
         //numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         //Log.info("numberOfRecords = " + numberOfRecords);
-        if (tableName.contentEquals("gd_product")) {
-            sql = String.format(ProductDataChecksSQL.GET_RANDOM_PRODUCT_ID, numberOfRecords);
-            Log.info(sql);
-            List<Map<?, ?>> randomProductIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            Ids = randomProductIds.stream().map(m -> (String) m.get("PRODUCT_ID")).collect(Collectors.toList());
-        } else if (tableName.contentEquals("gh_product")) {
-            sql = String.format(ProductDataChecksSQL.GET_RANDOM_GH_PRODUCT_ID, numberOfRecords);
-            Log.info(sql);
-            List<Map<?, ?>> randomProductIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            Ids = randomProductIds.stream().map(m -> (String) m.get("PRODUCT_ID")).collect(Collectors.toList());
-        } else if (tableName.contentEquals("gd_accountable_product")) {
-            sql = String.format(ProductDataChecksSQL.GET_RANDOM_ACCOUNTABLE_PRODUCT_ID, numberOfRecords);
-            Log.info(sql);
-            List<Map<?, ?>> randomProductIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            Ids = randomProductIds.stream().map(m -> (BigDecimal) m.get("ACCOUNTABLE_PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
+        switch (tableName){
+            case "gd_product":
+                sql = String.format(ProductGDGHTablesDataChecksSQL.GET_RANDOM_PRODUCT_ID, numberOfRecords);
+                Log.info(sql);
+                List<Map<?, ?>> randomProductIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomProductIds.stream().map(m -> (String) m.get("PRODUCT_ID")).collect(Collectors.toList());
+                break;
+
+            case "gh_product":
+                sql = String.format(ProductGDGHTablesDataChecksSQL.GET_RANDOM_GH_PRODUCT_ID, numberOfRecords);
+                Log.info(sql);
+                List<Map<?, ?>> randomGHProductIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomGHProductIds.stream().map(m -> (String) m.get("PRODUCT_ID")).collect(Collectors.toList());
+                break;
+
+            case "gd_accountable_product":
+                sql = String.format(ProductGDGHTablesDataChecksSQL.GET_RANDOM_ACCOUNTABLE_PRODUCT_ID, numberOfRecords);
+                Log.info(sql);
+                List<Map<?, ?>> randomAccProductIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomAccProductIds.stream().map(m -> (BigDecimal) m.get("ACCOUNTABLE_PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
+                break;
+
         }
         Log.info(Ids.toString());
     }
@@ -58,7 +65,7 @@ public class ProductDataCheckSteps {
     @When("^We get the gd product records from EPH$")
     public void getProductEPH() {
         Log.info("We get the product records from EPH..");
-        sql = String.format(ProductDataChecksSQL.GET_DATA_PRODUCT_EPH, Joiner.on("','").join(Ids));
+        sql = String.format(ProductGDGHTablesDataChecksSQL.GET_DATA_PRODUCT_EPH, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbProductDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, ProductDataDLObject.class, Constants.EPH_URL);
     }
@@ -67,7 +74,7 @@ public class ProductDataCheckSteps {
     @Then("^We get the gd product records from DL$")
     public void getProductDL() {
         Log.info("We get the product records from DL..");
-        sql = String.format(ProductDataChecksSQL.GET_DATA_PRODUCT_DL, Joiner.on("','").join(Ids));
+        sql = String.format(ProductGDGHTablesDataChecksSQL.GET_DATA_PRODUCT_DL, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbProductDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, ProductDataDLObject.class, Constants.AWS_URL);
     }
@@ -356,7 +363,7 @@ public class ProductDataCheckSteps {
     @When("^We get the gh product records from EPH$")
     public void getGHProductEPH() {
         Log.info("We get the GH product records from EPH..");
-        sql = String.format(ProductDataChecksSQL.GET_DATA_GH_PRODUCT_EPH, Joiner.on("','").join(Ids));
+        sql = String.format(ProductGDGHTablesDataChecksSQL.GET_DATA_GH_PRODUCT_EPH, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbProductDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, ProductDataDLObject.class, Constants.EPH_URL);
     }
@@ -365,7 +372,7 @@ public class ProductDataCheckSteps {
     @Then("^We get the gh product records from DL$")
     public void getGHProductDL() {
         Log.info("We get the GH product records from DL..");
-        sql = String.format(ProductDataChecksSQL.GET_DATA_GH_PRODUCT_DL, Joiner.on("','").join(Ids));
+        sql = String.format(ProductGDGHTablesDataChecksSQL.GET_DATA_GH_PRODUCT_DL, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbProductDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, ProductDataDLObject.class, Constants.AWS_URL);
     }
@@ -666,7 +673,7 @@ public class ProductDataCheckSteps {
     @When("^We get the gd accountable product records from EPH$")
     public void getAccountableProductEPH() {
         Log.info("We get the accountable product records from EPH..");
-        sql = String.format(ProductDataChecksSQL.GET_DATA_ACCOUNTABLE_PRODUCT_EPH, Joiner.on("','").join(Ids));
+        sql = String.format(ProductGDGHTablesDataChecksSQL.GET_DATA_ACCOUNTABLE_PRODUCT_EPH, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbProductDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, ProductDataDLObject.class, Constants.EPH_URL);
     }
@@ -675,7 +682,7 @@ public class ProductDataCheckSteps {
     @Then("^We get the gd accountable product records from DL$")
     public void getAccountableProductDL() {
         Log.info("We get the accountable product records from DL..");
-        sql = String.format(ProductDataChecksSQL.GET_DATA_ACCOUNTABLE_PRODUCT_DL, Joiner.on("','").join(Ids));
+        sql = String.format(ProductGDGHTablesDataChecksSQL.GET_DATA_ACCOUNTABLE_PRODUCT_DL, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbProductDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, ProductDataDLObject.class, Constants.AWS_URL);
     }

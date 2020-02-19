@@ -1,6 +1,6 @@
 package com.eph.automation.testing.services.db.DataLakeSql;
 
-public  class ManifestationDataChecksSQL {
+public  class ManifestationGDGHTablesDataChecksSQL {
 
     public static String GET_RANDOM_MANIFESTATION_ID = "select manifestation_id as MANIFESTATION_ID from semarchy_eph_mdm.gd_manifestation order by random() limit '%s'";
 

@@ -1,6 +1,6 @@
 package com.eph.automation.testing.services.db.DataLakeSql;
 
-public  class ProductDataChecksSQL {
+public  class ProductGDGHTablesDataChecksSQL {
 
     public static String GET_RANDOM_PRODUCT_ID = "select product_id as PRODUCT_ID from semarchy_eph_mdm.gd_product order by random() limit '%s'";
      public static String GET_RANDOM_GH_PRODUCT_ID = "select product_id as PRODUCT_ID from semarchy_eph_mdm.gh_product order by random() limit '%s'";

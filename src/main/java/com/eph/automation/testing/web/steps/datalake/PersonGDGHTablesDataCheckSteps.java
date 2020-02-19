@@ -6,7 +6,7 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityDLContext;
 import com.eph.automation.testing.models.dao.datalake.PersonDataDLObject;
-import com.eph.automation.testing.services.db.DataLakeSql.PersonDataChecksSQL;
+import com.eph.automation.testing.services.db.DataLakeSql.PersonGDGHTablesDataChecksSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-public class PersonDataCheckSteps {
+public class PersonGDGHTablesDataCheckSteps {
 
     @StaticInjection
     public DataQualityDLContext dataQualityDLContext;
@@ -36,24 +36,32 @@ public class PersonDataCheckSteps {
         //Get property when running with jenkins
         //numberOfRecords = System.getProperty("dbRandomRecordsNumber");
         //Log.info("numberOfRecords = " + numberOfRecords);
-        if (tableName.contentEquals("gd_person")) {
-            sql = String.format(PersonDataChecksSQL.GET_RANDOM_PERSON_ID, numberOfRecords);
-            Log.info(sql);
-            List<Map<?, ?>> randomPersonIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            Ids = randomPersonIds.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
-        }else{
-            sql = String.format(PersonDataChecksSQL.GET_RANDOM_GH_PERSON_ID, numberOfRecords);
-            Log.info(sql);
-            List<Map<?, ?>> randomPersonIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            Ids = randomPersonIds.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
+
+        switch (tableName){
+
+            case "gd_person":
+                sql = String.format(PersonGDGHTablesDataChecksSQL.GET_RANDOM_PERSON_ID, numberOfRecords);
+                Log.info(sql);
+                List<Map<?, ?>> randomPersonIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomPersonIds.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
+                break;
+
+            case "gh_person":
+                sql = String.format(PersonGDGHTablesDataChecksSQL.GET_RANDOM_GH_PERSON_ID, numberOfRecords);
+                Log.info(sql);
+                List<Map<?, ?>> randomGHPersonIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomGHPersonIds.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
+                break;
+
         }
+
         Log.info(Ids.toString());
     }
 
     @When("^We get the gd person records from EPH$")
     public void getPersonEPH() {
         Log.info("We get the person records from EPH..");
-        sql = String.format(PersonDataChecksSQL.GET_DATA_PERSON_EPH, Joiner.on("','").join(Ids));
+        sql = String.format(PersonGDGHTablesDataChecksSQL.GET_DATA_PERSON_EPH, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbPersonDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, PersonDataDLObject.class, Constants.EPH_URL);
     }
@@ -62,7 +70,7 @@ public class PersonDataCheckSteps {
     @Then("^We get the gd person records from DL$")
     public void getPersonDL() {
         Log.info("We get the product records from DL..");
-        sql = String.format(PersonDataChecksSQL.GET_DATA_PERSON_DL, Joiner.on("','").join(Ids));
+        sql = String.format(PersonGDGHTablesDataChecksSQL.GET_DATA_PERSON_DL, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbPersonDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, PersonDataDLObject.class, Constants.AWS_URL);
     }
@@ -189,7 +197,7 @@ public class PersonDataCheckSteps {
     @When("^We get the gh person records from EPH$")
     public void getGHPersonEPH() {
         Log.info("We get the GH person records from EPH..");
-        sql = String.format(PersonDataChecksSQL.GET_DATA_GH_PERSON_EPH, Joiner.on("','").join(Ids));
+        sql = String.format(PersonGDGHTablesDataChecksSQL.GET_DATA_GH_PERSON_EPH, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbPersonDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, PersonDataDLObject.class, Constants.EPH_URL);
         Log.info("Size EPH =>"+ dataQualityDLContext.tbPersonDataObjectsFromEPH.size());
@@ -199,7 +207,7 @@ public class PersonDataCheckSteps {
     @Then("^We get the gh person records from DL$")
     public void getGHProductDL() {
         Log.info("We get the GH person records from DL..");
-        sql = String.format(PersonDataChecksSQL.GET_DATA_GH_PERSON_DL, Joiner.on("','").join(Ids));
+        sql = String.format(PersonGDGHTablesDataChecksSQL.GET_DATA_GH_PERSON_DL, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbPersonDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, PersonDataDLObject.class, Constants.AWS_URL);
         Log.info("Size DL =>"+ dataQualityDLContext.tbPersonDataObjectsFromDL.size());
@@ -222,7 +230,7 @@ public class PersonDataCheckSteps {
                             dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getPERSON_ID());
 
                 }
-               if (dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_CLASSNAME() != null ||
+                if (dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_CLASSNAME() != null ||
                         (!dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_CLASSNAME().equals("null"))) {
                     Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPERSON_ID(),
                             dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_CLASSNAME(),
