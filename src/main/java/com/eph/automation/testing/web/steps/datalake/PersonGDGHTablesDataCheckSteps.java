@@ -64,7 +64,7 @@ public class PersonGDGHTablesDataCheckSteps {
     public void getPersonEPH() {
         Log.info("We get the person records from EPH..");
         //sql = String.format(PersonGDGHTablesDataChecksSQL.GET_DATA_PERSON_EPH, Joiner.on("','").join(Ids));
-        sql = String.format(personObj.gdPersonBuildSql("semarchy_eph_mdm"),Joiner.on("','").join(Ids));
+        sql = String.format(personObj.gdPersonBuildSql(Constants.EPH_SCHEMA),Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbPersonDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, PersonDataDLObject.class, Constants.EPH_URL);
     }
@@ -261,7 +261,7 @@ public class PersonGDGHTablesDataCheckSteps {
     public void getGHPersonEPH() {
         Log.info("We get the GH person records from EPH..");
        // sql = String.format(PersonGDGHTablesDataChecksSQL.GET_DATA_GH_PERSON_EPH, Joiner.on("','").join(Ids));
-        sql = String.format(personObj.ghPersonBuildSql("semarchy_eph_mdm"),Joiner.on("','").join(Ids));
+        sql = String.format(personObj.ghPersonBuildSql(Constants.EPH_SCHEMA),Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbPersonDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, PersonDataDLObject.class, Constants.EPH_URL);
         Log.info("Size EPH =>"+ dataQualityDLContext.tbPersonDataObjectsFromEPH.size());

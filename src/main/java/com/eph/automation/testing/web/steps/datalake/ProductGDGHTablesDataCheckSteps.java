@@ -68,7 +68,7 @@ public class ProductGDGHTablesDataCheckSteps {
     public void getProductEPH() {
         Log.info("We get the product records from EPH..");
       //  sql = String.format(ProductGDGHTablesDataChecksSQL.GET_DATA_PRODUCT_EPH, Joiner.on("','").join(Ids));
-        sql = String.format(productObj.gdProductBuildSql("semarchy_eph_mdm"),Joiner.on("','").join(Ids));
+        sql = String.format(productObj.gdProductBuildSql(Constants.EPH_SCHEMA),Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbProductDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, ProductDataDLObject.class, Constants.EPH_URL);
     }
@@ -526,7 +526,7 @@ public class ProductGDGHTablesDataCheckSteps {
     public void getGHProductEPH() {
         Log.info("We get the GH product records from EPH..");
         //sql = String.format(ProductGDGHTablesDataChecksSQL.GET_DATA_GH_PRODUCT_EPH, Joiner.on("','").join(Ids));
-        sql = String.format(productObj.ghProductBuildSql("semarchy_eph_mdm"),Joiner.on("','").join(Ids));
+        sql = String.format(productObj.ghProductBuildSql(Constants.EPH_SCHEMA),Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbProductDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, ProductDataDLObject.class, Constants.EPH_URL);
     }
@@ -1024,7 +1024,7 @@ public class ProductGDGHTablesDataCheckSteps {
     public void getAccountableProductEPH() {
         Log.info("We get the accountable product records from EPH..");
         //sql = String.format(ProductGDGHTablesDataChecksSQL.GET_DATA_ACCOUNTABLE_PRODUCT_EPH, Joiner.on("','").join(Ids));
-        sql = String.format(productObj.gdAccProductBuildSql("semarchy_eph_mdm"),Joiner.on("','").join(Ids));
+        sql = String.format(productObj.gdAccProductBuildSql(Constants.EPH_SCHEMA),Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbProductDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, ProductDataDLObject.class, Constants.EPH_URL);
     }

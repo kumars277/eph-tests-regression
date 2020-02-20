@@ -75,7 +75,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
     public void getManifestationEPH() {
         Log.info("We get the manifestation records from EPH..");
        // sql = String.format(ManifestationGDGHTablesDataChecksSQL.GET_DATA_MANIFESTATION_EPH, Joiner.on("','").join(Ids));
-        sql = String.format(manifObj.gdManifestationBuildSql("semarchy_eph_mdm"),Joiner.on("','").join(Ids));
+        sql = String.format(manifObj.gdManifestationBuildSql(Constants.EPH_SCHEMA),Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbManifestationDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, ManifestationDataDLObject.class, Constants.EPH_URL);
     }
@@ -352,7 +352,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
     public void getGHManifestationEPH() {
         Log.info("We get the work records from EPH..");
        // sql = String.format(ManifestationGDGHTablesDataChecksSQL.GET_DATA_GH_MANIFESTATION_EPH, Joiner.on("','").join(Ids));
-        sql = String.format(manifObj.ghManifestationBuildSql("semarchy_eph_mdm"),Joiner.on("','").join(Ids));
+        sql = String.format(manifObj.ghManifestationBuildSql(Constants.EPH_SCHEMA),Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbManifestationDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, ManifestationDataDLObject.class, Constants.EPH_URL);
     }
@@ -648,7 +648,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
     public void getGHManiIdentifierEPH() {
         Log.info("We get the manifestation identifier records from EPH..");
        // sql = String.format(ManifestationGDGHTablesDataChecksSQL.GET_DATA_GH_MANI_IDENTIFIER_EPH, Joiner.on("','").join(Ids));
-        sql = String.format(manifObj.ghManifIdentifierBuildSql("semarchy_eph_mdm"),Joiner.on("','").join(Ids));
+        sql = String.format(manifObj.ghManifIdentifierBuildSql(Constants.EPH_SCHEMA),Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbManifestationDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, ManifestationDataDLObject.class, Constants.EPH_URL);
     }
@@ -850,7 +850,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
     public void getManiIdentifierEPH() {
         Log.info("We get the manifestation identifier records from EPH..");
        // sql = String.format(ManifestationGDGHTablesDataChecksSQL.GET_DATA_GD_MANI_IDENTIFIER_EPH, Joiner.on("','").join(Ids));
-        sql = String.format(manifObj.gdManifIdentifierBuildSql("semarchy_eph_mdm"),Joiner.on("','").join(Ids));
+        sql = String.format(manifObj.gdManifIdentifierBuildSql(Constants.EPH_SCHEMA),Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbManifestationDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, ManifestationDataDLObject.class, Constants.EPH_URL);
     }

@@ -59,7 +59,7 @@ public class WorkGDGHTablesDataCheckSteps {
     public void getWorksEPH() {
         Log.info("We get the work records from EPH..");
        // sql = String.format(WorksGDGHTablesDataChecksSQL.GET_DATA_WORKS_EPH, Joiner.on("','").join(Ids));
-        sql = String.format(workObj.gdWorkDataBuildSql("semarchy_eph_mdm"),Joiner.on("','").join(Ids));
+        sql = String.format(workObj.gdWorkDataBuildSql(Constants.EPH_SCHEMA),Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbWorkDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, WorkDataDLObject.class, Constants.EPH_URL);
     }
@@ -538,7 +538,7 @@ public class WorkGDGHTablesDataCheckSteps {
     public void getGhWorksEPH() {
         Log.info("We get the gh work records from EPH..");
         //sql = String.format(WorksGDGHTablesDataChecksSQL.GET_DATA_GH_WORKS_EPH, Joiner.on("','").join(Ids));
-        sql = String.format(workObj.ghWorkDataBuildSql("semarch_eph_mdm"),Joiner.on("','").join(Ids));
+        sql = String.format(workObj.ghWorkDataBuildSql(Constants.EPH_SCHEMA),Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbWorkDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, WorkDataDLObject.class, Constants.EPH_URL);
     }

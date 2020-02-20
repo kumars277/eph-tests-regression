@@ -53,7 +53,7 @@ public class EventGDGHTablesDataCheckSteps {
     public void getEventsEPH() {
         Log.info("We get the event records from EPH..");
        // sql = String.format(EventGDGHTablesDataChecksSQL.GET_DATA_EVENT_EPH, Joiner.on("','").join(Ids));
-        sql = String.format(eventObj.eventBuildSQLQuery("semarchy_eph_mdm"),Joiner.on("','").join(Ids)) ;
+        sql = String.format(eventObj.eventBuildSQLQuery(Constants.EPH_SCHEMA),Joiner.on("','").join(Ids)) ;
         Log.info(sql);
         dataQualityDLContext.tbEventDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, EventDataDLObject.class, Constants.EPH_URL);
     }
