@@ -24,4 +24,7 @@ public class DataQualityDLContext {
     public static List<PersonDataDLObject> tbPersonDataObjectsFromEPH;
     public static List<PersonDataDLObject> tbPersonDataObjectsFromDL;
 
+    public static List<EventDataDLObject> tbEventDataObjectsFromEPH;
+    public static List<EventDataDLObject> tbEventDataObjectsFromDL;
+
 }
