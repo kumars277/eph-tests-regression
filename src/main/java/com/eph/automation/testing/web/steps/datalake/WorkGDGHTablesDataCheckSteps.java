@@ -6,6 +6,7 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityDLContext;
 import com.eph.automation.testing.models.dao.datalake.*;
+import com.eph.automation.testing.services.db.DataLakeSql.GetDLDBUser;
 import com.eph.automation.testing.services.db.DataLakeSql.WorksGDGHTablesDataChecksSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
@@ -26,6 +27,7 @@ public class WorkGDGHTablesDataCheckSteps {
     public DataQualityDLContext dataQualityDLContext;
     private static String sql;
     private static List<String> Ids;
+    public WorksGDGHTablesDataChecksSQL workObj = new WorksGDGHTablesDataChecksSQL();
 
 
     @Given("^We get (.*) random work ids of (.*)")
@@ -56,7 +58,8 @@ public class WorkGDGHTablesDataCheckSteps {
     @When("^We get the gd work records from EPH$")
     public void getWorksEPH() {
         Log.info("We get the work records from EPH..");
-        sql = String.format(WorksGDGHTablesDataChecksSQL.GET_DATA_WORKS_EPH, Joiner.on("','").join(Ids));
+       // sql = String.format(WorksGDGHTablesDataChecksSQL.GET_DATA_WORKS_EPH, Joiner.on("','").join(Ids));
+        sql = String.format(workObj.gdWorkDataBuildSql("semarchy_eph_mdm"),Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbWorkDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, WorkDataDLObject.class, Constants.EPH_URL);
     }
@@ -65,7 +68,8 @@ public class WorkGDGHTablesDataCheckSteps {
     @Then("^We get the gd work records from DL$")
     public void getWorksDL() {
         Log.info("We get the work records from DL..");
-        sql = String.format(WorksGDGHTablesDataChecksSQL.GET_DATA_WORKS_DL, Joiner.on("','").join(Ids));
+       //sql = String.format(WorksGDGHTablesDataChecksSQL.GET_DATA_WORKS_DL, Joiner.on("','").join(Ids));
+        sql = String.format(workObj.gdWorkDataBuildSql(GetDLDBUser.getDataBase()),Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbWorkDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, WorkDataDLObject.class, Constants.AWS_URL);
     }
@@ -75,7 +79,7 @@ public class WorkGDGHTablesDataCheckSteps {
         if(dataQualityDLContext.tbWorkDataObjectsFromDL.isEmpty()){
             Log.info("No Data Found ....");
         }else{
-            Log.info("Sorting the data to compare the work records in EPH and DATA LAKE ..");//sort data in the lists
+            Log.info("Sorting the data to compare the GD work records in EPH and DATA LAKE ..");//sort data in the lists
             for (int i = 0; i < dataQualityDLContext.tbWorkDataObjectsFromEPH.size(); i++) {
                 dataQualityDLContext.tbWorkDataObjectsFromEPH.sort(Comparator.comparing(WorkDataDLObject::getWORK_ID));
                 dataQualityDLContext.tbWorkDataObjectsFromDL.sort(Comparator.comparing(WorkDataDLObject::getWORK_ID));
@@ -533,7 +537,8 @@ public class WorkGDGHTablesDataCheckSteps {
     @When("^We get the gh work records from EPH$")
     public void getGhWorksEPH() {
         Log.info("We get the gh work records from EPH..");
-        sql = String.format(WorksGDGHTablesDataChecksSQL.GET_DATA_GH_WORKS_EPH, Joiner.on("','").join(Ids));
+        //sql = String.format(WorksGDGHTablesDataChecksSQL.GET_DATA_GH_WORKS_EPH, Joiner.on("','").join(Ids));
+        sql = String.format(workObj.ghWorkDataBuildSql("semarch_eph_mdm"),Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbWorkDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, WorkDataDLObject.class, Constants.EPH_URL);
     }
@@ -542,7 +547,8 @@ public class WorkGDGHTablesDataCheckSteps {
     @Then("^We get the gh work records from DL$")
     public void getGhWorksDL() {
         Log.info("We get the work records from DL..");
-        sql = String.format(WorksGDGHTablesDataChecksSQL.GET_DATA_GH_WORKS_DL, Joiner.on("','").join(Ids));
+        //sql = String.format(WorksGDGHTablesDataChecksSQL.GET_DATA_GH_WORKS_DL, Joiner.on("','").join(Ids));
+        sql = String.format(workObj.ghWorkDataBuildSql(GetDLDBUser.getDataBase()),Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityDLContext.tbWorkDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, WorkDataDLObject.class, Constants.AWS_URL);
     }
