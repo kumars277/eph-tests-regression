@@ -23,6 +23,52 @@ public class PersonDataDLObject {
     private String S_EMAIL;
     private String B_FROMBATCHID;
     private String B_TOBATCHID;
+    private String PRODUCT_PERSON_ROLE_ID;
+    private String EFFECTIVE_START_DATE;
+    private String EFFECTIVE_END_DATE;
+    private String F_ROLE;
+    private String F_PRODUCT;
+    private String F_PERSON;
+    private String F_EVENT;
+
+
+    public String getEFFECTIVE_START_DATE() {  return EFFECTIVE_START_DATE;   }
+    public void setEFFECTIVE_START_DATE(String EFFECTIVE_START_DATE) {
+        this.EFFECTIVE_START_DATE = EFFECTIVE_START_DATE;
+    }
+
+    public String getF_PERSON() {  return F_PERSON;   }
+    public void setF_PERSON(String F_PERSON) {
+        this.F_PERSON = F_PERSON;
+    }
+
+    public String getF_EVENT() {  return F_EVENT;   }
+    public void setF_EVENT(String F_EVENT) {
+        this.F_EVENT = F_EVENT;
+    }
+
+
+
+    public String getF_ROLE() {  return F_ROLE;   }
+    public void setF_ROLE(String F_ROLE) {
+        this.F_ROLE = F_ROLE;
+    }
+
+    public String getF_PRODUCT() {  return F_PRODUCT;   }
+    public void setF_PRODUCT(String F_PRODUCT) {
+        this.F_PRODUCT = F_PRODUCT;
+    }
+
+    public String getEFFECTIVE_END_DATE() {  return EFFECTIVE_END_DATE;   }
+    public void setEFFECTIVE_END_DATE(String EFFECTIVE_END_DATE) {
+        this.EFFECTIVE_END_DATE = EFFECTIVE_END_DATE;
+    }
+
+    public String getPRODUCT_PERSON_ROLE_ID() {  return PRODUCT_PERSON_ROLE_ID;   }
+    public void setPRODUCT_PERSON_ROLE_ID(String PRODUCT_PERSON_ROLE_ID) {
+        this.PRODUCT_PERSON_ROLE_ID = PRODUCT_PERSON_ROLE_ID;
+    }
+
 
     public String getPERSON_ID() {  return PERSON_ID;   }
     public void setPERSON_ID(String PERSON_ID) {

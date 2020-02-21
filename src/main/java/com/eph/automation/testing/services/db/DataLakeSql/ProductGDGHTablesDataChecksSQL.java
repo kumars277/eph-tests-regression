@@ -4,8 +4,33 @@ public  class ProductGDGHTablesDataChecksSQL {
 
     public static String GET_RANDOM_PRODUCT_ID = "select product_id as PRODUCT_ID from semarchy_eph_mdm.gd_product order by random() limit '%s'";
      public static String GET_RANDOM_GH_PRODUCT_ID = "select product_id as PRODUCT_ID from semarchy_eph_mdm.gh_product order by random() limit '%s'";
-    public static String GET_RANDOM_ACCOUNTABLE_PRODUCT_ID = "select accountable_product_id from semarchy_eph_mdm.gd_accountable_product order by random() limit '%s'";;
+    public static String GET_RANDOM_ACCOUNTABLE_PRODUCT_ID = "select accountable_product_id as ACCOUNTABLE_PRODUCT_ID from semarchy_eph_mdm.gd_accountable_product order by random() limit '%s'";;
+    public static String GET_RANDOM_PRODUCT_PACKAGE_ID = "select product_rel_pack_id as PRODUCT_REL_PACK_ID from semarchy_eph_mdm.gd_product_rel_package order by random() limit '%s'";;
 
+
+    public String gdProductPkgBuildSql(String db) {
+        String GET_DATA_PRODUCT_PKG = "select \n" +
+                "PRODUCT_REL_PACK_ID as PRODUCT_REL_PACK_ID\n" +
+                ",B_CLASSNAME as B_CLASSNAME\n" +
+                ",B_BATCHID as B_BATCHID\n" +
+                ",B_CREDATE as B_CREDATE\n" +
+                ",B_UPDDATE as B_UPDDATE\n" +
+                ",B_CREATOR as B_CREATOR\n" +
+                ",B_UPDATOR as B_UPDATOR\n" +
+                ",EXTERNAL_REFERENCE as EXTERNAL_REFERENCE\n" +
+                ",ALLOCATION as ALLOCATION\n" +
+                ",EFFECTIVE_START_DATE as EFFECTIVE_START_DATE\n" +
+                ",EFFECTIVE_END_DATE as EFFECTIVE_END_DATE\n" +
+                ",F_PACKAGE_OWNER as F_PACKAGE_OWNER\n" +
+                ",F_COMPONENT as F_COMPONENT\n" +
+                ",F_RELATIONSHIP_TYPE as F_RELATIONSHIP_TYPE\n" +
+                ",F_EVENT as F_EVENT\n" +
+                 "from "+db+".gd_product_rel_package \n" +
+                "where PRODUCT_REL_PACK_ID in ('%s')";
+
+        return GET_DATA_PRODUCT_PKG;
+
+    }
 
     public String gdProductBuildSql(String db) {
 
@@ -50,7 +75,6 @@ public  class ProductGDGHTablesDataChecksSQL {
                 ",F_SELF_SEVEN as F_SELF_SEVEN\n" +
                 "from "+db+".gd_product \n" +
                 "where PRODUCT_ID in ('%s')";
-
 
         return GET_DATA_PRODUCT;
     }

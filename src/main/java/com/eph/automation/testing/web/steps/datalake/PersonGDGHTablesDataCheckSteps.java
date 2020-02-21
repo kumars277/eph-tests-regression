@@ -55,10 +55,19 @@ public class PersonGDGHTablesDataCheckSteps {
                 Ids = randomGHPersonIds.stream().map(m -> (BigDecimal) m.get("PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
                 break;
 
+            case "gd_product_person_role":
+                sql = String.format(PersonGDGHTablesDataChecksSQL.GET_RANDOM_GD_PRODUCT_PERSON_ID, numberOfRecords);
+                Log.info(sql);
+                List<Map<?, ?>> randomGDProductPersonIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomGDProductPersonIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_PERSON_ID")).map(String::valueOf).collect(Collectors.toList());
+                break;
+
         }
 
         Log.info(Ids.toString());
     }
+
+
 
     @When("^We get the gd person records from EPH$")
     public void getPersonEPH() {
@@ -467,6 +476,198 @@ public class PersonGDGHTablesDataCheckSteps {
 
         }}
 
+    @When("^We get the gd product person records from EPH$")
+    public void getGDproductPersonEPH() {
+        Log.info("We get the gd product person records from EPH..");
+        //sql = String.format(PersonGDGHTablesDataChecksSQL.GET_DATA_PERSON_EPH, Joiner.on("','").join(Ids));
+        sql = String.format(personObj.gdProductPersonBuildSql(Constants.EPH_SCHEMA),Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityDLContext.tbPersonDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, PersonDataDLObject.class, Constants.EPH_URL);
+    }
+
+    @When("^We get the gd product person records from DL$")
+    public void getGDproductPersonDL() {
+        Log.info("We get the gd product person records from EPH..");
+        //sql = String.format(PersonGDGHTablesDataChecksSQL.GET_DATA_PERSON_EPH, Joiner.on("','").join(Ids));
+        sql = String.format(personObj.gdProductPersonBuildSql(GetDLDBUser.getDataBase()),Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityDLContext.tbPersonDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, PersonDataDLObject.class, Constants.AWS_URL);
+    }
+
+    @And ("^Compare gd product person records in EPH and DL$")
+    public void compareGDProductPersonDataEPHtoDL() {
+        if (dataQualityDLContext.tbPersonDataObjectsFromDL.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the data to compare the GD product person records in EPH and DATA LAKE ..");//sort data in the lists
+            for (int i = 0; i <dataQualityDLContext.tbPersonDataObjectsFromEPH.size(); i++) {
+                dataQualityDLContext.tbPersonDataObjectsFromEPH.sort(Comparator.comparing(PersonDataDLObject::getPRODUCT_PERSON_ROLE_ID));
+                dataQualityDLContext.tbPersonDataObjectsFromDL.sort(Comparator.comparing(PersonDataDLObject::getPRODUCT_PERSON_ROLE_ID));
+
+                if (dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID() != null ||
+                        (!dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getPRODUCT_PERSON_ROLE_ID().equals("null"))) {  //In data lake null considering or getting as String
+                    Assert.assertEquals("The PRODUCT_PERSON_ROLE_ID is incorrect for id=" + dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID(),
+                            dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID(),
+                            dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getPRODUCT_PERSON_ROLE_ID());
+
+                }
+
+                Log.info("ID => " + dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID() +
+                        " B_CLASSNAME => EPH=" + dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_CLASSNAME() +
+                        " DL=" + dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_CLASSNAME());
+
+                if (dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_CLASSNAME() != null ||
+                        (!dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_CLASSNAME().equals("null"))) {
+                    Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID(),
+                            dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_CLASSNAME(),
+                            dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_CLASSNAME());
+                }
+
+                Log.info("ID => "+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID()+
+                        " B_BATCHID => EPH="+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_BATCHID()+
+                        " DL="+dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_BATCHID());
+
+                if (dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_BATCHID() != null ||
+                        (!dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_BATCHID().equals("null"))) {
+                    Assert.assertEquals("The B_BATCHID is incorrect for id=" + dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID(),
+                            dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_BATCHID(),
+                            dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_BATCHID());
+                }
+
+                Log.info("ID => "+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID()+
+                        " B_CREDATE => EPH="+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_CREDATE()+
+                        " DL="+dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_CREDATE());
+
+                if (dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_CREDATE() != null ||
+                        (!dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_CREDATE().equals("null"))) {
+                    Assert.assertEquals("The B_CREDATE is incorrect for id=" + dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID(),
+                            dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_CREDATE().substring(0, 10),
+                            dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_CREDATE().substring(0, 10));
+                }
+
+                Log.info("ID => "+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID()+
+                        " B_UPDDATE => EPH="+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_UPDDATE()+
+                        " DL="+dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_UPDDATE());
+
+
+                if (dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_UPDDATE() != null ||
+                        (!dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_UPDDATE().equals("null"))) {
+                    Assert.assertEquals("The B_UPDATE is incorrect for id=" + dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID(),
+                            dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_UPDDATE().substring(0, 10),
+                            dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_UPDDATE().substring(0, 10));
+                }
+                Log.info("ID => "+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID()+
+                        " B_CREATOR => EPH="+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_CREATOR()+
+                        " DL="+dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_CREATOR());
+
+                if (dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_CREATOR() != null ||
+                        (!dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_CREATOR().equals("null"))) {
+                    Assert.assertEquals("The B_CREATOR is incorrect for id=" + dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID(),
+                            dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_CREATOR(),
+                            dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_CREATOR());
+                }
+
+                Log.info("ID => "+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID()+
+                        " B_UPDATOR => EPH="+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_UPDATOR()+
+                        " DL="+dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_UPDATOR());
+
+                if (dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_UPDATOR() != null ||
+                        (!dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_UPDATOR().equals("null"))) {
+                    Assert.assertEquals("The B_UPDATOR is incorrect for id=" + dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID(),
+                            dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getB_UPDATOR(),
+                            dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getB_UPDATOR());
+                }
+
+                Log.info("ID => "+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID()+
+                        " EXTERNAL_REFERENCE => EPH="+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE()+
+                        " DL="+dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
+
+                if (dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE() != null ||
+                        (!dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE().equals("null"))) {
+                    Assert.assertEquals("The EXTERNAL_REFERENCE is incorrect for id=" + dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID(),
+                            dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE(),
+                            dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
+                }
+
+                Log.info("ID => "+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID()+
+                        " EFFECTIVE_START_DATE => EPH="+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getEFFECTIVE_START_DATE()+
+                        " DL="+dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE());
+
+                if (dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getEFFECTIVE_START_DATE() != null ||
+                        (!dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE().equals("null"))) {
+                    Assert.assertEquals("The EFFECTIVE_START_DATE is incorrect for id=" + dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID(),
+                            dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getEFFECTIVE_START_DATE(),
+                            dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE());
+                }
+
+                Log.info("ID => "+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID()+
+                        " EFFECTIVE_START_DATE => EPH="+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getEFFECTIVE_END_DATE()+
+                        " DL="+dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE());
+
+                if (dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getEFFECTIVE_END_DATE() != null ||
+                        (!dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE().equals("null"))) {
+                    Assert.assertEquals("The EFFECTIVE_END_DATE is incorrect for id=" + dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID(),
+                            dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getEFFECTIVE_END_DATE(),
+                            dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE());
+                }
+
+                Log.info("ID => "+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID()+
+                        " F_ROLE => EPH="+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getF_ROLE()+
+                        " DL="+dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getF_ROLE());
+
+                if (dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getF_ROLE() != null ||
+                        (!dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getF_ROLE().equals("null"))) {
+                    Assert.assertEquals("The F_ROLE is incorrect for id=" + dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID(),
+                            dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getF_ROLE(),
+                            dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getF_ROLE());
+                }
+
+                Log.info("ID => "+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID()+
+                        " F_PRODUCT => EPH="+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getF_PRODUCT()+
+                        " DL="+dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getF_PRODUCT());
+
+                if (dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getF_PRODUCT() != null ||
+                        (!dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getF_PRODUCT().equals("null"))) {
+                    Assert.assertEquals("The F_PRODUCT is incorrect for id=" + dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID(),
+                            dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getF_PRODUCT(),
+                            dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getF_PRODUCT());
+                }
+
+                Log.info("ID => "+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID()+
+                        " F_PERSON => EPH="+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getF_PERSON()+
+                        " DL="+dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getF_PERSON());
+
+                if (dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getF_PERSON() != null ||
+                        (!dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getF_PERSON().equals("null"))) {
+                    Assert.assertEquals("The F_PERSON is incorrect for id=" + dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID(),
+                            dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getF_PERSON(),
+                            dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getF_PERSON());
+                }
+
+                Log.info("ID => "+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID()+
+                        " F_EVENT => EPH="+dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getF_EVENT()+
+                        " DL="+dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getF_EVENT());
+
+                if (dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getF_EVENT() != null ||
+                        (!dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getF_EVENT().equals("null"))) {
+                    Assert.assertEquals("The F_EVENT is incorrect for id=" + dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getPRODUCT_PERSON_ROLE_ID(),
+                            dataQualityDLContext.tbPersonDataObjectsFromEPH.get(i).getF_EVENT(),
+                            dataQualityDLContext.tbPersonDataObjectsFromDL.get(i).getF_EVENT());
+                }
+
+
+
+
+
+
+
+
+
+
+            }
+
+        }
+    }
 
 }
 
