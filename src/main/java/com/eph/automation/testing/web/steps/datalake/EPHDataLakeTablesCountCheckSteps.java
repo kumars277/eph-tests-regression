@@ -3,11 +3,7 @@ package com.eph.automation.testing.web.steps.datalake;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
-<<<<<<< HEAD:src/main/java/com/eph/automation/testing/web/steps/datalake/EPHDataLakeCountCheckSteps.java
-import com.eph.automation.testing.services.db.DataLakeSql.EPHDataLakeCountSQL;
-=======
-import com.eph.automation.testing.services.db.DataLakeSql.EPHGDGHTablesDataLakeCountSQL;
->>>>>>> e6e7cdafa5c8fc46a7e13a2096d2854d50b32472:src/main/java/com/eph/automation/testing/web/steps/datalake/EPHDataLakeTablesCountCheckSteps.java
+import com.eph.automation.testing.services.db.DataLakeSql.*;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -27,34 +23,20 @@ public class EPHDataLakeTablesCountCheckSteps {
 
 // gd_Wwork count
     @Given("^We know the number of Works in EPH$")
-<<<<<<< HEAD:src/main/java/com/eph/automation/testing/web/steps/datalake/EPHDataLakeCountCheckSteps.java
     public void getEph_GD_Works_Count() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_WORK_COUNT;
-=======
-    public void getEphWorksCount() {
-        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_WORK_COUNT;
->>>>>>> e6e7cdafa5c8fc46a7e13a2096d2854d50b32472:src/main/java/com/eph/automation/testing/web/steps/datalake/EPHDataLakeTablesCountCheckSteps.java
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_WORK_COUNT;
+
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEph = DBManager.getDBResultMap(sqlEPH,Constants.EPH_URL);
         EPHCount = ((Long) workCountEph.get(0).get("EPH_gd_Wwork_Count")).intValue();
         Log.info("GD Works in EPH are: " + EPHCount);
     }
 
-
-<<<<<<< HEAD:src/main/java/com/eph/automation/testing/web/steps/datalake/EPHDataLakeCountCheckSteps.java
     @When("^The wwork data is in the DL$")
     public void getDL_GD_Works_Count() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_WORK_COUNT;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_WORK_COUNT;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
-=======
-    @When("^The works are in DL Outbound$")
-    public void getDLWorksCount() {
-        // Run the Talend job
-        sqlDLSTG = EPHGDGHTablesDataLakeCountSQL.DL_WORK_COUNT;
-        Log.info(sqlDLSTG);
-        List<Map<String, Object>> workCountDLSTG = DBManager.getDLResultMap(sqlDLSTG,
->>>>>>> e6e7cdafa5c8fc46a7e13a2096d2854d50b32472:src/main/java/com/eph/automation/testing/web/steps/datalake/EPHDataLakeTablesCountCheckSteps.java
                 Constants.AWS_URL);
         DLCount = ((Long) workCountDL.get(0).get("DL_gd_Wwork_Count")).intValue();
         Log.info("GD Works in DL staging: " + DLCount);
@@ -64,7 +46,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 //gd Accountable product count
     @Given("^We know the number of Accountable products in EPH$")
     public void getEPH_GD_Accountable_Product() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_Accountable_Product_Count;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_Accountable_Product_Count;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -74,7 +56,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The Accountable product data is in the DL$")
     public void getDL_GD_Accountable_Product() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_Accountable_Product_Count;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_Accountable_Product_Count;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -85,7 +67,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd event count
     @Given("^We know the number of event data in EPH$")
     public void getEPH_GD_Event() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_Event;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_Event;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -95,7 +77,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The event data is in the DL$")
     public void getDL_GD_Event() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_Event;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_Event;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -106,7 +88,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd manifestation count
     @Given("^We know the number of manifestation data in EPH$")
     public void getEPH_GD_Manifestation() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_Manifestation;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_Manifestation;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -116,7 +98,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The manifestation data is in the DL$")
     public void getDL_GD_Manifestation() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_Manifestation;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_Manifestation;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -127,7 +109,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd manifestation_identifier count
     @Given("^We know the number of manifestation_identifier data in EPH$")
     public void getEPH_GD_Manifestation_Identifier() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_Manifestation_Identifier;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_Manifestation_Identifier;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -137,7 +119,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The manifestation_identifier data is in the DL$")
     public void getDL_GD_Manifestation_Identifier() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_Manifestation_Identifier;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_Manifestation_Identifier;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -148,7 +130,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd person count
     @Given("^We know the number of person data in EPH$")
     public void getEPH_GD_Person() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_Person;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_Person;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -158,7 +140,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The person data is in the DL$")
     public void getDL_GD_Person() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_Person;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_Person;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -169,7 +151,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd product count
     @Given("^We know the number of product data in EPH$")
     public void getEPH_GD_Product() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_Product;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_Product;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -179,7 +161,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The product data is in the DL$")
     public void getDL_GD_Product() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_Product;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_Product;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -190,7 +172,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd product person role count
     @Given("^We know the number of product person role data in EPH$")
     public void getEPH_GD_Product_Person_Role() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_Product_Person_Role;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_Product_Person_Role;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -200,7 +182,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The product person role data is in the DL$")
     public void getDL_GD_Product_Person_Role() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_Product_Person_Role;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_Product_Person_Role;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -211,7 +193,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd product rel package count
     @Given("^We know the number of product rel package data in EPH$")
     public void getEPH_GD_Product_Rel_Package() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_Product_Rel_Package;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_Product_Rel_Package;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -221,7 +203,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The product rel package data is in the DL$")
     public void getDL_GD_Product_Rel_Package() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_Product_Rel_Package;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_Product_Rel_Package;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -232,7 +214,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd subject area
     @Given("^We know the number of subject area data in EPH$")
     public void getEPH_GD_Subject_Area() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_Subject_Area;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_Subject_Area;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -242,7 +224,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The subject area data is in the DL$")
     public void getDL_GD_Subject_Area() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_Subject_Area;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_Subject_Area;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -253,7 +235,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd work financial attributes
     @Given("^We know the number of work financial attribs data in EPH$")
     public void getEPH_GD_Work_Financial_Attribs() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_Work_Financial_Attribs;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_Work_Financial_Attribs;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -263,7 +245,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The work financial attribs data is in the DL$")
     public void getDL_GD_Work_Financial_Attribs() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_Work_Financial_Attribs;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_Work_Financial_Attribs;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -274,7 +256,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd work financial attributes
     @Given("^We know the number of work identifier data in EPH$")
     public void getEPH_GD_Work_Identifier() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_Work_Identifier;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_Work_Identifier;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -284,7 +266,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The work identifier data is in the DL$")
     public void getDL_GD_Work_Identifier() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_Work_Identifier;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_Work_Identifier;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -295,7 +277,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd work person role
     @Given("^We know the number of work person role data in EPH$")
     public void getEPH_GD_Work_Person_Role() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_Work_Person_Role;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_Work_Person_Role;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -305,7 +287,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The work person role data is in the DL$")
     public void getDL_GD_Work_Person_Role() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_Work_Person_Role;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_Work_Person_Role;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -317,7 +299,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd work relationship
     @Given("^We know the number of work relationship data in EPH$")
     public void getEPH_GD_Work_Relationship() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_Work_Relationship;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_Work_Relationship;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -327,7 +309,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The work relationship data is in the DL$")
     public void getDL_GD_Work_Relationship() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_Work_Relationship;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_Work_Relationship;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -338,7 +320,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd work subject area link
     @Given("^We know the number of work subject area link data in EPH$")
     public void getEPH_GD_Work_Subject_Area_Link() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_Work_Subject_Area_Link;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_Work_Subject_Area_Link;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -348,7 +330,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The work subject area link data is in the DL$")
     public void getDL_GD_Work_Subject_Area_Link() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_Work_Subject_Area_Link;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_Work_Subject_Area_Link;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -359,7 +341,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov etax product code
     @Given("^We know the number of x lov etax product code data in EPH$")
     public void getEPH_GD_X_Lov_Etax_Product_Code() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Etax_Product_Code;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Etax_Product_Code;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -369,7 +351,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov etax product code data is in the DL$")
     public void getDL_GD_X_Lov_Etax_Product_Code() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Etax_Product_Code;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Etax_Product_Code;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -380,7 +362,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov event type
     @Given("^We know the number of x lov event type data in EPH$")
     public void getEPH_GD_X_Lov_Event_Type() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Event_Type;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Event_Type;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -390,7 +372,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov event type data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Event_Type() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Event_Type;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Event_Type;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -401,7 +383,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov gl company
     @Given("^We know the number of x lov gl company data in EPH$")
     public void getEPH_GD_X_Lov_Gl_Company() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Gl_Company;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Gl_Company;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -411,7 +393,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov gl company data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Gl_Company() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Gl_Company;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Gl_Company;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -422,7 +404,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov gl prod seg parent
     @Given("^We know the number of x lov gl prod seg parent data in EPH$")
     public void getEPH_GD_X_Lov_Gl_Prod_Seg_Parent() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Gl_Prod_Seg_Parent;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Gl_Prod_Seg_Parent;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -432,7 +414,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov gl prod seg parent data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Gl_Prod_Seg_Parent() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Gl_Prod_Seg_Parent;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Gl_Prod_Seg_Parent;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -443,7 +425,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov gl prod seg parent
     @Given("^We know the number of x lov gl resp centre data in EPH$")
     public void getEPH_GD_X_Lov_Gl_Resp_Centre() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Gl_Resp_Centre;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Gl_Resp_Centre;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -453,7 +435,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov gl resp centre data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Gl_Resp_Centre() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Gl_Resp_Centre;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Gl_Resp_Centre;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -464,7 +446,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov gl prod seg parent
     @Given("^We know the number of x lov identifier type data in EPH$")
     public void getEPH_GD_X_Lov_Identifier_Type() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Identifier_Type;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Identifier_Type;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -474,7 +456,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov identifier type data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Identifier_Type() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Identifier_Type;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Identifier_Type;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -485,7 +467,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov imprint
     @Given("^We know the number of x lov imprint data in EPH$")
     public void getEPH_GD_X_Lov_Imprint() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Imprint;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Imprint;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -495,7 +477,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov imprint data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Imprint() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Imprint;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Imprint;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -506,7 +488,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov language
     @Given("^We know the number of x lov language data in EPH$")
     public void getEPH_GD_X_Lov_Language() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Language;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Language;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -516,7 +498,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov language data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Language() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Language;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Language;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -527,7 +509,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov manif status
     @Given("^We know the number of x lov manif status data in EPH$")
     public void getEPH_GD_X_Lov_Manif_Status() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Manif_Status;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Manif_Status;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -537,7 +519,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov manif status data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Manif_Status() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Manif_Status;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Manif_Status;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -548,7 +530,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov manif type
     @Given("^We know the number of x lov manif type data in EPH$")
     public void getEPH_GD_X_Lov_Manif_Type() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Manif_Type;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Manif_Type;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -558,7 +540,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov manif type data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Manif_Type() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Manif_Type;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Manif_Type;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -569,7 +551,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov oa type
     @Given("^We know the number of x lov oa type data in EPH$")
     public void getEPH_GD_X_Lov_OA_Type() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_OA_Type;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_OA_Type;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -579,7 +561,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov oa type data is in the DL$")
     public void getDL_GD_X_Lov_OA_Type() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_OA_Type;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_OA_Type;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -590,7 +572,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov oa type
     @Given("^We know the number of x lov origin data in EPH$")
     public void getEPH_GD_X_Lov_Origin() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Origin;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Origin;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -600,7 +582,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov origin data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Origin() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Origin;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Origin;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -611,7 +593,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov person role
     @Given("^We know the number of x lov person role data in EPH$")
     public void getEPH_GD_X_Lov_Person_Role() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Person_Role;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Person_Role;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -621,7 +603,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov person role data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Person_Role() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Person_Role;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Person_Role;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -632,7 +614,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov pmc
     @Given("^We know the number of x lov pmc data in EPH$")
     public void getEPH_GD_X_Lov_PMC() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_PMC;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_PMC;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -642,7 +624,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov pmc data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_PMC() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_PMC;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_PMC;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -653,7 +635,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov pmg
     @Given("^We know the number of x lov pmg data in EPH$")
     public void getEPH_GD_X_Lov_PMG() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_PMG;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_PMG;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -663,7 +645,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov pmg data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_PMG() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_PMG;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_PMG;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -674,7 +656,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov product status
     @Given("^We know the number of x lov product status data in EPH$")
     public void getEPH_GD_X_Lov_Product_Status() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Product_Status;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Product_Status;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -684,7 +666,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov product status data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Product_Status() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Product_Status;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Product_Status;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -695,7 +677,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov product type
     @Given("^We know the number of x lov product type data in EPH$")
     public void getEPH_GD_X_Lov_Product_Type() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Product_Type;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Product_Type;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -705,7 +687,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov product type data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Product_Type() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Product_Type;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Product_Type;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -716,7 +698,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov relationship type
     @Given("^We know the number of x lov relationship type data in EPH$")
     public void getEPH_GD_X_Lov_Relationship_Type() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Relationship_Type;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Relationship_Type;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -726,7 +708,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov relationship type data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Relationship_Type() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Relationship_Type;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Relationship_Type;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -737,7 +719,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov revenue model
     @Given("^We know the number of x lov revenue model data in EPH$")
     public void getEPH_GD_X_Lov_Revenue_Model() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Revenue_Model;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Revenue_Model;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -747,7 +729,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov revenue model data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Revenue_Model() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Revenue_Model;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Revenue_Model;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -758,7 +740,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov society ownership
     @Given("^We know the number of x lov society ownership data in EPH$")
     public void getEPH_GD_X_Lov_Society_Ownership() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Society_Ownership;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Society_Ownership;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -768,7 +750,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov society ownership data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Society_Ownership() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Society_Ownership;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Society_Ownership;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -779,7 +761,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov subject area type
     @Given("^We know the number of x lov subject area type data in EPH$")
     public void getEPH_GD_X_Lov_Subject_Area_Type() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Subject_Area_Type;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Subject_Area_Type;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -789,7 +771,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov subject area type data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Subject_Area_Type() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Subject_Area_Type;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Subject_Area_Type;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -800,7 +782,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov subscription type
     @Given("^We know the number of x lov subscription type data in EPH$")
     public void getEPH_GD_X_Lov_Subscription_Type() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Subscription_Type;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Subscription_Type;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -810,7 +792,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov subscription type data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Subscription_Type() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Subscription_Type;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Subscription_Type;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -821,7 +803,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov work status
     @Given("^We know the number of x lov work status data in EPH$")
     public void getEPH_GD_X_Lov_Work_Status() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Work_Status;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Work_Status;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -831,7 +813,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov work status data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Work_Status() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Work_Status;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Work_Status;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -842,7 +824,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov work type
     @Given("^We know the number of x lov work type data in EPH$")
     public void getEPH_GD_X_Lov_Work_Type() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Work_Type;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Work_Type;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -852,7 +834,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov work type data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Work_Type() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Work_Type;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Work_Type;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -863,7 +845,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gd x lov workflow source
     @Given("^We know the number of x lov workflow source data in EPH$")
     public void getEPH_GD_X_Lov_Workflow_Source() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GD_X_Lov_Workflow_Source;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GD_X_Lov_Workflow_Source;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -873,7 +855,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The x lov workflow source data is in the DL$")
     public void getDL_GD_X_Lov_X_Lov_Workflow_Source() {
-        sqlDL = EPHDataLakeCountSQL.DL_GD_X_Lov_Workflow_Source;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GD_X_Lov_Workflow_Source;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -884,7 +866,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gh accountable product
     @Given("^We know the number of gh accountable product data in EPH$")
     public void getEPH_GH_Accountable_Product() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GH_Accountable_Product;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GH_Accountable_Product;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -894,7 +876,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The gh accountable product data is in the DL$")
     public void getDL_GH_Accountable_Product() {
-        sqlDL = EPHDataLakeCountSQL.DL_GH_Accountable_Product;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GH_Accountable_Product;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -905,7 +887,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gh manifestation
     @Given("^We know the number of gh manifestation data in EPH$")
     public void getEPH_GH_Manifestation() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GH_Manifestation;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GH_Manifestation;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -915,7 +897,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The gh manifestation data is in the DL$")
     public void getDL_GH_Manifestation() {
-        sqlDL = EPHDataLakeCountSQL.DL_GH_Manifestation;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GH_Manifestation;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -926,7 +908,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gh manifestation identifier
     @Given("^We know the number of gh manifestation identifier data in EPH$")
     public void getEPH_GH_Manifestation_Identifier() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GH_Manifestation_Identifier;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GH_Manifestation_Identifier;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -936,7 +918,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The gh manifestation identifier data is in the DL$")
     public void getDL_GH_Manifestation_Identifier() {
-        sqlDL = EPHDataLakeCountSQL.DL_GH_Manifestation_Identifier;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GH_Manifestation_Identifier;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -947,7 +929,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gh person
     @Given("^We know the number of gh person data in EPH$")
     public void getEPH_GH_Person() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GH_Person;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GH_Person;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -957,7 +939,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The gh person data is in the DL$")
     public void getDL_GH_Person() {
-        sqlDL = EPHDataLakeCountSQL.DL_GH_Person;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GH_Person;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -968,7 +950,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gh product
     @Given("^We know the number of gh product data in EPH$")
     public void getEPH_GH_Product() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GH_Product;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GH_Product;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -978,7 +960,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The gh product data is in the DL$")
     public void getDL_GH_Product() {
-        sqlDL = EPHDataLakeCountSQL.DL_GH_Product;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GH_Product;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -989,7 +971,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gh product person role
     @Given("^We know the number of gh product person role data in EPH$")
     public void getEPH_GH_Product_Person_Role() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GH_Product_Person_Role;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GH_Product_Person_Role;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -999,7 +981,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The gh product person role data is in the DL$")
     public void getDL_GH_Product_Person_Role() {
-        sqlDL = EPHDataLakeCountSQL.DL_GH_Product_Person_Role;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GH_Product_Person_Role;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -1010,7 +992,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gh product rel package
     @Given("^We know the number of gh product rel package data in EPH$")
     public void getEPH_GH_Product_Rel_Package() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GH_Product_Rel_Package;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GH_Product_Rel_Package;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -1020,7 +1002,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The gh product rel package data is in the DL$")
     public void getDL_GH_Product_Rel_Package() {
-        sqlDL = EPHDataLakeCountSQL.DL_GH_Product_Rel_Package;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GH_Product_Rel_Package;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -1031,7 +1013,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gh work financial attribs
     @Given("^We know the number of gh work financial attribs data in EPH$")
     public void getEPH_GH_Work_Financial_Attribs() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GH_Work_Financial_Attribs;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GH_Work_Financial_Attribs;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -1041,7 +1023,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The gh work financial attribs data is in the DL$")
     public void getDL_GH_Work_Financial_Attribs() {
-        sqlDL = EPHDataLakeCountSQL.DL_GH_Work_Financial_Attribs;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GH_Work_Financial_Attribs;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -1052,7 +1034,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gh work identifier
     @Given("^We know the number of gh work identifier data in EPH$")
     public void getEPH_GH_Work_Identifier() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GH_Work_Identifier;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GH_Work_Identifier;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -1062,7 +1044,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The gh work identifier data is in the DL$")
     public void getDL_GH_Work_Identifier() {
-        sqlDL = EPHDataLakeCountSQL.DL_GH_Work_Identifier;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GH_Work_Identifier;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -1073,7 +1055,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gh work person role
     @Given("^We know the number of gh work person role data in EPH$")
     public void getEPH_GH_Work_Person_Role() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GH_Work_Person_Role;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GH_Work_Person_Role;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -1083,7 +1065,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The gh work person role data is in the DL$")
     public void getDL_GH_Work_Person_Role() {
-        sqlDL = EPHDataLakeCountSQL.DL_GH_Work_Person_Role;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GH_Work_Person_Role;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -1094,7 +1076,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gh work relationship
     @Given("^We know the number of gh work relationship data in EPH$")
     public void getEPH_GH_Work_Relationship() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GH_Work_Relationship;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GH_Work_Relationship;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -1104,7 +1086,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The gh work relationship data is in the DL$")
     public void getDL_GH_Work_Relationship() {
-        sqlDL = EPHDataLakeCountSQL.DL_GH_Work_Relationship;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GH_Work_Relationship;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -1115,7 +1097,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gh work subject area link
     @Given("^We know the number of gh work subject area link data in EPH$")
     public void getEPH_GH_Work_Subject_Area_Link() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GH_Work_Subject_Area_Link;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GH_Work_Subject_Area_Link;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -1125,7 +1107,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The gh work subject area link data is in the DL$")
     public void getDL_GH_Work_Subject_Area_Link() {
-        sqlDL = EPHDataLakeCountSQL.DL_GH_Work_Subject_Area_Link;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GH_Work_Subject_Area_Link;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
@@ -1136,7 +1118,7 @@ public class EPHDataLakeTablesCountCheckSteps {
     //gh Wwork
     @Given("^We know the number of gh wwork data in EPH$")
     public void getEPH_GH_Wwork() {
-        sqlEPH = EPHDataLakeCountSQL.EPH_GH_Wwork;
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_GH_Wwork;
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.EPH_URL);
@@ -1146,7 +1128,7 @@ public class EPHDataLakeTablesCountCheckSteps {
 
     @When("^The gh wwork data is in the DL$")
     public void getDL_GH_Wwork() {
-        sqlDL = EPHDataLakeCountSQL.DL_GH_Wwork;
+        sqlDL = EPHGDGHTablesDataLakeCountSQL.DL_GH_Wwork;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
