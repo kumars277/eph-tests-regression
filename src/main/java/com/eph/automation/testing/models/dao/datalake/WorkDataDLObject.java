@@ -51,7 +51,81 @@ public class WorkDataDLObject {
     private String S_WORK_SHORT_TITLE;
     private boolean ELECTRO_RIGHTS_INDICATOR;
     private String VOLUME;
+    private String WORK_FIN_ATTRIBS_ID;
+    private String EFFECTIVE_START_DATE;
+    private String EFFECTIVE_END_DATE;
+    private String F_GL_COMPANY;
+    private String F_GL_COST_RESP_CENTRE;
+    private String F_GL_REVENUE_RESP_CENTRE;
+    private String F_WWORK;
+    private String WORK_IDENTIFIER_ID;
+    private String IDENTIFIER;
+    private String S_IDENTIFIER;
 
+    public String getWORK_IDENTIFIER_ID() {   return WORK_IDENTIFIER_ID;  }
+    public void setWORK_IDENTIFIER_ID(String WORK_IDENTIFIER_ID) {
+        this.WORK_IDENTIFIER_ID = WORK_IDENTIFIER_ID;
+    }
+
+    public String getS_IDENTIFIER() {   return S_IDENTIFIER;  }
+    public void setS_IDENTIFIER(String S_IDENTIFIER) {
+        this.S_IDENTIFIER = S_IDENTIFIER;
+    }
+
+    public String getIDENTIFIER() { return IDENTIFIER;  }
+    public void setIDENTIFIER(String IDENTIFIER) {
+        this.IDENTIFIER = IDENTIFIER;
+    }
+
+
+    public String getF_WWORK() {
+        return F_WWORK;
+    }
+    public void setF_WWORK(String F_WWORK) {
+        this.F_WWORK = F_WWORK;
+    }
+
+    public String getF_GL_REVENUE_RESP_CENTRE() {
+        return F_GL_REVENUE_RESP_CENTRE;
+    }
+    public void setF_GL_REVENUE_RESP_CENTRE(String F_GL_REVENUE_RESP_CENTRE) {
+        this.F_GL_REVENUE_RESP_CENTRE = F_GL_REVENUE_RESP_CENTRE;
+    }
+
+    public String getF_GL_COST_RESP_CENTRE() {
+        return F_GL_COST_RESP_CENTRE;
+    }
+    public void setF_GL_COST_RESP_CENTRE(String F_GL_COST_RESP_CENTRE) {
+        this.F_GL_COST_RESP_CENTRE = F_GL_COST_RESP_CENTRE;
+    }
+
+    public String getF_GL_COMPANY() {
+        return F_GL_COMPANY;
+    }
+    public void setF_GL_COMPANY(String F_GL_COMPANY) {
+        this.F_GL_COMPANY = F_GL_COMPANY;
+    }
+
+    public String getEFFECTIVE_END_DATE() {
+        return EFFECTIVE_END_DATE;
+    }
+    public void setEFFECTIVE_END_DATE(String EFFECTIVE_END_DATE) {
+        this.EFFECTIVE_END_DATE = EFFECTIVE_END_DATE;
+    }
+
+    public String getEFFECTIVE_START_DATE() {
+        return EFFECTIVE_START_DATE;
+    }
+    public void setEFFECTIVE_START_DATE(String EFFECTIVE_START_DATE) {
+        this.EFFECTIVE_START_DATE = EFFECTIVE_START_DATE;
+    }
+
+    public String getWORK_FIN_ATTRIBS_ID() {
+        return WORK_FIN_ATTRIBS_ID;
+    }
+    public void setWORK_FIN_ATTRIBS_ID(String WORK_FIN_ATTRIBS_ID) {
+        this.WORK_FIN_ATTRIBS_ID = WORK_FIN_ATTRIBS_ID;
+    }
 
     public String getWORK_ID() {
         return WORK_ID;

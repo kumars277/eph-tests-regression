@@ -50,6 +50,49 @@ public class ProductDataDLObject {
     private String GL_PRODUCT_SEGMENT_CODE;
     private String GL_PRODUCT_SEGMENT_NAME;
     private String F_GL_PRODUCT_SEGMENT_PARENT;
+    private String PRODUCT_REL_PACK_ID;
+    private String ALLOCATION;
+    private String EFFECTIVE_START_DATE;
+    private String EFFECTIVE_END_DATE;
+    private String F_PACKAGE_OWNER;
+    private String F_COMPONENT;
+    private String F_RELATIONSHIP_TYPE;
+
+
+    public String getF_RELATIONSHIP_TYPE() { return F_RELATIONSHIP_TYPE;  }
+    public void setF_RELATIONSHIP_TYPE(String F_RELATIONSHIP_TYPE) {
+        this.F_RELATIONSHIP_TYPE = F_RELATIONSHIP_TYPE;
+    }
+
+    public String getF_COMPONENT() { return F_COMPONENT;  }
+    public void setF_COMPONENT(String F_COMPONENT) {
+        this.F_COMPONENT = F_COMPONENT;
+    }
+
+    public String getEFFECTIVE_START_DATE() { return EFFECTIVE_START_DATE;  }
+    public void setEFFECTIVE_START_DATE(String EFFECTIVE_START_DATE) {
+        this.EFFECTIVE_START_DATE = EFFECTIVE_START_DATE;
+    }
+
+    public String getF_PACKAGE_OWNER() { return F_PACKAGE_OWNER;  }
+    public void setF_PACKAGE_OWNER(String F_PACKAGE_OWNER) {
+        this.F_PACKAGE_OWNER = F_PACKAGE_OWNER;
+    }
+
+    public String getEFFECTIVE_END_DATE() { return EFFECTIVE_END_DATE;  }
+    public void setEFFECTIVE_END_DATE(String EFFECTIVE_END_DATE) {
+        this.EFFECTIVE_END_DATE = EFFECTIVE_END_DATE;
+    }
+
+    public String getPRODUCT_REL_PACK_ID() { return PRODUCT_REL_PACK_ID;  }
+    public void setPRODUCT_REL_PACK_ID(String PRODUCT_REL_PACK_ID) {
+        this.PRODUCT_REL_PACK_ID = PRODUCT_REL_PACK_ID;
+    }
+
+    public String getALLOCATION() { return ALLOCATION;  }
+    public void setALLOCATION(String ALLOCATION) {
+        this.ALLOCATION = ALLOCATION;
+    }
 
     public String getPRODUCT_ID() { return PRODUCT_ID;  }
     public void setPRODUCT_ID(String PRODUCT_ID) {
