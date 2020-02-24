@@ -3,17 +3,21 @@ package com.eph.automation.testing.web.steps.datalake;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
+<<<<<<< HEAD:src/main/java/com/eph/automation/testing/web/steps/datalake/EPHDataLakeCountCheckSteps.java
 import com.eph.automation.testing.services.db.DataLakeSql.EPHDataLakeCountSQL;
+=======
+import com.eph.automation.testing.services.db.DataLakeSql.EPHGDGHTablesDataLakeCountSQL;
+>>>>>>> e6e7cdafa5c8fc46a7e13a2096d2854d50b32472:src/main/java/com/eph/automation/testing/web/steps/datalake/EPHDataLakeTablesCountCheckSteps.java
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
+
 import java.util.List;
 import java.util.Map;
 
 
-
-public class EPHDataLakeCountCheckSteps {
+public class EPHDataLakeTablesCountCheckSteps {
 
     private static String sqlDL;
     private static String sqlEPH;
@@ -23,8 +27,13 @@ public class EPHDataLakeCountCheckSteps {
 
 // gd_Wwork count
     @Given("^We know the number of Works in EPH$")
+<<<<<<< HEAD:src/main/java/com/eph/automation/testing/web/steps/datalake/EPHDataLakeCountCheckSteps.java
     public void getEph_GD_Works_Count() {
         sqlEPH = EPHDataLakeCountSQL.EPH_GD_WORK_COUNT;
+=======
+    public void getEphWorksCount() {
+        sqlEPH = EPHGDGHTablesDataLakeCountSQL.EPH_WORK_COUNT;
+>>>>>>> e6e7cdafa5c8fc46a7e13a2096d2854d50b32472:src/main/java/com/eph/automation/testing/web/steps/datalake/EPHDataLakeTablesCountCheckSteps.java
         Log.info(sqlEPH);
         List<Map<String, Object>> workCountEph = DBManager.getDBResultMap(sqlEPH,Constants.EPH_URL);
         EPHCount = ((Long) workCountEph.get(0).get("EPH_gd_Wwork_Count")).intValue();
@@ -32,11 +41,20 @@ public class EPHDataLakeCountCheckSteps {
     }
 
 
+<<<<<<< HEAD:src/main/java/com/eph/automation/testing/web/steps/datalake/EPHDataLakeCountCheckSteps.java
     @When("^The wwork data is in the DL$")
     public void getDL_GD_Works_Count() {
         sqlDL = EPHDataLakeCountSQL.DL_GD_WORK_COUNT;
         Log.info(sqlDL);
         List<Map<String, Object>> workCountDL = DBManager.getDLResultMap(sqlDL,
+=======
+    @When("^The works are in DL Outbound$")
+    public void getDLWorksCount() {
+        // Run the Talend job
+        sqlDLSTG = EPHGDGHTablesDataLakeCountSQL.DL_WORK_COUNT;
+        Log.info(sqlDLSTG);
+        List<Map<String, Object>> workCountDLSTG = DBManager.getDLResultMap(sqlDLSTG,
+>>>>>>> e6e7cdafa5c8fc46a7e13a2096d2854d50b32472:src/main/java/com/eph/automation/testing/web/steps/datalake/EPHDataLakeTablesCountCheckSteps.java
                 Constants.AWS_URL);
         DLCount = ((Long) workCountDL.get(0).get("DL_gd_Wwork_Count")).intValue();
         Log.info("GD Works in DL staging: " + DLCount);
