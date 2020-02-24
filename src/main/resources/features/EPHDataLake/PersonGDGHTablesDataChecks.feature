@@ -22,6 +22,18 @@ Feature:Validate data for person tables between EPH and Data Lake - Outbound
       | 10              | gh_person|
 
 
+  @DL
+  Scenario Outline: Validate data is transferred from gd_product_person_role EPH to DL Outbound
+    Given We get <countOfRandomIds> random person ids of <table>
+    When We get the gd product person records from EPH
+    Then We get the gd product person records from DL
+    And Compare gd product person records in EPH and DL
+    Examples:
+      | countOfRandomIds | table  |
+      | 10             | gd_product_person_role|
+
+
+
 
 
 

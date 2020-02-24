@@ -60,6 +60,13 @@ public class ProductGDGHTablesDataCheckSteps {
                 Ids = randomAccProductIds.stream().map(m -> (BigDecimal) m.get("ACCOUNTABLE_PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
                 break;
 
+            case "gd_product_rel_package":
+                sql = String.format(ProductGDGHTablesDataChecksSQL.GET_RANDOM_PRODUCT_PACKAGE_ID, numberOfRecords);
+                Log.info(sql);
+                List<Map<?, ?>> randomProductPkgIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomProductPkgIds.stream().map(m -> (BigDecimal) m.get("PRODUCT_REL_PACK_ID")).map(String::valueOf).collect(Collectors.toList());
+                break;
+
         }
         Log.info(Ids.toString());
     }
@@ -1206,6 +1213,218 @@ public class ProductGDGHTablesDataCheckSteps {
             }
         }
     }
+
+    @When("^We get the gd product package records from EPH$")
+    public void getProductPkgEPH() {
+        Log.info("We get the product Package records from EPH..");
+        //  sql = String.format(ProductGDGHTablesDataChecksSQL.GET_DATA_PRODUCT_EPH, Joiner.on("','").join(Ids));
+        sql = String.format(productObj.gdProductPkgBuildSql(Constants.EPH_SCHEMA),Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityDLContext.tbProductDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, ProductDataDLObject.class, Constants.EPH_URL);
+    }
+
+
+    @Then("^We get the gd product package records from DL$")
+    public void getProductPkgDL() {
+        Log.info("We get the product Package records from DL..");
+        // sql = String.format(ProductGDGHTablesDataChecksSQL.GET_DATA_PRODUCT_DL, Joiner.on("','").join(Ids));
+        sql = String.format(productObj.gdProductPkgBuildSql(GetDLDBUser.getDataBase()),Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityDLContext.tbProductDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, ProductDataDLObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare gd product package records in EPH and DL$")
+    public void compareGDProductPkgDataEPHtoDL() {
+        if (dataQualityDLContext.tbProductDataObjectsFromDL.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the data to compare the gd product package records in EPH and DATA LAKE ..");//sort data in the lists
+            for (int i = 0; i < dataQualityDLContext.tbProductDataObjectsFromEPH.size(); i++) {
+                dataQualityDLContext.tbProductDataObjectsFromEPH.sort(Comparator.comparing(ProductDataDLObject::getPRODUCT_REL_PACK_ID));
+                dataQualityDLContext.tbProductDataObjectsFromDL.sort(Comparator.comparing(ProductDataDLObject::getPRODUCT_REL_PACK_ID));
+
+                if (dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID() != null ||
+                        (!dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getPRODUCT_REL_PACK_ID().equals("null"))) {  //In data lake null considering or getting as String
+                    Assert.assertEquals("The ACCOUNTABLE_PRODUCT_ID is incorrect for id=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
+                            dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
+                            dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getPRODUCT_REL_PACK_ID());
+
+                }
+
+                Log.info("ID => " + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID() +
+                        " B_CLASSNAME => EPH=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getB_CLASSNAME() +
+                        " DL=" + dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME());
+
+
+                if (dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getB_CLASSNAME() != null ||
+                        (!dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME().equals("null"))) {
+                    Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
+                            dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getB_CLASSNAME(),
+                            dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME());
+                }
+
+                Log.info("ID => " + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID() +
+                        " B_BATCHID => EPH=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getB_BATCHID() +
+                        " DL=" + dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID());
+
+
+                if (dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getB_BATCHID() != null ||
+                        (!dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID().equals("null"))) {
+                    Assert.assertEquals("The B_BATCHID is incorrect for id=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
+                            dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getB_BATCHID(),
+                            dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID());
+                }
+
+                Log.info("ID => " + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID() +
+                        " B_CREDATE => EPH=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREDATE() +
+                        " DL=" + dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE());
+
+
+                if (dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREDATE() != null ||
+                        (!dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE().equals("null"))) {
+                    Assert.assertEquals("The B_CREDATE is incorrect for id=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
+                            dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREDATE().substring(0, 10),
+                            dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE().substring(0, 10));
+                }
+
+                Log.info("ID => " + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID() +
+                        " B_UPDDATE => EPH=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDDATE() +
+                        " DL=" + dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE());
+
+
+                if (dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDDATE() != null ||
+                        (!dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE().equals("null"))) {
+                    Assert.assertEquals("The B_UPDDATE is incorrect for id=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
+                            dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDDATE().substring(0, 10),
+                            dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE().substring(0, 10));
+                }
+
+                Log.info("ID => " + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID() +
+                        " B_CREATOR => EPH=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREATOR() +
+                        " DL=" + dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR());
+
+
+                if (dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREATOR() != null ||
+                        (!dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR().equals("null"))) {
+                    Assert.assertEquals("The B_CREATOR is incorrect for id=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
+                            dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREATOR(),
+                            dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR());
+                }
+
+                Log.info("ID => " + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID() +
+                        " B_UPDATOR => EPH=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDATOR() +
+                        " DL=" + dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR());
+
+
+                if (dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDATOR() != null ||
+                        (!dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR().equals("null"))) {
+                    Assert.assertEquals("The B_UPDATOR is incorrect for id=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
+                            dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDATOR(),
+                            dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR());
+                }
+
+                Log.info("ID => " + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID() +
+                        " EXTERNAL_REFERENCE => EPH=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE() +
+                        " DL=" + dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
+
+
+                if (dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE() != null ||
+                        (!dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE().equals("null"))) {
+                    Assert.assertEquals("The EXTERNAL_REFERENCE is incorrect for id=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
+                            dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE(),
+                            dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
+                }
+
+                Log.info("ID => " + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID() +
+                        " ALLOCATION => EPH=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getALLOCATION() +
+                        " DL=" + dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getALLOCATION());
+
+
+                if (dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getALLOCATION() != null ||
+                        (!dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getALLOCATION().equals("null"))) {
+                    Assert.assertEquals("The ALLOCATION is incorrect for id=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
+                            dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getALLOCATION(),
+                            dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getALLOCATION());
+                }
+
+                Log.info("ID => " + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID() +
+                        " EFFECTIVE_START_DATE => EPH=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_START_DATE() +
+                        " DL=" + dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE());
+
+
+                if (dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_START_DATE() != null ||
+                        (!dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE().equals("null"))) {
+                    Assert.assertEquals("The EFFECTIVE_START_DATE is incorrect for id=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
+                            dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_START_DATE(),
+                            dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE());
+                }
+
+                Log.info("ID => " + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID() +
+                        " EFFECTIVE_END_DATE => EPH=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_END_DATE() +
+                        " DL=" + dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE());
+
+
+                if (dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_END_DATE() != null ||
+                        (!dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE().equals("null"))) {
+                    Assert.assertEquals("The EFFECTIVE_END_DATE is incorrect for id=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
+                            dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_END_DATE(),
+                            dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE());
+                }
+
+                Log.info("ID => " + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID() +
+                        " F_PACKAGE_OWNER => EPH=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getF_PACKAGE_OWNER() +
+                        " DL=" + dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getF_PACKAGE_OWNER());
+
+
+                if (dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getF_PACKAGE_OWNER() != null ||
+                        (!dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getF_PACKAGE_OWNER().equals("null"))) {
+                    Assert.assertEquals("The F_PACKAGE_OWNER is incorrect for id=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
+                            dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getF_PACKAGE_OWNER(),
+                            dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getF_PACKAGE_OWNER());
+                }
+
+                Log.info("ID => " + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID() +
+                        " F_COMPONENT => EPH=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getF_COMPONENT() +
+                        " DL=" + dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getF_COMPONENT());
+
+
+                if (dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getF_COMPONENT() != null ||
+                        (!dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getF_COMPONENT().equals("null"))) {
+                    Assert.assertEquals("The F_COMPONENT is incorrect for id=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
+                            dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getF_COMPONENT(),
+                            dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getF_COMPONENT());
+                }
+
+                Log.info("ID => " + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID() +
+                        " F_RELATIONSHIP_TYPE => EPH=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getF_RELATIONSHIP_TYPE() +
+                        " DL=" + dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getF_RELATIONSHIP_TYPE());
+
+
+                if (dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getF_RELATIONSHIP_TYPE() != null ||
+                        (!dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getF_RELATIONSHIP_TYPE().equals("null"))) {
+                    Assert.assertEquals("The F_RELATIONSHIP_TYPE is incorrect for id=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
+                            dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getF_RELATIONSHIP_TYPE(),
+                            dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getF_RELATIONSHIP_TYPE());
+                }
+
+                Log.info("ID => " + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID() +
+                        " F_EVENT => EPH=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getF_EVENT() +
+                        " DL=" + dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT());
+
+
+                if (dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getF_EVENT() != null ||
+                        (!dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT().equals("null"))) {
+                    Assert.assertEquals("The F_EVENT is incorrect for id=" + dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
+                            dataQualityDLContext.tbProductDataObjectsFromEPH.get(i).getF_EVENT(),
+                            dataQualityDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT());
+                }
+
+            }}
+
+
+
+
+            }
 }
 
 

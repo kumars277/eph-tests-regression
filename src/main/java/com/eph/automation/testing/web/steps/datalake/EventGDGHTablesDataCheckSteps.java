@@ -45,6 +45,13 @@ public class EventGDGHTablesDataCheckSteps {
                 List<Map<?, ?>> randomEventIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
                 Ids = randomEventIds.stream().map(m -> (BigDecimal) m.get("EVENT_ID")).map(String::valueOf).collect(Collectors.toList());
                 break;
+
+            case "gd_subject_area":
+                sql = String.format(EventGDGHTablesDataChecksSQL.GET_RANDOM_SUB_AREA_ID, numberOfRecords);
+                Log.info(sql);
+                List<Map<?, ?>> randomSubjAreaIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+                Ids = randomSubjAreaIds.stream().map(m -> (BigDecimal) m.get("SUBJECT_AREA_ID")).map(String::valueOf).collect(Collectors.toList());
+                break;
         }
             Log.info(Ids.toString());
     }
@@ -266,6 +273,166 @@ public class EventGDGHTablesDataCheckSteps {
             }
 
         }}
+
+    }
+
+    @When("^We get the gd subject area records from EPH$")
+    public void getSubjAreaEPH() {
+        Log.info("We get the Subject Area records from EPH..");
+        // sql = String.format(EventGDGHTablesDataChecksSQL.GET_DATA_EVENT_EPH, Joiner.on("','").join(Ids));
+        sql = String.format(eventObj.subAreaBuildSQLQuery(Constants.EPH_SCHEMA),Joiner.on("','").join(Ids)) ;
+        Log.info(sql);
+        dataQualityDLContext.tbEventDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, EventDataDLObject.class, Constants.EPH_URL);
+    }
+
+
+    @Then("^We get the gd subject area records from DL$")
+    public void getSubjAreaDL() {
+        Log.info("We get the Subject Area records from DL..");
+        //sql = String.format(EventGDGHTablesDataChecksSQL.GET_DATA_EVENT_DL, Joiner.on("','").join(Ids));
+        sql = String.format(eventObj.subAreaBuildSQLQuery(GetDLDBUser.getDataBase()),Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityDLContext.tbEventDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, EventDataDLObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare gd subject area records in EPH and DL$")
+    public void compareGDSubAreaDataEPHtoDL() {
+        if(dataQualityDLContext.tbEventDataObjectsFromDL.isEmpty()){
+            Log.info("No Data Found ....");
+        }else{
+            Log.info("Sorting the data to compare the gd subject area records in EPH and DATA LAKE ..");//sort data in the lists
+            for (int i = 0; i < dataQualityDLContext.tbEventDataObjectsFromEPH.size(); i++) {
+                dataQualityDLContext.tbEventDataObjectsFromEPH.sort(Comparator.comparing(EventDataDLObject::getSUBJECT_AREA_ID));
+                dataQualityDLContext.tbEventDataObjectsFromDL.sort(Comparator.comparing(EventDataDLObject::getSUBJECT_AREA_ID));
+
+                String subAreaId = dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getSUBJECT_AREA_ID();
+
+                Log.info("ID => "+subAreaId+
+                        " EVENT_ID => EPH="+subAreaId+
+                        " DL="+subAreaId);
+
+                if (subAreaId != null ||
+                        (!subAreaId.equals("null"))) {  //In data lake null considering or getting as String
+                    Assert.assertEquals("The EVENT_ID is incorrect for id=" + subAreaId,
+                            dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getEVENT_ID(),
+                            dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getEVENT_ID());
+
+                }
+                Log.info("ID => "+subAreaId+
+                        " B_CLASSNAME => EPH="+dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getB_CLASSNAME()+
+                        " DL="+dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getB_CLASSNAME());
+
+                if (dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getB_CLASSNAME() != null ||
+                        (!dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getB_CLASSNAME().equals("null"))) {
+                    Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + subAreaId,
+                            dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getB_CLASSNAME(),
+                            dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getB_CLASSNAME());
+                }
+                Log.info("ID => "+subAreaId+
+                        " B_BATCHID => EPH="+dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getB_BATCHID()+
+                        " DL="+dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getB_BATCHID());
+
+                if (dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getB_BATCHID() != null ||
+                        (!dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getB_BATCHID().equals("null"))) {
+                    Assert.assertEquals("The B_BATCHID is incorrect for id=" + subAreaId,
+                            dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getB_BATCHID(),
+                            dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getB_BATCHID());
+                }
+                Log.info("ID => "+subAreaId+
+                        " B_CREDATE => EPH="+dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getB_CREDATE()+
+                        " DL="+dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getB_CREDATE());
+
+                if (dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getB_CREDATE() != null ||
+                        (!dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getB_CREDATE().equals("null"))) {
+                    Assert.assertEquals("The B_CREDATE is incorrect for id=" + subAreaId,
+                            dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getB_CREDATE().substring(0, 10),
+                            dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getB_CREDATE().substring(0, 10));
+                }
+                Log.info("ID => "+subAreaId+
+                        " B_UPDDATE => EPH="+dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getB_UPDDATE()+
+                        " DL="+dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDDATE());
+
+                if (dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getB_UPDDATE() != null ||
+                        (!dataQualityDLContext.tbWorkDataObjectsFromDL.get(i).getB_UPDDATE().equals("null"))) {
+                    Assert.assertEquals("The B_UPDATE is incorrect for id=" + subAreaId,
+                            dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getB_UPDDATE().substring(0, 10),
+                            dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDDATE().substring(0, 10));
+                }
+                Log.info("ID => "+subAreaId+
+                        " B_CREATOR => EPH="+dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getB_CREATOR()+
+                        " DL="+dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getB_CREATOR());
+
+                if (dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getB_CREATOR() != null ||
+                        (!dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getB_CREATOR().equals("null"))) {
+                    Assert.assertEquals("The B_CREATOR is incorrect for id=" + subAreaId,
+                            dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getB_CREATOR(),
+                            dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getB_CREATOR());
+                }
+                Log.info("ID => "+subAreaId+
+                        " B_UPDATOR => EPH="+dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getB_UPDATOR()+
+                        " DL="+dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDATOR());
+
+
+                if (dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getB_UPDATOR() != null ||
+                        (!dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDATOR().equals("null"))) {
+                    Assert.assertEquals("The B_UPDATOR is incorrect for id=" + subAreaId,
+                            dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getB_UPDATOR(),
+                            dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDATOR());
+                }
+                Log.info("ID => "+subAreaId+
+                        " EXTERNAL_REFERENCE => EPH="+dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE()+
+                        " DL="+dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
+
+
+                if (dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE() != null ||
+                        (!dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE().equals("null"))) {
+                    Assert.assertEquals("The EXTERNAL_REFERENCE is incorrect for id=" + subAreaId,
+                            dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE(),
+                            dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
+                }
+                Log.info("ID => "+subAreaId+
+                        " CODE => EPH="+dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getCODE()+
+                        " DL="+dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getCODE());
+
+
+                if (dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getCODE() != null ||
+                        (!dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getCODE().equals("null"))) {
+                    Assert.assertEquals("The CODE is incorrect for id=" + subAreaId,
+                            dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getCODE(),
+                            dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getCODE());
+                }
+                Log.info("ID => "+subAreaId+
+                        " NAME => EPH="+dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getNAME()+
+                        " DL="+dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getNAME());
+
+                if (dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getNAME() != null ||
+                        (!dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getNAME().equals("null"))) {
+                    Assert.assertEquals("The NAME is incorrect for id=" + subAreaId,
+                            dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getNAME(),
+                            dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getNAME());
+                }
+                Log.info("ID => "+subAreaId+
+                        " F_TYPE => EPH="+dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getF_TYPE()+
+                        " DL="+dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getF_TYPE());
+
+                if (dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getF_TYPE() != null ||
+                        (!dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getF_TYPE().equals("null"))) {
+                    Assert.assertEquals("The F_TYPE is incorrect for id=" + subAreaId,
+                            dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getF_TYPE(),
+                            dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getF_TYPE());
+                }
+                Log.info("ID => "+subAreaId+
+                        " F_PARENT_SUBJECT_AREA => EPH="+dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getF_PARENT_SUBJECT_AREA()+
+                        " DL="+dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getF_PARENT_SUBJECT_AREA());
+
+                if (dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getF_PARENT_SUBJECT_AREA() != null ||
+                        (!dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getF_PARENT_SUBJECT_AREA().equals("null"))) {
+                    Assert.assertEquals("The F_PARENT_SUBJECT_AREA is incorrect for id=" + subAreaId,
+                            dataQualityDLContext.tbEventDataObjectsFromEPH.get(i).getF_PARENT_SUBJECT_AREA(),
+                            dataQualityDLContext.tbEventDataObjectsFromDL.get(i).getF_PARENT_SUBJECT_AREA());
+                }
+
+            }}
 
     }
 

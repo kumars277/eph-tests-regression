@@ -24,6 +24,56 @@ public class EventDataDLObject {
     private String F_SELF_TWO;
     private String F_SELF_THREE;
     private String F_SELF_FOUR;
+    private String SUBJECT_AREA_ID;
+    private String EXTERNAL_REFERENCE;
+    private String CODE;
+    private String NAME;
+    private String F_TYPE;
+    private String F_PARENT_SUBJECT_AREA;
+
+    public String getSUBJECT_AREA_ID() {
+        return SUBJECT_AREA_ID;
+    }
+    public void setSUBJECT_AREA_ID(String SUBJECT_AREA_ID) {
+        this.SUBJECT_AREA_ID = SUBJECT_AREA_ID;
+    }
+
+    public String getF_PARENT_SUBJECT_AREA() {
+        return F_PARENT_SUBJECT_AREA;
+    }
+    public void setF_PARENT_SUBJECT_AREA(String F_PARENT_SUBJECT_AREA) {
+        this.F_PARENT_SUBJECT_AREA = F_PARENT_SUBJECT_AREA;
+    }
+
+    public String getF_TYPE() {
+        return F_TYPE;
+    }
+    public void setF_TYPE(String F_TYPE) {
+        this.F_TYPE = F_TYPE;
+    }
+
+    public String getNAME() {
+        return NAME;
+    }
+    public void setNAME(String NAME) {
+        this.NAME = NAME;
+    }
+
+
+    public String getCODE() {
+        return CODE;
+    }
+    public void setCODE(String CODE) {
+        this.CODE = CODE;
+    }
+
+    public String getEXTERNAL_REFERENCE() {
+        return EXTERNAL_REFERENCE;
+    }
+    public void setEXTERNAL_REFERENCE(String EXTERNAL_REFERENCE) {
+        this.EXTERNAL_REFERENCE = EXTERNAL_REFERENCE;
+    }
+
 
     public String getEVENT_ID() {
         return EVENT_ID;

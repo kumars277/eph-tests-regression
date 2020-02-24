@@ -6,6 +6,62 @@ public  class WorksGDGHTablesDataChecksSQL {
 
     public static String GET_RANDOM_WORK_ID_GH = "select work_id as WORK_ID from semarchy_eph_mdm.gh_wwork order by random() limit '%s'";
 
+    public static String GET_RANDOM_WORK_FIN_ATTR_ID_GD = "select work_fin_attribs_id as WORK_FIN_ATTRIBS_ID from semarchy_eph_mdm.gd_work_financial_attribs order by random() limit '%s'";
+
+    public static String GET_RANDOM_WORK_IDENTFIER_ID_GD = "select work_identifier_id as WORK_IDENTIFIER_ID from semarchy_eph_mdm.gd_work_identifier order by random() limit '%s'";
+
+
+    public  String gdWorkIdentifierBuildSql(String db) {
+        String GET_DATA_WORK_IDENT_GD = "select \n" +
+                "WORK_IDENTIFIER_ID as WORK_IDENTIFIER_ID\n" +
+                ",B_CLASSNAME as B_CLASSNAME\n" +
+                ",B_BATCHID as B_BATCHID\n" +
+                ",B_CREDATE as B_CREDATE\n" +
+                ",B_UPDDATE as B_UPDDATE\n" +
+                ",B_CREATOR as B_CREATOR\n" +
+                ",B_UPDATOR as B_UPDATOR\n" +
+                ",EXTERNAL_REFERENCE as EXTERNAL_REFERENCE\n" +
+                ",IDENTIFIER as IDENTIFIER\n" +
+                ",S_IDENTIFIER as S_IDENTIFIER\n" +
+                ",EFFECTIVE_START_DATE as EFFECTIVE_START_DATE\n" +
+                ",EFFECTIVE_END_DATE as EFFECTIVE_END_DATE\n" +
+                ",F_TYPE as F_TYPE\n" +
+                ",F_WWORK as F_WWORK\n" +
+                ",F_EVENT as F_EVENT\n" +
+                "from "+db+".gd_work_identifier\n" +
+                "where WORK_IDENTIFIER_ID in ('%s')";
+
+                return GET_DATA_WORK_IDENT_GD;
+
+    }
+
+
+    public  String gdWorkFinAttrBuildSql(String db) {
+
+        String GET_DATA_FIN_ATTR_GD = "select \n" +
+                "WORK_FIN_ATTRIBS_ID as WORK_FIN_ATTRIBS_ID\n" +
+                ",B_CLASSNAME as B_CLASSNAME\n" +
+                ",B_BATCHID as B_BATCHID\n" +
+                ",B_CREDATE as B_CREDATE\n" +
+                ",B_UPDDATE as B_UPDDATE\n" +
+                ",B_CREATOR as B_CREATOR\n" +
+                ",B_UPDATOR as B_UPDATOR\n" +
+                ",EXTERNAL_REFERENCE as EXTERNAL_REFERENCE\n" +
+                ",EFFECTIVE_START_DATE as EFFECTIVE_START_DATE\n" +
+                ",EFFECTIVE_END_DATE as EFFECTIVE_END_DATE\n" +
+                ",F_GL_COMPANY as F_GL_COMPANY\n" +
+                ",F_GL_COST_RESP_CENTRE as F_GL_COST_RESP_CENTRE\n" +
+                ",F_GL_REVENUE_RESP_CENTRE as F_GL_REVENUE_RESP_CENTRE\n" +
+                ",F_WWORK as F_WWORK\n" +
+                ",F_EVENT as F_EVENT\n" +
+                "from "+db+".gd_work_financial_attribs\n" +
+                "where WORK_FIN_ATTRIBS_ID in ('%s')";
+
+                return GET_DATA_FIN_ATTR_GD;
+
+    }
+
+
     public  String gdWorkDataBuildSql(String db) {
 
         String GET_DATA_WORKS= "select \n" +
