@@ -10,7 +10,7 @@ Feature: Product Finder Selenium tests
     And User is forwarded to the searched works page
     Examples:
       | id                        |
-      | EPR-W-TSTW01              |
+      | EPR-W-113YW0              |
 
   @PF
   Scenario Outline: Search the work by title
@@ -22,7 +22,7 @@ Feature: Product Finder Selenium tests
     And User is forwarded to the searched works page
     Examples:
       | id                        |
-      | EPR-W-TSTW01              |
+      | EPR-W-10DDN2              |
 
   @PF
   Scenario Outline: Search the work by keyword
@@ -34,8 +34,7 @@ Feature: Product Finder Selenium tests
     And User is forwarded to the searched works page
     Examples:
       | id                        | keyword     |
-      | EPR-W-TSTW01              | Tetrahedron |
-
+      | EPR-W-10DDN2              | Spectroscopy |
 
   @PF
     Scenario Outline: When no product is found "There are no results that match your search" is displayed
@@ -46,6 +45,21 @@ Feature: Product Finder Selenium tests
       |keyword      |
       |abcdefg1234567890|
 
+
+  @PF
+  Scenario Outline: Search the work and filter them with one Work Type
+    Given Get the available Work Types from the DB "<workType>"
+    Then  Get a Work Id for each Work Types available in the DB
+    Given user is on search page
+    Then  Search for the Work by Work Ids Filter By "<workType>"
+    And   Click on the result to verify the work Type is "<workType>"
+    Examples:
+      |        workType        |
+      |Book                    |
+      |Journal                 |
+   #  |Other                   | #NA
+
+    #steps missing for below
   @PF
   Scenario: Search the Product by id
     Given We get the id and title for product search from DB
@@ -53,7 +67,6 @@ Feature: Product Finder Selenium tests
     And  Searches for Product by id
     Then Verify the searched product id is displayed in the result and clicked
     And  User is forwarded to the searched product id page
-
 
 
   @PF
@@ -71,7 +84,7 @@ Feature: Product Finder Selenium tests
 
 
       @PF
-      Scenario Outline: Search the work and filter them with Work Statuses
+      Scenario Outline: Search the work and filter them with Work Status
         Given user is on search page
         And Searches for works by given "<keyword>"
         And Filter the Search Result by work status "<workStatus>"
@@ -96,23 +109,6 @@ Feature: Product Finder Selenium tests
         |Cell           |       Being Published      |  Book      |
         |Cell           |       Launched             |  Journal   |
         |Cell           |       Planned              |   Book      |
-
-
-
-        @PFN
-        Scenario Outline: Search the work and filter them with one Work Type
-          Given Get the available Work Types from the DB "<workType>"
-          Then  Get a Work Id for each Work Types available in the DB
-          Given user is on search page
-          Then  Search for the Work by Work Ids Filter By "<workType>"
-          And   Click on the result to verify the work Type is "<workType>"
-          Examples:
-            |        workType        |
-            |Book                    |
-            |Journal                  |
-            |Other                    |
-
-
 
 
 

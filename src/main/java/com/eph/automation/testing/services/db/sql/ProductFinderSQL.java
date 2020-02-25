@@ -25,7 +25,8 @@ public class ProductFinderSQL {
     public static String SELECT_AVAILABLE_WORK_TYPES_FOR_BOOK = "select distinct f_type as WORK_TYPE from semarchy_eph_mdm.gd_wwork where f_type in ('BKS','MRW','OTH','RBK','SER','TBK')";
     public static String SELECT_AVAILABLE_WORK_TYPES_FOR_JOURNAL = "select distinct f_type as WORK_TYPE from semarchy_eph_mdm.gd_wwork where f_type in ('ABS','JBB','JNL','NWL')";
     public static String SELECT_AVAILABLE_WORK_TYPES_FOR_OTHER = "select distinct f_type as WORK_TYPE from semarchy_eph_mdm.gd_wwork where f_type in ('DMG','MPR')";
-    public static String SELECT_WORKID_FOR_WORK_TYPE = "select work_id as WORK_ID from semarchy_eph_mdm.gd_wwork where f_type = '%s' limit 1";
-    public static String SELECT_PRODUCTID_TITLE_FOR_SEARCH = "select product_id as PRODUCT_ID, name as PRODUCT_TITLE from semarchy_eph_mdm.gd_product limit 1";
+    //updated by Nishant @ Feb 2020
+    public static String SELECT_WORKID_FOR_WORK_TYPE = "select work_id as WORK_ID from semarchy_eph_mdm.gd_wwork where f_type = '%s' order by random() limit 1";
+    public static String SELECT_PRODUCTID_TITLE_FOR_SEARCH = "select product_id as PRODUCT_ID, name as PRODUCT_TITLE from semarchy_eph_mdm.gd_product order by random() limit 1";
 
 }

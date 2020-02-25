@@ -155,9 +155,7 @@ public class AuthorizationService {
             accessToken = mapper.readValue(response, AccessToken.class);
             JsonNode node = mapper.readTree(response);
             String access_token = node.get("access_token").textValue();
-            System.out.println(access_token);
             String temp = accessToken.getToken();
-            System.out.println(temp);
         }
         catch (IOException e)
         {

@@ -2,29 +2,33 @@ package com.eph.automation.testing.models.api;
 /**
  * Created by GVLAYKOV
  */
+
+//updated by Nishant to fix search API v2
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.models.dao.ManifestationDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.databind.util.TypeKey;
 import com.google.common.base.Joiner;
 import org.junit.Assert;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-   public class WorkManifestationApiObject {
+public class WorkManifestationApiObject {
     public WorkManifestationApiObject() {
     }
     private List<ManifestationDataObject> manifestationDataObjectFromEPHGD;
     public void compareWithDB(){
         getManifestationByID(this.id);
         Assert.assertEquals(this.keyTitle, manifestationDataObjectFromEPHGD.get(0).getMANIFESTATION_KEY_TITLE());
-        if(!(manifestationDataObjectFromEPHGD.get(0).getINTERNATIONAL_EDITION_IND()==null)||!(this.internationalEditionInd==null)) {
+      /*  if(!(manifestationDataObjectFromEPHGD.get(0).getINTERNATIONAL_EDITION_IND()==null)||!(this.internationalEditionInd==null)) {
             Assert.assertEquals(Boolean.valueOf(this.internationalEditionInd), Boolean.valueOf(manifestationDataObjectFromEPHGD.get(0).getINTERNATIONAL_EDITION_IND()));
-        }
+        }*/
         Assert.assertEquals(this.firstPubDate, manifestationDataObjectFromEPHGD.get(0).getFIRST_PUB_DATE());
         Assert.assertEquals(this.type.get("code"), manifestationDataObjectFromEPHGD.get(0).getF_TYPE());
         Assert.assertEquals(this.status.get("code"), manifestationDataObjectFromEPHGD.get(0).getF_STATUS());
@@ -38,7 +42,7 @@ import java.util.List;
     private List<ManifestationIdentifiersApiObject> identifiers;
     private HashMap<String, Object> type;
     private HashMap<String, Object> status;
-    private Products[] products;
+    private List<ManifestationProductAPIObject> products;
 
     public List<ManifestationIdentifiersApiObject> getIdentifiers() {
         return identifiers;
@@ -48,18 +52,13 @@ import java.util.List;
         this.identifiers = identifiers;
     }
 
-
-
-    public Products[] getProducts() {
+    public List<ManifestationProductAPIObject> getProducts() {
         return products;
     }
 
-    public void setProducts(Products[] products) {
+    public void setProducts(List<ManifestationProductAPIObject> products) {
         this.products = products;
     }
-
-
-
 
     public String getId() {
         return id;
@@ -110,22 +109,24 @@ import java.util.List;
     }
 
 
-    static class Products {
-        public Products() {
+    // public void setProducts(HashMap<String, Object> products) {this.products = products; }
 
+    /*
+        static class Products {
+            public Products() {
+            }
+
+            public String getId() {
+                return id;
+            }
+
+            public void setId(String id) {
+                this.id = id;
+            }
+
+            String id;
         }
-
-        public String getId() {
-            return id;
-        }
-
-        public void setId(String id) {
-            this.id = id;
-        }
-
-        String id;
-    }
-
+    */
     private void getManifestationByID(String manifestationID) {
         List<String> ids = new ArrayList<>();
         ids.add(manifestationID);
@@ -133,8 +134,7 @@ import java.util.List;
         if(manifestationDataObjectFromEPHGD!=null){
             manifestationDataObjectFromEPHGD.clear();
         }
-        manifestationDataObjectFromEPHGD = DBManager
-                .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
+        manifestationDataObjectFromEPHGD = DBManager.getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
     }
 }
 
