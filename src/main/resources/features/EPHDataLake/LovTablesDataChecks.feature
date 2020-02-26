@@ -26,6 +26,7 @@ Feature:Validate data for gd_x_Lov tables between EPH and Data Lake - Outbound
       | 5                | gd_x_lov_subject_area_type |
       | 5                | gd_x_lov_workflow_source   |
 
+      #     Tables with specific columns
 
       | 5                | gd_x_lov_event_type        |
       | 5                | gd_x_lov_identifier_type   |

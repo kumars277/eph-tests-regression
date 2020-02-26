@@ -61,6 +61,7 @@ public class DLLovTablesDataChecks {
                 LovTablesDLContext.LovTableDataObjectsFromDL.sort(Comparator.comparing(LovTableDLObject::getCODE));
                 String lovCode = LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getCODE();
 
+//              Switch cases for tables with specific columns
                 switch (tableName) {
                     case "gd_x_lov_event_type":
                         if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getLEVEL_2_EVENT() != null ||
@@ -138,6 +139,8 @@ public class DLLovTablesDataChecks {
                                     LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getROLL_UP_TYPE(),
                                     LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getROLL_UP_TYPE());
                         }
+                        break;
+
                     case "gd_x_lov_pmc":
                         if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getF_PMG() != null ||
                                 (!LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getF_PMG().equals("null"))) {
@@ -228,6 +231,8 @@ public class DLLovTablesDataChecks {
                         }
                         break;
                 }
+
+//                Columns which apply to all tables
 
                         if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getCODE() != null ||
                                 (!LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getCODE().equals("null"))) {  //In data lake null considering or getting as String

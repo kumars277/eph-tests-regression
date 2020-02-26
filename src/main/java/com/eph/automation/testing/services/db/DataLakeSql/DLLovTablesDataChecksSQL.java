@@ -10,6 +10,7 @@ public class DLLovTablesDataChecksSQL {
     public static String EPHlovDataBuildSql(String db , String tableName) {
         String extendedColumns = "";
 
+//      Inserts table specific columns into SQL statement
         if ("gd_x_lov_event_type".equals(tableName)) {
             extendedColumns = ",LEVEL_2_EVENT as LEVEL_2_EVENT \n" +
                     ",LEVEL_3_EVENT as LEVEL_3_EVENT \n";
@@ -53,6 +54,7 @@ public class DLLovTablesDataChecksSQL {
             extendedColumns = ",ROLL_UP_OWNERSHIP as ROLL_UP_OWNERSHIP \n";
         }
 
+//      Core columns SQL statement
         String GET_DATA_LOV_EPH = "select \n" +
             "CODE as CODE\n" +
             ",B_CLASSNAME as B_CLASSNAME\n" +
@@ -74,6 +76,7 @@ public class DLLovTablesDataChecksSQL {
     public static String DLlovDataBuildSql(String db,  String tableName ) {
         String extendedColumns = "";
 
+        //      Inserts table specific columns into SQL statement
         if ("gd_x_lov_event_type".equals(tableName)) {
             extendedColumns = ",LEVEL_2_EVENT as LEVEL_2_EVENT \n" +
                     ",LEVEL_3_EVENT as LEVEL_3_EVENT \n";
@@ -117,6 +120,7 @@ public class DLLovTablesDataChecksSQL {
             extendedColumns = ",ROLL_UP_OWNERSHIP as ROLL_UP_OWNERSHIP \n";
         }
 
+//        Core columns SQL
         String GET_DATA_LOV_DL = "select \n" +
                 "CODE as CODE\n" +
                 ",B_CLASSNAME as B_CLASSNAME\n" +
@@ -129,7 +133,7 @@ public class DLLovTablesDataChecksSQL {
                 ",L_START_DATE as L_START_DATE\n" +
                 ",L_END_DATE as L_END_DATE\n" +
                  extendedColumns +
-                "from product_database_sit.%s \n" +
+                "from " +db+ ".%s \n" +
                 "where CODE in ('%s')";
 
         return GET_DATA_LOV_DL;

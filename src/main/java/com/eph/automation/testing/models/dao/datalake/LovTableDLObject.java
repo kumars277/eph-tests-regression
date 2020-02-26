@@ -2,6 +2,7 @@ package com.eph.automation.testing.models.dao.datalake;
 
 public class LovTableDLObject {
 
+
     private String CODE;
     private String B_CLASSNAME;
     private int B_BATCHID;
@@ -13,6 +14,7 @@ public class LovTableDLObject {
     private String L_START_DATE;
     private String L_END_DATE;
 
+//  Table specific columns
     private String LEVEL_2_EVENT;
     private String LEVEL_3_EVENT;
     private String VALID_AT_WORK;
