@@ -18,6 +18,7 @@ public class DLLovTablesDataChecks {
     private static List<String> lovIds;
     public static LovTablesDLContext LovTablesDLContext;
     public DLLovTablesDataChecksSQL lovObj = new DLLovTablesDataChecksSQL();
+    public String validCheck;
 
     @Given("^We get (.*) random Lov Codes of (.*)")
     public void getRandomLovIds(String numberOfRecords, String tableName) {
@@ -81,32 +82,62 @@ public class DLLovTablesDataChecks {
                     case "gd_x_lov_identifier_type":
                         if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_AT_WORK() != null ||
                                 (!LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_AT_WORK().equals("null"))) {
+                            if(LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_AT_WORK().equals("t")){
+                                validCheck = "true";
+                            }
+                            else if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_AT_WORK().equals("f")){
+                                validCheck = "false";
+                            }
                             Assert.assertEquals("The VALID_AT_WORK is incorrect for id=" + lovCode,
-                                    LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_AT_WORK(),
+                                    validCheck,
                                     LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_AT_WORK());
                         }
                         if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_AT_MANIFESTATION() != null ||
                                 (!LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_AT_MANIFESTATION().equals("null"))) {
+                            if(LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_AT_MANIFESTATION().equals("t")){
+                                validCheck = "true";
+                            }
+                            else if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_AT_MANIFESTATION().equals("f")){
+                                validCheck = "false";
+                            }
                             Assert.assertEquals("The VALID_AT_MANIFESTATION is incorrect for id=" + lovCode,
-                                    LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_AT_MANIFESTATION(),
+                                    validCheck,
                                     LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_AT_MANIFESTATION());
                         }
                         if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_AT_PRODUCT() != null ||
                                 (!LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_AT_PRODUCT().equals("null"))) {
+                            if(LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_AT_PRODUCT().equals("t")){
+                                validCheck = "true";
+                            }
+                            else if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_AT_PRODUCT().equals("f")){
+                                validCheck = "false";
+                            }
                             Assert.assertEquals("The VALID_AT_PRODUCT is incorrect for id=" + lovCode,
-                                    LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_AT_PRODUCT(),
+                                    validCheck,
                                     LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_AT_PRODUCT());
                         }
                         if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_BOOKS() != null ||
                                 (!LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_FOR_BOOKS().equals("null"))) {
+                            if(LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_BOOKS().equals("t")){
+                                validCheck = "true";
+                            }
+                            else if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_BOOKS().equals("f")){
+                                validCheck = "false";
+                            }
                             Assert.assertEquals("The VALID_FOR_BOOKS is incorrect for id=" + lovCode,
-                                    LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_BOOKS(),
+                                    validCheck,
                                     LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_FOR_BOOKS());
                         }
                         if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_JOURNALS() != null ||
                                 (!LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_FOR_JOURNALS().equals("null"))) {
+                            if(LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_JOURNALS().equals("t")){
+                                validCheck = "true";
+                            }
+                            else if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_JOURNALS().equals("f")){
+                                validCheck = "false";
+                            }
                             Assert.assertEquals("The VALID_FOR_JOURNALS is incorrect for id=" + lovCode,
-                                    LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_JOURNALS(),
+                                    validCheck,
                                     LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_FOR_JOURNALS());
                         }
                         break;
@@ -120,14 +151,26 @@ public class DLLovTablesDataChecks {
                         }
                         if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_BOOKS() != null ||
                                 (!LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_FOR_BOOKS().equals("null"))) {
+                            if(LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_BOOKS().equals("t")){
+                                validCheck = "true";
+                            }
+                            else if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_BOOKS().equals("f")){
+                                validCheck = "false";
+                            }
                             Assert.assertEquals("The VALID_FOR_BOOKS is incorrect for id=" + lovCode,
-                                    LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_BOOKS(),
+                                    validCheck,
                                     LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_FOR_BOOKS());
                         }
                         if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_JOURNALS() != null ||
                                 (!LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_FOR_JOURNALS().equals("null"))) {
+                            if(LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_JOURNALS().equals("t")){
+                                validCheck = "true";
+                            }
+                            else if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_JOURNALS().equals("f")){
+                                validCheck = "false";
+                            }
                             Assert.assertEquals("The VALID_FOR_JOURNALS is incorrect for id=" + lovCode,
-                                    LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_JOURNALS(),
+                                    validCheck,
                                     LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_FOR_JOURNALS());
                         }
                         break;
@@ -159,20 +202,38 @@ public class DLLovTablesDataChecks {
                         }
                         if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_BOOKS() != null ||
                                 (!LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_FOR_BOOKS().equals("null"))) {
+                            if(LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_BOOKS().equals("t")){
+                                validCheck = "true";
+                            }
+                            else if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_BOOKS().equals("f")){
+                                validCheck = "false";
+                            }
                             Assert.assertEquals("The VALID_FOR_BOOKS is incorrect for id=" + lovCode,
-                                    LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_BOOKS(),
+                                    validCheck,
                                     LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_FOR_BOOKS());
                         }
                         if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_JOURNALS() != null ||
                                 (!LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_FOR_JOURNALS().equals("null"))) {
+                            if(LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_JOURNALS().equals("t")){
+                                validCheck = "true";
+                            }
+                            else if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_JOURNALS().equals("f")){
+                                validCheck = "false";
+                            }
                             Assert.assertEquals("The VALID_FOR_JOURNALS is incorrect for id=" + lovCode,
-                                    LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_JOURNALS(),
+                                    validCheck,
                                     LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_FOR_JOURNALS());
                         }
                         if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_DIGITAL_PACKAGE() != null ||
                                 (!LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_FOR_DIGITAL_PACKAGE().equals("null"))) {
+                            if(LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_DIGITAL_PACKAGE().equals("t")){
+                                validCheck = "true";
+                            }
+                            else if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_DIGITAL_PACKAGE().equals("f")){
+                                validCheck = "false";
+                            }
                             Assert.assertEquals("The VALID_FOR_DIGITAL_PACKAGE is incorrect for id=" + lovCode,
-                                    LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_DIGITAL_PACKAGE(),
+                                    validCheck,
                                     LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_FOR_DIGITAL_PACKAGE());
                         }
                         break;
@@ -201,14 +262,26 @@ public class DLLovTablesDataChecks {
                         }
                         if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_BOOKS() != null ||
                                 (!LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_FOR_BOOKS().equals("null"))) {
+                            if(LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_BOOKS().equals("t")){
+                                validCheck = "true";
+                            }
+                            else if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_BOOKS().equals("f")){
+                                validCheck = "false";
+                            }
                             Assert.assertEquals("The VALID_FOR_BOOKS is incorrect for id=" + lovCode,
-                                    LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_BOOKS(),
+                                    validCheck,
                                     LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_FOR_BOOKS());
                         }
                         if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_JOURNALS() != null ||
                                 (!LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_FOR_JOURNALS().equals("null"))) {
+                            if(LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_JOURNALS().equals("t")){
+                                validCheck = "true";
+                            }
+                            else if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_JOURNALS().equals("f")){
+                                validCheck = "false";
+                            }
                             Assert.assertEquals("The VALID_FOR_JOURNALS is incorrect for id=" + lovCode,
-                                    LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getVALID_FOR_JOURNALS(),
+                                    validCheck,
                                     LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getVALID_FOR_JOURNALS());
                         }
                         break;
@@ -220,11 +293,11 @@ public class DLLovTablesDataChecks {
                                     LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getROLL_UP_TYPE(),
                                     LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getROLL_UP_TYPE());
                         }
-                        break;
+                            break;
 
                     case "gd_x_lov_society_ownership":
                         if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getROLL_UP_OWNERSHIP() != null ||
-                                (!LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getROLL_UP_OWNERSHIP().equals("null"))) {
+                                !LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getROLL_UP_OWNERSHIP().equals("null")) {
                             Assert.assertEquals("The ROLL_UP_OWNERSHIP is incorrect for id=" + lovCode,
                                     LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getROLL_UP_OWNERSHIP(),
                                     LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getROLL_UP_OWNERSHIP());

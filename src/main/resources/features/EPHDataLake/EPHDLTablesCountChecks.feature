@@ -19,6 +19,7 @@ Feature: Validate data count for all tables between EPH and Data Lake - Outbound
     When The event data is in the DL
     Then The count between EPH_gd_event and DL_gd_event are identical
 
+
   @DL
   Scenario: Verify that all the manifestation data is transferred from EPH to DL
     Given We know the number of manifestation data in EPH
@@ -67,6 +68,7 @@ Feature: Validate data count for all tables between EPH and Data Lake - Outbound
     Given We know the number of work financial attribs data in EPH
     When The work financial attribs data is in the DL
     Then The count between EPH_gd_work_financial_attribs and DL_gd_work_financial_attribs are identical
+
 
   @DL
   Scenario: Verify that all the work identifier data is transferred from EPH to DL
