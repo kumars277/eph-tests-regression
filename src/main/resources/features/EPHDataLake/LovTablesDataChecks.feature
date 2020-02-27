@@ -15,12 +15,10 @@ Feature:Validate data for gd_x_Lov tables between EPH and Data Lake - Outbound
       | 5                | gd_x_lov_gl_resp_centre    |
       | 5                | gd_x_lov_imprint           |
       | 5                | gd_x_lov_language          |
-#      | 1                | gd_x_lov_manif_format      |
       | 5                | gd_x_lov_oa_type           |
       | 5                | gd_x_lov_origin            |
       | 5                | gd_x_lov_person_role       |
       | 5                | gd_x_lov_pmg               |
-#      | 1                | gd_x_lov_product_line_type |
       | 5                | gd_x_lov_product_type      |
       | 5                | gd_x_lov_revenue_model     |
       | 5                | gd_x_lov_subject_area_type |
@@ -40,6 +38,9 @@ Feature:Validate data for gd_x_Lov tables between EPH and Data Lake - Outbound
       | 5                | gd_x_lov_work_type         |
 
 
+#  Scripts untested due to no data in EPH
+    #      | 1                | gd_x_lov_manif_format      |
+#      | 1                | gd_x_lov_product_line_type |
 
 
 
