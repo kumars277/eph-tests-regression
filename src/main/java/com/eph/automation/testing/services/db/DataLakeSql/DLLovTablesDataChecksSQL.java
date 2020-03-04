@@ -8,50 +8,50 @@ public class DLLovTablesDataChecksSQL {
     }
 
     public static String EPHlovDataBuildSql(String db , String tableName) {
-        String extendedColumns = "";
+        String specificColumns = "";
 
 //      Inserts table specific columns into SQL statement
         if ("gd_x_lov_event_type".equals(tableName)) {
-            extendedColumns = ",LEVEL_2_EVENT as LEVEL_2_EVENT \n" +
+            specificColumns = ",LEVEL_2_EVENT as LEVEL_2_EVENT \n" +
                     ",LEVEL_3_EVENT as LEVEL_3_EVENT \n";
         } else if ("gd_x_lov_identifier_type".equals(tableName)) {
-            extendedColumns = ",VALID_AT_WORK as VALID_AT_WORK \n" +
+            specificColumns = ",VALID_AT_WORK as VALID_AT_WORK \n" +
                     ",VALID_AT_MANIFESTATION as VALID_AT_MANIFESTATION \n" +
                     ",VALID_AT_PRODUCT as VALID_AT_PRODUCT \n" +
                     ",VALID_FOR_BOOKS as VALID_FOR_BOOKS \n" +
                     ",VALID_FOR_JOURNALS as VALID_FOR_JOURNALS \n";
         }
         else if ("gd_x_lov_manif_status".equals(tableName)) {
-            extendedColumns = ",ROLL_UP_STATUS as ROLL_UP_STATUS \n" +
+            specificColumns = ",ROLL_UP_STATUS as ROLL_UP_STATUS \n" +
                     ",VALID_FOR_BOOKS as VALID_FOR_BOOKS \n" +
                     ",VALID_FOR_JOURNALS as VALID_FOR_JOURNALS \n";
         }
         else if ("gd_x_lov_manif_type".equals(tableName)) {
-            extendedColumns = ",ROLL_UP_TYPE as ROLL_UP_TYPE \n";
+            specificColumns = ",ROLL_UP_TYPE as ROLL_UP_TYPE \n";
         }
         else if ("gd_x_lov_pmc".equals(tableName)) {
-            extendedColumns = ",F_PMG as F_PMG \n";
+            specificColumns = ",F_PMG as F_PMG \n";
         }
         else if ("gd_x_lov_product_status".equals(tableName)) {
-            extendedColumns = ",ROLL_UP_STATUS as ROLL_UP_STATUS \n" +
+            specificColumns = ",ROLL_UP_STATUS as ROLL_UP_STATUS \n" +
                     ",VALID_FOR_BOOKS as VALID_FOR_BOOKS \n" +
                     ",VALID_FOR_JOURNALS as VALID_FOR_JOURNALS \n" +
                     ",VALID_FOR_DIGITAL_PACKAGE as VALID_FOR_DIGITAL_PACKAGE \n";
         }
         else if ("gd_x_lov_relationship_type".equals(tableName)) {
-            extendedColumns = ",PARENT_DESCRIPTION as PARENT_DESCRIPTION \n" +
+            specificColumns = ",PARENT_DESCRIPTION as PARENT_DESCRIPTION \n" +
                     ",CHILD_DESCRIPTION as CHILD_DESCRIPTION \n";
         }
         else if ("gd_x_lov_work_status".equals(tableName)) {
-            extendedColumns = ",ROLL_UP_STATUS as ROLL_UP_STATUS \n" +
+            specificColumns = ",ROLL_UP_STATUS as ROLL_UP_STATUS \n" +
                     ",VALID_FOR_BOOKS as VALID_FOR_BOOKS \n" +
                     ",VALID_FOR_JOURNALS as VALID_FOR_JOURNALS \n";
         }
         else if ("gd_x_lov_work_type".equals(tableName)) {
-            extendedColumns = ",ROLL_UP_TYPE as ROLL_UP_TYPE \n";
+            specificColumns = ",ROLL_UP_TYPE as ROLL_UP_TYPE \n";
         }
         else if ("gd_x_lov_society_ownership".equals(tableName)) {
-            extendedColumns = ",ROLL_UP_OWNERSHIP as ROLL_UP_OWNERSHIP \n";
+            specificColumns = ",ROLL_UP_OWNERSHIP as ROLL_UP_OWNERSHIP \n";
         }
 
 //      Core columns SQL statement
@@ -66,7 +66,7 @@ public class DLLovTablesDataChecksSQL {
             ",L_DESCRIPTION as L_DESCRIPTION\n" +
             ",L_START_DATE as L_START_DATE\n" +
             ",L_END_DATE as L_END_DATE\n" +
-                extendedColumns +
+                specificColumns +
             "from "+ db + ".%s \n" +
             "where CODE in ('%s')";
 
@@ -74,50 +74,50 @@ public class DLLovTablesDataChecksSQL {
     }
 
     public static String DLlovDataBuildSql(String db,  String tableName ) {
-        String extendedColumns = "";
+        String specificColumns = "";
 
         //      Inserts table specific columns into SQL statement
         if ("gd_x_lov_event_type".equals(tableName)) {
-            extendedColumns = ",LEVEL_2_EVENT as LEVEL_2_EVENT \n" +
+            specificColumns = ",LEVEL_2_EVENT as LEVEL_2_EVENT \n" +
                     ",LEVEL_3_EVENT as LEVEL_3_EVENT \n";
         }else if ("gd_x_lov_identifier_type".equals(tableName)) {
-            extendedColumns = ",VALID_AT_WORK as VALID_AT_WORK \n" +
+            specificColumns = ",VALID_AT_WORK as VALID_AT_WORK \n" +
                     ",VALID_AT_MANIFESTATION as VALID_AT_MANIFESTATION \n" +
                     ",VALID_AT_PRODUCT as VALID_AT_PRODUCT \n" +
                     ",VALID_FOR_BOOKS as VALID_FOR_BOOKS \n" +
                     ",VALID_FOR_JOURNALS as VALID_FOR_JOURNALS \n";
         }
         else if ("gd_x_lov_manif_status".equals(tableName)) {
-            extendedColumns = ",ROLL_UP_STATUS as ROLL_UP_STATUS \n" +
+            specificColumns = ",ROLL_UP_STATUS as ROLL_UP_STATUS \n" +
                     ",VALID_FOR_BOOKS as VALID_FOR_BOOKS \n" +
                     ",VALID_FOR_JOURNALS as VALID_FOR_JOURNALS \n";
         }
         else if ("gd_x_lov_manif_type".equals(tableName)) {
-            extendedColumns = ",ROLL_UP_TYPE as ROLL_UP_TYPE \n";
+            specificColumns = ",ROLL_UP_TYPE as ROLL_UP_TYPE \n";
         }
         else if ("gd_x_lov_pmc".equals(tableName)) {
-            extendedColumns = ",F_PMG as F_PMG \n";
+            specificColumns = ",F_PMG as F_PMG \n";
         }
         else if ("gd_x_lov_product_status".equals(tableName)) {
-            extendedColumns = ",ROLL_UP_STATUS as ROLL_UP_STATUS \n" +
+            specificColumns = ",ROLL_UP_STATUS as ROLL_UP_STATUS \n" +
                     ",VALID_FOR_BOOKS as VALID_FOR_BOOKS \n" +
                     ",VALID_FOR_JOURNALS as VALID_FOR_JOURNALS \n" +
                     ",VALID_FOR_DIGITAL_PACKAGE as VALID_FOR_DIGITAL_PACKAGE \n";
         }
         else if ("gd_x_lov_relationship_type".equals(tableName)) {
-            extendedColumns = ",PARENT_DESCRIPTION as PARENT_DESCRIPTION \n" +
+            specificColumns = ",PARENT_DESCRIPTION as PARENT_DESCRIPTION \n" +
                     ",CHILD_DESCRIPTION as CHILD_DESCRIPTION \n";
         }
         else if ("gd_x_lov_work_status".equals(tableName)) {
-            extendedColumns = ",ROLL_UP_STATUS as ROLL_UP_STATUS \n" +
+            specificColumns = ",ROLL_UP_STATUS as ROLL_UP_STATUS \n" +
                     ",VALID_FOR_BOOKS as VALID_FOR_BOOKS \n" +
                     ",VALID_FOR_JOURNALS as VALID_FOR_JOURNALS \n";
         }
         else if ("gd_x_lov_work_type".equals(tableName)) {
-            extendedColumns = ",ROLL_UP_TYPE as ROLL_UP_TYPE \n";
+            specificColumns = ",ROLL_UP_TYPE as ROLL_UP_TYPE \n";
         }
         else if ("gd_x_lov_society_ownership".equals(tableName)) {
-            extendedColumns = ",ROLL_UP_OWNERSHIP as ROLL_UP_OWNERSHIP \n";
+            specificColumns = ",ROLL_UP_OWNERSHIP as ROLL_UP_OWNERSHIP \n";
         }
 
 //        Core columns SQL
@@ -132,7 +132,7 @@ public class DLLovTablesDataChecksSQL {
                 ",L_DESCRIPTION as L_DESCRIPTION\n" +
                 ",L_START_DATE as L_START_DATE\n" +
                 ",L_END_DATE as L_END_DATE\n" +
-                 extendedColumns +
+                specificColumns +
                 "from " +db+ ".%s \n" +
                 "where CODE in ('%s')";
 
