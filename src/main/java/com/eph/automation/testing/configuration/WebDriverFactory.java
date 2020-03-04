@@ -61,10 +61,10 @@ public class WebDriverFactory implements Provider<WebDriver> {
                     capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
                     return new InternetExplorerDriver(capabilities);*/
                 case "chrome":
-                    ChromeDriverManager.getInstance().setup();
+                    ChromeDriverManager.chromedriver().setup();
                     return new ChromeDriver();
                 default:
-                    ChromeDriverManager.getInstance().setup();
+                    ChromeDriverManager.chromedriver().setup();
                     return new ChromeDriver();
             }
         }

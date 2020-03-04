@@ -44,10 +44,8 @@ public class WorkApiObject {
 
 
 
-
-
     public void compareWithDB(){
-//        getWorkDataFromEPHGD(this.id);
+        getWorkDataFromEPHGD(this.id);
         Assert.assertEquals(this.subTitle, this.workDataObjectsFromEPHGD.get(0).getWORK_SUBTITLE());
         Assert.assertEquals(Boolean.valueOf(this.electronicRightsInd), Boolean.valueOf(this.workDataObjectsFromEPHGD.get(0).getELECTRONIC_RIGHTS_IND()));
         if(!(this.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE()==null)) {
@@ -70,7 +68,7 @@ public class WorkApiObject {
 //                workIdentifier.compareWithDB();
 //            }
 //        }
-        Assert.assertEquals(this.type.get("code"), this.workDataObjectsFromEPHGD.get(0).getF_TYPE());
+        Assert.assertEquals(this.type.get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
         Assert.assertEquals(this.status.get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
         if(!(this.imprint.get("code")==null)||!((this.workDataObjectsFromEPHGD==null)||(this.workDataObjectsFromEPHGD.isEmpty()))) {
             Assert.assertEquals(this.imprint.get("code"), this.workDataObjectsFromEPHGD.get(0).getIMPRINT());
@@ -138,6 +136,7 @@ public class WorkApiObject {
     public PersonsApiObject[] getPersons() {
         return persons;
     }
+
     public void setPersons(PersonsApiObject[] persons) {
         this.persons = persons;
     }
@@ -166,36 +165,12 @@ public class WorkApiObject {
         this.title = title;
     }
 
-    public String getElectronicRightsInd() {
-        return electronicRightsInd;
-    }
-
-    public void setElectronicRightsInd(String electronicRightsInd) {
-        this.electronicRightsInd = electronicRightsInd;
-    }
-
-    public String getEditionNumber() {
-        return editionNumber;
-    }
-
-    public void setEditionNumber(String editionNumber) {
-        this.editionNumber = editionNumber;
-    }
-
     public String getVolume() {
         return volume;
     }
 
     public void setVolume(String volume) {
         this.volume = volume;
-    }
-
-    public String getCopyrightYear() {
-        return copyrightYear;
-    }
-
-    public void setCopyrightYear(String copyrightYear) {
-        this.copyrightYear = copyrightYear;
     }
 
     public HashMap<String, Object> getType() {
@@ -230,6 +205,39 @@ public class WorkApiObject {
         this.identifiers = identifiers;
     }
 
+    public WorkManifestationApiObject[] getManifestations() {
+        return manifestations;
+    }
+
+    public void setManifestations(WorkManifestationApiObject[] manifestations) {
+        this.manifestations = manifestations;
+    }
+
+
+    public String getElectronicRightsInd() {
+        return electronicRightsInd;
+    }
+
+    public void setElectronicRightsInd(String electronicRightsInd) {
+        this.electronicRightsInd = electronicRightsInd;
+    }
+
+    public String getEditionNumber() {
+        return editionNumber;
+    }
+
+    public void setEditionNumber(String editionNumber) {
+        this.editionNumber = editionNumber;
+    }
+
+    public String getCopyrightYear() {
+        return copyrightYear;
+    }
+
+    public void setCopyrightYear(String copyrightYear) {
+        this.copyrightYear = copyrightYear;
+    }
+
     public CopyrightOwnersApiObject[] getCopyrightOwner() {
         return copyrightOwner;
     }
@@ -238,14 +246,6 @@ public class WorkApiObject {
         this.copyrightOwner = copyrightOwner;
     }
 
-
-    public WorkManifestationApiObject[] getManifestations() {
-        return manifestations;
-    }
-
-    public void setManifestations(WorkManifestationApiObject[] manifestations) {
-        this.manifestations = manifestations;
-    }
 
     private void getWorkDataFromEPHGD(String workID) {
         List<String> ids = new ArrayList<>();
@@ -257,7 +257,7 @@ public class WorkApiObject {
 
     private String getPMGcodeByPMC(String pmcCode) {
         String sql = String.format(APIDataSQL.EPH_GD_PMG_CODE_EXTRACT_BYPMC, pmcCode);
-        Log.info(sql);
+        //  Log.info(sql);
         List<Map<String, Object>> getPMG = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         String pmgCode = ((String) getPMG.get(0).get("f_pmg"));
         return pmgCode;

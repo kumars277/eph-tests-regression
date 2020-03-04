@@ -77,8 +77,8 @@ public class Constants {
     public static String WIRE_MOCK_END_POINT = "http://10.48.67.42:8080/api/";
 
     /*Authorization OATH2 constants*/
-    //public static final String AUTHORIZATION_HEADER = "X-ADFS-JWT"; //for v1 API
-    public static final String AUTHORIZATION_HEADER = "X-JWT-Assertion"; //for v2 API
+    public static final String AUTHORIZATION_HEADER = "X-ADFS-JWT"; //for v1 API
+    //public static final String AUTHORIZATION_HEADER = "X-JWT-Assertion"; //for v2 API
     public static final String CUSTOMER_GATEWAY_AUTHORIZATION_HEADER_VALUE = "Basic NUkyel9VTTRRSm5SSUlqZmZ4TVdVV0o0U013YTpSTmRnZDFUUTJLS2ZOTVliSm9fcEJNRHhPNlVh";
     public static final String GET_TOKEN_PATH = "/token";
     public static final String GRANT_TYPE = "grant_type";

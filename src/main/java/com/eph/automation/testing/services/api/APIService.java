@@ -52,7 +52,7 @@ public class APIService {
     }
 
 
-    //updating for search API v2 - complete- Nishant
+    //by Nishant - updated for search API v2 - complete as of 27 Nov 2019
     public static boolean checkProductExists(String productID) throws AzureOauthTokenFetchingException {
         int statusCode = given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
@@ -128,97 +128,101 @@ public class APIService {
                 .thenReturn().as(ProductsMatchedApiObject.class);
     }
 
+    public static ProductsMatchedApiObject searchForProductsByComponentsResult(String componentID) throws AzureOauthTokenFetchingException {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
+                .when()
+                .get("/products?queryType=HasComponents&queryValue="+componentID)
+                .thenReturn().as(ProductsMatchedApiObject.class);
+    }
 
-    //updating as per search API v2 changes- in progress -
+    //getWorks APIs
+    public static Boolean checkWorkExists(String workID) throws AzureOauthTokenFetchingException {
+        int statusCode = given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
+                .when()
+                .get("/works/" + workID)
+                .thenReturn().statusCode();
+        if (statusCode == 200) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static WorkApiObject searchForWorkByIDResult(String workID) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
-                .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
+                .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/work/" + workID)
+                .get("/works/" + workID)
                 .thenReturn().as(WorkApiObject.class);
-
     }
-
-    public static WorksMatchedApiObject searchForWorkByPMCResult(String pmcCode) throws AzureOauthTokenFetchingException {
-        return given()
-                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
-                .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
-                .when()
-                .get("/works/pmcCode/" + pmcCode)
-                .thenReturn().as(WorksMatchedApiObject.class);
-
-    }
-
-    public static WorksMatchedApiObject searchForWorkByPMGResult(String pmgCode) throws AzureOauthTokenFetchingException {
-        return given()
-                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
-                .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken())
-                .when()
-                .get("/works/pmgCode/" + pmgCode)
-                .thenReturn().as(WorksMatchedApiObject.class);
-    }
-
-
 
     public static WorksMatchedApiObject searchForWorkByTitleResult(String title) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
-                .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
+                .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/works/title/?title="+title)
+                .get("/works?queryType=title&queryValue="+title)
                 .thenReturn().as(WorksMatchedApiObject.class);
-
     }
 
     public static WorksMatchedApiObject searchForWorksByIdentifierResult(String identifier) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
-                .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
+                .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/works/identifier/"+identifier)
+                .get("/works?queryType=identifier&queryValue="+identifier)
                 .thenReturn().as(WorksMatchedApiObject.class);
-
     }
 
     public static WorksMatchedApiObject searchForWorksByIdentifierAndTypeResult(String identifier, String identifierType) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
-                .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
+                .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
                 .param("identifierType", identifierType)
                 .when()
-                .get("/works/identifier/"+identifier).thenReturn().as(WorksMatchedApiObject.class);
+                .get("/works?queryType=identifier&queryValue=" + identifier).thenReturn().as(WorksMatchedApiObject.class);
+    }
+
+    public static WorksMatchedApiObject searchForWorksBySearchOptionResult(String searchFor) throws AzureOauthTokenFetchingException {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
+                .when()
+                .get("/works?queryType=search&queryValue="+searchFor)
+                .thenReturn().as(WorksMatchedApiObject.class);
+    }
+
+    public static WorksMatchedApiObject searchForWorkByPMCResult(String pmcCode) throws AzureOauthTokenFetchingException {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
+                .when()
+                .get("/works?queryType=pmcCode&queryValue=" + pmcCode)
+                .thenReturn().as(WorksMatchedApiObject.class);
+    }
+
+    public static WorksMatchedApiObject searchForWorkByPMGResult(String pmgCode) throws AzureOauthTokenFetchingException {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
+                .when()
+                .get("/works?queryType=pmgCode&queryValue=" + pmgCode)
+                .thenReturn().as(WorksMatchedApiObject.class);
     }
 
     public static WorksMatchedApiObject searchForWorksByPersonIDResult(String identifier) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
-                .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken())
+                .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/works/personId/"+identifier)
+                .get("/works?queryType=personId&queryValue="+identifier)
                 .thenReturn().as(WorksMatchedApiObject.class);
     }
-
-
-    public static WorksMatchedApiObject searchForWorksBySearchOptionResult(String searchFor) throws AzureOauthTokenFetchingException {
-        return given()
-                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
-                .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
-                .when()
-                .get("/works/search?query="+searchFor)
-                .thenReturn().as(WorksMatchedApiObject.class);
-    }
-
-
-    public static ProductsMatchedApiObject searchForProductsByComponentsResult(String componentID) throws AzureOauthTokenFetchingException {
-        return given()
-                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
-                .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
-                .when()
-                .get("/products/hasComponents?ids="+componentID)
-                .thenReturn().as(ProductsMatchedApiObject.class);
-    }
-
 
     public static ProductsMatchedApiObject searchForProductsBySearchResult(String searchOption) throws AzureOauthTokenFetchingException {
         return given()
@@ -240,30 +244,92 @@ public class APIService {
                 .thenReturn().as(ProductsMatchedApiObject.class);
     }
 
-    public static ProductsMatchedApiObject searchForProductByTitleResult(String title) throws AzureOauthTokenFetchingException {
+    //created by Nishant as per search API v2 changes
+    public static ProductsMatchedApiObject searchForProductsByaccountableProduct(String accountableProduct) throws AzureOauthTokenFetchingException {
         return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
-                .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken())
+                .header(Constants.AUTHORIZATION_HEADER,   AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/products/title?title="+title)
+                .get("/products?queryType=accountableProduct&queryValue=" + accountableProduct)
                 .thenReturn().as(ProductsMatchedApiObject.class);
-
     }
 
-    public static Boolean checkWorkExists(String workID) throws AzureOauthTokenFetchingException {
-
-        int statusCode = given()
+    public static ProductsMatchedApiObject searchForProductByParam(String searchTerm, String ParamKey,String ParamValue) throws AzureOauthTokenFetchingException {
+        /*
+       function supports below
+       query type*      : name, identifier, personId, isInPackages, hasComponents, pmgCode, pmcCode, accountableProduct, latest, search
+       productStatus    : PAS,PNS or PPL etc
+       productType      : JAS,JBS etc
+       manifestationType: JEL,JPR or !PHB
+       workType         : !RBK,BKS or JNL
+       pmcCode          : 300,303 or 746
+       pmgCode          : 030,090 or 077
+       */
+        return given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
-                .header(Constants.AUTHORIZATION_HEADER,   AuthorizationService.getAuthToken())
+                .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
+                .param("queryType","name")
+                .param("queryValue",searchTerm)
+                .param(ParamKey,ParamValue)
                 .when()
-                .get("/work/" + workID)
-                .thenReturn().statusCode();
-
-        if(statusCode==200){
-            return true;
-        } else {
-            return false;
-        }
+                .get("products")
+                .thenReturn().as(ProductsMatchedApiObject.class);
     }
+
+    public static WorksMatchedApiObject searchForWorksByaccountableProduct(String accountableProduct) throws AzureOauthTokenFetchingException {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER,   AuthorizationService.getAuthToken().getToken())
+                .when()
+                .get("/works?queryType=accountableProduct&queryValue=" + accountableProduct)
+                .thenReturn().as(WorksMatchedApiObject.class);
+    }
+
+    public static WorksMatchedApiObject searchForWorksByWorkStatus(String searchKeyword, String workStatus) throws AzureOauthTokenFetchingException {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER,   AuthorizationService.getAuthToken().getToken())
+                .when()
+                .get("/works?queryType=title&queryValue="+searchKeyword+"&workStatus=" + workStatus)
+                .thenReturn().as(WorksMatchedApiObject.class);
+    }
+
+    public static WorksMatchedApiObject searchForWorksByWorkType(String searchKeyword,String workType) throws AzureOauthTokenFetchingException {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER,   AuthorizationService.getAuthToken().getToken())
+                .when()
+                .get("/works?queryType=title&queryValue="+searchKeyword+"&workType=" + workType)
+                .thenReturn().as(WorksMatchedApiObject.class);
+    }
+
+    public static WorksMatchedApiObject searchForWorksByManifestationType(String searchKeyword,String manifestationType) throws AzureOauthTokenFetchingException {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER,   AuthorizationService.getAuthToken().getToken())
+                .when()
+                .get("/works?queryType=search&queryValue="+searchKeyword+"&manifestationType=" + manifestationType)
+                .thenReturn().as(WorksMatchedApiObject.class);
+    }
+
+    public static WorksMatchedApiObject searchForWorksBySearchWithPMCCode(String searchKeyword,String pmcCode) throws AzureOauthTokenFetchingException {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER,   AuthorizationService.getAuthToken().getToken())
+                .when()
+                .get("/works?queryType=title&queryValue="+searchKeyword+"&pmcCode=" + pmcCode)
+                .thenReturn().as(WorksMatchedApiObject.class);
+    }
+
+
+    public static WorksMatchedApiObject searchForWorksBySearchWithPMGCode(String searchKeyword,String pmgCode) throws AzureOauthTokenFetchingException {
+        return given()
+                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+                .header(Constants.AUTHORIZATION_HEADER,   AuthorizationService.getAuthToken().getToken())
+                .when()
+                .get("/works?queryType=search&queryValue="+searchKeyword+"&pmgCode=" + pmgCode)
+                .thenReturn().as(WorksMatchedApiObject.class);
+    }
+
 
 }

@@ -28,10 +28,10 @@ Feature: Search API: Products
     Examples:
       | idType                           |
       | PRODUCT_ID                       |
-      | PRODUCT_WORK_IDENTIFIER          |
       | PRODUCT_MANIFESTATION_IDENTIFIER |
       | PRODUCT_WORK_ID                  |
       | PRODUCT_MANIFESTATION_ID         |
+  #   | PRODUCT_WORK_IDENTIFIER          | #NA as gd_work_identifier is empty - by Nishant @ 12 Feb 2020
 
   @API
   Scenario Outline: search product by type and identifier
@@ -40,30 +40,24 @@ Feature: Search API: Products
     Then the products detail are retrieved and compared when searched by type and <identifier>
     Examples:
       | identifier                       |
-      | PRODUCT_WORK_IDENTIFIER          |
       | PRODUCT_MANIFESTATION_IDENTIFIER |
+  #   | PRODUCT_WORK_IDENTIFIER          | #NA as gd_work_identifier is empty - by Nishant @ 12 Feb 2020
 
-  @API
+  @APIs
   Scenario Outline: search product with search option
     Given We get 1 random search ids for products
     And We get the search data from EPH GD for products
     Then the product details are retrieved and compared when search option is used with <idType>
     Examples:
       | idType                           |
+      | PRODUCT_PRODUCT_TITLE            |
+      | PRODUCT_MANIFESTATION_WORK_TITLE |
       | PRODUCT_ID                       |
-      | PRODUCT_WORK_IDENTIFIER          |
       | PRODUCT_MANIFESTATION_IDENTIFIER |
       | PRODUCT_WORK_ID                  |
       | PRODUCT_MANIFESTATION_ID         |
-      | PRODUCT_PRODUCT_TITLE            |
       | WORK_MANIFESTATION_TITLE         |
-      | PRODUCT_MANIFESTATION_WORK_TITLE |
-
-  @API
-  Scenario: search work by package
-    Given We get 1 random search ids for products in packages
-    And We get the search data from EPH GD for products
-    Then the product response returned when searched by packages is verified
+  #   | PRODUCT_WORK_IDENTIFIER          | #NA as gd_work_identifier is empty - by Nishant @ 12 Feb 2020
 
   @API
   Scenario: search product by person ID
@@ -77,19 +71,12 @@ Feature: Search API: Products
     Then the product details are retrieved and compared
     Examples:
       | id                                   |
-      | EPR-TSTP01                           |
-      | EPR-TSTP02                           |
-      | EPR-TSTP03                           |
-      | EPR-TSTP04                           |
-      | EPR-TSTP05                           |
-      | EPR-TSTP06                           |
-      | EPR-TSTP07                           |
+      | EPR-11BBFJ                           |
+      | EPR-11BBFK                           |
+      | EPR-11BBFM                           |
+      | EPR-11BBFN                           |
+      | EPR-11BBFR                           |
 
-#  @API
-#  Scenario: search work by components
-#    Given We get 1 random search ids for products in packages
-#    And We get the search data from EPH GD for products
-#    Then the product response returned when searched by components is verified
 
   @API
   Scenario: search product by PMC
@@ -102,5 +89,40 @@ Feature: Search API: Products
     Given We get 1 random search ids for products
     And We get the search data from EPH GD for products
     Then the product details are retrieved by PMG Code and compared
+   ##created by Nishant
+  @API
+  Scenario: search products in Package - IsInPackage
+    Given We get 1 random package id
+    Then the product response returned when searched by packages is verified
+
+  @API
+  Scenario: search packages by products - hasComponents
+    Given We get 1 random package id
+    And We get 1 random search ids from package
+    Then the product response returned when searched by components is verified
+
+  @API
+  Scenario: search product by accountableProduct
+    Given We get 1 random search ids for products
+    And We get the search data from EPH GD for products
+    Then the product details are retrieved by accountableProduct and compared
+
+  @API
+  Scenario Outline: search product by parameters
+    Given We get 1 random search ids for products
+    And We get the search data from EPH GD for products
+    Then the product count are retrieved by <paramKey> compared
+    Examples:
+      | paramKey         |
+      | productStatus    |
+      | productType      |
+      | workType         |
+      | manifestationType|
+      | pmcCode          |
+      | pmgCode          |
+  #search by pmgcode has count mismatch intermitenttly
+
+
+
 
 
