@@ -3,6 +3,7 @@ package com.eph.automation.testing.configuration;
 import com.google.inject.Provider;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import io.github.bonigarcia.wdm.*;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
 //import org.openqa.selenium.firefox.FirefoxOptions;
@@ -23,11 +24,15 @@ public class MarionetteDriver implements Provider<WebDriver>{
         final String osName = System.getProperty("os.name").toLowerCase();
         if (osName.toLowerCase().contains("windows")) {
             directoryPath = System.getProperty("user.dir");
-            pathToDriver = "C://Users//sureshkumard//Downloads//Selenium//chromedriver.exe";
+            // pathToDriver = "C://Users//sureshkumard//Downloads//Selenium//chromedriver.exe";
         }
-        final File file = new File(pathToDriver);
-        System.setProperty("webdriver.chrome.driver",file.getAbsolutePath());
+       // final File file = new File(pathToDriver);
+        //System.setProperty("webdriver.chrome.driver",file.getAbsolutePath());
         //System.setProperty(ChromeDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
+
+        //Added by Nishant @11 Feb 2020, to handle webdrivers dynamically
+        DriverManagerType chrome = DriverManagerType.CHROME;
+        WebDriverManager.getInstance(chrome).setup();
         final WebDriver driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().window().maximize();

@@ -62,7 +62,7 @@ class ManifestationWorkApiObject {
             int apiCopyrightYear = Integer.valueOf(this.copyrightYear);
             Assert.assertEquals(apiCopyrightYear, this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR());
         }
-        Assert.assertEquals(this.type.get("code"), this.workDataObjectsFromEPHGD.get(0).getF_TYPE());
+        Assert.assertEquals(this.type.get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
         Assert.assertEquals(this.status.get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
         if(!(this.imprint.get("code")==null)||!((this.workDataObjectsFromEPHGD==null)||(this.workDataObjectsFromEPHGD.isEmpty()))) {
             Assert.assertEquals(this.imprint.get("code"), this.workDataObjectsFromEPHGD.get(0).getIMPRINT());

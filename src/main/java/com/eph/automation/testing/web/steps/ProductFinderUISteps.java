@@ -75,7 +75,7 @@ public class ProductFinderUISteps {
     @Given("^We get the id for work search (.*)$")
     public void getWorkDataFromEPHGD(String workID) {
         sql = String.format(ProductFinderSQL.SELECT_WORK_BY_ID_FOR_SEARCH, workID);
-        Log.info(sql);
+     //   Log.info(sql);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
@@ -84,9 +84,8 @@ public class ProductFinderUISteps {
     public void getWorksDataFromEPHGD() {
         Log.info("And We get the data from EPH GD for journals ...");
         sql = String.format(ProductFinderSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, Joiner.on("','").join(ids));
-        Log.info(sql);
-        DataQualityContext.workDataObjectsFromEPHGD = DBManager
-                .getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
+      //  Log.info(sql);
+        DataQualityContext.workDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
         DataQualityContext.workDataObjectsFromEPHGD.sort(Comparator.comparing(WorkDataObject::getWORK_ID));
     }
 
@@ -142,7 +141,7 @@ public class ProductFinderUISteps {
     @Then("^The searched item is listed and clicked$")
     public void checkSearchResultsAndClickElement() throws Throwable {
         WebElement foundEntry = productFinderTasks.getElementByTitle(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
-        Log.info("found entry is"+ DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+        Log.info("found entry is "+ DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
         foundEntry.isDisplayed();
         foundEntry.click();
         Thread.sleep(2000);
@@ -153,7 +152,7 @@ public class ProductFinderUISteps {
     public void verifyUserIsForwardedToWorksPage () {
         assertTrue(productFinderTasks.isUserOnWorkPage(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID()));
     }
-  /*
+
     @Given("^Filter the Search Result by \"([^\"]*)\"$")
     public void filter_the_Search_Result_by(String workType) throws InterruptedException {
             String buildWorkTypeFilterLocator = "//span[contains(text(),\'"+workType+"\')]";
@@ -167,7 +166,7 @@ public class ProductFinderUISteps {
         tasks.click("XPATH",buildWorkTypeFilterLocator);
         Thread.sleep(1000);
     }
-
+/*
     @Then("^Verify the Work \"([^\"]*)\" Type is \"([^\"]*)\"$")
     public void verify_the_Work_Type_is(String workID, String workType) throws Throwable {
         if (tasks.verifyElementTextisDisplayed(workID)) {
@@ -229,7 +228,7 @@ public class ProductFinderUISteps {
         }
 
     }
-
+*/
 
     @Given("^Searches for works by given \"([^\"]*)\"$")
     public void searches_for_works_by_given(String searchKeyword) throws InterruptedException {
@@ -252,7 +251,7 @@ public class ProductFinderUISteps {
     public void verify_user_is_forwarded_to_the_searched_works_page(String workId){
         assertTrue(productFinderTasks.isUserOnWorkPage(workId));
     }
-
+/*
   @Given("^Test$")
     public void test() throws InterruptedException {
         sql = String.format(ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_BOOK);
@@ -287,7 +286,7 @@ public class ProductFinderUISteps {
     @Given("^We get the id and title for product search from DB$")
     public void getProductId() throws Throwable {
         sql = String.format(ProductFinderSQL.SELECT_PRODUCTID_TITLE_FOR_SEARCH);
-        Log.info(sql);
+      //  Log.info(sql);
         availableProduct = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         if(availableProduct.size() > 0){
             productIdList       = availableProduct.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
@@ -313,13 +312,13 @@ public class ProductFinderUISteps {
             } else {
                 sql = String.format(ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_OTHER);
             }
-            Log.info(sql);
+         //   Log.info(sql);
             workTypesCodeAvailable = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             if (workTypesCodeAvailable.size() > 0) {
-                workTypeCode = workTypesCodeAvailable.stream().map(m -> (String) m.get("WORK_TYPE")).map(String::valueOf).collect(Collectors.toList());
+                workTypeCode = workTypesCodeAvailable.stream().map(m -> (String) m.get("WORK_TYPE"))
+                        .map(String::valueOf).collect(Collectors.toList());
                 Log.info("Available Work Types in DB: " + workTypeCode);
             } else {
-
                 Log.info("Records for the work Type => " + chooseWorkType + " not available in DB.");
             }
         }catch (Exception e){
@@ -333,7 +332,7 @@ public class ProductFinderUISteps {
             if (workTypesCodeAvailable.size() > 0) {
                 for (String workTypeCodes : workTypeCode) {
                     sql = String.format(ProductFinderSQL.SELECT_WORKID_FOR_WORK_TYPE, workTypeCodes);
-                    Log.info(sql);
+                 //   Log.info(sql);
                     List<Map<?, ?>> workIdsAvailableforWorkTypes = DBManager.getDBResultMap(sql, Constants.EPH_URL);
                     workIdList = workIdsAvailableforWorkTypes.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
                     workIds = workIdList.toString();
@@ -360,6 +359,7 @@ public class ProductFinderUISteps {
         try {
             if (workTypesCodeAvailable.size() > 0) {
                 for (String booksworkId : booksworkIdList) {
+
                     productFinderTasks.searchFor(booksworkId);
                     String buildWorkTypeFilterLocator = "//span[contains(text(),\'" + chooseWorkType + "\')]";
                     tasks.click("XPATH", buildWorkTypeFilterLocator);
@@ -399,6 +399,7 @@ public class ProductFinderUISteps {
                             if (productFinderTasks.isPageContainingString(Book_Types[i])) {
                                 Log.info("Work Id=> " + booksworkId + " and work Type: " + Book_Types[i]);
                                 assertTrue("Work Id " + booksworkId + " Successfully filtered by Work Type: " + chooseWorkType, productFinderTasks.isPageContainingString(Book_Types[i]));
+                            break;
                             }
                         }
                     } else if (chooseWorkType.equalsIgnoreCase("Journal")) {
@@ -416,7 +417,8 @@ public class ProductFinderUISteps {
                             }
                         }
                     }
-                    //tasks.click("XPATH", ProductFinderConstants.previousPage);
+                    productFinderTasks.openHomePage();
+                  //  tasks.click("XPATH", ProductFinderConstants.previousPage);
                     //tasks.click("XPATH", ProductFinderConstants.closeButtonSearchBar);
                 }
             }

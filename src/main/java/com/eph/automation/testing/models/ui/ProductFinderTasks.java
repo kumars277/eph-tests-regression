@@ -20,12 +20,15 @@ public class ProductFinderTasks {
     }
 
     public void loginByScienceAccount(String scienceEmailId) throws InterruptedException{
-        tasks.sendKeys("NAME",ProductFinderConstants.loginByEmail,scienceEmailId);
+        //updated by Nishant @ 13 Feb 2020
+        tasks.sendKeys("NAME",ProductFinderConstants.loginByEmail,System.getenv("username")+scienceEmailId);
         tasks.click("ID",ProductFinderConstants.nextButton);
 
     }
 
     public void searchFor(final String searchID) {
+        //updated by Nishant @ 14 Feb 2020
+        tasks.clearText("XPATH",ProductFinderConstants.searchBar);
         tasks.sendKeys("XPATH",ProductFinderConstants.searchBar,searchID);
         tasks.click("XPATH",ProductFinderConstants.searchButton);
     }
@@ -47,11 +50,7 @@ public class ProductFinderTasks {
     public boolean isUserOnWorkPage(String workID) {
         String targetURL = Constants.PRODUCT_FINDER_EPH_SIT_UI+"work/"+workID+"/overview";
         Log.info("Target URL "+targetURL);
-       if(targetURL.equalsIgnoreCase(tasks.getCurrentPage())){
-            return true;
-        } else {
-            return false;
-        }
+       if(targetURL.equalsIgnoreCase(tasks.getCurrentPage()))return true; else return false;
     }
 
 
