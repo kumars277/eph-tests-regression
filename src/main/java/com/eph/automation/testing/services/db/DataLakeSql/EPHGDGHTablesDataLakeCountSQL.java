@@ -1,6 +1,6 @@
 package com.eph.automation.testing.services.db.DataLakeSql;
 
-public  class EPHDataLakeCountSQL {
+public  class EPHGDGHTablesDataLakeCountSQL {
 
     public static String EPH_WORK_COUNT = "Select count(*) as EPH_Work_Count from semarchy_eph_mdm.gd_wwork";
 
