@@ -38,7 +38,40 @@ public class DLLovTablesDataChecks {
     @When("^We get the Lov (.*) records from EPH$")
     public void getLovEPH(String tableName) {
         Log.info("We get the Lov records from EPH..");
-        sql = String.format(lovObj.EPHlovDataBuildSql(Constants.EPH_SCHEMA, tableName), tableName, Joiner.on("','").join(lovIds));
+        switch (tableName){
+            case "gd_x_lov_event_type":
+                sql = String.format(lovObj.gd_x_Lov_event_type(Constants.EPH_SCHEMA), tableName, Joiner.on("','").join(lovIds));
+                break;
+            case "gd_x_lov_identifier_type":
+                sql = String.format(lovObj.gd_x_lov_identifier_type(Constants.EPH_SCHEMA), tableName, Joiner.on("','").join(lovIds));
+                break;
+            case "gd_x_lov_manif_status":
+                sql = String.format(lovObj.gd_x_lov_manif_status(Constants.EPH_SCHEMA), tableName, Joiner.on("','").join(lovIds));
+                break;
+            case "gd_x_lov_manif_type":
+                sql = String.format(lovObj.gd_x_lov_manif_type(Constants.EPH_SCHEMA), tableName, Joiner.on("','").join(lovIds));
+                break;
+            case "gd_x_lov_pmc":
+                sql = String.format(lovObj.gd_x_lov_pmc(Constants.EPH_SCHEMA), tableName, Joiner.on("','").join(lovIds));
+                break;
+            case "gd_x_lov_product_status":
+                sql = String.format(lovObj.gd_x_lov_product_status(Constants.EPH_SCHEMA), tableName, Joiner.on("','").join(lovIds));
+                break;
+            case "gd_x_lov_relationship_type":
+                sql = String.format(lovObj.gd_x_lov_relationship_type(Constants.EPH_SCHEMA), tableName, Joiner.on("','").join(lovIds));
+                break;
+            case "gd_x_lov_work_type":
+                sql = String.format(lovObj.gd_x_lov_work_type(Constants.EPH_SCHEMA), tableName, Joiner.on("','").join(lovIds));
+                break;
+            case "gd_x_lov_work_status":
+                sql = String.format(lovObj.gd_x_lov_work_status(Constants.EPH_SCHEMA), tableName, Joiner.on("','").join(lovIds));
+                break;
+            case "gd_x_lov_society_ownership":
+                sql = String.format(lovObj.gd_x_lov_society_ownership(Constants.EPH_SCHEMA), tableName, Joiner.on("','").join(lovIds));
+                break;
+            default :
+                sql = String.format(lovObj.gd_x_lov_core_sql(Constants.EPH_SCHEMA), tableName, Joiner.on("','").join(lovIds));
+        }
         Log.info(sql);
         LovTablesDLContext.LovTableDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, LovTableDLObject.class, Constants.EPH_URL);
     }
@@ -46,7 +79,40 @@ public class DLLovTablesDataChecks {
     @Then("^We get the Lov (.*) records from DL$")
     public void getWorksDL(String tableName) {
         Log.info("We get the Lov records from DL..");
-        sql = String.format(lovObj.DLlovDataBuildSql(GetDLDBUser.getDataBase(), tableName), tableName,  Joiner.on("','").join(lovIds));
+        switch (tableName){
+            case "gd_x_lov_event_type":
+                sql = String.format(lovObj.gd_x_Lov_event_type( GetDLDBUser.getDataBase()), tableName, Joiner.on("','").join(lovIds));
+                break;
+            case "gd_x_lov_identifier_type":
+                sql = String.format(lovObj.gd_x_lov_identifier_type( GetDLDBUser.getDataBase()), tableName, Joiner.on("','").join(lovIds));
+                break;
+            case "gd_x_lov_manif_status":
+                sql = String.format(lovObj.gd_x_lov_manif_status( GetDLDBUser.getDataBase()), tableName, Joiner.on("','").join(lovIds));
+                break;
+            case "gd_x_lov_manif_type":
+                sql = String.format(lovObj.gd_x_lov_manif_type( GetDLDBUser.getDataBase()), tableName, Joiner.on("','").join(lovIds));
+                break;
+            case "gd_x_lov_pmc":
+                sql = String.format(lovObj.gd_x_lov_pmc( GetDLDBUser.getDataBase()), tableName, Joiner.on("','").join(lovIds));
+                break;
+            case "gd_x_lov_product_status":
+                sql = String.format(lovObj.gd_x_lov_product_status( GetDLDBUser.getDataBase()), tableName, Joiner.on("','").join(lovIds));
+                break;
+            case "gd_x_lov_relationship_type":
+                sql = String.format(lovObj.gd_x_lov_relationship_type( GetDLDBUser.getDataBase()), tableName, Joiner.on("','").join(lovIds));
+                break;
+            case "gd_x_lov_work_type":
+                sql = String.format(lovObj.gd_x_lov_work_type( GetDLDBUser.getDataBase()), tableName, Joiner.on("','").join(lovIds));
+                break;
+            case "gd_x_lov_work_status":
+                sql = String.format(lovObj.gd_x_lov_work_status( GetDLDBUser.getDataBase()), tableName, Joiner.on("','").join(lovIds));
+                break;
+            case "gd_x_lov_society_ownership":
+                sql = String.format(lovObj.gd_x_lov_society_ownership( GetDLDBUser.getDataBase()), tableName, Joiner.on("','").join(lovIds));
+                break;
+            default :
+                sql = String.format(lovObj.gd_x_lov_core_sql( GetDLDBUser.getDataBase()), tableName, Joiner.on("','").join(lovIds));
+        }
         Log.info(sql);
         LovTablesDLContext.LovTableDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, LovTableDLObject.class, Constants.AWS_URL);
     }
