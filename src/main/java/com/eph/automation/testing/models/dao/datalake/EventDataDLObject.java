@@ -30,6 +30,41 @@ public class EventDataDLObject {
     private String NAME;
     private String F_TYPE;
     private String F_PARENT_SUBJECT_AREA;
+    private String COPY_RIGHT_ID;
+    private String S_NAME;
+    private String B_FROMBATCHID;
+    private String B_TOBATCHID;
+
+    public String getB_FROMBATCHID() {
+        return B_FROMBATCHID;
+    }
+    public void setB_FROMBATCHID(String B_FROMBATCHID) {
+        this.B_FROMBATCHID = B_FROMBATCHID;
+    }
+
+
+    public String getB_TOBATCHID() {
+        return B_TOBATCHID;
+    }
+    public void setB_TOBATCHID(String B_TOBATCHID) {
+        this.B_TOBATCHID = B_TOBATCHID;
+    }
+
+
+
+    public String getS_NAME() {
+        return S_NAME;
+    }
+    public void setS_NAME(String S_NAME) {
+        this.S_NAME = S_NAME;
+    }
+
+    public String getCOPY_RIGHT_ID() {
+        return COPY_RIGHT_ID;
+    }
+    public void setCOPY_RIGHT_ID(String COPY_RIGHT_ID) {
+        this.COPY_RIGHT_ID = COPY_RIGHT_ID;
+    }
 
     public String getSUBJECT_AREA_ID() {
         return SUBJECT_AREA_ID;

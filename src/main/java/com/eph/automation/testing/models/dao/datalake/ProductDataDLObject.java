@@ -19,13 +19,13 @@ public class ProductDataDLObject {
     private String S_NAME;
     private String SHORT_NAME;
     private String S_SHORT_NAME;
-    private boolean SEPARATELY_SALE_INDICATOR;
-    private boolean TRIAL_ALLOWED_INDICATOR;
+    private String SEPARATELY_SALE_INDICATOR;
+    private String TRIAL_ALLOWED_INDICATOR;
     private String CONTENT_FROM_DATE;
     private String LAUNCH_DATE;
     private String CONTENT_TO_DATE;
     private String CONTENT_DATE_OFFSET;
-    private boolean T_SUMMARY_CHANGED;
+    private String T_SUMMARY_CHANGED;
     private String T_EVENT_DESCRIPTION;
     private String F_TYPE;
     private String F_STATUS;
@@ -57,6 +57,80 @@ public class ProductDataDLObject {
     private String F_PACKAGE_OWNER;
     private String F_COMPONENT;
     private String F_RELATIONSHIP_TYPE;
+    private String PRODUCT_FIN_AATRIBS_ID;
+    private String F_GL_COMPANY;
+    private String F_GL_COST_RESP_CENTRE;
+    private String F_GL_REVENUE_RESP_CENTRE;
+    private String F_PRODUCT;
+    private String PRODUCT_IDENTIFIER_ID;
+    private String IDENTIFIER;
+    private String S_IDENTIFIER;
+    private String PRODUCT_RELATIONSHIP_ID;
+    private String F_PARENT;
+    private String F_CHILD;
+    private String F_RELATIOSHIP_TYPE;
+
+
+    public String getF_RELATIOSHIP_TYPE() { return F_RELATIOSHIP_TYPE;  }
+    public void setF_RELATIOSHIP_TYPE(String F_RELATIOSHIP_TYPE) {
+        this.F_RELATIOSHIP_TYPE = F_RELATIOSHIP_TYPE;
+    }
+
+    public String getF_PARENT() { return F_PARENT;  }
+    public void setF_PARENT(String F_PARENT) {
+        this.F_PARENT = F_PARENT;
+    }
+
+    public String getF_CHILD() { return F_CHILD;  }
+    public void setF_CHILD(String F_CHILD) {
+        this.F_CHILD = F_CHILD;
+    }
+
+    public String getPRODUCT_RELATIONSHIP_ID() { return PRODUCT_RELATIONSHIP_ID;  }
+    public void setPRODUCT_RELATIONSHIP_ID(String PRODUCT_RELATIONSHIP_ID) {
+        this.PRODUCT_RELATIONSHIP_ID = PRODUCT_RELATIONSHIP_ID;
+    }
+
+    public String getPRODUCT_IDENTIFIER_ID() { return PRODUCT_IDENTIFIER_ID;  }
+    public void setPRODUCT_IDENTIFIER_ID(String PRODUCT_IDENTIFIER_ID) {
+        this.PRODUCT_IDENTIFIER_ID = PRODUCT_IDENTIFIER_ID;
+    }
+
+    public String getIDENTIFIER() { return IDENTIFIER;  }
+    public void setIDENTIFIER(String IDENTIFIER) {
+        this.IDENTIFIER = IDENTIFIER;
+    }
+
+    public String getS_IDENTIFIER() { return S_IDENTIFIER;  }
+    public void setS_IDENTIFIER(String S_IDENTIFIER) {
+        this.S_IDENTIFIER = S_IDENTIFIER;
+    }
+
+    public String getF_PRODUCT() { return F_PRODUCT;  }
+    public void setF_PRODUCT(String F_PRODUCT) {
+        this.F_PRODUCT = F_PRODUCT;
+    }
+
+    public String getF_GL_REVENUE_RESP_CENTRE() { return F_GL_REVENUE_RESP_CENTRE;  }
+    public void setF_GL_REVENUE_RESP_CENTRE(String F_GL_REVENUE_RESP_CENTRE) {
+        this.F_GL_REVENUE_RESP_CENTRE = F_GL_REVENUE_RESP_CENTRE;
+    }
+
+    public String getF_GL_COST_RESP_CENTRE() { return F_GL_COST_RESP_CENTRE;  }
+    public void setF_GL_COST_RESP_CENTRE(String F_GL_COST_RESP_CENTRE) {
+        this.F_GL_COST_RESP_CENTRE = F_GL_COST_RESP_CENTRE;
+    }
+
+
+    public String getF_GL_COMPANY() { return F_GL_COMPANY;  }
+    public void setF_GL_COMPANY(String F_GL_COMPANY) {
+        this.F_GL_COMPANY = F_GL_COMPANY;
+    }
+
+    public String getPRODUCT_FIN_AATRIBS_ID() { return PRODUCT_FIN_AATRIBS_ID;  }
+    public void setPRODUCT_FIN_AATRIBS_ID(String PRODUCT_FIN_AATRIBS_ID) {
+        this.PRODUCT_FIN_AATRIBS_ID = PRODUCT_FIN_AATRIBS_ID;
+    }
 
 
     public String getF_RELATIONSHIP_TYPE() { return F_RELATIONSHIP_TYPE;  }
@@ -142,12 +216,12 @@ public class ProductDataDLObject {
 
 
 
-    public boolean getSEPARATELY_SALE_INDICATOR() { return SEPARATELY_SALE_INDICATOR;  }
-    public void setSEPARATELY_SALE_INDICATOR(boolean SEPARATELY_SALE_INDICATOR) { this.SEPARATELY_SALE_INDICATOR = SEPARATELY_SALE_INDICATOR;  }
+    public String getSEPARATELY_SALE_INDICATOR() { return SEPARATELY_SALE_INDICATOR;  }
+    public void setSEPARATELY_SALE_INDICATOR(String SEPARATELY_SALE_INDICATOR) { this.SEPARATELY_SALE_INDICATOR = SEPARATELY_SALE_INDICATOR;  }
 
 
-    public boolean getTRIAL_ALLOWED_INDICATOR() { return TRIAL_ALLOWED_INDICATOR;  }
-    public void setTRIAL_ALLOWED_INDICATOR(boolean TRIAL_ALLOWED_INDICATOR) { this.TRIAL_ALLOWED_INDICATOR = TRIAL_ALLOWED_INDICATOR;  }
+    public String getTRIAL_ALLOWED_INDICATOR() { return TRIAL_ALLOWED_INDICATOR;  }
+    public void setTRIAL_ALLOWED_INDICATOR(String TRIAL_ALLOWED_INDICATOR) { this.TRIAL_ALLOWED_INDICATOR = TRIAL_ALLOWED_INDICATOR;  }
 
 
     public String getLAUNCH_DATE() {      return LAUNCH_DATE;   }
@@ -173,8 +247,8 @@ public class ProductDataDLObject {
     }
 
 
-    public boolean getT_SUMMARY_CHANGED() { return T_SUMMARY_CHANGED; }
-    public void setT_SUMMARY_CHANGED(boolean T_SUMMARY_CHANGED) {
+    public String getT_SUMMARY_CHANGED() { return T_SUMMARY_CHANGED; }
+    public void setT_SUMMARY_CHANGED(String T_SUMMARY_CHANGED) {
         this.T_SUMMARY_CHANGED = T_SUMMARY_CHANGED;
     }
 

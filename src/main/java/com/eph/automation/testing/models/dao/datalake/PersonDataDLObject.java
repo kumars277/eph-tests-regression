@@ -30,7 +30,20 @@ public class PersonDataDLObject {
     private String F_PRODUCT;
     private String F_PERSON;
     private String F_EVENT;
+    private String F_WWORK;
+    private String WORK_PERSON_ROLE_ID;
 
+
+
+    public String getWORK_PERSON_ROLE_ID() {  return WORK_PERSON_ROLE_ID;   }
+    public void setWORK_PERSON_ROLE_ID(String WORK_PERSON_ROLE_ID) {
+        this.WORK_PERSON_ROLE_ID = WORK_PERSON_ROLE_ID;
+    }
+
+    public String getF_WWORK() {  return F_WWORK;   }
+    public void setF_WWORK(String F_WWORK) {
+        this.F_WWORK = F_WWORK;
+    }
 
     public String getEFFECTIVE_START_DATE() {  return EFFECTIVE_START_DATE;   }
     public void setEFFECTIVE_START_DATE(String EFFECTIVE_START_DATE) {

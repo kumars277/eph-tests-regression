@@ -25,7 +25,7 @@ public class WorkDataDLObject {
     private String B_TOBATCHID;
     private String COPYRIGHT_YEAR;
     private String EDITION_NUMBER;
-    private boolean T_SUMMARY_CHANGED;
+    private String T_SUMMARY_CHANGED;
     private String T_EVENT_DESCRIPTION;
     private String F_TYPE;
     private String F_STATUS;
@@ -49,7 +49,7 @@ public class WorkDataDLObject {
     private String F_SOCIETY_OWNERSHIP;
     private String F_IMPRINT;
     private String S_WORK_SHORT_TITLE;
-    private boolean ELECTRO_RIGHTS_INDICATOR;
+    private String ELECTRO_RIGHTS_INDICATOR;
     private String VOLUME;
     private String WORK_FIN_ATTRIBS_ID;
     private String EFFECTIVE_START_DATE;
@@ -61,6 +61,85 @@ public class WorkDataDLObject {
     private String WORK_IDENTIFIER_ID;
     private String IDENTIFIER;
     private String S_IDENTIFIER;
+    private String WORK_RELATIOSNHIP_ID;
+    private String F_RELATIONSHIP_TYPE;
+    private String F_CHILD;
+    private String F_PARENT;
+    private String WORK_RELATIONSHIP_ID;
+    private String WORK_SUBJECT_ID;
+    private String PPRIMARY;
+    private String F_SUBJECT_AREA;
+    private String F_COPYRIGHT_OWNER;
+    private String WORK_COPYRIGHTS_ID;
+    private String F_EDITION;
+    private String F_ORIGINAL;
+    private String WORK_REL_EDITION_ID;
+
+    public String getWORK_REL_EDITION_ID() {   return WORK_REL_EDITION_ID;  }
+    public void setWORK_REL_EDITION_ID(String WORK_REL_EDITION_ID) {
+        this.WORK_REL_EDITION_ID = WORK_REL_EDITION_ID;
+    }
+
+    public String getF_EDITION() {   return F_EDITION;  }
+    public void setF_EDITION(String F_EDITION) {
+        this.F_EDITION = F_EDITION;
+    }
+
+    public String getF_ORIGINAL() {   return F_ORIGINAL;  }
+    public void setF_ORIGINAL(String F_ORIGINAL) {
+        this.F_ORIGINAL = F_ORIGINAL;
+    }
+
+
+    public String getWORK_COPYRIGHTS_ID() {   return WORK_COPYRIGHTS_ID;  }
+    public void setWORK_COPYRIGHTS_ID(String WORK_COPYRIGHTS_ID) {
+        this.WORK_COPYRIGHTS_ID = WORK_COPYRIGHTS_ID;
+    }
+
+    public String getF_COPYRIGHT_OWNER() {   return F_COPYRIGHT_OWNER;  }
+    public void setF_COPYRIGHT_OWNER(String F_COPYRIGHT_OWNER) {
+        this.F_COPYRIGHT_OWNER = F_COPYRIGHT_OWNER;
+    }
+
+    public String getF_SUBJECT_AREA() {   return F_SUBJECT_AREA;  }
+    public void setF_SUBJECT_AREA(String F_SUBJECT_AREA) {
+        this.F_SUBJECT_AREA = F_SUBJECT_AREA;
+    }
+
+    public String getPPRIMARY() {   return PPRIMARY;  }
+    public void setPPRIMARY(String PPRIMARY) {
+        this.PPRIMARY = PPRIMARY;
+    }
+
+    public String getWORK_SUBJECT_ID() {   return WORK_SUBJECT_ID;  }
+    public void setWORK_SUBJECT_ID(String WORK_SUBJECT_ID) {
+        this.WORK_SUBJECT_ID = WORK_SUBJECT_ID;
+    }
+
+    public String getWORK_RELATIONSHIP_ID() {   return WORK_RELATIONSHIP_ID;  }
+    public void setWORK_RELATIONSHIP_ID(String WORK_RELATIONSHIP_ID) {
+        this.WORK_RELATIONSHIP_ID = WORK_RELATIONSHIP_ID;
+    }
+
+    public String getF_PARENT() {   return F_PARENT;  }
+    public void setF_PARENT(String F_PARENT) {
+        this.F_PARENT = F_PARENT;
+    }
+
+    public String getF_CHILD() {   return F_CHILD;  }
+    public void setF_CHILD(String F_CHILD) {
+        this.F_CHILD = F_CHILD;
+    }
+
+    public String getF_RELATIONSHIP_TYPE() {   return F_RELATIONSHIP_TYPE;  }
+    public void setF_RELATIONSHIP_TYPE(String F_RELATIONSHIP_TYPE) {
+        this.F_RELATIONSHIP_TYPE = F_RELATIONSHIP_TYPE;
+    }
+
+    public String getWORK_RELATIOSNHIP_ID() {   return WORK_RELATIOSNHIP_ID;  }
+    public void setWORK_RELATIOSNHIP_ID(String WORK_RELATIOSNHIP_ID) {
+        this.WORK_RELATIOSNHIP_ID = WORK_RELATIOSNHIP_ID;
+    }
 
     public String getWORK_IDENTIFIER_ID() {   return WORK_IDENTIFIER_ID;  }
     public void setWORK_IDENTIFIER_ID(String WORK_IDENTIFIER_ID) {
@@ -180,8 +259,8 @@ public class WorkDataDLObject {
     public String getS_WORK_SHORT_TITLE() { return S_WORK_SHORT_TITLE;  }
     public void setS_WORK_SHORT_TITLE(String S_WORK_SHORT_TITLE) { this.S_WORK_SHORT_TITLE = S_WORK_SHORT_TITLE;  }
 
-    public boolean getELECTRO_RIGHTS_INDICATOR() { return ELECTRO_RIGHTS_INDICATOR;  }
-    public void setELECTRO_RIGHTS_INDICATOR(boolean ELECTRO_RIGHTS_INDICATOR) { this.ELECTRO_RIGHTS_INDICATOR = ELECTRO_RIGHTS_INDICATOR;  }
+    public String getELECTRO_RIGHTS_INDICATOR() { return ELECTRO_RIGHTS_INDICATOR;  }
+    public void setELECTRO_RIGHTS_INDICATOR(String ELECTRO_RIGHTS_INDICATOR) { this.ELECTRO_RIGHTS_INDICATOR = ELECTRO_RIGHTS_INDICATOR;  }
 
     public String getVOLUME() {      return VOLUME;   }
     public void setVOLUME(String VOLUME) {
@@ -199,8 +278,8 @@ public class WorkDataDLObject {
     }
 
 
-    public boolean getT_SUMMARY_CHANGED() { return T_SUMMARY_CHANGED; }
-    public void setT_SUMMARY_CHANGED(boolean T_SUMMARY_CHANGED) {
+    public String getT_SUMMARY_CHANGED() { return T_SUMMARY_CHANGED; }
+    public void setT_SUMMARY_CHANGED(String T_SUMMARY_CHANGED) {
         this.T_SUMMARY_CHANGED = T_SUMMARY_CHANGED;
     }
 
