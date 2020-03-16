@@ -39,6 +39,9 @@ public class Constants {
     public static String PPM_PROD_SCHEMA = "MEX_OPER_PROD";
     public static String EPH_SCHEMA = "semarchy_eph_mdm";
 
+//    DPP Database Constant
+    public static String DPP_SCHEMA = "researchpackages";
+
     //PMX Database Constants
 //    public static String PMX_SIT_URL = "PMX_SIT_URL";
 //    public static String PMX_UAT_URL = "PMX_UAT_URL";

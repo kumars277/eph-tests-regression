@@ -1,5 +1,9 @@
 package com.eph.automation.testing.services.db.DataLakeSql;
 
+/**
+ * Created by Thomas Kruck on 15/02/2020
+ */
+
 public class DLLovTablesDataChecksSQL {
 
     public static String getRandomLovCodes(String db){
