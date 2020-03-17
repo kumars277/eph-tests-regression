@@ -6,24 +6,24 @@ package com.eph.automation.testing.services.db.DataLakeSql;
 
 public class DPPTablesEPHtoDLSQL {
 //    COUNT EPH DPP SQL
-    public static String EPHCommentCount = "Select count(*) as comment from researchpackages.comment";
-    public static String EPH_EPHUser = "Select count(*) as eph_user from researchpackages.eph_user";
-    public static String EPHPackage = "Select count(*) as package from researchpackages.package";
-    public static String EPHPackageApproval = "Select count(*) as package_approval from researchpackages.package_approval";
-    public static String EPHPackageApprovals = "Select count(*) as package_approvals from researchpackages.package_approvals";
-    public static String EPHPackageHaveItems = "Select count(*) as package_have_items from researchpackages.package_have_items";
-    public static String EPHPackageItem = "Select count(*) as package_item from researchpackages.package_item";
-    public static String EPHPackageItemAudit = "Select count(*) as package_Item_Audit from researchpackages.package_Item_Audit";
+    public static String EPHCommentCount = "Select count(*) as count from researchpackages.comment";
+    public static String EPH_EPHUser = "Select count(*) as count from researchpackages.eph_user";
+    public static String EPHPackage = "Select count(*) as count from researchpackages.package";
+    public static String EPHPackageApproval = "Select count(*) as count from researchpackages.package_approval";
+    public static String EPHPackageApprovals = "Select count(*) as count from researchpackages.package_approvals";
+    public static String EPHPackageHaveItems = "Select count(*) as count from researchpackages.package_have_items";
+    public static String EPHPackageItem = "Select count(*) as count from researchpackages.package_item";
+    public static String EPHPackageItemAudit = "Select count(*) as count from researchpackages.package_Item_Audit";
 
 //    COUNT ATHENA DPP SQL
-    public static String DLCommentCount = "Select count(*) as comment from product_database_sit.comment";
-    public static String DL_EPHUser = "Select count(*) as eph_user from product_database_sit.eph_user";
-    public static String DLPackage = "Select count(*) as package from product_database_sit.package";
-    public static String DLPackageApproval = "Select count(*) as package_approval from product_database_sit.package_approval";
-    public static String DLPackageApprovals = "Select count(*) as package_approvals from product_database_sit.package_approvals";
-    public static String DLPackageHaveItems = "Select count(*) as package_have_items from product_database_sit.package_have_items";
-    public static String DLPackageItem = "Select count(*) as package_item from product_database_sit.package_item";
-    public static String DLPackageItemAudit = "Select count(*) as package_Item_Audit from product_database_sit.package_Item_Audit";
+    public static String DLCommentCount = "Select count(*) as count from product_database_sit.comment";
+    public static String DL_EPHUser = "Select count(*) as count from product_database_sit.eph_user";
+    public static String DLPackage = "Select count(*) as count from product_database_sit.package";
+    public static String DLPackageApproval = "Select count(*) as count from product_database_sit.package_approval";
+    public static String DLPackageApprovals = "Select count(*) as count from product_database_sit.package_approvals";
+    public static String DLPackageHaveItems = "Select count(*) as count from product_database_sit.package_have_items";
+    public static String DLPackageItem = "Select count(*) as count from product_database_sit.package_item";
+    public static String DLPackageItemAudit = "Select count(*) as count from product_database_sit.package_Item_Audit";
 
 //  DATA CHECKS RANDOM IDs SQL
   public static String getRandomDPPIDs(String db) {

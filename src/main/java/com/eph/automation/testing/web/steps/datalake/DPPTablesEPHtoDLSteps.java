@@ -59,7 +59,7 @@ public class DPPTablesEPHtoDLSteps {
         Log.info(sqlEPH);
         List<Map<String, Object>> DPPCountEPH = DBManager.getDBResultMap(sqlEPH,
                 Constants.WFT_URL);
-        EPHDPPCount = ((Long) DPPCountEPH.get(0).get(tableName)).intValue();
+        EPHDPPCount = ((Long) DPPCountEPH.get(0).get("count")).intValue();
         Log.info(tableName + " in EPH Count: " + EPHDPPCount);
     }
 
@@ -94,7 +94,7 @@ public class DPPTablesEPHtoDLSteps {
         Log.info(sqlDL);
         List<Map<String, Object>> DPPCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
-        DLDPPCount = ((Long) DPPCountDL.get(0).get(tableName)).intValue();
+        DLDPPCount = ((Long) DPPCountDL.get(0).get("count")).intValue();
         Log.info(tableName + " data in DL: " + DLDPPCount);
 
     }
