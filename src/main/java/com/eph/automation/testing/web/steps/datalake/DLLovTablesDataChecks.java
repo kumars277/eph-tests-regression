@@ -12,6 +12,9 @@ import org.junit.Assert;
 import java.util.*;
 import java.util.stream.*;
 
+/**
+ * Created by Thomas Kruck on 15/02/2020
+ */
 
 public class DLLovTablesDataChecks {
     private static String sql;

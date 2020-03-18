@@ -1,5 +1,7 @@
 package com.eph.automation.testing.models.dao.datalake;
-
+/**
+ * Created by Thomas Kruck on 15/02/2020
+ */
 public class LovTableDLObject {
 
 
