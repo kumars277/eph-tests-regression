@@ -38,6 +38,8 @@ public class Constants {
     public static String PPM_UAT_SCHEMA = "MEX_OPER_DEV";
     public static String PPM_PROD_SCHEMA = "MEX_OPER_PROD";
     public static String EPH_SCHEMA = "semarchy_eph_mdm";
+    public static String JMF_SCHEMA = "jmf_sit_application";
+
 
 //    DPP Database Constant
     public static String DPP_SCHEMA = "researchpackages";
@@ -70,6 +72,7 @@ public class Constants {
     public static String MYSQL_DB_URL_KEY = "MYSQL_URL";
     public static String WFT_URL = "WFT_URL";
     public static  String AWS_URL = "AWS_URL";
+    public static String MYSQL_JM_URL = "MYSQL_JM_URL";
 
 
 

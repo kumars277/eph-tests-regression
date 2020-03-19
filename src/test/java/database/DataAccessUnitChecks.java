@@ -24,13 +24,14 @@ public class DataAccessUnitChecks {
     @Ignore
     public void testDecrypt() {
         //PMX_UAT_URL=jdbc:oracle:thin:PMX/pmxuat@//pmxuat.cucvf0thmu0s.eu-west-1.rds.amazonaws.com:1521/PMXUAT
-        System.out.println(DecryptionService.decrypt(LoadProperties.getProperty(Constants.EPH_URL)));
+       // System.out.println(DecryptionService.decrypt(LoadProperties.getProperty(Constants.MYSQL_DB_URL_KEY)));
     }
 
     @Test
     @Ignore
     public void testEncrypt() {
-          // System.out.println(DecryptionService.encrypt(athena));
+        String JM_MYSQL = "jdbc:mysql://mysql-jmf-activiti.ceuft9o6msiv.eu-west-1.rds.amazonaws.com:3306/jmf_sit_application?user=sureshkumard&password=Iqos31XVOELcKQ";
+           System.out.println(DecryptionService.encrypt(JM_MYSQL));
     }
 
     @Test
