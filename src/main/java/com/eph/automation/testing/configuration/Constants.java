@@ -38,7 +38,9 @@ public class Constants {
     public static String PPM_UAT_SCHEMA = "MEX_OPER_DEV";
     public static String PPM_PROD_SCHEMA = "MEX_OPER_PROD";
     public static String EPH_SCHEMA = "semarchy_eph_mdm";
-    public static String JMF_SCHEMA = "jmf_sit_application";
+    public static String JMF_SQL_SCHEMA = "jmf_sit_application";
+    public static String JMF_AWS_SCHEMA = "journalmaestro_staging_sit";
+
 
 
 //    DPP Database Constant

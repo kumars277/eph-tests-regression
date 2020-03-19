@@ -8,5 +8,5 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Allocation records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 1              | JMF_ALLOCATION_CHANGE|
+      | 10              | JMF_ALLOCATION_CHANGE|
 

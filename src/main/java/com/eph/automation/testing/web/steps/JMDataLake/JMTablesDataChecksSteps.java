@@ -25,7 +25,7 @@ public class JMTablesDataChecksSteps {
     public DataQualityJMContext dataQualityJMContext;
     private static String sql;
     private static List<String> Ids;
-//    private JMTablesDataChecksSQL jmObj = new JMTablesDataChecksSQL();
+   private JMTablesDataChecksSQL jmObj = new JMTablesDataChecksSQL();
 
 
     @Given("^We get (.*) random allocation ids of (.*)")
@@ -41,7 +41,7 @@ public class JMTablesDataChecksSteps {
     @When("^We get the JMF Allocation records from JMF MySQL of (.*)")
     public void getRecordsFromJMF(String tableName){
         Log.info("We get the Allocations Change records from JMF MySql..");
-        sql = String.format(JMTablesDataChecksSQL.GET_DATA_ALLOCATION_CHANGE_JM, Joiner.on("','").join(Ids));
+        sql = String.format(jmObj.getAllocationChangesSql("mysql",tableName), Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityJMContext.tbJMDataObjectsFromMysql = DBManager.getDBResultAsBeanList(sql, JMTablesDLObject.class, Constants.MYSQL_JM_URL);
 
@@ -50,7 +50,7 @@ public class JMTablesDataChecksSteps {
     @Then("^We get the JMF Allocation records from DL of (.*)$")
     public void getRecordsFromDL(String tableName) {
         Log.info("We get the Allocations Change records from JMF DL..");
-        sql = String.format(JMTablesDataChecksSQL.GET_DATA_ALLOCATION_CHANGE_DL,Joiner.on("','").join(Ids));
+        sql = String.format(jmObj.getAllocationChangesSql("aws",tableName),Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityJMContext.tbJMDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, JMTablesDLObject.class, Constants.AWS_URL);
     }
@@ -63,11 +63,14 @@ public class JMTablesDataChecksSteps {
             Log.info("Sorting the data to compare the application_change records in MySql and DATA LAKE ..");//sort data in the lists
             for (int i = 0; i < dataQualityJMContext.tbJMDataObjectsFromMysql.size(); i++) {
 
+                dataQualityJMContext.tbJMDataObjectsFromMysql.sort(Comparator.comparing(JMTablesDLObject::getALLOCATION_CHANGE_ID));
+                dataQualityJMContext.tbJMDataObjectsFromDL.sort(Comparator.comparing(JMTablesDLObject::getALLOCATION_CHANGE_ID));
+
                 Log.info("APPLICATION_CHANGE_ID => "+dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID()+
                         " APPLICATION_CHANGE_ID => MysqL="+dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID()+
                         " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getALLOCATION_CHANGE_ID());
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID() != null ||
-                        (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getALLOCATION_CHANGE_ID().equals("null"))) {  //In data lake null considering or getting as String
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getALLOCATION_CHANGE_ID()!= null)) {  //In data lake null considering or getting as String
                     Assert.assertEquals("The APPLICATION_CHANGE_ID is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getALLOCATION_CHANGE_ID());
@@ -78,41 +81,41 @@ public class JMTablesDataChecksSteps {
                         " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getALLOCATION_TYPE());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_TYPE() != null ||
-                        (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getALLOCATION_TYPE().equals("null"))) {
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getALLOCATION_TYPE()!= null)) {
                     Assert.assertEquals("The ALLOCATION_TYPE is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_TYPE(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getALLOCATION_TYPE());
                 }
                 Log.info("APPLICATION_CHANGE_ID => "+dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID()+
-                            " PMG_FILTER => Mysql="+dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_FILTER()+
-                            " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_FILTER());
+                        " PMG_FILTER => Mysql="+dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_FILTER()+
+                        " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_FILTER());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_FILTER() != null ||
-                            (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_FILTER().equals("null"))) {
-                        Assert.assertEquals("The PMG_FILTER is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
-                                dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_FILTER(),
-                                dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_FILTER());
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_FILTER()!= null)) {
+                    Assert.assertEquals("The PMG_FILTER is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
+                            dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_FILTER(),
+                            dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_FILTER());
                 }
                 Log.info("APPLICATION_CHANGE_ID => "+dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID()+
                         " PMC_FILTER => Mysql="+dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMC_FILTER()+
-                            " DL="+ dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMC_FILTER());
+                        " DL="+ dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMC_FILTER());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMC_FILTER() != null ||
-                            (! dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMC_FILTER().equals("null"))) {
-                        Assert.assertEquals("The PMC_FILTER is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
-                                dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMC_FILTER(),
-                                dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMC_FILTER());
-                    }
-                    Log.info("APPLICATION_CHANGE_ID => "+dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID()+
-                            " PPC_FILTER_EMAIL => Mysql="+dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPPC_FILTER_EMAIL()+
-                            " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPPC_FILTER_EMAIL());
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMC_FILTER()!= null)) {
+                    Assert.assertEquals("The PMC_FILTER is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
+                            dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMC_FILTER(),
+                            dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMC_FILTER());
+                }
+                Log.info("APPLICATION_CHANGE_ID => "+dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID()+
+                        " PPC_FILTER_EMAIL => Mysql="+dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPPC_FILTER_EMAIL()+
+                        " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPPC_FILTER_EMAIL());
 
-                    if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPPC_FILTER_EMAIL() != null ||
-                            (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPPC_FILTER_EMAIL().equals("null"))) {
-                        Assert.assertEquals("The PPC_FILTER_EMAIL is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
-                                dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPPC_FILTER_EMAIL(),
-                                dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPPC_FILTER_EMAIL());
-                    }
+                if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPPC_FILTER_EMAIL() != null ||
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPPC_FILTER_EMAIL()!= null)) {
+                    Assert.assertEquals("The PPC_FILTER_EMAIL is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
+                            dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPPC_FILTER_EMAIL(),
+                            dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPPC_FILTER_EMAIL());
+                }
 
 
                 Log.info("APPLICATION_CHANGE_ID => "+dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID()+
@@ -120,7 +123,7 @@ public class JMTablesDataChecksSteps {
                         " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPPC_FILTER_NAME());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPPC_FILTER_NAME() != null ||
-                        (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPPC_FILTER_NAME().equals("null"))) {
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPPC_FILTER_NAME()!=null)) {
                     Assert.assertEquals("The PPC_FILTER_NAME is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPPC_FILTER_NAME(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPPC_FILTER_NAME());
@@ -131,7 +134,7 @@ public class JMTablesDataChecksSteps {
                         " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMC_CHANGE_IND());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMC_CHANGE_IND() != null ||
-                        (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMC_CHANGE_IND().equals("null"))) {
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMC_CHANGE_IND()!=null)) {
                     Assert.assertEquals("The PMC_CHANGE_IND is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMC_CHANGE_IND(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMC_CHANGE_IND());
@@ -142,7 +145,7 @@ public class JMTablesDataChecksSteps {
                         " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPPC_CHANGE_IND());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPPC_CHANGE_IND() != null ||
-                        (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPPC_CHANGE_IND().equals("null"))) {
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPPC_CHANGE_IND()!=null)) {
                     Assert.assertEquals("The PPC_CHANGE_IND is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPPC_CHANGE_IND(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPPC_CHANGE_IND());
@@ -153,7 +156,7 @@ public class JMTablesDataChecksSteps {
                         " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMX_PMGCODE());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMX_PMGCODE() != null ||
-                        (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMX_PMGCODE().equals("null"))) {
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMX_PMGCODE()!=null)) {
                     Assert.assertEquals("The PMX_PMGCODE is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMX_PMGCODE(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMX_PMGCODE());
@@ -163,7 +166,7 @@ public class JMTablesDataChecksSteps {
                         " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMX_PMG_NAME());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMX_PMGCODE() != null ||
-                        (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMX_PMGCODE().equals("null"))) {
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMX_PMGCODE()!=null)) {
                     Assert.assertEquals("The PMX_PMG_NAME is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMX_PMG_NAME(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMX_PMG_NAME());
@@ -174,7 +177,7 @@ public class JMTablesDataChecksSteps {
                         " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMX_PMG_F_BUSINESS_UNIT());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMX_PMG_F_BUSINESS_UNIT() != null ||
-                        (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMX_PMG_F_BUSINESS_UNIT().equals("null"))) {
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMX_PMG_F_BUSINESS_UNIT()!=null)) {
                     Assert.assertEquals("The PMX_PMG_F_BUSINESS_UNIT is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMX_PMG_F_BUSINESS_UNIT(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMX_PMG_F_BUSINESS_UNIT());
@@ -185,7 +188,7 @@ public class JMTablesDataChecksSteps {
                         " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_BUS_CTRL_NAME());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_BUS_CTRL_NAME() != null ||
-                        (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_BUS_CTRL_NAME().equals("null"))) {
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_BUS_CTRL_NAME()!=null)) {
                     Assert.assertEquals("The PMG_BUS_CTRL_NAME is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_BUS_CTRL_NAME(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_BUS_CTRL_NAME());
@@ -197,7 +200,7 @@ public class JMTablesDataChecksSteps {
                         " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_BUS_CTRL_EMAIL());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_BUS_CTRL_EMAIL() != null ||
-                        (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_BUS_CTRL_EMAIL().equals("null"))) {
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_BUS_CTRL_EMAIL()!=null)) {
                     Assert.assertEquals("The PMG_BUS_CTRL_EMAIL is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_BUS_CTRL_EMAIL(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_BUS_CTRL_EMAIL());
@@ -208,7 +211,7 @@ public class JMTablesDataChecksSteps {
                         " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_NAME_OLD());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_PUBDIR_NAME_OLD() != null ||
-                        (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_NAME_OLD().equals("null"))) {
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_NAME_OLD()!=null)) {
                     Assert.assertEquals("The PMG_PUBDIR_NAME_OLD is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_PUBDIR_NAME_OLD(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_NAME_OLD());
@@ -220,7 +223,7 @@ public class JMTablesDataChecksSteps {
                         " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_EMAIL_OLD());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_PUBDIR_EMAIL_OLD() != null ||
-                        (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_EMAIL_OLD().equals("null"))) {
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_EMAIL_OLD()!=null)) {
                     Assert.assertEquals("The PMG_PUBDIR_EMAIL_OLD is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_PUBDIR_EMAIL_OLD(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_EMAIL_OLD());
@@ -232,7 +235,7 @@ public class JMTablesDataChecksSteps {
                         " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_PEOPLE_HUB_ID_OLD());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_PUBDIR_PEOPLE_HUB_ID_OLD() != null ||
-                        (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_PEOPLE_HUB_ID_OLD().equals("null"))) {
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_PEOPLE_HUB_ID_OLD()!=null)) {
                     Assert.assertEquals("The PMG_PUBDIR_PEOPLE_HUB_ID_OLD is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_PUBDIR_PEOPLE_HUB_ID_OLD(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_PEOPLE_HUB_ID_OLD());
@@ -244,7 +247,7 @@ public class JMTablesDataChecksSteps {
                         " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_NAME_NEW());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_PUBDIR_NAME_NEW() != null ||
-                        (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_NAME_NEW().equals("null"))) {
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_NAME_NEW()!=null)) {
                     Assert.assertEquals("The PMG_PUBDIR_NAME_NEW is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_PUBDIR_NAME_NEW(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_NAME_NEW());
@@ -255,7 +258,7 @@ public class JMTablesDataChecksSteps {
                         " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_EMAIL_NEW());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_PUBDIR_EMAIL_NEW() != null ||
-                        (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_EMAIL_NEW().equals("null"))) {
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_EMAIL_NEW()!=null)) {
                     Assert.assertEquals("The PMG_PUBDIR_EMAIL_NEW is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_PUBDIR_EMAIL_NEW(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_EMAIL_NEW());
@@ -267,7 +270,7 @@ public class JMTablesDataChecksSteps {
                         " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_PEOPLE_HUB_ID_NEW());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_PUBDIR_EMAIL_NEW() != null ||
-                        (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_EMAIL_NEW().equals("null"))) {
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_EMAIL_NEW()!=null)) {
                     Assert.assertEquals("The PMG_PUBDIR_EMAIL_NEW is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPMG_PUBDIR_EMAIL_NEW(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPMG_PUBDIR_EMAIL_NEW());
@@ -278,7 +281,7 @@ public class JMTablesDataChecksSteps {
                         " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getNOTIFIED_DATE());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getNOTIFIED_DATE() != null ||
-                        (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getNOTIFIED_DATE().equals("null"))) {
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getNOTIFIED_DATE()!=null)) {
                     Assert.assertEquals("The NOTIFIED_DATE is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getNOTIFIED_DATE(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getNOTIFIED_DATE());
@@ -289,7 +292,7 @@ public class JMTablesDataChecksSteps {
                         " DL="+dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getEPH_PMG_CODE());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getEPH_PMG_CODE() != null ||
-                        (!dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getEPH_PMG_CODE().equals("null"))) {
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getEPH_PMG_CODE()!=null)) {
                     Assert.assertEquals("The EPH_PMG_CODE is incorrect for id=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getALLOCATION_CHANGE_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getEPH_PMG_CODE(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getEPH_PMG_CODE());
