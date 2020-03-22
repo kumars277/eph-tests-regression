@@ -55,3 +55,21 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     Examples:
       | countOfRandomIds | table  |
       | 10             | JMF_FAMILY_RESOURCE_DETAILS|
+
+  Scenario Outline: Validate Finanacial Info data is transferred from JM MYSQL to DL Inbound
+    Given We get <countOfRandomIds> random ids of <table>
+    When We get the JMF Finanacial Info records from JMF MySQL of <table>
+    Then We get the JMF Finanacial Info records from DL of <table>
+    And Compare JMF Finanacial Info records in JMF MySQL and DL of <table>
+    Examples:
+      | countOfRandomIds | table  |
+      | 10             | JMF_FINANCIAL_INFORMATION|
+
+  Scenario Outline: Validate Legal Info data is transferred from JM MYSQL to DL Inbound
+    Given We get <countOfRandomIds> random ids of <table>
+    When We get the JMF Legal Info records from JMF MySQL of <table>
+    Then We get the JMF Legal Info records from DL of <table>
+    And Compare JMF Legal Info records in JMF MySQL and DL of <table>
+    Examples:
+      | countOfRandomIds | table  |
+      | 100            | JMF_LEGAL_INFORMATION|
