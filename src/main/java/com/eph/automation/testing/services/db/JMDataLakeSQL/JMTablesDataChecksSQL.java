@@ -20,6 +20,14 @@ public class JMTablesDataChecksSQL {
 
     public static String GET_LEGAL_PRODUCT_WORK_ID = "select PRODUCT_WORK_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_LEGAL_INFORMATION order by rand() limit %s";
 
+    public static String GET_MANIF_PRODUCT_ID = "select PRODUCT_MANIFESTATION_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_MANIFESTATION_ELECTRONIC_DETAILS order by rand() limit %s";
+
+    public static String GET_MANIF_PRINT_ID = "select PRODUCT_MANIFESTATION_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_MANIFESTATION_PRINT_DETAILS order by rand() limit %s";
+
+    public static String GET_PARTY_PROD_ID = "select PARTY_IN_PRODUCT_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PARTY_IN_PRODUCT order by rand() limit %s";
+
+    public static String GET_PRODUCT_AVAIL_ID = "select PRODUCT_AVAILABILITY_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_AVAILABILITY order by rand() limit %s";
+
 
     public static String getAllocationChangesSql(String serverEnv, String table) {
         String GET_DATA_ALLOCATION_CHANGE_JM = null;
@@ -415,6 +423,213 @@ public class JMTablesDataChecksSQL {
         }
         return GET_DATA_LEGAL_INFO_JM;
     }
+
+    public static String getManifDetailSql(String serverEnv, String table) {
+        String GET_DATA_MANIF_DETAIL_JM = null;
+        switch (serverEnv) {
+            case ("mysql"):
+                GET_DATA_MANIF_DETAIL_JM = "select \n" +
+                        "PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID\n" +
+                        ",EMBARGO_TIMES_INDICATOR as EMBARGO_TIMES_INDICATOR\n" +
+                        ",ELECTRONIC_RIGHTS_SECURED_TYPE as ELECTRONIC_RIGHTS_SECURED_TYPE\n" +
+                        ",ONLINE_LAUNCH_DATE as ONLINE_LAUNCH_DATE\n" +
+                        ",ARTICLE_IN_PRESS_S5_IND as ARTICLE_IN_PRESS_S5_IND\n" +
+                        ",ARTICLE_IN_PRESS_S100_IND as ARTICLE_IN_PRESS_S100_IND\n" +
+                        ",ARTICLE_IN_PRESS_S250_IND as ARTICLE_IN_PRESS_S250_IND\n" +
+                        ",EMBARGO_TIMES_NUMBER as EMBARGO_TIMES_NUMBER\n" +
+                        ",ONLINE_LAST_ISSUE_DATE as ONLINE_LAST_ISSUE_DATE\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        " where PRODUCT_MANIFESTATION_ID in ('%s')";
+                break;
+            case ("aws"):
+                GET_DATA_MANIF_DETAIL_JM = "select \n" +
+                        "PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID\n" +
+                        ",EMBARGO_TIMES_INDICATOR as EMBARGO_TIMES_INDICATOR\n" +
+                        ",ELECTRONIC_RIGHTS_SECURED_TYPE as ELECTRONIC_RIGHTS_SECURED_TYPE\n" +
+                        ",ONLINE_LAUNCH_DATE as ONLINE_LAUNCH_DATE\n" +
+                        ",ARTICLE_IN_PRESS_S5_IND as ARTICLE_IN_PRESS_S5_IND\n" +
+                        ",ARTICLE_IN_PRESS_S100_IND as ARTICLE_IN_PRESS_S100_IND\n" +
+                        ",ARTICLE_IN_PRESS_S250_IND as ARTICLE_IN_PRESS_S250_IND\n" +
+                        ",EMBARGO_TIMES_NUMBER as EMBARGO_TIMES_NUMBER\n" +
+                        ",ONLINE_LAST_ISSUE_DATE as ONLINE_LAST_ISSUE_DATE\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        " AND PRODUCT_MANIFESTATION_ID in ('%s')";
+                break;
+
+        }
+        return GET_DATA_MANIF_DETAIL_JM;
+
+    }
+
+    public static String getManifPrintSql(String serverEnv, String table) {
+        String GET_DATA_MANIF_PRINT_JM = null;
+        switch (serverEnv) {
+            case ("mysql"):
+                GET_DATA_MANIF_PRINT_JM = "select \n" +
+                        "PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID\n" +
+                        ",TRIM_SIZE as TRIM_SIZE\n" +
+                        ",BASE_PRINT_RUN_NUMBER as BASE_PRINT_RUN_NUMBER\n" +
+                        ",COLOUR_FREQUENCY as COLOUR_FREQUENCY\n" +
+                        ",ARTWORK_SENSITIVITY_IND as ARTWORK_SENSITIVITY_IND\n" +
+                        ",MAILING_BREAKDOWN_EUROPE as MAILING_BREAKDOWN_EUROPE\n" +
+                        ",MAILING_BREAKDOWN_USA as MAILING_BREAKDOWN_USA\n" +
+                        ",MAILING_BREAKDOWN_ROW as MAILING_BREAKDOWN_ROW\n" +
+                        ",ZERO_WAREHOUSING_IND as ZERO_WAREHOUSING_IND\n" +
+                        ",BACK_STOCK_WAREHOUSE_LOCATION_TYPE as BACK_STOCK_WAREHOUSE_LOCATION_TYPE\n" +
+                        ",PRINTER_TYPE as PRINTER_TYPE\n" +
+                        ",PRINTER_LOCATION_TYPE as PRINTER_LOCATION_TYPE\n" +
+                        ",INTERIOR_PAPER_TYPE as INTERIOR_PAPER_TYPE\n" +
+                        ",COVER_PAPER_TYPE as COVER_PAPER_TYPE\n" +
+                        ",DISTRIBUTOR_CODE as DISTRIBUTOR_CODE\n" +
+                        ",DISTRIBUTOR_LOCATION_CODE as DISTRIBUTOR_LOCATION_CODE\n" +
+                        ",PRINT_MODEL_CODE as PRINT_MODEL_CODE\n" +
+                        ",SEPARATE_PRINT_RUN_IND as SEPARATE_PRINT_RUN_IND\n" +
+                        ",OFFPRINT_PRICING_CODE as OFFPRINT_PRICING_CODE\n" +
+                        ",OFFPRINT_COVER_IND as OFFPRINT_COVER_IND\n" +
+                        ",FREE_ISSUES_QUANTITY as FREE_ISSUES_QUANTITY\n" +
+                        ",FREE_OFFPRINTS_TYPE as FREE_OFFPRINTS_TYPE\n" +
+                        ",FREE_PAID_COLOUR_OFFPRINTS_QUANTITY as FREE_PAID_COLOUR_OFFPRINTS_QUANTITY\n" +
+                        ",COLOUR_PRINTING_CURRENCY_CODE as COLOUR_PRINTING_CURRENCY_CODE\n" +
+                        ",COLOUR_ARTWORK_EXCEPTIONS as COLOUR_ARTWORK_EXCEPTIONS\n" +
+                        ",SOCIETY_OWNS_LABELS_IND as SOCIETY_OWNS_LABELS_IND\n" +
+                        ",BINDING_TYPE as BINDING_TYPE\n" +
+                        ",SPECIAL_BULK_ARRANGEMENTS as SPECIAL_BULK_ARRANGEMENTS\n" +
+                        ",COST_FIRST_PRINTED_COLOUR_UNIT as COST_FIRST_PRINTED_COLOUR_UNIT\n" +
+                        ",COST_NEXT_PRINTED_COLOUR_UNIT as COST_NEXT_PRINTED_COLOUR_UNIT\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        " where PRODUCT_MANIFESTATION_ID in ('%s')";
+                break;
+            case ("aws"):
+                GET_DATA_MANIF_PRINT_JM = "select \n" +
+                        "PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID\n" +
+                        ",TRIM_SIZE as TRIM_SIZE\n" +
+                        ",BASE_PRINT_RUN_NUMBER as BASE_PRINT_RUN_NUMBER\n" +
+                        ",COLOUR_FREQUENCY as COLOUR_FREQUENCY\n" +
+                        ",ARTWORK_SENSITIVITY_IND as ARTWORK_SENSITIVITY_IND\n" +
+                        ",MAILING_BREAKDOWN_EUROPE as MAILING_BREAKDOWN_EUROPE\n" +
+                        ",MAILING_BREAKDOWN_USA as MAILING_BREAKDOWN_USA\n" +
+                        ",MAILING_BREAKDOWN_ROW as MAILING_BREAKDOWN_ROW\n" +
+                        ",ZERO_WAREHOUSING_IND as ZERO_WAREHOUSING_IND\n" +
+                        ",BACK_STOCK_WAREHOUSE_LOCATION_TYPE as BACK_STOCK_WAREHOUSE_LOCATION_TYPE\n" +
+                        ",PRINTER_TYPE as PRINTER_TYPE\n" +
+                        ",PRINTER_LOCATION_TYPE as PRINTER_LOCATION_TYPE\n" +
+                        ",INTERIOR_PAPER_TYPE as INTERIOR_PAPER_TYPE\n" +
+                        ",COVER_PAPER_TYPE as COVER_PAPER_TYPE\n" +
+                        ",DISTRIBUTOR_CODE as DISTRIBUTOR_CODE\n" +
+                        ",DISTRIBUTOR_LOCATION_CODE as DISTRIBUTOR_LOCATION_CODE\n" +
+                        ",PRINT_MODEL_CODE as PRINT_MODEL_CODE\n" +
+                        ",SEPARATE_PRINT_RUN_IND as SEPARATE_PRINT_RUN_IND\n" +
+                        ",OFFPRINT_PRICING_CODE as OFFPRINT_PRICING_CODE\n" +
+                        ",OFFPRINT_COVER_IND as OFFPRINT_COVER_IND\n" +
+                        ",FREE_ISSUES_QUANTITY as FREE_ISSUES_QUANTITY\n" +
+                        ",FREE_OFFPRINTS_TYPE as FREE_OFFPRINTS_TYPE\n" +
+                        ",FREE_PAID_COLOUR_OFFPRINTS_QUANTITY as FREE_PAID_COLOUR_OFFPRINTS_QUANTITY\n" +
+                        ",COLOUR_PRINTING_CURRENCY_CODE as COLOUR_PRINTING_CURRENCY_CODE\n" +
+                        ",COLOUR_ARTWORK_EXCEPTIONS as COLOUR_ARTWORK_EXCEPTIONS\n" +
+                        ",SOCIETY_OWNS_LABELS_IND as SOCIETY_OWNS_LABELS_IND\n" +
+                        ",BINDING_TYPE as BINDING_TYPE\n" +
+                        ",SPECIAL_BULK_ARRANGEMENTS as SPECIAL_BULK_ARRANGEMENTS\n" +
+                        ",COST_FIRST_PRINTED_COLOUR_UNIT as COST_FIRST_PRINTED_COLOUR_UNIT\n" +
+                        ",COST_NEXT_PRINTED_COLOUR_UNIT as COST_NEXT_PRINTED_COLOUR_UNIT\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        " AND PRODUCT_MANIFESTATION_ID in ('%s')";
+                break;
+
+        }
+        return GET_DATA_MANIF_PRINT_JM;
+
+    }
+
+    public static String getPartyProdSql(String serverEnv, String table) {
+        String GET_DATA_PARTY_PROD_JM = null;
+        switch (serverEnv) {
+            case ("mysql"):
+                GET_DATA_PARTY_PROD_JM = "select \n" +
+                        "PARTY_IN_PRODUCT_ID as PARTY_IN_PRODUCT_ID\n" +
+                        ",F_PRODUCT_WORK as F_PRODUCT_WORK\n" +
+                        ",PARTY_ROLE_TYPE as PARTY_ROLE_TYPE\n" +
+                        ",EMAIL_ADDRESS as EMAIL_ADDRESS\n" +
+                        ",FULL_NAME as FULL_NAME\n" +
+                        ",PHONE_NUMBER as PHONE_NUMBER\n" +
+                        ",ADDRESS_LINE_1 as ADDRESS_LINE_1\n" +
+                        ",ADDRESS_LINE_2 as ADDRESS_LINE_2\n" +
+                        ",ADDRESS_LINE_3 as ADDRESS_LINE_3\n" +
+                        ",CITY as CITY\n" +
+                        ",COUNTRY as COUNTRY\n" +
+                        ",STATE as STATE\n" +
+                        ",POST_CODE as POST_CODE\n" +
+                        ",ORGANISATION_1 as ORGANISATION_1\n" +
+                        ",PMX_PARTY_ID as PMX_PARTY_ID\n" +
+                        ",PEOPLEHUB_ID as PEOPLEHUB_ID\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        ",EPH_PERSON_ID as EPH_PERSON_ID\n" +
+                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        " where PARTY_IN_PRODUCT_ID in ('%s')";
+                break;
+            case ("aws"):
+                GET_DATA_PARTY_PROD_JM = "select \n" +
+                        "PARTY_IN_PRODUCT_ID as PARTY_IN_PRODUCT_ID\n" +
+                        ",F_PRODUCT_WORK as F_PRODUCT_WORK\n" +
+                        ",PARTY_ROLE_TYPE as PARTY_ROLE_TYPE\n" +
+                        ",EMAIL_ADDRESS as EMAIL_ADDRESS\n" +
+                        ",FULL_NAME as FULL_NAME\n" +
+                        ",PHONE_NUMBER as PHONE_NUMBER\n" +
+                        ",ADDRESS_LINE_1 as ADDRESS_LINE_1\n" +
+                        ",ADDRESS_LINE_2 as ADDRESS_LINE_2\n" +
+                        ",ADDRESS_LINE_3 as ADDRESS_LINE_3\n" +
+                        ",CITY as CITY\n" +
+                        ",COUNTRY as COUNTRY\n" +
+                        ",STATE as STATE\n" +
+                        ",POST_CODE as POST_CODE\n" +
+                        ",ORGANISATION_1 as ORGANISATION_1\n" +
+                        ",PMX_PARTY_ID as PMX_PARTY_ID\n" +
+                        ",PEOPLEHUB_ID as PEOPLEHUB_ID\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        ",EPH_PERSON_ID as EPH_PERSON_ID\n" +
+                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        " AND PARTY_IN_PRODUCT_ID in ('%s')";
+                break;
+
+        }
+        return GET_DATA_PARTY_PROD_JM;
+
+    }
+
+    public static String getProdAvailSql(String serverEnv, String table) {
+        String GET_DATA_PRODUCT_AVAIL_JM = null;
+        switch (serverEnv) {
+            case ("mysql"):
+                GET_DATA_PRODUCT_AVAIL_JM = "select \n" +
+                        "PRODUCT_AVAILABILITY_ID as PRODUCT_AVAILABILITY_ID\n" +
+                        ",F_PRODUCT_MANIFESTATION as F_PRODUCT_MANIFESTATION\n" +
+                        ",APPLICATION_CODE as APPLICATION_CODE\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        " where PRODUCT_AVAILABILITY_ID in ('%s')";
+                break;
+            case ("aws"):
+                GET_DATA_PRODUCT_AVAIL_JM = "select \n" +
+                        "PRODUCT_AVAILABILITY_ID as PRODUCT_AVAILABILITY_ID\n" +
+                        ",F_PRODUCT_MANIFESTATION as F_PRODUCT_MANIFESTATION\n" +
+                        ",APPLICATION_CODE as APPLICATION_CODE\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        " AND PRODUCT_AVAILABILITY_ID in ('%s')";
+                break;
+
+        }
+        return GET_DATA_PRODUCT_AVAIL_JM;
+
+    }
+
 }
 
 

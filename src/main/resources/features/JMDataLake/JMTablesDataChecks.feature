@@ -8,7 +8,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Allocation records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 10              | JMF_ALLOCATION_CHANGE|
+      | 100              | JMF_ALLOCATION_CHANGE|
 
   Scenario Outline: Validate Application properties data is transferred from JM MYSQL to DL Inbound
     Given We get <countOfRandomIds> random application key of <table>
@@ -17,7 +17,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Application properties records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 10              | JMF_APPLICATION_PROPERTIES|
+      | 100              | JMF_APPLICATION_PROPERTIES|
 
   Scenario Outline: Validate Approval Request data is transferred from JM MYSQL to DL Inbound
     Given We get <countOfRandomIds> random ids of <table>
@@ -26,7 +26,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Approval Request records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 10             | JMF_APPROVAL_REQUEST|
+      | 100             | JMF_APPROVAL_REQUEST|
 
   Scenario Outline: Validate Chronicle Scenario data is transferred from JM MYSQL to DL Inbound
     Given We get <countOfRandomIds> random ids of <table>
@@ -35,7 +35,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Chronicle Scenario records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 10             | JMF_CHRONICLE_SCENARIO|
+      | 100             | JMF_CHRONICLE_SCENARIO|
 
   Scenario Outline: Validate Chronicle Status data is transferred from JM MYSQL to DL Inbound
     Given We get <countOfRandomIds> random ids of <table>
@@ -44,7 +44,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Chronicle Status records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 10             | JMF_CHRONICLE_STATUS|
+      | 100             | JMF_CHRONICLE_STATUS|
 
 
   Scenario Outline: Validate Family Resource data is transferred from JM MYSQL to DL Inbound
@@ -54,7 +54,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Family Resource records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 10             | JMF_FAMILY_RESOURCE_DETAILS|
+      | 100             | JMF_FAMILY_RESOURCE_DETAILS|
 
   Scenario Outline: Validate Finanacial Info data is transferred from JM MYSQL to DL Inbound
     Given We get <countOfRandomIds> random ids of <table>
@@ -63,7 +63,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Finanacial Info records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 10             | JMF_FINANCIAL_INFORMATION|
+      | 100             | JMF_FINANCIAL_INFORMATION|
 
   Scenario Outline: Validate Legal Info data is transferred from JM MYSQL to DL Inbound
     Given We get <countOfRandomIds> random ids of <table>
@@ -73,3 +73,39 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     Examples:
       | countOfRandomIds | table  |
       | 100            | JMF_LEGAL_INFORMATION|
+
+  Scenario Outline: Validate Manifestation data is transferred from JM MYSQL to DL Inbound
+    Given We get <countOfRandomIds> random ids of <table>
+    When We get the JMF Manifestation Info records from JMF MySQL of <table>
+    Then We get the JMF Manifestation Info records from DL of <table>
+    And Compare JMF Manifestation Info records in JMF MySQL and DL of <table>
+    Examples:
+      | countOfRandomIds | table  |
+      | 100                 | JMF_MANIFESTATION_ELECTRONIC_DETAILS|
+
+  Scenario Outline: Validate Manifestation Print is transferred from JM MYSQL to DL Inbound
+    Given We get <countOfRandomIds> random ids of <table>
+    When We get the JMF Manifestation Print records from JMF MySQL of <table>
+    Then We get the JMF Manifestation Print records from DL of <table>
+    And Compare JMF Manifestation Print records in JMF MySQL and DL of <table>
+    Examples:
+      | countOfRandomIds | table  |
+      | 100                 | JMF_MANIFESTATION_PRINT_DETAILS|
+
+  Scenario Outline: Validate Party Product is transferred from JM MYSQL to DL Inbound
+    Given We get <countOfRandomIds> random ids of <table>
+    When We get the JMF Party Product records from JMF MySQL of <table>
+    Then We get the JMF Party Product records from DL of <table>
+    And Compare JMF Party Product records in JMF MySQL and DL of <table>
+    Examples:
+      | countOfRandomIds | table  |
+      | 100                 | JMF_PARTY_IN_PRODUCT|
+
+  Scenario Outline: Validate Product Availability is transferred from JM MYSQL to DL Inbound
+    Given We get <countOfRandomIds> random ids of <table>
+    When We get the JMF Product Availability records from JMF MySQL of <table>
+    Then We get the JMF Product Availability records from DL of <table>
+    And Compare JMF Product Availability records in JMF MySQL and DL of <table>
+    Examples:
+      | countOfRandomIds | table  |
+      | 100                 | JMF_PRODUCT_AVAILABILITY|

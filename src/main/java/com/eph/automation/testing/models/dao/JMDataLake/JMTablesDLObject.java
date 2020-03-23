@@ -113,6 +113,471 @@ public class JMTablesDLObject {
     private String	SOC_CK_CONTENT_AGREEMENT_TEXT;
     private String	MONTHS_TO_KEEP_TRANSFER_ONLINE;
     private String	SOC_CK_CONTENT_AGREEMENT_DATE;
+    private String  EMBARGO_TIMES_INDICATOR;
+    private String  ELECTRONIC_RIGHTS_SECURED_TYPE ;
+    private String  ONLINE_LAUNCH_DATE ;
+    private String  ARTICLE_IN_PRESS_S5_IND ;
+    private String  ARTICLE_IN_PRESS_S100_IND ;
+    private String  ARTICLE_IN_PRESS_S250_IND ;
+    private String  EMBARGO_TIMES_NUMBER ;
+    private String  ONLINE_LAST_ISSUE_DATE;
+    private String PRODUCT_MANIFESTATION_ID;
+    private String TRIM_SIZE;
+    private String BASE_PRINT_RUN_NUMBER;
+    private String COLOUR_FREQUENCY;
+    private String ARTWORK_SENSITIVITY_IND;
+    private String MAILING_BREAKDOWN_EUROPE;
+    private String MAILING_BREAKDOWN_USA;
+    private String MAILING_BREAKDOWN_ROW;
+    private String ZERO_WAREHOUSING_IND;
+    private String BACK_STOCK_WAREHOUSE_LOCATION_TYPE;
+    private String PRINTER_TYPE;
+    private String PRINTER_LOCATION_TYPE;
+    private String INTERIOR_PAPER_TYPE;
+    private String COVER_PAPER_TYPE;
+    private String DISTRIBUTOR_CODE;
+    private String DISTRIBUTOR_LOCATION_CODE;
+    private String PRINT_MODEL_CODE;
+    private String SEPARATE_PRINT_RUN_IND;
+    private String OFFPRINT_PRICING_CODE;
+    private String OFFPRINT_COVER_IND;
+    private String FREE_ISSUES_QUANTITY;
+    private String FREE_OFFPRINTS_TYPE;
+    private String FREE_PAID_COLOUR_OFFPRINTS_QUANTITY;
+    private String COLOUR_PRINTING_CURRENCY_CODE;
+    private String COLOUR_ARTWORK_EXCEPTIONS;
+    private String SOCIETY_OWNS_LABELS_IND;
+    private String BINDING_TYPE;
+    private String SPECIAL_BULK_ARRANGEMENTS;
+    private String COST_FIRST_PRINTED_COLOUR_UNIT;
+    private String COST_NEXT_PRINTED_COLOUR_UNIT;
+    private String PARTY_IN_PRODUCT_ID;
+    private String F_PRODUCT_WORK;
+    private String PARTY_ROLE_TYPE;
+    private String EMAIL_ADDRESS;
+    private String FULL_NAME;
+    private String PHONE_NUMBER;
+    private String ADDRESS_LINE_1;
+    private String ADDRESS_LINE_2;
+    private String ADDRESS_LINE_3;
+    private String CITY;
+    private String COUNTRY;
+    private String STATE;
+    private String POST_CODE;
+    private String ORGANISATION_1;
+    private String PMX_PARTY_ID;
+    private String PEOPLEHUB_ID;
+    private String EPH_PERSON_ID;
+    private String PRODUCT_AVAILABILITY_ID;
+    private String F_PRODUCT_MANIFESTATION;
+    private String APPLICATION_CODE;
+
+
+
+    public String getPRODUCT_AVAILABILITY_ID() {
+        return PRODUCT_AVAILABILITY_ID;
+    }
+    public void setPRODUCT_AVAILABILITY_ID(String PRODUCT_AVAILABILITY_ID) {
+        this.PRODUCT_AVAILABILITY_ID= PRODUCT_AVAILABILITY_ID;
+    }
+
+    public String getF_PRODUCT_MANIFESTATION() {
+        return F_PRODUCT_MANIFESTATION;
+    }
+    public void setF_PRODUCT_MANIFESTATION(String F_PRODUCT_MANIFESTATION) {
+        this.F_PRODUCT_MANIFESTATION= F_PRODUCT_MANIFESTATION;
+    }
+
+    public String getAPPLICATION_CODE() {
+        return APPLICATION_CODE;
+    }
+    public void setAPPLICATION_CODE(String APPLICATION_CODE) {
+        this.APPLICATION_CODE= APPLICATION_CODE;
+    }
+
+    public String getEPH_PERSON_ID() {
+        return EPH_PERSON_ID;
+    }
+    public void setEPH_PERSON_ID(String EPH_PERSON_ID) {
+        this.EPH_PERSON_ID= EPH_PERSON_ID;
+    }
+
+    public String getPEOPLEHUB_ID() {
+        return PEOPLEHUB_ID;
+    }
+    public void setPEOPLEHUB_ID(String PEOPLEHUB_ID) {
+        this.PEOPLEHUB_ID= PEOPLEHUB_ID;
+    }
+
+    public String getPMX_PARTY_ID() {
+        return PMX_PARTY_ID;
+    }
+    public void setPMX_PARTY_ID(String PMX_PARTY_ID) {
+        this.PMX_PARTY_ID= PMX_PARTY_ID;
+    }
+
+    public String getORGANISATION_1() {
+        return ORGANISATION_1;
+    }
+    public void setORGANISATION_1(String ORGANISATION_1) {
+        this.ORGANISATION_1= ORGANISATION_1;
+    }
+
+    public String getPOST_CODE() {
+        return POST_CODE;
+    }
+    public void setPOST_CODE(String POST_CODE) {
+        this.POST_CODE= POST_CODE;
+    }
+
+    public String getSTATE() {
+        return STATE;
+    }
+    public void setSTATE(String STATE) {
+        this.STATE= STATE;
+    }
+
+    public String getCITY() {
+        return CITY;
+    }
+    public void setCITY(String CITY) {
+        this.CITY= CITY;
+    }
+    public String getCOUNTRY() {
+        return COUNTRY;
+    }
+    public void setCOUNTRY(String COUNTRY) {
+        this.COUNTRY= COUNTRY;
+    }
+    public String getADDRESS_LINE_2() {
+        return ADDRESS_LINE_2;
+    }
+    public void setADDRESS_LINE_2(String ADDRESS_LINE_2) {
+        this.ADDRESS_LINE_2= ADDRESS_LINE_2;
+    }
+
+    public String getADDRESS_LINE_3() {
+        return ADDRESS_LINE_3;
+    }
+    public void setADDRESS_LINE_3(String ADDRESS_LINE_3) {
+        this.ADDRESS_LINE_3= ADDRESS_LINE_3;
+    }
+
+    public String getADDRESS_LINE_1() {
+        return ADDRESS_LINE_1;
+    }
+    public void setADDRESS_LINE_1(String ADDRESS_LINE_1) {
+        this.ADDRESS_LINE_1= ADDRESS_LINE_1;
+    }
+
+    public String getPHONE_NUMBER() {
+        return PHONE_NUMBER;
+    }
+    public void setPHONE_NUMBER(String PHONE_NUMBER) {
+        this.PHONE_NUMBER= PHONE_NUMBER;
+    }
+
+    public String getFULL_NAME() {
+        return FULL_NAME;
+    }
+    public void setFULL_NAME(String FULL_NAME) {
+        this.FULL_NAME= FULL_NAME;
+    }
+
+    public String getEMAIL_ADDRESS() {
+        return EMAIL_ADDRESS;
+    }
+    public void setEMAIL_ADDRESS(String EMAIL_ADDRESS) {
+        this.EMAIL_ADDRESS= EMAIL_ADDRESS;
+    }
+
+    public String getPARTY_ROLE_TYPE() {
+        return PARTY_ROLE_TYPE;
+    }
+    public void setPARTY_ROLE_TYPE(String PARTY_ROLE_TYPE) {
+        this.PARTY_ROLE_TYPE= PARTY_ROLE_TYPE;
+    }
+
+    public String getF_PRODUCT_WORK() {
+        return F_PRODUCT_WORK;
+    }
+    public void setF_PRODUCT_WORK(String F_PRODUCT_WORK) {
+        this.F_PRODUCT_WORK= F_PRODUCT_WORK;
+    }
+
+    public String getPARTY_IN_PRODUCT_ID() {
+        return PARTY_IN_PRODUCT_ID;
+    }
+    public void setPARTY_IN_PRODUCT_ID(String PARTY_IN_PRODUCT_ID) {
+        this.PARTY_IN_PRODUCT_ID= PARTY_IN_PRODUCT_ID;
+    }
+
+    public String getTRIM_SIZE() {
+        return TRIM_SIZE;
+    }
+    public void setTRIM_SIZE(String TRIM_SIZE) {
+        this.TRIM_SIZE= TRIM_SIZE;
+    }
+
+    public String getBASE_PRINT_RUN_NUMBER() {
+        return BASE_PRINT_RUN_NUMBER;
+    }
+    public void setBASE_PRINT_RUN_NUMBER(String BASE_PRINT_RUN_NUMBER) {
+        this.BASE_PRINT_RUN_NUMBER= BASE_PRINT_RUN_NUMBER;
+    }
+
+    public String getCOLOUR_FREQUENCY() {
+        return COLOUR_FREQUENCY;
+    }
+    public void setCOLOUR_FREQUENCY(String COLOUR_FREQUENCY) {
+        this.COLOUR_FREQUENCY= COLOUR_FREQUENCY;
+    }
+
+    public String getARTWORK_SENSITIVITY_IND() {
+        return ARTWORK_SENSITIVITY_IND;
+    }
+    public void setARTWORK_SENSITIVITY_IND(String ARTWORK_SENSITIVITY_IND) {
+        this.ARTWORK_SENSITIVITY_IND= ARTWORK_SENSITIVITY_IND;
+    }
+
+    public String getMAILING_BREAKDOWN_EUROPE() {
+        return MAILING_BREAKDOWN_EUROPE;
+    }
+    public void setMAILING_BREAKDOWN_EUROPE(String MAILING_BREAKDOWN_EUROPE) {
+        this.MAILING_BREAKDOWN_EUROPE= MAILING_BREAKDOWN_EUROPE;
+    }
+
+    public String getMAILING_BREAKDOWN_USA() {
+        return MAILING_BREAKDOWN_USA;
+    }
+    public void setMAILING_BREAKDOWN_USA(String MAILING_BREAKDOWN_USA) {
+        this.MAILING_BREAKDOWN_USA= MAILING_BREAKDOWN_USA;
+    }
+
+    public String getMAILING_BREAKDOWN_ROW() {
+        return MAILING_BREAKDOWN_ROW;
+    }
+    public void setMAILING_BREAKDOWN_ROW(String MAILING_BREAKDOWN_ROW) {
+        this.MAILING_BREAKDOWN_ROW= MAILING_BREAKDOWN_ROW;
+    }
+
+    public String getZERO_WAREHOUSING_IND() {
+        return ZERO_WAREHOUSING_IND;
+    }
+    public void setZERO_WAREHOUSING_IND(String ZERO_WAREHOUSING_IND) {
+        this.ZERO_WAREHOUSING_IND= ZERO_WAREHOUSING_IND;
+    }
+
+    public String getBACK_STOCK_WAREHOUSE_LOCATION_TYPE() {
+        return BACK_STOCK_WAREHOUSE_LOCATION_TYPE;
+    }
+    public void setBACK_STOCK_WAREHOUSE_LOCATION_TYPE(String BACK_STOCK_WAREHOUSE_LOCATION_TYPE) {
+        this.BACK_STOCK_WAREHOUSE_LOCATION_TYPE= BACK_STOCK_WAREHOUSE_LOCATION_TYPE;
+    }
+
+    public String getPRINTER_TYPE() {
+        return PRINTER_TYPE;
+    }
+    public void setPRINTER_TYPE(String PRINTER_TYPE) {
+        this.PRINTER_TYPE= PRINTER_TYPE;
+    }
+
+    public String getPRINTER_LOCATION_TYPE() {
+        return PRINTER_LOCATION_TYPE;
+    }
+    public void setPRINTER_LOCATION_TYPE(String PRINTER_LOCATION_TYPE) {
+        this.PRINTER_LOCATION_TYPE= PRINTER_LOCATION_TYPE;
+    }
+
+    public String getINTERIOR_PAPER_TYPE() {
+        return INTERIOR_PAPER_TYPE;
+    }
+    public void setINTERIOR_PAPER_TYPE(String INTERIOR_PAPER_TYPE) {
+        this.INTERIOR_PAPER_TYPE= INTERIOR_PAPER_TYPE;
+    }
+
+    public String getCOVER_PAPER_TYPE() {
+        return COVER_PAPER_TYPE;
+    }
+    public void setCOVER_PAPER_TYPE(String COVER_PAPER_TYPE) {
+        this.COVER_PAPER_TYPE= COVER_PAPER_TYPE;
+    }
+
+    public String getDISTRIBUTOR_CODE() {
+        return DISTRIBUTOR_CODE;
+    }
+    public void setDISTRIBUTOR_CODE(String DISTRIBUTOR_CODE) {
+        this.DISTRIBUTOR_CODE= DISTRIBUTOR_CODE;
+    }
+
+    public String getDISTRIBUTOR_LOCATION_CODE() {
+        return DISTRIBUTOR_LOCATION_CODE;
+    }
+    public void setDISTRIBUTOR_LOCATION_CODE(String DISTRIBUTOR_LOCATION_CODE) {
+        this.DISTRIBUTOR_LOCATION_CODE= DISTRIBUTOR_LOCATION_CODE;
+    }
+
+    public String getPRINT_MODEL_CODE() {
+        return PRINT_MODEL_CODE;
+    }
+    public void setPRINT_MODEL_CODE(String PRINT_MODEL_CODE) {
+        this.PRINT_MODEL_CODE= PRINT_MODEL_CODE;
+    }
+
+    public String getSEPARATE_PRINT_RUN_IND() {
+        return SEPARATE_PRINT_RUN_IND;
+    }
+    public void setSEPARATE_PRINT_RUN_IND(String SEPARATE_PRINT_RUN_IND) {
+        this.SEPARATE_PRINT_RUN_IND= SEPARATE_PRINT_RUN_IND;
+    }
+
+    public String getOFFPRINT_PRICING_CODE() {
+        return OFFPRINT_PRICING_CODE;
+    }
+    public void setOFFPRINT_PRICING_CODE(String OFFPRINT_PRICING_CODE) {
+        this.OFFPRINT_PRICING_CODE= OFFPRINT_PRICING_CODE;
+    }
+
+    public String getOFFPRINT_COVER_IND() {
+        return OFFPRINT_COVER_IND;
+    }
+    public void setOFFPRINT_COVER_IND(String OFFPRINT_COVER_IND) {
+        this.OFFPRINT_COVER_IND= OFFPRINT_COVER_IND;
+    }
+
+    public String getFREE_ISSUES_QUANTITY() {
+        return FREE_ISSUES_QUANTITY;
+    }
+    public void setFREE_ISSUES_QUANTITY(String FREE_ISSUES_QUANTITY) {
+        this.FREE_ISSUES_QUANTITY= FREE_ISSUES_QUANTITY;
+    }
+
+    public String getFREE_OFFPRINTS_TYPE() {
+        return FREE_OFFPRINTS_TYPE;
+    }
+    public void setFREE_OFFPRINTS_TYPE(String FREE_OFFPRINTS_TYPE) {
+        this.FREE_OFFPRINTS_TYPE= FREE_OFFPRINTS_TYPE;
+    }
+
+    public String getFREE_PAID_COLOUR_OFFPRINTS_QUANTITY() {
+        return FREE_PAID_COLOUR_OFFPRINTS_QUANTITY;
+    }
+    public void setFREE_PAID_COLOUR_OFFPRINTS_QUANTITY(String FREE_PAID_COLOUR_OFFPRINTS_QUANTITY) {
+        this.FREE_PAID_COLOUR_OFFPRINTS_QUANTITY= FREE_PAID_COLOUR_OFFPRINTS_QUANTITY;
+    }
+
+    public String getCOLOUR_PRINTING_CURRENCY_CODE() {
+        return COLOUR_PRINTING_CURRENCY_CODE;
+    }
+    public void setCOLOUR_PRINTING_CURRENCY_CODE(String COLOUR_PRINTING_CURRENCY_CODE) {
+        this.COLOUR_PRINTING_CURRENCY_CODE= COLOUR_PRINTING_CURRENCY_CODE;
+    }
+
+    public String getCOLOUR_ARTWORK_EXCEPTIONS() {
+        return COLOUR_ARTWORK_EXCEPTIONS;
+    }
+    public void setCOLOUR_ARTWORK_EXCEPTIONS(String COLOUR_ARTWORK_EXCEPTIONS) {
+        this.COLOUR_ARTWORK_EXCEPTIONS = COLOUR_ARTWORK_EXCEPTIONS;
+    }
+
+    public String getSOCIETY_OWNS_LABELS_IND() {
+        return SOCIETY_OWNS_LABELS_IND;
+    }
+    public void setSOCIETY_OWNS_LABELS_IND(String SOCIETY_OWNS_LABELS_IND) {
+        this.SOCIETY_OWNS_LABELS_IND = SOCIETY_OWNS_LABELS_IND;
+    }
+
+    public String getBINDING_TYPE() {
+        return BINDING_TYPE;
+    }
+    public void setBINDING_TYPE(String BINDING_TYPE) {
+        this.BINDING_TYPE = BINDING_TYPE;
+    }
+
+    public String getSPECIAL_BULK_ARRANGEMENTS() {
+        return SPECIAL_BULK_ARRANGEMENTS;
+    }
+    public void setSPECIAL_BULK_ARRANGEMENTS(String SPECIAL_BULK_ARRANGEMENTS) {
+        this.SPECIAL_BULK_ARRANGEMENTS = SPECIAL_BULK_ARRANGEMENTS;
+    }
+
+    public String getCOST_FIRST_PRINTED_COLOUR_UNIT() {
+        return COST_FIRST_PRINTED_COLOUR_UNIT;
+    }
+    public void setCOST_FIRST_PRINTED_COLOUR_UNIT(String COST_FIRST_PRINTED_COLOUR_UNIT) {
+        this.COST_FIRST_PRINTED_COLOUR_UNIT = COST_FIRST_PRINTED_COLOUR_UNIT;
+    }
+
+    public String getCOST_NEXT_PRINTED_COLOUR_UNIT() {
+        return COST_NEXT_PRINTED_COLOUR_UNIT;
+    }
+    public void setCOST_NEXT_PRINTED_COLOUR_UNIT(String COST_NEXT_PRINTED_COLOUR_UNIT) {
+        this.COST_NEXT_PRINTED_COLOUR_UNIT = COST_NEXT_PRINTED_COLOUR_UNIT;
+    }
+
+
+    public String getONLINE_LAST_ISSUE_DATE() {
+        return ONLINE_LAST_ISSUE_DATE;
+    }
+    public void setONLINE_LAST_ISSUE_DATE(String ONLINE_LAST_ISSUE_DATE) {
+        this.ONLINE_LAST_ISSUE_DATE = ONLINE_LAST_ISSUE_DATE;
+    }
+
+    public String getEMBARGO_TIMES_NUMBER() {
+        return EMBARGO_TIMES_NUMBER;
+    }
+    public void setEMBARGO_TIMES_NUMBER(String EMBARGO_TIMES_NUMBER) {
+        this.EMBARGO_TIMES_NUMBER = EMBARGO_TIMES_NUMBER;
+    }
+
+    public String getARTICLE_IN_PRESS_S250_IND() {
+        return ARTICLE_IN_PRESS_S250_IND;
+    }
+    public void setARTICLE_IN_PRESS_S250_IND(String ARTICLE_IN_PRESS_S250_IND) {
+        this.ARTICLE_IN_PRESS_S250_IND = ARTICLE_IN_PRESS_S250_IND;
+    }
+
+    public String getARTICLE_IN_PRESS_S100_IND() {
+        return ARTICLE_IN_PRESS_S100_IND;
+    }
+    public void setARTICLE_IN_PRESS_S100_IND(String ARTICLE_IN_PRESS_S100_IND) {
+        this.ARTICLE_IN_PRESS_S100_IND = ARTICLE_IN_PRESS_S100_IND;
+    }
+
+    public String getARTICLE_IN_PRESS_S5_IND() {
+        return ARTICLE_IN_PRESS_S5_IND;
+    }
+    public void setARTICLE_IN_PRESS_S5_IND(String ARTICLE_IN_PRESS_S5_IND) {
+        this.ARTICLE_IN_PRESS_S5_IND = ARTICLE_IN_PRESS_S5_IND;
+    }
+
+    public String getONLINE_LAUNCH_DATE() {
+        return ONLINE_LAUNCH_DATE;
+    }
+    public void setONLINE_LAUNCH_DATE(String ONLINE_LAUNCH_DATE) {
+        this.ONLINE_LAUNCH_DATE = ONLINE_LAUNCH_DATE;
+    }
+
+    public String getELECTRONIC_RIGHTS_SECURED_TYPE() {
+        return ELECTRONIC_RIGHTS_SECURED_TYPE;
+    }
+    public void setELECTRONIC_RIGHTS_SECURED_TYPE(String ELECTRONIC_RIGHTS_SECURED_TYPE) {
+        this.ELECTRONIC_RIGHTS_SECURED_TYPE = ELECTRONIC_RIGHTS_SECURED_TYPE;
+    }
+
+    public String getEMBARGO_TIMES_INDICATOR() {
+        return EMBARGO_TIMES_INDICATOR;
+    }
+    public void setEMBARGO_TIMES_INDICATOR(String EMBARGO_TIMES_INDICATOR) {
+        this.EMBARGO_TIMES_INDICATOR = EMBARGO_TIMES_INDICATOR;
+    }
+
+    public String getPRODUCT_MANIFESTATION_ID() {
+        return PRODUCT_MANIFESTATION_ID;
+    }
+    public void setPRODUCT_MANIFESTATION_ID(String PRODUCT_MANIFESTATION_ID) {
+        this.PRODUCT_MANIFESTATION_ID = PRODUCT_MANIFESTATION_ID;
+    }
 
     public String getOWNERSHIP_BRAND_TYPE() {
         return OWNERSHIP_BRAND_TYPE;
