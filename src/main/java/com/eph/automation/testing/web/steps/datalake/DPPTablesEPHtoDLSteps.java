@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 import static com.eph.automation.testing.configuration.Constants.DPP_SCHEMA;
 
 public class DPPTablesEPHtoDLSteps {
-        private static String sqlDL;
+    private static String sqlDL;
     private static String sqlEPH;
     private static int EPHDPPCount;
     private static int DLDPPCount;
