@@ -136,3 +136,12 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     Examples:
       | countOfRandomIds | table  |
       | 100               | JMF_PRODUCT_MANIFESTATION|
+
+  Scenario Outline: Validate Product Subject is transferred from JM MYSQL to DL Inbound
+    Given We get <countOfRandomIds> random ids of <table>
+    When We get the JMF Product Subject records from JMF MySQL of <table>
+    Then We get the JMF Product Subject records from DL of <table>
+    And Compare JMF Product Subject records in JMF MySQL and DL of <table>
+    Examples:
+      | countOfRandomIds | table  |
+      | 100               | JMF_PRODUCT_SUBJECT_AREA|

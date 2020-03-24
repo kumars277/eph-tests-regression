@@ -199,7 +199,47 @@ public class JMTablesDLObject {
     private String PRICE_CATEGORIES;
     private String PMX_PRODUCT_MANIFESTATION_ID;
     private String EPH_MANIFESTATION_ID;
+    private String PRODUCT_SUBJECT_AREA_ID;
+    private String SUBJECT_AREA_TYPE_CODE;
+    private String SUBJECT_AREA_PRIORITY_CODE;
+    private String SUBJECT_AREA_CODE;
+    private String SUBJECT_AREA_NAME;
 
+
+    public String getSUBJECT_AREA_NAME() {
+        return SUBJECT_AREA_NAME;
+    }
+    public void setSUBJECT_AREA_NAME(String SUBJECT_AREA_NAME) {
+        this.SUBJECT_AREA_NAME= SUBJECT_AREA_NAME;
+    }
+
+    public String getSUBJECT_AREA_CODE() {
+        return SUBJECT_AREA_CODE;
+    }
+    public void setSUBJECT_AREA_CODE(String SUBJECT_AREA_CODE) {
+        this.SUBJECT_AREA_CODE= SUBJECT_AREA_CODE;
+    }
+
+    public String getSUBJECT_AREA_PRIORITY_CODE() {
+        return SUBJECT_AREA_PRIORITY_CODE;
+    }
+    public void setSUBJECT_AREA_PRIORITY_CODE(String SUBJECT_AREA_PRIORITY_CODE) {
+        this.SUBJECT_AREA_PRIORITY_CODE= SUBJECT_AREA_PRIORITY_CODE;
+    }
+
+    public String getSUBJECT_AREA_TYPE_CODE() {
+        return SUBJECT_AREA_TYPE_CODE;
+    }
+    public void setSUBJECT_AREA_TYPE_CODE(String SUBJECT_AREA_TYPE_CODE) {
+        this.SUBJECT_AREA_TYPE_CODE= SUBJECT_AREA_TYPE_CODE;
+    }
+
+    public String getPRODUCT_SUBJECT_AREA_ID() {
+        return PRODUCT_SUBJECT_AREA_ID;
+    }
+    public void setPRODUCT_SUBJECT_AREA_ID(String PRODUCT_SUBJECT_AREA_ID) {
+        this.PRODUCT_SUBJECT_AREA_ID= PRODUCT_SUBJECT_AREA_ID;
+    }
 
     public String getEPH_MANIFESTATION_ID() {
         return EPH_MANIFESTATION_ID;

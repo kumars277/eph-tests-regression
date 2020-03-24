@@ -34,6 +34,9 @@ public class JMTablesDataChecksSQL {
 
     public static String GET_PRODUCT_MANIF_ID = "select PRODUCT_MANIFESTATION_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_MANIFESTATION order by rand() limit %s";
 
+    public static String GET_PRODUCT_SUBJ_ID = "select PRODUCT_SUBJECT_AREA_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_SUBJECT_AREA order by rand() limit %s";
+
+
     public static String getAllocationChangesSql(String serverEnv, String table) {
         String GET_DATA_ALLOCATION_CHANGE_JM = null;
         switch (serverEnv) {
@@ -760,6 +763,39 @@ public class JMTablesDataChecksSQL {
         return GET_DATA_PRODUCT_MANIF_JM;
     }
 
+    public static String getProdSubjSql(String serverEnv, String table) {
+        String GET_DATA_PROD_SUBJ_JM = null;
+        switch (serverEnv) {
+            case ("mysql"):
+                GET_DATA_PROD_SUBJ_JM = "select \n" +
+                        "PRODUCT_SUBJECT_AREA_ID as PRODUCT_SUBJECT_AREA_ID\n" +
+                        ",F_PRODUCT_WORK as F_PRODUCT_WORK\n" +
+                        ",SUBJECT_AREA_TYPE_CODE as SUBJECT_AREA_TYPE_CODE\n" +
+                        ",SUBJECT_AREA_PRIORITY_CODE as SUBJECT_AREA_PRIORITY_CODE\n" +
+                        ",SUBJECT_AREA_CODE as SUBJECT_AREA_CODE\n" +
+                        ",SUBJECT_AREA_NAME as SUBJECT_AREA_NAME\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        " where PRODUCT_SUBJECT_AREA_ID in ('%s')";
+                break;
+            case ("aws"):
+                GET_DATA_PROD_SUBJ_JM = "select \n" +
+                        "PRODUCT_SUBJECT_AREA_ID as PRODUCT_SUBJECT_AREA_ID\n" +
+                        ",F_PRODUCT_WORK as F_PRODUCT_WORK\n" +
+                        ",SUBJECT_AREA_TYPE_CODE as SUBJECT_AREA_TYPE_CODE\n" +
+                        ",SUBJECT_AREA_PRIORITY_CODE as SUBJECT_AREA_PRIORITY_CODE\n" +
+                        ",SUBJECT_AREA_CODE as SUBJECT_AREA_CODE\n" +
+                        ",SUBJECT_AREA_NAME as SUBJECT_AREA_NAME\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        " AND PRODUCT_SUBJECT_AREA_ID in ('%s')";
+                break;
+
+        }
+        return GET_DATA_PROD_SUBJ_JM;
+
+    }
 
 
 

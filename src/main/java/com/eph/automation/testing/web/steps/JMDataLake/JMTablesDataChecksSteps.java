@@ -115,6 +115,12 @@ public class JMTablesDataChecksSteps {
                 Ids = randomProdManifIds.stream().map(m -> (Integer) m.get("PRODUCT_MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
                 break;
 
+            case "JMF_PRODUCT_SUBJECT_AREA":
+                sql = String.format(JMTablesDataChecksSQL.GET_PRODUCT_SUBJ_ID, numberOfRecords);
+                List<Map<?, ?>> randomProdSubjIds = DBManager.getDBResultMap(sql, Constants.MYSQL_JM_URL);
+                Ids = randomProdSubjIds.stream().map(m -> (Integer) m.get("PRODUCT_SUBJECT_AREA_ID")).map(String::valueOf).collect(Collectors.toList());
+                break;
+
         }
         Log.info(sql);
         Log.info(Ids.toString());
@@ -2873,4 +2879,110 @@ public class JMTablesDataChecksSteps {
             }
         }
     }
+
+    @When("^We get the JMF Product Subject records from JMF MySQL of (.*)")
+    public void getProdSubjRecordsFromJMF(String tableName) {
+        Log.info("We get the Product Subject records from JMF MySql..");
+        sql = String.format(jmObj.getProdSubjSql("mysql", tableName), Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityJMContext.tbJMDataObjectsFromMysql = DBManager.getDBResultAsBeanList(sql, JMTablesDLObject.class, Constants.MYSQL_JM_URL);
+
+    }
+
+    @Then("^We get the JMF Product Subject records from DL of (.*)$")
+    public void getProdSubjRecordsFromDL(String tableName) {
+        Log.info("We get the Product Subject records from JMF DL..");
+        sql = String.format(jmObj.getProdSubjSql("aws", tableName), Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityJMContext.tbJMDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, JMTablesDLObject.class, Constants.AWS_URL);
+    }
+    @And("^Compare JMF Product Subject records in JMF MySQL and DL of (.*)$")
+    public void compareProdSubjJMFSQLtoDL(String tableName) {
+        if (dataQualityJMContext.tbJMDataObjectsFromMysql.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the data to compare the Product Subject Details records in MySql and DATA LAKE ..");
+            for (int i = 0; i < dataQualityJMContext.tbJMDataObjectsFromMysql.size(); i++) {
+                dataQualityJMContext.tbJMDataObjectsFromMysql.sort(Comparator.comparing(JMTablesDLObject::getPRODUCT_SUBJECT_AREA_ID)); //sort data in the lists
+                dataQualityJMContext.tbJMDataObjectsFromDL.sort(Comparator.comparing(JMTablesDLObject::getPRODUCT_SUBJECT_AREA_ID));
+                Log.info("PRODUCT_SUBJECT_AREA_ID => " + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPRODUCT_SUBJECT_AREA_ID() +
+                        " PRODUCT_SUBJECT_AREA_ID => Mysql=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPRODUCT_SUBJECT_AREA_ID() +
+                        " DL=" + dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPRODUCT_SUBJECT_AREA_ID());
+
+                if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPRODUCT_SUBJECT_AREA_ID() != null ||
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPRODUCT_SUBJECT_AREA_ID() != null)) {
+                    Assert.assertEquals("The PRODUCT_SUBJECT_AREA_ID is incorrect for PRODUCT_SUBJECT_AREA_ID=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPRODUCT_SUBJECT_AREA_ID(),
+                            dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPRODUCT_SUBJECT_AREA_ID(),
+                            dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getPRODUCT_SUBJECT_AREA_ID());
+                }
+                Log.info("PRODUCT_SUBJECT_AREA_ID => " + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPRODUCT_SUBJECT_AREA_ID() +
+                        " F_PRODUCT_WORK => Mysql=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getF_PRODUCT_WORK() +
+                        " DL=" + dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getF_PRODUCT_WORK());
+
+                if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getF_PRODUCT_WORK() != null ||
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getF_PRODUCT_WORK() != null)) {
+                    Assert.assertEquals("The F_PRODUCT_WORK is incorrect for PRODUCT_SUBJECT_AREA_ID=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPRODUCT_SUBJECT_AREA_ID(),
+                            dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getF_PRODUCT_WORK(),
+                            dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getF_PRODUCT_WORK());
+                }
+
+                Log.info("PRODUCT_SUBJECT_AREA_ID => " + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPRODUCT_SUBJECT_AREA_ID() +
+                        " SUBJECT_AREA_TYPE_CODE => Mysql=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getSUBJECT_AREA_TYPE_CODE() +
+                        " DL=" + dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getSUBJECT_AREA_TYPE_CODE());
+
+                if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getSUBJECT_AREA_TYPE_CODE() != null ||
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getSUBJECT_AREA_TYPE_CODE() != null)) {
+                    Assert.assertEquals("The SUBJECT_AREA_TYPE_CODE is incorrect for PRODUCT_SUBJECT_AREA_ID=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPRODUCT_SUBJECT_AREA_ID(),
+                            dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getSUBJECT_AREA_TYPE_CODE(),
+                            dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getSUBJECT_AREA_TYPE_CODE());
+                }
+
+                Log.info("PRODUCT_SUBJECT_AREA_ID => " + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPRODUCT_SUBJECT_AREA_ID() +
+                        " SUBJECT_AREA_PRIORITY_CODE => Mysql=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getSUBJECT_AREA_PRIORITY_CODE() +
+                        " DL=" + dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getSUBJECT_AREA_PRIORITY_CODE());
+
+                if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getSUBJECT_AREA_PRIORITY_CODE() != null ||
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getSUBJECT_AREA_PRIORITY_CODE() != null)) {
+                    Assert.assertEquals("The SUBJECT_AREA_PRIORITY_CODE is incorrect for PRODUCT_SUBJECT_AREA_ID=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPRODUCT_SUBJECT_AREA_ID(),
+                            dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getSUBJECT_AREA_PRIORITY_CODE(),
+                            dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getSUBJECT_AREA_PRIORITY_CODE());
+                }
+
+                Log.info("PRODUCT_SUBJECT_AREA_ID => " + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPRODUCT_SUBJECT_AREA_ID() +
+                        " SUBJECT_AREA_CODE => Mysql=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getSUBJECT_AREA_CODE() +
+                        " DL=" + dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getSUBJECT_AREA_CODE());
+
+                if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getSUBJECT_AREA_CODE() != null ||
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getSUBJECT_AREA_CODE() != null)) {
+                    Assert.assertEquals("The SUBJECT_AREA_CODE is incorrect for PRODUCT_SUBJECT_AREA_ID=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPRODUCT_SUBJECT_AREA_ID(),
+                            dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getSUBJECT_AREA_CODE(),
+                            dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getSUBJECT_AREA_CODE());
+                }
+
+                Log.info("PRODUCT_SUBJECT_AREA_ID => " + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPRODUCT_SUBJECT_AREA_ID() +
+                        " SUBJECT_AREA_NAME => Mysql=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getSUBJECT_AREA_NAME() +
+                        " DL=" + dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getSUBJECT_AREA_NAME());
+
+                if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getSUBJECT_AREA_NAME() != null ||
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getSUBJECT_AREA_NAME() != null)) {
+                    Assert.assertEquals("The SUBJECT_AREA_NAME is incorrect for PRODUCT_SUBJECT_AREA_ID=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPRODUCT_SUBJECT_AREA_ID(),
+                            dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getSUBJECT_AREA_NAME(),
+                            dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getSUBJECT_AREA_NAME());
+                }
+
+                Log.info("PRODUCT_SUBJECT_AREA_ID => " + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPRODUCT_SUBJECT_AREA_ID() +
+                        " NOTIFIED_DATE => Mysql=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getNOTIFIED_DATE() +
+                        " DL=" + dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getNOTIFIED_DATE());
+
+                if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getNOTIFIED_DATE() != null ||
+                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getNOTIFIED_DATE() != null)) {
+                    Assert.assertEquals("The NOTIFIED_DATE is incorrect for PRODUCT_SUBJECT_AREA_ID=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPRODUCT_SUBJECT_AREA_ID(),
+                            dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getNOTIFIED_DATE(),
+                            dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getNOTIFIED_DATE());
+                }
+            }
+        }
+    }
+
+
 }
