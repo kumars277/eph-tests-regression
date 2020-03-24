@@ -109,3 +109,39 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     Examples:
       | countOfRandomIds | table  |
       | 100                 | JMF_PRODUCT_AVAILABILITY|
+
+  Scenario Outline: Validate Product Chronicle is transferred from JM MYSQL to DL Inbound
+    Given We get <countOfRandomIds> random ids of <table>
+    When We get the JMF Product Chronicle records from JMF MySQL of <table>
+    Then We get the JMF Product Chronicle records from DL of <table>
+    And Compare JMF Product Chronicle records in JMF MySQL and DL of <table>
+    Examples:
+      | countOfRandomIds | table  |
+      | 100               | JMF_PRODUCT_CHRONICLE|
+
+  Scenario Outline: Validate Product Family is transferred from JM MYSQL to DL Inbound
+    Given We get <countOfRandomIds> random ids of <table>
+    When We get the JMF Product Family records from JMF MySQL of <table>
+    Then We get the JMF Product Family records from DL of <table>
+    And Compare JMF Product Family records in JMF MySQL and DL of <table>
+    Examples:
+      | countOfRandomIds | table  |
+      | 100               | JMF_PRODUCT_FAMILY|
+
+  Scenario Outline: Validate Product Manifestation is transferred from JM MYSQL to DL Inbound
+    Given We get <countOfRandomIds> random ids of <table>
+    When We get the JMF Product Manifestation records from JMF MySQL of <table>
+    Then We get the JMF Product Manifestation records from DL of <table>
+    And Compare JMF Product Manifestation records in JMF MySQL and DL of <table>
+    Examples:
+      | countOfRandomIds | table  |
+      | 100               | JMF_PRODUCT_MANIFESTATION|
+
+  Scenario Outline: Validate Product Subject is transferred from JM MYSQL to DL Inbound
+    Given We get <countOfRandomIds> random ids of <table>
+    When We get the JMF Product Subject records from JMF MySQL of <table>
+    Then We get the JMF Product Subject records from DL of <table>
+    And Compare JMF Product Subject records in JMF MySQL and DL of <table>
+    Examples:
+      | countOfRandomIds | table  |
+      | 100               | JMF_PRODUCT_SUBJECT_AREA|

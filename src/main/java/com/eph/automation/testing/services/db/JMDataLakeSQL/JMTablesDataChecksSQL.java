@@ -28,6 +28,14 @@ public class JMTablesDataChecksSQL {
 
     public static String GET_PRODUCT_AVAIL_ID = "select PRODUCT_AVAILABILITY_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_AVAILABILITY order by rand() limit %s";
 
+    public static String GET_PRODUCT_CHRONICLE_ID = "select PRODUCT_CHRONICLE_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_CHRONICLE order by rand() limit %s";
+
+    public static String GET_PRODUCT_FAMILY_ID = "select PRODUCT_FAMILY_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_FAMILY order by rand() limit %s";
+
+    public static String GET_PRODUCT_MANIF_ID = "select PRODUCT_MANIFESTATION_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_MANIFESTATION order by rand() limit %s";
+
+    public static String GET_PRODUCT_SUBJ_ID = "select PRODUCT_SUBJECT_AREA_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_SUBJECT_AREA order by rand() limit %s";
+
 
     public static String getAllocationChangesSql(String serverEnv, String table) {
         String GET_DATA_ALLOCATION_CHANGE_JM = null;
@@ -624,11 +632,174 @@ public class JMTablesDataChecksSQL {
                         " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND PRODUCT_AVAILABILITY_ID in ('%s')";
                 break;
-
         }
         return GET_DATA_PRODUCT_AVAIL_JM;
+    }
+
+    public static String getPrdtChronicleSql(String serverEnv, String table) {
+        String GET_DATA_PRODUCT_CHRONICLE_JM = null;
+        switch (serverEnv) {
+            case ("mysql"):
+                GET_DATA_PRODUCT_CHRONICLE_JM = "select \n" +
+                        "PRODUCT_CHRONICLE_ID as PRODUCT_CHRONICLE_ID\n" +
+                        ",COMPLETED_ON as COMPLETED_ON\n" +
+                        ",DISTRIBUTION_LIST as DISTRIBUTION_LIST\n" +
+                        ",RENAME_REQUIRED_IND as RENAME_REQUIRED_IND\n" +
+                        ",CHRONICLE_STATUS_CODE as CHRONICLE_STATUS_CODE\n" +
+                        ",CHRONICLE_SCENARIO_CODE as CHRONICLE_SCENARIO_CODE\n" +
+                        ",STARTED_BY as STARTED_BY\n" +
+                        ",STARTED_ON as STARTED_ON\n" +
+                        ",UPDATED_BY as UPDATED_BY\n" +
+                        ",UPDATED_ON as UPDATED_ON\n" +
+                        ",PROCESS_INSTANCE_ID as PROCESS_INSTANCE_ID\n" +
+                        ",REASON_FOR_CHANGE as REASON_FOR_CHANGE\n" +
+                        ",CANCELLED_BY as CANCELLED_BY\n" +
+                        ",CREATED_BY_NAME as CREATED_BY_NAME\n" +
+                        ",REJECTION_COMMENT as REJECTION_COMMENT\n" +
+                        ",SUBMISSION_DATE as SUBMISSION_DATE\n" +
+                        ",CANCELLED_DATE as CANCELLED_DATE\n" +
+                        ",REJECTION_DATE as REJECTION_DATE\n" +
+                        ",VERSION as VERSION\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        " where PRODUCT_CHRONICLE_ID in ('%s')";
+                break;
+            case ("aws"):
+                GET_DATA_PRODUCT_CHRONICLE_JM = "select \n" +
+                        "PRODUCT_CHRONICLE_ID as PRODUCT_CHRONICLE_ID\n" +
+                        ",COMPLETED_ON as COMPLETED_ON\n" +
+                        ",DISTRIBUTION_LIST as DISTRIBUTION_LIST\n" +
+                        ",RENAME_REQUIRED_IND as RENAME_REQUIRED_IND\n" +
+                        ",CHRONICLE_STATUS_CODE as CHRONICLE_STATUS_CODE\n" +
+                        ",CHRONICLE_SCENARIO_CODE as CHRONICLE_SCENARIO_CODE\n" +
+                        ",STARTED_BY as STARTED_BY\n" +
+                        ",STARTED_ON as STARTED_ON\n" +
+                        ",UPDATED_BY as UPDATED_BY\n" +
+                        ",UPDATED_ON as UPDATED_ON\n" +
+                        ",PROCESS_INSTANCE_ID as PROCESS_INSTANCE_ID\n" +
+                        ",REASON_FOR_CHANGE as REASON_FOR_CHANGE\n" +
+                        ",CANCELLED_BY as CANCELLED_BY\n" +
+                        ",CREATED_BY_NAME as CREATED_BY_NAME\n" +
+                        ",REJECTION_COMMENT as REJECTION_COMMENT\n" +
+                        ",SUBMISSION_DATE as SUBMISSION_DATE\n" +
+                        ",CANCELLED_DATE as CANCELLED_DATE\n" +
+                        ",REJECTION_DATE as REJECTION_DATE\n" +
+                        ",VERSION as VERSION\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        " AND PRODUCT_CHRONICLE_ID in ('%s')";
+                break;
+        }
+        return GET_DATA_PRODUCT_CHRONICLE_JM;
 
     }
+
+    public static String getProdFamilySql(String serverEnv, String table) {
+        String GET_DATA_PRODUCT_FAMILY_JM = null;
+        switch (serverEnv) {
+            case ("mysql"):
+                GET_DATA_PRODUCT_FAMILY_JM = "select \n" +
+                        "PRODUCT_FAMILY_ID as PRODUCT_FAMILY_ID\n" +
+                        ",F_PRODUCT_CHRONICLE as F_PRODUCT_CHRONICLE\n" +
+                        ",PRODUCT_FAMILY_TITLE as PRODUCT_FAMILY_TITLE\n" +
+                        ",PRODUCT_JOURNEY_IDENTIFIER as PRODUCT_JOURNEY_IDENTIFIER\n" +
+                        ",PMX_PRODUCT_FAMILY_ID as PMX_PRODUCT_FAMILY_ID\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        " where PRODUCT_FAMILY_ID in ('%s')";
+                break;
+            case ("aws"):
+                GET_DATA_PRODUCT_FAMILY_JM = "select \n" +
+                        "PRODUCT_FAMILY_ID as PRODUCT_FAMILY_ID\n" +
+                        ",F_PRODUCT_CHRONICLE as F_PRODUCT_CHRONICLE\n" +
+                        ",PRODUCT_FAMILY_TITLE as PRODUCT_FAMILY_TITLE\n" +
+                        ",PRODUCT_JOURNEY_IDENTIFIER as PRODUCT_JOURNEY_IDENTIFIER\n" +
+                        ",PMX_PRODUCT_FAMILY_ID as PMX_PRODUCT_FAMILY_ID\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        " AND PRODUCT_FAMILY_ID in ('%s')";
+                break;
+        }
+        return GET_DATA_PRODUCT_FAMILY_JM;
+    }
+
+    public static String getProdManifSql(String serverEnv, String table) {
+        String GET_DATA_PRODUCT_MANIF_JM = null;
+        switch (serverEnv) {
+            case ("mysql"):
+                GET_DATA_PRODUCT_MANIF_JM ="select \n" +
+                        "PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID\n" +
+                        ",F_PRODUCT_WORK as F_PRODUCT_WORK\n" +
+                        ",PRODUCT_MANIFESTATION_TITLE as PRODUCT_MANIFESTATION_TITLE\n" +
+                        ",ISSN as ISSN\n" +
+                        ",ELSEVIER_JOURNAL_NUMBER as ELSEVIER_JOURNAL_NUMBER\n" +
+                        ",SUBSCRIPTION_TYPE as SUBSCRIPTION_TYPE\n" +
+                        ",PRICE_CATEGORIES as PRICE_CATEGORIES\n" +
+                        ",PMX_PRODUCT_MANIFESTATION_ID as PMX_PRODUCT_MANIFESTATION_ID\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        ",EPH_MANIFESTATION_ID as EPH_MANIFESTATION_ID\n" +
+                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        " where PRODUCT_MANIFESTATION_ID in ('%s')";
+                break;
+            case ("aws"):
+                GET_DATA_PRODUCT_MANIF_JM = "select \n" +
+                        "PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID\n" +
+                        ",F_PRODUCT_WORK as F_PRODUCT_WORK\n" +
+                        ",PRODUCT_MANIFESTATION_TITLE as PRODUCT_MANIFESTATION_TITLE\n" +
+                        ",ISSN as ISSN\n" +
+                        ",ELSEVIER_JOURNAL_NUMBER as ELSEVIER_JOURNAL_NUMBER\n" +
+                        ",SUBSCRIPTION_TYPE as SUBSCRIPTION_TYPE\n" +
+                        ",PRICE_CATEGORIES as PRICE_CATEGORIES\n" +
+                        ",PMX_PRODUCT_MANIFESTATION_ID as PMX_PRODUCT_MANIFESTATION_ID\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        ",EPH_MANIFESTATION_ID as EPH_MANIFESTATION_ID\n" +
+                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        " AND PRODUCT_MANIFESTATION_ID in ('%s')";
+                break;
+        }
+        return GET_DATA_PRODUCT_MANIF_JM;
+    }
+
+    public static String getProdSubjSql(String serverEnv, String table) {
+        String GET_DATA_PROD_SUBJ_JM = null;
+        switch (serverEnv) {
+            case ("mysql"):
+                GET_DATA_PROD_SUBJ_JM = "select \n" +
+                        "PRODUCT_SUBJECT_AREA_ID as PRODUCT_SUBJECT_AREA_ID\n" +
+                        ",F_PRODUCT_WORK as F_PRODUCT_WORK\n" +
+                        ",SUBJECT_AREA_TYPE_CODE as SUBJECT_AREA_TYPE_CODE\n" +
+                        ",SUBJECT_AREA_PRIORITY_CODE as SUBJECT_AREA_PRIORITY_CODE\n" +
+                        ",SUBJECT_AREA_CODE as SUBJECT_AREA_CODE\n" +
+                        ",SUBJECT_AREA_NAME as SUBJECT_AREA_NAME\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        " where PRODUCT_SUBJECT_AREA_ID in ('%s')";
+                break;
+            case ("aws"):
+                GET_DATA_PROD_SUBJ_JM = "select \n" +
+                        "PRODUCT_SUBJECT_AREA_ID as PRODUCT_SUBJECT_AREA_ID\n" +
+                        ",F_PRODUCT_WORK as F_PRODUCT_WORK\n" +
+                        ",SUBJECT_AREA_TYPE_CODE as SUBJECT_AREA_TYPE_CODE\n" +
+                        ",SUBJECT_AREA_PRIORITY_CODE as SUBJECT_AREA_PRIORITY_CODE\n" +
+                        ",SUBJECT_AREA_CODE as SUBJECT_AREA_CODE\n" +
+                        ",SUBJECT_AREA_NAME as SUBJECT_AREA_NAME\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        " AND PRODUCT_SUBJECT_AREA_ID in ('%s')";
+                break;
+
+        }
+        return GET_DATA_PROD_SUBJ_JM;
+
+    }
+
+
+
+
 
 }
 
