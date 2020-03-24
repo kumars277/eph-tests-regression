@@ -171,8 +171,174 @@ public class JMTablesDLObject {
     private String PRODUCT_AVAILABILITY_ID;
     private String F_PRODUCT_MANIFESTATION;
     private String APPLICATION_CODE;
+    private String PRODUCT_CHRONICLE_ID;
+    private String COMPLETED_ON;
+    private String DISTRIBUTION_LIST;
+    private String RENAME_REQUIRED_IND;
+    private String STARTED_BY;
+    private String STARTED_ON;
+    private String UPDATED_BY;
+    private String UPDATED_ON;
+    private String PROCESS_INSTANCE_ID;
+    private String REASON_FOR_CHANGE;
+    private String CANCELLED_BY;
+    private String CREATED_BY_NAME;
+    private String REJECTION_COMMENT;
+    private String SUBMISSION_DATE;
+    private String CANCELLED_DATE;
+    private String REJECTION_DATE;
+    private String VERSION;
+    private String PRODUCT_FAMILY_ID;
+    private String PRODUCT_FAMILY_TITLE;
+    private String PRODUCT_JOURNEY_IDENTIFIER;
+    private String PMX_PRODUCT_FAMILY_ID;
 
+    public String getPRODUCT_FAMILY_ID() {
+        return PRODUCT_FAMILY_ID;
+    }
+    public void setPRODUCT_FAMILY_ID(String PRODUCT_FAMILY_ID) {
+        this.PRODUCT_FAMILY_ID= PRODUCT_FAMILY_ID;
+    }
 
+    public String getPRODUCT_FAMILY_TITLE() {
+        return PRODUCT_FAMILY_TITLE;
+    }
+    public void setPRODUCT_FAMILY_TITLE(String PRODUCT_FAMILY_TITLE) {
+        this.PRODUCT_FAMILY_TITLE= PRODUCT_FAMILY_TITLE;
+    }
+
+    public String getPRODUCT_JOURNEY_IDENTIFIER() {
+        return PRODUCT_JOURNEY_IDENTIFIER;
+    }
+    public void setPRODUCT_JOURNEY_IDENTIFIER(String PRODUCT_JOURNEY_IDENTIFIER) {
+        this.PRODUCT_JOURNEY_IDENTIFIER= PRODUCT_JOURNEY_IDENTIFIER;
+    }
+
+    public String getPMX_PRODUCT_FAMILY_ID() {
+        return PMX_PRODUCT_FAMILY_ID;
+    }
+    public void setPMX_PRODUCT_FAMILY_ID(String PMX_PRODUCT_FAMILY_ID) {
+        this.PMX_PRODUCT_FAMILY_ID= PMX_PRODUCT_FAMILY_ID;
+    }
+
+    public String getVERSION() {
+        return VERSION;
+    }
+    public void setVERSION(String VERSION) {
+        this.VERSION= VERSION;
+    }
+
+    public String getREJECTION_DATE() {
+        return REJECTION_DATE;
+    }
+    public void setREJECTION_DATE(String REJECTION_DATE) {
+        this.REJECTION_DATE= REJECTION_DATE;
+    }
+
+    public String getCANCELLED_DATE() {
+        return CANCELLED_DATE;
+    }
+    public void setCANCELLED_DATE(String CANCELLED_DATE) {
+        this.CANCELLED_DATE= CANCELLED_DATE;
+    }
+
+    public String getSUBMISSION_DATE() {
+        return SUBMISSION_DATE;
+    }
+    public void setSUBMISSION_DATE(String SUBMISSION_DATE) {
+        this.SUBMISSION_DATE= SUBMISSION_DATE;
+    }
+
+    public String getREJECTION_COMMENT() {
+        return REJECTION_COMMENT;
+    }
+    public void setREJECTION_COMMENT(String REJECTION_COMMENT) {
+        this.REJECTION_COMMENT= REJECTION_COMMENT;
+    }
+
+    public String getCREATED_BY_NAME() {
+        return CREATED_BY_NAME;
+    }
+    public void setCREATED_BY_NAME(String CREATED_BY_NAME) {
+        this.CREATED_BY_NAME= CREATED_BY_NAME;
+    }
+
+    public String getCANCELLED_BY() {
+        return CANCELLED_BY;
+    }
+    public void setCANCELLED_BY(String CANCELLED_BY) {
+        this.CANCELLED_BY= CANCELLED_BY;
+    }
+
+    public String getREASON_FOR_CHANGE() {
+        return REASON_FOR_CHANGE;
+    }
+    public void setREASON_FOR_CHANGE(String REASON_FOR_CHANGE) {
+        this.REASON_FOR_CHANGE= REASON_FOR_CHANGE;
+    }
+
+    public String getPROCESS_INSTANCE_ID() {
+        return PROCESS_INSTANCE_ID;
+    }
+    public void setPROCESS_INSTANCE_ID(String PROCESS_INSTANCE_ID) {
+        this.PROCESS_INSTANCE_ID= PROCESS_INSTANCE_ID;
+    }
+
+    public String getUPDATED_ON() {
+        return UPDATED_ON;
+    }
+    public void setUPDATED_ON(String UPDATED_ON) {
+        this.UPDATED_ON= UPDATED_ON;
+    }
+
+    public String getUPDATED_BY() {
+        return UPDATED_BY;
+    }
+    public void setUPDATED_BY(String UPDATED_BY) {
+        this.UPDATED_BY= UPDATED_BY;
+    }
+
+    public String getSTARTED_ON() {
+        return STARTED_ON;
+    }
+    public void setSTARTED_ON(String STARTED_ON) {
+        this.STARTED_ON= STARTED_ON;
+    }
+
+    public String getSTARTED_BY() {
+        return STARTED_BY;
+    }
+    public void setSTARTED_BY(String STARTED_BY) {
+        this.STARTED_BY= STARTED_BY;
+    }
+
+    public String getRENAME_REQUIRED_IND() {
+        return RENAME_REQUIRED_IND;
+    }
+    public void setRENAME_REQUIRED_IND(String RENAME_REQUIRED_IND) {
+        this.RENAME_REQUIRED_IND= RENAME_REQUIRED_IND;
+    }
+
+    public String getDISTRIBUTION_LIST() {
+        return DISTRIBUTION_LIST;
+    }
+    public void setDISTRIBUTION_LIST(String DISTRIBUTION_LIST) {
+        this.DISTRIBUTION_LIST= DISTRIBUTION_LIST;
+    }
+
+    public String getCOMPLETED_ON() {
+        return COMPLETED_ON;
+    }
+    public void setCOMPLETED_ON(String COMPLETED_ON) {
+        this.COMPLETED_ON= COMPLETED_ON;
+    }
+
+    public String getPRODUCT_CHRONICLE_ID() {
+        return PRODUCT_CHRONICLE_ID;
+    }
+    public void setPRODUCT_CHRONICLE_ID(String PRODUCT_CHRONICLE_ID) {
+        this.PRODUCT_CHRONICLE_ID= PRODUCT_CHRONICLE_ID;
+    }
 
     public String getPRODUCT_AVAILABILITY_ID() {
         return PRODUCT_AVAILABILITY_ID;
