@@ -32,6 +32,8 @@ public class JMTablesDataChecksSQL {
 
     public static String GET_PRODUCT_FAMILY_ID = "select PRODUCT_FAMILY_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_FAMILY order by rand() limit %s";
 
+    public static String GET_PRODUCT_MANIF_ID = "select PRODUCT_MANIFESTATION_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_MANIFESTATION order by rand() limit %s";
+
     public static String getAllocationChangesSql(String serverEnv, String table) {
         String GET_DATA_ALLOCATION_CHANGE_JM = null;
         switch (serverEnv) {
@@ -719,6 +721,46 @@ public class JMTablesDataChecksSQL {
         }
         return GET_DATA_PRODUCT_FAMILY_JM;
     }
+
+    public static String getProdManifSql(String serverEnv, String table) {
+        String GET_DATA_PRODUCT_MANIF_JM = null;
+        switch (serverEnv) {
+            case ("mysql"):
+                GET_DATA_PRODUCT_MANIF_JM ="select \n" +
+                        "PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID\n" +
+                        ",F_PRODUCT_WORK as F_PRODUCT_WORK\n" +
+                        ",PRODUCT_MANIFESTATION_TITLE as PRODUCT_MANIFESTATION_TITLE\n" +
+                        ",ISSN as ISSN\n" +
+                        ",ELSEVIER_JOURNAL_NUMBER as ELSEVIER_JOURNAL_NUMBER\n" +
+                        ",SUBSCRIPTION_TYPE as SUBSCRIPTION_TYPE\n" +
+                        ",PRICE_CATEGORIES as PRICE_CATEGORIES\n" +
+                        ",PMX_PRODUCT_MANIFESTATION_ID as PMX_PRODUCT_MANIFESTATION_ID\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        ",EPH_MANIFESTATION_ID as EPH_MANIFESTATION_ID\n" +
+                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        " where PRODUCT_MANIFESTATION_ID in ('%s')";
+                break;
+            case ("aws"):
+                GET_DATA_PRODUCT_MANIF_JM = "select \n" +
+                        "PRODUCT_MANIFESTATION_ID as PRODUCT_MANIFESTATION_ID\n" +
+                        ",F_PRODUCT_WORK as F_PRODUCT_WORK\n" +
+                        ",PRODUCT_MANIFESTATION_TITLE as PRODUCT_MANIFESTATION_TITLE\n" +
+                        ",ISSN as ISSN\n" +
+                        ",ELSEVIER_JOURNAL_NUMBER as ELSEVIER_JOURNAL_NUMBER\n" +
+                        ",SUBSCRIPTION_TYPE as SUBSCRIPTION_TYPE\n" +
+                        ",PRICE_CATEGORIES as PRICE_CATEGORIES\n" +
+                        ",PMX_PRODUCT_MANIFESTATION_ID as PMX_PRODUCT_MANIFESTATION_ID\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        ",EPH_MANIFESTATION_ID as EPH_MANIFESTATION_ID\n" +
+                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        " AND PRODUCT_MANIFESTATION_ID in ('%s')";
+                break;
+        }
+        return GET_DATA_PRODUCT_MANIF_JM;
+    }
+
+
 
 
 

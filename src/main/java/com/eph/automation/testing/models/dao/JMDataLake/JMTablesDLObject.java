@@ -192,6 +192,63 @@ public class JMTablesDLObject {
     private String PRODUCT_FAMILY_TITLE;
     private String PRODUCT_JOURNEY_IDENTIFIER;
     private String PMX_PRODUCT_FAMILY_ID;
+    private String PRODUCT_MANIFESTATION_TITLE;
+    private String ISSN;
+    private String ELSEVIER_JOURNAL_NUMBER;
+    private String SUBSCRIPTION_TYPE;
+    private String PRICE_CATEGORIES;
+    private String PMX_PRODUCT_MANIFESTATION_ID;
+    private String EPH_MANIFESTATION_ID;
+
+
+    public String getEPH_MANIFESTATION_ID() {
+        return EPH_MANIFESTATION_ID;
+    }
+    public void setEPH_MANIFESTATION_ID(String EPH_MANIFESTATION_ID) {
+        this.EPH_MANIFESTATION_ID= EPH_MANIFESTATION_ID;
+    }
+
+    public String getPMX_PRODUCT_MANIFESTATION_ID() {
+        return PMX_PRODUCT_MANIFESTATION_ID;
+    }
+    public void setPMX_PRODUCT_MANIFESTATION_ID(String PMX_PRODUCT_MANIFESTATION_ID) {
+        this.PMX_PRODUCT_MANIFESTATION_ID= PMX_PRODUCT_MANIFESTATION_ID;
+    }
+
+    public String getPRICE_CATEGORIES() {
+        return PRICE_CATEGORIES;
+    }
+    public void setPRICE_CATEGORIES(String PRICE_CATEGORIES) {
+        this.PRICE_CATEGORIES= PRICE_CATEGORIES;
+    }
+
+    public String getSUBSCRIPTION_TYPE() {
+        return SUBSCRIPTION_TYPE;
+    }
+    public void setSUBSCRIPTION_TYPE(String SUBSCRIPTION_TYPE) {
+        this.SUBSCRIPTION_TYPE= SUBSCRIPTION_TYPE;
+    }
+
+    public String getELSEVIER_JOURNAL_NUMBER() {
+        return ELSEVIER_JOURNAL_NUMBER;
+    }
+    public void setELSEVIER_JOURNAL_NUMBER(String ELSEVIER_JOURNAL_NUMBER) {
+        this.ELSEVIER_JOURNAL_NUMBER= ELSEVIER_JOURNAL_NUMBER;
+    }
+
+    public String getISSN() {
+        return ISSN;
+    }
+    public void setISSN(String ISSN) {
+        this.ISSN= ISSN;
+    }
+
+    public String getPRODUCT_MANIFESTATION_TITLE() {
+        return PRODUCT_MANIFESTATION_TITLE;
+    }
+    public void setPRODUCT_MANIFESTATION_TITLE(String PRODUCT_MANIFESTATION_TITLE) {
+        this.PRODUCT_MANIFESTATION_TITLE= PRODUCT_MANIFESTATION_TITLE;
+    }
 
     public String getPRODUCT_FAMILY_ID() {
         return PRODUCT_FAMILY_ID;
