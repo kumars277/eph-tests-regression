@@ -8,7 +8,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Allocation records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 100              | JMF_ALLOCATION_CHANGE|
+      | 1             | JMF_ALLOCATION_CHANGE|
 
   Scenario Outline: Validate Application properties data is transferred from JM MYSQL to DL Inbound
     Given We get <countOfRandomIds> random application key of <table>
@@ -145,3 +145,21 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     Examples:
       | countOfRandomIds | table  |
       | 100               | JMF_PRODUCT_SUBJECT_AREA|
+
+  Scenario Outline: Validate Review Comment is transferred from JM MYSQL to DL Inbound
+    Given We get <countOfRandomIds> random ids of <table>
+    When We get the JMF Review Comment records from JMF MySQL of <table>
+    Then We get the JMF Review Comment records from DL of <table>
+    And Compare JMF Review Comment records in JMF MySQL and DL of <table>
+    Examples:
+      | countOfRandomIds | table  |
+      | 100              | JMF_REVIEW_COMMENT|
+
+  Scenario Outline: Validate Product Work is transferred from JM MYSQL to DL Inbound
+    Given We get <countOfRandomIds> random ids of <table>
+    When We get the JMF Product Work records from JMF MySQL of <table>
+    Then We get the JMF Product Work records from DL of <table>
+    And Compare JMF Product Work records in JMF MySQL and DL of <table>
+    Examples:
+      | countOfRandomIds | table  |
+      | 1              | JMF_PRODUCT_WORK|

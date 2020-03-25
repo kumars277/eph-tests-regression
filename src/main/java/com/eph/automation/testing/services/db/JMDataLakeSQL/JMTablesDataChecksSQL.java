@@ -36,6 +36,10 @@ public class JMTablesDataChecksSQL {
 
     public static String GET_PRODUCT_SUBJ_ID = "select PRODUCT_SUBJECT_AREA_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_SUBJECT_AREA order by rand() limit %s";
 
+    public static String GET_REVIEW_COMMENTS_ID = "select REVIEW_COMMENT_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_REVIEW_COMMENT order by rand() limit %s";
+
+    public static String GET_PROD_WORK_ID = "select PRODUCT_WORK_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_WORK order by rand() limit %s";
+
 
     public static String getAllocationChangesSql(String serverEnv, String table) {
         String GET_DATA_ALLOCATION_CHANGE_JM = null;
@@ -798,9 +802,200 @@ public class JMTablesDataChecksSQL {
     }
 
 
+    public static String getReviewCommentsSql(String serverEnv, String table) {
+        String GET_DATA_REVIEW_COMMENT_JM = null;
+        switch (serverEnv) {
+            case ("mysql"):
+                GET_DATA_REVIEW_COMMENT_JM = "select \n" +
+                        "REVIEW_COMMENT_ID as REVIEW_COMMENT_ID\n" +
+                        ",F_APPROVAL_ID as F_APPROVAL_ID\n" +
+                        ",REVIEW_ATTRIBUTE_NAME as REVIEW_ATTRIBUTE_NAME\n" +
+                        ",REVIEW_COMMENT as REVIEW_COMMENT\n" +
+                        ",REVIEW_COMMENT_DATE as REVIEW_COMMENT_DATE\n" +
+                        ",CREATED_ON as CREATED_ON\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        " where REVIEW_COMMENT_ID in ('%s')";
+                break;
+            case ("aws"):
+                GET_DATA_REVIEW_COMMENT_JM = "select \n" +
+                        "REVIEW_COMMENT_ID as REVIEW_COMMENT_ID\n" +
+                        ",F_APPROVAL_ID as F_APPROVAL_ID\n" +
+                        ",REVIEW_ATTRIBUTE_NAME as REVIEW_ATTRIBUTE_NAME\n" +
+                        ",REVIEW_COMMENT as REVIEW_COMMENT\n" +
+                        ",REVIEW_COMMENT_DATE as REVIEW_COMMENT_DATE\n" +
+                        ",CREATED_ON as CREATED_ON\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        " AND REVIEW_COMMENT_ID in ('%s')";
+                break;
 
+        }
+        return GET_DATA_REVIEW_COMMENT_JM;
+    }
 
-
+    public static String getProdWorkSql(String serverEnv, String table) {
+        String GET_DATA_PRODUCT_WORK_JM = null;
+        switch (serverEnv) {
+            case ("mysql"):
+                GET_DATA_PRODUCT_WORK_JM = "select \n" +
+                        "PRODUCT_WORK_ID as PRODUCT_WORK_ID\n" +
+                        ",F_PRODUCT_FAMILY as F_PRODUCT_FAMILY\n" +
+                        ",PRODUCT_WORK_TITLE as PRODUCT_WORK_TITLE\n" +
+                        ",PRODUCT_SUBTITLE as PRODUCT_SUBTITLE\n" +
+                        ",PRODUCT_WORK_TITLE_INFO as PRODUCT_WORK_TITLE_INFO\n" +
+                        ",ISSN_L as ISSN_L\n" +
+                        ",ELSEVIER_JOURNAL_NUMBER as ELSEVIER_JOURNAL_NUMBER\n" +
+                        ",INTERNAL_ELSEVIER_DIVISION as INTERNAL_ELSEVIER_DIVISION\n" +
+                        ",MANIFESTATION_TYPES_CODE as MANIFESTATION_TYPES_CODE\n" +
+                        ",MANIFESTATION_PERSONAL_MODEL_TYPE as MANIFESTATION_PERSONAL_MODEL_TYPE\n" +
+                        ",IMPRINT_NAME as IMPRINT_NAME\n" +
+                        ",PTS_JOURNAL_INDICATOR as PTS_JOURNAL_INDICATOR\n" +
+                        ",YEAR_OF_FIRST_ISSUE as YEAR_OF_FIRST_ISSUE\n" +
+                        ",YEAR_OF_LAST_ISSUE as YEAR_OF_LAST_ISSUE\n" +
+                        ",FIRST_VOLUME_NAME as FIRST_VOLUME_NAME\n" +
+                        ",FIRST_ISSUE_NAME as FIRST_ISSUE_NAME\n" +
+                        ",LAST_VOLUME_NAME as LAST_VOLUME_NAME\n" +
+                        ",LAST_ISSUE_NAME as LAST_ISSUE_NAME\n" +
+                        ",VOLUMES_PER_YEAR_QUANTITY as VOLUMES_PER_YEAR_QUANTITY\n" +
+                        ",ISSUES_PER_VOLUME_QUANTITY as ISSUES_PER_VOLUME_QUANTITY\n" +
+                        ",FIRST_YEAR_VOLUMES_PER_YEAR_QUANTITY as FIRST_YEAR_VOLUMES_PER_YEAR_QUANTITY\n" +
+                        ",FIRST_YEAR_ISSUES_PER_VOLUME_QUANTITY as FIRST_YEAR_ISSUES_PER_VOLUME_QUANTITY\n" +
+                        ",PERIODICAL_TIMING_DESC as PERIODICAL_TIMING_DESC\n" +
+                        ",OPEN_ACCESSTYPE_CODE as OPEN_ACCESSTYPE_CODE\n" +
+                        ",OPEN_ACCESS_SPONSOR_NAME as OPEN_ACCESS_SPONSOR_NAME\n" +
+                        ",OPEN_ACCESS_FEE as OPEN_ACCESS_FEE\n" +
+                        ",OPEN_ACCESS_CURRENCY_CODE as OPEN_ACCESS_CURRENCY_CODE\n" +
+                        ",OPEN_ACCESS_DISCOUNT_IND as OPEN_ACCESS_DISCOUNT_IND\n" +
+                        ",OPEN_ACCESS_DISCOUNT_PERIOD as OPEN_ACCESS_DISCOUNT_PERIOD\n" +
+                        ",OA_FIRST_YEAR_DISCOUNT_PRICE as OA_FIRST_YEAR_DISCOUNT_PRICE\n" +
+                        ",OA_SECOND_YEAR_DISCOUNT_PRICE as OA_SECOND_YEAR_DISCOUNT_PRICE\n" +
+                        ",DDP_ELIGIBLE_IND as DDP_ELIGIBLE_IND\n" +
+                        ",WEBSHOP_IND as WEBSHOP_IND\n" +
+                        ",MEDLINE_IND as MEDLINE_IND\n" +
+                        ",THOMSON_REUTERS_IND as THOMSON_REUTERS_IND\n" +
+                        ",SCOPUS_IND as SCOPUS_IND\n" +
+                        ",EMBASE_IND as EMBASE_IND\n" +
+                        ",DOAJ_IND as DOAJ_IND\n" +
+                        ",ROAD_IND as ROAD_IND\n" +
+                        ",PUBMEDCENTRAL_IND as PUBMEDCENTRAL_IND\n" +
+                        ",MAIN_LANGUAGE_CODE as MAIN_LANGUAGE_CODE\n" +
+                        ",ENGLISH_LANGUAGE_PERCENTAGE_TYPE as ENGLISH_LANGUAGE_PERCENTAGE_TYPE\n" +
+                        ",OPEN_ARCHIVE_PERIOD as OPEN_ARCHIVE_PERIOD\n" +
+                        ",DELAYED_OPEN_ARCHIVE_IND as DELAYED_OPEN_ARCHIVE_IND\n" +
+                        ",INCLUDE_IN_COLLECTIONS_IND as INCLUDE_IN_COLLECTIONS_IND\n" +
+                        ",LAUNCH_DATE as LAUNCH_DATE\n" +
+                        ",PUBLICATION_SCHEDULE_JAN as PUBLICATION_SCHEDULE_JAN\n" +
+                        ",PUBLICATION_SCHEDULE_FEB as PUBLICATION_SCHEDULE_FEB\n" +
+                        ",PUBLICATION_SCHEDULE_MAR as PUBLICATION_SCHEDULE_MAR\n" +
+                        ",PUBLICATION_SCHEDULE_APR as PUBLICATION_SCHEDULE_APR\n" +
+                        ",PUBLICATION_SCHEDULE_MAY as PUBLICATION_SCHEDULE_MAY\n" +
+                        ",PUBLICATION_SCHEDULE_JUN as PUBLICATION_SCHEDULE_JUN\n" +
+                        ",PUBLICATION_SCHEDULE_JUL as PUBLICATION_SCHEDULE_JUL\n" +
+                        ",PUBLICATION_SCHEDULE_AUG as PUBLICATION_SCHEDULE_AUG\n" +
+                        ",PUBLICATION_SCHEDULE_SEP as PUBLICATION_SCHEDULE_SEP\n" +
+                        ",PUBLICATION_SCHEDULE_OCT as PUBLICATION_SCHEDULE_OCT\n" +
+                        ",PUBLICATION_SCHEDULE_NOV as PUBLICATION_SCHEDULE_NOV\n" +
+                        ",PUBLICATION_SCHEDULE_DEC as PUBLICATION_SCHEDULE_DEC\n" +
+                        ",JOURNAL_ACRONYM_ARGI as JOURNAL_ACRONYM_ARGI\n" +
+                        ",MANIFESTATION_FORMATS_CODE as MANIFESTATION_FORMATS_CODE\n" +
+                        ",TAKEOVER_YEAR as TAKEOVER_YEAR\n" +
+                        ",DOI_PREFIX as DOI_PREFIX\n" +
+                        ",DOI_RIGHT_ASSIGNED_IND as DOI_RIGHT_ASSIGNED_IND\n" +
+                        ",SOCIETY_OWNED_IND as SOCIETY_OWNED_IND\n" +
+                        ",CHECKED_WITH_OA_TEAM_IND as CHECKED_WITH_OA_TEAM_IND\n" +
+                        ",IMPRINT_CODE as IMPRINT_CODE\n" +
+                        ",DISCONTINUE_DATE as DISCONTINUE_DATE\n" +
+                        ",PMX_PRODUCT_WORK_ID as PMX_PRODUCT_WORK_ID\n" +
+                        ",REMOVED_FROM_CATALOGUE_IND as REMOVED_FROM_CATALOGUE_IND\n" +
+                        ",TRANSFER_DATE as TRANSFER_DATE\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        ",EPH_WORK_ID as EPH_WORK_ID\n" +
+                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        " where PRODUCT_WORK_ID in ('%s')";
+                break;
+            case ("aws"):
+                GET_DATA_PRODUCT_WORK_JM = "select \n" +
+                        "PRODUCT_WORK_ID as PRODUCT_WORK_ID\n" +
+                        ",F_PRODUCT_FAMILY as F_PRODUCT_FAMILY\n" +
+                        ",PRODUCT_WORK_TITLE as PRODUCT_WORK_TITLE\n" +
+                        ",PRODUCT_SUBTITLE as PRODUCT_SUBTITLE\n" +
+                        ",PRODUCT_WORK_TITLE_INFO as PRODUCT_WORK_TITLE_INFO\n" +
+                        ",ISSN_L as ISSN_L\n" +
+                        ",ELSEVIER_JOURNAL_NUMBER as ELSEVIER_JOURNAL_NUMBER\n" +
+                        ",INTERNAL_ELSEVIER_DIVISION as INTERNAL_ELSEVIER_DIVISION\n" +
+                        ",MANIFESTATION_TYPES_CODE as MANIFESTATION_TYPES_CODE\n" +
+                        ",MANIFESTATION_PERSONAL_MODEL_TYPE as MANIFESTATION_PERSONAL_MODEL_TYPE\n" +
+                        ",IMPRINT_NAME as IMPRINT_NAME\n" +
+                        ",PTS_JOURNAL_INDICATOR as PTS_JOURNAL_INDICATOR\n" +
+                        ",YEAR_OF_FIRST_ISSUE as YEAR_OF_FIRST_ISSUE\n" +
+                        ",YEAR_OF_LAST_ISSUE as YEAR_OF_LAST_ISSUE\n" +
+                        ",FIRST_VOLUME_NAME as FIRST_VOLUME_NAME\n" +
+                        ",FIRST_ISSUE_NAME as FIRST_ISSUE_NAME\n" +
+                        ",LAST_VOLUME_NAME as LAST_VOLUME_NAME\n" +
+                        ",LAST_ISSUE_NAME as LAST_ISSUE_NAME\n" +
+                        ",VOLUMES_PER_YEAR_QUANTITY as VOLUMES_PER_YEAR_QUANTITY\n" +
+                        ",ISSUES_PER_VOLUME_QUANTITY as ISSUES_PER_VOLUME_QUANTITY\n" +
+                        ",FIRST_YEAR_VOLUMES_PER_YEAR_QUANTITY as FIRST_YEAR_VOLUMES_PER_YEAR_QUANTITY\n" +
+                        ",FIRST_YEAR_ISSUES_PER_VOLUME_QUANTITY as FIRST_YEAR_ISSUES_PER_VOLUME_QUANTITY\n" +
+                        ",PERIODICAL_TIMING_DESC as PERIODICAL_TIMING_DESC\n" +
+                        ",OPEN_ACCESSTYPE_CODE as OPEN_ACCESSTYPE_CODE\n" +
+                        ",OPEN_ACCESS_SPONSOR_NAME as OPEN_ACCESS_SPONSOR_NAME\n" +
+                        ",OPEN_ACCESS_FEE as OPEN_ACCESS_FEE\n" +
+                        ",OPEN_ACCESS_CURRENCY_CODE as OPEN_ACCESS_CURRENCY_CODE\n" +
+                        ",OPEN_ACCESS_DISCOUNT_IND as OPEN_ACCESS_DISCOUNT_IND\n" +
+                        ",OPEN_ACCESS_DISCOUNT_PERIOD as OPEN_ACCESS_DISCOUNT_PERIOD\n" +
+                        ",OA_FIRST_YEAR_DISCOUNT_PRICE as OA_FIRST_YEAR_DISCOUNT_PRICE\n" +
+                        ",OA_SECOND_YEAR_DISCOUNT_PRICE as OA_SECOND_YEAR_DISCOUNT_PRICE\n" +
+                        ",DDP_ELIGIBLE_IND as DDP_ELIGIBLE_IND\n" +
+                        ",WEBSHOP_IND as WEBSHOP_IND\n" +
+                        ",MEDLINE_IND as MEDLINE_IND\n" +
+                        ",THOMSON_REUTERS_IND as THOMSON_REUTERS_IND\n" +
+                        ",SCOPUS_IND as SCOPUS_IND\n" +
+                        ",EMBASE_IND as EMBASE_IND\n" +
+                        ",DOAJ_IND as DOAJ_IND\n" +
+                        ",ROAD_IND as ROAD_IND\n" +
+                        ",PUBMEDCENTRAL_IND as PUBMEDCENTRAL_IND\n" +
+                        ",MAIN_LANGUAGE_CODE as MAIN_LANGUAGE_CODE\n" +
+                        ",ENGLISH_LANGUAGE_PERCENTAGE_TYPE as ENGLISH_LANGUAGE_PERCENTAGE_TYPE\n" +
+                        ",OPEN_ARCHIVE_PERIOD as OPEN_ARCHIVE_PERIOD\n" +
+                        ",DELAYED_OPEN_ARCHIVE_IND as DELAYED_OPEN_ARCHIVE_IND\n" +
+                        ",INCLUDE_IN_COLLECTIONS_IND as INCLUDE_IN_COLLECTIONS_IND\n" +
+                        ",LAUNCH_DATE as LAUNCH_DATE\n" +
+                        ",PUBLICATION_SCHEDULE_JAN as PUBLICATION_SCHEDULE_JAN\n" +
+                        ",PUBLICATION_SCHEDULE_FEB as PUBLICATION_SCHEDULE_FEB\n" +
+                        ",PUBLICATION_SCHEDULE_MAR as PUBLICATION_SCHEDULE_MAR\n" +
+                        ",PUBLICATION_SCHEDULE_APR as PUBLICATION_SCHEDULE_APR\n" +
+                        ",PUBLICATION_SCHEDULE_MAY as PUBLICATION_SCHEDULE_MAY\n" +
+                        ",PUBLICATION_SCHEDULE_JUN as PUBLICATION_SCHEDULE_JUN\n" +
+                        ",PUBLICATION_SCHEDULE_JUL as PUBLICATION_SCHEDULE_JUL\n" +
+                        ",PUBLICATION_SCHEDULE_AUG as PUBLICATION_SCHEDULE_AUG\n" +
+                        ",PUBLICATION_SCHEDULE_SEP as PUBLICATION_SCHEDULE_SEP\n" +
+                        ",PUBLICATION_SCHEDULE_OCT as PUBLICATION_SCHEDULE_OCT\n" +
+                        ",PUBLICATION_SCHEDULE_NOV as PUBLICATION_SCHEDULE_NOV\n" +
+                        ",PUBLICATION_SCHEDULE_DEC as PUBLICATION_SCHEDULE_DEC\n" +
+                        ",JOURNAL_ACRONYM_ARGI as JOURNAL_ACRONYM_ARGI\n" +
+                        ",MANIFESTATION_FORMATS_CODE as MANIFESTATION_FORMATS_CODE\n" +
+                        ",TAKEOVER_YEAR as TAKEOVER_YEAR\n" +
+                        ",DOI_PREFIX as DOI_PREFIX\n" +
+                        ",DOI_RIGHT_ASSIGNED_IND as DOI_RIGHT_ASSIGNED_IND\n" +
+                        ",SOCIETY_OWNED_IND as SOCIETY_OWNED_IND\n" +
+                        ",CHECKED_WITH_OA_TEAM_IND as CHECKED_WITH_OA_TEAM_IND\n" +
+                        ",IMPRINT_CODE as IMPRINT_CODE\n" +
+                        ",DISCONTINUE_DATE as DISCONTINUE_DATE\n" +
+                        ",PMX_PRODUCT_WORK_ID as PMX_PRODUCT_WORK_ID\n" +
+                        ",REMOVED_FROM_CATALOGUE_IND as REMOVED_FROM_CATALOGUE_IND\n" +
+                        ",TRANSFER_DATE as TRANSFER_DATE\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        ",EPH_WORK_ID as EPH_WORK_ID\n" +
+                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        " AND PRODUCT_WORK_ID in ('%s')";
+                break;
+        }
+        return GET_DATA_PRODUCT_WORK_JM;
+    }
 }
 
 
