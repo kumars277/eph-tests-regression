@@ -40,6 +40,9 @@ public class JMTablesDataChecksSQL {
 
     public static String GET_PROD_WORK_ID = "select PRODUCT_WORK_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_WORK order by rand() limit %s";
 
+    public static String GET_APPROVAL_ID = "select APPROVAL_ATTACHMENT_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_APPROVAL_ATTACHMENT order by rand() limit %s";
+
+    public static String GET_PRODUCTION_INFORMATION_ID = "select PRODUCT_WORK_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCTION_INFORMATION order by rand() limit %s";
 
     public static String getAllocationChangesSql(String serverEnv, String table) {
         String GET_DATA_ALLOCATION_CHANGE_JM = null;
@@ -996,6 +999,174 @@ public class JMTablesDataChecksSQL {
         }
         return GET_DATA_PRODUCT_WORK_JM;
     }
+
+    public static String getAppAttachSql(String serverEnv, String table) {
+        String GET_DATA_APPROVAL_ATTACH_JM = null;
+        switch (serverEnv) {
+            case ("mysql"):
+                GET_DATA_APPROVAL_ATTACH_JM = "select \n" +
+                        "APPROVAL_ATTACHMENT_ID as APPROVAL_ATTACHMENT_ID\n" +
+                        ",F_APPROVAL as F_APPROVAL\n" +
+                        ",ATTACHMENT_NAME as ATTACHMENT_NAME\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        " where APPROVAL_ATTACHMENT_ID in ('%s')";
+                break;
+            case ("aws"):
+                GET_DATA_APPROVAL_ATTACH_JM = "select \n" +
+                        "APPROVAL_ATTACHMENT_ID as APPROVAL_ATTACHMENT_ID\n" +
+                        ",F_APPROVAL as F_APPROVAL\n" +
+                        ",ATTACHMENT_NAME as ATTACHMENT_NAME\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        " AND APPROVAL_ATTACHMENT_ID in ('%s')";
+                break;
+        }
+        return GET_DATA_APPROVAL_ATTACH_JM;
+
+    }
+
+    public static String getProdInfoSql(String serverEnv, String table) {
+        String GET_DATA_PROD_INFO_JM = null;
+        switch (serverEnv) {
+            case ("mysql"):
+                GET_DATA_PROD_INFO_JM = "select \n" +
+                        "PRODUCT_WORK_ID as PRODUCT_WORK_ID\n" +
+                        ",LE_MANS_IND as LE_MANS_IND\n" +
+                        ",SOCIETY_RELATIONSHIP_TYPE as SOCIETY_RELATIONSHIP_TYPE\n" +
+                        ",SOCIETY_NAME as SOCIETY_NAME\n" +
+                        ",ARTICLE_NUMBER_PER_YEAR as ARTICLE_NUMBER_PER_YEAR\n" +
+                        ",SUBMISSION_NUMBER_PER_YEAR as SUBMISSION_NUMBER_PER_YEAR\n" +
+                        ",EVISE_REQUESTED_CODE as EVISE_REQUESTED_CODE\n" +
+                        ",JOURNAL_ACRONYM_EVISE as JOURNAL_ACRONYM_EVISE\n" +
+                        ",JOURNAL_ACRONYM_PTS as JOURNAL_ACRONYM_PTS\n" +
+                        ",EVISE_SUPPORT_LEVEL as EVISE_SUPPORT_LEVEL\n" +
+                        ",EVISE_WORKFLOW_TYPE as EVISE_WORKFLOW_TYPE\n" +
+                        ",EDITOR_LOCATION as EDITOR_LOCATION\n" +
+                        ",ABP_USAGE_IND as ABP_USAGE_IND\n" +
+                        ",NON_STANDARD_PRODUCTION_ASPECTS as NON_STANDARD_PRODUCTION_ASPECTS\n" +
+                        ",EDITORIAL_PRODUCTION_SITE as EDITORIAL_PRODUCTION_SITE\n" +
+                        ",PRODUCTION_SPECIFICATION_TYPE as PRODUCTION_SPECIFICATION_TYPE\n" +
+                        ",TYPESET_MODEL_TYPE as TYPESET_MODEL_TYPE\n" +
+                        ",REFERENCE_STYLE_TYPE as REFERENCE_STYLE_TYPE\n" +
+                        ",BUDGETED_PAGE_NUMBER_PER_ISSUE as BUDGETED_PAGE_NUMBER_PER_ISSUE\n" +
+                        ",LATEX_SUBMISSION_PERCENTAGE as LATEX_SUBMISSION_PERCENTAGE\n" +
+                        ",TYPESETTER_CODE as TYPESETTER_CODE\n" +
+                        ",PAGE_REVIEW_CHARGES as PAGE_REVIEW_CHARGES\n" +
+                        ",COPY_EDITING_CODE as COPY_EDITING_CODE\n" +
+                        ",HISTORY_DATE_FORMAT as HISTORY_DATE_FORMAT\n" +
+                        ",PROOF_SENT_TO_AUTHOR_IND as PROOF_SENT_TO_AUTHOR_IND\n" +
+                        ",PROOF_SENT_TO_EDITOR_IND as PROOF_SENT_TO_EDITOR_IND\n" +
+                        ",EDITOR_EMAIL_ADDRESS as EDITOR_EMAIL_ADDRESS\n" +
+                        ",E_SUITE_JOURNAL_IND as E_SUITE_JOURNAL_IND\n" +
+                        ",SPONSOR_ACCRESS_REQUIRED_IND as SPONSOR_ACCRESS_REQUIRED_IND\n" +
+                        ",ONLINE_PUBLICATION_DATE_IND as ONLINE_PUBLICATION_DATE_IND\n" +
+                        ",AUTHOR_FEEDBACK_IND as AUTHOR_FEEDBACK_IND\n" +
+                        ",SEND_COPYRIGHT_FORM_IND as SEND_COPYRIGHT_FORM_IND\n" +
+                        ",RUNNING_ORDER_DETAILS as RUNNING_ORDER_DETAILS\n" +
+                        ",FLEXIBILITY as FLEXIBILITY\n" +
+                        ",MAXIMUM_PAGE_DETAILS as MAXIMUM_PAGE_DETAILS\n" +
+                        ",SPECIFIC_LOGO_REQUIRED_IND as SPECIFIC_LOGO_REQUIRED_IND\n" +
+                        ",ADDITIONAL_DELIVERIES_DETAILS as ADDITIONAL_DELIVERIES_DETAILS\n" +
+                        ",MANDATORY_SUBMISSION_ITEM_IND as MANDATORY_SUBMISSION_ITEM_IND\n" +
+                        ",DOI_STATEMENT_IND as DOI_STATEMENT_IND\n" +
+                        ",LANGUAGE_EDITING_PERFORMED_IND as LANGUAGE_EDITING_PERFORMED_IND\n" +
+                        ",LANGUAGE_EDITING_STAGE as LANGUAGE_EDITING_STAGE\n" +
+                        ",DEDICATED_JOURNAL_URL_IND as DEDICATED_JOURNAL_URL_IND\n" +
+                        ",DEDICATED_JOURNAL_URL as DEDICATED_JOURNAL_URL\n" +
+                        ",COI_REQUIRED_IND as COI_REQUIRED_IND\n" +
+                        ",EDITORIAL_SYSTEM_NAME as EDITORIAL_SYSTEM_NAME\n" +
+                        ",TYPESETTER_NAME as TYPESETTER_NAME\n" +
+                        ",EDITORIAL_TURNAROUND_TIME as EDITORIAL_TURNAROUND_TIME\n" +
+                        ",PENDING_SUBMISSIONS_QUANTITY as PENDING_SUBMISSIONS_QUANTITY\n" +
+                        ",CHECKED_WITH_SOCIETY_TEAM_IND as CHECKED_WITH_SOCIETY_TEAM_IND\n" +
+                        ",LAUNCH_DATE as LAUNCH_DATE\n" +
+                        ",PROPOSED_EVISE_ROLLOUT_PERIOD_DATE as PROPOSED_EVISE_ROLLOUT_PERIOD_DATE\n" +
+                        ",BACKSTOCK_END_YEAR as BACKSTOCK_END_YEAR\n" +
+                        ",BACKSTOCK_END_OPTION as BACKSTOCK_END_OPTION\n" +
+                        ",JBS_SITE_IND as JBS_SITE_IND\n" +
+                        ",EDITORIAL_PRODUCTION_EMAIL_ADDRESS as EDITORIAL_PRODUCTION_EMAIL_ADDRESS\n" +
+                        ",EDITORIAL_PRODUCTION_SITE_NAME as EDITORIAL_PRODUCTION_SITE_NAME\n" +
+                        ",JOURNAL_HAS_ARTICLE_NOS as JOURNAL_HAS_ARTICLE_NOS\n" +
+                        ",JOURNAL_ARTICLE_NUMBER_TYPE as JOURNAL_ARTICLE_NUMBER_TYPE\n" +
+                        ",BACKSTOCK_TREATMENT_NOTE as BACKSTOCK_TREATMENT_NOTE\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        " where PRODUCT_WORK_ID in ('%s')";
+                break;
+            case ("aws"):
+                GET_DATA_PROD_INFO_JM = "select \n" +
+                        "PRODUCT_WORK_ID as PRODUCT_WORK_ID\n" +
+                        ",LE_MANS_IND as LE_MANS_IND\n" +
+                        ",SOCIETY_RELATIONSHIP_TYPE as SOCIETY_RELATIONSHIP_TYPE\n" +
+                        ",SOCIETY_NAME as SOCIETY_NAME\n" +
+                        ",ARTICLE_NUMBER_PER_YEAR as ARTICLE_NUMBER_PER_YEAR\n" +
+                        ",SUBMISSION_NUMBER_PER_YEAR as SUBMISSION_NUMBER_PER_YEAR\n" +
+                        ",EVISE_REQUESTED_CODE as EVISE_REQUESTED_CODE\n" +
+                        ",JOURNAL_ACRONYM_EVISE as JOURNAL_ACRONYM_EVISE\n" +
+                        ",JOURNAL_ACRONYM_PTS as JOURNAL_ACRONYM_PTS\n" +
+                        ",EVISE_SUPPORT_LEVEL as EVISE_SUPPORT_LEVEL\n" +
+                        ",EVISE_WORKFLOW_TYPE as EVISE_WORKFLOW_TYPE\n" +
+                        ",EDITOR_LOCATION as EDITOR_LOCATION\n" +
+                        ",ABP_USAGE_IND as ABP_USAGE_IND\n" +
+                        ",NON_STANDARD_PRODUCTION_ASPECTS as NON_STANDARD_PRODUCTION_ASPECTS\n" +
+                        ",EDITORIAL_PRODUCTION_SITE as EDITORIAL_PRODUCTION_SITE\n" +
+                        ",PRODUCTION_SPECIFICATION_TYPE as PRODUCTION_SPECIFICATION_TYPE\n" +
+                        ",TYPESET_MODEL_TYPE as TYPESET_MODEL_TYPE\n" +
+                        ",REFERENCE_STYLE_TYPE as REFERENCE_STYLE_TYPE\n" +
+                        ",BUDGETED_PAGE_NUMBER_PER_ISSUE as BUDGETED_PAGE_NUMBER_PER_ISSUE\n" +
+                        ",LATEX_SUBMISSION_PERCENTAGE as LATEX_SUBMISSION_PERCENTAGE\n" +
+                        ",TYPESETTER_CODE as TYPESETTER_CODE\n" +
+                        ",PAGE_REVIEW_CHARGES as PAGE_REVIEW_CHARGES\n" +
+                        ",COPY_EDITING_CODE as COPY_EDITING_CODE\n" +
+                        ",HISTORY_DATE_FORMAT as HISTORY_DATE_FORMAT\n" +
+                        ",PROOF_SENT_TO_AUTHOR_IND as PROOF_SENT_TO_AUTHOR_IND\n" +
+                        ",PROOF_SENT_TO_EDITOR_IND as PROOF_SENT_TO_EDITOR_IND\n" +
+                        ",EDITOR_EMAIL_ADDRESS as EDITOR_EMAIL_ADDRESS\n" +
+                        ",E_SUITE_JOURNAL_IND as E_SUITE_JOURNAL_IND\n" +
+                        ",SPONSOR_ACCRESS_REQUIRED_IND as SPONSOR_ACCRESS_REQUIRED_IND\n" +
+                        ",ONLINE_PUBLICATION_DATE_IND as ONLINE_PUBLICATION_DATE_IND\n" +
+                        ",AUTHOR_FEEDBACK_IND as AUTHOR_FEEDBACK_IND\n" +
+                        ",SEND_COPYRIGHT_FORM_IND as SEND_COPYRIGHT_FORM_IND\n" +
+                        ",RUNNING_ORDER_DETAILS as RUNNING_ORDER_DETAILS\n" +
+                        ",FLEXIBILITY as FLEXIBILITY\n" +
+                        ",MAXIMUM_PAGE_DETAILS as MAXIMUM_PAGE_DETAILS\n" +
+                        ",SPECIFIC_LOGO_REQUIRED_IND as SPECIFIC_LOGO_REQUIRED_IND\n" +
+                        ",ADDITIONAL_DELIVERIES_DETAILS as ADDITIONAL_DELIVERIES_DETAILS\n" +
+                        ",MANDATORY_SUBMISSION_ITEM_IND as MANDATORY_SUBMISSION_ITEM_IND\n" +
+                        ",DOI_STATEMENT_IND as DOI_STATEMENT_IND\n" +
+                        ",LANGUAGE_EDITING_PERFORMED_IND as LANGUAGE_EDITING_PERFORMED_IND\n" +
+                        ",LANGUAGE_EDITING_STAGE as LANGUAGE_EDITING_STAGE\n" +
+                        ",DEDICATED_JOURNAL_URL_IND as DEDICATED_JOURNAL_URL_IND\n" +
+                        ",DEDICATED_JOURNAL_URL as DEDICATED_JOURNAL_URL\n" +
+                        ",COI_REQUIRED_IND as COI_REQUIRED_IND\n" +
+                        ",EDITORIAL_SYSTEM_NAME as EDITORIAL_SYSTEM_NAME\n" +
+                        ",TYPESETTER_NAME as TYPESETTER_NAME\n" +
+                        ",EDITORIAL_TURNAROUND_TIME as EDITORIAL_TURNAROUND_TIME\n" +
+                        ",PENDING_SUBMISSIONS_QUANTITY as PENDING_SUBMISSIONS_QUANTITY\n" +
+                        ",CHECKED_WITH_SOCIETY_TEAM_IND as CHECKED_WITH_SOCIETY_TEAM_IND\n" +
+                        ",LAUNCH_DATE as LAUNCH_DATE\n" +
+                        ",PROPOSED_EVISE_ROLLOUT_PERIOD_DATE as PROPOSED_EVISE_ROLLOUT_PERIOD_DATE\n" +
+                        ",BACKSTOCK_END_YEAR as BACKSTOCK_END_YEAR\n" +
+                        ",BACKSTOCK_END_OPTION as BACKSTOCK_END_OPTION\n" +
+                        ",JBS_SITE_IND as JBS_SITE_IND\n" +
+                        ",EDITORIAL_PRODUCTION_EMAIL_ADDRESS as EDITORIAL_PRODUCTION_EMAIL_ADDRESS\n" +
+                        ",EDITORIAL_PRODUCTION_SITE_NAME as EDITORIAL_PRODUCTION_SITE_NAME\n" +
+                        ",JOURNAL_HAS_ARTICLE_NOS as JOURNAL_HAS_ARTICLE_NOS\n" +
+                        ",JOURNAL_ARTICLE_NUMBER_TYPE as JOURNAL_ARTICLE_NUMBER_TYPE\n" +
+                        ",BACKSTOCK_TREATMENT_NOTE as BACKSTOCK_TREATMENT_NOTE\n" +
+                        ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
+                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        " AND PRODUCT_WORK_ID in ('%s')";
+                break;
+
+        }
+        return GET_DATA_PROD_INFO_JM;
+
+    }
+
 }
 
 

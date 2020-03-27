@@ -19,14 +19,24 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
       | countOfRandomIds | table  |
       | 100              | JMF_APPLICATION_PROPERTIES|
 
+  Scenario Outline: Validate Approval Attachment data is transferred from JM MYSQL to DL Inbound
+    Given We get <countOfRandomIds> random ids of <table>
+    When We get the JMF Approval Attachment records from JMF MySQL of <table>
+    Then We get the JMF Approval Attachment records from DL of <table>
+    And Compare JMF Approval Attachment records in JMF MySQL and DL of <table>
+    Examples:
+      | countOfRandomIds | table  |
+      | 1             | JMF_APPROVAL_ATTACHMENT|
+
+
   Scenario Outline: Validate Approval Request data is transferred from JM MYSQL to DL Inbound
     Given We get <countOfRandomIds> random ids of <table>
     When We get the JMF Approval Request records from JMF MySQL of <table>
-    Then We get the JMF Approval Request records from DL of <table>
+    Then We get the JMF Approval Request recor  ds from DL of <table>
     And Compare JMF Approval Request records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 100             | JMF_APPROVAL_REQUEST|
+      | 1             | JMF_APPROVAL_REQUEST|
 
   Scenario Outline: Validate Chronicle Scenario data is transferred from JM MYSQL to DL Inbound
     Given We get <countOfRandomIds> random ids of <table>
@@ -44,7 +54,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Chronicle Status records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 100             | JMF_CHRONICLE_STATUS|
+      | 1             | JMF_CHRONICLE_STATUS|
 
 
   Scenario Outline: Validate Family Resource data is transferred from JM MYSQL to DL Inbound
@@ -163,3 +173,14 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     Examples:
       | countOfRandomIds | table  |
       | 1              | JMF_PRODUCT_WORK|
+
+  Scenario Outline: Validate Product Information is transferred from JM MYSQL to DL Inbound
+    Given We get <countOfRandomIds> random ids of <table>
+    When We get the JMF Production Information records from JMF MySQL of <table>
+    Then We get the JMF Production Information records from DL of <table>
+    And Compare JMF Production Information records in JMF MySQL and DL of <table>
+    Examples:
+      | countOfRandomIds | table  |
+      | 1                 | JMF_PRODUCTION_INFORMATION|
+
+
