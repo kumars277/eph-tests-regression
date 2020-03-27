@@ -44,10 +44,8 @@ public class JMTablesDLObject {
     private String INITIAL_VALUE;
     private String RESOURCE_CHANGE_INDICATOR;
     private String NEW_VALUE;
-    private String F_PRODUCT_FAMILY;
     private String PEOPLEHUB_ID_OLD;
     private String PEOPLEHUB_ID_NEW;
-    private String PRODUCT_WORK_ID;
     private String BUSINESS_CONTROLLER_NAME;
     private String BUSINESS_UNIT_CODE;
     private String PMG_CODE;
@@ -204,7 +202,788 @@ public class JMTablesDLObject {
     private String SUBJECT_AREA_PRIORITY_CODE;
     private String SUBJECT_AREA_CODE;
     private String SUBJECT_AREA_NAME;
+    private String REVIEW_COMMENT_ID;
+    private String F_APPROVAL_ID;
+    private String REVIEW_ATTRIBUTE_NAME;
+    private String REVIEW_COMMENT;
+    private String REVIEW_COMMENT_DATE;
+    private String CREATED_ON;
+    private String PRODUCT_WORK_ID;
+    private String F_PRODUCT_FAMILY;
+    private String PRODUCT_WORK_TITLE;
+    private String PRODUCT_SUBTITLE;
+    private String PRODUCT_WORK_TITLE_INFO;
+    private String ISSN_L;
+    private String INTERNAL_ELSEVIER_DIVISION;
+    private String MANIFESTATION_TYPES_CODE;
+    private String MANIFESTATION_PERSONAL_MODEL_TYPE;
+    private String IMPRINT_NAME;
+    private String PTS_JOURNAL_INDICATOR;
+    private String YEAR_OF_FIRST_ISSUE;
+    private String YEAR_OF_LAST_ISSUE;
+    private String FIRST_VOLUME_NAME;
+    private String FIRST_ISSUE_NAME;
+    private String LAST_VOLUME_NAME;
+    private String LAST_ISSUE_NAME;
+    private String VOLUMES_PER_YEAR_QUANTITY;
+    private String ISSUES_PER_VOLUME_QUANTITY;
+    private String FIRST_YEAR_VOLUMES_PER_YEAR_QUANTITY;
+    private String FIRST_YEAR_ISSUES_PER_VOLUME_QUANTITY;
+    private String PERIODICAL_TIMING_DESC;
+    private String OPEN_ACCESSTYPE_CODE;
+    private String OPEN_ACCESS_SPONSOR_NAME;
+    private String OPEN_ACCESS_FEE;
+    private String OPEN_ACCESS_CURRENCY_CODE;
+    private String OPEN_ACCESS_DISCOUNT_IND;
+    private String OPEN_ACCESS_DISCOUNT_PERIOD;
+    private String OA_FIRST_YEAR_DISCOUNT_PRICE;
+    private String OA_SECOND_YEAR_DISCOUNT_PRICE;
+    private String DDP_ELIGIBLE_IND;
+    private String WEBSHOP_IND;
+    private String MEDLINE_IND;
+    private String THOMSON_REUTERS_IND;
+    private String SCOPUS_IND;
+    private String EMBASE_IND;
+    private String DOAJ_IND;
+    private String ROAD_IND;
+    private String PUBMEDCENTRAL_IND;
+    private String MAIN_LANGUAGE_CODE;
+    private String ENGLISH_LANGUAGE_PERCENTAGE_TYPE;
+    private String OPEN_ARCHIVE_PERIOD;
+    private String DELAYED_OPEN_ARCHIVE_IND;
+    private String INCLUDE_IN_COLLECTIONS_IND;
+    private String PUBLICATION_SCHEDULE_JAN;
+    private String PUBLICATION_SCHEDULE_FEB;
+    private String PUBLICATION_SCHEDULE_MAR;
+    private String PUBLICATION_SCHEDULE_APR;
+    private String PUBLICATION_SCHEDULE_MAY;
+    private String PUBLICATION_SCHEDULE_JUN;
+    private String PUBLICATION_SCHEDULE_JUL;
+    private String PUBLICATION_SCHEDULE_AUG;
+    private String PUBLICATION_SCHEDULE_SEP;
+    private String PUBLICATION_SCHEDULE_OCT;
+    private String PUBLICATION_SCHEDULE_NOV;
+    private String PUBLICATION_SCHEDULE_DEC;
+    private String JOURNAL_ACRONYM_ARGI;
+    private String MANIFESTATION_FORMATS_CODE;
+    private String TAKEOVER_YEAR;
+    private String DOI_PREFIX;
+    private String DOI_RIGHT_ASSIGNED_IND;
+    private String SOCIETY_OWNED_IND;
+    private String CHECKED_WITH_OA_TEAM_IND;
+    private String IMPRINT_CODE;
+    private String DISCONTINUE_DATE;
+    private String PMX_PRODUCT_WORK_ID;
+    private String REMOVED_FROM_CATALOGUE_IND;
+    private String TRANSFER_DATE;
+    private String EPH_WORK_ID;
+    private String APPROVAL_ATTACHMENT_ID;
+    private String F_APPROVAL;
+    private String ATTACHMENT_NAME;
+    private String LE_MANS_IND;
+    private String SOCIETY_RELATIONSHIP_TYPE;
+    private String SOCIETY_NAME;
+    private String ARTICLE_NUMBER_PER_YEAR;
+    private String SUBMISSION_NUMBER_PER_YEAR;
+    private String EVISE_REQUESTED_CODE;
+    private String JOURNAL_ACRONYM_EVISE;
+    private String JOURNAL_ACRONYM_PTS;
+    private String EVISE_SUPPORT_LEVEL;
+    private String EVISE_WORKFLOW_TYPE;
+    private String EDITOR_LOCATION;
+    private String ABP_USAGE_IND;
+    private String NON_STANDARD_PRODUCTION_ASPECTS;
+    private String EDITORIAL_PRODUCTION_SITE;
+    private String PRODUCTION_SPECIFICATION_TYPE;
+    private String TYPESET_MODEL_TYPE;
+    private String REFERENCE_STYLE_TYPE;
+    private String BUDGETED_PAGE_NUMBER_PER_ISSUE;
+    private String LATEX_SUBMISSION_PERCENTAGE;
+    private String TYPESETTER_CODE;
+    private String PAGE_REVIEW_CHARGES;
+    private String COPY_EDITING_CODE;
+    private String HISTORY_DATE_FORMAT;
+    private String PROOF_SENT_TO_AUTHOR_IND;
+    private String PROOF_SENT_TO_EDITOR_IND;
+    private String EDITOR_EMAIL_ADDRESS;
+    private String E_SUITE_JOURNAL_IND;
+    private String SPONSOR_ACCRESS_REQUIRED_IND;
+    private String ONLINE_PUBLICATION_DATE_IND;
+    private String AUTHOR_FEEDBACK_IND;
+    private String SEND_COPYRIGHT_FORM_IND;
+    private String RUNNING_ORDER_DETAILS;
+    private String FLEXIBILITY;
+    private String MAXIMUM_PAGE_DETAILS;
+    private String SPECIFIC_LOGO_REQUIRED_IND;
+    private String ADDITIONAL_DELIVERIES_DETAILS;
+    private String MANDATORY_SUBMISSION_ITEM_IND;
+    private String DOI_STATEMENT_IND;
+    private String LANGUAGE_EDITING_PERFORMED_IND;
+    private String LANGUAGE_EDITING_STAGE;
+    private String DEDICATED_JOURNAL_URL_IND;
+    private String DEDICATED_JOURNAL_URL;
+    private String COI_REQUIRED_IND;
+    private String EDITORIAL_SYSTEM_NAME;
+    private String TYPESETTER_NAME;
+    private String EDITORIAL_TURNAROUND_TIME;
+    private String PENDING_SUBMISSIONS_QUANTITY;
+    private String CHECKED_WITH_SOCIETY_TEAM_IND;
+    private String LAUNCH_DATE;
+    private String PROPOSED_EVISE_ROLLOUT_PERIOD_DATE;
+    private String BACKSTOCK_END_YEAR;
+    private String BACKSTOCK_END_OPTION;
+    private String JBS_SITE_IND;
+    private String EDITORIAL_PRODUCTION_EMAIL_ADDRESS;
+    private String EDITORIAL_PRODUCTION_SITE_NAME;
+    private String JOURNAL_HAS_ARTICLE_NOS;
+    private String JOURNAL_ARTICLE_NUMBER_TYPE;
+    private String BACKSTOCK_TREATMENT_NOTE;
 
+    public String getLE_MANS_IND() {
+        return LE_MANS_IND;
+    }
+    public void setLE_MANS_IND(String LE_MANS_IND) {
+        this.LE_MANS_IND = LE_MANS_IND;
+    }
+
+    public String getSOCIETY_RELATIONSHIP_TYPE() {
+        return SOCIETY_RELATIONSHIP_TYPE;
+    }
+    public void setSOCIETY_RELATIONSHIP_TYPE(String SOCIETY_RELATIONSHIP_TYPE) { this.SOCIETY_RELATIONSHIP_TYPE = SOCIETY_RELATIONSHIP_TYPE; }
+
+    public String getSOCIETY_NAME() {
+        return SOCIETY_NAME;
+    }
+    public void setSOCIETY_NAME(String SOCIETY_NAME) { this.SOCIETY_NAME = SOCIETY_NAME; }
+
+    public String getARTICLE_NUMBER_PER_YEAR() {
+        return ARTICLE_NUMBER_PER_YEAR;
+    }
+    public void setARTICLE_NUMBER_PER_YEAR(String ARTICLE_NUMBER_PER_YEAR) { this.ARTICLE_NUMBER_PER_YEAR = ARTICLE_NUMBER_PER_YEAR; }
+
+    public String getSUBMISSION_NUMBER_PER_YEAR() {
+        return SUBMISSION_NUMBER_PER_YEAR;
+    }
+    public void setSUBMISSION_NUMBER_PER_YEAR(String SUBMISSION_NUMBER_PER_YEAR) { this.SUBMISSION_NUMBER_PER_YEAR = SUBMISSION_NUMBER_PER_YEAR; }
+
+    public String getEVISE_REQUESTED_CODE() {
+        return EVISE_REQUESTED_CODE;
+    }
+    public void setEVISE_REQUESTED_CODE(String EVISE_REQUESTED_CODE) { this.EVISE_REQUESTED_CODE = EVISE_REQUESTED_CODE; }
+
+    public String getJOURNAL_ACRONYM_EVISE() {
+        return JOURNAL_ACRONYM_EVISE;
+    }
+    public void setJOURNAL_ACRONYM_EVISE(String JOURNAL_ACRONYM_EVISE) { this.JOURNAL_ACRONYM_EVISE = JOURNAL_ACRONYM_EVISE; }
+
+    public String getJOURNAL_ACRONYM_PTS() {
+        return JOURNAL_ACRONYM_PTS;
+    }
+    public void setJOURNAL_ACRONYM_PTS(String JOURNAL_ACRONYM_PTS) { this.JOURNAL_ACRONYM_PTS = JOURNAL_ACRONYM_PTS; }
+
+    public String getEVISE_SUPPORT_LEVEL() {
+        return EVISE_SUPPORT_LEVEL;
+    }
+    public void setEVISE_SUPPORT_LEVEL(String EVISE_SUPPORT_LEVEL) { this.EVISE_SUPPORT_LEVEL = EVISE_SUPPORT_LEVEL; }
+
+    public String getEVISE_WORKFLOW_TYPE() {
+        return EVISE_WORKFLOW_TYPE;
+    }
+    public void setEVISE_WORKFLOW_TYPE(String EVISE_WORKFLOW_TYPE) { this.EVISE_WORKFLOW_TYPE = EVISE_WORKFLOW_TYPE; }
+
+    public String getEDITOR_LOCATION() {
+        return EDITOR_LOCATION;
+    }
+    public void setEDITOR_LOCATION(String EDITOR_LOCATION) { this.EDITOR_LOCATION = EDITOR_LOCATION; }
+
+    public String getABP_USAGE_IND() {
+        return ABP_USAGE_IND;
+    }
+    public void setABP_USAGE_IND(String ABP_USAGE_IND) { this.ABP_USAGE_IND = ABP_USAGE_IND; }
+
+    public String getNON_STANDARD_PRODUCTION_ASPECTS() {
+        return NON_STANDARD_PRODUCTION_ASPECTS;
+    }
+    public void setNON_STANDARD_PRODUCTION_ASPECTS(String NON_STANDARD_PRODUCTION_ASPECTS) { this.NON_STANDARD_PRODUCTION_ASPECTS = NON_STANDARD_PRODUCTION_ASPECTS; }
+
+    public String getEDITORIAL_PRODUCTION_SITE() { return EDITORIAL_PRODUCTION_SITE; }
+    public void setEDITORIAL_PRODUCTION_SITE(String EDITORIAL_PRODUCTION_SITE) { this.EDITORIAL_PRODUCTION_SITE = EDITORIAL_PRODUCTION_SITE; }
+
+    public String getPRODUCTION_SPECIFICATION_TYPE() { return PRODUCTION_SPECIFICATION_TYPE; }
+    public void setPRODUCTION_SPECIFICATION_TYPE(String PRODUCTION_SPECIFICATION_TYPE) { this.PRODUCTION_SPECIFICATION_TYPE = PRODUCTION_SPECIFICATION_TYPE; }
+
+    public String getTYPESET_MODEL_TYPE() { return TYPESET_MODEL_TYPE; }
+    public void setTYPESET_MODEL_TYPE(String TYPESET_MODEL_TYPE) { this.TYPESET_MODEL_TYPE = TYPESET_MODEL_TYPE; }
+
+    public String getREFERENCE_STYLE_TYPE() { return REFERENCE_STYLE_TYPE; }
+    public void setREFERENCE_STYLE_TYPE(String REFERENCE_STYLE_TYPE) { this.REFERENCE_STYLE_TYPE = REFERENCE_STYLE_TYPE; }
+
+    public String getBUDGETED_PAGE_NUMBER_PER_ISSUE() { return BUDGETED_PAGE_NUMBER_PER_ISSUE; }
+    public void setBUDGETED_PAGE_NUMBER_PER_ISSUE(String BUDGETED_PAGE_NUMBER_PER_ISSUE) { this.BUDGETED_PAGE_NUMBER_PER_ISSUE = BUDGETED_PAGE_NUMBER_PER_ISSUE; }
+
+    public String getLATEX_SUBMISSION_PERCENTAGE() { return LATEX_SUBMISSION_PERCENTAGE; }
+    public void setLATEX_SUBMISSION_PERCENTAGE(String LATEX_SUBMISSION_PERCENTAGE) { this.LATEX_SUBMISSION_PERCENTAGE = LATEX_SUBMISSION_PERCENTAGE; }
+
+    public String getTYPESETTER_CODE() { return TYPESETTER_CODE; }
+    public void setTYPESETTER_CODE(String TYPESETTER_CODE) { this.TYPESETTER_CODE = TYPESETTER_CODE; }
+
+    public String getPAGE_REVIEW_CHARGES() { return PAGE_REVIEW_CHARGES; }
+    public void setPAGE_REVIEW_CHARGES(String PAGE_REVIEW_CHARGES) { this.PAGE_REVIEW_CHARGES = PAGE_REVIEW_CHARGES; }
+
+    public String getCOPY_EDITING_CODE() { return COPY_EDITING_CODE; }
+    public void setCOPY_EDITING_CODE(String COPY_EDITING_CODE) { this.COPY_EDITING_CODE = COPY_EDITING_CODE; }
+
+    public String getHISTORY_DATE_FORMAT() { return HISTORY_DATE_FORMAT; }
+    public void setHISTORY_DATE_FORMAT(String HISTORY_DATE_FORMAT) { this.HISTORY_DATE_FORMAT = HISTORY_DATE_FORMAT; }
+
+    public String getPROOF_SENT_TO_AUTHOR_IND() { return PROOF_SENT_TO_AUTHOR_IND; }
+    public void setPROOF_SENT_TO_AUTHOR_IND(String PROOF_SENT_TO_AUTHOR_IND) { this.PROOF_SENT_TO_AUTHOR_IND = PROOF_SENT_TO_AUTHOR_IND; }
+
+    public String getPROOF_SENT_TO_EDITOR_IND() { return PROOF_SENT_TO_EDITOR_IND; }
+    public void setPROOF_SENT_TO_EDITOR_IND(String PROOF_SENT_TO_EDITOR_IND) { this.PROOF_SENT_TO_EDITOR_IND = PROOF_SENT_TO_EDITOR_IND; }
+
+    public String getEDITOR_EMAIL_ADDRESS() { return EDITOR_EMAIL_ADDRESS; }
+    public void setEDITOR_EMAIL_ADDRESS(String EDITOR_EMAIL_ADDRESS) { this.EDITOR_EMAIL_ADDRESS = EDITOR_EMAIL_ADDRESS; }
+
+    public String getE_SUITE_JOURNAL_IND() { return E_SUITE_JOURNAL_IND; }
+    public void setE_SUITE_JOURNAL_IND(String E_SUITE_JOURNAL_IND) { this.E_SUITE_JOURNAL_IND = E_SUITE_JOURNAL_IND; }
+
+    public String getSPONSOR_ACCRESS_REQUIRED_IND() { return SPONSOR_ACCRESS_REQUIRED_IND; }
+    public void setSPONSOR_ACCRESS_REQUIRED_IND(String SPONSOR_ACCRESS_REQUIRED_IND) { this.SPONSOR_ACCRESS_REQUIRED_IND = SPONSOR_ACCRESS_REQUIRED_IND; }
+
+    public String getONLINE_PUBLICATION_DATE_IND() { return ONLINE_PUBLICATION_DATE_IND; }
+    public void setONLINE_PUBLICATION_DATE_IND(String ONLINE_PUBLICATION_DATE_IND) { this.ONLINE_PUBLICATION_DATE_IND = ONLINE_PUBLICATION_DATE_IND; }
+
+    public String getAUTHOR_FEEDBACK_IND() { return AUTHOR_FEEDBACK_IND; }
+    public void setAUTHOR_FEEDBACK_IND(String AUTHOR_FEEDBACK_IND) { this.AUTHOR_FEEDBACK_IND = AUTHOR_FEEDBACK_IND; }
+
+    public String getSEND_COPYRIGHT_FORM_IND() { return SEND_COPYRIGHT_FORM_IND; }
+    public void setSEND_COPYRIGHT_FORM_IND(String SEND_COPYRIGHT_FORM_IND) { this.SEND_COPYRIGHT_FORM_IND = SEND_COPYRIGHT_FORM_IND; }
+
+    public String getRUNNING_ORDER_DETAILS() { return RUNNING_ORDER_DETAILS; }
+    public void setRUNNING_ORDER_DETAILS(String RUNNING_ORDER_DETAILS) { this.RUNNING_ORDER_DETAILS = RUNNING_ORDER_DETAILS; }
+
+    public String getFLEXIBILITY() { return FLEXIBILITY; }
+    public void setFLEXIBILITY(String FLEXIBILITY) { this.FLEXIBILITY = FLEXIBILITY; }
+
+    public String getMAXIMUM_PAGE_DETAILS() { return MAXIMUM_PAGE_DETAILS; }
+    public void setMAXIMUM_PAGE_DETAILS(String MAXIMUM_PAGE_DETAILS) { this.MAXIMUM_PAGE_DETAILS = MAXIMUM_PAGE_DETAILS; }
+
+    public String getSPECIFIC_LOGO_REQUIRED_IND() { return SPECIFIC_LOGO_REQUIRED_IND; }
+    public void setSPECIFIC_LOGO_REQUIRED_IND(String SPECIFIC_LOGO_REQUIRED_IND) { this.SPECIFIC_LOGO_REQUIRED_IND = SPECIFIC_LOGO_REQUIRED_IND; }
+
+    public String getADDITIONAL_DELIVERIES_DETAILS() { return ADDITIONAL_DELIVERIES_DETAILS; }
+    public void setADDITIONAL_DELIVERIES_DETAILS(String ADDITIONAL_DELIVERIES_DETAILS) { this.ADDITIONAL_DELIVERIES_DETAILS = ADDITIONAL_DELIVERIES_DETAILS; }
+
+    public String getMANDATORY_SUBMISSION_ITEM_IND() { return MANDATORY_SUBMISSION_ITEM_IND; }
+    public void setMANDATORY_SUBMISSION_ITEM_IND(String MANDATORY_SUBMISSION_ITEM_IND) { this.MANDATORY_SUBMISSION_ITEM_IND = MANDATORY_SUBMISSION_ITEM_IND; }
+
+    public String getDOI_STATEMENT_IND() { return DOI_STATEMENT_IND; }
+    public void setDOI_STATEMENT_IND(String DOI_STATEMENT_IND) { this.DOI_STATEMENT_IND = DOI_STATEMENT_IND; }
+
+    public String getLANGUAGE_EDITING_PERFORMED_IND() { return LANGUAGE_EDITING_PERFORMED_IND; }
+    public void setLANGUAGE_EDITING_PERFORMED_IND(String LANGUAGE_EDITING_PERFORMED_IND) { this.LANGUAGE_EDITING_PERFORMED_IND = LANGUAGE_EDITING_PERFORMED_IND; }
+
+    public String getLANGUAGE_EDITING_STAGE() { return LANGUAGE_EDITING_STAGE; }
+    public void setLANGUAGE_EDITING_STAGE(String LANGUAGE_EDITING_STAGE) { this.LANGUAGE_EDITING_STAGE = LANGUAGE_EDITING_STAGE; }
+
+    public String getDEDICATED_JOURNAL_URL_IND() { return DEDICATED_JOURNAL_URL_IND; }
+    public void setDEDICATED_JOURNAL_URL_IND(String DEDICATED_JOURNAL_URL_IND) { this.DEDICATED_JOURNAL_URL_IND = DEDICATED_JOURNAL_URL_IND; }
+
+    public String getDEDICATED_JOURNAL_URL() { return DEDICATED_JOURNAL_URL; }
+    public void setDEDICATED_JOURNAL_URL(String DEDICATED_JOURNAL_URL) { this.DEDICATED_JOURNAL_URL = DEDICATED_JOURNAL_URL; }
+
+    public String getCOI_REQUIRED_IND() { return COI_REQUIRED_IND; }
+    public void setCOI_REQUIRED_IND(String COI_REQUIRED_IND) { this.COI_REQUIRED_IND = COI_REQUIRED_IND; }
+
+    public String getEDITORIAL_SYSTEM_NAME() { return EDITORIAL_SYSTEM_NAME; }
+    public void setEDITORIAL_SYSTEM_NAME(String EDITORIAL_SYSTEM_NAME) { this.EDITORIAL_SYSTEM_NAME = EDITORIAL_SYSTEM_NAME; }
+
+    public String getTYPESETTER_NAME() { return TYPESETTER_NAME; }
+    public void setTYPESETTER_NAME(String TYPESETTER_NAME) { this.TYPESETTER_NAME = TYPESETTER_NAME; }
+
+    public String getEDITORIAL_TURNAROUND_TIME() { return EDITORIAL_TURNAROUND_TIME; }
+    public void setEDITORIAL_TURNAROUND_TIME(String EDITORIAL_TURNAROUND_TIME) { this.EDITORIAL_TURNAROUND_TIME = EDITORIAL_TURNAROUND_TIME; }
+
+    public String getPENDING_SUBMISSIONS_QUANTITY() { return PENDING_SUBMISSIONS_QUANTITY; }
+    public void setPENDING_SUBMISSIONS_QUANTITY(String PENDING_SUBMISSIONS_QUANTITY) { this.PENDING_SUBMISSIONS_QUANTITY = PENDING_SUBMISSIONS_QUANTITY; }
+
+    public String getCHECKED_WITH_SOCIETY_TEAM_IND() { return CHECKED_WITH_SOCIETY_TEAM_IND; }
+    public void setCHECKED_WITH_SOCIETY_TEAM_IND(String CHECKED_WITH_SOCIETY_TEAM_IND) { this.CHECKED_WITH_SOCIETY_TEAM_IND = CHECKED_WITH_SOCIETY_TEAM_IND; }
+
+    public String getPROPOSED_EVISE_ROLLOUT_PERIOD_DATE() { return PROPOSED_EVISE_ROLLOUT_PERIOD_DATE; }
+    public void setPROPOSED_EVISE_ROLLOUT_PERIOD_DATE(String PROPOSED_EVISE_ROLLOUT_PERIOD_DATE) { this.PROPOSED_EVISE_ROLLOUT_PERIOD_DATE = PROPOSED_EVISE_ROLLOUT_PERIOD_DATE; }
+
+    public String getBACKSTOCK_END_YEAR() { return BACKSTOCK_END_YEAR; }
+    public void setBACKSTOCK_END_YEAR(String BACKSTOCK_END_YEAR) { this.BACKSTOCK_END_YEAR = BACKSTOCK_END_YEAR; }
+
+    public String getBACKSTOCK_END_OPTION() { return BACKSTOCK_END_OPTION; }
+    public void setBACKSTOCK_END_OPTION(String BACKSTOCK_END_OPTION) { this.BACKSTOCK_END_OPTION = BACKSTOCK_END_OPTION; }
+
+    public String getJBS_SITE_IND() { return JBS_SITE_IND; }
+    public void setJBS_SITE_IND(String JBS_SITE_IND) { this.JBS_SITE_IND = JBS_SITE_IND; }
+
+    public String getEDITORIAL_PRODUCTION_EMAIL_ADDRESS() { return EDITORIAL_PRODUCTION_EMAIL_ADDRESS; }
+    public void setEDITORIAL_PRODUCTION_EMAIL_ADDRESS(String EDITORIAL_PRODUCTION_EMAIL_ADDRESS) { this.EDITORIAL_PRODUCTION_EMAIL_ADDRESS = EDITORIAL_PRODUCTION_EMAIL_ADDRESS; }
+
+    public String getEDITORIAL_PRODUCTION_SITE_NAME() { return EDITORIAL_PRODUCTION_SITE_NAME; }
+    public void setEDITORIAL_PRODUCTION_SITE_NAME(String EDITORIAL_PRODUCTION_SITE_NAME) { this.EDITORIAL_PRODUCTION_SITE_NAME = EDITORIAL_PRODUCTION_SITE_NAME; }
+
+    public String getJOURNAL_HAS_ARTICLE_NOS() { return JOURNAL_HAS_ARTICLE_NOS; }
+    public void setJOURNAL_HAS_ARTICLE_NOS(String JOURNAL_HAS_ARTICLE_NOS) { this.JOURNAL_HAS_ARTICLE_NOS = JOURNAL_HAS_ARTICLE_NOS; }
+
+    public String getJOURNAL_ARTICLE_NUMBER_TYPE() { return JOURNAL_ARTICLE_NUMBER_TYPE; }
+    public void setJOURNAL_ARTICLE_NUMBER_TYPE(String JOURNAL_ARTICLE_NUMBER_TYPE) { this.JOURNAL_ARTICLE_NUMBER_TYPE = JOURNAL_ARTICLE_NUMBER_TYPE; }
+
+    public String getBACKSTOCK_TREATMENT_NOTE() { return BACKSTOCK_TREATMENT_NOTE; }
+    public void setBACKSTOCK_TREATMENT_NOTE(String BACKSTOCK_TREATMENT_NOTE) { this.BACKSTOCK_TREATMENT_NOTE = BACKSTOCK_TREATMENT_NOTE; }
+
+
+    public String getAPPROVAL_ATTACHMENT_ID() {
+        return APPROVAL_ATTACHMENT_ID;
+    }
+    public void setAPPROVAL_ATTACHMENT_ID(String APPROVAL_ATTACHMENT_ID) {
+        this.APPROVAL_ATTACHMENT_ID= APPROVAL_ATTACHMENT_ID;
+    }
+
+    public String getF_APPROVAL() {
+        return F_APPROVAL;
+    }
+    public void setF_APPROVAL(String F_APPROVAL) {
+        this.F_APPROVAL= F_APPROVAL;
+    }
+
+    public String getATTACHMENT_NAME() {
+        return ATTACHMENT_NAME;
+    }
+    public void setATTACHMENT_NAME(String ATTACHMENT_NAME) {
+        this.ATTACHMENT_NAME= ATTACHMENT_NAME;
+    }
+
+    public String getMANIFESTATION_FORMATS_CODE() {
+        return MANIFESTATION_FORMATS_CODE;
+    }
+    public void setMANIFESTATION_FORMATS_CODE(String MANIFESTATION_FORMATS_CODE) {
+        this.MANIFESTATION_FORMATS_CODE= MANIFESTATION_FORMATS_CODE;
+    }
+
+    public String getTAKEOVER_YEAR() {
+        return TAKEOVER_YEAR;
+    }
+    public void setTAKEOVER_YEAR(String TAKEOVER_YEAR) {
+        this.TAKEOVER_YEAR= TAKEOVER_YEAR;
+    }
+
+    public String getDOI_PREFIX() {
+        return DOI_PREFIX;
+    }
+    public void setDOI_PREFIX(String DOI_PREFIX) {
+        this.DOI_PREFIX= DOI_PREFIX;
+    }
+
+    public String getDOI_RIGHT_ASSIGNED_IND() {
+        return DOI_RIGHT_ASSIGNED_IND;
+    }
+    public void setDOI_RIGHT_ASSIGNED_IND(String DOI_RIGHT_ASSIGNED_IND) {
+        this.DOI_RIGHT_ASSIGNED_IND= DOI_RIGHT_ASSIGNED_IND;
+    }
+    public String getSOCIETY_OWNED_IND() {
+        return SOCIETY_OWNED_IND;
+    }
+    public void setSOCIETY_OWNED_IND(String SOCIETY_OWNED_IND) {
+        this.SOCIETY_OWNED_IND= SOCIETY_OWNED_IND;
+    }
+
+    public String getCHECKED_WITH_OA_TEAM_IND() {
+        return CHECKED_WITH_OA_TEAM_IND;
+    }
+    public void setCHECKED_WITH_OA_TEAM_IND(String CHECKED_WITH_OA_TEAM_IND) {
+        this.CHECKED_WITH_OA_TEAM_IND= CHECKED_WITH_OA_TEAM_IND;
+    }
+    public String getIMPRINT_CODE() {
+        return IMPRINT_CODE;
+    }
+    public void setIMPRINT_CODE(String IMPRINT_CODE) {
+        this.IMPRINT_CODE= IMPRINT_CODE;
+    }
+
+    public String getDISCONTINUE_DATE() {
+        return DISCONTINUE_DATE;
+    }
+    public void setDISCONTINUE_DATE(String DISCONTINUE_DATE) {
+        this.DISCONTINUE_DATE= DISCONTINUE_DATE;
+    }
+
+    public String getPMX_PRODUCT_WORK_ID() {
+        return PMX_PRODUCT_WORK_ID;
+    }
+    public void setPMX_PRODUCT_WORK_ID(String PMX_PRODUCT_WORK_ID) {
+        this.PMX_PRODUCT_WORK_ID= PMX_PRODUCT_WORK_ID;
+    }
+
+    public String getREMOVED_FROM_CATALOGUE_IND() {
+        return REMOVED_FROM_CATALOGUE_IND;
+    }
+    public void setREMOVED_FROM_CATALOGUE_IND(String REMOVED_FROM_CATALOGUE_IND) {
+        this.REMOVED_FROM_CATALOGUE_IND= REMOVED_FROM_CATALOGUE_IND;
+    }
+
+    public String getEPH_WORK_ID() {
+        return EPH_WORK_ID;
+    }
+    public void setEPH_WORK_ID(String EPH_WORK_ID) {
+        this.EPH_WORK_ID= EPH_WORK_ID;
+    }
+
+    public String getTRANSFER_DATE() {
+        return TRANSFER_DATE;
+    }
+    public void setTRANSFER_DATE(String TRANSFER_DATE) {
+        this.TRANSFER_DATE= TRANSFER_DATE;
+    }
+
+    public String getPERIODICAL_TIMING_DESC() {
+        return PERIODICAL_TIMING_DESC;
+    }
+    public void setPERIODICAL_TIMING_DESC(String PERIODICAL_TIMING_DESC) {
+        this.PERIODICAL_TIMING_DESC= PERIODICAL_TIMING_DESC;
+    }
+    public String getOPEN_ACCESSTYPE_CODE() {
+        return OPEN_ACCESSTYPE_CODE;
+    }
+    public void setOPEN_ACCESSTYPE_CODE(String OPEN_ACCESSTYPE_CODE) {
+        this.OPEN_ACCESSTYPE_CODE= OPEN_ACCESSTYPE_CODE;
+    }
+    public String getOPEN_ACCESS_SPONSOR_NAME() {
+        return OPEN_ACCESS_SPONSOR_NAME;
+    }
+    public void setOPEN_ACCESS_SPONSOR_NAME(String OPEN_ACCESS_SPONSOR_NAME) {
+        this.OPEN_ACCESS_SPONSOR_NAME= OPEN_ACCESS_SPONSOR_NAME;
+    }
+    public String getOPEN_ACCESS_FEE() {
+        return OPEN_ACCESS_FEE;
+    }
+    public void setOPEN_ACCESS_FEE(String OPEN_ACCESS_FEE) {
+        this.OPEN_ACCESS_FEE= OPEN_ACCESS_FEE;
+    }
+    public String getOPEN_ACCESS_CURRENCY_CODE() {
+        return OPEN_ACCESS_CURRENCY_CODE;
+    }
+    public void setOPEN_ACCESS_CURRENCY_CODE(String OPEN_ACCESS_CURRENCY_CODE) {
+        this.OPEN_ACCESS_CURRENCY_CODE= OPEN_ACCESS_CURRENCY_CODE;
+    }
+    public String getOPEN_ACCESS_DISCOUNT_IND() {
+        return OPEN_ACCESS_DISCOUNT_IND;
+    }
+    public void setOPEN_ACCESS_DISCOUNT_IND(String OPEN_ACCESS_DISCOUNT_IND) {
+        this.OPEN_ACCESS_DISCOUNT_IND= OPEN_ACCESS_DISCOUNT_IND;
+    }
+    public String getOPEN_ACCESS_DISCOUNT_PERIOD() {
+        return OPEN_ACCESS_DISCOUNT_PERIOD;
+    }
+    public void setOPEN_ACCESS_DISCOUNT_PERIOD(String OPEN_ACCESS_DISCOUNT_PERIOD) {
+        this.OPEN_ACCESS_DISCOUNT_PERIOD= OPEN_ACCESS_DISCOUNT_PERIOD;
+    }
+    public String getOA_FIRST_YEAR_DISCOUNT_PRICE() {
+        return OA_FIRST_YEAR_DISCOUNT_PRICE;
+    }
+    public void setOA_FIRST_YEAR_DISCOUNT_PRICE(String OA_FIRST_YEAR_DISCOUNT_PRICE) {
+        this.OA_FIRST_YEAR_DISCOUNT_PRICE= OA_FIRST_YEAR_DISCOUNT_PRICE;
+    }
+    public String getOA_SECOND_YEAR_DISCOUNT_PRICE() {
+        return OA_SECOND_YEAR_DISCOUNT_PRICE;
+    }
+    public void setOA_SECOND_YEAR_DISCOUNT_PRICE(String OA_SECOND_YEAR_DISCOUNT_PRICE) {
+        this.OA_SECOND_YEAR_DISCOUNT_PRICE= OA_SECOND_YEAR_DISCOUNT_PRICE;
+    }
+    public String getDDP_ELIGIBLE_IND() {
+        return DDP_ELIGIBLE_IND;
+    }
+    public void setDDP_ELIGIBLE_IND(String DDP_ELIGIBLE_IND) {
+        this.DDP_ELIGIBLE_IND= DDP_ELIGIBLE_IND;
+    }
+    public String getWEBSHOP_IND() {
+        return WEBSHOP_IND;
+    }
+    public void setWEBSHOP_IND(String WEBSHOP_IND) {
+        this.WEBSHOP_IND= WEBSHOP_IND;
+    }
+    public String getMEDLINE_IND() {
+        return MEDLINE_IND;
+    }
+    public void setMEDLINE_IND(String MEDLINE_IND) {
+        this.MEDLINE_IND= MEDLINE_IND;
+    }
+    public String getTHOMSON_REUTERS_IND() {
+        return THOMSON_REUTERS_IND;
+    }
+    public void setTHOMSON_REUTERS_IND(String THOMSON_REUTERS_IND) {
+        this.THOMSON_REUTERS_IND= THOMSON_REUTERS_IND;
+    }
+    public String getSCOPUS_IND() {
+        return SCOPUS_IND;
+    }
+    public void setSCOPUS_IND(String SCOPUS_IND) {
+        this.SCOPUS_IND= SCOPUS_IND;
+    }
+    public String getEMBASE_IND() {
+        return EMBASE_IND;
+    }
+    public void setEMBASE_IND(String EMBASE_IND) {
+        this.EMBASE_IND= EMBASE_IND;
+    }
+    public String getDOAJ_IND() {
+        return DOAJ_IND;
+    }
+    public void setDOAJ_IND(String DOAJ_IND) {
+        this.DOAJ_IND= DOAJ_IND;
+    }
+    public String getROAD_IND() {
+        return ROAD_IND;
+    }
+    public void setROAD_IND(String ROAD_IND) {
+        this.ROAD_IND= ROAD_IND;
+    }
+    public String getPUBMEDCENTRAL_IND() {
+        return PUBMEDCENTRAL_IND;
+    }
+    public void setPUBMEDCENTRAL_IND(String PUBMEDCENTRAL_IND) {
+        this.PUBMEDCENTRAL_IND= PUBMEDCENTRAL_IND;
+    }
+    public String getMAIN_LANGUAGE_CODE() {
+        return MAIN_LANGUAGE_CODE;
+    }
+    public void setMAIN_LANGUAGE_CODE(String MAIN_LANGUAGE_CODE) {
+        this.MAIN_LANGUAGE_CODE= MAIN_LANGUAGE_CODE;
+    }
+    public String getENGLISH_LANGUAGE_PERCENTAGE_TYPE() {
+        return ENGLISH_LANGUAGE_PERCENTAGE_TYPE;
+    }
+    public void setENGLISH_LANGUAGE_PERCENTAGE_TYPE(String ENGLISH_LANGUAGE_PERCENTAGE_TYPE) {
+        this.ENGLISH_LANGUAGE_PERCENTAGE_TYPE= ENGLISH_LANGUAGE_PERCENTAGE_TYPE;
+    }
+    public String getOPEN_ARCHIVE_PERIOD() {
+        return OPEN_ARCHIVE_PERIOD;
+    }
+    public void setOPEN_ARCHIVE_PERIOD(String OPEN_ARCHIVE_PERIOD) {
+        this.OPEN_ARCHIVE_PERIOD= OPEN_ARCHIVE_PERIOD;
+    }
+    public String getDELAYED_OPEN_ARCHIVE_IND() {
+        return DELAYED_OPEN_ARCHIVE_IND;
+    }
+    public void setDELAYED_OPEN_ARCHIVE_IND(String DELAYED_OPEN_ARCHIVE_IND) {
+        this.DELAYED_OPEN_ARCHIVE_IND= DELAYED_OPEN_ARCHIVE_IND;
+    }
+    public String getINCLUDE_IN_COLLECTIONS_IND() {
+        return INCLUDE_IN_COLLECTIONS_IND;
+    }
+    public void setINCLUDE_IN_COLLECTIONS_IND(String INCLUDE_IN_COLLECTIONS_IND) {
+        this.INCLUDE_IN_COLLECTIONS_IND= INCLUDE_IN_COLLECTIONS_IND;
+    }
+
+    public String getLAUNCH_DATE() {
+        return LAUNCH_DATE;
+    }
+    public void setLAUNCH_DATE(String LAUNCH_DATE) {
+        this.LAUNCH_DATE= LAUNCH_DATE;
+    }
+    public String getPUBLICATION_SCHEDULE_JAN() {
+        return PUBLICATION_SCHEDULE_JAN;
+    }
+    public void setPUBLICATION_SCHEDULE_JAN(String PUBLICATION_SCHEDULE_JAN) {
+        this.PUBLICATION_SCHEDULE_JAN= PUBLICATION_SCHEDULE_JAN;
+    }
+    public String getPUBLICATION_SCHEDULE_FEB() {
+        return PUBLICATION_SCHEDULE_FEB;
+    }
+    public void setPUBLICATION_SCHEDULE_FEB(String PUBLICATION_SCHEDULE_FEB) {
+        this.PUBLICATION_SCHEDULE_FEB= PUBLICATION_SCHEDULE_FEB;
+    }
+    public String getPUBLICATION_SCHEDULE_MAR() {
+        return PUBLICATION_SCHEDULE_MAR;
+    }
+    public void setPUBLICATION_SCHEDULE_MAR(String PUBLICATION_SCHEDULE_MAR) {
+        this.PUBLICATION_SCHEDULE_MAR= PUBLICATION_SCHEDULE_MAR;
+    }
+    public String getPUBLICATION_SCHEDULE_APR() {
+        return PUBLICATION_SCHEDULE_APR;
+    }
+    public void setPUBLICATION_SCHEDULE_APR(String PUBLICATION_SCHEDULE_APR) {
+        this.PUBLICATION_SCHEDULE_APR= PUBLICATION_SCHEDULE_APR;
+    }
+
+    public String getPUBLICATION_SCHEDULE_MAY() {  return PUBLICATION_SCHEDULE_MAY;    }
+    public void setPUBLICATION_SCHEDULE_MAY(String PUBLICATION_SCHEDULE_MAY) {
+        this.PUBLICATION_SCHEDULE_MAY= PUBLICATION_SCHEDULE_MAY;
+    }
+
+    public String getPUBLICATION_SCHEDULE_JUN() {  return PUBLICATION_SCHEDULE_JUN;   }
+    public void setPUBLICATION_SCHEDULE_JUN(String PUBLICATION_SCHEDULE_JUN) {
+        this.PUBLICATION_SCHEDULE_JUN= PUBLICATION_SCHEDULE_JUN;
+    }
+
+    public String getPUBLICATION_SCHEDULE_JUL() {   return PUBLICATION_SCHEDULE_JUL; }
+    public void setPUBLICATION_SCHEDULE_JUL(String PUBLICATION_SCHEDULE_JUL) {
+        this.PUBLICATION_SCHEDULE_JUL= PUBLICATION_SCHEDULE_JUL;
+    }
+
+    public String getPUBLICATION_SCHEDULE_AUG() {   return PUBLICATION_SCHEDULE_AUG;  }
+    public void setPUBLICATION_SCHEDULE_AUG(String PUBLICATION_SCHEDULE_AUG) {
+        this.PUBLICATION_SCHEDULE_AUG= PUBLICATION_SCHEDULE_AUG;
+    }
+
+    public String getPUBLICATION_SCHEDULE_SEP() {  return PUBLICATION_SCHEDULE_SEP;  }
+    public void setPUBLICATION_SCHEDULE_SEP(String PUBLICATION_SCHEDULE_SEP) {
+        this.PUBLICATION_SCHEDULE_SEP= PUBLICATION_SCHEDULE_SEP;
+    }
+
+    public String getPUBLICATION_SCHEDULE_OCT() {   return PUBLICATION_SCHEDULE_OCT;    }
+    public void setPUBLICATION_SCHEDULE_OCT(String PUBLICATION_SCHEDULE_OCT) {
+        this.PUBLICATION_SCHEDULE_OCT= PUBLICATION_SCHEDULE_OCT;
+    }
+
+    public String getPUBLICATION_SCHEDULE_NOV() {   return PUBLICATION_SCHEDULE_NOV;  }
+    public void setPUBLICATION_SCHEDULE_NOV(String PUBLICATION_SCHEDULE_NOV) {
+        this.PUBLICATION_SCHEDULE_NOV= PUBLICATION_SCHEDULE_NOV;
+    }
+
+    public String getPUBLICATION_SCHEDULE_DEC() {   return PUBLICATION_SCHEDULE_DEC;  }
+    public void setPUBLICATION_SCHEDULE_DEC(String PUBLICATION_SCHEDULE_DEC) {
+        this.PUBLICATION_SCHEDULE_DEC= PUBLICATION_SCHEDULE_DEC;
+    }
+
+    public String getJOURNAL_ACRONYM_ARGI() {  return JOURNAL_ACRONYM_ARGI; }
+    public void setJOURNAL_ACRONYM_ARGI(String JOURNAL_ACRONYM_ARGI) {
+        this.JOURNAL_ACRONYM_ARGI= JOURNAL_ACRONYM_ARGI;
+    }
+
+    public String getLAST_ISSUE_NAME() {  return LAST_ISSUE_NAME;  }
+    public void setLAST_ISSUE_NAME(String LAST_ISSUE_NAME) {
+        this.LAST_ISSUE_NAME= LAST_ISSUE_NAME;
+    }
+
+    public String getLAST_VOLUME_NAME() { return LAST_VOLUME_NAME; }
+    public void setLAST_VOLUME_NAME(String LAST_VOLUME_NAME) {
+        this.LAST_VOLUME_NAME= LAST_VOLUME_NAME;
+    }
+    public String getVOLUMES_PER_YEAR_QUANTITY() {  return VOLUMES_PER_YEAR_QUANTITY;}
+    public void setVOLUMES_PER_YEAR_QUANTITY(String VOLUMES_PER_YEAR_QUANTITY) {
+        this.VOLUMES_PER_YEAR_QUANTITY= VOLUMES_PER_YEAR_QUANTITY;
+    }
+    public String getISSUES_PER_VOLUME_QUANTITY() {  return ISSUES_PER_VOLUME_QUANTITY;  }
+    public void setISSUES_PER_VOLUME_QUANTITY(String ISSUES_PER_VOLUME_QUANTITY) {
+        this.ISSUES_PER_VOLUME_QUANTITY= ISSUES_PER_VOLUME_QUANTITY;
+    }
+
+    public String getFIRST_YEAR_VOLUMES_PER_YEAR_QUANTITY() { return FIRST_YEAR_VOLUMES_PER_YEAR_QUANTITY;    }
+    public void setFIRST_YEAR_VOLUMES_PER_YEAR_QUANTITY(String FIRST_YEAR_VOLUMES_PER_YEAR_QUANTITY) {
+        this.FIRST_YEAR_VOLUMES_PER_YEAR_QUANTITY= FIRST_YEAR_VOLUMES_PER_YEAR_QUANTITY;
+    }
+    public String getFIRST_YEAR_ISSUES_PER_VOLUME_QUANTITY() { return FIRST_YEAR_ISSUES_PER_VOLUME_QUANTITY;    }
+    public void setFIRST_YEAR_ISSUES_PER_VOLUME_QUANTITY(String FIRST_YEAR_ISSUES_PER_VOLUME_QUANTITY) {
+        this.FIRST_YEAR_ISSUES_PER_VOLUME_QUANTITY= FIRST_YEAR_ISSUES_PER_VOLUME_QUANTITY;
+    }
+
+    public String getMANIFESTATION_TYPES_CODE() { return MANIFESTATION_TYPES_CODE;  }
+    public void setMANIFESTATION_TYPES_CODE(String MANIFESTATION_TYPES_CODE) {
+        this.MANIFESTATION_TYPES_CODE= MANIFESTATION_TYPES_CODE;
+    }
+
+    public String getMANIFESTATION_PERSONAL_MODEL_TYPE() {  return MANIFESTATION_PERSONAL_MODEL_TYPE; }
+    public void setMANIFESTATION_PERSONAL_MODEL_TYPE(String MANIFESTATION_PERSONAL_MODEL_TYPE) {
+        this.MANIFESTATION_PERSONAL_MODEL_TYPE= MANIFESTATION_PERSONAL_MODEL_TYPE;
+    }
+
+    public String getIMPRINT_NAME() { return IMPRINT_NAME; }
+    public void setIMPRINT_NAME(String IMPRINT_NAME) {
+        this.IMPRINT_NAME= IMPRINT_NAME;
+    }
+
+    public String getPTS_JOURNAL_INDICATOR() { return PTS_JOURNAL_INDICATOR;
+    }
+    public void setPTS_JOURNAL_INDICATOR(String PTS_JOURNAL_INDICATOR) {
+        this.PTS_JOURNAL_INDICATOR= PTS_JOURNAL_INDICATOR;
+    }
+    public String getYEAR_OF_FIRST_ISSUE() {  return YEAR_OF_FIRST_ISSUE; }
+    public void setYEAR_OF_FIRST_ISSUE(String YEAR_OF_FIRST_ISSUE) {
+        this.YEAR_OF_FIRST_ISSUE= YEAR_OF_FIRST_ISSUE;
+    }
+    public String getYEAR_OF_LAST_ISSUE() { return YEAR_OF_LAST_ISSUE; }
+    public void setYEAR_OF_LAST_ISSUE(String YEAR_OF_LAST_ISSUE) {
+        this.YEAR_OF_LAST_ISSUE= YEAR_OF_LAST_ISSUE;
+    }
+    public String getFIRST_VOLUME_NAME() {  return FIRST_VOLUME_NAME; }
+    public void setFIRST_VOLUME_NAME(String FIRST_VOLUME_NAME) {
+        this.FIRST_VOLUME_NAME= FIRST_VOLUME_NAME;
+    }
+
+    public String getFIRST_ISSUE_NAME() {    return FIRST_ISSUE_NAME;    }
+    public void setFIRST_ISSUE_NAME(String FIRST_ISSUE_NAME) {
+        this.FIRST_ISSUE_NAME= FIRST_ISSUE_NAME;
+    }
+
+    public String getPRODUCT_SUBTITLE() {  return PRODUCT_SUBTITLE;  }
+    public void setPRODUCT_SUBTITLE(String PRODUCT_SUBTITLE) {
+        this.PRODUCT_SUBTITLE= PRODUCT_SUBTITLE;
+    }
+
+    public String getPRODUCT_WORK_TITLE_INFO() {  return PRODUCT_WORK_TITLE_INFO;    }
+    public void setPRODUCT_WORK_TITLE_INFO(String PRODUCT_WORK_TITLE_INFO) {
+        this.PRODUCT_WORK_TITLE_INFO= PRODUCT_WORK_TITLE_INFO;
+    }
+
+    public String getISSN_L() { return ISSN_L; }
+    public void setISSN_L(String ISSN_L) {  this.ISSN_L= ISSN_L;   }
+
+    public String getINTERNAL_ELSEVIER_DIVISION() { return INTERNAL_ELSEVIER_DIVISION; }
+    public void setINTERNAL_ELSEVIER_DIVISION(String INTERNAL_ELSEVIER_DIVISION) {
+        this.INTERNAL_ELSEVIER_DIVISION= INTERNAL_ELSEVIER_DIVISION;
+    }
+
+    public String getPRODUCT_WORK_TITLE() { return PRODUCT_WORK_TITLE; }
+    public void setPRODUCT_WORK_TITLE(String PRODUCT_WORK_TITLE) {
+        this.PRODUCT_WORK_TITLE= PRODUCT_WORK_TITLE;
+    }
+
+    public String getREVIEW_COMMENT_DATE() {
+        return REVIEW_COMMENT_DATE;
+    }
+    public void setREVIEW_COMMENT_DATE(String REVIEW_COMMENT_DATE) {
+        this.REVIEW_COMMENT_DATE= REVIEW_COMMENT_DATE;
+    }
+
+    public String getCREATED_ON() {
+        return CREATED_ON;
+    }
+    public void setCREATED_ON(String CREATED_ON) {
+        this.CREATED_ON= CREATED_ON;
+    }
+
+    public String getREVIEW_COMMENT() {
+        return REVIEW_COMMENT;
+    }
+    public void setREVIEW_COMMENT(String REVIEW_COMMENT) {
+        this.REVIEW_COMMENT= REVIEW_COMMENT;
+    }
+
+    public String getREVIEW_ATTRIBUTE_NAME() {
+        return REVIEW_ATTRIBUTE_NAME;
+    }
+    public void setREVIEW_ATTRIBUTE_NAME(String REVIEW_ATTRIBUTE_NAME) {
+        this.REVIEW_ATTRIBUTE_NAME= REVIEW_ATTRIBUTE_NAME;
+    }
+
+    public String getF_APPROVAL_ID() { return F_APPROVAL_ID;}
+    public void setF_APPROVAL_ID(String F_APPROVAL_ID) {
+        this.F_APPROVAL_ID= F_APPROVAL_ID;
+    }
+
+    public String getREVIEW_COMMENT_ID() {
+        return REVIEW_COMMENT_ID;
+    }
+    public void setREVIEW_COMMENT_ID(String REVIEW_COMMENT_ID) {
+        this.REVIEW_COMMENT_ID= REVIEW_COMMENT_ID;
+    }
 
     public String getSUBJECT_AREA_NAME() {
         return SUBJECT_AREA_NAME;
@@ -506,12 +1285,14 @@ public class JMTablesDLObject {
     public void setCITY(String CITY) {
         this.CITY= CITY;
     }
+
     public String getCOUNTRY() {
         return COUNTRY;
     }
     public void setCOUNTRY(String COUNTRY) {
         this.COUNTRY= COUNTRY;
     }
+
     public String getADDRESS_LINE_2() {
         return ADDRESS_LINE_2;
     }
@@ -778,7 +1559,6 @@ public class JMTablesDLObject {
         this.COST_NEXT_PRINTED_COLOUR_UNIT = COST_NEXT_PRINTED_COLOUR_UNIT;
     }
 
-
     public String getONLINE_LAST_ISSUE_DATE() {
         return ONLINE_LAST_ISSUE_DATE;
     }
@@ -967,6 +1747,7 @@ public class JMTablesDLObject {
     public void setBACKFILE_CONSENT_IND(String BACKFILE_CONSENT_IND) {
         this.BACKFILE_CONSENT_IND = BACKFILE_CONSENT_IND;
     }
+
     public String getBACKFILE_CONSENT_INFO() {
         return BACKFILE_CONSENT_INFO;
     }
@@ -1042,6 +1823,7 @@ public class JMTablesDLObject {
     public void setDESPATCH_METHOD(String DESPATCH_METHOD) {
         this.DESPATCH_METHOD = DESPATCH_METHOD;
     }
+
     public String getCONTRACT_SEEN_BY_ELS_ATTORNEY_IND() {
         return CONTRACT_SEEN_BY_ELS_ATTORNEY_IND;
     }
@@ -1272,6 +2054,7 @@ public class JMTablesDLObject {
     public void setBUSINESS_CONTROLLER_EMAIL_ADDRESS(String BUSINESS_CONTROLLER_EMAIL_ADDRESS) {
         this.BUSINESS_CONTROLLER_EMAIL_ADDRESS = BUSINESS_CONTROLLER_EMAIL_ADDRESS;
     }
+
     public String getCLAIMS_HANDLING_OPTION() {
         return CLAIMS_HANDLING_OPTION;
     }
@@ -1361,7 +2144,6 @@ public class JMTablesDLObject {
         this.CHRONICLE_STATUS_CODE = CHRONICLE_STATUS_CODE;
     }
 
-
     public String getCHRONICLE_STATUS_NAME() {
         return CHRONICLE_STATUS_NAME;
     }
@@ -1375,7 +2157,6 @@ public class JMTablesDLObject {
     public void setCHRONICLE_STATUS_DESCRIPTION(String CHRONICLE_STATUS_DESCRIPTION) {
         this.CHRONICLE_STATUS_DESCRIPTION = CHRONICLE_STATUS_DESCRIPTION;
     }
-
 
     public String getCHRONICLE_SCENARIO_EVOLUTIONARY_IND() {
         return CHRONICLE_SCENARIO_EVOLUTIONARY_IND;
@@ -1460,6 +2241,7 @@ public class JMTablesDLObject {
     public void setAPPLICATION_PROPERTY_KEY(String APPLICATION_PROPERTY_KEY) {
         this.APPLICATION_PROPERTY_KEY = APPLICATION_PROPERTY_KEY;
     }
+
     public String getAPPLICATION_PROPERTY_VALUE() {
         return APPLICATION_PROPERTY_VALUE;
     }
@@ -1479,28 +2261,33 @@ public class JMTablesDLObject {
     public void setALLOCATION_TYPE(String ALLOCATION_TYPE) {
         this.ALLOCATION_TYPE = ALLOCATION_TYPE;
     }
+
     public String getPMG_FILTER() {
         return PMG_FILTER;
     }
     public void setPMG_FILTER(String PMG_FILTER) {
         this.PMG_FILTER = PMG_FILTER;
     }
+
     public String getPMC_FILTER() { return PMC_FILTER;  }
     public void setPMC_FILTER(String PMC_FILTER) {
         this.PMC_FILTER = PMC_FILTER;
     }
+
     public String getPPC_FILTER_EMAIL() {
         return PPC_FILTER_EMAIL;
     }
     public void setPPC_FILTER_EMAIL(String PPC_FILTER_EMAIL) {
         this.PPC_FILTER_EMAIL = PPC_FILTER_EMAIL;
     }
+
     public String getPPC_FILTER_NAME() {
         return PPC_FILTER_NAME;
     }
     public void setPPC_FILTER_NAME(String PPC_FILTER_NAME) {
         this.PPC_FILTER_NAME = PPC_FILTER_NAME;
     }
+
     public String getPMC_CHANGE_IND() {
         return PMC_CHANGE_IND;
     }
@@ -1542,6 +2329,7 @@ public class JMTablesDLObject {
     public void setPMG_BUS_CTRL_NAME(String PMG_BUS_CTRL_NAME) {
         this.PMG_BUS_CTRL_NAME = PMG_BUS_CTRL_NAME;
     }
+
     public String getPMG_BUS_CTRL_EMAIL() {
         return PMG_BUS_CTRL_EMAIL;
     }
@@ -1604,11 +2392,5 @@ public class JMTablesDLObject {
     public void setEPH_PMG_CODE(String EPH_PMG_CODE) {
         this.EPH_PMG_CODE = EPH_PMG_CODE;
     }
-
-
-
-
-
-
 
 }

@@ -9,8 +9,8 @@ Feature:Validate data for Work tables between EPH and Data Lake - Outbound
     And Compare work records in EPH and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 20           | gd_wwork|
-      | 20              | gh_wwork|
+      | 1           | gd_wwork|
+      | 1              | gh_wwork|
 
 
 
