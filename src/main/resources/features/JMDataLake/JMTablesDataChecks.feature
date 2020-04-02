@@ -38,7 +38,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Approval Request records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 100             | JMF_APPROVAL_REQUEST|
+      | 1             | JMF_APPROVAL_REQUEST|
 
   @JMDL
   Scenario Outline: Validate Chronicle Scenario data is transferred from JM MYSQL to DL Inbound

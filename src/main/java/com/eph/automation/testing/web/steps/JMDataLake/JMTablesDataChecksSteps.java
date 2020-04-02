@@ -3,7 +3,6 @@ package com.eph.automation.testing.web.steps.JMDataLake;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
-import com.eph.automation.testing.models.contexts.DataQualityDLContext;
 import com.eph.automation.testing.models.dao.JMDataLake.JMTablesDLObject;
 import com.eph.automation.testing.services.db.JMDataLakeSQL.JMTablesDataChecksSQL;
 import com.google.common.base.Joiner;
@@ -12,14 +11,15 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import com.eph.automation.testing.models.contexts.DataQualityJMContext;
-import cucumber.api.java.en_scouse.An;
 import org.junit.Assert;
-
-import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 public class JMTablesDataChecksSteps {
 
@@ -28,6 +28,8 @@ public class JMTablesDataChecksSteps {
     private static List<String> Ids;
     private JMTablesDataChecksSQL jmObj = new JMTablesDataChecksSQL();
 
+  // private SimpleDateFormat formatter1=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+  // private SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     @Given("^We get (.*) random ids of (.*)")
     public void getRandomIds(String numberOfRecords, String tableName) {
@@ -508,6 +510,7 @@ public class JMTablesDataChecksSteps {
 
     @And("^Compare JMF Approval Request records in JMF MySQL and DL of (.*)$")
     public void compareJMappRequestDataSQLtoDL(String tableName) {
+
         if (dataQualityJMContext.tbJMDataObjectsFromMysql.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
@@ -575,9 +578,11 @@ public class JMTablesDataChecksSteps {
                 Log.info("APPROVAL_ID => " + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getAPPROVAL_ID() +
                         " APPROVAL_REQUEST_DATE => Mysql=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getAPPROVAL_REQUEST_DATE() +
                         " DL=" + dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getAPPROVAL_REQUEST_DATE());
-
-                if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getAPPROVAL_REQUEST_DATE() != null ||
-                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getAPPROVAL_REQUEST_DATE() != null)) {
+                //Date ReqdateSql=formatter1.parse(dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getAPPROVAL_REQUEST_DATE());
+                //Date ReqdateDL = formatter2.parse(dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getAPPROVAL_REQUEST_DATE());
+                if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getAPPROVAL_REQUEST_DATE()!=null ||
+                        dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getAPPROVAL_REQUEST_DATE()!=null) {
+                   // Assert.assertTrue("APPROVAL_REQUEST_DATE are not equal",ReqdateSql.compareTo(ReqdateDL)==0);
                     Assert.assertEquals("The APPROVAL_REQUEST_DATE is incorrect for APPROVAL_ID=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getAPPROVAL_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getAPPROVAL_REQUEST_DATE(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getAPPROVAL_REQUEST_DATE());
@@ -586,14 +591,16 @@ public class JMTablesDataChecksSteps {
                 Log.info("APPROVAL_ID => " + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getAPPROVAL_ID() +
                         " APPROVAL_RESPONSE_DATE => Mysql=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getAPPROVAL_RESPONSE_DATE() +
                         " DL=" + dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getAPPROVAL_RESPONSE_DATE());
+                //Date ResponsedateSql=formatter1.parse(dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getAPPROVAL_REQUEST_DATE());
+                //Date ResponsedateDL = formatter2.parse(dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getAPPROVAL_REQUEST_DATE());
 
-                if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getAPPROVAL_RESPONSE_DATE() != null ||
-                        (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getAPPROVAL_RESPONSE_DATE() != null)) {
+                if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getAPPROVAL_RESPONSE_DATE()!= null
+                        || dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getAPPROVAL_RESPONSE_DATE()!= null) {
                     Assert.assertEquals("The APPROVAL_RESPONSE_DATE is incorrect for APPROVAL_ID=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getAPPROVAL_ID(),
                             dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getAPPROVAL_RESPONSE_DATE(),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getAPPROVAL_RESPONSE_DATE());
+                    //Assert.assertTrue("APPROVAL_RESPONSE_DATE are not equal",ResponsedateSql.compareTo(ResponsedateDL)==0);
                 }
-
             }
         }
     }

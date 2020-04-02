@@ -23,15 +23,15 @@ public class DataAccessUnitChecks {
     @Test
     @Ignore
     public void testDecrypt() {
-        //PMX_UAT_URL=jdbc:oracle:thin:PMX/pmxuat@//pmxuat.cucvf0thmu0s.eu-west-1.rds.amazonaws.com:1521/PMXUAT
-       // System.out.println(DecryptionService.decrypt(LoadProperties.getProperty(Constants.MYSQL_DB_URL_KEY)));
+       // String PMX_URL="x/elg6FAh8Gfwmtxp3AaBcI8FmirWvsv07DzabN7iePMOy3ePn9xTs605XXrZ9HtYCQmsSXAlMSnxeBwMuk1OJXEaN9AnbkR/HgJVZ+5gJmWLzQlymA+S6wN//Jj5UB3GUVV4m1oJZM=";
+      // System.out.println(DecryptionService.decrypt(PMX_URL));
     }
 
     @Test
     @Ignore
     public void testEncrypt() {
-        String JM_MYSQL = "jdbc:mysql://mysql-jmf-activiti.ceuft9o6msiv.eu-west-1.rds.amazonaws.com:3306/jmf_sit_application?user=sureshkumard&password=Iqos31XVOELcKQ";
-           System.out.println(DecryptionService.encrypt(JM_MYSQL));
+        String PROMIS_ORACLE = "jdbc:oracle:thin:SURESHD/Tyv2qtp2k@promis-oracledb.prod.ordersubs.tio.systems:1521/prmdb";
+           System.out.println(DecryptionService.encrypt(PROMIS_ORACLE));
     }
 
     @Test
