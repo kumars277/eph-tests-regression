@@ -20,8 +20,8 @@ public class JMtoDatalakeTableCountChecksSteps {
     private static int JMCount;
     private static int DLJMCount;
 
-    @Given("^We know the number of JM (.*) data in EPH")
-    public void getJMEPHCount(String tableName) {
+    @Given("^We know the number of JM (.*) data in MYSQL")
+    public void getJMMYSQLCount(String tableName) {
         switch (tableName){
             case "jmf_allocation_change":
                 sqlJM = JMtoDataLakeCountChecksSQL.jmf_allocation_change_Count;
@@ -162,9 +162,9 @@ public class JMtoDatalakeTableCountChecksSteps {
         Log.info(tableName + " data in DL: " + DLJMCount);
     }
 
-    @Then("^The JM count for (.*) table between EPH and DL are identical$")
-    public void JMcompareEPHtoDL(String tableName) {
+    @Then("^The JM count for (.*) table between MYSQL and DL are identical$")
+    public void JMcompareMYSQLtoDL(String tableName) {
         Assert.assertEquals("The counts between " + tableName + " is not equal", JMCount, DLJMCount);
-        Log.info("The count for " + tableName + " table between EPH: " + JMCount + " and DL: " + DLJMCount + " is equal");
+        Log.info("The count for " + tableName + " table between MYSQL: " + JMCount + " and DL: " + DLJMCount + " is equal");
     }
 }
