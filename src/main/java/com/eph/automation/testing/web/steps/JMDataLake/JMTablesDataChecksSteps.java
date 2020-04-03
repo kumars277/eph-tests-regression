@@ -3076,13 +3076,13 @@ public class JMTablesDataChecksSteps {
                 }
 
                 Log.info("REVIEW_COMMENT_ID => " + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getREVIEW_COMMENT_ID() +
-                        " REVIEW_COMMENT => Mysql=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getREVIEW_COMMENT() +
+                        " REVIEW_COMMENT => Mysql=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getREVIEW_COMMENT().replace("\n"," ").replace("\r"," ").replace("\0", "") +
                         " DL=" + dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getREVIEW_COMMENT());
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getREVIEW_COMMENT() != null ||
                         (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getREVIEW_COMMENT() != null)) {
                     Assert.assertEquals("The REVIEW_COMMENT is incorrect for REVIEW_COMMENT_ID=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getREVIEW_COMMENT_ID(),
-                            dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getREVIEW_COMMENT(),
+                            dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getREVIEW_COMMENT().replace("\n"," ").replace("\r"," ").replace("\0", ""),
                             dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getREVIEW_COMMENT());
                 }
                 Log.info("REVIEW_COMMENT_ID => " + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getREVIEW_COMMENT_ID() +
