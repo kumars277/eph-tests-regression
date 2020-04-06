@@ -85,6 +85,7 @@ public class PRMTablesDataChecksSteps {
         sql = String.format(prmObj.getAutPubtSql("oracle", tableName), Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityPRMContext.tbPRMDataObjectsFromOracle = DBManager.getDBResultAsBeanList(sql, PRMTablesDLObject.class, Constants.PROMIS_URL);
+    System.out.println(dataQualityPRMContext.tbPRMDataObjectsFromOracle.size());
     }
 
     @Then("^We get the PRM PRMAUTPUBT records from DL of (.*)$")
@@ -237,7 +238,7 @@ public class PRMTablesDataChecksSteps {
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getFTN());
                 }
 
-                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+     /*           Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
                         " BIO => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getBIO() +
                         " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getBIO());
 
@@ -247,7 +248,7 @@ public class PRMTablesDataChecksSteps {
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getBIO(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getBIO());
                 }
-                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+     */           Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
                         " AUT_EDT_FAX => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_FAX() +
                         " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_FAX());
 

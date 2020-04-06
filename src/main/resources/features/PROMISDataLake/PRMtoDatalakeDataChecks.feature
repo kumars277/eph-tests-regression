@@ -4,61 +4,61 @@ Feature:Validate data for PRM between Oracle and Data Lake - Inbound
     Given We get the <countOfRandomIds> random PRM ids of <table>
     When We get the PRM PRMAUTPUBT records from Oracle of <table>
     Then We get the PRM PRMAUTPUBT records from DL of <table>
-    And Compare PRM PRMAUTPUBT records in PRM Oracle and DL of <table>
+   And Compare PRM PRMAUTPUBT records in PRM Oracle and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 109                 | PRMAUTPUBT|
-
-  Scenario Outline: Verify that all PRM PRMCLSCODT is transferred from PRM Oracle to DL Inbound
-    Given We get the <countOfRandomIds> random PRM ids of <table>
-    When We get the PRM PRMCLSCODT records from Oracle of <table>
-    Then We get the PRM PRMCLSCODT records from DL of <table>
-    And Compare PRM PRMCLSCODT records in PRM Oracle and DL of <table>
-    Examples:
-      | countOfRandomIds | table  |
-      | 2000                 | PRMCLSCODT|
-
-  Scenario Outline: Verify that all PRM PRMCLST is transferred from PRM Oracle to DL Inbound
-    Given We get the <countOfRandomIds> random PRM ids of <table>
-    When We get the PRM PRMCLST records from Oracle of <table>
-    Then We get the PRM PRMCLST records from DL of <table>
-    And Compare PRM PRMCLST records in PRM Oracle and DL of <table>
-    Examples:
-      | countOfRandomIds | table  |
-      | 2000                 | PRMCLST|
-
-  Scenario Outline: Verify that all PRM PRMLONDEST is transferred from PRM Oracle to DL Inbound
-    Given We get the <countOfRandomIds> random PRM ids of <table>
-    When We get the PRM PRMLONDEST records from Oracle of <table>
-    Then We get the PRM PRMLONDEST records from DL of <table>
-    And Compare PRM PRMLONDEST records in PRM Oracle and DL of <table>
-    Examples:
-      | countOfRandomIds | table  |
-      | 2000                 | PRMLONDEST|
-
-  Scenario Outline: Verify that all PRM PRMPRICEST is transferred from PRM Oracle to DL Inbound
-    Given We get the <countOfRandomIds> random PRM ids of <table>
-    When We get the PRM PRMPRICEST records from Oracle of <table>
-    Then We get the PRM PRMPRICEST records from DL of <table>
-    And Compare PRM PRMPRICEST records in PRM Oracle and DL of <table>
-    Examples:
-      | countOfRandomIds | table  |
-      | 2000                 | PRMPRICEST|
-
-  Scenario Outline: Verify that all PRM PRMPUBINFT is transferred from PRM Oracle to DL Inbound
-    Given We get the <countOfRandomIds> random PRM ids of <table>
-    When We get the PRM PRMPUBINFT records from Oracle of <table>
-    Then We get the PRM PRMPUBINFT records from DL of <table>
-    And Compare PRM PRMPUBINFT records in PRM Oracle and DL of <table>
-    Examples:
-      | countOfRandomIds | table  |
-      | 2000                 | PRMPUBINFT|
-
-  Scenario Outline: Verify that all PRM PRMPUBRELT is transferred from PRM Oracle to DL Inbound
-    Given We get the <countOfRandomIds> random PRM ids of <table>
-    When We get the PRM PRMPUBRELT records from Oracle of <table>
-    Then We get the PRM PRMPUBRELT records from DL of <table>
-    And Compare PRM PRMPUBRELT records in PRM Oracle and DL of <table>
-    Examples:
-      | countOfRandomIds | table  |
-      | 2000                 | PRMPUBRELT|
+      | 10               | PRMAUTPUBT|
+#
+#  Scenario Outline: Verify that all PRM PRMCLSCODT is transferred from PRM Oracle to DL Inbound
+#    Given We get the <countOfRandomIds> random PRM ids of <table>
+#    When We get the PRM PRMCLSCODT records from Oracle of <table>
+#    Then We get the PRM PRMCLSCODT records from DL of <table>
+#    And Compare PRM PRMCLSCODT records in PRM Oracle and DL of <table>
+#    Examples:
+#      | countOfRandomIds | table  |
+#      | 2000                 | PRMCLSCODT|
+#
+#  Scenario Outline: Verify that all PRM PRMCLST is transferred from PRM Oracle to DL Inbound
+#    Given We get the <countOfRandomIds> random PRM ids of <table>
+#    When We get the PRM PRMCLST records from Oracle of <table>
+#    Then We get the PRM PRMCLST records from DL of <table>
+#    And Compare PRM PRMCLST records in PRM Oracle and DL of <table>
+#    Examples:
+#      | countOfRandomIds | table  |
+#      | 2000                 | PRMCLST|
+#
+#  Scenario Outline: Verify that all PRM PRMLONDEST is transferred from PRM Oracle to DL Inbound
+#    Given We get the <countOfRandomIds> random PRM ids of <table>
+#    When We get the PRM PRMLONDEST records from Oracle of <table>
+#    Then We get the PRM PRMLONDEST records from DL of <table>
+#    And Compare PRM PRMLONDEST records in PRM Oracle and DL of <table>
+#    Examples:
+#      | countOfRandomIds | table  |
+#      | 2000                 | PRMLONDEST|
+#
+#  Scenario Outline: Verify that all PRM PRMPRICEST is transferred from PRM Oracle to DL Inbound
+#    Given We get the <countOfRandomIds> random PRM ids of <table>
+#    When We get the PRM PRMPRICEST records from Oracle of <table>
+#    Then We get the PRM PRMPRICEST records from DL of <table>
+#    And Compare PRM PRMPRICEST records in PRM Oracle and DL of <table>
+#    Examples:
+#      | countOfRandomIds | table  |
+#      | 2000                 | PRMPRICEST|
+#
+#  Scenario Outline: Verify that all PRM PRMPUBINFT is transferred from PRM Oracle to DL Inbound
+#    Given We get the <countOfRandomIds> random PRM ids of <table>
+#    When We get the PRM PRMPUBINFT records from Oracle of <table>
+#    Then We get the PRM PRMPUBINFT records from DL of <table>
+#    And Compare PRM PRMPUBINFT records in PRM Oracle and DL of <table>
+#    Examples:
+#      | countOfRandomIds | table  |
+#      | 2000                 | PRMPUBINFT|
+#
+#  Scenario Outline: Verify that all PRM PRMPUBRELT is transferred from PRM Oracle to DL Inbound
+#    Given We get the <countOfRandomIds> random PRM ids of <table>
+#    When We get the PRM PRMPUBRELT records from Oracle of <table>
+#    Then We get the PRM PRMPUBRELT records from DL of <table>
+#    And Compare PRM PRMPUBRELT records in PRM Oracle and DL of <table>
+#    Examples:
+#      | countOfRandomIds | table  |
+#      | 2000                 | PRMPUBRELT|
