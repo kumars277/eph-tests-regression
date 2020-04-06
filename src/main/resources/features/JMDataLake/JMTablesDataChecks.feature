@@ -8,7 +8,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Allocation records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 2000             | JMF_ALLOCATION_CHANGE|
+      | 5000             | JMF_ALLOCATION_CHANGE|
 
   @JMDL
   Scenario Outline: Validate Application properties data is transferred from JM MYSQL to DL Inbound
@@ -18,7 +18,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Application properties records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 2000              | JMF_APPLICATION_PROPERTIES|
+      | 5000              | JMF_APPLICATION_PROPERTIES|
 
   @JMDL
   Scenario Outline: Validate Approval Attachment data is transferred from JM MYSQL to DL Inbound
@@ -28,7 +28,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Approval Attachment records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 2000             | JMF_APPROVAL_ATTACHMENT|
+      | 5000             | JMF_APPROVAL_ATTACHMENT|
 
   @JMDL
   Scenario Outline: Validate Approval Request data is transferred from JM MYSQL to DL Inbound
@@ -38,7 +38,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Approval Request records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 2000             | JMF_APPROVAL_REQUEST|
+      | 5000             | JMF_APPROVAL_REQUEST|
 
   @JMDL
   Scenario Outline: Validate Chronicle Scenario data is transferred from JM MYSQL to DL Inbound
@@ -48,7 +48,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Chronicle Scenario records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 2000             | JMF_CHRONICLE_SCENARIO|
+      | 5000             | JMF_CHRONICLE_SCENARIO|
 
   @JMDL
   Scenario Outline: Validate Chronicle Status data is transferred from JM MYSQL to DL Inbound
@@ -58,7 +58,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Chronicle Status records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 2000             | JMF_CHRONICLE_STATUS|
+      | 5000             | JMF_CHRONICLE_STATUS|
 
   @JMDL
   Scenario Outline: Validate Family Resource data is transferred from JM MYSQL to DL Inbound
@@ -68,7 +68,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Family Resource records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 2000             | JMF_FAMILY_RESOURCE_DETAILS|
+      | 5000             | JMF_FAMILY_RESOURCE_DETAILS|
 
   @JMDL
   Scenario Outline: Validate Finanacial Info data is transferred from JM MYSQL to DL Inbound

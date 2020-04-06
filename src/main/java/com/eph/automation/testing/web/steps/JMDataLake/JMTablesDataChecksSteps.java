@@ -2283,9 +2283,13 @@ public class JMTablesDataChecksSteps {
 
                 if (dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getADDRESS_LINE_3() != null ||
                         (dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getADDRESS_LINE_3() != null)) {
+                    String addressLine3Sql =dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getADDRESS_LINE_3();
+                    if(addressLine3Sql.isEmpty()){
+                        addressLine3Sql = null;
+                    }
+
                     Assert.assertEquals("The ADDRESS_LINE_3 is incorrect for PARTY_IN_PRODUCT_ID=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPARTY_IN_PRODUCT_ID(),
-                            dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getADDRESS_LINE_3(),
-                            dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getADDRESS_LINE_3());
+                            addressLine3Sql,dataQualityJMContext.tbJMDataObjectsFromDL.get(i).getADDRESS_LINE_3());
                 }
                 Log.info("PARTY_IN_PRODUCT_ID => " + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getPARTY_IN_PRODUCT_ID() +
                         " CITY => Mysql=" + dataQualityJMContext.tbJMDataObjectsFromMysql.get(i).getCITY() +
