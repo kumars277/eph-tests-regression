@@ -78,7 +78,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Finanacial Info records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 2000             | JMF_FINANCIAL_INFORMATION|
+      | 5000             | JMF_FINANCIAL_INFORMATION|
 
   @JMDL
   Scenario Outline: Validate Legal Info data is transferred from JM MYSQL to DL Inbound
@@ -88,7 +88,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Legal Info records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 2000            | JMF_LEGAL_INFORMATION|
+      | 5000            | JMF_LEGAL_INFORMATION|
 
   @JMDL
   Scenario Outline: Validate Manifestation data is transferred from JM MYSQL to DL Inbound
@@ -98,7 +98,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Manifestation Info records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 2000                 | JMF_MANIFESTATION_ELECTRONIC_DETAILS|
+      | 5000                 | JMF_MANIFESTATION_ELECTRONIC_DETAILS|
 
   @JMDL
   Scenario Outline: Validate Manifestation Print is transferred from JM MYSQL to DL Inbound
@@ -108,7 +108,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Manifestation Print records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 2000                 | JMF_MANIFESTATION_PRINT_DETAILS|
+      | 5000                 | JMF_MANIFESTATION_PRINT_DETAILS|
 
   @JMDL
   Scenario Outline: Validate Party Product is transferred from JM MYSQL to DL Inbound
@@ -148,7 +148,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Product Family records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 2000               | JMF_PRODUCT_FAMILY|
+      | 5000               | JMF_PRODUCT_FAMILY|
 
   @JMDL
   Scenario Outline: Validate Product Manifestation is transferred from JM MYSQL to DL Inbound
@@ -158,7 +158,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Product Manifestation records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 2000               | JMF_PRODUCT_MANIFESTATION|
+      | 5000               | JMF_PRODUCT_MANIFESTATION|
 
   @JMDL
   Scenario Outline: Validate Product Subject is transferred from JM MYSQL to DL Inbound
@@ -168,7 +168,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Product Subject records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 2000               | JMF_PRODUCT_SUBJECT_AREA|
+      | 5000               | JMF_PRODUCT_SUBJECT_AREA|
 
   @JMDL
   Scenario Outline: Validate Review Comment is transferred from JM MYSQL to DL Inbound
@@ -178,7 +178,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Review Comment records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 1000              | JMF_REVIEW_COMMENT|
+      | 5000              | JMF_REVIEW_COMMENT|
 
   @JMDL
   Scenario Outline: Validate Product Work is transferred from JM MYSQL to DL Inbound
@@ -188,7 +188,7 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Product Work records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 2000              | JMF_PRODUCT_WORK|
+      | 7000              | JMF_PRODUCT_WORK|
 
   @JMDL
   Scenario Outline: Validate Product Information is transferred from JM MYSQL to DL Inbound
@@ -198,6 +198,6 @@ Feature:Validate data for JM between MYsql and Data Lake - Inbound
     And Compare JMF Production Information records in JMF MySQL and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 2000                 | JMF_PRODUCTION_INFORMATION|
+      | 3000                 | JMF_PRODUCTION_INFORMATION|
 
 
