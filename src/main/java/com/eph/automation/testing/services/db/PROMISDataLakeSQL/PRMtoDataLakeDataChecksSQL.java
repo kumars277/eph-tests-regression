@@ -6,9 +6,9 @@ public class PRMtoDataLakeDataChecksSQL {
 
     public static String GET_PUBIDS_IDS = "select PUB_IDT from (SELECT PUB_IDT FROM PRM.PRMAUTPUBT ORDER BY dbms_random.value) WHERE ROWNUM<=%s";
 
-    public static String GET_CLSCOD_IDS = "select CLS_COD from (SELECT PUB_IDT FROM PRM.PRMCLSCODT ORDER BY dbms_random.value) WHERE ROWNUM<=%s";
+    public static String GET_CLSCOD_IDS = "select CLS_COD from (SELECT CLS_COD FROM PRM.PRMCLSCODT ORDER BY dbms_random.value) WHERE ROWNUM<=%s";
 
-    public static String GET_PUBIDT_IDS = "select PUB_IDT from (SELECT PUB_IDT FROM PRM.PRMCLST ORDER BY dbms_random.value) WHERE ROWNUM<=%s";
+    public static String GET_CLSTPUBIDT_IDS = "select PUB_IDT from (SELECT PUB_IDT FROM PRM.PRMCLST ORDER BY dbms_random.value) WHERE ROWNUM<=%s";
 
     public static String GET_PUBIDT_LONDEST_IDS = "select PUB_IDT from (SELECT PUB_IDT FROM PRM.PRMLONDEST ORDER BY dbms_random.value) WHERE ROWNUM<=%s";
 
@@ -75,7 +75,7 @@ public class PRMtoDataLakeDataChecksSQL {
     public static String getClsCodSql(String serverEnv, String table) {
         String GET_DATA_CLSCOD_PRM = null;
         switch (serverEnv) {
-            case ("mysql"):
+            case ("oracle"):
                 GET_DATA_CLSCOD_PRM = "select \n" +
                         "CLS_COD as CLS_COD\n" +
                         ",CLS_DES as CLS_DES\n" +
@@ -97,15 +97,40 @@ public class PRMtoDataLakeDataChecksSQL {
 
     }
 
+    public static String getClstSql(String serverEnv, String table) {
+        String GET_DATA_CLST_PRM = null;
+        switch (serverEnv) {
+            case ("oracle"):
+                GET_DATA_CLST_PRM = "select \n" +
+                        "PUB_IDT as PUB_IDT\n" +
+                        ",CLS_COD as CLS_COD\n" +
+                        ",SCA_COD as SCA_COD\n" +
+                        "from PRM" + "." + table + "\n" +
+                        " where PUB_IDT in ('%s')";
+                break;
+            case ("aws"):
+                GET_DATA_CLST_PRM = "select \n" +
+                        "PUB_IDT as PUB_IDT\n" +
+                        ",CLS_COD as CLS_COD\n" +
+                        ",SCA_COD as SCA_COD\n" +
+                        "from " + Constants.PRM_AWS_SCHEMA + ".PROMIS_" + table + "_PART\n" +
+                        " where inbound_ts = (select inbound_ts from " + Constants.PRM_AWS_SCHEMA + ".PROMIS_" + table + "_PART order by inbound_ts desc limit 1)\n" +
+                        " AND PUB_IDT in ('%s')";
+                break;
+        }
+        return GET_DATA_CLST_PRM;
+
+    }
+
     public static String getLonDestSql(String serverEnv, String table) {
         String GET_DATA_LONDEST_PRM = null;
         switch (serverEnv) {
-            case ("mysql"):
+            case ("oracle"):
                 GET_DATA_LONDEST_PRM = "select \n" +
                         "PUB_IDT as PUB_IDT\n" +
                         ",PUB_VOL_IDT as PUB_VOL_IDT\n" +
                         ",VOL_PRT_IDT as VOL_PRT_IDT\n" +
-                        ",LON_DES as LON_DES\n" +
+                       // ",LON_DES as LON_DES\n" + Data Type Long Not supported in the framework
                         "from PRM" + "." + table + "\n" +
                         " where PUB_IDT in ('%s')";
                 break;
@@ -114,7 +139,7 @@ public class PRMtoDataLakeDataChecksSQL {
                         "PUB_IDT as PUB_IDT\n" +
                         ",PUB_VOL_IDT as PUB_VOL_IDT\n" +
                         ",VOL_PRT_IDT as VOL_PRT_IDT\n" +
-                        ",LON_DES as LON_DES\n" +
+                       // ",LON_DES as LON_DES\n" +
                         "from " + Constants.PRM_AWS_SCHEMA + ".PROMIS_" + table + "_PART\n" +
                         " where inbound_ts = (select inbound_ts from " + Constants.PRM_AWS_SCHEMA + ".PROMIS_" + table + "_PART order by inbound_ts desc limit 1)\n" +
                         " AND PUB_IDT in ('%s')";
@@ -127,7 +152,7 @@ public class PRMtoDataLakeDataChecksSQL {
     public static String getPriCestSql(String serverEnv, String table) {
         String GET_DATA_PRICEST_PRM = null;
         switch (serverEnv) {
-            case ("mysql"):
+            case ("oracle"):
                 GET_DATA_PRICEST_PRM = "select \n" +
                         "PUB_IDT as PUB_IDT\n" +
                         ",PUB_VOL_IDT as PUB_VOL_IDT\n" +
@@ -173,7 +198,7 @@ public class PRMtoDataLakeDataChecksSQL {
     public static String getPubInftSql(String serverEnv, String table) {
         String GET_DATA_PUBINFT_PRM = null;
         switch (serverEnv) {
-            case ("mysql"):
+            case ("oracle"):
                 GET_DATA_PUBINFT_PRM = "select \n" +
                         "PUB_IDT as PUB_IDT\n" +
                         ",STA_DAA as STA_DAA\n" +
@@ -309,7 +334,7 @@ public class PRMtoDataLakeDataChecksSQL {
     public static String getPubReltSql(String serverEnv, String table) {
         String GET_DATA_PUBRELT_PRM = null;
         switch (serverEnv) {
-            case ("mysql"):
+            case ("oracle"):
                 GET_DATA_PUBRELT_PRM = "select \n" +
                         "PUB_PUB_IDT as PUB_PUB_IDT\n" +
                         ",REL_NO as REL_NO\n" +

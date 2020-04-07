@@ -22,13 +22,13 @@ import java.util.stream.Collectors;
 
 public class PRMTablesDataChecksSteps {
 
-    public DataQualityPRMContext dataQualityPRMContext ;
+    public DataQualityPRMContext dataQualityPRMContext;
     private static String sql;
     private static List<String> Ids;
     private PRMtoDataLakeDataChecksSQL prmObj = new PRMtoDataLakeDataChecksSQL();
 
-  // private SimpleDateFormat formatter1=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
-  // private SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+    // private SimpleDateFormat formatter1=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+    // private SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     @Given("^We get the (.*) random PRM ids of (.*)$")
     public void getRandomPRMIds(String numberOfRecords, String tableName) {
@@ -42,10 +42,10 @@ public class PRMTablesDataChecksSteps {
             case "PRMCLSCODT":
                 sql = String.format(PRMtoDataLakeDataChecksSQL.GET_CLSCOD_IDS, numberOfRecords);
                 List<Map<?, ?>> randomClscodIds = DBManager.getDBResultMap(sql, Constants.PROMIS_URL);
-                Ids = randomClscodIds.stream().map(m -> (BigDecimal) m.get("CLS_COD")).map(String::valueOf).collect(Collectors.toList());
+                Ids = randomClscodIds.stream().map(m -> (String) m.get("CLS_COD")).collect(Collectors.toList());
                 break;
             case "PRMCLST":
-                sql = String.format(PRMtoDataLakeDataChecksSQL.GET_PUBIDT_IDS, numberOfRecords);
+                sql = String.format(PRMtoDataLakeDataChecksSQL.GET_CLSTPUBIDT_IDS, numberOfRecords);
                 List<Map<?, ?>> randomPubIdtIds = DBManager.getDBResultMap(sql, Constants.PROMIS_URL);
                 Ids = randomPubIdtIds.stream().map(m -> (BigDecimal) m.get("PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
                 break;
@@ -74,7 +74,7 @@ public class PRMTablesDataChecksSteps {
                 Ids = randomPubreltIds.stream().map(m -> (BigDecimal) m.get("PUB_PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
                 break;
 
-     }
+        }
         Log.info(sql);
         Log.info(Ids.toString());
     }
@@ -85,7 +85,7 @@ public class PRMTablesDataChecksSteps {
         sql = String.format(prmObj.getAutPubtSql("oracle", tableName), Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityPRMContext.tbPRMDataObjectsFromOracle = DBManager.getDBResultAsBeanList(sql, PRMTablesDLObject.class, Constants.PROMIS_URL);
-    System.out.println(dataQualityPRMContext.tbPRMDataObjectsFromOracle.size());
+        System.out.println(dataQualityPRMContext.tbPRMDataObjectsFromOracle.size());
     }
 
     @Then("^We get the PRM PRMAUTPUBT records from DL of (.*)$")
@@ -111,8 +111,8 @@ public class PRMTablesDataChecksSteps {
                         " PUB_IDT => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
                         " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT());
                 if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() != null ||
-                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() != null)) {  //In data lake null considering or getting as String
-                    Assert.assertEquals("The PUB_IDT is incorrect for id=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() != null)) {
+                    Assert.assertEquals("The PUB_IDT is =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT());
 
@@ -248,7 +248,8 @@ public class PRMTablesDataChecksSteps {
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getBIO(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getBIO());
                 }
-     */           Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+     */
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
                         " AUT_EDT_FAX => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_FAX() +
                         " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_FAX());
 
@@ -305,5 +306,436 @@ public class PRMTablesDataChecksSteps {
         }
     }
 
+    @When("^We get the PRM PRMCLSCODT records from Oracle of (.*)$")
+    public void getRecordsPrmClsCodtOracle(String tableName) {
+        Log.info("We get the PRMCLSCODT records from PRM Oracle..");
+        sql = String.format(prmObj.getClsCodSql("oracle", tableName), Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityPRMContext.tbPRMDataObjectsFromOracle = DBManager.getDBResultAsBeanList(sql, PRMTablesDLObject.class, Constants.PROMIS_URL);
+        System.out.println(dataQualityPRMContext.tbPRMDataObjectsFromOracle.size());
+    }
 
+    @Then("^We get the PRM PRMCLSCODT records from DL of (.*)$")
+    public void getRecordsPrmClsCodtDL(String tableName) {
+        Log.info("We get the PRMCLSCODT records from PRM DL..");
+        sql = String.format(prmObj.getClsCodSql("aws", tableName), Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityPRMContext.tbPRMDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, PRMTablesDLObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare PRM PRMCLSCODT records in PRM Oracle and DL of (.*)$")
+    public void comparePrmClsCodtDataOracletoDL(String tableName) {
+        if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the data to compare the PRMCLSCODT records in Oracle and DATA LAKE ..");
+            for (int i = 0; i < dataQualityPRMContext.tbPRMDataObjectsFromOracle.size(); i++) {
+
+                dataQualityPRMContext.tbPRMDataObjectsFromOracle.sort(Comparator.comparing(PRMTablesDLObject::getCLS_COD)); //sort data in the lists
+                dataQualityPRMContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getCLS_COD));
+
+                Log.info("CLS_COD => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_COD() +
+                        " CLS_COD => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_COD() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_COD() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD() != null)) {
+                    Assert.assertEquals("The CLS_COD =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_COD() + " is missing/not found in Data Lake",
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_COD(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD());
+
+                }
+
+                Log.info("CLS_COD => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_COD() +
+                        " CLS_DES => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_DES() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getCLS_DES());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_DES() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getCLS_DES() != null)) {
+                    Assert.assertEquals("The CLS_DES is incorrect for CLS_COD=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_COD(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_DES(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getCLS_DES());
+
+                }
+
+                Log.info("CLS_COD => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_COD() +
+                        " CLS_GRP_COD => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_GRP_COD() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getCLS_GRP_COD());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_GRP_COD() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getCLS_GRP_COD() != null)) {
+                    Assert.assertEquals("The CLS_GRP_COD is incorrect for CLS_COD=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_COD(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_GRP_COD(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getCLS_GRP_COD());
+
+                }
+            }
+        }
+
+    }
+
+    @When("^We get the PRM PRMCLST records from Oracle of (.*)$")
+    public void getRecordsClstOracle(String tableName) {
+        Log.info("We get the PRMCLST records from PRM Oracle..");
+        sql = String.format(prmObj.getClstSql("oracle", tableName), Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityPRMContext.tbPRMDataObjectsFromOracle = DBManager.getDBResultAsBeanList(sql, PRMTablesDLObject.class, Constants.PROMIS_URL);
+    }
+
+    @Then("^We get the PRM PRMCLST records from DL of (.*)$")
+    public void getRecordsClstDL(String tableName) {
+        Log.info("We get the PRMCLST records from PRM DL..");
+        sql = String.format(prmObj.getClstSql("aws", tableName), Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityPRMContext.tbPRMDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, PRMTablesDLObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare PRM PRMCLST records in PRM Oracle and DL of (.*)$")
+    public void comparePrmClstDataOracletoDL(String tableName) {
+        if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the data to compare the PRMCLST records in Oracle and DATA LAKE ..");
+            for (int i = 0; i < dataQualityPRMContext.tbPRMDataObjectsFromOracle.size(); i++) {
+
+                dataQualityPRMContext.tbPRMDataObjectsFromOracle.sort(Comparator.comparing(PRMTablesDLObject::getPUB_IDT)); //sort data in the lists
+                dataQualityPRMContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getPUB_IDT));
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " PUB_IDT => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() != null)) {
+                    Assert.assertEquals("The PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT());
+
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " CLS_COD => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_COD() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_COD() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD() != null)) {
+                    Assert.assertEquals("The CLS_COD is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_COD(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD());
+
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " SCA_COD => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getSCA_COD() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getSCA_COD());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getSCA_COD() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getSCA_COD() != null)) {
+                    Assert.assertEquals("The SCA_COD is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getSCA_COD(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getSCA_COD());
+
+                }
+
+            }
+        }
+    }
+
+    @When("^We get the PRM PRMLONDEST records from Oracle of (.*)$")
+    public void getRecordsLndestDLOracle(String tableName) {
+        Log.info("We get the PRMLONDEST records from PRM Oracle..");
+        sql = String.format(prmObj.getLonDestSql("oracle", tableName), Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityPRMContext.tbPRMDataObjectsFromOracle = DBManager.getDBResultAsBeanList(sql, PRMTablesDLObject.class, Constants.PROMIS_URL);
+    }
+
+    @Then("^We get the PRM PRMLONDEST records from DL of (.*)$")
+    public void getRecordsLndestDL(String tableName) {
+        Log.info("We get the PRMLONDEST records from PRM DL..");
+        sql = String.format(prmObj.getLonDestSql("aws", tableName), Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityPRMContext.tbPRMDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, PRMTablesDLObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare PRM PRMLONDEST records in PRM Oracle and DL of (.*)$")
+    public void comparePrmLondestDataOracletoDL(String tableName) {
+        if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the data to compare the PRMLONDEST records in Oracle and DATA LAKE ..");
+            for (int i = 0; i < dataQualityPRMContext.tbPRMDataObjectsFromOracle.size(); i++) {
+
+                dataQualityPRMContext.tbPRMDataObjectsFromOracle.sort(Comparator.comparing(PRMTablesDLObject::getPUB_IDT)); //sort data in the lists
+                dataQualityPRMContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getPUB_IDT));
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " PUB_IDT => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() != null)) {
+                    Assert.assertEquals("The PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT());
+
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " PUB_VOL_IDT => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_VOL_IDT() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_VOL_IDT());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_VOL_IDT() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_VOL_IDT() != null)) {
+                    Assert.assertEquals("The PUB_VOL_IDT is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_VOL_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_VOL_IDT());
+
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " VOL_PRT_IDT => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getVOL_PRT_IDT() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getVOL_PRT_IDT());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getVOL_PRT_IDT() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getVOL_PRT_IDT() != null)) {
+                    Assert.assertEquals("The VOL_PRT_IDT is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getVOL_PRT_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getVOL_PRT_IDT());
+
+                }
+
+            }
+        }
+    }
+
+    @When("^We get the PRM PRMPRICEST records from Oracle of (.*)$")
+    public void getRecordsPricestOracle(String tableName) {
+        Log.info("We get the PRMPRICEST records from PRM Oracle..");
+        sql = String.format(prmObj.getPriCestSql("oracle", tableName), Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityPRMContext.tbPRMDataObjectsFromOracle = DBManager.getDBResultAsBeanList(sql, PRMTablesDLObject.class, Constants.PROMIS_URL);
+        System.out.println(dataQualityPRMContext.tbPRMDataObjectsFromOracle.size());
+    }
+
+    @Then("^We get the PRM PRMPRICEST records from DL of (.*)$")
+    public void getRecordsPricestDL(String tableName) {
+        Log.info("We get the PRMPRICEST records from PRM DL..");
+        sql = String.format(prmObj.getPriCestSql("aws", tableName), Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityPRMContext.tbPRMDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, PRMTablesDLObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare PRM PRMPRICEST records in PRM Oracle and DL of (.*)$")
+    public void comparePrmPricestDataOracletoDL(String tableName) {
+        if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the data to compare the PRMPRICEST records in Oracle and DATA LAKE ..");
+            for (int i = 0; i < dataQualityPRMContext.tbPRMDataObjectsFromOracle.size(); i++) {
+
+                dataQualityPRMContext.tbPRMDataObjectsFromOracle.sort(Comparator.comparing(PRMTablesDLObject::getPUB_IDT)); //sort data in the lists
+                dataQualityPRMContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getPUB_IDT));
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " PUB_IDT => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() != null)) {
+                    Assert.assertEquals("The PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT());
+
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " PUB_VOL_IDT => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_VOL_IDT() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_VOL_IDT());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_VOL_IDT() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_VOL_IDT() != null)) {
+                    Assert.assertEquals("The PUB_VOL_IDT is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_VOL_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_VOL_IDT());
+
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " VOL_PRT_IDT => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getVOL_PRT_IDT() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getVOL_PRT_IDT());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getVOL_PRT_IDT() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getVOL_PRT_IDT() != null)) {
+                    Assert.assertEquals("The VOL_PRT_IDT is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getVOL_PRT_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getVOL_PRT_IDT());
+
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " EDN_IDT => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getEDN_IDT() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getEDN_IDT());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getEDN_IDT() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getEDN_IDT() != null)) {
+                    Assert.assertEquals("The EDN_IDT is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getEDN_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getEDN_IDT());
+
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " PRC_TYP => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPRC_TYP() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPRC_TYP());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPRC_TYP() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPRC_TYP() != null)) {
+                    Assert.assertEquals("The PRC_TYP is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPRC_TYP(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPRC_TYP());
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " PRC_GEO => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPRC_GEO() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPRC_GEO());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPRC_GEO() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPRC_GEO() != null)) {
+                    Assert.assertEquals("The PRC_GEO is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPRC_GEO(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPRC_GEO());
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " IPT_COD => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getIPT_COD() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getIPT_COD());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getIPT_COD() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getIPT_COD() != null)) {
+                    Assert.assertEquals("The IPT_COD is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getIPT_COD(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getIPT_COD());
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " PRC_DAT => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPRC_DAT() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPRC_DAT());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPRC_DAT() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPRC_DAT() != null)) {
+                    Assert.assertEquals("The PRC_DAT is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPRC_DAT().substring(0, 10),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPRC_DAT().substring(0, 10));
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " STD_CUR_COD => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getSTD_CUR_COD() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getSTD_CUR_COD());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getSTD_CUR_COD() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getSTD_CUR_COD() != null)) {
+                    Assert.assertEquals("The STD_CUR_COD is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getSTD_CUR_COD(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getSTD_CUR_COD());
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " STD_PRC => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getSTD_PRC() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getSTD_PRC());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getSTD_CUR_COD() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getSTD_CUR_COD() != null)) {
+                    Assert.assertEquals("The STD_PRC is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getSTD_PRC(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getSTD_PRC());
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " PRC_PRE => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPRC_PRE() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPRC_PRE());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPRC_PRE() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPRC_PRE() != null)) {
+                    Assert.assertEquals("The PRC_PRE is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPRC_PRE().replace("\n", " ").replace("\r", " ").replace("\0", ""),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPRC_PRE());
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " ADD_PRC => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getADD_PRC() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getADD_PRC());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getADD_PRC() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getADD_PRC() != null)) {
+                    Assert.assertEquals("The ADD_PRC is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getADD_PRC().replace("\n", " ").replace("\r", " ").replace("\0", ""),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getADD_PRC());
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " FLAG => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getFLAG() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getFLAG());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getFLAG() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getFLAG() != null)) {
+                    Assert.assertEquals("The FLAG is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getFLAG(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getFLAG());
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " EXP_DAT => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getEXP_DAT() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getEXP_DAT());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getEXP_DAT() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getEXP_DAT() != null)) {
+                    Assert.assertEquals("The EXP_DAT is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getEXP_DAT().substring(0, 10),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getEXP_DAT().substring(0, 10));
+                }
+
+            }
+        }
+    }
+
+    @When("^We get the PRM PRMPUBINFT records from Oracle of (.*)$")
+    public void getRecordsPubInftOracle(String tableName) {
+        Log.info("We get the PRMPUBINFT records from PRM Oracle..");
+        sql = String.format(prmObj.getPubInftSql("oracle", tableName), Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityPRMContext.tbPRMDataObjectsFromOracle = DBManager.getDBResultAsBeanList(sql, PRMTablesDLObject.class, Constants.PROMIS_URL);
+        System.out.println(dataQualityPRMContext.tbPRMDataObjectsFromOracle.size());
+    }
+
+    @Then("^We get the PRM PRMPUBINFT records from DL of (.*)$")
+    public void getRecordsPubInftDL(String tableName) {
+        Log.info("We get the PRMPUBINFT records from PRM DL..");
+        sql = String.format(prmObj.getPubInftSql("aws", tableName), Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityPRMContext.tbPRMDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, PRMTablesDLObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare PRM PRMPUBINFT records in PRM Oracle and DL of (.*)$")
+    public void comparePrmPubInftDataOracletoDL(String tableName) {
+        if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the data to compare the PRMPUBINFT records in Oracle and DATA LAKE ..");
+            for (int i = 0; i < dataQualityPRMContext.tbPRMDataObjectsFromOracle.size(); i++) {
+
+                dataQualityPRMContext.tbPRMDataObjectsFromOracle.sort(Comparator.comparing(PRMTablesDLObject::getPUB_IDT)); //sort data in the lists
+                dataQualityPRMContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getPUB_IDT));
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " PUB_IDT => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() != null)) {
+                    Assert.assertEquals("The PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT());
+
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " STA_DAA => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getSTA_DAA() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getSTA_DAA());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getSTA_DAA() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getSTA_DAA() != null)) {
+                    Assert.assertEquals("The STA_DAA is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getSTA_DAA(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getSTA_DAA());
+                }
+
+                Log.info("PUB_IDT => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() +
+                        " FUL_TIT => Oracle=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getFUL_TIT() +
+                        " DL=" + dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getFUL_TIT());
+                if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getFUL_TIT() != null ||
+                        (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getFUL_TIT() != null)) {
+                    Assert.assertEquals("The FUL_TIT is incorrect for PUB_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getFUL_TIT(),
+                            dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getFUL_TIT());
+                }
+
+
+            }
+        }
+    }
 }
