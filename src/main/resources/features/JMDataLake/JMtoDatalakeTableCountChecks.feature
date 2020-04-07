@@ -2,7 +2,7 @@ Feature:Validate data for JM tables between MYSQL and Data Lake
 
 #  Created by Thomas Kruck on 20/03/20
 
-    @JMCount
+    @JMDL
   Scenario Outline: Verify that all JM data is transferred from MYSQL to DL
     Given We know the number of JM <tableName> data in MYSQL
     When The JM <tableName> data is in the DL
