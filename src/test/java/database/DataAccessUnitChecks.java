@@ -23,15 +23,13 @@ public class DataAccessUnitChecks {
     @Test
     @Ignore
     public void testDecrypt() {
-       String PMX_URL="Km9u97GvVfcVW6OgYwRM8Ux4X8xR0lWEHD7u+cU3eCXaQ4H3A/2w3qk3J4ZdN27x7eDLsObMIdu8MSXmmVc8nsNRjNAQguaUOq7HnxFh4oO4cQNSOHmw6NBEY0duIZ237dE/GubBmI0=";
-       System.out.println(DecryptionService.decrypt(PMX_URL));
+      // System.out.println(DecryptionService.decrypt(PMX_URL));
     }
 
     @Test
     @Ignore
     public void testEncrypt() {
-        String PROMIS_ORACLE = "jdbc:oracle:thin:SURESHD/Tyv2qtp2k@//promis-oracledb.prod.ordersubs.tio.systems:1521/prmdb";
-           System.out.println(DecryptionService.encrypt(PROMIS_ORACLE));
+        //   System.out.println(DecryptionService.encrypt(PROMIS_ORACLE));
     }
 
     @Test

@@ -916,7 +916,7 @@ public class JMTablesDataChecksSQL {
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
                         ",EPH_WORK_ID as EPH_WORK_ID\n" +
                         "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
-                        " where PRODUCT_WORK_ID in ('4968')";
+                        " where PRODUCT_WORK_ID in ('%s')";
                 break;
             case ("aws"):
                 GET_DATA_PRODUCT_WORK_JM = "select \n" +
@@ -994,7 +994,7 @@ public class JMTablesDataChecksSQL {
                         ",EPH_WORK_ID as EPH_WORK_ID\n" +
                         "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
                         " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
-                        " AND PRODUCT_WORK_ID in ('4968')";
+                        " AND PRODUCT_WORK_ID in ('%s')";
                 break;
         }
         return GET_DATA_PRODUCT_WORK_JM;
