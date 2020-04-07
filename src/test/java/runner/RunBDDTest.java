@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Cucumber.class)
 @CucumberOptions(strict = false, features = "src/main/resources/features", format = { "pretty",
-        "json:target/cucumber.json" }, tags = { "@JMCount" },
+        "json:target/cucumber.json" }, tags = { "@JMDL" },
         glue = {"com.eph.automation.testing.web.steps", "com.eph.automation.testing.common.hooks"})
 public class RunBDDTest {
 }
