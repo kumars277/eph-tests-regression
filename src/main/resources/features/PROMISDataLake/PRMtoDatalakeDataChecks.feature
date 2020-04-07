@@ -43,7 +43,7 @@ Feature:Validate data for PRM between Oracle and Data Lake - Inbound
     And Compare PRM PRMPRICEST records in PRM Oracle and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 10                 | PRMPRICEST|
+      | 1                 | PRMPRICEST|
 
   Scenario Outline: Verify that all PRM PRMPUBINFT is transferred from PRM Oracle to DL Inbound
     Given We get the <countOfRandomIds> random PRM ids of <table>
@@ -52,13 +52,13 @@ Feature:Validate data for PRM between Oracle and Data Lake - Inbound
     And Compare PRM PRMPUBINFT records in PRM Oracle and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 10                 | PRMPUBINFT|
-#
-#  Scenario Outline: Verify that all PRM PRMPUBRELT is transferred from PRM Oracle to DL Inbound
-#    Given We get the <countOfRandomIds> random PRM ids of <table>
-#    When We get the PRM PRMPUBRELT records from Oracle of <table>
-#    Then We get the PRM PRMPUBRELT records from DL of <table>
-#    And Compare PRM PRMPUBRELT records in PRM Oracle and DL of <table>
-#    Examples:
-#      | countOfRandomIds | table  |
-#      | 2000                 | PRMPUBRELT|
+      | 1                 | PRMPUBINFT|
+
+  Scenario Outline: Verify that all PRM PRMPUBRELT is transferred from PRM Oracle to DL Inbound
+    Given We get the <countOfRandomIds> random PRM ids of <table>
+    When We get the PRM PRMPUBRELT records from Oracle of <table>
+    Then We get the PRM PRMPUBRELT records from DL of <table>
+    And Compare PRM PRMPUBRELT records in PRM Oracle and DL of <table>
+    Examples:
+      | countOfRandomIds | table  |
+      | 1                 | PRMPUBRELT|

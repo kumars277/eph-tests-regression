@@ -16,7 +16,7 @@ public class PRMtoDataLakeDataChecksSQL {
 
     public static String GET_PUBIDT_PUBINFT_IDS = "select PUB_IDT from (SELECT PUB_IDT FROM PRM.PRMPUBINFT ORDER BY dbms_random.value) WHERE ROWNUM<=%s";
 
-    public static String GET_PUBIDT_PUBRELT_IDS = "select PUB_PUB_IDT from (SELECT PUB_IDT FROM PRM.PRMPUBRELT ORDER BY dbms_random.value) WHERE ROWNUM<=%s";
+    public static String GET_PUBIDT_PUBRELT_IDS = "select PUB_PUB_IDT from (SELECT PUB_PUB_IDT FROM PRM.PRMPUBRELT ORDER BY dbms_random.value) WHERE ROWNUM<=%s";
 
     public static String getAutPubtSql(String serverEnv, String table) {
         String GET_DATA_AUTPUBT_PRM = null;

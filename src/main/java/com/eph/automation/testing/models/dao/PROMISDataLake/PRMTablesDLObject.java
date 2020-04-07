@@ -360,7 +360,7 @@ public class PRMTablesDLObject {
     public void setIF_RANKING(String IF_RANKING) {
         this.IF_RANKING= IF_RANKING;
     }
-    public String getIIF_CAT() {
+    public String getIF_CAT() {
         return IF_CAT;
     }
     public void setIF_CAT(String IF_CAT) {
