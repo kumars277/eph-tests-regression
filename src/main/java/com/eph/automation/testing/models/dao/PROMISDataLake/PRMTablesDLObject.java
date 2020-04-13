@@ -118,15 +118,37 @@ public class PRMTablesDLObject {
     }
     public void setAUT_EDT_IDT(String AUT_EDT_IDT) { this.AUT_EDT_IDT = AUT_EDT_IDT; }
 
+    public String getTYP_DES() {
+        return TYP_DES;
+    }
+    public void setTYP_DES(String TYP_DES) { this.TYP_DES = TYP_DES; }
+
+
     public String getAUT_EDT_TYP() {
         return AUT_EDT_TYP;
     }
     public void setAUT_EDT_TYP(String AUT_EDT_TYP) { this.AUT_EDT_TYP = AUT_EDT_TYP; }
 
-    public String getTYP_DES() {
-        return TYP_DES;
+    public String getAUT_EDT_FAX() {
+        return AUT_EDT_FAX;
     }
-    public void setTYP_DES(String TYP_DES) { this.TYP_DES = TYP_DES; }
+    public void setAUT_EDT_FAX(String AUT_EDT_FAX) { this.AUT_EDT_FAX = AUT_EDT_FAX; }
+
+    public String getAUT_EDT_PHONE() {
+        return AUT_EDT_PHONE;
+    }
+    public void setAUT_EDT_PHONE(String AUT_EDT_PHONE) { this.AUT_EDT_PHONE = AUT_EDT_PHONE; }
+
+    public String getAUT_EDT_EMAIL() {
+        return AUT_EDT_EMAIL;
+    }
+    public void setAUT_EDT_EMAIL(String AUT_EDT_EMAIL) { this.AUT_EDT_EMAIL = AUT_EDT_EMAIL; }
+
+    public String getBIO() {
+        return BIO;
+    }
+    public void setBIO(String AUT_EDT_EMAIL) { this.BIO = BIO; }
+
 
     public String getSEQ_NUM() {
         return SEQ_NUM;
@@ -161,21 +183,6 @@ public class PRMTablesDLObject {
     }
     public void setFTN(String FTN) { this.FTN = FTN; }
 
-    public String getBIO() {
-        return BIO;
-    }
-    public void setBIO(String BIO) { this.BIO = BIO; }
-
-    public String getAUT_EDT_FAX() {
-        return AUT_EDT_FAX  ;
-    }
-    public void setAUT_EDT_FAX(String AUT_EDT_FAX) { this.AUT_EDT_FAX = AUT_EDT_FAX; }
-
-    public String getAUT_EDT_PHONE() { return AUT_EDT_PHONE; }
-    public void setAUT_EDT_PHONE(String AUT_EDT_PHONE) { this.AUT_EDT_PHONE = AUT_EDT_PHONE; }
-
-    public String getAUT_EDT_EMAIL() { return AUT_EDT_EMAIL; }
-    public void setAUT_EDT_EMAIL(String AUT_EDT_EMAIL) { this.AUT_EDT_EMAIL = AUT_EDT_EMAIL; }
 
     public String getAUT_EDT_JCI() { return AUT_EDT_JCI; }
     public void setAUT_EDT_JCI(String AUT_EDT_JCI) { this.AUT_EDT_JCI = AUT_EDT_JCI; }
@@ -360,7 +367,7 @@ public class PRMTablesDLObject {
     public void setIF_RANKING(String IF_RANKING) {
         this.IF_RANKING= IF_RANKING;
     }
-    public String getIIF_CAT() {
+    public String getIF_CAT() {
         return IF_CAT;
     }
     public void setIF_CAT(String IF_CAT) {

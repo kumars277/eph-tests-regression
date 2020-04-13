@@ -16,7 +16,7 @@ public class PRMtoDataLakeDataChecksSQL {
 
     public static String GET_PUBIDT_PUBINFT_IDS = "select PUB_IDT from (SELECT PUB_IDT FROM PRM.PRMPUBINFT ORDER BY dbms_random.value) WHERE ROWNUM<=%s";
 
-    public static String GET_PUBIDT_PUBRELT_IDS = "select PUB_PUB_IDT from (SELECT PUB_IDT FROM PRM.PRMPUBRELT ORDER BY dbms_random.value) WHERE ROWNUM<=%s";
+    public static String GET_PUBIDT_PUBRELT_IDS = "select PUB_PUB_IDT from (SELECT PUB_PUB_IDT FROM PRM.PRMPUBRELT ORDER BY dbms_random.value) WHERE ROWNUM<=%s";
 
     public static String getAutPubtSql(String serverEnv, String table) {
         String GET_DATA_AUTPUBT_PRM = null;
@@ -35,7 +35,7 @@ public class PRMtoDataLakeDataChecksSQL {
                         ",AUT_EDT_SUF as AUT_EDT_SUF\n" +
                         ",AFF_TXT as AFF_TXT\n" +
                         ",FTN as FTN\n" +
-                        //    ",BIO as BIO\n" + problem with BIO Column throws nullpointer removed for now it holds Long datatype
+                       // ",BIO as BIO\n" + //problem with BIO Column throws nullpointer removed for now it holds Long datatype
                         ",AUT_EDT_FAX as AUT_EDT_FAX\n" +
                         ",AUT_EDT_PHONE as AUT_EDT_PHONE\n" +
                         ",AUT_EDT_EMAIL as AUT_EDT_EMAIL\n" +
