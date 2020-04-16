@@ -40,7 +40,7 @@ public class Constants {
     public static String EPH_SCHEMA = "semarchy_eph_mdm";
     //public static String JMF_SQL_SCHEMA = "jmf_sit_application";
     //public static String JMF_AWS_SCHEMA = "journalmaestro_staging_sit";
-    public static String PRM_AWS_SCHEMA = "promis_staging_sit";
+    //public static String PRM_AWS_SCHEMA = "promis_staging_sit";
 
 
 
