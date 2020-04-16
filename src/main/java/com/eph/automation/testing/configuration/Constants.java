@@ -60,7 +60,7 @@ public class Constants {
 
 
     //MySql Database
-//    public static String MYSQL_SIT_DB_URL_KEY = "MYSQL_SIT_URL";
+    public static String MYSQL_SIT_DB_URL_KEY = "MYSQL_SIT_URL";
 //    public static String MYSQL_UAT_DB_URL_KEY = "MYSQL_UAT_URL";
 
     public static String HEADER_KEY_FOR_EIP_NOTIFICAIOTN = "Authorization";
