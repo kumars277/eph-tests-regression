@@ -64,8 +64,8 @@ public class PRMtoDataLakeDataChecksSQL {
                         ",AUT_EDT_EMAIL as AUT_EDT_EMAIL\n" +
                         ",AUT_EDT_JCI as AUT_EDT_JCI\n" +
                         ",BIO_IMAGE as BIO_IMAGE\n" +
-                        "from " + Constants.PRM_AWS_SCHEMA + ".PROMIS_" + table + "_PART\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.PRM_AWS_SCHEMA + ".PROMIS_" + table + "_PART order by inbound_ts desc limit 1)\n" +
+                        "from " + GetPRMDLDBUser.getPRMDataBase() + ".PROMIS_" + table + "_PART\n" +
+                        " where inbound_ts = (select inbound_ts from " + GetPRMDLDBUser.getPRMDataBase() + ".PROMIS_" + table + "_PART order by inbound_ts desc limit 1)\n" +
                         " AND PUB_IDT in ('%s')";
                 break;
         }
@@ -88,8 +88,8 @@ public class PRMtoDataLakeDataChecksSQL {
                         "CLS_COD as CLS_COD\n" +
                         ",CLS_DES as CLS_DES\n" +
                         ",CLS_GRP_COD as CLS_GRP_COD\n" +
-                        "from " + Constants.PRM_AWS_SCHEMA + ".PROMIS_" + table + "_PART\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.PRM_AWS_SCHEMA + ".PROMIS_" + table + "_PART order by inbound_ts desc limit 1)\n" +
+                        "from " + GetPRMDLDBUser.getPRMDataBase() + ".PROMIS_" + table + "_PART\n" +
+                        " where inbound_ts = (select inbound_ts from " + GetPRMDLDBUser.getPRMDataBase() + ".PROMIS_" + table + "_PART order by inbound_ts desc limit 1)\n" +
                         " AND CLS_COD in ('%s')";
                 break;
         }
@@ -113,8 +113,8 @@ public class PRMtoDataLakeDataChecksSQL {
                         "PUB_IDT as PUB_IDT\n" +
                         ",CLS_COD as CLS_COD\n" +
                         ",SCA_COD as SCA_COD\n" +
-                        "from " + Constants.PRM_AWS_SCHEMA + ".PROMIS_" + table + "_PART\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.PRM_AWS_SCHEMA + ".PROMIS_" + table + "_PART order by inbound_ts desc limit 1)\n" +
+                        "from " + GetPRMDLDBUser.getPRMDataBase() + ".PROMIS_" + table + "_PART\n" +
+                        " where inbound_ts = (select inbound_ts from " + GetPRMDLDBUser.getPRMDataBase() + ".PROMIS_" + table + "_PART order by inbound_ts desc limit 1)\n" +
                         " AND PUB_IDT in ('%s')";
                 break;
         }
@@ -140,8 +140,8 @@ public class PRMtoDataLakeDataChecksSQL {
                         ",PUB_VOL_IDT as PUB_VOL_IDT\n" +
                         ",VOL_PRT_IDT as VOL_PRT_IDT\n" +
                        // ",LON_DES as LON_DES\n" +
-                        "from " + Constants.PRM_AWS_SCHEMA + ".PROMIS_" + table + "_PART\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.PRM_AWS_SCHEMA + ".PROMIS_" + table + "_PART order by inbound_ts desc limit 1)\n" +
+                        "from " + GetPRMDLDBUser.getPRMDataBase() + ".PROMIS_" + table + "_PART\n" +
+                        " where inbound_ts = (select inbound_ts from " + GetPRMDLDBUser.getPRMDataBase() + ".PROMIS_" + table + "_PART order by inbound_ts desc limit 1)\n" +
                         " AND PUB_IDT in ('%s')";
                 break;
         }
@@ -187,8 +187,8 @@ public class PRMtoDataLakeDataChecksSQL {
                         ",ADD_PRC as ADD_PRC\n" +
                         ",FLAG as FLAG\n" +
                         ",EXP_DAT as EXP_DAT\n" +
-                        "from " + Constants.PRM_AWS_SCHEMA + ".PROMIS_" + table + "_PART\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.PRM_AWS_SCHEMA + ".PROMIS_" + table + "_PART order by inbound_ts desc limit 1)\n" +
+                        "from " + GetPRMDLDBUser.getPRMDataBase() + ".PROMIS_" + table + "_PART\n" +
+                        " where inbound_ts = (select inbound_ts from " + GetPRMDLDBUser.getPRMDataBase() + ".PROMIS_" + table + "_PART order by inbound_ts desc limit 1)\n" +
                         " AND PUB_IDT in ('%s')";
                 break;
         }
@@ -323,8 +323,8 @@ public class PRMtoDataLakeDataChecksSQL {
                         ",IF_RANKING as IF_RANKING\n" +
                         ",IF_CAT as IF_CAT\n" +
                         ",OA_TYPE as OA_TYPE\n" +
-                        "from " + Constants.PRM_AWS_SCHEMA + ".PROMIS_" + table + "_PART\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.PRM_AWS_SCHEMA + ".PROMIS_" + table + "_PART order by inbound_ts desc limit 1)\n" +
+                        "from " + GetPRMDLDBUser.getPRMDataBase() + ".PROMIS_" + table + "_PART\n" +
+                        " where inbound_ts = (select inbound_ts from " + GetPRMDLDBUser.getPRMDataBase() + ".PROMIS_" + table + "_PART order by inbound_ts desc limit 1)\n" +
                         " AND PUB_IDT in ('%s')";
                 break;
         }
@@ -363,8 +363,8 @@ public class PRMtoDataLakeDataChecksSQL {
                         ",RTP_RTP_COD as RTP_RTP_COD\n" +
                         ",REL_END_DATE as REL_END_DATE\n" +
                         ",REL_START_DATE as REL_START_DATE\n" +
-                        "from " + Constants.PRM_AWS_SCHEMA + ".PROMIS_" + table + "_PART\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.PRM_AWS_SCHEMA + ".PROMIS_" + table + "_PART order by inbound_ts desc limit 1)\n" +
+                        "from " + GetPRMDLDBUser.getPRMDataBase() + ".PROMIS_" + table + "_PART\n" +
+                        " where inbound_ts = (select inbound_ts from " + GetPRMDLDBUser.getPRMDataBase() + ".PROMIS_" + table + "_PART order by inbound_ts desc limit 1)\n" +
                         " AND PUB_PUB_IDT in ('%s')";
                 break;
         }
