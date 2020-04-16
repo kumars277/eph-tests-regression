@@ -2,47 +2,52 @@ package com.eph.automation.testing.services.db.JMDataLakeSQL;
 
 import com.eph.automation.testing.configuration.Constants;
 
+import static com.eph.automation.testing.services.db.JMDataLakeSQL.GetJMDLDBUser.getJMDataBase;
+
+
 public class JMTablesDataChecksSQL {
 
-    public static String GET_ALLOCATION_IDS = "select ALLOCATION_CHANGE_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_ALLOCATION_CHANGE order by rand() limit %s";
+    static  String[] databaseEnv = getJMDataBase();
 
-    public static String GET_APPLICATION_KEY = "select APPLICATION_PROPERTY_KEY from " + Constants.JMF_SQL_SCHEMA + ".JMF_APPLICATION_PROPERTIES order by rand() limit %s";
+    public static String GET_ALLOCATION_IDS = "select ALLOCATION_CHANGE_ID from " + databaseEnv[0] + ".JMF_ALLOCATION_CHANGE order by rand() limit %s";
 
-    public static String GET_APPROVAL_REQ_ID = "select APPROVAL_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_APPROVAL_REQUEST order by rand() limit %s";
+    public static String GET_APPLICATION_KEY = "select APPLICATION_PROPERTY_KEY from " + databaseEnv[0] + ".JMF_APPLICATION_PROPERTIES order by rand() limit %s";
 
-    public static String GET_CHRONICLE_SCE_ID = "select CHRONICLE_SCENARIO_CODE from " + Constants.JMF_SQL_SCHEMA + ".JMF_CHRONICLE_SCENARIO order by rand() limit %s";
+    public static String GET_APPROVAL_REQ_ID = "select APPROVAL_ID from " + databaseEnv[0] + ".JMF_APPROVAL_REQUEST order by rand() limit %s";
 
-    public static String GET_CHRONICLE_STATUS_ID = "select CHRONICLE_STATUS_CODE from " + Constants.JMF_SQL_SCHEMA + ".JMF_CHRONICLE_STATUS order by rand() limit %s";
+    public static String GET_CHRONICLE_SCE_ID = "select CHRONICLE_SCENARIO_CODE from " + databaseEnv[0] + ".JMF_CHRONICLE_SCENARIO order by rand() limit %s";
 
-    public static String GET_FAMILY_RESOURCE_ID = "select FAMILY_RESOURCE_DETAILS_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_FAMILY_RESOURCE_DETAILS order by rand() limit %s";
+    public static String GET_CHRONICLE_STATUS_ID = "select CHRONICLE_STATUS_CODE from " + databaseEnv[0] + ".JMF_CHRONICLE_STATUS order by rand() limit %s";
 
-    public static String GET_PRODUCT_WORK_ID = "select PRODUCT_WORK_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_FINANCIAL_INFORMATION order by rand() limit %s";
+    public static String GET_FAMILY_RESOURCE_ID = "select FAMILY_RESOURCE_DETAILS_ID from " + databaseEnv[0] + ".JMF_FAMILY_RESOURCE_DETAILS order by rand() limit %s";
 
-    public static String GET_LEGAL_PRODUCT_WORK_ID = "select PRODUCT_WORK_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_LEGAL_INFORMATION order by rand() limit %s";
+    public static String GET_PRODUCT_WORK_ID = "select PRODUCT_WORK_ID from " + databaseEnv[0] + ".JMF_FINANCIAL_INFORMATION order by rand() limit %s";
 
-    public static String GET_MANIF_PRODUCT_ID = "select PRODUCT_MANIFESTATION_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_MANIFESTATION_ELECTRONIC_DETAILS order by rand() limit %s";
+    public static String GET_LEGAL_PRODUCT_WORK_ID = "select PRODUCT_WORK_ID from " + databaseEnv[0] + ".JMF_LEGAL_INFORMATION order by rand() limit %s";
 
-    public static String GET_MANIF_PRINT_ID = "select PRODUCT_MANIFESTATION_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_MANIFESTATION_PRINT_DETAILS order by rand() limit %s";
+    public static String GET_MANIF_PRODUCT_ID = "select PRODUCT_MANIFESTATION_ID from " + databaseEnv[0] + ".JMF_MANIFESTATION_ELECTRONIC_DETAILS order by rand() limit %s";
 
-    public static String GET_PARTY_PROD_ID = "select PARTY_IN_PRODUCT_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PARTY_IN_PRODUCT order by rand() limit %s";
+    public static String GET_MANIF_PRINT_ID = "select PRODUCT_MANIFESTATION_ID from " + databaseEnv[0] + ".JMF_MANIFESTATION_PRINT_DETAILS order by rand() limit %s";
 
-    public static String GET_PRODUCT_AVAIL_ID = "select PRODUCT_AVAILABILITY_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_AVAILABILITY order by rand() limit %s";
+    public static String GET_PARTY_PROD_ID = "select PARTY_IN_PRODUCT_ID from " + databaseEnv[0] + ".JMF_PARTY_IN_PRODUCT order by rand() limit %s";
 
-    public static String GET_PRODUCT_CHRONICLE_ID = "select PRODUCT_CHRONICLE_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_CHRONICLE order by rand() limit %s";
+    public static String GET_PRODUCT_AVAIL_ID = "select PRODUCT_AVAILABILITY_ID from " + databaseEnv[0] + ".JMF_PRODUCT_AVAILABILITY order by rand() limit %s";
 
-    public static String GET_PRODUCT_FAMILY_ID = "select PRODUCT_FAMILY_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_FAMILY order by rand() limit %s";
+    public static String GET_PRODUCT_CHRONICLE_ID = "select PRODUCT_CHRONICLE_ID from " + databaseEnv[0] + ".JMF_PRODUCT_CHRONICLE order by rand() limit %s";
 
-    public static String GET_PRODUCT_MANIF_ID = "select PRODUCT_MANIFESTATION_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_MANIFESTATION order by rand() limit %s";
+    public static String GET_PRODUCT_FAMILY_ID = "select PRODUCT_FAMILY_ID from " + databaseEnv[0] + ".JMF_PRODUCT_FAMILY order by rand() limit %s";
 
-    public static String GET_PRODUCT_SUBJ_ID = "select PRODUCT_SUBJECT_AREA_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_SUBJECT_AREA order by rand() limit %s";
+    public static String GET_PRODUCT_MANIF_ID = "select PRODUCT_MANIFESTATION_ID from " + databaseEnv[0] + ".JMF_PRODUCT_MANIFESTATION order by rand() limit %s";
 
-    public static String GET_REVIEW_COMMENTS_ID = "select REVIEW_COMMENT_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_REVIEW_COMMENT order by rand() limit %s";
+    public static String GET_PRODUCT_SUBJ_ID = "select PRODUCT_SUBJECT_AREA_ID from " + databaseEnv[0] + ".JMF_PRODUCT_SUBJECT_AREA order by rand() limit %s";
 
-    public static String GET_PROD_WORK_ID = "select PRODUCT_WORK_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCT_WORK order by rand() limit %s";
+    public static String GET_REVIEW_COMMENTS_ID = "select REVIEW_COMMENT_ID from " + databaseEnv[0] + ".JMF_REVIEW_COMMENT order by rand() limit %s";
 
-    public static String GET_APPROVAL_ID = "select APPROVAL_ATTACHMENT_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_APPROVAL_ATTACHMENT order by rand() limit %s";
+    public static String GET_PROD_WORK_ID = "select PRODUCT_WORK_ID from " + databaseEnv[0] + ".JMF_PRODUCT_WORK order by rand() limit %s";
 
-    public static String GET_PRODUCTION_INFORMATION_ID = "select PRODUCT_WORK_ID from " + Constants.JMF_SQL_SCHEMA + ".JMF_PRODUCTION_INFORMATION order by rand() limit %s";
+    public static String GET_APPROVAL_ID = "select APPROVAL_ATTACHMENT_ID from " + databaseEnv[0] + ".JMF_APPROVAL_ATTACHMENT order by rand() limit %s";
+
+    public static String GET_PRODUCTION_INFORMATION_ID = "select PRODUCT_WORK_ID from " + databaseEnv[0] + ".JMF_PRODUCTION_INFORMATION order by rand() limit %s";
 
     public static String getAllocationChangesSql(String serverEnv, String table) {
         String GET_DATA_ALLOCATION_CHANGE_JM = null;
@@ -70,7 +75,7 @@ public class JMTablesDataChecksSQL {
                         ",PMG_PUBDIR_PEOPLE_HUB_ID_NEW as PMG_PUBDIR_PEOPLE_HUB_ID_NEW\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
                         ",EPH_PMG_CODE asEPH_PMG_CODE\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where ALLOCATION_CHANGE_ID in ('%s')";
                 break;
             case ("aws"):
@@ -96,8 +101,8 @@ public class JMTablesDataChecksSQL {
                         ",PMG_PUBDIR_PEOPLE_HUB_ID_NEW as PMG_PUBDIR_PEOPLE_HUB_ID_NEW\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
                         ",EPH_PMG_CODE asEPH_PMG_CODE\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND ALLOCATION_CHANGE_ID in ('%s')";
                 break;
         }
@@ -114,7 +119,7 @@ public class JMTablesDataChecksSQL {
                         "APPLICATION_PROPERTY_KEY as APPLICATION_PROPERTY_KEY\n" +
                         ",APPLICATION_PROPERTY_VALUE as APPLICATION_PROPERTY_VALUE\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where APPLICATION_PROPERTY_KEY in ('%s')";
                 break;
             case ("aws"):
@@ -122,8 +127,8 @@ public class JMTablesDataChecksSQL {
                         "APPLICATION_PROPERTY_KEY as APPLICATION_PROPERTY_KEY\n" +
                         ",APPLICATION_PROPERTY_VALUE as APPLICATION_PROPERTY_VALUE\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND APPLICATION_PROPERTY_KEY in ('%s')";
                 break;
 
@@ -144,7 +149,7 @@ public class JMTablesDataChecksSQL {
                         ",APPROVAL_GIVEN_INDICATOR as APPROVAL_GIVEN_INDICATOR\n" +
                         ",APPROVAL_REQUEST_DATE as APPROVAL_REQUEST_DATE\n" +
                         ",APPROVAL_RESPONSE_DATE as APPROVAL_RESPONSE_DATE\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where APPROVAL_ID in ('%s')";
                 break;
             case ("aws"):
@@ -156,8 +161,8 @@ public class JMTablesDataChecksSQL {
                         ",APPROVAL_GIVEN_INDICATOR as APPROVAL_GIVEN_INDICATOR\n" +
                         ",APPROVAL_REQUEST_DATE as APPROVAL_REQUEST_DATE\n" +
                         ",APPROVAL_RESPONSE_DATE as APPROVAL_RESPONSE_DATE\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND APPROVAL_ID in ('%s')";
                 break;
 
@@ -175,7 +180,7 @@ public class JMTablesDataChecksSQL {
                         ",CHRONICLE_SCENARIO_DESCRIPTION as CHRONICLE_SCENARIO_DESCRIPTION\n" +
                         ",CHRONICLE_SCENARIO_EVOLUTIONARY_IND as CHRONICLE_SCENARIO_EVOLUTIONARY_IND\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where CHRONICLE_SCENARIO_CODE in ('%s')";
                 break;
             case ("aws"):
@@ -185,8 +190,8 @@ public class JMTablesDataChecksSQL {
                         ",CHRONICLE_SCENARIO_DESCRIPTION as CHRONICLE_SCENARIO_DESCRIPTION\n" +
                         ",CHRONICLE_SCENARIO_EVOLUTIONARY_IND as CHRONICLE_SCENARIO_EVOLUTIONARY_IND\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND CHRONICLE_SCENARIO_CODE in ('%s')";
                 break;
 
@@ -204,7 +209,7 @@ public class JMTablesDataChecksSQL {
                         ",CHRONICLE_STATUS_NAME as CHRONICLE_STATUS_NAME\n" +
                         ",CHRONICLE_STATUS_DESCRIPTION as CHRONICLE_STATUS_DESCRIPTION\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where CHRONICLE_STATUS_CODE in ('%s')";
                 break;
             case ("aws"):
@@ -213,8 +218,8 @@ public class JMTablesDataChecksSQL {
                         ",CHRONICLE_STATUS_NAME as CHRONICLE_STATUS_NAME\n" +
                         ",CHRONICLE_STATUS_DESCRIPTION as CHRONICLE_STATUS_DESCRIPTION\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND CHRONICLE_STATUS_CODE in ('%s')";
                 break;
 
@@ -237,7 +242,7 @@ public class JMTablesDataChecksSQL {
                         ",PEOPLEHUB_ID_OLD as PEOPLEHUB_ID_OLD\n" +
                         ",PEOPLEHUB_ID_NEW as PEOPLEHUB_ID_NEW\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where FAMILY_RESOURCE_DETAILS_ID in ('%s')";
                 break;
             case ("aws"):
@@ -251,8 +256,8 @@ public class JMTablesDataChecksSQL {
                         ",PEOPLEHUB_ID_OLD as PEOPLEHUB_ID_OLD\n" +
                         ",PEOPLEHUB_ID_NEW as PEOPLEHUB_ID_NEW\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND FAMILY_RESOURCE_DETAILS_ID in ('%s')";
                 break;
 
@@ -291,7 +296,7 @@ public class JMTablesDataChecksSQL {
                         ",BACKISSUES_HANDLING_OPTION as BACKISSUES_HANDLING_OPTION\n" +
                         ",BACKISSUES_HANDLING_END_DATE as BACKISSUES_HANDLING_END_DATE\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where PRODUCT_WORK_ID in ('%s')";
                 break;
 
@@ -322,8 +327,8 @@ public class JMTablesDataChecksSQL {
                         ",BACKISSUES_HANDLING_OPTION as BACKISSUES_HANDLING_OPTION\n" +
                         ",BACKISSUES_HANDLING_END_DATE as BACKISSUES_HANDLING_END_DATE\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND PRODUCT_WORK_ID in ('%s')";
                 break;
 
@@ -380,7 +385,7 @@ public class JMTablesDataChecksSQL {
                         ",MONTHS_TO_KEEP_TRANSFER_ONLINE as MONTHS_TO_KEEP_TRANSFER_ONLINE\n" +
                         ",SOC_CK_CONTENT_AGREEMENT_DATE as SOC_CK_CONTENT_AGREEMENT_DATE\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where PRODUCT_WORK_ID in ('%s')";
                 break;
 
@@ -430,8 +435,8 @@ public class JMTablesDataChecksSQL {
                         ",MONTHS_TO_KEEP_TRANSFER_ONLINE as MONTHS_TO_KEEP_TRANSFER_ONLINE\n" +
                         ",SOC_CK_CONTENT_AGREEMENT_DATE as SOC_CK_CONTENT_AGREEMENT_DATE\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND PRODUCT_WORK_ID in ('%s')";
                 break;
 
@@ -454,7 +459,7 @@ public class JMTablesDataChecksSQL {
                         ",EMBARGO_TIMES_NUMBER as EMBARGO_TIMES_NUMBER\n" +
                         ",ONLINE_LAST_ISSUE_DATE as ONLINE_LAST_ISSUE_DATE\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where PRODUCT_MANIFESTATION_ID in ('%s')";
                 break;
             case ("aws"):
@@ -469,8 +474,8 @@ public class JMTablesDataChecksSQL {
                         ",EMBARGO_TIMES_NUMBER as EMBARGO_TIMES_NUMBER\n" +
                         ",ONLINE_LAST_ISSUE_DATE as ONLINE_LAST_ISSUE_DATE\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND PRODUCT_MANIFESTATION_ID in ('%s')";
                 break;
 
@@ -515,7 +520,7 @@ public class JMTablesDataChecksSQL {
                         ",COST_FIRST_PRINTED_COLOUR_UNIT as COST_FIRST_PRINTED_COLOUR_UNIT\n" +
                         ",COST_NEXT_PRINTED_COLOUR_UNIT as COST_NEXT_PRINTED_COLOUR_UNIT\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where PRODUCT_MANIFESTATION_ID in ('%s')";
                 break;
             case ("aws"):
@@ -551,8 +556,8 @@ public class JMTablesDataChecksSQL {
                         ",COST_FIRST_PRINTED_COLOUR_UNIT as COST_FIRST_PRINTED_COLOUR_UNIT\n" +
                         ",COST_NEXT_PRINTED_COLOUR_UNIT as COST_NEXT_PRINTED_COLOUR_UNIT\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND PRODUCT_MANIFESTATION_ID in ('%s')";
                 break;
 
@@ -584,7 +589,7 @@ public class JMTablesDataChecksSQL {
                         ",PEOPLEHUB_ID as PEOPLEHUB_ID\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
                         ",EPH_PERSON_ID as EPH_PERSON_ID\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where PARTY_IN_PRODUCT_ID in ('%s')";
                 break;
             case ("aws"):
@@ -607,8 +612,8 @@ public class JMTablesDataChecksSQL {
                         ",PEOPLEHUB_ID as PEOPLEHUB_ID\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
                         ",EPH_PERSON_ID as EPH_PERSON_ID\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND PARTY_IN_PRODUCT_ID in ('%s')";
                 break;
 
@@ -626,7 +631,7 @@ public class JMTablesDataChecksSQL {
                         ",F_PRODUCT_MANIFESTATION as F_PRODUCT_MANIFESTATION\n" +
                         ",APPLICATION_CODE as APPLICATION_CODE\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where PRODUCT_AVAILABILITY_ID in ('%s')";
                 break;
             case ("aws"):
@@ -635,8 +640,8 @@ public class JMTablesDataChecksSQL {
                         ",F_PRODUCT_MANIFESTATION as F_PRODUCT_MANIFESTATION\n" +
                         ",APPLICATION_CODE as APPLICATION_CODE\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND PRODUCT_AVAILABILITY_ID in ('%s')";
                 break;
         }
@@ -668,7 +673,7 @@ public class JMTablesDataChecksSQL {
                         ",REJECTION_DATE as REJECTION_DATE\n" +
                         ",VERSION as VERSION\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where PRODUCT_CHRONICLE_ID in ('%s')";
                 break;
             case ("aws"):
@@ -693,8 +698,8 @@ public class JMTablesDataChecksSQL {
                         ",REJECTION_DATE as REJECTION_DATE\n" +
                         ",VERSION as VERSION\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND PRODUCT_CHRONICLE_ID in ('%s')";
                 break;
         }
@@ -713,7 +718,7 @@ public class JMTablesDataChecksSQL {
                         ",PRODUCT_JOURNEY_IDENTIFIER as PRODUCT_JOURNEY_IDENTIFIER\n" +
                         ",PMX_PRODUCT_FAMILY_ID as PMX_PRODUCT_FAMILY_ID\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where PRODUCT_FAMILY_ID in ('%s')";
                 break;
             case ("aws"):
@@ -724,8 +729,8 @@ public class JMTablesDataChecksSQL {
                         ",PRODUCT_JOURNEY_IDENTIFIER as PRODUCT_JOURNEY_IDENTIFIER\n" +
                         ",PMX_PRODUCT_FAMILY_ID as PMX_PRODUCT_FAMILY_ID\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND PRODUCT_FAMILY_ID in ('%s')";
                 break;
         }
@@ -747,7 +752,7 @@ public class JMTablesDataChecksSQL {
                         ",PMX_PRODUCT_MANIFESTATION_ID as PMX_PRODUCT_MANIFESTATION_ID\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
                         ",EPH_MANIFESTATION_ID as EPH_MANIFESTATION_ID\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where PRODUCT_MANIFESTATION_ID in ('%s')";
                 break;
             case ("aws"):
@@ -762,8 +767,8 @@ public class JMTablesDataChecksSQL {
                         ",PMX_PRODUCT_MANIFESTATION_ID as PMX_PRODUCT_MANIFESTATION_ID\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
                         ",EPH_MANIFESTATION_ID as EPH_MANIFESTATION_ID\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND PRODUCT_MANIFESTATION_ID in ('%s')";
                 break;
         }
@@ -782,7 +787,7 @@ public class JMTablesDataChecksSQL {
                         ",SUBJECT_AREA_CODE as SUBJECT_AREA_CODE\n" +
                         ",SUBJECT_AREA_NAME as SUBJECT_AREA_NAME\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where PRODUCT_SUBJECT_AREA_ID in ('%s')";
                 break;
             case ("aws"):
@@ -794,8 +799,8 @@ public class JMTablesDataChecksSQL {
                         ",SUBJECT_AREA_CODE as SUBJECT_AREA_CODE\n" +
                         ",SUBJECT_AREA_NAME as SUBJECT_AREA_NAME\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND PRODUCT_SUBJECT_AREA_ID in ('%s')";
                 break;
 
@@ -817,7 +822,7 @@ public class JMTablesDataChecksSQL {
                         ",REVIEW_COMMENT_DATE as REVIEW_COMMENT_DATE\n" +
                         ",CREATED_ON as CREATED_ON\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where REVIEW_COMMENT_ID in ('%s')";
                 break;
             case ("aws"):
@@ -829,8 +834,8 @@ public class JMTablesDataChecksSQL {
                         ",REVIEW_COMMENT_DATE as REVIEW_COMMENT_DATE\n" +
                         ",CREATED_ON as CREATED_ON\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND REVIEW_COMMENT_ID in ('%s')";
                 break;
 
@@ -915,7 +920,7 @@ public class JMTablesDataChecksSQL {
                         ",TRANSFER_DATE as TRANSFER_DATE\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
                         ",EPH_WORK_ID as EPH_WORK_ID\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where PRODUCT_WORK_ID in ('%s')";
                 break;
             case ("aws"):
@@ -992,8 +997,8 @@ public class JMTablesDataChecksSQL {
                         ",TRANSFER_DATE as TRANSFER_DATE\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
                         ",EPH_WORK_ID as EPH_WORK_ID\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND PRODUCT_WORK_ID in ('%s')";
                 break;
         }
@@ -1009,7 +1014,7 @@ public class JMTablesDataChecksSQL {
                         ",F_APPROVAL as F_APPROVAL\n" +
                         ",ATTACHMENT_NAME as ATTACHMENT_NAME\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where APPROVAL_ATTACHMENT_ID in ('%s')";
                 break;
             case ("aws"):
@@ -1018,8 +1023,8 @@ public class JMTablesDataChecksSQL {
                         ",F_APPROVAL as F_APPROVAL\n" +
                         ",ATTACHMENT_NAME as ATTACHMENT_NAME\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND APPROVAL_ATTACHMENT_ID in ('%s')";
                 break;
         }
@@ -1092,7 +1097,7 @@ public class JMTablesDataChecksSQL {
                         ",JOURNAL_ARTICLE_NUMBER_TYPE as JOURNAL_ARTICLE_NUMBER_TYPE\n" +
                         ",BACKSTOCK_TREATMENT_NOTE as BACKSTOCK_TREATMENT_NOTE\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_SQL_SCHEMA + "." + table + "\n" +
+                        "from " + databaseEnv[0] + "." + table + "\n" +
                         " where PRODUCT_WORK_ID in ('%s')";
                 break;
             case ("aws"):
@@ -1157,8 +1162,8 @@ public class JMTablesDataChecksSQL {
                         ",JOURNAL_ARTICLE_NUMBER_TYPE as JOURNAL_ARTICLE_NUMBER_TYPE\n" +
                         ",BACKSTOCK_TREATMENT_NOTE as BACKSTOCK_TREATMENT_NOTE\n" +
                         ",NOTIFIED_DATE as NOTIFIED_DATE\n" +
-                        "from " + Constants.JMF_AWS_SCHEMA + "." + table + "\n" +
-                        " where inbound_ts = (select inbound_ts from " + Constants.JMF_AWS_SCHEMA + "." + table + " order by inbound_ts desc limit 1)\n" +
+                        "from " + databaseEnv[1] + "." + table + "\n" +
+                        " where inbound_ts = (select inbound_ts from " + databaseEnv[1] + "." + table + " order by inbound_ts desc limit 1)\n" +
                         " AND PRODUCT_WORK_ID in ('%s')";
                 break;
 
