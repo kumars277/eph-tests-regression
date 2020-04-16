@@ -1,7 +1,5 @@
 package com.eph.automation.testing.services.db.JMDataLakeSQL;
 
-import com.eph.automation.testing.configuration.Constants;
-
 import static com.eph.automation.testing.services.db.JMDataLakeSQL.GetJMDLDBUser.getJMDataBase;
 
 

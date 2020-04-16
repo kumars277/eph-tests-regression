@@ -12,7 +12,7 @@ public class GetJMDLDBUser {
             }
             else{
                 dbJMDL = "journalmaestro_staging_uat";
-                dbJMSQL = "jmf_uat_application";
+                dbJMSQL = "jmf_sit_application";
             }
 
         }else{
