@@ -126,7 +126,7 @@ public class PRMTablesDataChecksSteps {
 
                 if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_IDT() != null ||
                         (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_IDT() != null)) {
-                    Assert.assertEquals("The AUT_EDT_IDT is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                    Assert.assertEquals("The AUT_EDT_IDT is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() ,
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_IDT(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_IDT());
                 }
@@ -137,7 +137,7 @@ public class PRMTablesDataChecksSteps {
 
                 if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_TYP() != null ||
                         (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_TYP() != null)) {
-                    Assert.assertEquals("The AUT_EDT_TYP is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                    Assert.assertEquals("The AUT_EDT_TYP is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_IDT(),
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_TYP(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_TYP());
                 }
@@ -148,7 +148,7 @@ public class PRMTablesDataChecksSteps {
 
                 if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getTYP_DES() != null ||
                         (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getTYP_DES() != null)) {
-                    Assert.assertEquals("The TYP_DES is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                    Assert.assertEquals("The TYP_DES is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_IDT(),
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getTYP_DES(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getTYP_DES());
                 }
@@ -159,7 +159,7 @@ public class PRMTablesDataChecksSteps {
 
                 if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getSEQ_NUM() != null ||
                         (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getSEQ_NUM() != null)) {
-                    Assert.assertEquals("The SEQ_NUM is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                    Assert.assertEquals("The SEQ_NUM is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_IDT(),
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getSEQ_NUM(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getSEQ_NUM());
                 }
@@ -170,7 +170,7 @@ public class PRMTablesDataChecksSteps {
 
                 if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_PRE() != null ||
                         (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_PRE() != null)) {
-                    Assert.assertEquals("The AUT_EDT_PRE is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                    Assert.assertEquals("The AUT_EDT_PRE is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_IDT(),
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_PRE(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_PRE());
                 }
@@ -181,7 +181,7 @@ public class PRMTablesDataChecksSteps {
 
                 if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_INI() != null ||
                         (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_INI() != null)) {
-                    Assert.assertEquals("The AUT_EDT_INI is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                    Assert.assertEquals("The AUT_EDT_INI is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_IDT(),
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_INI(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_INI());
                 }
@@ -192,7 +192,7 @@ public class PRMTablesDataChecksSteps {
 
                 if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_NAM() != null ||
                         (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_NAM() != null)) {
-                    Assert.assertEquals("The AUT_EDT_NAM is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                    Assert.assertEquals("The AUT_EDT_NAM is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_IDT(),
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_NAM(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_NAM());
                 }
@@ -203,7 +203,7 @@ public class PRMTablesDataChecksSteps {
 
                 if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_SORT() != null ||
                         (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_SORT() != null)) {
-                    Assert.assertEquals("The AUT_EDT_SORT is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                    Assert.assertEquals("The AUT_EDT_SORT is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_IDT(),
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_SORT(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_SORT());
                 }
@@ -214,7 +214,7 @@ public class PRMTablesDataChecksSteps {
 
                 if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_SUF() != null ||
                         (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_SUF() != null)) {
-                    Assert.assertEquals("The AUT_EDT_SUF is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                    Assert.assertEquals("The AUT_EDT_SUF is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_IDT(),
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_SUF(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_SUF());
                 }
@@ -225,7 +225,7 @@ public class PRMTablesDataChecksSteps {
 
                 if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAFF_TXT() != null ||
                         (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAFF_TXT() != null)) {
-                    Assert.assertEquals("The AFF_TXT is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                    Assert.assertEquals("The AFF_TXT is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_IDT(),
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAFF_TXT().replace("\n", " ").replace("\r", " ").replace("\0", ""),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAFF_TXT());
                 }
@@ -258,7 +258,7 @@ public class PRMTablesDataChecksSteps {
 
                 if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_FAX() != null ||
                         (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_FAX() != null)) {
-                    Assert.assertEquals("The AUT_EDT_FAX is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                    Assert.assertEquals("The AUT_EDT_FAX is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_IDT(),
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_FAX(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_FAX());
                 }
@@ -269,7 +269,7 @@ public class PRMTablesDataChecksSteps {
 
                 if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_PHONE() != null ||
                         (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_PHONE() != null)) {
-                    Assert.assertEquals("The AUT_EDT_PHONE is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                    Assert.assertEquals("The AUT_EDT_PHONE is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_IDT(),
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_PHONE(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_PHONE());
                 }
@@ -279,7 +279,7 @@ public class PRMTablesDataChecksSteps {
 
                 if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_EMAIL() != null ||
                         (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_EMAIL() != null)) {
-                    Assert.assertEquals("The AUT_EDT_EMAIL is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                    Assert.assertEquals("The AUT_EDT_EMAIL is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_IDT(),
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_EMAIL(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_EMAIL());
                 }
@@ -289,7 +289,7 @@ public class PRMTablesDataChecksSteps {
 
                 if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_JCI() != null ||
                         (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_JCI() != null)) {
-                    Assert.assertEquals("The AUT_EDT_JCI is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                    Assert.assertEquals("The AUT_EDT_JCI is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_IDT(),
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_JCI(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_JCI());
                 }
@@ -299,7 +299,7 @@ public class PRMTablesDataChecksSteps {
 
                 if (dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getBIO_IMAGE() != null ||
                         (dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getBIO_IMAGE() != null)) {
-                    Assert.assertEquals("The BIO_IMAGE is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT(),
+                    Assert.assertEquals("The BIO_IMAGE is incorrect for PUB_IDT=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getAUT_EDT_IDT(),
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getBIO_IMAGE(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getBIO_IMAGE());
                 }
