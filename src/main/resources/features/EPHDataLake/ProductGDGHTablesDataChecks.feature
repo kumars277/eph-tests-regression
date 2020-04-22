@@ -9,8 +9,8 @@ Feature:Validate data for Product tables between EPH and Data Lake - Outbound
     And Compare product records in EPH and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 1             | gd_product|
-      | 1             | gh_product|
+      | 100             | gd_product|
+      | 100             | gh_product|
 
 
   @DLD
@@ -21,8 +21,8 @@ Feature:Validate data for Product tables between EPH and Data Lake - Outbound
     And Compare accountable product records in EPH and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 1              | gd_accountable_product|
-      | 1              | gh_accountable_product|
+      | 100              | gd_accountable_product|
+      | 100              | gh_accountable_product|
 
 
   @DLD
@@ -33,8 +33,8 @@ Feature:Validate data for Product tables between EPH and Data Lake - Outbound
     And Compare product package records in EPH and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 1              | gd_product_rel_package|
-      | 1              | gh_product_rel_package|
+      | 100              | gd_product_rel_package|
+      | 100              | gh_product_rel_package|
 
 
   @DLD
@@ -45,8 +45,8 @@ Feature:Validate data for Product tables between EPH and Data Lake - Outbound
     And Compare product financial records in EPH and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 1              | gd_product_financial_attribs|
-      | 1              | gh_product_financial_attribs|
+      | 100              | gd_product_financial_attribs|
+      | 100              | gh_product_financial_attribs|
 
 
   @DLD
@@ -57,8 +57,8 @@ Feature:Validate data for Product tables between EPH and Data Lake - Outbound
     And Compare product identifier records in EPH and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 1              | gd_product_identifier|
-      | 1                 | gh_product_identifier|
+      | 100              | gd_product_identifier|
+      | 100                 | gh_product_identifier|
 
 
   @DLD
@@ -69,8 +69,8 @@ Feature:Validate data for Product tables between EPH and Data Lake - Outbound
     And Compare product relationship records in EPH and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 1              | gd_product_relationship|
-      | 1              | gh_product_relationship|
+      | 100              | gd_product_relationship|
+      | 100              | gh_product_relationship|
 
 
 

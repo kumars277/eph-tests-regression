@@ -31,7 +31,7 @@ public class JMtoDataLakeCountChecksSQL {
 
 
     public static String DL_jmf_allocation_change_Count = "select count(*) as count from "+databaseEnv[1]+".jmf_allocation_change where inbound_ts = (select inbound_ts from "+databaseEnv[1]+".jmf_allocation_change order by inbound_ts desc limit 1)";
-    public static String DL_jmf_application_properties_Count = "select count(*) as count from journalmaestro_staging_sit.jmf_application_properties where inbound_ts = (select inbound_ts from "+databaseEnv[1]+".jmf_application_properties order by inbound_ts desc limit 1)";
+    public static String DL_jmf_application_properties_Count = "select count(*) as count from "+databaseEnv[1]+".jmf_application_properties where inbound_ts = (select inbound_ts from "+databaseEnv[1]+".jmf_application_properties order by inbound_ts desc limit 1)";
     public static String DL_jmf_approval_attachment_Count = "select count(*) as count from "+databaseEnv[1]+".jmf_approval_attachment where inbound_ts = (select inbound_ts from "+databaseEnv[1]+".jmf_approval_attachment order by inbound_ts desc limit 1)";
     public static String DL_jmf_approval_request_Count = "select count(*) as count from "+databaseEnv[1]+".jmf_approval_request where inbound_ts = (select inbound_ts from "+databaseEnv[1]+".jmf_approval_request order by inbound_ts desc limit 1)";
     public static String DL_jmf_chronicle_scenario_Count = "select count(*) as count from "+databaseEnv[1]+".jmf_chronicle_scenario where inbound_ts = (select inbound_ts from "+databaseEnv[1]+".jmf_chronicle_scenario order by inbound_ts desc limit 1)";

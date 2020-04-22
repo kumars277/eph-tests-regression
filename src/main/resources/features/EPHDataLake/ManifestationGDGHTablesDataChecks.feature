@@ -9,8 +9,8 @@ Feature:Validate data for manifestation tables between EPH and Data Lake - Outbo
     And Compare manifestation records in EPH and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 10              | gd_manifestation|
-      | 10              | gh_manifestation|
+      | 100              | gd_manifestation|
+      | 100              | gh_manifestation|
 
 
 
@@ -23,8 +23,8 @@ Feature:Validate data for manifestation tables between EPH and Data Lake - Outbo
     And Compare manifestation identifier records in EPH and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 10              | gd_manifestation_identifier|
-      | 10              | gh_manifestation_identifier|
+      | 100              | gd_manifestation_identifier|
+      | 100              | gh_manifestation_identifier|
 
 
 
