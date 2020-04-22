@@ -13,7 +13,7 @@ public class GetPRMDLDBUser {
             }
 
         }else{
-            dbPRMDL = "promis_staging_uat";
+            dbPRMDL = "promis_staging_sit";
         }
         return dbPRMDL;
     }

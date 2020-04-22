@@ -8,8 +8,8 @@ Feature:Validate data for person tables between EPH and Data Lake - Outbound
     And Compare person records in EPH and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 1              | gd_person|
-      | 1              | gh_person|
+      | 100              | gd_person|
+      | 100              | gh_person|
 
   @DLD
   Scenario Outline: Validate data is transferred from product_person_role EPH to DL Outbound
@@ -19,8 +19,8 @@ Feature:Validate data for person tables between EPH and Data Lake - Outbound
     And Compare product person records in EPH and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 10             | gd_product_person_role|
-      | 10             | gh_product_person_role|
+      | 100             | gd_product_person_role|
+      | 100             | gh_product_person_role|
 
 
   @DLD
@@ -31,8 +31,8 @@ Feature:Validate data for person tables between EPH and Data Lake - Outbound
     And Compare work person role records in EPH and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 10             | gd_work_person_role|
-      | 10             | gh_work_person_role|
+      | 100             | gd_work_person_role|
+      | 100             | gh_work_person_role|
 
 
 

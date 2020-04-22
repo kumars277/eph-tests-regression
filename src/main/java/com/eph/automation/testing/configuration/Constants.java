@@ -79,10 +79,6 @@ public class Constants {
     public static String PROMIS_URL = "PROMIS_URL";
 
 
-
-
-
-
     //Wiremock
     public static String WIRE_MOCK_END_POINT = "http://10.48.67.42:8080/api/";
 

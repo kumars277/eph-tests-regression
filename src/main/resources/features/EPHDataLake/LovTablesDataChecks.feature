@@ -1,6 +1,6 @@
 Feature:Validate data for gd_x_Lov tables between EPH and Data Lake - Outbound
 
-  @DL
+  @DLD
   Scenario Outline: Validate Lov Table data is transferred from EPH to DL Outbound
     Given We get <countOfRandomIds> random Lov Codes of <tableName>
     When We get the Lov <tableName> records from EPH

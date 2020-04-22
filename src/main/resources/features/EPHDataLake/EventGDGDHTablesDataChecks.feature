@@ -9,7 +9,7 @@ Feature:Validate data for Event tables between EPH and Data Lake - Outbound
     And Compare gd event records in EPH and DL
     Examples:
       | countOfRandomIds | table  |
-      | 10              | gd_event|
+      | 100              | gd_event|
 
 
   @DLD
@@ -20,8 +20,8 @@ Feature:Validate data for Event tables between EPH and Data Lake - Outbound
     And Compare subject area records in EPH and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 1              | gd_subject_area|
-      | 1              | gh_subject_area|
+      | 100              | gd_subject_area|
+      | 100              | gh_subject_area|
 
 
   @DLD
@@ -32,8 +32,8 @@ Feature:Validate data for Event tables between EPH and Data Lake - Outbound
     And Compare copyright records in EPH and DL of <table>
     Examples:
       | countOfRandomIds | table  |
-      | 1              | gd_copyright_owner|
-      | 1              | gh_copyright_owner|
+      | 100              | gd_copyright_owner|
+      | 100              | gh_copyright_owner|
 
 
 
