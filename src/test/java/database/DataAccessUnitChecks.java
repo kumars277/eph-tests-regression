@@ -23,16 +23,13 @@ public class DataAccessUnitChecks {
     @Test
     @Ignore
     public void testDecrypt() {
-        //PMX_UAT_URL=jdbc:oracle:thin:PMX/pmxuat@//pmxuat.cucvf0thmu0s.eu-west-1.rds.amazonaws.com:1521/PMXUAT
-        System.out.println(DecryptionService.decrypt(LoadProperties.getProperty(Constants.EPH_URL)));
+ //       System.out.println(DecryptionService.decrypt(PMX_URL));
     }
 
     @Test
     @Ignore
     public void testEncrypt() {
-        //String postgres = "jdbc:postgresql://eph-sit-eph-sit-rds.cnnrbgocj0xg.eu-west-1.rds.amazonaws.com/ephsit?user=rdsappadmin&password=e)NWt4)0dq&ssl=false";
-        String athena = "jdbc:awsathena://AwsRegion=eu-west-1;User=AKIAUBO7FOFUYWSPKBBO;Password=KBVibP3WhGypp8p1a/2NjiFGcOQEpegjiBJgesVb;s3OutputLocation=s3://com-elsevier-eph-masterdata-nonprod/sit";
-        System.out.println(DecryptionService.encrypt(athena));
+//           System.out.println(DecryptionService.encrypt(PROMIS_ORACLE));
     }
 
     @Test

@@ -1,0 +1,2396 @@
+package com.eph.automation.testing.models.dao.JMDataLake;
+
+public class JMTablesDLObject {
+
+    private String ALLOCATION_CHANGE_ID;
+    private String ALLOCATION_TYPE;
+    private String PMG_FILTER ;
+    private String PMC_FILTER;
+    private String PPC_FILTER_EMAIL;
+    private String PPC_FILTER_NAME;
+    private String PMC_CHANGE_IND;
+    private String PPC_CHANGE_IND;
+    private String PMX_PMGCODE;
+    private String PMX_PMG_NAME;
+    private String PMX_PMG_F_BUSINESS_UNIT;
+    private String PMG_BUS_CTRL_NAME;
+    private String PMG_BUS_CTRL_EMAIL;
+    private String PMG_PUBDIR_NAME_OLD;
+    private String PMG_PUBDIR_EMAIL_OLD;
+    private String PMG_PUBDIR_PEOPLE_HUB_ID_OLD;
+    private String PMG_PUBDIR_NAME_NEW;
+    private String PMG_PUBDIR_EMAIL_NEW;
+    private String PMG_PUBDIR_PEOPLE_HUB_ID_NEW;
+    private String NOTIFIED_DATE;
+    private String EPH_PMG_CODE;
+    private String APPLICATION_PROPERTY_KEY;
+    private String APPLICATION_PROPERTY_VALUE;
+    private String APPROVAL_ID;
+    private String F_PRODUCT_CHRONICLE;
+    private String APPROVAL_TYPE;
+    private String APPROVER_NAME;
+    private String APPROVAL_GIVEN_INDICATOR;
+    private String APPROVAL_REQUEST_DATE;
+    private String APPROVAL_RESPONSE_DATE;
+    private String CHRONICLE_SCENARIO_CODE;
+    private String CHRONICLE_SCENARIO_NAME;
+    private String CHRONICLE_SCENARIO_DESCRIPTION;
+    private String CHRONICLE_SCENARIO_EVOLUTIONARY_IND;
+    private String CHRONICLE_STATUS_CODE;
+    private String CHRONICLE_STATUS_NAME;
+    private String CHRONICLE_STATUS_DESCRIPTION;
+    private String FAMILY_RESOURCE_DETAILS_ID;
+    private String RESOURCE_KEY;
+    private String INITIAL_VALUE;
+    private String RESOURCE_CHANGE_INDICATOR;
+    private String NEW_VALUE;
+    private String PEOPLEHUB_ID_OLD;
+    private String PEOPLEHUB_ID_NEW;
+    private String BUSINESS_CONTROLLER_NAME;
+    private String BUSINESS_UNIT_CODE;
+    private String PMG_CODE;
+    private String PMC_CODE;
+    private String OPCO_R12_ID;
+    private String OPCO_R12_CODE;
+    private String CONTRACT_OPCO_R12_CODE;
+    private String RESPONSIBILITY_CENTRE_CODE;
+    private String HFM_HIERARCHY_POSITION_CODE;
+    private String CITY_OPCO_R12_CODE;
+    private String COUNTRY_OPCO_R12_CODE;
+    private String OPCO_R12_NAME;
+    private String OPCO_R12_LEGAL_NAME;
+    private String REFUND_OPTION;
+    private String REMINDER_DATE;
+    private String REMINDER_OPTION;
+    private String RENEWAL_OPTION;
+    private String RENEWAL_DATE;
+    private String BUSINESS_CONTROLLER_EMAIL_ADDRESS;
+    private String CLAIMS_HANDLING_OPTION;
+    private String CLAIMS_HANDLING_END_DATE;
+    private String BACKISSUES_HANDLING_OPTION;
+    private String BACKISSUES_HANDLING_END_DATE;
+    private String OWNERSHIP_BRAND_TYPE;
+    private String JOINT_OWNERSHIP_DETAILS;
+    private String SOCIETY_CONTRACT_DATE;
+    private String SOCIETY_CONTRACT_EXPIRY_DATE;
+    private String JOURNAL_COPYRIGHT_OWNER;
+    private String STANDARD_COPYRIGHT_STATEMENT_IND;
+    private String NON_STANDARD_COPYRIGHT_STATEMENT;
+    private String OPEN_ACCESS_ARTICLE_COPYRIGHT_TYPE;
+    private String ARTICLE_DISCLAIMER;
+    private String PUBLISHING_RIGHT_TYPE;
+    private String PRINT_RIGHTS_SECURED_IND;
+    private String EXCLUSIVE_RIGHTS_SECURED_IND;
+    private String NO_EXCLUSIVE_PRINT_RIGHTS_REASON;
+    private String ELECTRONIC_PRINT_RIGHTS_SECURED_IND;
+    private String	NO_EXCLUSIVE_ELECTRONIC_RIGHTS_REASON;
+    private String	RIGHTS_RESTRICTIONS_IND;
+    private String	RIGHTS_RESTRICTIONS_LIST;
+    private String	BACKFILE_CONSENT_IND;
+    private String	BACKFILE_CONSENT_INFO;
+    private String	BACK_RIGHTS_TYPE;
+    private String	BACK_RIGHTS_START_VOLUME_AND_ISSUE;
+    private String	NON_EXCLUSIVE_ELECTRONIC_RIGHTS_IND;
+    private String	POST_TERMINATION_ELECTRONIC_RIGHTS_TYPE;
+    private String	NO_POST_TERMINATION_ELECTRONIC_RIGHTS_REASON;
+    private String	PERMISSION_TYPE;
+    private String	PERMISSION_HANDLING_EMAIL_ADDRESS;
+    private String	SOCIETY_MEMBERSHIP_HELD_TYPE;
+    private String	SPECIAL_ARRANGEMENTS;
+    private String	DESPATCH_METHOD;
+    private String	CONTRACT_SEEN_BY_ELS_ATTORNEY_IND;
+    private String	CONTRACT_SENT_IND;
+    private String	DIRECT_BILLING_MEMBERSHIP;
+    private String	DIRECT_BILLING_MEMBERSHIP_WITH_FEE;
+    private String	SOCIETY_MAINTAINED_PREPAYMENT;
+    private String	SOCIETY_MAINTAINED_ACCOUNT;
+    private String	AUTOMATIC_RENEWAL;
+    private String	MAILING_LABELS;
+    private String	TITLE_INCLUDED_IN_CK;
+    private String	SOC_AGREED_TO_CK_CONTENT;
+    private String	SOC_CK_CONTENT_AGREEMENT_TEXT;
+    private String	MONTHS_TO_KEEP_TRANSFER_ONLINE;
+    private String	SOC_CK_CONTENT_AGREEMENT_DATE;
+    private String  EMBARGO_TIMES_INDICATOR;
+    private String  ELECTRONIC_RIGHTS_SECURED_TYPE ;
+    private String  ONLINE_LAUNCH_DATE ;
+    private String  ARTICLE_IN_PRESS_S5_IND ;
+    private String  ARTICLE_IN_PRESS_S100_IND ;
+    private String  ARTICLE_IN_PRESS_S250_IND ;
+    private String  EMBARGO_TIMES_NUMBER ;
+    private String  ONLINE_LAST_ISSUE_DATE;
+    private String PRODUCT_MANIFESTATION_ID;
+    private String TRIM_SIZE;
+    private String BASE_PRINT_RUN_NUMBER;
+    private String COLOUR_FREQUENCY;
+    private String ARTWORK_SENSITIVITY_IND;
+    private String MAILING_BREAKDOWN_EUROPE;
+    private String MAILING_BREAKDOWN_USA;
+    private String MAILING_BREAKDOWN_ROW;
+    private String ZERO_WAREHOUSING_IND;
+    private String BACK_STOCK_WAREHOUSE_LOCATION_TYPE;
+    private String PRINTER_TYPE;
+    private String PRINTER_LOCATION_TYPE;
+    private String INTERIOR_PAPER_TYPE;
+    private String COVER_PAPER_TYPE;
+    private String DISTRIBUTOR_CODE;
+    private String DISTRIBUTOR_LOCATION_CODE;
+    private String PRINT_MODEL_CODE;
+    private String SEPARATE_PRINT_RUN_IND;
+    private String OFFPRINT_PRICING_CODE;
+    private String OFFPRINT_COVER_IND;
+    private String FREE_ISSUES_QUANTITY;
+    private String FREE_OFFPRINTS_TYPE;
+    private String FREE_PAID_COLOUR_OFFPRINTS_QUANTITY;
+    private String COLOUR_PRINTING_CURRENCY_CODE;
+    private String COLOUR_ARTWORK_EXCEPTIONS;
+    private String SOCIETY_OWNS_LABELS_IND;
+    private String BINDING_TYPE;
+    private String SPECIAL_BULK_ARRANGEMENTS;
+    private String COST_FIRST_PRINTED_COLOUR_UNIT;
+    private String COST_NEXT_PRINTED_COLOUR_UNIT;
+    private String PARTY_IN_PRODUCT_ID;
+    private String F_PRODUCT_WORK;
+    private String PARTY_ROLE_TYPE;
+    private String EMAIL_ADDRESS;
+    private String FULL_NAME;
+    private String PHONE_NUMBER;
+    private String ADDRESS_LINE_1;
+    private String ADDRESS_LINE_2;
+    private String ADDRESS_LINE_3;
+    private String CITY;
+    private String COUNTRY;
+    private String STATE;
+    private String POST_CODE;
+    private String ORGANISATION_1;
+    private String PMX_PARTY_ID;
+    private String PEOPLEHUB_ID;
+    private String EPH_PERSON_ID;
+    private String PRODUCT_AVAILABILITY_ID;
+    private String F_PRODUCT_MANIFESTATION;
+    private String APPLICATION_CODE;
+    private String PRODUCT_CHRONICLE_ID;
+    private String COMPLETED_ON;
+    private String DISTRIBUTION_LIST;
+    private String RENAME_REQUIRED_IND;
+    private String STARTED_BY;
+    private String STARTED_ON;
+    private String UPDATED_BY;
+    private String UPDATED_ON;
+    private String PROCESS_INSTANCE_ID;
+    private String REASON_FOR_CHANGE;
+    private String CANCELLED_BY;
+    private String CREATED_BY_NAME;
+    private String REJECTION_COMMENT;
+    private String SUBMISSION_DATE;
+    private String CANCELLED_DATE;
+    private String REJECTION_DATE;
+    private String VERSION;
+    private String PRODUCT_FAMILY_ID;
+    private String PRODUCT_FAMILY_TITLE;
+    private String PRODUCT_JOURNEY_IDENTIFIER;
+    private String PMX_PRODUCT_FAMILY_ID;
+    private String PRODUCT_MANIFESTATION_TITLE;
+    private String ISSN;
+    private String ELSEVIER_JOURNAL_NUMBER;
+    private String SUBSCRIPTION_TYPE;
+    private String PRICE_CATEGORIES;
+    private String PMX_PRODUCT_MANIFESTATION_ID;
+    private String EPH_MANIFESTATION_ID;
+    private String PRODUCT_SUBJECT_AREA_ID;
+    private String SUBJECT_AREA_TYPE_CODE;
+    private String SUBJECT_AREA_PRIORITY_CODE;
+    private String SUBJECT_AREA_CODE;
+    private String SUBJECT_AREA_NAME;
+    private String REVIEW_COMMENT_ID;
+    private String F_APPROVAL_ID;
+    private String REVIEW_ATTRIBUTE_NAME;
+    private String REVIEW_COMMENT;
+    private String REVIEW_COMMENT_DATE;
+    private String CREATED_ON;
+    private String PRODUCT_WORK_ID;
+    private String F_PRODUCT_FAMILY;
+    private String PRODUCT_WORK_TITLE;
+    private String PRODUCT_SUBTITLE;
+    private String PRODUCT_WORK_TITLE_INFO;
+    private String ISSN_L;
+    private String INTERNAL_ELSEVIER_DIVISION;
+    private String MANIFESTATION_TYPES_CODE;
+    private String MANIFESTATION_PERSONAL_MODEL_TYPE;
+    private String IMPRINT_NAME;
+    private String PTS_JOURNAL_INDICATOR;
+    private String YEAR_OF_FIRST_ISSUE;
+    private String YEAR_OF_LAST_ISSUE;
+    private String FIRST_VOLUME_NAME;
+    private String FIRST_ISSUE_NAME;
+    private String LAST_VOLUME_NAME;
+    private String LAST_ISSUE_NAME;
+    private String VOLUMES_PER_YEAR_QUANTITY;
+    private String ISSUES_PER_VOLUME_QUANTITY;
+    private String FIRST_YEAR_VOLUMES_PER_YEAR_QUANTITY;
+    private String FIRST_YEAR_ISSUES_PER_VOLUME_QUANTITY;
+    private String PERIODICAL_TIMING_DESC;
+    private String OPEN_ACCESSTYPE_CODE;
+    private String OPEN_ACCESS_SPONSOR_NAME;
+    private String OPEN_ACCESS_FEE;
+    private String OPEN_ACCESS_CURRENCY_CODE;
+    private String OPEN_ACCESS_DISCOUNT_IND;
+    private String OPEN_ACCESS_DISCOUNT_PERIOD;
+    private String OA_FIRST_YEAR_DISCOUNT_PRICE;
+    private String OA_SECOND_YEAR_DISCOUNT_PRICE;
+    private String DDP_ELIGIBLE_IND;
+    private String WEBSHOP_IND;
+    private String MEDLINE_IND;
+    private String THOMSON_REUTERS_IND;
+    private String SCOPUS_IND;
+    private String EMBASE_IND;
+    private String DOAJ_IND;
+    private String ROAD_IND;
+    private String PUBMEDCENTRAL_IND;
+    private String MAIN_LANGUAGE_CODE;
+    private String ENGLISH_LANGUAGE_PERCENTAGE_TYPE;
+    private String OPEN_ARCHIVE_PERIOD;
+    private String DELAYED_OPEN_ARCHIVE_IND;
+    private String INCLUDE_IN_COLLECTIONS_IND;
+    private String PUBLICATION_SCHEDULE_JAN;
+    private String PUBLICATION_SCHEDULE_FEB;
+    private String PUBLICATION_SCHEDULE_MAR;
+    private String PUBLICATION_SCHEDULE_APR;
+    private String PUBLICATION_SCHEDULE_MAY;
+    private String PUBLICATION_SCHEDULE_JUN;
+    private String PUBLICATION_SCHEDULE_JUL;
+    private String PUBLICATION_SCHEDULE_AUG;
+    private String PUBLICATION_SCHEDULE_SEP;
+    private String PUBLICATION_SCHEDULE_OCT;
+    private String PUBLICATION_SCHEDULE_NOV;
+    private String PUBLICATION_SCHEDULE_DEC;
+    private String JOURNAL_ACRONYM_ARGI;
+    private String MANIFESTATION_FORMATS_CODE;
+    private String TAKEOVER_YEAR;
+    private String DOI_PREFIX;
+    private String DOI_RIGHT_ASSIGNED_IND;
+    private String SOCIETY_OWNED_IND;
+    private String CHECKED_WITH_OA_TEAM_IND;
+    private String IMPRINT_CODE;
+    private String DISCONTINUE_DATE;
+    private String PMX_PRODUCT_WORK_ID;
+    private String REMOVED_FROM_CATALOGUE_IND;
+    private String TRANSFER_DATE;
+    private String EPH_WORK_ID;
+    private String APPROVAL_ATTACHMENT_ID;
+    private String F_APPROVAL;
+    private String ATTACHMENT_NAME;
+    private String LE_MANS_IND;
+    private String SOCIETY_RELATIONSHIP_TYPE;
+    private String SOCIETY_NAME;
+    private String ARTICLE_NUMBER_PER_YEAR;
+    private String SUBMISSION_NUMBER_PER_YEAR;
+    private String EVISE_REQUESTED_CODE;
+    private String JOURNAL_ACRONYM_EVISE;
+    private String JOURNAL_ACRONYM_PTS;
+    private String EVISE_SUPPORT_LEVEL;
+    private String EVISE_WORKFLOW_TYPE;
+    private String EDITOR_LOCATION;
+    private String ABP_USAGE_IND;
+    private String NON_STANDARD_PRODUCTION_ASPECTS;
+    private String EDITORIAL_PRODUCTION_SITE;
+    private String PRODUCTION_SPECIFICATION_TYPE;
+    private String TYPESET_MODEL_TYPE;
+    private String REFERENCE_STYLE_TYPE;
+    private String BUDGETED_PAGE_NUMBER_PER_ISSUE;
+    private String LATEX_SUBMISSION_PERCENTAGE;
+    private String TYPESETTER_CODE;
+    private String PAGE_REVIEW_CHARGES;
+    private String COPY_EDITING_CODE;
+    private String HISTORY_DATE_FORMAT;
+    private String PROOF_SENT_TO_AUTHOR_IND;
+    private String PROOF_SENT_TO_EDITOR_IND;
+    private String EDITOR_EMAIL_ADDRESS;
+    private String E_SUITE_JOURNAL_IND;
+    private String SPONSOR_ACCRESS_REQUIRED_IND;
+    private String ONLINE_PUBLICATION_DATE_IND;
+    private String AUTHOR_FEEDBACK_IND;
+    private String SEND_COPYRIGHT_FORM_IND;
+    private String RUNNING_ORDER_DETAILS;
+    private String FLEXIBILITY;
+    private String MAXIMUM_PAGE_DETAILS;
+    private String SPECIFIC_LOGO_REQUIRED_IND;
+    private String ADDITIONAL_DELIVERIES_DETAILS;
+    private String MANDATORY_SUBMISSION_ITEM_IND;
+    private String DOI_STATEMENT_IND;
+    private String LANGUAGE_EDITING_PERFORMED_IND;
+    private String LANGUAGE_EDITING_STAGE;
+    private String DEDICATED_JOURNAL_URL_IND;
+    private String DEDICATED_JOURNAL_URL;
+    private String COI_REQUIRED_IND;
+    private String EDITORIAL_SYSTEM_NAME;
+    private String TYPESETTER_NAME;
+    private String EDITORIAL_TURNAROUND_TIME;
+    private String PENDING_SUBMISSIONS_QUANTITY;
+    private String CHECKED_WITH_SOCIETY_TEAM_IND;
+    private String LAUNCH_DATE;
+    private String PROPOSED_EVISE_ROLLOUT_PERIOD_DATE;
+    private String BACKSTOCK_END_YEAR;
+    private String BACKSTOCK_END_OPTION;
+    private String JBS_SITE_IND;
+    private String EDITORIAL_PRODUCTION_EMAIL_ADDRESS;
+    private String EDITORIAL_PRODUCTION_SITE_NAME;
+    private String JOURNAL_HAS_ARTICLE_NOS;
+    private String JOURNAL_ARTICLE_NUMBER_TYPE;
+    private String BACKSTOCK_TREATMENT_NOTE;
+
+    public String getLE_MANS_IND() {
+        return LE_MANS_IND;
+    }
+    public void setLE_MANS_IND(String LE_MANS_IND) {
+        this.LE_MANS_IND = LE_MANS_IND;
+    }
+
+    public String getSOCIETY_RELATIONSHIP_TYPE() {
+        return SOCIETY_RELATIONSHIP_TYPE;
+    }
+    public void setSOCIETY_RELATIONSHIP_TYPE(String SOCIETY_RELATIONSHIP_TYPE) { this.SOCIETY_RELATIONSHIP_TYPE = SOCIETY_RELATIONSHIP_TYPE; }
+
+    public String getSOCIETY_NAME() {
+        return SOCIETY_NAME;
+    }
+    public void setSOCIETY_NAME(String SOCIETY_NAME) { this.SOCIETY_NAME = SOCIETY_NAME; }
+
+    public String getARTICLE_NUMBER_PER_YEAR() {
+        return ARTICLE_NUMBER_PER_YEAR;
+    }
+    public void setARTICLE_NUMBER_PER_YEAR(String ARTICLE_NUMBER_PER_YEAR) { this.ARTICLE_NUMBER_PER_YEAR = ARTICLE_NUMBER_PER_YEAR; }
+
+    public String getSUBMISSION_NUMBER_PER_YEAR() {
+        return SUBMISSION_NUMBER_PER_YEAR;
+    }
+    public void setSUBMISSION_NUMBER_PER_YEAR(String SUBMISSION_NUMBER_PER_YEAR) { this.SUBMISSION_NUMBER_PER_YEAR = SUBMISSION_NUMBER_PER_YEAR; }
+
+    public String getEVISE_REQUESTED_CODE() {
+        return EVISE_REQUESTED_CODE;
+    }
+    public void setEVISE_REQUESTED_CODE(String EVISE_REQUESTED_CODE) { this.EVISE_REQUESTED_CODE = EVISE_REQUESTED_CODE; }
+
+    public String getJOURNAL_ACRONYM_EVISE() {
+        return JOURNAL_ACRONYM_EVISE;
+    }
+    public void setJOURNAL_ACRONYM_EVISE(String JOURNAL_ACRONYM_EVISE) { this.JOURNAL_ACRONYM_EVISE = JOURNAL_ACRONYM_EVISE; }
+
+    public String getJOURNAL_ACRONYM_PTS() {
+        return JOURNAL_ACRONYM_PTS;
+    }
+    public void setJOURNAL_ACRONYM_PTS(String JOURNAL_ACRONYM_PTS) { this.JOURNAL_ACRONYM_PTS = JOURNAL_ACRONYM_PTS; }
+
+    public String getEVISE_SUPPORT_LEVEL() {
+        return EVISE_SUPPORT_LEVEL;
+    }
+    public void setEVISE_SUPPORT_LEVEL(String EVISE_SUPPORT_LEVEL) { this.EVISE_SUPPORT_LEVEL = EVISE_SUPPORT_LEVEL; }
+
+    public String getEVISE_WORKFLOW_TYPE() {
+        return EVISE_WORKFLOW_TYPE;
+    }
+    public void setEVISE_WORKFLOW_TYPE(String EVISE_WORKFLOW_TYPE) { this.EVISE_WORKFLOW_TYPE = EVISE_WORKFLOW_TYPE; }
+
+    public String getEDITOR_LOCATION() {
+        return EDITOR_LOCATION;
+    }
+    public void setEDITOR_LOCATION(String EDITOR_LOCATION) { this.EDITOR_LOCATION = EDITOR_LOCATION; }
+
+    public String getABP_USAGE_IND() {
+        return ABP_USAGE_IND;
+    }
+    public void setABP_USAGE_IND(String ABP_USAGE_IND) { this.ABP_USAGE_IND = ABP_USAGE_IND; }
+
+    public String getNON_STANDARD_PRODUCTION_ASPECTS() {
+        return NON_STANDARD_PRODUCTION_ASPECTS;
+    }
+    public void setNON_STANDARD_PRODUCTION_ASPECTS(String NON_STANDARD_PRODUCTION_ASPECTS) { this.NON_STANDARD_PRODUCTION_ASPECTS = NON_STANDARD_PRODUCTION_ASPECTS; }
+
+    public String getEDITORIAL_PRODUCTION_SITE() { return EDITORIAL_PRODUCTION_SITE; }
+    public void setEDITORIAL_PRODUCTION_SITE(String EDITORIAL_PRODUCTION_SITE) { this.EDITORIAL_PRODUCTION_SITE = EDITORIAL_PRODUCTION_SITE; }
+
+    public String getPRODUCTION_SPECIFICATION_TYPE() { return PRODUCTION_SPECIFICATION_TYPE; }
+    public void setPRODUCTION_SPECIFICATION_TYPE(String PRODUCTION_SPECIFICATION_TYPE) { this.PRODUCTION_SPECIFICATION_TYPE = PRODUCTION_SPECIFICATION_TYPE; }
+
+    public String getTYPESET_MODEL_TYPE() { return TYPESET_MODEL_TYPE; }
+    public void setTYPESET_MODEL_TYPE(String TYPESET_MODEL_TYPE) { this.TYPESET_MODEL_TYPE = TYPESET_MODEL_TYPE; }
+
+    public String getREFERENCE_STYLE_TYPE() { return REFERENCE_STYLE_TYPE; }
+    public void setREFERENCE_STYLE_TYPE(String REFERENCE_STYLE_TYPE) { this.REFERENCE_STYLE_TYPE = REFERENCE_STYLE_TYPE; }
+
+    public String getBUDGETED_PAGE_NUMBER_PER_ISSUE() { return BUDGETED_PAGE_NUMBER_PER_ISSUE; }
+    public void setBUDGETED_PAGE_NUMBER_PER_ISSUE(String BUDGETED_PAGE_NUMBER_PER_ISSUE) { this.BUDGETED_PAGE_NUMBER_PER_ISSUE = BUDGETED_PAGE_NUMBER_PER_ISSUE; }
+
+    public String getLATEX_SUBMISSION_PERCENTAGE() { return LATEX_SUBMISSION_PERCENTAGE; }
+    public void setLATEX_SUBMISSION_PERCENTAGE(String LATEX_SUBMISSION_PERCENTAGE) { this.LATEX_SUBMISSION_PERCENTAGE = LATEX_SUBMISSION_PERCENTAGE; }
+
+    public String getTYPESETTER_CODE() { return TYPESETTER_CODE; }
+    public void setTYPESETTER_CODE(String TYPESETTER_CODE) { this.TYPESETTER_CODE = TYPESETTER_CODE; }
+
+    public String getPAGE_REVIEW_CHARGES() { return PAGE_REVIEW_CHARGES; }
+    public void setPAGE_REVIEW_CHARGES(String PAGE_REVIEW_CHARGES) { this.PAGE_REVIEW_CHARGES = PAGE_REVIEW_CHARGES; }
+
+    public String getCOPY_EDITING_CODE() { return COPY_EDITING_CODE; }
+    public void setCOPY_EDITING_CODE(String COPY_EDITING_CODE) { this.COPY_EDITING_CODE = COPY_EDITING_CODE; }
+
+    public String getHISTORY_DATE_FORMAT() { return HISTORY_DATE_FORMAT; }
+    public void setHISTORY_DATE_FORMAT(String HISTORY_DATE_FORMAT) { this.HISTORY_DATE_FORMAT = HISTORY_DATE_FORMAT; }
+
+    public String getPROOF_SENT_TO_AUTHOR_IND() { return PROOF_SENT_TO_AUTHOR_IND; }
+    public void setPROOF_SENT_TO_AUTHOR_IND(String PROOF_SENT_TO_AUTHOR_IND) { this.PROOF_SENT_TO_AUTHOR_IND = PROOF_SENT_TO_AUTHOR_IND; }
+
+    public String getPROOF_SENT_TO_EDITOR_IND() { return PROOF_SENT_TO_EDITOR_IND; }
+    public void setPROOF_SENT_TO_EDITOR_IND(String PROOF_SENT_TO_EDITOR_IND) { this.PROOF_SENT_TO_EDITOR_IND = PROOF_SENT_TO_EDITOR_IND; }
+
+    public String getEDITOR_EMAIL_ADDRESS() { return EDITOR_EMAIL_ADDRESS; }
+    public void setEDITOR_EMAIL_ADDRESS(String EDITOR_EMAIL_ADDRESS) { this.EDITOR_EMAIL_ADDRESS = EDITOR_EMAIL_ADDRESS; }
+
+    public String getE_SUITE_JOURNAL_IND() { return E_SUITE_JOURNAL_IND; }
+    public void setE_SUITE_JOURNAL_IND(String E_SUITE_JOURNAL_IND) { this.E_SUITE_JOURNAL_IND = E_SUITE_JOURNAL_IND; }
+
+    public String getSPONSOR_ACCRESS_REQUIRED_IND() { return SPONSOR_ACCRESS_REQUIRED_IND; }
+    public void setSPONSOR_ACCRESS_REQUIRED_IND(String SPONSOR_ACCRESS_REQUIRED_IND) { this.SPONSOR_ACCRESS_REQUIRED_IND = SPONSOR_ACCRESS_REQUIRED_IND; }
+
+    public String getONLINE_PUBLICATION_DATE_IND() { return ONLINE_PUBLICATION_DATE_IND; }
+    public void setONLINE_PUBLICATION_DATE_IND(String ONLINE_PUBLICATION_DATE_IND) { this.ONLINE_PUBLICATION_DATE_IND = ONLINE_PUBLICATION_DATE_IND; }
+
+    public String getAUTHOR_FEEDBACK_IND() { return AUTHOR_FEEDBACK_IND; }
+    public void setAUTHOR_FEEDBACK_IND(String AUTHOR_FEEDBACK_IND) { this.AUTHOR_FEEDBACK_IND = AUTHOR_FEEDBACK_IND; }
+
+    public String getSEND_COPYRIGHT_FORM_IND() { return SEND_COPYRIGHT_FORM_IND; }
+    public void setSEND_COPYRIGHT_FORM_IND(String SEND_COPYRIGHT_FORM_IND) { this.SEND_COPYRIGHT_FORM_IND = SEND_COPYRIGHT_FORM_IND; }
+
+    public String getRUNNING_ORDER_DETAILS() { return RUNNING_ORDER_DETAILS; }
+    public void setRUNNING_ORDER_DETAILS(String RUNNING_ORDER_DETAILS) { this.RUNNING_ORDER_DETAILS = RUNNING_ORDER_DETAILS; }
+
+    public String getFLEXIBILITY() { return FLEXIBILITY; }
+    public void setFLEXIBILITY(String FLEXIBILITY) { this.FLEXIBILITY = FLEXIBILITY; }
+
+    public String getMAXIMUM_PAGE_DETAILS() { return MAXIMUM_PAGE_DETAILS; }
+    public void setMAXIMUM_PAGE_DETAILS(String MAXIMUM_PAGE_DETAILS) { this.MAXIMUM_PAGE_DETAILS = MAXIMUM_PAGE_DETAILS; }
+
+    public String getSPECIFIC_LOGO_REQUIRED_IND() { return SPECIFIC_LOGO_REQUIRED_IND; }
+    public void setSPECIFIC_LOGO_REQUIRED_IND(String SPECIFIC_LOGO_REQUIRED_IND) { this.SPECIFIC_LOGO_REQUIRED_IND = SPECIFIC_LOGO_REQUIRED_IND; }
+
+    public String getADDITIONAL_DELIVERIES_DETAILS() { return ADDITIONAL_DELIVERIES_DETAILS; }
+    public void setADDITIONAL_DELIVERIES_DETAILS(String ADDITIONAL_DELIVERIES_DETAILS) { this.ADDITIONAL_DELIVERIES_DETAILS = ADDITIONAL_DELIVERIES_DETAILS; }
+
+    public String getMANDATORY_SUBMISSION_ITEM_IND() { return MANDATORY_SUBMISSION_ITEM_IND; }
+    public void setMANDATORY_SUBMISSION_ITEM_IND(String MANDATORY_SUBMISSION_ITEM_IND) { this.MANDATORY_SUBMISSION_ITEM_IND = MANDATORY_SUBMISSION_ITEM_IND; }
+
+    public String getDOI_STATEMENT_IND() { return DOI_STATEMENT_IND; }
+    public void setDOI_STATEMENT_IND(String DOI_STATEMENT_IND) { this.DOI_STATEMENT_IND = DOI_STATEMENT_IND; }
+
+    public String getLANGUAGE_EDITING_PERFORMED_IND() { return LANGUAGE_EDITING_PERFORMED_IND; }
+    public void setLANGUAGE_EDITING_PERFORMED_IND(String LANGUAGE_EDITING_PERFORMED_IND) { this.LANGUAGE_EDITING_PERFORMED_IND = LANGUAGE_EDITING_PERFORMED_IND; }
+
+    public String getLANGUAGE_EDITING_STAGE() { return LANGUAGE_EDITING_STAGE; }
+    public void setLANGUAGE_EDITING_STAGE(String LANGUAGE_EDITING_STAGE) { this.LANGUAGE_EDITING_STAGE = LANGUAGE_EDITING_STAGE; }
+
+    public String getDEDICATED_JOURNAL_URL_IND() { return DEDICATED_JOURNAL_URL_IND; }
+    public void setDEDICATED_JOURNAL_URL_IND(String DEDICATED_JOURNAL_URL_IND) { this.DEDICATED_JOURNAL_URL_IND = DEDICATED_JOURNAL_URL_IND; }
+
+    public String getDEDICATED_JOURNAL_URL() { return DEDICATED_JOURNAL_URL; }
+    public void setDEDICATED_JOURNAL_URL(String DEDICATED_JOURNAL_URL) { this.DEDICATED_JOURNAL_URL = DEDICATED_JOURNAL_URL; }
+
+    public String getCOI_REQUIRED_IND() { return COI_REQUIRED_IND; }
+    public void setCOI_REQUIRED_IND(String COI_REQUIRED_IND) { this.COI_REQUIRED_IND = COI_REQUIRED_IND; }
+
+    public String getEDITORIAL_SYSTEM_NAME() { return EDITORIAL_SYSTEM_NAME; }
+    public void setEDITORIAL_SYSTEM_NAME(String EDITORIAL_SYSTEM_NAME) { this.EDITORIAL_SYSTEM_NAME = EDITORIAL_SYSTEM_NAME; }
+
+    public String getTYPESETTER_NAME() { return TYPESETTER_NAME; }
+    public void setTYPESETTER_NAME(String TYPESETTER_NAME) { this.TYPESETTER_NAME = TYPESETTER_NAME; }
+
+    public String getEDITORIAL_TURNAROUND_TIME() { return EDITORIAL_TURNAROUND_TIME; }
+    public void setEDITORIAL_TURNAROUND_TIME(String EDITORIAL_TURNAROUND_TIME) { this.EDITORIAL_TURNAROUND_TIME = EDITORIAL_TURNAROUND_TIME; }
+
+    public String getPENDING_SUBMISSIONS_QUANTITY() { return PENDING_SUBMISSIONS_QUANTITY; }
+    public void setPENDING_SUBMISSIONS_QUANTITY(String PENDING_SUBMISSIONS_QUANTITY) { this.PENDING_SUBMISSIONS_QUANTITY = PENDING_SUBMISSIONS_QUANTITY; }
+
+    public String getCHECKED_WITH_SOCIETY_TEAM_IND() { return CHECKED_WITH_SOCIETY_TEAM_IND; }
+    public void setCHECKED_WITH_SOCIETY_TEAM_IND(String CHECKED_WITH_SOCIETY_TEAM_IND) { this.CHECKED_WITH_SOCIETY_TEAM_IND = CHECKED_WITH_SOCIETY_TEAM_IND; }
+
+    public String getPROPOSED_EVISE_ROLLOUT_PERIOD_DATE() { return PROPOSED_EVISE_ROLLOUT_PERIOD_DATE; }
+    public void setPROPOSED_EVISE_ROLLOUT_PERIOD_DATE(String PROPOSED_EVISE_ROLLOUT_PERIOD_DATE) { this.PROPOSED_EVISE_ROLLOUT_PERIOD_DATE = PROPOSED_EVISE_ROLLOUT_PERIOD_DATE; }
+
+    public String getBACKSTOCK_END_YEAR() { return BACKSTOCK_END_YEAR; }
+    public void setBACKSTOCK_END_YEAR(String BACKSTOCK_END_YEAR) { this.BACKSTOCK_END_YEAR = BACKSTOCK_END_YEAR; }
+
+    public String getBACKSTOCK_END_OPTION() { return BACKSTOCK_END_OPTION; }
+    public void setBACKSTOCK_END_OPTION(String BACKSTOCK_END_OPTION) { this.BACKSTOCK_END_OPTION = BACKSTOCK_END_OPTION; }
+
+    public String getJBS_SITE_IND() { return JBS_SITE_IND; }
+    public void setJBS_SITE_IND(String JBS_SITE_IND) { this.JBS_SITE_IND = JBS_SITE_IND; }
+
+    public String getEDITORIAL_PRODUCTION_EMAIL_ADDRESS() { return EDITORIAL_PRODUCTION_EMAIL_ADDRESS; }
+    public void setEDITORIAL_PRODUCTION_EMAIL_ADDRESS(String EDITORIAL_PRODUCTION_EMAIL_ADDRESS) { this.EDITORIAL_PRODUCTION_EMAIL_ADDRESS = EDITORIAL_PRODUCTION_EMAIL_ADDRESS; }
+
+    public String getEDITORIAL_PRODUCTION_SITE_NAME() { return EDITORIAL_PRODUCTION_SITE_NAME; }
+    public void setEDITORIAL_PRODUCTION_SITE_NAME(String EDITORIAL_PRODUCTION_SITE_NAME) { this.EDITORIAL_PRODUCTION_SITE_NAME = EDITORIAL_PRODUCTION_SITE_NAME; }
+
+    public String getJOURNAL_HAS_ARTICLE_NOS() { return JOURNAL_HAS_ARTICLE_NOS; }
+    public void setJOURNAL_HAS_ARTICLE_NOS(String JOURNAL_HAS_ARTICLE_NOS) { this.JOURNAL_HAS_ARTICLE_NOS = JOURNAL_HAS_ARTICLE_NOS; }
+
+    public String getJOURNAL_ARTICLE_NUMBER_TYPE() { return JOURNAL_ARTICLE_NUMBER_TYPE; }
+    public void setJOURNAL_ARTICLE_NUMBER_TYPE(String JOURNAL_ARTICLE_NUMBER_TYPE) { this.JOURNAL_ARTICLE_NUMBER_TYPE = JOURNAL_ARTICLE_NUMBER_TYPE; }
+
+    public String getBACKSTOCK_TREATMENT_NOTE() { return BACKSTOCK_TREATMENT_NOTE; }
+    public void setBACKSTOCK_TREATMENT_NOTE(String BACKSTOCK_TREATMENT_NOTE) { this.BACKSTOCK_TREATMENT_NOTE = BACKSTOCK_TREATMENT_NOTE; }
+
+
+    public String getAPPROVAL_ATTACHMENT_ID() {
+        return APPROVAL_ATTACHMENT_ID;
+    }
+    public void setAPPROVAL_ATTACHMENT_ID(String APPROVAL_ATTACHMENT_ID) {
+        this.APPROVAL_ATTACHMENT_ID= APPROVAL_ATTACHMENT_ID;
+    }
+
+    public String getF_APPROVAL() {
+        return F_APPROVAL;
+    }
+    public void setF_APPROVAL(String F_APPROVAL) {
+        this.F_APPROVAL= F_APPROVAL;
+    }
+
+    public String getATTACHMENT_NAME() {
+        return ATTACHMENT_NAME;
+    }
+    public void setATTACHMENT_NAME(String ATTACHMENT_NAME) {
+        this.ATTACHMENT_NAME= ATTACHMENT_NAME;
+    }
+
+    public String getMANIFESTATION_FORMATS_CODE() {
+        return MANIFESTATION_FORMATS_CODE;
+    }
+    public void setMANIFESTATION_FORMATS_CODE(String MANIFESTATION_FORMATS_CODE) {
+        this.MANIFESTATION_FORMATS_CODE= MANIFESTATION_FORMATS_CODE;
+    }
+
+    public String getTAKEOVER_YEAR() {
+        return TAKEOVER_YEAR;
+    }
+    public void setTAKEOVER_YEAR(String TAKEOVER_YEAR) {
+        this.TAKEOVER_YEAR= TAKEOVER_YEAR;
+    }
+
+    public String getDOI_PREFIX() {
+        return DOI_PREFIX;
+    }
+    public void setDOI_PREFIX(String DOI_PREFIX) {
+        this.DOI_PREFIX= DOI_PREFIX;
+    }
+
+    public String getDOI_RIGHT_ASSIGNED_IND() {
+        return DOI_RIGHT_ASSIGNED_IND;
+    }
+    public void setDOI_RIGHT_ASSIGNED_IND(String DOI_RIGHT_ASSIGNED_IND) {
+        this.DOI_RIGHT_ASSIGNED_IND= DOI_RIGHT_ASSIGNED_IND;
+    }
+    public String getSOCIETY_OWNED_IND() {
+        return SOCIETY_OWNED_IND;
+    }
+    public void setSOCIETY_OWNED_IND(String SOCIETY_OWNED_IND) {
+        this.SOCIETY_OWNED_IND= SOCIETY_OWNED_IND;
+    }
+
+    public String getCHECKED_WITH_OA_TEAM_IND() {
+        return CHECKED_WITH_OA_TEAM_IND;
+    }
+    public void setCHECKED_WITH_OA_TEAM_IND(String CHECKED_WITH_OA_TEAM_IND) {
+        this.CHECKED_WITH_OA_TEAM_IND= CHECKED_WITH_OA_TEAM_IND;
+    }
+    public String getIMPRINT_CODE() {
+        return IMPRINT_CODE;
+    }
+    public void setIMPRINT_CODE(String IMPRINT_CODE) {
+        this.IMPRINT_CODE= IMPRINT_CODE;
+    }
+
+    public String getDISCONTINUE_DATE() {
+        return DISCONTINUE_DATE;
+    }
+    public void setDISCONTINUE_DATE(String DISCONTINUE_DATE) {
+        this.DISCONTINUE_DATE= DISCONTINUE_DATE;
+    }
+
+    public String getPMX_PRODUCT_WORK_ID() {
+        return PMX_PRODUCT_WORK_ID;
+    }
+    public void setPMX_PRODUCT_WORK_ID(String PMX_PRODUCT_WORK_ID) {
+        this.PMX_PRODUCT_WORK_ID= PMX_PRODUCT_WORK_ID;
+    }
+
+    public String getREMOVED_FROM_CATALOGUE_IND() {
+        return REMOVED_FROM_CATALOGUE_IND;
+    }
+    public void setREMOVED_FROM_CATALOGUE_IND(String REMOVED_FROM_CATALOGUE_IND) {
+        this.REMOVED_FROM_CATALOGUE_IND= REMOVED_FROM_CATALOGUE_IND;
+    }
+
+    public String getEPH_WORK_ID() {
+        return EPH_WORK_ID;
+    }
+    public void setEPH_WORK_ID(String EPH_WORK_ID) {
+        this.EPH_WORK_ID= EPH_WORK_ID;
+    }
+
+    public String getTRANSFER_DATE() {
+        return TRANSFER_DATE;
+    }
+    public void setTRANSFER_DATE(String TRANSFER_DATE) {
+        this.TRANSFER_DATE= TRANSFER_DATE;
+    }
+
+    public String getPERIODICAL_TIMING_DESC() {
+        return PERIODICAL_TIMING_DESC;
+    }
+    public void setPERIODICAL_TIMING_DESC(String PERIODICAL_TIMING_DESC) {
+        this.PERIODICAL_TIMING_DESC= PERIODICAL_TIMING_DESC;
+    }
+    public String getOPEN_ACCESSTYPE_CODE() {
+        return OPEN_ACCESSTYPE_CODE;
+    }
+    public void setOPEN_ACCESSTYPE_CODE(String OPEN_ACCESSTYPE_CODE) {
+        this.OPEN_ACCESSTYPE_CODE= OPEN_ACCESSTYPE_CODE;
+    }
+    public String getOPEN_ACCESS_SPONSOR_NAME() {
+        return OPEN_ACCESS_SPONSOR_NAME;
+    }
+    public void setOPEN_ACCESS_SPONSOR_NAME(String OPEN_ACCESS_SPONSOR_NAME) {
+        this.OPEN_ACCESS_SPONSOR_NAME= OPEN_ACCESS_SPONSOR_NAME;
+    }
+    public String getOPEN_ACCESS_FEE() {
+        return OPEN_ACCESS_FEE;
+    }
+    public void setOPEN_ACCESS_FEE(String OPEN_ACCESS_FEE) {
+        this.OPEN_ACCESS_FEE= OPEN_ACCESS_FEE;
+    }
+    public String getOPEN_ACCESS_CURRENCY_CODE() {
+        return OPEN_ACCESS_CURRENCY_CODE;
+    }
+    public void setOPEN_ACCESS_CURRENCY_CODE(String OPEN_ACCESS_CURRENCY_CODE) {
+        this.OPEN_ACCESS_CURRENCY_CODE= OPEN_ACCESS_CURRENCY_CODE;
+    }
+    public String getOPEN_ACCESS_DISCOUNT_IND() {
+        return OPEN_ACCESS_DISCOUNT_IND;
+    }
+    public void setOPEN_ACCESS_DISCOUNT_IND(String OPEN_ACCESS_DISCOUNT_IND) {
+        this.OPEN_ACCESS_DISCOUNT_IND= OPEN_ACCESS_DISCOUNT_IND;
+    }
+    public String getOPEN_ACCESS_DISCOUNT_PERIOD() {
+        return OPEN_ACCESS_DISCOUNT_PERIOD;
+    }
+    public void setOPEN_ACCESS_DISCOUNT_PERIOD(String OPEN_ACCESS_DISCOUNT_PERIOD) {
+        this.OPEN_ACCESS_DISCOUNT_PERIOD= OPEN_ACCESS_DISCOUNT_PERIOD;
+    }
+    public String getOA_FIRST_YEAR_DISCOUNT_PRICE() {
+        return OA_FIRST_YEAR_DISCOUNT_PRICE;
+    }
+    public void setOA_FIRST_YEAR_DISCOUNT_PRICE(String OA_FIRST_YEAR_DISCOUNT_PRICE) {
+        this.OA_FIRST_YEAR_DISCOUNT_PRICE= OA_FIRST_YEAR_DISCOUNT_PRICE;
+    }
+    public String getOA_SECOND_YEAR_DISCOUNT_PRICE() {
+        return OA_SECOND_YEAR_DISCOUNT_PRICE;
+    }
+    public void setOA_SECOND_YEAR_DISCOUNT_PRICE(String OA_SECOND_YEAR_DISCOUNT_PRICE) {
+        this.OA_SECOND_YEAR_DISCOUNT_PRICE= OA_SECOND_YEAR_DISCOUNT_PRICE;
+    }
+    public String getDDP_ELIGIBLE_IND() {
+        return DDP_ELIGIBLE_IND;
+    }
+    public void setDDP_ELIGIBLE_IND(String DDP_ELIGIBLE_IND) {
+        this.DDP_ELIGIBLE_IND= DDP_ELIGIBLE_IND;
+    }
+    public String getWEBSHOP_IND() {
+        return WEBSHOP_IND;
+    }
+    public void setWEBSHOP_IND(String WEBSHOP_IND) {
+        this.WEBSHOP_IND= WEBSHOP_IND;
+    }
+    public String getMEDLINE_IND() {
+        return MEDLINE_IND;
+    }
+    public void setMEDLINE_IND(String MEDLINE_IND) {
+        this.MEDLINE_IND= MEDLINE_IND;
+    }
+    public String getTHOMSON_REUTERS_IND() {
+        return THOMSON_REUTERS_IND;
+    }
+    public void setTHOMSON_REUTERS_IND(String THOMSON_REUTERS_IND) {
+        this.THOMSON_REUTERS_IND= THOMSON_REUTERS_IND;
+    }
+    public String getSCOPUS_IND() {
+        return SCOPUS_IND;
+    }
+    public void setSCOPUS_IND(String SCOPUS_IND) {
+        this.SCOPUS_IND= SCOPUS_IND;
+    }
+    public String getEMBASE_IND() {
+        return EMBASE_IND;
+    }
+    public void setEMBASE_IND(String EMBASE_IND) {
+        this.EMBASE_IND= EMBASE_IND;
+    }
+    public String getDOAJ_IND() {
+        return DOAJ_IND;
+    }
+    public void setDOAJ_IND(String DOAJ_IND) {
+        this.DOAJ_IND= DOAJ_IND;
+    }
+    public String getROAD_IND() {
+        return ROAD_IND;
+    }
+    public void setROAD_IND(String ROAD_IND) {
+        this.ROAD_IND= ROAD_IND;
+    }
+    public String getPUBMEDCENTRAL_IND() {
+        return PUBMEDCENTRAL_IND;
+    }
+    public void setPUBMEDCENTRAL_IND(String PUBMEDCENTRAL_IND) {
+        this.PUBMEDCENTRAL_IND= PUBMEDCENTRAL_IND;
+    }
+    public String getMAIN_LANGUAGE_CODE() {
+        return MAIN_LANGUAGE_CODE;
+    }
+    public void setMAIN_LANGUAGE_CODE(String MAIN_LANGUAGE_CODE) {
+        this.MAIN_LANGUAGE_CODE= MAIN_LANGUAGE_CODE;
+    }
+    public String getENGLISH_LANGUAGE_PERCENTAGE_TYPE() {
+        return ENGLISH_LANGUAGE_PERCENTAGE_TYPE;
+    }
+    public void setENGLISH_LANGUAGE_PERCENTAGE_TYPE(String ENGLISH_LANGUAGE_PERCENTAGE_TYPE) {
+        this.ENGLISH_LANGUAGE_PERCENTAGE_TYPE= ENGLISH_LANGUAGE_PERCENTAGE_TYPE;
+    }
+    public String getOPEN_ARCHIVE_PERIOD() {
+        return OPEN_ARCHIVE_PERIOD;
+    }
+    public void setOPEN_ARCHIVE_PERIOD(String OPEN_ARCHIVE_PERIOD) {
+        this.OPEN_ARCHIVE_PERIOD= OPEN_ARCHIVE_PERIOD;
+    }
+    public String getDELAYED_OPEN_ARCHIVE_IND() {
+        return DELAYED_OPEN_ARCHIVE_IND;
+    }
+    public void setDELAYED_OPEN_ARCHIVE_IND(String DELAYED_OPEN_ARCHIVE_IND) {
+        this.DELAYED_OPEN_ARCHIVE_IND= DELAYED_OPEN_ARCHIVE_IND;
+    }
+    public String getINCLUDE_IN_COLLECTIONS_IND() {
+        return INCLUDE_IN_COLLECTIONS_IND;
+    }
+    public void setINCLUDE_IN_COLLECTIONS_IND(String INCLUDE_IN_COLLECTIONS_IND) {
+        this.INCLUDE_IN_COLLECTIONS_IND= INCLUDE_IN_COLLECTIONS_IND;
+    }
+
+    public String getLAUNCH_DATE() {
+        return LAUNCH_DATE;
+    }
+    public void setLAUNCH_DATE(String LAUNCH_DATE) {
+        this.LAUNCH_DATE= LAUNCH_DATE;
+    }
+    public String getPUBLICATION_SCHEDULE_JAN() {
+        return PUBLICATION_SCHEDULE_JAN;
+    }
+    public void setPUBLICATION_SCHEDULE_JAN(String PUBLICATION_SCHEDULE_JAN) {
+        this.PUBLICATION_SCHEDULE_JAN= PUBLICATION_SCHEDULE_JAN;
+    }
+    public String getPUBLICATION_SCHEDULE_FEB() {
+        return PUBLICATION_SCHEDULE_FEB;
+    }
+    public void setPUBLICATION_SCHEDULE_FEB(String PUBLICATION_SCHEDULE_FEB) {
+        this.PUBLICATION_SCHEDULE_FEB= PUBLICATION_SCHEDULE_FEB;
+    }
+    public String getPUBLICATION_SCHEDULE_MAR() {
+        return PUBLICATION_SCHEDULE_MAR;
+    }
+    public void setPUBLICATION_SCHEDULE_MAR(String PUBLICATION_SCHEDULE_MAR) {
+        this.PUBLICATION_SCHEDULE_MAR= PUBLICATION_SCHEDULE_MAR;
+    }
+    public String getPUBLICATION_SCHEDULE_APR() {
+        return PUBLICATION_SCHEDULE_APR;
+    }
+    public void setPUBLICATION_SCHEDULE_APR(String PUBLICATION_SCHEDULE_APR) {
+        this.PUBLICATION_SCHEDULE_APR= PUBLICATION_SCHEDULE_APR;
+    }
+
+    public String getPUBLICATION_SCHEDULE_MAY() {  return PUBLICATION_SCHEDULE_MAY;    }
+    public void setPUBLICATION_SCHEDULE_MAY(String PUBLICATION_SCHEDULE_MAY) {
+        this.PUBLICATION_SCHEDULE_MAY= PUBLICATION_SCHEDULE_MAY;
+    }
+
+    public String getPUBLICATION_SCHEDULE_JUN() {  return PUBLICATION_SCHEDULE_JUN;   }
+    public void setPUBLICATION_SCHEDULE_JUN(String PUBLICATION_SCHEDULE_JUN) {
+        this.PUBLICATION_SCHEDULE_JUN= PUBLICATION_SCHEDULE_JUN;
+    }
+
+    public String getPUBLICATION_SCHEDULE_JUL() {   return PUBLICATION_SCHEDULE_JUL; }
+    public void setPUBLICATION_SCHEDULE_JUL(String PUBLICATION_SCHEDULE_JUL) {
+        this.PUBLICATION_SCHEDULE_JUL= PUBLICATION_SCHEDULE_JUL;
+    }
+
+    public String getPUBLICATION_SCHEDULE_AUG() {   return PUBLICATION_SCHEDULE_AUG;  }
+    public void setPUBLICATION_SCHEDULE_AUG(String PUBLICATION_SCHEDULE_AUG) {
+        this.PUBLICATION_SCHEDULE_AUG= PUBLICATION_SCHEDULE_AUG;
+    }
+
+    public String getPUBLICATION_SCHEDULE_SEP() {  return PUBLICATION_SCHEDULE_SEP;  }
+    public void setPUBLICATION_SCHEDULE_SEP(String PUBLICATION_SCHEDULE_SEP) {
+        this.PUBLICATION_SCHEDULE_SEP= PUBLICATION_SCHEDULE_SEP;
+    }
+
+    public String getPUBLICATION_SCHEDULE_OCT() {   return PUBLICATION_SCHEDULE_OCT;    }
+    public void setPUBLICATION_SCHEDULE_OCT(String PUBLICATION_SCHEDULE_OCT) {
+        this.PUBLICATION_SCHEDULE_OCT= PUBLICATION_SCHEDULE_OCT;
+    }
+
+    public String getPUBLICATION_SCHEDULE_NOV() {   return PUBLICATION_SCHEDULE_NOV;  }
+    public void setPUBLICATION_SCHEDULE_NOV(String PUBLICATION_SCHEDULE_NOV) {
+        this.PUBLICATION_SCHEDULE_NOV= PUBLICATION_SCHEDULE_NOV;
+    }
+
+    public String getPUBLICATION_SCHEDULE_DEC() {   return PUBLICATION_SCHEDULE_DEC;  }
+    public void setPUBLICATION_SCHEDULE_DEC(String PUBLICATION_SCHEDULE_DEC) {
+        this.PUBLICATION_SCHEDULE_DEC= PUBLICATION_SCHEDULE_DEC;
+    }
+
+    public String getJOURNAL_ACRONYM_ARGI() {  return JOURNAL_ACRONYM_ARGI; }
+    public void setJOURNAL_ACRONYM_ARGI(String JOURNAL_ACRONYM_ARGI) {
+        this.JOURNAL_ACRONYM_ARGI= JOURNAL_ACRONYM_ARGI;
+    }
+
+    public String getLAST_ISSUE_NAME() {  return LAST_ISSUE_NAME;  }
+    public void setLAST_ISSUE_NAME(String LAST_ISSUE_NAME) {
+        this.LAST_ISSUE_NAME= LAST_ISSUE_NAME;
+    }
+
+    public String getLAST_VOLUME_NAME() { return LAST_VOLUME_NAME; }
+    public void setLAST_VOLUME_NAME(String LAST_VOLUME_NAME) {
+        this.LAST_VOLUME_NAME= LAST_VOLUME_NAME;
+    }
+    public String getVOLUMES_PER_YEAR_QUANTITY() {  return VOLUMES_PER_YEAR_QUANTITY;}
+    public void setVOLUMES_PER_YEAR_QUANTITY(String VOLUMES_PER_YEAR_QUANTITY) {
+        this.VOLUMES_PER_YEAR_QUANTITY= VOLUMES_PER_YEAR_QUANTITY;
+    }
+    public String getISSUES_PER_VOLUME_QUANTITY() {  return ISSUES_PER_VOLUME_QUANTITY;  }
+    public void setISSUES_PER_VOLUME_QUANTITY(String ISSUES_PER_VOLUME_QUANTITY) {
+        this.ISSUES_PER_VOLUME_QUANTITY= ISSUES_PER_VOLUME_QUANTITY;
+    }
+
+    public String getFIRST_YEAR_VOLUMES_PER_YEAR_QUANTITY() { return FIRST_YEAR_VOLUMES_PER_YEAR_QUANTITY;    }
+    public void setFIRST_YEAR_VOLUMES_PER_YEAR_QUANTITY(String FIRST_YEAR_VOLUMES_PER_YEAR_QUANTITY) {
+        this.FIRST_YEAR_VOLUMES_PER_YEAR_QUANTITY= FIRST_YEAR_VOLUMES_PER_YEAR_QUANTITY;
+    }
+    public String getFIRST_YEAR_ISSUES_PER_VOLUME_QUANTITY() { return FIRST_YEAR_ISSUES_PER_VOLUME_QUANTITY;    }
+    public void setFIRST_YEAR_ISSUES_PER_VOLUME_QUANTITY(String FIRST_YEAR_ISSUES_PER_VOLUME_QUANTITY) {
+        this.FIRST_YEAR_ISSUES_PER_VOLUME_QUANTITY= FIRST_YEAR_ISSUES_PER_VOLUME_QUANTITY;
+    }
+
+    public String getMANIFESTATION_TYPES_CODE() { return MANIFESTATION_TYPES_CODE;  }
+    public void setMANIFESTATION_TYPES_CODE(String MANIFESTATION_TYPES_CODE) {
+        this.MANIFESTATION_TYPES_CODE= MANIFESTATION_TYPES_CODE;
+    }
+
+    public String getMANIFESTATION_PERSONAL_MODEL_TYPE() {  return MANIFESTATION_PERSONAL_MODEL_TYPE; }
+    public void setMANIFESTATION_PERSONAL_MODEL_TYPE(String MANIFESTATION_PERSONAL_MODEL_TYPE) {
+        this.MANIFESTATION_PERSONAL_MODEL_TYPE= MANIFESTATION_PERSONAL_MODEL_TYPE;
+    }
+
+    public String getIMPRINT_NAME() { return IMPRINT_NAME; }
+    public void setIMPRINT_NAME(String IMPRINT_NAME) {
+        this.IMPRINT_NAME= IMPRINT_NAME;
+    }
+
+    public String getPTS_JOURNAL_INDICATOR() { return PTS_JOURNAL_INDICATOR;
+    }
+    public void setPTS_JOURNAL_INDICATOR(String PTS_JOURNAL_INDICATOR) {
+        this.PTS_JOURNAL_INDICATOR= PTS_JOURNAL_INDICATOR;
+    }
+    public String getYEAR_OF_FIRST_ISSUE() {  return YEAR_OF_FIRST_ISSUE; }
+    public void setYEAR_OF_FIRST_ISSUE(String YEAR_OF_FIRST_ISSUE) {
+        this.YEAR_OF_FIRST_ISSUE= YEAR_OF_FIRST_ISSUE;
+    }
+    public String getYEAR_OF_LAST_ISSUE() { return YEAR_OF_LAST_ISSUE; }
+    public void setYEAR_OF_LAST_ISSUE(String YEAR_OF_LAST_ISSUE) {
+        this.YEAR_OF_LAST_ISSUE= YEAR_OF_LAST_ISSUE;
+    }
+    public String getFIRST_VOLUME_NAME() {  return FIRST_VOLUME_NAME; }
+    public void setFIRST_VOLUME_NAME(String FIRST_VOLUME_NAME) {
+        this.FIRST_VOLUME_NAME= FIRST_VOLUME_NAME;
+    }
+
+    public String getFIRST_ISSUE_NAME() {    return FIRST_ISSUE_NAME;    }
+    public void setFIRST_ISSUE_NAME(String FIRST_ISSUE_NAME) {
+        this.FIRST_ISSUE_NAME= FIRST_ISSUE_NAME;
+    }
+
+    public String getPRODUCT_SUBTITLE() {  return PRODUCT_SUBTITLE;  }
+    public void setPRODUCT_SUBTITLE(String PRODUCT_SUBTITLE) {
+        this.PRODUCT_SUBTITLE= PRODUCT_SUBTITLE;
+    }
+
+    public String getPRODUCT_WORK_TITLE_INFO() {  return PRODUCT_WORK_TITLE_INFO;    }
+    public void setPRODUCT_WORK_TITLE_INFO(String PRODUCT_WORK_TITLE_INFO) {
+        this.PRODUCT_WORK_TITLE_INFO= PRODUCT_WORK_TITLE_INFO;
+    }
+
+    public String getISSN_L() { return ISSN_L; }
+    public void setISSN_L(String ISSN_L) {  this.ISSN_L= ISSN_L;   }
+
+    public String getINTERNAL_ELSEVIER_DIVISION() { return INTERNAL_ELSEVIER_DIVISION; }
+    public void setINTERNAL_ELSEVIER_DIVISION(String INTERNAL_ELSEVIER_DIVISION) {
+        this.INTERNAL_ELSEVIER_DIVISION= INTERNAL_ELSEVIER_DIVISION;
+    }
+
+    public String getPRODUCT_WORK_TITLE() { return PRODUCT_WORK_TITLE; }
+    public void setPRODUCT_WORK_TITLE(String PRODUCT_WORK_TITLE) {
+        this.PRODUCT_WORK_TITLE= PRODUCT_WORK_TITLE;
+    }
+
+    public String getREVIEW_COMMENT_DATE() {
+        return REVIEW_COMMENT_DATE;
+    }
+    public void setREVIEW_COMMENT_DATE(String REVIEW_COMMENT_DATE) {
+        this.REVIEW_COMMENT_DATE= REVIEW_COMMENT_DATE;
+    }
+
+    public String getCREATED_ON() {
+        return CREATED_ON;
+    }
+    public void setCREATED_ON(String CREATED_ON) {
+        this.CREATED_ON= CREATED_ON;
+    }
+
+    public String getREVIEW_COMMENT() {
+        return REVIEW_COMMENT;
+    }
+    public void setREVIEW_COMMENT(String REVIEW_COMMENT) {
+        this.REVIEW_COMMENT= REVIEW_COMMENT;
+    }
+
+    public String getREVIEW_ATTRIBUTE_NAME() {
+        return REVIEW_ATTRIBUTE_NAME;
+    }
+    public void setREVIEW_ATTRIBUTE_NAME(String REVIEW_ATTRIBUTE_NAME) {
+        this.REVIEW_ATTRIBUTE_NAME= REVIEW_ATTRIBUTE_NAME;
+    }
+
+    public String getF_APPROVAL_ID() { return F_APPROVAL_ID;}
+    public void setF_APPROVAL_ID(String F_APPROVAL_ID) {
+        this.F_APPROVAL_ID= F_APPROVAL_ID;
+    }
+
+    public String getREVIEW_COMMENT_ID() {
+        return REVIEW_COMMENT_ID;
+    }
+    public void setREVIEW_COMMENT_ID(String REVIEW_COMMENT_ID) {
+        this.REVIEW_COMMENT_ID= REVIEW_COMMENT_ID;
+    }
+
+    public String getSUBJECT_AREA_NAME() {
+        return SUBJECT_AREA_NAME;
+    }
+    public void setSUBJECT_AREA_NAME(String SUBJECT_AREA_NAME) {
+        this.SUBJECT_AREA_NAME= SUBJECT_AREA_NAME;
+    }
+
+    public String getSUBJECT_AREA_CODE() {
+        return SUBJECT_AREA_CODE;
+    }
+    public void setSUBJECT_AREA_CODE(String SUBJECT_AREA_CODE) {
+        this.SUBJECT_AREA_CODE= SUBJECT_AREA_CODE;
+    }
+
+    public String getSUBJECT_AREA_PRIORITY_CODE() {
+        return SUBJECT_AREA_PRIORITY_CODE;
+    }
+    public void setSUBJECT_AREA_PRIORITY_CODE(String SUBJECT_AREA_PRIORITY_CODE) {
+        this.SUBJECT_AREA_PRIORITY_CODE= SUBJECT_AREA_PRIORITY_CODE;
+    }
+
+    public String getSUBJECT_AREA_TYPE_CODE() {
+        return SUBJECT_AREA_TYPE_CODE;
+    }
+    public void setSUBJECT_AREA_TYPE_CODE(String SUBJECT_AREA_TYPE_CODE) {
+        this.SUBJECT_AREA_TYPE_CODE= SUBJECT_AREA_TYPE_CODE;
+    }
+
+    public String getPRODUCT_SUBJECT_AREA_ID() {
+        return PRODUCT_SUBJECT_AREA_ID;
+    }
+    public void setPRODUCT_SUBJECT_AREA_ID(String PRODUCT_SUBJECT_AREA_ID) {
+        this.PRODUCT_SUBJECT_AREA_ID= PRODUCT_SUBJECT_AREA_ID;
+    }
+
+    public String getEPH_MANIFESTATION_ID() {
+        return EPH_MANIFESTATION_ID;
+    }
+    public void setEPH_MANIFESTATION_ID(String EPH_MANIFESTATION_ID) {
+        this.EPH_MANIFESTATION_ID= EPH_MANIFESTATION_ID;
+    }
+
+    public String getPMX_PRODUCT_MANIFESTATION_ID() {
+        return PMX_PRODUCT_MANIFESTATION_ID;
+    }
+    public void setPMX_PRODUCT_MANIFESTATION_ID(String PMX_PRODUCT_MANIFESTATION_ID) {
+        this.PMX_PRODUCT_MANIFESTATION_ID= PMX_PRODUCT_MANIFESTATION_ID;
+    }
+
+    public String getPRICE_CATEGORIES() {
+        return PRICE_CATEGORIES;
+    }
+    public void setPRICE_CATEGORIES(String PRICE_CATEGORIES) {
+        this.PRICE_CATEGORIES= PRICE_CATEGORIES;
+    }
+
+    public String getSUBSCRIPTION_TYPE() {
+        return SUBSCRIPTION_TYPE;
+    }
+    public void setSUBSCRIPTION_TYPE(String SUBSCRIPTION_TYPE) {
+        this.SUBSCRIPTION_TYPE= SUBSCRIPTION_TYPE;
+    }
+
+    public String getELSEVIER_JOURNAL_NUMBER() {
+        return ELSEVIER_JOURNAL_NUMBER;
+    }
+    public void setELSEVIER_JOURNAL_NUMBER(String ELSEVIER_JOURNAL_NUMBER) {
+        this.ELSEVIER_JOURNAL_NUMBER= ELSEVIER_JOURNAL_NUMBER;
+    }
+
+    public String getISSN() {
+        return ISSN;
+    }
+    public void setISSN(String ISSN) {
+        this.ISSN= ISSN;
+    }
+
+    public String getPRODUCT_MANIFESTATION_TITLE() {
+        return PRODUCT_MANIFESTATION_TITLE;
+    }
+    public void setPRODUCT_MANIFESTATION_TITLE(String PRODUCT_MANIFESTATION_TITLE) {
+        this.PRODUCT_MANIFESTATION_TITLE= PRODUCT_MANIFESTATION_TITLE;
+    }
+
+    public String getPRODUCT_FAMILY_ID() {
+        return PRODUCT_FAMILY_ID;
+    }
+    public void setPRODUCT_FAMILY_ID(String PRODUCT_FAMILY_ID) {
+        this.PRODUCT_FAMILY_ID= PRODUCT_FAMILY_ID;
+    }
+
+    public String getPRODUCT_FAMILY_TITLE() {
+        return PRODUCT_FAMILY_TITLE;
+    }
+    public void setPRODUCT_FAMILY_TITLE(String PRODUCT_FAMILY_TITLE) {
+        this.PRODUCT_FAMILY_TITLE= PRODUCT_FAMILY_TITLE;
+    }
+
+    public String getPRODUCT_JOURNEY_IDENTIFIER() {
+        return PRODUCT_JOURNEY_IDENTIFIER;
+    }
+    public void setPRODUCT_JOURNEY_IDENTIFIER(String PRODUCT_JOURNEY_IDENTIFIER) {
+        this.PRODUCT_JOURNEY_IDENTIFIER= PRODUCT_JOURNEY_IDENTIFIER;
+    }
+
+    public String getPMX_PRODUCT_FAMILY_ID() {
+        return PMX_PRODUCT_FAMILY_ID;
+    }
+    public void setPMX_PRODUCT_FAMILY_ID(String PMX_PRODUCT_FAMILY_ID) {
+        this.PMX_PRODUCT_FAMILY_ID= PMX_PRODUCT_FAMILY_ID;
+    }
+
+    public String getVERSION() {
+        return VERSION;
+    }
+    public void setVERSION(String VERSION) {
+        this.VERSION= VERSION;
+    }
+
+    public String getREJECTION_DATE() {
+        return REJECTION_DATE;
+    }
+    public void setREJECTION_DATE(String REJECTION_DATE) {
+        this.REJECTION_DATE= REJECTION_DATE;
+    }
+
+    public String getCANCELLED_DATE() {
+        return CANCELLED_DATE;
+    }
+    public void setCANCELLED_DATE(String CANCELLED_DATE) {
+        this.CANCELLED_DATE= CANCELLED_DATE;
+    }
+
+    public String getSUBMISSION_DATE() {
+        return SUBMISSION_DATE;
+    }
+    public void setSUBMISSION_DATE(String SUBMISSION_DATE) {
+        this.SUBMISSION_DATE= SUBMISSION_DATE;
+    }
+
+    public String getREJECTION_COMMENT() {
+        return REJECTION_COMMENT;
+    }
+    public void setREJECTION_COMMENT(String REJECTION_COMMENT) {
+        this.REJECTION_COMMENT= REJECTION_COMMENT;
+    }
+
+    public String getCREATED_BY_NAME() {
+        return CREATED_BY_NAME;
+    }
+    public void setCREATED_BY_NAME(String CREATED_BY_NAME) {
+        this.CREATED_BY_NAME= CREATED_BY_NAME;
+    }
+
+    public String getCANCELLED_BY() {
+        return CANCELLED_BY;
+    }
+    public void setCANCELLED_BY(String CANCELLED_BY) {
+        this.CANCELLED_BY= CANCELLED_BY;
+    }
+
+    public String getREASON_FOR_CHANGE() {
+        return REASON_FOR_CHANGE;
+    }
+    public void setREASON_FOR_CHANGE(String REASON_FOR_CHANGE) {
+        this.REASON_FOR_CHANGE= REASON_FOR_CHANGE;
+    }
+
+    public String getPROCESS_INSTANCE_ID() {
+        return PROCESS_INSTANCE_ID;
+    }
+    public void setPROCESS_INSTANCE_ID(String PROCESS_INSTANCE_ID) {
+        this.PROCESS_INSTANCE_ID= PROCESS_INSTANCE_ID;
+    }
+
+    public String getUPDATED_ON() {
+        return UPDATED_ON;
+    }
+    public void setUPDATED_ON(String UPDATED_ON) {
+        this.UPDATED_ON= UPDATED_ON;
+    }
+
+    public String getUPDATED_BY() {
+        return UPDATED_BY;
+    }
+    public void setUPDATED_BY(String UPDATED_BY) {
+        this.UPDATED_BY= UPDATED_BY;
+    }
+
+    public String getSTARTED_ON() {
+        return STARTED_ON;
+    }
+    public void setSTARTED_ON(String STARTED_ON) {
+        this.STARTED_ON= STARTED_ON;
+    }
+
+    public String getSTARTED_BY() {
+        return STARTED_BY;
+    }
+    public void setSTARTED_BY(String STARTED_BY) {
+        this.STARTED_BY= STARTED_BY;
+    }
+
+    public String getRENAME_REQUIRED_IND() {
+        return RENAME_REQUIRED_IND;
+    }
+    public void setRENAME_REQUIRED_IND(String RENAME_REQUIRED_IND) {
+        this.RENAME_REQUIRED_IND= RENAME_REQUIRED_IND;
+    }
+
+    public String getDISTRIBUTION_LIST() {
+        return DISTRIBUTION_LIST;
+    }
+    public void setDISTRIBUTION_LIST(String DISTRIBUTION_LIST) {
+        this.DISTRIBUTION_LIST= DISTRIBUTION_LIST;
+    }
+
+    public String getCOMPLETED_ON() {
+        return COMPLETED_ON;
+    }
+    public void setCOMPLETED_ON(String COMPLETED_ON) {
+        this.COMPLETED_ON= COMPLETED_ON;
+    }
+
+    public String getPRODUCT_CHRONICLE_ID() {
+        return PRODUCT_CHRONICLE_ID;
+    }
+    public void setPRODUCT_CHRONICLE_ID(String PRODUCT_CHRONICLE_ID) {
+        this.PRODUCT_CHRONICLE_ID= PRODUCT_CHRONICLE_ID;
+    }
+
+    public String getPRODUCT_AVAILABILITY_ID() {
+        return PRODUCT_AVAILABILITY_ID;
+    }
+    public void setPRODUCT_AVAILABILITY_ID(String PRODUCT_AVAILABILITY_ID) {
+        this.PRODUCT_AVAILABILITY_ID= PRODUCT_AVAILABILITY_ID;
+    }
+
+    public String getF_PRODUCT_MANIFESTATION() {
+        return F_PRODUCT_MANIFESTATION;
+    }
+    public void setF_PRODUCT_MANIFESTATION(String F_PRODUCT_MANIFESTATION) {
+        this.F_PRODUCT_MANIFESTATION= F_PRODUCT_MANIFESTATION;
+    }
+
+    public String getAPPLICATION_CODE() {
+        return APPLICATION_CODE;
+    }
+    public void setAPPLICATION_CODE(String APPLICATION_CODE) {
+        this.APPLICATION_CODE= APPLICATION_CODE;
+    }
+
+    public String getEPH_PERSON_ID() {
+        return EPH_PERSON_ID;
+    }
+    public void setEPH_PERSON_ID(String EPH_PERSON_ID) {
+        this.EPH_PERSON_ID= EPH_PERSON_ID;
+    }
+
+    public String getPEOPLEHUB_ID() {
+        return PEOPLEHUB_ID;
+    }
+    public void setPEOPLEHUB_ID(String PEOPLEHUB_ID) {
+        this.PEOPLEHUB_ID= PEOPLEHUB_ID;
+    }
+
+    public String getPMX_PARTY_ID() {
+        return PMX_PARTY_ID;
+    }
+    public void setPMX_PARTY_ID(String PMX_PARTY_ID) {
+        this.PMX_PARTY_ID= PMX_PARTY_ID;
+    }
+
+    public String getORGANISATION_1() {
+        return ORGANISATION_1;
+    }
+    public void setORGANISATION_1(String ORGANISATION_1) {
+        this.ORGANISATION_1= ORGANISATION_1;
+    }
+
+    public String getPOST_CODE() {
+        return POST_CODE;
+    }
+    public void setPOST_CODE(String POST_CODE) {
+        this.POST_CODE= POST_CODE;
+    }
+
+    public String getSTATE() {
+        return STATE;
+    }
+    public void setSTATE(String STATE) {
+        this.STATE= STATE;
+    }
+
+    public String getCITY() {
+        return CITY;
+    }
+    public void setCITY(String CITY) {
+        this.CITY= CITY;
+    }
+
+    public String getCOUNTRY() {
+        return COUNTRY;
+    }
+    public void setCOUNTRY(String COUNTRY) {
+        this.COUNTRY= COUNTRY;
+    }
+
+    public String getADDRESS_LINE_2() {
+        return ADDRESS_LINE_2;
+    }
+    public void setADDRESS_LINE_2(String ADDRESS_LINE_2) {
+        this.ADDRESS_LINE_2= ADDRESS_LINE_2;
+    }
+
+    public String getADDRESS_LINE_3() {
+        return ADDRESS_LINE_3;
+    }
+    public void setADDRESS_LINE_3(String ADDRESS_LINE_3) {
+        this.ADDRESS_LINE_3= ADDRESS_LINE_3;
+    }
+
+    public String getADDRESS_LINE_1() {
+        return ADDRESS_LINE_1;
+    }
+    public void setADDRESS_LINE_1(String ADDRESS_LINE_1) {
+        this.ADDRESS_LINE_1= ADDRESS_LINE_1;
+    }
+
+    public String getPHONE_NUMBER() {
+        return PHONE_NUMBER;
+    }
+    public void setPHONE_NUMBER(String PHONE_NUMBER) {
+        this.PHONE_NUMBER= PHONE_NUMBER;
+    }
+
+    public String getFULL_NAME() {
+        return FULL_NAME;
+    }
+    public void setFULL_NAME(String FULL_NAME) {
+        this.FULL_NAME= FULL_NAME;
+    }
+
+    public String getEMAIL_ADDRESS() {
+        return EMAIL_ADDRESS;
+    }
+    public void setEMAIL_ADDRESS(String EMAIL_ADDRESS) {
+        this.EMAIL_ADDRESS= EMAIL_ADDRESS;
+    }
+
+    public String getPARTY_ROLE_TYPE() {
+        return PARTY_ROLE_TYPE;
+    }
+    public void setPARTY_ROLE_TYPE(String PARTY_ROLE_TYPE) {
+        this.PARTY_ROLE_TYPE= PARTY_ROLE_TYPE;
+    }
+
+    public String getF_PRODUCT_WORK() {
+        return F_PRODUCT_WORK;
+    }
+    public void setF_PRODUCT_WORK(String F_PRODUCT_WORK) {
+        this.F_PRODUCT_WORK= F_PRODUCT_WORK;
+    }
+
+    public String getPARTY_IN_PRODUCT_ID() {
+        return PARTY_IN_PRODUCT_ID;
+    }
+    public void setPARTY_IN_PRODUCT_ID(String PARTY_IN_PRODUCT_ID) {
+        this.PARTY_IN_PRODUCT_ID= PARTY_IN_PRODUCT_ID;
+    }
+
+    public String getTRIM_SIZE() {
+        return TRIM_SIZE;
+    }
+    public void setTRIM_SIZE(String TRIM_SIZE) {
+        this.TRIM_SIZE= TRIM_SIZE;
+    }
+
+    public String getBASE_PRINT_RUN_NUMBER() {
+        return BASE_PRINT_RUN_NUMBER;
+    }
+    public void setBASE_PRINT_RUN_NUMBER(String BASE_PRINT_RUN_NUMBER) {
+        this.BASE_PRINT_RUN_NUMBER= BASE_PRINT_RUN_NUMBER;
+    }
+
+    public String getCOLOUR_FREQUENCY() {
+        return COLOUR_FREQUENCY;
+    }
+    public void setCOLOUR_FREQUENCY(String COLOUR_FREQUENCY) {
+        this.COLOUR_FREQUENCY= COLOUR_FREQUENCY;
+    }
+
+    public String getARTWORK_SENSITIVITY_IND() {
+        return ARTWORK_SENSITIVITY_IND;
+    }
+    public void setARTWORK_SENSITIVITY_IND(String ARTWORK_SENSITIVITY_IND) {
+        this.ARTWORK_SENSITIVITY_IND= ARTWORK_SENSITIVITY_IND;
+    }
+
+    public String getMAILING_BREAKDOWN_EUROPE() {
+        return MAILING_BREAKDOWN_EUROPE;
+    }
+    public void setMAILING_BREAKDOWN_EUROPE(String MAILING_BREAKDOWN_EUROPE) {
+        this.MAILING_BREAKDOWN_EUROPE= MAILING_BREAKDOWN_EUROPE;
+    }
+
+    public String getMAILING_BREAKDOWN_USA() {
+        return MAILING_BREAKDOWN_USA;
+    }
+    public void setMAILING_BREAKDOWN_USA(String MAILING_BREAKDOWN_USA) {
+        this.MAILING_BREAKDOWN_USA= MAILING_BREAKDOWN_USA;
+    }
+
+    public String getMAILING_BREAKDOWN_ROW() {
+        return MAILING_BREAKDOWN_ROW;
+    }
+    public void setMAILING_BREAKDOWN_ROW(String MAILING_BREAKDOWN_ROW) {
+        this.MAILING_BREAKDOWN_ROW= MAILING_BREAKDOWN_ROW;
+    }
+
+    public String getZERO_WAREHOUSING_IND() {
+        return ZERO_WAREHOUSING_IND;
+    }
+    public void setZERO_WAREHOUSING_IND(String ZERO_WAREHOUSING_IND) {
+        this.ZERO_WAREHOUSING_IND= ZERO_WAREHOUSING_IND;
+    }
+
+    public String getBACK_STOCK_WAREHOUSE_LOCATION_TYPE() {
+        return BACK_STOCK_WAREHOUSE_LOCATION_TYPE;
+    }
+    public void setBACK_STOCK_WAREHOUSE_LOCATION_TYPE(String BACK_STOCK_WAREHOUSE_LOCATION_TYPE) {
+        this.BACK_STOCK_WAREHOUSE_LOCATION_TYPE= BACK_STOCK_WAREHOUSE_LOCATION_TYPE;
+    }
+
+    public String getPRINTER_TYPE() {
+        return PRINTER_TYPE;
+    }
+    public void setPRINTER_TYPE(String PRINTER_TYPE) {
+        this.PRINTER_TYPE= PRINTER_TYPE;
+    }
+
+    public String getPRINTER_LOCATION_TYPE() {
+        return PRINTER_LOCATION_TYPE;
+    }
+    public void setPRINTER_LOCATION_TYPE(String PRINTER_LOCATION_TYPE) {
+        this.PRINTER_LOCATION_TYPE= PRINTER_LOCATION_TYPE;
+    }
+
+    public String getINTERIOR_PAPER_TYPE() {
+        return INTERIOR_PAPER_TYPE;
+    }
+    public void setINTERIOR_PAPER_TYPE(String INTERIOR_PAPER_TYPE) {
+        this.INTERIOR_PAPER_TYPE= INTERIOR_PAPER_TYPE;
+    }
+
+    public String getCOVER_PAPER_TYPE() {
+        return COVER_PAPER_TYPE;
+    }
+    public void setCOVER_PAPER_TYPE(String COVER_PAPER_TYPE) {
+        this.COVER_PAPER_TYPE= COVER_PAPER_TYPE;
+    }
+
+    public String getDISTRIBUTOR_CODE() {
+        return DISTRIBUTOR_CODE;
+    }
+    public void setDISTRIBUTOR_CODE(String DISTRIBUTOR_CODE) {
+        this.DISTRIBUTOR_CODE= DISTRIBUTOR_CODE;
+    }
+
+    public String getDISTRIBUTOR_LOCATION_CODE() {
+        return DISTRIBUTOR_LOCATION_CODE;
+    }
+    public void setDISTRIBUTOR_LOCATION_CODE(String DISTRIBUTOR_LOCATION_CODE) {
+        this.DISTRIBUTOR_LOCATION_CODE= DISTRIBUTOR_LOCATION_CODE;
+    }
+
+    public String getPRINT_MODEL_CODE() {
+        return PRINT_MODEL_CODE;
+    }
+    public void setPRINT_MODEL_CODE(String PRINT_MODEL_CODE) {
+        this.PRINT_MODEL_CODE= PRINT_MODEL_CODE;
+    }
+
+    public String getSEPARATE_PRINT_RUN_IND() {
+        return SEPARATE_PRINT_RUN_IND;
+    }
+    public void setSEPARATE_PRINT_RUN_IND(String SEPARATE_PRINT_RUN_IND) {
+        this.SEPARATE_PRINT_RUN_IND= SEPARATE_PRINT_RUN_IND;
+    }
+
+    public String getOFFPRINT_PRICING_CODE() {
+        return OFFPRINT_PRICING_CODE;
+    }
+    public void setOFFPRINT_PRICING_CODE(String OFFPRINT_PRICING_CODE) {
+        this.OFFPRINT_PRICING_CODE= OFFPRINT_PRICING_CODE;
+    }
+
+    public String getOFFPRINT_COVER_IND() {
+        return OFFPRINT_COVER_IND;
+    }
+    public void setOFFPRINT_COVER_IND(String OFFPRINT_COVER_IND) {
+        this.OFFPRINT_COVER_IND= OFFPRINT_COVER_IND;
+    }
+
+    public String getFREE_ISSUES_QUANTITY() {
+        return FREE_ISSUES_QUANTITY;
+    }
+    public void setFREE_ISSUES_QUANTITY(String FREE_ISSUES_QUANTITY) {
+        this.FREE_ISSUES_QUANTITY= FREE_ISSUES_QUANTITY;
+    }
+
+    public String getFREE_OFFPRINTS_TYPE() {
+        return FREE_OFFPRINTS_TYPE;
+    }
+    public void setFREE_OFFPRINTS_TYPE(String FREE_OFFPRINTS_TYPE) {
+        this.FREE_OFFPRINTS_TYPE= FREE_OFFPRINTS_TYPE;
+    }
+
+    public String getFREE_PAID_COLOUR_OFFPRINTS_QUANTITY() {
+        return FREE_PAID_COLOUR_OFFPRINTS_QUANTITY;
+    }
+    public void setFREE_PAID_COLOUR_OFFPRINTS_QUANTITY(String FREE_PAID_COLOUR_OFFPRINTS_QUANTITY) {
+        this.FREE_PAID_COLOUR_OFFPRINTS_QUANTITY= FREE_PAID_COLOUR_OFFPRINTS_QUANTITY;
+    }
+
+    public String getCOLOUR_PRINTING_CURRENCY_CODE() {
+        return COLOUR_PRINTING_CURRENCY_CODE;
+    }
+    public void setCOLOUR_PRINTING_CURRENCY_CODE(String COLOUR_PRINTING_CURRENCY_CODE) {
+        this.COLOUR_PRINTING_CURRENCY_CODE= COLOUR_PRINTING_CURRENCY_CODE;
+    }
+
+    public String getCOLOUR_ARTWORK_EXCEPTIONS() {
+        return COLOUR_ARTWORK_EXCEPTIONS;
+    }
+    public void setCOLOUR_ARTWORK_EXCEPTIONS(String COLOUR_ARTWORK_EXCEPTIONS) {
+        this.COLOUR_ARTWORK_EXCEPTIONS = COLOUR_ARTWORK_EXCEPTIONS;
+    }
+
+    public String getSOCIETY_OWNS_LABELS_IND() {
+        return SOCIETY_OWNS_LABELS_IND;
+    }
+    public void setSOCIETY_OWNS_LABELS_IND(String SOCIETY_OWNS_LABELS_IND) {
+        this.SOCIETY_OWNS_LABELS_IND = SOCIETY_OWNS_LABELS_IND;
+    }
+
+    public String getBINDING_TYPE() {
+        return BINDING_TYPE;
+    }
+    public void setBINDING_TYPE(String BINDING_TYPE) {
+        this.BINDING_TYPE = BINDING_TYPE;
+    }
+
+    public String getSPECIAL_BULK_ARRANGEMENTS() {
+        return SPECIAL_BULK_ARRANGEMENTS;
+    }
+    public void setSPECIAL_BULK_ARRANGEMENTS(String SPECIAL_BULK_ARRANGEMENTS) {
+        this.SPECIAL_BULK_ARRANGEMENTS = SPECIAL_BULK_ARRANGEMENTS;
+    }
+
+    public String getCOST_FIRST_PRINTED_COLOUR_UNIT() {
+        return COST_FIRST_PRINTED_COLOUR_UNIT;
+    }
+    public void setCOST_FIRST_PRINTED_COLOUR_UNIT(String COST_FIRST_PRINTED_COLOUR_UNIT) {
+        this.COST_FIRST_PRINTED_COLOUR_UNIT = COST_FIRST_PRINTED_COLOUR_UNIT;
+    }
+
+    public String getCOST_NEXT_PRINTED_COLOUR_UNIT() {
+        return COST_NEXT_PRINTED_COLOUR_UNIT;
+    }
+    public void setCOST_NEXT_PRINTED_COLOUR_UNIT(String COST_NEXT_PRINTED_COLOUR_UNIT) {
+        this.COST_NEXT_PRINTED_COLOUR_UNIT = COST_NEXT_PRINTED_COLOUR_UNIT;
+    }
+
+    public String getONLINE_LAST_ISSUE_DATE() {
+        return ONLINE_LAST_ISSUE_DATE;
+    }
+    public void setONLINE_LAST_ISSUE_DATE(String ONLINE_LAST_ISSUE_DATE) {
+        this.ONLINE_LAST_ISSUE_DATE = ONLINE_LAST_ISSUE_DATE;
+    }
+
+    public String getEMBARGO_TIMES_NUMBER() {
+        return EMBARGO_TIMES_NUMBER;
+    }
+    public void setEMBARGO_TIMES_NUMBER(String EMBARGO_TIMES_NUMBER) {
+        this.EMBARGO_TIMES_NUMBER = EMBARGO_TIMES_NUMBER;
+    }
+
+    public String getARTICLE_IN_PRESS_S250_IND() {
+        return ARTICLE_IN_PRESS_S250_IND;
+    }
+    public void setARTICLE_IN_PRESS_S250_IND(String ARTICLE_IN_PRESS_S250_IND) {
+        this.ARTICLE_IN_PRESS_S250_IND = ARTICLE_IN_PRESS_S250_IND;
+    }
+
+    public String getARTICLE_IN_PRESS_S100_IND() {
+        return ARTICLE_IN_PRESS_S100_IND;
+    }
+    public void setARTICLE_IN_PRESS_S100_IND(String ARTICLE_IN_PRESS_S100_IND) {
+        this.ARTICLE_IN_PRESS_S100_IND = ARTICLE_IN_PRESS_S100_IND;
+    }
+
+    public String getARTICLE_IN_PRESS_S5_IND() {
+        return ARTICLE_IN_PRESS_S5_IND;
+    }
+    public void setARTICLE_IN_PRESS_S5_IND(String ARTICLE_IN_PRESS_S5_IND) {
+        this.ARTICLE_IN_PRESS_S5_IND = ARTICLE_IN_PRESS_S5_IND;
+    }
+
+    public String getONLINE_LAUNCH_DATE() {
+        return ONLINE_LAUNCH_DATE;
+    }
+    public void setONLINE_LAUNCH_DATE(String ONLINE_LAUNCH_DATE) {
+        this.ONLINE_LAUNCH_DATE = ONLINE_LAUNCH_DATE;
+    }
+
+    public String getELECTRONIC_RIGHTS_SECURED_TYPE() {
+        return ELECTRONIC_RIGHTS_SECURED_TYPE;
+    }
+    public void setELECTRONIC_RIGHTS_SECURED_TYPE(String ELECTRONIC_RIGHTS_SECURED_TYPE) {
+        this.ELECTRONIC_RIGHTS_SECURED_TYPE = ELECTRONIC_RIGHTS_SECURED_TYPE;
+    }
+
+    public String getEMBARGO_TIMES_INDICATOR() {
+        return EMBARGO_TIMES_INDICATOR;
+    }
+    public void setEMBARGO_TIMES_INDICATOR(String EMBARGO_TIMES_INDICATOR) {
+        this.EMBARGO_TIMES_INDICATOR = EMBARGO_TIMES_INDICATOR;
+    }
+
+    public String getPRODUCT_MANIFESTATION_ID() {
+        return PRODUCT_MANIFESTATION_ID;
+    }
+    public void setPRODUCT_MANIFESTATION_ID(String PRODUCT_MANIFESTATION_ID) {
+        this.PRODUCT_MANIFESTATION_ID = PRODUCT_MANIFESTATION_ID;
+    }
+
+    public String getOWNERSHIP_BRAND_TYPE() {
+        return OWNERSHIP_BRAND_TYPE;
+    }
+    public void setOWNERSHIP_BRAND_TYPE(String OWNERSHIP_BRAND_TYPE) {
+        this.OWNERSHIP_BRAND_TYPE = OWNERSHIP_BRAND_TYPE;
+    }
+
+    public String getJOINT_OWNERSHIP_DETAILS() {
+        return JOINT_OWNERSHIP_DETAILS;
+    }
+    public void setJOINT_OWNERSHIP_DETAILS(String JOINT_OWNERSHIP_DETAILS) {
+        this.JOINT_OWNERSHIP_DETAILS = JOINT_OWNERSHIP_DETAILS;
+    }
+
+    public String getSOCIETY_CONTRACT_DATE() {
+        return SOCIETY_CONTRACT_DATE;
+    }
+    public void setSOCIETY_CONTRACT_DATE(String SOCIETY_CONTRACT_DATE) {
+        this.SOCIETY_CONTRACT_DATE = SOCIETY_CONTRACT_DATE;
+    }
+
+    public String getSOCIETY_CONTRACT_EXPIRY_DATE() {
+        return SOCIETY_CONTRACT_EXPIRY_DATE;
+    }
+    public void setSOCIETY_CONTRACT_EXPIRY_DATE(String SOCIETY_CONTRACT_EXPIRY_DATE) {
+        this.SOCIETY_CONTRACT_EXPIRY_DATE = SOCIETY_CONTRACT_EXPIRY_DATE;
+    }
+
+    public String getJOURNAL_COPYRIGHT_OWNER() {
+        return JOURNAL_COPYRIGHT_OWNER;
+    }
+    public void setJOURNAL_COPYRIGHT_OWNER(String JOURNAL_COPYRIGHT_OWNER) {
+        this.JOURNAL_COPYRIGHT_OWNER = JOURNAL_COPYRIGHT_OWNER;
+    }
+
+    public String getSTANDARD_COPYRIGHT_STATEMENT_IND() {
+        return STANDARD_COPYRIGHT_STATEMENT_IND;
+    }
+    public void setSTANDARD_COPYRIGHT_STATEMENT_IND(String STANDARD_COPYRIGHT_STATEMENT_IND) {
+        this.STANDARD_COPYRIGHT_STATEMENT_IND = STANDARD_COPYRIGHT_STATEMENT_IND;
+    }
+
+    public String getNON_STANDARD_COPYRIGHT_STATEMENT() {
+        return NON_STANDARD_COPYRIGHT_STATEMENT;
+    }
+    public void setNON_STANDARD_COPYRIGHT_STATEMENT(String NON_STANDARD_COPYRIGHT_STATEMENT) {
+        this.NON_STANDARD_COPYRIGHT_STATEMENT = NON_STANDARD_COPYRIGHT_STATEMENT;
+    }
+
+    public String getOPEN_ACCESS_ARTICLE_COPYRIGHT_TYPE() {
+        return OPEN_ACCESS_ARTICLE_COPYRIGHT_TYPE;
+    }
+    public void setOPEN_ACCESS_ARTICLE_COPYRIGHT_TYPE(String OPEN_ACCESS_ARTICLE_COPYRIGHT_TYPE) {
+        this.OPEN_ACCESS_ARTICLE_COPYRIGHT_TYPE = OPEN_ACCESS_ARTICLE_COPYRIGHT_TYPE;
+    }
+
+    public String getARTICLE_DISCLAIMER() {
+        return ARTICLE_DISCLAIMER;
+    }
+    public void setARTICLE_DISCLAIMER(String ARTICLE_DISCLAIMER) {
+        this.ARTICLE_DISCLAIMER = ARTICLE_DISCLAIMER;
+    }
+
+    public String getPUBLISHING_RIGHT_TYPE() {
+        return PUBLISHING_RIGHT_TYPE;
+    }
+    public void setPUBLISHING_RIGHT_TYPE(String PUBLISHING_RIGHT_TYPE) {
+        this.PUBLISHING_RIGHT_TYPE = PUBLISHING_RIGHT_TYPE;
+    }
+
+    public String getPRINT_RIGHTS_SECURED_IND() {
+        return PRINT_RIGHTS_SECURED_IND;
+    }
+    public void setPRINT_RIGHTS_SECURED_IND(String PRINT_RIGHTS_SECURED_IND) {
+        this.PRINT_RIGHTS_SECURED_IND = PRINT_RIGHTS_SECURED_IND;
+    }
+
+    public String getEXCLUSIVE_RIGHTS_SECURED_IND() {
+        return EXCLUSIVE_RIGHTS_SECURED_IND;
+    }
+    public void setEXCLUSIVE_RIGHTS_SECURED_IND(String EXCLUSIVE_RIGHTS_SECURED_IND) {
+        this.EXCLUSIVE_RIGHTS_SECURED_IND = EXCLUSIVE_RIGHTS_SECURED_IND;
+    }
+
+    public String getNO_EXCLUSIVE_PRINT_RIGHTS_REASON() {
+        return NO_EXCLUSIVE_PRINT_RIGHTS_REASON;
+    }
+    public void setNO_EXCLUSIVE_PRINT_RIGHTS_REASON(String NO_EXCLUSIVE_PRINT_RIGHTS_REASON) {
+        this.NO_EXCLUSIVE_PRINT_RIGHTS_REASON = NO_EXCLUSIVE_PRINT_RIGHTS_REASON;
+    }
+
+    public String getELECTRONIC_PRINT_RIGHTS_SECURED_IND() {
+        return ELECTRONIC_PRINT_RIGHTS_SECURED_IND;
+    }
+    public void setELECTRONIC_PRINT_RIGHTS_SECURED_IND(String ELECTRONIC_PRINT_RIGHTS_SECURED_IND) {
+        this.ELECTRONIC_PRINT_RIGHTS_SECURED_IND = ELECTRONIC_PRINT_RIGHTS_SECURED_IND;
+    }
+
+    public String getNO_EXCLUSIVE_ELECTRONIC_RIGHTS_REASON() {
+        return NO_EXCLUSIVE_ELECTRONIC_RIGHTS_REASON;
+    }
+    public void setNO_EXCLUSIVE_ELECTRONIC_RIGHTS_REASON(String NO_EXCLUSIVE_ELECTRONIC_RIGHTS_REASON) {
+        this.NO_EXCLUSIVE_ELECTRONIC_RIGHTS_REASON = NO_EXCLUSIVE_ELECTRONIC_RIGHTS_REASON;
+    }
+
+    public String getRIGHTS_RESTRICTIONS_IND() {
+        return RIGHTS_RESTRICTIONS_IND;
+    }
+    public void setRIGHTS_RESTRICTIONS_IND(String RIGHTS_RESTRICTIONS_IND) {
+        this.RIGHTS_RESTRICTIONS_IND = RIGHTS_RESTRICTIONS_IND;
+    }
+
+    public String getRIGHTS_RESTRICTIONS_LIST() {
+        return RIGHTS_RESTRICTIONS_LIST;
+    }
+    public void setRIGHTS_RESTRICTIONS_LIST(String RIGHTS_RESTRICTIONS_LIST) {
+        this.RIGHTS_RESTRICTIONS_LIST = RIGHTS_RESTRICTIONS_LIST;
+    }
+
+    public String getBACKFILE_CONSENT_IND() {
+        return BACKFILE_CONSENT_IND;
+    }
+    public void setBACKFILE_CONSENT_IND(String BACKFILE_CONSENT_IND) {
+        this.BACKFILE_CONSENT_IND = BACKFILE_CONSENT_IND;
+    }
+
+    public String getBACKFILE_CONSENT_INFO() {
+        return BACKFILE_CONSENT_INFO;
+    }
+    public void setBACKFILE_CONSENT_INFO(String BACKFILE_CONSENT_INFO) {
+        this.BACKFILE_CONSENT_INFO = BACKFILE_CONSENT_INFO;
+    }
+
+    public String getBACK_RIGHTS_TYPE() {
+        return BACK_RIGHTS_TYPE;
+    }
+    public void setBACK_RIGHTS_TYPE(String BACK_RIGHTS_TYPE) {
+        this.BACK_RIGHTS_TYPE = BACK_RIGHTS_TYPE;
+    }
+
+    public String getBACK_RIGHTS_START_VOLUME_AND_ISSUE() {
+        return BACK_RIGHTS_START_VOLUME_AND_ISSUE;
+    }
+    public void setBACK_RIGHTS_START_VOLUME_AND_ISSUE(String BACK_RIGHTS_START_VOLUME_AND_ISSUE) {
+        this.BACK_RIGHTS_START_VOLUME_AND_ISSUE = BACK_RIGHTS_START_VOLUME_AND_ISSUE;
+    }
+
+    public String getNON_EXCLUSIVE_ELECTRONIC_RIGHTS_IND() {
+        return NON_EXCLUSIVE_ELECTRONIC_RIGHTS_IND;
+    }
+    public void setNON_EXCLUSIVE_ELECTRONIC_RIGHTS_IND(String NON_EXCLUSIVE_ELECTRONIC_RIGHTS_IND) {
+        this.NON_EXCLUSIVE_ELECTRONIC_RIGHTS_IND = NON_EXCLUSIVE_ELECTRONIC_RIGHTS_IND;
+    }
+
+    public String getPOST_TERMINATION_ELECTRONIC_RIGHTS_TYPE() {
+        return POST_TERMINATION_ELECTRONIC_RIGHTS_TYPE;
+    }
+    public void setPOST_TERMINATION_ELECTRONIC_RIGHTS_TYPE(String POST_TERMINATION_ELECTRONIC_RIGHTS_TYPE) {
+        this.POST_TERMINATION_ELECTRONIC_RIGHTS_TYPE = POST_TERMINATION_ELECTRONIC_RIGHTS_TYPE;
+    }
+
+    public String getNO_POST_TERMINATION_ELECTRONIC_RIGHTS_REASON() {
+        return NO_POST_TERMINATION_ELECTRONIC_RIGHTS_REASON;
+    }
+    public void setNO_POST_TERMINATION_ELECTRONIC_RIGHTS_REASON(String NO_POST_TERMINATION_ELECTRONIC_RIGHTS_REASON) {
+        this.NO_POST_TERMINATION_ELECTRONIC_RIGHTS_REASON = NO_POST_TERMINATION_ELECTRONIC_RIGHTS_REASON;
+    }
+    public String getPERMISSION_TYPE() {
+        return PERMISSION_TYPE;
+    }
+    public void setPERMISSION_TYPE(String PERMISSION_TYPE) {
+        this.PERMISSION_TYPE = PERMISSION_TYPE;
+    }
+
+    public String getPERMISSION_HANDLING_EMAIL_ADDRESS() {
+        return PERMISSION_HANDLING_EMAIL_ADDRESS;
+    }
+    public void setPERMISSION_HANDLING_EMAIL_ADDRESS(String PERMISSION_HANDLING_EMAIL_ADDRESS) {
+        this.PERMISSION_HANDLING_EMAIL_ADDRESS = PERMISSION_HANDLING_EMAIL_ADDRESS;
+    }
+
+    public String getSOCIETY_MEMBERSHIP_HELD_TYPE() {
+        return SOCIETY_MEMBERSHIP_HELD_TYPE;
+    }
+    public void setSOCIETY_MEMBERSHIP_HELD_TYPE(String SOCIETY_MEMBERSHIP_HELD_TYPE) {
+        this.SOCIETY_MEMBERSHIP_HELD_TYPE = SOCIETY_MEMBERSHIP_HELD_TYPE;
+    }
+
+    public String getSPECIAL_ARRANGEMENTS() {
+        return SPECIAL_ARRANGEMENTS;
+    }
+    public void setSPECIAL_ARRANGEMENTS(String SPECIAL_ARRANGEMENTS) {
+        this.SPECIAL_ARRANGEMENTS = SPECIAL_ARRANGEMENTS;
+    }
+
+    public String getDESPATCH_METHOD() {
+        return DESPATCH_METHOD;
+    }
+    public void setDESPATCH_METHOD(String DESPATCH_METHOD) {
+        this.DESPATCH_METHOD = DESPATCH_METHOD;
+    }
+
+    public String getCONTRACT_SEEN_BY_ELS_ATTORNEY_IND() {
+        return CONTRACT_SEEN_BY_ELS_ATTORNEY_IND;
+    }
+    public void setCONTRACT_SEEN_BY_ELS_ATTORNEY_IND(String CONTRACT_SEEN_BY_ELS_ATTORNEY_IND) {
+        this.CONTRACT_SEEN_BY_ELS_ATTORNEY_IND = CONTRACT_SEEN_BY_ELS_ATTORNEY_IND;
+    }
+
+    public String getCONTRACT_SENT_IND() {
+        return CONTRACT_SENT_IND;
+    }
+    public void setCONTRACT_SENT_IND(String CONTRACT_SENT_IND) {
+        this.CONTRACT_SENT_IND = CONTRACT_SENT_IND;
+    }
+
+    public String getDIRECT_BILLING_MEMBERSHIP() {
+        return DIRECT_BILLING_MEMBERSHIP;
+    }
+    public void setDIRECT_BILLING_MEMBERSHIP(String DIRECT_BILLING_MEMBERSHIP) {
+        this.DIRECT_BILLING_MEMBERSHIP = DIRECT_BILLING_MEMBERSHIP;
+    }
+
+    public String getDIRECT_BILLING_MEMBERSHIP_WITH_FEE() {
+        return DIRECT_BILLING_MEMBERSHIP_WITH_FEE;
+    }
+    public void setDIRECT_BILLING_MEMBERSHIP_WITH_FEE(String DIRECT_BILLING_MEMBERSHIP_WITH_FEE) {
+        this.DIRECT_BILLING_MEMBERSHIP_WITH_FEE = DIRECT_BILLING_MEMBERSHIP_WITH_FEE;
+    }
+
+    public String getSOCIETY_MAINTAINED_PREPAYMENT() {
+        return SOCIETY_MAINTAINED_PREPAYMENT;
+    }
+    public void setSOCIETY_MAINTAINED_PREPAYMENT(String SOCIETY_MAINTAINED_PREPAYMENT) {
+        this.SOCIETY_MAINTAINED_PREPAYMENT = SOCIETY_MAINTAINED_PREPAYMENT;
+    }
+
+    public String getSOCIETY_MAINTAINED_ACCOUNT() {
+        return SOCIETY_MAINTAINED_ACCOUNT;
+    }
+    public void setSOCIETY_MAINTAINED_ACCOUNT(String SOCIETY_MAINTAINED_ACCOUNT) {
+        this.SOCIETY_MAINTAINED_ACCOUNT = SOCIETY_MAINTAINED_ACCOUNT;
+    }
+
+    public String getAUTOMATIC_RENEWAL() {
+        return AUTOMATIC_RENEWAL;
+    }
+    public void setAUTOMATIC_RENEWAL(String AUTOMATIC_RENEWAL) {
+        this.AUTOMATIC_RENEWAL = AUTOMATIC_RENEWAL;
+    }
+
+    public String getMAILING_LABELS() {
+        return MAILING_LABELS;
+    }
+    public void setMAILING_LABELS(String MAILING_LABELS) {
+        this.MAILING_LABELS = MAILING_LABELS;
+    }
+
+    public String getTITLE_INCLUDED_IN_CK() {
+        return TITLE_INCLUDED_IN_CK;
+    }
+    public void setTITLE_INCLUDED_IN_CK(String TITLE_INCLUDED_IN_CK) {
+        this.TITLE_INCLUDED_IN_CK = TITLE_INCLUDED_IN_CK;
+    }
+
+    public String getSOC_AGREED_TO_CK_CONTENT() {
+        return SOC_AGREED_TO_CK_CONTENT;
+    }
+    public void setSOC_AGREED_TO_CK_CONTENT(String SOC_AGREED_TO_CK_CONTENT) {
+        this.SOC_AGREED_TO_CK_CONTENT = SOC_AGREED_TO_CK_CONTENT;
+    }
+
+    public String getSOC_CK_CONTENT_AGREEMENT_TEXT() {
+        return SOC_CK_CONTENT_AGREEMENT_TEXT;
+    }
+    public void setSOC_CK_CONTENT_AGREEMENT_TEXT(String SOC_CK_CONTENT_AGREEMENT_TEXT) {
+        this.SOC_CK_CONTENT_AGREEMENT_TEXT = SOC_CK_CONTENT_AGREEMENT_TEXT;
+    }
+
+    public String getMONTHS_TO_KEEP_TRANSFER_ONLINE() {
+        return MONTHS_TO_KEEP_TRANSFER_ONLINE;
+    }
+    public void setMONTHS_TO_KEEP_TRANSFER_ONLINE(String MONTHS_TO_KEEP_TRANSFER_ONLINE) {
+        this.MONTHS_TO_KEEP_TRANSFER_ONLINE = MONTHS_TO_KEEP_TRANSFER_ONLINE;
+    }
+
+    public String getSOC_CK_CONTENT_AGREEMENT_DATE() {
+        return SOC_CK_CONTENT_AGREEMENT_DATE;
+    }
+    public void setSOC_CK_CONTENT_AGREEMENT_DATE(String SOC_CK_CONTENT_AGREEMENT_DATE) {
+        this.SOC_CK_CONTENT_AGREEMENT_DATE = SOC_CK_CONTENT_AGREEMENT_DATE;
+    }
+
+    public String getPRODUCT_WORK_ID() {
+        return PRODUCT_WORK_ID;
+    }
+    public void setPRODUCT_WORK_ID(String PRODUCT_WORK_ID) {
+        this.PRODUCT_WORK_ID = PRODUCT_WORK_ID;
+    }
+
+    public String getBUSINESS_CONTROLLER_NAME() {
+        return BUSINESS_CONTROLLER_NAME;
+    }
+    public void setBUSINESS_CONTROLLER_NAME(String BUSINESS_CONTROLLER_NAME) {
+        this.BUSINESS_CONTROLLER_NAME = BUSINESS_CONTROLLER_NAME;
+    }
+
+    public String getBUSINESS_UNIT_CODE() {
+        return BUSINESS_UNIT_CODE;
+    }
+    public void setBUSINESS_UNIT_CODE(String BUSINESS_UNIT_CODE) {
+        this.BUSINESS_UNIT_CODE = BUSINESS_UNIT_CODE;
+    }
+
+    public String getPMG_CODE() {
+        return PMG_CODE;
+    }
+    public void setPMG_CODE(String PMG_CODE) {
+        this.PMG_CODE = PMG_CODE;
+    }
+
+    public String getPMC_CODE() {
+        return PMC_CODE;
+    }
+    public void setPMC_CODE(String PMC_CODE) {
+        this.PMC_CODE = PMC_CODE;
+    }
+
+    public String getOPCO_R12_ID() {
+        return OPCO_R12_ID;
+    }
+    public void setOPCO_R12_ID(String OPCO_R12_ID) {
+        this.OPCO_R12_ID = OPCO_R12_ID;
+    }
+
+    public String getOPCO_R12_CODE() {
+        return OPCO_R12_CODE;
+    }
+    public void setOPCO_R12_CODE(String OPCO_R12_CODE) {
+        this.OPCO_R12_CODE = OPCO_R12_CODE;
+    }
+
+    public String getCONTRACT_OPCO_R12_CODE() {
+        return CONTRACT_OPCO_R12_CODE;
+    }
+    public void setCONTRACT_OPCO_R12_CODE(String CONTRACT_OPCO_R12_CODE) {
+        this.CONTRACT_OPCO_R12_CODE = CONTRACT_OPCO_R12_CODE;
+    }
+
+    public String getRESPONSIBILITY_CENTRE_CODE() {
+        return RESPONSIBILITY_CENTRE_CODE;
+    }
+    public void setRESPONSIBILITY_CENTRE_CODE(String RESPONSIBILITY_CENTRE_CODE) {
+        this.RESPONSIBILITY_CENTRE_CODE = RESPONSIBILITY_CENTRE_CODE;
+    }
+
+    public String getHFM_HIERARCHY_POSITION_CODE() {
+        return HFM_HIERARCHY_POSITION_CODE;
+    }
+    public void setHFM_HIERARCHY_POSITION_CODE(String HFM_HIERARCHY_POSITION_CODE) {
+        this.HFM_HIERARCHY_POSITION_CODE = HFM_HIERARCHY_POSITION_CODE;
+    }
+
+    public String getCITY_OPCO_R12_CODE() {
+        return CITY_OPCO_R12_CODE;
+    }
+    public void setCITY_OPCO_R12_CODE(String CITY_OPCO_R12_CODE) {
+        this.CITY_OPCO_R12_CODE = CITY_OPCO_R12_CODE;
+    }
+
+    public String getCOUNTRY_OPCO_R12_CODE() {
+        return COUNTRY_OPCO_R12_CODE;
+    }
+    public void setCOUNTRY_OPCO_R12_CODE(String COUNTRY_OPCO_R12_CODE) {
+        this.COUNTRY_OPCO_R12_CODE = COUNTRY_OPCO_R12_CODE;
+    }
+
+    public String getOPCO_R12_NAME() {
+        return OPCO_R12_NAME;
+    }
+    public void setOPCO_R12_NAME(String OPCO_R12_NAME) {
+        this.OPCO_R12_NAME = OPCO_R12_NAME;
+    }
+
+    public String getOPCO_R12_LEGAL_NAME() {
+        return OPCO_R12_LEGAL_NAME;
+    }
+    public void setOPCO_R12_LEGAL_NAME(String OPCO_R12_LEGAL_NAME) {
+        this.OPCO_R12_LEGAL_NAME = OPCO_R12_LEGAL_NAME;
+    }
+
+    public String getREFUND_OPTION() {
+        return REFUND_OPTION;
+    }
+    public void setREFUND_OPTION(String REFUND_OPTION) {
+        this.REFUND_OPTION = REFUND_OPTION;
+    }
+
+    public String getREMINDER_DATE() {
+        return REMINDER_DATE;
+    }
+    public void setREMINDER_DATE(String REMINDER_DATE) {
+        this.REMINDER_DATE = REMINDER_DATE;
+    }
+
+    public String getREMINDER_OPTION() {
+        return REMINDER_OPTION;
+    }
+    public void setREMINDER_OPTION(String REMINDER_OPTION) {
+        this.REMINDER_OPTION = REMINDER_OPTION;
+    }
+
+    public String getRENEWAL_OPTION() {
+        return RENEWAL_OPTION;
+    }
+    public void setRENEWAL_OPTION(String RENEWAL_OPTION) {
+        this.RENEWAL_OPTION = RENEWAL_OPTION;
+    }
+
+    public String getRENEWAL_DATE() {
+        return RENEWAL_DATE;
+    }
+    public void setRENEWAL_DATE(String RENEWAL_DATE) {
+        this.RENEWAL_DATE = RENEWAL_DATE;
+    }
+
+    public String getBUSINESS_CONTROLLER_EMAIL_ADDRESS() {
+        return BUSINESS_CONTROLLER_EMAIL_ADDRESS;
+    }
+    public void setBUSINESS_CONTROLLER_EMAIL_ADDRESS(String BUSINESS_CONTROLLER_EMAIL_ADDRESS) {
+        this.BUSINESS_CONTROLLER_EMAIL_ADDRESS = BUSINESS_CONTROLLER_EMAIL_ADDRESS;
+    }
+
+    public String getCLAIMS_HANDLING_OPTION() {
+        return CLAIMS_HANDLING_OPTION;
+    }
+    public void setCLAIMS_HANDLING_OPTION(String CLAIMS_HANDLING_OPTION) {
+        this.CLAIMS_HANDLING_OPTION = CLAIMS_HANDLING_OPTION;
+    }
+
+    public String getCLAIMS_HANDLING_END_DATE() {
+        return CLAIMS_HANDLING_END_DATE;
+    }
+    public void setCLAIMS_HANDLING_END_DATE(String CLAIMS_HANDLING_END_DATE) {
+        this.CLAIMS_HANDLING_END_DATE = CLAIMS_HANDLING_END_DATE;
+    }
+    public String getBACKISSUES_HANDLING_OPTION() {
+        return BACKISSUES_HANDLING_OPTION;
+    }
+    public void setBACKISSUES_HANDLING_OPTION(String BACKISSUES_HANDLING_OPTION) {
+        this.BACKISSUES_HANDLING_OPTION = BACKISSUES_HANDLING_OPTION;
+    }
+    public String getBACKISSUES_HANDLING_END_DATE() {
+        return BACKISSUES_HANDLING_END_DATE;
+    }
+    public void setBACKISSUES_HANDLING_END_DATE(String BACKISSUES_HANDLING_END_DATE) {
+        this.BACKISSUES_HANDLING_END_DATE = BACKISSUES_HANDLING_END_DATE;
+    }
+
+    public String getRESOURCE_CHANGE_INDICATOR() {
+        return RESOURCE_CHANGE_INDICATOR;
+    }
+    public void setRESOURCE_CHANGE_INDICATOR(String RESOURCE_CHANGE_INDICATOR) {
+        this.RESOURCE_CHANGE_INDICATOR = RESOURCE_CHANGE_INDICATOR;
+    }
+
+    public String getPEOPLEHUB_ID_OLD() {
+        return PEOPLEHUB_ID_OLD;
+    }
+    public void setPEOPLEHUB_ID_OLD(String PEOPLEHUB_ID_OLD) {
+        this.PEOPLEHUB_ID_OLD = PEOPLEHUB_ID_OLD;
+    }
+
+    public String getPEOPLEHUB_ID_NEW() {
+        return PEOPLEHUB_ID_NEW;
+    }
+    public void setPEOPLEHUB_ID_NEW(String PEOPLEHUB_ID_NEW) {
+        this.PEOPLEHUB_ID_NEW = PEOPLEHUB_ID_NEW;
+    }
+
+    public String getF_PRODUCT_FAMILY() {
+        return F_PRODUCT_FAMILY;
+    }
+    public void setF_PRODUCT_FAMILY(String F_PRODUCT_FAMILY) {
+        this.F_PRODUCT_FAMILY = F_PRODUCT_FAMILY;
+    }
+
+    public String getNEW_VALUE() {
+        return NEW_VALUE;
+    }
+    public void setNEW_VALUE(String NEW_VALUE) {
+        this.NEW_VALUE = NEW_VALUE;
+    }
+
+    public String getRESOURCE_KEY() {
+        return RESOURCE_KEY;
+    }
+    public void setRESOURCE_KEY(String RESOURCE_KEY) {
+        this.RESOURCE_KEY = RESOURCE_KEY;
+    }
+
+    public String getINITIAL_VALUE() {
+        return INITIAL_VALUE;
+    }
+    public void setINITIAL_VALUE(String INITIAL_VALUE) {
+        this.INITIAL_VALUE = INITIAL_VALUE;
+    }
+
+    public String getFAMILY_RESOURCE_DETAILS_ID() {
+        return FAMILY_RESOURCE_DETAILS_ID;
+    }
+    public void setFAMILY_RESOURCE_DETAILS_ID(String FAMILY_RESOURCE_DETAILS_ID) {
+        this.FAMILY_RESOURCE_DETAILS_ID = FAMILY_RESOURCE_DETAILS_ID;
+    }
+
+    public String getCHRONICLE_STATUS_CODE() {
+        return CHRONICLE_STATUS_CODE;
+    }
+    public void setCHRONICLE_STATUS_CODE(String CHRONICLE_STATUS_CODE) {
+        this.CHRONICLE_STATUS_CODE = CHRONICLE_STATUS_CODE;
+    }
+
+    public String getCHRONICLE_STATUS_NAME() {
+        return CHRONICLE_STATUS_NAME;
+    }
+    public void setCHRONICLE_STATUS_NAME(String CHRONICLE_STATUS_NAME) {
+        this.CHRONICLE_STATUS_NAME = CHRONICLE_STATUS_NAME;
+    }
+
+    public String getCHRONICLE_STATUS_DESCRIPTION() {
+        return CHRONICLE_STATUS_DESCRIPTION;
+    }
+    public void setCHRONICLE_STATUS_DESCRIPTION(String CHRONICLE_STATUS_DESCRIPTION) {
+        this.CHRONICLE_STATUS_DESCRIPTION = CHRONICLE_STATUS_DESCRIPTION;
+    }
+
+    public String getCHRONICLE_SCENARIO_EVOLUTIONARY_IND() {
+        return CHRONICLE_SCENARIO_EVOLUTIONARY_IND;
+    }
+    public void setCHRONICLE_SCENARIO_EVOLUTIONARY_IND(String CHRONICLE_SCENARIO_EVOLUTIONARY_IND) {
+        this.CHRONICLE_SCENARIO_EVOLUTIONARY_IND = CHRONICLE_SCENARIO_EVOLUTIONARY_IND;
+    }
+
+    public String getCHRONICLE_SCENARIO_DESCRIPTION() {
+        return CHRONICLE_SCENARIO_DESCRIPTION;
+    }
+    public void setCHRONICLE_SCENARIO_DESCRIPTION(String CHRONICLE_SCENARIO_DESCRIPTION) {
+        this.CHRONICLE_SCENARIO_DESCRIPTION = CHRONICLE_SCENARIO_DESCRIPTION;
+    }
+
+    public String getCHRONICLE_SCENARIO_CODE() {
+        return CHRONICLE_SCENARIO_CODE;
+    }
+    public void setCHRONICLE_SCENARIO_CODE(String CHRONICLE_SCENARIO_CODE) {
+        this.CHRONICLE_SCENARIO_CODE = CHRONICLE_SCENARIO_CODE;
+    }
+
+    public String getCHRONICLE_SCENARIO_NAME() {
+        return CHRONICLE_SCENARIO_NAME;
+    }
+    public void setCHRONICLE_SCENARIO_NAME(String CHRONICLE_SCENARIO_NAME) {
+        this.CHRONICLE_SCENARIO_NAME = CHRONICLE_SCENARIO_NAME;
+    }
+
+    public String getAPPROVAL_ID() {
+        return APPROVAL_ID;
+    }
+    public void setAPPROVAL_ID(String APPROVAL_ID) {
+        this.APPROVAL_ID = APPROVAL_ID;
+    }
+
+    public String getF_PRODUCT_CHRONICLE() {
+        return F_PRODUCT_CHRONICLE;
+    }
+    public void setF_PRODUCT_CHRONICLE(String F_PRODUCT_CHRONICLE) {
+        this.F_PRODUCT_CHRONICLE = F_PRODUCT_CHRONICLE;
+    }
+
+    public String getAPPROVAL_TYPE() {
+        return APPROVAL_TYPE;
+    }
+    public void setAPPROVAL_TYPE(String APPROVAL_TYPE) {
+        this.APPROVAL_TYPE = APPROVAL_TYPE;
+    }
+
+    public String getAPPROVER_NAME() {
+        return APPROVER_NAME;
+    }
+    public void setAPPROVER_NAME(String APPROVER_NAME) {
+        this.APPROVER_NAME = APPROVER_NAME;
+    }
+
+    public String getAPPROVAL_GIVEN_INDICATOR() {
+        return APPROVAL_GIVEN_INDICATOR;
+    }
+    public void setAPPROVAL_GIVEN_INDICATOR(String APPROVAL_GIVEN_INDICATOR) {
+        this.APPROVAL_GIVEN_INDICATOR = APPROVAL_GIVEN_INDICATOR;
+    }
+
+    public String getAPPROVAL_REQUEST_DATE() {
+        return APPROVAL_REQUEST_DATE;
+    }
+    public void setAPPROVAL_REQUEST_DATE(String APPROVAL_REQUEST_DATE) {
+        this.APPROVAL_REQUEST_DATE = APPROVAL_REQUEST_DATE;
+    }
+
+    public String getAPPROVAL_RESPONSE_DATE() {
+        return APPROVAL_RESPONSE_DATE;
+    }
+    public void setAPPROVAL_RESPONSE_DATE(String APPROVAL_RESPONSE_DATE) {
+        this.APPROVAL_RESPONSE_DATE = APPROVAL_RESPONSE_DATE;
+    }
+
+    public String getAPPLICATION_PROPERTY_KEY() {
+        return APPLICATION_PROPERTY_KEY;
+    }
+    public void setAPPLICATION_PROPERTY_KEY(String APPLICATION_PROPERTY_KEY) {
+        this.APPLICATION_PROPERTY_KEY = APPLICATION_PROPERTY_KEY;
+    }
+
+    public String getAPPLICATION_PROPERTY_VALUE() {
+        return APPLICATION_PROPERTY_VALUE;
+    }
+    public void setAPPLICATION_PROPERTY_VALUE(String APPLICATION_PROPERTY_VALUE) {
+        this.APPLICATION_PROPERTY_VALUE = APPLICATION_PROPERTY_VALUE;
+    }
+
+    public String getALLOCATION_CHANGE_ID() {
+        return ALLOCATION_CHANGE_ID;
+    }
+    public void setALLOCATION_CHANGE_ID(String ALLOCATION_CHANGE_ID) {
+        this.ALLOCATION_CHANGE_ID = ALLOCATION_CHANGE_ID;
+    }
+    public String getALLOCATION_TYPE() {
+        return ALLOCATION_TYPE;
+    }
+    public void setALLOCATION_TYPE(String ALLOCATION_TYPE) {
+        this.ALLOCATION_TYPE = ALLOCATION_TYPE;
+    }
+
+    public String getPMG_FILTER() {
+        return PMG_FILTER;
+    }
+    public void setPMG_FILTER(String PMG_FILTER) {
+        this.PMG_FILTER = PMG_FILTER;
+    }
+
+    public String getPMC_FILTER() { return PMC_FILTER;  }
+    public void setPMC_FILTER(String PMC_FILTER) {
+        this.PMC_FILTER = PMC_FILTER;
+    }
+
+    public String getPPC_FILTER_EMAIL() {
+        return PPC_FILTER_EMAIL;
+    }
+    public void setPPC_FILTER_EMAIL(String PPC_FILTER_EMAIL) {
+        this.PPC_FILTER_EMAIL = PPC_FILTER_EMAIL;
+    }
+
+    public String getPPC_FILTER_NAME() {
+        return PPC_FILTER_NAME;
+    }
+    public void setPPC_FILTER_NAME(String PPC_FILTER_NAME) {
+        this.PPC_FILTER_NAME = PPC_FILTER_NAME;
+    }
+
+    public String getPMC_CHANGE_IND() {
+        return PMC_CHANGE_IND;
+    }
+    public void setPMC_CHANGE_IND(String PMC_CHANGE_IND) {
+        this.PMC_CHANGE_IND = PMC_CHANGE_IND;
+    }
+
+    public String getPPC_CHANGE_IND() {
+        return PPC_CHANGE_IND;
+    }
+    public void setPPC_CHANGE_IND(String PPC_CHANGE_IND) {
+        this.PPC_CHANGE_IND = PPC_CHANGE_IND;
+    }
+
+    public String getPMX_PMGCODE() {
+        return PMX_PMGCODE;
+    }
+    public void setPMX_PMGCODE(String PMX_PMGCODE) {
+        this.PMX_PMGCODE = PMX_PMGCODE;
+    }
+
+    public String getPMX_PMG_NAME() {
+        return PMX_PMG_NAME;
+    }
+    public void setPMX_PMG_NAME(String PMX_PMG_NAME) {
+        this.PMX_PMG_NAME = PMX_PMG_NAME;
+    }
+
+    public String getPMX_PMG_F_BUSINESS_UNIT() {
+        return PMX_PMG_F_BUSINESS_UNIT;
+    }
+    public void setPMX_PMG_F_BUSINESS_UNIT(String PMX_PMG_F_BUSINESS_UNIT) {
+        this.PMX_PMG_F_BUSINESS_UNIT = PMX_PMG_F_BUSINESS_UNIT;
+    }
+
+    public String getPMG_BUS_CTRL_NAME() {
+        return PMG_BUS_CTRL_NAME;
+    }
+    public void setPMG_BUS_CTRL_NAME(String PMG_BUS_CTRL_NAME) {
+        this.PMG_BUS_CTRL_NAME = PMG_BUS_CTRL_NAME;
+    }
+
+    public String getPMG_BUS_CTRL_EMAIL() {
+        return PMG_BUS_CTRL_EMAIL;
+    }
+    public void setPMG_BUS_CTRL_EMAIL(String PMG_BUS_CTRL_EMAIL) {
+        this.PMG_BUS_CTRL_EMAIL = PMG_BUS_CTRL_EMAIL;
+    }
+
+    public String getPMG_PUBDIR_NAME_OLD() {
+        return PMG_PUBDIR_NAME_OLD;
+    }
+    public void setPMG_PUBDIR_NAME_OLD(String PMG_PUBDIR_NAME_OLD) {
+        this.PMG_PUBDIR_NAME_OLD = PMG_PUBDIR_NAME_OLD;
+    }
+
+    public String getPMG_PUBDIR_EMAIL_OLD() {
+        return PMG_PUBDIR_EMAIL_OLD;
+    }
+    public void setPMG_PUBDIR_EMAIL_OLD(String PMG_PUBDIR_EMAIL_OLD) {
+        this.PMG_PUBDIR_EMAIL_OLD = PMG_PUBDIR_EMAIL_OLD;
+    }
+
+    public String getPMG_PUBDIR_PEOPLE_HUB_ID_OLD() {
+        return PMG_PUBDIR_PEOPLE_HUB_ID_OLD;
+    }
+    public void setPMG_PUBDIR_PEOPLE_HUB_ID_OLD(String PMG_PUBDIR_PEOPLE_HUB_ID_OLD) {
+        this.PMG_PUBDIR_PEOPLE_HUB_ID_OLD = PMG_PUBDIR_PEOPLE_HUB_ID_OLD;
+    }
+
+    public String getPMG_PUBDIR_NAME_NEW() {
+        return PMG_PUBDIR_NAME_NEW;
+    }
+    public void setPMG_PUBDIR_NAME_NEW(String PMG_PUBDIR_NAME_NEW) {
+        this.PMG_PUBDIR_NAME_NEW = PMG_PUBDIR_NAME_NEW;
+    }
+
+    public String getPMG_PUBDIR_EMAIL_NEW() {
+        return PMG_PUBDIR_EMAIL_NEW;
+    }
+    public void setPMG_PUBDIR_EMAIL_NEW(String PMG_PUBDIR_EMAIL_NEW) {
+        this.PMG_PUBDIR_EMAIL_NEW = PMG_PUBDIR_EMAIL_NEW;
+    }
+
+    public String getPMG_PUBDIR_PEOPLE_HUB_ID_NEW() {
+        return PMG_PUBDIR_PEOPLE_HUB_ID_NEW;
+    }
+    public void setPMG_PUBDIR_PEOPLE_HUB_ID_NEW(String PMG_PUBDIR_PEOPLE_HUB_ID_NEW) {
+        this.PMG_PUBDIR_PEOPLE_HUB_ID_NEW = PMG_PUBDIR_PEOPLE_HUB_ID_NEW;
+    }
+
+    public String getNOTIFIED_DATE() {
+        return NOTIFIED_DATE;
+    }
+    public void setNOTIFIED_DATE(String NOTIFIED_DATE) {
+        this.NOTIFIED_DATE = NOTIFIED_DATE;
+    }
+
+    public String getEPH_PMG_CODE() {
+        return EPH_PMG_CODE;
+    }
+    public void setEPH_PMG_CODE(String EPH_PMG_CODE) {
+        this.EPH_PMG_CODE = EPH_PMG_CODE;
+    }
+
+}
