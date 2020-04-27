@@ -21,6 +21,7 @@ public class ProductApiObject {
     private static List<ProductDataObject> productDataObjectsFromEPHGD;
 
     private String id;
+
     private String name;
     private String shortName;
     private Boolean separatelySaleableInd;

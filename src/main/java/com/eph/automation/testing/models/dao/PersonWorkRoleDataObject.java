@@ -4,6 +4,7 @@ import java.util.Objects;
 
 /**
  * Created by Bistra Drazheva on 13/03/2019
+ * updated by Nishant @ 24 Apr 2020
  */
 public class PersonWorkRoleDataObject {
     private String WORK_PERSON_ROLE_SOURCE_REF;
@@ -13,8 +14,6 @@ public class PersonWorkRoleDataObject {
     private String START_DATE;
     private String END_DATE;
     private String UPDATED;
-
-
 
     //SA_WORK_PERSON_ROLE
     private String B_LOADID;
@@ -27,125 +26,50 @@ public class PersonWorkRoleDataObject {
     private String F_PERSON;
 
 
-    public String getSTART_DATE() {
-        return START_DATE;
-    }
+    public String getSTART_DATE() {return START_DATE;}
+    public void setSTART_DATE(String START_DATE) {this.START_DATE = START_DATE;}
 
-    public void setSTART_DATE(String START_DATE) {
-        this.START_DATE = START_DATE;
-    }
+    public String getEND_DATE() {return END_DATE;}
+    public void setEND_DATE(String END_DATE) {this.END_DATE = END_DATE;}
 
-    public String getEND_DATE() {
-        return END_DATE;
-    }
+    public String getUPDATED() {return UPDATED;}
+    public void setUPDATED(String UPDATED) {this.UPDATED = UPDATED;}
 
-    public void setEND_DATE(String END_DATE) {
-        this.END_DATE = END_DATE;
-    }
+    public String getWORK_PERSON_ROLE_SOURCE_REF() {return WORK_PERSON_ROLE_SOURCE_REF;}
+    public void setWORK_PERSON_ROLE_SOURCE_REF(String WORK_PERSON_ROLE_SOURCE_REF) {this.WORK_PERSON_ROLE_SOURCE_REF = WORK_PERSON_ROLE_SOURCE_REF;}
 
-    public String getUPDATED() {
-        return UPDATED;
-    }
+    public int getPMX_PARTY_SOURCE_REF() {return PMX_PARTY_SOURCE_REF;}
+    public void setPMX_PARTY_SOURCE_REF(int PMX_PARTY_SOURCE_REF) {this.PMX_PARTY_SOURCE_REF = PMX_PARTY_SOURCE_REF;}
 
-    public void setUPDATED(String UPDATED) {
-        this.UPDATED = UPDATED;
-    }
+    public String getPMX_WORK_SOURCE_REF() {return PMX_WORK_SOURCE_REF;}
+    public void setPMX_WORK_SOURCE_REF(String PMX_WORK_SOURCE_REF) {this.PMX_WORK_SOURCE_REF = PMX_WORK_SOURCE_REF;}
 
-    public String getWORK_PERSON_ROLE_SOURCE_REF() {
-        return WORK_PERSON_ROLE_SOURCE_REF;
-    }
+    public String getF_ROLE() {return F_ROLE;}
+    public void setF_ROLE(String f_ROLE) {F_ROLE = f_ROLE;}
 
-    public void setWORK_PERSON_ROLE_SOURCE_REF(String WORK_PERSON_ROLE_SOURCE_REF) {
-        this.WORK_PERSON_ROLE_SOURCE_REF = WORK_PERSON_ROLE_SOURCE_REF;
-    }
+    public String getB_LOADID() {return B_LOADID;}
+    public void setB_LOADID(String b_LOADID) {B_LOADID = b_LOADID;}
 
-    public int getPMX_PARTY_SOURCE_REF() {
-        return PMX_PARTY_SOURCE_REF;
-    }
+    public String getF_EVENT() {return F_EVENT;}
+    public void setF_EVENT(String f_EVENT) {F_EVENT = f_EVENT;}
 
-    public void setPMX_PARTY_SOURCE_REF(int PMX_PARTY_SOURCE_REF) {
-        this.PMX_PARTY_SOURCE_REF = PMX_PARTY_SOURCE_REF;
-    }
+    public String getB_CLASSNAME() {return B_CLASSNAME;}
+    public void setB_CLASSNAME(String b_CLASSNAME) {B_CLASSNAME = b_CLASSNAME;}
 
-    public String getPMX_WORK_SOURCE_REF() {
-        return PMX_WORK_SOURCE_REF;
-    }
+    public String getWORK_PERSON_ROLE_ID() {return WORK_PERSON_ROLE_ID;}
+    public void setWORK_PERSON_ROLE_ID(String WORK_PERSON_ROLE_ID) {this.WORK_PERSON_ROLE_ID = WORK_PERSON_ROLE_ID;}
 
-    public void setPMX_WORK_SOURCE_REF(String PMX_WORK_SOURCE_REF) {
-        this.PMX_WORK_SOURCE_REF = PMX_WORK_SOURCE_REF;
-    }
+    public String getEFFECTIVE_START_DATE() {return EFFECTIVE_START_DATE;}
+    public void setEFFECTIVE_START_DATE(String EFFECTIVE_START_DATE) {this.EFFECTIVE_START_DATE = EFFECTIVE_START_DATE;}
 
-    public String getF_ROLE() {
-        return F_ROLE;
-    }
+    public String getEFFECTIVE_END_DATE() {return EFFECTIVE_END_DATE;}
+    public void setEFFECTIVE_END_DATE(String EFFECTIVE_END_DATE) {this.EFFECTIVE_END_DATE = EFFECTIVE_END_DATE;}
 
-    public void setF_ROLE(String f_ROLE) {
-        F_ROLE = f_ROLE;
-    }
+    public String getF_WWORK() {return F_WWORK;}
+    public void setF_WWORK(String f_WWORK) {F_WWORK = f_WWORK;}
 
-    public String getB_LOADID() {
-        return B_LOADID;
-    }
-
-    public void setB_LOADID(String b_LOADID) {
-        B_LOADID = b_LOADID;
-    }
-
-    public String getF_EVENT() {
-        return F_EVENT;
-    }
-
-    public void setF_EVENT(String f_EVENT) {
-        F_EVENT = f_EVENT;
-    }
-
-    public String getB_CLASSNAME() {
-        return B_CLASSNAME;
-    }
-
-    public void setB_CLASSNAME(String b_CLASSNAME) {
-        B_CLASSNAME = b_CLASSNAME;
-    }
-
-    public String getWORK_PERSON_ROLE_ID() {
-        return WORK_PERSON_ROLE_ID;
-    }
-
-    public void setWORK_PERSON_ROLE_ID(String WORK_PERSON_ROLE_ID) {
-        this.WORK_PERSON_ROLE_ID = WORK_PERSON_ROLE_ID;
-    }
-
-    public String getEFFECTIVE_START_DATE() {
-        return EFFECTIVE_START_DATE;
-    }
-
-    public void setEFFECTIVE_START_DATE(String EFFECTIVE_START_DATE) {
-        this.EFFECTIVE_START_DATE = EFFECTIVE_START_DATE;
-    }
-
-    public String getEFFECTIVE_END_DATE() {
-        return EFFECTIVE_END_DATE;
-    }
-
-    public void setEFFECTIVE_END_DATE(String EFFECTIVE_END_DATE) {
-        this.EFFECTIVE_END_DATE = EFFECTIVE_END_DATE;
-    }
-
-    public String getF_WWORK() {
-        return F_WWORK;
-    }
-
-    public void setF_WWORK(String f_WWORK) {
-        F_WWORK = f_WWORK;
-    }
-
-    public String getF_PERSON() {
-        return F_PERSON;
-    }
-
-    public void setF_PERSON(String f_PERSON) {
-        F_PERSON = f_PERSON;
-    }
+    public String getF_PERSON() {return F_PERSON;}
+    public void setF_PERSON(String f_PERSON) {F_PERSON = f_PERSON;}
 
     @Override
     public boolean equals(Object o) {

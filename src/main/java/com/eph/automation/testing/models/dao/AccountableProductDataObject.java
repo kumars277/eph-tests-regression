@@ -4,6 +4,7 @@ import java.util.Objects;
 
 /**
  * Created by Bistra Drazheva on 03/04/2019
+ * updated by Nishant @ 22 Apr 2020
  */
 public class AccountableProductDataObject {
     private int PRODUCT_WORK_ID;
@@ -29,166 +30,65 @@ public class AccountableProductDataObject {
     private String GL_PRODUCT_SEGMENT_NAME;
     private String F_GL_PRODUCT_SEGMENT_PARENT;
 
-    public String getEXTERNAL_REFERENCE() {
-        return EXTERNAL_REFERENCE;
-    }
+    public String getEXTERNAL_REFERENCE() {return EXTERNAL_REFERENCE;}
+    public void setEXTERNAL_REFERENCE(String EXTERNAL_REFERENCE) {this.EXTERNAL_REFERENCE = EXTERNAL_REFERENCE;}
 
-    public void setEXTERNAL_REFERENCE(String EXTERNAL_REFERENCE) {
-        this.EXTERNAL_REFERENCE = EXTERNAL_REFERENCE;
-    }
+    public String getPMX_SOURCE_REFERENCE() {return PMX_SOURCE_REFERENCE;}
+    public void setPMX_SOURCE_REFERENCE(String PMX_SOURCE_REFERENCE) {this.PMX_SOURCE_REFERENCE = PMX_SOURCE_REFERENCE;}
 
-    public String getPMX_SOURCE_REFERENCE() {
-        return PMX_SOURCE_REFERENCE;
-    }
+    public String getDQ_ERR() {return DQ_ERR;}
+    public void setDQ_ERR(String DQ_ERR) {this.DQ_ERR = DQ_ERR;}
 
-    public void setPMX_SOURCE_REFERENCE(String PMX_SOURCE_REFERENCE) {
-        this.PMX_SOURCE_REFERENCE = PMX_SOURCE_REFERENCE;
-    }
+    public String getUPDATED() {return UPDATED;}
+    public void setUPDATED(String UPDATED) {this.UPDATED = UPDATED;}
 
-    public String getDQ_ERR() {
-        return DQ_ERR;
-    }
+    public String getWORK_ELS_PROD_ID() {return WORK_ELS_PROD_ID;}
+    public void setWORK_ELS_PROD_ID(String WORK_ELS_PROD_ID) {this.WORK_ELS_PROD_ID = WORK_ELS_PROD_ID;}
 
-    public void setDQ_ERR(String DQ_ERR) {
-        this.DQ_ERR = DQ_ERR;
-    }
+    public String getAC_ELS_PROD_ID() {return AC_ELS_PROD_ID;}
+    public void setAC_ELS_PROD_ID(String AC_ELS_PROD_ID) {this.AC_ELS_PROD_ID = AC_ELS_PROD_ID;}
 
-    public String getUPDATED() {
-        return UPDATED;
-    }
+    public int getPRODUCT_WORK_ID() {return PRODUCT_WORK_ID;}
+    public void setPRODUCT_WORK_ID(int PRODUCT_WORK_ID) {this.PRODUCT_WORK_ID = PRODUCT_WORK_ID;}
 
-    public void setUPDATED(String UPDATED) {
-        this.UPDATED = UPDATED;
-    }
+    public String getACC_PROD_ID() {return ACC_PROD_ID;}
+    public void setACC_PROD_ID(String ACC_PROD_ID) {this.ACC_PROD_ID = ACC_PROD_ID;}
 
-    public String getWORK_ELS_PROD_ID() {
-        return WORK_ELS_PROD_ID;
-    }
+    public String getACC_PROD_NAME() {return ACC_PROD_NAME;}
+    public void setACC_PROD_NAME(String ACC_PROD_NAME) {this.ACC_PROD_NAME = ACC_PROD_NAME;}
 
-    public void setWORK_ELS_PROD_ID(String WORK_ELS_PROD_ID) {
-        this.WORK_ELS_PROD_ID = WORK_ELS_PROD_ID;
-    }
+    public String getPARENT_ACC_PROD() {return PARENT_ACC_PROD;}
+    public void setPARENT_ACC_PROD(String PARENT_ACC_PROD) {this.PARENT_ACC_PROD = PARENT_ACC_PROD;}
 
-    public String getAC_ELS_PROD_ID() {
-        return AC_ELS_PROD_ID;
-    }
+    public String getPRODUCT_GROUP_TYPE_NAME() {return PRODUCT_GROUP_TYPE_NAME;}
+    public void setPRODUCT_GROUP_TYPE_NAME(String PRODUCT_GROUP_TYPE_NAME) {this.PRODUCT_GROUP_TYPE_NAME = PRODUCT_GROUP_TYPE_NAME;}
 
-    public void setAC_ELS_PROD_ID(String AC_ELS_PROD_ID) {
-        this.AC_ELS_PROD_ID = AC_ELS_PROD_ID;
-    }
+    public String getB_LOADID() {return B_LOADID;}
+    public void setB_LOADID(String b_LOADID) {B_LOADID = b_LOADID;}
 
-    public int getPRODUCT_WORK_ID() {
-        return PRODUCT_WORK_ID;
-    }
+    public String getF_EVENT() {return F_EVENT;}
+    public void setF_EVENT(String f_EVENT) {F_EVENT = f_EVENT;}
 
-    public void setPRODUCT_WORK_ID(int PRODUCT_WORK_ID) {
-        this.PRODUCT_WORK_ID = PRODUCT_WORK_ID;
-    }
+    public String getB_CLASSNAME() {return B_CLASSNAME;}
+    public void setB_CLASSNAME(String b_CLASSNAME) {B_CLASSNAME = b_CLASSNAME;}
 
-    public String getACC_PROD_ID() {
-        return ACC_PROD_ID;
-    }
+    public int getACCOUNTABLE_PRODUCT_ID() {return ACCOUNTABLE_PRODUCT_ID;}
+    public void setACCOUNTABLE_PRODUCT_ID(int ACCOUNTABLE_PRODUCT_ID) {this.ACCOUNTABLE_PRODUCT_ID = ACCOUNTABLE_PRODUCT_ID;}
 
-    public void setACC_PROD_ID(String ACC_PROD_ID) {
-        this.ACC_PROD_ID = ACC_PROD_ID;
-    }
+    public String getGL_PRODUCT_SEGMENT_CODE() {return GL_PRODUCT_SEGMENT_CODE;}
+    public void setGL_PRODUCT_SEGMENT_CODE(String GL_PRODUCT_SEGMENT_CODE) {this.GL_PRODUCT_SEGMENT_CODE = GL_PRODUCT_SEGMENT_CODE;}
 
-    public String getACC_PROD_NAME() {
-        return ACC_PROD_NAME;
-    }
+    public String getGL_PRODUCT_SEGMENT_NAME() {return GL_PRODUCT_SEGMENT_NAME;}
+    public void setGL_PRODUCT_SEGMENT_NAME(String GL_PRODUCT_SEGMENT_NAME) {this.GL_PRODUCT_SEGMENT_NAME = GL_PRODUCT_SEGMENT_NAME;}
 
-    public void setACC_PROD_NAME(String ACC_PROD_NAME) {
-        this.ACC_PROD_NAME = ACC_PROD_NAME;
-    }
+    public String getF_GL_PRODUCT_SEGMENT_PARENT() {return F_GL_PRODUCT_SEGMENT_PARENT;}
+    public void setF_GL_PRODUCT_SEGMENT_PARENT(String f_GL_PRODUCT_SEGMENT_PARENT) {F_GL_PRODUCT_SEGMENT_PARENT = f_GL_PRODUCT_SEGMENT_PARENT;}
 
-    public String getPARENT_ACC_PROD() {
-        return PARENT_ACC_PROD;
-    }
+    public String getACC_PROD_HIERARHY() {return ACC_PROD_HIERARHY;}
+    public void setACC_PROD_HIERARHY(String ACC_PROD_HIERARHY) {this.ACC_PROD_HIERARHY = ACC_PROD_HIERARHY;}
 
-    public void setPARENT_ACC_PROD(String PARENT_ACC_PROD) {
-        this.PARENT_ACC_PROD = PARENT_ACC_PROD;
-    }
-
-    public String getPRODUCT_GROUP_TYPE_NAME() {
-        return PRODUCT_GROUP_TYPE_NAME;
-    }
-
-    public void setPRODUCT_GROUP_TYPE_NAME(String PRODUCT_GROUP_TYPE_NAME) {
-        this.PRODUCT_GROUP_TYPE_NAME = PRODUCT_GROUP_TYPE_NAME;
-    }
-
-    public String getB_LOADID() {
-        return B_LOADID;
-    }
-
-    public void setB_LOADID(String b_LOADID) {
-        B_LOADID = b_LOADID;
-    }
-
-    public String getF_EVENT() {
-        return F_EVENT;
-    }
-
-    public void setF_EVENT(String f_EVENT) {
-        F_EVENT = f_EVENT;
-    }
-
-    public String getB_CLASSNAME() {
-        return B_CLASSNAME;
-    }
-
-    public void setB_CLASSNAME(String b_CLASSNAME) {
-        B_CLASSNAME = b_CLASSNAME;
-    }
-
-    public int getACCOUNTABLE_PRODUCT_ID() {
-        return ACCOUNTABLE_PRODUCT_ID;
-    }
-
-    public void setACCOUNTABLE_PRODUCT_ID(int ACCOUNTABLE_PRODUCT_ID) {
-        this.ACCOUNTABLE_PRODUCT_ID = ACCOUNTABLE_PRODUCT_ID;
-    }
-
-    public String getGL_PRODUCT_SEGMENT_CODE() {
-        return GL_PRODUCT_SEGMENT_CODE;
-    }
-
-    public void setGL_PRODUCT_SEGMENT_CODE(String GL_PRODUCT_SEGMENT_CODE) {
-        this.GL_PRODUCT_SEGMENT_CODE = GL_PRODUCT_SEGMENT_CODE;
-    }
-
-    public String getGL_PRODUCT_SEGMENT_NAME() {
-        return GL_PRODUCT_SEGMENT_NAME;
-    }
-
-    public void setGL_PRODUCT_SEGMENT_NAME(String GL_PRODUCT_SEGMENT_NAME) {
-        this.GL_PRODUCT_SEGMENT_NAME = GL_PRODUCT_SEGMENT_NAME;
-    }
-
-    public String getF_GL_PRODUCT_SEGMENT_PARENT() {
-        return F_GL_PRODUCT_SEGMENT_PARENT;
-    }
-
-    public void setF_GL_PRODUCT_SEGMENT_PARENT(String f_GL_PRODUCT_SEGMENT_PARENT) {
-        F_GL_PRODUCT_SEGMENT_PARENT = f_GL_PRODUCT_SEGMENT_PARENT;
-    }
-
-
-    public String getACC_PROD_HIERARHY() {
-        return ACC_PROD_HIERARHY;
-    }
-
-    public void setACC_PROD_HIERARHY(String ACC_PROD_HIERARHY) {
-        this.ACC_PROD_HIERARHY = ACC_PROD_HIERARHY;
-    }
-
-    public String getPRODUCT_WORK_TITLE() {
-        return PRODUCT_WORK_TITLE;
-    }
-
-    public void setPRODUCT_WORK_TITLE(String PRODUCT_WORK_TITLE) {
-        this.PRODUCT_WORK_TITLE = PRODUCT_WORK_TITLE;
-    }
+    public String getPRODUCT_WORK_TITLE() {return PRODUCT_WORK_TITLE;}
+    public void setPRODUCT_WORK_TITLE(String PRODUCT_WORK_TITLE) {this.PRODUCT_WORK_TITLE = PRODUCT_WORK_TITLE;}
 
     @Override
     public String toString() {
