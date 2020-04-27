@@ -5,12 +5,15 @@ package com.eph.automation.testing.services.api;
 
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.RESTEndPoints;
+import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.api.ProductApiObject;
 import com.eph.automation.testing.models.api.ProductsMatchedApiObject;
 import com.eph.automation.testing.models.api.WorkApiObject;
 import com.eph.automation.testing.models.api.WorksMatchedApiObject;
+import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.RequestSpecification;
+import org.junit.Assert;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -143,22 +146,26 @@ public class APIService {
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/works/" + workID)
+                .get("/product-hub-works/works/" + workID)
                 .thenReturn().statusCode();
-        if (statusCode == 200) {
-            return true;
-        } else {
-            return false;
-        }
+        if (statusCode == 200) {return true;} else {return false;}
     }
 
     public static WorkApiObject searchForWorkByIDResult(String workID) throws AzureOauthTokenFetchingException {
-        return given()
+        //updated by Nishant @ 30 Mar 2020 as per latest API changes
+         Response getWorkResponse = given()
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/works/" + workID)
-                .thenReturn().as(WorkApiObject.class);
+                .get("/product-hub-works/works/" + workID);
+
+        Assert.assertTrue("Verify that the searched work exists and is accessible trough the API",getWorkResponse.statusCode()==200);
+
+        Log.info("print response start#######################");
+        Log.info(getWorkResponse.getBody().prettyPrint());
+        Log.info("print response end ########################");
+
+        return getWorkResponse.thenReturn().as(WorkApiObject.class);
     }
 
     public static WorksMatchedApiObject searchForWorkByTitleResult(String title) throws AzureOauthTokenFetchingException {
@@ -166,7 +173,7 @@ public class APIService {
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/works?queryType=title&queryValue="+title)
+                .get("/product-hub-works/works?queryType=title&queryValue="+title)
                 .thenReturn().as(WorksMatchedApiObject.class);
     }
 
@@ -175,7 +182,7 @@ public class APIService {
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/works?queryType=identifier&queryValue="+identifier)
+                .get("/product-hub-works/works?queryType=identifier&queryValue="+identifier)
                 .thenReturn().as(WorksMatchedApiObject.class);
     }
 
@@ -185,16 +192,19 @@ public class APIService {
                 .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
                 .param("identifierType", identifierType)
                 .when()
-                .get("/works?queryType=identifier&queryValue=" + identifier).thenReturn().as(WorksMatchedApiObject.class);
+                .get("/product-hub-works/works?queryType=identifier&queryValue=" + identifier+"&identifierType="+identifierType)
+                .thenReturn().as(WorksMatchedApiObject.class);
     }
 
     public static WorksMatchedApiObject searchForWorksBySearchOptionResult(String searchFor) throws AzureOauthTokenFetchingException {
-        return given()
-                .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
-                .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
-                .when()
-                .get("/works?queryType=search&queryValue="+searchFor)
-                .thenReturn().as(WorksMatchedApiObject.class);
+
+     Response response = given()
+             .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
+             .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
+             .when()
+             .get("/product-hub-works/works?queryType=search&queryValue="+searchFor);
+       // response.prettyPrint();
+        return response.thenReturn().as(WorksMatchedApiObject.class);
     }
 
     public static WorksMatchedApiObject searchForWorkByPMCResult(String pmcCode) throws AzureOauthTokenFetchingException {
@@ -202,7 +212,7 @@ public class APIService {
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/works?queryType=pmcCode&queryValue=" + pmcCode)
+                .get("/product-hub-works/works?queryType=pmcCode&queryValue=" + pmcCode)
                 .thenReturn().as(WorksMatchedApiObject.class);
     }
 
@@ -211,7 +221,7 @@ public class APIService {
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/works?queryType=pmgCode&queryValue=" + pmgCode)
+                .get("/product-hub-works/works?queryType=pmgCode&queryValue=" + pmgCode)
                 .thenReturn().as(WorksMatchedApiObject.class);
     }
 
@@ -220,7 +230,7 @@ public class APIService {
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/works?queryType=personId&queryValue="+identifier)
+                .get("/product-hub-works/works?queryType=personId&queryValue="+identifier)
                 .thenReturn().as(WorksMatchedApiObject.class);
     }
 
@@ -250,7 +260,7 @@ public class APIService {
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,   AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/products?queryType=accountableProduct&queryValue=" + accountableProduct)
+                .get("/product-hub-works/products?queryType=accountableProduct&queryValue=" + accountableProduct)
                 .thenReturn().as(ProductsMatchedApiObject.class);
     }
 
@@ -281,7 +291,7 @@ public class APIService {
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,   AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/works?queryType=accountableProduct&queryValue=" + accountableProduct)
+                .get("/product-hub-works/works?queryType=accountableProduct&queryValue=" + accountableProduct)
                 .thenReturn().as(WorksMatchedApiObject.class);
     }
 
@@ -290,7 +300,7 @@ public class APIService {
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,   AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/works?queryType=title&queryValue="+searchKeyword+"&workStatus=" + workStatus)
+                .get("/product-hub-works/works?queryType=title&queryValue="+searchKeyword+"&workStatus=" + workStatus)
                 .thenReturn().as(WorksMatchedApiObject.class);
     }
 
@@ -299,7 +309,7 @@ public class APIService {
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,   AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/works?queryType=title&queryValue="+searchKeyword+"&workType=" + workType)
+                .get("/product-hub-works/works?queryType=title&queryValue="+searchKeyword+"&workType=" + workType)
                 .thenReturn().as(WorksMatchedApiObject.class);
     }
 
@@ -308,7 +318,7 @@ public class APIService {
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,   AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/works?queryType=search&queryValue="+searchKeyword+"&manifestationType=" + manifestationType)
+                .get("/product-hub-works/works?queryType=search&queryValue="+searchKeyword+"&manifestationType=" + manifestationType)
                 .thenReturn().as(WorksMatchedApiObject.class);
     }
 
@@ -317,7 +327,7 @@ public class APIService {
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,   AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/works?queryType=title&queryValue="+searchKeyword+"&pmcCode=" + pmcCode)
+                .get("/product-hub-works/works?queryType=title&queryValue="+searchKeyword+"&pmcCode=" + pmcCode)
                 .thenReturn().as(WorksMatchedApiObject.class);
     }
 
@@ -327,7 +337,7 @@ public class APIService {
                 .baseUri(PRODUCT_SEARCH_END_POINT_SIT)
                 .header(Constants.AUTHORIZATION_HEADER,   AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/works?queryType=search&queryValue="+searchKeyword+"&pmgCode=" + pmgCode)
+                .get("/product-hub-works/works?queryType=search&queryValue="+searchKeyword+"&pmgCode=" + pmgCode)
                 .thenReturn().as(WorksMatchedApiObject.class);
     }
 

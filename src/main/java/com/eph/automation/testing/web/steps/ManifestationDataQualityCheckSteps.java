@@ -336,10 +336,10 @@ public class ManifestationDataQualityCheckSteps {
             assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ", manifestationDataObjectsFromPMX.get(i).getCARTON_QTY(), manifestationDataObjectsFromEPHSTG.get(i).getCARTON_QTY());
 
             //INTERNATIONAL_EDITION_IND
-            Log.info("INTERNATIONAL_EDITION_IND in PMX: " + manifestationDataObjectsFromPMX.get(i).getINTERNATIONAL_EDITION_IND());
-            Log.info("INTERNATIONAL_EDITION_IND in EPH Staging: " + manifestationDataObjectsFromEPHSTG.get(i).getINTERNATIONAL_EDITION_IND());
+            Log.info("INTERNATIONAL_EDITION_IND in PMX: " + manifestationDataObjectsFromPMX.get(i).getInternationalEditionInd());
+            Log.info("INTERNATIONAL_EDITION_IND in EPH Staging: " + manifestationDataObjectsFromEPHSTG.get(i).getInternationalEditionInd());
 
-            assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ", manifestationDataObjectsFromPMX.get(i).getINTERNATIONAL_EDITION_IND(), manifestationDataObjectsFromEPHSTG.get(i).getINTERNATIONAL_EDITION_IND());
+            assertEquals("Expecting the Product details from PMX and EPH Staging are consistent ", manifestationDataObjectsFromPMX.get(i).getInternationalEditionInd(), manifestationDataObjectsFromEPHSTG.get(i).getInternationalEditionInd());
 
 
             //FIRST_PUB_DATE
@@ -523,11 +523,11 @@ public class ManifestationDataQualityCheckSteps {
 
 
                 //INTER_EDITION_FLAG
-                Log.info("INTER_EDITION_FLAG in stg : " + manifestationDataObjectsFromEPHSTG.get(i).getINTERNATIONAL_EDITION_IND());
+                Log.info("INTER_EDITION_FLAG in stg : " + manifestationDataObjectsFromEPHSTG.get(i).getInternationalEditionInd());
                 Log.info("INTER_EDITION_FLAG in DQ : " + manifestationDataObjectsFromEPHDQ.get(i).getINTER_EDITION_FLAG());
 
 
-                if (Objects.equals(manifestationDataObjectsFromEPHSTG.get(i).getINTERNATIONAL_EDITION_IND(), "Y")) {
+                if (Objects.equals(manifestationDataObjectsFromEPHSTG.get(i).getInternationalEditionInd(), "Y")) {
                     assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are not consistent ", "t", manifestationDataObjectsFromEPHDQ.get(i).getINTER_EDITION_FLAG());
                 } else
                     assertEquals("Expecting the Product details from EPH Staging and STG_10_PMX_MANIFESTATION_DQ are not consistent ", "f", manifestationDataObjectsFromEPHDQ.get(i).getINTER_EDITION_FLAG());
@@ -631,12 +631,12 @@ public class ManifestationDataQualityCheckSteps {
 
 
                     //INTER_EDITION_FLAG
-                    Log.info("INTER_EDITION_FLAG in SA : " + manifestationDataObjectsFromEPHDQ.get(i).getINTERNATIONAL_EDITION_IND());
+                    Log.info("INTER_EDITION_FLAG in SA : " + manifestationDataObjectsFromEPHDQ.get(i).getInternationalEditionInd());
                     Log.info("INTER_EDITION_FLAG in DQ : " + manifestationDataObjectsFromEPHSA.get(i).getINTER_EDITION_FLAG());
 
                     assertEquals("Expecting the Product details from EPH DQ and SA_MANIFESTATION are consistent ",
-                            manifestationDataObjectsFromEPHDQ.get(i).getINTERNATIONAL_EDITION_IND(),
-                            manifestationDataObjectsFromEPHSA.get(i).getINTERNATIONAL_EDITION_IND());
+                            manifestationDataObjectsFromEPHDQ.get(i).getInternationalEditionInd(),
+                            manifestationDataObjectsFromEPHSA.get(i).getInternationalEditionInd());
 
 
                     //FIRST_PUB_DATE
@@ -747,10 +747,10 @@ public class ManifestationDataQualityCheckSteps {
                 assertEquals("Expecting the Product details from  SA and GD are consistent ", manifestationDataObjectsFromEPHSA.get(i).getMANIFESTATION_KEY_TITLE(), manifestationDataObjectsFromEPHGD.get(i).getMANIFESTATION_KEY_TITLE());
 
                 //INTER_EDITION_FLAG
-                Log.info("INTER_EDITION_FLAG in sa_manifestation : " + manifestationDataObjectsFromEPHSA.get(i).getINTERNATIONAL_EDITION_IND());
-                Log.info("INTER_EDITION_FLAG in gd_manifestation : " + manifestationDataObjectsFromEPHGD.get(i).getINTERNATIONAL_EDITION_IND());
+                Log.info("INTER_EDITION_FLAG in sa_manifestation : " + manifestationDataObjectsFromEPHSA.get(i).getInternationalEditionInd());
+                Log.info("INTER_EDITION_FLAG in gd_manifestation : " + manifestationDataObjectsFromEPHGD.get(i).getInternationalEditionInd());
 
-                assertEquals("Expecting the Product details from  SA and GD are consistent ", manifestationDataObjectsFromEPHSA.get(i).getINTERNATIONAL_EDITION_IND(), manifestationDataObjectsFromEPHGD.get(i).getINTERNATIONAL_EDITION_IND());
+                assertEquals("Expecting the Product details from  SA and GD are consistent ", manifestationDataObjectsFromEPHSA.get(i).getInternationalEditionInd(), manifestationDataObjectsFromEPHGD.get(i).getInternationalEditionInd());
 
                 //FIRST_PUB_DATE
                 if (manifestationDataObjectsFromEPHSA.get(i).getFIRST_PUB_DATE() != null)

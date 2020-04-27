@@ -24,8 +24,8 @@ import java.util.List;
 
         getManifestationByID(this.id);
         Assert.assertEquals(this.keyTitle, manifestationDataObjectFromEPHGD.get(0).getMANIFESTATION_KEY_TITLE());
-        if(!(manifestationDataObjectFromEPHGD.get(0).getINTERNATIONAL_EDITION_IND()==null)||!(this.internationalEditionInd==null)) {
-            Assert.assertEquals(Boolean.valueOf(this.internationalEditionInd), Boolean.valueOf(manifestationDataObjectFromEPHGD.get(0).getINTERNATIONAL_EDITION_IND()));
+        if(!(manifestationDataObjectFromEPHGD.get(0).getInternationalEditionInd()==null)||!(this.internationalEditionInd==null)) {
+            Assert.assertEquals(Boolean.valueOf(this.internationalEditionInd), Boolean.valueOf(manifestationDataObjectFromEPHGD.get(0).getInternationalEditionInd()));
         }
         Assert.assertEquals(this.firstPubDate, manifestationDataObjectFromEPHGD.get(0).getFIRST_PUB_DATE());
         Assert.assertEquals(this.type.get("code"), manifestationDataObjectFromEPHGD.get(0).getF_TYPE());
@@ -48,21 +48,13 @@ import java.util.List;
                 .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
     }
 
-    public String getId() {
-        return id;
-    }
+    public String getId() {return id;}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    public void setId(String id) {this.id = id;}
 
-    public String getKeyTitle() {
-        return keyTitle;
-    }
+    public String getKeyTitle() {return keyTitle;}
 
-    public void setKeyTitle(String keyTitle) {
-        this.keyTitle = keyTitle;
-    }
+    public void setKeyTitle(String keyTitle) {this.keyTitle = keyTitle;}
 
     public Boolean getInternationalEditionInd() {
         return internationalEditionInd;
