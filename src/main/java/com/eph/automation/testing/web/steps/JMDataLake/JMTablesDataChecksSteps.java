@@ -33,6 +33,8 @@ public class JMTablesDataChecksSteps {
 
     @Given("^We get (.*) random ids of (.*)$")
     public void getRandomIds(String numberOfRecords, String tableName) {
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random record...");
         switch (tableName) {
             case "JMF_ALLOCATION_CHANGE":
@@ -420,6 +422,8 @@ public class JMTablesDataChecksSteps {
 
     @Given("^We get (.*) random application key of (.*)")
     public void getApplicationkey(String numberOfRecords, String tableName) {
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random record...");
         sql = String.format(JMTablesDataChecksSQL.GET_APPLICATION_KEY, numberOfRecords);
         List<Map<?, ?>> randomAllocationIds = DBManager.getDBResultMap(sql, Constants.MYSQL_JM_URL);

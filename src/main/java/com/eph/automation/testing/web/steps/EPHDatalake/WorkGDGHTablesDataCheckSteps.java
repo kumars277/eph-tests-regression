@@ -33,6 +33,8 @@ public class WorkGDGHTablesDataCheckSteps {
 
     @Given("^We get (.*) random work ids of (.*)")
     public void getRandomWorkIds(String numberOfRecords, String tableName) {
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random records ..");
 
         //Get property when running with jenkins

@@ -33,7 +33,9 @@ public class EventGDGHTablesDataCheckSteps {
 
     @Given("^We get (.*) random event ids of (.*)")
     public void getRandomEventIds(String numberOfRecords, String tableName) {
-        Log.info("Get random records ..");
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        Log.info("numberOfRecords = " + numberOfRecords);
+        Log.info("Get random record...");
 
         //Get property when running with jenkins
         //numberOfRecords = System.getProperty("dbRandomRecordsNumber");
