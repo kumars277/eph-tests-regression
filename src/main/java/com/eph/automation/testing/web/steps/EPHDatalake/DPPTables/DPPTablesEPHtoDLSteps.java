@@ -107,6 +107,8 @@ public class DPPTablesEPHtoDLSteps {
 
     @Given("^We get (.*) random DPP ids of (.*)")
     public void getRandomDPPId(String numberOfRecords, String tableName) {
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random records ..");
         switch (tableName) {
 
