@@ -27,44 +27,59 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by GVLAYKOV
- */
+
 public class ProductFinderUISteps {
+    /**
+     * Created by GVLAYKOV
+     * update by Nishant @ 15 May 2020
+     */
 
     @StaticInjection
     public DataQualityContext dataQualityContext;
+    private ProductFinderTasks productFinderTasks;
+    private TasksNew tasks;
 
-    public static List<ManifestationIdentifierObject> manifestationIdentifiers;
     private String sql;
+    private String workIds;
+    private static String productId;
+    private String searchingID;
     private static List<String> ids;
     private static List<String>workTypeCode;
+    private static List<String> productIdList;
+    private static List<String>productTitleList;
+    private static List<String> workIdList;
+    private static List<String> booksworkIdList = new ArrayList<String>();
+    private static List<Map<?, ?>> workTypesCodeAvailable;
+    private static List<Map<?, ?>> availableProduct;
+
+    private static String[] Book_Types = {"Books Series","Major Ref Work","Other Book","Reference Book","Serial","Text Book"};
+    private static String[] Journal_Types = {"Abstracts Journal","B2B Journal","Journal","Newsletter"};
+    private static String[] Other_Types = {"Drug Monograph","Medical Procedure"};
+
+    private static List<ManifestationIdentifierObject> manifestationIdentifiers;
     private static List<String>workStatusCode;
     private static List<String> manifestation_Ids;
     private static List<String> manifestationIdentifiers_Ids;
     private static List<String> allWorkTypesCodeArrayToList;
+    private static List<String>workStatusCodesofLaunchedToList,workStatusCodesofPlannedToList;
     private String finalworkTypeCode;
     private String finalworkStatusCode;
-    private static List<String>workStatusCodesofLaunchedToList,workStatusCodesofPlannedToList;
-    private static List<String> productIdList;
-    private static List<String>productTitleList;
-    private ProductFinderTasks productFinderTasks;
-    private TasksNew tasks;
-    private  static  List <String> workIdList;
-    private static String searchingID;
-    private String workIds;
-    private  static List<String> booksworkIdList = new ArrayList<String>();
-    private static String[] Book_Types = {"Books Series","Major Ref Work","Other Book","Reference Book","Serial","Text Book"};
-    private static String[] Journal_Types = {"Abstracts Journal","B2B Journal","Journal","Newsletter"};
-    private static String[] Other_Types = {"Drug Monograph","Medical Procedure"};
-    private static List<Map<?, ?>> workTypesCodeAvailable;
-    private static List<Map<?, ?>> availableProduct;
-    private static String productId;
 
     @Inject
     public ProductFinderUISteps(ProductFinderTasks productFinderTasks, TasksNew tasks) {
         this.productFinderTasks = productFinderTasks;
         this.tasks = tasks;
+    }
+
+    @Given("^get a random work id from DB")
+    public void getRandomWorkIds(String numberOfRecords) {
+        //created by Nishant @ 15 May 2020
+        sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_IDS_FOR_SEARCH, numberOfRecords);
+        List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("Selected random work ids  : " + ids);
+//        ids.clear(); ids.add("EPR-W-1135VY");  Log.info("hard coded work ids are : " + ids);
+        Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
 
@@ -79,7 +94,6 @@ public class ProductFinderUISteps {
 
     @And("^We get the work search data from the EPH GD$")
     public void getWorksDataFromEPHGD() {
-      //  Log.info("And We get the data from EPH GD for journals ...");
         sql = String.format(ProductFinderSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, Joiner.on("','").join(ids));
         DataQualityContext.workDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
         DataQualityContext.workDataObjectsFromEPHGD.sort(Comparator.comparing(WorkDataObject::getWORK_ID));

@@ -4,6 +4,7 @@ public class ProductFinderSQL {
     public static String SELECT_WORK_BY_ID_FOR_SEARCH = "SELECT \"work_id\" as WORK_ID\n" +
             "FROM semarchy_eph_mdm.gd_wwork " +
             "WHERE work_id='%s'";
+
     public static String EPH_GD_WORK_EXTRACT_FOR_SEARCH = "SELECT \n" +
             "               work_id AS WORK_ID,\n" +
             "               work_title AS WORK_TITLE,\n" +
@@ -29,4 +30,13 @@ public class ProductFinderSQL {
     public static String SELECT_WORKID_FOR_WORK_TYPE = "select work_id as WORK_ID from semarchy_eph_mdm.gd_wwork where f_type = '%s' order by random() limit 1";
     public static String SELECT_PRODUCTID_TITLE_FOR_SEARCH = "select product_id as PRODUCT_ID, name as PRODUCT_TITLE from semarchy_eph_mdm.gd_product order by random() limit 1";
 
+    //created by Nishant @ 15 May 2020
+    public static String SELECT_RANDOM_WORK_IDS_FOR_SEARCH = "SELECT \"work_id\" as WORK_ID\n" +
+            "FROM semarchy_eph_mdm.gd_wwork \n" +
+            "WHERE exists (\n" +
+            "SELECT * FROM semarchy_eph_mdm.gd_manifestation\n" +
+            "WHERE semarchy_eph_mdm.gd_wwork.work_id = semarchy_eph_mdm.gd_manifestation.f_wwork "+
+            "and LENGTH(semarchy_eph_mdm.gd_manifestation.manifestation_key_title)>20)\n" +
+            "and LENGTH(work_title)>20\n" +
+            "order by random() limit '%s'";
 }
