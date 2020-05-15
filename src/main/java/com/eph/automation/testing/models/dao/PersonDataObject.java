@@ -4,13 +4,16 @@ import java.util.Objects;
 
 /**
  * Created by Bistra Drazheva on 13/03/2019
+ * updated by Nishan @ 8 May 2020
  */
 public class PersonDataObject {
 
-    private String PERSON_SOURCE_REF;
+
     private String PERSON_FIRST_NAME;
     private String PERSON_FAMILY_NAME;
     private String PEOPLEHUB_ID;
+    private String PERSON_EMAIL_ID;
+    private String PERSON_SOURCE_REF;
     private String DQ_ERR;
     private String UPDATED;
 
@@ -19,77 +22,35 @@ public class PersonDataObject {
     private String B_CLASSNAME;
     private String PERSON_ID;
 
-    public String getUPDATED() {
-        return UPDATED;
-    }
+    public String getUPDATED() {return UPDATED;}
+    public void setUPDATED(String UPDATED) {this.UPDATED = UPDATED;}
 
-    public void setUPDATED(String UPDATED) {
-        this.UPDATED = UPDATED;
-    }
+    public String getPERSON_SOURCE_REF() {return PERSON_SOURCE_REF;}
+    public void setPERSON_SOURCE_REF(String PERSON_SOURCE_REF) {this.PERSON_SOURCE_REF = PERSON_SOURCE_REF;}
 
-    public String getPERSON_SOURCE_REF() {
-        return PERSON_SOURCE_REF;
-    }
+    public String getPERSON_FIRST_NAME() {return PERSON_FIRST_NAME;}
+    public void setPERSON_FIRST_NAME(String PERSON_FIRST_NAME) {this.PERSON_FIRST_NAME = PERSON_FIRST_NAME;}
 
-    public void setPERSON_SOURCE_REF(String PERSON_SOURCE_REF) {
-        this.PERSON_SOURCE_REF = PERSON_SOURCE_REF;
-    }
+    public String getPERSON_FAMILY_NAME() {return PERSON_FAMILY_NAME;}
+    public void setPERSON_FAMILY_NAME(String PERSON_FAMILY_NAME) {this.PERSON_FAMILY_NAME = PERSON_FAMILY_NAME;}
 
-    public String getPERSON_FIRST_NAME() {
-        return PERSON_FIRST_NAME;
-    }
+    public String getB_LOADID() {return B_LOADID;}
+    public void setB_LOADID(String b_LOADID) {B_LOADID = b_LOADID;}
 
-    public void setPERSON_FIRST_NAME(String PERSON_FIRST_NAME) {
-        this.PERSON_FIRST_NAME = PERSON_FIRST_NAME;
-    }
+    public String getB_CLASSNAME() {return B_CLASSNAME;}
+    public void setB_CLASSNAME(String b_CLASSNAME) {B_CLASSNAME = b_CLASSNAME;}
 
-    public String getPERSON_FAMILY_NAME() {
-        return PERSON_FAMILY_NAME;
-    }
+    public String getPERSON_ID() {return PERSON_ID;}
+    public void setPERSON_ID(String PERSON_ID) {this.PERSON_ID = PERSON_ID;}
 
-    public void setPERSON_FAMILY_NAME(String PERSON_FAMILY_NAME) {
-        this.PERSON_FAMILY_NAME = PERSON_FAMILY_NAME;
-    }
+    public String getPEOPLEHUB_ID() {return PEOPLEHUB_ID;}
+    public void setPEOPLEHUB_ID(String PEOPLEHUB_ID) {this.PEOPLEHUB_ID = PEOPLEHUB_ID;}
 
-    public String getB_LOADID() {
-        return B_LOADID;
-    }
+    public String getPERSON_EMAIL_ID() {return PERSON_EMAIL_ID;}
+    public void setPERSON_EMAIL_ID(String PERSON_EMAIL_ID) {this.PERSON_EMAIL_ID = PERSON_EMAIL_ID;}
 
-    public void setB_LOADID(String b_LOADID) {
-        B_LOADID = b_LOADID;
-    }
-
-    public String getB_CLASSNAME() {
-        return B_CLASSNAME;
-    }
-
-    public void setB_CLASSNAME(String b_CLASSNAME) {
-        B_CLASSNAME = b_CLASSNAME;
-    }
-
-    public String getPERSON_ID() {
-        return PERSON_ID;
-    }
-
-    public void setPERSON_ID(String PERSON_ID) {
-        this.PERSON_ID = PERSON_ID;
-    }
-
-    public String getPEOPLEHUB_ID() {
-        return PEOPLEHUB_ID;
-    }
-
-    public void setPEOPLEHUB_ID(String PEOPLEHUB_ID) {
-        this.PEOPLEHUB_ID = PEOPLEHUB_ID;
-    }
-
-    public String getDQ_ERR() {
-        return DQ_ERR;
-    }
-
-    public void setDQ_ERR(String DQ_ERR) {
-        this.DQ_ERR = DQ_ERR;
-    }
+    public String getDQ_ERR() {return DQ_ERR;}
+    public void setDQ_ERR(String DQ_ERR) {this.DQ_ERR = DQ_ERR;}
 
     @Override
     public boolean equals(Object o) {

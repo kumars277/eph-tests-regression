@@ -62,7 +62,12 @@ public class WorkDataObject {
     public String getWORK_TITLE() {return WORK_TITLE;}
     public void setWORK_TITLE(String WORK_TITLE) {this.WORK_TITLE = WORK_TITLE;}
 
-    public String getELECTRONIC_RIGHTS_IND() {return ELECTRONIC_RIGHTS_IND;}
+    public String getELECTRONIC_RIGHTS_IND()
+    {
+        if(ELECTRONIC_RIGHTS_IND.equalsIgnoreCase("t"))ELECTRONIC_RIGHTS_IND= "True";
+        if(ELECTRONIC_RIGHTS_IND.equalsIgnoreCase("f")) ELECTRONIC_RIGHTS_IND= "False";
+        return ELECTRONIC_RIGHTS_IND;}
+
     public void setELECTRONIC_RIGHTS_IND(String ELECTRONIC_RIGHTS_IND) {this.ELECTRONIC_RIGHTS_IND = ELECTRONIC_RIGHTS_IND;}
 
     public String getLANGUAGE_CODE() {return LANGUAGE_CODE;}
@@ -73,6 +78,9 @@ public class WorkDataObject {
 
     public String getIDENTIFIER() {return IDENTIFIER;}
     public void setIDENTIFIER(String IDENTIFIER) {this.IDENTIFIER = IDENTIFIER;}
+
+    public String getIDENTIFER() {return IDENTIFER;}
+    public void setIDENTIFER(String IDENTIFER) {this.IDENTIFER = IDENTIFER;}
 
     public String getPRIMARY_ISBN() {return PRIMARY_ISBN;}
     public void setPRIMARY_ISBN(String PRIMARY_ISBN) {this.PRIMARY_ISBN = PRIMARY_ISBN;}
@@ -122,8 +130,8 @@ public class WorkDataObject {
     public String getOPEN_ACCESS_JNL_TYPE_CODE() {return OPEN_ACCESS_JNL_TYPE_CODE;}
     public void setOPEN_ACCESS_JNL_TYPE_CODE(String OPEN_ACCESS_JNL_TYPE_CODE) {this.OPEN_ACCESS_JNL_TYPE_CODE = OPEN_ACCESS_JNL_TYPE_CODE;}
 
- public String getOPEN_ACCESS_TYPE() {return OPEN_ACCESS_TYPE;}
- public void setOPEN_ACCESS_TYPE(String OPEN_ACCESS_TYPE) {this.OPEN_ACCESS_TYPE = OPEN_ACCESS_TYPE;}
+    public String getOPEN_ACCESS_TYPE() {return OPEN_ACCESS_TYPE;}
+    public void setOPEN_ACCESS_TYPE(String OPEN_ACCESS_TYPE) {this.OPEN_ACCESS_TYPE = OPEN_ACCESS_TYPE;}
 
     public String getPRODUCT_WORK_ID() {return PRODUCT_WORK_ID;}
     public void setPRODUCT_WORK_ID(String PRODUCT_WORK_ID) {this.PRODUCT_WORK_ID = PRODUCT_WORK_ID;}
@@ -190,9 +198,6 @@ public class WorkDataObject {
 
     public String getB_CLASSNAME() {return B_CLASSNAME;}
     public void setB_CLASSNAME(String b_CLASSNAME) {B_CLASSNAME = b_CLASSNAME;}
-
-    public String getIDENTIFER() {return IDENTIFER;}
-    public void setIDENTIFER(String IDENTIFER) {this.IDENTIFER = IDENTIFER;}
 
     public String getF_WWORK() {return F_WWORK;}
     public void setF_WWORK(String f_WWORK) {F_WWORK = f_WWORK;}

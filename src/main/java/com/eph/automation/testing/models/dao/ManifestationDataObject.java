@@ -1,4 +1,5 @@
-/**
+
+/*
  * updated by Nishant @ 15 Apr 2020
  */
 package com.eph.automation.testing.models.dao;
@@ -80,7 +81,11 @@ public class  ManifestationDataObject {
     public String getCARTON_QTY() {return CARTON_QTY;}
     public void setCARTON_QTY(String CARTON_QTY) {this.CARTON_QTY = CARTON_QTY;}
 
-    public String getInternationalEditionInd() {return internationalEditionInd;}
+    public String getInternationalEditionInd() {
+        if(internationalEditionInd.equalsIgnoreCase("t"))internationalEditionInd= "True";
+        if(internationalEditionInd.equalsIgnoreCase("f")) internationalEditionInd= "False";
+     return internationalEditionInd;
+    }
     public void setInternationalEditionInd(String INTERNATIONAL_EDITION_IND) {this.internationalEditionInd = INTERNATIONAL_EDITION_IND;}
 
     public String getCOPYRIGHT_DATE() {return COPYRIGHT_DATE;}

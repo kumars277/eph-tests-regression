@@ -3,13 +3,13 @@ Feature: Customer Search API: Works
   I would like to search works from Enterprise Customer Hub using EIP Search
   So that I can use the details to validate business needs
 
-  @API
+  @searchAPI
   Scenario: search work by ID
     Given We get 1 random search ids for works
     And We get the work search data from EPH GD
     Then the work details are retrieved and compared
 
-  @API
+  @searchAPI
   Scenario Outline: search work by title
     Given We get 1 random search ids for works
     And We get the work search data from EPH GD
@@ -21,7 +21,7 @@ Feature: Customer Search API: Works
     |WORK_MANIFESTATION_TITLE|
     |WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME|
 
-  @API
+  @searchAPI
   Scenario Outline: Search works by identifier
     Given We get 1 random search ids for works
     And We get the work search data from EPH GD
@@ -33,7 +33,7 @@ Feature: Customer Search API: Works
       | WORK_ID                       |
       | WORK_MANIFESTATION_ID         |
 
-  @API
+  @searchAPI
   Scenario Outline: Search works by identifier and Type
     Given We get 1 random search ids for works
     And We get the work search data from EPH GD
@@ -43,7 +43,7 @@ Feature: Customer Search API: Works
       | WORK_IDENTIFIER          |
       | WORK_MANIFESTATION_IDENTIFIER |
 
-  @API
+  @searchAPI
   Scenario Outline: Search works by search option
     Given We get 1 random search ids for works
     And We get the work search data from EPH GD
@@ -62,24 +62,24 @@ Feature: Customer Search API: Works
       | WORK_PRODUCT_SUMMARY_NAME              |
       | WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME|
 
-  @API
+  @searchAPI
   Scenario: search work by PMC Code
     Given We get 1 random search ids for works
     And We get the work search data from EPH GD
     Then the work details are retrieved by PMC Code and compared
 
-  @API
+  @searchAPI
   Scenario: search work by PMG Code
     Given We get 1 random search ids for works
     And We get the work search data from EPH GD
     Then the work details are retrieved by PMG Code and compared
 
-  @API
+  @searchAPI
   Scenario: search work by Person id
     Given We get 1 random search ids for person roles
     Then the work response count is compared with the count in the DB for person ID
 
-  @API
+  @searchAPI
   Scenario Outline: Search E2E
     Given We get id for work search <id>
     And We get the work search data from EPH GD
@@ -90,39 +90,37 @@ Feature: Customer Search API: Works
 
 ##created by Nishant
 
-  @API
+  @searchAPI
   Scenario: search work by accountableProduct
     Given We get 1 random search ids for works
     And We get the work search data from EPH GD
     Then the work details are retrieved by accountableProduct and compared
 
-  @API
+  @searchAPI
   Scenario: search work by workStatus
     Given We get 1 random search ids for works
     And We get the work search data from EPH GD
     Then the work details are retrieved by workStatus and compared
 
-  @API  @test
+  @searchAPI
   Scenario: search work by workType
     Given We get 1 random search ids for works
     And We get the work search data from EPH GD
     Then the work details are retrieved by workType and compared
-    #count mismatch
 
-  @API
+  @searchAPI
   Scenario: search work by manifestationType
     Given We get 1 random search ids for works
     And We get the work search data from EPH GD
     Then the work details are retrieved by manifestationType and compared
-  #count mismatch
 
-  @API
+  @searchAPI
   Scenario: search work by Search with PMCCode
     Given We get 1 random search ids for works
     And We get the work search data from EPH GD
     Then the work details are retrieved by search with PMC code and compared
 
-  @API
+  @searchAPI
   Scenario: search work by Search with PMGCode
     Given We get 1 random search ids for works
     And We get the work search data from EPH GD

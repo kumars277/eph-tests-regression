@@ -36,6 +36,8 @@ Feature: Product Finder Selenium tests
       | id                        | keyword     |
       | EPR-W-10DDN2              | Spectroscopy |
 
+
+
   @PF
     Scenario Outline: When no product is found "There are no results that match your search" is displayed
       Given user is on search page

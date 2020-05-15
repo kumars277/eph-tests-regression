@@ -244,6 +244,18 @@ public class PersonProductRoleDataSQL {
             "from semarchy_eph_mdm.gd_product_person_role \n" +
             "where external_reference in ('%s')";
 
+    public static String selectProductPersonByproductId ="Select " +
+            "product_person_role_id as PRODUCT_PERSON_ROLE_ID,\n" +
+            "effective_start_date as EFFECTIVE_START_DATE,\n" +
+            "effective_end_date as EFFECTIVE_END_DATE,\n" +
+            "f_role as F_ROLE,\n" +
+            "f_product as F_PRODUCT,\n" +
+            "f_person as F_PERSON,\n" +
+            "f_event as F_EVENT" +
+            " from semarchy_eph_mdm.gd_product_person_role where f_product='%s'";
+
+
+
 //    public static String GET_RANDOM_PERSON_PRODUCT_ROLE_IDS = "select PROD_PER_ROLE_SOURCE_REF as PROD_PER_ROLE_SOURCE_REF\n" +
 //            "from " + GetEPHDBUser.getDBUser() + ".stg_10_pmx_product_person_role\n" +
 //            "join  (select s.pmx_source_reference as stage, g.external_reference as gold,\n" +
@@ -364,4 +376,7 @@ public class PersonProductRoleDataSQL {
             "    and gd.effective_end_date is not null";
 
     public static String GET_SOURCE_REF = "select source_ref as source_ref from "+ GetEPHDBUser.getDBUser() + ".map_sourceref_2_numericid where numeric_id = '%s'";
+
+
+
 }

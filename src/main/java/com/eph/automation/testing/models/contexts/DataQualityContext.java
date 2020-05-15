@@ -2,6 +2,7 @@ package com.eph.automation.testing.models.contexts;
 
 import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.models.dao.*;
+import com.eph.automation.testing.services.db.sql.WorkRelationshipDataObject;
 
 import java.util.List;
 
@@ -36,6 +37,9 @@ public class DataQualityContext {
     public static List<ProductRelationshipDataObject> productRelationshipDataObjectsFromEPHSTG;
     public static List<ProductRelationshipDataObject> productRelationshipDataObjectsFromEPHSA;
     public static List<ProductRelationshipDataObject> productRelationshipDataObjectsFromEPHGD;
+
+    public static List<WorkRelationshipDataObject> workRelationshipParentDataObjectsFromEPGD;
+    public static List<WorkRelationshipDataObject> workRelationshipChildDataObjectsFromEPGD;
 
     public static List<ManifestationIdentifierObject> manifestationIdentifiersDataObjectsFromSTG;
     public static List<ManifestationIdentifierObject> manifestationIdentifiersDataObjectsFromSA;

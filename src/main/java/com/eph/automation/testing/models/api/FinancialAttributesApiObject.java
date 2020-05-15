@@ -1,5 +1,5 @@
 package com.eph.automation.testing.models.api;
-/**
+/*
  * Created by GVLAYKOV
  * updated by Nishant @ 30 Mar 2020 as per latest API changes
  */
@@ -24,50 +24,39 @@ class FinancialAttributesApiObject {
     private FinancialAttribsContext financialAttribs;
     public FinancialAttributesApiObject() {}
 
+    private HashMap<String, Object> glCompany;
+    public HashMap<String, Object> getGlCompany() {return glCompany;}
+    public void setGlCompany(HashMap<String, Object> glCompany) {this.glCompany = glCompany;}
+
+    private HashMap<String, Object> costResponsibilityCentre;
+    public HashMap<String, Object> getCostResponsibilityCentre() {return costResponsibilityCentre;}
+    public void setCostResponsibilityCentre(HashMap<String, Object> costResponsibilityCentre) {this.costResponsibilityCentre = costResponsibilityCentre;}
+
+    private HashMap<String, Object> revenueResponsibilityCentre;
+    public HashMap<String, Object> getRevenueResponsibilityCentre() {return revenueResponsibilityCentre;}
+    public void setRevenueResponsibilityCentre(HashMap<String, Object> revenueResponsibilityCentre) {this.revenueResponsibilityCentre = revenueResponsibilityCentre;}
+
+    private String effectiveStartDate;
+    public String getEffectiveStartDate() {return effectiveStartDate;}
+    public void setEffectiveStartDate(String effectiveStartDate) {this.effectiveStartDate = effectiveStartDate;}
+
     private void getFinancialData(String workid){
         String sql = String.format(APIDataSQL.GET_GD_FinnAttr_DATA, workid);
         financialAttribs.financialDataFromGD = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
     }
 
+
     public void compareWithDB(String workID){
-        Log.info("comparing below financial attributes for work... "+workID);
-        Log.info("\n-company code\n"+
-                "-costResponsibilityCentre code\n"+
-                "-revenueResponsibilityCentre code"
-        );
+        Log.info("verifying below financial attributes for work... "+workID);
+
         getFinancialData(workID);
         Assert.assertEquals(financialAttribs.financialDataFromGD.get(0).getGl_company(), this.glCompany.get("code"));
+        printLog("glCompany code");
         Assert.assertEquals(financialAttribs.financialDataFromGD.get(0).getCost_resp_centre(), this.costResponsibilityCentre.get("code"));
+        printLog("costResponsibilityCentre code");
         Assert.assertEquals(financialAttribs.financialDataFromGD.get(0).getRevenue_resp_centre(), this.revenueResponsibilityCentre.get("code"));
+        printLog("revenueResponsibilityCentre code");
     }
-
-
-    private HashMap<String, Object> glCompany;
-    public HashMap<String, Object> getGlCompany() {
-        return glCompany;
-    }
-    public void setGlCompany(HashMap<String, Object> glCompany) {
-        this.glCompany = glCompany;
-    }
-
-    private HashMap<String, Object> costResponsibilityCentre;
-    public HashMap<String, Object> getCostResponsibilityCentre() {
-        return costResponsibilityCentre;
-    }
-    public void setCostResponsibilityCentre(HashMap<String, Object> costResponsibilityCentre) {this.costResponsibilityCentre = costResponsibilityCentre;}
-
-    private HashMap<String, Object> revenueResponsibilityCentre;
-    public HashMap<String, Object> getRevenueResponsibilityCentre() {
-        return revenueResponsibilityCentre;
-    }
-    public void setRevenueResponsibilityCentre(HashMap<String, Object> revenueResponsibilityCentre) {this.revenueResponsibilityCentre = revenueResponsibilityCentre;}
-
-    private String effectiveStartDate;
-    public String getEffectiveStartDate() {
-        return effectiveStartDate;
-    }
-    public void setEffectiveStartDate(String effectiveStartDate) {
-        this.effectiveStartDate = effectiveStartDate;
-    }
+    private void printLog(String verified){Log.info("verified..."+verified);}
 
 }

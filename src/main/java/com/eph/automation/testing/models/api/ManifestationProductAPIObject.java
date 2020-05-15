@@ -17,8 +17,6 @@ Created by Nishant @ 27 Nov 2019
 * */
 public class ManifestationProductAPIObject {
 
-//    public ManifestationProductAPIObject() {}
-
     private static List<ProductDataObject> productDataObjectsFromEPHGD;
 
     private String id;
@@ -27,9 +25,7 @@ public class ManifestationProductAPIObject {
 
     private ProductSummary productSummary;
     public ProductSummary getProductSummary() {return productSummary;}
-    public void setProductSummary(ProductSummary productSummary) {
-        this.productSummary = productSummary;
-    }
+    public void setProductSummary(ProductSummary productSummary) {this.productSummary = productSummary;}
 
     static class ProductSummary {
         String name;
@@ -53,15 +49,18 @@ public class ManifestationProductAPIObject {
     }
 
     public void compareWithDB(){
-        Log.info("comparing product..."+this.id);
-        Log.info( "\n-product name\n"+
-                "-product type\n"+
-                "-product status");
+        Log.info("verifying product..."+this.id);
+
         getProductDataFromEPHGD(this.id);
         Assert.assertEquals(this.productSummary.name,productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME());
+        printLog("product name");
+
         Assert.assertEquals(this.productSummary.type.get("code"),productDataObjectsFromEPHGD.get(0).getF_TYPE());
+        printLog("product type");
+
         Assert.assertEquals(this.productSummary.status.get("code"),productDataObjectsFromEPHGD.get(0).getF_STATUS());
+        printLog("product status");
     }
 
-
+    private void printLog(String verified){Log.info("verified..."+verified);}
 }

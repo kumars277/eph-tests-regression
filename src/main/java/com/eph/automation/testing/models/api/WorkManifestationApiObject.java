@@ -1,10 +1,9 @@
 package com.eph.automation.testing.models.api;
-/**
+/*
  * Created by GVLAYKOV
  * updated by Nishant to fix search API v2
  * updated by Nishant @ 13 Apr 2020 to adjust data model changes for search API
  */
-
 
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
@@ -31,41 +30,14 @@ public class WorkManifestationApiObject {
     public String getId() {return id;}
     public void setId(String id) {this.id = id;}
 
-    private manifestationcore manifestationCore;
-    public manifestationcore getManifestationCore() {return manifestationCore;}
-    public void setManifestationCore(manifestationcore manifestationCore) {this.manifestationCore = manifestationCore; }
+    private manifestationCore manifestationCore;
+    public manifestationCore getManifestationCore() {return manifestationCore;}
+    public void setManifestationCore(manifestationCore manifestationCore) {this.manifestationCore = manifestationCore; }
 
-    public class manifestationcore {
-        private String keyTitle;
-        public String getKeyTitle() {return keyTitle;}
-        public void setKeyTitle(String keyTitle) {this.keyTitle = keyTitle;}
-
-        private Boolean internationalEditionInd;
-        public Boolean getInternationalEditionInd() {return internationalEditionInd;}
-        public void setInternationalEditionInd(Boolean internationalEditionInd) {this.internationalEditionInd = internationalEditionInd;}
-
-        private String firstPubDate;
-        public String getFirstPubDate() {return firstPubDate;}
-        public void setFirstPubDate(String firstPubDate) {this.firstPubDate = firstPubDate;}
-
-        private List<ManifestationIdentifiersApiObject> identifiers;
-        public List<ManifestationIdentifiersApiObject> getIdentifiers() {return identifiers;}
-        public void setIdentifiers(List<ManifestationIdentifiersApiObject> identifiers) {this.identifiers = identifiers;}
-
-        private HashMap<String, Object> type;
-        public HashMap<String, Object> getType() {return type;}
-        public void setType(HashMap<String, Object> type) {this.type = type;}
-
-        private HashMap<String, Object> status;
-        public HashMap<String, Object> getStatus() {return status;}
-        public void setStatus(HashMap<String, Object> status) {this.status = status;}
-
-    }
-
-        //created by Nishant @ 17 Apr 2020
-        private List<ManifestationProductAPIObject> products;
-        public List<ManifestationProductAPIObject> getProducts() {return products;}
-        public void setProducts(List<ManifestationProductAPIObject> products) {this.products = products;}
+    //created by Nishant @ 17 Apr 2020
+    private List<ManifestationProductAPIObject> products;
+    public List<ManifestationProductAPIObject> getProducts() {return products;}
+    public void setProducts(List<ManifestationProductAPIObject> products) {this.products = products;}
 
     private void getManifestationByID(String manifestationID) {
         List<String> ids = new ArrayList<>();
@@ -76,27 +48,12 @@ public class WorkManifestationApiObject {
     }
 
     public void compareWithDB(){
-        Log.info("comparing below for work manifestations... "+this.id);
-        getManifestationByID(this.id);
+        Log.info("verifying work manifestations... "+this.id);
+        manifestationCore.compareWithDB(this.id);
 
-        Log.info("\n-keyTitle\n-internationalEditionInd\n-firstPubDate\n-manifestationIdentifier");
-        Assert.assertEquals(manifestationCore.keyTitle, manifestationDataObjectFromEPHGD.get(0).getMANIFESTATION_KEY_TITLE());
-        if(!(manifestationDataObjectFromEPHGD.get(0).getInternationalEditionInd()==null)||!(manifestationCore.internationalEditionInd==null)) {
-            Assert.assertEquals(Boolean.valueOf(manifestationCore.internationalEditionInd), Boolean.valueOf(manifestationDataObjectFromEPHGD.get(0).getInternationalEditionInd()));
+        if(products!=null) {Log.info("verifying manifestation products");
+            for (ManifestationProductAPIObject manifestationProduct : products) {manifestationProduct.compareWithDB();}
         }
-        Assert.assertEquals(manifestationCore.firstPubDate, manifestationDataObjectFromEPHGD.get(0).getFIRST_PUB_DATE());
-        if(manifestationCore.identifiers!=null) {for (ManifestationIdentifiersApiObject manifestationIdentifier : manifestationCore.identifiers) {manifestationIdentifier.compareWithDB();}}
-        Log.info( "\n-manifestation type\n-manifestation status");
-        Assert.assertEquals(manifestationCore.type.get("code"), manifestationDataObjectFromEPHGD.get(0).getF_TYPE());
-        Assert.assertEquals(manifestationCore.status.get("code"), manifestationDataObjectFromEPHGD.get(0).getF_STATUS());
-        if(products!=null) {
-            Log.info("comparing manifestation products...");
-            for (ManifestationProductAPIObject manifestationProduct : products) {
-                manifestationProduct.compareWithDB();
-            }
-        }
-
-
     }
 }
 

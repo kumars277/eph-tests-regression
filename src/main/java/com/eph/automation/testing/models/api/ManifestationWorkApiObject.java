@@ -1,10 +1,12 @@
 package com.eph.automation.testing.models.api;
 /**
  * Created by GVLAYKOV
+ * updated by Nishant @ 4 May 2020
  */
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.dao.AccountableProductDataObject;
 import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -30,7 +32,14 @@ class ManifestationWorkApiObject {
     public ManifestationWorkApiObject.workCore getWorkCore() {return workCore;}
     public void setWorkCore(ManifestationWorkApiObject.workCore workCore) {this.workCore = workCore;}
 
+    private List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD;
+    public List<AccountableProductDataObject> getAccountableProductDataObjectsFromEPHGD() {return accountableProductDataObjectsFromEPHGD;}
+    public void setAccountableProductDataObjectsFromEPHGD(List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD) {this.accountableProductDataObjectsFromEPHGD = accountableProductDataObjectsFromEPHGD;}
+
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public class workCore{
+
         private String title;
         public String getTitle() {return title;}
         public void setTitle(String title) {this.title = title;}
@@ -99,10 +108,13 @@ class ManifestationWorkApiObject {
         public FinancialAttributesApiObject[] getWorkFinancialAttributes() {return workFinancialAttributes;}
         public void setWorkFinancialAttributes(FinancialAttributesApiObject[] workFinancialAttributes) {this.workFinancialAttributes = workFinancialAttributes;}
 
-
         private PersonsApiObject[] workPersons;
         public PersonsApiObject[] getWorkPersons() {return workPersons;}
         public void setWorkPersons(PersonsApiObject[] workPersons) {this.workPersons = workPersons;}
+
+        private WorkRelationshipsAPIObject workRelationships;
+        public WorkRelationshipsAPIObject getWorkRelationships() {return workRelationships;}
+        public void setWorkRelationships(WorkRelationshipsAPIObject workRelationships) {this.workRelationships = workRelationships;}
 
         //subjectAreas//EPR-103R9H
     }
@@ -112,8 +124,10 @@ class ManifestationWorkApiObject {
     public void compareWithDB(){
         getWorkDataFromEPHGD(this.id);
         Log.info("comparing work id..."+this.id);
-        Log.info("script in progress");
+        Log.info("-title\n-subTitle \n-electronicRightsInd \n-language code \n-editionNumber \n-volume \n-copyrightYear");
+
         Assert.assertEquals(workCore.title, this.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+       if(!(workCore.subTitle==null &&this.workDataObjectsFromEPHGD.get(0).getWORK_SUBTITLE()==null))
         Assert.assertEquals(workCore.subTitle, this.workDataObjectsFromEPHGD.get(0).getWORK_SUBTITLE());
         Assert.assertEquals(Boolean.valueOf(workCore.electronicRightsInd), Boolean.valueOf(this.workDataObjectsFromEPHGD.get(0).getELECTRONIC_RIGHTS_IND()));
         if(!(this.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE()==null)) {
@@ -131,6 +145,11 @@ class ManifestationWorkApiObject {
             int apiCopyrightYear = Integer.valueOf(workCore.copyrightYear);
             Assert.assertEquals(apiCopyrightYear, this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR());
         }
+
+        //IDENTIFIERS - EPR-11119M
+        if(!(workCore.identifiers==null &&this.workDataObjectsFromEPHGD.get(0).getIDENTIFIER()==null) )
+            for(WorkIdentifiersApiObject identifier:workCore.identifiers){identifier.compareWithDB();}
+            Log.info( "-work type code \n-work status code \n-imprint \n-openAccessType code \n-pmc \n-pmg\n");
         Assert.assertEquals(workCore.type.get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
         Assert.assertEquals(workCore.status.get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
         if(!(workCore.imprint.get("code")==null)||!((this.workDataObjectsFromEPHGD==null)||(this.workDataObjectsFromEPHGD.isEmpty()))) {
@@ -139,6 +158,20 @@ class ManifestationWorkApiObject {
         Assert.assertEquals(workCore.openAccessType.get("code"),this.workDataObjectsFromEPHGD.get(0).getOPEN_ACCESS_TYPE());
         Assert.assertEquals(workCore.pmc.getCode(), this.workDataObjectsFromEPHGD.get(0).getPMC());
         Assert.assertEquals(workCore.pmc.getPmg().get("code"), getPMGcodeByPMC(this.workDataObjectsFromEPHGD.get(0).getPMC()));
+
+        if(this.workDataObjectsFromEPHGD.get(0).getF_accountable_product()!=null) {
+            //accountable products varification implemmented by Nishant on 4 May 2020
+            Log.info("work type..."+workCore.type.get("code"));
+            Log.info("comparing accountable product id..." + this.workDataObjectsFromEPHGD.get(0).getF_accountable_product());
+            getAccountableProductFromEPHGD(this.workDataObjectsFromEPHGD.get(0).getF_accountable_product());
+            Log.info("getGlProductSegmentCode - " + workCore.accountableProduct.getGlProductSegmentCode());
+            Assert.assertEquals(workCore.accountableProduct.getGlProductSegmentCode(), this.accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_CODE());
+            Log.info("glProductSegmentName - " + workCore.accountableProduct.getGlProductSegmentName());
+            Assert.assertEquals(workCore.accountableProduct.getGlProductSegmentName(), this.accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_NAME());
+            Log.info("glProductParentValue_code - " + workCore.accountableProduct.getGlProductParentValue().get("code"));
+            Assert.assertEquals(workCore.accountableProduct.getGlProductParentValue().get("code"), this.accountableProductDataObjectsFromEPHGD.get(0).getF_GL_PRODUCT_SEGMENT_PARENT());
+        }
+
         if(!(workCore.workFinancialAttributes==null)&&!(workCore.workFinancialAttributes.length==0)){
             for (FinancialAttributesApiObject attribute : workCore.workFinancialAttributes) {attribute.compareWithDB(this.id);}
         }
@@ -146,6 +179,10 @@ class ManifestationWorkApiObject {
         if(!(workCore.workPersons==null)&&!(workCore.workPersons.length==0)){
             for (PersonsApiObject person : workCore.workPersons) {person.compareWithDB_work();}
         }
+
+        //workRelationships - EPR-11119M
+        //The data is stored in table semarchy_eph_mdm.gd_work_relationship.
+        if(workCore.workRelationships!=null)workCore.workRelationships.compareWithDB(this.workDataObjectsFromEPHGD.get(0).getWORK_ID());
     }
 
     private void getWorkDataFromEPHGD(String workID) {
@@ -162,5 +199,12 @@ class ManifestationWorkApiObject {
         String pmgCode = ((String) getPMG.get(0).get("f_pmg"));
         return pmgCode;
     }
+
+    private void getAccountableProductFromEPHGD(String accountable_product_id)
+    {
+        String sql=String.format(APIDataSQL.SELECT_ACCOUNTABLE_PRODUCT_BY_ACCOUNTABLEID,accountable_product_id);
+        accountableProductDataObjectsFromEPHGD=DBManager.getDBResultAsBeanList(sql, AccountableProductDataObject.class,Constants.EPH_URL);
+    }
+
 
 }

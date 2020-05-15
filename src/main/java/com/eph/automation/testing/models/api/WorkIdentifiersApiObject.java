@@ -34,20 +34,20 @@ class WorkIdentifiersApiObject {
         this.identifierType = identifierType;
     }
 
-    String effectiveStartDate;
+    private String effectiveStartDate;
     public String getEffectiveStartDate(){return effectiveStartDate;}
     public void setEffectiveStartDate(String effectiveStartDate){this.effectiveStartDate=effectiveStartDate;}
 
 
     private void getWorkIdentifierByID(String workidentifierID){
-        String sql = APIDataSQL.getWorkIdentifiersDataFromGDByID.replace("PARAM1", workidentifierID);
+        String sql = APIDataSQL.getWorkIdentifiersDataFromGDByIdentifier.replace("PARAM1", workidentifierID);
         DBworkIdentifier = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
     }
 
     public void compareWithDB(){
-        Log.info("comparing work identifiers... "+this.identifier);
-        Log.info("-work identifier type");
+        Log.info("verifiying work identifiers... "+this.identifier);
         getWorkIdentifierByID(this.identifier);
         Assert.assertEquals(this.identifierType.get("code"), this.DBworkIdentifier.get(0).getF_TYPE());
+        Log.info("verified...work identifier type");
     }
 }

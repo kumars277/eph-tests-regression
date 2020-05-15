@@ -26,12 +26,12 @@ class ManifestationIdentifiersApiObject {
     public void setIdentifier(String identifier) {this.identifier = identifier;}
 
     private HashMap<String, Object> identifierType;
-    public HashMap<String, Object> getIdentifierType() {
-            return identifierType;
-        }
-    public void setIdentifierType(HashMap<String, Object> identifierType) {
-            this.identifierType = identifierType;
-        }
+    public HashMap<String, Object> getIdentifierType() {return identifierType;}
+    public void setIdentifierType(HashMap<String, Object> identifierType) {this.identifierType = identifierType;}
+
+    private String effective_start_date;
+    public String getEffective_start_date() {return effective_start_date;}
+    public void setEffective_start_date(String effective_start_date) {this.effective_start_date = effective_start_date;}
 
     private void getManifestationIdentifierByID(String identifierID){
         String sql = String.format(APIDataSQL.SELECT_GD_MANIFESTATION_IDENTIFIER_BY_ID, identifierID);
@@ -39,11 +39,15 @@ class ManifestationIdentifiersApiObject {
     }
 
     public void compareWithDB(){
-        Log.info("comparing manifestation identifier... "+this.identifier);
-        Log.info("-identifier type");
+        Log.info("verifying manifestation identifier... "+this.identifier);
+
         if(this.identifier!=null) {
             getManifestationIdentifierByID(this.identifier);
             Assert.assertEquals(this.identifierType.get("code"), manifestationIDentifiersDO.get(0).getF_type());
+            Log.info("verified...identifier type");
+    if(!(this.effective_start_date==null && manifestationIDentifiersDO.get(0).getEffective_end_date()==null))
+        Assert.assertEquals(this.effective_start_date,manifestationIDentifiersDO.get(0).getEffective_start_date());
+            Log.info("verified...effective start date");
         }
     }
 

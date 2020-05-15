@@ -4,6 +4,7 @@ import java.util.Objects;
 
 /**
  * Created by Bistra Drazheva on 13/03/2019
+ * updated by Nishant @ 8 May 2020
  */
 public class PersonProductRoleDataObject {
     private String PROD_PER_ROLE_SOURCE_REF;

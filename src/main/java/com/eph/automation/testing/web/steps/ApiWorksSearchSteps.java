@@ -1,5 +1,5 @@
 package com.eph.automation.testing.web.steps;
-/**
+/*
  * Created by GVLAYKOV
  * updated by Nishant @ 20 April 2020 for data model changes
  */
@@ -48,7 +48,7 @@ public class ApiWorksSearchSteps {
     private WorkApiObject workApi_response;
     private static List<WorkDataObject> workIdentifiers;
     private List<WorkDataObject> workDataObjectsFromEPHGD;
-    public ApiProductsSearchSteps apiProductsSearchSteps = new ApiProductsSearchSteps();
+    private ApiProductsSearchSteps apiProductsSearchSteps = new ApiProductsSearchSteps();
     @Given("^We get (.*) random search ids for works")
     public void getRandomWorkIds(String numberOfRecords) {
         sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_IDS_FOR_SEARCH, numberOfRecords);
@@ -56,13 +56,11 @@ public class ApiWorksSearchSteps {
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
         //added by Nishant @ 27 Dec for debugging failures
-      //   ids.clear(); ids.add("EPR-W-10B7C6");
-       //  Log.info("hard coded work ids are : " + ids);
+         ids.clear(); ids.add("EPR-W-1135VY");  Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
-    public void getRandomWorkIdWithProducts()
-    {
+    private void getRandomWorkIdWithProducts(){
         sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_IDS_WITH_PRODUCT);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
@@ -91,7 +89,7 @@ public class ApiWorksSearchSteps {
     //created by Nishant
     @Then("^the work details are retrieved by accountableProduct and compared$")
     public void compareWorkByAccountableProductWithDB() throws Throwable {
-        WorksMatchedApiObject returnedWorks = null;
+        WorksMatchedApiObject returnedWorks;
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
         for (int i = 0; i < bound; i++) {
             String accountableProduct_SegmentCode = apiProductsSearchSteps.getSegmentCode(dataQualityContext.workDataObjectsFromEPHGD.get(i).getF_accountable_product());
@@ -103,7 +101,7 @@ public class ApiWorksSearchSteps {
         }
     }
 
-    public int getNumberOfWorksByAccountableProduct(String accountableProduct) {
+    private int getNumberOfWorksByAccountableProduct(String accountableProduct) {
         sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_BY_ACCOUNTABLE_PRODUCT, accountableProduct);
         List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         int count = ((Long) getCount.get(0).get("count")).intValue();
@@ -113,7 +111,7 @@ public class ApiWorksSearchSteps {
 
     @Then("^the work details are retrieved by workStatus and compared$")
     public void compareWorksByWorkStatusWithDB() throws Throwable {
-        WorksMatchedApiObject returnedWorks = null;
+        WorksMatchedApiObject returnedWorks;
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
         for (int i = 0; i < bound; i++) {
             String searchKeyword = dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().split(" ")[0].toUpperCase();
@@ -127,7 +125,7 @@ public class ApiWorksSearchSteps {
         }
     }
 
-    public int getNumberOfWorksByWorkStatus(String searchKeyword,String workStatus) {
+    private int getNumberOfWorksByWorkStatus(String searchKeyword,String workStatus) {
         sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_WORKSTATUS,searchKeyword, workStatus);
         List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         int count = ((Long) getCount.get(0).get("count")).intValue();
@@ -137,7 +135,7 @@ public class ApiWorksSearchSteps {
 
     @Then("^the work details are retrieved by workType and compared$")
     public void compareWorksByWorkTypeWithDB() throws Throwable {
-        WorksMatchedApiObject returnedWorks = null;
+        WorksMatchedApiObject returnedWorks;
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
         for (int i = 0; i < bound; i++) {
             String searchKeyword = dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().split(" ")[0].toUpperCase();
@@ -151,7 +149,7 @@ public class ApiWorksSearchSteps {
         }
     }
 
-    public int getNumberOfWorksByWorkType(String searchKeyword,String workType) {
+    private int getNumberOfWorksByWorkType(String searchKeyword,String workType) {
         sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_WORKTYPE,searchKeyword, workType);
         List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         int count = ((Long) getCount.get(0).get("count")).intValue();
@@ -161,7 +159,7 @@ public class ApiWorksSearchSteps {
 
     @Then("^the work details are retrieved by manifestationType and compared$")
     public void compareWorksByManifestationTypeWithDB() throws Throwable {
-        WorksMatchedApiObject returnedWorks = null;
+        WorksMatchedApiObject returnedWorks;
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
         for (int i = 0; i < bound; i++) {
             getManifestationsByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
@@ -183,7 +181,7 @@ public class ApiWorksSearchSteps {
         }
     }
 
-    public int getNumberOfWorksByManifestationType(String searchKeyword, String manifestationType) {
+    private int getNumberOfWorksByManifestationType(String searchKeyword, String manifestationType) {
         sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_MANIFESTATIONTYPE,searchKeyword, manifestationType);
         List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         int count = ((Long) getCount.get(0).get("count")).intValue();
@@ -193,7 +191,7 @@ public class ApiWorksSearchSteps {
 
     @Then("^the work details are retrieved by search with PMC code and compared$")
     public void compareWorkBySearchWithPMCCodeWithDB() throws Throwable {
-        WorksMatchedApiObject returnedWorks = null;
+        WorksMatchedApiObject returnedWorks;
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
         String searchKeyword = dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().split(" ")[0];
 
@@ -207,7 +205,7 @@ public class ApiWorksSearchSteps {
         }
     }
 
-    public int getNumberOfWorksBySearchWithPMCCode(String searchKeyword,String PMCCode) {
+    private int getNumberOfWorksBySearchWithPMCCode(String searchKeyword,String PMCCode) {
         sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_PMCCODE,searchKeyword, PMCCode);
         List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         int count = ((Long) getCount.get(0).get("count")).intValue();
@@ -217,7 +215,7 @@ public class ApiWorksSearchSteps {
 
     @Then("^the work details are retrieved by search with PMG code and compared$")
     public void compareWorkBySearchWithPMGCodeWithDB() throws Throwable {
-        WorksMatchedApiObject returnedWorks = null;
+        WorksMatchedApiObject returnedWorks;
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
         String searchKeyword = dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().split(" ")[0].toUpperCase();
         for (int i = 0; i < bound; i++) {
@@ -231,7 +229,7 @@ public class ApiWorksSearchSteps {
         }
     }
 
-    public int getNumberOfWorksBySearchWithPMGCode(String searchKeyword,String PMCCode) {
+    private int getNumberOfWorksBySearchWithPMGCode(String searchKeyword,String PMCCode) {
         sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_PMGCODE,searchKeyword, PMCCode);
         List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         int count = ((Long) getCount.get(0).get("count")).intValue();
@@ -245,9 +243,7 @@ public class ApiWorksSearchSteps {
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
         for (int i = 0; i < bound; i++) {
             workApi_response = searchForWorkByIDResult(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-          //  getManifestationsByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-          //  getEPHGDManifestationIdentifiersByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-              workApi_response.compareWithDB();
+            workApi_response.compareWithDB();
         }
     }
 
@@ -271,11 +267,7 @@ public class ApiWorksSearchSteps {
                //implemented by Nishant @ 22 Apr 2020
                case "WORK_PRODUCT_SUMMARY_NAME":
                    //not all works has products hence need separate query
-                   sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_IDS_WITH_PRODUCT);
-                   List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                   ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
-                   //ids.clear();ids.add("EPR-W-108S1J");//hard coded value for debugging failures
-                   Log.info("Selected random work ids with product is : " + ids);
+                   getRandomWorkIdWithProducts();
                    getWorksDataFromEPHGD();
                    getProductDetailByWorkId(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
                    returnedWorks=searchForWorkByTitleResult(dataQualityContext.productDataObjectsFromEPHGD.get(i).getPRODUCT_NAME());
@@ -428,7 +420,7 @@ public class ApiWorksSearchSteps {
 
     @When("^the work details are retrieved by PMC Code and compared$")
     public void compareWorkSearchByPMCResultsWithDB() throws AzureOauthTokenFetchingException {
-        WorksMatchedApiObject returnedWorks = null;
+        WorksMatchedApiObject returnedWorks;
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
         for (int i = 0; i < bound; i++) {
             Log.info("pmc to be tested..."+dataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
@@ -441,7 +433,7 @@ public class ApiWorksSearchSteps {
 
     @When("^the work details are retrieved by PMG Code and compared$")
     public void compareWorkSearchByPMGResultsWithDB() throws AzureOauthTokenFetchingException {
-        WorksMatchedApiObject returnedWorks = null;
+        WorksMatchedApiObject returnedWorks;
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
         for (int i = 0; i < bound; i++) {
             String pmgCode = getPMGcodeByPMC(dataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
@@ -462,11 +454,10 @@ public class ApiWorksSearchSteps {
             returnedWorks.verifyWorksAreReturned();
             Log.info("Total API count matched..."+returnedWorks.getTotalMatchCount());
             returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByPersonIDs(ids.get(i)));
-
         }
     }
 
-    public int getNumberOfWorksByPMC(String pmcCode) {
+    private int getNumberOfWorksByPMC(String pmcCode) {
         sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_AMOUNT_BYPMC, pmcCode);
         List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         int count = ((Long) getCount.get(0).get("count")).intValue();
@@ -474,7 +465,7 @@ public class ApiWorksSearchSteps {
         return count;
     }
 
-    public int getNumberOfWorksByPersonIDs(String personID) {
+    private int getNumberOfWorksByPersonIDs(String personID) {
         sql = String.format(APIDataSQL.SELECT_COUNT_PERSONID_FOR_WORKS, personID);
         List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         int count = ((Long) getCount.get(0).get("count")).intValue();
@@ -482,7 +473,7 @@ public class ApiWorksSearchSteps {
         return count;
     }
 
-    public String getPMGcodeByPMC(String pmcCode) {
+    private String getPMGcodeByPMC(String pmcCode) {
         sql = String.format(APIDataSQL.EPH_GD_PMG_CODE_EXTRACT_BYPMC, pmcCode);
        // Log.info(sql);
         List<Map<String, Object>> getPMG = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -491,7 +482,7 @@ public class ApiWorksSearchSteps {
         return pmgCode;
     }
 
-    public int getNumberOfWorksByPMG(String pmgCode) {
+    private int getNumberOfWorksByPMG(String pmgCode) {
         sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_AMOUNT_BYPMG, pmgCode);
         List<Map<String, Object>> subjectAreaNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         int count = ((Long) subjectAreaNumber.get(0).get("count")).intValue();
@@ -500,7 +491,7 @@ public class ApiWorksSearchSteps {
     }
 
 
-    public List<String> getManifestationIdsForWorkID(String workID) {
+    private List<String> getManifestationIdsForWorkID(String workID) {
       //  Log.info("Get manifestationApiObject ids ..");
 
         sql = String.format(APIDataSQL.SELECT_MANIFESTATION_IDS_BY_WORKID, workID);
@@ -513,7 +504,7 @@ public class ApiWorksSearchSteps {
         return ids;
     }
 
-    public void getManifestationsByWorkID(String workID) {
+    private void getManifestationsByWorkID(String workID) {
         Log.info("get manifestations for the work in EPH GD ..");
         sql = String.format(APIDataSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_GD_BY_WORKID, workID);
         manifestationDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
@@ -521,7 +512,7 @@ public class ApiWorksSearchSteps {
     }
 
     //created by Nishant @ 22 Apr 2020
-    public void getProductDetailByManifestationId(String manifestationId){
+    private void getProductDetailByManifestationId(String manifestationId){
         Log.info("get product by manifestation id of the work...");
         sql=String.format(APIDataSQL.SelectProductByManifestationId,manifestationId);
         productDataObjectsFromEPHGD=DBManager.getDBResultAsBeanList(sql, ProductDataObject.class,Constants.EPH_URL);
@@ -536,28 +527,28 @@ public class ApiWorksSearchSteps {
     }
 
     //created by Nishant @ 24 Apr 2020
-    public void getWorkPersonRoleByWorkId(String workId)
+    private void getWorkPersonRoleByWorkId(String workId)
     {
        sql = String.format(APIDataSQL.selectWorkPersonByworkId,workId);
         personWorkRoleDataObjectsFromEPHGD=DBManager.getDBResultAsBeanList(sql,PersonWorkRoleDataObject.class,Constants.EPH_URL);
         Assert.assertFalse("Verify person role by work id successfully extracted from EPH DB", personWorkRoleDataObjectsFromEPHGD.isEmpty());
     }
 
-    public void getPersonDataByPersonId(String personId)
+    private void getPersonDataByPersonId(String personId)
     {
         sql =String.format(APIDataSQL.SelectPersonDataByPersonId,personId);
         personDataObjectsFromEPHGD=DBManager.getDBResultAsBeanList(sql,PersonDataObject.class,Constants.EPH_URL);
         Assert.assertFalse("verify person Data by person id extracted from EPH DB",personDataObjectsFromEPHGD.isEmpty());
     }
 
-    public List getEPHGDManifestationIdentifiersByWorkID(String workID) {
+    private List getEPHGDManifestationIdentifiersByWorkID(String workID) {
         sql = String.format(APIDataSQL.SELECT_GD_MANIFESTATION_IDENTIFIER_BY_MANIFESTATION_ID,
                 Joiner.on("','").join(getManifestationIdsForWorkID(workID)));
         //   Log.info(sql);
         return DBManager.getDBResultMap(sql, Constants.EPH_URL);
     }
 
-    public void getWorkIdentifiersByWorkID(String workID){
+    private void getWorkIdentifiersByWorkID(String workID){
         sql = APIDataSQL.getWorkIdentifiersDataFromGD.replace("PARAM1", workID);
         workIdentifiers = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
         //added by Nishant @ 28 Dec 2019 to handle works without identifiers
