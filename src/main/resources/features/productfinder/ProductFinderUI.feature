@@ -1,5 +1,17 @@
 Feature: Product Finder Selenium tests
 
+
+  @searchAPI
+  Scenario: search work by ID
+    Given get a random work id from DB
+    And We get the work search data from the EPH GD
+    Then the work details are retrieved and compared
+
+
+
+
+
+
   @PF
   Scenario Outline: Search the Work by Id
     Given We get the id for work search <id>
@@ -35,6 +47,8 @@ Feature: Product Finder Selenium tests
     Examples:
       | id                        | keyword     |
       | EPR-W-10DDN2              | Spectroscopy |
+
+
 
   @PF
     Scenario Outline: When no product is found "There are no results that match your search" is displayed

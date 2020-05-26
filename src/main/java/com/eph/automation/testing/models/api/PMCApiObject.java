@@ -16,30 +16,14 @@ public class PMCApiObject {
     private String sql;
     private static List<String> ids;
 
-    public PMCApiObject() {
-    }
+    public PMCApiObject() {    }
 
-    public String getCode() {
-        return code;
-    }
+    public String getCode() {return code;}
+    public void setCode(String code) {this.code = code;}
 
-    public void setCode(String code) {
-        this.code = code;
-    }
+    public String getName() {return name;}
+    public void setName(String name) {this.name = name;}
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public HashMap<String, Object> getPmg() {
-        return pmg;
-    }
-
-    public void setPmg(HashMap<String, Object> pmg) {
-        this.pmg = pmg;
-    }
+    public HashMap<String, Object> getPmg() {return pmg;}
+    public void setPmg(HashMap<String, Object> pmg) {this.pmg = pmg;}
 }

@@ -27,43 +27,43 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-/**
- * Created by GVLAYKOV
- */
+
 public class ProductFinderUISteps {
+    /**
+     * Created by GVLAYKOV
+     * update by Nishant @ 15 May 2020
+     */
 
     @StaticInjection
     public DataQualityContext dataQualityContext;
+    private ProductFinderTasks productFinderTasks;
+    private TasksNew tasks;
 
-    public static List<ManifestationIdentifierObject> manifestationIdentifiers;
     private String sql;
+    private String workIds;
+    private static String productId;
+    private String searchingID;
     private static List<String> ids;
     private static List<String>workTypeCode;
+    private static List<String> productIdList;
+    private static List<String>productTitleList;
+    private static List<String> workIdList;
+    private static List<String> booksworkIdList = new ArrayList<String>();
+    private static List<Map<?, ?>> workTypesCodeAvailable;
+    private static List<Map<?, ?>> availableProduct;
+
+    private static String[] Book_Types = {"Books Series","Major Ref Work","Other Book","Reference Book","Serial","Text Book"};
+    private static String[] Journal_Types = {"Abstracts Journal","B2B Journal","Journal","Newsletter"};
+    private static String[] Other_Types = {"Drug Monograph","Medical Procedure"};
+
+    private static List<ManifestationIdentifierObject> manifestationIdentifiers;
     private static List<String>workStatusCode;
     private static List<String> manifestation_Ids;
     private static List<String> manifestationIdentifiers_Ids;
     private static List<String> allWorkTypesCodeArrayToList;
+    private static List<String>workStatusCodesofLaunchedToList,workStatusCodesofPlannedToList;
     private String finalworkTypeCode;
     private String finalworkStatusCode;
-    private static List<String>workStatusCodesofLaunchedToList,workStatusCodesofPlannedToList;
-
-    private static List<String> productIdList;
-    private static List<String>productTitleList;
-
-
-
-    private ProductFinderTasks productFinderTasks;
-    private TasksNew tasks;
-    private  static  List <String> workIdList;
-    private static String searchingID;
-    private String workIds;
-    private  static List<String> booksworkIdList = new ArrayList<String>();
-    private static String[] Book_Types = {"Books Series","Major Ref Work","Other Book","Reference Book","Serial","Text Book"};
-    private static String[] Journal_Types = {"Abstracts Journal","B2B Journal","Journal","Newsletter"};
-    private static String[] Other_Types = {"Drug Monograph","Medical Procedure"};
-    private static List<Map<?, ?>> workTypesCodeAvailable;
-    private static List<Map<?, ?>> availableProduct;
-    private static String productId;
 
     @Inject
     public ProductFinderUISteps(ProductFinderTasks productFinderTasks, TasksNew tasks) {
@@ -71,25 +71,39 @@ public class ProductFinderUISteps {
         this.tasks = tasks;
     }
 
+    @Given("^get a random work id from DB")
+    public void getRandomWorkIds(String numberOfRecords) {
+        //created by Nishant @ 15 May 2020
+        sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_IDS_FOR_SEARCH, numberOfRecords);
+        List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("Selected random work ids  : " + ids);
+//        ids.clear(); ids.add("EPR-W-1135VY");  Log.info("hard coded work ids are : " + ids);
+        Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
+    }
+
 
     @Given("^We get the id for work search (.*)$")
     public void getWorkDataFromEPHGD(String workID) {
         sql = String.format(ProductFinderSQL.SELECT_WORK_BY_ID_FOR_SEARCH, workID);
-     //   Log.info(sql);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
     }
+
+
     @And("^We get the work search data from the EPH GD$")
     public void getWorksDataFromEPHGD() {
-        Log.info("And We get the data from EPH GD for journals ...");
         sql = String.format(ProductFinderSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, Joiner.on("','").join(ids));
-      //  Log.info(sql);
         DataQualityContext.workDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
         DataQualityContext.workDataObjectsFromEPHGD.sort(Comparator.comparing(WorkDataObject::getWORK_ID));
     }
 
-
+    @Given("^user is on search page$")
+    public void userOpensHomePage() throws InterruptedException {
+        productFinderTasks.openHomePage();
+        productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
+    }
 
     @Then("^Searches for works by ID$")
     public void search_for_ID() throws Throwable {
@@ -100,20 +114,6 @@ public class ProductFinderUISteps {
             productFinderTasks.goToNextPage();
             Thread.sleep(2000);
         }
-    }
-
-    @Then("^user is searching for \"([^\"]*)\"$")
-    public void search_for_string(String searchString) throws Throwable {
-        productFinderTasks.searchFor(searchString);
-        Thread.sleep(1000);
-    }
-
-    @Then("^No results message is displayed for \"([^\"]*)\"$")
-    public void no_results_message_is_displayed_for(String searchText) throws Throwable {
-        if(tasks.verifyElementisDisplayed("XPATH",ProductFinderConstants.searchNoResults)){
-            Assert.assertTrue("No Records found for the keyword "+searchText,true);
-        }
-
     }
 
     @Then("^Searches for works by title$")
@@ -138,6 +138,20 @@ public class ProductFinderUISteps {
         }
     }
 
+    @Then("^user is searching for \"([^\"]*)\"$")
+    public void search_for_string(String searchString) throws Throwable {
+        productFinderTasks.searchFor(searchString);
+        Thread.sleep(1000);
+    }
+
+    @Then("^No results message is displayed for \"([^\"]*)\"$")
+    public void no_results_message_is_displayed_for(String searchText) throws Throwable {
+        if(tasks.verifyElementisDisplayed("XPATH",ProductFinderConstants.searchNoResults)){
+            Assert.assertTrue("No Records found for the keyword "+searchText,true);
+        }
+
+    }
+
     @Then("^The searched item is listed and clicked$")
     public void checkSearchResultsAndClickElement() throws Throwable {
         WebElement foundEntry = productFinderTasks.getElementByTitle(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
@@ -145,12 +159,35 @@ public class ProductFinderUISteps {
         foundEntry.isDisplayed();
         foundEntry.click();
         Thread.sleep(2000);
-
     }
 
     @And("^User is forwarded to the searched works page$")
     public void verifyUserIsForwardedToWorksPage () {
         assertTrue(productFinderTasks.isUserOnWorkPage(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID()));
+    }
+
+
+
+    @Given("^Searches for works by given \"([^\"]*)\"$")
+    public void searches_for_works_by_given(String searchKeyword) throws InterruptedException {
+        Log.info("keyword is "+searchKeyword);
+        productFinderTasks.searchFor(searchKeyword);
+    }
+
+    @Then("^Search items are listed and click the result based on \"([^\"]*)\"$")
+    public void search_items_are_listed_and_click_the_result_based_on(String workId) throws InterruptedException {
+        while(!productFinderTasks.isPageContainingString(workId)){
+            productFinderTasks.goToNextPage();
+            Thread.sleep(1000);
+        }
+        String buildWorkIdLocator = "//a[@href='/work/"+workId+"/overview']";
+        tasks.click("XPATH",buildWorkIdLocator);
+        Thread.sleep(2000);
+    }
+
+    @Then("^Verify user is forwarded to the searched works page \"([^\"]*)\"$")
+    public void verify_user_is_forwarded_to_the_searched_works_page(String workId){
+        assertTrue(productFinderTasks.isUserOnWorkPage(workId));
     }
 
     @Given("^Filter the Search Result by \"([^\"]*)\"$")
@@ -166,7 +203,8 @@ public class ProductFinderUISteps {
         tasks.click("XPATH",buildWorkTypeFilterLocator);
         Thread.sleep(1000);
     }
-/*
+
+    /*
     @Then("^Verify the Work \"([^\"]*)\" Type is \"([^\"]*)\"$")
     public void verify_the_Work_Type_is(String workID, String workType) throws Throwable {
         if (tasks.verifyElementTextisDisplayed(workID)) {
@@ -230,27 +268,6 @@ public class ProductFinderUISteps {
     }
 */
 
-    @Given("^Searches for works by given \"([^\"]*)\"$")
-    public void searches_for_works_by_given(String searchKeyword) throws InterruptedException {
-        Log.info("keyword is "+searchKeyword);
-        productFinderTasks.searchFor(searchKeyword);
-    }
-
-    @Then("^Search items are listed and click the result based on \"([^\"]*)\"$")
-    public void search_items_are_listed_and_click_the_result_based_on(String workId) throws InterruptedException {
-        while(!productFinderTasks.isPageContainingString(workId)){
-            productFinderTasks.goToNextPage();
-            Thread.sleep(1000);
-        }
-        String buildWorkIdLocator = "//a[@href='/work/"+workId+"/overview']";
-        tasks.click("XPATH",buildWorkIdLocator);
-        Thread.sleep(2000);
-    }
-
-    @Then("^Verify user is forwarded to the searched works page \"([^\"]*)\"$")
-    public void verify_user_is_forwarded_to_the_searched_works_page(String workId){
-        assertTrue(productFinderTasks.isUserOnWorkPage(workId));
-    }
 /*
   @Given("^Test$")
     public void test() throws InterruptedException {
@@ -347,12 +364,7 @@ public class ProductFinderUISteps {
         }
     }
 
-    @Given("^user is on search page$")
-    public void userOpensHomePage() throws InterruptedException {
-        productFinderTasks.openHomePage();
-        productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
 
-    }
 
     @Then("^Search for the Work by Work Ids Filter By \"([^\"]*)\"$")
     public void search_for_the_Work_by_Work_Ids_Filter_By(String chooseWorkType) throws Throwable {
