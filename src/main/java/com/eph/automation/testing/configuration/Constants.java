@@ -24,8 +24,8 @@ public class Constants {
     //public static final String PRODUCT_SEARCH_END_POINT_SIT = "https://enterprise-sit.api.elsevier.com/v1/product-hub";
 
     //for search API v2
-    public static final String PRODUCT_SEARCH_END_POINT_SIT = "https://product-hub-search-v2-eipsit.apps.ose-nonprod.cp.tio.systems";
-
+    //public static final String PRODUCT_SEARCH_END_POINT_SIT = "https://product-hub-search-v2-eipsit.apps.ose-nonprod.cp.tio.systems";
+    public static final String PRODUCT_SEARCH_END_POINT_SIT = "https://enterprise-sit.api.elsevier.com/v2";
 
     //New SIT_CRM EMS Notification End points
     public static final String EIP_NOTIFICATION_ORG_CRM_END_POINT_SIT = "https://enterprise-sit.api.elsevier.com";
@@ -99,7 +99,9 @@ public class Constants {
     public static String uriPostfix = "/oauth2/token";
     public static String tenantId = "9274ee3f-9425-4109-a27f-9fb15c10675d";
     public static String httptimeoutmilliseconds = "60000";
-    public static String clientId = "3753f9c9-2d69-4633-a3a0-bfa6b014792b";
-    public static String clientSecret = "r986MOW/5mntufAzD*IO=@s842cWnEqH";
+  //  public static String clientId = "3753f9c9-2d69-4633-a3a0-bfa6b014792b";
+  //  public static String clientSecret = "r986MOW/5mntufAzD*IO=@s842cWnEqH";
+    public static String clientId = "a1b11662-709e-4f14-b2bc-7d505785a093";
+    public static String clientSecret = "PGpE6BJyK:IacmsLFpvs/bWE6bKN82].";
     public static String expiryOffsetSeconds = "300";
 }

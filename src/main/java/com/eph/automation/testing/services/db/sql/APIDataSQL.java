@@ -34,6 +34,17 @@ public class APIDataSQL {
             "and LENGTH(work_title)>20\n" +
             "order by random() limit '%s'";
 
+    //CREATED by Nishant @ 22 Apr 2020
+    public static String SELECT_RANDOM_WORK_IDS_WITH_PRODUCT = "select f_wwork as WORK_ID from semarchy_eph_mdm.gd_product where f_wwork is not null order by random() limit 1";
+    public static String SELECT_RANDOM_PRODUCT_IDS_WITH_WORK = "select product_id as PRODUCT_ID from semarchy_eph_mdm.gd_product where f_wwork is not null order by random() limit 1";
+    public static String SELECT_RANDOM_PRODUCT_IDS_WITH_PERSON = "select f_product as PRODUCT_ID from semarchy_eph_mdm.gd_product_person_role where f_product is not null order by random() limit 1";
+    public static String SELECT_ACCOUNTABLE_PRODUCT_BY_ACCOUNTABLEID="" +
+        "select accountable_product_id as ACCOUNTABLE_PRODUCT_ID, \n" +
+            "gl_product_segment_code as GL_PRODUCT_SEGMENT_CODE,\n" +
+            "gl_product_segment_name as GL_PRODUCT_SEGMENT_NAME,\n" +
+            "f_gl_product_segment_parent as F_GL_PRODUCT_SEGMENT_PARENT\n" +
+            "from semarchy_eph_mdm.gd_accountable_product where accountable_product_id='%s';";
+
     public static String SELECT_PRODUCTCOUNT_BY_WORKTYPE =
             "select count(p.product_id) from semarchy_eph_mdm.gd_product p,semarchy_eph_mdm.gd_manifestation m,semarchy_eph_mdm.gd_wwork w"+
             " where p.s_name like \'%%CELL%%\' and "+
@@ -79,6 +90,29 @@ public class APIDataSQL {
                     ")a                                                                                "+
                     "where upper(a.name) like '%%%s%%' and a.f_pmg='%s';                           ";
 
+
+    public static String SELECT_PRODUCTCOUNT_BY_PMG =
+            "select count(a.product_id) from                                                   "+
+                    "(                                                                                 "+
+                    "	select 	p.product_id,p.name,pmc.f_pmg                                          "+
+                    "			from                                                                   "+
+                    "				semarchy_eph_mdm.gd_product p,                                     "+
+                    "				semarchy_eph_mdm.gd_manifestation m,                               "+
+                    "				semarchy_eph_mdm.gd_wwork w,                                       "+
+                    "				semarchy_eph_mdm.gd_x_lov_pmc pmc                                  "+
+                    "			where                                                                  "+
+                    "				p.f_manifestation = m.manifestation_id and                         "+
+                    "				w.work_id = m.f_wwork and                                          "+
+                    "				pmc.code=w.f_pmc                                                   "+
+                    "	union                                                                          "+
+                    "	select  p.product_id,p.name,pmc.f_pmg                                          "+
+                    "			from                                                                   "+
+                    "				semarchy_eph_mdm.gd_product p                                      "+
+                    "				inner join semarchy_eph_mdm.gd_wwork w on p.f_wwork=w.work_id      "+
+                    "				inner join semarchy_eph_mdm.gd_x_lov_pmc pmc on pmc.code=w.f_pmc   "+
+                    ")a                                                                                "+
+                    "where a.f_pmg='%s';                           ";
+
     public static String SELECT_PRODUCTCOUNT_BY_SEGMENT_CODE =
             "select count(p.product_id) from semarchy_eph_mdm.gd_product p "+
                     "where p.f_status<>'NVP' and p.f_manifestation in "+
@@ -91,6 +125,8 @@ public class APIDataSQL {
     //by Nishant @ 29 Nov 2019
     public static String EPH_GD_PRODUCT_EXTRACT_FOR_SEARCH = "SELECT \n" +
             "              product_id AS PRODUCT_ID -- Title\n" +
+            "              ,b_credate as CREATED\n" +
+            "              ,b_upddate as UPDATED\n" +
             "              ,name as PRODUCT_NAME\n" +
             "              ,separately_sale_indicator as SEPARATELY_SALEABLE_IND\n" +
             "              ,trial_allowed_indicator as TRIAL_ALLOWED_IND\n" +
@@ -113,6 +149,7 @@ public class APIDataSQL {
             "               f_llanguage AS LANGUAGE_CODE,\n" +
             "               electro_rights_indicator AS ELECTRONIC_RIGHTS_IND,\n" +
             "               f_pmc AS PMC,\n" +
+            "               f_oa_type AS OPEN_ACCESS_TYPE,\n" +
             "               copyright_year as COPYRIGHT_YEAR,\n" +
             "               f_status AS WORK_STATUS,\n" +
             "               f_type AS WORK_TYPE,\n" +
@@ -196,7 +233,7 @@ public class APIDataSQL {
             "B_CLASSNAME as B_CLASSNAME,\n" +
             "MANIFESTATION_ID as MANIFESTATION_ID,\n" +
             "MANIFESTATION_KEY_TITLE as MANIFESTATION_KEY_TITLE,\n" +
-            "INTER_EDITION_FLAG as INTERNATIONAL_EDITION_IND,\n" +
+            "INTER_EDITION_FLAG as internationalEditionInd,\n" +
             "FIRST_PUB_DATE as FIRST_PUB_DATE,\n" +
             "LAST_PUB_DATE as LAST_PUB_DATE, \n" +
             "F_TYPE as F_TYPE,\n" +
@@ -223,7 +260,7 @@ public class APIDataSQL {
             "from semarchy_eph_mdm.gd_manifestation_identifier \n" +
             "where identifier in (select identifier from semarchy_eph_mdm.gd_manifestation_identifier where f_manifestation in ('%s'));";
 
-    public static final String SELECT_GD_MANIFESTATION_IDENTIFIER_BY_ID = "select identifier as identifier, f_type as f_type " +
+    public static final String SELECT_GD_MANIFESTATION_IDENTIFIER_BY_ID = "select identifier as identifier, f_type as f_type, effective_start_date as effective_start_date " +
             "from semarchy_eph_mdm.gd_manifestation_identifier where identifier in ('%s');";
 
     public static String getWorkIdentifiersDataFromGD="SELECT \n" +
@@ -236,7 +273,8 @@ public class APIDataSQL {
             "  FROM ephsit.semarchy_eph_mdm.gd_work_identifier\n" +
             "  WHERE f_wwork='PARAM1'";
 
-    public static String getWorkIdentifiersDataFromGDByID="SELECT \n" +
+    //updated by Nishant @ 15 Apr 2020
+    public static String getWorkIdentifiersDataFromGDByIdentifier="SELECT \n" +
             " F_EVENT as F_EVENT\n" +
             " ,B_CLASSNAME as B_CLASSNAME\n" +
             " ,WORK_IDENTIFIER_ID AS WORK_IDENTIFIER_ID -- WORK IDENTIFIER\n" +
@@ -244,5 +282,60 @@ public class APIDataSQL {
             " ,F_TYPE AS F_TYPE -- WORK IDENTIFIER\n" +
             " ,F_WWORK AS WORK_ID -- WORK IDENTIFIER\n" +
             "  FROM ephsit.semarchy_eph_mdm.gd_work_identifier\n" +
-            "  WHERE WORK_IDENTIFIER_ID='PARAM1'";
+            "  WHERE identifier='PARAM1'";
+
+    //created by Nishant @ 22 Apr 2020
+    public static String SelectProductByManifestationId="SELECT \n" +
+            "              p.product_id AS PRODUCT_ID -- Title\n" +
+            "              ,p.name as PRODUCT_NAME\n" +
+            "              ,p.separately_sale_indicator as SEPARATELY_SALEABLE_IND\n" +
+            "              ,p.trial_allowed_indicator as TRIAL_ALLOWED_IND\n" +
+            "              ,p.short_name as PRODUCT_SHORT_NAME\n" +
+            "              ,p.launch_date as FIRST_PUB_DATE\n" +
+            "              ,p.f_type AS F_TYPE\n" +
+            "              ,p.f_status AS F_STATUS\n" +
+            "              ,p.f_revenue_model AS F_REVENUE_MODEL\n" +
+            "              ,p.f_wwork AS F_PRODUCT_WORK\n" +
+            "              ,p.f_tax_code AS TAX_CODE\n" +
+            "              ,p.f_manifestation AS F_PRODUCT_MANIFESTATION_TYP\n" +
+            " from semarchy_eph_mdm.gd_product p inner join semarchy_eph_mdm.gd_manifestation m\n" +
+                    "on m.manifestation_id = p.f_manifestation where m.manifestation_id='%s';";
+
+    public static String SelectProductByWorkId="SELECT \n" +
+            "              product_id AS PRODUCT_ID -- Title\n" +
+            "              ,name as PRODUCT_NAME\n" +
+            "              ,separately_sale_indicator as SEPARATELY_SALEABLE_IND\n" +
+            "              ,trial_allowed_indicator as TRIAL_ALLOWED_IND\n" +
+            "              ,short_name as PRODUCT_SHORT_NAME\n" +
+            "              ,launch_date as FIRST_PUB_DATE\n" +
+            "              ,f_type AS F_TYPE\n" +
+            "              ,f_status AS F_STATUS\n" +
+            "              ,f_revenue_model AS F_REVENUE_MODEL\n" +
+            "              ,f_wwork AS F_PRODUCT_WORK\n" +
+            "              ,f_tax_code AS TAX_CODE\n" +
+            "              ,f_manifestation AS F_PRODUCT_MANIFESTATION_TYP\n" +
+            " from semarchy_eph_mdm.gd_product where f_wwork ='%s';";
+
+    //created by Nishant @ 24 Apr 2020
+    public static String selectWorkPersonByworkId ="Select " +
+            "work_person_role_id as WORK_PERSON_ROLE_ID,\n" +
+            "b_classname as B_CLASSNAME,\n" +
+            "effective_start_date as EFFECTIVE_START_DATE,\n" +
+            "effective_end_date as EFFECTIVE_END_DATE,\n" +
+            "f_role as F_ROLE,\n" +
+            "f_wwork as F_WWORK,\n" +
+            "f_person as F_PERSON,\n" +
+            "f_event as F_EVENT" +
+            " from semarchy_eph_mdm.gd_work_person_role where f_wwork='%s'";
+
+
+    public static String SelectPersonDataByPersonId = "select " +
+            "person_id as PERSON_ID,\n" +
+            "b_classname as B_CLASSNAME,\n" +
+            "b_upddate as UPDATED,\n" +
+            "given_name\tas PERSON_FIRST_NAME,\n" +
+            "family_name\tas PERSON_FAMILY_NAME,\n" +
+            "peoplehub_id as PEOPLEHUB_ID\n" +
+            " from semarchy_eph_mdm.gd_person where person_id='%s'";
+
 }

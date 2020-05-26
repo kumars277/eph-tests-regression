@@ -113,10 +113,11 @@ public class PersonDataSQL {
             "and person_id in ('%s')";
 
     public static String GET_DATA_PERSONS_EPHGD = "select\n" +
-            "b_classname as B_CLASSNAME,\n" +
+            "peoplehub_id as PEOPLEHUB_ID,\n" +
             "person_id as PERSON_ID,\n" +
             "given_name as PERSON_FIRST_NAME,\n" +
-            "family_name as PERSON_FAMILY_NAME\n" +
+            "family_name as PERSON_FAMILY_NAME,\n" +
+            "email as PERSON_EMAIL_ID\n"+
             "from semarchy_eph_mdm.gd_person \n" +
             "where person_id in ('%s')";
 
