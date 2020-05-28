@@ -14,6 +14,7 @@ import java.util.List;
 public class JRBIAccessDLContext {
     public static List<JRBIDLWorkAccessObject> recordsFromDataFullLoad;
     public static List<JRBIDLWorkAccessObject> recordsFromFromCurrentWork;
+    public static List<JRBIDLWorkAccessObject> recordsFromFromCurrentWorkHistory;
 
     public static List<JRBIDLManifestationAccessObject> recordsFromDataFullLoadManif;
     public static List<JRBIDLManifestationAccessObject> recordsFromFromCurrentManif;
