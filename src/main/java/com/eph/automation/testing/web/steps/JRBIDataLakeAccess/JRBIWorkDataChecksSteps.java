@@ -4,7 +4,7 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.JRBIAccessDLContext;
-import com.eph.automation.testing.models.dao.JRBIDataLakeAccess.JRBIDLAccessObject;
+import com.eph.automation.testing.models.dao.JRBIDataLakeAccess.JRBIDLWorkAccessObject;
 import com.eph.automation.testing.services.db.JRBIDataLakeAccesSQL.JRBIWorkDataChecksSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
@@ -13,7 +13,6 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 
-import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +50,7 @@ public class JRBIWorkDataChecksSteps {
         Log.info("We get the FULL Load records...");
         sql = String.format(JRBIWorkDataChecksSQL.GET_WORK_RECORDS_FULL_LOAD, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromDataFullLoad = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromDataFullLoad = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
     }
 
     @Then("^We get the records from transform current work (.*)$")
@@ -59,7 +58,7 @@ public class JRBIWorkDataChecksSteps {
         Log.info("We get the records from Current Work..");
         sql = String.format(JRBIWorkDataChecksSQL.GET_CURRENT_WORK_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromCurrentWork = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromCurrentWork = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
     }
 
     @And("^Compare the records of data full load and transform current work (.*)$")
@@ -70,8 +69,8 @@ public class JRBIWorkDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between Full Load and Current Work...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromDataFullLoad.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromDataFullLoad.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromCurrentWork.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromDataFullLoad.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromCurrentWork.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR));
 
                 Log.info("Full Load -> EPR => " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() +
                         "Current_Work -> EPR => " + dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getEPR());

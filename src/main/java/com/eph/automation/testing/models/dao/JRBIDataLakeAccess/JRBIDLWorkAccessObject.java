@@ -1,6 +1,6 @@
 package com.eph.automation.testing.models.dao.JRBIDataLakeAccess;
 
-public class JRBIDLAccessObject {
+public class JRBIDLWorkAccessObject {
 
     private String EPR;
     private String RECORD_TYPE;
