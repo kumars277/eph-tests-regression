@@ -114,17 +114,17 @@ public class JRBICountChecksSteps {
           DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
           String currentDate= dateFormat.format(cal.getTime());
         switch (tableName){
-            case "jrbi_temp_transform_current_work_history_part":
+            case "jrbi_transform_current_work_history_part":
                 Log.info("Getting Current Work History Table Count...");
                 JRBICurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_CURRENT_WORK_HISTORY_COUNT;
                 break;
 
-            case "jrbi_temp_transform_current_manifestation_history_part":
+            case "jrbi_transform_current_manifestation_history_part":
                 Log.info("Getting Current Manifestation History Table Count...");
                 JRBICurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_CURRENT_MANIF_HISTORY_COUNT;
                 break;
 
-            case "jrbi_temp_transform_current_person_history_part":
+            case "jrbi_transform_current_person_history_part":
                 Log.info("Getting Current Person History Table Count...");
                 JRBICurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_CURRENT_PERSON_HISTORY_COUNT;
                 break;
