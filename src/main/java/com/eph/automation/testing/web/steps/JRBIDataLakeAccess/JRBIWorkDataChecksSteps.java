@@ -70,8 +70,8 @@ public class JRBIWorkDataChecksSteps {
     @Then("^Get the records from transform current work history (.*)$")
     public void getRecordsFromCurrentWorkHistory(String tableName) {
         Log.info("We get the records from Current history Work..");
-        //sql = String.format(JRBIWorkDataChecksSQL.GET_CURRENT_WORK_HISTORY_RECORDS, Joiner.on("','").join(Ids));
-        Log.info(JRBIWorkDataChecksSQL.GET_CURRENT_WORK_HISTORY_RECORDS);
+        sql = String.format(JRBIWorkDataChecksSQL.GET_CURRENT_WORK_HISTORY_RECORDS, Joiner.on("','").join(Ids));
+        Log.info(sql);
         dataQualityJRBIContext.recordsFromFromCurrentWorkHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
     }
 
@@ -83,14 +83,14 @@ public class JRBIWorkDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between Full Load and Current Work...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromFromCurrentWork.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromFromCurrentWorkHistory.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromCurrentWork.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromFromCurrentWork.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromCurrentWorkHistory.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR));
 
                 Log.info("Current_Work -> EPR => " + dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getEPR() +
                         "Current_Work_History -> EPR => " + dataQualityJRBIContext.recordsFromFromCurrentWorkHistory.get(i).getEPR());
                 if (dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getEPR() != null ||
                         (dataQualityJRBIContext.recordsFromFromCurrentWorkHistory.get(i).getEPR() != null)) {
-                    Assert.assertEquals("The EPR is =" + dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getEPR() + " is missing/not found in Current_Work table",
+                    Assert.assertEquals("The EPR is => " + dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getEPR() + " is missing/not found in Current_Work_history table",
                             dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getEPR(),
                             dataQualityJRBIContext.recordsFromFromCurrentWorkHistory.get(i).getEPR());
                 }

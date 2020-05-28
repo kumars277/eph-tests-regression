@@ -20,7 +20,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And Compare the records of current work and current work history <targetTable>
     Examples:
       | sourceTable               | targetTable                               | countOfRandomIds|
-      |jrbi_transform_current_work| jrbi_transform_current_work_history_part  |1                 |
+      |jrbi_transform_current_work| jrbi_transform_current_work_history_part  |10                 |
 
 
 

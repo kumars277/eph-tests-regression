@@ -130,9 +130,8 @@ public class JRBIWorkDataChecksSQL {
                     ",rf_fvi as RF_FVI" +
                     ",rf_lvi as RF_LVI" +
                     ",business_unit_desc as BUSINESS_UNIT_DESC" +
-                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part where EPR in ('%s') AND transform_ts like \'2020-05-28%\'";
-
-
+                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part where EPR in ('%s') AND " +
+                    "transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\'";
 
     public static String GET_CURRENT_WORK_EPR_ID=
             "select epr as EPR from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work order by rand() limit %s\n";
