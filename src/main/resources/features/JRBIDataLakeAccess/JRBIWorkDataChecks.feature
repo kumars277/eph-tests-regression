@@ -22,6 +22,16 @@ Feature:Validate data for JRBI Work tables in Data Lake
       | sourceTable               | targetTable                               | countOfRandomIds|
       |jrbi_transform_current_work| jrbi_transform_current_work_history_part  |10                 |
 
+  @JRBI
+  Scenario Outline: Verify Data for JRBI transform_Previous_work_history is transferred from Previous Work
+    Given We get the <countOfRandomIds> random EPR ids <sourceTable>
+    When We get the records from transform previous work <sourceTable>
+    Then Get the records from transform previous work history <targetTable>
+    And Compare the records of previous work and previous work history <targetTable>
+    Examples:
+      | sourceTable               | targetTable                               | countOfRandomIds|
+      |jrbi_transform_previous_work| jrbi_transform_current_work_history_part  |10                 |
+
 
 
       

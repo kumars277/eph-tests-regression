@@ -45,6 +45,12 @@ public class JRBIWorkDataChecksSteps {
                 List<Map<?, ?>> randomCurrentWorkEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 Ids = randomCurrentWorkEPRIds.stream().map(m -> (String) m.get("EPR")).collect(Collectors.toList());
                 break;
+            case "jrbi_transform_previous_work":
+                sql = String.format(JRBIWorkDataChecksSQL.GET_PREVIOUS_WORK_EPR_ID, numberOfRecords);
+                List<Map<?, ?>> randomPreviousWorkEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomPreviousWorkEPRIds.stream().map(m -> (String) m.get("EPR")).collect(Collectors.toList());
+                break;
+
 
         }
         Log.info(sql);
@@ -74,6 +80,222 @@ public class JRBIWorkDataChecksSteps {
         Log.info(sql);
         dataQualityJRBIContext.recordsFromFromCurrentWorkHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
     }
+
+    @When("^We get the records from transform previous work (.*)$")
+    public void getRecordsFromPreviousWork(String tableName) {
+        Log.info("We get the records from Previous Work..");
+        sql = String.format(JRBIWorkDataChecksSQL.GET_PREVIOUS_WORK_RECORDS, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityJRBIContext.recordsFromFromPreviousWork = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
+    }
+
+    @Then("^Get the records from transform previous work history (.*)$")
+    public void getRecordsFromPreviousWorkHistory(String tableName) {
+        Log.info("We get the records from Current history Work..");
+        sql = String.format(JRBIWorkDataChecksSQL.GET_PREVIOUS_WORK_HISTORY_RECORDS, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityJRBIContext.recordsFromFromPreviousWorkHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare the records of previous work and previous work history (.*)$")
+    public void comparePrevioustWorkandPreviousHistoryWork(String tableName) {
+        if (dataQualityJRBIContext.recordsFromFromPreviousWork.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the EPR Ids to compare the records between Full Load and Current Work...");
+            for (int i = 0; i < dataQualityJRBIContext.recordsFromFromPreviousWork.size(); i++) {
+
+                dataQualityJRBIContext.recordsFromFromPreviousWork.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR));
+
+                Log.info("Previous_Work -> EPR => " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() +
+                        "Previous_Work_History -> EPR => " + dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getEPR());
+                if (dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() != null ||
+                        (dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getEPR() != null)) {
+                    Assert.assertEquals("The EPR is => " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() + " is missing/not found in Current_Work_history table",
+                            dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR(),
+                            dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getEPR());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() +
+                        " RECORD_TYPE => Previous_Work =" + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getRECORD_TYPE() +
+                        " Previous_Work_History=" + dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getRECORD_TYPE());
+
+                if (dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getRECORD_TYPE() != null ||
+                        (dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getRECORD_TYPE() != null)) {
+                    Assert.assertEquals("The RECORD_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getRECORD_TYPE(),
+                            dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getRECORD_TYPE());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() +
+                        " PRIMARY_SITE_SYSTEM => Previous_Work =" + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getPRIMARY_SITE_SYSTEM() +
+                        " Previous_Work_History=" + dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getPRIMARY_SITE_SYSTEM());
+
+                if (dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getPRIMARY_SITE_SYSTEM() != null ||
+                        (dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getPRIMARY_SITE_SYSTEM() != null)) {
+                    Assert.assertEquals("The PRIMARY_SITE_SYSTEM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getPRIMARY_SITE_SYSTEM(),
+                            dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getPRIMARY_SITE_SYSTEM());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() +
+                        " PRIMARY_SITE_ACRONYM => Previous_Work =" + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getPRIMARY_SITE_ACRONYM() +
+                        " Previous_Work_History=" + dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getPRIMARY_SITE_ACRONYM());
+
+                if (dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getPRIMARY_SITE_ACRONYM() != null ||
+                        (dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getPRIMARY_SITE_ACRONYM() != null)) {
+                    Assert.assertEquals("The PRIMARY_SITE_ACRONYM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getPRIMARY_SITE_ACRONYM(),
+                            dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getPRIMARY_SITE_ACRONYM());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() +
+                        " PRIMARY_SITE_SUPPORT_LEVEL => Previous_Work =" + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL() +
+                        " Previous_Work_History=" + dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getPRIMARY_SITE_SUPPORT_LEVEL());
+
+                if (dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL() != null ||
+                        (dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getPRIMARY_SITE_SUPPORT_LEVEL() != null)) {
+                    Assert.assertEquals("The PRIMARY_SITE_SUPPORT_LEVEL is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL(),
+                            dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getPRIMARY_SITE_SUPPORT_LEVEL());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() +
+                        " FULFILMENT_SYSTEM => Previous_Work =" + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getFULFILMENT_SYSTEM() +
+                        " Previous_Work_History=" + dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getFULFILMENT_SYSTEM());
+
+                if (dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getFULFILMENT_SYSTEM() != null ||
+                        (dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getFULFILMENT_SYSTEM() != null)) {
+                    Assert.assertEquals("The FULFILMENT_SYSTEM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getFULFILMENT_SYSTEM(),
+                            dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getFULFILMENT_SYSTEM());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() +
+                        " FULFILMENT_JOURNAL_ACRONYM => Previous_Work =" + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getFULFILMENT_JOURNAL_ACRONYM() +
+                        " Previous_Work_History=" + dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getFULFILMENT_JOURNAL_ACRONYM());
+
+                if (dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getFULFILMENT_JOURNAL_ACRONYM() != null ||
+                        (dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getFULFILMENT_JOURNAL_ACRONYM() != null)) {
+                    Assert.assertEquals("The FULFILMENT_SYSTEM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getFULFILMENT_JOURNAL_ACRONYM(),
+                            dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getFULFILMENT_JOURNAL_ACRONYM());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() +
+                        " ISSUE_PROD_TYPE_CODE => Previous_Work =" + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getISSUE_PROD_TYPE_CODE() +
+                        " Current_Work_history=" + dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getISSUE_PROD_TYPE_CODE());
+
+                if (dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getISSUE_PROD_TYPE_CODE() != null ||
+                        (dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getISSUE_PROD_TYPE_CODE() != null)) {
+                    Assert.assertEquals("The ISSUE_PROD_TYPE_CODE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getISSUE_PROD_TYPE_CODE(),
+                            dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getISSUE_PROD_TYPE_CODE());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() +
+                        " CATALOGUE_VOLUME_QTY => Previous_Work =" + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getCATALOGUE_VOLUME_QTY() +
+                        " Current_Work_history=" + dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getCATALOGUE_VOLUME_QTY());
+
+                if (dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getCATALOGUE_VOLUME_QTY() != null ||
+                        (dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getCATALOGUE_VOLUME_QTY() != null)) {
+                    Assert.assertEquals("The CATALOGUE_VOLUME_QTY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getCATALOGUE_VOLUME_QTY(),
+                            dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getCATALOGUE_VOLUME_QTY());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() +
+                        " CATALOGUE_ISSUES_QTY => Previous_Work =" + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getCATALOGUE_ISSUES_QTY() +
+                        " Current_Work_history=" + dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getCATALOGUE_ISSUES_QTY());
+
+                if (dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getCATALOGUE_ISSUES_QTY() != null ||
+                        (dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getCATALOGUE_ISSUES_QTY() != null)) {
+                    Assert.assertEquals("The CATALOGUE_ISSUES_QTY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getCATALOGUE_ISSUES_QTY(),
+                            dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getCATALOGUE_ISSUES_QTY());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() +
+                        " CATALOGUE_VOLUME_FROM => Previous_Work =" + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getCATALOGUE_VOLUME_FROM() +
+                        " Current_Work_history=" + dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getCATALOGUE_VOLUME_FROM());
+
+                if (dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getCATALOGUE_VOLUME_FROM() != null ||
+                        (dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getCATALOGUE_VOLUME_FROM() != null)) {
+                    Assert.assertEquals("The CATALOGUE_VOLUME_FROM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getCATALOGUE_VOLUME_FROM(),
+                            dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getCATALOGUE_VOLUME_FROM());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() +
+                        " CATALOGUE_VOLUME_TO => Previous_Work =" + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getCATALOGUE_VOLUME_TO() +
+                        " Current_Work_history=" + dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getCATALOGUE_VOLUME_TO());
+
+                if (dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getCATALOGUE_VOLUME_TO() != null ||
+                        (dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getCATALOGUE_VOLUME_TO() != null)) {
+                    Assert.assertEquals("The CATALOGUE_VOLUME_TO is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getCATALOGUE_VOLUME_TO(),
+                            dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getCATALOGUE_VOLUME_TO());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() +
+                        " RF_ISSUES_QTY => Previous_Work =" + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getRF_ISSUES_QTY() +
+                        " Current_Work_history=" + dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getRF_ISSUES_QTY());
+
+                if (dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getRF_ISSUES_QTY() != null ||
+                        (dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getRF_ISSUES_QTY() != null)) {
+                    Assert.assertEquals("The RF_ISSUES_QTY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getRF_ISSUES_QTY(),
+                            dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getRF_ISSUES_QTY());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() +
+                        " RF_TOTAL_PAGES_QTY => Previous_Work =" + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getRF_TOTAL_PAGES_QTY() +
+                        " Current_Work_history=" + dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getRF_TOTAL_PAGES_QTY());
+
+                if (dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getRF_TOTAL_PAGES_QTY() != null ||
+                        (dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getRF_TOTAL_PAGES_QTY() != null)) {
+                    Assert.assertEquals("The RF_TOTAL_PAGES_QTY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getRF_TOTAL_PAGES_QTY(),
+                            dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getRF_TOTAL_PAGES_QTY());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() +
+                        " RF_FVI => Previous_Work =" + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getRF_FVI() +
+                        " Current_Work_history=" + dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getRF_FVI());
+
+                if (dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getRF_FVI() != null ||
+                        (dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getRF_FVI() != null)) {
+                    Assert.assertEquals("The RF_FVI is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getRF_FVI(),
+                            dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getRF_FVI());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() +
+                        " RF_LVI => Previous_Work =" + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getRF_LVI() +
+                        " Current_Work_history=" + dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getRF_LVI());
+
+                if (dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getRF_LVI() != null ||
+                        (dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getRF_LVI() != null)) {
+                    Assert.assertEquals("The RF_LVI is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getRF_LVI(),
+                            dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getRF_LVI());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() +
+                        " BUSINESS_UNIT_DESC => Previous_Work =" + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getBUSINESS_UNIT_DESC() +
+                        " Current_Work_history=" + dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getBUSINESS_UNIT_DESC());
+
+                if (dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getBUSINESS_UNIT_DESC() != null ||
+                        (dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getBUSINESS_UNIT_DESC() != null)) {
+                    Assert.assertEquals("The BUSINESS_UNIT_DESC is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromPreviousWork.get(i).getBUSINESS_UNIT_DESC(),
+                            dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i).getBUSINESS_UNIT_DESC());
+                }
+            }
+        }
+    }
+
 
     @And("^Compare the records of current work and current work history (.*)$")
     public void compareCurrentWorkandCurrentHistoryWork(String tableName) {
