@@ -82,6 +82,30 @@ public class JRBIManifestationDataChecksSQL {
     public static String GET_PREVIOUS_MANIF_EPR_ID =
             "select epr as EPR from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_manifestation order by rand() limit %s\n";
 
+    public static String GET_DELTA_MANIF_EPR_ID =
+            "select epr as EPR from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation order by rand() limit %s\n";
+
+    public static String GET_DELTA_MANIF_RECORDS =
+            "select epr as EPR" +
+                    ",record_type as RECORD_TYPE" +
+                    ",journal_prod_site_code as JOURNAL_PROD_SITE" +
+                    ",journal_issue_trim_size as JOURNAL_ISSUE_TRIM_SIZE" +
+                    ",war_reference as WAR_REFERENCE" +
+                    "type as TYPE" +
+                    "delta_mode as DELTA_MODE" +
+                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation where EPR in ('%s')";
+
+    public static String GET_DELTA_MANIF_HISTORY_RECORDS =
+            "select epr as EPR" +
+                    ",record_type as RECORD_TYPE" +
+                    ",journal_prod_site_code as JOURNAL_PROD_SITE" +
+                    ",journal_issue_trim_size as JOURNAL_ISSUE_TRIM_SIZE" +
+                    ",war_reference as WAR_REFERENCE" +
+                    "type as TYPE" +
+                    "delta_mode as DELTA_MODE" +
+                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_manifestation_history_part where EPR in ('%s') AND " +
+                    "delta_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\'";
+
 
     public static String GET_PREVIOUS_MANIF_RECORDS =
             "select epr as EPR" +

@@ -11,6 +11,8 @@ public class JRBIDLPersonAccessObject {
     private String FAMILY_NAME;
     private String PEOPLEHUB_ID;
     private String EMAIL;
+    private String TYPE;
+    private String DELTA_MODE;
 
     public String getEPR() {
         return EPR;
@@ -74,6 +76,21 @@ public class JRBIDLPersonAccessObject {
     public void setEMAIL(String EMAIL) {
         this.EMAIL = EMAIL;
     }
+
+    public String getTYPE() {
+        return TYPE;
+    }
+    public void setTYPE(String TYPE) {
+        this.TYPE = TYPE;
+    }
+
+    public String getDELTA_MODE() {
+        return DELTA_MODE;
+    }
+    public void setDELTA_MODE(String DELTA_MODE) {
+        this.DELTA_MODE = DELTA_MODE;
+    }
+
 
 }
 

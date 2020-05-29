@@ -7,6 +7,8 @@ public class JRBIDLManifestationAccessObject {
     private String JOURNAL_PROD_SITE;
     private String JOURNAL_ISSUE_TRIM_SIZE;
     private String WAR_REFERENCE;
+    private String DELTA_MODE;
+    private String TYPE;
 
     public String getEPR() {
         return EPR;
@@ -41,6 +43,20 @@ public class JRBIDLManifestationAccessObject {
     }
     public void setWAR_REFERENCE(String WAR_REFERENCE) {
         this.WAR_REFERENCE = WAR_REFERENCE;
+    }
+
+    public String getDELTA_MODE() {
+        return DELTA_MODE;
+    }
+    public void setDELTA_MODE(String DELTA_MODE) {
+        this.DELTA_MODE = DELTA_MODE;
+    }
+
+    public String getTYPE() {
+        return TYPE;
+    }
+    public void setTYPE(String TYPE) {
+        this.TYPE = TYPE;
     }
 
 }

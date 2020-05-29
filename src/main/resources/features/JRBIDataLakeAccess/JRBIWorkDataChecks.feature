@@ -33,5 +33,15 @@ Feature:Validate data for JRBI Work tables in Data Lake
       |jrbi_transform_previous_work| jrbi_transform_current_work_history_part  |10                 |
 
 
+  @JRBI
+  Scenario Outline: Verify Data for JRBI delta work history is transferred from delta current Work
+    Given We get the <countOfRandomIds> random EPR ids <sourceTable>
+    When We get the records from transform delta current work
+    Then Get the records from transform delta work history
+    And Compare the records of delta work and delta work history <targetTable>
+    Examples:
+      | sourceTable               | targetTable                               | countOfRandomIds|
+      |jrbi_delta_current_work| jrbi_transform_delta_work_history_part        |10                 |
+
 
       

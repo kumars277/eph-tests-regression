@@ -34,3 +34,14 @@ Feature:Validate data for JRBI Work tables in Data Lake
       | sourceTable                  | targetTable                                 | countOfRandomIds|
       |jrbi_transform_previous_person| jrbi_transform_current_person_history_part  |10                 |
 
+
+  @JRBI
+  Scenario Outline: Verify Data for JRBI transform_Delta_person_history is transferred from Delta Person
+    Given We get the <countOfRandomIds> random Person EPR ids <sourceTable>
+    When Get the records from transform Delta person <sourceTable>
+    Then We Get the records from transform Delta person History <targetTable>
+    And Compare the records of delta person and delta person history
+    Examples:
+      | sourceTable                  | targetTable                                 | countOfRandomIds|
+      |jrbi_delta_current_person| jrbi_transform_delta_person_history_part  |10                 |
+

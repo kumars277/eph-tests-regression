@@ -74,6 +74,40 @@ public class JRBIPersonDataChecksSQL {
                     ",email as EMAIL" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person where EPR in ('%s')";
 
+    public static String GET_DELTA_PERSON_EPR_ID =
+            "select epr as EPR from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person order by rand() limit %s\n";
+
+    public static String GET_DELTA_PERSON_RECORDS =
+            "select epr as EPR" +
+                    ",record_type as RECORD_TYPE" +
+                    ",role_code as ROLE_CODE" +
+                    ",u_key as U_KEY" +
+                    ",role_description as ROLE_DESCRIPTION" +
+                    ",given_name as GIVEN_NAME" +
+                    ",family_name as FAMILY_NAME" +
+                    ",peoplehub_id as PEOPLEHUB_ID" +
+                    ",email as EMAIL" +
+                    ",type as TYPE" +
+                    ",delta_mode as DELTA_MODE" +
+                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person where EPR in ('%s')";
+
+    public static String GET_DELTA_PERSON_HISTORY_RECORDS =
+            "select epr as EPR" +
+                    ",record_type as RECORD_TYPE" +
+                    ",role_code as ROLE_CODE" +
+                    ",u_key as U_KEY" +
+                    ",role_description as ROLE_DESCRIPTION" +
+                    ",given_name as GIVEN_NAME" +
+                    ",family_name as FAMILY_NAME" +
+                    ",peoplehub_id as PEOPLEHUB_ID" +
+                    ",email as EMAIL" +
+                    ",type as TYPE" +
+                    ",delta_mode as DELTA_MODE" +
+                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_person_history_part where EPR in ('%s') AND " +
+                    "delta_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\'";
+
+
+
     public static String GET_CURRENT_PERSON_EPR_ID =
             "select epr as EPR from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person order by rand() limit %s\n";
 

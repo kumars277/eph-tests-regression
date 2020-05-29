@@ -140,6 +140,56 @@ public class JRBIWorkDataChecksSQL {
     public static String GET_PREVIOUS_WORK_EPR_ID=
             "select epr as EPR from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_work order by rand() limit %s\n";
 
+    public static String GET_DELTA_WORK_EPR_ID=
+            "select epr as EPR from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work order by rand() limit %s\n";
+
+
+    public static String GET_DELTA_WORK_CURRENT_RECORDS =
+            "select epr as EPR" +
+            ",record_type as RECORD_TYPE" +
+            ",primary_site_system as PRIMARY_SITE_SYSTEM" +
+            ",primary_site_acronym as PRIMARY_SITE_ACRONYM" +
+            ",primary_site_support_level as PRIMARY_SITE_SUPPORT_LEVEL" +
+            ",fulfilment_system as FULFILMENT_SYSTEM" +
+            ",fulfilment_journal_acronym as FULFILMENT_JOURNAL_ACRONYM" +
+            ",issue_prod_type_code as ISSUE_PROD_TYPE_CODE" +
+            ",catalogue_volumes_qty as CATALOGUE_VOLUME_QTY" +
+            ",catalogue_issues_qty as CATALOGUE_ISSUES_QTY" +
+            ",catalogue_volume_from as CATALOGUE_VOLUME_FROM" +
+            ",catalogue_volume_to as CATALOGUE_VOLUME_TO" +
+            ",rf_issues_qty as RF_ISSUES_QTY" +
+            ",rf_total_pages_qty as RF_TOTAL_PAGES_QTY" +
+            ",rf_fvi as RF_FVI" +
+            ",rf_lvi as RF_LVI" +
+            ",business_unit_desc as BUSINESS_UNIT_DESC" +
+            ",delta_mode as DELTA_MODE" +
+            ",type as TYPE" +
+            " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work where EPR in ('%s')";
+
+    public static String GET_DELTA_WORK_HISTORY_RECORDS =
+            "select epr as EPR" +
+                    ",record_type as RECORD_TYPE" +
+                    ",primary_site_system as PRIMARY_SITE_SYSTEM" +
+                    ",primary_site_acronym as PRIMARY_SITE_ACRONYM" +
+                    ",primary_site_support_level as PRIMARY_SITE_SUPPORT_LEVEL" +
+                    ",fulfilment_system as FULFILMENT_SYSTEM" +
+                    ",fulfilment_journal_acronym as FULFILMENT_JOURNAL_ACRONYM" +
+                    ",issue_prod_type_code as ISSUE_PROD_TYPE_CODE" +
+                    ",catalogue_volumes_qty as CATALOGUE_VOLUME_QTY" +
+                    ",catalogue_issues_qty as CATALOGUE_ISSUES_QTY" +
+                    ",catalogue_volume_from as CATALOGUE_VOLUME_FROM" +
+                    ",catalogue_volume_to as CATALOGUE_VOLUME_TO" +
+                    ",rf_issues_qty as RF_ISSUES_QTY" +
+                    ",rf_total_pages_qty as RF_TOTAL_PAGES_QTY" +
+                    ",rf_fvi as RF_FVI" +
+                    ",rf_lvi as RF_LVI" +
+                    ",business_unit_desc as BUSINESS_UNIT_DESC" +
+                    ",delta_mode as DELTA_MODE" +
+                    ",type as TYPE" +
+                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_work_history_part where EPR in ('%s') AND \n" +
+                    "delta_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\'";
+
+
     public static String GET_PREVIOUS_WORK_RECORDS =
             "select epr as EPR" +
                     ",record_type as RECORD_TYPE" +

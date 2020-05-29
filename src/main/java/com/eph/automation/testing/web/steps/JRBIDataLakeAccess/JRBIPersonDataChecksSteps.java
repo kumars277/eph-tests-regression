@@ -42,18 +42,40 @@ public class JRBIPersonDataChecksSteps {
                 break;
             case "jrbi_transform_current_person":
                 sql = String.format(JRBIPersonDataChecksSQL.GET_CURRENT_PERSON_EPR_ID, numberOfRecords);
-                List<Map<?, ?>> randomCurrentEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                Ids = randomCurrentEPRIds.stream().map(m -> (String) m.get("EPR")).collect(Collectors.toList());
+                List<Map<?, ?>> randomCurrentPersonEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomCurrentPersonEPRIds.stream().map(m -> (String) m.get("EPR")).collect(Collectors.toList());
                 break;
             case "jrbi_transform_previous_person":
                 sql = String.format(JRBIPersonDataChecksSQL.GET_PREVIOUS_PERSON_EPR_ID, numberOfRecords);
-                List<Map<?, ?>> randomPreviousEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                Ids = randomPreviousEPRIds.stream().map(m -> (String) m.get("EPR")).collect(Collectors.toList());
+                List<Map<?, ?>> randomPreviousPersonEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomPreviousPersonEPRIds.stream().map(m -> (String) m.get("EPR")).collect(Collectors.toList());
+                break;
+            case "jrbi_delta_current_person":
+                sql = String.format(JRBIPersonDataChecksSQL.GET_DELTA_PERSON_EPR_ID, numberOfRecords);
+                List<Map<?, ?>> randomDeltapersonEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomDeltapersonEPRIds.stream().map(m -> (String) m.get("EPR")).collect(Collectors.toList());
                 break;
         }
         Log.info(sql);
         Log.info(Ids.toString());
     }
+
+    @When("^Get the records from transform Delta person (.*)$")
+    public void getDeltaPersonRecords(String tableName) {
+        Log.info("We get the Delta Person current records...");
+        sql = String.format(JRBIPersonDataChecksSQL.GET_DELTA_PERSON_RECORDS, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityJRBIContext.recordsFromFromDeltaPerson = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
+    }
+
+    @Then("^We Get the records from transform Delta person History (.*)$")
+    public void getDeltaPersonHistoryRecords(String tableName) {
+        Log.info("We get the Delta Person history records...");
+        sql = String.format(JRBIPersonDataChecksSQL.GET_DELTA_PERSON_HISTORY_RECORDS, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityJRBIContext.recordsFromFromDeltaPersonHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
+    }
+
 
     @When("^Get the records from data full load for Person (.*)$")
     public void getPersonRecordsFromFullLoad(String tableName) {
@@ -217,7 +239,7 @@ public class JRBIPersonDataChecksSteps {
                 dataQualityJRBIContext.recordsFromFromPreviousPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR)); //sort data in the lists
                 dataQualityJRBIContext.recordsFromFromPreviousPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR));
 
-                Log.info("Current_person -> EPR => " + dataQualityJRBIContext.recordsFromFromPreviousPerson.get(i).getEPR() +
+                Log.info("Previous_person -> EPR => " + dataQualityJRBIContext.recordsFromFromPreviousPerson.get(i).getEPR() +
                         "Previous_person_History -> EPR => " + dataQualityJRBIContext.recordsFromFromPreviousPersonHistory.get(i).getEPR());
                 if (dataQualityJRBIContext.recordsFromFromPreviousPerson.get(i).getEPR() != null ||
                         (dataQualityJRBIContext.recordsFromFromPreviousPersonHistory.get(i).getEPR() != null)) {
@@ -426,4 +448,135 @@ public class JRBIPersonDataChecksSteps {
             }
         }
     }
+
+    @And ("^Compare the records of delta person and delta person history$")
+    public void compareDeltaPersonandDeltapersonHistory() {
+        if (dataQualityJRBIContext.recordsFromFromDeltaPerson.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the EPR Ids to compare the records between Delta Person and Delta Person history...");
+            for (int i = 0; i < dataQualityJRBIContext.recordsFromFromDeltaPerson.size(); i++) {
+
+                dataQualityJRBIContext.recordsFromFromDeltaPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR));
+
+                Log.info("Delta_person -> EPR => " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() +
+                        "Delta_person_History -> EPR => " + dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getEPR());
+                if (dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getEPR() != null)) {
+                    Assert.assertEquals("The EPR is =" + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() + " is missing/not found in Current_Manif table",
+                            dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR(),
+                            dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getEPR());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() +
+                        " RECORD_TYPE => Delta_person =" + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getRECORD_TYPE() +
+                        " Delta_person_History=" + dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getRECORD_TYPE());
+
+                if (dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getRECORD_TYPE() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getRECORD_TYPE() != null)) {
+                    Assert.assertEquals("The RECORD_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getRECORD_TYPE(),
+                            dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getRECORD_TYPE());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() +
+                        " ROLE_CODE => Delta_person =" + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getROLE_CODE() +
+                        " Delta_person_History=" + dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getROLE_CODE());
+
+                if (dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getROLE_CODE() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getROLE_CODE() != null)) {
+                    Assert.assertEquals("The ROLE_CODE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getROLE_CODE(),
+                            dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getROLE_CODE());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() +
+                        " U_KEY => Delta_person =" + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getU_KEY() +
+                        " Delta_person_History=" + dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getU_KEY());
+
+                if (dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getU_KEY() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getU_KEY() != null)) {
+                    Assert.assertEquals("The U_KEY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getU_KEY(),
+                            dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getU_KEY());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() +
+                        " ROLE_DESCRIPTION => Delta_person =" + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getROLE_DESCRIPTION() +
+                        " Delta_person_History=" + dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getROLE_DESCRIPTION());
+
+                if (dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getROLE_DESCRIPTION() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getROLE_DESCRIPTION() != null)) {
+                    Assert.assertEquals("The ROLE_DESCRIPTION is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getROLE_DESCRIPTION(),
+                            dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getROLE_DESCRIPTION());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() +
+                        " GIVEN_NAME => Delta_person =" + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getGIVEN_NAME() +
+                        " Delta_person_History=" + dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getGIVEN_NAME());
+
+                if (dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getGIVEN_NAME() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getGIVEN_NAME() != null)) {
+                    Assert.assertEquals("The GIVEN_NAME is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getGIVEN_NAME(),
+                            dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getGIVEN_NAME());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() +
+                        " FAMILY_NAME => Delta_person =" + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getFAMILY_NAME() +
+                        " Delta_person_History=" + dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getFAMILY_NAME());
+
+                if (dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getFAMILY_NAME() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getFAMILY_NAME() != null)) {
+                    Assert.assertEquals("The FAMILY_NAME is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getFAMILY_NAME(),
+                            dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getFAMILY_NAME());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() +
+                        " PEOPLEHUB_ID => Delta_person =" + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getPEOPLEHUB_ID() +
+                        " Delta_person_History=" + dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getPEOPLEHUB_ID());
+
+                if (dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getPEOPLEHUB_ID() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getPEOPLEHUB_ID() != null)) {
+                    Assert.assertEquals("The PEOPLEHUB_ID is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getPEOPLEHUB_ID(),
+                            dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getPEOPLEHUB_ID());
+                }
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() +
+                        " EMAIL => Delta_person =" + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEMAIL() +
+                        " Delta_person_History=" + dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getEMAIL());
+
+                if (dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEMAIL() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getEMAIL() != null)) {
+                    Assert.assertEquals("The EMAIL is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEMAIL(),
+                            dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getEMAIL());
+                }
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() +
+                        " TYPE => Delta_person =" + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getTYPE() +
+                        " Delta_person_History=" + dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getTYPE());
+
+                if (dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getTYPE() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getTYPE() != null)) {
+                    Assert.assertEquals("The TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getTYPE(),
+                            dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getTYPE());
+                }
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() +
+                        " DELTA_MODE => Delta_person =" + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getDELTA_MODE() +
+                        " Delta_person_History=" + dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getDELTA_MODE());
+
+                if (dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getDELTA_MODE() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getDELTA_MODE() != null)) {
+                    Assert.assertEquals("The DELTA_MODE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getDELTA_MODE(),
+                            dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getDELTA_MODE());
+                }
+            }
+        }
+    }
+
 }

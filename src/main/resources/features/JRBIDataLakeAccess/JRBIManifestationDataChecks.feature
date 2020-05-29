@@ -25,7 +25,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
 
 
   @JRBI
-  Scenario Outline: Verify Data for JRBI transform_Previous_manifestation_history is transferred from manifestation Work
+  Scenario Outline: Verify Data for JRBI transform_Previous_manifestation_history is transferred from manifestation
     Given We get the <countOfRandomIds> random manifestation EPR ids <sourceTable>
     When We get the records from transform previous manifestation <sourceTable>
     Then Get the records from transform previous manifestation history <targetTable>
@@ -33,6 +33,16 @@ Feature:Validate data for JRBI Work tables in Data Lake
     Examples:
       | sourceTable               | targetTable                               | countOfRandomIds|
       |jrbi_transform_previous_manifestation| jrbi_transform_current_manifestation_history_part  |10                 |
+
+  @JRBI
+  Scenario Outline: Verify Data for JRBI delta_manifestation_history is transferred from delta manifestation
+    Given We get the <countOfRandomIds> random manifestation EPR ids <sourceTable>
+    When We get the records from transform delta manifestation <sourceTable>
+    Then Get the records from transform delta manifestation history <targetTable>
+    And Compare the records of delta manifestation and delta manifestation history
+    Examples:
+      | sourceTable                    | targetTable                               | countOfRandomIds|
+      |jrbi_delta_current_manifestation| jrbi_transform_delta_manifestation_history_part  |10                 |
 
 
 

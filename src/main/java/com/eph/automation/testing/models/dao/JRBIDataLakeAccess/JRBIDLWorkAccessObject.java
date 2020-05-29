@@ -19,6 +19,9 @@ public class JRBIDLWorkAccessObject {
     private String RF_FVI;
     private String RF_LVI;
     private String BUSINESS_UNIT_DESC;
+    private String DELTA_MODE;
+    private String TYPE;
+
 
     public String getEPR() {
         return EPR;
@@ -138,6 +141,21 @@ public class JRBIDLWorkAccessObject {
     public void setBUSINESS_UNIT_DESC(String BUSINESS_UNIT_DESC) {
         this.BUSINESS_UNIT_DESC = BUSINESS_UNIT_DESC;
     }
+
+    public String getDELTA_MODE() {
+        return DELTA_MODE;
+    }
+    public void setDELTA_MODE(String DELTA_MODE) {
+        this.DELTA_MODE = DELTA_MODE;
+    }
+
+    public String getTYPE() {
+        return TYPE;
+    }
+    public void setTYPE(String TYPE) {
+        this.TYPE = TYPE;
+    }
+
 
 }
 
