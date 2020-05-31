@@ -13,6 +13,24 @@ public class JRBIDLPersonAccessObject {
     private String EMAIL;
     private String TYPE;
     private String DELTA_MODE;
+    private String LAST_UPDATED_DATE;
+    private String DELETE_FLAG;
+
+
+
+    public String getDELETE_FLAG() {
+        return DELETE_FLAG;
+    }
+    public void setDELETE_FLAG(String DELETE_FLAG) {
+        this.DELETE_FLAG = DELETE_FLAG;
+    }
+
+    public String getLAST_UPDATED_DATE() {
+        return LAST_UPDATED_DATE;
+    }
+    public void setLAST_UPDATED_DATE(String LAST_UPDATED_DATE) {
+        this.LAST_UPDATED_DATE = LAST_UPDATED_DATE;
+    }
 
     public String getEPR() {
         return EPR;
@@ -90,6 +108,7 @@ public class JRBIDLPersonAccessObject {
     public void setDELTA_MODE(String DELTA_MODE) {
         this.DELTA_MODE = DELTA_MODE;
     }
+
 
 
 }

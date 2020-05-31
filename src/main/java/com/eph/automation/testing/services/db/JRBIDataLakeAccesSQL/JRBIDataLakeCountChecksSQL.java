@@ -92,19 +92,35 @@ public class JRBIDataLakeCountChecksSQL {
 
 
     public static String GET_JRBI_COUNT_DIFF_PERSON_HISTORY_AND_DELTA_PERSON =
-            "select count(*) as source_count from \n" +
-                    "(select A.epr, A.record_type, A.role_code, A.u_key, A.role_description\n" +
-                    ", A.given_name, A.family_name, A.peoplehub_id, A.email\n" +
-                    ", A.last_updated_date, A.delete_flag, A.transform_ts\n" +
-                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A \n" +
-                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person B on A.u_key  = B.u_key \n" +
-                    "where B.u_key is null and A.transform_ts like '"+JRBIDataLakeCountChecksSQL.currentDate()+"%')\n";
+           "select count(*) as source_count from \n" +
+                   "(select A.epr, A.record_type, A.role_code, A.u_key\n" +
+                   ", A.role_description, A.given_name, A.family_name, A.peoplehub_id\n" +
+                   ", A.email, A.last_updated_date, A.delete_flag, A.transform_ts \n" +
+                   "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A \n" +
+                   "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person B on A.u_key  = B.u_key \n" +
+                   "where B.u_key is null and A.transform_ts like '%"+JRBIDataLakeCountChecksSQL.currentDate()+"%')\n";
 
     public static String GET_JRBI_COUNT_DIFF_MANIF_HISTORY_AND_DELTA_MANIF =
             "select count(*) as source_count from \n" +
-                    "(select * from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part A \n" +
+                    "(select A.epr, A.journal_issue_trim_size\n" +
+                    ", A.journal_prod_site_code, A.record_type, A.war_reference\n" +
+                    ", A.last_updated_date, A.transform_ts, A.delete_flag \n" +
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation B on A.epr  = B.epr \n" +
-                    "where B.epr is null and A.transform_ts like '"+JRBIDataLakeCountChecksSQL.currentDate()+"%')\n";
+                    "where B.epr is null and A.transform_ts like '%"+JRBIDataLakeCountChecksSQL.currentDate()+"%')\n";
+
+    public static String GET_JRBI_COUNT_DIFF_WORK_HISTORY_AND_DELTA_WORK =
+           "select count(*) as source_count from \n" +
+                   "(select A.epr, A.record_type, A.primary_site_system\n" +
+                   ", A.primary_site_acronym, A.primary_site_support_level\n" +
+                   ", A.fulfilment_system, A.fulfilment_journal_acronym, A.issue_prod_type_code\n" +
+                   ", A.catalogue_volumes_qty, A.catalogue_issues_qty, A.catalogue_volume_from\n" +
+                   ", A.catalogue_volume_to, A.rf_issues_qty, A.rf_total_pages_qty, A.rf_fvi\n" +
+                   ", A.rf_lvi, A.business_unit_desc, A.last_updated_date, A.delete_flag\n" +
+                   ", A.transform_ts from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A \n" +
+                   "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work B on A.epr  = B.epr \n" +
+                   "where B.epr is null and A.transform_ts like '%"+JRBIDataLakeCountChecksSQL.currentDate()+"%')\n";
+
 
     public static String GET_JRBI_WORK_EXCL_COUNT =
             "select count(*) as Target_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_work_excl_delta\n";
@@ -116,11 +132,6 @@ public class JRBIDataLakeCountChecksSQL {
             "select count(*) as Target_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_manifestation_excl_delta\n";
 
 
-    public static String GET_JRBI_COUNT_DIFF_WORK_HISTORY_AND_DELTA_WORK =
-           "select count(*) as source_count from \n" +
-                   "(select * from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A \n" +
-                   "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work B on A.epr  = B.epr \n" +
-                   "where B.epr is null and A.transform_ts like '"+JRBIDataLakeCountChecksSQL.currentDate()+"%')\n";
 
 
     public static  String GET_JRBI_CURRENT_WORK_HISTORY_COUNT =

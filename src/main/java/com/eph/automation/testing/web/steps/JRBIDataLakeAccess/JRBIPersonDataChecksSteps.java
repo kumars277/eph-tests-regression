@@ -55,9 +55,30 @@ public class JRBIPersonDataChecksSteps {
                 List<Map<?, ?>> randomDeltapersonEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 Ids = randomDeltapersonEPRIds.stream().map(m -> (String) m.get("EPR")).collect(Collectors.toList());
                 break;
+            case "jrbi_transform_history_person_excl_delta":
+                sql = String.format(JRBIPersonDataChecksSQL.GET_EPR_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_PERSON, numberOfRecords);
+                List<Map<?, ?>> randomExclEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomExclEPRIds.stream().map(m -> (String) m.get("EPR")).collect(Collectors.toList());
+                break;
         }
         Log.info(sql);
         Log.info(Ids.toString());
+    }
+
+    @When("^Get the records from the difference of Delta_current_person and person_history$")
+    public void getRecordsofDeltaPErsonandPersonHistory(){
+        Log.info("We get the difference of Delta Person and PErson History with current time records...");
+        sql = String.format(JRBIPersonDataChecksSQL.GET_RECORDS_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_PERSON, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
+    }
+
+    @Then("^Get the records from person exclude table$")
+    public void getExcludePersonRecords(){
+        Log.info("We get the records fromPerson Exclude...");
+        sql = String.format(JRBIPersonDataChecksSQL.GET_RECORDS_FROM_PERSON_EXCLUDE, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityJRBIContext.recordsFromExcludePerson = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
     }
 
     @When("^Get the records from transform Delta person (.*)$")
@@ -578,5 +599,139 @@ public class JRBIPersonDataChecksSteps {
             }
         }
     }
+
+    @And("^Compare the records of Person Exclude with difference of Delta_current_person and person_history$")
+    public void compareDataForPersonExclude() {
+        if (dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the EPR Ids to compare the records between Delta Person & PersonHistory with Person Exclude...");
+            for (int i = 0; i < dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.size(); i++) {
+
+                dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromExcludePerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR));
+
+                Log.info("Diff of Delt Person and History -> EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() +
+                        "Person_Exclude -> EPR => " + dataQualityJRBIContext.recordsFromExcludePerson.get(i).getEPR());
+                if (dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() != null ||
+                        (dataQualityJRBIContext.recordsFromExcludePerson.get(i).getEPR() != null)) {
+                    Assert.assertEquals("The EPR is =" + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() + " is missing/not found in Current_Manif table",
+                            dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR(),
+                            dataQualityJRBIContext.recordsFromExcludePerson.get(i).getEPR());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() +
+                        " RECORD_TYPE => Diff of Delt Person and History =" + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getRECORD_TYPE() +
+                        " Person_Exclude=" + dataQualityJRBIContext.recordsFromExcludePerson.get(i).getRECORD_TYPE());
+
+                if (dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getRECORD_TYPE() != null ||
+                        (dataQualityJRBIContext.recordsFromExcludePerson.get(i).getRECORD_TYPE() != null)) {
+                    Assert.assertEquals("The RECORD_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getRECORD_TYPE(),
+                            dataQualityJRBIContext.recordsFromExcludePerson.get(i).getRECORD_TYPE());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() +
+                        " ROLE_CODE => Diff of Delt Person and History =" + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getROLE_CODE() +
+                        " Person_Exclude=" + dataQualityJRBIContext.recordsFromExcludePerson.get(i).getROLE_CODE());
+
+                if (dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getROLE_CODE() != null ||
+                        (dataQualityJRBIContext.recordsFromExcludePerson.get(i).getROLE_CODE() != null)) {
+                    Assert.assertEquals("The ROLE_CODE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getROLE_CODE(),
+                            dataQualityJRBIContext.recordsFromExcludePerson.get(i).getROLE_CODE());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() +
+                        " U_KEY => Diff of Delt Person and History =" + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getU_KEY() +
+                        " Person_Exclude=" + dataQualityJRBIContext.recordsFromExcludePerson.get(i).getU_KEY());
+
+                if (dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getU_KEY() != null ||
+                        (dataQualityJRBIContext.recordsFromExcludePerson.get(i).getU_KEY() != null)) {
+                    Assert.assertEquals("The U_KEY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getU_KEY(),
+                            dataQualityJRBIContext.recordsFromExcludePerson.get(i).getU_KEY());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() +
+                        " ROLE_DESCRIPTION => Diff of Delt Person and History =" + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getROLE_DESCRIPTION() +
+                        " Person_Exclude=" + dataQualityJRBIContext.recordsFromExcludePerson.get(i).getROLE_DESCRIPTION());
+
+                if (dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getROLE_DESCRIPTION() != null ||
+                        (dataQualityJRBIContext.recordsFromExcludePerson.get(i).getROLE_DESCRIPTION() != null)) {
+                    Assert.assertEquals("The ROLE_DESCRIPTION is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getROLE_DESCRIPTION(),
+                            dataQualityJRBIContext.recordsFromExcludePerson.get(i).getROLE_DESCRIPTION());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() +
+                        " GIVEN_NAME => Diff of Delt Person and History =" + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getGIVEN_NAME() +
+                        " Person_Exclude=" + dataQualityJRBIContext.recordsFromExcludePerson.get(i).getGIVEN_NAME());
+
+                if (dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getGIVEN_NAME() != null ||
+                        (dataQualityJRBIContext.recordsFromExcludePerson.get(i).getGIVEN_NAME() != null)) {
+                    Assert.assertEquals("The GIVEN_NAME is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getGIVEN_NAME(),
+                            dataQualityJRBIContext.recordsFromExcludePerson.get(i).getGIVEN_NAME());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() +
+                        " FAMILY_NAME => Diff of Delt Person and History =" + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getFAMILY_NAME() +
+                        " Person_Exclude=" + dataQualityJRBIContext.recordsFromExcludePerson.get(i).getFAMILY_NAME());
+
+                if (dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getFAMILY_NAME() != null ||
+                        (dataQualityJRBIContext.recordsFromExcludePerson.get(i).getFAMILY_NAME() != null)) {
+                    Assert.assertEquals("The FAMILY_NAME is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getFAMILY_NAME(),
+                            dataQualityJRBIContext.recordsFromExcludePerson.get(i).getFAMILY_NAME());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() +
+                        " PEOPLEHUB_ID => Diff of Delt Person and History =" + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getPEOPLEHUB_ID() +
+                        " Person_Exclude=" + dataQualityJRBIContext.recordsFromExcludePerson.get(i).getPEOPLEHUB_ID());
+
+                if (dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getPEOPLEHUB_ID() != null ||
+                        (dataQualityJRBIContext.recordsFromExcludePerson.get(i).getPEOPLEHUB_ID() != null)) {
+                    Assert.assertEquals("The PEOPLEHUB_ID is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getPEOPLEHUB_ID(),
+                            dataQualityJRBIContext.recordsFromExcludePerson.get(i).getPEOPLEHUB_ID());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() +
+                        " EMAIL => Diff of Delt Person and History =" + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEMAIL() +
+                        " Person_Exclude=" + dataQualityJRBIContext.recordsFromExcludePerson.get(i).getEMAIL());
+
+                if (dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEMAIL() != null ||
+                        (dataQualityJRBIContext.recordsFromExcludePerson.get(i).getEMAIL() != null)) {
+                    Assert.assertEquals("The EMAIL is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEMAIL(),
+                            dataQualityJRBIContext.recordsFromExcludePerson.get(i).getEMAIL());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() +
+                        " LAST_UPDATED_DATE => Diff of Delt Person and History =" + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getLAST_UPDATED_DATE() +
+                        " Person_Exclude=" + dataQualityJRBIContext.recordsFromExcludePerson.get(i).getLAST_UPDATED_DATE());
+
+                if (dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getLAST_UPDATED_DATE() != null ||
+                        (dataQualityJRBIContext.recordsFromExcludePerson.get(i).getLAST_UPDATED_DATE() != null)) {
+                    Assert.assertEquals("The LAST_UPDATED_DATE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getLAST_UPDATED_DATE(),
+                            dataQualityJRBIContext.recordsFromExcludePerson.get(i).getLAST_UPDATED_DATE());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() +
+                        " DELETE_FLAG => Diff of Delt Person and History =" + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getDELETE_FLAG() +
+                        " Person_Exclude=" + dataQualityJRBIContext.recordsFromExcludePerson.get(i).getDELETE_FLAG());
+
+                if (dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getDELETE_FLAG() != null ||
+                        (dataQualityJRBIContext.recordsFromExcludePerson.get(i).getDELETE_FLAG() != null)) {
+                    Assert.assertEquals("The DELETE_FLAG is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getDELETE_FLAG(),
+                            dataQualityJRBIContext.recordsFromExcludePerson.get(i).getDELETE_FLAG());
+                }
+            }
+        }
+    }
+
 
 }
