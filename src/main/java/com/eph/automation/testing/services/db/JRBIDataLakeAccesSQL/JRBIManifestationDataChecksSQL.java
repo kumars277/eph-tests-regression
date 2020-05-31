@@ -125,6 +125,43 @@ public class JRBIManifestationDataChecksSQL {
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part where EPR in ('%s') AND " +
                     "transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.previousDate()+"%%\'";
 
+    public static String GET_EPR_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_MANIF =
+            "select epr as EPR from \n" +
+                    "(select A.epr, A.journal_issue_trim_size \n" +
+                    ",A.journal_prod_site_code, A.record_type\n" +
+                    ", A.war_reference, A.last_updated_date\n" +
+                    ", A.transform_ts, A.delete_flag \n" +
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part A \n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation B on A.epr  = B.epr \n" +
+                    "where B.epr is null and A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\') order by rand() limit %s\n";
+
+    public static String GET_RECORDS_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_MANIF =
+            "select epr as EPR,\n" +
+                    "record_type as RECORD_TYPE,\n" +
+                    "journal_prod_site_code as JOURNAL_PROD_SITE,\n" +
+                    "journal_issue_trim_size as JOURNAL_ISSUE_TRIM_SIZE,\n" +
+                    "war_reference as WAR_REFERENCE,\n" +
+                    "last_updated_date as LAST_UPDATED_DATE,\n" +
+                    "delete_flag as DELETE_FLAG \n" +
+                    "from \n" +
+                    "(select A.epr, A.journal_issue_trim_size \n" +
+                    ",A.journal_prod_site_code, A.record_type\n" +
+                    ", A.war_reference, A.last_updated_date\n" +
+                    ", A.transform_ts, A.delete_flag \n" +
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part A \n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation B on A.epr  = B.epr \n" +
+                    "where B.epr is null and A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\' AND A.epr in ('%s'))\n";
+
+    public static String GET_RECORDS_FROM_MANIF_EXCLUDE =
+            "select epr as EPR,\n" +
+                    "record_type as RECORD_TYPE,\n" +
+                    "journal_prod_site_code as JOURNAL_PROD_SITE,\n" +
+                    "journal_issue_trim_size as JOURNAL_ISSUE_TRIM_SIZE,\n" +
+                    "war_reference as WAR_REFERENCE,\n" +
+                    "last_updated_date as LAST_UPDATED_DATE,\n" +
+                    "delete_flag as DELETE_FLAG\n" +
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_manifestation_excl_delta where EPR in ('%s')\n";
+
 }
 
 

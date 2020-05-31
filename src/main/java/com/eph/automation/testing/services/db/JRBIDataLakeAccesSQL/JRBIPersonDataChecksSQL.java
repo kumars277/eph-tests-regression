@@ -158,8 +158,8 @@ public class JRBIPersonDataChecksSQL {
                     "(select A.epr, A.record_type, A.role_code, A.u_key\n" +
                     ", A.role_description, A.given_name, A.family_name, A.peoplehub_id\n" +
                     ", A.email, A.last_updated_date, A.delete_flag, A.transform_ts \n" +
-                    "from jrbi_staging_sit.jrbi_transform_current_person_history_part A \n" +
-                    "left join jrbi_staging_sit.jrbi_delta_current_person B on A.u_key  = B.u_key\n" +
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A \n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person B on A.u_key  = B.u_key\n" +
                     "where B.u_key is null and A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\')\n" +
                     " order by rand() limit %s\n";
 
@@ -177,8 +177,8 @@ public class JRBIPersonDataChecksSQL {
                     "(select A.epr, A.record_type, A.role_code, A.u_key\n" +
                     ", A.role_description, A.given_name, A.family_name, A.peoplehub_id\n" +
                     ", A.email, A.last_updated_date, A.delete_flag, A.transform_ts \n" +
-                    "from jrbi_staging_sit.jrbi_transform_current_person_history_part A \n" +
-                    "left join jrbi_staging_sit.jrbi_delta_current_person B on A.u_key  = B.u_key\n" +
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A \n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person B on A.u_key  = B.u_key\n" +
                     "where B.u_key is null and A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\' AND A.epr in ('%s'))\n";
 
 
@@ -192,8 +192,10 @@ public class JRBIPersonDataChecksSQL {
                     "email as EMAIL,\n" +
                     "last_updated_date as LAST_UPDATED_DATE,\n" +
                     "delete_flag as DELETE_FLAG\n" +
-                    "from jrbi_staging_sit.jrbi_transform_history_person_excl_delta \n"+
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_person_excl_delta \n"+
                     "where EPR in ('%s')\n";
+
+
 }
 
 

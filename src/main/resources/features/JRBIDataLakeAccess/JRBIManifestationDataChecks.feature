@@ -45,6 +45,15 @@ Feature:Validate data for JRBI Work tables in Data Lake
       |jrbi_delta_current_manifestation| jrbi_transform_delta_manifestation_history_part  |10                 |
 
 
+  @JRBI
+  Scenario Outline: Verify Data from the difference of Delta_manif and manif_history is transferred to manif exclude table
+    Given We get the <countOfRandomIds> random manifestation EPR ids <tableName>
+    When Get the records from the difference of Delta_current_manif and manif_history
+    Then Get the records from manifestation exclude table
+    And  Compare the records of Manif Exclude with difference of Delta_current_manif and manif_history
+    Examples:
+      |tableName                                      | countOfRandomIds|
+      |jrbi_transform_history_manifestation_excl_delta|1                 |
 
 
       
