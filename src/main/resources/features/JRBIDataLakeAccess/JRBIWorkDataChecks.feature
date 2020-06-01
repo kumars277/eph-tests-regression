@@ -53,3 +53,13 @@ Feature:Validate data for JRBI Work tables in Data Lake
     Examples:
       |tableName                                | countOfRandomIds|
       |jrbi_transform_history_work_excl_delta   |1                 |
+
+  @JRBI
+  Scenario Outline: Verify Data from the addition of Delta_current_work and work_Exclude is transferred to work Latest table
+    Given We get the <countOfRandomIds> random EPR ids <tableName>
+    When Get the records from the addition of Delta_current_work and work_Exclude
+    Then Get the records from work latest table
+    And  Compare the records of Work Latest with addition of Delta_current_work and work_Exclude
+    Examples:
+      |tableName                                | countOfRandomIds|
+      |jrbi_transform_latest_work               |1                 |

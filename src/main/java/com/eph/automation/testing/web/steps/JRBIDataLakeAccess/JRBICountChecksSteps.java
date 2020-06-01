@@ -234,7 +234,7 @@ public class JRBICountChecksSteps {
                 break;
             case "jrbi_transform_latest_manifestation":
                 Log.info("Getting Count by sum of delta_current_manifestation and current_exclude_manifestation... ");
-                JRBISumSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_COUNT_SUM_DELTA_MANIF_AND_MANIF_HISTORY;
+                JRBISumSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_COUNT_SUM_DELTA_MANIF_AND_MANIF_EXCLUDE;
                 break;
         }
 

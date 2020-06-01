@@ -193,7 +193,7 @@ public class JRBIDataLakeCountChecksSQL {
                     "b.rf_lvi, b.business_unit_desc, null as col11, null as col12 \n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work as b)\n";
 
-    public  static String GET_JRBI_COUNT_SUM_DELTA_MANIF_AND_MANIF_HISTORY =
+    public  static String GET_JRBI_COUNT_SUM_DELTA_MANIF_AND_MANIF_EXCLUDE =
          "select count(*) as source_count from \n" +
                  "(select a.epr, a.record_type, a.journal_prod_site_code, \n" +
                  "a.journal_issue_trim_size, a.war_reference, a.transform_ts, a.last_updated_date, a.delete_flag\n" +

@@ -162,6 +162,42 @@ public class JRBIManifestationDataChecksSQL {
                     "delete_flag as DELETE_FLAG\n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_manifestation_excl_delta where EPR in ('%s')\n";
 
+    public  static String GET_JRBI_EPR_MANIF_LATEST =
+            "select epr as EPR from \n" +
+                    "(select a.epr, a.record_type, a.journal_prod_site_code, \n" +
+                    "a.journal_issue_trim_size, a.war_reference, a.transform_ts, a.last_updated_date, a.delete_flag\n" +
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_manifestation_excl_delta \n" +
+                    "as a union all select b.epr, b.record_type, b.journal_prod_site_code, \n" +
+                    "b.journal_issue_trim_size, b.war_reference,b.transform_ts,null as col11, null as col12 \n" +
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation as b)\n "+
+                    "order by rand() limit %s\n";
+
+    public static String GET_JRBI_REC_SUM_DELTA_MANIF_AND_MANIF_EXCLUDE =
+            "select epr as EPR,\n" +
+                    "record_type as RECORD_TYPE,\n" +
+                    "journal_prod_site_code as JOURNAL_PROD_SITE,\n" +
+                    "journal_issue_trim_size as JOURNAL_ISSUE_TRIM_SIZE,\n" +
+                    "war_reference as WAR_REFERENCE,\n" +
+                    "last_updated_date as LAST_UPDATED_DATE,\n" +
+                    "delete_flag as DELETE_FLAG\n" +
+                    " from (select a.epr, a.record_type, a.journal_prod_site_code, \n" +
+                    "a.journal_issue_trim_size, a.war_reference, a.transform_ts, a.last_updated_date, a.delete_flag\n" +
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_manifestation_excl_delta \n" +
+                    "as a union all select b.epr, b.record_type, b.journal_prod_site_code, \n" +
+                    "b.journal_issue_trim_size, b.war_reference,b.transform_ts,null as col11, null as col12 \n" +
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation as b) where EPR in ('%s')\n";
+
+    public static String GET_JRBI_MANIF_LATEST_RECORDS =
+            "select epr as EPR,\n" +
+                    "record_type as RECORD_TYPE,\n" +
+                    "journal_prod_site_code as JOURNAL_PROD_SITE,\n" +
+                    "journal_issue_trim_size as JOURNAL_ISSUE_TRIM_SIZE,\n" +
+                    "war_reference as WAR_REFERENCE,\n" +
+                    "last_updated_date as LAST_UPDATED_DATE,\n" +
+                    "delete_flag as DELETE_FLAG\n" +
+                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_manifestation where EPR in ('%s')\n";
+
+
 }
 
 
