@@ -32,6 +32,11 @@ public class JRBICountChecksSteps {
     private static int JRBISumCount;
     private static String JRBILatestSQLCount;
     private static int JRBILatestCount;
+    private static String JRBIDeltaCurrentSQLCount;
+    private static int JRBIDeltaCurrentCount;
+    private static String JRBIDiffCurrentPreviousSQLCount;
+    private static int JRBIDiffCurrentPreviousCount;
+
 
     @Given("^Get the total count of JRBI Data from Full Load (.*)$")
     public void getJRBIFullLoadCount(String tableName) {
@@ -244,6 +249,55 @@ public class JRBICountChecksSteps {
         JRBISumCount = ((Long) JRBIsUMTableCount.get(0).get("source_count")).intValue();
     }
 
+    @Given("^Get the difference of total count between current and previous Table (.*)$")
+    public void countDiffofCurrentAndPrevious(String table){
+
+        switch (table){
+            case "jrbi_delta_current_work":
+                Log.info("Getting Count from difference of current_work and previous_work...");
+                JRBIDiffCurrentPreviousSQLCount = JRBIDataLakeCountChecksSQL.GET_COUNT_DIFF_CURRENT_PREVIOUS_WORK;
+                break;
+            case "jrbi_delta_current_manifestation":
+                Log.info("Getting Count from difference of current_manifestation and previous_manifestation...");
+                JRBIDiffCurrentPreviousSQLCount = JRBIDataLakeCountChecksSQL.GET_COUNT_DIFF_CURRENT_PREVIOUS_MANIF;
+                break;
+            case "jrbi_delta_current_person":
+                Log.info("Getting Count from difference of current_person and previous_person...");
+                JRBIDiffCurrentPreviousSQLCount = JRBIDataLakeCountChecksSQL.GET_COUNT_DIFF_CURRENT_PREVIOUS_PERSON;
+                break;
+        }
+
+        // Log.info("Current Date => " + currentDate);
+        Log.info(JRBIDiffCurrentPreviousSQLCount);
+        List<Map<String, Object>> JRBIDiffCurrentPreviousTableCount = DBManager.getDBResultMap(JRBIDiffCurrentPreviousSQLCount, Constants.AWS_URL);
+        JRBIDiffCurrentPreviousCount = ((Long) JRBIDiffCurrentPreviousTableCount.get(0).get("source_count")).intValue();
+    }
+
+    @Then("^Get the JRBI (.*) delta current data count$")
+    public void deltaCurrentCounts(String targetTable){
+        switch (targetTable){
+        case "jrbi_delta_current_work":
+        Log.info("Getting Delta Current Work Table Count...");
+        JRBIDeltaCurrentSQLCount = JRBIDataLakeCountChecksSQL.GET_COUNT_DELTA_WORK;
+        break;
+
+        case "jrbi_delta_current_manifestation":
+        Log.info("Getting Delta Current Work Table Count...");
+            JRBIDeltaCurrentSQLCount = JRBIDataLakeCountChecksSQL.GET_COUNT_DELTA_MANIF;
+        break;
+
+        case "jrbi_delta_current_person":
+        Log.info("Getting Delta Current Work Table Count...");
+            JRBIDeltaCurrentSQLCount = JRBIDataLakeCountChecksSQL.GET_COUNT_DELTA_PERSON;
+        break;
+
+
+    }
+    Log.info(JRBIDeltaCurrentSQLCount);
+    List<Map<String, Object>> JRBIDeltaCurrentTableCount = DBManager.getDBResultMap(JRBIDeltaCurrentSQLCount, Constants.AWS_URL);
+    JRBIDeltaCurrentCount = ((Long) JRBIDeltaCurrentTableCount.get(0).get("Target_Count")).intValue();
+    }
+
     @Then("^Get the JRBI (.*) latest data count$")
     public void latestCounts(String targetTable){
         switch (targetTable){
@@ -292,6 +346,14 @@ public class JRBICountChecksSteps {
         Log.info("The counts from the difference of tables " + srcTableOne + " and "+srcTableTwo+" => " + JRBIDiffCount + " and in "+trgtTable+" => " + JRBIExclCount);
         Assert.assertEquals("The counts are not equal when compared difference of "+srcTableOne+" and "+srcTableTwo+" with "+trgtTable, JRBIExclCount, JRBIDiffCount);
     }
+
+    @And("^Compare delta count of (.*) and (.*) with (.*) are identical$")
+    public void compareCurrentDeltacounts(String srcTableOne, String srcTableTwo, String trgtTable){
+        Log.info("The counts from the difference of tables " + srcTableOne + " and "+srcTableTwo+" => " + JRBIDiffCurrentPreviousCount + " and in "+trgtTable+" => " + JRBIDeltaCurrentCount);
+        Assert.assertEquals("The counts are not equal when compared difference of "+srcTableOne+" and "+srcTableTwo+" with "+trgtTable, JRBIDeltaCurrentCount, JRBIDiffCurrentPreviousCount);
+    }
+
+
     @And("^Compare counts of (.*) and (.*) with (.*) are identical$")
     public void compareLatestcounts(String srcTableOne, String srcTableTwo, String trgtTable){
         Log.info("The counts from the addition of tables " + srcTableOne + " and "+srcTableTwo+" => " + JRBISumCount + " and in "+trgtTable+" => " + JRBILatestCount);

@@ -205,6 +205,104 @@ public class JRBIDataLakeCountChecksSQL {
     public static String GET_JRBI_MANIF_LATEST_COUNT =
             "select count(*) as Target_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_manifestation\n";
 
+    public static String GET_COUNT_DIFF_CURRENT_PREVIOUS_WORK =
+            "select count(*) as source_count from (\n" +
+                    "--inserted\n" +
+                    "select c.epr,c.record_type, c.work_type, c.primary_site_system,c.primary_site_acronym,c.primary_site_support_level,\n" +
+                    "c.fulfilment_system,c.fulfilment_journal_acronym,c.issue_prod_type_code,c.catalogue_volumes_qty,\n" +
+                    "c.catalogue_issues_qty,c.catalogue_volume_from,c.catalogue_volume_to,\n" +
+                    "c.rf_issues_qty,c.rf_total_pages_qty,c.rf_fvi,c.rf_lvi,c.business_unit_desc,'I' as delta_mode\n" +
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work c\n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_work p  on c.epr = p.epr\n" +
+                    "where p.epr is null\n" +
+                    "union all\n" +
+                    "select c.epr,c.record_type, c.work_type, c.primary_site_system,c.primary_site_acronym,c.primary_site_support_level,\n" +
+                    "c.fulfilment_system,c.fulfilment_journal_acronym,c.issue_prod_type_code,c.catalogue_volumes_qty,\n" +
+                    "c.catalogue_issues_qty,c.catalogue_volume_from,c.catalogue_volume_to,\n" +
+                    "c.rf_issues_qty,c.rf_total_pages_qty,c.rf_fvi,c.rf_lvi,c.business_unit_desc,'D' as delta_mode\n" +
+                    "FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_work  c\n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work p  on c.epr = p.epr\n" +
+                    "where p.epr is null\n" +
+                    "union all\n" +
+                    "select c.epr,c.record_type, c.work_type, c.primary_site_system,c.primary_site_acronym,c.primary_site_support_level,\n" +
+                    "c.fulfilment_system,c.fulfilment_journal_acronym,c.issue_prod_type_code,c.catalogue_volumes_qty,\n" +
+                    "c.catalogue_issues_qty,c.catalogue_volume_from,c.catalogue_volume_to,\n" +
+                    "c.rf_issues_qty,c.rf_total_pages_qty,c.rf_fvi,c.rf_lvi,c.business_unit_desc, 'C' as delta_mode\n" +
+                    "FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_work  c\n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work p  on c.epr = p.epr\n" +
+                    "where (c.record_type != (p.record_type) or\n" +
+                    "c.work_type != (p.work_type) or\n" +
+                    "c.primary_site_system !=  (p.primary_site_system) or\n" +
+                    "c.primary_site_acronym !=  (p.primary_site_acronym) or\n" +
+                    "c.primary_site_support_level !=  (p.primary_site_support_level) or\n" +
+                    "c.fulfilment_system !=  (p.fulfilment_system) or\n" +
+                    "c.fulfilment_journal_acronym !=  (p.fulfilment_journal_acronym) or \n" +
+                    "c.issue_prod_type_code !=  (p.issue_prod_type_code) or\n" +
+                    "c.catalogue_volumes_qty !=  (p.catalogue_volumes_qty) or\n" +
+                    "c.catalogue_issues_qty !=  (p.catalogue_issues_qty) or\n" +
+                    "c.catalogue_volume_from !=  (p.catalogue_volume_from) or\n" +
+                    "c.catalogue_volume_to !=  (p.catalogue_volume_to) or\n" +
+                    "c.rf_issues_qty !=  (p.rf_issues_qty) or\n" +
+                    "c.rf_total_pages_qty !=  (p.rf_total_pages_qty) or\n" +
+                    "c.rf_fvi !=  (p.rf_fvi) or\n" +
+                    "c.rf_lvi !=  (p.rf_lvi) or\n" +
+                    "c.business_unit_desc !=  (p.business_unit_desc)))\n";
+
+    public static String GET_COUNT_DELTA_WORK =
+            "select count(*) as Target_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work\n";
+
+    public static String GET_COUNT_DIFF_CURRENT_PREVIOUS_PERSON =
+            "select count(*) as source_count from (\n" +
+                    "--new\n" +
+                    "select c.epr, c.record_type, c.role_code , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email FROM jrbi_staging_sit.jrbi_transform_current_person c\n" +
+                    "left join jrbi_staging_sit.jrbi_transform_previous_person p  on c.u_key = p.u_key\n" +
+                    "where p.u_key is null\n" +
+                    "union all\n" +
+                    "-- deleted\n" +
+                    "select c.epr, c.record_type, c.role_code , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email FROM  jrbi_staging_sit.jrbi_transform_previous_person  c\n" +
+                    "left join jrbi_staging_sit.jrbi_transform_current_person p  on c.u_key = p.u_key\n" +
+                    "where p.u_key is null\n" +
+                    "union all\n" +
+                    "--changed\n" +
+                    "select c.epr, c.record_type, c.role_code , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email\n" +
+                    "FROM  jrbi_staging_sit.jrbi_transform_previous_person  c\n" +
+                    "left join jrbi_staging_sit.jrbi_transform_current_person p  on c.u_key = p.u_key\n" +
+                    "where (c.epr !=(p.epr) or\n" +
+                    "c.record_type != (p.record_type) or \n" +
+                    "c.role_code !=  (p.role_code) or\n" +
+                    "c.role_description !=  (p.role_description) or\n" +
+                    "c.given_name !=  (p.given_name) or\n" +
+                    "c. family_name !=  (p.family_name) or\n" +
+                    "c.peoplehub_id !=  (p.peoplehub_id) or\n" +
+                    "c.email !=  (p.email)))\n";
+
+    public static String GET_COUNT_DELTA_PERSON =
+            "select count(*) as Target_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person\n";
+
+
+    public static String GET_COUNT_DIFF_CURRENT_PREVIOUS_MANIF =
+            "select count(*) as source_count from (\n" +
+                    "select c.epr , c.record_type , c.manifestation_type, c.journal_prod_site_code , c.journal_issue_trim_size , c.war_reference FROM jrbi_staging_sit.jrbi_transform_current_manifestation c\n" +
+                    "left join jrbi_staging_sit.jrbi_transform_previous_manifestation p  on c.epr = p.epr\n" +
+                    "where p.epr is null\n" +
+                    "union all\n" +
+                    "select c.epr , c.record_type , c.manifestation_type, c.journal_prod_site_code , c.journal_issue_trim_size , c.war_reference  FROM  jrbi_staging_sit.jrbi_transform_previous_manifestation  c\n" +
+                    "left join jrbi_staging_sit.jrbi_transform_current_manifestation p  on c.epr = p.epr\n" +
+                    "where p.epr is null\n" +
+                    "union all\n" +
+                    "select c.epr , c.record_type , c.manifestation_type, c.journal_prod_site_code , c.journal_issue_trim_size , c.war_reference FROM  jrbi_staging_sit.jrbi_transform_previous_manifestation c\n" +
+                    "left join jrbi_staging_sit.jrbi_transform_current_manifestation p  on c.epr = p.epr\n" +
+                    "where (c.epr !=(p.epr) or\n" +
+                    "c.record_type != (p.record_type) or \n" +
+                    "c.manifestation_type !=  (p.manifestation_type ) or\n" +
+                    "c.journal_prod_site_code !=  (p.journal_prod_site_code ) or\n" +
+                    "c.journal_issue_trim_size !=  (p.journal_issue_trim_size ) or\n" +
+                    "c.war_reference !=  (p.war_reference )))\n";
+
+    public static String GET_COUNT_DELTA_MANIF =
+            "select count(*) as Target_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation\n";
+
+
 }
 
 
