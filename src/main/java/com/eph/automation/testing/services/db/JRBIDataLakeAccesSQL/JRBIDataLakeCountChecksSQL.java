@@ -131,9 +131,6 @@ public class JRBIDataLakeCountChecksSQL {
     public static String GET_JRBI_MANIF_EXCL_COUNT =
             "select count(*) as Target_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_manifestation_excl_delta\n";
 
-
-
-
     public static  String GET_JRBI_CURRENT_WORK_HISTORY_COUNT =
                 "select count(*) as Current_History_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part where transform_ts like '"+JRBIDataLakeCountChecksSQL.currentDate()+"%'\n";
 
@@ -161,6 +158,52 @@ public class JRBIDataLakeCountChecksSQL {
     public static  String GET_JRBI_DELTA_MANIF_HISTORY_COUNT =
             "select count(*) as Current_History_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_manifestation_history_part where delta_ts like '"+JRBIDataLakeCountChecksSQL.currentDate()+"%'\n";
 
+
+    public  static String GET_JRBI_COUNT_SUM_DELTA_PERSON_AND_PERSON_HISTORY =
+            "select count(*) as source_count from \n" +
+                    "(select a.epr, a.record_type, a.role_code, \n" +
+                    "a.u_key, a.role_description, a.given_name, a.family_name, \n" +
+                    "a.peoplehub_id, a.email, a.transform_ts, a.delete_flag, \n" +
+                    "a.last_updated_date \n" +
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_person_excl_delta \n" +
+                    "as a union all select b.epr, b.record_type, b.role_code, b.u_key, \n" +
+                    "b.role_description, b.given_name, b.family_name, b.peoplehub_id, \n" +
+                    "b.email, b.transform_ts, null as col11, null as col12 \n" +
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person as b)\n ";
+
+    public static String GET_JRBI_PERSON_LATEST_COUNT =
+            "select count(*) as Target_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person\n";
+
+
+    public static String GET_JRBI_WORK_LATEST_COUNT =
+            "select count(*) as Target_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_work\n";
+
+    public  static String GET_JRBI_COUNT_SUM_DELTA_WORK_AND_WORK_HISTORY =
+            "select count(*) as source_count from \n" +
+                    "(select a.epr, a.record_type, a.primary_site_system, \n" +
+                    "a.primary_site_acronym, a.primary_site_support_level, a.fulfilment_system, a.fulfilment_journal_acronym, \n" +
+                    "a.issue_prod_type_code, a.catalogue_volumes_qty, a.catalogue_issues_qty, a.catalogue_volume_from, \n" +
+                    "a.catalogue_volume_to, a.rf_issues_qty,a.rf_total_pages_qty, a.rf_fvi,\n" +
+                    "a.rf_lvi, a.business_unit_desc, a.last_updated_date, a.delete_flag\n" +
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_work_excl_delta \n" +
+                    "as a union all select b.epr, b.record_type, b.primary_site_system, \n" +
+                    "b.primary_site_acronym, b.primary_site_support_level, b.fulfilment_system, b.fulfilment_journal_acronym, \n" +
+                    "b.issue_prod_type_code, b.catalogue_volumes_qty, b.catalogue_issues_qty, b.catalogue_volume_from, \n" +
+                    "b.catalogue_volume_to, b.rf_issues_qty,b.rf_total_pages_qty, b.rf_fvi,\n" +
+                    "b.rf_lvi, b.business_unit_desc, null as col11, null as col12 \n" +
+                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work as b)\n";
+
+    public  static String GET_JRBI_COUNT_SUM_DELTA_MANIF_AND_MANIF_HISTORY =
+         "select count(*) as source_count from \n" +
+                 "(select a.epr, a.record_type, a.journal_prod_site_code, \n" +
+                 "a.journal_issue_trim_size, a.war_reference, a.transform_ts, a.last_updated_date, a.delete_flag\n" +
+                 "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_manifestation_excl_delta \n" +
+                 "as a union all select b.epr, b.record_type, b.journal_prod_site_code, \n" +
+                 "b.journal_issue_trim_size, b.war_reference,b.transform_ts,null as col11, null as col12 \n" +
+                 "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation as b)\n ";
+
+    public static String GET_JRBI_MANIF_LATEST_COUNT =
+            "select count(*) as Target_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_manifestation\n";
 
 }
 

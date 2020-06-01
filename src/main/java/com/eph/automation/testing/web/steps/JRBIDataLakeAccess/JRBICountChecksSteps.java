@@ -28,6 +28,10 @@ public class JRBICountChecksSteps {
     private static int JRBIDiffCount;
     private static String JRBIExclSQLCount;
     private static int JRBIExclCount;
+    private static String JRBISumSQLCount;
+    private static int JRBISumCount;
+    private static String JRBILatestSQLCount;
+    private static int JRBILatestCount;
 
     @Given("^Get the total count of JRBI Data from Full Load (.*)$")
     public void getJRBIFullLoadCount(String tableName) {
@@ -187,7 +191,7 @@ public class JRBICountChecksSteps {
         Assert.assertEquals("The counts are not equal when compared with "+SrctableName+" and "+trgttableName, JRBICurrentHistoryCount, JRBICurrentCount);
     }
 
-    @Given("^Get the total count difference between First and Second Source Table (.*)$")
+    @Given("^Get the total count difference between delta current and transform current history Table (.*)$")
     public void countDifferenceSourceTables(String targetTable ){
 
         Calendar cal = Calendar.getInstance();
@@ -208,12 +212,60 @@ public class JRBICountChecksSteps {
                 JRBIDiffSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_COUNT_DIFF_MANIF_HISTORY_AND_DELTA_MANIF;
                 break;
         }
+
         Log.info("Current Date => " + currentDate);
         Log.info(JRBIDiffSQLCount);
         List<Map<String, Object>> JRBIDiffTableCount = DBManager.getDBResultMap(JRBIDiffSQLCount, Constants.AWS_URL);
         JRBIDiffCount = ((Long) JRBIDiffTableCount.get(0).get("source_count")).intValue();
 
     }
+
+    @Given("^Get the sum of total count between delta current and and Current_Exclude Table (.*)$")
+    public void countsumOfDeltacurrentandExclude(String table){
+
+        switch (table){
+            case "jrbi_transform_latest_person":
+                Log.info("Getting Count by sum of delta_current_person and current_exclude_person... ");
+                JRBISumSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_COUNT_SUM_DELTA_PERSON_AND_PERSON_HISTORY;
+                break;
+            case "jrbi_transform_latest_work":
+                Log.info("Getting Count by sum of delta_current_work and current_exclude_work... ");
+                JRBISumSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_COUNT_SUM_DELTA_WORK_AND_WORK_HISTORY;
+                break;
+            case "jrbi_transform_latest_manifestation":
+                Log.info("Getting Count by sum of delta_current_manifestation and current_exclude_manifestation... ");
+                JRBISumSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_COUNT_SUM_DELTA_MANIF_AND_MANIF_HISTORY;
+                break;
+        }
+
+       // Log.info("Current Date => " + currentDate);
+        Log.info(JRBISumSQLCount);
+        List<Map<String, Object>> JRBIsUMTableCount = DBManager.getDBResultMap(JRBISumSQLCount, Constants.AWS_URL);
+        JRBISumCount = ((Long) JRBIsUMTableCount.get(0).get("source_count")).intValue();
+    }
+
+    @Then("^Get the JRBI (.*) latest data count$")
+    public void latestCounts(String targetTable){
+        switch (targetTable){
+            case "jrbi_transform_latest_person":
+                Log.info("Getting Count from exclude person... ");
+                JRBILatestSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_PERSON_LATEST_COUNT;
+                break;
+            case "jrbi_transform_latest_work":
+                Log.info("Getting Count from exclude work... ");
+                JRBILatestSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_WORK_LATEST_COUNT;
+                break;
+            case "jrbi_transform_latest_manifestation":
+                Log.info("Getting Count from exclude manifestation... ");
+                JRBILatestSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_MANIF_LATEST_COUNT;
+                break;
+        }
+        Log.info(JRBILatestSQLCount);
+        List<Map<String, Object>> JRBILatestTableCount = DBManager.getDBResultMap(JRBILatestSQLCount, Constants.AWS_URL);
+        JRBILatestCount = ((Long) JRBILatestTableCount.get(0).get("Target_Count")).intValue();
+    }
+
+
     @Then("^Get the JRBI (.*) exclude data count$")
     public void excludeCounts(String targetTable){
         switch (targetTable){
@@ -239,5 +291,10 @@ public class JRBICountChecksSteps {
     public void compareExclcounts(String srcTableOne, String srcTableTwo, String trgtTable){
         Log.info("The counts from the difference of tables " + srcTableOne + " and "+srcTableTwo+" => " + JRBIDiffCount + " and in "+trgtTable+" => " + JRBIExclCount);
         Assert.assertEquals("The counts are not equal when compared difference of "+srcTableOne+" and "+srcTableTwo+" with "+trgtTable, JRBIExclCount, JRBIDiffCount);
+    }
+    @And("^Compare counts of (.*) and (.*) with (.*) are identical$")
+    public void compareLatestcounts(String srcTableOne, String srcTableTwo, String trgtTable){
+        Log.info("The counts from the addition of tables " + srcTableOne + " and "+srcTableTwo+" => " + JRBISumCount + " and in "+trgtTable+" => " + JRBILatestCount);
+        Assert.assertEquals("The counts are not equal when compared addition of "+srcTableOne+" and "+srcTableTwo+" with "+trgtTable, JRBILatestCount, JRBISumCount);
     }
 }

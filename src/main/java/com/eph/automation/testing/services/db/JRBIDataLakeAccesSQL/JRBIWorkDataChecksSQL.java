@@ -296,7 +296,3 @@ public class JRBIWorkDataChecksSQL {
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_work_excl_delta \n" +
                     "where EPR in ('%s')\n";
 }
-
-
-
-
