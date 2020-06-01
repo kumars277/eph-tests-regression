@@ -71,6 +71,27 @@ public class JRBIWorkDataChecksSteps {
         Log.info(Ids.toString());
     }
 
+    @Given("^We get the (.*) delta random EPR ids$")
+    public void getDeltaRandomEPRWork(String numberOfRecords) {
+        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        Log.info("numberOfRecords = " + numberOfRecords);
+        Log.info("Get random EPR Ids...");
+        sql = String.format(JRBIWorkDataChecksSQL.GET_RANDOM_DELTA_EPR_WORK, numberOfRecords);
+        List<Map<?, ?>> randomDeltaWorkEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+        Ids = randomDeltaWorkEPRIds.stream().map(m -> (String) m.get("EPR")).collect(Collectors.toList());
+        Log.info(sql);
+        Log.info(Ids.toString());
+    }
+
+    @When("^Get the records from the difference of current_work and previous_work$")
+    public void getDiffCurrentPreviousWorkRec() {
+        Log.info("We get the Difference of Current work and Previous Work records...");
+        sql = String.format(JRBIWorkDataChecksSQL.GET_DIFF_REC_PREVIOUS_CURRENT_WORK, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
+    }
+
+
     @When("^Get the records from the addition of Delta_current_work and work_Exclude$")
     public void getAddRecDeltaCurrentWorkandExclude(){
         Log.info("We get the Addition of Delta Current work and Work Exclude records...");
@@ -1420,6 +1441,216 @@ public class JRBIWorkDataChecksSteps {
             }
         }
     }
+    @And("^Compare the records of Delta Current work with difference of current and previous work$")
+    public void compareDeltawithCurrentPreviousWork() {
+        if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the EPR Ids to compare the records between DElta Work and Current,Previous tables...");
+            for (int i = 0; i < dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.size(); i++) {
+
+                dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromDeltaWork.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR));
+
+                Log.info("Current_previous -> EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() +
+                        "Delta_Work -> EPR => " + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getEPR());
+                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getEPR() != null)) {
+                    Assert.assertEquals("The EPR is => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() + " is missing/not found in Current_Work_history table",
+                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR(),
+                            dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getEPR());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() +
+                        " RECORD_TYPE => Current_PRevious =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getRECORD_TYPE() +
+                        " Delta_Work=" + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getRECORD_TYPE());
+
+                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getRECORD_TYPE() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getRECORD_TYPE() != null)) {
+                    Assert.assertEquals("The RECORD_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getRECORD_TYPE(),
+                            dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getRECORD_TYPE());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getEPR() +
+                        " PRIMARY_SITE_SYSTEM => Current_PRevious =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getPRIMARY_SITE_SYSTEM() +
+                        " Delta_Work=" + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getPRIMARY_SITE_SYSTEM());
+
+                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getPRIMARY_SITE_SYSTEM() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getPRIMARY_SITE_SYSTEM() != null)) {
+                    Assert.assertEquals("The PRIMARY_SITE_SYSTEM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getPRIMARY_SITE_SYSTEM(),
+                            dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getPRIMARY_SITE_SYSTEM());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() +
+                        " PRIMARY_SITE_ACRONYM => Current_PRevious =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getPRIMARY_SITE_ACRONYM() +
+                        " Delta_Work=" + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getPRIMARY_SITE_ACRONYM());
+
+                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getPRIMARY_SITE_ACRONYM() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getPRIMARY_SITE_ACRONYM() != null)) {
+                    Assert.assertEquals("The PRIMARY_SITE_ACRONYM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getPRIMARY_SITE_ACRONYM(),
+                            dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getPRIMARY_SITE_ACRONYM());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() +
+                        " PRIMARY_SITE_SUPPORT_LEVEL => Current_PRevious =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL() +
+                        " Delta_Work=" + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL());
+
+                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL() != null)) {
+                    Assert.assertEquals("The PRIMARY_SITE_SUPPORT_LEVEL is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL(),
+                            dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() +
+                        " FULFILMENT_SYSTEM => Current_Previous =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getFULFILMENT_SYSTEM() +
+                        " Delta_Work=" + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getFULFILMENT_SYSTEM());
+
+                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getFULFILMENT_SYSTEM() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getFULFILMENT_SYSTEM() != null)) {
+                    Assert.assertEquals("The FULFILMENT_SYSTEM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getFULFILMENT_SYSTEM(),
+                            dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getFULFILMENT_SYSTEM());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() +
+                        " FULFILMENT_JOURNAL_ACRONYM => Current_PRevious =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getFULFILMENT_JOURNAL_ACRONYM() +
+                        " Delta_Work=" + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getFULFILMENT_JOURNAL_ACRONYM());
+
+                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getFULFILMENT_JOURNAL_ACRONYM() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getFULFILMENT_JOURNAL_ACRONYM() != null)) {
+                    Assert.assertEquals("The FULFILMENT_SYSTEM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getFULFILMENT_JOURNAL_ACRONYM(),
+                            dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getFULFILMENT_JOURNAL_ACRONYM());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() +
+                        " ISSUE_PROD_TYPE_CODE => Current_PRevious =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getISSUE_PROD_TYPE_CODE() +
+                        " Delta_Work=" + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getISSUE_PROD_TYPE_CODE());
+
+                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getISSUE_PROD_TYPE_CODE() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getISSUE_PROD_TYPE_CODE() != null)) {
+                    Assert.assertEquals("The ISSUE_PROD_TYPE_CODE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getISSUE_PROD_TYPE_CODE(),
+                            dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getISSUE_PROD_TYPE_CODE());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() +
+                        " CATALOGUE_VOLUME_QTY => Current_PRevious =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getCATALOGUE_VOLUME_QTY() +
+                        " Delta_Work=" + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getCATALOGUE_VOLUME_QTY());
+
+                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getCATALOGUE_VOLUME_QTY() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getCATALOGUE_VOLUME_QTY() != null)) {
+                    Assert.assertEquals("The CATALOGUE_VOLUME_QTY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getCATALOGUE_VOLUME_QTY(),
+                            dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getCATALOGUE_VOLUME_QTY());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() +
+                        " CATALOGUE_ISSUES_QTY => Current_PRevious =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getCATALOGUE_ISSUES_QTY() +
+                        " Delta_Work=" + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getCATALOGUE_ISSUES_QTY());
+
+                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getCATALOGUE_ISSUES_QTY() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getCATALOGUE_ISSUES_QTY() != null)) {
+                    Assert.assertEquals("The CATALOGUE_ISSUES_QTY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getCATALOGUE_ISSUES_QTY(),
+                            dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getCATALOGUE_ISSUES_QTY());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() +
+                        " CATALOGUE_VOLUME_FROM => Current_PRevious =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getCATALOGUE_VOLUME_FROM() +
+                        " Delta_Work=" + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getCATALOGUE_VOLUME_FROM());
+
+                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getCATALOGUE_VOLUME_FROM() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getCATALOGUE_VOLUME_FROM() != null)) {
+                    Assert.assertEquals("The CATALOGUE_VOLUME_FROM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getCATALOGUE_VOLUME_FROM(),
+                            dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getCATALOGUE_VOLUME_FROM());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() +
+                        " CATALOGUE_VOLUME_TO => Current_PRevious =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getCATALOGUE_VOLUME_TO() +
+                        " Delta_Work=" + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getCATALOGUE_VOLUME_TO());
+
+                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getCATALOGUE_VOLUME_TO() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getCATALOGUE_VOLUME_TO() != null)) {
+                    Assert.assertEquals("The CATALOGUE_VOLUME_TO is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getCATALOGUE_VOLUME_TO(),
+                            dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getCATALOGUE_VOLUME_TO());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() +
+                        " RF_ISSUES_QTY => Current_PRevious =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getRF_ISSUES_QTY() +
+                        " Delta_Work=" + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getRF_ISSUES_QTY());
+
+                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getRF_ISSUES_QTY() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getRF_ISSUES_QTY() != null)) {
+                    Assert.assertEquals("The RF_ISSUES_QTY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getRF_ISSUES_QTY(),
+                            dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getRF_ISSUES_QTY());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() +
+                        " RF_TOTAL_PAGES_QTY => current_previous =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getRF_TOTAL_PAGES_QTY() +
+                        " Delta_Work=" + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getRF_TOTAL_PAGES_QTY());
+
+                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getRF_TOTAL_PAGES_QTY() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getRF_TOTAL_PAGES_QTY() != null)) {
+                    Assert.assertEquals("The RF_TOTAL_PAGES_QTY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getRF_TOTAL_PAGES_QTY(),
+                            dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getRF_TOTAL_PAGES_QTY());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() +
+                        " RF_FVI => current_previous =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getRF_FVI() +
+                        " Delta_Work=" + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getRF_FVI());
+
+                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getRF_FVI() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getRF_FVI() != null)) {
+                    Assert.assertEquals("The RF_FVI is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getRF_FVI(),
+                            dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getRF_FVI());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() +
+                        " RF_LVI => current_previous =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getRF_LVI() +
+                        " Delta_Work=" + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getRF_LVI());
+
+                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getRF_LVI() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getRF_LVI() != null)) {
+                    Assert.assertEquals("The RF_LVI is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getRF_LVI(),
+                            dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getRF_LVI());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() +
+                        " BUSINESS_UNIT_DESC => current_previous =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getBUSINESS_UNIT_DESC() +
+                        " Delta_Work=" + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getBUSINESS_UNIT_DESC());
+
+                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getBUSINESS_UNIT_DESC() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getBUSINESS_UNIT_DESC() != null)) {
+                    Assert.assertEquals("The BUSINESS_UNIT_DESC is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getBUSINESS_UNIT_DESC(),
+                            dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getBUSINESS_UNIT_DESC());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() +
+                        " DELTA_MODE => current_previous =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getDELTA_MODE() +
+                        " Delta_Work=" + dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getDELTA_MODE());
+
+                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getDELTA_MODE() != null ||
+                        (dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getDELTA_MODE() != null)) {
+                    Assert.assertEquals("The DELTA_MODE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i).getDELTA_MODE(),
+                            dataQualityJRBIContext.recordsFromFromDeltaWork.get(i).getDELTA_MODE());
+                }
+            }
+        }
+    }
+
 
 
 

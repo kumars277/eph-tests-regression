@@ -51,7 +51,7 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
   Scenario Outline: Verify Data count for JRBI delta_current_exclude tables are transferred from delta_current and current_history tables
     Given Get the total count difference between delta current and transform current history Table <TargetTable>
     Then Get the JRBI <TargetTable> exclude data count
-    And Compare count of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
+    And Compare exclude count of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
     Examples:
       |FirstSourceTable                 |SecondSourceTable                               |TargetTable                            |
       |jrbi_delta_current_work          |jrbi_transform_current_work_history_part          |jrbi_transform_history_work_excl_delta |
@@ -62,7 +62,7 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
   Scenario Outline: Verify Data count for JRBI delta_latest tables are transferred from delta_current and Current_Exclude tables
     Given Get the sum of total count between delta current and and Current_Exclude Table <TargetTable>
     Then Get the JRBI <TargetTable> latest data count
-    And Compare counts of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
+    And Compare latest counts of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
     Examples:
       |FirstSourceTable                 |SecondSourceTable                               |TargetTable                            |
       |jrbi_delta_current_work          |jrbi_transform_history_work_excl_delta          |jrbi_transform_latest_work |

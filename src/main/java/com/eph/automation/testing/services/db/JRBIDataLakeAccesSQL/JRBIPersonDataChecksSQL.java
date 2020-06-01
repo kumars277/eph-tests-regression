@@ -244,6 +244,69 @@ public class JRBIPersonDataChecksSQL {
                     " where EPR in ('%s')\n";
 
 
+    public static String GET_RANDOM_EPR_DELTA_PERSON =
+            "select epr as EPR" +
+                    " from (\n" +
+                    "--new\n" +
+                    "select c.epr, c.record_type, c.role_code , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email,'I' as delta_mode FROM jrbi_staging_sit.jrbi_transform_current_person c\n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_person p  on c.u_key = p.u_key\n" +
+                    "where p.u_key is null\n" +
+                    "union all\n" +
+                    "-- deleted\n" +
+                    "select c.epr, c.record_type, c.role_code , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email, 'D' as delta_mode FROM  jrbi_staging_sit.jrbi_transform_previous_person  c\n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person p  on c.u_key = p.u_key\n" +
+                    "where p.u_key is null\n" +
+                    "union all\n" +
+                    "--changed\n" +
+                    "select c.epr, c.record_type, c.role_code , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email, 'C' as delta_mode\n" +
+                    "FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_person  c\n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person p  on c.u_key = p.u_key\n" +
+                    "where (c.epr !=(p.epr) or\n" +
+                    "c.record_type != (p.record_type) or \n" +
+                    "c.role_code !=  (p.role_code) or\n" +
+                    "c.role_description !=  (p.role_description) or\n" +
+                    "c.given_name !=  (p.given_name) or\n" +
+                    "c. family_name !=  (p.family_name) or\n" +
+                    "c.peoplehub_id !=  (p.peoplehub_id) or\n" +
+                    "c.email != (p.email))) order by rand() limit %s\n";
+
+
+    public static String GET_DIFF_REC_PREVIOUS_CURRENT_PREVIOUS_PERSON =
+            "select epr as EPR\n" +
+                    ",record_type as RECORD_TYPE\n" +
+                    ",role_code as ROLE_CODE\n" +
+                    ",u_key as U_KEY\n" +
+                    ",role_description as ROLE_DESCRIPTION\n" +
+                    ",given_name as GIVEN_NAME\n" +
+                    ",family_name as FAMILY_NAME\n" +
+                    ",peoplehub_id as PEOPLEHUB_ID\n" +
+                    ",email as EMAIL,\n" +
+                    "delta_mode as DELTA_MODE from (\n" +
+                    "--new\n" +
+                    "select c.epr, c.record_type, c.role_code , c.u_key , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email,'I' as delta_mode FROM "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person c\n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_person p  on c.u_key = p.u_key\n" +
+                    "where p.u_key is null\n" +
+                    "union all\n" +
+                    "-- deleted\n" +
+                    "select c.epr, c.record_type, c.role_code , c. u_key ,c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email, 'D' as delta_mode FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_person  c\n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person p  on c.u_key = p.u_key\n" +
+                    "where p.u_key is null\n" +
+                    "union all\n" +
+                    "--changed\n" +
+                    "select c.epr, c.record_type, c.role_code , c.u_key , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email, 'C' as delta_mode\n" +
+                    "FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_person  c\n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person p  on c.u_key = p.u_key\n" +
+                    "where (c.epr !=(p.epr) or\n" +
+                    "c.record_type != (p.record_type) or\n" +
+                    "c.role_code !=  (p.role_code) or\n" +
+                    "c.u_key != (p.u_key ) or\n" +
+                    "c.role_description !=  (p.role_description) or\n" +
+                    "c.given_name !=  (p.given_name) or\n" +
+                    "c. family_name !=  (p.family_name) or\n" +
+                    "c.peoplehub_id !=  (p.peoplehub_id) or\n" +
+                    "c.email !=  (p.email)))\n" +
+                    " where EPR in ('%s')\n";
+
 }
 
 

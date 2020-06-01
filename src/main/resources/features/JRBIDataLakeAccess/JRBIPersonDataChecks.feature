@@ -65,3 +65,13 @@ Feature:Validate data for JRBI Work tables in Data Lake
     Examples:
       |tableName                                | countOfRandomIds|
       |jrbi_transform_latest_person               |1                 |
+
+  @JRBI
+  Scenario Outline: Verify Data from the difference of current_person and previous_person is transferred to delta current person table
+    Given We get the <countOfRandomIds> delta person random EPR ids
+    When Get the records from the difference of current_person and previous_person
+    Then Get the records from transform Delta person <tableNAme>
+    And  Compare the records of Delta Current person with difference of current and previous person
+    Examples:
+      | tableNAme                  | countOfRandomIds|
+      |jrbi_delta_current_person       |1                 |

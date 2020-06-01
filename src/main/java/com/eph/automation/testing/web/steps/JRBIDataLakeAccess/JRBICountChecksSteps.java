@@ -341,7 +341,7 @@ public class JRBICountChecksSteps {
         JRBIExclCount = ((Long) JRBIExclTableCount.get(0).get("Target_Count")).intValue();
     }
 
-    @And("^Compare count of (.*) and (.*) with (.*) are identical$")
+    @And("^Compare exclude count of (.*) and (.*) with (.*) are identical$")
     public void compareExclcounts(String srcTableOne, String srcTableTwo, String trgtTable){
         Log.info("The counts from the difference of tables " + srcTableOne + " and "+srcTableTwo+" => " + JRBIDiffCount + " and in "+trgtTable+" => " + JRBIExclCount);
         Assert.assertEquals("The counts are not equal when compared difference of "+srcTableOne+" and "+srcTableTwo+" with "+trgtTable, JRBIExclCount, JRBIDiffCount);
@@ -354,7 +354,7 @@ public class JRBICountChecksSteps {
     }
 
 
-    @And("^Compare counts of (.*) and (.*) with (.*) are identical$")
+    @And("^Compare latest counts of (.*) and (.*) with (.*) are identical$")
     public void compareLatestcounts(String srcTableOne, String srcTableTwo, String trgtTable){
         Log.info("The counts from the addition of tables " + srcTableOne + " and "+srcTableTwo+" => " + JRBISumCount + " and in "+trgtTable+" => " + JRBILatestCount);
         Assert.assertEquals("The counts are not equal when compared addition of "+srcTableOne+" and "+srcTableTwo+" with "+trgtTable, JRBILatestCount, JRBISumCount);

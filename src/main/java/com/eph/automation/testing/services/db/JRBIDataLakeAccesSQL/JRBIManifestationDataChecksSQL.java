@@ -198,6 +198,52 @@ public class JRBIManifestationDataChecksSQL {
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_manifestation where EPR in ('%s')\n";
 
 
+    public static String GET_RANDOM_EPR_DELTA_PERSON =
+                    "select epr as EPR from (\n" +
+                    "select c.epr , c.record_type , c.manifestation_type, c.journal_prod_site_code , c.journal_issue_trim_size , c.war_reference FROM "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation c\n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_manifestation p  on c.epr = p.epr\n" +
+                    "where p.epr is null\n" +
+                    "union all\n" +
+                    "select c.epr , c.record_type , c.manifestation_type, c.journal_prod_site_code , c.journal_issue_trim_size , c.war_reference  FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_manifestation  c\n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation p  on c.epr = p.epr\n" +
+                    "where p.epr is null\n" +
+                    "union all\n" +
+                    "select c.epr , c.record_type , c.manifestation_type, c.journal_prod_site_code , c.journal_issue_trim_size , c.war_reference FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_manifestation c\n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation p  on c.epr = p.epr\n" +
+                    "where (c.epr !=(p.epr) or\n" +
+                    "c.record_type != (p.record_type) or \n" +
+                    "c.manifestation_type !=  (p.manifestation_type ) or\n" +
+                    "c.journal_prod_site_code !=  (p.journal_prod_site_code ) or\n" +
+                    "c.journal_issue_trim_size !=  (p.journal_issue_trim_size ) or\n" +
+                    "c.war_reference !=  (p.war_reference ))) order by rand() limit %s\n";
+
+    public static String GET_DIFF_REC_PREVIOUS_CURRENT_PREVIOUS_MANIF =
+            "select epr as EPR" +
+                    ",record_type as RECORD_TYPE" +
+                    ",journal_prod_site_code as JOURNAL_PROD_SITE" +
+                    ",journal_issue_trim_size as JOURNAL_ISSUE_TRIM_SIZE" +
+                    ",war_reference as WAR_REFERENCE" +
+                    ",delta_mode as DELTA_MODE" +
+                    " from (\n" +
+                    "select c.epr , c.record_type , c.manifestation_type, c.journal_prod_site_code , c.journal_issue_trim_size , c.war_reference,'I' as delta_mode\n " +
+                    "FROM "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation c\n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_manifestation p  on c.epr = p.epr\n" +
+                    "where p.epr is null\n" +
+                    "union all\n" +
+                    "select c.epr , c.record_type , c.manifestation_type, c.journal_prod_site_code , c.journal_issue_trim_size , c.war_reference,'D' as delta_mode\n  " +
+                    "FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_manifestation  c\n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation p  on c.epr = p.epr\n" +
+                    "where p.epr is null\n" +
+                    "union all\n" +
+                    "select c.epr , c.record_type , c.manifestation_type, c.journal_prod_site_code , c.journal_issue_trim_size , c.war_reference,'C' as delta_mode\n " +
+                    "FROM  jrbi_staging_sit.jrbi_transform_previous_manifestation c\n" +
+                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation p  on c.epr = p.epr\n" +
+                    "where (c.epr !=(p.epr) or\n" +
+                    "c.record_type != (p.record_type) or \n" +
+                    "c.manifestation_type !=  (p.manifestation_type ) or\n" +
+                    "c.journal_prod_site_code !=  (p.journal_prod_site_code ) or\n" +
+                    "c.journal_issue_trim_size !=  (p.journal_issue_trim_size ) or\n" +
+                    "c.war_reference !=  (p.war_reference ))) where EPR in ('%s')\n";
 }
 
 

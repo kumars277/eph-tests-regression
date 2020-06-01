@@ -65,5 +65,16 @@ Feature:Validate data for JRBI Work tables in Data Lake
       |tableName                                | countOfRandomIds|
       |jrbi_transform_latest_manifestation               |1                 |
 
+  @JRBI
+  Scenario Outline: Verify Data from the difference of current_manif and previous_manif is transferred to delta current manif table
+    Given We get the <countOfRandomIds> delta manifestation random EPR ids
+    When Get the records from the difference of current_manifestation and previous_manifestation
+    Then We get the records from transform delta manifestation <tableNAme>
+    And  Compare the records of Delta Current manifestation with difference of current and previous manifestation
+    Examples:
+      | tableNAme                  | countOfRandomIds|
+      |jrbi_delta_current_person       |1                 |
+
+
 
       
