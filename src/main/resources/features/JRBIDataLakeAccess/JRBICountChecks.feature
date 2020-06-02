@@ -5,8 +5,8 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
     @JRBI
   Scenario Outline: Verify Data Count for JRBI transform_Current_tables is transferred from Source Table
       Given Get the total count of JRBI Data from Full Load <tableName>
-      Then  We know the total count of JRBI data from <tableName>
-      And The count of source table and <tableName> table are identical
+      Then  We know the total count of Current JRBI data from <tableName>
+      And Compare count of Full load with current <tableName> table are identical
     Examples:
       | tableName                                 |
       |jrbi_transform_current_work                |
@@ -16,31 +16,31 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
       
       @JRBI
       Scenario Outline: Verify Data count for JRBI transform_current_history tables are transferred from transformed_current tables
-        Given We know the total count of JRBI data from <SourceTableName>
-        Then Get the JRBI <TargettableName> history data count
-        And Compare count <SourceTableName> table and <TargettableName> are identical
+        Given We know the total count of Current JRBI data from <SourceTableName>
+        Then Get the count of transform_current_history <TargettableName>
+        And Check count of current table <SourceTableName> and current history <TargettableName> are identical
         Examples:
-          |SourceTableName                      |TargettableName                                 |
-          |jrbi_transform_current_work          |jrbi_transform_current_work_history_part   |
+          |SourceTableName                      |TargettableName                                     |
+          |jrbi_transform_current_work          |jrbi_transform_current_work_history_part            |
           |jrbi_transform_current_manifestation |jrbi_transform_current_manifestation_history_part   |
-          |jrbi_transform_current_person        |jrbi_transform_current_person_history_part   |
+          |jrbi_transform_current_person        |jrbi_transform_current_person_history_part          |
 
   @JRBI
   Scenario Outline: Verify Data count for JRBI transform_previous_history tables are transferred from transformed_previous tables
-    Given We know the total count of JRBI data from <SourceTableName>
-    Then We Get the JRBI <TargettableName> previous history data count
-    And Compare count <SourceTableName> table and <TargettableName> are identical
+    Given We know the total count of Previous tables from <SourceTableName>
+    Then  We Get the JRBI <TargettableName> previous history data count
+    And   Check count of previous table <SourceTableName> and previous history <TargettableName> are identical
     Examples:
       |SourceTableName                      |TargettableName                                 |
-      |jrbi_transform_previous_work         |jrbi_transform_current_work_history_part   |
-      |jrbi_transform_previous_manifestation|jrbi_transform_current_manifestation_history_part   |
-      |jrbi_transform_previous_person       |jrbi_transform_current_person_history_part   |
+      |jrbi_transform_previous_work         |jrbi_transform_previous_work_history_part   |
+      |jrbi_transform_previous_manifestation|jrbi_transform_previous_manifestation_history_part   |
+      |jrbi_transform_previous_person       |jrbi_transform_previous_person_history_part   |
 
   @JRBI
   Scenario Outline: Verify Data count for JRBI delta_current_history tables are transferred from delta_current_work tables
-    Given We know the total count of JRBI data from <SourceTableName>
-    Then Get the JRBI <TargettableName> history data count
-    And Compare count <SourceTableName> table and <TargettableName> are identical
+    Given We know the delta current count for tables <SourceTableName>
+    Then  Get the count of delta current history <TargettableName> table
+    And   Compare delta current <SourceTableName> table and delta history <TargettableName> are identical
     Examples:
       |SourceTableName                   |TargettableName                                 |
       |jrbi_delta_current_work           |jrbi_transform_delta_work_history_part   |
@@ -48,7 +48,7 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
       |jrbi_delta_current_person         |jrbi_transform_delta_person_history_part   |
 
   @JRBI
-  Scenario Outline: Verify Data count for JRBI delta_current_exclude tables are transferred from delta_current and current_history tables
+  Scenario Outline: Verify Data count for JRBI delta_current_exclude are transferred from delta_current and current_history tables
     Given Get the total count difference between delta current and transform current history Table <TargetTable>
     Then Get the JRBI <TargetTable> exclude data count
     And Compare exclude count of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
@@ -73,7 +73,7 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
   @JRBI
   Scenario Outline: Verify Data count for JRBI delta_current tables are transferred from Current and Previous tables
     Given Get the difference of total count between current and previous Table <TargetTable>
-    Then Get the JRBI <TargetTable> delta current data count
+    Then We know the delta current count for tables <TargetTable>
     And Compare delta count of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
     Examples:
       |FirstSourceTable                 |SecondSourceTable                               |TargetTable                            |

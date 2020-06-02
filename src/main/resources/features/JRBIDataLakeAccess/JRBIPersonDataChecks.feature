@@ -4,13 +4,13 @@ Feature:Validate data for JRBI Work tables in Data Lake
 
     @JRBI
   Scenario Outline: Verify Data for JRBI transform_current_person is transferred from person_data_full
-      Given We get the <countOfRandomIds> random Person EPR ids <sourceTable>
-      When Get the records from data full load for Person <sourceTable>
-      Then Get the records from transform current person <targetTable>
-      And Compare the records of person full load and current person
+      Given We get the <countOfRandomIds> random Person EPR ids <tableName>
+      When  Get the records from data full load for Person
+      Then  Get the records from transform current person
+      And   Compare the records of person full load and current person
     Examples:
-     | sourceTable| targetTable                                 | countOfRandomIds|
-    |jrbi_journal_data_full|jrbi_transform_current_person               |10                 |
+     | tableName                        |    countOfRandomIds|
+     |jrbi_journal_data_full             |10                 |
 
 
   @JRBI
