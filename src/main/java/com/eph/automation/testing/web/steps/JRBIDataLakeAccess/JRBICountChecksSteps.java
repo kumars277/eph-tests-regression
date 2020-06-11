@@ -182,61 +182,10 @@ public class JRBICountChecksSteps {
 
     @And("^Check count of previous table (.*) and previous history (.*) are identical$")
     public void comparePreviousandPreviousHistoryCount(String SrctableName, String trgttableName){
-        Log.info("The count for previous table " + SrctableName + " => " + JRBICurrentCount + " and in previous_history "+trgttableName+" => " + JRBIPreviousHistoryCount);
+        Log.info("The count for previous table " + SrctableName + " => " + JRBIPreviousCount + " and in previous_history "+trgttableName+" => " + JRBIPreviousHistoryCount);
         Assert.assertEquals("The counts are not equal when compared with "+SrctableName+" and "+trgttableName, JRBIPreviousHistoryCount, JRBIPreviousCount);
     }
 
-    @Given("^We know the delta current count for tables (.*)$")
-    public void getDeltaCurrentCount(String tableName){
-        switch (tableName) {
-            case "jrbi_delta_current_work":
-                Log.info("Getting Delta Current Work Table Count...");
-                JRBIDeltaCurrentSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_WORK_COUNT;
-                break;
-
-            case "jrbi_delta_current_manifestation":
-                Log.info("Getting Delta Current Manifestation Table Count...");
-                JRBIDeltaCurrentSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_MANIF_COUNT;
-                break;
-
-            case "jrbi_delta_current_person":
-                Log.info("Getting Delta Current Person Table Count...");
-                JRBIDeltaCurrentSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_PERSON_COUNT;
-                break;
-        }
-            Log.info(JRBIDeltaCurrentSQLCount);
-            List<Map<String, Object>> JRBIDeltaCurrentTableCount = DBManager.getDBResultMap(JRBIDeltaCurrentSQLCount, Constants.AWS_URL);
-            JRBIDeltaCurrentCount = ((Long) JRBIDeltaCurrentTableCount.get(0).get("Delta_Current_Count")).intValue();
-    }
-
-    @Then("^Get the count of delta current history (.*) table$")
-    public void getDeltaCurrentHistoryCount(String tableName){
-        switch (tableName){
-            case "jrbi_transform_delta_work_history_part":
-                Log.info("Getting Delta Current Work History Table Count...");
-                JRBIDeltaCurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_WORK_HISTORY_COUNT;
-                break;
-
-            case "jrbi_transform_delta_manifestation_history_part":
-                Log.info("Getting Delta Current Manifest History Table Count...");
-                JRBIDeltaCurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_MANIF_HISTORY_COUNT;
-                break;
-
-            case "jrbi_transform_delta_person_history_part":
-                Log.info("Getting Delta Current Manifest History Table Count...");
-                JRBIDeltaCurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_PERSON_HISTORY_COUNT;
-                break;
-        }
-        Log.info(JRBIDeltaCurrentHistorySQLCount);
-        List<Map<String, Object>> JRBIDeltaCurrentTableCount = DBManager.getDBResultMap(JRBIDeltaCurrentHistorySQLCount, Constants.AWS_URL);
-        JRBIDeltaCurrentHistoryCount = ((Long) JRBIDeltaCurrentTableCount.get(0).get("Delta_Current_Count")).intValue();
-    }
-
-    @And("^Compare delta current (.*) table and delta history (.*) are identical$")
-    public void compareDeltaCurrentandDeltaHistoryCount(String SrctableName, String trgttableName){
-        Log.info("The count for Delta table " + SrctableName + " => " + JRBIDeltaCurrentCount + " and in delta_history "+trgttableName+" => " + JRBIDeltaCurrentHistoryCount);
-        Assert.assertEquals("The counts are not equal when compared with "+SrctableName+" and "+trgttableName, JRBIDeltaCurrentHistoryCount, JRBIDeltaCurrentCount);
-    }
 
     @Given("^Get the total count difference between delta current and transform current history Table (.*)$")
     public void countDiffoFDeltaCurrentAndCurrentHistory(String targetTable ){
@@ -371,4 +320,59 @@ public class JRBICountChecksSteps {
         Log.info("The counts from the difference of tables " + srcTableOne + " and "+srcTableTwo+" => " + JRBIDiffCurrentPreviousCount + " and in "+trgtTable+" => " + JRBIDeltaCurrentCount);
         Assert.assertEquals("The counts are not equal when compared difference of "+srcTableOne+" and "+srcTableTwo+" with "+trgtTable, JRBIDeltaCurrentCount, JRBIDiffCurrentPreviousCount);
     }
+
+    @Given("^We know the delta current count for tables (.*)$")
+    public void getDeltaCurrentCount(String tableName){
+        switch (tableName) {
+            case "jrbi_delta_current_work":
+                Log.info("Getting Delta Current Work Table Count...");
+                JRBIDeltaCurrentSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_WORK_COUNT;
+                break;
+
+            case "jrbi_delta_current_manifestation":
+                Log.info("Getting Delta Current Manifestation Table Count...");
+                JRBIDeltaCurrentSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_MANIF_COUNT;
+                break;
+
+            case "jrbi_delta_current_person":
+                Log.info("Getting Delta Current Person Table Count...");
+                JRBIDeltaCurrentSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_PERSON_COUNT;
+                break;
+        }
+        Log.info(JRBIDeltaCurrentSQLCount);
+        List<Map<String, Object>> JRBIDeltaCurrentTableCount = DBManager.getDBResultMap(JRBIDeltaCurrentSQLCount, Constants.AWS_URL);
+        JRBIDeltaCurrentCount = ((Long) JRBIDeltaCurrentTableCount.get(0).get("Delta_Current_Count")).intValue();
+    }
+
+    @Then("^Get the count of delta current history (.*) table$")
+    public void getDeltaCurrentHistoryCount(String tableName){
+        switch (tableName){
+            case "jrbi_transform_delta_work_history_part":
+                Log.info("Getting Delta Current Work History Table Count...");
+                JRBIDeltaCurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_WORK_HISTORY_COUNT;
+                break;
+
+            case "jrbi_transform_delta_manifestation_history_part":
+                Log.info("Getting Delta Current Manifest History Table Count...");
+                JRBIDeltaCurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_MANIF_HISTORY_COUNT;
+                break;
+
+            case "jrbi_transform_delta_person_history_part":
+                Log.info("Getting Delta Current Manifest History Table Count...");
+                JRBIDeltaCurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_PERSON_HISTORY_COUNT;
+                break;
+        }
+        Log.info(JRBIDeltaCurrentHistorySQLCount);
+        List<Map<String, Object>> JRBIDeltaCurrentTableCount = DBManager.getDBResultMap(JRBIDeltaCurrentHistorySQLCount, Constants.AWS_URL);
+        JRBIDeltaCurrentHistoryCount = ((Long) JRBIDeltaCurrentTableCount.get(0).get("Delta_History_Count")).intValue();
+    }
+
+    @And("^Compare delta current (.*) table and delta history (.*) are identical$")
+    public void compareDeltaCurrentandDeltaHistoryCount(String SrctableName, String trgttableName){
+        Log.info("The count for Delta table " + SrctableName + " => " + JRBIDeltaCurrentCount + " and in delta_history "+trgttableName+" => " + JRBIDeltaCurrentHistoryCount);
+        Assert.assertEquals("The counts are not equal when compared with "+SrctableName+" and "+trgttableName, JRBIDeltaCurrentHistoryCount, JRBIDeltaCurrentCount);
+    }
+
+
+
 }

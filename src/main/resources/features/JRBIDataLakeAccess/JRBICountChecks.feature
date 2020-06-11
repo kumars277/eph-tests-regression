@@ -36,6 +36,18 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
       |jrbi_transform_previous_manifestation|jrbi_transform_previous_manifestation_history_part   |
       |jrbi_transform_previous_person       |jrbi_transform_previous_person_history_part   |
 
+
+  @JRBI
+  Scenario Outline: Verify Data count for JRBI delta_current tables are transferred from Current and Previous tables
+    Given Get the difference of total count between current and previous Table <TargetTable>
+    Then We know the delta current count for tables <TargetTable>
+    And Compare delta count of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
+    Examples:
+      |FirstSourceTable                     |SecondSourceTable                     |TargetTable                            |
+      |jrbi_transform_current_work          |jrbi_transform_previous_work          |jrbi_delta_current_work |
+      |jrbi_transform_current_manifestation |jrbi_transform_previous_manifestation |jrbi_delta_current_manifestation|
+      |jrbi_transform_current_person        |jrbi_transform_previous_person        |jrbi_delta_current_person|
+
   @JRBI
   Scenario Outline: Verify Data count for JRBI delta_current_history tables are transferred from delta_current_work tables
     Given We know the delta current count for tables <SourceTableName>
@@ -69,15 +81,4 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
       |jrbi_delta_current_manifestation |jrbi_transform_history_manifestation_excl_delta |jrbi_transform_latest_manifestation|
       |jrbi_delta_current_person        |jrbi_transform_history_person_excl_delta        |jrbi_transform_latest_person|
 
-
-  @JRBI
-  Scenario Outline: Verify Data count for JRBI delta_current tables are transferred from Current and Previous tables
-    Given Get the difference of total count between current and previous Table <TargetTable>
-    Then We know the delta current count for tables <TargetTable>
-    And Compare delta count of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
-    Examples:
-      |FirstSourceTable                 |SecondSourceTable                               |TargetTable                            |
-      |jrbi_delta_current_work          |jrbi_transform_previous_work          |jrbi_delta_current_work |
-      | jrbi_delta_current_manifestation|jrbi_transform_previous_manifestation |jrbi_delta_current_manifestation|
-      |jrbi_delta_current_person        |jrbi_transform_previous_person        |jrbi_delta_current_person|
 

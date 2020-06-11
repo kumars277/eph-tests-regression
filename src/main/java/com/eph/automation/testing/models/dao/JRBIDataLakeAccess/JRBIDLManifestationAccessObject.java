@@ -11,6 +11,7 @@ public class JRBIDLManifestationAccessObject {
     private String TYPE;
     private String DELETE_FLAG;
     private String LAST_UPDATED_DATE;
+    private String MANIFESTATION_TYPE;
 
     public String getLAST_UPDATED_DATE() {
         return LAST_UPDATED_DATE;
@@ -26,6 +27,12 @@ public class JRBIDLManifestationAccessObject {
         this.DELETE_FLAG = DELETE_FLAG;
     }
 
+    public String getMANIFESTATION_TYPE() {
+        return MANIFESTATION_TYPE;
+    }
+    public void setMANIFESTATION_TYPE(String MANIFESTATION_TYPE) {
+        this.MANIFESTATION_TYPE = MANIFESTATION_TYPE;
+    }
 
     public String getEPR() {
         return EPR;
