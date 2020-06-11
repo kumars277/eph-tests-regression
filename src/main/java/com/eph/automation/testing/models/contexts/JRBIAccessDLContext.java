@@ -19,6 +19,10 @@ public class JRBIAccessDLContext {
     public static List<JRBIDLWorkAccessObject> recordsFromFromPreviousWork;
     public static List<JRBIDLWorkAccessObject> recordsFromFromDeltaWork;
     public static List<JRBIDLWorkAccessObject> recordsFromFromDeltaWorkHistory;
+    public static List<JRBIDLWorkAccessObject> recordsFromDiffDeltaAndWorkHistory;
+    public static List<JRBIDLWorkAccessObject> recordsFromExcludeWork;
+    public static List<JRBIDLWorkAccessObject> recordsFromLAtestWork;
+    public static List<JRBIDLWorkAccessObject> recordsFromAddDeltaAndWorkExclude;
 
 
     public static List<JRBIDLManifestationAccessObject> recordsFromDataFullLoadManif;
@@ -28,6 +32,11 @@ public class JRBIAccessDLContext {
     public static List<JRBIDLManifestationAccessObject> recordsFromFromPreviousManifHistory;
     public static List<JRBIDLManifestationAccessObject> recordsFromFromDeltaManifHistory;
     public static List<JRBIDLManifestationAccessObject> recordsFromFromDeltaManif;
+    public static List<JRBIDLManifestationAccessObject> recordsFromDiffDeltaAndManifHistory;
+    public static List<JRBIDLManifestationAccessObject> recordsFromExcludeManif;
+    public static List<JRBIDLManifestationAccessObject> recordsFromLAtestManif;
+    public static List<JRBIDLManifestationAccessObject> recordsFromAddDeltaAndManifExclude;
+
 
     public static List<JRBIDLPersonAccessObject>recordsFromDataFullLoadPerson;
     public static List<JRBIDLPersonAccessObject> recordsFromFromCurrentPerson;
@@ -36,6 +45,10 @@ public class JRBIAccessDLContext {
     public static List<JRBIDLPersonAccessObject> recordsFromFromPreviousPersonHistory;
     public static List<JRBIDLPersonAccessObject> recordsFromFromDeltaPersonHistory;
     public static List<JRBIDLPersonAccessObject> recordsFromFromDeltaPerson;
+    public static List<JRBIDLPersonAccessObject> recordsFromDiffDeltaAndPersonHistory;
+    public static List<JRBIDLPersonAccessObject> recordsFromExcludePerson;
+    public static List<JRBIDLPersonAccessObject> recordsFromLAtestPerson;
+    public static List<JRBIDLPersonAccessObject> recordsFromAddDeltaAndPersonExclude;
 
 }
 

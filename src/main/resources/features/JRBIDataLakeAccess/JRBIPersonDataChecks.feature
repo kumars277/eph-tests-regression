@@ -45,3 +45,23 @@ Feature:Validate data for JRBI Work tables in Data Lake
       | sourceTable                  | targetTable                                 | countOfRandomIds|
       |jrbi_delta_current_person| jrbi_transform_delta_person_history_part  |10                 |
 
+
+    @JRBI
+    Scenario Outline: Verify Data from the difference of Delta_person and person_history is transferred to person exclude table
+      Given We get the <countOfRandomIds> random Person EPR ids <tableName>
+      When Get the records from the difference of Delta_current_person and person_history
+      Then Get the records from person exclude table
+      And  Compare the records of Person Exclude with difference of Delta_current_person and person_history
+      Examples:
+      |tableName                                | countOfRandomIds|
+      |jrbi_transform_history_person_excl_delta|1                 |
+
+  @JRBI
+  Scenario Outline: Verify Data from the addition of Delta_current_person and person_Exclude is transferred to person Latest table
+    Given We get the <countOfRandomIds> random Person EPR ids <tableName>
+    When Get the records from the addition of Delta_Person and Person_Exclude
+    Then Get the records from Person latest table
+    And  Compare the records of Person Latest with addition of Delta_current_Person and Person_Exclude
+    Examples:
+      |tableName                                | countOfRandomIds|
+      |jrbi_transform_latest_person               |1                 |

@@ -44,4 +44,22 @@ Feature:Validate data for JRBI Work tables in Data Lake
       |jrbi_delta_current_work| jrbi_transform_delta_work_history_part        |10                 |
 
 
-      
+  @JRBI
+  Scenario Outline: Verify Data from the difference of Delta_work and work_history is transferred to work exclude table
+    Given We get the <countOfRandomIds> random EPR ids <tableName>
+    When Get the records from the difference of Delta_current_work and work_history
+    Then Get the records from work exclude table
+    And  Compare the records of Work Exclude with difference of Delta_current_work and work_history
+    Examples:
+      |tableName                                | countOfRandomIds|
+      |jrbi_transform_history_work_excl_delta   |1                 |
+
+  @JRBI
+  Scenario Outline: Verify Data from the addition of Delta_current_work and work_Exclude is transferred to work Latest table
+    Given We get the <countOfRandomIds> random EPR ids <tableName>
+    When Get the records from the addition of Delta_current_work and work_Exclude
+    Then Get the records from work latest table
+    And  Compare the records of Work Latest with addition of Delta_current_work and work_Exclude
+    Examples:
+      |tableName                                | countOfRandomIds|
+      |jrbi_transform_latest_work               |1                 |

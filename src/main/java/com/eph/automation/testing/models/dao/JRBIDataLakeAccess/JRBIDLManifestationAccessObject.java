@@ -9,6 +9,23 @@ public class JRBIDLManifestationAccessObject {
     private String WAR_REFERENCE;
     private String DELTA_MODE;
     private String TYPE;
+    private String DELETE_FLAG;
+    private String LAST_UPDATED_DATE;
+
+    public String getLAST_UPDATED_DATE() {
+        return LAST_UPDATED_DATE;
+    }
+    public void setLAST_UPDATED_DATE(String LAST_UPDATED_DATE) {
+        this.LAST_UPDATED_DATE = LAST_UPDATED_DATE;
+    }
+
+    public String getDELETE_FLAG() {
+        return DELETE_FLAG;
+    }
+    public void setDELETE_FLAG(String DELETE_FLAG) {
+        this.DELETE_FLAG = DELETE_FLAG;
+    }
+
 
     public String getEPR() {
         return EPR;

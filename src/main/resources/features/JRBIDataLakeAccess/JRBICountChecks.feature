@@ -48,8 +48,8 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
       |jrbi_delta_current_person         |jrbi_transform_delta_person_history_part   |
 
   @JRBI
-  Scenario Outline: Verify Data count for JRBI delta_current_execlude tables are transferred from delta_current and current_history tables
-    Given Get the total count difference between First and Second Source Table <TargetTable>
+  Scenario Outline: Verify Data count for JRBI delta_current_exclude tables are transferred from delta_current and current_history tables
+    Given Get the total count difference between delta current and transform current history Table <TargetTable>
     Then Get the JRBI <TargetTable> exclude data count
     And Compare count of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
     Examples:
@@ -58,6 +58,26 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
       |jrbi_delta_current_manifestation |jrbi_transform_current_manifestation_history_part |jrbi_transform_history_manifestation_excl_delta|
       |jrbi_delta_current_person        |jrbi_transform_current_person_history_part        |jrbi_transform_history_person_excl_delta|
 
+  @JRBI
+  Scenario Outline: Verify Data count for JRBI delta_latest tables are transferred from delta_current and Current_Exclude tables
+    Given Get the sum of total count between delta current and and Current_Exclude Table <TargetTable>
+    Then Get the JRBI <TargetTable> latest data count
+    And Compare counts of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
+    Examples:
+      |FirstSourceTable                 |SecondSourceTable                               |TargetTable                            |
+      |jrbi_delta_current_work          |jrbi_transform_history_work_excl_delta          |jrbi_transform_latest_work |
+      |jrbi_delta_current_manifestation |jrbi_transform_history_manifestation_excl_delta |jrbi_transform_latest_manifestation|
+      |jrbi_delta_current_person        |jrbi_transform_history_person_excl_delta        |jrbi_transform_latest_person|
 
 
+  @JRBI
+  Scenario Outline: Verify Data count for JRBI delta_current tables are transferred from Current and Previous tables
+    Given Get the difference of total count between current and previous Table <TargetTable>
+    Then Get the JRBI <TargetTable> delta current data count
+    And Compare delta count of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
+    Examples:
+      |FirstSourceTable                 |SecondSourceTable                               |TargetTable                            |
+      |jrbi_delta_current_work          |jrbi_transform_previous_work          |jrbi_delta_current_work |
+      | jrbi_delta_current_manifestation|jrbi_transform_previous_manifestation |jrbi_delta_current_manifestation|
+      |jrbi_delta_current_person        |jrbi_transform_previous_person        |jrbi_delta_current_person|
 
