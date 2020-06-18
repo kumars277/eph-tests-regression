@@ -21,7 +21,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And Compare the records of current manifestation and current manifestation history
     Examples:
       | sourceTable                        | countOfRandomIds|
-      |jrbi_transform_current_manifestation| 50                 |
+      |jrbi_transform_current_manifestation| 1                |
 
   @JRBI
   Scenario Outline: Verify Data for JRBI transform_Previous_manifestation_history is transferred from manifestation
@@ -31,7 +31,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And Compare the records of previous manifestation and previous manifestation history
     Examples:
       | sourceTable                         | countOfRandomIds|
-      |jrbi_transform_previous_manifestation|   50                 |
+      |jrbi_transform_previous_manifestation|   1                 |
 
 
   @JRBI
@@ -42,7 +42,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And  Compare the records of Delta Current manifestation with difference of current and previous manifestation
     Examples:
       | tableRef                                 | countOfRandomIds|
-      |jrbi_current_previous_manifestation       |50                 |
+      |jrbi_current_previous_manifestation       |1                |
 
 
   @JRBI
@@ -53,7 +53,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And Compare the records of delta manifestation and delta manifestation history
     Examples:
       | sourceTable                      | countOfRandomIds|
-      |jrbi_delta_current_manifestation  |50                 |
+      |jrbi_delta_current_manifestation  |1                 |
 
 
   @JRBI
@@ -64,7 +64,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And  Compare the records of Manif Exclude with difference of Delta_current_manif and manif_history
     Examples:
       |tableName                                      | countOfRandomIds|
-      |jrbi_transform_history_manifestation_excl_delta|50                 |
+      |jrbi_transform_history_manifestation_excl_delta|1                 |
 
   @JRBI
   Scenario Outline: Verify Data from the addition of Delta_current_manifestation and manifestation_Exclude is transferred to manifestation Latest table
@@ -74,7 +74,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And  Compare the records of Manifestation Latest with addition of Delta_current_Manifestation and Manifestation_Exclude
     Examples:
       |tableName                                | countOfRandomIds|
-      |jrbi_transform_latest_manifestation               |50                 |
+      |jrbi_transform_latest_manifestation               |1                 |
 
 
 

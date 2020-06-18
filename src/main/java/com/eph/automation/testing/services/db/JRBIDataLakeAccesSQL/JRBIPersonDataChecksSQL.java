@@ -104,7 +104,9 @@ public class JRBIPersonDataChecksSQL {
                     ",type as TYPE" +
                     ",delta_mode as DELTA_MODE" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_person_history_part where EPR in ('%s') AND " +
-                    "delta_ts like \'%%"+JRBIDataLakeCountChecksSQL.previousDate()+"%%\'";
+                    //"delta_ts like \'%%"+JRBIDataLakeCountChecksSQL.previousDate()+"%%\'";
+                    "delta_ts=(select max(delta_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_person_history_part\n " +
+                    "where delta_ts < (select max(delta_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_person_history_part))\n";
 
 
 
@@ -138,7 +140,9 @@ public class JRBIPersonDataChecksSQL {
                     ",peoplehub_id as PEOPLEHUB_ID" +
                     ",email as EMAIL" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part where EPR in ('%s') AND " +
-                    "transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\' and delete_flag=false";
+                    //"transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\' " +
+                    "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part)\n " +
+                    "and delete_flag=false";
 
     public static String GET_PREVIOUS_PERSON_HISTORY_RECORDS =
             "select epr as EPR" +
@@ -151,7 +155,9 @@ public class JRBIPersonDataChecksSQL {
                     ",peoplehub_id as PEOPLEHUB_ID" +
                     ",email as EMAIL" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part where EPR in ('%s') AND " +
-                    "transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.previousDate()+"%%\'";
+                    //"transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.previousDate()+"%%\'";
+                    "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part\n " +
+                    "where transform_ts < (select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part))\n";
 
     public static String GET_EPR_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_PERSON =
             "select epr as EPR from \n" +
@@ -160,7 +166,9 @@ public class JRBIPersonDataChecksSQL {
                     ", A.email, A.last_updated_date, A.delete_flag, A.transform_ts \n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person B on A.u_key  = B.u_key\n" +
-                    "where B.u_key is null and A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\')\n" +
+                    "where B.u_key is null and " +
+                   // "A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\')\n" +
+                    "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A))\n " +
                     " order by rand() limit %s\n";
 
     public static String GET_RECORDS_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_PERSON =
@@ -179,7 +187,10 @@ public class JRBIPersonDataChecksSQL {
                     ", A.email, A.last_updated_date, A.delete_flag, A.transform_ts \n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person B on A.u_key  = B.u_key\n" +
-                    "where B.u_key is null and A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\' AND A.epr in ('%s'))\n";
+                    "where B.u_key is null and " +
+                   // "A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\' " +
+                    "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A)\n " +
+                    "AND A.epr in ('%s'))\n";
 
 
     public static String GET_RECORDS_FROM_PERSON_EXCLUDE =

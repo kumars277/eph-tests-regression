@@ -136,7 +136,9 @@ public class JRBIWorkDataChecksSQL {
                     ",rf_lvi as RF_LVI" +
                     ",business_unit_desc as BUSINESS_UNIT_DESC" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part where EPR in ('%s') AND " +
-                    "transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\' AND delete_flag=false";
+                    //"transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\' " +
+                    "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part)\n " +
+                    "AND delete_flag=false";
 
     public static String GET_CURRENT_WORK_EPR_ID=
             "select epr as EPR from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work order by rand() limit %s\n";
@@ -194,8 +196,8 @@ public class JRBIWorkDataChecksSQL {
                     ",delta_mode as DELTA_MODE" +
                     ",type as TYPE" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_work_history_part where EPR in ('%s') AND \n" +
-                    "delta_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\'";
-
+                    //"delta_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\'";
+                    "delta_ts=(select max(delta_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_work_history_part)\n " ;
 
     public static String GET_PREVIOUS_WORK_RECORDS =
             "select epr as EPR" +
@@ -238,7 +240,10 @@ public class JRBIWorkDataChecksSQL {
                     ",rf_lvi as RF_LVI" +
                     ",business_unit_desc as BUSINESS_UNIT_DESC" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part where EPR in ('%s') AND " +
-                    "transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.previousDate()+"%%\'";
+                   // "transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.previousDate()+"%%\'";
+                    "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part\n " +
+                    " where transform_ts < (select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part))\n";
+
 
     public static String GET_EPR_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_WORK =
             "select epr as EPR from \n" +
@@ -249,7 +254,9 @@ public class JRBIWorkDataChecksSQL {
                     ", A.rf_total_pages_qty, A.rf_fvi, A.rf_lvi, A.business_unit_desc, A.last_updated_date\n" +
                     ", A.delete_flag, A.transform_ts from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work B on A.epr  = B.epr \n" +
-                    "where B.epr is null and A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\')\n" +
+                    "where B.epr is null and " +
+                    //"A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\')\n" +
+                    "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A))\n " +
                     " order by rand() limit %s\n";
 
     public static String GET_RECORDS_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_WORK =
@@ -281,7 +288,10 @@ public class JRBIWorkDataChecksSQL {
                     ", A.rf_total_pages_qty, A.rf_fvi, A.rf_lvi, A.business_unit_desc, A.last_updated_date\n" +
                     ", A.delete_flag, A.transform_ts from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work B on A.epr  = B.epr \n" +
-                    "where B.epr is null and A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\' AND A.epr in ('%s'))\n";
+                    "where B.epr is null and " +
+                   // "A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\' " +
+                    "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A)\n " +
+                    "AND A.epr in ('%s'))\n";
 
     public static String GET_RECORDS_FROM_WORK_EXCLUDE =
             "select epr as EPR \n" +
