@@ -10,7 +10,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
       And Compare the records of jrbi_journal_data_full and transform current work
     Examples:
      | sourceTable         | countOfRandomIds|
-    |jrbi_journal_data_full|      50         |
+    |jrbi_journal_data_full|      1         |
 
   @JRBI
   Scenario Outline: Verify Data for JRBI transform_Current_work_history is transferred from Current Work
@@ -20,7 +20,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And Compare the records of current work and current work history
     Examples:
       | sourceTable               | countOfRandomIds|
-      |jrbi_transform_current_work| 50                 |
+      |jrbi_transform_current_work| 1                 |
 
   @JRBI
   Scenario Outline: Verify Data for JRBI transform_Previous_work_history is transferred from Previous Work
@@ -30,7 +30,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And Compare the records of previous work and previous work history
     Examples:
       | sourceTable                  | countOfRandomIds|
-      |jrbi_transform_previous_work  |50                 |
+      |jrbi_transform_previous_work  |1                 |
 
   @JRBI
   Scenario Outline: Verify Data from the difference of current_work and previous_work is transferred to delta current work table
@@ -40,7 +40,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And  Compare the records of Delta Current work with difference of current and previous work
     Examples:
       |tableReference                       | countOfRandomIds|
-      |jrbi_transform_previous_current_work| 50                 |
+      |jrbi_transform_previous_current_work| 1                 |
 
 
   @JRBI
@@ -51,7 +51,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And Compare the records of delta work and delta work history
     Examples:
       | sourceTable               | countOfRandomIds|
-      |jrbi_delta_current_work|         50                 |
+      |jrbi_delta_current_work|         1                 |
 
 
   @JRBI
@@ -62,7 +62,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And  Compare the records of Work Exclude with difference of Delta_current_work and work_history
     Examples:
       |tableName                                | countOfRandomIds|
-      |jrbi_transform_history_work_excl_delta   |50                 |
+      |jrbi_transform_history_work_excl_delta   |1                 |
 
   @JRBI
   Scenario Outline: Verify Data from the addition of Delta_current_work and work_Exclude is transferred to work Latest table
@@ -72,5 +72,5 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And  Compare the records of Work Latest with addition of Delta_current_work and work_Exclude
     Examples:
       |tableName                                | countOfRandomIds|
-      |jrbi_transform_latest_work               |50                 |
+      |jrbi_transform_latest_work               |1                 |
 

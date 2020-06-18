@@ -10,7 +10,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
       And   Compare the records of person full load and current person
     Examples:
      | tableName                        |    countOfRandomIds|
-     |jrbi_journal_data_full             |50                 |
+     |jrbi_journal_data_full             |1                 |
 
 
   @JRBI
@@ -21,7 +21,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And Compare the records of current person and current person history
     Examples:
       | sourceTable                 | countOfRandomIds      |
-      |jrbi_transform_current_person|   50                 |
+      |jrbi_transform_current_person|   1                 |
 
 
   @JRBI
@@ -32,7 +32,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And Compare the records of previous person and previous person history
     Examples:
       | sourceTable                  | countOfRandomIds|
-      |jrbi_transform_previous_person|   50                 |
+      |jrbi_transform_previous_person|   1                 |
 
 
   @JRBI
@@ -43,7 +43,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And  Compare the records of Delta Current person with difference of current and previous person
     Examples:
       | tableReference                  | countOfRandomIds|
-      |jrbi_current_previous_person       |50                 |
+      |jrbi_current_previous_person       |1                 |
 
 
   @JRBI
@@ -54,7 +54,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And Compare the records of delta person and delta person history
     Examples:
       | sourceTable              | countOfRandomIds|
-      |jrbi_delta_current_person| 50                 |
+      |jrbi_delta_current_person| 1                 |
 
 
     @JRBI
@@ -65,7 +65,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
       And  Compare the records of Person Exclude with difference of Delta_current_person and person_history
       Examples:
       |tableName                                | countOfRandomIds|
-      |jrbi_transform_history_person_excl_delta|50                 |
+      |jrbi_transform_history_person_excl_delta|1                 |
 
   @JRBI
   Scenario Outline: Verify Data from the addition of Delta_current_person and person_Exclude is transferred to person Latest table
@@ -75,5 +75,5 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And  Compare the records of Person Latest with addition of Delta_current_Person and Person_Exclude
     Examples:
       |tableName                                | countOfRandomIds|
-      |jrbi_transform_latest_person               |50                 |
+      |jrbi_transform_latest_person               |1                 |
 
