@@ -282,6 +282,9 @@ public class JRBIDataLakeCountChecksSQL {
                     "c.business_unit_desc !=  (p.business_unit_desc)))\n";
 
 
+    public static String GET_COUNT_DELTA_MANIF =
+            "select count(*) as Target_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation\n";
+
     public static String GET_COUNT_DIFF_CURRENT_PREVIOUS_PERSON =
             "select count(*) as source_count from (\n" +
                     "--new\n" +
