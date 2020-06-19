@@ -82,9 +82,9 @@ Feature:Validate data for JRBI Manifestation tables in Data Lake
     Given We get the <countOfRandomIds> random manifestation EPR ids <tableName>
     When Get the records from manifestation latest table
     Then Get the records from manif extended table
-    And  Compare the records of manif Latest with work_Extended
+    And  Compare the records of manif Latest with manif_Extended
     Examples:
       |tableName                                | countOfRandomIds|
-      |jrbi_transform_latest_manifestation               |50                 |
+      |jrbi_transform_latest_manifestation               |1                 |
 
 

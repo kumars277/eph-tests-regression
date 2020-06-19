@@ -32,7 +32,7 @@ public class JRBIManifestationDataChecksSteps {
 
     @Given("^We get the (.*) random manifestation EPR ids (.*)$")
     public void getRandomManifEPRIds(String numberOfRecords, String tableName) {
-       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Manif EPR Ids...");
         switch (tableName) {
@@ -839,7 +839,7 @@ public class JRBIManifestationDataChecksSteps {
         dataQualityJRBIContext.recordsFromLAtestManif = DBManager.getDBResultAsBeanList(sql, JRBIDLManifestationAccessObject.class, Constants.AWS_URL);
     }
 
-    @And("^Compare the records of manif Latest with work_Extended$")
+    @And("^Compare the records of manif Latest with manif_Extended")
     public void compareManifExtendedRecords() {
         if (dataQualityJRBIContext.recordsFromLAtestManif.isEmpty()) {
             Log.info("No Data Found ....");
