@@ -169,7 +169,7 @@ public class JRBIManifestationDataChecksSQL {
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation B on A.epr  = B.epr \n" +
                     "where B.epr is null and " +
                    // "A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\' " +
-                    "A.transform_ts = (select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part A))" +
+                    "A.transform_ts = (select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part A)" +
                     "AND A.epr in ('%s'))\n";
 
     public static String GET_RECORDS_FROM_MANIF_EXCLUDE =
@@ -185,10 +185,10 @@ public class JRBIManifestationDataChecksSQL {
 
     public  static String GET_JRBI_EPR_MANIF_LATEST =
             "select epr as EPR from \n" +
-                    "(select a.epr, a.record_type, a.journal_prod_site_code, \n" +
+                    "(select a.epr, a.record_type,a.manifestation_type, a.journal_prod_site_code, \n" +
                     "a.journal_issue_trim_size, a.war_reference, a.transform_ts, a.last_updated_date, a.delete_flag\n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_manifestation_excl_delta \n" +
-                    "as a union all select b.epr, b.record_type, b.journal_prod_site_code, \n" +
+                    "as a union all select b.epr, b.record_type,b.manifestation_type, b.journal_prod_site_code, \n" +
                     "b.journal_issue_trim_size, b.war_reference,b.transform_ts,null as col11, null as col12 \n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation as b)\n "+
                     "order by rand() limit %s\n";
@@ -202,10 +202,10 @@ public class JRBIManifestationDataChecksSQL {
                     "war_reference as WAR_REFERENCE,\n" +
                     "last_updated_date as LAST_UPDATED_DATE,\n" +
                     "delete_flag as DELETE_FLAG\n" +
-                    " from (select a.epr, a.record_type, a.journal_prod_site_code, \n" +
+                    " from (select a.epr, a.record_type,a.manifestation_type, a.journal_prod_site_code, \n" +
                     "a.journal_issue_trim_size, a.war_reference, a.transform_ts, a.last_updated_date, a.delete_flag\n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_manifestation_excl_delta \n" +
-                    "as a union all select b.epr, b.record_type, b.journal_prod_site_code, \n" +
+                    "as a union all select b.epr, b.record_type,b.manifestation_type, b.journal_prod_site_code, \n" +
                     "b.journal_issue_trim_size, b.war_reference,b.transform_ts,null as col11, null as col12 \n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation as b) where EPR in ('%s')\n";
 
@@ -219,6 +219,16 @@ public class JRBIManifestationDataChecksSQL {
                     "last_updated_date as LAST_UPDATED_DATE,\n" +
                     "delete_flag as DELETE_FLAG\n" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_manifestation where EPR in ('%s')\n";
+
+    public static String GET_JRBI_MANIF_EXTENDED_RECORDS =
+            "select epr_id as EPR_ID,\n" +
+                    "manifestation_type as MANIFESTATION_TYPE,\n" +
+                    "journal_prod_site_code as JOURNAL_PROD_SITE,\n" +
+                    "journal_issue_trim_size as JOURNAL_ISSUE_TRIM_SIZE,\n" +
+                    "war_reference as WAR_REFERENCE,\n" +
+                    "last_updated_date as LAST_UPDATED_DATE,\n" +
+                    "delete_flag as DELETE_FLAG\n" +
+                    " from "+GetJRBIDLDBUser.getProductExtdb()+".manifestation_extended where EPR_ID in ('%s')\n";
 
 
     public static String GET_RANDOM_EPR_DELTA_PERSON =

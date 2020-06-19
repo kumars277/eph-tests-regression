@@ -3,6 +3,7 @@ package com.eph.automation.testing.models.dao.JRBIDataLakeAccess;
 public class JRBIDLManifestationAccessObject {
 
     private String EPR;
+    private String EPR_ID;
     private String RECORD_TYPE;
     private String JOURNAL_PROD_SITE;
     private String JOURNAL_ISSUE_TRIM_SIZE;
@@ -11,6 +12,7 @@ public class JRBIDLManifestationAccessObject {
     private String TYPE;
     private String DELETE_FLAG;
     private String LAST_UPDATED_DATE;
+    private String MANIFESTATION_TYPE;
 
     public String getLAST_UPDATED_DATE() {
         return LAST_UPDATED_DATE;
@@ -26,13 +28,23 @@ public class JRBIDLManifestationAccessObject {
         this.DELETE_FLAG = DELETE_FLAG;
     }
 
-
-    public String getEPR() {
-        return EPR;
+    public String getMANIFESTATION_TYPE() {
+        return MANIFESTATION_TYPE;
     }
+    public void setMANIFESTATION_TYPE(String MANIFESTATION_TYPE) {
+        this.MANIFESTATION_TYPE = MANIFESTATION_TYPE;
+    }
+
+    public String getEPR() { return EPR; }
     public void setEPR(String EPR) {
         this.EPR = EPR;
     }
+
+    public String getEPR_ID() { return EPR_ID; }
+    public void setEPR_ID(String EPR_ID) {
+        this.EPR_ID = EPR_ID;
+    }
+
 
     public String getRECORD_TYPE() {
         return RECORD_TYPE;
