@@ -189,7 +189,7 @@ public class JRBIPersonDataChecksSQL {
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person B on A.u_key  = B.u_key\n" +
                     "where B.u_key is null and " +
                    // "A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\' " +
-                    "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A))\n " +
+                    "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A)\n " +
                     "AND A.epr in ('%s'))\n";
 
 
