@@ -26,6 +26,8 @@ public class JRBIAccessDLContext {
     public static List<JRBIDLWorkAccessObject> recordsFromDiffCurrentAndPreviousWork;
     public static List<JRBIDLWorkAccessObject> recordsFromExtendeWork;
 
+
+
     public static List<JRBIDLManifestationAccessObject> recordsFromDataFullLoadManif;
     public static List<JRBIDLManifestationAccessObject> recordsFromFromCurrentManif;
     public static List<JRBIDLManifestationAccessObject> recordsFromFromCurrentManifHistory;
@@ -37,6 +39,9 @@ public class JRBIAccessDLContext {
     public static List<JRBIDLManifestationAccessObject> recordsFromExcludeManif;
     public static List<JRBIDLManifestationAccessObject> recordsFromLAtestManif;
     public static List<JRBIDLManifestationAccessObject> recordsFromAddDeltaAndManifExclude;
+    public static List<JRBIDLManifestationAccessObject> recordsFromDiffCurrentAndPreviousManif;
+    public static List<JRBIDLManifestationAccessObject> recordsFromExtendedManif;
+
 
 
     public static List<JRBIDLPersonAccessObject>recordsFromDataFullLoadPerson;
@@ -50,6 +55,7 @@ public class JRBIAccessDLContext {
     public static List<JRBIDLPersonAccessObject> recordsFromExcludePerson;
     public static List<JRBIDLPersonAccessObject> recordsFromLAtestPerson;
     public static List<JRBIDLPersonAccessObject> recordsFromAddDeltaAndPersonExclude;
+    public static List<JRBIDLPersonAccessObject> recordsFromDiffCurrentAndPreviousPerson;
 
 }
 

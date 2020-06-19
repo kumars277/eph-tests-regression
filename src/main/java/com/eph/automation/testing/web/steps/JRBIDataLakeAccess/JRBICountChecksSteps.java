@@ -42,10 +42,10 @@ public class JRBICountChecksSteps {
     private static String JRBIDeltaCurrentHistorySQLCount;
     private static int JRBIDeltaCurrentCount;
     private static int JRBIDeltaCurrentHistoryCount;
-
-
-    private static int JRBIWorkExtCount;
     private static String JRBIworkExtendedSQLCount;
+    private static int JRBIWorkExtCount;
+    private static String JRBIManifExtendedSQLCount;
+    private static int JRBIManifExtCount;
 
 
 
@@ -220,6 +220,7 @@ public class JRBICountChecksSteps {
         JRBIDiffDeltaCurrAndCurrHistCount = ((Long) JRBIDiffDeltaCurrAndCurrHistTableCount.get(0).get("source_count")).intValue();
     }
 
+
     @Then("^Get the JRBI (.*) exclude data count$")
     public void getExcludeTableCounts(String targetTable){
         switch (targetTable){
@@ -240,6 +241,7 @@ public class JRBICountChecksSteps {
         List<Map<String, Object>> JRBIExclTableCount = DBManager.getDBResultMap(JRBIExclSQLCount, Constants.AWS_URL);
         JRBIExclCount = ((Long) JRBIExclTableCount.get(0).get("Excl_Count")).intValue();
     }
+
 
     @And("^Compare exclude count of (.*) and (.*) with (.*) are identical$")
     public void compareExclcounts(String srcTableOne, String srcTableTwo, String trgtTable){
@@ -275,15 +277,16 @@ public class JRBICountChecksSteps {
     public void latestCounts(String targetTable){
         switch (targetTable){
             case "jrbi_transform_latest_person":
-                Log.info("Getting Count from exclude person... ");
+                Log.info("Getting Count from Latest person... ");
                 JRBILatestSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_PERSON_LATEST_COUNT;
                 break;
             case "jrbi_transform_latest_work":
-                Log.info("Getting Count from exclude work... ");
+                Log.info("Getting Count from Latest work... ");
                 JRBILatestSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_WORK_LATEST_COUNT;
                 break;
             case "jrbi_transform_latest_manifestation":
-                Log.info("Getting Count from exclude manifestation... ");
+                Log.info("Getting Count from Latest manifestation... ");
+
                 JRBILatestSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_MANIF_LATEST_COUNT;
                 break;
         }
@@ -364,7 +367,8 @@ public class JRBICountChecksSteps {
                 break;
 
             case "jrbi_transform_delta_person_history_part":
-                Log.info("Getting Delta Current Manifest History Table Count...");
+                Log.info("Getting Delta Current person History Table Count...");
+
                 JRBIDeltaCurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_PERSON_HISTORY_COUNT;
                 break;
         }
@@ -379,14 +383,15 @@ public class JRBICountChecksSteps {
         Assert.assertEquals("The counts are not equal when compared with "+SrctableName+" and "+trgttableName, JRBIDeltaCurrentHistoryCount, JRBIDeltaCurrentCount);
     }
 
-    @Given ("^Get the total count of work latest table$")
-    public void totalCountworkLatest(){
-        Log.info("Getting Work Latest Table Count...");
+
+    @Given("^Get the total count of work latest table$")
+        public void getLatestWorkCount(){
+        Log.info("Getting Count from Latest work... ");
+
         JRBILatestSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_WORK_LATEST_COUNT;
         Log.info(JRBILatestSQLCount);
         List<Map<String, Object>> JRBILatestTableCount = DBManager.getDBResultMap(JRBILatestSQLCount, Constants.AWS_URL);
         JRBILatestCount = ((Long) JRBILatestTableCount.get(0).get("Target_Count")).intValue();
-
     }
 
     @Then("^Get the total count of work extended table$")
@@ -403,4 +408,32 @@ public class JRBICountChecksSteps {
         Log.info("The count for Work LAtest table => " + JRBILatestCount + " and in Work Extended => " + JRBIWorkExtCount);
         Assert.assertEquals("The counts are not equal when compared with Work Latest and Work Extended", JRBIWorkExtCount, JRBILatestCount);
     }
+
+    @Given("^Get the total count of manif latest table$")
+    public void getLatestManifCount(){
+        Log.info("Getting Count from Latest manif... ");
+        JRBILatestSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_MANIF_LATEST_COUNT;
+        Log.info(JRBILatestSQLCount);
+        List<Map<String, Object>> JRBILatestTableCount = DBManager.getDBResultMap(JRBILatestSQLCount, Constants.AWS_URL);
+        JRBILatestCount = ((Long) JRBILatestTableCount.get(0).get("Target_Count")).intValue();
+    }
+
+    @Then("^Get the total count of manif extended table$")
+    public void totalCountManifExtended(){
+        Log.info("Getting Manif Extended Table Count...");
+        JRBIManifExtendedSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_MANIF_EXTENDED_COUNT;
+        Log.info(JRBIManifExtendedSQLCount);
+        List<Map<String, Object>> JRBIManifExtTableCount = DBManager.getDBResultMap(JRBIManifExtendedSQLCount, Constants.AWS_URL);
+        JRBIManifExtCount = ((Long) JRBIManifExtTableCount.get(0).get("MANIF_EXTENDED_COUNT")).intValue();
+    }
+
+    @And("^Compare the counts of manif latest and manif extended table are identical$")
+    public void compareManifLatestExtended() {
+        Log.info("The count for Manifestation LAtest table => " + JRBILatestCount + " and in Manif Extended => " + JRBIManifExtCount);
+        Assert.assertEquals("The counts are not equal when compared with Manif Latest and Manif Extended", JRBIManifExtCount, JRBILatestCount);
+
+    }
+
+
+
 }
