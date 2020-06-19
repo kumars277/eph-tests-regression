@@ -82,3 +82,8 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
       |jrbi_delta_current_person        |jrbi_transform_history_person_excl_delta        |jrbi_transform_latest_person|
 
 
+  @JRBIExtended
+  Scenario: Verify Data count for JRBI work_extended tables are transferred from work_latest tables
+    Given Get the total count of work latest table
+    Then Get the total count of work extended table
+    And Compare the counts of work latest and work extended table are identical

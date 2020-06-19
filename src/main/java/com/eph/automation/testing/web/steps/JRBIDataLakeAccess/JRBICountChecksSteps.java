@@ -31,7 +31,9 @@ public class JRBICountChecksSteps {
     private static String JRBISumSQLCount;
     private static int JRBISumCount;
     private static String JRBILatestSQLCount;
+    private static String JRBIworkExtendedSQLCount;
     private static int JRBILatestCount;
+    private static int JRBIWorkExtCount;
     private static String JRBIDiffCurrentPreviousSQLCount;
     private static int JRBIDiffCurrentPreviousCount;
     private static String JRBIPreviousSQLCount;
@@ -373,6 +375,30 @@ public class JRBICountChecksSteps {
         Assert.assertEquals("The counts are not equal when compared with "+SrctableName+" and "+trgttableName, JRBIDeltaCurrentHistoryCount, JRBIDeltaCurrentCount);
     }
 
+    @Given ("^Get the total count of work latest table$")
+    public void totalCountworkLatest(){
+        Log.info("Getting Work Latest Table Count...");
+        JRBILatestSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_WORK_LATEST_COUNT;
+        Log.info(JRBILatestSQLCount);
+        List<Map<String, Object>> JRBILatestTableCount = DBManager.getDBResultMap(JRBILatestSQLCount, Constants.AWS_URL);
+        JRBILatestCount = ((Long) JRBILatestTableCount.get(0).get("Target_Count")).intValue();
+
+    }
+
+    @Then("^Get the total count of work extended table$")
+    public void totalCountworkExtended(){
+        Log.info("Getting Work Extended Table Count...");
+        JRBIworkExtendedSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_WORK_EXTENDED_COUNT;
+        Log.info(JRBIworkExtendedSQLCount);
+        List<Map<String, Object>> JRBIWorkExtTableCount = DBManager.getDBResultMap(JRBIworkExtendedSQLCount, Constants.AWS_URL);
+        JRBIWorkExtCount = ((Long) JRBIWorkExtTableCount.get(0).get("WORK_EXTENDED_COUNT")).intValue();
+    }
+
+    @And("^Compare the counts of work latest and work extended table are identical$")
+    public void compareworkLatestExtended(){
+        Log.info("The count for Work LAtest table => " + JRBILatestCount + " and in Work Extended => " + JRBIWorkExtCount);
+        Assert.assertEquals("The counts are not equal when compared with Work Latest and Work Extended", JRBIWorkExtCount, JRBILatestCount);
+    }
 
 
 }

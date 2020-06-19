@@ -74,3 +74,15 @@ Feature:Validate data for JRBI Work tables in Data Lake
       |tableName                                | countOfRandomIds|
       |jrbi_transform_latest_work               |1                 |
 
+
+  @JRBIExtended
+  Scenario Outline: Verify Data from the work_latest transferred to work Extended table
+    Given We get the <countOfRandomIds> random EPR ids <tableName>
+    When Get the records from work latest table
+    Then Get the records from work extended table
+    And  Compare the records of Work Latest with work_Extended
+    Examples:
+      |tableName                                | countOfRandomIds|
+      |jrbi_transform_latest_work               |50                 |
+
+

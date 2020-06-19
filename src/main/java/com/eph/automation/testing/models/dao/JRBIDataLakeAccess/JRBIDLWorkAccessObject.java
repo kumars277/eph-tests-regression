@@ -3,6 +3,7 @@ package com.eph.automation.testing.models.dao.JRBIDataLakeAccess;
 public class JRBIDLWorkAccessObject {
 
     private String EPR;
+    private String EPR_ID;
     private String RECORD_TYPE;
     private String PRIMARY_SITE_SYSTEM;
     private String PRIMARY_SITE_ACRONYM;
@@ -45,6 +46,11 @@ public class JRBIDLWorkAccessObject {
     }
     public void setWORK_TYPE(String WORK_TYPE) {
         this.WORK_TYPE = WORK_TYPE;
+    }
+
+    public String getEPR_ID() { return EPR_ID; }
+    public void setEPR_ID(String EPR_ID) {
+        this.EPR_ID = EPR_ID;
     }
 
     public String getEPR() {

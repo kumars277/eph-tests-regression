@@ -500,4 +500,27 @@ public class JRBIWorkDataChecksSQL {
                     "c.rf_lvi !=  (p.rf_lvi) or\n" +
                     "c.business_unit_desc !=  (p.business_unit_desc)))\n" +
                     "where EPR in ('%s')\n";
+
+
+    public static String GET_JRBI_WORK_EXTENDED_RECORDS =
+            "select epr_id as EPR_ID \n" +
+                    ",work_type as WORK_TYPE\n" +
+                    ",primary_site_system as PRIMARY_SITE_SYSTEM\n" +
+                    ",primary_site_acronym as PRIMARY_SITE_ACRONYM\n" +
+                    ",primary_site_support_level as PRIMARY_SITE_SUPPORT_LEVEL\n" +
+                    ",issue_prod_type_code as ISSUE_PROD_TYPE_CODE\n" +
+                    ",catalogue_volumes_qty as CATALOGUE_VOLUME_QTY\n" +
+                    ",catalogue_issues_qty as CATALOGUE_ISSUES_QTY\n" +
+                    ",catalogue_volume_from as CATALOGUE_VOLUME_FROM\n" +
+                    ",catalogue_volume_to as CATALOGUE_VOLUME_TO\n" +
+                    ",rf_issues_qty as RF_ISSUES_QTY\n" +
+                    ",rf_total_pages_qty as RF_TOTAL_PAGES_QTY\n" +
+                    ",rf_fvi as RF_FVI\n" +
+                    ",rf_lvi as RF_LVI\n" +
+                    ",business_unit_desc as BUSINESS_UNIT_DESC\n" +
+                    ",delete_flag as DELETE_FLAG\n" +
+                    ",last_updated_date as LAST_UPDATED_DATE\n" +
+                    "from "+GetJRBIDLDBUser.getProductExtdb()+".work_extended\n" +
+                    "where EPR_ID in ('%s')\n";
+
 }

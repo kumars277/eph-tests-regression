@@ -31,7 +31,7 @@ public class JRBIWorkDataChecksSteps {
 
     @Given("^We get the (.*) random EPR ids (.*)$")
     public void getRandomEPRIds(String numberOfRecords, String tableName) {
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random EPR Ids...");
         switch (tableName) {
@@ -1794,6 +1794,221 @@ public class JRBIWorkDataChecksSteps {
 
             }
         }
+    }
+
+    @Then("^Get the records from work extended table$")
+    public void getExtendedWorkRec(){
+        Log.info("We get the Extended Work records...");
+        sql = String.format(JRBIWorkDataChecksSQL.GET_JRBI_WORK_EXTENDED_RECORDS, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityJRBIContext.recordsFromExtendeWork = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
+
+    }
+
+    @And("^Compare the records of Work Latest with work_Extended$")
+    public void compareWorkLatestandExtended(){
+
+       if (dataQualityJRBIContext.recordsFromLAtestWork.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the EPR Ids to compare the records between Work Latest with Work_Extended...");
+            for (int i = 0; i < dataQualityJRBIContext.recordsFromLAtestWork.size(); i++) {
+                System.out.println(dataQualityJRBIContext.recordsFromLAtestWork.get(i).getDELETE_FLAG());
+
+
+                dataQualityJRBIContext.recordsFromLAtestWork.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromExtendeWork.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR_ID));
+
+                Log.info("Work_Latest -> EPR => " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() +
+                        "Work_Extended -> EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID());
+                if (dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() != null ||
+                        (dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() != null)) {
+                    Assert.assertEquals("The EPR is => " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() + " is missing/not found in Work_extended table",
+                            dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR(),
+                            dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() +
+                        " WORK_TYPE => Work_Latest =" + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getWORK_TYPE() +
+                        " Work_Extend=" + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getWORK_TYPE());
+
+                if (dataQualityJRBIContext.recordsFromLAtestWork.get(i).getWORK_TYPE() != null ||
+                        (dataQualityJRBIContext.recordsFromExtendeWork.get(i).getWORK_TYPE() != null)) {
+                    Assert.assertEquals("The WORK_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromLAtestWork.get(i).getWORK_TYPE(),
+                            dataQualityJRBIContext.recordsFromExtendeWork.get(i).getWORK_TYPE());
+                }
+
+
+                String primarySiteExt = dataQualityJRBIContext.recordsFromLAtestWork.get(i).getPRIMARY_SITE_SYSTEM();
+                String primarySiteAcrExt = dataQualityJRBIContext.recordsFromLAtestWork.get(i).getPRIMARY_SITE_ACRONYM();
+                String primarySiteSupportLevelExt = dataQualityJRBIContext.recordsFromLAtestWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL();
+                String issueProdTypeCodeExt = dataQualityJRBIContext.recordsFromLAtestWork.get(i).getISSUE_PROD_TYPE_CODE();
+                String catalogueVolQtyExt = dataQualityJRBIContext.recordsFromLAtestWork.get(i).getCATALOGUE_VOLUME_QTY();
+                String catlogueIssueQtyExt = dataQualityJRBIContext.recordsFromLAtestWork.get(i).getCATALOGUE_ISSUES_QTY();
+                String catalogueVolFromExt = dataQualityJRBIContext.recordsFromLAtestWork.get(i).getCATALOGUE_VOLUME_FROM();
+                String catalogueVolToExt = dataQualityJRBIContext.recordsFromLAtestWork.get(i).getCATALOGUE_VOLUME_TO();
+                String rfIssueQtyExt =  dataQualityJRBIContext.recordsFromLAtestWork.get(i).getRF_ISSUES_QTY();
+                String rfTotalPageQtyExt = dataQualityJRBIContext.recordsFromLAtestWork.get(i).getRF_TOTAL_PAGES_QTY();
+                String rfFviExt = dataQualityJRBIContext.recordsFromLAtestWork.get(i).getRF_FVI();
+                String rfLviExt = dataQualityJRBIContext.recordsFromLAtestWork.get(i).getRF_LVI();
+                String busineesUnitDescExt = dataQualityJRBIContext.recordsFromLAtestWork.get(i).getBUSINESS_UNIT_DESC();
+
+                if(dataQualityJRBIContext.recordsFromLAtestWork.get(i).getDELETE_FLAG()=="1"){
+                    primarySiteExt = null;
+                    primarySiteAcrExt = null;
+                    primarySiteSupportLevelExt = null;
+                    issueProdTypeCodeExt = null;
+                    catalogueVolQtyExt = null;
+                    catlogueIssueQtyExt = null;
+                    catalogueVolFromExt = null;
+                    catalogueVolToExt = null;
+                    rfIssueQtyExt = null;
+                    rfTotalPageQtyExt = null;
+                    rfFviExt = null;
+                    rfLviExt = null;
+                    busineesUnitDescExt = null;
+                }
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() +
+                        " PRIMARY_SITE_SYSTEM => Work_Latest =" + primarySiteExt +
+                        " Work_Extend=" + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_SYSTEM());
+
+                if (primarySiteExt != null || dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_SYSTEM() != null) {
+                    Assert.assertEquals("The PRIMARY_SITE_SYSTEM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() ,
+                            primarySiteExt, dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_SYSTEM());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() +
+                        " PRIMARY_SITE_ACRONYM => Work_latest =" + primarySiteAcrExt +
+                        " Work_Extended=" + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_ACRONYM());
+
+                if (primarySiteAcrExt != null || dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_ACRONYM() != null) {
+                    Assert.assertEquals("The PRIMARY_SITE_ACRONYM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() ,
+                            primarySiteAcrExt,dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_ACRONYM());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() +
+                        " PRIMARY_SITE_SUPPORT_LEVEL => Work_Latest =" + primarySiteSupportLevelExt +
+                        " Work_Extend=" + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL());
+
+                if (primarySiteSupportLevelExt != null || dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL() != null) {
+                    Assert.assertEquals("The PRIMARY_SITE_SUPPORT_LEVEL is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() ,
+                            primarySiteSupportLevelExt,dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL());
+                }
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() +
+                        " ISSUE_PROD_TYPE_CODE => Work_Latest =" + issueProdTypeCodeExt +
+                        " Work_Extend=" + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getISSUE_PROD_TYPE_CODE());
+
+                if (issueProdTypeCodeExt != null || dataQualityJRBIContext.recordsFromExtendeWork.get(i).getISSUE_PROD_TYPE_CODE() != null) {
+                    Assert.assertEquals("The ISSUE_PROD_TYPE_CODE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() ,
+                            issueProdTypeCodeExt,dataQualityJRBIContext.recordsFromExtendeWork.get(i).getISSUE_PROD_TYPE_CODE());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() +
+                        " CATALOGUE_VOLUME_QTY => Work_Latest =" + catalogueVolQtyExt +
+                        " Work_Extend =" + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_QTY());
+
+                if (catalogueVolQtyExt != null ||dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_QTY() != null) {
+                    Assert.assertEquals("The CATALOGUE_VOLUME_QTY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() ,
+                            catalogueVolQtyExt,dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_QTY());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() +
+                        " CATALOGUE_ISSUES_QTY => Work_Latest =" + catlogueIssueQtyExt +
+                        " Work_Extend=" + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_ISSUES_QTY());
+
+                if (catlogueIssueQtyExt != null || dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_ISSUES_QTY() != null) {
+                    Assert.assertEquals("The CATALOGUE_ISSUES_QTY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() ,
+                            catlogueIssueQtyExt,dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_ISSUES_QTY());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() +
+                        " CATALOGUE_VOLUME_FROM => Work_Latest =" + catalogueVolFromExt +
+                        " Work_Extend=" + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_FROM());
+
+                if (catalogueVolFromExt != null || dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_FROM() != null) {
+                    Assert.assertEquals("The CATALOGUE_VOLUME_FROM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() ,
+                            catalogueVolFromExt,dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_FROM());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() +
+                        " CATALOGUE_VOLUME_TO => Work_Latest =" + catalogueVolToExt +
+                        " Work_Extend=" + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_TO());
+
+                if (catalogueVolToExt != null || dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_TO() != null) {
+                    Assert.assertEquals("The CATALOGUE_VOLUME_TO is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() ,
+                            catalogueVolToExt,dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_TO());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() +
+                        " RF_ISSUES_QTY => Work_Latest =" + rfIssueQtyExt +
+                        " Work_Extend=" + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_ISSUES_QTY());
+
+                if (rfIssueQtyExt != null || dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_ISSUES_QTY() != null) {
+                    Assert.assertEquals("The RF_ISSUES_QTY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() ,
+                            rfIssueQtyExt,dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_ISSUES_QTY());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() +
+                        " RF_TOTAL_PAGES_QTY => Work_Latest =" + rfTotalPageQtyExt +
+                        " Work_Extend=" + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_TOTAL_PAGES_QTY());
+
+                if (rfTotalPageQtyExt != null || dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_TOTAL_PAGES_QTY() != null) {
+                    Assert.assertEquals("The RF_TOTAL_PAGES_QTY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() ,
+                            rfTotalPageQtyExt,dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_TOTAL_PAGES_QTY());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() +
+                        " RF_FVI => Work_Latest =" + rfFviExt +
+                        " Work_Extend=" + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_FVI());
+
+                if (rfFviExt != null || dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_FVI() != null) {
+                    Assert.assertEquals("The RF_FVI is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() ,
+                            rfFviExt,dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_FVI());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() +
+                        " RF_LVI => Work_Latest =" + rfLviExt +
+                        " Work_Extend=" + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_LVI());
+
+                if (rfLviExt != null || dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_LVI() != null) {
+                    Assert.assertEquals("The RF_LVI is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() ,
+                            rfLviExt,dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_LVI());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() +
+                        " BUSINESS_UNIT_DESC => Work_Latest =" + busineesUnitDescExt +
+                        " Work_Extend=" + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getBUSINESS_UNIT_DESC());
+
+                if (busineesUnitDescExt != null || dataQualityJRBIContext.recordsFromExtendeWork.get(i).getBUSINESS_UNIT_DESC() != null) {
+                    Assert.assertEquals("The BUSINESS_UNIT_DESC is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() ,
+                            busineesUnitDescExt,dataQualityJRBIContext.recordsFromExtendeWork.get(i).getBUSINESS_UNIT_DESC());
+                }
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() +
+                        " DELETE_FLAG => Work_Latest =" + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getDELETE_FLAG() +
+                        " Work_Extend=" + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getDELETE_FLAG());
+
+                if (dataQualityJRBIContext.recordsFromLAtestWork.get(i).getDELETE_FLAG() != null ||
+                        (dataQualityJRBIContext.recordsFromExtendeWork.get(i).getDELETE_FLAG() != null)) {
+                    Assert.assertEquals("The DELETE_FLAG is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromLAtestWork.get(i).getDELETE_FLAG(),
+                            dataQualityJRBIContext.recordsFromExtendeWork.get(i).getDELETE_FLAG());
+                }
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() +
+                        " LAST_UPDATED_DATE => Work_Latest =" + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getLAST_UPDATED_DATE() +
+                        " Work_Extend=" + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getLAST_UPDATED_DATE());
+
+                if (dataQualityJRBIContext.recordsFromLAtestWork.get(i).getLAST_UPDATED_DATE() != null ||
+                        (dataQualityJRBIContext.recordsFromExtendeWork.get(i).getLAST_UPDATED_DATE() != null)) {
+                    Assert.assertEquals("The LAST_UPDATED_DATE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestWork.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromLAtestWork.get(i).getLAST_UPDATED_DATE(),
+                            dataQualityJRBIContext.recordsFromExtendeWork.get(i).getLAST_UPDATED_DATE());
+                }
+
+            }
+        }
+
+
     }
 
 
