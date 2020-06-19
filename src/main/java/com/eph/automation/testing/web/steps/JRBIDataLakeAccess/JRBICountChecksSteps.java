@@ -44,6 +44,8 @@ public class JRBICountChecksSteps {
     private static int JRBIDeltaCurrentHistoryCount;
     private static String JRBIworkExtendedSQLCount;
     private static int JRBIWorkExtCount;
+    private static String JRBIManifExtendedSQLCount;
+    private static int JRBIManifExtCount;
 
 
     @Given("^Get the total count of JRBI Data from Full Load (.*)$")
@@ -397,6 +399,30 @@ public class JRBICountChecksSteps {
     public void compareworkLatestExtended() {
         Log.info("The count for Work LAtest table => " + JRBILatestCount + " and in Work Extended => " + JRBIWorkExtCount);
         Assert.assertEquals("The counts are not equal when compared with Work Latest and Work Extended", JRBIWorkExtCount, JRBILatestCount);
+    }
+
+    @Given("^Get the total count of manif latest table$")
+    public void getLatestManifCount(){
+        Log.info("Getting Count from Latest manif... ");
+        JRBILatestSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_MANIF_LATEST_COUNT;
+        Log.info(JRBILatestSQLCount);
+        List<Map<String, Object>> JRBILatestTableCount = DBManager.getDBResultMap(JRBILatestSQLCount, Constants.AWS_URL);
+        JRBILatestCount = ((Long) JRBILatestTableCount.get(0).get("Target_Count")).intValue();
+    }
+
+    @Then("^Get the total count of manif extended table$")
+    public void totalCountManifExtended(){
+        Log.info("Getting Manif Extended Table Count...");
+        JRBIManifExtendedSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_MANIF_EXTENDED_COUNT;
+        Log.info(JRBIManifExtendedSQLCount);
+        List<Map<String, Object>> JRBIManifExtTableCount = DBManager.getDBResultMap(JRBIManifExtendedSQLCount, Constants.AWS_URL);
+        JRBIManifExtCount = ((Long) JRBIManifExtTableCount.get(0).get("MANIF_EXTENDED_COUNT")).intValue();
+    }
+
+    @And("^Compare the counts of manif latest and manif extended table are identical$")
+    public void compareManifLatestExtended() {
+        Log.info("The count for Manifestation LAtest table => " + JRBILatestCount + " and in Manif Extended => " + JRBIManifExtCount);
+        Assert.assertEquals("The counts are not equal when compared with Manif Latest and Manif Extended", JRBIManifExtCount, JRBILatestCount);
     }
 
 

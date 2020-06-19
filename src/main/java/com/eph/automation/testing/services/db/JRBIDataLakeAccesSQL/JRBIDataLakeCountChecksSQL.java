@@ -207,6 +207,10 @@ public class JRBIDataLakeCountChecksSQL {
     public static String GET_JRBI_WORK_EXTENDED_COUNT =
             "select count(*) as WORK_EXTENDED_COUNT from "+GetJRBIDLDBUser.getProductExtdb()+".work_extended\n";
 
+    public static String GET_JRBI_MANIF_EXTENDED_COUNT =
+            "select count(*) as MANIF_EXTENDED_COUNT from "+GetJRBIDLDBUser.getProductExtdb()+".manifestation_extended\n";
+
+
     public  static String GET_JRBI_COUNT_SUM_DELTA_WORK_AND_WORK_HISTORY =
             "select count(*) as source_count from \n" +
                     "(select a.epr, a.record_type, a.primary_site_system, \n" +
