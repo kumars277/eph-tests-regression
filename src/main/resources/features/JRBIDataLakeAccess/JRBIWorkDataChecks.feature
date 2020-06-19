@@ -5,57 +5,47 @@ Feature:Validate data for JRBI Work tables in Data Lake
     @JRBI
   Scenario Outline: Verify Data for JRBI transform_Current_work is transferred from journal_data_full
       Given We get the <countOfRandomIds> random EPR ids <sourceTable>
-      When We get the records from data jrbi_journal_data_full
-      Then We get the records from transform current work
-      And Compare the records of jrbi_journal_data_full and transform current work
+      When We get the records from data full load <sourceTable>
+      Then We get the records from transform current work <targetTable>
+      And Compare the records of data full load and transform current work <targetTable>
     Examples:
-     | sourceTable         | countOfRandomIds|
-    |jrbi_journal_data_full|      1         |
+     | sourceTable         | targetTable                  | countOfRandomIds|
+    |jrbi_journal_data_full|jrbi_transform_current_work   |1                 |
 
   @JRBI
   Scenario Outline: Verify Data for JRBI transform_Current_work_history is transferred from Current Work
     Given We get the <countOfRandomIds> random EPR ids <sourceTable>
-    When We get the records from transform current work
-    Then Get the records from transform current work history
-    And Compare the records of current work and current work history
+    When We get the records from transform current work <sourceTable>
+    Then Get the records from transform current work history <targetTable>
+    And Compare the records of current work and current work history <targetTable>
     Examples:
-      | sourceTable               | countOfRandomIds|
-      |jrbi_transform_current_work| 1                 |
+      | sourceTable               | targetTable                               | countOfRandomIds|
+      |jrbi_transform_current_work| jrbi_transform_current_work_history_part  |10                 |
 
   @JRBI
   Scenario Outline: Verify Data for JRBI transform_Previous_work_history is transferred from Previous Work
     Given We get the <countOfRandomIds> random EPR ids <sourceTable>
-    When We get the records from transform previous work
-    Then Get the records from transform previous work history
-    And Compare the records of previous work and previous work history
+    When We get the records from transform previous work <sourceTable>
+    Then Get the records from transform previous work history <targetTable>
+    And Compare the records of previous work and previous work history <targetTable>
     Examples:
-      | sourceTable                  | countOfRandomIds|
-      |jrbi_transform_previous_work  |1                 |
-
-  @JRBI
-  Scenario Outline: Verify Data from the difference of current_work and previous_work is transferred to delta current work table
-    Given We get the <countOfRandomIds> random EPR ids <tableReference>
-    When Get the records from the difference of current_work and previous_work
-    Then We get the records from transform delta current work
-    And  Compare the records of Delta Current work with difference of current and previous work
-    Examples:
-      |tableReference                       | countOfRandomIds|
-      |jrbi_transform_previous_current_work| 1                 |
+      | sourceTable               | targetTable                               | countOfRandomIds|
+      |jrbi_transform_previous_work| jrbi_transform_current_work_history_part  |10                 |
 
 
   @JRBI
-  Scenario Outline: Verify Data for JRBI delta_current_work_history is transferred from delta current Work
+  Scenario Outline: Verify Data for JRBI delta work history is transferred from delta current Work
     Given We get the <countOfRandomIds> random EPR ids <sourceTable>
     When We get the records from transform delta current work
     Then Get the records from transform delta work history
-    And Compare the records of delta work and delta work history
+    And Compare the records of delta work and delta work history <targetTable>
     Examples:
-      | sourceTable               | countOfRandomIds|
-      |jrbi_delta_current_work|         1                 |
+      | sourceTable               | targetTable                               | countOfRandomIds|
+      |jrbi_delta_current_work| jrbi_transform_delta_work_history_part        |10                 |
 
 
   @JRBI
-  Scenario Outline: Verify Data from the difference of Delta_current_work and work_history is transferred to work exclude table
+  Scenario Outline: Verify Data from the difference of Delta_work and work_history is transferred to work exclude table
     Given We get the <countOfRandomIds> random EPR ids <tableName>
     When Get the records from the difference of Delta_current_work and work_history
     Then Get the records from work exclude table
@@ -84,5 +74,4 @@ Feature:Validate data for JRBI Work tables in Data Lake
     Examples:
       |tableName                                | countOfRandomIds|
       |jrbi_transform_latest_work               |50                 |
-
 

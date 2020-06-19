@@ -27,25 +27,12 @@ public class GetJRBIDLDBUser {
             else{
                 dbProdDb = "product_staging_database_uat";
             }
+
         }else{
             dbProdDb = "product_staging_database_sit";
         }
         return dbProdDb;
-    }
 
-    public static String getProductGDdb(){
-        String dbProdGDdb = null;
-        if (System.getProperty("ENV") != null){
-            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
-                dbProdGDdb = "product_database_sit";
-            }
-            else{
-                dbProdGDdb = "product_database_uat";
-            }
-        }else{
-            dbProdGDdb = "product_database_sit";
-        }
-        return dbProdGDdb;
     }
 
     public static String getProductExtdb(){
