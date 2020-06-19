@@ -290,7 +290,7 @@ public class JRBIWorkDataChecksSQL {
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work B on A.epr  = B.epr \n" +
                     "where B.epr is null and " +
                    // "A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\' " +
-                    "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A))\n " +
+                    "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A)\n " +
                     "AND A.epr in ('%s'))\n";
 
     public static String GET_RECORDS_FROM_WORK_EXCLUDE =
