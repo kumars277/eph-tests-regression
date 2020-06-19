@@ -31,7 +31,7 @@ public class JRBIWorkDataChecksSteps {
 
     @Given("^We get the (.*) random EPR ids (.*)$")
     public void getRandomEPRIds(String numberOfRecords, String tableName) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random EPR Ids...");
         switch (tableName) {
@@ -1813,7 +1813,6 @@ public class JRBIWorkDataChecksSteps {
         } else {
             Log.info("Sorting the EPR Ids to compare the records between Work Latest with Work_Extended...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromLAtestWork.size(); i++) {
-                System.out.println(dataQualityJRBIContext.recordsFromLAtestWork.get(i).getDELETE_FLAG());
 
 
                 dataQualityJRBIContext.recordsFromLAtestWork.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR)); //sort data in the lists
