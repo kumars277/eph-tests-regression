@@ -23,7 +23,8 @@ public class JRBIAccessDLContext {
     public static List<JRBIDLWorkAccessObject> recordsFromExcludeWork;
     public static List<JRBIDLWorkAccessObject> recordsFromLAtestWork;
     public static List<JRBIDLWorkAccessObject> recordsFromAddDeltaAndWorkExclude;
-
+    public static List<JRBIDLWorkAccessObject> recordsFromDiffCurrentAndPreviousWork;
+    public static List<JRBIDLWorkAccessObject> recordsFromExtendeWork;
 
     public static List<JRBIDLManifestationAccessObject> recordsFromDataFullLoadManif;
     public static List<JRBIDLManifestationAccessObject> recordsFromFromCurrentManif;

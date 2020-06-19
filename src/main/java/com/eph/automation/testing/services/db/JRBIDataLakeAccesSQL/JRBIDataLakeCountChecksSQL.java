@@ -178,6 +178,9 @@ public class JRBIDataLakeCountChecksSQL {
     public static String GET_JRBI_WORK_LATEST_COUNT =
             "select count(*) as Target_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_work\n";
 
+    public static String GET_JRBI_WORK_EXTENDED_COUNT =
+            "select count(*) as WORK_EXTENDED_COUNT from "+GetJRBIDLDBUser.getProductExtdb()+".work_extended\n";
+
     public  static String GET_JRBI_COUNT_SUM_DELTA_WORK_AND_WORK_HISTORY =
             "select count(*) as source_count from \n" +
                     "(select a.epr, a.record_type, a.primary_site_system, \n" +
@@ -299,8 +302,6 @@ public class JRBIDataLakeCountChecksSQL {
                     "c.journal_issue_trim_size !=  (p.journal_issue_trim_size ) or\n" +
                     "c.war_reference !=  (p.war_reference )))\n";
 
-    public static String GET_COUNT_DELTA_MANIF =
-            "select count(*) as Target_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation\n";
 
 
 }
