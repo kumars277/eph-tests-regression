@@ -279,6 +279,16 @@ public class JRBIManifestationDataChecksSQL {
                     "c.journal_prod_site_code !=  (p.journal_prod_site_code ) or\n" +
                     "c.journal_issue_trim_size !=  (p.journal_issue_trim_size ) or\n" +
                     "c.war_reference !=  (p.war_reference ))) where EPR in ('%s')\n";
+
+    public static String Get_ProductDB_Manif_Extended_Records =
+            "select epr_id as EPR,\n" +
+                    "manifestation_type as MANIFESTATION_TYPE,\n" +
+                    "journal_prod_site_code as JOURNAL_PROD_SITE,\n" +
+                    "journal_issue_trim_size as JOURNAL_ISSUE_TRIM_SIZE,\n" +
+                    "war_reference as WAR_REFERENCE,\n" +
+                    "delete_flag as DELETE_FLAG\n" +
+                    " from "+GetJRBIDLDBUser.getProductExtendedDatabase()+".manifestation_extended where epr_id in ('%s')\n";
+
 }
 
 
