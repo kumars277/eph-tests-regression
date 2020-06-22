@@ -1,4 +1,4 @@
-Feature:Validate data for JRBI Work tables in Data Lake
+Feature:Validate data for JRBI Manifestation tables in Data Lake
 
 #  Created by Dinesh on 26/05/2020
 
