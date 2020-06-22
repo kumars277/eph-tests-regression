@@ -78,7 +78,7 @@ Feature:Validate data for JRBI Manifestation tables in Data Lake
 
 
   @JRBIExtended
-  Scenario Outline: Verify Data from the manif_latest transferred to manif Extended table
+  Scenario Outline: Verify Data from the manif_latest transferred  to manif Extended table
     Given We get the <countOfRandomIds> random manifestation EPR ids <tableName>
     When Get the records from manifestation latest table
     Then Get the records from manif extended table
@@ -86,5 +86,8 @@ Feature:Validate data for JRBI Manifestation tables in Data Lake
     Examples:
       |tableName                                | countOfRandomIds|
       |jrbi_transform_latest_manifestation               |1                 |
+
+
+
 
 
