@@ -23,11 +23,8 @@ public class JRBIDLWorkAccessObject {
     private String DELTA_MODE;
     private String TYPE;
     private String DELETE_FLAG;
-    private String LAST_UPDATED_DATE;
     private String WORK_TYPE;
-
-
-
+    private String LAST_UPDATED_DATE;
 
     public String getLAST_UPDATED_DATE() {
         return LAST_UPDATED_DATE;
