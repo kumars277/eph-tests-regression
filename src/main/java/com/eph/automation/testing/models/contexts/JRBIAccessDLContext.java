@@ -41,7 +41,7 @@ public class JRBIAccessDLContext {
     public static List<JRBIDLManifestationAccessObject> recordsFromAddDeltaAndManifExclude;
     public static List<JRBIDLManifestationAccessObject> recordsFromDiffCurrentAndPreviousManif;
     public static List<JRBIDLManifestationAccessObject> recordsFromExtendedManif;
-
+    public static List<JRBIDLManifestationAccessObject> recordsFromProdManifExtended;
 
 
     public static List<JRBIDLPersonAccessObject>recordsFromDataFullLoadPerson;
