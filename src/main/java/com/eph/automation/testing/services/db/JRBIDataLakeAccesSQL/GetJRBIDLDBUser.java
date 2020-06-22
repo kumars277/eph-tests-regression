@@ -62,4 +62,21 @@ public class GetJRBIDLDBUser {
         }
         return dbProdExtdb;
     }
+
+    public static String getProductExtendedDatabase(){
+        String dbProdExtDb = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbProdExtDb = "product_ext_database_sit";
+            }
+            else{
+                dbProdExtDb = "product_ext_database_uat";
+            }
+
+        }else{
+            dbProdExtDb = "product_ext_database_sit";
+        }
+        return dbProdExtDb;
+
+    }
 }
