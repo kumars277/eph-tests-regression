@@ -65,7 +65,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
       |tableName                                | countOfRandomIds|
       |jrbi_transform_latest_manifestation      |50               |
 
-  @JRBI
+  @JRBIExtended
   Scenario Outline: Verify Data for product manifestation extended is transferred from jrbi_transform_latest_manifestation
     Given We get the <countOfRandomIds> random manifestation EPR ids <sourceTable>
     When We get the records from transform latest manifestation <sourceTable>
