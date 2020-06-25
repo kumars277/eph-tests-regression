@@ -37,13 +37,13 @@ public class GetJRBIDLDBUser {
         String dbProdGDdb = null;
         if (System.getProperty("ENV") != null){
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
-                dbProdGDdb = "product_staging_database_sit";
+                dbProdGDdb = "product_database_sit";
             }
             else{
-                dbProdGDdb = "product_staging_database_uat";
+                dbProdGDdb = "product_database_uat";
             }
         }else{
-            dbProdGDdb = "product_staging_database_sit";
+            dbProdGDdb = "product_database_sit";
         }
         return dbProdGDdb;
     }
