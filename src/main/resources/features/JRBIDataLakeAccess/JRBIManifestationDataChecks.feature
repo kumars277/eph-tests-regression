@@ -79,10 +79,10 @@ Feature:Validate data for JRBI Manifestation tables in Data Lake
   @JRBIExtended
   Scenario Outline: Verify Data for product manifestation extended is transferred from jrbi_transform_latest_manifestation
     Given We get the <countOfRandomIds> random manifestation EPR ids <sourceTable>
-    When We get the records from transform latest manifestation <sourceTable>
-    Then Get the records from productDB manifestation extended <targetTable>
+    When Get the records from manifestation latest table
+    Then Get the records from productDB manifestation extended
     And Compare the records of transform latest manifestation and manifestation extended
     Examples:
-      | sourceTable                       | targetTable             | countOfRandomIds|
-      |jrbi_transform_latest_manifestation| manifestation_extended  |50               |
+      | sourceTable                       |  countOfRandomIds|
+      |jrbi_transform_latest_manifestation| 50               |
 

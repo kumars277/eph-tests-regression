@@ -77,3 +77,12 @@ Feature:Validate data for JRBI Person tables in Data Lake
       |tableName                                | countOfRandomIds|
       |jrbi_transform_latest_person               |50                 |
 
+  @JRBIExtended
+  Scenario Outline: Verify Data for product person extended is transferred from jrbi_transform_latest_person
+    Given We get the <countOfRandomIds> random Person EPR ids <sourceTable>
+    When Get the records from Person latest table
+    Then Get the records from productDB person extended
+    And Compare the records of transform person manifestation and person extended
+    Examples:
+      | sourceTable                       |  countOfRandomIds|
+      |jrbi_transform_latest_person| 50               |

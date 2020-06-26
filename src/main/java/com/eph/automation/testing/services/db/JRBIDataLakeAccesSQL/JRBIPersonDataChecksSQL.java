@@ -34,7 +34,7 @@ public class JRBIPersonDataChecksSQL {
                     ", p.family_name family_name, p.peoplehub_id peoplehub_id\n" +
                     ", j.email email \n" +
                     "FROM ((("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_person_unpivot_v j \n" +
-                    "INNER JOIN "+GetJRBIDLDBUser.getProductGDdb()+".gd_person p ON (j.email = p.email)) \n" +
+                    "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (j.email = p.email)) \n" +
                     "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr1 ON ((((j.issn = cr1.identifier) AND (cr1.identifier_type = 'ISSN')) AND (cr1.record_level = 'n')) AND (cr1.record_level = 'Work')))\n" +
                     "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work'))))where epr is not NULL\n" +
                     " order by rand() limit %s\n";
@@ -57,7 +57,7 @@ public class JRBIPersonDataChecksSQL {
                     ", p.family_name family_name, p.peoplehub_id peoplehub_id\n" +
                     ", j.email email\n" +
                     "FROM ((("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_person_unpivot_v j \n" +
-                    "INNER JOIN "+GetJRBIDLDBUser.getProductGDdb()+".gd_person p ON (j.email = p.email)) \n" +
+                    "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (j.email = p.email)) \n" +
                     "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr1 ON ((((j.issn = cr1.identifier) AND (cr1.identifier_type = 'ISSN')) AND (cr1.record_level = 'n')) AND (cr1.record_level = 'Work')))\n" +
                      "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work'))))\n" +
                     "where EPR in ('%s')";
@@ -253,6 +253,20 @@ public class JRBIPersonDataChecksSQL {
                     "delete_flag as DELETE_FLAG\n" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person\n" +
                     " where EPR in ('%s')\n";
+
+
+    public static String GET_JRBI_PERSON_EXTENDED_RECORDS =
+            "select epr_id as EPR,\n" +
+                    "role_code as ROLE_CODE,\n" +
+                    "role_name as ROLE_NAME,\n" +
+                    "first_name as FIRST_NAME,\n" +
+                    "last_name as LAST_NAME,\n" +
+                    "peoplehub_id as PEOPLEHUB_ID,\n" +
+                    "email as EMAIL,\n" +
+                    "last_updated_date as LAST_UPDATED_DATE,\n" +
+                    "delete_flag as DELETE_FLAG\n" +
+                    " from "+GetJRBIDLDBUser.getProductExtdb()+".work_extended_person_role\n" +
+                    " where epr_id in ('%s')\n";
 
 
     public static String GET_RANDOM_EPR_DELTA_PERSON =

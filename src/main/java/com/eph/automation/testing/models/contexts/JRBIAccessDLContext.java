@@ -56,6 +56,7 @@ public class JRBIAccessDLContext {
     public static List<JRBIDLPersonAccessObject> recordsFromLAtestPerson;
     public static List<JRBIDLPersonAccessObject> recordsFromAddDeltaAndPersonExclude;
     public static List<JRBIDLPersonAccessObject> recordsFromDiffCurrentAndPreviousPerson;
+    public static List<JRBIDLPersonAccessObject> recordsFromPersonExtended;
 
 }
 

@@ -287,7 +287,7 @@ public class JRBIManifestationDataChecksSQL {
                     "journal_issue_trim_size as JOURNAL_ISSUE_TRIM_SIZE,\n" +
                     "war_reference as WAR_REFERENCE,\n" +
                     "delete_flag as DELETE_FLAG\n" +
-                    " from "+GetJRBIDLDBUser.getProductExtendedDatabase()+".manifestation_extended where epr_id in ('%s')\n";
+                    " from "+GetJRBIDLDBUser.getProductExtdb()+".manifestation_extended where epr_id in ('%s')\n";
 
 }
 
