@@ -660,6 +660,8 @@ public class JRBIPersonDataChecksSteps {
 
                 dataQualityJRBIContext.recordsFromFromDeltaPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR)); //sort data in the lists
                 dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromFromDeltaPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY));
 
                 Log.info("Delta_person -> EPR => " + dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i).getEPR() +
                         "Delta_person_History -> EPR => " + dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i).getEPR());
@@ -1086,6 +1088,127 @@ public class JRBIPersonDataChecksSteps {
         }
     }
 
+    @Then("^Get the records from productDB person extended$")
+    public void getRecordsFromProductDBManifestationExtended() {
+        Log.info("We get the records from ProductDB Manif Extended...");
+        sql = String.format(JRBIPersonDataChecksSQL.GET_JRBI_PERSON_EXTENDED_RECORDS, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityJRBIContext.recordsFromPersonExtended = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare the records of transform person manifestation and person extended$")
+    public void comparePersonLatestandExtended(){
+        if (dataQualityJRBIContext.recordsFromLAtestPerson.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the EPR Ids to compare the records of Person Extended & Person_Latest...");
+            for (int i = 0; i < dataQualityJRBIContext.recordsFromLAtestPerson.size(); i++) {
+
+                dataQualityJRBIContext.recordsFromLAtestPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromPersonExtended.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromPersonExtended.sort(Comparator.comparing(JRBIDLPersonAccessObject::getROLE_CODE)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromLAtestPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getROLE_CODE));
+
+                Log.info("Person_Latest -> EPR => " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() +
+                        "Person_Extended -> EPR => " + dataQualityJRBIContext.recordsFromPersonExtended.get(i).getEPR());
+                if (dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() != null ||
+                        (dataQualityJRBIContext.recordsFromPersonExtended.get(i).getEPR() != null)) {
+                    Assert.assertEquals("The EPR is =" + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() + " is missing/not found in Person Extended table",
+                            dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR(),
+                            dataQualityJRBIContext.recordsFromPersonExtended.get(i).getEPR());
+                }
+
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() +
+                        " ROLE_CODE => Person_Latest =" + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getROLE_CODE() +
+                        " Person_Extended=" + dataQualityJRBIContext.recordsFromPersonExtended.get(i).getROLE_CODE());
+
+                if (dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getROLE_CODE() != null ||
+                        (dataQualityJRBIContext.recordsFromPersonExtended.get(i).getROLE_CODE() != null)) {
+                    Assert.assertEquals("The ROLE_CODE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getROLE_CODE(),
+                            dataQualityJRBIContext.recordsFromPersonExtended.get(i).getROLE_CODE());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() +
+                        " ROLE_NAME => Person_Latest =" + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getROLE_DESCRIPTION() +
+                        " Person_Extended=" + dataQualityJRBIContext.recordsFromPersonExtended.get(i).getROLE_NAME());
+
+                if (dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getROLE_DESCRIPTION() != null ||
+                        (dataQualityJRBIContext.recordsFromPersonExtended.get(i).getROLE_NAME() != null)) {
+                    Assert.assertEquals("The ROLE_NAME is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getROLE_DESCRIPTION(),
+                            dataQualityJRBIContext.recordsFromPersonExtended.get(i).getROLE_NAME());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() +
+                        " FIRST_NAME => Person_Latest =" + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getGIVEN_NAME() +
+                        " Person_Extended=" + dataQualityJRBIContext.recordsFromPersonExtended.get(i).getFIRST_NAME());
+
+                if (dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getGIVEN_NAME() != null ||
+                        (dataQualityJRBIContext.recordsFromPersonExtended.get(i).getFIRST_NAME() != null)) {
+                    Assert.assertEquals("The FIRST_NAME is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getGIVEN_NAME(),
+                            dataQualityJRBIContext.recordsFromPersonExtended.get(i).getFIRST_NAME());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() +
+                        " LAST_NAME => Person_Latest =" + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getFAMILY_NAME() +
+                        "Person_Extended =" + dataQualityJRBIContext.recordsFromPersonExtended.get(i).getLAST_NAME());
+
+                if (dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getFAMILY_NAME() != null ||
+                        (dataQualityJRBIContext.recordsFromPersonExtended.get(i).getLAST_NAME() != null)) {
+                    Assert.assertEquals("The SECOND_NAME is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getFAMILY_NAME(),
+                            dataQualityJRBIContext.recordsFromPersonExtended.get(i).getLAST_NAME());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() +
+                        " PEOPLEHUB_ID => Person_Latest =" + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getPEOPLEHUB_ID() +
+                        " Person_Extended=" + dataQualityJRBIContext.recordsFromPersonExtended.get(i).getPEOPLEHUB_ID());
+
+                if (dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getPEOPLEHUB_ID() != null ||
+                        (dataQualityJRBIContext.recordsFromPersonExtended.get(i).getPEOPLEHUB_ID() != null)) {
+                    Assert.assertEquals("The PEOPLEHUB_ID is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getPEOPLEHUB_ID(),
+                            dataQualityJRBIContext.recordsFromPersonExtended.get(i).getPEOPLEHUB_ID());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() +
+                        " EMAIL => Person_Latest =" + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEMAIL() +
+                        " Person_Extended=" + dataQualityJRBIContext.recordsFromPersonExtended.get(i).getEMAIL());
+
+                if (dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEMAIL() != null ||
+                        (dataQualityJRBIContext.recordsFromPersonExtended.get(i).getEMAIL() != null)) {
+                    Assert.assertEquals("The EMAIL is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEMAIL(),
+                            dataQualityJRBIContext.recordsFromPersonExtended.get(i).getEMAIL());
+                }
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() +
+                        " LAST_UPDATED => Person_Latest =" + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getLAST_UPDATED_DATE() +
+                        " Person_Extended=" + dataQualityJRBIContext.recordsFromPersonExtended.get(i).getLAST_UPDATED_DATE());
+
+                if (dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getLAST_UPDATED_DATE() != null ||
+                        (dataQualityJRBIContext.recordsFromPersonExtended.get(i).getLAST_UPDATED_DATE() != null)) {
+                    Assert.assertEquals("The LAST_UPDATED_DATE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getLAST_UPDATED_DATE(),
+                            dataQualityJRBIContext.recordsFromPersonExtended.get(i).getLAST_UPDATED_DATE());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() +
+                        " DELETE_FLAG => Person_Latest =" + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getLAST_UPDATED_DATE() +
+                        " Person_Extended=" + dataQualityJRBIContext.recordsFromPersonExtended.get(i).getLAST_UPDATED_DATE());
+
+                if (dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getDELETE_FLAG() != null ||
+                        (dataQualityJRBIContext.recordsFromPersonExtended.get(i).getDELETE_FLAG() != null)) {
+                    Assert.assertEquals("The DELETE_FLAG is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() ,
+                            dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getDELETE_FLAG(),
+                            dataQualityJRBIContext.recordsFromPersonExtended.get(i).getDELETE_FLAG());
+                }
+
+            }
+        }
+    }
 
 
 

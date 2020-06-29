@@ -15,8 +15,39 @@ public class JRBIDLPersonAccessObject {
     private String DELTA_MODE;
     private String LAST_UPDATED_DATE;
     private String DELETE_FLAG;
+    private String EPR_ID;
+    private String ROLE_NAME;
+    private String FIRST_NAME;
+    private String LAST_NAME;
 
 
+    public String getLAST_NAME() {
+        return LAST_NAME;
+    }
+    public void setLAST_NAME(String LAST_NAME) {
+        this.LAST_NAME = LAST_NAME;
+    }
+
+    public String getFIRST_NAME() {
+        return FIRST_NAME;
+    }
+    public void setFIRST_NAME(String FIRST_NAME) {
+        this.FIRST_NAME = FIRST_NAME;
+    }
+
+    public String getROLE_NAME() {
+        return ROLE_NAME;
+    }
+    public void setROLE_NAME(String ROLE_NAME) {
+        this.ROLE_NAME = ROLE_NAME;
+    }
+
+    public String getEPR_ID() {
+        return EPR_ID;
+    }
+    public void setEPR_ID(String EPR_ID) {
+        this.EPR_ID = EPR_ID;
+    }
 
     public String getDELETE_FLAG() {
         return DELETE_FLAG;

@@ -100,5 +100,10 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
     Then Get the total count of manif extended table
     And Compare the counts of manif latest and manif extended table are identical
 
+  @JRBIExtended
+  Scenario: Verify Data count for JRBI person_extended tables are transferred from person_latest tables
+    Given Get the total count of person latest table
+    Then Get the total count of person extended table
+    And Compare the counts of person latest and person extended table are identical
 
 

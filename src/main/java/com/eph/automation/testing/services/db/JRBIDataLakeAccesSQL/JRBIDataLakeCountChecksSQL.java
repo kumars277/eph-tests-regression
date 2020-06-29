@@ -73,7 +73,7 @@ public class JRBIDataLakeCountChecksSQL {
                         ", p.family_name family_name, p.peoplehub_id peoplehub_id\n" +
                         ", j.email email \n" +
                         "FROM ((("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_person_unpivot_v j \n" +
-                        "INNER JOIN "+GetJRBIDLDBUser.getProductGDdb()+".gd_person p ON (j.email = p.email)) \n" +
+                        "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (j.email = p.email)) \n" +
                         "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr1 ON ((((j.issn = cr1.identifier) AND (cr1.identifier_type = 'ISSN')) AND (cr1.record_level = 'n')) AND (cr1.record_level = 'Work'))) \n" +
                         "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work'))))where epr is not NULL\n";
 
@@ -197,8 +197,6 @@ public class JRBIDataLakeCountChecksSQL {
                     "b.email, b.transform_ts, null as col11, null as col12 \n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person as b)\n ";
 
-    public static String GET_JRBI_PERSON_LATEST_COUNT =
-            "select count(*) as Target_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person\n";
 
 
     public static String GET_JRBI_WORK_LATEST_COUNT =
@@ -209,6 +207,9 @@ public class JRBIDataLakeCountChecksSQL {
 
     public static String GET_JRBI_MANIF_EXTENDED_COUNT =
             "select count(*) as MANIF_EXTENDED_COUNT from "+GetJRBIDLDBUser.getProductExtdb()+".manifestation_extended\n";
+
+    public static String GET_JRBI_PERSON_EXTENDED_COUNT =
+            "select count(*) as PERSON_EXTENDED_COUNT from "+GetJRBIDLDBUser.getProductExtdb()+".work_extended_person_role\n";
 
 
     public  static String GET_JRBI_COUNT_SUM_DELTA_WORK_AND_WORK_HISTORY =
@@ -237,6 +238,10 @@ public class JRBIDataLakeCountChecksSQL {
 
     public static String GET_JRBI_MANIF_LATEST_COUNT =
             "select count(*) as Target_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_manifestation\n";
+
+    public static String GET_JRBI_PERSON_LATEST_COUNT =
+            "select count(*) as Target_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person\n";
+
 
     public static String GET_COUNT_DIFF_CURRENT_PREVIOUS_WORK =
             "select count(*) as source_count from (\n" +

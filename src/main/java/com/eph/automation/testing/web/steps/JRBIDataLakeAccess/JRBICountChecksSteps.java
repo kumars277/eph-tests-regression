@@ -45,8 +45,9 @@ public class JRBICountChecksSteps {
     private static String JRBIworkExtendedSQLCount;
     private static int JRBIWorkExtCount;
     private static String JRBIManifExtendedSQLCount;
+    private static String JRBIPersonExtendedSQLCount;
     private static int JRBIManifExtCount;
-
+    private static int JRBIPersonExtCount;
 
 
 
@@ -434,6 +435,31 @@ public class JRBICountChecksSteps {
 
     }
 
+
+    @Given("^Get the total count of person latest table$")
+    public void getLatestPersonCount(){
+        Log.info("Getting Count from Latest Person... ");
+        JRBILatestSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_PERSON_LATEST_COUNT;
+        Log.info(JRBILatestSQLCount);
+        List<Map<String, Object>> JRBILatestTableCount = DBManager.getDBResultMap(JRBILatestSQLCount, Constants.AWS_URL);
+        JRBILatestCount = ((Long) JRBILatestTableCount.get(0).get("Target_Count")).intValue();
+    }
+
+    @Then("^Get the total count of person extended table$")
+    public void totalCountPersonExtended(){
+        Log.info("Getting Person Extended Table Count...");
+        JRBIPersonExtendedSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_PERSON_EXTENDED_COUNT;
+        Log.info(JRBIPersonExtendedSQLCount);
+        List<Map<String, Object>> JRBIPersonExtTableCount = DBManager.getDBResultMap(JRBIPersonExtendedSQLCount, Constants.AWS_URL);
+        JRBIPersonExtCount = ((Long) JRBIPersonExtTableCount.get(0).get("PERSON_EXTENDED_COUNT")).intValue();
+    }
+
+    @And("^Compare the counts of person latest and person extended table are identical$")
+    public void comparePersonLatestExtended() {
+        Log.info("The count for Person LAtest table => " + JRBILatestCount + " and in Person Extended => " + JRBIPersonExtCount);
+        Assert.assertEquals("The counts are not equal when compared with Person Latest and Person Extended", JRBIPersonExtCount, JRBILatestCount);
+
+    }
 
 
 }

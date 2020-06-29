@@ -14,6 +14,7 @@ public class JRBIDLManifestationAccessObject {
     private String LAST_UPDATED_DATE;
     private String MANIFESTATION_TYPE;
 
+
     public String getLAST_UPDATED_DATE() {
         return LAST_UPDATED_DATE;
     }
