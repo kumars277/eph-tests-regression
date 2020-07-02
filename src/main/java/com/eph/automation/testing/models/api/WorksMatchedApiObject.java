@@ -3,6 +3,7 @@ package com.eph.automation.testing.models.api;
  * Created by GVLAYKOV
  */
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.base.Verify;
 import org.junit.Assert;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -20,7 +21,9 @@ public class WorksMatchedApiObject {
 
     public void verifyWorksAreReturned(){Assert.assertNotEquals("Verify more than 0 items returned from API", 0, totalMatchCount);}
 
-    public void verifyWorksReturnedCount(int worksInDB){Assert.assertEquals(totalMatchCount, worksInDB);}
+    public void verifyWorksReturnedCount(int worksInDB){
+        //API count could be higher than DB count as it comes from Elastic search
+        Verify.verify(totalMatchCount>= worksInDB,"API count less than DB count");}
 
     public void verifyWorkWithIdIsReturned(String workID){
         int i=0;

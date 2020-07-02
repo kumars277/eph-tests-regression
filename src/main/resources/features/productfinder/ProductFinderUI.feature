@@ -7,7 +7,7 @@ Feature: Product Finder Selenium tests
     When user is on search page
     And Search works by <options>
     Then The searched work is listed and clicked
-    And User is forwarded to the searched works page
+    And User is forwarded to the searched works page from DB
     Examples:
     |options|
     |Id     |
@@ -21,7 +21,7 @@ Feature: Product Finder Selenium tests
     When user is on search page
     And Search product by <options>
     Then The searched product is listed and clicked
-    And User is forwarded to the searched product page
+    And User is forwarded to the searched product page from DB
     Examples:
       |options|
       |Id     |
@@ -35,7 +35,7 @@ Feature: Product Finder Selenium tests
     When user is on search page
     And Search manifestation by <options>
     Then The searched manifestation is listed and clicked
-    And User is forwarded to the searched manifestation page
+    And User is forwarded to the searched manifestation page from DB
     Examples:
       |options|
       |Id     |
@@ -69,10 +69,10 @@ Feature: Product Finder Selenium tests
   @PFUI
   Scenario Outline: Search the work and filter them with Work Types
     Given user is on search page
-    And   Searches for works by given "<keyword>"
+    And   Searches for works by given <keyword>
     And   Filter the Search Result by "<workType>"
-    Then  Search items are listed and click the result based on id
-    And   Verify user is forwarded to the searched work page id
+    Then  Search items are listed and click a work id from the result
+    And   Verify user is forwarded to the searched work page from Search Result
     Then  Verify the Work id Type is "<workType>"
     Examples:
       |keyword   |   workType  |
@@ -82,10 +82,10 @@ Feature: Product Finder Selenium tests
   @PFUI
   Scenario Outline: Search the work and filter them with Work Status
     Given user is on search page
-    And Searches for works by given "<keyword>"
+    And Searches for works by given <keyword>
     And Filter the Search Result by "<workStatus>"
-    Then Search items are listed and click the result based on id
-    And  Verify user is forwarded to the searched work page id
+    Then Search items are listed and click a work id from the result
+    And  Verify user is forwarded to the searched work page from Search Result
     Then Verify the Work Status is "<workStatus>"
     Examples:
       |keyword        |workStatus          |
@@ -96,11 +96,11 @@ Feature: Product Finder Selenium tests
   @PFUI
   Scenario Outline: Search the work and filter them with Work Statuses and Types
     Given user is on search page
-    And Searches for works by given "<keyword>"
+    And Searches for works by given <keyword>
     And Filter the Search Result by "<workStatus>"
     And Filter the Search Result by "<workType>"
-    Then Search items are listed and click the result based on id
-    And  Verify user is forwarded to the searched work page id
+    Then Search items are listed and click a work id from the result
+    And  Verify user is forwarded to the searched work page from Search Result
     Then  Verify the Work id Type is "<workType>"
     Then Verify the Work Status is "<workStatus>"
     Examples:
@@ -109,55 +109,19 @@ Feature: Product Finder Selenium tests
       |surgical       |Planned             |Book      |
       |nurse          |No Longer Published |Book      |
 
-
-
   #for data model changes
   #https://sit.productfinder.elsevier.net/work/EPR-W-10104W/overview
   #https://sit.productfinder.elsevier.net/work/EPR-W-101055/overview
-
-
-
-    #NA - covered in above scenario
-  @PF
-  Scenario: Search the Product by id
-    Given We get the id and title for product search from DB
-    When user is on search page
-    And  Searches for Product by id
-    Then Verify the searched product id is displayed in the result and clicked
-    And  User is forwarded to the searched product id page
-
-  @PF
-  Scenario Outline: Search the Work by Id
-    Given We get the id for work search <id>
-    And We get the work search data from the EPH GD
-    When user is on search page
-    And Searches for works by ID
-    Then The searched item is listed and clicked
-    And User is forwarded to the searched works page
+  @PFDMC
+  Scenario Outline: Search the work and verify data model changes
+    Given user is on search page
+    And   We get the work search data from EPH GD for <id>
+    And   Searches for works by given <id>
+    Then  Search items are listed and click specific work <id> from the result
+    And   Verify user is forwarded to the searched work page of <id>
+    Then  Verify work Overview Information for <id>
+    And   Verify work Finanfial records
     Examples:
-      | id                        |
-      | EPR-W-113YW0              |
-
-  @PF
-  Scenario Outline: Search the work by title
-    Given We get the id for work search <id>
-    And We get the work search data from the EPH GD
-    And user is on search page
-    When Searches for works by title
-    Then The searched item is listed and clicked
-    And User is forwarded to the searched works page
-    Examples:
-      | id                        |
-      | EPR-W-10DDN2              |
-
-  @PF
-  Scenario Outline: Search the work by keyword
-    Given We get the id for work search <id>
-    And We get the work search data from the EPH GD
-    When user is on search page
-    And Searches for works by keyword "<keyword>"
-    Then The searched item is listed and clicked
-    And User is forwarded to the searched works page
-    Examples:
-      | id                        | keyword     |
-      | EPR-W-10DDN2              | Spectroscopy |
+      |id           |
+      |EPR-W-10104W |
+   #   |EPR-W-101055 |

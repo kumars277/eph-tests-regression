@@ -134,12 +134,12 @@ public class workCore{
             printLog("EditionNumber");}
 
 
-        int apiVolume =Integer.valueOf(volume);
-        Assert.assertEquals(apiVolume, this.workDataObjectsFromEPHGD.get(0).getVOLUME());
+      //  int apiVolume =Integer.valueOf(volume);
+        Assert.assertEquals(volume, this.workDataObjectsFromEPHGD.get(0).getVOLUME());
         printLog("volume");
-        if(this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR()!=0) {
-            int apiCopyrightYear = Integer.valueOf(copyrightYear);
-            Assert.assertEquals(apiCopyrightYear, this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR());
+        //if(Integer.parseInt(this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR())!=0) {
+        if(this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR()!=null) {
+            Assert.assertEquals(copyrightYear, this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR());
             printLog("copyrightYear");}
 
         if(!(identifiers==null && this.workDataObjectsFromEPHGD.get(0).getIDENTIFIER()==null)) {
@@ -153,11 +153,11 @@ public class workCore{
         printLog("workStatus code");
 
 
-/*
-* "plannedLaunchDate": "2020-04-10",
-				"actualLaunchDate": "2020-04-11",
-				"plannedDiscontinuationDate": "2022-04-24",
-* */
+        /*
+         "plannedLaunchDate": "2020-04-10",
+		"actualLaunchDate": "2020-04-11",
+		"plannedDiscontinuationDate": "2022-04-24",
+        */
 
         if(!(imprint==null && this.workDataObjectsFromEPHGD.get(0).getIMPRINT()==null)) {
             Assert.assertEquals(imprint.get("code"), this.workDataObjectsFromEPHGD.get(0).getIMPRINT());

@@ -141,7 +141,7 @@ class ManifestationWorkApiObject {
         int apiVolume =Integer.valueOf(workCore.volume);
         Assert.assertEquals(apiVolume, this.workDataObjectsFromEPHGD.get(0).getVOLUME());
 
-        if(this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR()!=0) {
+        if(Integer.parseInt(this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR())!=0) {
             int apiCopyrightYear = Integer.valueOf(workCore.copyrightYear);
             Assert.assertEquals(apiCopyrightYear, this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR());
         }
