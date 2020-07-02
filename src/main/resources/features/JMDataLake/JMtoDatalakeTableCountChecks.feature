@@ -9,9 +9,6 @@ Feature:Validate data for JM tables between MYSQL and Data Lake
     Then The JM count for <tableName> table between MYSQL and DL are identical
     Examples:
       | tableName                           |
-      | jmf_allocation_change               |
-      | jmf_application_properties          |
-      | jmf_approval_attachment             |
       | jmf_approval_request                |
       | jmf_chronicle_scenario              |
       | jmf_chronicle_status                |

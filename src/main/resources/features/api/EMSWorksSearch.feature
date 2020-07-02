@@ -11,14 +11,12 @@ Feature: Customer Search API: Works
     Then the work details are retrieved and compared
 
   @APIv3
-  Scenario Outline: verify Manifestation Extended specific ID
-    Given We get 1 random search ids for Extended manifestation
+  Scenario: verify Manifestation Extended specific ID
+    Given We get 2 random search ids for Extended manifestation
     And get work by manifestation
     And We get the work search data from EPH GD
     Then the work details are retrieved and compared
-    Examples:
-      |id          |
-      |EPR-M-10GF59|
+
    #{'datafile':'C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\Elastic search,APIv3 and JRBI data/stch_work_ext_json_202006181758.csv'}
 
    #new search fields included as part of Journal Finder #EPR-W-108TJK

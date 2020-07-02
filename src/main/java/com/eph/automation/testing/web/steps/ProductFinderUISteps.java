@@ -725,8 +725,6 @@ public class ProductFinderUISteps {
         //EPR-W-108RXC
         //Business Unit:	STM Health & Medical Sciences
 
-
-
         //data model changes
         Assert.assertEquals(productFinderTasks.prop_info.getProperty("Planned Launch Date"), getFormat_PlannedLaunchDate());
         Log.info("verified...Planned Launch Date");

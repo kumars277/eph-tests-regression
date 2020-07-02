@@ -1,5 +1,8 @@
 package com.eph.automation.testing.models.api;
-
+/*
+* created by Nishant @ 02 Jul 2020
+* to validate manifestation Extended data with API v3
+* */
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import org.junit.Assert;
@@ -18,8 +21,14 @@ public class ManifestationExtended {
     public void setWarReference(String warReference) {this.warReference = warReference;}
 
     public void compareWithDB() {
+        Assert.assertEquals(journalProdSiteCode,DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getJournalProdSiteCode());
+        printLog("journalProdSiteCode");
+
         Assert.assertEquals(journalIssueTrimSize, DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getJournalIssueTrimSize());
         printLog("primarySiteSystem");
+
+        Assert.assertEquals(warReference,DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getWarReference());
+        printLog("warReference");
 
     }
     private void printLog(String verified){Log.info("verified..."+verified);}
