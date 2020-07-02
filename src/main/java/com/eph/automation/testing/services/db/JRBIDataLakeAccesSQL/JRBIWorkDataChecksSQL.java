@@ -524,4 +524,24 @@ public class JRBIWorkDataChecksSQL {
                     "where EPR_ID in ('%s')\n";
 
 
+    public static String GET_RANDOM_EPR_WORK_EXTENDED =
+            "select epr_id as EPR from "+GetJRBIDLDBUser.getProductExtdb()+".work_extended where delete_flag=false order by rand() limit %s\n";
+
+    public static String GET_WORK_JSON_RECORDS =
+            "select json as JSON, epr_id as EPR from "+GetJRBIDLDBUser.getStitchingdb()+".stch_work_ext_json WHERE epr_id in ('%s')\n";
+
+
+    public static String GET_JRBI_PERSON_ROLE_REC =
+            "select epr_id as EPR_ID,\n" +
+                    "role_code as ROLE_CODE,\n" +
+                    "role_name as ROLE_NAME,\n" +
+                    "first_name as FIRST_NAME,\n" +
+                    "last_name as LAST_NAME,\n" +
+                    "peoplehub_id as PEOPLEHUB_ID,\n" +
+                    "email as EMAIL,\n" +
+                    "last_updated_date as LAST_UPDATED_DATE,\n" +
+                    "delete_flag as DELETE_FLAG\n" +
+                    " from "+GetJRBIDLDBUser.getProductExtdb()+".work_extended_person_role\n" +
+                    " where epr_id in ('%s') and delete_flag = false\n";
+
 }

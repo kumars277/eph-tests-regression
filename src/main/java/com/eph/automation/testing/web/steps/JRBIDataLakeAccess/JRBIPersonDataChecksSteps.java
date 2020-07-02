@@ -1088,15 +1088,15 @@ public class JRBIPersonDataChecksSteps {
         }
     }
 
-    @Then("^Get the records from productDB person extended$")
+    @Then("^Get the records from person extended table$")
     public void getRecordsFromProductDBManifestationExtended() {
-        Log.info("We get the records from ProductDB Manif Extended...");
+        Log.info("We get the records from Person Extended Roles...");
         sql = String.format(JRBIPersonDataChecksSQL.GET_JRBI_PERSON_EXTENDED_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualityJRBIContext.recordsFromPersonExtended = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
     }
 
-    @And("^Compare the records of transform person manifestation and person extended$")
+    @And("^Compare the records of transform latest person and person extended$")
     public void comparePersonLatestandExtended(){
         if (dataQualityJRBIContext.recordsFromLAtestPerson.isEmpty()) {
             Log.info("No Data Found ....");

@@ -62,4 +62,19 @@ public class GetJRBIDLDBUser {
         }
         return dbProdExtdb;
     }
+
+    public static String getStitchingdb(){
+        String dbStitching = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbStitching = "ephsit_extended_data_stitch";
+            }
+            else{
+                dbStitching = "ephuat_extended_data_stitch";
+            }
+        }else{
+            dbStitching = "ephsit_extended_data_stitch";
+        }
+        return dbStitching;
+    }
 }

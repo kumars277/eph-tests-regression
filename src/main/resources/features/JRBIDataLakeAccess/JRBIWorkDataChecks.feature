@@ -85,3 +85,23 @@ Feature:Validate data for JRBI Work tables in Data Lake
       |tableName                                | countOfRandomIds|
       |jrbi_transform_latest_work               |100                 |
 
+
+    @JRBIStitching
+    Scenario Outline: Verify Data from the work_extended transferred to work Extended Stitching table
+      Given We get the <countOfRandomIds> random EPR ids <tableName>
+      When Get the records from work extended table
+      Then Get the records from work extended person role table
+      Then Get the records from work extended stitching table
+      And compare work extended and work extended person role with work stitching table
+      Examples:
+        |tableName                   |countOfRandomIds|
+        |work_extended               |3                 |
+
+  @JRBIStitching
+  Scenario Outline: Verify Data from the work_extended transferred to work Extended Stitching table-testing inprogress
+    Given We get the <countOfRandomIds> random EPR ids <tableName>
+    And Get the records from work extended table
+    Then compare work extended and work extended person role with work stitching table
+    Examples:
+      |tableName                   |countOfRandomIds|
+      |work_extended               |50                 |
