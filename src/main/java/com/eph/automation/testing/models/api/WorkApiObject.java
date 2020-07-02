@@ -7,11 +7,14 @@ package com.eph.automation.testing.models.api;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.AccountableProductDataObject;
 import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
+import com.eph.automation.testing.services.db.sql.DataQualityChecksSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
+import com.google.gson.Gson;
 import org.junit.Assert;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +32,10 @@ public class WorkApiObject {
     public List<AccountableProductDataObject> getAccountableProductDataObjectsFromEPHGD() {return accountableProductDataObjectsFromEPHGD;}
     public void setAccountableProductDataObjectsFromEPHGD(List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD) {this.accountableProductDataObjectsFromEPHGD = accountableProductDataObjectsFromEPHGD;}
 
+    private WorkExtendedTestClass workExtendedTestClass;
+    public WorkExtendedTestClass getWorkExtendedTestClass() {return workExtendedTestClass;}
+    public void setWorkExtendedTestClass(WorkExtendedTestClass workExtendedTestClass) {this.workExtendedTestClass = workExtendedTestClass;}
+
     private String createdDate;
     public String getCreatedDate(){return  createdDate;}
     public void setCreatedDate(String createdDate) {this.createdDate = createdDate;}
@@ -45,6 +52,10 @@ public class WorkApiObject {
     public workCore getWorkCore() {return workCore;}
     public void setWorkCore(workCore workCore) {this.workCore = workCore;}
 
+    private WorkExtended workExtended;
+    public WorkExtended getWorkExtended() {return workExtended;}
+    public void setWorkExtended(WorkExtended workExtended) {this.workExtended = workExtended;}
+
     private WorkManifestationApiObject[] manifestations;
     public WorkManifestationApiObject[] getManifestations() {return manifestations;}
     public void setManifestations(WorkManifestationApiObject[] manifestations) {this.manifestations = manifestations;}
@@ -54,15 +65,25 @@ public class WorkApiObject {
     public List<ManifestationProductAPIObject> getProducts() {return products;}
     public void setProducts(List<ManifestationProductAPIObject> products) {this.products = products;}
 
-    public void compareWithDB(){
-        workCore.compareWithDB(this.id);
+    public void compareWithDB(WorkDataObject workId){//implemented by Nishant @ 23 Apr 2020
 
-        for (WorkManifestationApiObject manifestation : manifestations){manifestation.compareWithDB();}
+  //   workCore.compareWithDB(this.id);
 
-        //implemented by Nishant @ 23 Apr 2020
-      if(products!=null) {Log.info("verifying work products...");
-          for (ManifestationProductAPIObject Workproducts : products) {Workproducts.compareWithDB();}
-      }
+     for (WorkManifestationApiObject manifestation : manifestations){manifestation.compareWithDB(workId);}
+
+    //if(products!=null) {Log.info("verifying work products...");for (ManifestationProductAPIObject Workproducts : products) {Workproducts.compareWithDB();}}
+
+   //  if(workExtended!=null){Log.info("verifying work Extended..."+this.id);getJsonToObject_extendedWork(this.id);workExtended.compareWithDB();}
+
     }
+
+    public void getJsonToObject_extendedWork(String workId)
+    {//created by Nishant @ 19 Jun 2020 to verify extended json value with APIv3
+        String sql="SELECT \"json\" FROM ephsit_extended_data_stitch.stch_work_ext_json where epr_id='"+workId+"'";
+        List<Map<String,String>> jsonValue=DBManager.getDBResultMap(sql,Constants.EPH_URL);
+        DataQualityContext.workExtendedTestClass = new Gson().fromJson(jsonValue.get(0).get("json"), WorkExtendedTestClass.class);
+    }
+
+
 
 }
