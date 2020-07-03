@@ -114,7 +114,7 @@ public class JRBIWorkDataChecksSQL {
                     ",rf_fvi as RF_FVI" +
                     ",rf_lvi as RF_LVI" +
                     ",business_unit_desc as BUSINESS_UNIT_DESC" +
-                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work where EPR in ('%s')";
+                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work where EPR in ('%s') order by catalogue_issues_qty desc";
 
     public static String GET_CURRENT_WORK_HISTORY_RECORDS =
             "select epr as EPR" +
@@ -138,7 +138,7 @@ public class JRBIWorkDataChecksSQL {
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part where EPR in ('%s') AND " +
                     //"transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\' " +
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part)\n " +
-                    "AND delete_flag=false";
+                    "AND delete_flag=false order by catalogue_issues_qty desc";
 
     public static String GET_CURRENT_WORK_EPR_ID=
             "select epr as EPR from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work order by rand() limit %s\n";
@@ -218,7 +218,7 @@ public class JRBIWorkDataChecksSQL {
                     ",rf_fvi as RF_FVI" +
                     ",rf_lvi as RF_LVI" +
                     ",business_unit_desc as BUSINESS_UNIT_DESC" +
-                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_work where EPR in ('%s')";
+                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_work where EPR in ('%s') order by catalogue_issues_qty desc";
 
     public static String GET_PREVIOUS_WORK_HISTORY_RECORDS =
             "select epr as EPR" +
@@ -242,7 +242,8 @@ public class JRBIWorkDataChecksSQL {
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part where EPR in ('%s') AND " +
                    // "transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.previousDate()+"%%\'";
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part\n " +
-                    " where transform_ts < (select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part))\n";
+                    " where transform_ts < (select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part))\n" +
+                    " order by catalogue_issues_qty desc\n";
 
 
     public static String GET_EPR_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_WORK =

@@ -18,7 +18,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.gson.Gson;
 
 
@@ -68,16 +67,18 @@ public class JRBIWorkDataChecksSteps {
                 List<Map<?, ?>> randomLatestWorkEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 Ids = randomLatestWorkEPRIds.stream().map(m -> (String) m.get("EPR")).collect(Collectors.toList());
                 break;
+
             case "jrbi_transform_previous_current_work":
                 sql = String.format(JRBIWorkDataChecksSQL.GET_RANDOM_DELTA_EPR_WORK, numberOfRecords);
                 List<Map<?, ?>> randomCurrentPreviousWorkEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 Ids = randomCurrentPreviousWorkEPRIds.stream().map(m -> (String) m.get("EPR")).collect(Collectors.toList());
+                break;
 
             case "work_extended":
                 sql = String.format(JRBIWorkDataChecksSQL.GET_RANDOM_EPR_WORK_EXTENDED, numberOfRecords);
                 List<Map<?, ?>> randomWorkExtendedEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 Ids = randomWorkExtendedEPRIds.stream().map(m -> (String) m.get("EPR")).collect(Collectors.toList());
-
+            break;
         }
         Log.info(sql);
         Log.info(Ids.toString());
@@ -2032,12 +2033,12 @@ public class JRBIWorkDataChecksSteps {
         List<Map<String,String>> jsonValue=DBManager.getDBResultMap(sql,Constants.EPH_URL);
         JRBIAccessDLContext.recordsFromWorkStitching = new Gson().fromJson(jsonValue.get(0).get("json"), JRBIWorkExtJsonObject.class);
     }
+
     @And("^compare work extended and work extended person role with work stitching table$")
     public  void compareWorkExtendedAndStitching() {
         if (dataQualityJRBIContext.recordsFromExtendeWork.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
-            Log.info("Sorting the EPR Ids to compare the records between Work Latest with Work_Extended...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromExtendeWork.size(); i++) {
                 String workId=dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID();
                 getRecPersonRole(workId);
@@ -2271,7 +2272,6 @@ public class JRBIWorkDataChecksSteps {
                         Assert.assertEquals("The email is incorrect for EPR => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getEPR_ID(),
                                 dataQualityJRBIContext.recordsFromPersonExtended.get(j).getEMAIL(),
                                 extPerson_temp[j].getExtendedPerson().get("email").toString());
-
 
                     }
                 }

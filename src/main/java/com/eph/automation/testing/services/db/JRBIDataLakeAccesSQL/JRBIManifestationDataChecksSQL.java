@@ -147,7 +147,7 @@ public class JRBIManifestationDataChecksSQL {
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation B on A.epr  = B.epr \n" +
                     "where B.epr is null and " +
                     //"A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\') " +
-                    "A.transform_ts = (select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_manifestation_history_part A))"+
+                    "A.transform_ts = (select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part A))"+
                     "order by rand() limit %s\n";
 
     public static String GET_RECORDS_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_MANIF =
@@ -271,7 +271,7 @@ public class JRBIManifestationDataChecksSQL {
                     "where p.epr is null\n" +
                     "union all\n" +
                     "select c.epr , c.record_type , c.manifestation_type, c.journal_prod_site_code , c.journal_issue_trim_size , c.war_reference,'NEW' as type,'C' as delta_mode\n " +
-                    "FROM  jrbi_staging_sit.jrbi_transform_previous_manifestation c\n" +
+                    "FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_manifestation c\n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation p  on c.epr = p.epr\n" +
                     "where (c.epr !=(p.epr) or\n" +
                     "c.record_type != (p.record_type) or \n" +
@@ -288,6 +288,14 @@ public class JRBIManifestationDataChecksSQL {
                     "war_reference as WAR_REFERENCE,\n" +
                     "delete_flag as DELETE_FLAG\n" +
                     " from "+GetJRBIDLDBUser.getProductExtdb()+".manifestation_extended where epr_id in ('%s')\n";
+
+    public static String GET_RANDOM_EPR_MANIF_EXTENDED =
+            "select epr_id as EPR from "+GetJRBIDLDBUser.getProductExtdb()+".manifestation_extended where delete_flag=false order by rand() limit %s\n";
+
+    public static String GET_MANIF_JSON_RECORDS =
+            "select json as JSON, epr_id as EPR from "+GetJRBIDLDBUser.getStitchingdb()+".stch_manifestation_ext_json WHERE epr_id in ('%s')\n";
+
+
 
 }
 

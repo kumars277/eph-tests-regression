@@ -10,7 +10,7 @@ Feature:Validate data for JRBI Manifestation tables in Data Lake
     And Compare the records of manifestation full load and current manifestation
     Examples:
       | sourceTable         | countOfRandomIds|
-      |jrbi_journal_data_full|       100        |
+      |jrbi_journal_data_full|       10        |
 
 
   @JRBI
@@ -21,17 +21,17 @@ Feature:Validate data for JRBI Manifestation tables in Data Lake
     And Compare the records of current manifestation and current manifestation history
     Examples:
       | sourceTable                        | countOfRandomIds|
-      |jrbi_transform_current_manifestation| 100                |
+      |jrbi_transform_current_manifestation| 10               |
 
   @JRBI
-  Scenario Outline: Verify Data for JRBI transform_Previous_manifestation_history is transferred from manifestation
+  Scenario Outline: Verify Data for JRBI transform_Previous_manifestation_history is transferred from Previous manifestation
     Given We get the <countOfRandomIds> random manifestation EPR ids <sourceTable>
     When We get the records from transform previous manifestation
     Then Get the records from transform previous manifestation history
     And Compare the records of previous manifestation and previous manifestation history
     Examples:
       | sourceTable                         | countOfRandomIds|
-      |jrbi_transform_previous_manifestation|   100                 |
+      |jrbi_transform_previous_manifestation|   10                 |
 
 
   @JRBI
@@ -42,7 +42,7 @@ Feature:Validate data for JRBI Manifestation tables in Data Lake
     And  Compare the records of Delta Current manifestation with difference of current and previous manifestation
     Examples:
       | tableRef                                 | countOfRandomIds|
-      |jrbi_current_previous_manifestation       |100                |
+      |jrbi_current_previous_manifestation       |10                |
 
 
   @JRBI
@@ -53,7 +53,7 @@ Feature:Validate data for JRBI Manifestation tables in Data Lake
     And Compare the records of delta manifestation and delta manifestation history
     Examples:
       | sourceTable                      | countOfRandomIds|
-      |jrbi_delta_current_manifestation  |100                 |
+      |jrbi_delta_current_manifestation  |10                 |
 
 
   @JRBI
@@ -64,7 +64,7 @@ Feature:Validate data for JRBI Manifestation tables in Data Lake
     And  Compare the records of Manif Exclude with difference of Delta_current_manif and manif_history
     Examples:
       |tableName                                      | countOfRandomIds|
-      |jrbi_transform_history_manifestation_excl_delta|100                 |
+      |jrbi_transform_history_manifestation_excl_delta|10                |
 
   @JRBI
   Scenario Outline: Verify Data from the addition of Delta_current_manifestation and manifestation_Exclude is transferred to manifestation Latest table
@@ -74,15 +74,24 @@ Feature:Validate data for JRBI Manifestation tables in Data Lake
     And  Compare the records of Manifestation Latest with addition of Delta_current_Manifestation and Manifestation_Exclude
     Examples:
       |tableName                                | countOfRandomIds|
-      |jrbi_transform_latest_manifestation      |100                 |
+      |jrbi_transform_latest_manifestation      |10                 |
 
   @JRBIExtended
   Scenario Outline: Verify Data for product manifestation extended is transferred from jrbi_transform_latest_manifestation
     Given We get the <countOfRandomIds> random manifestation EPR ids <sourceTable>
     When Get the records from manifestation latest table
-    Then Get the records from productDB manifestation extended
+    Then Get the records from Manif extended table
     And Compare the records of transform latest manifestation and manifestation extended
     Examples:
       | sourceTable                       |  countOfRandomIds|
-      |jrbi_transform_latest_manifestation| 100               |
+      |jrbi_transform_latest_manifestation| 10               |
+
+  @JRBIStitching
+  Scenario Outline: Verify Data from the Manif_extended transferred to Manif Extended Stitching table-testing
+    Given We get the <countOfRandomIds> random manifestation EPR ids <tableName>
+    And Get the records from Manif extended table
+    Then compare manifestation extended and manifestation extended person role with manifestation stitching table
+    Examples:
+      |tableName                   |countOfRandomIds|
+      |manifestation_extended               |1                 |
 

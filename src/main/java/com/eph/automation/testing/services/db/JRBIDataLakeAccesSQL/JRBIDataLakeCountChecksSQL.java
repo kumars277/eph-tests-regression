@@ -335,6 +335,12 @@ public class JRBIDataLakeCountChecksSQL {
                     "c.journal_issue_trim_size !=  (p.journal_issue_trim_size ) or\n" +
                     "c.war_reference !=  (p.war_reference )))\n";
 
+    public static String GET_JRBI_MANIF_STITCHING_COUNT =
+            "select count(*) as MANIF_STCH_COUNT from "+GetJRBIDLDBUser.getStitchingdb()+".stch_manifestation_ext_json\n";
+
+    public static String GET_JRBI_WORK_STITCHING_COUNT =
+            "select count(*) as WORK_STCH_COUNT from "+GetJRBIDLDBUser.getStitchingdb()+".stch_work_ext_json\n";
+
 
 
 }

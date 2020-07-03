@@ -105,8 +105,8 @@ public class JRBIPersonDataChecksSQL {
                     ",delta_mode as DELTA_MODE" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_person_history_part where EPR in ('%s') AND " +
                     //"delta_ts like \'%%"+JRBIDataLakeCountChecksSQL.previousDate()+"%%\'";
-                    "delta_ts=(select max(delta_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_person_history_part\n " +
-                    "where delta_ts < (select max(delta_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_person_history_part))\n";
+                    "delta_ts=(select max(delta_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_person_history_part)\n ";
+
 
 
 
@@ -273,12 +273,12 @@ public class JRBIPersonDataChecksSQL {
             "select epr as EPR" +
                     " from (\n" +
                     "--new\n" +
-                    "select c.epr, c.record_type, c.role_code , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email,'I' as delta_mode FROM jrbi_staging_sit.jrbi_transform_current_person c\n" +
+                    "select c.epr, c.record_type, c.role_code , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email,'I' as delta_mode FROM "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person c\n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_person p  on c.u_key = p.u_key\n" +
                     "where p.u_key is null\n" +
                     "union all\n" +
                     "-- deleted\n" +
-                    "select c.epr, c.record_type, c.role_code , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email, 'D' as delta_mode FROM  jrbi_staging_sit.jrbi_transform_previous_person  c\n" +
+                    "select c.epr, c.record_type, c.role_code , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email, 'D' as delta_mode FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_person  c\n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person p  on c.u_key = p.u_key\n" +
                     "where p.u_key is null\n" +
                     "union all\n" +

@@ -10,7 +10,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And Compare the records of jrbi_journal_data_full and transform current work
     Examples:
       | sourceTable         | countOfRandomIds|
-      |jrbi_journal_data_full|      100         |
+      |jrbi_journal_data_full|      10         |
 
   @JRBI
   Scenario Outline: Verify Data for JRBI transform_Current_work_history is transferred from Current Work
@@ -20,7 +20,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And Compare the records of current work and current work history
     Examples:
       | sourceTable               | countOfRandomIds|
-      |jrbi_transform_current_work| 100                 |
+      |jrbi_transform_current_work| 10                |
 
   @JRBI
   Scenario Outline: Verify Data for JRBI transform_Previous_work_history is transferred from Previous Work
@@ -30,7 +30,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And Compare the records of previous work and previous work history
     Examples:
       | sourceTable                  | countOfRandomIds|
-      |jrbi_transform_previous_work  |100                 |
+      |jrbi_transform_previous_work  |10                 |
 
   @JRBI
   Scenario Outline: Verify Data from the difference of current_work and previous_work is transferred to delta current work table
@@ -40,7 +40,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And  Compare the records of Delta Current work with difference of current and previous work
     Examples:
       |tableReference                       | countOfRandomIds|
-      |jrbi_transform_previous_current_work| 100                 |
+      |jrbi_transform_previous_current_work| 10                 |
 
 
   @JRBI
@@ -51,7 +51,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And Compare the records of delta work and delta work history
     Examples:
       | sourceTable               | countOfRandomIds|
-      |jrbi_delta_current_work|         100                 |
+      |jrbi_delta_current_work|         10                 |
 
 
   @JRBI
@@ -62,7 +62,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And  Compare the records of Work Exclude with difference of Delta_current_work and work_history
     Examples:
       |tableName                                | countOfRandomIds|
-      |jrbi_transform_history_work_excl_delta   |100                 |
+      |jrbi_transform_history_work_excl_delta   |10                 |
 
   @JRBI
   Scenario Outline: Verify Data from the addition of Delta_current_work and work_Exclude is transferred to work Latest table
@@ -72,7 +72,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And  Compare the records of Work Latest with addition of Delta_current_work and work_Exclude
     Examples:
       |tableName                                | countOfRandomIds|
-      |jrbi_transform_latest_work               |100                 |
+      |jrbi_transform_latest_work               |10                 |
 
 
   @JRBIExtended
@@ -86,19 +86,9 @@ Feature:Validate data for JRBI Work tables in Data Lake
       |jrbi_transform_latest_work               |100                 |
 
 
-    @JRBIStitching
-    Scenario Outline: Verify Data from the work_extended transferred to work Extended Stitching table
-      Given We get the <countOfRandomIds> random EPR ids <tableName>
-      When Get the records from work extended table
-      Then Get the records from work extended person role table
-      Then Get the records from work extended stitching table
-      And compare work extended and work extended person role with work stitching table
-      Examples:
-        |tableName                   |countOfRandomIds|
-        |work_extended               |3                 |
 
   @JRBIStitching
-  Scenario Outline: Verify Data from the work_extended transferred to work Extended Stitching table-testing inprogress
+  Scenario Outline: Verify Data from the work_extended transferred to work Extended Stitching table-testing
     Given We get the <countOfRandomIds> random EPR ids <tableName>
     And Get the records from work extended table
     Then compare work extended and work extended person role with work stitching table

@@ -46,8 +46,12 @@ public class JRBICountChecksSteps {
     private static int JRBIWorkExtCount;
     private static String JRBIManifExtendedSQLCount;
     private static String JRBIPersonExtendedSQLCount;
+    private static String JRBIManifStitchingSQLCount;
+    private static String JRBIWorkStitchingSQLCount;
     private static int JRBIManifExtCount;
     private static int JRBIPersonExtCount;
+    private static int JRBIManifStchCount;
+    private static int JRBIWorkStchCount;
 
 
 
@@ -461,5 +465,36 @@ public class JRBICountChecksSteps {
 
     }
 
+    @Then("^Get the total count of stitching manif json table$")
+    public void totalCountStchManif(){
+        Log.info("Getting Manif Stitching Table Count...");
+        JRBIManifStitchingSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_MANIF_STITCHING_COUNT;
+        Log.info(JRBIManifStitchingSQLCount);
+        List<Map<String, Object>> JRBIManifStschTableCount = DBManager.getDBResultMap(JRBIManifStitchingSQLCount, Constants.EPH_URL);
+        JRBIManifStchCount = ((Long) JRBIManifStschTableCount.get(0).get("MANIF_STCH_COUNT")).intValue();
+    }
+
+    @And("^Compare the counts of stitching manif json and manif extended table are identical$")
+    public void compareStchManifandManifExt() {
+        Log.info("The count for Manif Ext table => " + JRBIManifExtCount + " and in Manif Stitching => " + JRBIManifStchCount);
+        Assert.assertEquals("The counts are not equal when compared with Manif Ext and Manif Stitching", JRBIManifExtCount, JRBIManifStchCount);
+
+    }
+
+    @Then("^Get the total count of stitching work json table$")
+    public void totalCountStchWork(){
+        Log.info("Getting Work Stitching Table Count...");
+        JRBIWorkStitchingSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_WORK_STITCHING_COUNT;
+        Log.info(JRBIWorkStitchingSQLCount);
+        List<Map<String, Object>> JRBIWorkStschTableCount = DBManager.getDBResultMap(JRBIWorkStitchingSQLCount, Constants.EPH_URL);
+        JRBIWorkStchCount = ((Long) JRBIWorkStschTableCount.get(0).get("WORK_STCH_COUNT")).intValue();
+    }
+
+    @And("^Compare the counts of stitching work json and work extended table are identical$")
+    public void compareStchWorkandWorkExt() {
+        Log.info("The count for Work Ext table => " + JRBIWorkExtCount + " and in Work Stitching => " + JRBIWorkStchCount);
+        Assert.assertEquals("The counts are not equal when compared with Work Ext and Work Stitching", JRBIWorkExtCount, JRBIWorkStchCount);
+
+    }
 
 }
