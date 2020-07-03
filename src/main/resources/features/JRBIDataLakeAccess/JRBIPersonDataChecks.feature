@@ -85,4 +85,4 @@ Feature:Validate data for JRBI Person tables in Data Lake
     And Compare the records of transform latest person and person extended
     Examples:
       | sourceTable                       |  countOfRandomIds|
-      |jrbi_transform_latest_person| 100               |
+      |jrbi_transform_latest_person       | 10               |

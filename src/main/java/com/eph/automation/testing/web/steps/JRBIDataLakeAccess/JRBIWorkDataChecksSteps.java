@@ -33,7 +33,7 @@ public class JRBIWorkDataChecksSteps {
 
     @Given("^We get the (.*) random EPR ids (.*)$")
     public void getRandomEPRIds(String numberOfRecords, String tableName) {
-      //  numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random EPR Ids...");
         switch (tableName) {
@@ -2079,7 +2079,7 @@ public class JRBIWorkDataChecksSteps {
                     }
                 }
 
-                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_SYSTEM().isEmpty()){
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_SYSTEM()==null){
                     Log.info("PrimarySiteSupportLevel not available");
                 }else{
                     Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
@@ -2093,7 +2093,7 @@ public class JRBIWorkDataChecksSteps {
                     }
                 }
 
-                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_QTY().isEmpty()){
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_QTY()==null){
                     Log.info("catalogueVolumesQty not available");
                 }else{
                     Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
@@ -2107,7 +2107,7 @@ public class JRBIWorkDataChecksSteps {
                     }
                 }
 
-                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_ISSUES_QTY().isEmpty()){
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_ISSUES_QTY()==null){
                     Log.info("catalogueIssuesQty not available");
                 }else{
                     Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
@@ -2121,7 +2121,7 @@ public class JRBIWorkDataChecksSteps {
                     }
                 }
 
-                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_FROM().isEmpty()){
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_FROM()==null){
                     Log.info("catalogueVolumeFrom not available");
                 }else{
                     Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
@@ -2135,7 +2135,7 @@ public class JRBIWorkDataChecksSteps {
                     }
                 }
 
-                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_TO().isEmpty()){
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_TO()==null){
                     Log.info("catalogueVolumeTo not available");
                 }else{
                     Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
@@ -2149,7 +2149,7 @@ public class JRBIWorkDataChecksSteps {
                     }
                 }
 
-                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_ISSUES_QTY().isEmpty()){
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_ISSUES_QTY()==null){
                     Log.info("RF_ISSUES_QTY not available");
                 }else{
                     Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
@@ -2163,7 +2163,7 @@ public class JRBIWorkDataChecksSteps {
                     }
                 }
 
-                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_TOTAL_PAGES_QTY().isEmpty()){
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_TOTAL_PAGES_QTY()==null){
                     Log.info("RF_TOTAL_PAGES_QTY not available");
                 }else{
                     Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
@@ -2177,7 +2177,7 @@ public class JRBIWorkDataChecksSteps {
                     }
                 }
 
-                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_FVI().isEmpty()){
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_FVI()==null){
                     Log.info("RF_FVI not available");
                 }else{
                     Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
@@ -2191,7 +2191,7 @@ public class JRBIWorkDataChecksSteps {
                     }
                 }
 
-                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_LVI().isEmpty()){
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_LVI()==null){
                     Log.info("RF_LVI not available");
                 }else{
                     Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +

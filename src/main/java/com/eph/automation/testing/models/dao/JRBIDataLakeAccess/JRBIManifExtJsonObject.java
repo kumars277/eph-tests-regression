@@ -14,8 +14,7 @@ public class JRBIManifExtJsonObject {
     public String getId() {return id;}
     public void setId(String id) {this.id = id;}
 
-    private JRBIManifExtJson manifExtended;
-    public JRBIManifExtJson getManifExtended() {return manifExtended;}
-    public void setManifExtended(JRBIManifExtJson manifExtended) {this.manifExtended = manifExtended;}
+    private JRBIManifExtJson manifestationExtended;
+    public JRBIManifExtJson getManifestationExtended() {return manifestationExtended;}
+    public void setManifestationExtended(JRBIManifExtJson manifestationExtended) {this.manifestationExtended = manifestationExtended;}
 }
-

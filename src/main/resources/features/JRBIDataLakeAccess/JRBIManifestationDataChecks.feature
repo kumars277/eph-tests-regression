@@ -93,5 +93,5 @@ Feature:Validate data for JRBI Manifestation tables in Data Lake
     Then compare manifestation extended and manifestation extended person role with manifestation stitching table
     Examples:
       |tableName                   |countOfRandomIds|
-      |manifestation_extended               |1                 |
+      |manifestation_extended               |10                 |
 

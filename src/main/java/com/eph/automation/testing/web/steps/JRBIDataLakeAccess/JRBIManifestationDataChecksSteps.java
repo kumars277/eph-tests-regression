@@ -32,7 +32,7 @@ public class JRBIManifestationDataChecksSteps {
 
     @Given("^We get the (.*) random manifestation EPR ids (.*)$")
     public void getRandomManifEPRIds(String numberOfRecords, String tableName) {
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Manif EPR Ids...");
         switch (tableName) {
@@ -1038,32 +1038,32 @@ public class JRBIManifestationDataChecksSteps {
 
                 Log.info("EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() +
                         " Manif_Extended -> journalProdSiteCode => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_PROD_SITE() +
-                        " Manif_JSON -> journalProdSiteCode => " + JRBIAccessDLContext.recordsFromManifStitching.getManifExtended().getJournalProdSiteCode());
+                        " Manif_JSON -> journalProdSiteCode => " + JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalProdSiteCode());
                 if (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_PROD_SITE() != null ||
-                        (JRBIAccessDLContext.recordsFromManifStitching.getManifExtended().getJournalProdSiteCode() != null)) {
+                        (JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalProdSiteCode() != null)) {
                     Assert.assertEquals("The journalProdSiteCode is incorrect for EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR(),
                             dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_PROD_SITE(),
-                            JRBIAccessDLContext.recordsFromManifStitching.getManifExtended().getJournalProdSiteCode());
+                            JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalProdSiteCode());
                 }
 
                 Log.info("EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() +
                         " Manif_Extended -> journalIssueTrimSize => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_ISSUE_TRIM_SIZE() +
-                        " Manif_JSON -> journalIssueTrimSize => " + JRBIAccessDLContext.recordsFromManifStitching.getManifExtended().getJournalIssueTrimSize());
+                        " Manif_JSON -> journalIssueTrimSize => " + JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalIssueTrimSize());
                 if (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null ||
-                        (JRBIAccessDLContext.recordsFromManifStitching.getManifExtended().getJournalIssueTrimSize() != null)) {
+                        (JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalIssueTrimSize() != null)) {
                     Assert.assertEquals("The journalIssueTrimSize is incorrect for EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR(),
                             dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_ISSUE_TRIM_SIZE(),
-                            JRBIAccessDLContext.recordsFromManifStitching.getManifExtended().getJournalIssueTrimSize());
+                            JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalIssueTrimSize());
                 }
 
                 Log.info("EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() +
                         " Manif_Extended -> warReference => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getWAR_REFERENCE() +
-                        " Manif_JSON -> warReference => " + JRBIAccessDLContext.recordsFromManifStitching.getManifExtended().getWarReference());
+                        " Manif_JSON -> warReference => " + JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getWarReference());
                 if (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getWAR_REFERENCE() != null ||
-                        (JRBIAccessDLContext.recordsFromManifStitching.getManifExtended().getWarReference() != null)) {
+                        (JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getWarReference() != null)) {
                     Assert.assertEquals("The warReference is incorrect for EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR(),
                             dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getWAR_REFERENCE(),
-                            JRBIAccessDLContext.recordsFromManifStitching.getManifExtended().getWarReference());
+                            JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getWarReference());
                 }
 
             }

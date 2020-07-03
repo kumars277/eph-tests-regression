@@ -342,6 +342,11 @@ public class JRBIDataLakeCountChecksSQL {
             "select count(*) as WORK_STCH_COUNT from "+GetJRBIDLDBUser.getStitchingdb()+".stch_work_ext_json\n";
 
 
+    public static String GET_JRBI_WORK_EXTENDED_COUNT_STCH =
+            "select count(*) as WORK_EXTENDED_COUNT from "+GetJRBIDLDBUser.getProductExtdb()+".work_extended where delete_flag=false\n";
+
+    public static String GET_JRBI_MANIF_EXTENDED_COUNT_STITCH =
+            "select count(*) as MANIF_EXTENDED_COUNT from "+GetJRBIDLDBUser.getProductExtdb()+".manifestation_extended where delete_flag=false\n";
 
 }
 

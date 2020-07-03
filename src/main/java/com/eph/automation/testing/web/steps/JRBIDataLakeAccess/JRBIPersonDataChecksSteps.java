@@ -31,7 +31,7 @@ public class JRBIPersonDataChecksSteps {
 
     @Given("^We get the (.*) random Person EPR ids (.*)$")
     public void getRandomPersonEPRIds(String numberOfRecords, String tableName) {
-     //   numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Person EPR Ids...");
         switch (tableName) {
@@ -819,6 +819,9 @@ public class JRBIPersonDataChecksSteps {
                 dataQualityJRBIContext.recordsFromExcludePerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR));
                 dataQualityJRBIContext.recordsFromExcludePerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY));
                 dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY));
+                dataQualityJRBIContext.recordsFromExcludePerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID));
+                dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID));
+
                 Log.info("Diff of Delt Person and History -> EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() +
                         "Person_Exclude -> EPR => " + dataQualityJRBIContext.recordsFromExcludePerson.get(i).getEPR());
                 if (dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i).getEPR() != null ||
@@ -972,6 +975,9 @@ public class JRBIPersonDataChecksSteps {
                 dataQualityJRBIContext.recordsFromLAtestPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR));
                 dataQualityJRBIContext.recordsFromAddDeltaAndPersonExclude.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY)); //sort data in the lists
                 dataQualityJRBIContext.recordsFromLAtestPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY));
+                dataQualityJRBIContext.recordsFromAddDeltaAndPersonExclude.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromLAtestPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID));
+
 
                 Log.info("Delta_PERSON_EXclude -> EPR => " + dataQualityJRBIContext.recordsFromAddDeltaAndPersonExclude.get(i).getEPR() +
                         "Person_Latest -> EPR => " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR());
@@ -1117,6 +1123,9 @@ public class JRBIPersonDataChecksSteps {
                 dataQualityJRBIContext.recordsFromPersonExtended.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR));
                 dataQualityJRBIContext.recordsFromPersonExtended.sort(Comparator.comparing(JRBIDLPersonAccessObject::getROLE_CODE)); //sort data in the lists
                 dataQualityJRBIContext.recordsFromLAtestPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getROLE_CODE));
+                dataQualityJRBIContext.recordsFromPersonExtended.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromLAtestPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID));
+
 
                 Log.info("Person_Latest -> EPR => " + dataQualityJRBIContext.recordsFromLAtestPerson.get(i).getEPR() +
                         "Person_Extended -> EPR => " + dataQualityJRBIContext.recordsFromPersonExtended.get(i).getEPR());

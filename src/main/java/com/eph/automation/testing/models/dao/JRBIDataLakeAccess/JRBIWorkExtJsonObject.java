@@ -18,4 +18,3 @@ public class JRBIWorkExtJsonObject {
     public JRBIWorkExtJson getWorkExtended() {return workExtended;}
     public void setWorkExtended(JRBIWorkExtJson workExtended) {this.workExtended = workExtended;}
 }
-

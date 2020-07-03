@@ -83,7 +83,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And  Compare the records of Work Latest with work_Extended
     Examples:
       |tableName                                | countOfRandomIds|
-      |jrbi_transform_latest_work               |100                 |
+      |jrbi_transform_latest_work               |10                 |
 
 
 
@@ -94,4 +94,4 @@ Feature:Validate data for JRBI Work tables in Data Lake
     Then compare work extended and work extended person role with work stitching table
     Examples:
       |tableName                   |countOfRandomIds|
-      |work_extended               |50                 |
+      |work_extended               |10                 |

@@ -252,7 +252,7 @@ public class JRBIPersonDataChecksSQL {
                     "last_updated_date as LAST_UPDATED_DATE,\n" +
                     "delete_flag as DELETE_FLAG\n" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person\n" +
-                    " where EPR in ('%s')\n";
+                    " where EPR in ('%s') order by role_code,peoplehub_id\n";
 
 
     public static String GET_JRBI_PERSON_EXTENDED_RECORDS =
@@ -266,7 +266,7 @@ public class JRBIPersonDataChecksSQL {
                     "last_updated_date as LAST_UPDATED_DATE,\n" +
                     "delete_flag as DELETE_FLAG\n" +
                     " from "+GetJRBIDLDBUser.getProductExtdb()+".work_extended_person_role\n" +
-                    " where epr_id in ('%s')\n";
+                    " where epr_id in ('%s') order by role_code,peoplehub_id\n";
 
 
     public static String GET_RANDOM_EPR_DELTA_PERSON =

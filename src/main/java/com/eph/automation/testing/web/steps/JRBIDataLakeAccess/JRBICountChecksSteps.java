@@ -465,6 +465,24 @@ public class JRBICountChecksSteps {
 
     }
 
+    @Then("^Get the total count of work extended table for Stitch$")
+    public void totalCountworkExtendedForStitch(){
+        Log.info("Getting Work Extended Table Count...");
+        JRBIworkExtendedSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_WORK_EXTENDED_COUNT_STCH;
+        Log.info(JRBIworkExtendedSQLCount);
+        List<Map<String, Object>> JRBIWorkExtTableCount = DBManager.getDBResultMap(JRBIworkExtendedSQLCount, Constants.AWS_URL);
+        JRBIWorkExtCount = ((Long) JRBIWorkExtTableCount.get(0).get("WORK_EXTENDED_COUNT")).intValue();
+    }
+
+    @Then("^Get the total count of manif extended table for stitch$")
+    public void totalCountManifExtendedForStitch(){
+        Log.info("Getting Manif Extended Table Count...");
+        JRBIManifExtendedSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_MANIF_EXTENDED_COUNT_STITCH;
+        Log.info(JRBIManifExtendedSQLCount);
+        List<Map<String, Object>> JRBIManifExtTableCount = DBManager.getDBResultMap(JRBIManifExtendedSQLCount, Constants.AWS_URL);
+        JRBIManifExtCount = ((Long) JRBIManifExtTableCount.get(0).get("MANIF_EXTENDED_COUNT")).intValue();
+    }
+
     @Then("^Get the total count of stitching manif json table$")
     public void totalCountStchManif(){
         Log.info("Getting Manif Stitching Table Count...");
@@ -480,6 +498,7 @@ public class JRBICountChecksSteps {
         Assert.assertEquals("The counts are not equal when compared with Manif Ext and Manif Stitching", JRBIManifExtCount, JRBIManifStchCount);
 
     }
+
 
     @Then("^Get the total count of stitching work json table$")
     public void totalCountStchWork(){
