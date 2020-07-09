@@ -78,7 +78,6 @@ public class manifestationCore {
 
     public void compareWithDB(String manifestationId) {
         Log.info("verifying ManifestationCore data...");
-        getManifestationByID(manifestationId);
 
         Assert.assertEquals(keyTitle, manifestationDataObjectFromEPHGD.get(0).getMANIFESTATION_KEY_TITLE());
         printLog("manifestation keyTitle");

@@ -15,7 +15,8 @@ public class WorkExtended {
     private String primarySiteSystem;
 
     public String getPrimarySiteSystem() {
-        return primarySiteSystem;
+        if(primarySiteSystem==null) return "";
+        else return primarySiteSystem;
     }
 
     public void setPrimarySiteSystem(String primarySiteSystem) {
@@ -25,7 +26,8 @@ public class WorkExtended {
     private String primarySiteAcronym;
 
     public String getPrimarySiteAcronym() {
-        return primarySiteAcronym;
+        if(primarySiteAcronym==null) return "";
+        else return primarySiteAcronym;
     }
 
     public void setPrimarySiteAcronym(String primarySiteAcronym) {
@@ -35,7 +37,8 @@ public class WorkExtended {
     private String primarySiteSupportLevel;
 
     public String getPrimarySiteSupportLevel() {
-        return primarySiteSupportLevel;
+        if(primarySiteSupportLevel==null) return "";
+        else return primarySiteSupportLevel;
     }
 
     public void setPrimarySiteSupportLevel(String primarySiteSupportLevel) {
@@ -60,10 +63,12 @@ public class WorkExtended {
     }
 
     public String getCatalogueVolumesQty() {
-        return catalogueVolumesQty;
+        if(catalogueVolumesQty==null) return "";
+        else return catalogueVolumesQty;
+
     }
 
-    private String catalogueIssuesQty;
+    private String catalogueIssuesQty="";
 
     public void setCatalogueIssuesQty(String catalogueIssuesQty) {
         this.catalogueIssuesQty = catalogueIssuesQty;
@@ -73,7 +78,7 @@ public class WorkExtended {
         return catalogueIssuesQty;
     }
 
-    private String catalogueVolumeFrom;
+    private String catalogueVolumeFrom="";
 
     public String getCatalogueVolumeFrom() {
         return catalogueVolumeFrom;
@@ -83,7 +88,7 @@ public class WorkExtended {
         this.catalogueVolumeFrom = catalogueVolumeFrom;
     }
 
-    private String catalogueVolumeTo;
+    private String catalogueVolumeTo="";
 
     public void setCatalogueVolumeTo(String catalogueVolumeTo) {
         this.catalogueVolumeTo = catalogueVolumeTo;
@@ -93,7 +98,7 @@ public class WorkExtended {
         return catalogueVolumeTo;
     }
 
-    private String rfIssuesQty;
+    private String rfIssuesQty="";
 
     public String getRfIssuesQty() {
         return rfIssuesQty;
@@ -103,7 +108,7 @@ public class WorkExtended {
         this.rfIssuesQty = rfIssuesQty;
     }
 
-    private String rfTotalPagesQty;
+    private String rfTotalPagesQty="";
 
     public String getRfTotalPagesQty() {
         return rfTotalPagesQty;
@@ -113,7 +118,7 @@ public class WorkExtended {
         this.rfTotalPagesQty = rfTotalPagesQty;
     }
 
-    private String rfFvi;
+    private String rfFvi="";
 
     public String getRfFvi() {
         return rfFvi;
@@ -123,7 +128,7 @@ public class WorkExtended {
         this.rfFvi = rfFvi;
     }
 
-    private String rfLvi;
+    private String rfLvi="";
 
     public void setRfLvi(String rfLvi) {
         this.rfLvi = rfLvi;
@@ -133,7 +138,7 @@ public class WorkExtended {
         return rfLvi;
     }
 
-    private String ptsBusinessUnitDesc;
+    private String ptsBusinessUnitDesc="";
 
     public String getPtsBusinessUnitDesc() {
         return ptsBusinessUnitDesc;

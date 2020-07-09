@@ -17,7 +17,7 @@ public class TestContext {
         String environment = System.getProperty("ENV");
         testProperties.browserType = browserName != null ? browserName : "chrome";
         testProperties.gridRun = gridRun != null ? Boolean.TRUE : Boolean.FALSE;
-        testProperties.environment = environment !=null ? environment : EnumConstants.ENVIRONMENTS.SIT.name();
+        testProperties.environment = environment !=null ? environment : EnumConstants.ENVIRONMENTS.UAT.name();
         testProperties.targetDB = targetDB != null ? Boolean.TRUE : Boolean.FALSE;
         return testProperties;
     }

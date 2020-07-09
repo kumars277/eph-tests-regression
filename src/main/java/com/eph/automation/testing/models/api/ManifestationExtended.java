@@ -17,7 +17,10 @@ public class ManifestationExtended {
     public void setJournalIssueTrimSize(String journalIssueTrimSize) {this.journalIssueTrimSize = journalIssueTrimSize;}
 
     public String warReference;
-    public String getWarReference() {return warReference;}
+    public String getWarReference() {
+        if(warReference==null) return "";
+        else return warReference;
+    }
     public void setWarReference(String warReference) {this.warReference = warReference;}
 
     public void compareWithDB() {

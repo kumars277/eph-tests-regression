@@ -47,9 +47,12 @@ public class ProductFinderSQL {
     public static String SELECT_LEGAL_OWNER="select name from semarchy_eph_mdm.gd_legal_owner where legal_owner_id='%s'";
     public static String SELECT_PMC_INFO="select l_description,f_pmg from semarchy_eph_mdm.gd_x_lov_pmc where code='%s'";
     public static String SELECT_PMG_INFO="select l_description from semarchy_eph_mdm.gd_x_lov_pmg where code='%S'";
+   public static String SELECT_IMPRINT_INFO="select l_description from semarchy_eph_mdm.gd_x_lov_imprint where code='%S'";
     public static String SELECT_SUBJECT_AREA="select sa.name,sa.f_type,sa.f_parent_subject_area from semarchy_eph_mdm.gd_subject_area sa\n" +
         "inner join semarchy_eph_mdm.gd_work_subject_area_link wsa\n" +
-        "on wsa.f_subject_area=sa.subject_area_id where wsa.f_wwork='%S'";
+        "on wsa.f_subject_area=sa.subject_area_id where wsa.f_wwork='%S'" +
+            "and wsa.f_subject_area not in(select wsa.f_subject_area where wsa.effective_end_date<current_date)";
 
-    public static String SELECT_IDENTIFIER_OF_WORK="select f_type,identifier from semarchy_eph_mdm.gd_work_identifier where f_wwork='%s'";
+    public static String SELECT_IDENTIFIER_OF_WORK="select f_type,identifier from semarchy_eph_mdm.gd_work_identifier where f_wwork='%s'" +
+            " and identifier not in (select identifier where effective_end_date<current_date)";
 }

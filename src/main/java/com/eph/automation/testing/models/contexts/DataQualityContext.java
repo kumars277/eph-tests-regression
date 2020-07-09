@@ -86,7 +86,7 @@ public class DataQualityContext {
 
     public static WorkExtendedTestClass workExtendedTestClass;
     public static ManifestationExtendedTestClass manifestationExtendedTestClass;
-
+    public static String uiUnderTest;
 
 
 

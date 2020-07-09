@@ -161,7 +161,7 @@ public class APIDataSQL {
             "               edition_number AS EDITION_NUMBER,\n" +
             "               volume AS VOLUME,\n" +
             "               copyright_year AS COPYRIGHT_YEAR\n" +
-            "              FROM ephsit.semarchy_eph_mdm.gd_wwork " +
+            "              FROM semarchy_eph_mdm.gd_wwork " +
             "  WHERE work_id IN ('%s')";
     //added by Nishant in Nov-Dec 2019
     public static String SELECT_PRODUCT_BY_ID= "SELECT \"product_id\" as PRODUCT_ID FROM semarchy_eph_mdm.gd_product WHERE product_id='%s'";

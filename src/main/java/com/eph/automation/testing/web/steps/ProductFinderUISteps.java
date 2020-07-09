@@ -4,6 +4,8 @@ import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.api.WorkApiObject;
+import com.eph.automation.testing.models.api.WorkManifestationApiObject;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.contexts.FinancialAttribsContext;
 import com.eph.automation.testing.models.dao.*;
@@ -14,24 +16,14 @@ import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.eph.automation.testing.services.db.sql.ProductFinderSQL;
 import com.google.common.base.Joiner;
 import com.google.inject.Inject;
-//import com.sun.java.util.jar.pack.Instruction;
 import cucumber.api.PendingException;
-import cucumber.api.java.en.And;
-import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
-import org.joda.time.DateTime;
-import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-
+import cucumber.api.java.en.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-//import java.util.Date;
-//import java.time.*;
 import java.util.*;
 import java.util.stream.Collectors;
-
+import org.junit.Assert;
+import org.openqa.selenium.WebElement;
 import static org.junit.Assert.assertTrue;
 
 
@@ -48,35 +40,28 @@ public class ProductFinderUISteps {
     private TasksNew tasks;
 
     private String sql;
-    private String workIds;
-    private static String productId;
-    private String searchingID;
     private static List<String> ids;
-    private static List<String> workTypeCode;
+    private static String productId;
     private static List<String> productIdList;
     private static List<String> productTitleList;
-    private static List<String> workIdList;
-    private static List<String> booksworkIdList = new ArrayList<String>();
-    private static List<Map<?, ?>> workTypesCodeAvailable;
+    private static List<String> workIdList = new ArrayList<String>();
+    private static List<String> workStatusCode;
+    private static List<String> workStatusCodesofLaunchedToList, workStatusCodesofPlannedToList, workStatusCodesofNoLongerPubList;
+
     private static List<Map<?, ?>> availableProduct;
+    private static List<Map<?, ?>> tempDBResultMap;
+    private static List<String> workTypeCode;
 
     private static String[] Book_Types = {"Books Series", "Major Ref Work", "Other Book", "Reference Book", "Serial", "Text Book"};
     private static String[] Journal_Types = {"Abstracts Journal", "B2B Journal", "Journal", "Newsletter"};
     private static String[] Other_Types = {"Drug Monograph", "Medical Procedure"};
     String allWorkTypesCode[] = {"BKS", "MRW", "OTH", "SER", "TBK", "RBK", "ABS", "JNL", "JBB", "NWL", "DMG", "MPR"};
-
-
-    //   private static List<String> allWorkTypesCodeArrayToList;
-
     private static List<ManifestationIdentifierObject> manifestationIdentifiers;
-    private static List<String> workStatusCode;
-    private static List<String> manifestation_Ids;
-    private static List<String> manifestationIdentifiers_Ids;
-    private static List<String> workStatusCodesofLaunchedToList, workStatusCodesofPlannedToList, workStatusCodesofNoLongerPubList;
-    private String finalworkTypeCode;
-    private String finalworkStatusCode;
     private List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD;
     private FinancialAttribsContext financialAttribs;
+    private WorkApiObject workApiObject=new WorkApiObject();
+    private WorkManifestationApiObject workManifestationApiObject=new WorkManifestationApiObject();
+    private ApiWorksSearchSteps apiWorksSearchSteps=new ApiWorksSearchSteps();
 
     @Inject
     public ProductFinderUISteps(ProductFinderTasks productFinderTasks, TasksNew tasks) {
@@ -98,21 +83,32 @@ public class ProductFinderUISteps {
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
-    @And("^We get the work search data from the EPH GD$")
-    public void getWorksDataFromEPHGD() {
-        sql = String.format(ProductFinderSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, Joiner.on("','").join(ids));
+
+    @And("We get the work search data from EPH GD for (.*)")
+    public void getSpecificWorksDataFromEPHGD(String WorkId) {
+        sql = String.format(ProductFinderSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, WorkId);
         DataQualityContext.workDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
         DataQualityContext.workDataObjectsFromEPHGD.sort(Comparator.comparing(WorkDataObject::getWORK_ID));
     }
 
-
     @Given("^user is on search page$")
     public void userOpensHomePage() throws InterruptedException, ParseException {
         //updated by Nishant @ 15 May 2020
+        DataQualityContext.uiUnderTest="PF";
         productFinderTasks.openHomePage();
         productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
         tasks.waitUntilPageLoad();
-        Log.info("signed in with science id...");
+
+    }
+
+    @Given("^user is on Journal Finder search page$")
+    public void userOpensJFHomePage() throws InterruptedException, ParseException {
+        //Created by Nishant @ 03 Jul 2020
+        DataQualityContext.uiUnderTest="JF";
+        productFinderTasks.openHomePage();
+        productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
+        tasks.waitUntilPageLoad();
+
     }
 
     @Then("^Search works by (.*)$")
@@ -160,10 +156,14 @@ public class ProductFinderUISteps {
         assertTrue(productFinderTasks.isUserOnWorkPage(workId));
     }
 
+    @And("^Verify user is forwarded to the searched work page$")
+    public void verifyUserIsForwardedToSearchedWorkPage() {
+        assertTrue(productFinderTasks.isUserOnWorkPage(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID()));
+    }
+
     @Given("^Get the available Work Types from the DB \"([^\"]*)\"$")
     public void get_the_available_Work_Types_from_the_DB(String chooseWorkType) {
         //updated by Nishant @ 21 May 2020
-        try {
             switch (chooseWorkType) {
                 case "Book":
                     sql = String.format(ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_BOOK);
@@ -175,67 +175,66 @@ public class ProductFinderUISteps {
                     sql = String.format(ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_OTHER);
                     break;
             }
-            workTypesCodeAvailable = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            if (workTypesCodeAvailable.size() > 0) {
-                workTypeCode = workTypesCodeAvailable.stream().map(m -> (String) m.get("WORK_TYPE")).map(String::valueOf).collect(Collectors.toList());
+
+            List<Map<?, ?>> availableWorkTypeCode = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            if (availableWorkTypeCode.size() > 0) {
+                workTypeCode = availableWorkTypeCode.stream().map(m -> (String) m.get("WORK_TYPE")).map(String::valueOf).collect(Collectors.toList());
                 Log.info("\nAvailable Work Types for " + chooseWorkType + " in DB: " + workTypeCode);
             } else {
                 Log.info("Records for the work Type => " + chooseWorkType + " not available in DB.");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Then("^Get a Work Id for each Work Types available in the DB$")
     public void get_Work_Id_for_each_Work_Types_available_in_DB() {
         //updated by Nishant @ 21 May 2020
-        try {
-            if (workTypesCodeAvailable.size() > 0) {
+        List<String> workforWorkType;// = new ArrayList<String>();
                 for (String workTypeCodes : workTypeCode) {
                     sql = String.format(ProductFinderSQL.SELECT_WORKID_FOR_WORK_TYPE, workTypeCodes);
                     List<Map<?, ?>> workIdsAvailableforWorkTypes = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                    workIdList = workIdsAvailableforWorkTypes.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
-                    booksworkIdList.add(workIdList.get(0));
+                    workforWorkType = workIdsAvailableforWorkTypes.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
+                    workIdList.add(workforWorkType.get(0));
                 }
-                Log.info("\nWork Ids Used: " + booksworkIdList);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                Log.info("\nWork Ids Used: " + workIdList);
     }
 
     @Given("^Search for the Work by Work Ids Filter workType and verify the work Type is \"([^\"]*)\"$")
     public void verify_the_result(String chooseWorkType) throws InterruptedException {
         try {
-            if (workTypesCodeAvailable.size() > 0) {
-                for (String booksworkId : booksworkIdList) {
-                    productFinderTasks.searchFor(booksworkId);
+                for (String workId : workIdList) {
+                    productFinderTasks.searchFor(workId);
                     filter_Search_Result_by_workType(chooseWorkType);
 
-                    productFinderTasks.searchOnResultPages(booksworkId);
-                    assertTrue(tasks.verifyElementTextisDisplayed(booksworkId));
+                    productFinderTasks.searchOnResultPages(workId);
+                    assertTrue(tasks.verifyElementTextisDisplayed(workId));
 
-                    productFinderTasks.clickWork(booksworkId);
-                    assertTrue(productFinderTasks.isUserOnWorkPage(booksworkId));
+                    productFinderTasks.clickWork(workId);
+                    assertTrue(productFinderTasks.isUserOnWorkPage(workId));
 
-                    boolean isWorkTypeCorrect = verifyWorkTypeForWorkId(booksworkId, chooseWorkType);
-                    assertTrue("Work Id " + booksworkId + " Successfully filtered by Work Type: " + chooseWorkType, isWorkTypeCorrect);
+                    boolean isWorkTypeCorrect = verifyWorkTypeForWorkId(workId, chooseWorkType);
+                    assertTrue("Work Id " + workId + " Successfully filtered by Work Type: " + chooseWorkType, isWorkTypeCorrect);
 
                     productFinderTasks.openHomePage();
                 }
-            }
-            booksworkIdList.clear();
+            workIdList.clear();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+
 
     @Given("^Searches for works by given ([^\"]*)$")
     public void searches_for_works_by_given(String searchKeyword) throws InterruptedException {
         Log.info("searching keyword..." + searchKeyword);
         productFinderTasks.searchFor(searchKeyword);
     }
+
+    @Given("^Searches work by id$")
+    public void searches_works_by_id() throws InterruptedException {
+        productFinderTasks.searchFor(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+    }
+
 
     @Given("^Filter the Search Result by \"([^\"]*)\"$")
     public void filter_Search_Result_by_workType(String workFilterType) throws InterruptedException {
@@ -258,6 +257,16 @@ public class ProductFinderUISteps {
         boolean workSearched = productFinderTasks.searchOnResultPages(workId);
         Assert.assertTrue("searched key is on search result", workSearched);
 
+        productFinderTasks.clickWork(workId);
+        Log.info("clicked " + workId + " id from search result");
+    }
+
+    @Then("^Search items are listed and click the workid from result")
+    public void search_items_are_listed_and_click_workId() throws InterruptedException {
+        //created by Nishant @ 4 JUne 2020
+        String workId=DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID();
+        boolean workSearched = productFinderTasks.searchOnResultPages(workId);
+        Assert.assertTrue("searched key is on search result", workSearched);
         productFinderTasks.clickWork(workId);
         Log.info("clicked " + workId + " id from search result");
     }
@@ -312,6 +321,7 @@ public class ProductFinderUISteps {
     }
 
     public boolean verifyWorkTypeForWorkId(String workId, String chooseWorkType) {//by Nishant @ 02 Jun 2020
+        Log.info("verifying work type for the work id...");
         boolean isWorkTypeCorrect = false;
         switch (chooseWorkType) {
             case "Book":
@@ -422,7 +432,7 @@ public class ProductFinderUISteps {
     }
 
     @And("^We get the manifestation data from DB$")
-    public void getManifestationByID() {
+    public void getManifestationDetailByID() {
         Log.info("get manifestation data from EPH DB...");
         List<String> manIds = new ArrayList<>();
         manIds.add(dataQualityContext.productDataObjectsFromEPHGD.get(0).getF_PRODUCT_MANIFESTATION_TYP());
@@ -567,32 +577,130 @@ public class ProductFinderUISteps {
         ProductFinderTasks.searchResultWorkId = idFound.get(0).split(" ")[2];
     }
 
-    @And("We get the work search data from EPH GD for (.*)")
-    public void getSpecificWorksDataFromEPHGD(String WorkId) {
-        sql = String.format(ProductFinderSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, WorkId);
-        DataQualityContext.workDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-        DataQualityContext.workDataObjectsFromEPHGD.sort(Comparator.comparing(WorkDataObject::getWORK_ID));
+
+    @And ("get Extended Data from DB")
+    public void getExtendedData(){
+        Log.info("getting Extended work and Manifestation data from DB...");
+        workApiObject.getJsonToObject_extendedWork(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+
+       // List<String> manifestationId= apiWorksSearchSteps.getManifestationIdsForWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+     //   workManifestationApiObject.getJsonToObject_extendedManifestation(manifestationId.get(0));
     }
 
-    @Then("^Verify work Overview Information for (.*)$")
-    public void verifyWorkOverviewInformationUI(String workId) throws ParseException {//created by Nishant @ 4 Jun 2020
 
+    @Then("^Verify PF/JF UI work overview values$")
+    public void verifyPFJFUIWorkOverviewValues() throws Throwable {
+        verifyWorkOverviewInformationUI();
+        verifyWorkFinancialInformation();
+        verifyEditorialInfo();
+    }
+
+    public void verifyWorkOverviewInformationUI() throws ParseException {//created by Nishant @ 4 Jun 2020
+       Log.info("Verifying Work Overview Core...");
         productFinderTasks.getUI_WorkOverview_Information();
         validate_workOverview_info();
         validateIdentifiers();
         validateSubjectArea();
     }
 
-    @And ("Verify work Finanfial records")
     public void verifyWorkFinancialInformation(){//created by Nishant @ 17 Jun 2020
         Log.info("verifiying......work Financial info");
-
         productFinderTasks.getUI_WorkOverview_Financial();
         validateAccountableProduct();
         validateCompanyCodes();
-
     }
 
+    public void verifyEditorialInfo() {
+        //created by Nishant @ 07 Jul 2020 for JRBI data validation on JF UI
+        Log.info("verifying...Editorial info");
+        productFinderTasks.getUI_Editorial();
+
+        Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Editorial Submission Site"),
+                DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSystem());
+        printLog("UI:Editorial Submission Site with JRBI:primarySiteSystem");
+
+        Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Editorial Submission Site Acronym"),
+                DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteAcronym());
+        printLog("UI:Editorial Submission Site Acronym with JRBI: primarySiteAcronym");
+
+        Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Editorial Support Level"),
+                DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSupportLevel());
+        printLog("UI:Editorial Support Level with JRBI: primarySiteSupportLevel");
+
+        if(productFinderTasks.prop_editorial1.containsKey("Production Site"))
+        {
+            List<String> manifestationId= apiWorksSearchSteps.getManifestationIdsForWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+            for(int cnt=0;cnt<manifestationId.size();cnt++)
+            {
+                try{
+                    workManifestationApiObject.getJsonToObject_extendedManifestation(manifestationId.get(cnt));
+                    break;}
+                catch(Exception e){Log.info(e.getMessage());}
+            }
+
+
+        //coming from manifestation Extended
+        Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Production Site"),
+                DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getJournalProdSiteCode());
+        printLog("UI:Production Site with JRBI: journalProdSiteCode");
+
+        //coming from manifestation Extended
+        Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Despatch Location"),
+                DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getWarReference());
+        printLog("UI:Despatch Location with JRBI: warReference");
+
+        //coming from manifestation Extended
+        Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Trim Size"),
+                DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getJournalIssueTrimSize());
+        printLog("UI:Trim Size with JRBI: journalIssueTrimSize");
+         }
+
+        Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Production Type"),
+                DataQualityContext.workExtendedTestClass.getWorkExtended().getIssueProdTypeCode());
+        printLog("UI:Production Type with JRBI: issueProdTypeCode");
+
+        Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Volumes in Catalogue"),
+                DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumesQty());
+        printLog("UI:Volumes in Catalogue with JRBI: catalogueVolumesQty");
+
+        Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("First Volume"),
+                DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumeFrom());
+        printLog("UI:First Volume with JRBI: catalogueVolumeFrom");
+
+        Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Last Volume"),
+                DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumeTo());
+        printLog("UI:Last Volume with JRBI: catalogueVolumeTo");
+
+        Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Total issues"),
+                DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueIssuesQty());
+        printLog("UI:Total issues with JRBI: catalogueIssuesQty");
+
+        Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("No Issues (Budget)"),
+                DataQualityContext.workExtendedTestClass.getWorkExtended().getRfIssuesQty());
+        printLog("UI:No Issues (Budget) with JRBI: rfIssuesQty");
+
+        Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("First Volume/Issue (Budget)"),
+                DataQualityContext.workExtendedTestClass.getWorkExtended().getRfFvi());
+        printLog("UI:First Volume/Issue (Budget) with JRBI: rfFvi");
+
+        Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Last Volume/Issue (Budget)"),
+                DataQualityContext.workExtendedTestClass.getWorkExtended().getRfLvi());
+        printLog("UI:Last Volume/Issue (Budget) with JRBI: rfLvi");
+
+        Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Total pages (Budget)"),
+                DataQualityContext.workExtendedTestClass.getWorkExtended().getRfTotalPagesQty());
+        printLog("UI:Total pages (Budget) with JRBI: rfTotalPagesQty");
+
+        //Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Launch Year"), DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumesQty());
+        //printLog("Launch Year");
+
+
+
+
+
+
+
+    }
 
     public void validateCompanyCodes() {//created by Nishant @ 17 Jun 2020
 
@@ -625,6 +733,7 @@ public class ProductFinderUISteps {
         String sql = String.format(APIDataSQL.GET_GD_FinnAttr_DATA, workid);
         financialAttribs.financialDataFromGD = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
     }
+
     private void printLog(String verified){Log.info("verified..."+verified);}
 
     private void getAccountableProductFromEPHGD(String accountable_product_id){
@@ -650,10 +759,14 @@ public class ProductFinderUISteps {
         Log.info("verifing......Subject Area");
         List<Map<String, Object>> subArea = getSubjectArea();
 
-        Assert.assertEquals(productFinderTasks.prop_subArea.size(), subArea.size());
+        HashSet hs_uniqueSubParents=new HashSet();//finding unique parents
+        for(int cnt=0;cnt<subArea.size();cnt++) {
+            hs_uniqueSubParents.add(subArea.get(cnt).get("f_parent_subject_area"));
+        }
+        Assert.assertEquals(productFinderTasks.prop_subArea.size(), hs_uniqueSubParents.size());
         Log.info("verified...number of sub area");
 
-        for (int i = 0; i < productFinderTasks.prop_subArea.size(); i++) {
+        for (int i = 0; i < subArea.size(); i++) {
             //get primary sub area name
             String ValuePrimarySubArea = "";
             if (subArea.get(i).get("f_parent_subject_area") == null)
@@ -671,8 +784,13 @@ public class ProductFinderUISteps {
             //get secondary sub area
             String secondaryArea = subAreaType.get(0).get("l_description").toString() + " / " + subArea.get(i).get("name");
 
-            Assert.assertEquals(productFinderTasks.prop_subArea.getProperty(ValuePrimarySubArea), secondaryArea);
-            Log.info("verified..." + ValuePrimarySubArea);
+            boolean subAreaMatched=false;
+            if(productFinderTasks.prop_subArea.getProperty(ValuePrimarySubArea).contains(secondaryArea))
+            {
+                subAreaMatched=true;
+            }
+            Assert.assertTrue(subAreaMatched);
+            Log.info("verified..." + secondaryArea);
         }
     }
 
@@ -705,58 +823,35 @@ public class ProductFinderUISteps {
 
 
     public void validate_workOverview_info() throws ParseException {
-        //created by Nishant @ 8 Jun 2020
+        //created by Nishant @08 Jun 2020
+        //updated by Nishant @09 Jul 2020
+      coreDataValidation();
+      dataModelValidation();
 
-        Log.info("verifying......work Overview Information tab");
+        //Extended data, discovered during EPH-1952 testing on 22 Jun 2020
+        //Business Unit:	STM Health & Medical Sciences         //EPR-W-108RXC
+        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Business Unit"),
+                DataQualityContext.workExtendedTestClass.getWorkExtended().getPtsBusinessUnitDesc());
+        printLog("UI: Business Unit with JRBI: ptsBusinessUnitDesc");
+    }
 
+    public void coreDataValidation(){
         Assert.assertEquals(productFinderTasks.prop_info.getProperty("Sub Title"), getValue_subTitle());
         Log.info("verified...Sub Title");
 
-        String DBWorkType = getDBWorkType();
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Work Type"), DBWorkType);
-        Log.info("verified...Work Type");
+        if(productFinderTasks.prop_info.containsKey("Work Type")) {
+            String DBWorkType = getDBWorkType();
+            Assert.assertEquals(productFinderTasks.prop_info.getProperty("Work Type"), DBWorkType);
+            Log.info("verified...Work Type");
+        }
 
         String DBWorkStatus = getDBWorkStatus();
         Assert.assertEquals(productFinderTasks.prop_info.getProperty("Work Status"), DBWorkStatus);
         Log.info("verified...Work Status");
 
-        //extended data
-        //discovered during EPH-1952 testing on 22 Jun 2020
-        //EPR-W-108RXC
-        //Business Unit:	STM Health & Medical Sciences
 
-        //data model changes
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Planned Launch Date"), getFormat_PlannedLaunchDate());
-        Log.info("verified...Planned Launch Date");
-
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Legal Ownership"), getValue_LegalOwnership());
-        Log.info("verified...Legal Ownership");
-
-        String[] OwnershipDetail = getValue_OwnershipDescription();
-
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Owner"), OwnershipDetail[1]);
-        Log.info("verified...Owner");
-
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Ownership Description"), OwnershipDetail[0]);
-        Log.info("verified...Ownership Description");
-
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Business Model"), getValue_BusinessModelFromEPHGD());
-        Log.info("verified...Business Model");
-
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Access Model"), getValue_AccessModelFromEPHGD());
-        Log.info("verified...Access Model");
-
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Imprint"), getValue_ImprintFromEPHGD());
-        Log.info("verified...Imprint");
-
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Copyright Year"), DataQualityContext.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR());
-        Log.info("verified...Copyright Year");
-
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Edition Number"), DataQualityContext.workDataObjectsFromEPHGD.get(0).getEDITION_NUMBER());
-        Log.info("verified...Edition Number");
-
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Volume"), getValue_volume());
-        Log.info("verified...Volume");
+       Assert.assertEquals(productFinderTasks.prop_info.getProperty("Imprint"), getValue_ImprintFromEPHGD());
+       Log.info("verified...Imprint");
 
         Assert.assertEquals(productFinderTasks.prop_info.getProperty("Language"), getValue_language());
         Log.info("verified...Language");
@@ -768,7 +863,52 @@ public class ProductFinderUISteps {
 
         Assert.assertEquals(productFinderTasks.prop_info.getProperty("PMG"), PMCDetail[1]);
         Log.info("verified...PMG");
+
+
     }
+
+    public void dataModelValidation()throws ParseException{
+        //data model changes
+        if(productFinderTasks.prop_info.containsKey("Planned Launch Date")){
+        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Planned Launch Date"), getFormat_PlannedLaunchDate());
+        Log.info("verified...Planned Launch Date");}
+
+        if(productFinderTasks.prop_info.containsKey("Legal Ownership")){
+        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Legal Ownership"), getValue_LegalOwnership());
+        Log.info("verified...Legal Ownership");}
+
+        if(productFinderTasks.prop_info.containsKey("Owner")) {
+            String[] OwnershipDetail = getValue_OwnershipDescription();
+            Assert.assertEquals(productFinderTasks.prop_info.getProperty("Owner"), OwnershipDetail[1]);
+            Log.info("verified...Owner");
+
+            if (productFinderTasks.prop_info.containsKey("Ownership Description")) {
+                Assert.assertEquals(productFinderTasks.prop_info.getProperty("Ownership Description"), OwnershipDetail[0]);
+                Log.info("verified...Ownership Description");
+            }
+        }
+        if(productFinderTasks.prop_info.containsKey("Business Model")){
+        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Business Model"), getValue_BusinessModelFromEPHGD());
+        Log.info("verified...Business Model");}
+
+        if(productFinderTasks.prop_info.containsKey("Access Model")){
+        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Access Model"), getValue_AccessModelFromEPHGD());
+        Log.info("verified...Access Model");}
+
+        if(productFinderTasks.prop_info.containsKey("Copyright Year")){
+        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Copyright Year"), DataQualityContext.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR());
+        Log.info("verified...Copyright Year");}
+
+        if(productFinderTasks.prop_info.containsKey("Edition Number")){
+        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Edition Number"), DataQualityContext.workDataObjectsFromEPHGD.get(0).getEDITION_NUMBER());
+        Log.info("verified...Edition Number");}
+
+        if(productFinderTasks.prop_info.containsKey("Volume")){
+        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Volume"), getValue_volume());
+        Log.info("verified...Volume");}
+
+    }
+
 
 
     public String getValue_subTitle() {
@@ -837,7 +977,8 @@ public class ProductFinderUISteps {
                 DBWorkStatus = "Withdrawn";
                 break;
             case "WDI":
-                DBWorkStatus = "Discontinued";
+               // DBWorkStatus = "Discontinued";
+                DBWorkStatus = "Stopped";
                 break;
             case "WDV":
                 DBWorkStatus = "Divested";
@@ -911,7 +1052,7 @@ public class ProductFinderUISteps {
         sql = String.format(ProductFinderSQL.SELECT_OWNERSHIP_DESCRIPTION, DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
         List<Map<String, Object>> OwnershipDescription = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         OwnerShip[0] = OwnershipDescription.get(0).get("l_description").toString();
-        ;
+
 
         String legalOwner = OwnershipDescription.get(0).get("f_legal_owner").toString();
 
@@ -958,729 +1099,11 @@ public class ProductFinderUISteps {
     }
 
     public String getValue_ImprintFromEPHGD() {//created by Nishant @ 11 Jun 2020
-        String Value_imprint = "";
-        switch (DataQualityContext.workDataObjectsFromEPHGD.get(0).getIMPRINT()) {
-            case "ABU":
-                Value_imprint = "Ahmadu Bello University";
-                break;
-            case "SHUS     ":
-                Value_imprint = "";
-                break;
-            case "CHANPUB  ":
-                Value_imprint = "";
-                break;
-            case "HBNRC    ":
-                Value_imprint = "";
-                break;
-            case "ANPEC    ":
-                Value_imprint = "";
-                break;
-            case "VE       ":
-                Value_imprint = "";
-                break;
-            case "MRU      ":
-                Value_imprint = "";
-                break;
-            case "NEWNES   ":
-                Value_imprint = "";
-                break;
-            case "ELSUP    ":
-                Value_imprint = "";
-                break;
-            case "AU       ":
-                Value_imprint = "";
-                break;
-            case "WILLAN   ":
-                Value_imprint = "";
-                break;
-            case "CMU      ":
-                Value_imprint = "";
-                break;
-            case "MORKAUF  ":
-                Value_imprint = "";
-                break;
-            case "ESA      ":
-                Value_imprint = "";
-                break;
-            case "ASU      ":
-                Value_imprint = "";
-                break;
-            case "CABS     ":
-                Value_imprint = "";
-                break;
-            case "CSJK     ":
-                Value_imprint = "";
-                break;
-            case "BAS      ":
-                Value_imprint = "";
-                break;
-            case "TU       ":
-                Value_imprint = "";
-                break;
-            case "BAFS     ":
-                Value_imprint = "";
-                break;
-            case "KA       ":
-                Value_imprint = "";
-                break;
-            case "CHLIV    ":
-                Value_imprint = "";
-                break;
-            case "UJ       ":
-                Value_imprint = "";
-                break;
-            case "ELSTAIW  ":
-                Value_imprint = "";
-                break;
-            case "CELL     ":
-                Value_imprint = "";
-                break;
-            case "KICIS    ":
-                Value_imprint = "";
-                break;
-            case "HEPLC    ":
-                Value_imprint = "";
-                break;
-            case "ERI      ":
-                Value_imprint = "";
-                break;
-            case "ELSSING  ":
-                Value_imprint = "";
-                break;
-            case "IHRS     ":
-                Value_imprint = "";
-                break;
-            case "PARADPR  ":
-                Value_imprint = "";
-                break;
-            case "SHBTRI   ":
-                Value_imprint = "";
-                break;
-            case "CUP      ":
-                Value_imprint = "";
-                break;
-            case "GULF     ":
-                Value_imprint = "";
-                break;
-            case "CHLIVAU  ":
-                Value_imprint = "";
-                break;
-            case "KFSHRC   ":
-                Value_imprint = "";
-                break;
-            case "CMP      ":
-                Value_imprint = "";
-                break;
-            case "MOSBJE   ":
-                Value_imprint = "";
-                break;
-            case "CSM      ":
-                Value_imprint = "";
-                break;
-            case "TKSO     ":
-                Value_imprint = "";
-                break;
-            case "ELSPOL   ":
-                Value_imprint = "";
-                break;
-            case "CBAFU    ":
-                Value_imprint = "";
-                break;
-            case "ELD      ":
-                Value_imprint = "";
-                break;
-            case "SAUNDCA  ":
-                Value_imprint = "";
-                break;
-            case "UCSV     ":
-                Value_imprint = "";
-                break;
-            case "JEMS     ":
-                Value_imprint = "";
-                break;
-            case "JGS      ":
-                Value_imprint = "";
-                break;
-            case "MANSOU   ":
-                Value_imprint = "";
-                break;
-            case "EMB      ":
-                Value_imprint = "";
-                break;
-            case "BCHEMIN  ":
-                Value_imprint = "";
-                break;
-            case "ABLEX    ":
-                Value_imprint = "";
-                break;
-            case "ELSEDI   ":
-                Value_imprint = "";
-                break;
-            case "SPPU     ":
-                Value_imprint = "";
-                break;
-            case "MADESIMP ":
-                Value_imprint = "";
-                break;
-            case "KARABU   ":
-                Value_imprint = "";
-                break;
-            case "CBSK     ":
-                Value_imprint = "";
-                break;
-            case "AN       ":
-                Value_imprint = "";
-                break;
-            case "JPPS     ":
-                Value_imprint = "";
-                break;
-            case "MPC      ":
-                Value_imprint = "";
-                break;
-            case "MERCKMAN ":
-                Value_imprint = "";
-                break;
-            case "ELSJPN   ":
-                Value_imprint = "";
-                break;
-            case "FPCU     ":
-                Value_imprint = "";
-                break;
-            case "ASPEN    ":
-                Value_imprint = "";
-                break;
-            case "APC      ":
-                Value_imprint = "";
-                break;
-            case "EGSZ     ":
-                Value_imprint = "";
-                break;
-            case "BMIDW    ":
-                Value_imprint = "";
-                break;
-            case "IMIC     ":
-                Value_imprint = "";
-                break;
-            case "TCCS     ":
-                Value_imprint = "";
-                break;
-            case "NIN      ":
-                Value_imprint = "";
-                break;
-            case "ESTGAZ   ":
-                Value_imprint = "";
-                break;
-            case "AAU      ":
-                Value_imprint = "";
-                break;
-            case "BIOPUB   ":
-                Value_imprint = "";
-                break;
-            case "BSP      ":
-                Value_imprint = "";
-                break;
-            case "PERG     ":
-                Value_imprint = "";
-                break;
-            case "DIGPRESS ":
-                Value_imprint = "";
-                break;
-            case "LANCET   ":
-                Value_imprint = "";
-                break;
-            case "CUG      ":
-                Value_imprint = "";
-                break;
-            case "AZTI     ":
-                Value_imprint = "";
-                break;
-            case "CAS      ":
-                Value_imprint = "";
-                break;
-            case "ISTEPELS ":
-                Value_imprint = "";
-                break;
-            case "BUCM     ":
-                Value_imprint = "";
-                break;
-            case "NWRC     ":
-                Value_imprint = "";
-                break;
-            case "CMRS     ":
-                Value_imprint = "";
-                break;
-            case "NIFST    ":
-                Value_imprint = "";
-                break;
-            case "NON      ":
-                Value_imprint = "";
-                break;
-            case "JBADHS   ":
-                Value_imprint = "";
-                break;
-            case "EGSC     ":
-                Value_imprint = "";
-                break;
-            case "FU       ":
-                Value_imprint = "";
-                break;
-            case "WIESE    ":
-                Value_imprint = "";
-                break;
-            case "ELSMAS   ":
-                Value_imprint = "";
-                break;
-            case "WB12     ":
-                Value_imprint = "";
-                break;
-            case "QU       ":
-                Value_imprint = "";
-                break;
-            case "IPB      ":
-                Value_imprint = "";
-                break;
-            case "CL13     ":
-                Value_imprint = "";
-                break;
-            case "PAUSA    ":
-                Value_imprint = "";
-                break;
-            case "LENPET   ":
-                Value_imprint = "";
-                break;
-            case "BSU      ":
-                Value_imprint = "";
-                break;
-            case "EGSRSA   ":
-                Value_imprint = "";
-                break;
-            case "CSSC     ":
-                Value_imprint = "";
-                break;
-            case "SCA      ":
-                Value_imprint = "";
-                break;
-            case "SYNGR    ":
-                Value_imprint = "";
-                break;
-            case "NAR      ":
-                Value_imprint = "";
-                break;
-            case "LEXNEX   ":
-                Value_imprint = "";
-                break;
-            case "BALTINLTD":
-                Value_imprint = "";
-                break;
-            case "PLAGH    ":
-                Value_imprint = "";
-                break;
-            case "DHRIS    ":
-                Value_imprint = "";
-                break;
-            case "CSAA     ":
-                Value_imprint = "";
-                break;
-            case "XJU      ":
-                Value_imprint = "";
-                break;
-            case "CFBNTU   ":
-                Value_imprint = "";
-                break;
-            case "BALTIN   ":
-                Value_imprint = "";
-                break;
-            case "FIEB     ":
-                Value_imprint = "";
-                break;
-            case "BIAS     ":
-                Value_imprint = "";
-                break;
-            case "EMS      ":
-                Value_imprint = "";
-                break;
-            case "ELSSRL   ":
-                Value_imprint = "";
-                break;
-            case "ELSADVT  ":
-                Value_imprint = "";
-                break;
-            case "EPS      ":
-                Value_imprint = "";
-                break;
-            case "NMS      ":
-                Value_imprint = "";
-                break;
-            case "PUCV     ":
-                Value_imprint = "";
-                break;
-            case "WPI      ":
-                Value_imprint = "";
-                break;
-            case "FMA      ":
-                Value_imprint = "";
-                break;
-            case "ESRNM    ":
-                Value_imprint = "";
-                break;
-            case "IMM      ":
-                Value_imprint = "";
-                break;
-            case "PDXMD    ":
-                Value_imprint = "";
-                break;
-            case "JAI      ":
-                Value_imprint = "";
-                break;
-            case "HANBEL   ":
-                Value_imprint = "";
-                break;
-            case "BYHCMU   ":
-                Value_imprint = "";
-                break;
-            case "AFREX    ":
-                Value_imprint = "";
-                break;
-            case "EPA      ":
-                Value_imprint = "";
-                break;
-            case "JEM      ":
-                Value_imprint = "";
-                break;
-            case "ARNOLD   ":
-                Value_imprint = "";
-                break;
-            case "KLFU     ":
-                Value_imprint = "";
-                break;
-            case "SIE      ":
-                Value_imprint = "";
-                break;
-            case "FADADHS  ":
-                Value_imprint = "";
-                break;
-            case "NRIAG    ":
-                Value_imprint = "";
-                break;
-            case "CURMED   ":
-                Value_imprint = "";
-                break;
-            case "JPSALL   ":
-                Value_imprint = "";
-                break;
-            case "ELSCI    ":
-                Value_imprint = "";
-                break;
-            case "DONICA   ":
-                Value_imprint = "";
-                break;
-            case "SHIN     ":
-                Value_imprint = "";
-                break;
-            case "UKERB    ":
-                Value_imprint = "";
-                break;
-            case "HYU      ":
-                Value_imprint = "";
-                break;
-            case "BCDECK   ":
-                Value_imprint = "";
-                break;
-            case "MOSBLTD  ":
-                Value_imprint = "";
-                break;
-            case "ESENT    ":
-                Value_imprint = "";
-                break;
-            case "MAS      ":
-                Value_imprint = "";
-                break;
-            case "NH       ":
-                Value_imprint = "";
-                break;
-            case "ABU      ":
-                Value_imprint = "";
-                break;
-            case "APA      ":
-                Value_imprint = "";
-                break;
-            case "NSMK     ":
-                Value_imprint = "";
-                break;
-            case "ESF      ":
-                Value_imprint = "";
-                break;
-            case "BHSEC    ":
-                Value_imprint = "";
-                break;
-            case "CAUM     ":
-                Value_imprint = "";
-                break;
-            case "COS      ":
-                Value_imprint = "";
-                break;
-            case "ECCCP    ":
-                Value_imprint = "";
-                break;
-            case "SP       ":
-                Value_imprint = "";
-                break;
-            case "CMNCKU   ":
-                Value_imprint = "";
-                break;
-            case "LAXTON   ":
-                Value_imprint = "";
-                break;
-            case "SMPP     ":
-                Value_imprint = "";
-                break;
-            case "ACACL    ":
-                Value_imprint = "";
-                break;
-            case "QUALMED  ":
-                Value_imprint = "";
-                break;
-            case "VNCNTZ   ":
-                Value_imprint = "";
-                break;
-            case "AMIRSYS  ":
-                Value_imprint = "";
-                break;
-            case "ELSEVIER ":
-                Value_imprint = "";
-                break;
-            case "BH       ":
-                Value_imprint = "";
-                break;
-            case "CU       ":
-                Value_imprint = "";
-                break;
-            case "KLU      ":
-                Value_imprint = "";
-                break;
-            case "LEGINT   ":
-                Value_imprint = "";
-                break;
-            case "SYSU     ":
-                Value_imprint = "";
-                break;
-            case "MOSBY    ":
-                Value_imprint = "";
-                break;
-            case "Harcourt ":
-                Value_imprint = "";
-                break;
-            case "CAMPUS   ":
-                Value_imprint = "";
-                break;
-            case "GORD     ":
-                Value_imprint = "";
-                break;
-            case "CO       ":
-                Value_imprint = "";
-                break;
-            case "AFEM     ":
-                Value_imprint = "";
-                break;
-            case "IIM      ":
-                Value_imprint = "";
-                break;
-            case "CMI      ":
-                Value_imprint = "";
-                break;
-            case "PASCHMP  ":
-                Value_imprint = "";
-                break;
-            case "CHMTEC   ":
-                Value_imprint = "";
-                break;
-            case "SMMU     ":
-                Value_imprint = "";
-                break;
-            case "ASRT     ":
-                Value_imprint = "";
-                break;
-            case "AUFM     ":
-                Value_imprint = "";
-                break;
-            case "NCICU    ":
-                Value_imprint = "";
-                break;
-            case "CNA      ":
-                Value_imprint = "";
-                break;
-            case "NIOF     ":
-                Value_imprint = "";
-                break;
-            case "FEFU     ":
-                Value_imprint = "";
-                break;
-            case "HOHAI    ":
-                Value_imprint = "";
-                break;
-            case "KSU      ":
-                Value_imprint = "";
-                break;
-            case "FDTU     ":
-                Value_imprint = "";
-                break;
-            case "URBFI    ":
-                Value_imprint = "";
-                break;
-            case "MOSBCAN  ":
-                Value_imprint = "";
-                break;
-            case "SCADE    ":
-                Value_imprint = "";
-                break;
-            case "MDUNITZ  ":
-                Value_imprint = "";
-                break;
-            case "IAT      ":
-                Value_imprint = "";
-                break;
-            case "EI       ":
-                Value_imprint = "";
-                break;
-            case "BHBCLA   ":
-                Value_imprint = "";
-                break;
-            case "UF       ":
-                Value_imprint = "";
-                break;
-            case "ELSIND   ":
-                Value_imprint = "";
-                break;
-            case "AGI      ":
-                Value_imprint = "";
-                break;
-            case "OIPRS    ":
-                Value_imprint = "";
-                break;
-            case "FDC      ":
-                Value_imprint = "";
-                break;
-            case "IMN      ":
-                Value_imprint = "";
-                break;
-            case "TAIBAH   ":
-                Value_imprint = "";
-                break;
-            case "FVMCU    ":
-                Value_imprint = "";
-                break;
-            case "TRENDS   ":
-                Value_imprint = "";
-                break;
-            case "GPC      ":
-                Value_imprint = "";
-                break;
-            case "SPU      ":
-                Value_imprint = "";
-                break;
-            case "SPEKTRUM ":
-                Value_imprint = "";
-                break;
-            case "AOCS     ":
-                Value_imprint = "";
-                break;
-            case "SAUNDAU  ":
-                Value_imprint = "";
-                break;
-            case "FOCPRESS ":
-                Value_imprint = "";
-                break;
-            case "WRIGHT   ":
-                Value_imprint = "";
-                break;
-            case "PERGFL   ":
-                Value_imprint = "";
-                break;
-            case "KAIMST   ":
-                Value_imprint = "";
-                break;
-            case "EXCMED   ":
-                Value_imprint = "";
-                break;
-            case "HSUK     ":
-                Value_imprint = "";
-                break;
-            case "ARCHPRESS":
-                Value_imprint = "";
-                break;
-            case "ABPB     ":
-                Value_imprint = "";
-                break;
-            case "INTMED   ":
-                Value_imprint = "";
-                break;
-            case "TPU      ":
-                Value_imprint = "";
-                break;
-            case "HARINDIA ":
-                Value_imprint = "";
-                break;
-            case "GWMEDPUB ":
-                Value_imprint = "";
-                break;
-            case "SAUND    ":
-                Value_imprint = "";
-                break;
-            case "GULENG   ":
-                Value_imprint = "";
-                break;
-            case "CIMA     ":
-                Value_imprint = "";
-                break;
-            case "JSRM     ":
-                Value_imprint = "";
-                break;
-            case "SAUNDLTD ":
-                Value_imprint = "";
-                break;
-            case "MOSBAU   ":
-                Value_imprint = "";
-                break;
-            case "MEFS     ":
-                Value_imprint = "";
-                break;
-            case "KASLI    ":
-                Value_imprint = "";
-                break;
-            case "ELSESP   ":
-                Value_imprint = "";
-                break;
-            case "UNIBAH   ":
-                Value_imprint = "";
-                break;
-            case "ESCDT    ":
-                Value_imprint = "";
-                break;
-            case "ELSSOKO  ":
-                Value_imprint = "";
-                break;
-            case "ACADPR   ":
-                Value_imprint = "";
-                break;
-            case "SJU      ":
-                Value_imprint = "";
-                break;
-            case "HMU      ":
-                Value_imprint = "";
-                break;
-            case "EPRI     ":
-                Value_imprint = "";
-                break;
-            case "ESJDA    ":
-                Value_imprint = "";
-                break;
-            case "HANS     ":
-                Value_imprint = "";
-                break;
-            case "WOPUB    ":
-                Value_imprint = "";
-                break;
-
+        String Value_imprint ="";
+        if(DataQualityContext.workDataObjectsFromEPHGD.get(0).getIMPRINT()!=null) {
+            sql = String.format(ProductFinderSQL.SELECT_IMPRINT_INFO, DataQualityContext.workDataObjectsFromEPHGD.get(0).getIMPRINT());
+            List<Map<String, String>> imprintInfo = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            Value_imprint = imprintInfo.get(0).get("l_description").toString();
         }
         return Value_imprint;
     }
@@ -1694,6 +1117,7 @@ public class ProductFinderUISteps {
 
     public String getValue_language() {//created by Nishant @ 11 Jun 2020
         String value_language = "";
+        if(DataQualityContext.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE()!=null){
         switch (DataQualityContext.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE()) {
             case "EE":
                 value_language = "Ewe";
@@ -2254,6 +1678,7 @@ public class ProductFinderUISteps {
                 value_language = "Multiple Languages (unspecified)";
                 break;
         }
+        }
         return value_language;
     }
 
@@ -2270,6 +1695,7 @@ public class ProductFinderUISteps {
 
         return pmcInfo;
     }
+
 
 
 }

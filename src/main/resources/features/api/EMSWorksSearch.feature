@@ -6,7 +6,7 @@ Feature: Customer Search API: Works
 
   @APIv3
   Scenario: verify Work Extended by specific ID
-    Given We get 10 random search ids for Extended works
+    Given We get 1 random search ids for Extended works
     And We get the work search data from EPH GD
     Then the work details are retrieved and compared
 
@@ -43,6 +43,12 @@ Feature: Customer Search API: Works
       |PERSON_NAME        |
       |PEOPLE_HUB_ID      |
       |PERSON_ID      |
+    #need to update for below as per EPHD-1414, comment by Nishant @ 08 Jul 2020
+      |personIdCurrent|
+      |personFullNameCurrent|
+      |personName|
+      |personId  |
+
 
 
   @searchAPI

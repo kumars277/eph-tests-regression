@@ -3,7 +3,7 @@ Feature: Product Finder Selenium tests
   @PFUI
   Scenario Outline: search work by multiple options
     Given get 1 random work id from DB
-    And We get the work search data from the EPH GD
+    And We get the work search data from EPH GD
     When user is on search page
     And Search works by <options>
     Then The searched work is listed and clicked
@@ -119,9 +119,20 @@ Feature: Product Finder Selenium tests
     And   Searches for works by given <id>
     Then  Search items are listed and click specific work <id> from the result
     And   Verify user is forwarded to the searched work page of <id>
-    Then  Verify work Overview Information for <id>
-    And   Verify work Finanfial records
+    Then  Verify PF/JF UI work overview values
     Examples:
       |id           |
       |EPR-W-10104W |
    #   |EPR-W-101055 |
+
+
+  @PFDMC @JFUI
+  Scenario: Search the Journal and verify core and Extended data
+    Given We get 1 random journal ids for search
+    And   We get the work search data from EPH GD
+    And   user is on Journal Finder search page
+    And   Searches work by id
+    Then  Search items are listed and click the workid from result
+    And   Verify user is forwarded to the searched work page
+    And   get Extended Data from DB
+    Then  Verify PF/JF UI work overview values

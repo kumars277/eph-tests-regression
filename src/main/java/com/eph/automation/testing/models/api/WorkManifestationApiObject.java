@@ -8,6 +8,7 @@ package com.eph.automation.testing.models.api;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ManifestationDataObject;
 import com.eph.automation.testing.models.api.ManifestationProductAPIObject;
@@ -73,7 +74,7 @@ public class WorkManifestationApiObject {
         this.manifestationExtended = manifestationExtended;
     }
 
-    private void getManifestationByID(String manifestationID) {
+    private void getManifestationDetailByID(String manifestationID) {
         List<String> ids = new ArrayList<>();
         ids.add(manifestationID);
         String sql = String.format(APIDataSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_GD_BY_ID, Joiner.on("','").join(ids));
@@ -85,6 +86,7 @@ public class WorkManifestationApiObject {
 
     public void compareWithDB() {
         Log.info("Verifying work manifestations... " + this.id);
+        getManifestationDetailByID(this.id);
         manifestationCore.compareWithDB(this.id);
 
         if (manifestationExtended != null) {
@@ -101,8 +103,14 @@ public class WorkManifestationApiObject {
         }
     }
 
-    public void getJsonToObject_extendedManifestation(String manifestationId) {//created by Nishant @ 01 Jul 2020 to verify extended json value with APIv3
-        String sql = "SELECT \"json\" FROM ephsit_extended_data_stitch.stch_manifestation_ext_json where epr_id='" + manifestationId + "'";
+    public void getJsonToObject_extendedManifestation(String manifestationId) {
+        //created by Nishant @ 01 Jul 2020 to verify extended json value with APIv3
+        //updated by Nishant @ 09 Jul 2020 for JRBI data validation on UAT JF UI
+        String sql ="";
+        if(TestContext.getValues().environment=="UAT")
+             sql = "SELECT \"json\" FROM ephuat_extended_data_stitch.stch_manifestation_ext_json where epr_id='" + manifestationId + "'";
+        else sql = "SELECT \"json\" FROM ephsit_extended_data_stitch.stch_manifestation_ext_json where epr_id='" + manifestationId + "'";
+
         List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         DataQualityContext.manifestationExtendedTestClass = new Gson().fromJson(jsonValue.get(0).get("json"), ManifestationExtendedTestClass.class);
     }

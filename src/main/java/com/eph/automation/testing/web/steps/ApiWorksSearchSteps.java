@@ -90,11 +90,12 @@ public class ApiWorksSearchSteps {
     @Given("^We get (.*) random journal ids for search")
     public void getRandomJournalIds(String numberOfRecords) {//created by Nishant @ 25 Jun 2020
         sql = String.format(APIDataSQL.SELECT_RANDOM_JOURNAL_IDS_FOR_SEARCH, numberOfRecords);
+        Log.info(Constants.EPH_URL);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random Journal ids  : " + ids);
         //for debugging failures
-        //ids.clear(); ids.add("EPR-W-108TJK");  Log.info("hard coded work ids are : " + ids);
+        //ids.clear(); ids.add("EPR-W-102SNW");  Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
@@ -697,7 +698,7 @@ public class ApiWorksSearchSteps {
         return pmgCode;
     }
 
-    private List<String> getManifestationIdsForWorkID(String workID) {
+    public List<String> getManifestationIdsForWorkID(String workID) {
         //  Log.info("Get manifestationApiObject ids ..");
 
         sql = String.format(APIDataSQL.SELECT_MANIFESTATION_IDS_BY_WORKID, workID);

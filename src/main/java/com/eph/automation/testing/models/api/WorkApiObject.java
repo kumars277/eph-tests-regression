@@ -8,6 +8,7 @@ package com.eph.automation.testing.models.api;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.AccountableProductDataObject;
 import com.eph.automation.testing.models.dao.WorkDataObject;
@@ -155,8 +156,15 @@ public class WorkApiObject {
         }
     }
 
-    public void getJsonToObject_extendedWork(String workId) {//created by Nishant @ 19 Jun 2020 to verify extended json value with APIv3
-        String sql = "SELECT \"json\" FROM ephsit_extended_data_stitch.stch_work_ext_json where epr_id='" + workId + "'";
+    public void getJsonToObject_extendedWork(String workId) {
+        //created by Nishant @ 19 Jun 2020 to verify extended json value with APIv3
+        //updated by Nishant @ 08 Jul 2020 for JRBI data validation on UAT JF UI
+        String sql ="";
+        if(TestContext.getValues().environment=="UAT")
+             sql = "SELECT \"json\" FROM ephuat_extended_data_stitch.stch_work_ext_json where epr_id='" + workId + "'";
+        else sql = "SELECT \"json\" FROM ephsit_extended_data_stitch.stch_work_ext_json where epr_id='" + workId + "'";
+
+
         List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         DataQualityContext.workExtendedTestClass = new Gson().fromJson(jsonValue.get(0).get("json"), WorkExtendedTestClass.class);
     }
