@@ -340,6 +340,6 @@ public class APIDataSQL {
             "given_name\tas PERSON_FIRST_NAME,\n" +
             "family_name\tas PERSON_FAMILY_NAME,\n" +
             "peoplehub_id as PEOPLEHUB_ID\n" +
-            " from semarchy_eph_mdm.gd_person where person_id='%s'";
+            " from semarchy_eph_mdm.gd_person where person_id in('%s')";
 
 }

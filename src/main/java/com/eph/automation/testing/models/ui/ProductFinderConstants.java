@@ -23,4 +23,33 @@ public class ProductFinderConstants {
     public static String buildWorkIdLocator = "//a[contains(@href,'/work/%s/overview')]";
     public static String buildProductIdLocator="//*[contains(text(),'%s')]/parent::div/preceding-sibling::div/a";
     public static String linkManifestationIdLocator = "//*[contains(text(),'%s')]/parent::div/preceding-sibling::div/a";
+
+    public static String peopleTab = "//*[@id='mat-tab-label-0-1']/div";
+    public static String financialTab = "//*[@id='mat-tab-label-0-2']/div";
+    public static String editorialTab = "//*[@id='mat-tab-label-0-3']/div";
+    public static String linkTab="//*[@id='mat-tab-label-0-4']/div";
+
+                //String section = "//div[@class='section']"; //parent of - Editorial Information
+               // String section = "//div[@class='section']"; //parent Information
+    public static String section = "//div[contains(@class,'section')]"; //parent of - subject area and information,//parent of - Financial Information
+    public static String DetailInformation1 = section + "/div[@class='section-detail'][1]";
+                         // String costInfo = section + "/div[@class='section-detail'][1]";
+                      //  String editorial1 = section + "/div[@class='section-detail'][1]";
+    public static String DetailInformation2 = section + "/div[@class='section-detail'][2]";
+               // String accountableProduct = section + "/div[@class='section-detail'][2]";
+                       // String editorial2 = section + "/div[@class='section-detail'][2]";
+
+    public static String sectionDetail = section + "/div[@class='section-detail']";
+
+    public static String section_identifier = "//div[@class='section identifiers']|//div[contains(@class,'section')]/eph-pf-identifier-list"; //parent of - identifier
+    public static String DetailIdentifiers = section_identifier + "//div[@class='section-detail']";
+    //table[@class='mat-table']/parent::div[@class='section-detail']/following-sibling::h2
+
+    public static String searchDropdownPerson="//option[@value='personName']|//option[@value='personFullNameCurrent']";
+    public static String searchDropdownPmg="//option[@value='pmgCode']";
+    public static String searchDropdownPmc="//option[@value='pmcCode']";
+    public static String zeroResultFound="//div[@class='container search-results no-results']";
+    public static String productFoundOf="//div[@class='pager']//div[@class='container']/div[1]";
+
+
 }

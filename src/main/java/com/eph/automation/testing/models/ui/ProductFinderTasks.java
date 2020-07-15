@@ -9,6 +9,7 @@ import com.google.inject.Inject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -30,7 +31,8 @@ public class ProductFinderTasks {
     public Properties prop_AccProducts = new Properties();
     public Properties prop_editorial1 = new Properties();
     public Properties prop_editorial2 = new Properties();
-
+    public List<Properties> list_people=new ArrayList();
+    public Properties prop_links = new Properties();
     public void openHomePage() throws InterruptedException {//updated by Nishant @ 18 May 2020
         String HomePageAddress="";
         if (TestContext.getValues().environment.equalsIgnoreCase("SIT"))
@@ -54,6 +56,16 @@ public class ProductFinderTasks {
         } catch (Exception e) {
             Log.info("User already signed in...");
             Log.info(e.getMessage());
+        }
+    }
+
+    public void selectSearchType(String searchType) { //created by Nishant @ 10 Jul 2020
+        switch(searchType)
+        {
+            case "All":break;
+            case "PMG":   tasks.click("XPATH",ProductFinderConstants.searchDropdownPmg);break;
+            case "PMC":   tasks.click("XPATH",ProductFinderConstants.searchDropdownPmc);break;
+            case "Person":tasks.click("XPATH",ProductFinderConstants.searchDropdownPerson);break;
         }
     }
 
@@ -187,96 +199,118 @@ public class ProductFinderTasks {
 
     public void getUI_WorkOverview_Information() {
         //created by Nishant @5 Jun 2020
-        String section = "//div[contains(@class,'section')]"; //parent of - subject area and information
-        String section_identifier = "//div[@class='section identifiers']|//div[contains(@class,'section')]/eph-pf-identifier-list"; //parent of - identifier
-
-        String sectionDetailInformation = section + "/div[@class='section-detail'][1]";
-        String sectionDetailSubArea = section + "/div[@class='section-detail'][2]";
-        String sectionDetailIdentifiers = section_identifier + "//div[@class='section-detail']";
-
-        //table[@class='mat-table']/parent::div[@class='section-detail']/following-sibling::h2
 
         //capture Information values
-        List<WebElement> rows_info = tasks.findmultipleElements("XPATH", sectionDetailInformation + "/table/tbody/tr");
+        List<WebElement> rows_info = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr");
         for (int i = 0; i < rows_info.size(); i++) {
-            String key = tasks.findElement("XPATH", sectionDetailInformation + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
-            String value = tasks.findElement("XPATH", sectionDetailInformation + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
+            String key = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
+            String value = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
             prop_info.setProperty(key, value);
         }
 
         //capture subject area values
-        List<WebElement> rows_subArea = tasks.findmultipleElements("XPATH", sectionDetailSubArea + "/table/tbody/tr");
+        List<WebElement> rows_subArea = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailInformation2 + "/table/tbody/tr");
         for (int i = 0; i < rows_subArea.size(); i++) {
-            String key = tasks.findElement("XPATH", sectionDetailSubArea + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
-            String value = tasks.findElement("XPATH", sectionDetailSubArea + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
+            String key = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation2 + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
+            String value = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation2 + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
             prop_subArea.setProperty(key, value);
         }
 
         //capture identifiers values
-        List<WebElement> rows_identifiers = tasks.findmultipleElements("XPATH", sectionDetailIdentifiers + "/table/tbody/tr");
+        List<WebElement> rows_identifiers = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr");
         for (int i = 0; i < rows_identifiers.size(); i++) {
-            String key = tasks.findElement("XPATH", sectionDetailIdentifiers + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
-            String value = tasks.findElement("XPATH", sectionDetailIdentifiers + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
+            String key = tasks.findElement("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
+            String value = tasks.findElement("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
             prop_identifier.setProperty(key, value);
         }
-
-
     }
 
-
-    public void getUI_WorkOverview_Financial() { //created by Nishant @15 Jun 2020
-        String section = "//div[@class='section']"; //parent of - Financial Information
-        String costInfo = section + "/div[@class='section-detail'][1]";
-        String accountableProduct = section + "/div[@class='section-detail'][2]";
+    public void getUI_WorkOverview_Financial() {
+        //created by Nishant @15 Jun 2020
 
         //click on Financial tab
-        String financialTab = "//*[@id='mat-tab-label-0-2']/div";
-        tasks.click("XPATH", financialTab);
+        tasks.click("XPATH", ProductFinderConstants.financialTab);
 
         //capture company code values
-        List<WebElement> rows_info = tasks.findmultipleElements("XPATH", costInfo + "/table/tbody/tr");
+        List<WebElement> rows_info = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr");
         for (int i = 0; i < rows_info.size(); i++) {
-            String key = tasks.findElement("XPATH", costInfo + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
-            String value = tasks.findElement("XPATH", costInfo + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
+            String key = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
+            String value = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
             prop_comCode.setProperty(key, value);
         }
 
 
         //capture accountable product values
-        List<WebElement> rows_subArea = tasks.findmultipleElements("XPATH", accountableProduct + "/table/tbody/tr");
+        List<WebElement> rows_subArea = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailInformation2 + "/table/tbody/tr");
         for (int i = 0; i < rows_subArea.size(); i++) {
-            String key = tasks.findElement("XPATH", accountableProduct + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
-            String value = tasks.findElement("XPATH", accountableProduct + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
+            String key = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation2 + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
+            String value = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation2 + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
             prop_AccProducts.setProperty(key, value);
         }
     }
 
-    public void getUI_Editorial() { //created by Nishant @07 Jul 2020
-        String section = "//div[@class='section']"; //parent of - Editorial Information
-        String editorial1 = section + "/div[@class='section-detail'][1]";
-        String editorial2 = section + "/div[@class='section-detail'][2]";
+    public void getUI_Editorial() {
+        //created by Nishant @07 Jul 2020
 
         //click on Editorial tab
-        String editorialTab = "//*[@id='mat-tab-label-0-3']/div";
-        tasks.click("XPATH", editorialTab);
+        tasks.click("XPATH", ProductFinderConstants.editorialTab);
 
         //capture left editorial info values
-        List<WebElement> rows_info = tasks.findmultipleElements("XPATH", editorial1 + "/table/tbody/tr");
+        List<WebElement> rows_info = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr");
         for (int i = 0; i < rows_info.size(); i++) {
-            String key = tasks.findElement("XPATH", editorial1 + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
-            String value = tasks.findElement("XPATH", editorial1 + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
+            String key = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
+            String value = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
             prop_editorial1.setProperty(key, value);
         }
 
-
         //capture right editorial info values
-        List<WebElement> rows_subArea = tasks.findmultipleElements("XPATH", editorial2 + "/table/tbody/tr");
+        List<WebElement> rows_subArea = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailInformation2 + "/table/tbody/tr");
         for (int i = 0; i < rows_subArea.size(); i++) {
-            String key = tasks.findElement("XPATH", editorial2 + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
-            String value = tasks.findElement("XPATH", editorial2 + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
+            String key = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation2 + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
+            String value = tasks.findElement("XPATH", ProductFinderConstants.DetailInformation2 + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
             prop_editorial2.setProperty(key, value);
         }
     }
 
+    public void getUI_People() {
+        //created by Nishant @10 Jul 2020
+        //click on People tab
+        tasks.click("XPATH", ProductFinderConstants.peopleTab);
 
+        //capture web elements
+        List<WebElement> rows_info = tasks.findmultipleElements("XPATH", ProductFinderConstants.sectionDetail + "//table/tbody/tr");
+        for (int i = 0; i < rows_info.size(); i++) {
+            Properties prop_people=new Properties();
+
+            String PersonName = tasks.findElement("XPATH", ProductFinderConstants.sectionDetail + "//table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
+            String Role = tasks.findElement("XPATH", ProductFinderConstants.sectionDetail + "//table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
+            String Email = tasks.findElement("XPATH", ProductFinderConstants.sectionDetail + "//table/tbody/tr[" + (i + 1) + "]/td[3]").getText();
+            prop_people.setProperty("PersonName", PersonName);
+            prop_people.setProperty("Role", Role);
+            prop_people.setProperty("Email", Email);
+            list_people.add(prop_people);
+        }
+
+    }
+
+    public void getUI_Links() {//created by Nishant @15 Jul 2020
+
+        //click on Editorial tab
+        tasks.click("XPATH", ProductFinderConstants.linkTab);
+
+        //capture links values
+        List<WebElement> rows_info = tasks.findmultipleElements("XPATH", ProductFinderConstants.sectionDetail + "/table/tbody/tr");
+        for (int i = 0; i < rows_info.size(); i++) {
+            String key = tasks.findElement("XPATH", ProductFinderConstants.sectionDetail + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
+            String value = tasks.findElement("XPATH", ProductFinderConstants.sectionDetail + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
+            prop_links.setProperty(key, value);
+        }
+    }
+
+
+    public List<WebElement> getLinks()
+{
+    List<WebElement> links= tasks.findmultipleElements("XPATH","//a");
+    return links;
+}
 }

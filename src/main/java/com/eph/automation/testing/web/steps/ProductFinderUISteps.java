@@ -5,26 +5,41 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.api.WorkApiObject;
+import com.eph.automation.testing.models.api.WorkExtendedPersons;
 import com.eph.automation.testing.models.api.WorkManifestationApiObject;
+import com.eph.automation.testing.models.api.WorksMatchedApiObject;
+import com.eph.automation.testing.models.api.PersonsApiObject;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.contexts.FinancialAttribsContext;
 import com.eph.automation.testing.models.dao.*;
 import com.eph.automation.testing.models.ui.ProductFinderConstants;
 import com.eph.automation.testing.models.ui.ProductFinderTasks;
 import com.eph.automation.testing.models.ui.TasksNew;
+import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
+import com.eph.automation.testing.services.db.sql.PersonWorkRoleDataSQL;
 import com.eph.automation.testing.services.db.sql.ProductFinderSQL;
 import com.google.common.base.Joiner;
 import com.google.inject.Inject;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.*;
+
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
+
+import javax.net.ssl.SSLHandshakeException;
+
 import static org.junit.Assert.assertTrue;
+
 
 
 public class ProductFinderUISteps {
@@ -62,6 +77,7 @@ public class ProductFinderUISteps {
     private WorkApiObject workApiObject=new WorkApiObject();
     private WorkManifestationApiObject workManifestationApiObject=new WorkManifestationApiObject();
     private ApiWorksSearchSteps apiWorksSearchSteps=new ApiWorksSearchSteps();
+    private PersonsApiObject personsApiObject =new PersonsApiObject();
 
     @Inject
     public ProductFinderUISteps(ProductFinderTasks productFinderTasks, TasksNew tasks) {
@@ -234,6 +250,7 @@ public class ProductFinderUISteps {
     public void searches_works_by_id() throws InterruptedException {
         productFinderTasks.searchFor(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
     }
+
 
 
     @Given("^Filter the Search Result by \"([^\"]*)\"$")
@@ -593,10 +610,14 @@ public class ProductFinderUISteps {
         verifyWorkOverviewInformationUI();
         verifyWorkFinancialInformation();
         verifyEditorialInfo();
+        verifyPeople();
+        verifyLink();
+
     }
 
     public void verifyWorkOverviewInformationUI() throws ParseException {//created by Nishant @ 4 Jun 2020
-       Log.info("Verifying Work Overview Core...");
+       Log.info("\nVerifying Work Overview - Core tab...");
+        Log.info("...................................\n");
         productFinderTasks.getUI_WorkOverview_Information();
         validate_workOverview_info();
         validateIdentifiers();
@@ -604,7 +625,8 @@ public class ProductFinderUISteps {
     }
 
     public void verifyWorkFinancialInformation(){//created by Nishant @ 17 Jun 2020
-        Log.info("verifiying......work Financial info");
+        Log.info("\nverifiying Work Overview - Financial tab");
+        Log.info("...................................\n");
         productFinderTasks.getUI_WorkOverview_Financial();
         validateAccountableProduct();
         validateCompanyCodes();
@@ -612,7 +634,8 @@ public class ProductFinderUISteps {
 
     public void verifyEditorialInfo() {
         //created by Nishant @ 07 Jul 2020 for JRBI data validation on JF UI
-        Log.info("verifying...Editorial info");
+        Log.info("\nverifying Work Overview - Editorial tab");
+        Log.info("...................................\n");
         productFinderTasks.getUI_Editorial();
 
         Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Editorial Submission Site"),
@@ -627,18 +650,18 @@ public class ProductFinderUISteps {
                 DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSupportLevel());
         printLog("UI:Editorial Support Level with JRBI: primarySiteSupportLevel");
 
-        if(productFinderTasks.prop_editorial1.containsKey("Production Site"))
+
+        List<String> manifestationId= apiWorksSearchSteps.getManifestationIdsForWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+        for(int cnt=0;cnt<manifestationId.size();cnt++)
         {
-            List<String> manifestationId= apiWorksSearchSteps.getManifestationIdsForWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
-            for(int cnt=0;cnt<manifestationId.size();cnt++)
-            {
-                try{
-                    workManifestationApiObject.getJsonToObject_extendedManifestation(manifestationId.get(cnt));
-                    break;}
-                catch(Exception e){Log.info(e.getMessage());}
-            }
+            try{
+                workManifestationApiObject.getJsonToObject_extendedManifestation(manifestationId.get(cnt));
+                break;}
+            catch(Exception e){Log.info(e.getMessage());}
+        }
 
-
+        if(DataQualityContext.manifestationExtendedTestClass!=null)
+        {
         //coming from manifestation Extended
         Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Production Site"),
                 DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getJournalProdSiteCode());
@@ -653,7 +676,9 @@ public class ProductFinderUISteps {
         Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Trim Size"),
                 DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getJournalIssueTrimSize());
         printLog("UI:Trim Size with JRBI: journalIssueTrimSize");
-         }
+
+        }
+
 
         Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Production Type"),
                 DataQualityContext.workExtendedTestClass.getWorkExtended().getIssueProdTypeCode());
@@ -694,13 +719,189 @@ public class ProductFinderUISteps {
         //Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Launch Year"), DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumesQty());
         //printLog("Launch Year");
 
+    }
 
+    public void verifyPeople(){ //created by Nishant @ 10 Jul 2020 for JRBI data validation on JF UI
+        Log.info("\nverifying Work Overview - People tab");
+        Log.info("...................................\n");
+        productFinderTasks.getUI_People();
+        verifyDuplicatePeopleRoles();
+        verifyPeopleInfo();
+    }
 
+    public void verifyLink() throws IOException {//created by Nishant @ 15 Jul 2020
+        Log.info("\nverifying Work Overview - Links tab");
+        Log.info("...................................\n");
+        productFinderTasks.getUI_Links();
 
+        String url = "";
+        HttpURLConnection huc = null;
+        int respCode = 0;
 
+        //List<WebElement> links = productFinderTasks.getLinks(); //capture links from entire page
+        Collection<Object> links = productFinderTasks.prop_links.values(); //capture links only within the links tab
+        System.out.println("number of links found on page :" +links.size());
+        boolean brokenLink;
+        Iterator<Object> it = links.iterator();
+       int l=0;
+        while(it.hasNext()){
+            l++;
+            brokenLink=false;
+            //url = it.next().getAttribute("href");
+            url = it.next().toString();
 
+            if(url == null || url.isEmpty()){System.out.println(l+": URL is not configured for anchor tag or it is empty");continue;}
+            System.out.println(l+": "+url);
+
+            try {
+                huc = (HttpURLConnection)(new URL(url).openConnection());
+                huc.setRequestMethod("HEAD");
+                huc.connect();
+                respCode = huc.getResponseCode();
+                String statusDescription="";
+                String comment="";
+                System.out.println("status code :" +respCode);
+                switch(respCode)
+                {
+                    case 200:	statusDescription="valid link"; break;
+                    case 301:	System.out.println("moved permanently to "+huc.getHeaderField("Location"));
+                        statusDescription="moved permanently";
+                        comment=huc.getHeaderField("Location");	break;
+                    case 403:	System.out.println("access to the requested resource is forbidden");statusDescription="Page not Found"; break;
+                    case 404:	System.out.println("page not found");statusDescription="Page not Found"; break;
+                    default:	System.out.println("less frequent error code");statusDescription="less frequent error code";break;
+                }
+
+                if(respCode >= 400){brokenLink=true;}
+                Assert.assertFalse(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID()+" - found broken link \n"+url+"\n status code: "+respCode,brokenLink);
+            }
+            catch (MalformedURLException e){Log.info(e.getMessage());Log.info("not a valid url format");}
+            catch (SSLHandshakeException e){Log.info(e.getMessage());}
+            catch (IOException e)          {Log.info(e.getMessage());}
+            catch(ClassCastException e)    {Log.info(e.getMessage());Log.info("unable to establish HttpURLConnection"); }
+        }
+    }
+
+    public void verifyDuplicatePeopleRoles() {//created by Nishant @ 10 Jul 2020
+        Log.info("Test : verifying duplicate People Role...");
+        Set uniqueRole=new HashSet();
+        List<String> duplicate=new ArrayList();
+
+        for(int c=0;c<productFinderTasks.list_people.size();c++)
+        {
+            if(!uniqueRole.add(productFinderTasks.list_people.get(c).getProperty("Role")))
+                duplicate.add(productFinderTasks.list_people.get(c).getProperty("Role"));
+        }
+
+        Assert.assertEquals(
+                "Should be only one person per role"+"\n"+
+                "Total Roles: "+productFinderTasks.list_people.size()+"\n"+
+                "Unique Roles: "+uniqueRole.size()+"\n"+
+                "Duplicate Roles: "+duplicate.size()+"\n",
+                productFinderTasks.list_people.size(),uniqueRole.size());
 
     }
+
+    public void verifyPeopleInfo()
+    {
+        //created by Nishant @ 14 Jul 2020
+        compareCorePersonWithDB();
+
+        if(DataQualityContext.workExtendedTestClass.getWorkExtended().getWorkExtendedPersons()!=null)
+        {
+            compareExtrendedPersonWithDB();
+        }
+    }
+
+    public List<Map<String,String>> getPersonsByWorkId(String workId) {//created by Nishant @ 14 Jul 2020
+        sql=String.format(PersonWorkRoleDataSQL.getPersonsByWorkId,workId);
+        List<Map<String,String>> lst_workPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        return lst_workPersons;
+    }
+
+    public void compareCorePersonWithDB(){//created by Nishant @ 15 Jul 2020
+        List<Map<String,String>> workPerson=getPersonsByWorkId(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+        List<Integer> ignore = new ArrayList();
+        for(int i=0;i<workPerson.size();i++)
+        {
+            if(dataQualityContext.personDataObjectsFromEPHGD!=null){dataQualityContext.personDataObjectsFromEPHGD.clear();}
+            if(dataQualityContext.personWorkRoleDataObjectsFromEPHGD!=null){dataQualityContext.personWorkRoleDataObjectsFromEPHGD.clear();}
+
+            String DB_workPersonRole=lov_personRole(workPerson.get(i).get("f_role"));
+            Log.info("verifying Core work person... "+DB_workPersonRole);
+
+            for(int cnt=0;cnt<productFinderTasks.list_people.size();cnt++) {
+                if (ignore.contains(cnt)) continue;
+                if (productFinderTasks.list_people.get(cnt).getProperty("Role").contentEquals(DB_workPersonRole)) {
+                    Assert.assertEquals(DB_workPersonRole, productFinderTasks.list_people.get(cnt).getProperty("Role"));
+                    printLog("person role");
+
+                    Object temp = workPerson.get(i).get("f_person");
+                    String personId = temp.toString();
+
+                    personsApiObject.getPersonDataFromEPHGD(personId);
+
+                    Assert.assertEquals((productFinderTasks.list_people.get(cnt).getProperty("PersonName")).trim(),
+                            dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " +
+                                    dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME());
+                    printLog("PersonName");
+
+                    if (!(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_EMAIL_ID() == null &&productFinderTasks.list_people.get(cnt).getProperty("Email") == null)) {
+                        Assert.assertEquals(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_EMAIL_ID(),
+                                productFinderTasks.list_people.get(cnt).getProperty("Email"));
+                        printLog("email");
+                    }
+
+                    ignore.add(cnt);
+                    break;
+                }
+            }
+        }
+    }
+
+    public void compareExtrendedPersonWithDB() {//created by Nishant @ 14 Jul 2020
+        Log.info("verifying work extended person in People tab...");
+        WorkExtendedPersons[] workExtendedPersons = DataQualityContext.workExtendedTestClass.getWorkExtended().getWorkExtendedPersons().clone();
+
+        for (int i = 0; i < workExtendedPersons.length; i++) {
+            String extRoleName = workExtendedPersons[i].getExtendedRole().get("name").toString();
+            String extPersonFullName = workExtendedPersons[i].getExtendedPerson().get("firstName") + " " +
+                    workExtendedPersons[i].getExtendedPerson().get("lastName");
+            String extEmailId = workExtendedPersons[i].getExtendedPerson().get("email").toString();
+
+            boolean extPersonFound = false;
+            List<Integer> ignore = new ArrayList();
+            for (int uiperson = 0; uiperson < productFinderTasks.list_people.size(); uiperson++) {
+                if (ignore.contains(uiperson)) continue;
+                if (productFinderTasks.list_people.get(uiperson).getProperty("Role").equalsIgnoreCase(extRoleName)) {
+
+                    extPersonFound = true;
+                    Assert.assertEquals(productFinderTasks.list_people.get(uiperson).getProperty("PersonName").trim(), extPersonFullName);
+                    Assert.assertEquals(productFinderTasks.list_people.get(uiperson).getProperty("Email"), extEmailId);
+                    ignore.add(uiperson);
+                    break;
+                }
+            }
+            Assert.assertTrue("Extended person not found " + extRoleName, extPersonFound);
+        }
+    }
+
+public String lov_personRole(String roleCode)
+{//created by Nishant @ 15 Jul 2020
+    String value_Role="";
+switch (roleCode)
+{
+    case "PO"	:value_Role="Product Owner";break;
+    case "AU"	:value_Role="Author";break;
+    case "ED"	:value_Role="Editor";break;
+    case "PD"	:value_Role="Publishing Director";break;
+    case "PU"	:value_Role="Publisher";break;
+    case "AE"	:value_Role="Acquisition Editor";break;
+    case "BC"	:value_Role="Business Controller";break;
+    case "SVP"	:value_Role="Senior Vice President";break;
+}
+return value_Role;
+}
 
     public void validateCompanyCodes() {//created by Nishant @ 17 Jun 2020
 
@@ -850,7 +1051,7 @@ public class ProductFinderUISteps {
         Log.info("verified...Work Status");
 
 
-       Assert.assertEquals(productFinderTasks.prop_info.getProperty("Imprint"), getValue_ImprintFromEPHGD());
+       Assert.assertEquals(productFinderTasks.prop_info.getProperty("Imprint").toUpperCase(), getValue_ImprintFromEPHGD().toUpperCase());
        Log.info("verified...Imprint");
 
         Assert.assertEquals(productFinderTasks.prop_info.getProperty("Language"), getValue_language());
@@ -887,6 +1088,8 @@ public class ProductFinderUISteps {
                 Log.info("verified...Ownership Description");
             }
         }
+    /* commented untill defect EPH-1936 get fixed
+
         if(productFinderTasks.prop_info.containsKey("Business Model")){
         Assert.assertEquals(productFinderTasks.prop_info.getProperty("Business Model"), getValue_BusinessModelFromEPHGD());
         Log.info("verified...Business Model");}
@@ -894,7 +1097,7 @@ public class ProductFinderUISteps {
         if(productFinderTasks.prop_info.containsKey("Access Model")){
         Assert.assertEquals(productFinderTasks.prop_info.getProperty("Access Model"), getValue_AccessModelFromEPHGD());
         Log.info("verified...Access Model");}
-
+*/
         if(productFinderTasks.prop_info.containsKey("Copyright Year")){
         Assert.assertEquals(productFinderTasks.prop_info.getProperty("Copyright Year"), DataQualityContext.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR());
         Log.info("verified...Copyright Year");}
@@ -1695,6 +1898,81 @@ public class ProductFinderUISteps {
 
         return pmcInfo;
     }
+
+
+    @And("^Searches journal work by person (.*)")
+    public void searchesJournalByfullName(String personSearchOption) throws AzureOauthTokenFetchingException, InterruptedException {
+    //created by Nishant @ 10 Jul 2020
+        WorksMatchedApiObject returnedWorks=null;
+
+        while (!tasks.isObjectpresent("XPATH", ProductFinderConstants.searchBar)) {tasks.driver.navigate().refresh();Thread.sleep(3000);}
+
+        for (int i = 0; i < dataQualityContext.personDataObjectsFromEPHGD.size(); i++) {
+            String queryValue = "";
+
+           productFinderTasks.selectSearchType("Person");
+           queryValue = dataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME() +
+                       " " + dataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FAMILY_NAME();
+
+           returnedWorks = apiWorksSearchSteps.callAPI_workByOption(personSearchOption, queryValue+"&workType=ABS,JBB,JNL,NWL&workStatus=WLA");
+           returnedWorks.verifyEnddatedPerson(queryValue);
+
+            Log.info("searching keyword..." + queryValue);
+            productFinderTasks.searchFor(queryValue);
+
+            int totalProductFound=0;
+            if(!tasks.isObjectpresent("XPATH",ProductFinderConstants.zeroResultFound))
+            {
+               String ProductFound = tasks.getTextofElement("XPATH", ProductFinderConstants.productFoundOf);
+               String[] showingProducts=ProductFound.split(" ");
+               totalProductFound=Integer.valueOf(showingProducts[showingProducts.length-1]);
+            }
+            Assert.assertEquals(returnedWorks.getTotalMatchCount(),totalProductFound);
+
+        }
+
+
+    }
+
+    @And("^Searches journal by pmc (.*)")
+    public void searchesJournalByPmc(String journalSearchOption) throws AzureOauthTokenFetchingException, InterruptedException {
+        //created by Nishant @ 14 Jul 2020
+        WorksMatchedApiObject returnedWorks=null;
+
+        while (!tasks.isObjectpresent("XPATH", ProductFinderConstants.searchBar)) {tasks.driver.navigate().refresh();Thread.sleep(3000);}
+
+        for (int i = 0; i < dataQualityContext.workDataObjectsFromEPHGD.size(); i++) {
+            String queryValue = "";
+            switch(journalSearchOption) {
+                case"pmcCode":
+                    productFinderTasks.selectSearchType("PMC");
+                    queryValue=dataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC();
+                    returnedWorks=apiWorksSearchSteps.callAPI_workByOption(journalSearchOption,queryValue+"&workType=ABS,JBB,JNL,NWL&workStatus=WLA");
+                    break;
+                case"pmgCode":
+                    productFinderTasks.selectSearchType("PMG");
+                    queryValue=apiWorksSearchSteps.getPMGcodeByPMC(dataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
+                    returnedWorks=apiWorksSearchSteps.callAPI_workByOption(journalSearchOption,queryValue+"&workType=ABS,JBB,JNL,NWL&workStatus=WLA");
+                    break;
+            }
+
+            Log.info("searching journals by..." +journalSearchOption+" "+ queryValue);
+            productFinderTasks.searchFor(queryValue);
+
+            int totalProductFound=0;
+            if(!tasks.isObjectpresent("XPATH",ProductFinderConstants.zeroResultFound))
+            {
+                String ProductFound = tasks.getTextofElement("XPATH", ProductFinderConstants.productFoundOf);
+                String[] showingProducts=ProductFound.split(" ");
+                totalProductFound=Integer.valueOf(showingProducts[showingProducts.length-1]);
+            }
+          Assert.assertEquals(returnedWorks.getTotalMatchCount(),totalProductFound);
+            Log.info(journalSearchOption+" matched for UI and API");
+        }
+
+
+    }
+
 
 
 

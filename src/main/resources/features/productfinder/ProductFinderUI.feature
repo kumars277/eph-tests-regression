@@ -136,3 +136,27 @@ Feature: Product Finder Selenium tests
     And   Verify user is forwarded to the searched work page
     And   get Extended Data from DB
     Then  Verify PF/JF UI work overview values
+
+  @JFUI
+  Scenario Outline: Search the Journal by person
+    Given We get 1 random search ids for person roles
+    And get person data from EPH DB
+    And   user is on Journal Finder search page
+    And   Searches journal work by person <option>
+    Examples:
+      |option               |
+      |personFullNameCurrent|
+   #   |personIdCurrent      |
+   #   |personName           |
+   #   |personId             |
+
+  @JFUI
+  Scenario Outline: Search the Journal by PMC
+    Given We get 1 random journal ids for search
+    And   We get the work search data from EPH GD
+    And   user is on Journal Finder search page
+    And   Searches journal by pmc <option>
+    Examples:
+      |option |
+      |pmgCode|
+      |pmcCode|

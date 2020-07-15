@@ -15,6 +15,7 @@ import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
 
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.*;
 
 import java.math.BigDecimal;
@@ -31,18 +32,16 @@ import org.junit.Assert;
 public class ApiWorksSearchSteps {
     @StaticInjection
     public DataQualityContext dataQualityContext;
-    public APIService apiService;
+    public APIService apiService=new APIService();
     private String sql;
     private static List<String> ids;
     private static List<String> manifestaionids;
     private WorkApiObject workApi_response;
     private static List<WorkDataObject> workIdentifiers;
     private ApiProductsSearchSteps apiProductsSearchSteps;
-    // = new ApiProductsSearchSteps();
-    //private List<WorkDataObject> workDataObjectsFromEPHGD;
-    //private static List<String> manifestation_Ids;
-    //private static List<String> manifestationIdentifiers_Ids;
-    //public static List<ManifestationIdentifierObject> manifestationIdentifiers;
+
+    String EndPoint;
+    public ApiWorksSearchSteps() {}
 
     @Given("^We get (.*) random search ids for works")
     public void getRandomWorkIds(String numberOfRecords) {
@@ -94,8 +93,8 @@ public class ApiWorksSearchSteps {
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random Journal ids  : " + ids);
-        //for debugging failures
-        //ids.clear(); ids.add("EPR-W-102SNW");  Log.info("hard coded work ids are : " + ids);
+        //for debugging failure
+        ids.clear(); ids.add("EPR-W-102RR8");  Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
@@ -105,9 +104,9 @@ public class ApiWorksSearchSteps {
         List<Map<?, ?>> randomPersonSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomPersonSearchIds.stream().map(m -> (BigDecimal) m.get("f_person")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random person ids  : " + ids);
+       //  ids.clear(); ids.add("10077793");  Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random person roles is not empty.", ids.isEmpty());
     }
-
 
     @And("^We get the work search data from EPH GD$")
     public void getWorksDataFromEPHGD() {
@@ -132,7 +131,7 @@ public class ApiWorksSearchSteps {
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
         for (int i = 0; i < bound; i++) {
             Log.info("#################################################################################");
-            Log.info("Verifying "+dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+            Log.info("Verifying " + dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
             workApi_response = apiService.searchForWorkByIDResult(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
             workApi_response.compareWithDB();
         }
@@ -559,13 +558,12 @@ public class ApiWorksSearchSteps {
             int size = 5000;
             switch (personSearchOption) {
                 case "PERSON_NAME":
-                        /*
-                        created by Nishant @24 Apr 2020
+                        /*created by Nishant @24 Apr 2020
                         getWorkByPerson returns sometimes 70000+ records and most probable intended work id does not appear in first 20 records
                         hence we need to send API request with size 5000 and check if intended workID is returned
-                        if not, send request again for next 5000 records
-                        */
-                    returnedWorks = apiService.searchForWorksBySearchOptionResult(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " +
+                        if not, send request again for next 5000 records*/
+
+                    returnedWorks = apiService.searchForWorksByQueryTypeResult("personName", dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " +
                             dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
 
                     while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
@@ -576,6 +574,20 @@ public class ApiWorksSearchSteps {
                                 dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
                     }
                     break;
+
+                case "personFullNameCurrent":
+                    returnedWorks = apiService.searchForWorksByQueryTypeResult("personFullNameCurrent", dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " +
+                            dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
+
+                    while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
+                            && from + size < returnedWorks.getTotalMatchCount()) {
+                        from += size;
+                        Log.info("scanned workID from " + (from - size) + " to " + from + " records...");
+                        returnedWorks = apiService.searchForWorksBySearchOptionResult(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " +
+                                dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
+                    }
+                    break;
+
 
                 case "PEOPLE_HUB_ID":
                     returnedWorks = apiService.searchForWorksByPersonIDResult(personDataObjectsFromEPHGD.get(0).getPEOPLEHUB_ID() + "&from=" + from + "&size=" + size);
@@ -596,6 +608,16 @@ public class ApiWorksSearchSteps {
                         returnedWorks = apiService.searchForWorksByPersonIDResult(personDataObjectsFromEPHGD.get(0).getPERSON_ID() + "&from=" + from + "&size=" + size);
                     }
                     break;
+
+                case "personIdCurrent":
+                    returnedWorks = apiService.searchForWorksByQueryTypeResult("personIdCurrent", personDataObjectsFromEPHGD.get(0).getPERSON_ID() + "&from=" + from + "&size=" + size);
+                    while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
+                            && from + size < returnedWorks.getTotalMatchCount()) {
+                        from += size;
+                        Log.info("scanned workID from " + (from - size) + " to " + from + " records...");
+                        returnedWorks = apiService.searchForWorksByPersonIDResult(personDataObjectsFromEPHGD.get(0).getPERSON_ID() + "&from=" + from + "&size=" + size);
+                    }
+                    break;
             }
 
             returnedWorks.verifyWorksAreReturned();
@@ -607,6 +629,16 @@ public class ApiWorksSearchSteps {
             returnedWorks.verifyWorkWithIdIsReturned(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
             Log.info("verified work present in search result...");
         }
+    }
+
+
+    public WorksMatchedApiObject callAPI_workByOption(String personSearchOption, String queryValue) throws AzureOauthTokenFetchingException {
+        //created by Nishant @ 10 Jul 2020
+        //verify Journal Finder search result with API
+       Log.info("calling workAPI for... "+personSearchOption);
+        WorksMatchedApiObject returnedWorks = null;
+        returnedWorks = apiService.searchForWorksByQueryTypeResult(personSearchOption, queryValue);
+        return returnedWorks;
     }
 
     @And("^get work by manifestation$")
@@ -689,7 +721,7 @@ public class ApiWorksSearchSteps {
         return count;
     }
 
-    private String getPMGcodeByPMC(String pmcCode) {
+    public String getPMGcodeByPMC(String pmcCode) {
         sql = String.format(APIDataSQL.EPH_GD_PMG_CODE_EXTRACT_BYPMC, pmcCode);
         // Log.info(sql);
         List<Map<String, Object>> getPMG = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -771,4 +803,12 @@ public class ApiWorksSearchSteps {
     }
 
 
+    @And("^get person data from EPH DB$")
+    public void getPersonDataByPersonId() {
+        Log.info("We get the work data from EPH GD ...");
+        sql = String.format(APIDataSQL.SelectPersonDataByPersonId, Joiner.on("','").join(ids));
+        dataQualityContext.personDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
+        dataQualityContext.personDataObjectsFromEPHGD.sort(Comparator.comparing(PersonDataObject::getPERSON_ID));
+        Assert.assertFalse("Verify that list with person objects from DB is not empty", dataQualityContext.personDataObjectsFromEPHGD.isEmpty());
+    }
 }

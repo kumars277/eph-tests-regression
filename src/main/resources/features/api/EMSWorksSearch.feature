@@ -44,8 +44,8 @@ Feature: Customer Search API: Works
       |PEOPLE_HUB_ID      |
       |PERSON_ID      |
     #need to update for below as per EPHD-1414, comment by Nishant @ 08 Jul 2020
-      |personIdCurrent|
       |personFullNameCurrent|
+      |personIdCurrent|
       |personName|
       |personId  |
 
