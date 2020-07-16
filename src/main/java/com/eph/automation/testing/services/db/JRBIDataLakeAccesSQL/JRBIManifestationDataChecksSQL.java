@@ -27,20 +27,21 @@ public class JRBIManifestationDataChecksSQL {
 
     public static String GET_EPR_IDS_MANIF_FULLLOAD =
             "select epr as EPR from(SELECT DISTINCT\n" +
-            "  COALESCE(cr1.epr, cr2.epr) epr\n" +
-            ", 'JRBI Manifestation Extended' record_type\n" +
-            ", COALESCE(cr1.manifestation_type,cr2.manifestation_type) manifestation_type\n" +
-            ", j.journal_prod_site_code journal_prod_site_code\n" +
-            ", j.journal_issue_trim_size journal_issue_trim_size\n" +
-            ", j.war_reference war_reference\n" +
-            "FROM\n" +
-            "  (("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
-            "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr1 ON ((((j.issn = cr1.identifier) AND (cr1.identifier_type = 'ISSN')) AND (cr1.record_level = 'Manifestation')) AND (cr1.manifestation_type = 'JPR')))\n" +
-            "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON ((((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Manifestation')) AND (cr2.manifestation_type = 'JPR')))) where epr is not NULL\n"+
+                    " cr2.epr epr\n" +
+                    ", 'JRBI Manifestation Extended' record_type\n" +
+                    ", cr2.manifestation_type manifestation_type\n" +
+                    ", NULLIF(j.journal_prod_site_code,'') journal_prod_site_code\n" +
+                    ", NULLIF(j.journal_issue_trim_size,'') journal_issue_trim_size\n" +
+                    ", NULLIF(j.war_reference,'') war_reference\n" +
+                    " FROM\n" +
+                    "("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
+                    "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON\n" +
+                    "((((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
+                    "AND (cr2.record_level = 'Manifestation')) AND (cr2.manifestation_type = 'JPR'))))where epr is not NULL\n" +
                     " order by rand() limit %s\n";
 
     public static String GET_MANIF_RECORDS_FULL_LOAD =
-            "select epr as EPR" +
+            /*"select epr as EPR" +
                     ",record_type as RECORD_TYPE" +
                     ",manifestation_type as MANIFESTATION_TYPE" +
                     ",journal_prod_site_code as JOURNAL_PROD_SITE" +
@@ -57,7 +58,26 @@ public class JRBIManifestationDataChecksSQL {
                     " (("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
                     " LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr1 ON ((((j.issn = cr1.identifier) AND (cr1.identifier_type = 'ISSN')) AND (cr1.record_level = 'Manifestation')) AND (cr1.manifestation_type = 'JPR')))\n" +
                     " LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON ((((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Manifestation')) AND (cr2.manifestation_type = 'JPR'))))\n" +
-                    "where EPR in ('%s')";
+                    "where EPR in ('%s')";*/
+
+            "select epr as EPR" +
+                    ",record_type as RECORD_TYPE" +
+                    ",manifestation_type as MANIFESTATION_TYPE" +
+                    ",journal_prod_site_code as JOURNAL_PROD_SITE" +
+                    ",journal_issue_trim_size as JOURNAL_ISSUE_TRIM_SIZE" +
+                    ",war_reference as WAR_REFERENCE" +
+                    " from(SELECT DISTINCT\n" +
+                    " cr2.epr epr\n" +
+                    ", 'JRBI Manifestation Extended' record_type\n" +
+                    ", cr2.manifestation_type manifestation_type\n" +
+                    ", NULLIF(j.journal_prod_site_code,'') journal_prod_site_code\n" +
+                    ", NULLIF(j.journal_issue_trim_size,'') journal_issue_trim_size\n" +
+                    ", NULLIF(j.war_reference,'') war_reference\n" +
+                    " FROM\n" +
+                    "("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
+                    "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON\n" +
+                    "((((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
+                    "AND (cr2.record_level = 'Manifestation')) AND (cr2.manifestation_type = 'JPR')))) where EPR in ('%s')";
 
     public static String GET_CURRENT_MANIF_RECORDS =
             "select epr as EPR" +

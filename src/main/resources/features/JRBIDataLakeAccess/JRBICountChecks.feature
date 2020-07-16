@@ -10,10 +10,10 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
     Then  We know the total count of Current JRBI data from <tableName>
     And Compare count of Full load with current <tableName> table are identical
     Examples:
-      | tableName                                 |
-      |jrbi_transform_current_work                |
-      |jrbi_transform_current_manifestation       |
-      |jrbi_transform_current_person              |
+      | tableName                                |
+     |jrbi_transform_current_work              |
+     |jrbi_transform_current_manifestation       |
+     |jrbi_transform_current_person              |
 
 
   @JRBI
@@ -85,6 +85,17 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
       |jrbi_delta_current_work           |jrbi_transform_delta_work_history_part   |
       |jrbi_delta_current_manifestation  |jrbi_transform_delta_manifestation_history_part   |
       |jrbi_delta_current_person         |jrbi_transform_delta_person_history_part   |
+
+    @JRBI
+    Scenario Outline: Verify Duplicate Entry for JRBI in transform latest tables
+      Given Get the Duplicate count in <SourceTableName> table
+      Then Check the count should be equal to Zero <SourceTableName>
+      Examples:
+        |SourceTableName                      |
+        |jrbi_transform_latest_work           |
+        |jrbi_transform_latest_manifestation  |
+        |jrbi_transform_latest_person         |
+
 
 
   @JRBIExtended

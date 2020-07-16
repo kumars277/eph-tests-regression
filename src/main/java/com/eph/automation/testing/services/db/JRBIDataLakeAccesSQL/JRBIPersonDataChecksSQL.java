@@ -26,21 +26,25 @@ public class JRBIPersonDataChecksSQL {
 
 
     public static String GET_EPR_IDS_PERSON_FULLLOAD =
-            "SELECT epr as EPR FROM (SELECT DISTINCT \n" +
-                    "COALESCE(cr1.epr, cr2.epr) epr\n" +
-                    ", 'JRBI Person Extended' record_type, j.role_code role_code\n" +
-                    ", COALESCE(cr1.epr, cr2.epr)||j.role_code as u_key\n" +
-                    ", j.role_description role_description, p.given_name given_name\n" +
-                    ", p.family_name family_name, p.peoplehub_id peoplehub_id\n" +
-                    ", j.email email \n" +
-                    "FROM ((("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_person_unpivot_v j \n" +
-                    "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (j.email = p.email)) \n" +
-                    "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr1 ON ((((j.issn = cr1.identifier) AND (cr1.identifier_type = 'ISSN')) AND (cr1.record_level = 'n')) AND (cr1.record_level = 'Work')))\n" +
-                    "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work'))))where epr is not NULL\n" +
+            " SELECT epr FROM (SELECT DISTINCT \n" +
+                    " cr2.epr epr\n" +
+                    ", 'JRBI Person Extended' record_type, cr2.work_type work_type\n" +
+                    ", NULLIF(j.role_code,'') role_code\n" +
+                    ", cr2.epr||j.role_code as u_key\n" +
+                    ", NULLIF(j.role_description,'') role_description\n" +
+                    ", p.given_name given_name\n" +
+                    ", p.family_name family_name\n" +
+                    ", p.peoplehub_id peoplehub_id\n" +
+                    ", NULLIF(j.email,'') email\n" +
+                    "FROM (("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_person_unpivot_v j \n" +
+                    "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (j.email = p.email))\n" +
+                    "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2\n" +
+                    "ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
+                    "AND (cr2.record_level = 'Work')))) where epr is not NULL\n" +
                     " order by rand() limit %s\n";
 
     public static String GET_PERSON_RECORDS_FULL_LOAD =
-            "select epr as EPR" +
+           /* "select epr as EPR" +
                     ",record_type as RECORD_TYPE" +
                     ",role_code as ROLE_CODE" +
                     ",u_key as U_KEY" +
@@ -60,7 +64,33 @@ public class JRBIPersonDataChecksSQL {
                     "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (j.email = p.email)) \n" +
                     "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr1 ON ((((j.issn = cr1.identifier) AND (cr1.identifier_type = 'ISSN')) AND (cr1.record_level = 'n')) AND (cr1.record_level = 'Work')))\n" +
                      "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work'))))\n" +
-                    "where EPR in ('%s')";
+                    "where EPR in ('%s')";*/
+
+            "select epr as EPR" +
+                    ",record_type as RECORD_TYPE" +
+                    ",role_code as ROLE_CODE" +
+                    ",u_key as U_KEY" +
+                    ",role_description as ROLE_DESCRIPTION" +
+                    ",given_name as GIVEN_NAME" +
+                    ",family_name as FAMILY_NAME" +
+                    ",peoplehub_id as PEOPLEHUB_ID" +
+                    ",email as EMAIL" +
+                    " FROM (SELECT DISTINCT \n" +
+                    " cr2.epr epr\n" +
+                    ", 'JRBI Person Extended' record_type, cr2.work_type work_type\n" +
+                    ", NULLIF(j.role_code,'') role_code\n" +
+                    ", cr2.epr||j.role_code as u_key\n" +
+                    ", NULLIF(j.role_description,'') role_description\n" +
+                    ", p.given_name given_name\n" +
+                    ", p.family_name family_name\n" +
+                    ", p.peoplehub_id peoplehub_id\n" +
+                    ", NULLIF(j.email,'') email\n" +
+                    "FROM (("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_person_unpivot_v j \n" +
+                    "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (j.email = p.email))\n" +
+                    "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2\n" +
+                    "ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
+                    "AND (cr2.record_level = 'Work')))) where EPR in ('%s')";
+
 
     public static String GET_CURRENT_PERSON_RECORDS =
             "select epr as EPR" +

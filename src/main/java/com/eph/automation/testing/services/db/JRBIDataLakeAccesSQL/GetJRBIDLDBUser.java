@@ -13,8 +13,8 @@ public class GetJRBIDLDBUser {
             }
 
         }else{
-           // dbJRBIDL = "jrbi_staging_sit";
-            dbJRBIDL = "jrbi_staging_uat";
+            dbJRBIDL = "jrbi_staging_sit";
+          //  dbJRBIDL = "jrbi_staging_uat";
         }
         return dbJRBIDL;
     }
@@ -29,8 +29,8 @@ public class GetJRBIDLDBUser {
                 dbProdDb = "product_staging_database_uat";
             }
         }else{
-           // dbProdDb = "product_staging_database_sit";
-            dbProdDb = "product_staging_database_uat";
+            dbProdDb = "product_staging_database_sit";
+          //  dbProdDb = "product_staging_database_uat";
         }
         return dbProdDb;
     }
@@ -45,8 +45,8 @@ public class GetJRBIDLDBUser {
                 dbProdGDdb = "product_database_uat";
             }
         }else{
-            //dbProdGDdb = "product_database_sit";
-            dbProdGDdb = "product_database_uat";
+            dbProdGDdb = "product_database_sit";
+           // dbProdGDdb = "product_database_uat";
         }
         return dbProdGDdb;
     }
@@ -61,8 +61,8 @@ public class GetJRBIDLDBUser {
                 dbProdExtdb = "product_ext_database_uat";
             }
         }else{
-            //dbProdExtdb = "product_ext_database_sit";
-            dbProdExtdb = "product_ext_database_uat";
+            dbProdExtdb = "product_ext_database_sit";
+          //  dbProdExtdb = "product_ext_database_uat";
         }
         return dbProdExtdb;
     }

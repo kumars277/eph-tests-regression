@@ -40,8 +40,10 @@ public class JRBICountChecksSteps {
     private static int JRBIPreviousHistoryCount;
     private static String JRBIDeltaCurrentSQLCount;
     private static String JRBIDeltaCurrentHistorySQLCount;
+    private static String JRBIDuplicateLatestSQLCount;
     private static int JRBIDeltaCurrentCount;
     private static int JRBIDeltaCurrentHistoryCount;
+    private static int JRBIDuplicateLatestCount;
     private static String JRBIworkExtendedSQLCount;
     private static int JRBIWorkExtCount;
     private static String JRBIManifExtendedSQLCount;
@@ -513,6 +515,36 @@ public class JRBICountChecksSteps {
     public void compareStchWorkandWorkExt() {
         Log.info("The count for Work Ext table => " + JRBIWorkExtCount + " and in Work Stitching => " + JRBIWorkStchCount);
         Assert.assertEquals("The counts are not equal when compared with Work Ext and Work Stitching", JRBIWorkExtCount, JRBIWorkStchCount);
+
+    }
+
+    @Given("^Get the Duplicate count in (.*) table$")
+    public void getDuplicateCount(String tableName){
+        switch (tableName){
+            case "jrbi_transform_latest_work":
+                Log.info("Getting Duplicate Work Latest Table Count...");
+                JRBIDuplicateLatestSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DUPLICATE_WORK_LAtest_COUNT;
+                break;
+
+            case "jrbi_transform_latest_manifestation":
+                Log.info("Getting Duplicate Manifest Latest Table Count...");
+                JRBIDuplicateLatestSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DUPLICATE_MANIF_LATEST_COUNT;
+                break;
+
+            case "jrbi_transform_latest_person":
+                Log.info("Getting Duplicate person Latest Table Count...");
+                JRBIDuplicateLatestSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DUPLICATE_PERSON_LATEST_COUNT;
+                break;
+        }
+        Log.info(JRBIDuplicateLatestSQLCount);
+        List<Map<String, Object>> JRBIDupLatestTableCount = DBManager.getDBResultMap(JRBIDuplicateLatestSQLCount, Constants.AWS_URL);
+        JRBIDuplicateLatestCount = ((Long) JRBIDupLatestTableCount.get(0).get("Duplicate_Count")).intValue();
+    }
+
+    @Then("^Check the count should be equal to Zero (.*)$")
+    public void checkDupCountZero(String tableName){
+        Log.info("The Duplicate count for "+tableName+" => " + JRBIDuplicateLatestCount);
+        Assert.assertEquals("There are Duplicate Count of EPR IDs in "+tableName,0,JRBIDuplicateLatestCount);
 
     }
 
