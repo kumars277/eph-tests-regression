@@ -10,7 +10,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
     And Compare the records of jrbi_journal_data_full and transform current work
     Examples:
       | sourceTable         | countOfRandomIds|
-      |jrbi_journal_data_full|      1         |
+      |jrbi_journal_data_full|      10         |
 
   @JRBI
   Scenario Outline: Verify Data for JRBI transform_Current_work_history is transferred from Current Work

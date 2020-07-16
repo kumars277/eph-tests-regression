@@ -257,8 +257,8 @@ public class JRBIPersonDataChecksSteps {
                 dataQualityJRBIContext.recordsFromFromCurrentPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR));
                 dataQualityJRBIContext.recordsFromFromCurrentPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY)); //sort data in the lists
                 dataQualityJRBIContext.recordsFromFromCurrentPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY));
-                dataQualityJRBIContext.recordsFromFromPreviousPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromPreviousPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID));
+                dataQualityJRBIContext.recordsFromFromCurrentPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromCurrentPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID));
 
 
                 Log.info("Current_person -> EPR => " + dataQualityJRBIContext.recordsFromFromCurrentPerson.get(i).getEPR() +
