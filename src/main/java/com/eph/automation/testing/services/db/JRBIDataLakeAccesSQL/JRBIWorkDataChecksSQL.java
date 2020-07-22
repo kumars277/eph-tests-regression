@@ -61,9 +61,10 @@ public class JRBIWorkDataChecksSQL {
                     ", MAX(NULLIF(j.rf_fvi,'')) rf_fvi\n" +
                     ", MAX(NULLIF(j.rf_lvi,'')) rf_lvi\n" +
                     " FROM\n" +
-                    "("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
-                    "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((j.journal_number=cr2.identifier)\n" +
-                    " AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work')))\n" +
+                    "(("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
+                    "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((substr('00000',1,5-length(j.journal_number))\n" +
+                    "||j.journal_number = cr2.identifier)\n" +
+                    " AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work'))))\n" +
                     " GROUP BY cr2.epr),\n" +
                     " jrbi_joined as (SELECT DISTINCT cr2.epr epr, 'JRBI Work Extended' record_type, cr2.work_type work_type\n" +
                     ", NULLIF(j.primary_site_system,'') primary_site_system\n" +
@@ -164,9 +165,10 @@ public class JRBIWorkDataChecksSQL {
                     ", MAX(NULLIF(j.rf_fvi,'')) rf_fvi\n" +
                     ", MAX(NULLIF(j.rf_lvi,'')) rf_lvi\n" +
                     " FROM\n" +
-                    "("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
-                    "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((j.journal_number=cr2.identifier)\n" +
-                    " AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work')))\n" +
+                    "(("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
+                    "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((substr('00000',1,5-length(j.journal_number))\n" +
+                    "||j.journal_number = cr2.identifier)\n" +
+                    " AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work'))))\n" +
                     " GROUP BY cr2.epr),\n" +
                     " jrbi_joined as (SELECT DISTINCT cr2.epr epr, 'JRBI Work Extended' record_type, cr2.work_type work_type\n" +
                     ", NULLIF(j.primary_site_system,'') primary_site_system\n" +

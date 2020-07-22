@@ -36,7 +36,7 @@ public class JRBIManifestationDataChecksSQL {
                     " FROM\n" +
                     "("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
                     "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON\n" +
-                    "((((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
+                    "((((substr('00000',1,5-length(j.journal_number))||j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
                     "AND (cr2.record_level = 'Manifestation')) AND (cr2.manifestation_type = 'JPR'))))where epr is not NULL\n" +
                     " order by rand() limit %s\n";
 
@@ -76,7 +76,7 @@ public class JRBIManifestationDataChecksSQL {
                     " FROM\n" +
                     "("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
                     "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON\n" +
-                    "((((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
+                    "((((substr('00000',1,5-length(j.journal_number))||j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
                     "AND (cr2.record_level = 'Manifestation')) AND (cr2.manifestation_type = 'JPR')))) where EPR in ('%s')";
 
     public static String GET_CURRENT_MANIF_RECORDS =

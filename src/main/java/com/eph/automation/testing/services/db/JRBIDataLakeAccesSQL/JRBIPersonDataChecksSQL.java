@@ -35,11 +35,11 @@ public class JRBIPersonDataChecksSQL {
                     ", p.given_name given_name\n" +
                     ", p.family_name family_name\n" +
                     ", p.peoplehub_id peoplehub_id\n" +
-                    ", NULLIF(j.email,'') email\n" +
+                    ", NULLIF(rtrim(ltrim(lower(j.email),' '),' '),'') email\n" +
                     "FROM (("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_person_unpivot_v j \n" +
-                    "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (j.email = p.email))\n" +
+                    "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (rtrim(ltrim(lower(j.email),' '),' ') = rtrim(ltrim(lower(p.email),' '),' ')))\n" +
                     "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2\n" +
-                    "ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
+                    "ON (((substr('00000',1,5-length(j.journal_number))||j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
                     "AND (cr2.record_level = 'Work')))) where epr is not NULL\n" +
                     " order by rand() limit %s\n";
 
@@ -84,11 +84,11 @@ public class JRBIPersonDataChecksSQL {
                     ", p.given_name given_name\n" +
                     ", p.family_name family_name\n" +
                     ", p.peoplehub_id peoplehub_id\n" +
-                    ", NULLIF(j.email,'') email\n" +
+                    ", NULLIF(rtrim(ltrim(lower(j.email),' '),' '),'') email\n" +
                     "FROM (("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_person_unpivot_v j \n" +
-                    "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (j.email = p.email))\n" +
+                    "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (rtrim(ltrim(lower(j.email),' '),' ') = rtrim(ltrim(lower(p.email),' '),' ')))\n" +
                     "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2\n" +
-                    "ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
+                    "ON (((substr('00000',1,5-length(j.journal_number))||j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
                     "AND (cr2.record_level = 'Work')))) where EPR in ('%s')";
 
 

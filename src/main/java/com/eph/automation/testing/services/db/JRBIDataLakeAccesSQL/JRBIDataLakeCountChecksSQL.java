@@ -39,9 +39,10 @@ public class JRBIDataLakeCountChecksSQL {
                     ", MAX(NULLIF(j.rf_fvi,'')) rf_fvi\n" +
                     ", MAX(NULLIF(j.rf_lvi,'')) rf_lvi\n" +
                     " FROM\n" +
-                    "("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
-                    "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((j.journal_number=cr2.identifier)\n" +
-                    " AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work')))\n" +
+                    "(("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
+                    "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((substr('00000',1,5-length(j.journal_number))\n" +
+                    "||j.journal_number = cr2.identifier)\n" +
+                    " AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work'))))\n" +
                     " GROUP BY cr2.epr),\n" +
                     " jrbi_joined as (SELECT DISTINCT cr2.epr epr, 'JRBI Work Extended' record_type, cr2.work_type work_type\n" +
                     ", NULLIF(j.primary_site_system,'') primary_site_system\n" +
@@ -117,7 +118,7 @@ public class JRBIDataLakeCountChecksSQL {
                          " FROM\n" +
                          "("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
                          "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON\n" +
-                         "((((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
+                         "((((substr('00000',1,5-length(j.journal_number))||j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
                          "AND (cr2.record_level = 'Manifestation')) AND (cr2.manifestation_type = 'JPR'))))where epr is not NULL\n";
 
          /*   "select Count(*) as Source_Count from(SELECT DISTINCT\n" +
@@ -142,11 +143,11 @@ public class JRBIDataLakeCountChecksSQL {
                         ", p.given_name given_name\n" +
                         ", p.family_name family_name\n" +
                         ", p.peoplehub_id peoplehub_id\n" +
-                        ", NULLIF(j.email,'') email\n" +
+                        ", NULLIF(rtrim(ltrim(lower(j.email),' '),' '),'') email\n" +
                         "FROM (("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_person_unpivot_v j \n" +
-                        "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (j.email = p.email))\n" +
+                        "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (rtrim(ltrim(lower(j.email),' '),' ') = rtrim(ltrim(lower(p.email),' '),' ')))\n" +
                         "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2\n" +
-                        "ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
+                        "ON (((substr('00000',1,5-length(j.journal_number))||j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
                         "AND (cr2.record_level = 'Work')))) where epr is not NULL\n";
 
       /*          "SELECT COUNT(*) as Source_Count FROM (SELECT DISTINCT \n" +
@@ -439,7 +440,7 @@ public class JRBIDataLakeCountChecksSQL {
             "select count(*) as Duplicate_Count from (SELECT epr,count(*) FROM "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_manifestation group by epr having count(*)>1)\n";
 
     public static  String GET_JRBI_DUPLICATE_PERSON_LATEST_COUNT =
-            "select count(*) as Duplicate_Count from (SELECT epr,count(*) FROM "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person group by epr having count(*)>1)\n";
+            "select count(*) as Duplicate_Count from (SELECT u_key,count(*) FROM "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person group by u_key having count(*)>1)\n";
 
 }
 

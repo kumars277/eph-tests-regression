@@ -11,9 +11,9 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
     And Compare count of Full load with current <tableName> table are identical
     Examples:
       | tableName                                |
-     |jrbi_transform_current_work              |
-     |jrbi_transform_current_manifestation       |
-     |jrbi_transform_current_person              |
+   |jrbi_transform_current_work              |
+    |jrbi_transform_current_manifestation       |
+    |jrbi_transform_current_person              |
 
 
   @JRBI
