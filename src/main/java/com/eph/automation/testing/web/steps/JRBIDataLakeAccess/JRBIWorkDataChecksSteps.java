@@ -4,7 +4,8 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.JRBIAccessDLContext;
-import com.eph.automation.testing.models.dao.JRBIDataLakeAccess.JRBIDLWorkAccessObject;
+import com.eph.automation.testing.models.dao.JRBIDataLakeAccess.*;
+
 import com.eph.automation.testing.services.db.JRBIDataLakeAccesSQL.JRBIWorkDataChecksSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
@@ -17,6 +18,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import com.google.gson.Gson;
 
 
 public class JRBIWorkDataChecksSteps {
@@ -31,7 +33,7 @@ public class JRBIWorkDataChecksSteps {
 
     @Given("^We get the (.*) random EPR ids (.*)$")
     public void getRandomEPRIds(String numberOfRecords, String tableName) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random EPR Ids...");
         switch (tableName) {
@@ -65,11 +67,18 @@ public class JRBIWorkDataChecksSteps {
                 List<Map<?, ?>> randomLatestWorkEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 Ids = randomLatestWorkEPRIds.stream().map(m -> (String) m.get("EPR")).collect(Collectors.toList());
                 break;
+
             case "jrbi_transform_previous_current_work":
                 sql = String.format(JRBIWorkDataChecksSQL.GET_RANDOM_DELTA_EPR_WORK, numberOfRecords);
                 List<Map<?, ?>> randomCurrentPreviousWorkEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 Ids = randomCurrentPreviousWorkEPRIds.stream().map(m -> (String) m.get("EPR")).collect(Collectors.toList());
+                break;
 
+            case "work_extended":
+                sql = String.format(JRBIWorkDataChecksSQL.GET_RANDOM_EPR_WORK_EXTENDED, numberOfRecords);
+                List<Map<?, ?>> randomWorkExtendedEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomWorkExtendedEPRIds.stream().map(m -> (String) m.get("EPR")).collect(Collectors.toList());
+            break;
         }
         Log.info(sql);
         Log.info(Ids.toString());
@@ -120,10 +129,10 @@ public class JRBIWorkDataChecksSteps {
                 if (dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getRECORD_TYPE() != null ||
                         (dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getRECORD_TYPE() != null)) {
                     String fullRecordType = dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getRECORD_TYPE();
-                    if(fullRecordType.isEmpty()){
+               /*     if(fullRecordType.isEmpty()){
                         fullRecordType = null;
                     }
-                    Assert.assertEquals("The RECORD_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
+               */     Assert.assertEquals("The RECORD_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
                             fullRecordType,dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getRECORD_TYPE());
                 }
 
@@ -134,10 +143,10 @@ public class JRBIWorkDataChecksSteps {
                 if (dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getWORK_TYPE() != null ||
                         (dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getWORK_TYPE() != null)) {
                     String fullWorkType = dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getWORK_TYPE();
-                    if(fullWorkType.isEmpty()){
+               /*     if(fullWorkType.isEmpty()){
                         fullWorkType = null;
                     }
-                    Assert.assertEquals("The RECORD_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
+               */     Assert.assertEquals("The RECORD_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
                             fullWorkType,dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getWORK_TYPE());
                 }
 
@@ -146,10 +155,10 @@ public class JRBIWorkDataChecksSteps {
                         " PRIMARY_SITE_SYSTEM => Full_Load =" + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getPRIMARY_SITE_SYSTEM() +
                         " Current_Work=" + dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getPRIMARY_SITE_SYSTEM());
                 String primarySiteSys = dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getPRIMARY_SITE_SYSTEM();
-                if(primarySiteSys.isEmpty()){
+         /*       if(primarySiteSys.isEmpty()){
                     primarySiteSys = null;
                 }
-                if (dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getPRIMARY_SITE_SYSTEM() != null ||
+           */     if (dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getPRIMARY_SITE_SYSTEM() != null ||
                         (dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getPRIMARY_SITE_SYSTEM() != null)) {
                     Assert.assertEquals("The PRIMARY_SITE_SYSTEM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
                             primarySiteSys,dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getPRIMARY_SITE_SYSTEM());
@@ -159,9 +168,11 @@ public class JRBIWorkDataChecksSteps {
                         " PRIMARY_SITE_ACRONYM => Full_Load =" + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getPRIMARY_SITE_ACRONYM() +
                         " Current_Work=" + dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getPRIMARY_SITE_ACRONYM());
                 String primarySiteAcronym = dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getPRIMARY_SITE_ACRONYM();
+/*
                 if(primarySiteAcronym.isEmpty()){
                     primarySiteAcronym = null;
                 }
+*/
                 if (dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getPRIMARY_SITE_ACRONYM() != null ||
                         (dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getPRIMARY_SITE_ACRONYM() != null)) {
                     Assert.assertEquals("The PRIMARY_SITE_ACRONYM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
@@ -172,10 +183,10 @@ public class JRBIWorkDataChecksSteps {
                         " PRIMARY_SITE_SUPPORT_LEVEL => Full_Load =" + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getPRIMARY_SITE_SUPPORT_LEVEL() +
                         " Current_Work=" + dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL());
                 String primarySiteSupportLevel = dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getPRIMARY_SITE_SUPPORT_LEVEL();
-                if(primarySiteSupportLevel.isEmpty()){
+           /*     if(primarySiteSupportLevel.isEmpty()){
                     primarySiteSupportLevel = null;
                 }
-                if (dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getPRIMARY_SITE_SUPPORT_LEVEL() != null ||
+           */     if (dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getPRIMARY_SITE_SUPPORT_LEVEL() != null ||
                         (dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL() != null)) {
                     Assert.assertEquals("The PRIMARY_SITE_SUPPORT_LEVEL is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
                             primarySiteSupportLevel,dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL());
@@ -185,10 +196,10 @@ public class JRBIWorkDataChecksSteps {
                         " FULFILMENT_SYSTEM => Full_Load =" + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getFULFILMENT_SYSTEM() +
                         " Current_Work=" + dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getFULFILMENT_SYSTEM());
                 String fulfilmentSys = dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getFULFILMENT_SYSTEM();
-                if(fulfilmentSys.isEmpty()){
+             /*   if(fulfilmentSys.isEmpty()){
                     fulfilmentSys = null;
                 }
-                if (dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getFULFILMENT_SYSTEM() != null ||
+             */   if (dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getFULFILMENT_SYSTEM() != null ||
                         (dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getFULFILMENT_SYSTEM() != null)) {
                     Assert.assertEquals("The FULFILMENT_SYSTEM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
                             fulfilmentSys,dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getFULFILMENT_SYSTEM());
@@ -201,10 +212,10 @@ public class JRBIWorkDataChecksSteps {
                 if (dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getFULFILMENT_JOURNAL_ACRONYM() != null ||
                         (dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getFULFILMENT_JOURNAL_ACRONYM() != null)) {
                     String fulfilmentJournalAcr = dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getFULFILMENT_JOURNAL_ACRONYM();
-                    if(fulfilmentJournalAcr.isEmpty()){
+               /*     if(fulfilmentJournalAcr.isEmpty()){
                         fulfilmentJournalAcr = null;
                     }
-                    Assert.assertEquals("The FULFILMENT_SYSTEM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
+               */     Assert.assertEquals("The FULFILMENT_SYSTEM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
                             fulfilmentJournalAcr,dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getFULFILMENT_JOURNAL_ACRONYM());
                 }
 
@@ -215,10 +226,10 @@ public class JRBIWorkDataChecksSteps {
                 if (dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getISSUE_PROD_TYPE_CODE() != null ||
                         (dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getISSUE_PROD_TYPE_CODE() != null)) {
                     String issueProdTypeCode = dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getISSUE_PROD_TYPE_CODE();
-                    if(issueProdTypeCode.isEmpty()){
+               /*     if(issueProdTypeCode.isEmpty()){
                         issueProdTypeCode = null;
                     }
-                    Assert.assertEquals("The ISSUE_PROD_TYPE_CODE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
+               */     Assert.assertEquals("The ISSUE_PROD_TYPE_CODE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
                             issueProdTypeCode,dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getISSUE_PROD_TYPE_CODE());
                 }
 
@@ -229,10 +240,10 @@ public class JRBIWorkDataChecksSteps {
                 if (dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getCATALOGUE_VOLUME_QTY() != null ||
                         (dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getCATALOGUE_VOLUME_QTY() != null)) {
                     String catalogue_volume_qty = dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getCATALOGUE_VOLUME_QTY();
-                    if(catalogue_volume_qty.isEmpty()){
+             /*       if(catalogue_volume_qty.isEmpty()){
                         catalogue_volume_qty = null;
                     }
-                    Assert.assertEquals("The CATALOGUE_VOLUME_QTY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
+             */       Assert.assertEquals("The CATALOGUE_VOLUME_QTY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
                             catalogue_volume_qty,dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getCATALOGUE_VOLUME_QTY());
                 }
 
@@ -244,10 +255,10 @@ public class JRBIWorkDataChecksSteps {
                         (dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getCATALOGUE_ISSUES_QTY() != null)) {
 
                     String catalogue_issue_qty = dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getCATALOGUE_ISSUES_QTY();
-                    if(catalogue_issue_qty.isEmpty()){
+              /*      if(catalogue_issue_qty.isEmpty()){
                         catalogue_issue_qty = null;
                     }
-                    Assert.assertEquals("The CATALOGUE_ISSUES_QTY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
+              */      Assert.assertEquals("The CATALOGUE_ISSUES_QTY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
                             catalogue_issue_qty,dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getCATALOGUE_ISSUES_QTY());
                 }
 
@@ -259,10 +270,10 @@ public class JRBIWorkDataChecksSteps {
                         (dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getCATALOGUE_VOLUME_FROM() != null)) {
 
                     String catalogue_vol_from = dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getCATALOGUE_VOLUME_FROM();
-                    if(catalogue_vol_from.isEmpty()){
+              /*      if(catalogue_vol_from.isEmpty()){
                         catalogue_vol_from = null;
                     }
-
+*/
                     Assert.assertEquals("The CATALOGUE_VOLUME_FROM is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
                             catalogue_vol_from,dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getCATALOGUE_VOLUME_FROM());
                 }
@@ -275,10 +286,10 @@ public class JRBIWorkDataChecksSteps {
                         (dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getCATALOGUE_VOLUME_TO() != null)) {
 
                     String catalogue_vol_to = dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getCATALOGUE_VOLUME_TO();
-                    if(catalogue_vol_to.isEmpty()){
+              /*      if(catalogue_vol_to.isEmpty()){
                         catalogue_vol_to = null;
                     }
-
+*/
                     Assert.assertEquals("The CATALOGUE_VOLUME_TO is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
                             catalogue_vol_to,dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getCATALOGUE_VOLUME_TO());
                 }
@@ -291,10 +302,10 @@ public class JRBIWorkDataChecksSteps {
                         (dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getRF_ISSUES_QTY() != null)) {
 
                     String RfIssueQty = dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getRF_ISSUES_QTY();
-                    if(RfIssueQty.isEmpty()){
+                /*    if(RfIssueQty.isEmpty()){
                         RfIssueQty = null;
                     }
-
+*/
                     Assert.assertEquals("The RF_ISSUES_QTY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
                             RfIssueQty,dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getRF_ISSUES_QTY());
                 }
@@ -307,10 +318,10 @@ public class JRBIWorkDataChecksSteps {
                         (dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getRF_TOTAL_PAGES_QTY() != null)) {
 
                     String RfIssuetotPage = dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getRF_TOTAL_PAGES_QTY();
-                    if(RfIssuetotPage.isEmpty()){
+                /*    if(RfIssuetotPage.isEmpty()){
                         RfIssuetotPage = null;
                     }
-
+*/
                     Assert.assertEquals("The RF_TOTAL_PAGES_QTY is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
                             RfIssuetotPage,dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getRF_TOTAL_PAGES_QTY());
                 }
@@ -322,10 +333,10 @@ public class JRBIWorkDataChecksSteps {
                 if (dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getRF_FVI() != null ||
                         (dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getRF_FVI() != null)) {
                     String RfVI = dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getRF_FVI();
-                    if(RfVI.isEmpty()){
+                /*    if(RfVI.isEmpty()){
                         RfVI = null;
                     }
-                    Assert.assertEquals("The RF_FVI is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
+                */    Assert.assertEquals("The RF_FVI is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
                             RfVI,dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getRF_FVI());
                 }
 
@@ -336,10 +347,10 @@ public class JRBIWorkDataChecksSteps {
                 if (dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getRF_LVI() != null ||
                         (dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getRF_LVI() != null)) {
                     String RfLVI = dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getRF_LVI();
-                    if(RfLVI.isEmpty()){
+                /*    if(RfLVI.isEmpty()){
                         RfLVI = null;
                     }
-                    Assert.assertEquals("The RF_LVI is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
+                */    Assert.assertEquals("The RF_LVI is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
                             RfLVI,dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getRF_LVI());
                 }
 
@@ -351,10 +362,10 @@ public class JRBIWorkDataChecksSteps {
                         (dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getBUSINESS_UNIT_DESC() != null)) {
 
                     String BusinessUnitDes = dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getBUSINESS_UNIT_DESC();
-                    if(BusinessUnitDes.isEmpty()){
+                /*    if(BusinessUnitDes.isEmpty()){
                         BusinessUnitDes = null;
                     }
-
+*/
                     Assert.assertEquals("The BUSINESS_UNIT_DESC is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoad.get(i).getEPR() ,
                             BusinessUnitDes,dataQualityJRBIContext.recordsFromFromCurrentWork.get(i).getBUSINESS_UNIT_DESC());
                 }
@@ -2006,9 +2017,271 @@ public class JRBIWorkDataChecksSteps {
 
             }
         }
-
-
     }
+
+    @ Then("^Get the records from work extended person role table$")
+    public void getRecPersonRole(String workId){
+        Log.info("We get the records from Person Extended Roles...");
+        sql = String.format(JRBIWorkDataChecksSQL.GET_JRBI_PERSON_ROLE_REC, workId);
+        Log.info(sql);
+        JRBIAccessDLContext.recordsFromPersonExtended = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
+    }
+
+    @Then("^Get the records from work extended stitching table$")
+    public void getworkExtendedJSONRec(String workId){
+        Log.info("We get the JSON from Work Stitching Tables...");
+        sql = String.format(JRBIWorkDataChecksSQL.GET_WORK_JSON_RECORDS, workId);
+        Log.info(sql);
+        List<Map<String,String>> jsonValue=DBManager.getDBResultMap(sql,Constants.EPH_URL);
+        JRBIAccessDLContext.recordsFromWorkStitching = new Gson().fromJson(jsonValue.get(0).get("json"), JRBIWorkExtJsonObject.class);
+    }
+
+    @And("^compare work extended and work extended person role with work stitching table$")
+    public  void compareWorkExtendedAndStitching() {
+        if (dataQualityJRBIContext.recordsFromExtendeWork.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            for (int i = 0; i < dataQualityJRBIContext.recordsFromExtendeWork.size(); i++) {
+                String workId=dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID();
+                getRecPersonRole(workId);
+                getworkExtendedJSONRec(workId);
+                Log.info("Work_Extended -> EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
+                        " Work_JSON -> EPR => " + JRBIAccessDLContext.recordsFromWorkStitching.getId());
+               if (dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() != null ||
+                        (JRBIAccessDLContext.recordsFromWorkStitching.getId() != null)) {
+                    Assert.assertEquals("The EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR() + " is missing/not found in Work_Stitching table",
+                            dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID(),
+                            JRBIAccessDLContext.recordsFromWorkStitching.getId());
+                }
+
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_SYSTEM()== null){
+                    Log.info("Primary Site System not available");
+                }else{
+                    Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
+                            " Work_Extended -> PrimarySiteSystem => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_SYSTEM() +
+                            " Work_JSON -> PrimarySiteSystem => " + JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getPrimarySiteSystem());
+                    if (dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_SYSTEM() != null ||
+                            (JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getPrimarySiteSystem() != null)) {
+                        Assert.assertEquals("The PrimarySiteSystem is incorrect for EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID(),
+                                dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_SYSTEM(),
+                                JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getPrimarySiteSystem());
+                    }
+                }
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_ACRONYM()==null){
+                    Log.info("PrimarySiteAcronym not available");
+                }else{
+                    Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
+                    " Work_Extended -> PrimarySiteAcronym => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_ACRONYM() +
+                            " Work_JSON -> PrimarySiteAcronym => " + JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getPrimarySiteAcronym());
+                    if (dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_ACRONYM() != null ||
+                            (JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getPrimarySiteAcronym() != null)) {
+                        Assert.assertEquals("The PrimarySiteAcronym is incorrect for EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID(),
+                                dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_ACRONYM(),
+                                JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getPrimarySiteAcronym());
+                    }
+                }
+
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_SYSTEM()==null){
+                    Log.info("PrimarySiteSupportLevel not available");
+                }else{
+                    Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
+                    " Work_Extended -> PrimarySiteSupportLevel => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL() +
+                            " Work_JSON -> PrimarySiteSupportLevel => " + JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getPrimarySiteSupportLevel());
+                    if (dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL() != null ||
+                            (JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getPrimarySiteSupportLevel() != null)) {
+                        Assert.assertEquals("The PrimarySiteSupportLevel is incorrect for EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID(),
+                                dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL(),
+                                JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getPrimarySiteSupportLevel());
+                    }
+                }
+
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_QTY()==null){
+                    Log.info("catalogueVolumesQty not available");
+                }else{
+                    Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
+                    " Work_Extended -> catalogueVolumesQty => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_QTY() +
+                            " Work_JSON -> catalogueVolumesQty => " + JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getCatalogueVolumesQty());
+                    if (dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_QTY() != null ||
+                            (JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getCatalogueVolumesQty() != null)) {
+                        Assert.assertEquals("The catalogueVolumesQty is incorrect for EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID(),
+                                dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_QTY(),
+                                JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getCatalogueVolumesQty());
+                    }
+                }
+
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_ISSUES_QTY()==null){
+                    Log.info("catalogueIssuesQty not available");
+                }else{
+                    Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
+                    " Work_Extended -> catalogueIssuesQty => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_ISSUES_QTY() +
+                            " Work_JSON -> catalogueIssuesQty => " + JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getCatalogueIssuesQty());
+                    if (dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_QTY() != null ||
+                            (JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getCatalogueIssuesQty() != null)) {
+                        Assert.assertEquals("The catalogueVolumesQty is incorrect for EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID(),
+                                dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_ISSUES_QTY(),
+                                JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getCatalogueIssuesQty());
+                    }
+                }
+
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_FROM()==null){
+                    Log.info("catalogueVolumeFrom not available");
+                }else{
+                    Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
+                    " Work_Extended -> catalogueVolumeFrom => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_FROM() +
+                            " Work_JSON -> catalogueVolumeFrom => " + JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getCatalogueVolumeFrom());
+                    if (dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_QTY() != null ||
+                            (JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getCatalogueVolumeFrom() != null)) {
+                        Assert.assertEquals("The catalogueVolumeFrom is incorrect for EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID(),
+                                dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_FROM(),
+                                JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getCatalogueVolumeFrom());
+                    }
+                }
+
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_TO()==null){
+                    Log.info("catalogueVolumeTo not available");
+                }else{
+                    Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
+                    " Work_Extended -> catalogueVolumeTo => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_TO() +
+                            " Work_JSON -> catalogueVolumeTo => " + JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getCatalogueVolumeTo());
+                    if (dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_TO() != null ||
+                            (JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getCatalogueVolumeTo() != null)) {
+                        Assert.assertEquals("The catalogueVolumeTo is incorrect for EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID(),
+                                dataQualityJRBIContext.recordsFromExtendeWork.get(i).getCATALOGUE_VOLUME_TO(),
+                                JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getCatalogueVolumeTo());
+                    }
+                }
+
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_ISSUES_QTY()==null){
+                    Log.info("RF_ISSUES_QTY not available");
+                }else{
+                    Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
+                    " Work_Extended -> catalogueVolumeTo => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_ISSUES_QTY() +
+                            " Work_JSON -> catalogueVolumeTo => " + JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getRfIssuesQty());
+                    if (dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_ISSUES_QTY() != null ||
+                            (JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getRfIssuesQty() != null)) {
+                        Assert.assertEquals("The RfIssuesQty is incorrect for EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID(),
+                                dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_ISSUES_QTY(),
+                                JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getRfIssuesQty());
+                    }
+                }
+
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_TOTAL_PAGES_QTY()==null){
+                    Log.info("RF_TOTAL_PAGES_QTY not available");
+                }else{
+                    Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
+                    " Work_Extended -> RF_TOTAL_PAGES_QTY => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_TOTAL_PAGES_QTY() +
+                            " Work_JSON -> RF_TOTAL_PAGES_QTY => " + JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getRfTotalPagesQty());
+                    if (dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_TOTAL_PAGES_QTY() != null ||
+                            (JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getRfTotalPagesQty() != null)) {
+                        Assert.assertEquals("The RF_TOTAL_PAGES_QTY is incorrect for EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID(),
+                                dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_TOTAL_PAGES_QTY(),
+                                JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getRfTotalPagesQty());
+                    }
+                }
+
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_FVI()==null){
+                    Log.info("RF_FVI not available");
+                }else{
+                    Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
+                    " Work_Extended -> RF_FVI => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_FVI() +
+                            " Work_JSON -> RF_FVI => " + JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getRfFvi());
+                    if (dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_FVI() != null ||
+                            (JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getRfFvi() != null)) {
+                        Assert.assertEquals("The RfFvi is incorrect for EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID(),
+                                dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_FVI(),
+                                JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getRfFvi());
+                    }
+                }
+
+                if(dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_LVI()==null){
+                    Log.info("RF_LVI not available");
+                }else{
+                    Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
+                    " Work_Extended -> RF_FVI => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_LVI() +
+                            " Work_JSON -> RF_FVI => " + JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getRfLvi());
+                    if (dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_LVI() != null ||
+                            (JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getRfLvi() != null)) {
+                        Assert.assertEquals("The RF_LVI is incorrect for EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID(),
+                                dataQualityJRBIContext.recordsFromExtendeWork.get(i).getRF_LVI(),
+                                JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getRfLvi());
+                    }
+                }
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
+               " Work_Extended -> issueProdTypeCode => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getISSUE_PROD_TYPE_CODE() +
+                        " Work_JSON -> issueProdTypeCode => " + JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getIssueProdTypeCode());
+            if (dataQualityJRBIContext.recordsFromExtendeWork.get(i).getPRIMARY_SITE_SUPPORT_LEVEL() != null ||
+                        (JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getPrimarySiteSupportLevel() != null)) {
+                    Assert.assertEquals("The issueProdTypeCode is incorrect for EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID(),
+                            dataQualityJRBIContext.recordsFromExtendeWork.get(i).getISSUE_PROD_TYPE_CODE(),
+                            JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getIssueProdTypeCode());
+                }
+
+                Log.info("EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
+                " Work_Extended -> PtsBusinessUnitDesc => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getBUSINESS_UNIT_DESC() +
+                        " Work_JSON -> PtsBusinessUnitDesc => " + JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getPtsBusinessUnitDesc());
+              if (dataQualityJRBIContext.recordsFromExtendeWork.get(i).getBUSINESS_UNIT_DESC() != null ||
+                        (JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getPtsBusinessUnitDesc() != null)) {
+                    Assert.assertEquals("The PtsBusinessUnitDesc is incorrect for EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID(),
+                            dataQualityJRBIContext.recordsFromExtendeWork.get(i).getBUSINESS_UNIT_DESC(),
+                            JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getPtsBusinessUnitDesc());
+                }
+            if(JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getWorkExtendedPersons()!=null) {
+                JRBIPersonExtJson[] extPerson_temp = JRBIAccessDLContext.recordsFromWorkStitching.getWorkExtended().getWorkExtendedPersons().clone();
+                for(int j=0;j<extPerson_temp.length;j++)
+                    {
+                       /* Log.info( extPerson_temp[j].getExtendedRole().toString());
+                        Log.info(JRBIAccessDLContext.recordsFromPersonExtended.get(j).getROLE_NAME());
+                        Log.info(extPerson_temp[j].getExtendedRole().get("code").toString());*/
+
+                        Log.info("EPR => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getEPR_ID() +
+                        " Role_Extended -> Role Code => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getROLE_CODE() +
+                                " Role_JSON -> Role Code => " + extPerson_temp[j].getExtendedRole().get("code").toString());
+                        Assert.assertEquals("The Code is incorrect for EPR => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getEPR_ID(),
+                                dataQualityJRBIContext.recordsFromPersonExtended.get(j).getROLE_CODE(),
+                                extPerson_temp[j].getExtendedRole().get("code").toString());
+
+                        Log.info("EPR => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getEPR_ID() +
+                                " Role_Extended -> Role Name => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getROLE_NAME() +
+                                " Role_JSON -> Role Name => " + extPerson_temp[j].getExtendedRole().get("code").toString());
+                        Assert.assertEquals("The Role name is incorrect for EPR => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getEPR_ID(),
+                                dataQualityJRBIContext.recordsFromPersonExtended.get(j).getROLE_NAME(),
+                                extPerson_temp[j].getExtendedRole().get("name").toString());
+
+                        Log.info("EPR => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getEPR_ID() +
+                                " Person_Extended -> firstName => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getFIRST_NAME() +
+                                " Person_JSON -> firstName => " + extPerson_temp[j].getExtendedRole().get("firstName").toString());
+                        Assert.assertEquals("The First name is incorrect for EPR => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getEPR_ID(),
+                                dataQualityJRBIContext.recordsFromPersonExtended.get(j).getFIRST_NAME(),
+                                extPerson_temp[j].getExtendedPerson().get("firstName").toString());
+
+                        Log.info("EPR => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getEPR_ID() +
+                                " Person_Extended -> lastName => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getLAST_NAME() +
+                                " Person_JSON -> lastName => " + extPerson_temp[j].getExtendedRole().get("lastName").toString());
+                        Assert.assertEquals("The Last name is incorrect for EPR => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getEPR_ID(),
+                                dataQualityJRBIContext.recordsFromPersonExtended.get(j).getLAST_NAME(),
+                                extPerson_temp[j].getExtendedPerson().get("lastName").toString());
+
+                        Log.info("EPR => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getEPR_ID() +
+                                " Person_Extended -> peoplehubId => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getPEOPLEHUB_ID() +
+                                " Person_JSON -> peoplehubId => " + extPerson_temp[j].getExtendedRole().get("peoplehubId").toString());
+                        Assert.assertEquals("The peoplehubId is incorrect for EPR => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getEPR_ID(),
+                                dataQualityJRBIContext.recordsFromPersonExtended.get(j).getPEOPLEHUB_ID(),
+                                extPerson_temp[j].getExtendedPerson().get("peoplehubId").toString());
+
+                        Log.info("EPR => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getEPR_ID() +
+                                " Person_Extended -> email => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getEMAIL() +
+                                " Person_JSON -> email => " + extPerson_temp[j].getExtendedRole().get("email").toString());
+                        Assert.assertEquals("The email is incorrect for EPR => " + dataQualityJRBIContext.recordsFromPersonExtended.get(j).getEPR_ID(),
+                                dataQualityJRBIContext.recordsFromPersonExtended.get(j).getEMAIL(),
+                                extPerson_temp[j].getExtendedPerson().get("email").toString());
+
+                    }
+                }
+
+            }
+        }
+    }
+
 
 
 
