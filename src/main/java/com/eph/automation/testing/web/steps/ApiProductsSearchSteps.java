@@ -64,7 +64,7 @@ public class ApiProductsSearchSteps {
     public void getRandomProductIds(String numberOfRecords) {
         //Get property when run with jenkins
         //numberOfRecords = System.getProperty("dbRandomRecordsNumber");
-         sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_FOR_SEARCH_BOOKS, numberOfRecords);
+         sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_FOR_SEARCH, numberOfRecords);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random product ids are : " + ids);
@@ -648,10 +648,7 @@ public class ApiProductsSearchSteps {
         manIds.add(manifestationID);
         Log.info("And get the manifestations in EPH GD ..");
         sql = String.format(APIDataSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_GD_BY_ID, Joiner.on("','").join(manIds));
-        //  Log.info(sql);
-
-        manifestationDataObjects = DBManager
-                .getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
+        manifestationDataObjects = DBManager.getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
     }
 
     public String getPackageIdByProductID(String workID) {
