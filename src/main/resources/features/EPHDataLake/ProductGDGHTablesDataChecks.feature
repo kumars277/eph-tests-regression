@@ -10,7 +10,7 @@ Feature:Validate data for Product tables between EPH and Data Lake - Outbound
     Examples:
       | countOfRandomIds | table  |
       | 100             | gd_product|
-      | 100             | gh_product|
+     | 100             | gh_product|
 
 
   @DLD

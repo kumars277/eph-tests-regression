@@ -108,7 +108,7 @@ public class EventGDGHTablesDataCheckSteps {
                 String eventId = dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getEVENT_ID();
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getEVENT_ID() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getEVENT_ID().equals("null"))) {  //In data lake null considering or getting as String
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getEVENT_ID()!= null)) {  //In data lake null considering or getting as String
                     Assert.assertEquals("The EVENT_ID is incorrect for id=" + eventId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getEVENT_ID(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getEVENT_ID());
@@ -119,7 +119,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CLASSNAME());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_CLASSNAME() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CLASSNAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CLASSNAME()!= null)) {
                     Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + eventId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_CLASSNAME(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CLASSNAME());
@@ -129,7 +129,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_BATCHID());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_BATCHID() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_BATCHID().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_BATCHID()!= null)) {
                     Assert.assertEquals("The B_BATCHID is incorrect for id=" + eventId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_BATCHID(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_BATCHID());
@@ -139,7 +139,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREDATE());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_CREDATE() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREDATE()!= null)) {
                     Assert.assertEquals("The B_CREDATE is incorrect for id=" + eventId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_CREDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREDATE().substring(0, 10));
@@ -149,7 +149,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDDATE());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_UPDDATE() != null ||
-                        (!dataQualityEPHDLContext.tbWorkDataObjectsFromDL.get(i).getB_UPDDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbWorkDataObjectsFromDL.get(i).getB_UPDDATE()!= null)) {
                     Assert.assertEquals("The B_UPDATE is incorrect for id=" + eventId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_UPDDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDDATE().substring(0, 10));
@@ -159,7 +159,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREATOR());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_CREATOR() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREATOR()!= null)) {
                     Assert.assertEquals("The B_CREATOR is incorrect for id=" + eventId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_CREATOR(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREATOR());
@@ -170,7 +170,7 @@ public class EventGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_UPDATOR() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDATOR()!= null)) {
                     Assert.assertEquals("The B_UPDATOR is incorrect for id=" + eventId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_UPDATOR(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDATOR());
@@ -181,7 +181,7 @@ public class EventGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getDDATE() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getDDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getDDATE()!= null)) {
                     Assert.assertEquals("The DDATE is incorrect for id=" + eventId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getDDATE(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getDDATE());
@@ -192,7 +192,7 @@ public class EventGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getTTIMESTAMP() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getTTIMESTAMP().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getTTIMESTAMP()!= null)) {
                     Assert.assertEquals("The TTIMESTAMP is incorrect for id=" + eventId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getTTIMESTAMP(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getTTIMESTAMP());
@@ -202,7 +202,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getDESCRIPTION());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getDESCRIPTION() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getDESCRIPTION().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getDESCRIPTION()!= null)) {
                     Assert.assertEquals("The DESCRIPTION is incorrect for id=" + eventId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getDESCRIPTION(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getDESCRIPTION());
@@ -212,7 +212,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getTHIRD_PARTY());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getTHIRD_PARTY() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getTHIRD_PARTY().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getTHIRD_PARTY()!= null)) {
                     Assert.assertEquals("The THIRD_PARTY is incorrect for id=" + eventId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getTHIRD_PARTY(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getTHIRD_PARTY());
@@ -222,7 +222,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getWORKFLOW_ID());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getWORKFLOW_ID() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getWORKFLOW_ID().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getWORKFLOW_ID()!= null)) {
                     Assert.assertEquals("The WORKFLOW_ID is incorrect for id=" + eventId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getWORKFLOW_ID(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getWORKFLOW_ID());
@@ -232,7 +232,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_EVENT_TYPE());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getF_EVENT_TYPE() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_EVENT_TYPE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_EVENT_TYPE()!= null)) {
                     Assert.assertEquals("The F_EVENT_TYPE is incorrect for id=" + eventId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getF_EVENT_TYPE(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_EVENT_TYPE());
@@ -242,7 +242,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_WORKFLOW_SOURCE());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getF_WORKFLOW_SOURCE() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_WORKFLOW_SOURCE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_WORKFLOW_SOURCE()!= null)) {
                     Assert.assertEquals("The F_WORKFLOW_SOURCE is incorrect for id=" + eventId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getF_WORKFLOW_SOURCE(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_WORKFLOW_SOURCE());
@@ -252,7 +252,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_SELF_ONE());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getF_SELF_ONE() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_SELF_ONE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_SELF_ONE()!= null)) {
                     Assert.assertEquals("The F_SELF_ONE is incorrect for id=" + eventId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getF_SELF_ONE(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_SELF_ONE());
@@ -262,7 +262,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_SELF_TWO());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getF_SELF_TWO() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_SELF_TWO().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_SELF_TWO()!= null)) {
                     Assert.assertEquals("The F_SELF_ONE is incorrect for id=" + eventId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getF_SELF_TWO(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_SELF_TWO());
@@ -272,7 +272,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_SELF_THREE());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getF_SELF_THREE() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_SELF_THREE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_SELF_THREE()!= null)) {
                     Assert.assertEquals("The F_SELF_ONE is incorrect for id=" + eventId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getF_SELF_THREE(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_SELF_THREE());
@@ -282,7 +282,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_SELF_FOUR());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getF_SELF_FOUR() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_SELF_FOUR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_SELF_FOUR()!= null)) {
                     Assert.assertEquals("The F_SELF_ONE is incorrect for id=" + eventId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getF_SELF_FOUR(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_SELF_FOUR());
@@ -324,7 +324,7 @@ public class EventGDGHTablesDataCheckSteps {
                 }
                 String subAreaId = dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getSUBJECT_AREA_ID();
                 if (subAreaId != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getEVENT_ID().equals("null"))) {  //In data lake null considering or getting as String
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getEVENT_ID()!= null)) {  //In data lake null considering or getting as String
                     Assert.assertEquals("The EVENT_ID is incorrect for id=" + subAreaId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getEVENT_ID(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getEVENT_ID());
@@ -335,7 +335,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CLASSNAME());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_CLASSNAME() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CLASSNAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CLASSNAME()!= null)) {
                     Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + subAreaId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_CLASSNAME(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CLASSNAME());
@@ -346,7 +346,7 @@ public class EventGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_FROMBATCHID());
 
                     if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_FROMBATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_FROMBATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_FROMBATCHID()!= null)) {
                         Assert.assertEquals("The B_FROMBATCHID is incorrect for id=" + subAreaId,
                                 dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_FROMBATCHID(),
                                 dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_FROMBATCHID());
@@ -356,7 +356,7 @@ public class EventGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_TOBATCHID());
 
                     if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_TOBATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_TOBATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_TOBATCHID()!= null)) {
                         Assert.assertEquals("The B_TOBATCHID is incorrect for id=" + subAreaId,
                                 dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_TOBATCHID(),
                                 dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_TOBATCHID());
@@ -368,7 +368,7 @@ public class EventGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_BATCHID());
 
                     if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_BATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_BATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_BATCHID()!= null)) {
                         Assert.assertEquals("The B_BATCHID is incorrect for id=" + subAreaId,
                                 dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_BATCHID(),
                                 dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_BATCHID());
@@ -380,7 +380,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREDATE());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_CREDATE() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREDATE()!= null)) {
                     Assert.assertEquals("The B_CREDATE is incorrect for id=" + subAreaId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_CREDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREDATE().substring(0, 10));
@@ -390,7 +390,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDDATE());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_UPDDATE() != null ||
-                        (!dataQualityEPHDLContext.tbWorkDataObjectsFromDL.get(i).getB_UPDDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbWorkDataObjectsFromDL.get(i).getB_UPDDATE()!= null)) {
                     Assert.assertEquals("The B_UPDATE is incorrect for id=" + subAreaId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_UPDDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDDATE().substring(0, 10));
@@ -400,7 +400,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREATOR());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_CREATOR() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREATOR()!= null)) {
                     Assert.assertEquals("The B_CREATOR is incorrect for id=" + subAreaId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_CREATOR(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREATOR());
@@ -411,7 +411,7 @@ public class EventGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_UPDATOR() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDATOR()!= null)) {
                     Assert.assertEquals("The B_UPDATOR is incorrect for id=" + subAreaId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_UPDATOR(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDATOR());
@@ -422,7 +422,7 @@ public class EventGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE()!= null)) {
                     Assert.assertEquals("The EXTERNAL_REFERENCE is incorrect for id=" + subAreaId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
@@ -433,7 +433,7 @@ public class EventGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getCODE() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getCODE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getCODE()!= null)) {
                     Assert.assertEquals("The CODE is incorrect for id=" + subAreaId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getCODE(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getCODE());
@@ -443,7 +443,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getNAME());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getNAME() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getNAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getNAME()!= null)) {
                     Assert.assertEquals("The NAME is incorrect for id=" + subAreaId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getNAME(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getNAME());
@@ -453,7 +453,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_TYPE());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getF_TYPE() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_TYPE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_TYPE()!= null)) {
                     Assert.assertEquals("The F_TYPE is incorrect for id=" + subAreaId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getF_TYPE(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_TYPE());
@@ -463,7 +463,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_PARENT_SUBJECT_AREA());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getF_PARENT_SUBJECT_AREA() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_PARENT_SUBJECT_AREA().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_PARENT_SUBJECT_AREA()!= null)) {
                     Assert.assertEquals("The F_PARENT_SUBJECT_AREA is incorrect for id=" + subAreaId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getF_PARENT_SUBJECT_AREA(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getF_PARENT_SUBJECT_AREA());
@@ -508,7 +508,7 @@ public class EventGDGHTablesDataCheckSteps {
                 String copyRightId = dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getCOPY_RIGHT_ID();
 
                 if (copyRightId != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getCOPY_RIGHT_ID().equals("null"))) {  //In data lake null considering or getting as String
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getCOPY_RIGHT_ID()!= null)) {  //In data lake null considering or getting as String
                     Assert.assertEquals("The COPY_RIGHT_ID is incorrect for id=" + copyRightId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getCOPY_RIGHT_ID(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getCOPY_RIGHT_ID());
@@ -519,7 +519,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CLASSNAME());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_CLASSNAME() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CLASSNAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CLASSNAME()!= null)) {
                     Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + copyRightId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_CLASSNAME(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CLASSNAME());
@@ -530,7 +530,7 @@ public class EventGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_BATCHID());
 
                     if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_BATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_BATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_BATCHID()!= null)) {
                         Assert.assertEquals("The B_BATCHID is incorrect for id=" + copyRightId,
                                 dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_BATCHID(),
                                 dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_BATCHID());
@@ -541,7 +541,7 @@ public class EventGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_FROMBATCHID());
 
                     if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_FROMBATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_FROMBATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_FROMBATCHID()!= null)) {
                         Assert.assertEquals("The B_FROMBATCHID is incorrect for id=" + copyRightId,
                                 dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_FROMBATCHID(),
                                 dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_FROMBATCHID());
@@ -552,7 +552,7 @@ public class EventGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_TOBATCHID());
 
                     if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_TOBATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_TOBATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_TOBATCHID()!= null)) {
                         Assert.assertEquals("The B_TOBATCHID is incorrect for id=" + copyRightId,
                                 dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_TOBATCHID(),
                                 dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_TOBATCHID());
@@ -564,7 +564,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREDATE());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_CREDATE() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREDATE()!= null)) {
                     Assert.assertEquals("The B_CREDATE is incorrect for id=" + copyRightId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_CREDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREDATE().substring(0, 10));
@@ -574,7 +574,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDDATE());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_UPDDATE() != null ||
-                        (!dataQualityEPHDLContext.tbWorkDataObjectsFromDL.get(i).getB_UPDDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbWorkDataObjectsFromDL.get(i).getB_UPDDATE()!= null)) {
                     Assert.assertEquals("The B_UPDATE is incorrect for id=" + copyRightId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_UPDDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDDATE().substring(0, 10));
@@ -584,7 +584,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREATOR());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_CREATOR() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREATOR()!= null)) {
                     Assert.assertEquals("The B_CREATOR is incorrect for id=" + copyRightId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_CREATOR(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_CREATOR());
@@ -595,7 +595,7 @@ public class EventGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_UPDATOR() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDATOR()!= null)) {
                     Assert.assertEquals("The B_UPDATOR is incorrect for id=" + copyRightId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getB_UPDATOR(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getB_UPDATOR());
@@ -606,7 +606,7 @@ public class EventGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE()!= null)) {
                     Assert.assertEquals("The EXTERNAL_REFERENCE is incorrect for id=" + copyRightId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
@@ -617,7 +617,7 @@ public class EventGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getNAME() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getNAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getNAME()!= null)) {
                     Assert.assertEquals("The NAME is incorrect for id=" + copyRightId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getNAME(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getNAME());
@@ -627,7 +627,7 @@ public class EventGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getS_NAME());
 
                 if (dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getS_NAME() != null ||
-                        (!dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getS_NAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getS_NAME()!= null)) {
                     Assert.assertEquals("The S_NAME is incorrect for id=" + copyRightId,
                             dataQualityEPHDLContext.tbEventDataObjectsFromEPH.get(i).getS_NAME(),
                             dataQualityEPHDLContext.tbEventDataObjectsFromDL.get(i).getS_NAME());
