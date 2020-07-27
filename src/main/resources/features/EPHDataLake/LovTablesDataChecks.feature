@@ -9,20 +9,6 @@ Feature:Validate data for gd_x_Lov tables between EPH and Data Lake - Outbound
     Examples:
       | countOfRandomIds |   tableName                 |
       | 50                | gd_x_lov_etax_product_code |
-      | 50                | gd_x_lov_oa_type           |
-      | 50                | gd_x_lov_gl_company        |
-      | 50                | gd_x_lov_gl_prod_seg_parent|
-      | 50                | gd_x_lov_gl_resp_centre    |
-      | 50                | gd_x_lov_imprint           |
-      | 50                | gd_x_lov_language          |
-      | 50                | gd_x_lov_oa_type           |
-      | 50                | gd_x_lov_origin            |
-      | 50                | gd_x_lov_person_role       |
-      | 50                | gd_x_lov_pmg               |
-      | 50                | gd_x_lov_product_type      |
-      | 50                | gd_x_lov_revenue_model     |
-      | 50                | gd_x_lov_subject_area_type |
-      | 50                | gd_x_lov_workflow_source   |
 
       #     Tables with specific columns
 
