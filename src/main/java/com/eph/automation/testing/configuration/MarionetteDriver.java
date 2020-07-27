@@ -19,22 +19,27 @@ import java.util.concurrent.TimeUnit;
 public class MarionetteDriver implements Provider<WebDriver>{
 
     public WebDriver getChromeDriver(){
-        String pathToDriver = null;
-        String directoryPath = null;
-        final String osName = System.getProperty("os.name").toLowerCase();
-        if (osName.toLowerCase().contains("windows")) {
-            directoryPath = System.getProperty("user.dir");
-            // pathToDriver = "C://Users//sureshkumard//Downloads//Selenium//chromedriver.exe";
-        }
-       // final File file = new File(pathToDriver);
-        //System.setProperty("webdriver.chrome.driver",file.getAbsolutePath());
-        //System.setProperty(ChromeDriver.SystemProperty.BROWSER_LOGFILE, "/dev/null");
+        String chromeDriverVersion="latest";
 
-        //Added by Nishant @11 Feb 2020, to handle webdrivers dynamically
-        DriverManagerType chrome = DriverManagerType.CHROME;
-        WebDriverManager.getInstance(chrome).setup();
-        final WebDriver driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        switch(chromeDriverVersion) //created by Nishant @ 12 June 2020
+        {
+            case "81":
+                String _driver = "\\chromedriver_81.exe";
+                String directoryPath = null;
+                final String osName = System.getProperty("os.name").toLowerCase();
+                if (osName.contains("windows")) {directoryPath = System.getProperty("user.dir");}
+                System.setProperty("webdriver.chrome.driver",directoryPath+_driver);
+                break;
+
+            case "latest":
+                //Added by Nishant @11 Feb 2020, to handle webdrivers dynamically
+                DriverManagerType chrome = DriverManagerType.CHROME;
+                WebDriverManager.getInstance(chrome).setup();
+                break;
+        }
+
+               final WebDriver driver = new ChromeDriver();
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         driver.manage().window().maximize();
         return driver;
     }

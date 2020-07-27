@@ -1,7 +1,7 @@
 package com.eph.automation.testing.services.db.sql;
 
 public class APIDataSQL {
-    public static String SELECT_RANDOM_PRODUCT_IDS_FOR_SEARCH_BOOKS = "SELECT \"product_id\" as PRODUCT_ID\n" +
+    public static String SELECT_RANDOM_PRODUCT_IDS_FOR_SEARCH = "SELECT \"product_id\" as PRODUCT_ID\n" +
             "FROM semarchy_eph_mdm.gd_product WHERE f_manifestation is not null\n" +
 //            "WHERE exists\n" +
 //            "    (SELECT * \n" +
@@ -34,6 +34,9 @@ public class APIDataSQL {
             "and LENGTH(work_title)>20\n" +
             "order by random() limit '%s'";
 
+    public static String SELECT_RANDOM_JOURNAL_IDS_FOR_SEARCH="select work_id from semarchy_eph_mdm.gd_wwork where f_type='JNL' order by random() limit %S";
+    public static String SELECT_RANDOM_EXTENDED_WORK_IDS="SELECT epr_id as WORK_ID FROM ephsit_extended_data_stitch.stch_work_ext_json order by random() limit %S";
+    public static String SELECT_RANDOM_EXTENDED_MANIFESTATION_IDS="SELECT epr_id as WORK_ID FROM ephsit_extended_data_stitch.stch_manifestation_ext_json order by random() limit %S";
     //CREATED by Nishant @ 22 Apr 2020
     public static String SELECT_RANDOM_WORK_IDS_WITH_PRODUCT = "select f_wwork as WORK_ID from semarchy_eph_mdm.gd_product where f_wwork is not null order by random() limit 1";
     public static String SELECT_RANDOM_PRODUCT_IDS_WITH_WORK = "select product_id as PRODUCT_ID from semarchy_eph_mdm.gd_product where f_wwork is not null order by random() limit 1";
@@ -138,7 +141,7 @@ public class APIDataSQL {
             "              ,f_wwork AS F_PRODUCT_WORK\n" +
             "              ,f_tax_code AS TAX_CODE\n" +
             "              ,f_manifestation AS F_PRODUCT_MANIFESTATION_TYP\n" +
-            "              FROM ephsit.semarchy_eph_mdm.gd_product \n" +
+            "              FROM semarchy_eph_mdm.gd_product \n" +
             "  WHERE product_id IN ('%s')";
 
     public static String EPH_GD_WORK_EXTRACT_FOR_SEARCH = "SELECT \n" +
@@ -158,7 +161,7 @@ public class APIDataSQL {
             "               edition_number AS EDITION_NUMBER,\n" +
             "               volume AS VOLUME,\n" +
             "               copyright_year AS COPYRIGHT_YEAR\n" +
-            "              FROM ephsit.semarchy_eph_mdm.gd_wwork " +
+            "              FROM semarchy_eph_mdm.gd_wwork " +
             "  WHERE work_id IN ('%s')";
     //added by Nishant in Nov-Dec 2019
     public static String SELECT_PRODUCT_BY_ID= "SELECT \"product_id\" as PRODUCT_ID FROM semarchy_eph_mdm.gd_product WHERE product_id='%s'";
@@ -198,6 +201,7 @@ public class APIDataSQL {
     public static String EPH_GD_PACKAGEID_EXTRACT_BY_PRODUCTID ="select f_package_owner from semarchy_eph_mdm.gd_product_rel_package where f_component='%s' limit 1";
     public static String EPH_GD_WORK_EXTRACT_AMOUNT_BYPMG ="select count (*) from semarchy_eph_mdm.gd_wwork where f_pmc in ( select code from semarchy_eph_mdm.gd_x_lov_pmc where f_pmg in (select code from semarchy_eph_mdm.gd_x_lov_pmg where code='%s'));";
     public static String EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_WORKSTATUS  ="select count(work_id) from semarchy_eph_mdm.gd_wwork where upper(work_title) like '%%%s%%' and f_status = '%s';";
+    public static String SELECT_GD_WWORK_TYPE_STATUS="select f_type as WORK_TYPE,f_status as WORK_STATUS from semarchy_eph_mdm.gd_wwork where work_id='%s'";
     public static String EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_WORKTYPE  ="select count(work_id) from semarchy_eph_mdm.gd_wwork where upper(work_title) like '%%%s%%' and f_type='%s';";
     public static String EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_MANIFESTATIONTYPE  ="select count(*) from (select distinct w.work_id "+
                     "from semarchy_eph_mdm.gd_wwork w inner join semarchy_eph_mdm.gd_manifestation m "+
@@ -336,6 +340,6 @@ public class APIDataSQL {
             "given_name\tas PERSON_FIRST_NAME,\n" +
             "family_name\tas PERSON_FAMILY_NAME,\n" +
             "peoplehub_id as PEOPLEHUB_ID\n" +
-            " from semarchy_eph_mdm.gd_person where person_id='%s'";
+            " from semarchy_eph_mdm.gd_person where person_id in('%s')";
 
 }
