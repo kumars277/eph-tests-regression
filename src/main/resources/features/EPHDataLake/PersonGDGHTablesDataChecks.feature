@@ -1,6 +1,6 @@
 Feature:Validate data for person tables between EPH and Data Lake - Outbound
 
-  @DLDP
+  @DLD
   Scenario Outline: Validate data is transferred from person EPH to DL Outbound
     Given We get <countOfRandomIds> random person ids of <table>
     When We get the person records from EPH of <table>
@@ -11,7 +11,7 @@ Feature:Validate data for person tables between EPH and Data Lake - Outbound
       | 100              | gd_person|
       | 100              | gh_person|
 
-  @DLDP
+  @DLD
   Scenario Outline: Validate data is transferred from product_person_role EPH to DL Outbound
     Given We get <countOfRandomIds> random person ids of <table>
     When We get the product person records from EPH of <table>
@@ -23,7 +23,7 @@ Feature:Validate data for person tables between EPH and Data Lake - Outbound
       | 100             | gh_product_person_role|
 
 
-  @DLDP
+  @DLD
   Scenario Outline: Validate data is transferred from work_person_role EPH to DL Outbound
     Given We get <countOfRandomIds> random person ids of <table>
     When We get the work person role records from EPH of <table>

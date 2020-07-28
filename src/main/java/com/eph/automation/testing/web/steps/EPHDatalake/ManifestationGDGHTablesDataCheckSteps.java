@@ -32,8 +32,8 @@ public class ManifestationGDGHTablesDataCheckSteps {
 
 
     @Given("^We get (.*) random manifestation ids of (.*)")
-        public void getRandomManifestationIds(String numberOfRecords, String tableName) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+    public void getRandomManifestationIds(String numberOfRecords, String tableName) {
+        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random record...");
 
@@ -101,7 +101,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                 }
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getMANIFESTATION_ID().equals("null"))) {  //In data lake null considering or getting as String
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getMANIFESTATION_ID()!= null)) {  //In data lake null considering or getting as String
                     Assert.assertEquals("The MANIFESTATION_ID is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getMANIFESTATION_ID());
@@ -112,7 +112,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CLASSNAME());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_CLASSNAME() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CLASSNAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CLASSNAME()!= null)) {
                     Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_CLASSNAME(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CLASSNAME());
@@ -123,7 +123,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_FROMBATCHID());
 
                     if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_FROMBATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_FROMBATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_FROMBATCHID()!= null)) {
                         Assert.assertEquals("The B_FROMBATCHID is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                                 dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_FROMBATCHID(),
                                 dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_FROMBATCHID());
@@ -135,7 +135,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_TOBATCHID());
 
                     if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_TOBATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_TOBATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_TOBATCHID()!= null)) {
                         Assert.assertEquals("The B_TOBATCHID is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                                 dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_TOBATCHID(),
                                 dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_TOBATCHID());
@@ -146,7 +146,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_BATCHID());
 
                     if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_BATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_BATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_BATCHID()!= null)) {
                         Assert.assertEquals("The B_BATCHID is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                                 dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_BATCHID(),
                                 dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_BATCHID());
@@ -158,7 +158,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CREDATE());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_CREDATE() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CREDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CREDATE()!= null)) {
                     Assert.assertEquals("The B_CREDATE is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_CREDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CREDATE().substring(0, 10));
@@ -169,7 +169,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_UPDDATE());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_UPDDATE() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_UPDDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_UPDDATE()!= null)) {
                     Assert.assertEquals("The B_UPDATE is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_UPDDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_UPDDATE().substring(0, 10));
@@ -180,7 +180,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CREATOR());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_CREATOR() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CREATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CREATOR()!= null)) {
                     Assert.assertEquals("The B_CREATOR is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_CREATOR(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CREATOR());
@@ -191,7 +191,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_UPDATOR());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_UPDATOR() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_UPDATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_UPDATOR()!= null)) {
                     Assert.assertEquals("The B_UPDATOR is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_UPDATOR(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_UPDATOR());
@@ -201,7 +201,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getS_MANIFESTATION_ID());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getS_MANIFESTATION_ID() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getS_MANIFESTATION_ID().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getS_MANIFESTATION_ID()!= null)) {
                     Assert.assertEquals("The S_MANIFESTATION_ID is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getS_MANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getS_MANIFESTATION_ID());
@@ -212,7 +212,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE()!= null)) {
                     Assert.assertEquals("The EXTERNAL_REFERENCE is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
@@ -223,7 +223,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getMANIFESTATION_KEY_TITLE());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_KEY_TITLE() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getMANIFESTATION_KEY_TITLE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getMANIFESTATION_KEY_TITLE()!= null)) {
                     Assert.assertEquals("The MANIFESTATION_KEY_TITLE is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_KEY_TITLE(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getMANIFESTATION_KEY_TITLE());
@@ -234,7 +234,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getS_MANIFESTATION_KEY_TITLE());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getS_MANIFESTATION_KEY_TITLE() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getS_MANIFESTATION_KEY_TITLE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getS_MANIFESTATION_KEY_TITLE()!= null)) {
                     Assert.assertEquals("The S_MANIFESTATION_KEY_TITLE is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getS_MANIFESTATION_KEY_TITLE(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getS_MANIFESTATION_KEY_TITLE());
@@ -247,7 +247,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                 //Converting Boolean to String
                 String inter_edition_indicator_eph = String.valueOf(dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getINTER_EDITION_FLAG());
                 String inter_edition_indicator_dl = String.valueOf(dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getINTER_EDITION_FLAG());
-                if (inter_edition_indicator_eph != null || (!inter_edition_indicator_dl.equals("null"))) {
+                if (inter_edition_indicator_eph != null || (inter_edition_indicator_dl!= null)) {
                     Assert.assertEquals("The INTER_EDITION_FLAG is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             inter_edition_indicator_eph, inter_edition_indicator_dl);
                 }
@@ -257,7 +257,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getFIRST_PUB_DATE());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getFIRST_PUB_DATE() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getFIRST_PUB_DATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getFIRST_PUB_DATE()!= null)) {
                     Assert.assertEquals("The FIRST_PUB_DATE is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getFIRST_PUB_DATE(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getFIRST_PUB_DATE());
@@ -267,7 +267,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getLAST_PUB_DATE());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getLAST_PUB_DATE() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getLAST_PUB_DATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getLAST_PUB_DATE()!= null)) {
                     Assert.assertEquals("The LAST_PUB_DATE is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getLAST_PUB_DATE(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getLAST_PUB_DATE());
@@ -277,7 +277,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getT_EVENT_DESCRIPTION());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getT_EVENT_DESCRIPTION() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getT_EVENT_DESCRIPTION().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getT_EVENT_DESCRIPTION()!= null)) {
                     Assert.assertEquals("The T_EVENT_DESCRIPTION is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getT_EVENT_DESCRIPTION(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getT_EVENT_DESCRIPTION());
@@ -287,7 +287,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_TYPE());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_TYPE() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_TYPE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_TYPE()!= null)) {
                     Assert.assertEquals("The F_TYPE is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_TYPE(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_TYPE());
@@ -298,7 +298,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_STATUS());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_STATUS() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_STATUS().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_STATUS()!= null)) {
                     Assert.assertEquals("The F_STATUS is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_STATUS(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_STATUS());
@@ -309,7 +309,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_FORMAT_TYPE());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_FORMAT_TYPE() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_FORMAT_TYPE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_FORMAT_TYPE()!= null)) {
                     Assert.assertEquals("The F_FORMAT_TYPE is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_FORMAT_TYPE(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_FORMAT_TYPE());
@@ -320,7 +320,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_WWORK());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_WWORK() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_WWORK().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_WWORK()!= null)) {
                     Assert.assertEquals("The F_WWORK is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_WWORK(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_WWORK());
@@ -331,7 +331,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_T_EVENT_TYPE());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_T_EVENT_TYPE() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_T_EVENT_TYPE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_T_EVENT_TYPE()!= null)) {
                     Assert.assertEquals("The F_T_EVENT_TYPE is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_T_EVENT_TYPE(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_T_EVENT_TYPE());
@@ -342,7 +342,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_EVENT());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_EVENT() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_EVENT().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_EVENT()!= null)) {
                     Assert.assertEquals("The F_EVENT is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_EVENT(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_EVENT());
@@ -355,7 +355,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_SELF_ONE() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_SELF_ONE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_SELF_ONE()!= null)) {
                     Assert.assertEquals("The F_SELF_ONE is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_SELF_ONE(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_SELF_ONE());
@@ -396,7 +396,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                 }
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIF_IDENTIFIER_ID() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getMANIF_IDENTIFIER_ID().equals("null"))) {  //In data lake null considering or getting as String
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getMANIF_IDENTIFIER_ID()!= null)) {  //In data lake null considering or getting as String
                     Assert.assertEquals("The MANIF_IDENTIFIER_ID is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIF_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIF_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getMANIF_IDENTIFIER_ID());
@@ -407,7 +407,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CLASSNAME());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_CLASSNAME() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CLASSNAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CLASSNAME()!= null)) {
                     Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIF_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_CLASSNAME(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CLASSNAME());
@@ -418,7 +418,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_BATCHID());
 
                     if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_BATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_BATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_BATCHID()!= null)) {
                         Assert.assertEquals("The B_BATCHID is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIF_IDENTIFIER_ID(),
                                 dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_BATCHID(),
                                 dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_BATCHID());
@@ -429,7 +429,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_FROMBATCHID());
 
                     if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_FROMBATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_FROMBATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_FROMBATCHID()!= null)) {
                         Assert.assertEquals("The B_FROMBATCHID is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIF_IDENTIFIER_ID(),
                                 dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_FROMBATCHID(),
                                 dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_FROMBATCHID());
@@ -440,7 +440,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_TOBATCHID());
 
                     if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_TOBATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_TOBATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_TOBATCHID()!= null)) {
                         Assert.assertEquals("The B_TOBATCHID is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIF_IDENTIFIER_ID(),
                                 dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_TOBATCHID(),
                                 dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_TOBATCHID());
@@ -451,7 +451,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CREDATE());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_CREDATE() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CREDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CREDATE()!= null)) {
                     Assert.assertEquals("The B_CREDATE is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIF_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_CREDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CREDATE().substring(0, 10));
@@ -461,7 +461,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_UPDDATE());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_UPDDATE() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_UPDDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_UPDDATE()!= null)) {
                     Assert.assertEquals("The B_UPDATE is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIF_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_UPDDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_UPDDATE().substring(0, 10));
@@ -471,7 +471,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CREATOR());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_CREATOR() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CREATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CREATOR()!= null)) {
                     Assert.assertEquals("The B_CREATOR is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIF_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_CREATOR(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_CREATOR());
@@ -481,7 +481,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_UPDATOR());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_UPDATOR() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_UPDATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_UPDATOR()!= null)) {
                     Assert.assertEquals("The B_UPDATOR is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIF_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getB_UPDATOR(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getB_UPDATOR());
@@ -491,7 +491,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE()!= null)) {
                     Assert.assertEquals("The EXTERNAL_REFERENCE is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIF_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
@@ -501,7 +501,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getIDENTIFIER());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getIDENTIFIER() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getIDENTIFIER().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getIDENTIFIER()!= null)) {
                     Assert.assertEquals("The IDENTIFIER is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIF_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getIDENTIFIER(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getIDENTIFIER());
@@ -511,7 +511,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getS_IDENTIFIER());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getS_IDENTIFIER() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getS_IDENTIFIER().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getS_IDENTIFIER()!= null)) {
                     Assert.assertEquals("The S_IDENTIFIER is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIF_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getS_IDENTIFIER(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getS_IDENTIFIER());
@@ -521,7 +521,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getEFFECTIVE_START_DATE() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE()!= null)) {
                     Assert.assertEquals("The EFFECTIVE_START_DATE is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIF_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getEFFECTIVE_START_DATE(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE());
@@ -531,7 +531,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getEFFECTIVE_END_DATE() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE()!= null)) {
                     Assert.assertEquals("The EFFECTIVE_END_DATE is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIF_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getEFFECTIVE_END_DATE(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE());
@@ -541,7 +541,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_TYPE());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_TYPE() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_TYPE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_TYPE()!= null)) {
                     Assert.assertEquals("The F_TYPE is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIF_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_TYPE(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_TYPE());
@@ -551,7 +551,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_MANIFESTATION());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_MANIFESTATION() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_MANIFESTATION().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_MANIFESTATION()!= null)) {
                     Assert.assertEquals("The F_MANIFESTATION is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIF_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_MANIFESTATION(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_MANIFESTATION());
@@ -561,7 +561,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_EVENT());
 
                 if (dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_EVENT() != null ||
-                        (!dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_EVENT().equals("null"))) {
+                        (dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_EVENT()!= null)) {
                     Assert.assertEquals("The F_EVENT is incorrect for id=" + dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getMANIFESTATION_ID(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromEPH.get(i).getF_EVENT(),
                             dataQualityEPHDLContext.tbManifestationDataObjectsFromDL.get(i).getF_EVENT());

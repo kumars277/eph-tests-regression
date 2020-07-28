@@ -33,7 +33,7 @@ public class PersonGDGHTablesDataCheckSteps {
 
     @Given("^We get (.*) random person ids of (.*)")
     public void getRandomPersonIds(String numberOfRecords, String tableName) {
-        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random records ..");
 
