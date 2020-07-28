@@ -10,9 +10,8 @@ public class Constants {
     public static String THREE_S_BUCKET_UI = "https://federation.reedelsevier.com/adfs/ls/IdpInitiatedSignOn.aspx?loginToRp=urn:amazon:webservices";
     public static String PRODUCT_FINDER_EPH_DEV_UI = "https://activitidev.ephdev.tio.systems/product-finder-app/search";
     public static String PRODUCT_FINDER_EPH_SIT_UI = "https://sit.productfinder.elsevier.net/";
-    public static String PRODUCT_FINDER_EPH_UAT_UI = "https://uat.productfinder.elsevier.net/";
     public static String RESEARCH_PACKAGES_SIT_UI   = "https://activitisit.ephdev.tio.systems/research-packages-app/";
-
+    public static String PRODUCT_FINDER_EPH_UAT_UI = "https://uat.productfinder.elsevier.net/";
 
 
     //SOAP EIP - SIT_CRM End point
@@ -26,12 +25,7 @@ public class Constants {
 
     //for search API v2
     //public static final String PRODUCT_SEARCH_END_POINT_SIT = "https://product-hub-search-v2-eipsit.apps.ose-nonprod.cp.tio.systems";
-    //public static final String PRODUCT_SEARCH_END_POINT_SIT = "https://enterprise-sit.api.elsevier.com/v2";
-
-    //for search API v3
-    //public static final String PRODUCT_SEARCH_END_POINT_SIT = "https://product-hub-search-v3-eipsit.apps.ose-nonprod.cp.tio.systems";
-    public static final String PRODUCT_SEARCH_END_POINT_SIT = "https://enterprise-sit.api.elsevier.com/v3";
-    public static final String PRODUCT_SEARCH_END_POINT_UAT = "https://enterprise-uat.api.elsevier.com/v3";
+    public static final String PRODUCT_SEARCH_END_POINT_SIT = "https://enterprise-sit.api.elsevier.com/v2";
 
     //New SIT_CRM EMS Notification End points
     public static final String EIP_NOTIFICATION_ORG_CRM_END_POINT_SIT = "https://enterprise-sit.api.elsevier.com";
@@ -78,7 +72,6 @@ public class Constants {
     //Base Constants
     public static String PMX_URL = "PMX_URL";
     public static String EPH_URL = "EPH_URL";
-    public static String API_ENDPOINT = "API_ENDPOINT";
     public static String MYSQL_DB_URL_KEY = "MYSQL_URL";
     public static String WFT_URL = "WFT_URL";
     public static  String AWS_URL = "AWS_URL";

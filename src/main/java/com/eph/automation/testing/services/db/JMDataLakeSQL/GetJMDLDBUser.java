@@ -16,7 +16,7 @@ public class GetJMDLDBUser {
             }
 
         }else{
-            dbJMDL = "journalmaestro_staging_sit";
+            dbJMDL = "journalmaestro_staging_uat";
             dbJMSQL = "jmf_sit_application";
         }
         return new String[]{dbJMSQL,dbJMDL};

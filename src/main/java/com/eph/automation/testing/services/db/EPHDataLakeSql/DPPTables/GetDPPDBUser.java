@@ -16,7 +16,7 @@ public class GetDPPDBUser {
             }
 
         }else{
-            DppdbDL = "product_database_sit";
+            DppdbDL = "product_database_uat";
             DppdbEPH = "researchpackages";
         }
         return new String[]{DppdbEPH,DppdbDL};

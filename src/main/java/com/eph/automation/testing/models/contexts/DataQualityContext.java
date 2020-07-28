@@ -1,10 +1,9 @@
 package com.eph.automation.testing.models.contexts;
 
 import com.eph.automation.testing.annotations.StaticInjection;
-import com.eph.automation.testing.models.api.ManifestationExtendedTestClass;
-import com.eph.automation.testing.models.api.WorkExtendedTestClass;
 import com.eph.automation.testing.models.dao.*;
 import com.eph.automation.testing.services.db.sql.WorkRelationshipDataObject;
+
 import java.util.List;
 
 /**
@@ -20,6 +19,7 @@ public class DataQualityContext {
     public static List<WorkDataObject> workDataObjectsFromEPH;
     public static List<WorkDataObject> workDataObjectsFromEPHGD;
     public static List<WorkDataObject> workDataObjectsAccProd;
+
 
     public static List<ManifestationDataObject> manifestationDataObjectsFromEPHSTG;
     public static List<ManifestationDataObject> manifestationDataObjectsFromPMX;
@@ -84,9 +84,7 @@ public class DataQualityContext {
     public static String productIdFromStg;
     public static String productIdentifierISSN_ID;
 
-    public static WorkExtendedTestClass workExtendedTestClass;
-    public static ManifestationExtendedTestClass manifestationExtendedTestClass;
-    public static String uiUnderTest;
+
 
 
 

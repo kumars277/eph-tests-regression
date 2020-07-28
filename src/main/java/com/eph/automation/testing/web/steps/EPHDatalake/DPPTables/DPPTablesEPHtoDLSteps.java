@@ -107,7 +107,7 @@ public class DPPTablesEPHtoDLSteps {
 
     @Given("^We get (.*) random DPP ids of (.*)")
     public void getRandomDPPId(String numberOfRecords, String tableName) {
-      numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random records ..");
         switch (tableName) {
@@ -165,7 +165,7 @@ public class DPPTablesEPHtoDLSteps {
         }
         Log.info(sql);
         DPPTablesDLContext.DPPTableDataObjectsFromEPH = DBManager.getDBResultAsBeanList(sql, DPPTablesDLObject.class, Constants.WFT_URL);
-    }
+   }
 
     @Then("^We get the DPP (.*) records from DL$")
     public void getDPPDL(String tableName) {  //db->0=EPHDB,1=AWSDB
@@ -217,17 +217,17 @@ public class DPPTablesEPHtoDLSteps {
                     DPPTablesDLContext.DPPTableDataObjectsFromDL.sort(Comparator.comparing(DPPTablesDLObject::getPACKAGE_APPROVAL_ID));
 
                     if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID() != null ||
-                            (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ID()!= null)) {
+                            (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ID().equals("null"))) {
                         Log.info("package ID => "+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID()+
                                 " PACKAGE_ID => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID()+
                                 " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ID());
                         Assert.assertEquals("The PACKAGE_ID "+DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID()+
-                                        " is missing/incorrect in DL",
+                                " is missing/incorrect in DL",
                                 DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID(),
                                 DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ID());
                     }
                     if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_APPROVAL_ID() != null ||
-                            (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_APPROVAL_ID()!= null)) {
+                            (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_APPROVAL_ID().equals("null"))) {
                         Log.info("package ID => "+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID()+
                                 " PACKAGE_APPROVAL_ID => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_APPROVAL_ID()+
                                 " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_APPROVAL_ID());
@@ -236,39 +236,39 @@ public class DPPTablesEPHtoDLSteps {
                                 DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_APPROVAL_ID());
                     }
                 }
-                else if (tableName.equals("package_have_items")){
+                    else if (tableName.equals("package_have_items")){
                     DPPTablesDLContext.DPPTableDataObjectsFromEPH.sort(Comparator.comparing(DPPTablesDLObject::getPACKAGE_ID));
                     DPPTablesDLContext.DPPTableDataObjectsFromDL.sort(Comparator.comparing(DPPTablesDLObject::getPACKAGE_ID));
                     DPPTablesDLContext.DPPTableDataObjectsFromEPH.sort(Comparator.comparing(DPPTablesDLObject::getPACKAGE_ITEM_ID));
                     DPPTablesDLContext.DPPTableDataObjectsFromDL.sort(Comparator.comparing(DPPTablesDLObject::getPACKAGE_ITEM_ID));
                     if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID() != null ||
-                            (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ID()!= null)) {
-                        Log.info("package ID => "+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID()+
-                                " PACKAGE_ID => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID()+
-                                " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ID());
-                        Assert.assertEquals("The PACKAGE_ID "+DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID()+
-                                        "is incorrect/missing in DL" ,
-                                DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID(),
-                                DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ID());
-                    }
-                    if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ITEM_ID() != null ||
-                            (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ITEM_ID()!= null)) {
-                        Log.info("Package ID => "+  DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID()+
-                                " PACKAGE_ITEM_ID => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ITEM_ID()+
-                                " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ITEM_ID());
-                        Assert.assertEquals("The PACKAGE_ITEM_ID is incorrect for package_id=" +  DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID(),
-                                DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ITEM_ID(),
-                                DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ITEM_ID());
-                    }
+                                (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ID().equals("null"))) {
+                            Log.info("package ID => "+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID()+
+                                    " PACKAGE_ID => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID()+
+                                    " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ID());
+                            Assert.assertEquals("The PACKAGE_ID "+DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID()+
+                                            "is incorrect/missing in DL" ,
+                                    DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID(),
+                                    DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ID());
+                        }
+                        if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ITEM_ID() != null ||
+                                (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ITEM_ID().equals("null"))) {
+                            Log.info("Package ID => "+  DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID()+
+                                    " PACKAGE_ITEM_ID => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ITEM_ID()+
+                                    " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ITEM_ID());
+                            Assert.assertEquals("The PACKAGE_ITEM_ID is incorrect for package_id=" +  DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID(),
+                                    DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ITEM_ID(),
+                                    DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ITEM_ID());
+                        }
                 }
-                else {
+                    else {
                     DPPTablesDLContext.DPPTableDataObjectsFromEPH.sort(Comparator.comparing(DPPTablesDLObject::getID));
                     DPPTablesDLContext.DPPTableDataObjectsFromDL.sort(Comparator.comparing(DPPTablesDLObject::getID));
-                    //                    Case switches for specific table columns
+                        //                    Case switches for specific table columns
                     switch (tableName) {
                         case "comment":
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getREASON() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getREASON()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getREASON().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " REASON => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getREASON()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getREASON());
@@ -277,7 +277,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getREASON());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getREMARKS() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getREMARKS()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getREMARKS().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " REMARKS => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getREMARKS()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getREMARKS());
@@ -286,7 +286,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getREMARKS());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getSTATUS() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getSTATUS()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getSTATUS().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " STATUS => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getSTATUS()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getSTATUS());
@@ -297,7 +297,7 @@ public class DPPTablesEPHtoDLSteps {
                             break;
                         case "eph_user":
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getEMAIL() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getEMAIL()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getEMAIL().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " EMAIL => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getEMAIL()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getEMAIL());
@@ -306,7 +306,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getEMAIL());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getNAME() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getNAME()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getNAME().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " NAME => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getNAME()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getNAME());
@@ -315,7 +315,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getNAME());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPEOPLE_HUB_ID() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPEOPLE_HUB_ID()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPEOPLE_HUB_ID().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " PEOPLE_HUB_ID => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPEOPLE_HUB_ID()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPEOPLE_HUB_ID());
@@ -324,7 +324,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPEOPLE_HUB_ID());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPMG() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPMG()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPMG().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " PMG => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPMG()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPMG());
@@ -333,7 +333,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPMG());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getROLE() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getROLE()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getROLE().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " ROLE => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getROLE()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getROLE());
@@ -342,7 +342,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getROLE());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getUPN_KEY() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getUPN_KEY()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getUPN_KEY().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " UPN_KEY => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getUPN_KEY()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getUPN_KEY());
@@ -353,7 +353,7 @@ public class DPPTablesEPHtoDLSteps {
                             break;
                         case "package":
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_EPR_ID() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_EPR_ID()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_EPR_ID().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " PACKAGE_EPR_ID => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_EPR_ID()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_EPR_ID());
@@ -362,7 +362,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_EPR_ID());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getSTATUS() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getSTATUS()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getSTATUS().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " STATUS => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getSTATUS()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getSTATUS());
@@ -371,7 +371,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getSTATUS());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getTITLE() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getTITLE()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getTITLE().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " TITLE => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getTITLE()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getTITLE());
@@ -380,7 +380,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getTITLE());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getVERSION() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getVERSION()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getVERSION().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " VERSION => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getVERSION()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getVERSION());
@@ -389,7 +389,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getVERSION());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getYEAR() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getYEAR()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getYEAR().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " YEAR => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getYEAR()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getYEAR());
@@ -398,7 +398,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getYEAR());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getWORKFLOW_TYPE() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getWORKFLOW_TYPE()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getWORKFLOW_TYPE().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " WORKFLOW_TYPE => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getWORKFLOW_TYPE()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getWORKFLOW_TYPE());
@@ -410,7 +410,7 @@ public class DPPTablesEPHtoDLSteps {
 
                         case "package_approval":
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getOVERRIDDEN() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getOVERRIDDEN()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getOVERRIDDEN().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " OVERRIDDEN => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getOVERRIDDEN()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getOVERRIDDEN());
@@ -425,7 +425,7 @@ public class DPPTablesEPHtoDLSteps {
                                         OverRiddenSql,DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getOVERRIDDEN());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getSTATUS() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getSTATUS()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getSTATUS().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " STATUS => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getSTATUS()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getSTATUS());
@@ -434,7 +434,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getSTATUS());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getEPH_USER_ID() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getEPH_USER_ID()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getEPH_USER_ID().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " EPH_USER_ID => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getEPH_USER_ID()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getEPH_USER_ID());
@@ -445,7 +445,7 @@ public class DPPTablesEPHtoDLSteps {
                             break;
                         case "package_item":
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getEPR_ID() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getEPR_ID()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getEPR_ID().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " EPR_ID => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getEPR_ID()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getEPR_ID());
@@ -454,7 +454,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getEPR_ID());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getIS_NEW_ADDITION() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getIS_NEW_ADDITION()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getIS_NEW_ADDITION().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " IS_NEW_ADDITION => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getIS_NEW_ADDITION()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getIS_NEW_ADDITION());
@@ -468,7 +468,7 @@ public class DPPTablesEPHtoDLSteps {
                                         newAdditionSql,DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getIS_NEW_ADDITION());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getISSN() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getISSN()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getISSN().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " ISSN => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getISSN()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getISSN());
@@ -477,7 +477,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getISSN());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getJOURNAL_NUMBER() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getJOURNAL_NUMBER()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getJOURNAL_NUMBER().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " JOURNAL_NUMBER => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getJOURNAL_NUMBER()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getJOURNAL_NUMBER());
@@ -486,16 +486,16 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getJOURNAL_NUMBER());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getOWNERSHIP_TYPE() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getOWNERSHIP_TYPE()!= null)) {
+                                (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getOWNERSHIP_TYPE().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " OWNERSHIP_TYPE => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getOWNERSHIP_TYPE()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getOWNERSHIP_TYPE());
                                 Assert.assertEquals("The OWNERSHIP_TYPE is incorrect for id=" + DPPID,
-                                        DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getOWNERSHIP_TYPE(),
-                                        DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getOWNERSHIP_TYPE());
-                            }
+                                    DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getOWNERSHIP_TYPE(),
+                                    DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getOWNERSHIP_TYPE());
+                        }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPMG_CODE() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPMG_CODE()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPMG_CODE().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " PMG_CODE => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPMG_CODE()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPMG_CODE());
@@ -504,7 +504,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPMG_CODE());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPUBLISHER() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPUBLISHER()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPUBLISHER().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " PUBLISHER => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPUBLISHER()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPUBLISHER());
@@ -513,7 +513,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPUBLISHER());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPUBLISHING_DIRECTOR() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPUBLISHING_DIRECTOR()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPUBLISHING_DIRECTOR().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " PUBLISHING_DIRECTOR => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPUBLISHING_DIRECTOR()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPUBLISHING_DIRECTOR());
@@ -522,7 +522,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPUBLISHING_DIRECTOR());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getSTATUS() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getSTATUS()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getSTATUS().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " STATUS => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getSTATUS()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getSTATUS());
@@ -531,7 +531,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getSTATUS());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getTITLE() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getTITLE()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getTITLE().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " TITLE => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getTITLE()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getTITLE());
@@ -540,7 +540,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getTITLE());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getVERSION() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getVERSION()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getVERSION().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " VERSION => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getVERSION()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getVERSION());
@@ -551,7 +551,7 @@ public class DPPTablesEPHtoDLSteps {
                             break;
                         case "package_item_audit":
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getAFTER_VALUE() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getAFTER_VALUE()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getAFTER_VALUE().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " AFTER_VALUE => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getAFTER_VALUE()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getAFTER_VALUE());
@@ -560,7 +560,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getAFTER_VALUE());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getBEFORE_VALUE() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getBEFORE_VALUE()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getBEFORE_VALUE().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " BEFORE_VALUE => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getBEFORE_VALUE()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getBEFORE_VALUE());
@@ -569,7 +569,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getBEFORE_VALUE());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getEPR_ID() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getEPR_ID()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getEPR_ID().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " EPR_ID => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getEPR_ID()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getEPR_ID());
@@ -578,7 +578,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getEPR_ID());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getFIELD_NAME() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getFIELD_NAME()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getFIELD_NAME().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " FIELD_NAME => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getFIELD_NAME()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getFIELD_NAME());
@@ -587,7 +587,7 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getFIELD_NAME());
                             }
                             if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_STATUS() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_STATUS()!= null)) {
+                                    (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_STATUS().equals("null"))) {
                                 Log.info("ID => "+ DPPID+
                                         " PACKAGE_STATUS => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_STATUS()+
                                         " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_STATUS());
@@ -595,22 +595,22 @@ public class DPPTablesEPHtoDLSteps {
                                         DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_STATUS(),
                                         DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_STATUS());
                             }
-                            if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID() != null ||
-                                    (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ID()!= null)) {
-                                Log.info("ID => "+ DPPID+
-                                        " PACKAGE_ID => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID()+
-                                        " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ID());
-                                Assert.assertEquals("The PACKAGE_ID is incorrect for id=" + DPPID,
-                                        DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID(),
-                                        DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ID());
-                            }
+                        if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID() != null ||
+                                (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ID().equals("null"))) {
+                            Log.info("ID => "+ DPPID+
+                                    " PACKAGE_ID => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID()+
+                                    " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ID());
+                            Assert.assertEquals("The PACKAGE_ID is incorrect for id=" + DPPID,
+                                    DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getPACKAGE_ID(),
+                                    DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getPACKAGE_ID());
+                        }
                             break;
                     }
 
 //                    Core columns for all tables (except package_approvals and package_have_items)
 
                     if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getID() != null ||
-                            (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getID()!= null)) {
+                            (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getID().equals("null"))) {
                         Log.info("ID => "+ DPPID+
                                 " ID => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getID()+
                                 " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getID());
@@ -619,7 +619,7 @@ public class DPPTablesEPHtoDLSteps {
                                 DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getID());
                     }
                     if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getCREATED_TIME() != null ||
-                            (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getCREATED_TIME()!= null)) {
+                            (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getCREATED_TIME().equals("null"))) {
                         Log.info("ID => "+ DPPID+
                                 " CREATED_TIME => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getCREATED_TIME()+
                                 " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getCREATED_TIME());
@@ -628,7 +628,7 @@ public class DPPTablesEPHtoDLSteps {
                                 DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getCREATED_TIME());
                     }
                     if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getLAST_UPDATE_TIME() != null ||
-                            (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getLAST_UPDATE_TIME()!= null)) {
+                            (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getLAST_UPDATE_TIME().equals("null"))) {
                         Log.info("ID => "+ DPPID+
                                 " LAST_UPDATE_TIME => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getLAST_UPDATE_TIME()+
                                 " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getLAST_UPDATE_TIME());
@@ -637,7 +637,7 @@ public class DPPTablesEPHtoDLSteps {
                                 DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getLAST_UPDATE_TIME());
                     }
                     if (DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getLAST_UPDATE_USER() != null ||
-                            (DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getLAST_UPDATE_USER()!= null)) {
+                            (!DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getLAST_UPDATE_USER().equals("null"))) {
                         Log.info("ID => "+ DPPID+
                                 " LAST_UPDATE_USER => EPH="+ DPPTablesDLContext.DPPTableDataObjectsFromEPH.get(i).getLAST_UPDATE_USER()+
                                 " DL="+ DPPTablesDLContext.DPPTableDataObjectsFromDL.get(i).getLAST_UPDATE_USER());

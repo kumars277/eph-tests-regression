@@ -3,54 +3,6 @@ Feature: Customer Search API: Works
   I would like to search works from Enterprise Customer Hub using EIP Search
   So that I can use the details to validate business needs
 
-
-  @APIv3
-  Scenario: verify Work Extended by specific ID
-    Given We get 1 random search ids for Extended works
-    And We get the work search data from EPH GD
-    Then the work details are retrieved and compared
-
-  @APIv3
-  Scenario: verify Manifestation Extended specific ID
-    Given We get 2 random search ids for Extended manifestation
-    And get work by manifestation
-    And We get the work search data from EPH GD
-    Then the work details are retrieved and compared
-
-   #{'datafile':'C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\Elastic search,APIv3 and JRBI data/stch_work_ext_json_202006181758.csv'}
-
-   #new search fields included as part of Journal Finder #EPR-W-108TJK
-  @searchAPI @JFSearch
-  Scenario Outline: Search journal by search option
-    Given We get 1 random journal ids for search
-    And We get the work search data from EPH GD
-    Then the journal by search <option> details are retrieved and compared
-    Examples:
-      | option            |
-      |TITLE              |
-      |EPR_ID             |
-      |JOURNAL_ACRONYM    |
-      |JOURNAL_NUMBER     |
-      |ISSN               |
-
-  @searchAPI @JFSearch
-  Scenario Outline: search journal by Person id
-    Given We get 1 random journal ids for search
-    And We get the work search data from EPH GD
-    Then work response is compared with the DB for <options>
-    Examples:
-      |options            |
-      |PERSON_NAME        |
-      |PEOPLE_HUB_ID      |
-      |PERSON_ID      |
-    #need to update for below as per EPHD-1414, comment by Nishant @ 08 Jul 2020
-      |personFullNameCurrent|
-      |personIdCurrent|
-      |personName|
-      |personId  |
-
-
-
   @searchAPI
   Scenario: search work by ID
     Given We get 1 random search ids for works
@@ -111,11 +63,6 @@ Feature: Customer Search API: Works
       | WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME|
 
   @searchAPI
-  Scenario: search work by random Person id
-    Given We get 1 random search ids for person roles
-    Then the work response count is compared with the count in the DB for Person Id
-
-  @searchAPI
   Scenario: search work by PMC Code
     Given We get 1 random search ids for works
     And We get the work search data from EPH GD
@@ -128,6 +75,11 @@ Feature: Customer Search API: Works
     Then the work details are retrieved by PMG Code and compared
 
   @searchAPI
+  Scenario: search work by Person id
+    Given We get 1 random search ids for person roles
+    Then the work response count is compared with the count in the DB for person ID
+
+  @searchAPI
   Scenario Outline: Search E2E
     Given We get id for work search <id>
     And We get the work search data from EPH GD
@@ -135,6 +87,8 @@ Feature: Customer Search API: Works
     Examples:
       | id                        |
       | EPR-W-10C6N8              |
+
+##created by Nishant
 
   @searchAPI
   Scenario: search work by accountableProduct
