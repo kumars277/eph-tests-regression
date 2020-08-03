@@ -44,6 +44,8 @@ public class WorksMatchedApiObject {
         int i=0;
         boolean found=false;
         int activePerson=0;
+        if(items!=null)
+        {
         while(i<items.length&&!found){
           PersonsApiObject[] persons=  items[i].getWorkCore().getWorkPersons().clone();
            for(PersonsApiObject person:persons)
@@ -64,6 +66,7 @@ public class WorksMatchedApiObject {
         }
         //activePerson+=extendedPerson.length;
         Assert.assertFalse(found);
+    }
     }
 
 

@@ -34,9 +34,10 @@ public class APIDataSQL {
             "and LENGTH(work_title)>20\n" +
             "order by random() limit '%s'";
 
-    public static String SELECT_RANDOM_JOURNAL_IDS_FOR_SEARCH="select work_id from semarchy_eph_mdm.gd_wwork where f_type='JNL' order by random() limit %S";
-    public static String SELECT_RANDOM_EXTENDED_WORK_IDS="SELECT epr_id as WORK_ID FROM ephsit_extended_data_stitch.stch_work_ext_json order by random() limit %S";
-    public static String SELECT_RANDOM_EXTENDED_MANIFESTATION_IDS="SELECT epr_id as WORK_ID FROM ephsit_extended_data_stitch.stch_manifestation_ext_json order by random() limit %S";
+    public static String SELECT_RANDOM_JOURNAL_IDS_FOR_SEARCH="select work_id from semarchy_eph_mdm.gd_wwork " +
+            "where f_type in('ABS','JBB','JNL','NWL')and f_status in('WLA') order by random() limit %S";
+    public static String SELECT_RANDOM_EXTENDED_WORK_IDS_SIT="SELECT epr_id as WORK_ID FROM ephsit_extended_data_stitch.stch_work_ext_json order by random() limit %S";
+    public static String SELECT_RANDOM_EXTENDED_MANIFESTATION_IDS_SIT="SELECT epr_id as WORK_ID FROM ephsit_extended_data_stitch.stch_manifestation_ext_json order by random() limit %S";
     //CREATED by Nishant @ 22 Apr 2020
     public static String SELECT_RANDOM_WORK_IDS_WITH_PRODUCT = "select f_wwork as WORK_ID from semarchy_eph_mdm.gd_product where f_wwork is not null order by random() limit 1";
     public static String SELECT_RANDOM_PRODUCT_IDS_WITH_WORK = "select product_id as PRODUCT_ID from semarchy_eph_mdm.gd_product where f_wwork is not null order by random() limit 1";
@@ -274,7 +275,7 @@ public class APIDataSQL {
             " ,IDENTIFIER AS IDENTIFIER --  IDENTIFIER\n" +
             " ,F_TYPE AS F_TYPE -- WORK IDENTIFIER\n" +
             " ,F_WWORK AS WORK_ID -- WORK IDENTIFIER\n" +
-            "  FROM ephsit.semarchy_eph_mdm.gd_work_identifier\n" +
+            "  FROM semarchy_eph_mdm.gd_work_identifier\n" +
             "  WHERE f_wwork='PARAM1'";
 
     //updated by Nishant @ 15 Apr 2020
@@ -285,7 +286,7 @@ public class APIDataSQL {
             " ,IDENTIFIER AS IDENTIFIER --  IDENTIFIER\n" +
             " ,F_TYPE AS F_TYPE -- WORK IDENTIFIER\n" +
             " ,F_WWORK AS WORK_ID -- WORK IDENTIFIER\n" +
-            "  FROM ephsit.semarchy_eph_mdm.gd_work_identifier\n" +
+            "  FROM semarchy_eph_mdm.gd_work_identifier\n" +
             "  WHERE identifier='PARAM1'";
 
     //created by Nishant @ 22 Apr 2020

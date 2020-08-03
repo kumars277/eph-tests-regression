@@ -7,6 +7,7 @@ package com.eph.automation.testing.models.ui;
  * Created by GVLAYKOV
  */
 import com.eph.automation.testing.configuration.MarionetteDriver;
+import com.eph.automation.testing.configuration.WebDriverFactory;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.openqa.selenium.*;
@@ -25,7 +26,8 @@ public class TasksNew {
     @Inject
     public TasksNew() {
         // this.driver = new MarionetteDriver().getFirefoxDriver();
-        this.driver = new MarionetteDriver().getChromeDriver();
+          this.driver = new MarionetteDriver().getChromeDriver();
+     //   this.driver=new WebDriverFactory().get();
         this.wait = new WebDriverWait(driver,10);
        // this.pageLoadTimeout=60000;
     }

@@ -260,12 +260,3 @@ Feature: Research Packages UI Selenium Tests
         Then  Submit the Second Prospective First Lists
         And   Verify the Message displayed for the Prospective List
 
-
-
-
-
-
-
-
-
-

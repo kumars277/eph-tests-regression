@@ -33,11 +33,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import org.bouncycastle.crypto.engines.AESEngine;
 import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 
 import javax.net.ssl.SSLHandshakeException;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 
@@ -180,58 +183,58 @@ public class ProductFinderUISteps {
     @Given("^Get the available Work Types from the DB \"([^\"]*)\"$")
     public void get_the_available_Work_Types_from_the_DB(String chooseWorkType) {
         //updated by Nishant @ 21 May 2020
-            switch (chooseWorkType) {
-                case "Book":
-                    sql = String.format(ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_BOOK);
-                    break;
-                case "Journal":
-                    sql = String.format(ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_JOURNAL);
-                    break;
-                case "Other":
-                    sql = String.format(ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_OTHER);
-                    break;
-            }
+        switch (chooseWorkType) {
+            case "Book":
+                sql = String.format(ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_BOOK);
+                break;
+            case "Journal":
+                sql = String.format(ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_JOURNAL);
+                break;
+            case "Other":
+                sql = String.format(ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_OTHER);
+                break;
+        }
 
-            List<Map<?, ?>> availableWorkTypeCode = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            if (availableWorkTypeCode.size() > 0) {
-                workTypeCode = availableWorkTypeCode.stream().map(m -> (String) m.get("WORK_TYPE")).map(String::valueOf).collect(Collectors.toList());
-                Log.info("\nAvailable Work Types for " + chooseWorkType + " in DB: " + workTypeCode);
-            } else {
-                Log.info("Records for the work Type => " + chooseWorkType + " not available in DB.");
-            }
+        List<Map<?, ?>> availableWorkTypeCode = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        if (availableWorkTypeCode.size() > 0) {
+            workTypeCode = availableWorkTypeCode.stream().map(m -> (String) m.get("WORK_TYPE")).map(String::valueOf).collect(Collectors.toList());
+            Log.info("\nAvailable Work Types for " + chooseWorkType + " in DB: " + workTypeCode);
+        } else {
+            Log.info("Records for the work Type => " + chooseWorkType + " not available in DB.");
+        }
     }
 
     @Then("^Get a Work Id for each Work Types available in the DB$")
     public void get_Work_Id_for_each_Work_Types_available_in_DB() {
         //updated by Nishant @ 21 May 2020
         List<String> workforWorkType;// = new ArrayList<String>();
-                for (String workTypeCodes : workTypeCode) {
-                    sql = String.format(ProductFinderSQL.SELECT_WORKID_FOR_WORK_TYPE, workTypeCodes);
-                    List<Map<?, ?>> workIdsAvailableforWorkTypes = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                    workforWorkType = workIdsAvailableforWorkTypes.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
-                    workIdList.add(workforWorkType.get(0));
-                }
-                Log.info("\nWork Ids Used: " + workIdList);
+        for (String workTypeCodes : workTypeCode) {
+            sql = String.format(ProductFinderSQL.SELECT_WORKID_FOR_WORK_TYPE, workTypeCodes);
+            List<Map<?, ?>> workIdsAvailableforWorkTypes = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            workforWorkType = workIdsAvailableforWorkTypes.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
+            workIdList.add(workforWorkType.get(0));
+        }
+        Log.info("\nWork Ids Used: " + workIdList);
     }
 
     @Given("^Search for the Work by Work Ids Filter workType and verify the work Type is \"([^\"]*)\"$")
     public void verify_the_result(String chooseWorkType) throws InterruptedException {
         try {
-                for (String workId : workIdList) {
-                    productFinderTasks.searchFor(workId);
-                    filter_Search_Result_by_workType(chooseWorkType);
+            for (String workId : workIdList) {
+                productFinderTasks.searchFor(workId);
+                filter_Search_Result_by_workType(chooseWorkType);
 
-                    productFinderTasks.searchOnResultPages(workId);
-                    assertTrue(tasks.verifyElementTextisDisplayed(workId));
+                productFinderTasks.searchOnResultPages(workId);
+                assertTrue(tasks.verifyElementTextisDisplayed(workId));
 
-                    productFinderTasks.clickWork(workId);
-                    assertTrue(productFinderTasks.isUserOnWorkPage(workId));
+                productFinderTasks.clickWork(workId);
+                assertTrue(productFinderTasks.isUserOnWorkPage(workId));
 
-                    boolean isWorkTypeCorrect = verifyWorkTypeForWorkId(workId, chooseWorkType);
-                    assertTrue("Work Id " + workId + " Successfully filtered by Work Type: " + chooseWorkType, isWorkTypeCorrect);
+                boolean isWorkTypeCorrect = verifyWorkTypeForWorkId(workId, chooseWorkType);
+                assertTrue("Work Id " + workId + " Successfully filtered by Work Type: " + chooseWorkType, isWorkTypeCorrect);
 
-                    productFinderTasks.openHomePage();
-                }
+                productFinderTasks.openHomePage();
+            }
             workIdList.clear();
         } catch (Exception e) {
             e.printStackTrace();
@@ -600,8 +603,8 @@ public class ProductFinderUISteps {
         Log.info("getting Extended work and Manifestation data from DB...");
         workApiObject.getJsonToObject_extendedWork(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
 
-       // List<String> manifestationId= apiWorksSearchSteps.getManifestationIdsForWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
-     //   workManifestationApiObject.getJsonToObject_extendedManifestation(manifestationId.get(0));
+        // List<String> manifestationId= apiWorksSearchSteps.getManifestationIdsForWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+        //   workManifestationApiObject.getJsonToObject_extendedManifestation(manifestationId.get(0));
     }
 
 
@@ -612,11 +615,10 @@ public class ProductFinderUISteps {
         verifyEditorialInfo();
         verifyPeople();
         verifyLink();
-
     }
 
     public void verifyWorkOverviewInformationUI() throws ParseException {//created by Nishant @ 4 Jun 2020
-       Log.info("\nVerifying Work Overview - Core tab...");
+        Log.info("\nVerifying Work Overview - Core tab...");
         Log.info("...................................\n");
         productFinderTasks.getUI_WorkOverview_Information();
         validate_workOverview_info();
@@ -636,85 +638,88 @@ public class ProductFinderUISteps {
         //created by Nishant @ 07 Jul 2020 for JRBI data validation on JF UI
         Log.info("\nverifying Work Overview - Editorial tab");
         Log.info("...................................\n");
-        productFinderTasks.getUI_Editorial();
 
-        Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Editorial Submission Site"),
-                DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSystem());
-        printLog("UI:Editorial Submission Site with JRBI:primarySiteSystem");
+        if (DataQualityContext.workExtendedTestClass != null) {
+            productFinderTasks.getUI_Editorial();
 
-        Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Editorial Submission Site Acronym"),
-                DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteAcronym());
-        printLog("UI:Editorial Submission Site Acronym with JRBI: primarySiteAcronym");
+            Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Editorial Submission Site"),
+                    DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSystem());
+            printLog("UI:Editorial Submission Site with JRBI:primarySiteSystem");
 
-        Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Editorial Support Level"),
-                DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSupportLevel());
-        printLog("UI:Editorial Support Level with JRBI: primarySiteSupportLevel");
+            Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Editorial Submission Site Acronym"),
+                    DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteAcronym());
+            printLog("UI:Editorial Submission Site Acronym with JRBI: primarySiteAcronym");
 
+            Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Editorial Support Level"),
+                    DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSupportLevel());
+            printLog("UI:Editorial Support Level with JRBI: primarySiteSupportLevel");
 
-        List<String> manifestationId= apiWorksSearchSteps.getManifestationIdsForWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
-        for(int cnt=0;cnt<manifestationId.size();cnt++)
-        {
-            try{
+            Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Production Type"),
+                    DataQualityContext.workExtendedTestClass.getWorkExtended().getIssueProdTypeCode());
+            printLog("UI:Production Type with JRBI: issueProdTypeCode");
+
+            Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Volumes in Catalogue"),
+                    DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumesQty());
+            printLog("UI:Volumes in Catalogue with JRBI: catalogueVolumesQty");
+
+            Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("First Volume"),
+                    DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumeFrom());
+            printLog("UI:First Volume with JRBI: catalogueVolumeFrom");
+
+            Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Last Volume"),
+                    DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumeTo());
+            printLog("UI:Last Volume with JRBI: catalogueVolumeTo");
+
+            Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Total issues"),
+                    DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueIssuesQty());
+            printLog("UI:Total issues with JRBI: catalogueIssuesQty");
+
+            Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("No Issues (Budget)"),
+                    DataQualityContext.workExtendedTestClass.getWorkExtended().getRfIssuesQty());
+            printLog("UI:No Issues (Budget) with JRBI: rfIssuesQty");
+
+            Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("First Volume/Issue (Budget)"),
+                    DataQualityContext.workExtendedTestClass.getWorkExtended().getRfFvi());
+            printLog("UI:First Volume/Issue (Budget) with JRBI: rfFvi");
+
+            Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Last Volume/Issue (Budget)"),
+                    DataQualityContext.workExtendedTestClass.getWorkExtended().getRfLvi());
+            printLog("UI:Last Volume/Issue (Budget) with JRBI: rfLvi");
+
+            Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Total pages (Budget)"),
+                    DataQualityContext.workExtendedTestClass.getWorkExtended().getRfTotalPagesQty());
+            printLog("UI:Total pages (Budget) with JRBI: rfTotalPagesQty");
+
+        }
+        List<String> manifestationId = apiWorksSearchSteps.getManifestationIdsForWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+        DataQualityContext.manifestationExtendedTestClass = null;
+        for (int cnt = 0; cnt < manifestationId.size(); cnt++) {
+            try {
                 workManifestationApiObject.getJsonToObject_extendedManifestation(manifestationId.get(cnt));
-                break;}
-            catch(Exception e){Log.info(e.getMessage());}
+                break;
+            } catch (Exception e) {
+                Log.info(e.getMessage());
+            }
         }
 
-        if(DataQualityContext.manifestationExtendedTestClass!=null)
-        {
-        //coming from manifestation Extended
-        Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Production Site"),
-                DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getJournalProdSiteCode());
-        printLog("UI:Production Site with JRBI: journalProdSiteCode");
+        if (DataQualityContext.manifestationExtendedTestClass != null) {
+            //coming from manifestation Extended
+            Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Production Site"),
+                    DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getJournalProdSiteCode());
+            printLog("UI:Production Site with JRBI: journalProdSiteCode");
 
-        //coming from manifestation Extended
-        Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Despatch Location"),
-                DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getWarReference());
-        printLog("UI:Despatch Location with JRBI: warReference");
+            //coming from manifestation Extended
+            Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Despatch Location"),
+                    DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getWarReference());
+            printLog("UI:Despatch Location with JRBI: warReference");
 
-        //coming from manifestation Extended
-        Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Trim Size"),
-                DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getJournalIssueTrimSize());
-        printLog("UI:Trim Size with JRBI: journalIssueTrimSize");
+            //coming from manifestation Extended
+            Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Trim Size"),
+                    DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getJournalIssueTrimSize());
+            printLog("UI:Trim Size with JRBI: journalIssueTrimSize");
 
         }
 
-
-        Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Production Type"),
-                DataQualityContext.workExtendedTestClass.getWorkExtended().getIssueProdTypeCode());
-        printLog("UI:Production Type with JRBI: issueProdTypeCode");
-
-        Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Volumes in Catalogue"),
-                DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumesQty());
-        printLog("UI:Volumes in Catalogue with JRBI: catalogueVolumesQty");
-
-        Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("First Volume"),
-                DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumeFrom());
-        printLog("UI:First Volume with JRBI: catalogueVolumeFrom");
-
-        Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Last Volume"),
-                DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumeTo());
-        printLog("UI:Last Volume with JRBI: catalogueVolumeTo");
-
-        Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Total issues"),
-                DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueIssuesQty());
-        printLog("UI:Total issues with JRBI: catalogueIssuesQty");
-
-        Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("No Issues (Budget)"),
-                DataQualityContext.workExtendedTestClass.getWorkExtended().getRfIssuesQty());
-        printLog("UI:No Issues (Budget) with JRBI: rfIssuesQty");
-
-        Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("First Volume/Issue (Budget)"),
-                DataQualityContext.workExtendedTestClass.getWorkExtended().getRfFvi());
-        printLog("UI:First Volume/Issue (Budget) with JRBI: rfFvi");
-
-        Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Last Volume/Issue (Budget)"),
-                DataQualityContext.workExtendedTestClass.getWorkExtended().getRfLvi());
-        printLog("UI:Last Volume/Issue (Budget) with JRBI: rfLvi");
-
-        Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Total pages (Budget)"),
-                DataQualityContext.workExtendedTestClass.getWorkExtended().getRfTotalPagesQty());
-        printLog("UI:Total pages (Budget) with JRBI: rfTotalPagesQty");
 
         //Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Launch Year"), DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumesQty());
         //printLog("Launch Year");
@@ -743,7 +748,7 @@ public class ProductFinderUISteps {
         System.out.println("number of links found on page :" +links.size());
         boolean brokenLink;
         Iterator<Object> it = links.iterator();
-       int l=0;
+        int l=0;
         while(it.hasNext()){
             l++;
             brokenLink=false;
@@ -753,9 +758,15 @@ public class ProductFinderUISteps {
             if(url == null || url.isEmpty()){System.out.println(l+": URL is not configured for anchor tag or it is empty");continue;}
             System.out.println(l+": "+url);
 
+
+
             try {
                 huc = (HttpURLConnection)(new URL(url).openConnection());
-                huc.setRequestMethod("HEAD");
+                //    String cookie = huc.getHeaderField( "Set-Cookie").split(";")[0];
+                //    huc.setRequestProperty("Accept","*/*");
+                huc.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:71.0) Gecko/20100101 Firefox/71.0");
+                //    huc.setRequestProperty("Cookie", cookie );
+                huc.setRequestMethod("GET");
                 huc.connect();
                 respCode = huc.getResponseCode();
                 String statusDescription="";
@@ -765,9 +776,8 @@ public class ProductFinderUISteps {
                 {
                     case 200:	statusDescription="valid link"; break;
                     case 301:	System.out.println("moved permanently to "+huc.getHeaderField("Location"));
-                        statusDescription="moved permanently";
-                        comment=huc.getHeaderField("Location");	break;
-                    case 403:	System.out.println("access to the requested resource is forbidden");statusDescription="Page not Found"; break;
+                        statusDescription="moved permanently"; comment=huc.getHeaderField("Location");	break;
+                    case 403:
                     case 404:	System.out.println("page not found");statusDescription="Page not Found"; break;
                     default:	System.out.println("less frequent error code");statusDescription="less frequent error code";break;
                 }
@@ -795,9 +805,9 @@ public class ProductFinderUISteps {
 
         Assert.assertEquals(
                 "Should be only one person per role"+"\n"+
-                "Total Roles: "+productFinderTasks.list_people.size()+"\n"+
-                "Unique Roles: "+uniqueRole.size()+"\n"+
-                "Duplicate Roles: "+duplicate.size()+"\n",
+                        "Total Roles: "+productFinderTasks.list_people.size()+"\n"+
+                        "Unique Roles: "+uniqueRole.size()+"\n"+
+                        "Duplicate Roles: "+duplicate.size()+"\n",
                 productFinderTasks.list_people.size(),uniqueRole.size());
 
     }
@@ -806,8 +816,8 @@ public class ProductFinderUISteps {
     {
         //created by Nishant @ 14 Jul 2020
         compareCorePersonWithDB();
-
-        if(DataQualityContext.workExtendedTestClass.getWorkExtended().getWorkExtendedPersons()!=null)
+        if(DataQualityContext.workExtendedTestClass!=null
+        && DataQualityContext.workExtendedTestClass.getWorkExtended().getWorkExtendedPersons()!=null)
         {
             compareExtrendedPersonWithDB();
         }
@@ -846,7 +856,8 @@ public class ProductFinderUISteps {
                                     dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME());
                     printLog("PersonName");
 
-                    if (!(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_EMAIL_ID() == null &&productFinderTasks.list_people.get(cnt).getProperty("Email") == null)) {
+                    if (!(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_EMAIL_ID() == null &&
+                            productFinderTasks.list_people.get(cnt).getProperty("Email").equalsIgnoreCase(""))) {
                         Assert.assertEquals(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_EMAIL_ID(),
                                 productFinderTasks.list_people.get(cnt).getProperty("Email"));
                         printLog("email");
@@ -860,7 +871,7 @@ public class ProductFinderUISteps {
     }
 
     public void compareExtrendedPersonWithDB() {//created by Nishant @ 14 Jul 2020
-        Log.info("verifying work extended person in People tab...");
+
         WorkExtendedPersons[] workExtendedPersons = DataQualityContext.workExtendedTestClass.getWorkExtended().getWorkExtendedPersons().clone();
 
         for (int i = 0; i < workExtendedPersons.length; i++) {
@@ -874,10 +885,13 @@ public class ProductFinderUISteps {
             for (int uiperson = 0; uiperson < productFinderTasks.list_people.size(); uiperson++) {
                 if (ignore.contains(uiperson)) continue;
                 if (productFinderTasks.list_people.get(uiperson).getProperty("Role").equalsIgnoreCase(extRoleName)) {
-
+                    Log.info("verifying work extended person..."+extRoleName);
+                    printLog("person role");
                     extPersonFound = true;
                     Assert.assertEquals(productFinderTasks.list_people.get(uiperson).getProperty("PersonName").trim(), extPersonFullName);
+                    printLog("PersonName");
                     Assert.assertEquals(productFinderTasks.list_people.get(uiperson).getProperty("Email"), extEmailId);
+                    printLog("Email");
                     ignore.add(uiperson);
                     break;
                 }
@@ -886,22 +900,22 @@ public class ProductFinderUISteps {
         }
     }
 
-public String lov_personRole(String roleCode)
-{//created by Nishant @ 15 Jul 2020
-    String value_Role="";
-switch (roleCode)
-{
-    case "PO"	:value_Role="Product Owner";break;
-    case "AU"	:value_Role="Author";break;
-    case "ED"	:value_Role="Editor";break;
-    case "PD"	:value_Role="Publishing Director";break;
-    case "PU"	:value_Role="Publisher";break;
-    case "AE"	:value_Role="Acquisition Editor";break;
-    case "BC"	:value_Role="Business Controller";break;
-    case "SVP"	:value_Role="Senior Vice President";break;
-}
-return value_Role;
-}
+    public String lov_personRole(String roleCode)
+    {//created by Nishant @ 15 Jul 2020
+        String value_Role="";
+        switch (roleCode)
+        {
+            case "PO"	:value_Role="Product Owner";break;
+            case "AU"	:value_Role="Author";break;
+            case "ED"	:value_Role="Editor";break;
+            case "PD"	:value_Role="Publishing Director";break;
+            case "PU"	:value_Role="Publisher";break;
+            case "AE"	:value_Role="Acquisition Editor";break;
+            case "BC"	:value_Role="Business Controller";break;
+            case "SVP"	:value_Role="Senior Vice President";break;
+        }
+        return value_Role;
+    }
 
     public void validateCompanyCodes() {//created by Nishant @ 17 Jun 2020
 
@@ -1026,14 +1040,16 @@ return value_Role;
     public void validate_workOverview_info() throws ParseException {
         //created by Nishant @08 Jun 2020
         //updated by Nishant @09 Jul 2020
-      coreDataValidation();
-      dataModelValidation();
+        coreDataValidation();
+        dataModelValidation();
 
         //Extended data, discovered during EPH-1952 testing on 22 Jun 2020
         //Business Unit:	STM Health & Medical Sciences         //EPR-W-108RXC
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Business Unit"),
-                DataQualityContext.workExtendedTestClass.getWorkExtended().getPtsBusinessUnitDesc());
-        printLog("UI: Business Unit with JRBI: ptsBusinessUnitDesc");
+        if(DataQualityContext.workExtendedTestClass!=null) {
+            Assert.assertEquals(productFinderTasks.prop_info.getProperty("Business Unit"),
+                    DataQualityContext.workExtendedTestClass.getWorkExtended().getPtsBusinessUnitDesc());
+            printLog("UI: Business Unit with JRBI: ptsBusinessUnitDesc");
+        }
     }
 
     public void coreDataValidation(){
@@ -1051,8 +1067,8 @@ return value_Role;
         Log.info("verified...Work Status");
 
 
-       Assert.assertEquals(productFinderTasks.prop_info.getProperty("Imprint").toUpperCase(), getValue_ImprintFromEPHGD().toUpperCase());
-       Log.info("verified...Imprint");
+        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Imprint").toUpperCase(), getValue_ImprintFromEPHGD().toUpperCase());
+        Log.info("verified...Imprint");
 
         Assert.assertEquals(productFinderTasks.prop_info.getProperty("Language"), getValue_language());
         Log.info("verified...Language");
@@ -1071,12 +1087,12 @@ return value_Role;
     public void dataModelValidation()throws ParseException{
         //data model changes
         if(productFinderTasks.prop_info.containsKey("Planned Launch Date")){
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Planned Launch Date"), getFormat_PlannedLaunchDate());
-        Log.info("verified...Planned Launch Date");}
+            Assert.assertEquals(productFinderTasks.prop_info.getProperty("Planned Launch Date"), getFormat_PlannedLaunchDate());
+            Log.info("verified...Planned Launch Date");}
 
         if(productFinderTasks.prop_info.containsKey("Legal Ownership")){
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Legal Ownership"), getValue_LegalOwnership());
-        Log.info("verified...Legal Ownership");}
+            Assert.assertEquals(productFinderTasks.prop_info.getProperty("Legal Ownership"), getValue_LegalOwnership());
+            Log.info("verified...Legal Ownership");}
 
         if(productFinderTasks.prop_info.containsKey("Owner")) {
             String[] OwnershipDetail = getValue_OwnershipDescription();
@@ -1088,27 +1104,30 @@ return value_Role;
                 Log.info("verified...Ownership Description");
             }
         }
-    /* commented untill defect EPH-1936 get fixed
+        // commented untill defect EPH-1936 get fixed
 
+        ArrayList<String> businessModel=getValue_BusinessModelFromEPHGD();
         if(productFinderTasks.prop_info.containsKey("Business Model")){
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Business Model"), getValue_BusinessModelFromEPHGD());
-        Log.info("verified...Business Model");}
+          boolean bModelFound=  businessModel.contains(productFinderTasks.prop_info.getProperty("Business Model"));
+            Assert.assertTrue(bModelFound);
+            Log.info("verified...Business Model");}
 
+        ArrayList<String> accessModel=getValue_AccessModelFromEPHGD();
         if(productFinderTasks.prop_info.containsKey("Access Model")){
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Access Model"), getValue_AccessModelFromEPHGD());
-        Log.info("verified...Access Model");}
-*/
+            Assert.assertTrue(accessModel.contains(productFinderTasks.prop_info.getProperty("Access Model")));
+            Log.info("verified...Access Model");}
+
         if(productFinderTasks.prop_info.containsKey("Copyright Year")){
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Copyright Year"), DataQualityContext.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR());
-        Log.info("verified...Copyright Year");}
+            Assert.assertEquals(productFinderTasks.prop_info.getProperty("Copyright Year"), DataQualityContext.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR());
+            Log.info("verified...Copyright Year");}
 
         if(productFinderTasks.prop_info.containsKey("Edition Number")){
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Edition Number"), DataQualityContext.workDataObjectsFromEPHGD.get(0).getEDITION_NUMBER());
-        Log.info("verified...Edition Number");}
+            Assert.assertEquals(productFinderTasks.prop_info.getProperty("Edition Number"), DataQualityContext.workDataObjectsFromEPHGD.get(0).getEDITION_NUMBER());
+            Log.info("verified...Edition Number");}
 
         if(productFinderTasks.prop_info.containsKey("Volume")){
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Volume"), getValue_volume());
-        Log.info("verified...Volume");}
+            Assert.assertEquals(productFinderTasks.prop_info.getProperty("Volume"), getValue_volume());
+            Log.info("verified...Volume");}
 
     }
 
@@ -1180,7 +1199,7 @@ return value_Role;
                 DBWorkStatus = "Withdrawn";
                 break;
             case "WDI":
-               // DBWorkStatus = "Discontinued";
+                // DBWorkStatus = "Discontinued";
                 DBWorkStatus = "Stopped";
                 break;
             case "WDV":
@@ -1265,40 +1284,45 @@ return value_Role;
         return OwnerShip;
     }
 
-    public String getValue_BusinessModelFromEPHGD() {//created by Nishant @ 9 Jun 2020
+    public ArrayList<String> getValue_BusinessModelFromEPHGD() {//created by Nishant @ 9 Jun 2020
         sql = String.format(ProductFinderSQL.SELECT_BUSINESS_MODEL, DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
-        List<Map<String, Object>> BusinessModel = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        String businessModel = "";
-        switch (BusinessModel.get(0).get("business_model").toString()) {
-            case "SBD":
-                businessModel = "Subsidized";
-                break;
-            case "SBS":
-                businessModel = "Subscription";
-                break;
-            case "APC":
-                businessModel = "Article Publishing Charge";
-                break;
+        List<Map<String, Object>> BusinessModelDB = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        ArrayList<String> businessModelValue = new ArrayList<>();
+
+        for (int i=0;i<BusinessModelDB.size();i++) {
+            switch (BusinessModelDB.get(i).get("business_model").toString()) {
+                case "SBD":
+                    businessModelValue.add("Subsidized");
+                    break;
+                case "SBS":
+                    businessModelValue.add("Subscription");
+                    break;
+                case "APC":
+                    businessModelValue.add("Article Publishing Charge");
+                    break;
+            }
         }
-        return businessModel;
+        return businessModelValue;
     }
 
-    public String getValue_AccessModelFromEPHGD() {//created by Nishant @ 9 Jun 2020
+    public ArrayList<String> getValue_AccessModelFromEPHGD() {//created by Nishant @ 9 Jun 2020
         sql = String.format(ProductFinderSQL.SELECT_ACCESS_MODEL, DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
         List<Map<String, Object>> AccessModel = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        String accessModel = "";
-        switch (AccessModel.get(0).get("access_model").toString()) {
-            case "OP":
-                accessModel = "Open";
-                break;
-            case "FR":
-                accessModel = "Free";
-                break;
-            case "PD":
-                accessModel = "Paid";
-                break;
-        }
-        return accessModel;
+        ArrayList<String> accessModelValue = new ArrayList<>();
+       for(int i=0;i<AccessModel.size();i++) {
+           switch (AccessModel.get(i).get("access_model").toString()) {
+               case "OP":
+                   accessModelValue.add("Open");
+                   break;
+               case "FR":
+                   accessModelValue.add("Free");
+                   break;
+               case "PD":
+                   accessModelValue.add("Paid");
+                   break;
+           }
+       }
+        return accessModelValue;
     }
 
     public String getValue_ImprintFromEPHGD() {//created by Nishant @ 11 Jun 2020
@@ -1321,566 +1345,566 @@ return value_Role;
     public String getValue_language() {//created by Nishant @ 11 Jun 2020
         String value_language = "";
         if(DataQualityContext.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE()!=null){
-        switch (DataQualityContext.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE()) {
-            case "EE":
-                value_language = "Ewe";
-                break;
-            case "EL":
-                value_language = "Greek Modern";
-                break;
-            case "EN":
-                value_language = "English";
-                break;
-            case "Code":
-                value_language = "Description";
-                break;
-            case "AA":
-                value_language = "Afar";
-                break;
-            case "AB":
-                value_language = "Abkhazian";
-                break;
-            case "AE":
-                value_language = "Avestan";
-                break;
-            case "AF":
-                value_language = "Afrikaans";
-                break;
-            case "AK":
-                value_language = "Akan";
-                break;
-            case "AM":
-                value_language = "Amharic";
-                break;
-            case "AN":
-                value_language = "Aragonese";
-                break;
-            case "AR":
-                value_language = "Arabic";
-                break;
-            case "AS":
-                value_language = "Assamese";
-                break;
-            case "AV":
-                value_language = "Avaric";
-                break;
-            case "AY":
-                value_language = "Aymara";
-                break;
-            case "AZ":
-                value_language = "Azerbaijani";
-                break;
-            case "BA":
-                value_language = "Bashkir";
-                break;
-            case "BE":
-                value_language = "Belarusian";
-                break;
-            case "BG":
-                value_language = "Bulgarian";
-                break;
-            case "BH":
-                value_language = "Bihari languages";
-                break;
-            case "BI":
-                value_language = "Bislama";
-                break;
-            case "BM":
-                value_language = "Bambara";
-                break;
-            case "BN":
-                value_language = "Bengali";
-                break;
-            case "BO":
-                value_language = "Tibetan";
-                break;
-            case "BR":
-                value_language = "Breton";
-                break;
-            case "BS":
-                value_language = "Bosnian";
-                break;
-            case "CA":
-                value_language = "Catalan";
-                break;
-            case "CE":
-                value_language = "Chechen";
-                break;
-            case "CH":
-                value_language = "Chamorro";
-                break;
-            case "CO":
-                value_language = "Corsican";
-                break;
-            case "CR":
-                value_language = "Cree";
-                break;
-            case "CS":
-                value_language = "Czech";
-                break;
-            case "CU":
-                value_language = "Church Slavic";
-                break;
-            case "CV":
-                value_language = "Chuvash";
-                break;
-            case "CY":
-                value_language = "Welsh";
-                break;
-            case "DA":
-                value_language = "Danish";
-                break;
-            case "DE":
-                value_language = "German";
-                break;
-            case "DV":
-                value_language = "Divehi";
-                break;
-            case "DZ":
-                value_language = "Dzongkha";
-                break;
-            case "ES":
-                value_language = "Spanish";
-                break;
-            case "ET":
-                value_language = "Estonian";
-                break;
-            case "EO":
-                value_language = "Esperanto";
-                break;
-            case "EU":
-                value_language = "Basque";
-                break;
-            case "FA":
-                value_language = "Persian";
-                break;
-            case "FF":
-                value_language = "Fulah";
-                break;
-            case "FI":
-                value_language = "Finnish";
-                break;
-            case "FJ":
-                value_language = "Fijian";
-                break;
-            case "FO":
-                value_language = "Faroese";
-                break;
-            case "FR":
-                value_language = "French";
-                break;
-            case "FY":
-                value_language = "Western Frisian";
-                break;
-            case "GA":
-                value_language = "Irish";
-                break;
-            case "GD":
-                value_language = "Gaelic";
-                break;
-            case "GL":
-                value_language = "Galician";
-                break;
-            case "GN":
-                value_language = "Guarani";
-                break;
-            case "GU":
-                value_language = "Gujarati";
-                break;
-            case "GV":
-                value_language = "Manx";
-                break;
-            case "HA":
-                value_language = "Hausa";
-                break;
-            case "HE":
-                value_language = "Hebrew";
-                break;
-            case "HI":
-                value_language = "Hindi";
-                break;
-            case "HO":
-                value_language = "Hiri Motu";
-                break;
-            case "HR":
-                value_language = "Croatian";
-                break;
-            case "HT":
-                value_language = "Haitian";
-                break;
-            case "HU":
-                value_language = "Hungarian";
-                break;
-            case "HY":
-                value_language = "Armenian";
-                break;
-            case "HZ":
-                value_language = "Herero";
-                break;
-            case "IA":
-                value_language = "Interlingua";
-                break;
-            case "ID":
-                value_language = "Indonesian";
-                break;
-            case "IE":
-                value_language = "Interlingue";
-                break;
-            case "IG":
-                value_language = "Igbo";
-                break;
-            case "II":
-                value_language = "Sichuan Yi";
-                break;
-            case "IK":
-                value_language = "Inupiaq";
-                break;
-            case "IO":
-                value_language = "Ido";
-                break;
-            case "IS":
-                value_language = "Icelandic";
-                break;
-            case "IT":
-                value_language = "Italian";
-                break;
-            case "IU":
-                value_language = "Inuktitut";
-                break;
-            case "JA":
-                value_language = "Japanese";
-                break;
-            case "JV":
-                value_language = "Javanese";
-                break;
-            case "KA":
-                value_language = "Georgian";
-                break;
-            case "KG":
-                value_language = "Kongo";
-                break;
-            case "KI":
-                value_language = "Kikuyu";
-                break;
-            case "KJ":
-                value_language = "Kuanyama";
-                break;
-            case "KK":
-                value_language = "Kazakh";
-                break;
-            case "KL":
-                value_language = "Kalaallisut";
-                break;
-            case "KM":
-                value_language = "Central Khmer";
-                break;
-            case "KN":
-                value_language = "Kannada";
-                break;
-            case "KO":
-                value_language = "Korean";
-                break;
-            case "KR":
-                value_language = "Kanuri";
-                break;
-            case "KS":
-                value_language = "Kashmiri";
-                break;
-            case "KU":
-                value_language = "Kurdish";
-                break;
-            case "KV":
-                value_language = "Komi";
-                break;
-            case "KW":
-                value_language = "Cornish";
-                break;
-            case "KY":
-                value_language = "Kirghiz";
-                break;
-            case "LA":
-                value_language = "Latin";
-                break;
-            case "LB":
-                value_language = "Luxembourgish";
-                break;
-            case "LG":
-                value_language = "Ganda";
-                break;
-            case "LI":
-                value_language = "Limburgan";
-                break;
-            case "LN":
-                value_language = "Lingala";
-                break;
-            case "LO":
-                value_language = "Lao";
-                break;
-            case "LT":
-                value_language = "Lithuanian";
-                break;
-            case "LU":
-                value_language = "Luba-Katanga";
-                break;
-            case "LV":
-                value_language = "Latvian";
-                break;
-            case "MG":
-                value_language = "Malagasy";
-                break;
-            case "MH":
-                value_language = "Marshallese";
-                break;
-            case "MI":
-                value_language = "Maori";
-                break;
-            case "MK":
-                value_language = "Macedonian";
-                break;
-            case "ML":
-                value_language = "Malayalam";
-                break;
-            case "MN":
-                value_language = "Mongolian";
-                break;
-            case "MR":
-                value_language = "Marathi";
-                break;
-            case "MS":
-                value_language = "Malay";
-                break;
-            case "MT":
-                value_language = "Maltese";
-                break;
-            case "MY":
-                value_language = "Burmese";
-                break;
-            case "NA":
-                value_language = "Nauru";
-                break;
-            case "NB":
-                value_language = "Norwegian Bokmål";
-                break;
-            case "NG":
-                value_language = "Ndonga";
-                break;
-            case "NL":
-                value_language = "Dutch";
-                break;
-            case "ND":
-                value_language = "North Ndebele";
-                break;
-            case "NE":
-                value_language = "Nepali";
-                break;
-            case "NN":
-                value_language = "Norwegian Nynorsk";
-                break;
-            case "NO":
-                value_language = "Norwegian";
-                break;
-            case "NR":
-                value_language = "Ndebele South";
-                break;
-            case "NV":
-                value_language = "Navajo; Navaho";
-                break;
-            case "NY":
-                value_language = "Nyanja";
-                break;
-            case "OC":
-                value_language = "Occitan";
-                break;
-            case "OJ":
-                value_language = "Ojibwa";
-                break;
-            case "OM":
-                value_language = "Oromo";
-                break;
-            case "OR":
-                value_language = "Oriya";
-                break;
-            case "OS":
-                value_language = "Ossetian";
-                break;
-            case "PA":
-                value_language = "Punjabi";
-                break;
-            case "PI":
-                value_language = "Pali";
-                break;
-            case "PL":
-                value_language = "Polish";
-                break;
-            case "PS":
-                value_language = "Pushto";
-                break;
-            case "PT":
-                value_language = "Portuguese";
-                break;
-            case "QU":
-                value_language = "Quechua";
-                break;
-            case "RM":
-                value_language = "Romansh";
-                break;
-            case "RN":
-                value_language = "Rundi";
-                break;
-            case "RO":
-                value_language = "Romanian";
-                break;
-            case "RU":
-                value_language = "Russian";
-                break;
-            case "RW":
-                value_language = "Kinyarwanda";
-                break;
-            case "SA":
-                value_language = "Sanskrit";
-                break;
-            case "SC":
-                value_language = "Sardinian";
-                break;
-            case "SD":
-                value_language = "Sindhi";
-                break;
-            case "SE":
-                value_language = "Northern Sami";
-                break;
-            case "SG":
-                value_language = "Sango";
-                break;
-            case "SI":
-                value_language = "Sinhalese";
-                break;
-            case "SK":
-                value_language = "Slovak";
-                break;
-            case "SL":
-                value_language = "Slovenian";
-                break;
-            case "SM":
-                value_language = "Samoan";
-                break;
-            case "SN":
-                value_language = "Shona";
-                break;
-            case "SO":
-                value_language = "Somali";
-                break;
-            case "SQ":
-                value_language = "Albanian";
-                break;
-            case "SR":
-                value_language = "Serbian";
-                break;
-            case "SS":
-                value_language = "Swati";
-                break;
-            case "ST":
-                value_language = "Sotho Southern";
-                break;
-            case "SU":
-                value_language = "Sundanese";
-                break;
-            case "SV":
-                value_language = "Swedish";
-                break;
-            case "SW":
-                value_language = "Swahili";
-                break;
-            case "TA":
-                value_language = "Tamil";
-                break;
-            case "TE":
-                value_language = "Telugu";
-                break;
-            case "TG":
-                value_language = "Tajik";
-                break;
-            case "TH":
-                value_language = "Thai";
-                break;
-            case "TI":
-                value_language = "Tigrinya";
-                break;
-            case "TK":
-                value_language = "Turkmen";
-                break;
-            case "TL":
-                value_language = "Tagalog";
-                break;
-            case "TN":
-                value_language = "Tswana";
-                break;
-            case "TO":
-                value_language = "Tonga";
-                break;
-            case "TR":
-                value_language = "Turkish";
-                break;
-            case "TS":
-                value_language = "Tsonga";
-                break;
-            case "TT":
-                value_language = "Tatar";
-                break;
-            case "TW":
-                value_language = "Twi";
-                break;
-            case "TY":
-                value_language = "Tahitian";
-                break;
-            case "UG":
-                value_language = "Uighur";
-                break;
-            case "UK":
-                value_language = "Ukrainian";
-                break;
-            case "UR":
-                value_language = "Urdu";
-                break;
-            case "UZ":
-                value_language = "Uzbek";
-                break;
-            case "VE":
-                value_language = "Venda";
-                break;
-            case "VI":
-                value_language = "Vietnamese";
-                break;
-            case "VO":
-                value_language = "Volapük";
-                break;
-            case "WA":
-                value_language = "Walloon";
-                break;
-            case "WO":
-                value_language = "Wolof";
-                break;
-            case "XH":
-                value_language = "Xhosa";
-                break;
-            case "YI":
-                value_language = "Yiddish";
-                break;
-            case "YO":
-                value_language = "Yoruba";
-                break;
-            case "ZA":
-                value_language = "Zhuang";
-                break;
-            case "ZH":
-                value_language = "Chinese";
-                break;
-            case "ZU":
-                value_language = "Zulu";
-                break;
-            case "ZZ":
-                value_language = "Multiple Languages (unspecified)";
-                break;
-        }
+            switch (DataQualityContext.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE()) {
+                case "EE":
+                    value_language = "Ewe";
+                    break;
+                case "EL":
+                    value_language = "Greek Modern";
+                    break;
+                case "EN":
+                    value_language = "English";
+                    break;
+                case "Code":
+                    value_language = "Description";
+                    break;
+                case "AA":
+                    value_language = "Afar";
+                    break;
+                case "AB":
+                    value_language = "Abkhazian";
+                    break;
+                case "AE":
+                    value_language = "Avestan";
+                    break;
+                case "AF":
+                    value_language = "Afrikaans";
+                    break;
+                case "AK":
+                    value_language = "Akan";
+                    break;
+                case "AM":
+                    value_language = "Amharic";
+                    break;
+                case "AN":
+                    value_language = "Aragonese";
+                    break;
+                case "AR":
+                    value_language = "Arabic";
+                    break;
+                case "AS":
+                    value_language = "Assamese";
+                    break;
+                case "AV":
+                    value_language = "Avaric";
+                    break;
+                case "AY":
+                    value_language = "Aymara";
+                    break;
+                case "AZ":
+                    value_language = "Azerbaijani";
+                    break;
+                case "BA":
+                    value_language = "Bashkir";
+                    break;
+                case "BE":
+                    value_language = "Belarusian";
+                    break;
+                case "BG":
+                    value_language = "Bulgarian";
+                    break;
+                case "BH":
+                    value_language = "Bihari languages";
+                    break;
+                case "BI":
+                    value_language = "Bislama";
+                    break;
+                case "BM":
+                    value_language = "Bambara";
+                    break;
+                case "BN":
+                    value_language = "Bengali";
+                    break;
+                case "BO":
+                    value_language = "Tibetan";
+                    break;
+                case "BR":
+                    value_language = "Breton";
+                    break;
+                case "BS":
+                    value_language = "Bosnian";
+                    break;
+                case "CA":
+                    value_language = "Catalan";
+                    break;
+                case "CE":
+                    value_language = "Chechen";
+                    break;
+                case "CH":
+                    value_language = "Chamorro";
+                    break;
+                case "CO":
+                    value_language = "Corsican";
+                    break;
+                case "CR":
+                    value_language = "Cree";
+                    break;
+                case "CS":
+                    value_language = "Czech";
+                    break;
+                case "CU":
+                    value_language = "Church Slavic";
+                    break;
+                case "CV":
+                    value_language = "Chuvash";
+                    break;
+                case "CY":
+                    value_language = "Welsh";
+                    break;
+                case "DA":
+                    value_language = "Danish";
+                    break;
+                case "DE":
+                    value_language = "German";
+                    break;
+                case "DV":
+                    value_language = "Divehi";
+                    break;
+                case "DZ":
+                    value_language = "Dzongkha";
+                    break;
+                case "ES":
+                    value_language = "Spanish";
+                    break;
+                case "ET":
+                    value_language = "Estonian";
+                    break;
+                case "EO":
+                    value_language = "Esperanto";
+                    break;
+                case "EU":
+                    value_language = "Basque";
+                    break;
+                case "FA":
+                    value_language = "Persian";
+                    break;
+                case "FF":
+                    value_language = "Fulah";
+                    break;
+                case "FI":
+                    value_language = "Finnish";
+                    break;
+                case "FJ":
+                    value_language = "Fijian";
+                    break;
+                case "FO":
+                    value_language = "Faroese";
+                    break;
+                case "FR":
+                    value_language = "French";
+                    break;
+                case "FY":
+                    value_language = "Western Frisian";
+                    break;
+                case "GA":
+                    value_language = "Irish";
+                    break;
+                case "GD":
+                    value_language = "Gaelic";
+                    break;
+                case "GL":
+                    value_language = "Galician";
+                    break;
+                case "GN":
+                    value_language = "Guarani";
+                    break;
+                case "GU":
+                    value_language = "Gujarati";
+                    break;
+                case "GV":
+                    value_language = "Manx";
+                    break;
+                case "HA":
+                    value_language = "Hausa";
+                    break;
+                case "HE":
+                    value_language = "Hebrew";
+                    break;
+                case "HI":
+                    value_language = "Hindi";
+                    break;
+                case "HO":
+                    value_language = "Hiri Motu";
+                    break;
+                case "HR":
+                    value_language = "Croatian";
+                    break;
+                case "HT":
+                    value_language = "Haitian";
+                    break;
+                case "HU":
+                    value_language = "Hungarian";
+                    break;
+                case "HY":
+                    value_language = "Armenian";
+                    break;
+                case "HZ":
+                    value_language = "Herero";
+                    break;
+                case "IA":
+                    value_language = "Interlingua";
+                    break;
+                case "ID":
+                    value_language = "Indonesian";
+                    break;
+                case "IE":
+                    value_language = "Interlingue";
+                    break;
+                case "IG":
+                    value_language = "Igbo";
+                    break;
+                case "II":
+                    value_language = "Sichuan Yi";
+                    break;
+                case "IK":
+                    value_language = "Inupiaq";
+                    break;
+                case "IO":
+                    value_language = "Ido";
+                    break;
+                case "IS":
+                    value_language = "Icelandic";
+                    break;
+                case "IT":
+                    value_language = "Italian";
+                    break;
+                case "IU":
+                    value_language = "Inuktitut";
+                    break;
+                case "JA":
+                    value_language = "Japanese";
+                    break;
+                case "JV":
+                    value_language = "Javanese";
+                    break;
+                case "KA":
+                    value_language = "Georgian";
+                    break;
+                case "KG":
+                    value_language = "Kongo";
+                    break;
+                case "KI":
+                    value_language = "Kikuyu";
+                    break;
+                case "KJ":
+                    value_language = "Kuanyama";
+                    break;
+                case "KK":
+                    value_language = "Kazakh";
+                    break;
+                case "KL":
+                    value_language = "Kalaallisut";
+                    break;
+                case "KM":
+                    value_language = "Central Khmer";
+                    break;
+                case "KN":
+                    value_language = "Kannada";
+                    break;
+                case "KO":
+                    value_language = "Korean";
+                    break;
+                case "KR":
+                    value_language = "Kanuri";
+                    break;
+                case "KS":
+                    value_language = "Kashmiri";
+                    break;
+                case "KU":
+                    value_language = "Kurdish";
+                    break;
+                case "KV":
+                    value_language = "Komi";
+                    break;
+                case "KW":
+                    value_language = "Cornish";
+                    break;
+                case "KY":
+                    value_language = "Kirghiz";
+                    break;
+                case "LA":
+                    value_language = "Latin";
+                    break;
+                case "LB":
+                    value_language = "Luxembourgish";
+                    break;
+                case "LG":
+                    value_language = "Ganda";
+                    break;
+                case "LI":
+                    value_language = "Limburgan";
+                    break;
+                case "LN":
+                    value_language = "Lingala";
+                    break;
+                case "LO":
+                    value_language = "Lao";
+                    break;
+                case "LT":
+                    value_language = "Lithuanian";
+                    break;
+                case "LU":
+                    value_language = "Luba-Katanga";
+                    break;
+                case "LV":
+                    value_language = "Latvian";
+                    break;
+                case "MG":
+                    value_language = "Malagasy";
+                    break;
+                case "MH":
+                    value_language = "Marshallese";
+                    break;
+                case "MI":
+                    value_language = "Maori";
+                    break;
+                case "MK":
+                    value_language = "Macedonian";
+                    break;
+                case "ML":
+                    value_language = "Malayalam";
+                    break;
+                case "MN":
+                    value_language = "Mongolian";
+                    break;
+                case "MR":
+                    value_language = "Marathi";
+                    break;
+                case "MS":
+                    value_language = "Malay";
+                    break;
+                case "MT":
+                    value_language = "Maltese";
+                    break;
+                case "MY":
+                    value_language = "Burmese";
+                    break;
+                case "NA":
+                    value_language = "Nauru";
+                    break;
+                case "NB":
+                    value_language = "Norwegian Bokmål";
+                    break;
+                case "NG":
+                    value_language = "Ndonga";
+                    break;
+                case "NL":
+                    value_language = "Dutch";
+                    break;
+                case "ND":
+                    value_language = "North Ndebele";
+                    break;
+                case "NE":
+                    value_language = "Nepali";
+                    break;
+                case "NN":
+                    value_language = "Norwegian Nynorsk";
+                    break;
+                case "NO":
+                    value_language = "Norwegian";
+                    break;
+                case "NR":
+                    value_language = "Ndebele South";
+                    break;
+                case "NV":
+                    value_language = "Navajo; Navaho";
+                    break;
+                case "NY":
+                    value_language = "Nyanja";
+                    break;
+                case "OC":
+                    value_language = "Occitan";
+                    break;
+                case "OJ":
+                    value_language = "Ojibwa";
+                    break;
+                case "OM":
+                    value_language = "Oromo";
+                    break;
+                case "OR":
+                    value_language = "Oriya";
+                    break;
+                case "OS":
+                    value_language = "Ossetian";
+                    break;
+                case "PA":
+                    value_language = "Punjabi";
+                    break;
+                case "PI":
+                    value_language = "Pali";
+                    break;
+                case "PL":
+                    value_language = "Polish";
+                    break;
+                case "PS":
+                    value_language = "Pushto";
+                    break;
+                case "PT":
+                    value_language = "Portuguese";
+                    break;
+                case "QU":
+                    value_language = "Quechua";
+                    break;
+                case "RM":
+                    value_language = "Romansh";
+                    break;
+                case "RN":
+                    value_language = "Rundi";
+                    break;
+                case "RO":
+                    value_language = "Romanian";
+                    break;
+                case "RU":
+                    value_language = "Russian";
+                    break;
+                case "RW":
+                    value_language = "Kinyarwanda";
+                    break;
+                case "SA":
+                    value_language = "Sanskrit";
+                    break;
+                case "SC":
+                    value_language = "Sardinian";
+                    break;
+                case "SD":
+                    value_language = "Sindhi";
+                    break;
+                case "SE":
+                    value_language = "Northern Sami";
+                    break;
+                case "SG":
+                    value_language = "Sango";
+                    break;
+                case "SI":
+                    value_language = "Sinhalese";
+                    break;
+                case "SK":
+                    value_language = "Slovak";
+                    break;
+                case "SL":
+                    value_language = "Slovenian";
+                    break;
+                case "SM":
+                    value_language = "Samoan";
+                    break;
+                case "SN":
+                    value_language = "Shona";
+                    break;
+                case "SO":
+                    value_language = "Somali";
+                    break;
+                case "SQ":
+                    value_language = "Albanian";
+                    break;
+                case "SR":
+                    value_language = "Serbian";
+                    break;
+                case "SS":
+                    value_language = "Swati";
+                    break;
+                case "ST":
+                    value_language = "Sotho Southern";
+                    break;
+                case "SU":
+                    value_language = "Sundanese";
+                    break;
+                case "SV":
+                    value_language = "Swedish";
+                    break;
+                case "SW":
+                    value_language = "Swahili";
+                    break;
+                case "TA":
+                    value_language = "Tamil";
+                    break;
+                case "TE":
+                    value_language = "Telugu";
+                    break;
+                case "TG":
+                    value_language = "Tajik";
+                    break;
+                case "TH":
+                    value_language = "Thai";
+                    break;
+                case "TI":
+                    value_language = "Tigrinya";
+                    break;
+                case "TK":
+                    value_language = "Turkmen";
+                    break;
+                case "TL":
+                    value_language = "Tagalog";
+                    break;
+                case "TN":
+                    value_language = "Tswana";
+                    break;
+                case "TO":
+                    value_language = "Tonga";
+                    break;
+                case "TR":
+                    value_language = "Turkish";
+                    break;
+                case "TS":
+                    value_language = "Tsonga";
+                    break;
+                case "TT":
+                    value_language = "Tatar";
+                    break;
+                case "TW":
+                    value_language = "Twi";
+                    break;
+                case "TY":
+                    value_language = "Tahitian";
+                    break;
+                case "UG":
+                    value_language = "Uighur";
+                    break;
+                case "UK":
+                    value_language = "Ukrainian";
+                    break;
+                case "UR":
+                    value_language = "Urdu";
+                    break;
+                case "UZ":
+                    value_language = "Uzbek";
+                    break;
+                case "VE":
+                    value_language = "Venda";
+                    break;
+                case "VI":
+                    value_language = "Vietnamese";
+                    break;
+                case "VO":
+                    value_language = "Volapük";
+                    break;
+                case "WA":
+                    value_language = "Walloon";
+                    break;
+                case "WO":
+                    value_language = "Wolof";
+                    break;
+                case "XH":
+                    value_language = "Xhosa";
+                    break;
+                case "YI":
+                    value_language = "Yiddish";
+                    break;
+                case "YO":
+                    value_language = "Yoruba";
+                    break;
+                case "ZA":
+                    value_language = "Zhuang";
+                    break;
+                case "ZH":
+                    value_language = "Chinese";
+                    break;
+                case "ZU":
+                    value_language = "Zulu";
+                    break;
+                case "ZZ":
+                    value_language = "Multiple Languages (unspecified)";
+                    break;
+            }
         }
         return value_language;
     }
@@ -1902,7 +1926,7 @@ return value_Role;
 
     @And("^Searches journal work by person (.*)")
     public void searchesJournalByfullName(String personSearchOption) throws AzureOauthTokenFetchingException, InterruptedException {
-    //created by Nishant @ 10 Jul 2020
+        //created by Nishant @ 10 Jul 2020
         WorksMatchedApiObject returnedWorks=null;
 
         while (!tasks.isObjectpresent("XPATH", ProductFinderConstants.searchBar)) {tasks.driver.navigate().refresh();Thread.sleep(3000);}
@@ -1910,12 +1934,12 @@ return value_Role;
         for (int i = 0; i < dataQualityContext.personDataObjectsFromEPHGD.size(); i++) {
             String queryValue = "";
 
-           productFinderTasks.selectSearchType("Person");
-           queryValue = dataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME() +
-                       " " + dataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FAMILY_NAME();
+            productFinderTasks.selectSearchType("Person");
+            queryValue = dataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME() +
+                    " " + dataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FAMILY_NAME();
 
-           returnedWorks = apiWorksSearchSteps.callAPI_workByOption(personSearchOption, queryValue+"&workType=ABS,JBB,JNL,NWL&workStatus=WLA");
-           returnedWorks.verifyEnddatedPerson(queryValue);
+            returnedWorks = apiWorksSearchSteps.callAPI_workByOption(personSearchOption, queryValue+"&workType=ABS,JBB,JNL,NWL&workStatus=WLA");
+            returnedWorks.verifyEnddatedPerson(queryValue);
 
             Log.info("searching keyword..." + queryValue);
             productFinderTasks.searchFor(queryValue);
@@ -1923,9 +1947,9 @@ return value_Role;
             int totalProductFound=0;
             if(!tasks.isObjectpresent("XPATH",ProductFinderConstants.zeroResultFound))
             {
-               String ProductFound = tasks.getTextofElement("XPATH", ProductFinderConstants.productFoundOf);
-               String[] showingProducts=ProductFound.split(" ");
-               totalProductFound=Integer.valueOf(showingProducts[showingProducts.length-1]);
+                String ProductFound = tasks.getTextofElement("XPATH", ProductFinderConstants.productFoundOf);
+                String[] showingProducts=ProductFound.split(" ");
+                totalProductFound=Integer.valueOf(showingProducts[showingProducts.length-1]);
             }
             Assert.assertEquals(returnedWorks.getTotalMatchCount(),totalProductFound);
 
@@ -1966,7 +1990,7 @@ return value_Role;
                 String[] showingProducts=ProductFound.split(" ");
                 totalProductFound=Integer.valueOf(showingProducts[showingProducts.length-1]);
             }
-          Assert.assertEquals(returnedWorks.getTotalMatchCount(),totalProductFound);
+            Assert.assertEquals(returnedWorks.getTotalMatchCount(),totalProductFound);
             Log.info(journalSearchOption+" matched for UI and API");
         }
 

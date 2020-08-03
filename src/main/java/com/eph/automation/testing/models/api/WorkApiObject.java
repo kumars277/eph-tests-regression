@@ -166,6 +166,7 @@ public class WorkApiObject {
 
 
         List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+      if(jsonValue.size()!=0)
         DataQualityContext.workExtendedTestClass = new Gson().fromJson(jsonValue.get(0).get("json"), WorkExtendedTestClass.class);
     }
 

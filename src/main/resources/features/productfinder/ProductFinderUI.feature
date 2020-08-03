@@ -127,7 +127,7 @@ Feature: Product Finder Selenium tests
 
 
   @PFDMC @JFUI
-  Scenario: Search the Journal and verify core and Extended data
+  Scenario Outline: Search the Journal and verify core and Extended data
     Given We get 1 random journal ids for search
     And   We get the work search data from EPH GD
     And   user is on Journal Finder search page
@@ -136,10 +136,16 @@ Feature: Product Finder Selenium tests
     And   Verify user is forwarded to the searched work page
     And   get Extended Data from DB
     Then  Verify PF/JF UI work overview values
+Examples:
+    |iterator|
+    |1|
+ #   |2|
+ #   |3|
+
 
   @JFUI
   Scenario Outline: Search the Journal by person
-    Given We get 1 random search ids for person roles
+    Given We get 10 random search ids for person roles
     And get person data from EPH DB
     And   user is on Journal Finder search page
     And   Searches journal work by person <option>
@@ -152,7 +158,7 @@ Feature: Product Finder Selenium tests
 
   @JFUI
   Scenario Outline: Search the Journal by PMC
-    Given We get 1 random journal ids for search
+    Given We get 2 random journal ids for search
     And   We get the work search data from EPH GD
     And   user is on Journal Finder search page
     And   Searches journal by pmc <option>

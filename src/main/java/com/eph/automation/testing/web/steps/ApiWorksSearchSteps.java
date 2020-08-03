@@ -50,9 +50,7 @@ public class ApiWorksSearchSteps {
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
         //added by Nishant @ 27 Dec for debugging failures
-        ids.clear();
-        ids.add("EPR-W-108TJK");
-        Log.info("hard coded work ids are : " + ids);
+        //ids.clear();ids.add("EPR-W-108TJK");Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
@@ -67,7 +65,7 @@ public class ApiWorksSearchSteps {
     @Given("^We get (.*) random search ids for Extended works")
     public void getRandomExtendedWorkIds(String numberOfRecords) {
         //created by Nishant @ 01 Jul 2020
-        sql = String.format(APIDataSQL.SELECT_RANDOM_EXTENDED_WORK_IDS, numberOfRecords);
+        sql = String.format(APIDataSQL.SELECT_RANDOM_EXTENDED_WORK_IDS_SIT, numberOfRecords);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
@@ -79,7 +77,7 @@ public class ApiWorksSearchSteps {
     @Given("^We get (.*) random search ids for Extended manifestation")
     public void getRandomExtendedManifestationIds(String numberOfRecords) {
         //created by Nishant @ 01 Jul 2020
-        sql = String.format(APIDataSQL.SELECT_RANDOM_EXTENDED_MANIFESTATION_IDS, numberOfRecords);
+        sql = String.format(APIDataSQL.SELECT_RANDOM_EXTENDED_MANIFESTATION_IDS_SIT, numberOfRecords);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         manifestaionids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random extended manifestation ids  : " + manifestaionids);
@@ -94,7 +92,7 @@ public class ApiWorksSearchSteps {
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random Journal ids  : " + ids);
         //for debugging failure
-        ids.clear(); ids.add("EPR-W-102RR8");  Log.info("hard coded work ids are : " + ids);
+       // ids.clear(); ids.add("EPR-W-102NSN");  Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
@@ -104,7 +102,7 @@ public class ApiWorksSearchSteps {
         List<Map<?, ?>> randomPersonSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomPersonSearchIds.stream().map(m -> (BigDecimal) m.get("f_person")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random person ids  : " + ids);
-       //  ids.clear(); ids.add("10077793");  Log.info("hard coded work ids are : " + ids);
+      //  ids.clear(); ids.add("10077793");  Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random person roles is not empty.", ids.isEmpty());
     }
 
