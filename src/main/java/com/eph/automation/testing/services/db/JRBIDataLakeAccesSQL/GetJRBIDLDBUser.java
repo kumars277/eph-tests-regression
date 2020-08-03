@@ -14,6 +14,7 @@ public class GetJRBIDLDBUser {
 
         }else{
             dbJRBIDL = "jrbi_staging_sit";
+          //  dbJRBIDL = "jrbi_staging_uat";
         }
         return dbJRBIDL;
     }
@@ -29,6 +30,7 @@ public class GetJRBIDLDBUser {
             }
         }else{
             dbProdDb = "product_staging_database_sit";
+          //  dbProdDb = "product_staging_database_uat";
         }
         return dbProdDb;
     }
@@ -44,6 +46,7 @@ public class GetJRBIDLDBUser {
             }
         }else{
             dbProdGDdb = "product_database_sit";
+           // dbProdGDdb = "product_database_uat";
         }
         return dbProdGDdb;
     }
@@ -59,7 +62,24 @@ public class GetJRBIDLDBUser {
             }
         }else{
             dbProdExtdb = "product_ext_database_sit";
+          //  dbProdExtdb = "product_ext_database_uat";
         }
         return dbProdExtdb;
+    }
+
+    public static String getStitchingdb(){
+        String dbStitching = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbStitching = "ephsit_extended_data_stitch";
+            }
+            else{
+                dbStitching = "ephuat_extended_data_stitch";
+            }
+        }else{
+            //dbStitching = "ephsit_extended_data_stitch";
+            dbStitching = "ephuat_extended_data_stitch";
+        }
+        return dbStitching;
     }
 }

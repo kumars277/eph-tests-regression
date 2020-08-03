@@ -2,8 +2,11 @@ package com.eph.automation.testing.models.contexts;
 
 import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.models.dao.JRBIDataLakeAccess.JRBIDLManifestationAccessObject;
-import com.eph.automation.testing.models.dao.JRBIDataLakeAccess.JRBIDLWorkAccessObject;
 import com.eph.automation.testing.models.dao.JRBIDataLakeAccess.JRBIDLPersonAccessObject;
+import com.eph.automation.testing.models.dao.JRBIDataLakeAccess.JRBIDLWorkAccessObject;
+import com.eph.automation.testing.models.dao.JRBIDataLakeAccess.JRBIWorkExtJsonObject;
+import com.eph.automation.testing.models.dao.JRBIDataLakeAccess.JRBIManifExtJsonObject;
+
 
 import java.util.List;
 
@@ -25,6 +28,8 @@ public class JRBIAccessDLContext {
     public static List<JRBIDLWorkAccessObject> recordsFromAddDeltaAndWorkExclude;
     public static List<JRBIDLWorkAccessObject> recordsFromDiffCurrentAndPreviousWork;
     public static List<JRBIDLWorkAccessObject> recordsFromExtendeWork;
+    public static JRBIWorkExtJsonObject  recordsFromWorkStitching;
+   // public static List<JRBIDLPersonAccessObject>JRBIWorkExtJson;
 
 
 
@@ -42,6 +47,7 @@ public class JRBIAccessDLContext {
     public static List<JRBIDLManifestationAccessObject> recordsFromDiffCurrentAndPreviousManif;
     public static List<JRBIDLManifestationAccessObject> recordsFromExtendedManif;
     public static List<JRBIDLManifestationAccessObject> recordsFromProdManifExtended;
+    public static JRBIManifExtJsonObject  recordsFromManifStitching;
 
 
     public static List<JRBIDLPersonAccessObject>recordsFromDataFullLoadPerson;
