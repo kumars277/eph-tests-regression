@@ -109,9 +109,6 @@ Feature: Product Finder Selenium tests
       |surgical       |Planned             |Book      |
       |nurse          |No Longer Published |Book      |
 
-  #for data model changes
-  #https://sit.productfinder.elsevier.net/work/EPR-W-10104W/overview
-  #https://sit.productfinder.elsevier.net/work/EPR-W-101055/overview
   @PFDMC
   Scenario Outline: Search the work and verify data model changes
     Given user is on search page
@@ -125,9 +122,8 @@ Feature: Product Finder Selenium tests
       |EPR-W-10104W |
    #   |EPR-W-101055 |
 
-
   @PFDMC @JFUI
-  Scenario Outline: Search the Journal and verify core and Extended data
+  Scenario Outline: Search the Journal and verify all tabs
     Given We get 1 random journal ids for search
     And   We get the work search data from EPH GD
     And   user is on Journal Finder search page
@@ -139,8 +135,6 @@ Feature: Product Finder Selenium tests
 Examples:
     |iterator|
     |1|
- #   |2|
- #   |3|
 
 
   @JFUI
@@ -166,3 +160,14 @@ Examples:
       |option |
       |pmgCode|
       |pmcCode|
+
+
+  @PFDMC @JFUI
+  Scenario: Search the Journal and verify link tab
+    Given We get 10 random journal ids for search
+    Then  search work and verify links
+
+  @PFDMC @JFUI
+  Scenario: Search specific Journal and verify link tab
+    Given We set specific journal ids for search
+    Then  search work and verify links

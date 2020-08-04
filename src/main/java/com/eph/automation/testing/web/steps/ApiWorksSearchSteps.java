@@ -34,7 +34,7 @@ public class ApiWorksSearchSteps {
     public DataQualityContext dataQualityContext;
     public APIService apiService=new APIService();
     private String sql;
-    private static List<String> ids;
+    //private static List<String> ids;
     private static List<String> manifestaionids;
     private WorkApiObject workApi_response;
     private static List<WorkDataObject> workIdentifiers;
@@ -87,13 +87,20 @@ public class ApiWorksSearchSteps {
     @Given("^We get (.*) random journal ids for search")
     public void getRandomJournalIds(String numberOfRecords) {//created by Nishant @ 25 Jun 2020
         sql = String.format(APIDataSQL.SELECT_RANDOM_JOURNAL_IDS_FOR_SEARCH, numberOfRecords);
-        Log.info(Constants.EPH_URL);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random Journal ids  : " + ids);
         //for debugging failure
        // ids.clear(); ids.add("EPR-W-102NSN");  Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
+    }
+
+    @Given("^We set specific journal ids for search")
+    public void setspecificJournalIds() {//created by Nishant @ 04 Aug 2020
+        ids=new ArrayList<>();
+        ids.add("EPR-W-102NSN");
+        Log.info("hard coded work ids are : " + ids);
+
     }
 
     @Given("^We get (.*) random search ids for person roles")
@@ -109,7 +116,7 @@ public class ApiWorksSearchSteps {
     @And("^We get the work search data from EPH GD$")
     public void getWorksDataFromEPHGD() {
         Log.info("We get the work data from EPH GD ...");
-        sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, Joiner.on("','").join(ids));
+        sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, Joiner.on("','").join(DataQualityContext.ids));
         dataQualityContext.workDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
         dataQualityContext.workDataObjectsFromEPHGD.sort(Comparator.comparing(WorkDataObject::getWORK_ID));
         Assert.assertFalse("Verify that list with work objects from DB is not empty", dataQualityContext.workDataObjectsFromEPHGD.isEmpty());

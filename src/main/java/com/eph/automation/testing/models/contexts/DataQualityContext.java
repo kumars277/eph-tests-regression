@@ -78,6 +78,8 @@ public class DataQualityContext {
     public static List<WorkSubjectAreaLinkDataObject> workSubjectAreaDataObjectsFromSA;
     public static List<WorkSubjectAreaLinkDataObject> workSubjectAreaDataObjectsFromGD;
 
+    public static List<String> ids;
+
     //public static List<ProductDataObject> productEntityObjectsFromSource;
     //public static List<ProductDataObject> productEntityObjectsFromEPH;
     public static String productIdentifierID;

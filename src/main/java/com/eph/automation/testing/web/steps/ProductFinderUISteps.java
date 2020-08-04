@@ -23,7 +23,7 @@ import com.google.common.base.Joiner;
 import com.google.inject.Inject;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.*;
-
+import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
@@ -58,7 +58,7 @@ public class ProductFinderUISteps {
     private TasksNew tasks;
 
     private String sql;
-    private static List<String> ids;
+    //private static List<String> ids;
     private static String productId;
     private static List<String> productIdList;
     private static List<String> productTitleList;
@@ -617,6 +617,21 @@ public class ProductFinderUISteps {
         verifyLink();
     }
 
+    @Then("^search work and verify links")
+    public void verifyPFJFUIWorkOverviewLinks() throws Throwable {//Created by Nishant @ 04 Aug 2020
+        userOpensJFHomePage();
+        for (int i=0;i<ids.size();i++) {
+            String workId=ids.get(i);
+            productFinderTasks.searchFor(workId);
+            boolean workSearched = productFinderTasks.searchOnResultPages(workId);         Assert.assertTrue("searched key is on search result", workSearched);
+            productFinderTasks.clickWork(workId);            Log.info("clicked " + workId + " id from search result");
+            assertTrue(productFinderTasks.isUserOnWorkPage(workId));
+            verifyLink();
+        }
+    }
+
+
+
     public void verifyWorkOverviewInformationUI() throws ParseException {//created by Nishant @ 4 Jun 2020
         Log.info("\nVerifying Work Overview - Core tab...");
         Log.info("...................................\n");
@@ -783,7 +798,7 @@ public class ProductFinderUISteps {
                 }
 
                 if(respCode >= 400){brokenLink=true;}
-                Assert.assertFalse(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID()+" - found broken link \n"+url+"\n status code: "+respCode,brokenLink);
+                Assert.assertFalse("found broken link \n"+url+"\n status code: "+respCode,brokenLink);
             }
             catch (MalformedURLException e){Log.info(e.getMessage());Log.info("not a valid url format");}
             catch (SSLHandshakeException e){Log.info(e.getMessage());}
