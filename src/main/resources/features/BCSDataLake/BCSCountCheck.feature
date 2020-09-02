@@ -1,6 +1,5 @@
+#Created by Nishant @ 04 Aug 2020
 Feature:Validate data count for BCS tables in Data Lake
-
-#  Created by Nishant @ 04 Aug 2020
 
   @BCS
   Scenario Outline: Verify Data Count for BCS stg_Current_tables transferred from Source Table initial_ingest
@@ -8,7 +7,7 @@ Feature:Validate data count for BCS tables in Data Lake
     Then  Get total count of BCS Current table <tableName>
     And Compare count of initial ingest with current table <tableName>
     Examples:
-      | tableName                                |
-      | stg_current_clasification              |
+      | tableName                              |
+      | stg_current_classification              |
 
 

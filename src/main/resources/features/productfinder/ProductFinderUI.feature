@@ -164,7 +164,7 @@ Examples:
 
   @PFDMC @JFUI
   Scenario: Search the Journal and verify link tab
-    Given We get 10 random journal ids for search
+    Given We get 2 random journal ids for search
     Then  search work and verify links
 
   @PFDMC @JFUI
