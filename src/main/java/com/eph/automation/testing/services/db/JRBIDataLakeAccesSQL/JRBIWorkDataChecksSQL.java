@@ -46,9 +46,9 @@ public class JRBIWorkDataChecksSQL {
                     ", j.rf_lvi rf_lvi\n" +
                     ", j.business_unit_desc business_unit_desc\n" +
                     "FROM\n" +
-                    "  (("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
-                    "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr1 ON (((j.issn = cr1.identifier) AND (cr1.identifier_type = 'ISSN')) AND (cr1.record_level = 'Work')))\n" +
-                    "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work')))) where epr is not NULL\n" +
+                    "  (("+GetSDBooksDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
+                    "LEFT JOIN "+GetSDBooksDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr1 ON (((j.issn = cr1.identifier) AND (cr1.identifier_type = 'ISSN')) AND (cr1.record_level = 'Work')))\n" +
+                    "LEFT JOIN "+GetSDBooksDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work')))) where epr is not NULL\n" +
                     "order by rand() limit %s\n";*/
             "WITH jrbi_catalogue_max as(SELECT\n" +
                     "  cr2.epr epr\n" +
@@ -147,9 +147,9 @@ public class JRBIWorkDataChecksSQL {
                     ", j.rf_lvi rf_lvi\n" +
                     ", j.business_unit_desc business_unit_desc\n" +
                     "FROM\n" +
-                    "  (("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
-                    "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr1 ON (((j.issn = cr1.identifier) AND (cr1.identifier_type = 'ISSN')) AND (cr1.record_level = 'Work')))\n" +
-                    "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work')))) where EPR in ('%s')";
+                    "  (("+GetSDBooksDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
+                    "LEFT JOIN "+GetSDBooksDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr1 ON (((j.issn = cr1.identifier) AND (cr1.identifier_type = 'ISSN')) AND (cr1.record_level = 'Work')))\n" +
+                    "LEFT JOIN "+GetSDBooksDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work')))) where EPR in ('%s')";
 
 
 */
@@ -270,7 +270,7 @@ public class JRBIWorkDataChecksSQL {
                     ",rf_lvi as RF_LVI" +
                     ",business_unit_desc as BUSINESS_UNIT_DESC" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part where EPR in ('%s') AND " +
-                    //"transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\' " +
+                    //"transform_ts like \'%%"+SDDataLakeCountChecksSQL.currentDate()+"%%\' " +
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part)\n " +
                     "AND delete_flag=false order by catalogue_issues_qty desc";
 
@@ -330,7 +330,7 @@ public class JRBIWorkDataChecksSQL {
                     ",delta_mode as DELTA_MODE" +
                     ",type as TYPE" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_work_history_part where EPR in ('%s') AND \n" +
-                    //"delta_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\'";
+                    //"delta_ts like \'%%"+SDDataLakeCountChecksSQL.currentDate()+"%%\'";
                     "delta_ts=(select max(delta_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_work_history_part)\n " ;
 
     public static String GET_PREVIOUS_WORK_RECORDS =
@@ -374,7 +374,7 @@ public class JRBIWorkDataChecksSQL {
                     ",rf_lvi as RF_LVI" +
                     ",business_unit_desc as BUSINESS_UNIT_DESC" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part where EPR in ('%s') AND " +
-                   // "transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.previousDate()+"%%\'";
+                   // "transform_ts like \'%%"+SDDataLakeCountChecksSQL.previousDate()+"%%\'";
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part\n " +
                     " where transform_ts < (select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part))\n" +
                     " order by catalogue_issues_qty desc\n";
@@ -390,7 +390,7 @@ public class JRBIWorkDataChecksSQL {
                     ", A.delete_flag, A.transform_ts from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work B on A.epr  = B.epr \n" +
                     "where B.epr is null and " +
-                    //"A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\')\n" +
+                    //"A.transform_ts like \'%%"+SDDataLakeCountChecksSQL.currentDate()+"%%\')\n" +
                     "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A))\n " +
                     " order by rand() limit %s\n";
 
@@ -424,7 +424,7 @@ public class JRBIWorkDataChecksSQL {
                     ", A.delete_flag, A.transform_ts from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work B on A.epr  = B.epr \n" +
                     "where B.epr is null and " +
-                   // "A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\' " +
+                   // "A.transform_ts like \'%%"+SDDataLakeCountChecksSQL.currentDate()+"%%\' " +
                     "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A)\n " +
                     "AND A.epr in ('%s'))\n";
 
