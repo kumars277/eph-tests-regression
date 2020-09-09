@@ -24,13 +24,23 @@ public class SDBooksCountChecksSteps {
     private static String SDCurrentHistSQLCount;
     private static String SDPreviousHistSQLCount;
     private static String SDDeltaCurrentSQLCount;
+    private static String SDDeltaCurrentHistSQLCount;
     private static int SDCurrentCount;
     private static int SDPreviousCount;
     private static int SDCurrentHistCount;
     private static int SDPreviousHistCount;
     private static int SDDeltaCurrentCount;
+    private static int SDDeltaCurrentHistCount;
     private static int SDCurrPrevCount;
     private static String SDCurrPrevSQLCount;
+    private static String SDDeltaExclSQLCount;
+    private static int SDDeltaExclCount;
+    private static String SDLatestSQLCount;
+    private static int SDLatestCount;
+    private static String SDDeltaCurrHistSQLCount;
+    private static int SDDeltaCurrHistCount;
+    private static String SDExclSQLCount;
+    private static int SDExclCount;
 
 
     @Given("^Get the total count of SD Data from Full Load (.*)$")
@@ -145,7 +155,91 @@ public class SDBooksCountChecksSteps {
     @And("^Compare SDbooks delta count of (.*) and (.*) with (.*) are identical$")
     public void compareDeltaCounts(String srcTable1,String srcTable2, String trgtTable){
         Log.info("The Diff of count for table "+srcTable1+" and "+srcTable2+" => " + SDCurrPrevCount + " and in "+trgtTable+" => " + SDDeltaCurrentCount);
-        Assert.assertEquals("The counts are not equal when compared with Diff of "+srcTable1+" and "+srcTable2+"with "+trgtTable, SDPreviousHistCount, SDPreviousCount);
+        Assert.assertEquals("The counts are not equal when compared with Diff of "+srcTable1+" and "+srcTable2+"with "+trgtTable, SDDeltaCurrentCount, SDCurrPrevCount);
+    }
+
+    @Then("^Get the count of SDBook delta current history (.*) table$")
+    public void getDeltaHistCurrTables(String tableName){
+        switch (tableName){
+            case "sdbooks_delta_history_urls_part":
+                Log.info("Getting Delta Current History URL Table Count...");
+                SDDeltaCurrentHistSQLCount = SDDataLakeCountChecksSQL.GET_SD_URL_DELTA_CURR_HIST_COUNT;
+                break;
+        }
+        Log.info(SDDeltaCurrentHistSQLCount);
+        List<Map<String, Object>> SDDeltaCurrentHistTableCount = DBManager.getDBResultMap(SDDeltaCurrentHistSQLCount, Constants.AWS_URL);
+        SDDeltaCurrentHistCount = ((Long) SDDeltaCurrentHistTableCount.get(0).get("Delta_History_Count")).intValue();
+    }
+
+    @And("^Compare SD delta current (.*) table and delta history (.*) are identical$")
+    public void compareDeltaHistCounts(String srcTable,String trgtTable){
+        Log.info("The count for table "+srcTable+" => " + SDDeltaCurrentCount + " and in "+trgtTable+" => " + SDDeltaCurrentHistCount);
+        Assert.assertEquals("The counts are not equal when compared with "+srcTable+" and "+trgtTable, SDDeltaCurrentCount, SDDeltaCurrentHistCount);
+    }
+
+
+    @Given("^Get the sum of total count between SDBooks delta current and and Current_Exclude Table (.*)$")
+    public void getCountSumofDeltaExclTables(String tableName){
+        switch (tableName){
+            case "sdbooks_transform_latest_urls":
+                Log.info("Getting Sum of Delta and Exclude URL Table Count...");
+                SDDeltaExclSQLCount = SDDataLakeCountChecksSQL.GET_SD_URL_SUM_DELTA_EXCL_COUNT;
+                break;
+        }
+        Log.info(SDDeltaExclSQLCount);
+        List<Map<String, Object>> SDDeltaExclTableCount = DBManager.getDBResultMap(SDDeltaExclSQLCount, Constants.AWS_URL);
+        SDDeltaExclCount = ((Long) SDDeltaExclTableCount.get(0).get("source_count")).intValue();
+    }
+
+    @Then("^Get the SDbooks (.*) latest data count$")
+    public void getLatestCurrentTables(String tableName){
+        switch (tableName){
+            case "sdbooks_transform_latest_urls":
+                Log.info("Getting Latest Current URL Table Count...");
+                SDLatestSQLCount = SDDataLakeCountChecksSQL.GET_SD_URL_LATEST_CURRENT_COUNT;
+                break;
+        }
+        Log.info(SDLatestSQLCount);
+        List<Map<String, Object>> SDLatestTableCount = DBManager.getDBResultMap(SDLatestSQLCount, Constants.AWS_URL);
+        SDLatestCount = ((Long) SDLatestTableCount.get(0).get("latest_count")).intValue();
+    }
+
+    @And("^Compare SDBooks latest counts of (.*) and (.*) with (.*) are identical$")
+    public void compareLatestCounts(String srcTable1,String srcTable2, String trgtTable){
+        Log.info("The sum of count for table "+srcTable1+" and "+srcTable2+" => " + SDDeltaExclCount + " and in "+trgtTable+" => " + SDLatestCount);
+        Assert.assertEquals("The counts are not equal when compared with sum of "+srcTable1+" and "+srcTable2+"with "+trgtTable, SDLatestCount, SDDeltaExclCount);
+    }
+
+    @Given("^Get the SDBooks total count difference between delta current and transform current history Table (.*)$")
+    public void getCountDiffofDeltaAndCurrHistTables(String tableName){
+        switch (tableName){
+            case "sdbooks_transform_history_excl_delta":
+                Log.info("Getting Diff of Delta and Current History URL Table Count...");
+                SDDeltaCurrHistSQLCount = SDDataLakeCountChecksSQL.GET_SD_URL_DIFF_DELTA_CURR_HIST_COUNT;
+                break;
+        }
+        Log.info(SDDeltaCurrHistSQLCount);
+        List<Map<String, Object>> SDDeltaCurrHistTableCount = DBManager.getDBResultMap(SDDeltaCurrHistSQLCount, Constants.AWS_URL);
+        SDDeltaCurrHistCount = ((Long) SDDeltaCurrHistTableCount.get(0).get("source_count")).intValue();
+    }
+
+    @Then("^Get the SDBooks (.*) exclude data count$")
+    public void getExclCurrentTables(String tableName){
+        switch (tableName){
+            case "sdbooks_transform_history_excl_delta":
+                Log.info("Getting Exclude Current URL Table Count...");
+                SDExclSQLCount = SDDataLakeCountChecksSQL.GET_SD_URL_EXCLUDE_CURRENT_COUNT;
+                break;
+        }
+        Log.info(SDExclSQLCount);
+        List<Map<String, Object>> SDExclTableCount = DBManager.getDBResultMap(SDExclSQLCount, Constants.AWS_URL);
+        SDExclCount = ((Long) SDExclTableCount.get(0).get("excl_count")).intValue();
+    }
+
+    @And("^Compare SDBooks exclude count of (.*) and (.*) with (.*) are identical$")
+    public void compareExcludeCounts(String srcTable1,String srcTable2, String trgtTable){
+        Log.info("The diff of count for table "+srcTable1+" and "+srcTable2+" => " + SDDeltaCurrHistCount + " and in "+trgtTable+" => " + SDExclCount);
+        Assert.assertEquals("The counts are not equal when compared with Diff of "+srcTable1+" and "+srcTable2+"with "+trgtTable, SDExclCount, SDDeltaCurrHistCount);
     }
 
 }

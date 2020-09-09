@@ -42,3 +42,30 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
       Examples:
         |FirstSourceTable                 |SecondSourceTable                        |TargetTable                            |
         |sdbooks_transform_current_urls   |sdbooks_transform_previous_urls          |sdbooks_delta_current_urls |
+
+      @SD
+      Scenario Outline: Verify Data count for SDBooks delta_current_history tables are transferred from delta_current_work tables
+        Given We know the delta current count for Sdbooks tables <SourceTableName>
+        Then Get the count of SDBook delta current history <TargettableName> table
+        And Compare SD delta current <SourceTableName> table and delta history <TargettableName> are identical
+        Examples:
+          |SourceTableName                   |TargettableName                                 |
+          |sdbooks_delta_current_urls           |sdbooks_delta_history_urls_part   |
+
+    @SD
+     Scenario Outline: Verify Data count for SDBooks delta_latest tables are transferred from delta_current and Current_Exclude tables
+    Given Get the sum of total count between SDBooks delta current and and Current_Exclude Table <TargetTable>
+    Then Get the SDbooks <TargetTable> latest data count
+    And Compare SDBooks latest counts of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
+    Examples:
+      |FirstSourceTable                 |SecondSourceTable                               |TargetTable                            |
+        |sdbooks_delta_current_urls          |sdbooks_transform_history_excl_delta          |sdbooks_transform_latest_urls |
+
+  @SD
+  Scenario Outline: Verify Data count for SDBooks delta_current_exclude are transferred from delta_current and current_history tables
+    Given Get the SDBooks total count difference between delta current and transform current history Table <TargetTable>
+    Then Get the SDBooks <TargetTable> exclude data count
+    And Compare SDBooks exclude count of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
+    Examples:
+      |FirstSourceTable                 |SecondSourceTable                               |TargetTable                            |
+      |sdbooks_delta_current_urls          |sdbooks_transform_history_urls_part          |sdbooks_transform_history_excl_delta |

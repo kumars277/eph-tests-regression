@@ -62,6 +62,30 @@ public class SDDataLakeCountChecksSQL {
 
     public static String GET_SD_URL_DELTA_CURRENT_COUNT =
             "select count(*) as Delta_Count from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_current_urls";
+
+    public static String GET_SD_URL_DELTA_CURR_HIST_COUNT =
+            "select count(*) as Delta_History_Count from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_history_urls_part\n " +
+                    "where delta_ts = (select max(delta_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_history_urls_part)";
+
+
+    public static String GET_SD_URL_LATEST_CURRENT_COUNT =
+                    "select count(*) as latest_count from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_latest_urls";
+
+    public static String GET_SD_URL_SUM_DELTA_EXCL_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.isbn from " +GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_excl_delta as c union all \n" +
+                    "select d.isbn from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_current_urls as d)";
+
+    public static String GET_SD_URL_DIFF_DELTA_CURR_HIST_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.isbn from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_urls_part c\n" +
+                    "left join "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_current_urls d on c.isbn  = d.isbn \n" +
+                    "where d.isbn is null and c.transform_ts = (\n" +
+                    "select max(c.transform_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_urls_part c ))";
+
+
+    public static String GET_SD_URL_EXCLUDE_CURRENT_COUNT =
+            "select count(*) as excl_count from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_excl_delta";
 }
 
 
