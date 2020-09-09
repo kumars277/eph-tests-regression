@@ -41,6 +41,9 @@ public class SDBooksCountChecksSteps {
     private static int SDDeltaCurrHistCount;
     private static String SDExclSQLCount;
     private static int SDExclCount;
+    private static int SDDuplicateLatestCount;
+    private static String SDDuplicateLatestSQLCount;
+
 
 
     @Given("^Get the total count of SD Data from Full Load (.*)$")
@@ -240,6 +243,26 @@ public class SDBooksCountChecksSteps {
     public void compareExcludeCounts(String srcTable1,String srcTable2, String trgtTable){
         Log.info("The diff of count for table "+srcTable1+" and "+srcTable2+" => " + SDDeltaCurrHistCount + " and in "+trgtTable+" => " + SDExclCount);
         Assert.assertEquals("The counts are not equal when compared with Diff of "+srcTable1+" and "+srcTable2+"with "+trgtTable, SDExclCount, SDDeltaCurrHistCount);
+    }
+
+    @Given("^Get the SDBooks Duplicate count in (.*) table$")
+    public void getDuplicateCount(String tableName){
+        switch (tableName){
+            case "sdbooks_transform_latest_urls":
+                Log.info("Getting Duplicate URL Latest Table Count...");
+                SDDuplicateLatestSQLCount = SDDataLakeCountChecksSQL.GET_SD_DUPLICATES_LATEST_URL_COUNT;
+                break;
+        }
+        Log.info(SDDuplicateLatestSQLCount);
+        List<Map<String, Object>> SDDupLatestTableCount = DBManager.getDBResultMap(SDDuplicateLatestSQLCount, Constants.AWS_URL);
+        SDDuplicateLatestCount = ((Long) SDDupLatestTableCount.get(0).get("Duplicate_Count")).intValue();
+    }
+
+    @Then("^Check the SDBooks count should be equal to Zero (.*)$")
+    public void checkDupCountZero(String tableName){
+        Log.info("The Duplicate count for "+tableName+" => " + SDDuplicateLatestCount);
+        Assert.assertEquals("There are Duplicate Count of ISBN in "+tableName,0,SDDuplicateLatestCount);
+
     }
 
 }

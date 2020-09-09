@@ -86,6 +86,10 @@ public class SDDataLakeCountChecksSQL {
 
     public static String GET_SD_URL_EXCLUDE_CURRENT_COUNT =
             "select count(*) as excl_count from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_excl_delta";
+
+    public static String GET_SD_DUPLICATES_LATEST_URL_COUNT =
+            "select count(*)  as Duplicate_Count from (SELECT count(*) FROM "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_latest_urls \n" +
+                    " group by isbn having count(*)>1)";
 }
 
 

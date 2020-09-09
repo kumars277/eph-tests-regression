@@ -69,3 +69,11 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
     Examples:
       |FirstSourceTable                 |SecondSourceTable                               |TargetTable                            |
       |sdbooks_delta_current_urls          |sdbooks_transform_history_urls_part          |sdbooks_transform_history_excl_delta |
+
+  @SD
+  Scenario Outline: Verify Duplicate Entry for SDBoks in transform latest tables
+    Given Get the SDBooks Duplicate count in <SourceTableName> table
+    Then Check the SDBooks count should be equal to Zero <SourceTableName>
+    Examples:
+      |SourceTableName                      |
+      |sdbooks_transform_latest_urls           |
