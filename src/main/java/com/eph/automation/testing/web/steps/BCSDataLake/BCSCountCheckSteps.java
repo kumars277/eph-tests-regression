@@ -20,10 +20,6 @@ public class BCSCountCheckSteps {
     private String BCSFullSourceCountSQL, BCSCurrentCountSQL;
     private int    BCSFullSourceCount   , BCSCurrentCount;
 
-
-
-
-
     @Given("Get the total count of BCS Data from initial_ingest (.*)")
     public void getTotalCountFromInitialIngest(String tableName) {
         Log.info("getting initial_ingest full count...");
@@ -54,7 +50,7 @@ public class BCSCountCheckSteps {
 
     @And("^Compare count of initial ingest with current table (.*)$")
     public void compareCountOfInitialIngestWithCurrentTable(String tableName) {
-        Log.info("initial_ingest count => " + BCSFullSourceCount + " and in "+tableName+" => " + BCSCurrentCount);
+        Log.info(tableName+ " : initial_ingest count = " + BCSFullSourceCount + " Vs BCS current table count = " + BCSCurrentCount);
         Assert.assertEquals("counts are not equal for initial_ingest and "+tableName, BCSFullSourceCount, BCSCurrentCount);
     }
 }
