@@ -34,6 +34,7 @@ public class BCSCountCheckSteps {
         }
 
         List<Map<String, Object>> BCSFullSourceTableCount = DBManager.getDLResultMap(BCSFullSourceCountSQL, Constants.AWS_URL);
+
         BCSFullSourceCount = ((Long) BCSFullSourceTableCount.get(0).get("Source_Count")).intValue();
         Log.info(tableName+" source count :" +BCSFullSourceCount);
     }

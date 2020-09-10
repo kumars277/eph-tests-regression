@@ -4,7 +4,7 @@ package com.eph.automation.testing.services.db.BCSDataLakeSQL;
 public class BCSDataLakeCountCheckSQL {
 
     public static String GET_BCS_CLASSIFICATION_SOURCE_COUNT =
-            "SELECT  count(*) FROM  (bcs_ingestion_database_sit.initial_ingest f\n" +
+            "SELECT  count(*)as Source_Count FROM  (bcs_ingestion_database_sit.initial_ingest f\n" +
             "CROSS JOIN UNNEST(\"distributionclassification\") x (cl))";
 
     public static String GET_BCS_CURRENT_CLASSIFICATION_COUNT=
