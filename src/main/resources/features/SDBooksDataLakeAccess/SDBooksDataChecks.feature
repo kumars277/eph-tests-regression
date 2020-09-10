@@ -8,7 +8,7 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
   Scenario Outline: Verify Data for SD transform_current_url is transferred from sdbooks_inbound_part
     Given We get the <countOfRandomIds> random ISBN ids <tableName>
     When  Get the records from data inbound for URL
-    Then  Get the records from transform current URL
+    Then  Get the records from transform SD current URL
     And   Compare the records of Inbound and current URL
     Examples:
       | tableName                        |    countOfRandomIds|
@@ -17,8 +17,8 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
     @SD
   Scenario Outline: Verify Data for SD transform_Current_URL_history is transferred from Current URL
       Given We get the <countOfRandomIds> random ISBN ids <sourceTable>
-      When Get the records from transform SD current url
-      Then We Get the records from transform SD current url History
+      When Get the records from transform SD current URL
+      Then We Get the records from transform SD url History <sourceTable>
       And Compare the records of SD current url and SD current url history
      Examples:
       | sourceTable                   | countOfRandomIds      |
@@ -28,18 +28,18 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
   Scenario Outline: Verify Data for SD transform_previous_url_history is transferred from Previous url
     Given We get the <countOfRandomIds> random ISBN ids <sourceTable>
     When Get the records from SD transform previous url
-    Then We Get the records from SD transform previous url History
+    Then We Get the records from transform SD url History <sourceTable>
     And Compare the records of SD previous url and previous url history
     Examples:
       | sourceTable                   | countOfRandomIds|
-      |jrbi_current_previous_person   |   10                 |
+      |sdbooks_transform_previous_urls   |   10                 |
 
     @SD
-    Scenario Outline: Verify Data for SD transform_Delta_url_history is transferred from Delta Url
+    Scenario Outline: Verify Data from the difference of Current and Previous is transffered to delta current table
       Given We get the <countOfRandomIds> random ISBN ids <sourceTable>
       When Get the records from SD transform Delta Current Url
-      Then We Get the records from SD transform Delta Url History
-      And Compare the records of SD delta url and delta url history
+      Then We Get the from the difference of SD Current and Previous table
+      And Compare the records of SD delta url with difference of current and previous
       Examples:
         | sourceTable              | countOfRandomIds|
         |sdbooks_delta_current_urls| 10                 |
