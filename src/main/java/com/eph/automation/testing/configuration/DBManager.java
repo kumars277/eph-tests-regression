@@ -24,7 +24,6 @@ public class DBManager {
     private static Connection connection = null;
     private static String driver = "oracle.jdbc.driver.OracleDriver";
     private static String mySQLDriver = "com.mysql.jdbc.Driver";
-
     private static String athenaDriver = "com.simba.athena.jdbc.Driver";
 
     public static List getDBResultAsBeanList(String sql, Class klass, String dbEndPoint) {

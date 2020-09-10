@@ -8,10 +8,6 @@ Feature: Product Finder Selenium tests
     Then the work details are retrieved and compared
 
 
-
-
-
-
   @PF
   Scenario Outline: Search the Work by Id
     Given We get the id for work search <id>
@@ -23,6 +19,7 @@ Feature: Product Finder Selenium tests
     Examples:
       | id                        |
       | EPR-W-113YW0              |
+
 
   @PF
   Scenario Outline: Search the work by title
