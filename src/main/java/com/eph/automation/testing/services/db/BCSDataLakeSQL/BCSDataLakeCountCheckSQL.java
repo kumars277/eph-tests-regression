@@ -8,7 +8,7 @@ public class BCSDataLakeCountCheckSQL {
             "CROSS JOIN UNNEST(\"distributionclassification\") x (cl))";
 
     public static String GET_BCS_CURRENT_CLASSIFICATION_COUNT=
-            "select count(*) from bcs_ingestion_database_sit.stg_current_classification";
+            "select count(*) as Current_Count from bcs_ingestion_database_sit.stg_current_classification";
 
 
 }
