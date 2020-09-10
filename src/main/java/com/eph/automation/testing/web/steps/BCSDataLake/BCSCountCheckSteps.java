@@ -17,8 +17,8 @@ import java.util.Map;
 
 public class BCSCountCheckSteps {
 
-    private String BCSFullSourceCountSQL, BCSCurrentCountSQL;
-    private int    BCSFullSourceCount   , BCSCurrentCount;
+    private static String BCSFullSourceCountSQL, BCSCurrentCountSQL;
+    private static int    BCSFullSourceCount   , BCSCurrentCount;
 
     @Given("Get the total count of BCS Data from initial_ingest (.*)")
     public void getTotalCountFromInitialIngest(String tableName) {
