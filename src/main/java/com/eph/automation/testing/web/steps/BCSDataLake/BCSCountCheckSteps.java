@@ -29,7 +29,8 @@ public class BCSCountCheckSteps {
         Log.info("getting initial_ingest full count...");
         switch (tableName){
             case "stg_current_classification":
-                BCSFullSourceCountSQL = BCSDataLakeCountCheckSQL.GET_BCS_CLASSIFICATION_SOURCE_COUNT;    break;
+                BCSFullSourceCountSQL = BCSDataLakeCountCheckSQL.GET_BCS_CLASSIFICATION_SOURCE_COUNT;
+                Log.info(BCSFullSourceCountSQL); break;
         }
 
         List<Map<String, Object>> BCSFullSourceTableCount = DBManager.getDLResultMap(BCSFullSourceCountSQL, Constants.AWS_URL);
