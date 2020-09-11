@@ -57,7 +57,6 @@ public class SDBooksDataChecksSteps {
                 sql = String.format(SDBooksDataChecksSQL.GET_RANDOM_ISBN_DELTA_CURR, numberOfRecords);
                 break;
 
-
           }
         List<Map<?, ?>> randomIsbnIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
         Ids = randomIsbnIds.stream().map(m -> (String) m.get("ISBN")).collect(Collectors.toList());
@@ -395,8 +394,8 @@ public class SDBooksDataChecksSteps {
         }
     }
 
-    @When("^Get the records from SD transform Delta Current Url$")
-    public void getRecordsFromdeltaCurrURL() {
+    @When("^Get the records from SDBooks for Delta Current Url$")
+    public void getRecordsDeltaCurrURL() {
         Log.info("We get the records from Delta Current URL table...");
         sql = String.format(SDBooksDataChecksSQL.GET_REC_DELTA_CURRENT_URL, Joiner.on("','").join(Ids));
         Log.info(sql);

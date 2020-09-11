@@ -128,7 +128,7 @@ public class SDBooksDataChecksSQL {
                     "p.url != (c.url ) or \n" +
                     "p.url_code != (c.url_code ) or \n" +
                     "p.url_name != (c.url_name ) or \n" +
-                    "p.url_title  != (c.url_title ))) order by rand () limit %s";
+                    "p.url_title  != (c.url_title ))) where ISBN is not null order by rand () limit %s";
 
 
     public static String GET_REC_ISBN_URL_DIFF_CURR_PREV =
