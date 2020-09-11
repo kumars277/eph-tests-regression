@@ -64,3 +64,14 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
       |tableName                                | countOfRandomIds|
       |sdbooks_transform_latest_urls               |10                 |
 
+  @SD
+  Scenario Outline: Verify Data for SD transform_Delta_URL_history is transferred from Delta URL
+    Given We get the <countOfRandomIds> random ISBN ids <sourceTable>
+    When Get the records from SD transform Delta Current Url
+    Then We Get the records from SD transform Delta Current History
+    And Compare the records of SDBooks delta Current and delta Current history
+    Examples:
+      | sourceTable                   | countOfRandomIds|
+      |sdbooks_delta_history_urls_part| 10                 |
+
+

@@ -47,6 +47,16 @@ public class SDBooksDataChecksSteps {
             case "sdbooks_delta_current_urls":
                 sql = String.format(SDBooksDataChecksSQL.GET_RANDOM_ISBN_URL_DIFF_CURR_PREV, numberOfRecords);
                 break;
+            case "sdbooks_transform_history_excl_delta":
+                sql = String.format(SDBooksDataChecksSQL.GET_RANDOM_ISBN_DIFF_DELTA_CURR_HIST_URL, numberOfRecords);
+                break;
+            case "sdbooks_transform_latest_urls":
+                sql = String.format(SDBooksDataChecksSQL.GET_RANDOM_ISBN_SUM_DELTA_EXCL_URL, numberOfRecords);
+                break;
+            case "sdbooks_delta_history_urls_part":
+                sql = String.format(SDBooksDataChecksSQL.GET_RANDOM_ISBN_DELTA_CURR, numberOfRecords);
+                break;
+
 
           }
         List<Map<?, ?>> randomIsbnIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
@@ -264,7 +274,7 @@ public class SDBooksDataChecksSteps {
                 }
 
                 Log.info("ISBN => " + dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN() +
-                        " EPRID => Current_URL =" + dataQualitySDContext.recordsFromCurrentUrl.get(i).getWORK_TYPE() +
+                        " WORK_TYPE => Current_URL =" + dataQualitySDContext.recordsFromCurrentUrl.get(i).getWORK_TYPE() +
                         " Current_URL_Hist=" + dataQualitySDContext.recordsFromCurrentUrlHistory.get(i).getWORK_TYPE());
 
                 if (dataQualitySDContext.recordsFromCurrentUrl.get(i).getWORK_TYPE() != null ||
@@ -372,7 +382,7 @@ public class SDBooksDataChecksSteps {
                 }
 
                 Log.info("ISBN => " + dataQualitySDContext.recordsFromPreviousUrl.get(i).getISBN() +
-                        " EPRID => Full_Load =" + dataQualitySDContext.recordsFromPreviousUrl.get(i).getWORK_TYPE() +
+                        " WORK_TYPE => Full_Load =" + dataQualitySDContext.recordsFromPreviousUrl.get(i).getWORK_TYPE() +
                         " Previous_URL=" + dataQualitySDContext.recordsFromPreviousUrlHistory.get(i).getWORK_TYPE());
 
                 if (dataQualitySDContext.recordsFromPreviousUrl.get(i).getWORK_TYPE() != null ||
@@ -488,7 +498,7 @@ public class SDBooksDataChecksSteps {
                 }
 
                 Log.info("ISBN => " + dataQualitySDContext.recordsFromDiffCurrentAndPreviousUrl.get(i).getISBN() +
-                        " EPRID => Diff_Curr_Prev =" + dataQualitySDContext.recordsFromDiffCurrentAndPreviousUrl.get(i).getWORK_TYPE() +
+                        " WORK_TYPE => Diff_Curr_Prev =" + dataQualitySDContext.recordsFromDiffCurrentAndPreviousUrl.get(i).getWORK_TYPE() +
                         " Delta_Current=" + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getWORK_TYPE());
 
                 if (dataQualitySDContext.recordsFromDiffCurrentAndPreviousUrl.get(i).getWORK_TYPE() != null ||
@@ -499,7 +509,7 @@ public class SDBooksDataChecksSteps {
                 }
 
                 Log.info("ISBN => " + dataQualitySDContext.recordsFromDiffCurrentAndPreviousUrl.get(i).getISBN() +
-                        " EPRID => Diff_Curr_Prev =" + dataQualitySDContext.recordsFromDiffCurrentAndPreviousUrl.get(i).getDELTA_MODE() +
+                        " DELTA_MODE => Diff_Curr_Prev =" + dataQualitySDContext.recordsFromDiffCurrentAndPreviousUrl.get(i).getDELTA_MODE() +
                         " Delta_Current=" + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getDELTA_MODE());
 
                 if (dataQualitySDContext.recordsFromDiffCurrentAndPreviousUrl.get(i).getDELTA_MODE() != null ||
@@ -511,6 +521,360 @@ public class SDBooksDataChecksSteps {
             }
         }
     }
+
+    @When("^Get the records from the difference of SD Delta_current_url and url_history$")
+    public void getDiffDeltaAndCurrentHist() {
+        Log.info("We get the Difference of Delta and Current Hist URL records...");
+        sql = String.format(SDBooksDataChecksSQL.GET_REC_DIFF_DELTA_CURR_HIST_URL, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl = DBManager.getDBResultAsBeanList(sql, SDBooksDLAccessObject.class, Constants.AWS_URL);
+    }
+
+    @Then("^Get the records from url exclude table$")
+    public void getUrlExclude() {
+        Log.info("We get the Exclude URL records...");
+        sql = String.format(SDBooksDataChecksSQL.GET_REC_EXCL_URL, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualitySDContext.recordsFromExcludeUrl = DBManager.getDBResultAsBeanList(sql, SDBooksDLAccessObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare the records of SD url Exclude with difference of Delta_current_url and url_history$")
+    public void compareExcludeDataUrl() {
+        if (dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the ISBN Ids to compare the records between URL PRevious and Hist URL...");
+            for (int i = 0; i < dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.size(); i++) {
+
+                dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl  .sort(Comparator.comparing(SDBooksDLAccessObject::getISBN)); //sort primarykey data in the lists
+                dataQualitySDContext.recordsFromExcludeUrl.sort(Comparator.comparing(SDBooksDLAccessObject::getISBN));
+
+                Log.info("Diff_DElta_Curr_Hist -> ISBN => " + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getISBN() +
+                        "Exclude -> ISBN => " + dataQualitySDContext.recordsFromExcludeUrl.get(i).getISBN());
+                if (dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getISBN() != null ||
+                        (dataQualitySDContext.recordsFromExcludeUrl.get(i).getISBN() != null)) {
+                    Assert.assertEquals("The ISBN is =" + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getISBN() + " is missing/not found in Diff_DElta_Curr_Hist table",
+                            dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getISBN(),
+                            dataQualitySDContext.recordsFromExcludeUrl.get(i).getISBN());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getISBN() +
+                        " BOOK_TITLE => Diff_DElta_Curr_Hist =" + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getBOOK_TITLE() +
+                        " Exclude=" + dataQualitySDContext.recordsFromExcludeUrl.get(i).getBOOK_TITLE());
+
+                if (dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getBOOK_TITLE() != null ||
+                        (dataQualitySDContext.recordsFromExcludeUrl.get(i).getBOOK_TITLE() != null)) {
+                    Assert.assertEquals("The BOOK_TITLE is incorrect for ISBN = " + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getBOOK_TITLE(),
+                            dataQualitySDContext.recordsFromExcludeUrl.get(i).getBOOK_TITLE());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getISBN() +
+                        " URL => Diff_DElta_Curr_Hist =" + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getURL() +
+                        " Exclude=" + dataQualitySDContext.recordsFromExcludeUrl.get(i).getURL());
+
+                if (dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getURL() != null ||
+                        (dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getURL() != null)) {
+                    Assert.assertEquals("The URL is incorrect for ISBN = " + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getURL(),
+                            dataQualitySDContext.recordsFromExcludeUrl.get(i).getURL());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getISBN() +
+                        " URL_CODE => Diff_DElta_Curr_Hist =" + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getURL_CODE() +
+                        " Exclude=" + dataQualitySDContext.recordsFromExcludeUrl.get(i).getURL_CODE());
+
+                if (dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getURL_CODE() != null ||
+                        (dataQualitySDContext.recordsFromExcludeUrl.get(i).getURL_CODE() != null)) {
+                    Assert.assertEquals("The URL_CODE is incorrect for ISBN = " + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getURL_CODE(),
+                            dataQualitySDContext.recordsFromExcludeUrl.get(i).getURL_CODE());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getISBN() +
+                        " URL_NAME => Diff_DElta_Curr_Hist =" + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getURL_NAME() +
+                        " Exclude=" + dataQualitySDContext.recordsFromExcludeUrl.get(i).getURL_NAME());
+
+                if (dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getURL_NAME() != null ||
+                        (dataQualitySDContext.recordsFromExcludeUrl.get(i).getURL_NAME() != null)) {
+                    Assert.assertEquals("The URL_NAME is incorrect for ISBN = " + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getURL_NAME(),
+                            dataQualitySDContext.recordsFromExcludeUrl.get(i).getURL_NAME());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getISBN() +
+                        " URL_TITLE => Diff_DElta_Curr_Hist =" + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getURL_TITLE() +
+                        " Exclude=" + dataQualitySDContext.recordsFromExcludeUrl.get(i).getURL_TITLE());
+
+                if (dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getURL_TITLE() != null ||
+                        (dataQualitySDContext.recordsFromExcludeUrl.get(i).getURL_TITLE() != null)) {
+                    Assert.assertEquals("The URL_TITLE is incorrect for ISBN = " + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getURL_TITLE(),
+                            dataQualitySDContext.recordsFromExcludeUrl.get(i).getURL_TITLE());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getISBN() +
+                        " EPRID => Diff_DElta_Curr_Hist =" + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getEPRID() +
+                        " Exclude=" + dataQualitySDContext.recordsFromExcludeUrl.get(i).getEPRID());
+
+                if (dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getEPRID() != null ||
+                        (dataQualitySDContext.recordsFromExcludeUrl.get(i).getEPRID() != null)) {
+                    Assert.assertEquals("The EPRID is incorrect for ISBN = " + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getEPRID(),
+                            dataQualitySDContext.recordsFromExcludeUrl.get(i).getEPRID());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getISBN() +
+                        " WORK_TYPE => Diff_DElta_Curr_Hist =" + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getWORK_TYPE() +
+                        " Exclude=" + dataQualitySDContext.recordsFromExcludeUrl.get(i).getWORK_TYPE());
+
+                if (dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getWORK_TYPE() != null ||
+                        (dataQualitySDContext.recordsFromExcludeUrl.get(i).getWORK_TYPE() != null)) {
+                    Assert.assertEquals("The WORK_TYPE is incorrect for ISBN = " + dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.get(i).getWORK_TYPE(),
+                            dataQualitySDContext.recordsFromExcludeUrl.get(i).getWORK_TYPE());
+                }
+
+            }
+        }
+    }
+
+    @When("^Get the records from the addition of SDbooks Delta_URL and URL_Exclude$")
+    public void getSumOfDeltaAndExclude() {
+        Log.info("We get the Sum of Delta and Excude URL records...");
+        sql = String.format(SDBooksDataChecksSQL.GET_REC_SUM_DELTA_EXCL_URL, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl = DBManager.getDBResultAsBeanList(sql, SDBooksDLAccessObject.class, Constants.AWS_URL);
+    }
+
+    @Then("^Get the records from SDbooks URL latest table$")
+    public void getUrlLatest() {
+        Log.info("We get the Latest URL records...");
+        sql = String.format(SDBooksDataChecksSQL.GET_REC_LATEST_URL, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualitySDContext.recordsFromLAtestUrl = DBManager.getDBResultAsBeanList(sql, SDBooksDLAccessObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare the records of SDbooks URL Latest with addition of Delta_current_Person and Person_Exclude$")
+    public void compareLatestDataUrl() {
+        if (dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the ISBN Ids to compare the records between URL PRevious and Hist URL...");
+            for (int i = 0; i < dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.size(); i++) {
+
+                dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl  .sort(Comparator.comparing(SDBooksDLAccessObject::getISBN)); //sort primarykey data in the lists
+                dataQualitySDContext.recordsFromLAtestUrl.sort(Comparator.comparing(SDBooksDLAccessObject::getISBN));
+
+                Log.info("Sum_Delta_Excl -> ISBN => " + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getISBN() +
+                        "Latest -> ISBN => " + dataQualitySDContext.recordsFromLAtestUrl.get(i).getISBN());
+                if (dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getISBN() != null ||
+                        (dataQualitySDContext.recordsFromLAtestUrl.get(i).getISBN() != null)) {
+                    Assert.assertEquals("The ISBN is =" + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getISBN() + " is missing/not found in Sum_Delta_Excl table",
+                            dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getISBN(),
+                            dataQualitySDContext.recordsFromLAtestUrl.get(i).getISBN());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getISBN() +
+                        " BOOK_TITLE => Sum_Delta_Excl =" + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getBOOK_TITLE() +
+                        " Latest=" + dataQualitySDContext.recordsFromLAtestUrl.get(i).getBOOK_TITLE());
+
+                if (dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getBOOK_TITLE() != null ||
+                        (dataQualitySDContext.recordsFromLAtestUrl.get(i).getBOOK_TITLE() != null)) {
+                    Assert.assertEquals("The BOOK_TITLE is incorrect for ISBN = " + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getBOOK_TITLE(),
+                            dataQualitySDContext.recordsFromLAtestUrl.get(i).getBOOK_TITLE());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getISBN() +
+                        " URL => Sum_Delta_Excl =" + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getURL() +
+                        " Latest=" + dataQualitySDContext.recordsFromLAtestUrl.get(i).getURL());
+
+                if (dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getURL() != null ||
+                        (dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getURL() != null)) {
+                    Assert.assertEquals("The URL is incorrect for ISBN = " + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getURL(),
+                            dataQualitySDContext.recordsFromLAtestUrl.get(i).getURL());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getISBN() +
+                        " URL_CODE => Sum_Delta_Excl =" + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getURL_CODE() +
+                        " Latest=" + dataQualitySDContext.recordsFromLAtestUrl.get(i).getURL_CODE());
+
+                if (dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getURL_CODE() != null ||
+                        (dataQualitySDContext.recordsFromLAtestUrl.get(i).getURL_CODE() != null)) {
+                    Assert.assertEquals("The URL_CODE is incorrect for ISBN = " + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getURL_CODE(),
+                            dataQualitySDContext.recordsFromLAtestUrl.get(i).getURL_CODE());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getISBN() +
+                        " URL_NAME => Sum_Delta_Excl =" + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getURL_NAME() +
+                        " Latest=" + dataQualitySDContext.recordsFromLAtestUrl.get(i).getURL_NAME());
+
+                if (dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getURL_NAME() != null ||
+                        (dataQualitySDContext.recordsFromLAtestUrl.get(i).getURL_NAME() != null)) {
+                    Assert.assertEquals("The URL_NAME is incorrect for ISBN = " + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getURL_NAME(),
+                            dataQualitySDContext.recordsFromLAtestUrl.get(i).getURL_NAME());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getISBN() +
+                        " URL_TITLE => Sum_Delta_Excl =" + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getURL_TITLE() +
+                        " Latest=" + dataQualitySDContext.recordsFromLAtestUrl.get(i).getURL_TITLE());
+
+                if (dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getURL_TITLE() != null ||
+                        (dataQualitySDContext.recordsFromLAtestUrl.get(i).getURL_TITLE() != null)) {
+                    Assert.assertEquals("The URL_TITLE is incorrect for ISBN = " + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getURL_TITLE(),
+                            dataQualitySDContext.recordsFromLAtestUrl.get(i).getURL_TITLE());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getISBN() +
+                        " EPRID => Sum_Delta_Excl =" + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getEPRID() +
+                        " Latest=" + dataQualitySDContext.recordsFromLAtestUrl.get(i).getEPRID());
+
+                if (dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getEPRID() != null ||
+                        (dataQualitySDContext.recordsFromLAtestUrl.get(i).getEPRID() != null)) {
+                    Assert.assertEquals("The EPRID is incorrect for ISBN = " + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getEPRID(),
+                            dataQualitySDContext.recordsFromLAtestUrl.get(i).getEPRID());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getISBN() +
+                        " WORK_TYPE => Sum_Delta_Excl =" + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getWORK_TYPE() +
+                        " Latest=" + dataQualitySDContext.recordsFromLAtestUrl.get(i).getWORK_TYPE());
+
+                if (dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getWORK_TYPE() != null ||
+                        (dataQualitySDContext.recordsFromLAtestUrl.get(i).getWORK_TYPE() != null)) {
+                    Assert.assertEquals("The WORK_TYPE is incorrect for ISBN = " + dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.get(i).getWORK_TYPE(),
+                            dataQualitySDContext.recordsFromLAtestUrl.get(i).getWORK_TYPE());
+                }
+
+            }
+        }
+    }
+
+
+    @Then("^We Get the records from SD transform Delta Current History$")
+    public void getDeltaCurrentHist() {
+        Log.info("We get the Delta Current Hist URL records...");
+        sql = String.format(SDBooksDataChecksSQL.GET_REC_DELTA_CURR_HIST, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualitySDContext.recordsFromDeltaCurrUrlHistory = DBManager.getDBResultAsBeanList(sql, SDBooksDLAccessObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare the records of SDBooks delta Current and delta Current history$")
+    public void compareDeltaCurrHist() {
+        if (dataQualitySDContext.recordsFromDeltaCurrentUrl.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the ISBN Ids to compare the records between URL PRevious and Hist URL...");
+            for (int i = 0; i < dataQualitySDContext.recordsFromDeltaCurrentUrl.size(); i++) {
+
+                dataQualitySDContext.recordsFromDeltaCurrentUrl  .sort(Comparator.comparing(SDBooksDLAccessObject::getISBN)); //sort primarykey data in the lists
+                dataQualitySDContext.recordsFromDeltaCurrUrlHistory.sort(Comparator.comparing(SDBooksDLAccessObject::getISBN));
+
+                Log.info("Delta_Curr -> ISBN => " + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() +
+                        "Delta_Curr_Hist -> ISBN => " + dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getISBN());
+                if (dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() != null ||
+                        (dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getISBN() != null)) {
+                    Assert.assertEquals("The ISBN is =" + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() + " is missing/not found in Delta_Curr table",
+                            dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN(),
+                            dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getISBN());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() +
+                        " BOOK_TITLE => Delta_Curr =" + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getBOOK_TITLE() +
+                        " Delta_Curr_Hist=" + dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getBOOK_TITLE());
+
+                if (dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getBOOK_TITLE() != null ||
+                        (dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getBOOK_TITLE() != null)) {
+                    Assert.assertEquals("The BOOK_TITLE is incorrect for ISBN = " + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getBOOK_TITLE(),
+                            dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getBOOK_TITLE());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() +
+                        " URL => Delta_Curr =" + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getURL() +
+                        " Delta_Curr_Hist=" + dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getURL());
+
+                if (dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getURL() != null ||
+                        (dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getURL() != null)) {
+                    Assert.assertEquals("The URL is incorrect for ISBN = " + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getURL(),
+                            dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getURL());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() +
+                        " URL_CODE => Delta_Curr =" + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getURL_CODE() +
+                        " Delta_Curr_Hist=" + dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getURL_CODE());
+
+                if (dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getURL_CODE() != null ||
+                        (dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getURL_CODE() != null)) {
+                    Assert.assertEquals("The URL_CODE is incorrect for ISBN = " + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getURL_CODE(),
+                            dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getURL_CODE());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() +
+                        " URL_NAME => Delta_Curr =" + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getURL_NAME() +
+                        " Delta_Curr_Hist=" + dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getURL_NAME());
+
+                if (dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getURL_NAME() != null ||
+                        (dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getURL_NAME() != null)) {
+                    Assert.assertEquals("The URL_NAME is incorrect for ISBN = " + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getURL_NAME(),
+                            dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getURL_NAME());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() +
+                        " URL_TITLE => Delta_Curr =" + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getURL_TITLE() +
+                        " Delta_Curr_Hist=" + dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getURL_TITLE());
+
+                if (dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getURL_TITLE() != null ||
+                        (dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getURL_TITLE() != null)) {
+                    Assert.assertEquals("The URL_TITLE is incorrect for ISBN = " + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getURL_TITLE(),
+                            dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getURL_TITLE());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() +
+                        " EPRID => Delta_Curr =" + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getEPRID() +
+                        " Delta_Curr_Hist=" + dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getEPRID());
+
+                if (dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getEPRID() != null ||
+                        (dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getEPRID() != null)) {
+                    Assert.assertEquals("The EPRID is incorrect for ISBN = " + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getEPRID(),
+                            dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getEPRID());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() +
+                        " WORK_TYPE => Delta_Curr =" + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getWORK_TYPE() +
+                        " Delta_Curr_Hist=" + dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getWORK_TYPE());
+
+                if (dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getWORK_TYPE() != null ||
+                        (dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getWORK_TYPE() != null)) {
+                    Assert.assertEquals("The WORK_TYPE is incorrect for ISBN = " + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getWORK_TYPE(),
+                            dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getWORK_TYPE());
+                }
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() +
+                        " DELTA_MODE => Delta_Curr =" + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getDELTA_MODE() +
+                        " Delta_Curr_Hist=" + dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getDELTA_MODE());
+
+                if (dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getDELTA_MODE() != null ||
+                        (dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getDELTA_MODE() != null)) {
+                    Assert.assertEquals("The DELTA_MODE is incorrect for ISBN = " + dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromDeltaCurrentUrl.get(i).getDELTA_MODE(),
+                            dataQualitySDContext.recordsFromDeltaCurrUrlHistory.get(i).getDELTA_MODE());
+                }
+            }
+        }
+    }
+
 
 
 

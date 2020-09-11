@@ -180,7 +180,7 @@ public class SDBooksDataChecksSQL {
                     " from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_current_urls where isbn in ('%s') order by isbn desc";
 
 
-    public static String GET_RANDOM_ISBN_DELTA_CURR_HIST_URL =
+    public static String GET_RANDOM_ISBN_DIFF_DELTA_CURR_HIST_URL =
             "select isbn as ISBN " +
                     "from \n" +
                     "(select c.isbn from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_urls_part c\n" +
@@ -188,7 +188,7 @@ public class SDBooksDataChecksSQL {
                     "where d.isbn is null and c.transform_ts = (\n" +
                     "select max(c.transform_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_urls_part c ))order by rand () limit %s";
 
-    public static String GET_REC_ISBN_DELTA_CURR_HIST_URL =
+    public static String GET_REC_DIFF_DELTA_CURR_HIST_URL =
             "select isbn as ISBN " +
                     ",book_title as BOOK_TITLE" +
                     ",url as URL" +
@@ -197,13 +197,14 @@ public class SDBooksDataChecksSQL {
                     ",url_title as URL_TITLE" +
                     ",epr_id as EPRID" +
                     ",work_type as WORK_TYPE" +
-                    "from \n" +
-                    "(select c.isbn from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_urls_part c\n" +
+                    " from \n" +
+                    "(select c.isbn,c.book_title ,c.url,c.url_code,c.url_name,c.url_title,c.epr_id,c.work_type " +
+                    " from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_urls_part c\n" +
                     "left join "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_current_urls d on c.isbn  = d.isbn \n" +
                     "where d.isbn is null and c.transform_ts = (\n" +
                     "select max(c.transform_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_urls_part c ))where isbn in ('%s') order by isbn desc";
 
-    public static String GET_REC_ISBN_EXCL_URL =
+    public static String GET_REC_EXCL_URL =
             "select isbn as ISBN " +
                     ",book_title as BOOK_TITLE" +
                     ",url as URL" +
@@ -212,7 +213,7 @@ public class SDBooksDataChecksSQL {
                     ",url_title as URL_TITLE" +
                     ",epr_id as EPRID" +
                     ",work_type as WORK_TYPE" +
-                    "from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_excl_delta where isbn in ('%s') order by isbn desc";
+                    " from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_excl_delta where isbn in ('%s') order by isbn desc";
 
 
     public static String GET_RANDOM_ISBN_SUM_DELTA_EXCL_URL =
@@ -231,9 +232,9 @@ public class SDBooksDataChecksSQL {
                     ",url_title as URL_TITLE" +
                     ",epr_id as EPRID" +
                     ",work_type as WORK_TYPE" +
-                    "from \n" +
-                    "(select c.isbn from " +GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_excl_delta as c union all \n" +
-                    "select d.isbn from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_current_urls as d) where isbn in ('%s') order by isbn desc";
+                    " from \n" +
+                    "(select c.isbn,c.book_title ,c.url,c.url_code,c.url_name,c.url_title,c.epr_id,c.work_type from " +GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_excl_delta as c union all \n" +
+                    "select d.isbn,d.book_title,d.url,d.url_code,d.url_name,d.url_title,d.epr_id,d.work_type from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_current_urls as d) where isbn in ('%s') order by isbn desc";
 
     public static String GET_REC_LATEST_URL =
             "select isbn as ISBN " +
@@ -244,8 +245,29 @@ public class SDBooksDataChecksSQL {
                     ",url_title as URL_TITLE" +
                     ",epr_id as EPRID" +
                     ",work_type as WORK_TYPE" +
-                    "from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_latest_urls";
+                    " from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_latest_urls where isbn in ('%s') order by isbn desc";
 
+
+
+    public static String GET_RANDOM_ISBN_DELTA_CURR =
+            "select isbn as ISBN " +
+                    " from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_current_urls order by rand() limit %s";
+
+
+    public static String GET_REC_DELTA_CURR_HIST =
+            "select isbn as ISBN " +
+                    ",book_title as BOOK_TITLE" +
+                    ",url as URL" +
+                    ",url_code as URL_CODE" +
+                    ",url_name as URL_NAME" +
+                    ",url_title as URL_TITLE" +
+                    ",epr_id as EPRID" +
+                    ",work_type as WORK_TYPE" +
+                    ",delta_mode as DELTA_MODE"+
+                    " from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_history_urls_part \n" +
+                    "where delta_ts = (select max(delta_ts) \n" +
+                    "from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_history_urls_part) and \n" +
+                    "isbn in ('%s') order by isbn desc";
 }
 
 

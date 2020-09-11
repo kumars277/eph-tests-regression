@@ -15,7 +15,7 @@ public class SDAccessDLContext {
     public static List<SDBooksDLAccessObject> recordsFromPreviousUrlHistory;
     public static List<SDBooksDLAccessObject> recordsFromPreviousUrl;
     public static List<SDBooksDLAccessObject> recordsFromDeltaCurrentUrl;
-    public static List<SDBooksDLAccessObject> recordsFromDeltaUrlHistory;
+    public static List<SDBooksDLAccessObject> recordsFromDeltaCurrUrlHistory;
     public static List<SDBooksDLAccessObject> recordsFromDiffDeltaAndCurrentHistoryUrl;
     public static List<SDBooksDLAccessObject> recordsFromExcludeUrl;
     public static List<SDBooksDLAccessObject> recordsFromLAtestUrl;
