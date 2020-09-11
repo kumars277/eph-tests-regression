@@ -82,7 +82,6 @@ public class ProductFinderUISteps {
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
-
     @Given("^We get the id for work search (.*)$")
     public void getWorkDataFromEPHGD(String workID) {
         sql = String.format(ProductFinderSQL.SELECT_WORK_BY_ID_FOR_SEARCH, workID);
@@ -90,7 +89,6 @@ public class ProductFinderUISteps {
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
     }
-
 
     @And("^We get the work search data from the EPH GD$")
     public void getWorksDataFromEPHGD() {
@@ -103,6 +101,14 @@ public class ProductFinderUISteps {
     public void userOpensHomePage() throws InterruptedException {
         productFinderTasks.openHomePage();
         productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
+    }
+
+
+    @And("^Searches for Product by id$")
+    public void searches_for_Product_by_id() throws Throwable {
+        productId = productIdList.toString();
+        productId =   productId.replaceAll("\\[", "").replaceAll("\\]", "");
+        productFinderTasks.searchFor(productId);
     }
 
     @Then("^Searches for works by ID$")
@@ -144,6 +150,13 @@ public class ProductFinderUISteps {
         Thread.sleep(1000);
     }
 
+    @Given("^Searches for works by given \"([^\"]*)\"$")
+    public void searches_for_works_by_given(String searchKeyword) throws InterruptedException {
+        Log.info("keyword is "+searchKeyword);
+        productFinderTasks.searchFor(searchKeyword);
+    }
+
+
     @Then("^No results message is displayed for \"([^\"]*)\"$")
     public void no_results_message_is_displayed_for(String searchText) throws Throwable {
         if(tasks.verifyElementisDisplayed("XPATH",ProductFinderConstants.searchNoResults)){
@@ -164,14 +177,6 @@ public class ProductFinderUISteps {
     @And("^User is forwarded to the searched works page$")
     public void verifyUserIsForwardedToWorksPage () {
         assertTrue(productFinderTasks.isUserOnWorkPage(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID()));
-    }
-
-
-
-    @Given("^Searches for works by given \"([^\"]*)\"$")
-    public void searches_for_works_by_given(String searchKeyword) throws InterruptedException {
-        Log.info("keyword is "+searchKeyword);
-        productFinderTasks.searchFor(searchKeyword);
     }
 
     @Then("^Search items are listed and click the result based on \"([^\"]*)\"$")
@@ -313,14 +318,8 @@ public class ProductFinderUISteps {
         }
     }
 
-    @And("^Searches for Product by id$")
-    public void searches_for_Product_by_id() throws Throwable {
-        productId = productIdList.toString();
-        productId =   productId.replaceAll("\\[", "").replaceAll("\\]", "");
-        productFinderTasks.searchFor(productId);
-    }
     @Given("^Get the available Work Types from the DB \"([^\"]*)\"$")
-    public void get_the_available_Work_Types_from_the_DB(String chooseWorkType){
+      public void get_the_available_Work_Types_from_the_DB(String chooseWorkType){
         try {
             if (chooseWorkType.equalsIgnoreCase("Book")) {
                 sql = String.format(ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_BOOK);
