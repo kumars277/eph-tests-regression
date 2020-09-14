@@ -13,8 +13,6 @@ import org.junit.Assert;
 import java.util.List;
 import java.util.Map;
 
-
-
 public class BCSCountCheckSteps {
 
     private static String BCSFullSourceCountSQL, BCSCurrentCountSQL;
@@ -26,12 +24,15 @@ public class BCSCountCheckSteps {
         switch (tableName){
             case "stg_current_classification":
                 BCSFullSourceCountSQL = BCSDataLakeCountCheckSQL.GET_BCS_CLASSIFICATION_SOURCE_COUNT; break;
-        }
 
+            case "stg_current_content":
+                BCSFullSourceCountSQL =BCSDataLakeCountCheckSQL.GET_BCS_CONTENT_SOURCE_COUNT;break;
+        }
         List<Map<String, Object>> BCSFullSourceTableCount = DBManager.getDLResultMap(BCSFullSourceCountSQL, Constants.AWS_URL);
         BCSFullSourceCount = ((Long) BCSFullSourceTableCount.get(0).get("Source_Count")).intValue();
         Log.info(tableName+" source count :" +BCSFullSourceCount);
     }
+
 
 
     @Then("^Get total count of BCS Current table (.*)$")
@@ -39,7 +40,10 @@ public class BCSCountCheckSteps {
         Log.info("getting BCS current table count...");
         switch (tableName){
             case "stg_current_classification":
-                BCSCurrentCountSQL = BCSDataLakeCountCheckSQL.GET_BCS_CURRENT_CLASSIFICATION_COUNT;     break;
+                BCSCurrentCountSQL = BCSDataLakeCountCheckSQL.GET_BCS_CLASSIFICATION_CURRENT_COUNT;     break;
+
+            case "stg_current_content":
+                BCSCurrentCountSQL=BCSDataLakeCountCheckSQL.GET_BCS_CONTENT_CURRENT_COUNT;break;
         }
 
         List<Map<String, Object>> BCSCurrentTableCount = DBManager.getDBResultMap(BCSCurrentCountSQL, Constants.AWS_URL);

@@ -8,6 +8,7 @@ Feature:Validate data count for BCS tables in Data Lake
     And Compare count of initial ingest with current table <tableName>
     Examples:
       | tableName                              |
-      | stg_current_classification              |
+      | stg_current_classification             |
+      | stg_current_content                    |
 
 
