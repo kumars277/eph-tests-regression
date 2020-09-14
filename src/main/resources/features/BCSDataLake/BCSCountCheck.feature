@@ -10,5 +10,5 @@ Feature:Validate data count for BCS tables in Data Lake
       | tableName                              |
       | stg_current_classification             |
       | stg_current_content                    |
-
+|                                        stg_current_extobject|
 

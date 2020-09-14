@@ -27,6 +27,8 @@ public class BCSCountCheckSteps {
 
             case "stg_current_content":
                 BCSFullSourceCountSQL =BCSDataLakeCountCheckSQL.GET_BCS_CONTENT_SOURCE_COUNT;break;
+            case "stg_current_extobject":
+                    BCSFullSourceCountSQL =BCSDataLakeCountCheckSQL.GET_BCS_EXTOBJECT_SOURCE_COUNT;break;
         }
         List<Map<String, Object>> BCSFullSourceTableCount = DBManager.getDLResultMap(BCSFullSourceCountSQL, Constants.AWS_URL);
         BCSFullSourceCount = ((Long) BCSFullSourceTableCount.get(0).get("Source_Count")).intValue();
@@ -44,7 +46,12 @@ public class BCSCountCheckSteps {
 
             case "stg_current_content":
                 BCSCurrentCountSQL=BCSDataLakeCountCheckSQL.GET_BCS_CONTENT_CURRENT_COUNT;break;
+
+            case "stg_current_extobject":
+                BCSCurrentCountSQL=BCSDataLakeCountCheckSQL.GET_BCS_EXTOBJECT_CURRENT_COUNT;break;
+
         }
+
 
         List<Map<String, Object>> BCSCurrentTableCount = DBManager.getDBResultMap(BCSCurrentCountSQL, Constants.AWS_URL);
         BCSCurrentCount = ((Long) BCSCurrentTableCount.get(0).get("Current_Count")).intValue();

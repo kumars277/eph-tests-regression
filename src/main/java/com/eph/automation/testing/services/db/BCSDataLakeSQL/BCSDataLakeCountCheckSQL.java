@@ -14,4 +14,8 @@ public class BCSDataLakeCountCheckSQL {
 
     public static String GET_BCS_CONTENT_CURRENT_COUNT="select count(*) as Current_Count from bcs_ingestion_database_sit.stg_current_content";
 
+    public static String GET_BCS_EXTOBJECT_SOURCE_COUNT= "select count(*)  as Source_Count from (bcs_ingestion_database_sit.initial_ingest df\n" +
+            "CROSS JOIN UNNEST(\"productexternalobjects\") x (cj))";
+    public static String GET_BCS_EXTOBJECT_CURRENT_COUNT="select count(*) as Current_Count from bcs_ingestion_database_sit.stg_current_extobject";
+
 }
