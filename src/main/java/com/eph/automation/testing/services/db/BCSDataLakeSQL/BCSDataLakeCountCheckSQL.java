@@ -26,7 +26,7 @@ public class BCSDataLakeCountCheckSQL {
 
     public static String GET_BCS_FULLVERSIONFAMILY_SOURCE_COUNT=
             "select count(*) as Source_Count from (bcs_ingestion_database_sit.initial_ingest df\n" +
-                    "CROSS JOIN UNNEST(\"contentfullversionfamily\") x (fv)";
+                    "CROSS JOIN UNNEST(\"contentfullversionfamily\") x (fv))";
 
    public static String GET_BCS_FULLVERSIONFAMILY_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_sit.stg_current_fullversionfamily";

@@ -22,4 +22,3 @@ Feature:Validate data count for BCS tables in Data Lake
       |stg_current_sublocation      |
       |stg_current_text             |
       |stg_current_versionfamily    |
-    
