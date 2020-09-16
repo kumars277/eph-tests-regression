@@ -10,6 +10,14 @@ public class BCSDataLakeCountCheckSQL {
     public static String GET_BCS_CLASSIFICATION_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_sit.stg_current_classification";
 
+    public static String GET_BCS_CLASSIFICATION_PREVIOUS_COUNT=
+            "select count(*) as Previous_Count from  bcs_ingestion_database_sit.stg_previous_classification";
+
+    public static String GET_BCS_CLASSIFICATION_HISTORY_COUNT=
+            "SELECT count(*) as History_Count FROM \"bcs_ingestion_database_sit\".\"stg_history_classification_part\" " +
+            "where inbound_ts =(select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_classification_part\" " +
+            "where inbound_ts < (select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_classification_part\"))";
+
     public static String GET_BCS_CONTENT_SOURCE_COUNT =
             "SELECT count(*) as Source_Count FROM bcs_ingestion_database_sit.initial_ingest df";
 
