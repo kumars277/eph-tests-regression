@@ -87,6 +87,7 @@ public class BCSCountCheckSteps {
             case "stg_previous_classification":    BCSPreviousCount_SQL = BCSDataLakeCountCheckSQL.GET_BCS_CLASSIFICATION_PREVIOUS_COUNT; break;
         }
 
+        Log.info(BCSPreviousCount_SQL);
         List<Map<String, Object>> BCSPreviousTableCount = DBManager.getDBResultMap(BCSPreviousCount_SQL, Constants.AWS_URL);
         BCSPreviousCount = ((Long) BCSPreviousTableCount.get(0).get("{Previous_Count")).intValue();
         Log.info(tableName+" previous count :" +BCSPreviousCount);
