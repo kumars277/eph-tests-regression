@@ -4,9 +4,9 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
 
 
 
-  @SD
+  @BCSCore
   Scenario Outline: Verify Data Count for BCS_ETL Core tables is transferred from Inbound Tables
-    Given Get the total count of BCS Core from Inbound Tables <tableName>
+    Given Get the total count of BCS Core from Current Tables <tableName>
     Then  We know the total count of Inbound tables <tableName>
     And Compare count of BCS Inbound and BCS Core <tableName> tables are identical
     Examples:
@@ -20,45 +20,80 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
       |etl_work_current_v                        |
       |etl_work_identifier_current_v             |
       |etl_manifestation_identifier_current_v    |
-      |etl_accountable_product_previous_v        |
-      |etl_manifestation_previous_v              |
-      |etl_person_previous_v                     |
-      |etl_product_previous_v                    |
-      |etl_work_person_role_previous_v           |
-      |etl_work_relationship_previous_v          |
-      |etl_work_previous_v                       |
-      |etl_work_identifier_previous_v            |
-      |etl_manifestation_identifier_previous_v   |
 
 
 
-  @SD
-  Scenario Outline: Verify Data count for BCS tables are transferred from transformed_current tables
-    Given We know the total count of Current SD data from <SourceTableName>
-    Then Get the count of SD transform_current_history <TargettableName>
-    And Check count of SD current table <SourceTableName> and SD current history <TargettableName> are identical
+  @BCSCore
+  Scenario Outline: Verify Data count for BCS core delta history tables are transferred from delta_current tables
+    Given We know the total count of delta current <SourceTableName>
+    Then Get the count of delta history of current timestamp from <TargettableName>
+    And Check count of delta current table <SourceTableName> and delta history <TargettableName> are identical
     Examples:
-      |SourceTableName                      |TargettableName                                 |
-      |sdbooks_transform_current_urls       |sdbooks_transform_history_urls_part   |
+      |SourceTableName                                |TargettableName                                  |
+      |etl_delta_current_accountable_product          |etl_delta_history_accountable_product_part       |
+      |etl_delta_current_manifestation                |etl_delta_history_manifestation_part             |
+      |etl_delta_current_person                       |etl_delta_history_person_part                    |
+      |etl_delta_current_product                      |etl_delta_history_product_part                   |
+      |etl_delta_current_work_person_role             |etl_delta_history_work_person_role_part          |
+      |etl_delta_current_work_relationship            |etl_delta_history_work_relationship_part         |
+      |etl_delta_current_work                         |etl_delta_history_work_part                      |
+      |etl_delta_current_work_identifier              |etl_delta_history_work_identifier_part           |
+      |etl_delta_current_manifestation_identifier     |etl_delta_history_manifestation_identifier_part  |
 
-  @SD
-  Scenario Outline: Verify Data count for SD transform_previous_history tables are transferred from transformed_previous tables
-    Given We know the total count of Previous SD data from <SourceTableName>
-    Then Get the count of SD transform_previous_history <TargettableName>
-    And Check count of SD previous table <SourceTableName> and SD previous history <TargettableName> are identical
+  @BCSCore
+  Scenario Outline: Verify Data count for BCS core history tables are transferred from current tables
+    Given Get the total count of BCS Core from Current Tables <SourceTableName>
+    Then Get the count of BCS core history <TargettableName>
+    And Compare count of current <SourceTableName> and history <TargettableName> are identical
 
     Examples:
-      |SourceTableName                      |TargettableName                                 |
-      |sdbooks_transform_previous_urls         |sdbooks_transform_history_urls_part_previous   |
+      |SourceTableName                            |TargettableName                                    |
+      |etl_accountable_product_current_v          |etl_transform_history_accountable_product_part     |
+      |etl_manifestation_current_v                |etl_transform_history_manifestation_part           |
+      |etl_person_current_v                       |etl_transform_history_person_part                  |
+      |etl_product_current_v                      |etl_transform_history_product_part                 |
+      |etl_work_person_role_current_v             |etl_transform_history_work_person_role_part        |
+      |etl_work_relationship_current_v            |etl_transform_history_work_relationship_part       |
+      |etl_work_current_v                         |etl_transform_history_work_part                    |
+      |etl_work_identifier_current_v              |etl_transform_history_work_identifier_part         |
+      |etl_manifestation_identifier_current_v     |etl_transform_history_manifestation_identifier_part|
 
-    @SD
-     Scenario Outline: Verify Data count for SDBooks delta_current tables are transferred from Current and Previous tables
-      Given Get the difference of total count between current and previous of SDbooks data <TargetTable>
-      Then We know the delta current count for Sdbooks tables <TargetTable>
-      And Compare SDbooks delta count of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
-      Examples:
-        |FirstSourceTable                 |SecondSourceTable                        |TargetTable                            |
-        |sdbooks_transform_current_urls   |sdbooks_transform_previous_urls          |sdbooks_delta_current_urls |
+  @BCSCore
+  Scenario Outline: Verify Data count for BCS core transform_file tables are transferred from current tables
+    Given Get the total count of BCS Core from Current Tables <SourceTableName>
+    Then Get the count of BCS core transform_file <TargettableName>
+    And Compare count of current <SourceTableName> and tranform_file <TargettableName> are identical
+
+    Examples:
+      |SourceTableName                            |TargettableName                                         |
+      |etl_accountable_product_current_v          |etl_accountable_product_transform_file_history_part     |
+      |etl_manifestation_current_v                |etl_manifestation_transform_file_history_part           |
+      |etl_person_current_v                       |etl_person_transform_file_history_part                  |
+      |etl_product_current_v                      |etl_product_transform_file_history_part                 |
+      |etl_work_person_role_current_v             |etl_work_person_role_transform_file_history_part        |
+      |etl_work_relationship_current_v            |etl_work_relationship_transform_file_history_part       |
+      |etl_work_current_v                         |etl_work_transform_file_history_part                    |
+      |etl_work_identifier_current_v              |etl_work_identifier_transform_file_history_part         |
+      |etl_manifestation_identifier_current_v     |etl_manifestation_identifier_transform_file_history_part|
+
+
+  @BCSCore
+  Scenario Outline: Verify Data count for BCS Core delta_current_exclude are transferred from delta_current and current_history tables
+    Given Get the BCSCore total count difference between delta current and transform current history Table <TargetTable>
+    Then Get the BCSCore <TargetTable> exclude data count
+    And Compare BCScore exclude count of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
+    Examples:
+      |FirstSourceTable                         |SecondSourceTable                                            |TargetTable                            |
+     |etl_delta_current_accountable_product     |etl_transform_history_accountable_product_part            |etl_transform_history_accountable_product_excl_delta|
+      |etl_delta_current_manifestation          |etl_transform_history_manifestation_part                 |etl_transform_history_manifestation_excl_delta        |
+      |etl_delta_current_person                 |etl_transform_history_person_part                            |etl_transform_history_person_excl_delta           |
+      |etl_delta_current_product                |etl_transform_history_product_part                           |etl_transform_history_product_excl_delta          |
+      |etl_delta_current_work_person_role       | etl_transform_history_work_person_role_part                |etl_transform_history_work_person_role_excl_delta  |
+      |etl_delta_current_work_relationship      |etl_transform_history_work_relationship_part               |etl_transform_history_work_relationship_excl_delta  |
+      |etl_delta_current_work                    |etl_transform_history_work_part                            |etl_transform_history_work_excl_delta              |
+      |etl_delta_current_work_identifier          |etl_transform_history_work_identifier_part                |etl_transform_history_work_identifier_excl_delta   |
+      |etl_delta_current_manifestation_identifier |etl_transform_history_manifestation_identifier_part|etl_transform_history_manifestation_identifier_excl_delta |
+
 
       @SD
       Scenario Outline: Verify Data count for SDBooks delta_current_history tables are transferred from delta_current_work tables
@@ -78,14 +113,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
       |FirstSourceTable                 |SecondSourceTable                               |TargetTable                            |
         |sdbooks_delta_current_urls          |sdbooks_transform_history_excl_delta          |sdbooks_transform_latest_urls |
 
-  @SD
-  Scenario Outline: Verify Data count for SDBooks delta_current_exclude are transferred from delta_current and current_history tables
-    Given Get the SDBooks total count difference between delta current and transform current history Table <TargetTable>
-    Then Get the SDBooks <TargetTable> exclude data count
-    And Compare SDBooks exclude count of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
-    Examples:
-      |FirstSourceTable                 |SecondSourceTable                               |TargetTable                            |
-      |sdbooks_delta_current_urls          |sdbooks_transform_history_urls_part          |sdbooks_transform_history_excl_delta |
+
 
   @SD
   Scenario Outline: Verify Duplicate Entry for SDBoks in transform latest tables
