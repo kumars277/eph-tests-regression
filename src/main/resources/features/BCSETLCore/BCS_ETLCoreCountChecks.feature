@@ -83,42 +83,53 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
     Then Get the BCSCore <TargetTable> exclude data count
     And Compare BCScore exclude count of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
     Examples:
-      |FirstSourceTable                         |SecondSourceTable                                            |TargetTable                            |
-     |etl_delta_current_accountable_product     |etl_transform_history_accountable_product_part            |etl_transform_history_accountable_product_excl_delta|
-      |etl_delta_current_manifestation          |etl_transform_history_manifestation_part                 |etl_transform_history_manifestation_excl_delta        |
-      |etl_delta_current_person                 |etl_transform_history_person_part                            |etl_transform_history_person_excl_delta           |
-      |etl_delta_current_product                |etl_transform_history_product_part                           |etl_transform_history_product_excl_delta          |
-      |etl_delta_current_work_person_role       | etl_transform_history_work_person_role_part                |etl_transform_history_work_person_role_excl_delta  |
-      |etl_delta_current_work_relationship      |etl_transform_history_work_relationship_part               |etl_transform_history_work_relationship_excl_delta  |
-      |etl_delta_current_work                    |etl_transform_history_work_part                            |etl_transform_history_work_excl_delta              |
-      |etl_delta_current_work_identifier          |etl_transform_history_work_identifier_part                |etl_transform_history_work_identifier_excl_delta   |
-      |etl_delta_current_manifestation_identifier |etl_transform_history_manifestation_identifier_part|etl_transform_history_manifestation_identifier_excl_delta |
+      |FirstSourceTable                           |SecondSourceTable                                            |TargetTable                                          |
+     |etl_delta_current_accountable_product       |etl_transform_history_accountable_product_part               |etl_transform_history_accountable_product_excl_delta |
+      |etl_delta_current_manifestation            |etl_transform_history_manifestation_part                     |etl_transform_history_manifestation_excl_delta       |
+      |etl_delta_current_person                   |etl_transform_history_person_part                            |etl_transform_history_person_excl_delta              |
+      |etl_delta_current_product                  |etl_transform_history_product_part                           |etl_transform_history_product_excl_delta             |
+      |etl_delta_current_work_person_role         | etl_transform_history_work_person_role_part                 |etl_transform_history_work_person_role_excl_delta    |
+      |etl_delta_current_work_relationship        |etl_transform_history_work_relationship_part                 |etl_transform_history_work_relationship_excl_delta   |
+      |etl_delta_current_work                     |etl_transform_history_work_part                              |etl_transform_history_work_excl_delta                |
+      |etl_delta_current_work_identifier          |etl_transform_history_work_identifier_part                   |etl_transform_history_work_identifier_excl_delta     |
+      |etl_delta_current_manifestation_identifier |etl_transform_history_manifestation_identifier_part          |etl_transform_history_manifestation_identifier_excl_delta |
 
 
-      @SD
-      Scenario Outline: Verify Data count for SDBooks delta_current_history tables are transferred from delta_current_work tables
-        Given We know the delta current count for Sdbooks tables <SourceTableName>
-        Then Get the count of SDBook delta current history <TargettableName> table
-        And Compare SD delta current <SourceTableName> table and delta history <TargettableName> are identical
-        Examples:
-          |SourceTableName                   |TargettableName                                 |
-          |sdbooks_delta_current_urls           |sdbooks_delta_history_urls_part   |
 
-    @SD
-     Scenario Outline: Verify Data count for SDBooks delta_latest tables are transferred from delta_current and Current_Exclude tables
-    Given Get the sum of total count between SDBooks delta current and and Current_Exclude Table <TargetTable>
-    Then Get the SDbooks <TargetTable> latest data count
-    And Compare SDBooks latest counts of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
+    @BCSCore
+    Scenario Outline: Verify Data count for BCSCore delta_latest tables are transferred from delta_current and Current_Exclude tables
+    Given Get the sum of total count between BCSCore delta current and and Current_Exclude Table <TargetTable>
+    Then Get the BCSCore <TargetTable> latest data count
+    And Compare BCSCore latest counts of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
     Examples:
-      |FirstSourceTable                 |SecondSourceTable                               |TargetTable                            |
-        |sdbooks_delta_current_urls          |sdbooks_transform_history_excl_delta          |sdbooks_transform_latest_urls |
+      |FirstSourceTable                           |SecondSourceTable                                                  |TargetTable                                      |
+      |etl_delta_current_accountable_product      |etl_transform_history_accountable_product_excl_delta               |etl_transform_history_accountable_product_latest |
+      |etl_delta_current_manifestation            |etl_transform_history_manifestation_excl_delta                     |etl_transform_history_manifestation_latest       |
+      |etl_delta_current_person                   |etl_transform_history_person_excl_delta                            |etl_transform_history_person_latest              |
+      |etl_delta_current_product                  |etl_transform_history_product_excl_delta                           |etl_transform_history_product_latest             |
+      |etl_delta_current_work_person_role         | etl_transform_history_work_person_role_excl_delta                 |etl_transform_history_work_person_role_latest    |
+      |etl_delta_current_work_relationship        |etl_transform_history_work_relationship_excl_delta                 |etl_transform_history_work_relationship_latest   |
+      |etl_delta_current_work                     |etl_transform_history_work_excl_delta                              |etl_transform_history_work_latest                |
+      |etl_delta_current_work_identifier          |etl_transform_history_work_identifier_excl_delta                   |etl_transform_history_work_identifier_latest     |
+      |etl_delta_current_manifestation_identifier |etl_transform_history_manifestation_identifier_excl_delta          |etl_transform_history_manifestation_identifier_latest |
+
 
 
 
   @SD
-  Scenario Outline: Verify Duplicate Entry for SDBoks in transform latest tables
-    Given Get the SDBooks Duplicate count in <SourceTableName> table
-    Then Check the SDBooks count should be equal to Zero <SourceTableName>
+  Scenario Outline: Verify Duplicate Entry for BCS COre in transform latest tables
+    Given Get the BCCore Duplicate count in <SourceTableName> table
+    Then Check the BCSCore count should be equal to Zero <SourceTableName>
     Examples:
       |SourceTableName                      |
-      |sdbooks_transform_latest_urls           |
+      |etl_transform_history_accountable_product_latest           |
+    |etl_transform_history_manifestation_latest                 |
+    |etl_transform_history_person_latest                        |
+    |etl_transform_history_product_latest                       |
+    |etl_transform_history_work_person_role_latest              |
+    |etl_transform_history_work_relationship_latest             |
+    |etl_transform_history_work_latest                          |
+    |etl_transform_history_work_identifier_latest               |
+    |etl_transform_history_manifestation_identifier_latest      |
+
+    ## Delta New Logic To be Implemented when the query is ready ##

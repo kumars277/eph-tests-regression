@@ -529,6 +529,124 @@ public class BCS_ETLCoreCountChecksSQL {
     public static String GET_MANIF_IDENTIF_EXCL_COUNT =
             "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_identifier_excl_delta";
 
+    public static String GET_ACC_PROD_LATEST_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_accountable_product_latest";
+
+    public static String GET_MANIF_LATEST_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_latest";
+
+    public static String GET_PERSON_LATEST_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_latest";
+
+    public static String GET_PRODUCT_LATEST_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_product_latest";
+
+    public static String GET_WRK_PERS_LATEST_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_person_role_latest";
+
+    public static String GET_WRK_RELT_LATEST_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_relationship_latest";
+
+    public static String GET_WRK_LATEST_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_latest";
+
+    public static String GET_WRK_IDENTIF_LATEST_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_identifier_latest";
+
+    public static String GET_MANIF_IDENTIF_LATEST_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_identifier_latest";
+
+
+    public static String GET_ACC_PROD_SUM_DELTACURR_EXCL_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.sourceref from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_accountable_product_excl_delta as c union all \n" +
+                    "select d.sourceref from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_accountable_product as d)";
+
+    public static String GET_MANIF_SUM_DELTACURR_EXCL_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.sourceref from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_excl_delta as c union all \n" +
+                    "select d.sourceref from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_manifestation as d)";
+
+    public static String GET_PERSON_SUM_DELTACURR_EXCL_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.sourceref from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_excl_delta\n" +
+                    "as c union all \n" +
+                    "select d.sourceref from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_person as d)";
+
+    public static String GET_PRODUCT_SUM_DELTACURR_EXCL_COUNT=
+           "select count(*) as source_count from \n" +
+                   "(select c.sourceref from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_product_excl_delta\n" +
+                   "as c union all \n" +
+                   "select d.sourceref from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_product as d)";
+
+    public static String GET_WRK_PERS_SUM_DELTACURR_EXCL_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_person_role_excl_delta as c \n" +
+                    "union all \n" +
+                    "select d.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_work_person_role as d)";
+
+    public static String GET_WRK_RELT_SUM_DELTACURR_EXCL_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_relationship_excl_delta\n" +
+                    "as c union all \n" +
+                    "select d.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_work_relationship as d)";
+
+    public static String GET_WRK_SUM_DELTACURR_EXCL_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.sourceref from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_excl_delta\n" +
+                    "as c union all \n" +
+                    "select d.sourceref from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_work as d)";
+
+    public static String GET_WRK_IDENTIF_SUM_DELTACURR_EXCL_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.sourceref from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_identifier_excl_delta as c union all \n" +
+                    "select d.sourceref from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_work_identifier as d)";
+
+
+    public static String GET_MANIF_IDENTIF_SUM_DELTACURR_EXCL_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.sourceref from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_identifier_excl_delta\n" +
+                    "as c union all \n" +
+                    "select d.sourceref from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_manifestation_identifier as d)";
+
+
+    public static String GET_DUPLICATES_LATEST_ACC_PROD_COUNT =
+            "select count(*) as Duplicate_Count " +
+                    "from (SELECT count(*) FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_accountable_product_latest " +
+                    "group by u_key having count(*)>1)";
+
+
+    public static String GET_DUPLICATES_LATEST_MANIF_COUNT =
+            "select count(*) as Duplicate_Count " +
+                    "from (SELECT count(*) FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_latest " +
+                    "group by sourceref having count(*)>1)";
+
+
+    public static String GET_DUPLICATES_LATEST_PROD_COUNT =
+            "select count(*) as Duplicate_Count from " +
+                    "(SELECT count(*) FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_product_latest " +
+                    "group by u_key having count(*)>1)";
+
+    public static String GET_DUPLICATES_LATEST_PERSON_COUNT =
+            "select count(*) as Duplicate_Count from (SELECT count(*) FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_latest group by sourceref having count(*)>1)";
+
+    public static String  GET_DUPLICATES_LATEST_WORK_RELT_COUNT=
+        "select count(*) as Duplicate_Count " +
+                "from (SELECT count(*) " +
+                "FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_relationship_latest " +
+                "group by u_key having count(*)>1)";
+
+    public static String GET_DUPLICATES_LATEST_WORK_PERS_COUNT =
+            "select count(*) as Duplicate_Count from (SELECT count(*) FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_person_role_latest group by u_key having count(*)>1)";
+
+    public static String GET_DUPLICATES_LATEST_WORK_COUNT =
+            "select count(*) as Duplicate_Count from (SELECT count(*) FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_latest group by sourceref having count(*)>1)";
+
+    public static String GET_DUPLICATES_WORK_IDENTIFIER_COUNT =
+            "select count(*) as Duplicate_Count from (SELECT count(*) FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_identifier_latest group by sourceref,identifier,identifier_type having count(*)>1)";
+
+    public static String GET_DUPLICATES_MANIF_IDENTIFIER_COUNT =
+            "select count(*) as Duplicate_Count from (SELECT count(*) FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_identifier_latest group by sourceref,identifier,identifier_type having count(*)>1)";
 }
 
 

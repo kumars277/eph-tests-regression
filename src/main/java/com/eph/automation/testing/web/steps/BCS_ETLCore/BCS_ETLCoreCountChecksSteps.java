@@ -30,16 +30,16 @@ public class BCS_ETLCoreCountChecksSteps {
     private static int BCSDiffDeltaAndHistCurrentCount;
     private static int BCSExcludeCount;
     private static String BCSExclSQLCurrentCount;
-    private static String SDDeltaExclSQLCount;
-    private static int SDDeltaExclCount;
-    private static String SDLatestSQLCount;
+    private static String BCSLatestSQLCurrentCount;
+    private static int BCSumDeltaExclCount;
+    private static String BCSCoreDuplicateLatestSQLCount;
     private static int SDLatestCount;
     private static String SDDeltaCurrHistSQLCount;
     private static int SDDeltaCurrHistCount;
     private static String SDExclSQLCount;
-    private static int SDExclCount;
-    private static int SDDuplicateLatestCount;
-    private static String SDDuplicateLatestSQLCount;
+    private static int BCSCoreDuplicateLatestCount;
+    private static int BCSLatestCount;
+    private static String BCSSumDeltaExclSQLCurrentCount;
 
 
 
@@ -440,6 +440,163 @@ public class BCS_ETLCoreCountChecksSteps {
         Log.info("The Diff of count for table "+srcTable1+" and "+srcTable2+" => " + BCSDiffDeltaAndHistCurrentCount + " and in "+trgtTable+" => " + BCSExcludeCount);
         Assert.assertEquals("The counts are not equal when compared with Diff of "+srcTable1+" and "+srcTable2+"with "+trgtTable, BCSExcludeCount, BCSDiffDeltaAndHistCurrentCount);
     }
+
+    @Then("^Get the BCSCore (.*) latest data count$")
+    public void getBCSCoreLatestCount (String tableName) {
+        switch (tableName){
+            case "etl_transform_history_accountable_product_latest":
+                Log.info("Getting Latest for Accountable Product Current File Table Count...");
+                BCSLatestSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_ACC_PROD_LATEST_COUNT;
+                break;
+            case "etl_transform_history_manifestation_latest":
+                Log.info("Getting Latest for Manifestation Current File Table Count...");
+                BCSLatestSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_MANIF_LATEST_COUNT;
+                break;
+            case "etl_transform_history_person_latest":
+                Log.info("Getting Latest for Person Current File Table Count...");
+                BCSLatestSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_PERSON_LATEST_COUNT;
+                break;
+            case "etl_transform_history_product_latest":
+                Log.info("Getting Latest for Product Current File Table Count...");
+                BCSLatestSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_PRODUCT_LATEST_COUNT;
+                break;
+            case "etl_transform_history_work_person_role_latest":
+                Log.info("Getting Latest for work person Current File Table Count...");
+                BCSLatestSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_WRK_PERS_LATEST_COUNT;
+                break;
+            case "etl_transform_history_work_relationship_latest":
+                Log.info("Getting Latest for work Relation Current File Table Count...");
+                BCSLatestSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_WRK_RELT_LATEST_COUNT;
+                break;
+            case "etl_transform_history_work_latest":
+                Log.info("Getting Latest for work Current Table File Count...");
+                BCSLatestSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_WRK_LATEST_COUNT;
+                break;
+            case "etl_transform_history_work_identifier_latest":
+                Log.info("Getting Latest for work identifier Current File Table Count...");
+                BCSLatestSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_WRK_IDENTIF_LATEST_COUNT;
+                break;
+            case "etl_transform_history_manifestation_identifier_latest":
+                Log.info("Getting Latest for manif identifier Current File Table Count...");
+                BCSLatestSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_MANIF_IDENTIF_LATEST_COUNT;
+                break;
+
+        }
+        Log.info(BCSLatestSQLCurrentCount);
+        List<Map<String, Object>> BCSLatestTableCount = DBManager.getDBResultMap(BCSLatestSQLCurrentCount, Constants.AWS_URL);
+        BCSLatestCount = ((Long) BCSLatestTableCount.get(0).get("Target_Count")).intValue();
+    }
+
+
+    @Given("^Get the sum of total count between BCSCore delta current and and Current_Exclude Table (.*)$")
+    public void getSumOfExclAndDeltaCurrCount (String tableName) {
+        switch (tableName){
+            case "etl_transform_history_accountable_product_latest":
+                Log.info("Getting Sum of Delta Curr & Excl for Accountable Product Current File Table Count...");
+                BCSSumDeltaExclSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_ACC_PROD_SUM_DELTACURR_EXCL_COUNT;
+                break;
+            case "etl_transform_history_manifestation_latest":
+                Log.info("Getting Sum of Delta Curr & Excl for Manifestation Current File Table Count...");
+                BCSSumDeltaExclSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_MANIF_SUM_DELTACURR_EXCL_COUNT;
+                break;
+            case "etl_transform_history_person_latest":
+                Log.info("Getting Sum of Delta Curr & Excl for Person Current File Table Count...");
+                BCSSumDeltaExclSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_PERSON_SUM_DELTACURR_EXCL_COUNT;
+                break;
+            case "etl_transform_history_product_latest":
+                Log.info("Getting Sum of Delta Curr & Excl for Product Current File Table Count...");
+                BCSSumDeltaExclSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_PRODUCT_SUM_DELTACURR_EXCL_COUNT;
+                break;
+            case "etl_transform_history_work_person_role_latest":
+                Log.info("Getting Sum of Delta Curr & Excl for work person Current File Table Count...");
+                BCSSumDeltaExclSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_WRK_PERS_SUM_DELTACURR_EXCL_COUNT;
+                break;
+            case "etl_transform_history_work_relationship_latest":
+                Log.info("Getting Sum of Delta Curr & Excl for work Relation Current File Table Count...");
+                BCSSumDeltaExclSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_WRK_RELT_SUM_DELTACURR_EXCL_COUNT;
+                break;
+            case "etl_transform_history_work_latest":
+                Log.info("Getting Sum of Delta Curr & Excl for work Current Table File Count...");
+                BCSSumDeltaExclSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_WRK_SUM_DELTACURR_EXCL_COUNT;
+                break;
+            case "etl_transform_history_work_identifier_latest":
+                Log.info("Getting Sum of Delta Curr & Excl for work identifier Current File Table Count...");
+                BCSSumDeltaExclSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_WRK_IDENTIF_SUM_DELTACURR_EXCL_COUNT;
+                break;
+            case "etl_transform_history_manifestation_identifier_latest":
+                Log.info("Getting Sum of Delta Curr & Excl for manif identifier Current File Table Count...");
+                BCSSumDeltaExclSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_MANIF_IDENTIF_SUM_DELTACURR_EXCL_COUNT;
+                break;
+
+        }
+        Log.info(BCSSumDeltaExclSQLCurrentCount);
+        List<Map<String, Object>> BCSSumDeltaExclTableCount = DBManager.getDBResultMap(BCSSumDeltaExclSQLCurrentCount, Constants.AWS_URL);
+        BCSumDeltaExclCount = ((Long) BCSSumDeltaExclTableCount.get(0).get("source_count")).intValue();
+
+    }
+
+
+    @And("^Compare BCSCore latest counts of (.*) and (.*) with (.*) are identical$")
+    public void compareLatestCounts(String srcTable1,String srcTable2, String trgtTable){
+        Log.info("The Diff of count for table "+srcTable1+" and "+srcTable2+" => " + BCSLatestCount + " and in "+trgtTable+" => " + BCSumDeltaExclCount);
+        Assert.assertEquals("The counts are not equal when compared with Diff of "+srcTable1+" and "+srcTable2+"with "+trgtTable, BCSLatestCount, BCSumDeltaExclCount);
+    }
+
+    @Given("^Get the BCCore Duplicate count in (.*) table$")
+    public void getDuplicateCount(String tableName){
+        switch (tableName){
+            case "etl_transform_history_accountable_product_latest":
+                Log.info("Getting Duplicate Acc Prod Latest Table Count...");
+                BCSCoreDuplicateLatestSQLCount = BCS_ETLCoreCountChecksSQL.GET_DUPLICATES_LATEST_ACC_PROD_COUNT;
+                break;
+            case "etl_transform_history_manifestation_latest":
+                Log.info("Getting Duplicate MANIF Latest Table Count...");
+                BCSCoreDuplicateLatestSQLCount = BCS_ETLCoreCountChecksSQL.GET_DUPLICATES_LATEST_MANIF_COUNT;
+                break;
+            case "etl_transform_history_person_latest":
+                Log.info("Getting Duplicate Person Latest Table Count...");
+                BCSCoreDuplicateLatestSQLCount = BCS_ETLCoreCountChecksSQL.GET_DUPLICATES_LATEST_PERSON_COUNT;
+                break;
+            case "etl_transform_history_product_latest":
+                Log.info("Getting Duplicate Product Latest Table Count...");
+                BCSCoreDuplicateLatestSQLCount = BCS_ETLCoreCountChecksSQL.GET_DUPLICATES_LATEST_PROD_COUNT;
+                break;
+            case "etl_transform_history_work_person_role_latest":
+                Log.info("Getting Duplicate Work Person Role Latest Table Count...");
+                BCSCoreDuplicateLatestSQLCount = BCS_ETLCoreCountChecksSQL.GET_DUPLICATES_LATEST_WORK_PERS_COUNT;
+                break;
+
+            case "etl_transform_history_work_relationship_latest":
+                Log.info("Getting Duplicate Work Latest Table Count...");
+                BCSCoreDuplicateLatestSQLCount = BCS_ETLCoreCountChecksSQL.GET_DUPLICATES_LATEST_WORK_RELT_COUNT;
+                break;
+
+            case "etl_transform_history_work_latest":
+                Log.info("Getting Duplicate Work Latest Table Count...");
+                BCSCoreDuplicateLatestSQLCount = BCS_ETLCoreCountChecksSQL.GET_DUPLICATES_LATEST_WORK_COUNT;
+                break;
+            case "etl_transform_history_work_identifier_latest":
+                Log.info("Getting Duplicate Work Identifier Latest Table Count...");
+                BCSCoreDuplicateLatestSQLCount = BCS_ETLCoreCountChecksSQL.GET_DUPLICATES_WORK_IDENTIFIER_COUNT;
+                break;
+            case "etl_transform_history_manifestation_identifier_latest":
+                Log.info("Getting Duplicate Manif Identifier Table Count...");
+                BCSCoreDuplicateLatestSQLCount = BCS_ETLCoreCountChecksSQL.GET_DUPLICATES_MANIF_IDENTIFIER_COUNT;
+                break;
+
+        }
+        Log.info(BCSCoreDuplicateLatestSQLCount);
+        List<Map<String, Object>> BCSCoreDupLatestTableCount = DBManager.getDBResultMap(BCSCoreDuplicateLatestSQLCount, Constants.AWS_URL);
+        BCSCoreDuplicateLatestCount = ((Long) BCSCoreDupLatestTableCount.get(0).get("Duplicate_Count")).intValue();
+    }
+
+    @Then("^Check the BCSCore count should be equal to Zero (.*)$")
+    public void checkDupCountZero(String tableName){
+        Log.info("The Duplicate count for "+tableName+" => " + BCSCoreDuplicateLatestCount);
+        Assert.assertEquals("There are Duplicate Count of "+tableName,0,BCSCoreDuplicateLatestCount);
+
+    }
+
 
 
 
