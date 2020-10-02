@@ -476,9 +476,9 @@ public class BCS_ETLCoreCountChecksSQL {
 
     public static String GET_WRK_RELT_DIFF_DELTA_AND_HIST_COUNT =
             "select count(*) as Source_Count from \n" +
-                    "(select c.sourceref from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_relationship_part c\n" +
-                    "left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_work_relationship d on c.sourceref  = d.sourceref \n" +
-                    "where d.sourceref is null and c.transform_ts = (\n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_relationship_part c\n" +
+                    "left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_work_relationship d on c.u_key  = d.u_key \n" +
+                    "where d.u_key is null and c.transform_ts = (\n" +
                     "select max(c.transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_relationship_part c ))";
 
     public static String GET_WRK_DIFF_DELTA_AND_HIST_COUNT =
