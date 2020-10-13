@@ -1,11 +1,11 @@
 /* Created by Nishant @ 04 Aug 2020 */
+//resumed automation on 23 Sep 2020
 package com.eph.automation.testing.services.db.BCSDataLakeSQL;
 
 public class BCSDataLakeCountCheckSQL {
 
     public static String GET_BCS_CLASSIFICATION_SOURCE_COUNT =
-            "SELECT  count(*)as Source_Count FROM  (bcs_ingestion_database_sit.initial_ingest f\n" +
-            "CROSS JOIN UNNEST(\"distributionclassification\") x (cl))";
+            "SELECT  count(*)as Source_Count FROM  (bcs_ingestion_database_sit.initial_ingest f CROSS JOIN UNNEST(distributionclassification) x (cl))";
 
     public static String GET_BCS_CLASSIFICATION_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_sit.stg_current_classification";
@@ -14,15 +14,24 @@ public class BCSDataLakeCountCheckSQL {
             "select count(*) as Previous_Count from  bcs_ingestion_database_sit.stg_previous_classification";
 
     public static String GET_BCS_CLASSIFICATION_HISTORY_COUNT=
-            "SELECT count(*) as History_Count FROM \"bcs_ingestion_database_sit\".\"stg_history_classification_part\" " +
-            "where inbound_ts =(select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_classification_part\" " +
-            "where inbound_ts < (select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_classification_part\"))";
+            "SELECT count(*) as History_Count FROM bcs_ingestion_database_sit.stg_history_classification_part " +
+            "where inbound_ts =(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_classification_part " +
+            "where inbound_ts <(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_classification_part))";
 
     public static String GET_BCS_CONTENT_SOURCE_COUNT =
             "SELECT count(*) as Source_Count FROM bcs_ingestion_database_sit.initial_ingest df";
 
     public static String GET_BCS_CONTENT_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_sit.stg_current_content";
+
+    public static String GET_BCS_CONTENT_PREVIOUS_COUNT=
+            "select count(*) as Previous_Count from bcs_ingestion_database_sit.stg_previous_content";
+
+    public static String GET_BCS_CONTENT_HISTORY_COUNT=
+            "SELECT count(*) as History_Count FROM bcs_ingestion_database_sit.stg_history_content_part " +
+             "where inbound_ts =(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_content_part " +
+             "where inbound_ts < (select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_content_part))";
+
 
     public static String GET_BCS_EXTOBJECT_SOURCE_COUNT=
             "select count(*)  as Source_Count from (bcs_ingestion_database_sit.initial_ingest df\n" +
@@ -31,6 +40,14 @@ public class BCSDataLakeCountCheckSQL {
     public static String GET_BCS_EXTOBJECT_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_sit.stg_current_extobject";
 
+    public static String GET_BCS_EXTOBJECT_PREVIOUS_COUNT=
+            "select count(*) as Previous_Count from bcs_ingestion_database_sit.stg_previous_extobject";
+
+    public static String GET_BCS_EXTOBJECT_HISTORY_COUNT=
+            "SELECT count(*) as History_Count FROM bcs_ingestion_database_sit.stg_history_extobject_part " +
+              "where inbound_ts =(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_extobject_part " +
+              "where inbound_ts < (select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_extobject_part))";
+
 
     public static String GET_BCS_FULLVERSIONFAMILY_SOURCE_COUNT=
             "select count(*) as Source_Count from (bcs_ingestion_database_sit.initial_ingest df\n" +
@@ -38,6 +55,14 @@ public class BCSDataLakeCountCheckSQL {
 
    public static String GET_BCS_FULLVERSIONFAMILY_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_sit.stg_current_fullversionfamily";
+
+    public static String GET_BCS_FULLVERSIONFAMILY_PREVIOUS_COUNT=
+            "select count(*) as Previous_Count from bcs_ingestion_database_sit.stg_previous_fullversionfamily ";
+
+    public static String GET_BCS_FULLVERSIONFAMILY_HISTORY_COUNT=
+            "SELECT count(*) as History_Count FROM \"bcs_ingestion_database_sit\".\"stg_history_fullversionfamily_part\" " +
+              "where inbound_ts =(select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_fullversionfamily_part\" " +
+              "where inbound_ts < (select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_fullversionfamily_part\"))";
 
     public static String GET_BCS_ORIGINATORADDRESS_SOURCE_COUNT=
             "with originator as (\n" +
@@ -80,6 +105,9 @@ public class BCSDataLakeCountCheckSQL {
     public static String GET_BCS_ORIGINATORADDRESS_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_sit.stg_current_originatoraddress";
 
+    //public static String GET_BCS_ORIGINATORADDRESS_PREVIOUS_COUNT=
+    //public static String GET_BCS_ORIGINATORADDRESS_HISTORY_COUNT=
+
     public static String GET_BCS_ORIGINATORS_SOURCE_COUNT=
             "select count(*) as Source_Count from (bcs_ingestion_database_sit.initial_ingest df\n" +
             "CROSS JOIN UNNEST(\"contactsoriginators\") x (\"co\"))";
@@ -87,19 +115,41 @@ public class BCSDataLakeCountCheckSQL {
     public static String GET_BCS_ORIGINATORS_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_sit.stg_current_originators";
 
+    public static String GET_BCS_ORIGINATORS_PREVIOUS_COUNT=
+            "select count(*) as Previous_Count from bcs_ingestion_database_sit.stg_previous_originators";
+
+    public static String GET_BCS_ORIGINATORS_HISTORY_COUNT=
+            "SELECT count(*) as History_Count FROM \"bcs_ingestion_database_sit\".\"stg_history_originators_part\" " +
+             "where inbound_ts =(select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_originators_part\" " +
+             "where inbound_ts < (select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_originators_part\"))";
+
     public static String GET_BCS_PRICING_SOURCE_COUNT=
-            "select count(*) as Source_Count from (bcs_ingestion_database_sit.initial_ingest df\n" +
-                    "CROSS JOIN UNNEST(\"productprice\") x (\"cp\"))";
+            "select count(*) as Source_Count from (bcs_ingestion_database_sit.initial_ingest df CROSS JOIN UNNEST(\"productprice\") x (\"cp\"))";
 
     public static String GET_BCS_PRICING_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_sit.stg_current_pricing";
+
+    public static String GET_BCS_PRICING_PREVIOUS_COUNT=
+            "select count(*) as Previous_Count from bcs_ingestion_database_sit.stg_previous_pricing";
+
+    public static String GET_BCS_PRICING_HISTORY_COUNT=
+            "SELECT count(*) as History_Count FROM \"bcs_ingestion_database_sit\".\"stg_history_pricing_part\" " +
+             "where inbound_ts =(select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_pricing_part\" " +
+             "where inbound_ts < (select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_pricing_part\"))";
 
     public static String GET_BCS_PRODUCT_SOURCE_COUNT=
             "select count(*) as Source_Count from (bcs_ingestion_database_sit.initial_ingest df)";
 
     public static String GET_BCS_PRODUCT_CURRENT_COUNT=
-            "select count(*) as Current_Count from \n" +
-                    "bcs_ingestion_database_sit.stg_current_product";
+            "select count(*) as Current_Count from bcs_ingestion_database_sit.stg_current_product";
+
+    public static String GET_BCS_PRODUCT_PREVIOUS_COUNT=
+            "select count(*) as Previous_Count from bcs_ingestion_database_sit.stg_previous_product";
+
+    public static String GET_BCS_PRODUCT_HISTORY_COUNT=
+            "SELECT count(*) as History_Count FROM \"bcs_ingestion_database_sit\".\"stg_history_product_part\" " +
+             "where inbound_ts =(select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_product_part\" " +
+             "where inbound_ts < (select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_product_part\"))";
 
     public static String GET_BCS_PRODUCTION_SOURCE_COUNT=
             "select count(*) as Source_Count from (bcs_ingestion_database_sit.initial_ingest df)";
@@ -107,44 +157,83 @@ public class BCSDataLakeCountCheckSQL {
     public static String GET_BCS_PRODUCTION_CURRENT_COUNT=
             "select  count(*) as Current_Count from bcs_ingestion_database_sit.stg_current_production";
 
+    public static String GET_BCS_PRODUCTION_PREVIOUS_COUNT=
+            "select  count(*) as Previous_Count from bcs_ingestion_database_sit.stg_previous_production ";
+
+    public static String GET_BCS_PRODUCTION_HISTORY_COUNT=
+            "SELECT count(*) as History_Count FROM \"bcs_ingestion_database_sit\".\"stg_history_production_part\" " +
+             "where inbound_ts =(select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_production_part\" " +
+             "where inbound_ts < (select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_production_part\"))";
+
     public static String GET_BCS_RELATIONS_SOURCE_COUNT=
-            "select  count(*) as Source_Count from (bcs_ingestion_database_sit.initial_ingest df \n" +
-                    "CROSS JOIN UNNEST(\"productrelation\") x (\"cj\"))";
+            "select  count(*) as Source_Count from (bcs_ingestion_database_sit.initial_ingest df CROSS JOIN UNNEST(\"productrelation\") x (\"cj\"))";
 
     public static String GET_BCS_RELATIONS_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_sit.stg_current_relations";
 
+    public static String GET_BCS_RELATIONS_PREVIOUS_COUNT=
+            "select count(*) as Previous_Count from bcs_ingestion_database_sit.stg_previous_relations";
+
+    public static String GET_BCS_RELATIONS_HISTORY_COUNT=
+            "SELECT count(*) as History_Count FROM \"bcs_ingestion_database_sit\".\"stg_history_relations_part\" " +
+             "where inbound_ts =(select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_relations_part\" " +
+             "where inbound_ts < (select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_relations_part\" ))";
+
     public static String GET_BCS_RESPONSIBILITIES_SOURCE_COUNT=
-            "select COUNT(*) as Source_Count from (bcs_ingestion_database_sit.initial_ingest df \n" +
-                    "CROSS JOIN UNNEST(\"contactsresponsibilities\") x (\"cj\"))";
+            "select COUNT(*) as Source_Count from (bcs_ingestion_database_sit.initial_ingest df CROSS JOIN UNNEST(\"contactsresponsibilities\") x (\"cj\"))";
 
     public static String GET_BCS_RESPONSIBILITIES_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_sit.stg_current_responsibilities";
 
+    public static String GET_BCS_RESPONSIBILITIES_PREVIOUS_COUNT=
+            "select count(*) as Previous_Count from bcs_ingestion_database_sit.stg_previous_responsibilities";
+
+    public static String GET_BCS_RESPONSIBILITIES_HISTORY_COUNT=
+            "SELECT count(*) as History_Count FROM \"bcs_ingestion_database_sit\".\"stg_history_responsibilities_part\" " +
+             "where inbound_ts =(select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_responsibilities_part\" " +
+             "where inbound_ts < (select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_responsibilities_part\" ))";
+
     public static String GET_BCS_SUBLOCATION_SOURCE_COUNT=
-            "select COUNT(*) as Source_Count from (bcs_ingestion_database_sit.initial_ingest df \n" +
-                    "CROSS JOIN UNNEST(\"productsublocation\") x (\"cj\"))";
+            "select COUNT(*) as Source_Count from (bcs_ingestion_database_sit.initial_ingest df CROSS JOIN UNNEST(\"productsublocation\") x (\"cj\"))";
 
     public static String GET_BCS_SUBLOCATION_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_sit.stg_current_sublocation";
 
+    public static String GET_BCS_SUBLOCATION_PREVIOUS_COUNT=
+            "select count(*) as Previous_Count from bcs_ingestion_database_sit.stg_previous_sublocation";
+
+    public static String GET_BCS_SUBLOCATION_HISTORY_COUNT=
+            "SELECT count(*) as History_Count FROM \"bcs_ingestion_database_sit\".\"stg_history_sublocation_part\" " +
+             "where inbound_ts =(select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_sublocation_part\" " +
+             "where inbound_ts < (select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_sublocation_part\" ))";
+
     public static String GET_BCS_TEXT_SOURCE_COUNT=
-            "select COUNT(*) as Source_Count from bcs_ingestion_database_sit.\"initial_ingest\" \"df\"\n" +
-                    "CROSS JOIN UNNEST(\"distributiontext\") x (\"cj\")";
+            "select COUNT(*) as Source_Count from bcs_ingestion_database_sit.\"initial_ingest\" \"df\" CROSS JOIN UNNEST(\"distributiontext\") x (\"cj\")";
 
     public static String GET_BCS_TEXT_CURRENT_COUNT=
             "select COUNT(*) as Current_Count from bcs_ingestion_database_sit.stg_current_text";
 
+    public static String GET_BCS_TEXT_PREVIOUS_COUNT=
+            "select COUNT(*) as Previous_Count from bcs_ingestion_database_sit.stg_previous_text";
+
+    public static String GET_BCS_TEXT_HISTORY_COUNT=
+            "SELECT count(*) as History_Count FROM \"bcs_ingestion_database_sit\".\"stg_history_text_part\" " +
+             "where inbound_ts =(select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_text_part\" " +
+             "where inbound_ts < (select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_text_part\" ))";
+
     public static String GET_BCS_VERSIONFAMILY_SOURCE_COUNT=
-            "select count(*) as Source_Count from bcs_ingestion_database_sit.\"initial_ingest\" \"df\"\n" +
-                    "CROSS JOIN UNNEST(\"contentversionfamily\") x (\"cj\")";
+            "select count(*) as Source_Count from bcs_ingestion_database_sit.\"initial_ingest\" \"df\" CROSS JOIN UNNEST(\"contentversionfamily\") x (\"cj\")";
 
     public static String GET_BCS_VERSIONFAMILY_CURRENT_COUNT=
             "select count(*) as Current_Count from bcs_ingestion_database_sit.stg_current_versionfamily";
 
+    public static String GET_BCS_VERSIONFAMILY_PREVIOUS_COUNT=
+            "select count(*) as Previous_Count from bcs_ingestion_database_sit.stg_previous_versionfamily";
 
-
-
+    public static String GET_BCS_VERSIONFAMILY_HISTORY_COUNT=
+            "SELECT count(*) as History_Count FROM \"bcs_ingestion_database_sit\".\"stg_history_versionfamily_part\" " +
+             "where inbound_ts =(select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_versionfamily_part\" " +
+             "where inbound_ts < (select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_versionfamily_part\" ))";
 
 
 
