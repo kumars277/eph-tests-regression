@@ -33,8 +33,50 @@ public class SDDataLakeCountChecksSQL {
                     "where transform_ts<(select max(transform_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_urls_part)) and delete_flag = false\n";
 
 
+    public static String GET_SD_URL_TRANSFORM_FILE =
+            "select count(*) as Transform_Count from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part where\n " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part)\n";
+
+   /* with crr_dataset as(
+            select isbn, book_title, url, url_code, url_name, url_title, epr_id, work_type
+            from sdbooks_staging_sit.sdbooks_transform_file_history_urls_part
+                    where transform_file_ts = (select max(transform_file_ts ) from sdbooks_staging_sit.sdbooks_transform_file_history_urls_part)
+            ),
+    prev_dataset as (
+            select isbn, book_title, url, url_code, url_name, url_title, epr_id, work_type
+            from sdbooks_staging_sit.sdbooks_transform_file_history_urls_part
+                    where transform_file_ts = (select distinct transform_file_ts
+                    from (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn
+    from sdbooks_staging_sit.sdbooks_transform_file_history_urls_part dhap
+                                            )
+    where rn = 2
+                                    )
+                                            )
+    select 'new', count(*)
+    from crr_dataset crr
+    left join prev_dataset prev on crr.isbn = prev.isbn
+    where prev.isbn is null
+    union
+    select 'deleted', count(*)
+    from prev_dataset prev
+    left join crr_dataset crr on crr.isbn = prev.isbn
+    where crr.isbn is null
+    union
+    select 'changed', count(*)
+    from crr_dataset crr
+    join prev_dataset prev on crr.isbn = prev.isbn
+    where (coalesce(crr.isbn, 'na') <> coalesce(prev.isbn, 'na') or
+    coalesce(crr.book_title, 'na') <> coalesce(prev.book_title, 'na') or
+    coalesce (crr.url, 'na') <> coalesce (prev.url, 'na') or
+    coalesce (crr.url_code, 'na') <> coalesce (prev.url_code, 'na') or
+    coalesce (crr.url_name, 'na') <> coalesce (prev.url_name, 'na') or
+    coalesce (crr.url_title, 'na') <> coalesce (prev.url_title, 'na') or
+    coalesce (crr.epr_id, 'na') <> coalesce (prev.epr_id, 'na') or
+    coalesce (crr.work_type, 'na') <> coalesce (prev.work_type, 'na'));
+*/
+
     public static String GET_SD_URL_DIFF_CURR_PREV_COUNT =
-    "select count(*) as source_count from (\n" +
+    /*"select count(*) as source_count from (\n" +
              "select c.isbn \n" +
             "from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_current_urls c\n" +
             "left join "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_previous_urls p  on \n" +
@@ -57,7 +99,44 @@ public class SDDataLakeCountChecksSQL {
             "p.url != (c.url ) or \n" +
             "p.url_code != (c.url_code ) or \n" +
             "p.url_name != (c.url_name ) or \n" +
-            "p.url_title  != (c.url_title )))";
+            "p.url_title  != (c.url_title )))";*/
+            "with crr_dataset as(\n" +
+                    "  select isbn, book_title, url, url_code, url_name, url_title, epr_id, work_type\n" +
+                    "  from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part\n" +
+                    "  where transform_file_ts = (select max(transform_file_ts ) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part)\n" +
+                    "  ),\n" +
+                    "  prev_dataset as (\n" +
+                    "  select isbn, book_title, url, url_code, url_name, url_title, epr_id, work_type\n" +
+                    "  from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part\n" +
+                    "  where transform_file_ts = (select distinct transform_file_ts\n" +
+                    "                                    from (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn   \n" +
+                    "                                            from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part dhap\n" +
+                    "                                            )\n" +
+                    "                                    where rn = 2\n" +
+                    "                                    )\n" +
+                    "                                    )                                  \n" +
+                    "select count(*) as source_count from( \n" +
+                    "    select crr.isbn as ISBN\n" +
+                    "    from crr_dataset crr\n" +
+                    "        left join prev_dataset prev on crr.isbn = prev.isbn\n" +
+                    "    where prev.isbn is null\n" +
+                    "    union\n" +
+                    "    select  prev.isbn as ISBN \n" +
+                    "    from prev_dataset prev\n" +
+                    "        left join crr_dataset crr on crr.isbn = prev.isbn\n" +
+                    "    where crr.isbn is null\n" +
+                    "    union\n" +
+                    "    select crr.isbn as ISBN\n" +
+                    "    from crr_dataset crr\n" +
+                    "        join prev_dataset prev on crr.isbn = prev.isbn\n" +
+                    "    where (coalesce(crr.isbn, 'na') <> coalesce(prev.isbn, 'na') or\n" +
+                    "            coalesce(crr.book_title, 'na') <> coalesce(prev.book_title, 'na') or\n" +
+                    "            coalesce (crr.url, 'na') <> coalesce (prev.url, 'na') or\n" +
+                    "            coalesce (crr.url_code, 'na') <> coalesce (prev.url_code, 'na') or\n" +
+                    "            coalesce (crr.url_name, 'na') <> coalesce (prev.url_name, 'na') or\n" +
+                    "            coalesce (crr.url_title, 'na') <> coalesce (prev.url_title, 'na') or\n" +
+                    "            coalesce (crr.epr_id, 'na') <> coalesce (prev.epr_id, 'na') or\n" +
+                    "            coalesce (crr.work_type, 'na') <> coalesce (prev.work_type, 'na')))";
 
 
     public static String GET_SD_URL_DELTA_CURRENT_COUNT =

@@ -22,13 +22,13 @@ public class SDBooksCountChecksSteps {
     private static String SDCurrentSQLCount;
     private static String SDPreviousSQLCount;
     private static String SDCurrentHistSQLCount;
-    private static String SDPreviousHistSQLCount;
+    private static String SDTransform_FileSQLCount;
     private static String SDDeltaCurrentSQLCount;
     private static String SDDeltaCurrentHistSQLCount;
     private static int SDCurrentCount;
     private static int SDPreviousCount;
     private static int SDCurrentHistCount;
-    private static int SDPreviousHistCount;
+    private static int SDTransformFileCount;
     private static int SDDeltaCurrentCount;
     private static int SDDeltaCurrentHistCount;
     private static int SDCurrPrevCount;
@@ -97,43 +97,31 @@ public class SDBooksCountChecksSteps {
         Assert.assertEquals("The counts are not equal when compared with "+srcTable+" and "+trgtTable, SDCurrentHistCount, SDCurrentCount);
     }
 
-    @Given("^We know the total count of Previous SD data from (.*)$")
-    public void getCountfromPreviousTables(String tableName){
+
+    @Then("^Get the count of SD transform_file (.*)$")
+    public void getCountfromtransform_fileTables(String tableName){
         switch (tableName){
-            case "sdbooks_transform_previous_urls":
-                Log.info("Getting Previous URL Table Count...");
-                SDPreviousSQLCount = SDDataLakeCountChecksSQL.GET_SD_URL_PREVIOUS_COUNT;
+            case "sdbooks_transform_file_history_urls_part":
+                Log.info("Getting transform_file URL Table Count...");
+                SDTransform_FileSQLCount = SDDataLakeCountChecksSQL.GET_SD_URL_TRANSFORM_FILE;
                 break;
         }
-        Log.info(SDPreviousSQLCount);
-        List<Map<String, Object>> SDPreviousTableCount = DBManager.getDBResultMap(SDPreviousSQLCount, Constants.AWS_URL);
-        SDPreviousCount = ((Long) SDPreviousTableCount.get(0).get("Previous_count")).intValue();
+        Log.info(SDTransform_FileSQLCount);
+        List<Map<String, Object>> SDTransformFileTableCount = DBManager.getDBResultMap(SDTransform_FileSQLCount, Constants.AWS_URL);
+        SDTransformFileCount = ((Long) SDTransformFileTableCount.get(0).get("Transform_Count")).intValue();
     }
 
-    @Then("^Get the count of SD transform_previous_history (.*)$")
-    public void getCountfromPreviousHistoryTables(String tableName){
-        switch (tableName){
-            case "sdbooks_transform_history_urls_part_previous":
-                Log.info("Getting Previous History URL Table Count...");
-                SDPreviousHistSQLCount = SDDataLakeCountChecksSQL.GET_SD_URL_PREVIOUS_HISTORY_COUNT;
-                break;
-        }
-        Log.info(SDPreviousHistSQLCount);
-        List<Map<String, Object>> SDPreviousHistTableCount = DBManager.getDBResultMap(SDPreviousHistSQLCount, Constants.AWS_URL);
-        SDPreviousHistCount = ((Long) SDPreviousHistTableCount.get(0).get("Previous_History_Count")).intValue();
+    @And("^Check count of SD current table (.*) and SD tranform_file (.*) are identical$")
+    public void compareCurrntAndTransformCounts(String srcTable, String trgtTable){
+        Log.info("The count for table "+srcTable+" => " + SDCurrentCount + " and in "+trgtTable+" => " + SDTransformFileCount);
+        Assert.assertEquals("The counts are not equal when compared with "+srcTable+" and "+trgtTable, SDTransformFileCount, SDCurrentCount);
     }
 
-    @And("^Check count of SD previous table (.*) and SD previous history (.*) are identical$")
-    public void comparePreviousAndHistCounts(String srcTable, String trgtTable){
-        Log.info("The count for table "+srcTable+" => " + SDPreviousCount + " and in "+trgtTable+" => " + SDPreviousHistCount);
-        Assert.assertEquals("The counts are not equal when compared with "+srcTable+" and "+trgtTable, SDPreviousHistCount, SDPreviousCount);
-    }
-
-    @Given("^Get the difference of total count between current and previous of SDbooks data (.*)$")
+    @Given("^Get the difference of total count between current and previous time stamps of transform_file of SDbooks data (.*)$")
     public void getCountDifffromCurrentPrevTables(String tableName){
         switch (tableName){
             case "sdbooks_delta_current_urls":
-                Log.info("Getting Current and Previous URL Table diff Count...");
+                Log.info("Getting Current and Previous transform_file toime stamp URL Table ...");
                 SDCurrPrevSQLCount = SDDataLakeCountChecksSQL.GET_SD_URL_DIFF_CURR_PREV_COUNT;
                 break;
         }
@@ -155,10 +143,10 @@ public class SDBooksCountChecksSteps {
         SDDeltaCurrentCount = ((Long) SDDeltaCurrentTableCount.get(0).get("Delta_Count")).intValue();
     }
 
-    @And("^Compare SDbooks delta count of (.*) and (.*) with (.*) are identical$")
-    public void compareDeltaCounts(String srcTable1,String srcTable2, String trgtTable){
-        Log.info("The Diff of count for table "+srcTable1+" and "+srcTable2+" => " + SDCurrPrevCount + " and in "+trgtTable+" => " + SDDeltaCurrentCount);
-        Assert.assertEquals("The counts are not equal when compared with Diff of "+srcTable1+" and "+srcTable2+"with "+trgtTable, SDDeltaCurrentCount, SDCurrPrevCount);
+    @And("^Compare SDbooks delta count of (.*) with (.*) are identical$")
+    public void compareDeltaCounts(String srcTable1, String trgtTable){
+        Log.info("The Diff of current and prev time stamp count for table "+srcTable1+" => " + SDCurrPrevCount + " and in "+trgtTable+" => " + SDDeltaCurrentCount);
+        Assert.assertEquals("The counts are not equal when compared with Diff of current and prev time stamp count for table "+srcTable1+"with "+trgtTable, SDDeltaCurrentCount, SDCurrPrevCount);
     }
 
     @Then("^Get the count of SDBook delta current history (.*) table$")

@@ -34,7 +34,6 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
       | sourceTable                   | countOfRandomIds|
       |sdbooks_transform_previous_urls   |   10                 |
 
-
   @SD
   Scenario Outline: Verify Data for SD transform_Delta_URL_history is transferred from Delta URL
     Given We get the <countOfRandomIds> random ISBN ids <sourceTable>
@@ -50,8 +49,8 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
     Scenario Outline: Verify Data from the difference of Current and Previous is transffered to delta current table
       Given We get the <countOfRandomIds> random ISBN ids <sourceTable>
       When Get the records from SDBooks for Delta Current Url
-      Then We Get the from the difference of SD Current and Previous table
-      And Compare the records of SD delta url with difference of current and previous
+      Then We Get the data from the difference of SD Current and Previous transform_file table
+      And Compare the records of SD delta url with difference of current and previous transform_file
       Examples:
         | sourceTable              | countOfRandomIds|
         |sdbooks_delta_current_urls| 10                 |

@@ -103,7 +103,7 @@ public class SDBooksDataChecksSQL {
                     "where transform_ts<(select max(transform_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_urls_part))\n " +
                     "and delete_flag = false order by rand() limit %s\n";
 
-    public static String GET_RANDOM_ISBN_URL_DIFF_CURR_PREV =
+    /*public static String GET_RANDOM_ISBN_URL_DIFF_CURR_PREV =
             "select isbn as ISBN " +
                     "from (\n" +
                     "select c.isbn \n" +
@@ -128,10 +128,10 @@ public class SDBooksDataChecksSQL {
                     "p.url != (c.url ) or \n" +
                     "p.url_code != (c.url_code ) or \n" +
                     "p.url_name != (c.url_name ) or \n" +
-                    "p.url_title  != (c.url_title ))) where ISBN is not null order by rand () limit %s";
+                    "p.url_title  != (c.url_title ))) where ISBN is not null order by rand () limit %s";*/
 
 
-    public static String GET_REC_ISBN_URL_DIFF_CURR_PREV =
+    /*public static String GET_REC_ISBN_URL_DIFF_CURR_PREV =
             "select isbn as ISBN " +
                     ",book_title as BOOK_TITLE" +
                     ",url as URL" +
@@ -165,7 +165,7 @@ public class SDBooksDataChecksSQL {
                     "p.url_code != (c.url_code ) or \n" +
                     "p.url_name != (c.url_name ) or \n" +
                     "p.url_title  != (c.url_title ))) where isbn in ('%s') order by isbn desc\n";
-
+*/
 
     public static String GET_REC_DELTA_CURRENT_URL =
             "select isbn as ISBN " +
@@ -268,6 +268,94 @@ public class SDBooksDataChecksSQL {
                     "where delta_ts = (select max(delta_ts) \n" +
                     "from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_history_urls_part) and \n" +
                     "isbn in ('%s') order by isbn desc";
+
+
+
+    public static String GET_REC_DIFF_OF_CURR_PREV_TRANS_FILE =
+            "with crr_dataset as(\n" +
+                    "  select isbn, book_title, url, url_code, url_name, url_title, epr_id, work_type\n" +
+                    "  from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part\n" +
+                    "  where transform_file_ts = (select max(transform_file_ts ) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part)\n" +
+                    "  ),\n" +
+                    "  prev_dataset as (\n" +
+                    "  select isbn, book_title, url, url_code, url_name, url_title, epr_id, work_type\n" +
+                    "  from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part\n" +
+                    "  where transform_file_ts = (select distinct transform_file_ts\n" +
+                    "                                    from (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn   \n" +
+                    "                                            from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part dhap\n" +
+                    "                                            )\n" +
+                    "                                    where rn = 2\n" +
+                    "                                    )\n" +
+                    "                                    )    \n" +
+                    "select isbn as ISBN " +
+                    ",book_title as BOOK_TITLE" +
+                    ",url as URL" +
+                    ",url_code as URL_CODE" +
+                    ",url_name as URL_NAME" +
+                    ",url_title as URL_TITLE" +
+                    ",epr_id as EPRID" +
+                    ",work_type as WORK_TYPE" +
+                    ",delta_mode as DELTA_MODE from ("+
+                    "    select crr.isbn,crr.book_title,crr.url,crr.url_code,crr.url_name,crr.url_title,crr.epr_id,crr.work_type, 'I' as delta_mode\n" +
+                    "    from crr_dataset crr\n" +
+                    "        left join prev_dataset prev on crr.isbn = prev.isbn\n" +
+                    "    where prev.isbn is null\n" +
+                    "    union\n" +
+                    "    select  prev.isbn,prev.book_title,prev.url,prev.url_code,prev.url_name,prev.url_title,prev.epr_id,prev.work_type, 'D' as delta_mode\n" +
+                    "    from prev_dataset prev\n" +
+                    "        left join crr_dataset crr on crr.isbn = prev.isbn\n" +
+                    "    where crr.isbn is null\n" +
+                    "    union\n" +
+                    "    select crr.isbn,crr.book_title,crr.url,crr.url_code,crr.url_name,crr.url_title,crr.epr_id,crr.work_type, 'C'as delta_mode\n" +
+                    "    from crr_dataset crr\n" +
+                    "        join prev_dataset prev on crr.isbn = prev.isbn\n" +
+                    "    where (coalesce(crr.isbn, 'na') <> coalesce(prev.isbn, 'na') or\n" +
+                    "            coalesce(crr.book_title, 'na') <> coalesce(prev.book_title, 'na') or\n" +
+                    "            coalesce (crr.url, 'na') <> coalesce (prev.url, 'na') or\n" +
+                    "            coalesce (crr.url_code, 'na') <> coalesce (prev.url_code, 'na') or\n" +
+                    "            coalesce (crr.url_name, 'na') <> coalesce (prev.url_name, 'na') or\n" +
+                    "            coalesce (crr.url_title, 'na') <> coalesce (prev.url_title, 'na') or\n" +
+                    "            coalesce (crr.epr_id, 'na') <> coalesce (prev.epr_id, 'na') or\n" +
+                    "            coalesce (crr.work_type, 'na') <> coalesce (prev.work_type, 'na'))) where isbn in ('%s') order by isbn desc ";
+
+
+    public static String GET_RANDOM_ISBN_URL_DIFF_CURR_PREV_TRANS_FILE =
+            "with crr_dataset as(\n" +
+                    "  select isbn, book_title, url, url_code, url_name, url_title, epr_id, work_type\n" +
+                    "  from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part\n" +
+                    "  where transform_file_ts = (select max(transform_file_ts ) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part)\n" +
+                    "  ),\n" +
+                    "  prev_dataset as (\n" +
+                    "  select isbn, book_title, url, url_code, url_name, url_title, epr_id, work_type\n" +
+                    "  from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part\n" +
+                    "  where transform_file_ts = (select distinct transform_file_ts\n" +
+                    "                                    from (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn   \n" +
+                    "                                            from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part dhap\n" +
+                    "                                            )\n" +
+                    "                                    where rn = 2\n" +
+                    "                                    )\n" +
+                    "                                    )                                  \n" +
+                    "    select crr.isbn as ISBN\n" +
+                    "    from crr_dataset crr\n" +
+                    "        left join prev_dataset prev on crr.isbn = prev.isbn\n" +
+                    "    where prev.isbn is null\n" +
+                    "    union\n" +
+                    "    select  prev.isbn as ISBN \n" +
+                    "    from prev_dataset prev\n" +
+                    "        left join crr_dataset crr on crr.isbn = prev.isbn\n" +
+                    "    where crr.isbn is null\n" +
+                    "    union\n" +
+                    "    select crr.isbn as ISBN\n" +
+                    "    from crr_dataset crr\n" +
+                    "        join prev_dataset prev on crr.isbn = prev.isbn\n" +
+                    "    where (coalesce(crr.isbn, 'na') <> coalesce(prev.isbn, 'na') or\n" +
+                    "            coalesce(crr.book_title, 'na') <> coalesce(prev.book_title, 'na') or\n" +
+                    "            coalesce (crr.url, 'na') <> coalesce (prev.url, 'na') or\n" +
+                    "            coalesce (crr.url_code, 'na') <> coalesce (prev.url_code, 'na') or\n" +
+                    "            coalesce (crr.url_name, 'na') <> coalesce (prev.url_name, 'na') or\n" +
+                    "            coalesce (crr.url_title, 'na') <> coalesce (prev.url_title, 'na') or\n" +
+                    "            coalesce (crr.epr_id, 'na') <> coalesce (prev.epr_id, 'na') or\n" +
+                    "            coalesce (crr.work_type, 'na') <> coalesce (prev.work_type, 'na'))order by rand() limit %s";
 }
 
 

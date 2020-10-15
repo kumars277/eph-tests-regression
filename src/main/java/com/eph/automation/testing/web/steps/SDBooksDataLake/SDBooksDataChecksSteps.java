@@ -31,7 +31,7 @@ public class SDBooksDataChecksSteps {
 
     @Given("^We get the (.*) random ISBN ids (.*)$")
     public void getRandomISBNIds(String numberOfRecords, String tableName) {
-       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+      // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random URL ISBN Ids...");
         switch (tableName) {
@@ -45,7 +45,7 @@ public class SDBooksDataChecksSteps {
                 sql = String.format(SDBooksDataChecksSQL.GET_RANDOM_ISBN_PREVIOUS_HIST_URL, numberOfRecords);
                 break;
             case "sdbooks_delta_current_urls":
-                sql = String.format(SDBooksDataChecksSQL.GET_RANDOM_ISBN_URL_DIFF_CURR_PREV, numberOfRecords);
+                sql = String.format(SDBooksDataChecksSQL.GET_RANDOM_ISBN_URL_DIFF_CURR_PREV_TRANS_FILE, numberOfRecords);
                 break;
             case "sdbooks_transform_history_excl_delta":
                 sql = String.format(SDBooksDataChecksSQL.GET_RANDOM_ISBN_DIFF_DELTA_CURR_HIST_URL, numberOfRecords);
@@ -56,6 +56,7 @@ public class SDBooksDataChecksSteps {
             case "sdbooks_delta_history_urls_part":
                 sql = String.format(SDBooksDataChecksSQL.GET_RANDOM_ISBN_DELTA_CURR, numberOfRecords);
                 break;
+
 
           }
         List<Map<?, ?>> randomIsbnIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
@@ -402,15 +403,15 @@ public class SDBooksDataChecksSteps {
         dataQualitySDContext.recordsFromDeltaCurrentUrl = DBManager.getDBResultAsBeanList(sql, SDBooksDLAccessObject.class, Constants.AWS_URL);
     }
 
-    @Then("^We Get the from the difference of SD Current and Previous table$")
+    @Then("^We Get the data from the difference of SD Current and Previous transform_file table$")
     public void getRecordsFromDiffofCurrPrevURL() {
         Log.info("We get the records from Diff from Current and previous URL table...");
-        sql = String.format(SDBooksDataChecksSQL.GET_REC_ISBN_URL_DIFF_CURR_PREV, Joiner.on("','").join(Ids));
+        sql = String.format(SDBooksDataChecksSQL.GET_REC_DIFF_OF_CURR_PREV_TRANS_FILE, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualitySDContext.recordsFromDiffCurrentAndPreviousUrl = DBManager.getDBResultAsBeanList(sql, SDBooksDLAccessObject.class, Constants.AWS_URL);
     }
 
-    @And("^Compare the records of SD delta url with difference of current and previous$")
+    @And("^Compare the records of SD delta url with difference of current and previous transform_file$")
     public void compareDataDeltaCurrentUrl() {
         if (dataQualitySDContext.recordsFromDiffCurrentAndPreviousUrl.isEmpty()) {
             Log.info("No Data Found ....");
