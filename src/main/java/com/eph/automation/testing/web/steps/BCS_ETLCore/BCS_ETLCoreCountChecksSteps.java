@@ -40,6 +40,8 @@ public class BCS_ETLCoreCountChecksSteps {
     private static int BCSCoreDuplicateLatestCount;
     private static int BCSLatestCount;
     private static String BCSSumDeltaExclSQLCurrentCount;
+    private static String BCSDiffTransformFileSQLCount;
+    private static int BCSDiffTransformFileCount;
 
 
 
@@ -596,6 +598,61 @@ public class BCS_ETLCoreCountChecksSteps {
         Assert.assertEquals("There are Duplicate Count of "+tableName,0,BCSCoreDuplicateLatestCount);
 
     }
+
+
+    @Given("^Get the total count of BCS Core transform_file by diff of current and previous timestamp (.*)$")
+    public void getDiffTransformFileTimeStamp (String tableName) {
+        switch (tableName){
+            case "etl_accountable_product_transform_file_history_part":
+                Log.info("Getting Diff Curr and Previous TimeStamp for Accountable Product Current File Table Count...");
+                BCSDiffTransformFileSQLCount = BCS_ETLCoreCountChecksSQL.GET_ACC_PROD_DIFF_TRANSFORM_FILE_COUNT;
+                break;
+            case "etl_manifestation_transform_file_history_part":
+                Log.info("Getting Diff Curr and Previous TimeStamp for Manifestation Current File Table Count...");
+                BCSDiffTransformFileSQLCount = BCS_ETLCoreCountChecksSQL.GET_MANIF_DIFF_TRANSFORM_FILE_COUNT;
+                break;
+            case "etl_person_transform_file_history_part":
+                Log.info("Getting Diff Curr and Previous TimeStamp for Person Current File Table Count...");
+                BCSDiffTransformFileSQLCount = BCS_ETLCoreCountChecksSQL.GET_PERSON_DIFF_TRANSFORM_FILE_COUNT;
+                break;
+            case "etl_product_transform_file_history_part":
+                Log.info("Getting Diff Curr and Previous TimeStamp for Product Current File Table Count...");
+                BCSDiffTransformFileSQLCount = BCS_ETLCoreCountChecksSQL.GET_PRODUCT_DIFF_TRANSFORM_FILE_COUNT;
+                break;
+            case "etl_work_person_role_transform_file_history_part":
+                Log.info("Getting Diff Curr and Previous TimeStamp for work person Current File Table Count...");
+                BCSDiffTransformFileSQLCount = BCS_ETLCoreCountChecksSQL.GET_WRK_PERS_DIFF_TRANSFORM_FILE_COUNT;
+                break;
+            case "etl_work_relationship_transform_file_history_part":
+                Log.info("Getting Diff Curr and Previous TimeStamp for work Relation Current File Table Count...");
+                BCSDiffTransformFileSQLCount = BCS_ETLCoreCountChecksSQL.GET_WRK_RELT_DIFF_TRANSFORM_FILE_COUNT;
+                break;
+            case "etl_work_transform_file_history_part":
+                Log.info("Getting Diff Curr and Previous TimeStamp for work Current Table File Count...");
+                BCSDiffTransformFileSQLCount = BCS_ETLCoreCountChecksSQL.GET_WRK_DIFF_TRANSFORM_FILE_COUNT;
+                break;
+            case "etl_work_identifier_transform_file_history_part":
+                Log.info("Getting Diff Curr and Previous TimeStamp for work identifier Current File Table Count...");
+                BCSDiffTransformFileSQLCount = BCS_ETLCoreCountChecksSQL.GET_WRK_IDENTIF_DIFF_TRANSFORM_FILE_COUNT;
+                break;
+            case "etl_manifestation_identifier_transform_file_history_part":
+                Log.info("Getting Diff Curr and Previous TimeStamp for manif identifier Current File Table Count...");
+                BCSDiffTransformFileSQLCount = BCS_ETLCoreCountChecksSQL.GET_MANIF_IDENTIF_DIFF_TRANSFORM_FILE_COUNT;
+                break;
+
+        }
+        Log.info(BCSDiffTransformFileSQLCount);
+        List<Map<String, Object>> BCSDiffTransformFileTableCount = DBManager.getDBResultMap(BCSDiffTransformFileSQLCount, Constants.AWS_URL);
+        BCSDiffTransformFileCount = ((Long) BCSDiffTransformFileTableCount.get(0).get("source_count")).intValue();
+
+    }
+
+    @And("^Compare count of tranform_file (.*) and delta current (.*) are identical$")
+    public void compareTransformFileAndDeltaCurrCounts(String srcTable,String trgtTable){
+        Log.info("Thecount for Diff of curr and previous timestamp of table "+srcTable+" => " + BCSDiffTransformFileCount + " and in "+trgtTable+" => " + BCSCoreDeltaCurrentCount);
+        Assert.assertEquals("The counts are not equal when compared Diff of curr and previous timestamp of table "+srcTable+" and "+trgtTable, BCSDiffTransformFileCount, BCSCoreDeltaCurrentCount);
+    }
+
 
 
 

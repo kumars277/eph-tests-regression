@@ -76,6 +76,25 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
       |etl_work_identifier_current_v              |etl_work_identifier_transform_file_history_part         |
       |etl_manifestation_identifier_current_v     |etl_manifestation_identifier_transform_file_history_part|
 
+  @BCSCore
+  Scenario Outline: Verify Data count for BCS core delta_current tables are transferred from transform_file tables
+    Given Get the total count of BCS Core transform_file by diff of current and previous timestamp <SourceTableName>
+    Then We know the total count of delta current <TargetTableName>
+    And Compare count of tranform_file <SourceTableName> and delta current <TargetTableName> are identical
+
+    Examples:
+      |TargetTableName                            |SourceTableName                                         |
+      |etl_delta_current_accountable_product          |etl_accountable_product_transform_file_history_part     |
+      |etl_delta_current_manifestation                |etl_manifestation_transform_file_history_part           |
+      |etl_delta_current_person                       |etl_person_transform_file_history_part                  |
+      |etl_delta_current_product                      |etl_product_transform_file_history_part                 |
+      |etl_delta_current_work_person_role             |etl_work_person_role_transform_file_history_part        |
+      |etl_delta_current_work_relationship                         |etl_work_relationship_transform_file_history_part       |
+      |etl_delta_current_work                         |etl_work_transform_file_history_part                    |
+      |etl_delta_current_work_identifier              |etl_work_identifier_transform_file_history_part         |
+      |etl_delta_current_manifestation_identifier     |etl_manifestation_identifier_transform_file_history_part|
+
+
 
   @BCSCore
   Scenario Outline: Verify Data count for BCS Core delta_current_exclude are transferred from delta_current and current_history tables
