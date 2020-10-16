@@ -91,7 +91,7 @@ public class ApiWorksSearchSteps {
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random Journal ids  : " + ids);
         //for debugging failure
-       // ids.clear(); ids.add("EPR-W-102NSN");  Log.info("hard coded work ids are : " + ids);
+        //ids.clear(); ids.add("EPR-W-102MK8");  Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 

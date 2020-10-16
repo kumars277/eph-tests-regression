@@ -2,7 +2,7 @@
 //resumed automation on 23 Sep 2020
 package com.eph.automation.testing.services.db.BCSDataLakeSQL;
 
-public class BCSDataLakeCountCheckSQL {
+public class BCSIngestVsCurrentCountCheckSQL {
 
     public static String GET_BCS_CLASSIFICATION_SOURCE_COUNT =
             "SELECT  count(*)as Source_Count FROM  (bcs_ingestion_database_sit.initial_ingest f CROSS JOIN UNNEST(distributionclassification) x (cl))";

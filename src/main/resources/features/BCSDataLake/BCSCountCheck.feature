@@ -1,7 +1,7 @@
 #Created by Nishant @ 04 Aug 2020
 Feature:Validate data count for BCS tables in Data Lake
 
-  @BCS
+  @BCSDebug
   Scenario Outline: Verify Data Count for BCS stg_Current_tables transferred from Source Table initial_ingest
     Given Get the total count of BCS Data from initial_ingest <tableName>
     Then  Get total count of BCS Current table <tableName>
@@ -23,6 +23,8 @@ Feature:Validate data count for BCS tables in Data Lake
       | stg_current_text             |
       | stg_current_versionfamily    |
 
+
+    #below scenario not applicable any more as previous tables are no longer valid
   @BCS
   Scenario Outline: Verify Data count for BCS stg_history tables are transferred from stg_previous tables
     Given We know the total count of stg_previous BCS data from <SourceTableName>

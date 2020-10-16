@@ -33,15 +33,10 @@ public class ProductFinderConstants {
                // String section = "//div[@class='section']"; //parent Information
     public static String section = "//div[contains(@class,'section')]"; //parent of - subject area and information,//parent of - Financial Information
     public static String DetailInformation1 = section + "/div[@class='section-detail'][1]";
-                         // String costInfo = section + "/div[@class='section-detail'][1]";
-                      //  String editorial1 = section + "/div[@class='section-detail'][1]";
     public static String DetailInformation2 = section + "/div[@class='section-detail'][2]";
-               // String accountableProduct = section + "/div[@class='section-detail'][2]";
-                       // String editorial2 = section + "/div[@class='section-detail'][2]";
-
     public static String sectionDetail = section + "/div[@class='section-detail']";
 
-    public static String section_identifier = "//div[@class='section identifiers']|//div[contains(@class,'section')]/eph-pf-identifier-list"; //parent of - identifier
+    public static String section_identifier = "//div[@class='section identifiers']|//eph-pf-identifier-list"; //parent of - identifier
     public static String DetailIdentifiers = section_identifier + "//div[@class='section-detail']";
     //table[@class='mat-table']/parent::div[@class='section-detail']/following-sibling::h2
 

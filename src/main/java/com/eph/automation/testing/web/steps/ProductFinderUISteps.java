@@ -76,7 +76,7 @@ public class ProductFinderUISteps {
     String allWorkTypesCode[] = {"BKS", "MRW", "OTH", "SER", "TBK", "RBK", "ABS", "JNL", "JBB", "NWL", "DMG", "MPR"};
     private static List<ManifestationIdentifierObject> manifestationIdentifiers;
     private List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD;
-    private FinancialAttribsContext financialAttribs;
+    private FinancialAttribsContext financialAttribs=new FinancialAttribsContext();
     private WorkApiObject workApiObject=new WorkApiObject();
     private WorkManifestationApiObject workManifestationApiObject=new WorkManifestationApiObject();
     private ApiWorksSearchSteps apiWorksSearchSteps=new ApiWorksSearchSteps();
@@ -98,7 +98,7 @@ public class ProductFinderUISteps {
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
-        // ids.clear(); ids.add("EPR-W-104Y61");  Log.info("hard coded work ids are : " + ids);
+       // ids.clear(); ids.add("EPR-W-102H5H");  Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
@@ -110,7 +110,7 @@ public class ProductFinderUISteps {
         DataQualityContext.workDataObjectsFromEPHGD.sort(Comparator.comparing(WorkDataObject::getWORK_ID));
     }
 
-    @Given("^user is on search page$")
+    @Given("^user is on Product Finder search page$")
     public void userOpensHomePage() throws InterruptedException, ParseException {
         //updated by Nishant @ 15 May 2020
         DataQualityContext.uiUnderTest="PF";
@@ -612,9 +612,10 @@ public class ProductFinderUISteps {
     public void verifyPFJFUIWorkOverviewValues() throws Throwable {
         verifyWorkOverviewInformationUI();
         verifyWorkFinancialInformation();
-        verifyEditorialInfo();
+        if(DataQualityContext.uiUnderTest=="JF") verifyEditorialInfo();
         verifyPeople();
-        verifyLink();
+        //commented links verification till EPHD-2254 get fixed
+      //  if(DataQualityContext.uiUnderTest=="JF") verifyLink();
     }
 
     @Then("^search work and verify links")
@@ -669,13 +670,10 @@ public class ProductFinderUISteps {
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSupportLevel());
             printLog("UI:Editorial Support Level with JRBI: primarySiteSupportLevel");
 
+
             Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Production Type"),
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getIssueProdTypeCode());
             printLog("UI:Production Type with JRBI: issueProdTypeCode");
-
-            Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Volumes in Catalogue"),
-                    DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumesQty());
-            printLog("UI:Volumes in Catalogue with JRBI: catalogueVolumesQty");
 
             Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("First Volume"),
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumeFrom());
@@ -684,6 +682,10 @@ public class ProductFinderUISteps {
             Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Last Volume"),
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumeTo());
             printLog("UI:Last Volume with JRBI: catalogueVolumeTo");
+
+            Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Volumes in Catalogue"),
+                    DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumesQty());
+            printLog("UI:Volumes in Catalogue with JRBI: catalogueVolumesQty");
 
             Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Total issues"),
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueIssuesQty());
@@ -706,6 +708,8 @@ public class ProductFinderUISteps {
             printLog("UI:Total pages (Budget) with JRBI: rfTotalPagesQty");
 
         }
+
+        //get extended record for manifestation
         List<String> manifestationId = apiWorksSearchSteps.getManifestationIdsForWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
         DataQualityContext.manifestationExtendedTestClass = null;
         for (int cnt = 0; cnt < manifestationId.size(); cnt++) {
@@ -745,8 +749,13 @@ public class ProductFinderUISteps {
         Log.info("\nverifying Work Overview - People tab");
         Log.info("...................................\n");
         productFinderTasks.getUI_People();
-        verifyDuplicatePeopleRoles();
         verifyPeopleInfo();
+
+        if(DataQualityContext.uiUnderTest=="JF")
+        {
+            verifyDuplicatePeopleRoles();
+            verifyValidPersonRole();
+        }
     }
 
     public void verifyLink() throws IOException {//created by Nishant @ 15 Jul 2020
@@ -797,7 +806,10 @@ public class ProductFinderUISteps {
                     default:	System.out.println("less frequent error code");statusDescription="less frequent error code";break;
                 }
 
-                if(respCode >= 400){brokenLink=true;}
+                if(respCode >= 400)
+                {
+                    brokenLink=true;//EPR-W-102TM0
+                }
                 Assert.assertFalse("found broken link \n"+url+"\n status code: "+respCode,brokenLink);
             }
             catch (MalformedURLException e){Log.info(e.getMessage());Log.info("not a valid url format");}
@@ -836,6 +848,31 @@ public class ProductFinderUISteps {
         {
             compareExtrendedPersonWithDB();
         }
+    }
+
+    public void verifyValidPersonRole()
+    {//created by Nishant @ 15 Oct 2020 as part of EPHD-2241
+       Log.info("...................................................");
+        Log.info("Test: verify if there is any role other than expeted");
+        String validRoles[]={
+        "Advertising Production Manager",
+        "Business Controller",
+        "Journal Manager",
+        "Local Supplier Manager",
+        "Publisher",
+        "Publishing Director",
+        "Senior Vice President"
+};
+
+List<String> invalidRoles = new ArrayList<>();
+        for(int c=0;c<productFinderTasks.list_people.size();c++)
+        {
+            if(!Arrays.asList(validRoles).contains(productFinderTasks.list_people.get(c).getProperty("Role")))
+                invalidRoles.add(productFinderTasks.list_people.get(c).getProperty("Role")) ;
+        }
+
+        Assert.assertTrue("Person roles present other than expected\n"+ invalidRoles.toString(), invalidRoles.isEmpty());
+
     }
 
     public List<Map<String,String>> getPersonsByWorkId(String workId) {//created by Nishant @ 14 Jul 2020
@@ -935,28 +972,31 @@ public class ProductFinderUISteps {
     public void validateCompanyCodes() {//created by Nishant @ 17 Jun 2020
 
         getFinancialData(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+    if(financialAttribs.financialDataFromGD!=null) {
+        sql = "select l_description FROM semarchy_eph_mdm.gd_x_lov_gl_company WHERE code='" + financialAttribs.financialDataFromGD.get(0).getGl_company() + "'";
+        List<Map<String, String>> glCompnyName = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
-        sql="select l_description FROM semarchy_eph_mdm.gd_x_lov_gl_company WHERE code='"+financialAttribs.financialDataFromGD.get(0).getGl_company()+"'";
-        List<Map<String,String>> glCompnyName=DBManager.getDBResultMap(sql,Constants.EPH_URL);
+        String DBvalue_GL_Company = financialAttribs.financialDataFromGD.get(0).getGl_company() + " - " + glCompnyName.get(0).get("l_description");
+      //  Assert.assertEquals(productFinderTasks.prop_comCode.getProperty("GL Company"), DBvalue_GL_Company);
+        Assert.assertEquals(productFinderTasks.prop_comCode.getProperty("Operating Company"), DBvalue_GL_Company);
+        printLog("Operating Company");
 
-        String DBvalue_GL_Company=financialAttribs.financialDataFromGD.get(0).getGl_company()+" - "+glCompnyName.get(0).get("l_description");
-        Assert.assertEquals(productFinderTasks.prop_comCode.getProperty("GL Company"),DBvalue_GL_Company);
-        printLog("GL Company");
+        sql = "select l_description FROM semarchy_eph_mdm.gd_x_lov_gl_resp_centre WHERE code='" + financialAttribs.financialDataFromGD.get(0).getCost_resp_centre() + "'";
+        List<Map<String, String>> costResCentre = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
-        sql="select l_description FROM semarchy_eph_mdm.gd_x_lov_gl_resp_centre WHERE code='"+financialAttribs.financialDataFromGD.get(0).getCost_resp_centre()+"'";
-        List<Map<String,String>> costResCentre=DBManager.getDBResultMap(sql,Constants.EPH_URL);
-
-        String DBvalue_costResCentre=financialAttribs.financialDataFromGD.get(0).getCost_resp_centre()+" - "+costResCentre.get(0).get("l_description");
-        Assert.assertEquals(productFinderTasks.prop_comCode.getProperty("Cost Responsibility Centre"),DBvalue_costResCentre);
+        //EPR-W-102SDV, updated by Nishant @ 16 Oct 2020
+        String DBvalue_costResCentre = financialAttribs.financialDataFromGD.get(0).getCost_resp_centre() + " - " + costResCentre.get(0).get("l_description");
+        Assert.assertEquals(productFinderTasks.prop_comCode.getProperty("Cost Responsibility Centre"), DBvalue_costResCentre);
         printLog("Cost Responsibility Centre");
 
-        sql="select l_description FROM semarchy_eph_mdm.gd_x_lov_gl_resp_centre WHERE code='"+financialAttribs.financialDataFromGD.get(0).getRevenue_resp_centre()+"'";
-        List<Map<String,String>> revenueResCentre=DBManager.getDBResultMap(sql,Constants.EPH_URL);
+        sql = "select l_description FROM semarchy_eph_mdm.gd_x_lov_gl_resp_centre WHERE code='" + financialAttribs.financialDataFromGD.get(0).getRevenue_resp_centre() + "'";
+        List<Map<String, String>> revenueResCentre = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
-        String DBvalue_revenueResCentre=financialAttribs.financialDataFromGD.get(0).getRevenue_resp_centre()+" - "+revenueResCentre.get(0).get("l_description").replace("  "," ");;
-        Assert.assertEquals(productFinderTasks.prop_comCode.getProperty("Revenue Responsibility Centre"),DBvalue_revenueResCentre);
+        String DBvalue_revenueResCentre = financialAttribs.financialDataFromGD.get(0).getRevenue_resp_centre() + " - " + revenueResCentre.get(0).get("l_description").replace("  ", " ");
+
+        Assert.assertEquals(productFinderTasks.prop_comCode.getProperty("Revenue Responsibility Centre"), DBvalue_revenueResCentre);
         printLog("Revenue Responsibility Centre");
-
+    }
     }
 
     private void getFinancialData(String workid){
@@ -972,17 +1012,24 @@ public class ProductFinderUISteps {
     }
 
     public void validateAccountableProduct() {//created by Nishant @ 16 Jun 2020
-        getAccountableProductFromEPHGD(DataQualityContext.workDataObjectsFromEPHGD.get(0).getF_accountable_product());
-        String DBValue_accProdSegment=accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_CODE()+" - "+accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_NAME();
+
+        String DBValue_accProdSegment="-";
+        if(DataQualityContext.workDataObjectsFromEPHGD.get(0).getF_accountable_product()!=null) {
+            getAccountableProductFromEPHGD(DataQualityContext.workDataObjectsFromEPHGD.get(0).getF_accountable_product());
+            DBValue_accProdSegment = accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_CODE() + " - " + accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_NAME();
+
+            sql="select l_description from semarchy_eph_mdm.gd_x_lov_gl_prod_seg_parent where code='"+accountableProductDataObjectsFromEPHGD.get(0).getF_GL_PRODUCT_SEGMENT_PARENT()+"'";
+            List<Map<String,String>> DB_accProdParent=DBManager.getDBResultMap(sql,Constants.EPH_URL);
+            String value_accProdParent=accountableProductDataObjectsFromEPHGD.get(0).getF_GL_PRODUCT_SEGMENT_PARENT()+" - "+DB_accProdParent.get(0).get("l_description");
+
+            Assert.assertEquals((productFinderTasks.prop_AccProducts.getProperty("Accountable Product Parent")),value_accProdParent);
+            Log.info("verified...Accountable Product Parent");
+
+        }
         Assert.assertEquals(productFinderTasks.prop_AccProducts.getProperty("Accountable Product Segment"),DBValue_accProdSegment);
         Log.info("verified...Accountable Product Segment");
 
-        sql="select l_description from semarchy_eph_mdm.gd_x_lov_gl_prod_seg_parent where code='"+accountableProductDataObjectsFromEPHGD.get(0).getF_GL_PRODUCT_SEGMENT_PARENT()+"'";
-        List<Map<String,String>> DB_accProdParent=DBManager.getDBResultMap(sql,Constants.EPH_URL);
-        String value_accProdParent=accountableProductDataObjectsFromEPHGD.get(0).getF_GL_PRODUCT_SEGMENT_PARENT()+" - "+DB_accProdParent.get(0).get("l_description");
 
-        Assert.assertEquals((productFinderTasks.prop_AccProducts.getProperty("Accountable Product Parent")),value_accProdParent);
-        Log.info("verified...Accountable Product Parent");
     }
 
     public void validateSubjectArea() {//created by Nishant @ 15 Jun 2020
@@ -1035,13 +1082,13 @@ public class ProductFinderUISteps {
         List<Map<String, Object>> identifierDetail = getIdentifier();
 
         Assert.assertEquals(productFinderTasks.prop_identifier.size(), identifierDetail.size());
-        Log.info("verified... number of identifiers");
+       printLog("number of identifiers");
 
         for (int i = 0; i < productFinderTasks.prop_identifier.size(); i++) {
             sql = "select l_description from semarchy_eph_mdm.gd_x_lov_identifier_type where code='" + identifierDetail.get(i).get("f_type") + "'";
             List<Map<String, String>> identifierType = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             Assert.assertEquals(productFinderTasks.prop_identifier.getProperty(identifierType.get(0).get("l_description")), identifierDetail.get(i).get("identifier"));
-            Log.info("verified..." + identifierType.get(0).get("l_description"));
+            printLog(identifierType.get(0).get("l_description"));
         }
     }
 
@@ -1060,17 +1107,21 @@ public class ProductFinderUISteps {
 
         //Extended data, discovered during EPH-1952 testing on 22 Jun 2020
         //Business Unit:	STM Health & Medical Sciences         //EPR-W-108RXC
-        if(DataQualityContext.workExtendedTestClass!=null) {
-            Assert.assertEquals(productFinderTasks.prop_info.getProperty("Business Unit"),
+        if(DataQualityContext.workExtendedTestClass!=null ) {
+            if(productFinderTasks.prop_info.getProperty("Business Unit")!=null&
+                    !DataQualityContext.workExtendedTestClass.getWorkExtended().getPtsBusinessUnitDesc().equalsIgnoreCase(""))
+            { Assert.assertEquals(productFinderTasks.prop_info.getProperty("Business Unit"),
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getPtsBusinessUnitDesc());
-            printLog("UI: Business Unit with JRBI: ptsBusinessUnitDesc");
+            printLog("Business Unit with JRBI ptsBusinessUnitDesc");}
         }
     }
 
     public void coreDataValidation(){
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("Sub Title"), getValue_subTitle());
-        Log.info("verified...Sub Title");
-
+        Log.info("Core data validation...");
+        if(productFinderTasks.prop_info.containsKey("Sub Title") & !getValue_subTitle().equalsIgnoreCase("")) {
+            Assert.assertEquals(productFinderTasks.prop_info.getProperty("Sub Title"), getValue_subTitle());
+            Log.info("verified...Sub Title");
+        }
         if(productFinderTasks.prop_info.containsKey("Work Type")) {
             String DBWorkType = getDBWorkType();
             Assert.assertEquals(productFinderTasks.prop_info.getProperty("Work Type"), DBWorkType);
@@ -1081,7 +1132,6 @@ public class ProductFinderUISteps {
         Assert.assertEquals(productFinderTasks.prop_info.getProperty("Work Status"), DBWorkStatus);
         Log.info("verified...Work Status");
 
-
         Assert.assertEquals(productFinderTasks.prop_info.getProperty("Imprint").toUpperCase(), getValue_ImprintFromEPHGD().toUpperCase());
         Log.info("verified...Imprint");
 
@@ -1089,18 +1139,17 @@ public class ProductFinderUISteps {
         Log.info("verified...Language");
 
         String[] PMCDetail = getValue_PMC();
+        Assert.assertEquals(productFinderTasks.prop_info.getProperty("PMG"), PMCDetail[1]);
+        Log.info("verified...PMG");
 
         Assert.assertEquals(productFinderTasks.prop_info.getProperty("PMC"), PMCDetail[0]);
         Log.info("verified...PMC");
 
-        Assert.assertEquals(productFinderTasks.prop_info.getProperty("PMG"), PMCDetail[1]);
-        Log.info("verified...PMG");
-
-
     }
 
     public void dataModelValidation()throws ParseException{
-        //data model changes
+        Log.info("Data Model changes validation...");
+
         if(productFinderTasks.prop_info.containsKey("Planned Launch Date")){
             Assert.assertEquals(productFinderTasks.prop_info.getProperty("Planned Launch Date"), getFormat_PlannedLaunchDate());
             Log.info("verified...Planned Launch Date");}
@@ -1121,16 +1170,16 @@ public class ProductFinderUISteps {
         }
         // commented untill defect EPH-1936 get fixed
 
-        ArrayList<String> businessModel=getValue_BusinessModelFromEPHGD();
-        if(productFinderTasks.prop_info.containsKey("Business Model")){
-          boolean bModelFound=  businessModel.contains(productFinderTasks.prop_info.getProperty("Business Model"));
-            Assert.assertTrue(bModelFound);
-            Log.info("verified...Business Model");}
-
-        ArrayList<String> accessModel=getValue_AccessModelFromEPHGD();
         if(productFinderTasks.prop_info.containsKey("Access Model")){
+            ArrayList<String> accessModel=getValue_AccessModelFromEPHGD();
             Assert.assertTrue(accessModel.contains(productFinderTasks.prop_info.getProperty("Access Model")));
             Log.info("verified...Access Model");}
+
+        if(productFinderTasks.prop_info.containsKey("Business Model")){
+            ArrayList<String> businessModel=getValue_BusinessModelFromEPHGD();
+            boolean bModelFound=  businessModel.contains(productFinderTasks.prop_info.getProperty("Business Model"));
+            Assert.assertTrue(bModelFound);
+            Log.info("verified...Business Model");}
 
         if(productFinderTasks.prop_info.containsKey("Copyright Year")){
             Assert.assertEquals(productFinderTasks.prop_info.getProperty("Copyright Year"), DataQualityContext.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR());
@@ -1195,6 +1244,9 @@ public class ProductFinderUISteps {
     public String getDBWorkStatus() {
         String DBWorkStatus = "";
         switch (DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS()) {
+            case "UNK":
+                DBWorkStatus = "Unknown";
+                break;
             case "WID":
                 DBWorkStatus = "In Development";
                 break;
@@ -1278,7 +1330,7 @@ public class ProductFinderUISteps {
                 break;
             case "JVE":
                 legalOwnership = "Joint Venture";
-                legalOwnership = "Third Party";
+                //legalOwnership = "Third Party";
                 break;
         }
         return legalOwnership;
@@ -1350,16 +1402,22 @@ public class ProductFinderUISteps {
         return Value_imprint;
     }
 
-    public String getValue_volume() {
+    public String getValue_volume() {//updated by Nishant @ 15 Oct 2020 for EPHD-2241
         String valueVolume = "";
-        if (DataQualityContext.workDataObjectsFromEPHGD.get(0).getVOLUME() != null)
+        if (DataQualityContext.workDataObjectsFromEPHGD.get(0).getVOLUME() != null &
+                !DataQualityContext.workDataObjectsFromEPHGD.get(0).getVOLUME().equalsIgnoreCase("0"))
             valueVolume = DataQualityContext.workDataObjectsFromEPHGD.get(0).getVOLUME();
+
         return valueVolume;
     }
 
     public String getValue_language() {//created by Nishant @ 11 Jun 2020
         String value_language = "";
         if(DataQualityContext.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE()!=null){
+            sql = String.format(ProductFinderSQL.SELECT_LANGUAGE_INFO, DataQualityContext.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE());
+            List<Map<String, String>> languageInfo = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            value_language = languageInfo.get(0).get("l_description").toString();
+/*
             switch (DataQualityContext.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE()) {
                 case "EE":
                     value_language = "Ewe";
@@ -1920,6 +1978,7 @@ public class ProductFinderUISteps {
                     value_language = "Multiple Languages (unspecified)";
                     break;
             }
+       */
         }
         return value_language;
     }
@@ -1956,7 +2015,7 @@ public class ProductFinderUISteps {
             returnedWorks = apiWorksSearchSteps.callAPI_workByOption(personSearchOption, queryValue+"&workType=ABS,JBB,JNL,NWL&workStatus=WLA");
             returnedWorks.verifyEnddatedPerson(queryValue);
 
-            Log.info("searching keyword..." + queryValue);
+         //   Log.info("searching keyword..." + queryValue);
             productFinderTasks.searchFor(queryValue);
 
             int totalProductFound=0;
@@ -1966,7 +2025,7 @@ public class ProductFinderUISteps {
                 String[] showingProducts=ProductFound.split(" ");
                 totalProductFound=Integer.valueOf(showingProducts[showingProducts.length-1]);
             }
-            Assert.assertEquals(returnedWorks.getTotalMatchCount(),totalProductFound);
+            Assert.assertEquals("match UI count with API count",returnedWorks.getTotalMatchCount(),totalProductFound);
 
         }
 

@@ -15,7 +15,7 @@ public class LoadProperties {
 
     private static void findPropertiesFile() {
         //below line need to enable when running in jenkins.
-        System.setProperty("ENV","SIT");
+
         propertiesFile = System.getProperty("user.dir") + "/src/main/resources/" + (System.getProperty("ENV") == null || "".equals(System.getProperty("ENV")) ? "UAT" : System.getProperty("ENV")) + ".properties";
         // propertiesFile = System.getProperty("user.dir") + "/src/main/resources/SIT.properties";
         // propertiesFile = System.getProperty("user.dir") + "/src/main/resources/UAT.properties";

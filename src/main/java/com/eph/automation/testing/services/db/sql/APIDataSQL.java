@@ -14,6 +14,7 @@ public class APIDataSQL {
             ",F_TYPE as SUBJECT_AREA_TYPE,F_PARENT_SUBJECT_AREA as F_PARENT_SUBJECT_AREA\n" +
             "from semarchy_eph_mdm.gd_subject_area where code='%s'";
 
+    //updated by Nishant @ 16 Oct 2020 for EPHD-2041
     public static String GET_GD_FinnAttr_DATA ="SELECT \n" +
             "  sa.B_CLASSNAME as B_CLASSNAME\n" +
             "  ,work_fin_attribs_id AS fin_attribs_id -- Title\n" +
@@ -23,7 +24,8 @@ public class APIDataSQL {
             "  ,effective_start_date as effective_start_date\n" +
             "  ,f_wwork as work_id\n" +
             "  FROM semarchy_eph_mdm.gd_work_financial_attribs sa\n"+
-            "  where f_wwork='%s'";
+            "  where f_wwork='%s' and work_fin_attribs_id not in \n" +
+            " (select work_fin_attribs_id where effective_end_date <current_date) ";
 
     public static String SELECT_RANDOM_WORK_IDS_FOR_SEARCH = "SELECT \"work_id\" as WORK_ID\n" +
             "FROM semarchy_eph_mdm.gd_wwork \n" +
@@ -159,6 +161,7 @@ public class APIDataSQL {
             "               f_type AS WORK_TYPE,\n" +
             "               f_imprint AS IMPRINT,\n" +
             "               f_accountable_product AS f_accountable_product,\n"+
+            "               f_legal_ownership AS LEGAL_OWNERSHIP,\n"+
             "               edition_number AS EDITION_NUMBER,\n" +
             "               volume AS VOLUME,\n" +
             "               copyright_year AS COPYRIGHT_YEAR\n" +

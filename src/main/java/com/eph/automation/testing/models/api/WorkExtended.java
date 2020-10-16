@@ -49,7 +49,8 @@ public class WorkExtended {
     private String issueProdTypeCode;
 
     public String getIssueProdTypeCode() {
-        return issueProdTypeCode;
+        if(issueProdTypeCode==null) return "";
+        else return issueProdTypeCode;
     }
 
     public void setIssueProdTypeCode(String issueProdTypeCode) {
@@ -65,7 +66,6 @@ public class WorkExtended {
     public String getCatalogueVolumesQty() {
         if(catalogueVolumesQty==null) return "";
         else return catalogueVolumesQty;
-
     }
 
     private String catalogueIssuesQty="";
