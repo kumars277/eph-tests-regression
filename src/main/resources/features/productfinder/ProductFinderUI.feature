@@ -109,7 +109,7 @@ Feature: Product Finder Selenium tests
       |surgical       |Planned             |Book      |
       |nurse          |No Longer Published |Book      |
 
-  @PFDMC @PFUI
+  @PFDMC @PFUIi
   Scenario Outline: Search the Product Finder and verify all 3 tabs
     Given get 1 random work id from DB
     And We get the work search data from EPH GD
@@ -147,7 +147,7 @@ Examples:
 
   @JFUI @PFUI
   Scenario Outline: Search the Journal by person
-    Given We get 1 random search ids for person roles
+    Given We get 5 random search ids for person roles
     And get person data from EPH DB
     And   user is on Journal Finder search page
     And   Searches journal work by person <option>
@@ -158,9 +158,9 @@ Examples:
    #   |personName           |
    #   |personId             |
 
-  @JFUI
+  @JFUI @PFUI
   Scenario Outline: Search the Journal by PMC
-    Given We get 2 random journal ids for search
+    Given We get 5 random journal ids for search
     And   We get the work search data from EPH GD
     And   user is on Journal Finder search page
     And   Searches journal by pmc <option>

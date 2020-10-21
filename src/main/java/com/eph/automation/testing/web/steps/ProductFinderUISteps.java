@@ -98,7 +98,7 @@ public class ProductFinderUISteps {
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
-       // ids.clear(); ids.add("EPR-W-102H5H");  Log.info("hard coded work ids are : " + ids);
+        //ids.clear(); ids.add("EPR-W-10WKYJ");  Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
@@ -615,7 +615,7 @@ public class ProductFinderUISteps {
         if(DataQualityContext.uiUnderTest=="JF") verifyEditorialInfo();
         verifyPeople();
         //commented links verification till EPHD-2254 get fixed
-      //  if(DataQualityContext.uiUnderTest=="JF") verifyLink();
+        //if(DataQualityContext.uiUnderTest=="JF") verifyLink();
     }
 
     @Then("^search work and verify links")
@@ -723,6 +723,7 @@ public class ProductFinderUISteps {
 
         if (DataQualityContext.manifestationExtendedTestClass != null) {
             //coming from manifestation Extended
+            //EPR-W-11560F
             Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Production Site"),
                     DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getJournalProdSiteCode());
             printLog("UI:Production Site with JRBI: journalProdSiteCode");
@@ -781,9 +782,6 @@ public class ProductFinderUISteps {
 
             if(url == null || url.isEmpty()){System.out.println(l+": URL is not configured for anchor tag or it is empty");continue;}
             System.out.println(l+": "+url);
-
-
-
             try {
                 huc = (HttpURLConnection)(new URL(url).openConnection());
                 //    String cookie = huc.getHeaderField( "Set-Cookie").split(";")[0];
@@ -985,14 +983,14 @@ List<String> invalidRoles = new ArrayList<>();
         List<Map<String, String>> costResCentre = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         //EPR-W-102SDV, updated by Nishant @ 16 Oct 2020
-        String DBvalue_costResCentre = financialAttribs.financialDataFromGD.get(0).getCost_resp_centre() + " - " + costResCentre.get(0).get("l_description");
+        String DBvalue_costResCentre = financialAttribs.financialDataFromGD.get(0).getCost_resp_centre() + " - " + costResCentre.get(0).get("l_description").trim();
         Assert.assertEquals(productFinderTasks.prop_comCode.getProperty("Cost Responsibility Centre"), DBvalue_costResCentre);
         printLog("Cost Responsibility Centre");
 
         sql = "select l_description FROM semarchy_eph_mdm.gd_x_lov_gl_resp_centre WHERE code='" + financialAttribs.financialDataFromGD.get(0).getRevenue_resp_centre() + "'";
         List<Map<String, String>> revenueResCentre = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
-        String DBvalue_revenueResCentre = financialAttribs.financialDataFromGD.get(0).getRevenue_resp_centre() + " - " + revenueResCentre.get(0).get("l_description").replace("  ", " ");
+        String DBvalue_revenueResCentre = financialAttribs.financialDataFromGD.get(0).getRevenue_resp_centre() + " - " + revenueResCentre.get(0).get("l_description").replace("  ", " ").trim();
 
         Assert.assertEquals(productFinderTasks.prop_comCode.getProperty("Revenue Responsibility Centre"), DBvalue_revenueResCentre);
         printLog("Revenue Responsibility Centre");
@@ -2066,6 +2064,7 @@ List<String> invalidRoles = new ArrayList<>();
             }
             Assert.assertEquals(returnedWorks.getTotalMatchCount(),totalProductFound);
             Log.info(journalSearchOption+" matched for UI and API");
+                Log.info("....................................");
         }
 
 

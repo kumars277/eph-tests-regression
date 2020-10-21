@@ -3,77 +3,51 @@ package com.eph.automation.testing.models.api;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.web.steps.ApiWorksSearchSteps;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.junit.Assert;
 
 /**
  * created by Nishant @ 19 Jun 2020
  * for JRBI data reflect in APIv3 work extended, person extended and manifestation extended
  */
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WorkExtended {
 
+    private String journalElsComInd;
+    public String getJournalElsComInd() {if(journalElsComInd==null) return "";else return journalElsComInd;}
+    public void setJournalElsComInd(String journalElsComInd) {this.journalElsComInd = journalElsComInd;}
+
+    private String journalAimsScope;
+    public String getJournalAimsScope() {if(journalAimsScope==null) return "";else return journalAimsScope;}
+    public void setJournalAimsScope(String journalAimsScope) {this.journalAimsScope = journalAimsScope;}
+
+    private String imageFileRef;
+    public String getImageFileRef() {if(imageFileRef==null) return "";else return imageFileRef;}
+    public void setImageFileRef(String imageFileRef) {this.imageFileRef = imageFileRef;}
+
     private String primarySiteSystem;
-
-    public String getPrimarySiteSystem() {
-        if(primarySiteSystem==null) return "";
-        else return primarySiteSystem;
-    }
-
-    public void setPrimarySiteSystem(String primarySiteSystem) {
-        this.primarySiteSystem = primarySiteSystem;
-    }
+    public String getPrimarySiteSystem() {if(primarySiteSystem==null) return "";else return primarySiteSystem;}
+    public void setPrimarySiteSystem(String primarySiteSystem) {this.primarySiteSystem = primarySiteSystem;}
 
     private String primarySiteAcronym;
-
-    public String getPrimarySiteAcronym() {
-        if(primarySiteAcronym==null) return "";
-        else return primarySiteAcronym;
-    }
-
-    public void setPrimarySiteAcronym(String primarySiteAcronym) {
-        this.primarySiteAcronym = primarySiteAcronym;
-    }
+    public String getPrimarySiteAcronym() {if(primarySiteAcronym==null) return "";else return primarySiteAcronym;}
+    public void setPrimarySiteAcronym(String primarySiteAcronym) {this.primarySiteAcronym = primarySiteAcronym;}
 
     private String primarySiteSupportLevel;
-
-    public String getPrimarySiteSupportLevel() {
-        if(primarySiteSupportLevel==null) return "";
-        else return primarySiteSupportLevel;
-    }
-
-    public void setPrimarySiteSupportLevel(String primarySiteSupportLevel) {
-        this.primarySiteSupportLevel = primarySiteSupportLevel;
-    }
+    public String getPrimarySiteSupportLevel() {if(primarySiteSupportLevel==null) return "";else return primarySiteSupportLevel;}
+    public void setPrimarySiteSupportLevel(String primarySiteSupportLevel) {this.primarySiteSupportLevel = primarySiteSupportLevel;}
 
 
     private String issueProdTypeCode;
-
-    public String getIssueProdTypeCode() {
-        if(issueProdTypeCode==null) return "";
-        else return issueProdTypeCode;
-    }
-
-    public void setIssueProdTypeCode(String issueProdTypeCode) {
-        this.issueProdTypeCode = issueProdTypeCode;
-    }
+    public String getIssueProdTypeCode() {if(issueProdTypeCode==null) return "";else return issueProdTypeCode;}
+    public void setIssueProdTypeCode(String issueProdTypeCode) {this.issueProdTypeCode = issueProdTypeCode;}
 
     private String catalogueVolumesQty;
-
-    public void setCatalogueVolumesQty(String catalogueVolumesQty) {
-        this.catalogueVolumesQty = catalogueVolumesQty;
-    }
-
-    public String getCatalogueVolumesQty() {
-        if(catalogueVolumesQty==null) return "";
-        else return catalogueVolumesQty;
-    }
+    public void setCatalogueVolumesQty(String catalogueVolumesQty) {this.catalogueVolumesQty = catalogueVolumesQty;}
+    public String getCatalogueVolumesQty() {if(catalogueVolumesQty==null) return "";else return catalogueVolumesQty;}
 
     private String catalogueIssuesQty="";
-
-    public void setCatalogueIssuesQty(String catalogueIssuesQty) {
-        this.catalogueIssuesQty = catalogueIssuesQty;
-    }
-
+    public void setCatalogueIssuesQty(String catalogueIssuesQty) {this.catalogueIssuesQty = catalogueIssuesQty;}
     public String getCatalogueIssuesQty() {
         return catalogueIssuesQty;
     }

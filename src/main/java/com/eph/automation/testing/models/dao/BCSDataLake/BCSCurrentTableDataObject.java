@@ -1,7 +1,9 @@
-//created by Nishant @ 30 Sep 2020
+//created by Nishant @ 21 Oct 2020
 package com.eph.automation.testing.models.dao.BCSDataLake;
 
-public class BCSInitialIngestDataObject {
+
+public class BCSCurrentTableDataObject {
+
     private String metadeleted;
     private String metamodifiedon;
     private String sourceref;
@@ -354,4 +356,3 @@ public class BCSInitialIngestDataObject {
     }
 
 }
-

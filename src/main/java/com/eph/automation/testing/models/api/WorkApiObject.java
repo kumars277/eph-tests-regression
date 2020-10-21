@@ -33,7 +33,7 @@ public class WorkApiObject {
         return workDataObjectsFromEPHGD;
     }
 
-    public void setWorkDataObjectsFromEPHGD(List<WorkDataObject> workDataObjectsFromEPHGD) {
+        public void setWorkDataObjectsFromEPHGD(List<WorkDataObject> workDataObjectsFromEPHGD) {
         this.workDataObjectsFromEPHGD = workDataObjectsFromEPHGD;
     }
 

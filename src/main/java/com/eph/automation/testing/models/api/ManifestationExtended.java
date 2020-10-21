@@ -5,8 +5,10 @@ package com.eph.automation.testing.models.api;
 * */
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.junit.Assert;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ManifestationExtended {
     private String journalProdSiteCode;
     public String getJournalProdSiteCode() {return journalProdSiteCode;}
