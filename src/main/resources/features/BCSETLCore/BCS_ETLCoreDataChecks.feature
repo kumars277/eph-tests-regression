@@ -4,7 +4,7 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
 
   @BCSCore
   Scenario Outline: Verify Data for BCS_ETL Core tables is transferred from Inbound Tables
-    Given Get the <countOfRandomIds> of BCS Core from Current Tables <tableName>
+    Given Get the <countOfRandomIds> of BCS Core data from Current Tables <tableName>
     Then  Get the Data from the Inbound Tables <tableName>
     And   Get the Data from the BCS Core Current Tables <tableName>
     Then  Compare data of BCS Inbound and BCS Core <tableName> tables are identical

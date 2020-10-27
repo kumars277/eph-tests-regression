@@ -41,8 +41,8 @@ public class SDBooksDataChecksSteps {
             case "sdbooks_transform_current_urls":
                 sql = String.format(SDBooksDataChecksSQL.GET_RANDOM_ISBN_CURRENT_URL, numberOfRecords);
                  break;
-            case "sdbooks_transform_previous_urls":
-                sql = String.format(SDBooksDataChecksSQL.GET_RANDOM_ISBN_PREVIOUS_HIST_URL, numberOfRecords);
+            case "sdbooks_transform_file_history_urls_part":
+                sql = String.format(SDBooksDataChecksSQL.GET_RANDOM_ISBN_CURRENT_URL, numberOfRecords);
                 break;
             case "sdbooks_delta_current_urls":
                 sql = String.format(SDBooksDataChecksSQL.GET_RANDOM_ISBN_URL_DIFF_CURR_PREV_TRANS_FILE, numberOfRecords);
@@ -178,12 +178,25 @@ public class SDBooksDataChecksSteps {
                 sql = String.format(SDBooksDataChecksSQL.GET_REC_CURRENT_HIST_URL, Joiner.on("','").join(Ids));
                 dataQualitySDContext.recordsFromCurrentUrlHistory = DBManager.getDBResultAsBeanList(sql, SDBooksDLAccessObject.class, Constants.AWS_URL);
                 break;
-
+/*
             case "sdbooks_transform_previous_urls":
                 sql = String.format(SDBooksDataChecksSQL.GET_REC_PREVIOUS_HIST_URL, Joiner.on("','").join(Ids));
                 dataQualitySDContext.recordsFromPreviousUrlHistory = DBManager.getDBResultAsBeanList(sql, SDBooksDLAccessObject.class, Constants.AWS_URL);
                 break;
-        }
+   */     }
+        Log.info(sql);
+    }
+
+
+    @When("^We Get the records from transform File SD url (.*)$")
+    public void getUrlRecFromTransformFile(String table) {
+        Log.info("We get the transform File URL records...");
+        switch (table){
+            case "sdbooks_transform_file_history_urls_part":
+                sql = String.format(SDBooksDataChecksSQL.GET_REC_CURRENT_TRANS_FILE_URL, Joiner.on("','").join(Ids));
+                dataQualitySDContext.recordsFromCurrentUrlTranFile = DBManager.getDBResultAsBeanList(sql, SDBooksDLAccessObject.class, Constants.AWS_URL);
+                break;
+     }
         Log.info(sql);
     }
 
@@ -286,6 +299,107 @@ public class SDBooksDataChecksSteps {
             }
         }
     }
+
+    @And("^Compare the records of SD current url and SD transform file url history$")
+    public void compareDataCurrentAndTransformFile() {
+        if (dataQualitySDContext.recordsFromCurrentUrl.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the ISBN Ids to compare the records between URL Current and Transform File URL...");
+            for (int i = 0; i < dataQualitySDContext.recordsFromCurrentUrl.size(); i++) {
+
+                dataQualitySDContext.recordsFromCurrentUrl  .sort(Comparator.comparing(SDBooksDLAccessObject::getISBN)); //sort primarykey data in the lists
+                dataQualitySDContext.recordsFromCurrentUrlTranFile.sort(Comparator.comparing(SDBooksDLAccessObject::getISBN));
+
+                Log.info("Current_URL -> ISBN => " + dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN() +
+                        "Trans_File -> ISBN => " + dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getISBN());
+                if (dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN() != null ||
+                        (dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getISBN() != null)) {
+                    Assert.assertEquals("The ISBN is =" + dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN() + " is missing/not found in Current_URL table",
+                            dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN(),
+                            dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getISBN());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN() +
+                        " BOOK_TITLE => Current_URL =" + dataQualitySDContext.recordsFromCurrentUrl.get(i).getBOOK_TITLE() +
+                        " Trans_File=" + dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getBOOK_TITLE());
+
+                if (dataQualitySDContext.recordsFromCurrentUrl.get(i).getBOOK_TITLE() != null ||
+                        (dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getBOOK_TITLE() != null)) {
+                    Assert.assertEquals("The BOOK_TITLE is incorrect for ISBN = " + dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromCurrentUrl.get(i).getBOOK_TITLE(),
+                            dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getBOOK_TITLE());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN() +
+                        " URL => Current_URL =" + dataQualitySDContext.recordsFromCurrentUrl.get(i).getURL() +
+                        " Trans_File=" + dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getURL());
+
+                if (dataQualitySDContext.recordsFromCurrentUrl.get(i).getURL() != null ||
+                        (dataQualitySDContext.recordsFromCurrentUrl.get(i).getURL() != null)) {
+                    Assert.assertEquals("The URL is incorrect for ISBN = " + dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromCurrentUrl.get(i).getURL(),
+                            dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getURL());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN() +
+                        " URL_CODE => Current_URL =" + dataQualitySDContext.recordsFromCurrentUrl.get(i).getURL_CODE() +
+                        " Trans_File=" + dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getURL_CODE());
+
+                if (dataQualitySDContext.recordsFromCurrentUrl.get(i).getURL_CODE() != null ||
+                        (dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getURL_CODE() != null)) {
+                    Assert.assertEquals("The URL_CODE is incorrect for ISBN = " + dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromCurrentUrl.get(i).getURL_CODE(),
+                            dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getURL_CODE());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN() +
+                        " URL_NAME => Current_URL =" + dataQualitySDContext.recordsFromCurrentUrl.get(i).getURL_NAME() +
+                        " Trans_File=" + dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getURL_NAME());
+
+                if (dataQualitySDContext.recordsFromCurrentUrl.get(i).getURL_NAME() != null ||
+                        (dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getURL_NAME() != null)) {
+                    Assert.assertEquals("The URL_NAME is incorrect for ISBN = " + dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromCurrentUrl.get(i).getURL_NAME(),
+                            dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getURL_NAME());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN() +
+                        " URL_TITLE => Current_URL =" + dataQualitySDContext.recordsFromCurrentUrl.get(i).getURL_TITLE() +
+                        " Trans_File =" + dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getURL_TITLE());
+
+                if (dataQualitySDContext.recordsFromCurrentUrl.get(i).getURL_TITLE() != null ||
+                        (dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getURL_TITLE() != null)) {
+                    Assert.assertEquals("The URL_TITLE is incorrect for ISBN = " + dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromCurrentUrl.get(i).getURL_TITLE(),
+                            dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getURL_TITLE());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN() +
+                        " EPRID => Current_URL =" + dataQualitySDContext.recordsFromCurrentUrl.get(i).getEPRID() +
+                        " Trans_File =" + dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getEPRID());
+
+                if (dataQualitySDContext.recordsFromCurrentUrl.get(i).getEPRID() != null ||
+                        (dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getEPRID() != null)) {
+                    Assert.assertEquals("The EPRID is incorrect for ISBN = " + dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromCurrentUrl.get(i).getEPRID(),
+                            dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getEPRID());
+                }
+
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN() +
+                        " WORK_TYPE => Current_URL =" + dataQualitySDContext.recordsFromCurrentUrl.get(i).getWORK_TYPE() +
+                        " Trans_File=" + dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getWORK_TYPE());
+
+                if (dataQualitySDContext.recordsFromCurrentUrl.get(i).getWORK_TYPE() != null ||
+                        (dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getWORK_TYPE() != null)) {
+                    Assert.assertEquals("The WORK_TYPE is incorrect for ISBN = " + dataQualitySDContext.recordsFromCurrentUrl.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromCurrentUrl.get(i).getWORK_TYPE(),
+                            dataQualitySDContext.recordsFromCurrentUrlTranFile.get(i).getWORK_TYPE());
+                }
+            }
+        }
+    }
+
 
     @Then("^Get the records from SD transform previous url$")
     public void getRecordsFromPreviousURL() {

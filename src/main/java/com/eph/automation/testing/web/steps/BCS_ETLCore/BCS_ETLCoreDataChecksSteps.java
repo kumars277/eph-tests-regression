@@ -29,7 +29,7 @@ public class BCS_ETLCoreDataChecksSteps {
     // private SimpleDateFormat formatter1=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
     // private SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
-    @Given("^Get the (.*) of BCS Core from Current Tables (.*)$")
+    @Given("^Get the (.*) of BCS Core data from Current Tables (.*)$")
     public void getRandomIds(String numberOfRecords, String tableName) {
         // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);

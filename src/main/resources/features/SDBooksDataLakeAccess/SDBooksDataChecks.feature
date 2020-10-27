@@ -25,14 +25,14 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
       |sdbooks_transform_current_urls |   10                 |
 
   @SD
-  Scenario Outline: Verify Data for SD transform_previous_url_history is transferred from Previous url
+  Scenario Outline: Verify Data for SD transform_File_URL_history is transferred from Current URL
     Given We get the <countOfRandomIds> random ISBN ids <sourceTable>
-    When Get the records from SD transform previous url
-    Then We Get the records from transform SD url History <sourceTable>
-    And Compare the records of SD previous url and previous url history
+    When Get the records from transform SD current URL
+    Then We Get the records from transform File SD url <sourceTable>
+    And Compare the records of SD current url and SD transform file url history
     Examples:
-      | sourceTable                   | countOfRandomIds|
-      |sdbooks_transform_previous_urls   |   10                 |
+      | sourceTable                   | countOfRandomIds      |
+      |sdbooks_transform_file_history_urls_part |   10                 |
 
   @SD
   Scenario Outline: Verify Data for SD transform_Delta_URL_history is transferred from Delta URL

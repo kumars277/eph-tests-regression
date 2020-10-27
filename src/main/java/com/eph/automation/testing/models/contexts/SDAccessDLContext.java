@@ -12,6 +12,8 @@ public class SDAccessDLContext {
     public static List<SDBooksDLAccessObject> recordsFromInboundData;
     public static List<SDBooksDLAccessObject> recordsFromCurrentUrl;
     public static List<SDBooksDLAccessObject> recordsFromCurrentUrlHistory;
+    public static List<SDBooksDLAccessObject> recordsFromCurrentUrlTranFile;
+
     public static List<SDBooksDLAccessObject> recordsFromPreviousUrlHistory;
     public static List<SDBooksDLAccessObject> recordsFromPreviousUrl;
     public static List<SDBooksDLAccessObject> recordsFromDeltaCurrentUrl;

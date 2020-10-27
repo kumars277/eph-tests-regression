@@ -70,6 +70,20 @@ public class SDBooksDataChecksSQL {
                     "transform_ts = (select max(transform_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_urls_part) " +
                     "and delete_flag = false and isbn in ('%s') order by isbn desc \n";
 
+
+    public static String GET_REC_CURRENT_TRANS_FILE_URL =
+            "select isbn as ISBN" +
+                    ",book_title as BOOK_TITLE" +
+                    ",url as URL" +
+                    ",url_code as URL_CODE" +
+                    ",url_name as URL_NAME" +
+                    ",url_title as URL_TITLE" +
+                    ",epr_id as EPRID" +
+                    ",work_type as WORK_TYPE" +
+                    " from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part where\n " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part) " +
+                    "and isbn in ('%s') order by isbn desc \n";
+
     public static String GET_REC_PREVIOUS_URL =
             "select isbn as ISBN" +
                     ",book_title as BOOK_TITLE" +

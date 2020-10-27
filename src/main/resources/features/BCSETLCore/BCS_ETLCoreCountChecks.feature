@@ -4,7 +4,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
 
 
 
-  @BCSCore
+  @BCSCoreD
   Scenario Outline: Verify Data Count for BCS_ETL Core tables is transferred from Inbound Tables
     Given Get the total count of BCS Core from Current Tables <tableName>
     Then  We know the total count of Inbound tables <tableName>
@@ -89,7 +89,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
       |etl_delta_current_person                       |etl_person_transform_file_history_part                  |
       |etl_delta_current_product                      |etl_product_transform_file_history_part                 |
       |etl_delta_current_work_person_role             |etl_work_person_role_transform_file_history_part        |
-      |etl_delta_current_work_relationship                         |etl_work_relationship_transform_file_history_part       |
+      |etl_delta_current_work_relationship            |etl_work_relationship_transform_file_history_part       |
       |etl_delta_current_work                         |etl_work_transform_file_history_part                    |
       |etl_delta_current_work_identifier              |etl_work_identifier_transform_file_history_part         |
       |etl_delta_current_manifestation_identifier     |etl_manifestation_identifier_transform_file_history_part|
@@ -135,7 +135,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
 
 
 
-  @SD
+  @BCSCoreD
   Scenario Outline: Verify Duplicate Entry for BCS COre in transform latest tables
     Given Get the BCCore Duplicate count in <SourceTableName> table
     Then Check the BCSCore count should be equal to Zero <SourceTableName>
@@ -151,4 +151,3 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
     |etl_transform_history_work_identifier_latest               |
     |etl_transform_history_manifestation_identifier_latest      |
 
-    ## Delta New Logic To be Implemented when the query is ready ##
