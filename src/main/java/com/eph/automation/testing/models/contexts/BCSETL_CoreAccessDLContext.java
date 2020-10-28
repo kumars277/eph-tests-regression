@@ -11,6 +11,9 @@ import java.util.List;
 public class BCSETL_CoreAccessDLContext {
     public static List<BCS_ETLCoreDLAccessObject> recordsFromInboundData;
     public static List<BCS_ETLCoreDLAccessObject> recordsFromCurrent;
+    public static List<BCS_ETLCoreDLAccessObject> recordsFromPersonCurrent;
+    public static List<BCS_ETLCoreDLAccessObject> recFromCurrentHist;
+    public static List<BCS_ETLCoreDLAccessObject> recFromPersonCurrentHist;
 
 
 
