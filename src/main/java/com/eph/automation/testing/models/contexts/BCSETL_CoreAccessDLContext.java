@@ -14,7 +14,12 @@ public class BCSETL_CoreAccessDLContext {
     public static List<BCS_ETLCoreDLAccessObject> recordsFromPersonCurrent;
     public static List<BCS_ETLCoreDLAccessObject> recFromCurrentHist;
     public static List<BCS_ETLCoreDLAccessObject> recFromPersonCurrentHist;
-
+    public static List<BCS_ETLCoreDLAccessObject> recFromPersonTransFile;
+    public static List<BCS_ETLCoreDLAccessObject> recFromTransformFile;
+    public static List<BCS_ETLCoreDLAccessObject> recFromDiffOfTransformFile;
+    public static List<BCS_ETLCoreDLAccessObject>recFromDeltaCurrent;
+    public static List<BCS_ETLCoreDLAccessObject> recFromPersonDiffOfTransformFile;
+    public static List<BCS_ETLCoreDLAccessObject>recFromPersonDeltaCurrent;
 
 
 

@@ -60,6 +60,12 @@ public class BCS_ETLCoreDLAccessObject {
     private String FOAJOURNALTYPE;
     private String FSOCIETYOWNERSHIP;
     private String SUBSCRIPTIONTYPE;
+    private String DELTA_MODE;
+
+    public String getDELTA_MODE() { return DELTA_MODE; }
+    public void setDELTA_MODE(String DELTA_MODE) {
+        this.DELTA_MODE = DELTA_MODE;
+    }
 
     public String getOPCO() { return OPCO; }
     public void setOPCO(String OPCO) {
