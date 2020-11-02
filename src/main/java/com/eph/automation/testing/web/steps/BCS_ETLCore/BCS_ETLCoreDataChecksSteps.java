@@ -101,7 +101,7 @@ public class BCS_ETLCoreDataChecksSteps {
         Log.info(sql);
 
     }
-/*
+
     @When("^Get the Data from the Inbound Tables (.*)$")
     public void getIngestRecords(String tableName) {
         Log.info("We get the BCS Ingest records...");
@@ -111,15 +111,15 @@ public class BCS_ETLCoreDataChecksSteps {
                 break;
             case "etl_manifestation_current_v":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_MANIF_INBOUND_DATA, Joiner.on("','").join(Ids));
+                Log.info(sql);
                 break;
             case "etl_person_current_v":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PERSON_INBOUND_DATA, Joiner.on(",").join(Ids));
                 break;
-
         }
         Log.info(sql);
         dataQualityBCSContext.recordsFromInboundData = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
-    }*/
+    }
 
 
 
@@ -1998,12 +1998,6 @@ public class BCS_ETLCoreDataChecksSteps {
 
     }
 
-
-
-
-
-
-/*
     @And("^Compare data of BCS Inbound and BCS Core (.*) tables are identical$")
     public void compareIngestandCurrent(String tableName) {
         if (dataQualityBCSContext.recordsFromInboundData.isEmpty()) {
@@ -2156,7 +2150,7 @@ public class BCS_ETLCoreDataChecksSteps {
 
         }
 
-    }*/
+    }
 }
 
 

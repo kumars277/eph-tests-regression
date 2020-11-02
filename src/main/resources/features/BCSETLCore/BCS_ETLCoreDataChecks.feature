@@ -10,12 +10,12 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
     Then  Compare data of BCS Inbound and BCS Core <tableName> tables are identical
     Examples:
       | tableName                                |countOfRandomIds|
-    # |etl_accountable_product_current_v         |10              |
-    #  |etl_manifestation_current_v               |10              |
+   # |etl_accountable_product_current_v         |10              |
+      |etl_manifestation_current_v               |10              |
      # |etl_person_current_v                      |10              | since sourceref integer after running the query the result not stored in the list.
      # |etl_product_current_v                     |10              |
      # |etl_work_person_role_current_v            |10              |
-      |etl_work_relationship_current_v           |10              |
+     # |etl_work_relationship_current_v           |10              |
        # when ever in source query Date appears script failed bcoz of invalid format
       #|etl_work_current_v                        |10              |
       #|etl_work_identifier_current_v             |10              |
@@ -107,3 +107,32 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
     Examples:
       |countOfRandomIds     |
       |   10                |
+
+  @BCSCore
+  Scenario Outline: Verify Data for BCS Core Delta_Current tables are transferred from Delta_Current Hist Tables
+    Given Get the <countOfRandomIds> of BCS Core data from delta_Current_hist Tables <sourceTable>
+    When Get the Data from the Delta_Current_History Tables <sourceTable>
+    Then We Get the records from delta current table BCS core <targetTable>
+    And Compare the records of BCS Core delta current and delta_Current_history <targetTable>
+    Examples:
+      | targetTable                               |  sourceTable                                        |countOfRandomIds     |
+      | etl_delta_current_accountable_product     |  etl_delta_history_accountable_product_part         |   10                |
+      | etl_delta_current_manifestation           |  etl_delta_history_manifestation_part               |   10                |
+      |etl_delta_current_manifestation_identifier |  etl_delta_history_manifestation_identifier_part    |   10                |
+   #  |   etl_delta_current_person                | etl_delta_history_person_part                       |   10                |
+      |   etl_delta_current_product               | etl_delta_history_product_part                      |   10                |
+      | etl_delta_current_work_person_role        | etl_delta_history_work_person_role_part             |   10                |
+      | etl_delta_current_work_relationship       | etl_delta_history_work_relationship_part            |   10                |
+      |etl_delta_current_work                     |etl_delta_history_work_part                          |   10                |
+      | etl_delta_current_work_identifier         | etl_delta_history_work_identifier_part              |   10                |
+
+  @BCSCore
+  Scenario Outline: Verify Data for BCS Core Person Delta_Current tables are transferred from Person Delta_History Tables
+    Given Get the <countOfRandomIds> of BCS Core data from person Delta_Hist Tables
+    When Get the Data from the Person Delta_History Tables
+    Then We Get the records from person delta current table BCS core
+    And Compare the records of BCS Core person delta current and BCS person delta History
+    Examples:
+      |countOfRandomIds     |
+      |   10                |
+
