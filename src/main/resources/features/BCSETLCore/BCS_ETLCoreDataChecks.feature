@@ -136,3 +136,33 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
       |countOfRandomIds     |
       |   10                |
 
+  @BCSCore
+  Scenario Outline: Verify Data from the difference of BCS Core Delta_Current and Current_history is transferred to BCS core exclude table
+    Given Get the <countOfRandomIds> from diff of delta_current and current_hist tables <targetTable>
+    When Get the records from the diff of delta_current and current_hist tables <targetTable>
+    Then Get the records from <targetTable> exclude table
+    And  Compare the records of Exclude with diff of delta_current and current_hist tables <targetTable>
+    Examples:
+      | targetTable                                              |  countOfRandomIds     |
+     | etl_transform_history_accountable_product_excl_delta     |  10                |
+    | etl_transform_history_manifestation_excl_delta           |  10                |
+     |etl_transform_history_manifestation_identifier_excl_delta |  10                |
+    # |   etl_transform_history_person_excl_delta                | 10                |
+      |   etl_transform_history_product_excl_delta               | 10                |
+     | etl_transform_history_work_person_role_excl_delta        | 10                |
+      | etl_transform_history_work_relationship_excl_delta       | 10                |
+      |etl_transform_history_work_excl_delta                     |10                |
+     | etl_transform_history_work_identifier_excl_delta         |10                |
+
+
+  @BCSCore
+  Scenario Outline: Verify Data for BCS Core Person Exclude_Delta tables are transferred from Person Delta_Current and Current Hist Tables
+    Given Get the <countOfRandomIds> from diff of person delta_current and current_hist tables
+    When Get the records from the diff of person delta_current and current_hist tables
+    Then Get the records from person exclude BCS core table
+    And Compare the records of Exclude with diff of person delta_current and current_hist tables
+    Examples:
+      |countOfRandomIds     |
+      |   10                |
+
+
