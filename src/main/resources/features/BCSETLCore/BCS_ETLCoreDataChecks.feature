@@ -165,4 +165,31 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
       |countOfRandomIds     |
       |   10                |
 
+  @BCSCore
+  Scenario Outline: Verify Data from the difference of BCS Core Delta_Current and Exclude is transferred to BCS core Latest table
+    Given Get the <countOfRandomIds> from diff of delta_current and exclude_delta tables <targetTable>
+    When Get the records from the diff of delta_current and exclude_delta tables <targetTable>
+    Then Get the records from <targetTable> BCS core latest table
+    And  Compare the records of Latest with diff of delta_current and Exclude_Delta tables <targetTable>
+    Examples:
+      | targetTable                                              |  countOfRandomIds     |
+    | etl_transform_history_accountable_product_latest     |  10                |
+     | etl_transform_history_manifestation_latest           |  10                |
+      |etl_transform_history_manifestation_identifier_latest |  10                |
+    #|   etl_transform_history_person_latest                | 10                |
+      |   etl_transform_history_product_latest               | 10                |
+      | etl_transform_history_work_person_role_latest        | 10                |
+      | etl_transform_history_work_relationship_latest       | 10                |
+      |etl_transform_history_work_latest                     |10                |
+      | etl_transform_history_work_identifier_latest         |10                |
+
+  @BCSCore
+  Scenario Outline: Verify Data for BCS Core Person Latest tables are transferred from Person Delta_Current and Exclude Tables
+    Given Get the <countOfRandomIds> from diff of Person delta_current and Person exclude_delta tables
+    When Get the records from the diff of Person delta_current and Person exclude_delta tables
+    Then Get the records from person Latest BCS core table
+    And Compare the records of Person Latest with diff of person delta_current and Exclude_delta tables
+    Examples:
+      |countOfRandomIds     |
+      |   10                |
 

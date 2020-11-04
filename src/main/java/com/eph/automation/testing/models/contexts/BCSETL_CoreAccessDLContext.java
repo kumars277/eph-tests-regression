@@ -25,7 +25,11 @@ public class BCSETL_CoreAccessDLContext {
     public static List<BCS_ETLCoreDLAccessObject> recFromDiffOfDeltaAndCurrHist;
     public static List<BCS_ETLCoreDLAccessObject>recFromExclDelta;
     public static List<BCS_ETLCoreDLAccessObject> recFromDiffOfPersonDeltaAndCurrHist;
+    public static List<BCS_ETLCoreDLAccessObject> recFromDiffOfPersonDeltaAndExcl;
     public static List<BCS_ETLCoreDLAccessObject>recFromPersonExclDelta;
+    public static List<BCS_ETLCoreDLAccessObject>recFromPersonLatest;
+    public static List<BCS_ETLCoreDLAccessObject> recFromDiffOfDeltaAndExcl;
+    public static List<BCS_ETLCoreDLAccessObject>recFromLatest;
 
 
 

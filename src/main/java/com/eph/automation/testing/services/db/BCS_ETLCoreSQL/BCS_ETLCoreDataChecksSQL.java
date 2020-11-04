@@ -158,7 +158,7 @@ public class BCS_ETLCoreDataChecksSQL {
                 ",familyname as FAMILYNAME" +
                 ",peoplehub_id as PEOPLEHUBID" +
                 ",email_address as EMAIL" +
-                ",dq_err as DQERR " +
+                ",dq_err as DQ_ERR " +
                 "FROM\n" +
                 "  (\n" +
                 "   SELECT DISTINCT\n" +
@@ -205,6 +205,8 @@ public class BCS_ETLCoreDataChecksSQL {
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_accountable_product_current_v \n" +
                     "where u_key in ('%s') \n" +
                     "order by u_key desc";
+
+
 
     public static String GET_ACCPROD_REC_CURR_HIST_DATA =
             "SELECT sourceref as SOURCEREF \n" +
@@ -919,7 +921,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",familyname as FAMILYNAME" +
                     ",peoplehub_id as PEOPLEHUBID" +
                     ",email_address as EMAIL" +
-                    ",dq_err as DQERR " +
+                    ",dq_err as DQ_ERR " +
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_person_current_v where u_key in \n" +
                     "(%s) order by u_key desc";
 
@@ -931,7 +933,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",familyname as FAMILYNAME" +
                     ",peoplehub_id as PEOPLEHUBID" +
                     ",email_address as EMAIL" +
-                    ",dq_err as DQERR " +
+                    ",dq_err as DQ_ERR " +
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_part  where " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_part)" +
                     "and u_key in (%s) \n" +
@@ -945,7 +947,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",familyname as FAMILYNAME" +
                     ",peoplehub_id as PEOPLEHUBID" +
                     ",email_address as EMAIL" +
-                    ",dq_err as DQERR " +
+                    ",dq_err as DQ_ERR " +
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_person_transform_file_history_part  where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_person_transform_file_history_part)" +
                     "and u_key in (%s) \n" +
@@ -1007,7 +1009,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",familyname as FAMILYNAME" +
                     ",peoplehub_id as PEOPLEHUBID" +
                     ",email_address as EMAIL" +
-                    ",dq_err as DQERR " +
+                    ",dq_err as DQ_ERR " +
                     ",delta_mode as DELTA_MODE from(" +
                     "    select crr.sourceref, crr.u_key, crr.firstname, crr.familyname, crr.peoplehub_id, crr.email_address, crr.dq_err,'I' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
@@ -1745,7 +1747,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",familyname as FAMILYNAME" +
                     ",peoplehub_id as PEOPLEHUBID" +
                     ",email_address as EMAIL" +
-                    ",dq_err as DQERR " +
+                    ",dq_err as DQ_ERR " +
                     ",delta_mode as DELTA_MODE "+
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_person where u_key in \n" +
                     "(%s) order by u_key desc";
@@ -1758,7 +1760,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",familyname as FAMILYNAME" +
                     ",peoplehub_id as PEOPLEHUBID" +
                     ",email_address as EMAIL" +
-                    ",dq_err as DQERR " +
+                    ",dq_err as DQ_ERR " +
                     ",delta_mode as DELTA_MODE "+
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_person_part  where " +
                     "delta_ts = (select max(delta_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_person_part)" +
@@ -1779,6 +1781,326 @@ public class BCS_ETLCoreDataChecksSQL {
                     "where d.u_key is null and c.transform_ts = (\n" +
                     "select max(c.transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_accountable_product_part c ))\n" +
                     " order by rand() limit %s";
+
+    public static String GET_RANDOM_ACCPROD_KEY_DIFF_DELTACURR_EXCL =
+            "select u_key as UKEY from \n" +
+                    "(select c.u_key \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_accountable_product_excl_delta as c union all \n" +
+                    "select d.u_key \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_accountable_product as d) \n" +
+                    " order by rand() limit %s";
+
+    public static String GET_ACCPROD_REC_DIFF_DELTACURR_EXCL =
+            "SELECT sourceref as SOURCEREF \n" +
+                    ",accountableproduct as ACCOUNTABLEPRODUCT \n" +
+                    ",accountablename as ACCOUNTABLENAME \n" +
+                    ",accountableparent as ACCOUNTABLEPARENT \n" +
+                    ",u_key as UKEY \n" +
+                    ",dq_err as DQ_ERR from \n" +
+                    "(select c.u_key,c.sourceref,c.accountableproduct,c.accountablename,c.accountableparent,c.dq_err \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_accountable_product_excl_delta as c union all \n" +
+                    "select d.u_key,d.sourceref,d.accountableproduct,d.accountablename,d.accountableparent,d.dq_err \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_accountable_product as d) \n" +
+                    " where u_key in ('%s') order by u_key desc";
+
+    public static String GET_ACCPROD_REC_LATEST =
+            "SELECT sourceref as SOURCEREF \n" +
+                    ",accountableproduct as ACCOUNTABLEPRODUCT \n" +
+                    ",accountablename as ACCOUNTABLENAME \n" +
+                    ",accountableparent as ACCOUNTABLEPARENT \n" +
+                    ",u_key as UKEY \n" +
+                    ",dq_err as DQ_ERR \n" +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_accountable_product_latest \n" +
+                    "where u_key in ('%s') \n" +
+                    "order by u_key desc";
+
+    public static String GET_RANDOM_MANIF_KEY_DIFF_DELTACURR_EXCL =
+            "select u_key as UKEY from \n" +
+                    "(select c.u_key \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_excl_delta as c union all \n" +
+                    "select d.u_key \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_manifestation as d) \n" +
+                    " order by rand() limit %s";
+
+    public static String GET_MANIF_REC_DIFF_DELTACURR_EXCL =
+            "select sourceref as SOURCEREF \n" +
+                    ",u_key as UKEY \n" +
+                    ",title as TITLE \n" +
+                    ",intereditionflag as INTEREDITIONFLAG \n" +
+                    ",firstpublisheddate as FIRSTPUBLISHEDDATE \n" +
+                    ",binding as BINDING \n" +
+                    ",manifestation_type as MANIFESTATIONTYPE \n" +
+                    ",status as STATUS \n" +
+                    ",work_id as WORKID \n" +
+                    ",last_pub_date as LASTPUBDATE \n" +
+                    ",dq_err as DQ_ERR from \n" +
+                    "(select c.u_key,c.sourceref,c.title,c.intereditionflag,c.firstpublisheddate,c.binding,c.manifestation_type,c.status,c.work_id,c.last_pub_date,c.dq_err from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_excl_delta as c union all \n" +
+                    "select d.u_key,d.sourceref,d.title,d.intereditionflag,d.firstpublisheddate,d.binding,d.manifestation_type,d.status,d.work_id,d.last_pub_date,d.dq_err \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_manifestation as d) \n" +
+                    " where u_key in ('%s') order by u_key desc";
+
+    public static String GET_MANIF_REC_LATEST =
+            "select " +
+                    "sourceref as SOURCEREF \n" +
+                    ",u_key as UKEY \n" +
+                    ",title as TITLE \n" +
+                    ",intereditionflag as INTEREDITIONFLAG \n" +
+                    ",firstpublisheddate as FIRSTPUBLISHEDDATE \n" +
+                    ",binding as BINDING \n" +
+                    ",manifestation_type as MANIFESTATIONTYPE \n" +
+                    ",status as STATUS \n" +
+                    ",work_id as WORKID \n" +
+                    ",last_pub_date as LASTPUBDATE \n" +
+                    ",dq_err as DQ_ERR \n" +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_latest where u_key in ('%s') order by u_key desc";
+
+    public static String GET_MANIF_IDENT_REC_LATEST =
+            "select " +
+                    "sourceref as SOURCEREF \n" +
+                    ",u_key as UKEY \n" +
+                    ",identifier as IDENTIFIER \n" +
+                    ",identifier_type as IDENTIFIERTYPE \n" +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_identifier_latest where u_key in ('%s') order by u_key desc";
+
+    public static String GET_PRODUCT_REC_LATEST =
+            "select " +
+                    "sourceref as SOURCEREF \n" +
+                    ",u_key as UKEY \n" +
+                    ",bindingcode as BINDINGCODE \n" +
+                    ",name as NAME \n" +
+                    ",shorttitle as SHORTTITLE \n" +
+                    ",launchdate as LAUNCHDATE \n" +
+                    ",taxcode as TAXCODE \n" +
+                    ",status as STATUS \n" +
+                    ",manifestationref as MANIFESTATIONREF \n" +
+                    ",worksource as WORKSOURCE \n" +
+                    ",work_type as WORKTYPE \n" +
+                    ",separately_sale_indicator as SEPRATELYSALEINDICATOR \n" +
+                    ",trial_allowed_indicator as TRIALALLOWEDINDICATOR \n" +
+                    ",f_work_source_ref as FWORKSOURCEREF \n" +
+                    ",product_type as PRODUCTTYPE \n" +
+                    ",f_revenue_model as REVENUEMODEL \n" +
+                    ",dq_err as DQ_ERR  \n" +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_product_latest \n" +
+                    "where u_key in ('%s') \n" +
+                    "order by u_key desc";
+
+    public static String GET_WORK_PERS_ROLE_REC_LATEST =
+            "select " +
+                    "worksourceref as WORKSOURCEREF \n" +
+                    ",personsourceref as PERSONSOURCEREF \n" +
+                    ",roletype as ROLETYPE \n" +
+                    ",u_key as UKEY \n" +
+                    ",sequence as SEQUENCE \n" +
+                    ",deduplicator as DEDUPLICATOR \n" +
+                    ",dq_err as DQ_ERR \n" +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_person_role_latest \n" +
+                    "where u_key in ('%s') \n" +
+                    "order by u_key desc";
+
+    public static String GET_WORK_RELATION_REC_LATEST =
+            "select " +
+                    "parentref as PARENTREF \n" +
+                    ",childref as CHILDREF \n" +
+                    ",relationtyperef as RELATIONTYPEREF \n" +
+                    ",u_key as UKEY \n" +
+                    ",dq_err as DQ_ERR \n" +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_relationship_latest \n" +
+                    "where u_key in ('%s') \n" +
+                    "order by u_key desc";
+
+    public static String GET_WORK_REC_LATEST =
+            "select " +
+                    "sourceref as SOURCEREF \n" +
+                    ",title as TITLE \n" +
+                    ",subtitle as SUBTITLE \n" +
+                    ",u_key as UKEY \n" +
+                    ",volumeno as VOLUMENO \n" +
+                    ",copyrightyear as COPYRIGHTYEAR \n" +
+                    ",editionno as EDITIONNO \n" +
+                    ",pmc as PMC \n" +
+                    ",work_type as WORKTYPE \n" +
+                    ",statuscode as STATUSCODE \n" +
+                    ",imprintcode as IMPRINTCODE \n" +
+                    ",te_opco as TEOPCO \n" +
+                    ",opco as OPCO \n" +
+                    ",resp_centre as RESPCENTRE \n" +
+                    ",pmg as PMG \n" +
+                    ",languagecode as LANGUAGECODE \n" +
+                    ",electro_rights_indicator as ELECTRORIGHTSINDICATOR \n" +
+                    ",f_oa_journal_type as FOAJOURNALTYPE \n" +
+                    ",f_society_ownership as FSOCIETYOWNERSHIP \n" +
+                    ",subscription_type as SUBSCRIPTIONTYPE \n" +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_latest \n" +
+                    "where u_key in ('%s') \n" +
+                    "order by u_key desc";
+
+    public static String GET_WORK_IDENT_REC_LATEST =
+            "select " +
+                    "sourceref as SOURCEREF \n" +
+                    ",u_key as UKEY \n" +
+                    ",identifier as IDENTIFIER \n" +
+                    ",identifier_type as IDENTIFIERTYPE \n" +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_identifier_latest \n" +
+                    "where u_key in ('%s') \n" +
+                    "order by u_key desc";
+
+
+    public static String GET_MANIF_IDENT_REC_DIFF_DELTACURR_EXCL =
+            "select " +
+                    "sourceref as SOURCEREF \n" +
+                    ",u_key as UKEY \n" +
+                    ",identifier as IDENTIFIER \n" +
+                    ",identifier_type as IDENTIFIERTYPE from \n" +
+                    "(select c.u_key,c.sourceref,c.identifier,c.identifier_type from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_identifier_excl_delta as c union all \n" +
+                    "select d.u_key,d.sourceref,d.identifier,d.identifier_type \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_manifestation_identifier as d) \n" +
+                    " where u_key in ('%s') order by u_key desc";
+
+    public static String GET_PRODUCT_DIFF_DELTACURR_EXCL =
+            "select " +
+                    "sourceref as SOURCEREF \n" +
+                    ",u_key as UKEY \n" +
+                    ",bindingcode as BINDINGCODE \n" +
+                    ",name as NAME \n" +
+                    ",shorttitle as SHORTTITLE \n" +
+                    ",launchdate as LAUNCHDATE \n" +
+                    ",taxcode as TAXCODE \n" +
+                    ",status as STATUS \n" +
+                    ",manifestationref as MANIFESTATIONREF \n" +
+                    ",worksource as WORKSOURCE \n" +
+                    ",work_type as WORKTYPE \n" +
+                    ",separately_sale_indicator as SEPRATELYSALEINDICATOR \n" +
+                    ",trial_allowed_indicator as TRIALALLOWEDINDICATOR \n" +
+                    ",f_work_source_ref as FWORKSOURCEREF \n" +
+                    ",product_type as PRODUCTTYPE \n" +
+                    ",f_revenue_model as REVENUEMODEL \n" +
+                    ",dq_err as DQ_ERR from \n" +
+                    "(select c.sourceref,c.bindingcode,c.u_key,c.name,c.shorttitle,c.launchdate,c.taxcode,c.status,c.manifestationref,\n" +
+                    "c.worksource,c.work_type,c.separately_sale_indicator,c.trial_allowed_indicator,c.f_work_source_ref,\n" +
+                    "c.product_type,c.f_revenue_model,c.dq_err  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_product_excl_delta as c union all \n" +
+                    "select d.sourceref,d.bindingcode,d.u_key,d.name,d.shorttitle,d.launchdate,d.taxcode,d.status,d.manifestationref, \n" +
+                    "d.worksource,d.work_type,d.separately_sale_indicator,d.trial_allowed_indicator,d.f_work_source_ref,d.product_type,d.f_revenue_model,d.dq_err \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_product as d) \n" +
+                    " where u_key in ('%s') order by u_key desc";
+
+    public static String GET_RANDOM_MANIF_IDENT_KEY_DIFF_DELTACURR_EXCL =
+            "select u_key as UKEY from \n" +
+                    "(select c.u_key \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_identifier_excl_delta as c union all \n" +
+                    "select d.u_key \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_manifestation_identifier as d) \n" +
+                    " order by rand() limit %s";
+
+    public static String GET_RANDOM_PRODUCT_KEY_DIFF_DELTACURR_EXCL =
+            "select u_key as UKEY from \n" +
+                    "(select c.u_key \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_product_excl_delta as c union all \n" +
+                    "select d.u_key \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_product as d) \n" +
+                    " order by rand() limit %s";
+
+    public static String GET_RANDOM_WORK_PERS_ROLE_KEY_DIFF_DELTACURR_EXCL =
+            "select u_key as UKEY from \n" +
+                    "(select c.u_key \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_person_role_excl_delta as c union all \n" +
+                    "select d.u_key \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_work_person_role as d) \n" +
+                    " order by rand() limit %s";
+
+    public static String GET_WORK_PERS_ROLE_REC_DIFF_DELTACURR_EXCL =
+            "select " +
+                    "worksourceref as WORKSOURCEREF \n" +
+                    ",personsourceref as PERSONSOURCEREF \n" +
+                    ",roletype as ROLETYPE \n" +
+                    ",u_key as UKEY \n" +
+                    ",sequence as SEQUENCE \n" +
+                    ",deduplicator as DEDUPLICATOR \n" +
+                    ",dq_err as DQ_ERR from \n" +
+                    "(select c.worksourceref,c.personsourceref,c.roletype,c.u_key,c.sequence,c.deduplicator,c.modifiedon,c.dq_err from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_person_role_excl_delta as c union all \n" +
+                    "select d.worksourceref,d.personsourceref,d.roletype,d.u_key,d.sequence,d.deduplicator,d.modifiedon,d.dq_err \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_work_person_role as d) \n" +
+                    " where u_key in ('%s') order by u_key desc";
+
+    public static String GET_RANDOM_WORK_RELATION_KEY_DIFF_DELTACURR_EXCL =
+            "select u_key as UKEY from \n" +
+                    "(select c.u_key \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_relationship_excl_delta as c union all \n" +
+                    "select d.u_key \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_work_relationship as d) \n" +
+                    " order by rand() limit %s";
+
+    public static String GET_WORK_RELATION_REC_DIFF_DELTACURR_EXCL =
+            "select " +
+                    "parentref as PARENTREF \n" +
+                    ",childref as CHILDREF \n" +
+                    ",relationtyperef as RELATIONTYPEREF \n" +
+                    ",u_key as UKEY \n" +
+                    ",dq_err as DQ_ERR from\n" +
+                    "(select c.u_key,c.parentref,c.childref,c.relationtyperef,c.modifiedon,c.dq_err from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_relationship_excl_delta as c union all \n" +
+                     "select d.u_key,d.parentref,d.childref,d.relationtyperef,d.modifiedon,d.dq_err \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_work_relationship as d) \n" +
+            " where u_key in ('%s') order by u_key desc";
+
+    public static String GET_RANDOM_WORK_KEY_DIFF_DELTACURR_EXCL =
+            "select u_key as UKEY from \n" +
+                    "(select c.u_key \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_excl_delta as c union all \n" +
+                    "select d.u_key \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_work as d) \n" +
+                    " order by rand() limit %s";
+
+    public static String GET_WORK_REC_DIFF_DELTACURR_EXCL =
+            "select " +
+                    "sourceref as SOURCEREF \n" +
+                    ",title as TITLE \n" +
+                    ",subtitle as SUBTITLE \n" +
+                    ",u_key as UKEY \n" +
+                    ",volumeno as VOLUMENO \n" +
+                    ",copyrightyear as COPYRIGHTYEAR \n" +
+                    ",editionno as EDITIONNO \n" +
+                    ",pmc as PMC \n" +
+                    ",work_type as WORKTYPE \n" +
+                    ",statuscode as STATUSCODE \n" +
+                    ",imprintcode as IMPRINTCODE \n" +
+                    ",te_opco as TEOPCO \n" +
+                    ",opco as OPCO \n" +
+                    ",resp_centre as RESPCENTRE \n" +
+                    ",pmg as PMG \n" +
+                    ",languagecode as LANGUAGECODE \n" +
+                    ",electro_rights_indicator as ELECTRORIGHTSINDICATOR \n" +
+                    ",f_oa_journal_type as FOAJOURNALTYPE \n" +
+                    ",f_society_ownership as FSOCIETYOWNERSHIP \n" +
+                    ",subscription_type as SUBSCRIPTIONTYPE from \n" +
+                    "(select c.u_key,c.sourceref,c.title,c.subtitle,c.volumeno,c.copyrightyear,c.editionno,c.pmc\n" +
+                    ",c.work_type,c.statuscode,c.imprintcode,c.opco,c.resp_centre,c.te_opco,\n" +
+                    "c.pmg,c.languagecode,c.electro_rights_indicator,\n" +
+                    "c.f_oa_journal_type,c.f_society_ownership,c.subscription_type from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_excl_delta as c union all \n" +
+                    "select d.u_key,d.sourceref,d.title,d.subtitle,d.volumeno,d.copyrightyear,d.editionno,d.pmc \n" +
+                    ",d.work_type,d.statuscode,d.imprintcode,d.opco,d.resp_centre,d.te_opco,\n" +
+                    "d.pmg,d.languagecode,d.electro_rights_indicator,d.f_oa_journal_type,d.f_society_ownership,d.subscription_type \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_work as d) \n" +
+                    " where u_key in ('%s') order by u_key desc";
+
+    public static String GET_RANDOM_WORK_IDENT_KEY_DIFF_DELTACURR_EXCL =
+            "select u_key as UKEY from \n" +
+                    "(select c.u_key \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_identifier_excl_delta as c union all \n" +
+                    "select d.u_key \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_work_identifier as d) \n" +
+                    " order by rand() limit %s";
+
+    public static String GET_WORK_IDENT_REC_DIFF_DELTACURR_EXCL =
+            "select " +
+                    "sourceref as SOURCEREF \n" +
+                    ",u_key as UKEY \n" +
+                    ",identifier as IDENTIFIER \n" +
+                    ",identifier_type as IDENTIFIERTYPE from \n" +
+                    "(select c.u_key,c.sourceref,c.identifier,c.identifier_type from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_identifier_excl_delta as c union all \n" +
+                    "select d.u_key,d.sourceref,d.identifier,d.identifier_type \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_work_identifier as d) \n" +
+                    " where u_key in ('%s') order by u_key desc";
+
 
     public static String GET_ACCPROD_REC_DIFF_DELTACURR_CURRHIST =
             "SELECT sourceref as SOURCEREF \n" +
@@ -2116,7 +2438,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",familyname as FAMILYNAME" +
                     ",peoplehub_id as PEOPLEHUBID" +
                     ",email_address as EMAIL" +
-                    ",dq_err as DQERR from " +
+                    ",dq_err as DQ_ERR from " +
                     "(select c.u_key,c.sourceref,c.firstname,c.familyname,c.peoplehub_id,c.email_address,c.dq_err from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_part c\n" +
                     "left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_person d on c.u_key  = d.u_key \n" +
                     "where d.u_key is null and c.transform_ts = (\n" +
@@ -2131,10 +2453,48 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",familyname as FAMILYNAME" +
                     ",peoplehub_id as PEOPLEHUBID" +
                     ",email_address as EMAIL" +
-                    ",dq_err as DQERR " +
+                    ",dq_err as DQ_ERR " +
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_excl_delta \n" +
                     "where u_key in (%s) \n" +
                     "order by u_key desc";
+
+    public static String GET_RANDOM_PERSON_KEY_DIFF_DELTACURR_EXCL =
+            "select u_key as UKEY from \n" +
+                    "(select c.u_key \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_excl_delta as c union all \n" +
+                    "select d.u_key \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_person as d) \n" +
+                    " order by rand() limit %s";
+
+
+
+    public static String GET_PERSON_REC_DIFF_DELTACURR_EXCL =
+            "select " +
+                    "sourceref as SOURCEREF" +
+                    ",u_key as UKEY" +
+                    ",firstname as FIRSTNAME" +
+                    ",familyname as FAMILYNAME" +
+                    ",peoplehub_id as PEOPLEHUBID" +
+                    ",email_address as EMAIL" +
+                    ",dq_err as DQ_ERR from " +
+                    "(select c.u_key,c.sourceref,c.firstname,c.familyname,c.peoplehub_id,c.email_address,c.dq_err from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_excl_delta as c union all \n" +
+                    "select d.u_key,d.sourceref,d.firstname,d.familyname,d.peoplehub_id,d.email_address,d.dq_err \n" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_person as d) \n" +
+                    " where u_key in (%s) order by u_key desc";
+
+    public static String GET_PERSON_REC_LATEST =
+            "select " +
+                    "sourceref as SOURCEREF" +
+                    ",u_key as UKEY" +
+                    ",firstname as FIRSTNAME" +
+                    ",familyname as FAMILYNAME" +
+                    ",peoplehub_id as PEOPLEHUBID" +
+                    ",email_address as EMAIL" +
+                    ",dq_err as DQ_ERR " +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_latest \n" +
+                    "where u_key in (%s) \n" +
+                    "order by u_key desc";
+
 
 
 

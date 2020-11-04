@@ -982,9 +982,9 @@ public class BCS_ETLCore_LatestDataChecksSteps {
     @And ("^Compare the records of Exclude with diff of person delta_current and current_hist tables$")
     public void comparePersonExclAndDiffOfDeltaAndCurrHist(){
         if (dataQualityBCSContext.recFromDiffOfPersonDeltaAndCurrHist.isEmpty()) {
-            Log.info("No Data Found in Person Trans_File Diff....");
+            Log.info("No Data Found in  Diff of Delta and Current History table....");
         } else {
-            Log.info("Sorting the Ids to compare the records between Person Delta Current and Person Diff Transform File...");
+            Log.info("Sorting the Ids to compare the records between Person Exclude and Person Diff Delta and Current Hist...");
             for (int i = 0; i < dataQualityBCSContext.recFromDiffOfPersonDeltaAndCurrHist.size(); i++) {
                 dataQualityBCSContext.recFromDiffOfPersonDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
                 dataQualityBCSContext.recFromPersonExclDelta.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
@@ -1053,37 +1053,38 @@ public class BCS_ETLCore_LatestDataChecksSteps {
             }
         }
     }
-/*
-    @Given("^Get the (.*) of BCS Core data from delta_Current_hist Tables (.*)$")
-    public void getIdsFromDeltaHist(String numberOfRecords, String tableName) {
+
+
+    @Given("^Get the (.*) from diff of delta_current and exclude_delta tables (.*)$")
+    public void getIdsFromDiffOfDeltaCurrAndExcl(String numberOfRecords, String tableName) {
         // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
-        Log.info("Get random Ids for BCS Core Delta History Tables....");
+        Log.info("Get random Ids for BCS Core Tables from Diff of Delta Current and Exclude....");
 
         switch (tableName) {
-            case "etl_delta_history_accountable_product_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_KEY_ACCPROD_DELTA_CURRENT_HIST, numberOfRecords);
+            case "etl_transform_history_accountable_product_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_ACCPROD_KEY_DIFF_DELTACURR_EXCL, numberOfRecords);
                 break;
-            case "etl_delta_history_manifestation_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_KEY_MANIF_DELTA_CURRENT_HIST, numberOfRecords);
+            case "etl_transform_history_manifestation_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_MANIF_KEY_DIFF_DELTACURR_EXCL, numberOfRecords);
                 break;
-            case "etl_delta_history_manifestation_identifier_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_KEY_MANIF_IDENT_DELTA_CURRENT_HIST, numberOfRecords);
+            case "etl_transform_history_manifestation_identifier_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_MANIF_IDENT_KEY_DIFF_DELTACURR_EXCL, numberOfRecords);
                 break;
-            case "etl_delta_history_product_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_KEY_PRODUCT_DELTA_CURRENT_HIST, numberOfRecords);
+            case "etl_transform_history_product_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_PRODUCT_KEY_DIFF_DELTACURR_EXCL, numberOfRecords);
                 break;
-            case "etl_delta_history_work_person_role_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_KEY_WORK_PERS_ROLE_DELTA_CURRENT_HIST, numberOfRecords);
+            case "etl_transform_history_work_person_role_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_WORK_PERS_ROLE_KEY_DIFF_DELTACURR_EXCL, numberOfRecords);
                 break;
-            case "etl_delta_history_work_relationship_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_KEY_WORK_RELATION_DELTA_CURRENT_HIST, numberOfRecords);
+            case "etl_transform_history_work_relationship_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_WORK_RELATION_KEY_DIFF_DELTACURR_EXCL, numberOfRecords);
                 break;
-            case "etl_delta_history_work_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_KEY_WORK_DELTA_CURRENT_HIST, numberOfRecords);
+            case "etl_transform_history_work_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_WORK_KEY_DIFF_DELTACURR_EXCL, numberOfRecords);
                 break;
-            case "etl_delta_history_work_identifier_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_KEY_WORK_IDENT_DELTA_CURRENT_HIST, numberOfRecords);
+            case "etl_transform_history_work_identifier_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_WORK_IDENT_KEY_DIFF_DELTACURR_EXCL, numberOfRecords);
                 break;
         }
         List<Map<?, ?>> randomIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
@@ -1092,1031 +1093,991 @@ public class BCS_ETLCore_LatestDataChecksSteps {
         Log.info(Ids.toString());
     }
 
-    @When ("^Get the Data from the Delta_Current_History Tables (.*)$")
-    public void getRecFromDeltaHist(String tableName){
-        Log.info("We get the records from Delta Hist of BCS Core table...");
+
+    @When ("^Get the records from the diff of delta_current and exclude_delta tables (.*)$")
+    public void getRecFromDiffDeltaCurrAndExcl(String tableName){
+        Log.info("We get the records from Diff of Delta Current and Excl of BCS Core table...");
         switch (tableName) {
-            case "etl_delta_history_accountable_product_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_ACCPROD_REC_DELTA_CURRENT_HIST, Joiner.on("','").join(Ids));
+            case "etl_transform_history_accountable_product_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_ACCPROD_REC_DIFF_DELTACURR_EXCL, Joiner.on("','").join(Ids));
                 break;
-            case "etl_delta_history_manifestation_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_MANIF_REC_DELTA_CURRENT_HIST, Joiner.on("','").join(Ids));
+            case "etl_transform_history_manifestation_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_MANIF_REC_DIFF_DELTACURR_EXCL, Joiner.on("','").join(Ids));
                 break;
-            case "etl_delta_history_manifestation_identifier_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_MANIF_IDENT_REC_DELTA_CURRENT_HIST, Joiner.on("','").join(Ids));
+            case "etl_transform_history_manifestation_identifier_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_MANIF_IDENT_REC_DIFF_DELTACURR_EXCL, Joiner.on("','").join(Ids));
                 break;
-            case "etl_delta_history_product_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PRODUCT_REC_DELTA_CURRENT_HIST, Joiner.on("','").join(Ids));
+            case "etl_transform_history_product_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PRODUCT_DIFF_DELTACURR_EXCL, Joiner.on("','").join(Ids));
                 break;
-            case "etl_delta_history_work_person_role_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_PERS_ROLE_REC_DELTA_CURRENT_HIST, Joiner.on("','").join(Ids));
+            case "etl_transform_history_work_person_role_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_PERS_ROLE_REC_DIFF_DELTACURR_EXCL, Joiner.on("','").join(Ids));
                 break;
-            case "etl_delta_history_work_relationship_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_RELATION_REC_DELTA_CURRENT_HIST, Joiner.on("','").join(Ids));
+            case "etl_transform_history_work_relationship_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_RELATION_REC_DIFF_DELTACURR_EXCL, Joiner.on("','").join(Ids));
                 break;
-            case "etl_delta_history_work_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_REC_DIFF_DELTA_CURRENT_HIST, Joiner.on("','").join(Ids));
+            case "etl_transform_history_work_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_REC_DIFF_DELTACURR_EXCL, Joiner.on("','").join(Ids));
                 break;
-            case "etl_delta_history_work_identifier_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_REC_DIFF_DELTA_CURRENT_HIST, Joiner.on("','").join(Ids));
+            case "etl_transform_history_work_identifier_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_IDENT_REC_DIFF_DELTACURR_EXCL, Joiner.on("','").join(Ids));
                 break;
         }
-        dataQualityBCSContext.recFromDeltaCurrentHist = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
+        dataQualityBCSContext.recFromDiffOfDeltaAndExcl = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
         Log.info(sql);
 
     }
 
-    @And("^Compare the records of BCS Core delta current and delta_Current_history (.*)$")
-    public void compareDeltaCurrentandDletaHist(String targetTableName) {
-        if (dataQualityBCSContext.recFromDeltaCurrentHist.isEmpty()) {
-            Log.info("No Data Found in the Delta Current Hist Tables ....");
-        } else {
-            Log.info("Sorting the Ids to compare the records between Delta Current and Delta Hist tables...");
+    @When ("^Get the records from (.*) BCS core latest table$")
+    public void getRecFromLatest(String tableName){
+        Log.info("We get the records from Latest BCS Core table...");
+        switch (tableName) {
+            case "etl_transform_history_accountable_product_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_ACCPROD_REC_LATEST, Joiner.on("','").join(Ids));
+                break;
+            case "etl_transform_history_manifestation_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_MANIF_REC_LATEST, Joiner.on("','").join(Ids));
+                break;
+            case "etl_transform_history_manifestation_identifier_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_MANIF_IDENT_REC_LATEST, Joiner.on("','").join(Ids));
+                break;
+            case "etl_transform_history_product_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PRODUCT_REC_LATEST, Joiner.on("','").join(Ids));
+                break;
+            case "etl_transform_history_work_person_role_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_PERS_ROLE_REC_LATEST, Joiner.on("','").join(Ids));
+                break;
+            case "etl_transform_history_work_relationship_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_RELATION_REC_LATEST, Joiner.on("','").join(Ids));
+                break;
+            case "etl_transform_history_work_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_REC_LATEST, Joiner.on("','").join(Ids));
+                break;
+            case "etl_transform_history_work_identifier_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_IDENT_REC_LATEST, Joiner.on("','").join(Ids));
+                break;
         }
-        for (int i = 0; i < dataQualityBCSContext.recFromDeltaCurrentHist.size(); i++) {
+        dataQualityBCSContext.recFromLatest = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
+        Log.info(sql);
+
+    }
+
+    @And("^Compare the records of Latest with diff of delta_current and Exclude_Delta tables (.*)$")
+    public void compareLatestwithDiffOfDeltaAndExcl(String targetTableName) {
+        if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the Ids to compare the records between Latest and Diff of delta and exclude tables...");
+        }
+        for (int i = 0; i < dataQualityBCSContext.recFromDiffOfDeltaAndExcl.size(); i++) {
             switch (targetTableName) {
-                case "etl_delta_current_accountable_product":
-                    Log.info("etl_delta_current_accountable_product Records:");
-                    dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                    dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
-                    Log.info("Acc_Prod_Delta_Hist -> UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            "Acc_Prod_Delta_Curr -> UKEY => " + dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY() != null)) {
+                case "etl_transform_history_accountable_product_latest":
+                    Log.info("etl_transform_history_accountable_product_Latest Records:");
+                    dataQualityBCSContext.recFromDiffOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                    dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                    Log.info("Acc_Prod_Diff_DeltaCurr_Excl -> UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            "Acc_Prod_Latest -> UKEY => " + dataQualityBCSContext.recFromLatest.get(i).getUKEY());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getUKEY() != null)) {
 
-                        Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() + " is missing/not found in Acc_Prod_Delta_Hist",
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY());
+                        Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() + " is missing/not found in Acc_Prod_Latest",
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromLatest.get(i).getUKEY());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " SOURCEREF => Acc_Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSOURCEREF() +
-                            " Acc_Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " SOURCEREF => Acc_Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSOURCEREF() +
+                            " Acc_Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getSOURCEREF());
 
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSOURCEREF() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF() != null)) {
-                        Assert.assertEquals("The SOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSOURCEREF(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSOURCEREF() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getSOURCEREF() != null)) {
+                        Assert.assertEquals("The SOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSOURCEREF(),
+                                dataQualityBCSContext.recFromLatest.get(i).getSOURCEREF());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " ACCOUNTABLEPRODUCT => Acc_Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getACCOUNTABLEPRODUCT() +
-                            " Acc_Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getACCOUNTABLEPRODUCT());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " ACCOUNTABLEPRODUCT => Acc_Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getACCOUNTABLEPRODUCT() +
+                            " Acc_Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getACCOUNTABLEPRODUCT());
 
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getACCOUNTABLEPRODUCT() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getACCOUNTABLEPRODUCT() != null)) {
-                        Assert.assertEquals("The ACCOUNTABLEPRODUCT is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getACCOUNTABLEPRODUCT(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getACCOUNTABLEPRODUCT());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getACCOUNTABLEPRODUCT() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getACCOUNTABLEPRODUCT() != null)) {
+                        Assert.assertEquals("The ACCOUNTABLEPRODUCT is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getACCOUNTABLEPRODUCT(),
+                                dataQualityBCSContext.recFromLatest.get(i).getACCOUNTABLEPRODUCT());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " ACCOUNTABLENAME => Acc_Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getACCOUNTABLENAME() +
-                            " Acc_Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getACCOUNTABLENAME());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " ACCOUNTABLENAME => Acc_Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getACCOUNTABLENAME() +
+                            " Acc_Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getACCOUNTABLENAME());
 
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getACCOUNTABLENAME() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getACCOUNTABLENAME() != null)) {
-                        Assert.assertEquals("The ACCOUNTABLENAME is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getACCOUNTABLENAME(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getACCOUNTABLENAME());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getACCOUNTABLENAME() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getACCOUNTABLENAME() != null)) {
+                        Assert.assertEquals("The ACCOUNTABLENAME is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getACCOUNTABLENAME(),
+                                dataQualityBCSContext.recFromLatest.get(i).getACCOUNTABLENAME());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " ACCOUNTABLEPARENT => Acc_Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getACCOUNTABLEPARENT() +
-                            " Acc_Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getACCOUNTABLEPARENT());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " ACCOUNTABLEPARENT => Acc_Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getACCOUNTABLEPARENT() +
+                            " Acc_Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getACCOUNTABLEPARENT());
 
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getACCOUNTABLEPARENT() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getACCOUNTABLEPARENT() != null)) {
-                        Assert.assertEquals("The ACCOUNTABLEPARENT is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getACCOUNTABLEPARENT(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getACCOUNTABLEPARENT());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " DElta_Mode => Acc_Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE() +
-                            " Acc_Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE() != null)) {
-                        Assert.assertEquals("The DElta_Mode is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE());
-
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getACCOUNTABLEPARENT() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getACCOUNTABLEPARENT() != null)) {
+                        Assert.assertEquals("The ACCOUNTABLEPARENT is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getACCOUNTABLEPARENT(),
+                                dataQualityBCSContext.recFromLatest.get(i).getACCOUNTABLEPARENT());
                     }
                     break;
-                case "etl_delta_current_manifestation":
-                    Log.info("etl_delta_current_manifestation Records:");
-                    dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                    dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
-                    Log.info("Manif_Curr -> UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            "Manif_Delta_Curr -> UKEY => " + dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY() != null)) {
+                case "etl_transform_history_manifestation_latest":
+                    Log.info("etl_transform_history_manifestation_Latest Records:");
+                    dataQualityBCSContext.recFromDiffOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                    dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                    Log.info("Manif_Diff_DeltaCurr_Excl -> UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            "Manif_Latest -> UKEY => " + dataQualityBCSContext.recFromLatest.get(i).getUKEY());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getUKEY() != null)) {
 
-                        Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() + " is missing/not found in Manif_DeltaCurr",
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY());
+                        Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() + " is missing/not found in Manif_DLatest",
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromLatest.get(i).getUKEY());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " SOURCEREF => Manif_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSOURCEREF() +
-                            " Manif_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " SOURCEREF => Manif_Diff_Exc_DeltaHist =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSOURCEREF() +
+                            " Manif_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getSOURCEREF());
 
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSOURCEREF() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF() != null)) {
-                        Assert.assertEquals("The SOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSOURCEREF(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSOURCEREF() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getSOURCEREF() != null)) {
+                        Assert.assertEquals("The SOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSOURCEREF(),
+                                dataQualityBCSContext.recFromLatest.get(i).getSOURCEREF());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " TITLE => Manif_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getTITLE() +
-                            " Manif_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getTITLE());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " TITLE => Manif_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getTITLE() +
+                            " Manif_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getTITLE());
 
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getTITLE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getTITLE() != null)) {
-                        Assert.assertEquals("The TITLE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getTITLE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getTITLE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getTITLE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getTITLE() != null)) {
+                        Assert.assertEquals("The TITLE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getTITLE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getTITLE());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " intereditionflag => Manif_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getINTEREDITIONFLAG() +
-                            " Manif_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getINTEREDITIONFLAG());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " intereditionflag => Manif_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getINTEREDITIONFLAG() +
+                            " Manif_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getINTEREDITIONFLAG());
 
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getINTEREDITIONFLAG() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getINTEREDITIONFLAG() != null)) {
-                        Assert.assertEquals("The INTEREDITIONFLAG is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getINTEREDITIONFLAG(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getINTEREDITIONFLAG());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getINTEREDITIONFLAG() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getINTEREDITIONFLAG() != null)) {
+                        Assert.assertEquals("The INTEREDITIONFLAG is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getINTEREDITIONFLAG(),
+                                dataQualityBCSContext.recFromLatest.get(i).getINTEREDITIONFLAG());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " firstpublisheddate => Manif_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getFIRSTPUBLISHEDDATE() +
-                            " Manif_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getFIRSTPUBLISHEDDATE());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " firstpublisheddate => Manif_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getFIRSTPUBLISHEDDATE() +
+                            " Manif_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getFIRSTPUBLISHEDDATE());
 
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getFIRSTPUBLISHEDDATE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getFIRSTPUBLISHEDDATE() != null)) {
-                        Assert.assertEquals("The INTEREDITIONFLAG is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getFIRSTPUBLISHEDDATE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getFIRSTPUBLISHEDDATE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getFIRSTPUBLISHEDDATE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getFIRSTPUBLISHEDDATE() != null)) {
+                        Assert.assertEquals("The INTEREDITIONFLAG is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getFIRSTPUBLISHEDDATE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getFIRSTPUBLISHEDDATE());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " binding => Manif_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getBINDING() +
-                            " Manif_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getBINDING());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " binding => Manif_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getBINDING() +
+                            " Manif_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getBINDING());
 
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getBINDING() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getBINDING() != null)) {
-                        Assert.assertEquals("The BINDING is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getBINDING(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getBINDING());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getBINDING() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getBINDING() != null)) {
+                        Assert.assertEquals("The BINDING is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getBINDING(),
+                                dataQualityBCSContext.recFromLatest.get(i).getBINDING());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " MANIF_TYPE => Manif_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getMANIFESTATIONTYPE() +
-                            " Manif_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getMANIFESTATIONTYPE());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " MANIF_TYPE => Manif_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getMANIFESTATIONTYPE() +
+                            " Manif_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getMANIFESTATIONTYPE());
 
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getMANIFESTATIONTYPE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getMANIFESTATIONTYPE() != null)) {
-                        Assert.assertEquals("The MANIF_TYPE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getMANIFESTATIONTYPE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getMANIFESTATIONTYPE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getMANIFESTATIONTYPE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getMANIFESTATIONTYPE() != null)) {
+                        Assert.assertEquals("The MANIF_TYPE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getMANIFESTATIONTYPE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getMANIFESTATIONTYPE());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " STATUS => Manif_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSTATUS() +
-                            " Manif_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getSTATUS());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " STATUS => Manif_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSTATUS() +
+                            " Manif_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getSTATUS());
 
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSTATUS() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getSTATUS() != null)) {
-                        Assert.assertEquals("The STATUS is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSTATUS(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getSTATUS());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSTATUS() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getSTATUS() != null)) {
+                        Assert.assertEquals("The STATUS is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSTATUS(),
+                                dataQualityBCSContext.recFromLatest.get(i).getSTATUS());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " WORKID => Manif_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getWORKID() +
-                            " Manif_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getWORKID());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " WORKID => Manif_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getWORKID() +
+                            " Manif_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getWORKID());
 
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getWORKID() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getWORKID() != null)) {
-                        Assert.assertEquals("The WORKID is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getWORKID(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getWORKID());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getWORKID() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getWORKID() != null)) {
+                        Assert.assertEquals("The WORKID is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getWORKID(),
+                                dataQualityBCSContext.recFromLatest.get(i).getWORKID());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " last_pub_date => Manif_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getLASTPUBDATE() +
-                            " Manif_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getLASTPUBDATE());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " last_pub_date => Manif_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getLASTPUBDATE() +
+                            " Manif_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getLASTPUBDATE());
 
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getWORKID() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getWORKID() != null)) {
-                        Assert.assertEquals("The LASTPUBDATE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getLASTPUBDATE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getLASTPUBDATE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getWORKID() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getWORKID() != null)) {
+                        Assert.assertEquals("The LASTPUBDATE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getLASTPUBDATE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getLASTPUBDATE());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " DQ_ERR => Manif_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDQ_ERR() +
-                            " Manif_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getDQ_ERR());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " DQ_ERR => Manif_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getDQ_ERR() +
+                            " Manif_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getDQ_ERR());
 
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDQ_ERR() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getDQ_ERR() != null)) {
-                        Assert.assertEquals("The DQ_ERR is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDQ_ERR(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getDQ_ERR());
-                    }
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " DElta_Mode => Manif_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE() +
-                            " Manif_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE() != null)) {
-                        Assert.assertEquals("The DElta_Mode is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE());
-
-                    }
-                    break;
-                case "etl_delta_current_manifestation_identifier":
-                    Log.info("etl_delta_current_manifestation_identifier Records:");
-                    dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                    dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
-                    Log.info("Manif_Ident_Delta_Hist -> UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            "Manif_Ident_Delta_Curr -> UKEY => " + dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY() != null)) {
-                        Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() + " is missing/not found in Manif_Ident_Delta_Curr",
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " SOURCEREF => Manif_Ident_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSOURCEREF() +
-                            " Manif_Ident_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSOURCEREF() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF() != null)) {
-                        Assert.assertEquals("The SOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSOURCEREF(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " IDENTIFIER => Manif_Ident_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getIDENTIFIER() +
-                            " Manif_Ident_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getIDENTIFIER());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getIDENTIFIER() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getIDENTIFIER() != null)) {
-                        Assert.assertEquals("The IDENTIFIER is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getIDENTIFIER(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getIDENTIFIER());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " IDENTIFIERTYPE => Manif_Ident_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getIDENTIFIERTYPE() +
-                            " Manif_Ident_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getIDENTIFIERTYPE());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getIDENTIFIERTYPE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getIDENTIFIERTYPE() != null)) {
-                        Assert.assertEquals("The IDENTIFIERTYPE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getIDENTIFIERTYPE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getIDENTIFIERTYPE());
-                    }
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " DElta_Mode => Manif_Ident_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE() +
-                            " Manif_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE() != null)) {
-                        Assert.assertEquals("The DElta_Mode is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE());
-
-                    }
-                    break;
-                case "etl_delta_current_product":
-                    Log.info("etl_delta_current_product Records:");
-                    dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                    dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
-                    Log.info("Prod_Delta_Hist -> UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            "Prod_Delta_Curr -> UKEY => " + dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY() != null)) {
-                        Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() + " is missing/not found in Prod_Delta_Curr",
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " SOURCEREF => Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSOURCEREF() +
-                            " Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSOURCEREF() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF() != null)) {
-                        Assert.assertEquals("The SOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSOURCEREF(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " BINDINGCODE => Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getBINDINGCODE() +
-                            " Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getBINDINGCODE());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getBINDINGCODE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getBINDINGCODE() != null)) {
-                        Assert.assertEquals("The BINDINGCODE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getBINDINGCODE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getBINDINGCODE());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " NAME => Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getNAME() +
-                            " Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getNAME());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getNAME() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getNAME() != null)) {
-                        Assert.assertEquals("The NAME is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getNAME(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getNAME());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " SHORTTITLE => Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSHORTTITLE() +
-                            " Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getSHORTTITLE());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSHORTTITLE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getSHORTTITLE() != null)) {
-                        Assert.assertEquals("The SHORTTITLE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSHORTTITLE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getSHORTTITLE());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " LAUNCHDATE => Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getLAUNCHDATE() +
-                            " Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getLAUNCHDATE());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getLAUNCHDATE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getLAUNCHDATE() != null)) {
-                        Assert.assertEquals("The LAUNCHDATE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getLAUNCHDATE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getLAUNCHDATE());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " TAXCODE => Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getTAXCODE() +
-                            " Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getTAXCODE());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getTAXCODE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getTAXCODE() != null)) {
-                        Assert.assertEquals("The TAXCODE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getTAXCODE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getTAXCODE());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " STATUS => Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSTATUS() +
-                            " Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getSTATUS());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSTATUS() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getSTATUS() != null)) {
-                        Assert.assertEquals("The STATUS is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSTATUS(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getSTATUS());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " MANIFESTATIONREF => Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getMANIFESTATIONREF() +
-                            " Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getMANIFESTATIONREF());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getMANIFESTATIONREF() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getMANIFESTATIONREF() != null)) {
-                        Assert.assertEquals("The MANIFESTATIONREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getMANIFESTATIONREF(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getMANIFESTATIONREF());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " WORKSOURCE => Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getWORKSOURCE() +
-                            " Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getWORKSOURCE());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getWORKSOURCE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getWORKSOURCE() != null)) {
-                        Assert.assertEquals("The WORKSOURCE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getWORKSOURCE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getWORKSOURCE());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " WORKTYPE => Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getWORKTYPE() +
-                            " Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getWORKTYPE());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getWORKTYPE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getWORKTYPE() != null)) {
-                        Assert.assertEquals("The WORKTYPE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getWORKTYPE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getWORKTYPE());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " SEPRATELYSALEINDICATOR => Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSEPRATELYSALEINDICATOR() +
-                            " Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getSEPRATELYSALEINDICATOR());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSEPRATELYSALEINDICATOR() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getSEPRATELYSALEINDICATOR() != null)) {
-                        Assert.assertEquals("The SEPRATELYSALEINDICATOR is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSEPRATELYSALEINDICATOR(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getSEPRATELYSALEINDICATOR());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " TRIALALLOWEDINDICATOR => Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getTRIALALLOWEDINDICATOR() +
-                            " Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getTRIALALLOWEDINDICATOR());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getTRIALALLOWEDINDICATOR() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getTRIALALLOWEDINDICATOR() != null)) {
-                        Assert.assertEquals("The TRIALALLOWEDINDICATOR is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getTRIALALLOWEDINDICATOR(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getTRIALALLOWEDINDICATOR());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " FWORKSOURCEREF => Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getFWORKSOURCEREF() +
-                            " Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getFWORKSOURCEREF());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getFWORKSOURCEREF() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getFWORKSOURCEREF() != null)) {
-                        Assert.assertEquals("The FWORKSOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getFWORKSOURCEREF(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getFWORKSOURCEREF());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " PRODUCTTYPE => Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getPRODUCTTYPE() +
-                            " Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getPRODUCTTYPE());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getPRODUCTTYPE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getPRODUCTTYPE() != null)) {
-                        Assert.assertEquals("The PRODUCTTYPE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getPRODUCTTYPE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getPRODUCTTYPE());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " REVENUEMODEL => Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getREVENUEMODEL() +
-                            " Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getREVENUEMODEL());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getREVENUEMODEL() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getREVENUEMODEL() != null)) {
-                        Assert.assertEquals("The REVENUEMODEL is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getREVENUEMODEL(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getREVENUEMODEL());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " DQ_ERR => Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDQ_ERR() +
-                            " Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getDQ_ERR());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDQ_ERR() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getDQ_ERR() != null)) {
-                        Assert.assertEquals("The DQ_ERR is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDQ_ERR(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getDQ_ERR());
-                    }
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " DQ_ERR => Prod_Delta_Hist =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE() +
-                            " Prod_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE());
-
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE() != null)) {
-                        Assert.assertEquals("The DQ_ERR is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE());
-                    }
-                    break;
-                case "etl_delta_current_work_person_role":
-                    Log.info("etl_delta_current_work_person_role Records:");
-                    dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                    dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
-                    Log.info("PERS_ROLE_Tran_Diff -> UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            "PERS_ROLE_Delta_Curr -> UKEY => " + dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY() != null)) {
-                        Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() + " is missing/not found in PERS_ROLE_Delta_Curr",
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " WORKSOURCEREF => PERS_ROLE_Tran_Diff =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getWORKSOURCEREF() +
-                            " PERS_ROLE_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getWORKSOURCEREF());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getWORKSOURCEREF() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getWORKSOURCEREF() != null)) {
-                        Assert.assertEquals("The WORKSOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getWORKSOURCEREF(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getWORKSOURCEREF());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " PERSONSOURCEREF => PERS_ROLE_Tran_Diff =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getPERSONSOURCEREF() +
-                            " PERS_ROLE_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getPERSONSOURCEREF());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getPERSONSOURCEREF() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getPERSONSOURCEREF() != null)) {
-                        Assert.assertEquals("The PERSONSOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getPERSONSOURCEREF(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getPERSONSOURCEREF());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " ROLETYPE => PERS_ROLE_Tran_Diff =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getROLETYPE() +
-                            " PERS_ROLE_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getROLETYPE());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getROLETYPE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getROLETYPE() != null)) {
-                        Assert.assertEquals("The ROLETYPE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getROLETYPE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getROLETYPE());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " SEQUENCE => PERS_ROLE_Tran_Diff =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSEQUENCE() +
-                            " PERS_ROLE_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getSEQUENCE());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSEQUENCE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getSEQUENCE() != null)) {
-                        Assert.assertEquals("The SEQUENCE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSEQUENCE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getSEQUENCE());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " DEDUPLICATOR => PERS_ROLE_Tran_Diff =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDEDUPLICATOR() +
-                            " PERS_ROLE_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getDEDUPLICATOR());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDEDUPLICATOR() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getDEDUPLICATOR() != null)) {
-                        Assert.assertEquals("The DEDUPLICATOR is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDEDUPLICATOR(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getDEDUPLICATOR());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " DQ_ERR => PERS_ROLE_Tran_Diff =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDQ_ERR() +
-                            " PERS_ROLE_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getDQ_ERR());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDQ_ERR() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getDQ_ERR() != null)) {
-                        Assert.assertEquals("The DQ_ERR is incorrect for U_KEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDQ_ERR(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getDQ_ERR());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " DELTA_MODE => PERS_ROLE_Tran_Diff =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE() +
-                            " PERS_ROLE_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE() != null)) {
-                        Assert.assertEquals("The DELTA_MODE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE());
-                    }
-                    break;
-                case "etl_delta_current_work_relationship":
-                    Log.info("etl_delta_current_work_relationship Records:");
-                    dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                    dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
-                    Log.info("WORK_RELAT_Trans_File -> UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            "WORK_RELAT_Delta_Curr -> UKEY => " + dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY() != null)) {
-                        Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() + " is missing/not found in WORK_RELAT_Delta_Curr",
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " PARENTREF => WORK_RELAT_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getPARENTREF() +
-                            " WORK_RELAT_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getPARENTREF());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getPARENTREF() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getPARENTREF() != null)) {
-                        Assert.assertEquals("The PARENTREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getPARENTREF(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getPARENTREF());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " CHILDREF => WORK_RELAT_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getCHILDREF() +
-                            " WORK_RELAT_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getCHILDREF());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getCHILDREF() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getCHILDREF() != null)) {
-                        Assert.assertEquals("The CHILDREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getCHILDREF(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getCHILDREF());
-                    }
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " RELATIONTYPEREF => WORK_RELAT_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getRELATIONTYPEREF() +
-                            " WORK_RELAT_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getRELATIONTYPEREF());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getRELATIONTYPEREF() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getRELATIONTYPEREF() != null)) {
-                        Assert.assertEquals("The RELATIONTYPEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getRELATIONTYPEREF(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getRELATIONTYPEREF());
-                    }
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " LASTUDATEDDATE => WORK_RELAT_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getLASTUDATEDDATE() +
-                            " WORK_RELAT_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getLASTUDATEDDATE());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getLASTUDATEDDATE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getLASTUDATEDDATE() != null)) {
-                        Assert.assertEquals("The LASTUDATEDDATE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getLASTUDATEDDATE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getLASTUDATEDDATE());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " DQ_ERR => WORK_RELAT_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDQ_ERR() +
-                            " WORK_RELAT_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getDQ_ERR());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDQ_ERR() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getDQ_ERR() != null)) {
-                        Assert.assertEquals("The DQ_ERR is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDQ_ERR(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getDQ_ERR());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " DELTA_MODE => WORK_RELAT_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE() +
-                            " WORK_RELAT_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE() != null)) {
-                        Assert.assertEquals("The DELTA_MODE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getDQ_ERR() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getDQ_ERR() != null)) {
+                        Assert.assertEquals("The DQ_ERR is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getDQ_ERR(),
+                                dataQualityBCSContext.recFromLatest.get(i).getDQ_ERR());
                     }
 
                     break;
-                case "etl_delta_current_work":
-                    Log.info("etl_delta_current_work Records:");
-                    dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                    dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
-                    Log.info("WORK_Trans_File -> UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            "WORK_Delta_Curr -> UKEY => " + dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY() != null)) {
-                        Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() + " is missing/not found in WORK_Delta_Curr",
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY());
+                case "etl_transform_history_manifestation_identifier_latest":
+                    Log.info("etl_transform_history_manifestation_identifier_Latest Records:");
+                    dataQualityBCSContext.recFromDiffOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                    dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                    Log.info("Manif_Ident_Diff_DeltaCurr_Excl -> UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            "Manif_Ident_Latest -> UKEY => " + dataQualityBCSContext.recFromLatest.get(i).getUKEY());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getUKEY() != null)) {
+                        Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() + " is missing/not found in Manif_Ident_Latest",
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromLatest.get(i).getUKEY());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " SOURCEREF => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSOURCEREF() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSOURCEREF() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF() != null)) {
-                        Assert.assertEquals("The SOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSOURCEREF(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " SOURCEREF => Manif_Ident_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSOURCEREF() +
+                            " Manif_Ident_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getSOURCEREF());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSOURCEREF() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getSOURCEREF() != null)) {
+                        Assert.assertEquals("The SOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSOURCEREF(),
+                                dataQualityBCSContext.recFromLatest.get(i).getSOURCEREF());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " TITLE => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getTITLE() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getTITLE());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getTITLE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getTITLE() != null)) {
-                        Assert.assertEquals("The TITLE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getTITLE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getTITLE());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " IDENTIFIER => Manif_Ident_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getIDENTIFIER() +
+                            " Manif_Ident_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getIDENTIFIER());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getIDENTIFIER() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getIDENTIFIER() != null)) {
+                        Assert.assertEquals("The IDENTIFIER is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getIDENTIFIER(),
+                                dataQualityBCSContext.recFromLatest.get(i).getIDENTIFIER());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " SUBTITLE => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSUBTITLE() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getSUBTITLE());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSUBTITLE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getSUBTITLE() != null)) {
-                        Assert.assertEquals("The SUBTITLE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSUBTITLE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getSUBTITLE());
-                    }
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " IDENTIFIERTYPE => Manif_Ident_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getIDENTIFIERTYPE() +
+                            " Manif_Ident_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getIDENTIFIERTYPE());
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " VOLUMENO => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getVOLUMENO() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getVOLUMENO());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getVOLUMENO() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getVOLUMENO() != null)) {
-                        Assert.assertEquals("The VOLUMENO is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getVOLUMENO(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getVOLUMENO());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " COPYRIGHTYEAR => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getCOPYRIGHTYEAR() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getCOPYRIGHTYEAR());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getCOPYRIGHTYEAR() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getCOPYRIGHTYEAR() != null)) {
-                        Assert.assertEquals("The COPYRIGHTYEAR is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getCOPYRIGHTYEAR(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getCOPYRIGHTYEAR());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " EDITIONNO => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getEDITIONNO() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getEDITIONNO());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getEDITIONNO() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getEDITIONNO() != null)) {
-                        Assert.assertEquals("The EDITIONNO is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getEDITIONNO(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getEDITIONNO());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " PMC => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getPMC() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getPMC());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getPMC() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getPMC() != null)) {
-                        Assert.assertEquals("The PMC is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getPMC(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getPMC());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " WORKTYPE => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getWORKTYPE() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getWORKTYPE());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getWORKTYPE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getWORKTYPE() != null)) {
-                        Assert.assertEquals("The WORKTYPE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getWORKTYPE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getWORKTYPE());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " STATUSCODE => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSTATUSCODE() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getSTATUSCODE());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSTATUSCODE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getSTATUSCODE() != null)) {
-                        Assert.assertEquals("The STATUSCODE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSTATUSCODE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getSTATUSCODE());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " IMPRINTCODE => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getIMPRINTCODE() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getIMPRINTCODE());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getIMPRINTCODE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getIMPRINTCODE() != null)) {
-                        Assert.assertEquals("The IMPRINTCODE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getIMPRINTCODE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getIMPRINTCODE());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " TEOPCO => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getTEOPCO() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getTEOPCO());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getTEOPCO() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getTEOPCO() != null)) {
-                        Assert.assertEquals("The TEOPCO is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getTEOPCO(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getTEOPCO());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " OPCO => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getOPCO() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getOPCO());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getOPCO() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getOPCO() != null)) {
-                        Assert.assertEquals("The OPCO is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getOPCO(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getOPCO());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " RESPCENTRE => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getRESPCENTRE() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getRESPCENTRE());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getRESPCENTRE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getRESPCENTRE() != null)) {
-                        Assert.assertEquals("The RESPCENTRE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getRESPCENTRE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getRESPCENTRE());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " LANGUAGECODE => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getLANGUAGECODE() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getLANGUAGECODE());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getLANGUAGECODE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getLANGUAGECODE() != null)) {
-                        Assert.assertEquals("The LANGUAGECODE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getLANGUAGECODE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getLANGUAGECODE());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " ELECTRORIGHTSINDICATOR => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getELECTRORIGHTSINDICATOR() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getELECTRORIGHTSINDICATOR());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getELECTRORIGHTSINDICATOR() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getELECTRORIGHTSINDICATOR() != null)) {
-                        Assert.assertEquals("The ELECTRORIGHTSINDICATOR is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getELECTRORIGHTSINDICATOR(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getELECTRORIGHTSINDICATOR());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " FOAJOURNALTYPE => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getFOAJOURNALTYPE() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getFOAJOURNALTYPE());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getFOAJOURNALTYPE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getFOAJOURNALTYPE() != null)) {
-                        Assert.assertEquals("The FOAJOURNALTYPE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getFOAJOURNALTYPE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getFOAJOURNALTYPE());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " FSOCIETYOWNERSHIP => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getFSOCIETYOWNERSHIP() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getFSOCIETYOWNERSHIP());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getFSOCIETYOWNERSHIP() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getFSOCIETYOWNERSHIP() != null)) {
-                        Assert.assertEquals("The FSOCIETYOWNERSHIP is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getFSOCIETYOWNERSHIP(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getFSOCIETYOWNERSHIP());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " SUBSCRIPTIONTYPE => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSUBSCRIPTIONTYPE() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getSUBSCRIPTIONTYPE());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSUBSCRIPTIONTYPE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getSUBSCRIPTIONTYPE() != null)) {
-                        Assert.assertEquals("The SUBSCRIPTIONTYPE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSUBSCRIPTIONTYPE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getSUBSCRIPTIONTYPE());
-                    }
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " DELTA_MODE => WORK_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE() +
-                            " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE() != null)) {
-                        Assert.assertEquals("The DELTA_MODE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getIDENTIFIERTYPE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getIDENTIFIERTYPE() != null)) {
+                        Assert.assertEquals("The IDENTIFIERTYPE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getIDENTIFIERTYPE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getIDENTIFIERTYPE());
                     }
 
                     break;
-                case "etl_delta_current_work_identifier":
-                    Log.info("etl_delta_current_work_identifier Records:");
-                    dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                    dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
-                    Log.info("Work_Ident_Trans_File -> UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            "Work_Ident_Delta_Curr -> UKEY => " + dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY() != null)) {
-                        Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() + " is missing/not found in Manif_Ident_Curr",
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY());
+                case "etl_transform_history_product_latest":
+                    Log.info("etl_transform_history_product_Latest Records:");
+                    dataQualityBCSContext.recFromDiffOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                    dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                    Log.info("Prod_Diff_DeltaCurr_Excl -> UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            "Prod_Latest -> UKEY => " + dataQualityBCSContext.recFromLatest.get(i).getUKEY());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getUKEY() != null)) {
+                        Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() + " is missing/not found in Prod_Latest",
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromLatest.get(i).getUKEY());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " SOURCEREF => Work_Ident_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSOURCEREF() +
-                            " Work_Ident_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSOURCEREF() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF() != null)) {
-                        Assert.assertEquals("The SOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getSOURCEREF(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " SOURCEREF => Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSOURCEREF() +
+                            " Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getSOURCEREF());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSOURCEREF() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getSOURCEREF() != null)) {
+                        Assert.assertEquals("The SOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSOURCEREF(),
+                                dataQualityBCSContext.recFromLatest.get(i).getSOURCEREF());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " IDENTIFIER => Work_Ident_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getIDENTIFIER() +
-                            " Work_Ident_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getIDENTIFIER());
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getIDENTIFIER() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getIDENTIFIER() != null)) {
-                        Assert.assertEquals("The IDENTIFIER is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getIDENTIFIER(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getIDENTIFIER());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " BINDINGCODE => Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getBINDINGCODE() +
+                            " Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getBINDINGCODE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getBINDINGCODE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getBINDINGCODE() != null)) {
+                        Assert.assertEquals("The BINDINGCODE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getBINDINGCODE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getBINDINGCODE());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " IDENTIFIERTYPE => Work_Ident_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getIDENTIFIERTYPE() +
-                            " Work_Ident_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getIDENTIFIERTYPE());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " NAME => Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getNAME() +
+                            " Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getNAME());
 
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getIDENTIFIERTYPE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getIDENTIFIERTYPE() != null)) {
-                        Assert.assertEquals("The IDENTIFIERTYPE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getIDENTIFIERTYPE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getIDENTIFIERTYPE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getNAME() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getNAME() != null)) {
+                        Assert.assertEquals("The NAME is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getNAME(),
+                                dataQualityBCSContext.recFromLatest.get(i).getNAME());
                     }
 
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
-                            " DELTA_MODE => Work_Ident_Trans_File =" + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE() +
-                            " Work_Ident_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE());
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " SHORTTITLE => Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSHORTTITLE() +
+                            " Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getSHORTTITLE());
 
-                    if (dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE() != null ||
-                            (dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE() != null)) {
-                        Assert.assertEquals("The DELTA_MODE is incorrect for UKEY = " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
-                                dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getDELTA_MODE(),
-                                dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSHORTTITLE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getSHORTTITLE() != null)) {
+                        Assert.assertEquals("The SHORTTITLE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSHORTTITLE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getSHORTTITLE());
                     }
 
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " LAUNCHDATE => Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getLAUNCHDATE() +
+                            " Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getLAUNCHDATE());
+
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getLAUNCHDATE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getLAUNCHDATE() != null)) {
+                        Assert.assertEquals("The LAUNCHDATE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getLAUNCHDATE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getLAUNCHDATE());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " TAXCODE => Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getTAXCODE() +
+                            " Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getTAXCODE());
+
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getTAXCODE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getTAXCODE() != null)) {
+                        Assert.assertEquals("The TAXCODE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getTAXCODE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getTAXCODE());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " STATUS => Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSTATUS() +
+                            " Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getSTATUS());
+
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSTATUS() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getSTATUS() != null)) {
+                        Assert.assertEquals("The STATUS is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSTATUS(),
+                                dataQualityBCSContext.recFromLatest.get(i).getSTATUS());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " MANIFESTATIONREF => Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getMANIFESTATIONREF() +
+                            " Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getMANIFESTATIONREF());
+
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getMANIFESTATIONREF() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getMANIFESTATIONREF() != null)) {
+                        Assert.assertEquals("The MANIFESTATIONREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getMANIFESTATIONREF(),
+                                dataQualityBCSContext.recFromLatest.get(i).getMANIFESTATIONREF());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " WORKSOURCE => Prod_Diff_LatestHist =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getWORKSOURCE() +
+                            " Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getWORKSOURCE());
+
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getWORKSOURCE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getWORKSOURCE() != null)) {
+                        Assert.assertEquals("The WORKSOURCE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getWORKSOURCE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getWORKSOURCE());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " WORKTYPE => Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getWORKTYPE() +
+                            " Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getWORKTYPE());
+
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getWORKTYPE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getWORKTYPE() != null)) {
+                        Assert.assertEquals("The WORKTYPE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getWORKTYPE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getWORKTYPE());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " SEPRATELYSALEINDICATOR => Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSEPRATELYSALEINDICATOR() +
+                            " Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getSEPRATELYSALEINDICATOR());
+
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSEPRATELYSALEINDICATOR() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getSEPRATELYSALEINDICATOR() != null)) {
+                        Assert.assertEquals("The SEPRATELYSALEINDICATOR is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSEPRATELYSALEINDICATOR(),
+                                dataQualityBCSContext.recFromLatest.get(i).getSEPRATELYSALEINDICATOR());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " TRIALALLOWEDINDICATOR => Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getTRIALALLOWEDINDICATOR() +
+                            " Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getTRIALALLOWEDINDICATOR());
+
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getTRIALALLOWEDINDICATOR() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getTRIALALLOWEDINDICATOR() != null)) {
+                        Assert.assertEquals("The TRIALALLOWEDINDICATOR is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getTRIALALLOWEDINDICATOR(),
+                                dataQualityBCSContext.recFromLatest.get(i).getTRIALALLOWEDINDICATOR());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " FWORKSOURCEREF => Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getFWORKSOURCEREF() +
+                            " Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getFWORKSOURCEREF());
+
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getFWORKSOURCEREF() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getFWORKSOURCEREF() != null)) {
+                        Assert.assertEquals("The FWORKSOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getFWORKSOURCEREF(),
+                                dataQualityBCSContext.recFromLatest.get(i).getFWORKSOURCEREF());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " PRODUCTTYPE => Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getPRODUCTTYPE() +
+                            " Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getPRODUCTTYPE());
+
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getPRODUCTTYPE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getPRODUCTTYPE() != null)) {
+                        Assert.assertEquals("The PRODUCTTYPE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getPRODUCTTYPE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getPRODUCTTYPE());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " REVENUEMODEL => Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getREVENUEMODEL() +
+                            " Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getREVENUEMODEL());
+
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getREVENUEMODEL() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getREVENUEMODEL() != null)) {
+                        Assert.assertEquals("The REVENUEMODEL is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getREVENUEMODEL(),
+                                dataQualityBCSContext.recFromLatest.get(i).getREVENUEMODEL());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " DQ_ERR => Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getDQ_ERR() +
+                            " Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getDQ_ERR());
+
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getDQ_ERR() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getDQ_ERR() != null)) {
+                        Assert.assertEquals("The DQ_ERR is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getDQ_ERR(),
+                                dataQualityBCSContext.recFromLatest.get(i).getDQ_ERR());
+                    }
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " DQ_ERR => Prod_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getDELTA_MODE() +
+                            " Prod_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getDELTA_MODE());
+
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getDELTA_MODE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getDELTA_MODE() != null)) {
+                        Assert.assertEquals("The DQ_ERR is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getDELTA_MODE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getDELTA_MODE());
+                    }
+                    break;
+                case "etl_transform_history_work_person_role_latest":
+                    Log.info("etl_transform_history_work_person_role_Latest Records:");
+                    dataQualityBCSContext.recFromDiffOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                    dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                    Log.info("PERS_ROLE_Diff_DeltaCurr_Excl -> UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            "PERS_ROLE_Latest -> UKEY => " + dataQualityBCSContext.recFromLatest.get(i).getUKEY());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getUKEY() != null)) {
+                        Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() + " is missing/not found in PERS_ROLE_Latest",
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromLatest.get(i).getUKEY());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " WORKSOURCEREF => PERS_ROLE_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getWORKSOURCEREF() +
+                            " PERS_ROLE_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getWORKSOURCEREF());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getWORKSOURCEREF() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getWORKSOURCEREF() != null)) {
+                        Assert.assertEquals("The WORKSOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getWORKSOURCEREF(),
+                                dataQualityBCSContext.recFromLatest.get(i).getWORKSOURCEREF());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " PERSONSOURCEREF => PERS_ROLE_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getPERSONSOURCEREF() +
+                            " PERS_ROLE_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getPERSONSOURCEREF());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getPERSONSOURCEREF() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getPERSONSOURCEREF() != null)) {
+                        Assert.assertEquals("The PERSONSOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getPERSONSOURCEREF(),
+                                dataQualityBCSContext.recFromLatest.get(i).getPERSONSOURCEREF());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " ROLETYPE => PERS_ROLE_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getROLETYPE() +
+                            " PERS_ROLE_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getROLETYPE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getROLETYPE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getROLETYPE() != null)) {
+                        Assert.assertEquals("The ROLETYPE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getROLETYPE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getROLETYPE());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " SEQUENCE => PERS_ROLE_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSEQUENCE() +
+                            " PERS_ROLE_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getSEQUENCE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSEQUENCE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getSEQUENCE() != null)) {
+                        Assert.assertEquals("The SEQUENCE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSEQUENCE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getSEQUENCE());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " DEDUPLICATOR => PERS_ROLE_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getDEDUPLICATOR() +
+                            " PERS_ROLE_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getDEDUPLICATOR());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getDEDUPLICATOR() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getDEDUPLICATOR() != null)) {
+                        Assert.assertEquals("The DEDUPLICATOR is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getDEDUPLICATOR(),
+                                dataQualityBCSContext.recFromLatest.get(i).getDEDUPLICATOR());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " DQ_ERR => PERS_ROLE_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getDQ_ERR() +
+                            " PERS_ROLE_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getDQ_ERR());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getDQ_ERR() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getDQ_ERR() != null)) {
+                        Assert.assertEquals("The DQ_ERR is incorrect for U_KEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getDQ_ERR(),
+                                dataQualityBCSContext.recFromLatest.get(i).getDQ_ERR());
+                    }
+                    break;
+                case "etl_transform_history_work_relationship_latest":
+                    Log.info("etl_transform_history_work_relationship_Latest Records:");
+                    dataQualityBCSContext.recFromDiffOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                    dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                    Log.info("WORK_RELAT_Diff_DeltaCurr_Excl -> UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            "WORK_RELAT_Latest -> UKEY => " + dataQualityBCSContext.recFromLatest.get(i).getUKEY());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getUKEY() != null)) {
+                        Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() + " is missing/not found in WORK_RELAT_Latest",
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromLatest.get(i).getUKEY());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " PARENTREF => WORK_RELAT_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getPARENTREF() +
+                            " WORK_RELAT_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getPARENTREF());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getPARENTREF() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getPARENTREF() != null)) {
+                        Assert.assertEquals("The PARENTREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getPARENTREF(),
+                                dataQualityBCSContext.recFromLatest.get(i).getPARENTREF());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " CHILDREF => WORK_RELAT_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getCHILDREF() +
+                            " WORK_RELAT_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getCHILDREF());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getCHILDREF() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getCHILDREF() != null)) {
+                        Assert.assertEquals("The CHILDREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getCHILDREF(),
+                                dataQualityBCSContext.recFromLatest.get(i).getCHILDREF());
+                    }
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " RELATIONTYPEREF => WORK_RELAT_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getRELATIONTYPEREF() +
+                            " WORK_RELAT_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getRELATIONTYPEREF());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getRELATIONTYPEREF() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getRELATIONTYPEREF() != null)) {
+                        Assert.assertEquals("The RELATIONTYPEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getRELATIONTYPEREF(),
+                                dataQualityBCSContext.recFromLatest.get(i).getRELATIONTYPEREF());
+                    }
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " LASTUDATEDDATE => WORK_RELAT_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getLASTUDATEDDATE() +
+                            " WORK_RELAT_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getLASTUDATEDDATE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getLASTUDATEDDATE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getLASTUDATEDDATE() != null)) {
+                        Assert.assertEquals("The LASTUDATEDDATE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getLASTUDATEDDATE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getLASTUDATEDDATE());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " DQ_ERR => WORK_RELAT_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getDQ_ERR() +
+                            " WORK_RELAT_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getDQ_ERR());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getDQ_ERR() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getDQ_ERR() != null)) {
+                        Assert.assertEquals("The DQ_ERR is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getDQ_ERR(),
+                                dataQualityBCSContext.recFromLatest.get(i).getDQ_ERR());
+                    }
+
+                    break;
+                case "etl_transform_history_work_latest":
+                    Log.info("etl_transform_history_work_Latest Records:");
+                    dataQualityBCSContext.recFromDiffOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                    dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                    Log.info("WORK_Diff_DeltaCurr_Excl -> UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            "WORK_Latest -> UKEY => " + dataQualityBCSContext.recFromLatest.get(i).getUKEY());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getUKEY() != null)) {
+                        Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() + " is missing/not found in WORK_Latest",
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromLatest.get(i).getUKEY());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " SOURCEREF => WORK_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSOURCEREF() +
+                            " WORK_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getSOURCEREF());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSOURCEREF() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getSOURCEREF() != null)) {
+                        Assert.assertEquals("The SOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSOURCEREF(),
+                                dataQualityBCSContext.recFromLatest.get(i).getSOURCEREF());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " TITLE => WORK_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getTITLE() +
+                            " WORK_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getTITLE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getTITLE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getTITLE() != null)) {
+                        Assert.assertEquals("The TITLE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getTITLE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getTITLE());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " SUBTITLE => WORK_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSUBTITLE() +
+                            " WORK_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getSUBTITLE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSUBTITLE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getSUBTITLE() != null)) {
+                        Assert.assertEquals("The SUBTITLE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSUBTITLE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getSUBTITLE());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " VOLUMENO => WORK_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getVOLUMENO() +
+                            " WORK_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getVOLUMENO());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getVOLUMENO() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getVOLUMENO() != null)) {
+                        Assert.assertEquals("The VOLUMENO is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getVOLUMENO(),
+                                dataQualityBCSContext.recFromLatest.get(i).getVOLUMENO());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " COPYRIGHTYEAR => WORK_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getCOPYRIGHTYEAR() +
+                            " WORK_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getCOPYRIGHTYEAR());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getCOPYRIGHTYEAR() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getCOPYRIGHTYEAR() != null)) {
+                        Assert.assertEquals("The COPYRIGHTYEAR is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getCOPYRIGHTYEAR(),
+                                dataQualityBCSContext.recFromLatest.get(i).getCOPYRIGHTYEAR());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " EDITIONNO => WORK_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getEDITIONNO() +
+                            " WORK_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getEDITIONNO());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getEDITIONNO() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getEDITIONNO() != null)) {
+                        Assert.assertEquals("The EDITIONNO is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getEDITIONNO(),
+                                dataQualityBCSContext.recFromLatest.get(i).getEDITIONNO());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " PMC => WORK_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getPMC() +
+                            " WORK_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getPMC());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getPMC() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getPMC() != null)) {
+                        Assert.assertEquals("The PMC is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getPMC(),
+                                dataQualityBCSContext.recFromLatest.get(i).getPMC());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " WORKTYPE => WORK_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getWORKTYPE() +
+                            " WORK_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getWORKTYPE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getWORKTYPE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getWORKTYPE() != null)) {
+                        Assert.assertEquals("The WORKTYPE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getWORKTYPE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getWORKTYPE());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " STATUSCODE => WORK_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSTATUSCODE() +
+                            " WORK_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getSTATUSCODE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSTATUSCODE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getSTATUSCODE() != null)) {
+                        Assert.assertEquals("The STATUSCODE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSTATUSCODE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getSTATUSCODE());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " IMPRINTCODE => WORK_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getIMPRINTCODE() +
+                            " WORK_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getIMPRINTCODE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getIMPRINTCODE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getIMPRINTCODE() != null)) {
+                        Assert.assertEquals("The IMPRINTCODE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getIMPRINTCODE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getIMPRINTCODE());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " TEOPCO => WORK_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getTEOPCO() +
+                            " WORK_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getTEOPCO());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getTEOPCO() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getTEOPCO() != null)) {
+                        Assert.assertEquals("The TEOPCO is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getTEOPCO(),
+                                dataQualityBCSContext.recFromLatest.get(i).getTEOPCO());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " OPCO => WORK_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getOPCO() +
+                            " WORK_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getOPCO());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getOPCO() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getOPCO() != null)) {
+                        Assert.assertEquals("The OPCO is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getOPCO(),
+                                dataQualityBCSContext.recFromLatest.get(i).getOPCO());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " RESPCENTRE => WORK_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getRESPCENTRE() +
+                            " WORK_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getRESPCENTRE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getRESPCENTRE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getRESPCENTRE() != null)) {
+                        Assert.assertEquals("The RESPCENTRE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getRESPCENTRE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getRESPCENTRE());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " LANGUAGECODE => WORK_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getLANGUAGECODE() +
+                            " WORK_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getLANGUAGECODE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getLANGUAGECODE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getLANGUAGECODE() != null)) {
+                        Assert.assertEquals("The LANGUAGECODE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getLANGUAGECODE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getLANGUAGECODE());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " ELECTRORIGHTSINDICATOR => WORK_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getELECTRORIGHTSINDICATOR() +
+                            " WORK_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getELECTRORIGHTSINDICATOR());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getELECTRORIGHTSINDICATOR() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getELECTRORIGHTSINDICATOR() != null)) {
+                        Assert.assertEquals("The ELECTRORIGHTSINDICATOR is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getELECTRORIGHTSINDICATOR(),
+                                dataQualityBCSContext.recFromLatest.get(i).getELECTRORIGHTSINDICATOR());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " FOAJOURNALTYPE => WORK_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getFOAJOURNALTYPE() +
+                            " WORK_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getFOAJOURNALTYPE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getFOAJOURNALTYPE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getFOAJOURNALTYPE() != null)) {
+                        Assert.assertEquals("The FOAJOURNALTYPE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getFOAJOURNALTYPE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getFOAJOURNALTYPE());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " FSOCIETYOWNERSHIP => WORK_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getFSOCIETYOWNERSHIP() +
+                            " WORK_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getFSOCIETYOWNERSHIP());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getFSOCIETYOWNERSHIP() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getFSOCIETYOWNERSHIP() != null)) {
+                        Assert.assertEquals("The FSOCIETYOWNERSHIP is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getFSOCIETYOWNERSHIP(),
+                                dataQualityBCSContext.recFromLatest.get(i).getFSOCIETYOWNERSHIP());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " SUBSCRIPTIONTYPE => WORK_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSUBSCRIPTIONTYPE() +
+                            " WORK_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getSUBSCRIPTIONTYPE());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSUBSCRIPTIONTYPE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getSUBSCRIPTIONTYPE() != null)) {
+                        Assert.assertEquals("The SUBSCRIPTIONTYPE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSUBSCRIPTIONTYPE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getSUBSCRIPTIONTYPE());
+                    }
+
+                    break;
+                case "etl_transform_history_work_identifier_latest":
+                    Log.info("etl_transform_history_work_identifier_Latest Records:");
+                    dataQualityBCSContext.recFromDiffOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                    dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                    Log.info("Work_Ident_Diff_DeltaCurr_Excl -> UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            "Work_Ident_Latest -> UKEY => " + dataQualityBCSContext.recFromLatest.get(i).getUKEY());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getUKEY() != null)) {
+                        Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() + " is missing/not found in Manif_Ident_Curr",
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromLatest.get(i).getUKEY());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " SOURCEREF => Work_Ident_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSOURCEREF() +
+                            " Work_Ident_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getSOURCEREF());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSOURCEREF() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getSOURCEREF() != null)) {
+                        Assert.assertEquals("The SOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getSOURCEREF(),
+                                dataQualityBCSContext.recFromLatest.get(i).getSOURCEREF());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " IDENTIFIER => Work_Ident_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getIDENTIFIER() +
+                            " Work_Ident_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getIDENTIFIER());
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getIDENTIFIER() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getIDENTIFIER() != null)) {
+                        Assert.assertEquals("The IDENTIFIER is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getIDENTIFIER(),
+                                dataQualityBCSContext.recFromLatest.get(i).getIDENTIFIER());
+                    }
+
+                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
+                            " IDENTIFIERTYPE => Work_Ident_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getIDENTIFIERTYPE() +
+                            " Work_Ident_Latest =" + dataQualityBCSContext.recFromLatest.get(i).getIDENTIFIERTYPE());
+
+                    if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getIDENTIFIERTYPE() != null ||
+                            (dataQualityBCSContext.recFromLatest.get(i).getIDENTIFIERTYPE() != null)) {
+                        Assert.assertEquals("The IDENTIFIERTYPE is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY(),
+                                dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getIDENTIFIERTYPE(),
+                                dataQualityBCSContext.recFromLatest.get(i).getIDENTIFIERTYPE());
+                    }
                     break;
             }
         }
     }
 
-    @Given("^Get the (.*) of BCS Core data from person Delta_Hist Tables$")
-    public void getRandKeyFrmPersonDeltaHist(String numberOfRecords) {
+
+    @Given("^Get the (.*) from diff of Person delta_current and Person exclude_delta tables$")
+    public void getRandKeyFromPersonDiffDeltaAndExcl(String numberOfRecords) {
         // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
-        Log.info("Get random Ids for BCS Core Person Delta Hist Tables....");
-        sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_KEY_PERS_DELTA_CURRENT_HIST, numberOfRecords);
+        Log.info("Get random Ids for BCS Core Person Diff of Delta current and Current History Tables....");
+        sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_PERSON_KEY_DIFF_DELTACURR_EXCL, numberOfRecords);
         List<Map<?, ?>> randomPersonIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
         Ids = randomPersonIds.stream().map(m -> (Integer) m.get("UKEY")).map(String::valueOf).collect(Collectors.toList());
         Log.info(sql);
         Log.info(Ids.toString());
     }
 
-    @When("^Get the Data from the Person Delta_History Tables$")
-    public void getRecPersonDeltaHist(){
-        Log.info("Get Records from Person Delta History Table");
-        sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PERSON_REC_DELTA_CURR_HIST, Joiner.on(",").join(Ids));
-        dataQualityBCSContext.recFromPersonDeltaCurrentHist = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
+    @When("^Get the records from the diff of Person delta_current and Person exclude_delta tables$")
+    public void getRecPersonDiffOfDeltaAndExcl(){
+        Log.info("Get Records from Person Diff of Delta current and Exclude Tables");
+        sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PERSON_REC_DIFF_DELTACURR_EXCL, Joiner.on(",").join(Ids));
+        dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
         Log.info(sql);
     }
 
-    @And ("^Compare the records of BCS Core person delta current and BCS person delta History$")
-    public void comparePersonDeltaCurrandHist(){
-        if (dataQualityBCSContext.recFromPersonDeltaCurrentHist.isEmpty()) {
+    @Then("^Get the records from person Latest BCS core table$")
+    public void getRecPersonLatest(){
+        Log.info("Get Records from Person Latest Table");
+        sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PERSON_REC_LATEST, Joiner.on(",").join(Ids));
+        dataQualityBCSContext.recFromPersonLatest = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
+        Log.info(sql);
+    }
+
+    @And ("^Compare the records of Person Latest with diff of person delta_current and Exclude_delta tables$")
+    public void comparePersonLatestAndDiffOfDeltaAndExcl(){
+        if (dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.isEmpty()) {
             Log.info("No Data Found in Person Trans_File Diff....");
         } else {
-            Log.info("Sorting the Ids to compare the records between Person Delta Current and Person Delta Hist...");
-            for (int i = 0; i < dataQualityBCSContext.recFromPersonDeltaCurrentHist.size(); i++) {
-                dataQualityBCSContext.recFromPersonDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                dataQualityBCSContext.recFromPersonDeltaCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+            Log.info("Sorting the Ids to compare the records between Person Latest and Person Diff Delta and Excl...");
+            for (int i = 0; i < dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.size(); i++) {
+                dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                dataQualityBCSContext.recFromPersonLatest.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
 
-                Log.info("Person_delta_hist -> UKEY => " + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getUKEY() +
-                        "Person_Delta_Curr -> UKEY => " + dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getUKEY());
-                if (dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getUKEY() != null ||
-                        (dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getUKEY() != null)) {
+                Log.info("Person_Diff_DeltaCurr_Excl -> UKEY => " + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getUKEY() +
+                        "Person_Latest -> UKEY => " + dataQualityBCSContext.recFromPersonLatest.get(i).getUKEY());
+                if (dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getUKEY() != null ||
+                        (dataQualityBCSContext.recFromPersonLatest.get(i).getUKEY() != null)) {
 
-                    Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getUKEY() + " is missing/not found in Person_delta_hist",
-                            dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getUKEY(),
-                            dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getUKEY());
+                    Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getUKEY() + " is missing/not found in Person_Latest",
+                            dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getUKEY(),
+                            dataQualityBCSContext.recFromPersonLatest.get(i).getUKEY());
                 }
 
-                Log.info("UKEY => " + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getUKEY() +
-                        " FIRSTNAME => Person_delta_hist =" + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getFIRSTNAME() +
-                        " Person_Delta_Curr =" + dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getFIRSTNAME());
+                Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getUKEY() +
+                        " FIRSTNAME => Person_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getFIRSTNAME() +
+                        " Person_Latest =" + dataQualityBCSContext.recFromPersonLatest.get(i).getFIRSTNAME());
 
-                if (dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getFIRSTNAME() != null ||
-                        (dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getFIRSTNAME() != null)) {
-                    Assert.assertEquals("The FIRSTNAME is incorrect for UKEY = " + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getUKEY(),
-                            dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getFIRSTNAME(),
-                            dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getFIRSTNAME());
+                if (dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getFIRSTNAME() != null ||
+                        (dataQualityBCSContext.recFromPersonLatest.get(i).getFIRSTNAME() != null)) {
+                    Assert.assertEquals("The FIRSTNAME is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getUKEY(),
+                            dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getFIRSTNAME(),
+                            dataQualityBCSContext.recFromPersonLatest.get(i).getFIRSTNAME());
                 }
-                Log.info("UKEY => " + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getUKEY() +
-                        " FAMILYNAME => Person_delta_hist =" + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getFAMILYNAME() +
-                        " Person_Delta_Curr =" + dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getFAMILYNAME());
+                Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getUKEY() +
+                        " FAMILYNAME => Person_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getFAMILYNAME() +
+                        " Person_Latest =" + dataQualityBCSContext.recFromPersonLatest.get(i).getFAMILYNAME());
 
-                if (dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getFAMILYNAME() != null ||
-                        (dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getFAMILYNAME() != null)) {
-                    Assert.assertEquals("The FAMILYNAME is incorrect for UKEY = " + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getUKEY(),
-                            dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getFAMILYNAME(),
-                            dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getFAMILYNAME());
+                if (dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getFAMILYNAME() != null ||
+                        (dataQualityBCSContext.recFromPersonLatest.get(i).getFAMILYNAME() != null)) {
+                    Assert.assertEquals("The FAMILYNAME is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getUKEY(),
+                            dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getFAMILYNAME(),
+                            dataQualityBCSContext.recFromPersonLatest.get(i).getFAMILYNAME());
                 }
-                Log.info("UKEY => " + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getUKEY() +
-                        " PEOPLEHUBID => Person_delta_hist =" + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getPEOPLEHUBID() +
-                        " Person_Delta_Curr =" + dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getPEOPLEHUBID());
+                Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getUKEY() +
+                        " PEOPLEHUBID => Person_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getPEOPLEHUBID() +
+                        " Person_Latest =" + dataQualityBCSContext.recFromPersonLatest.get(i).getPEOPLEHUBID());
 
-                if (dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getPEOPLEHUBID() != null ||
-                        (dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getPEOPLEHUBID() != null)) {
-                    Assert.assertEquals("The PEOPLEHUBID is incorrect for UKEY = " + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getUKEY(),
-                            dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getPEOPLEHUBID(),
-                            dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getPEOPLEHUBID());
-                }
-
-                Log.info("UKEY => " + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getUKEY() +
-                        " EMAIL => Person_delta_hist =" + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getEMAIL() +
-                        " Person_Delta_Curr =" + dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getEMAIL());
-
-                if (dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getEMAIL() != null ||
-                        (dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getEMAIL() != null)) {
-                    Assert.assertEquals("The EMAIL is incorrect for UKEY = " + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getUKEY(),
-                            dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getEMAIL(),
-                            dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getEMAIL());
-                }
-                Log.info("UKEY => " + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getSOURCEREF() +
-                        " DQ_ERR => Person_delta_hist =" + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getDQ_ERR() +
-                        " Person_Delta_Curr =" + dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getDQ_ERR());
-
-                if (dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getDQ_ERR() != null ||
-                        (dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getDQ_ERR() != null)) {
-                    Assert.assertEquals("The DQ_ERR is incorrect for UKEY = " + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getUKEY(),
-                            dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getDQ_ERR(),
-                            dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getDQ_ERR());
-                }
-                Log.info("UKEY => " + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getSOURCEREF() +
-                        " DELTA_MODE => Person_delta_hist =" + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getDELTA_MODE() +
-                        " Person_Delta_Curr =" + dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getDELTA_MODE());
-
-                if (dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getDELTA_MODE() != null ||
-                        (dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getDELTA_MODE() != null)) {
-                    Assert.assertEquals("The DELTA_MODE is incorrect for UKEY = " + dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getUKEY(),
-                            dataQualityBCSContext.recFromPersonDeltaCurrentHist.get(i).getDELTA_MODE(),
-                            dataQualityBCSContext.recFromPersonDeltaCurrent.get(i).getDELTA_MODE());
+                if (dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getPEOPLEHUBID() != null ||
+                        (dataQualityBCSContext.recFromPersonLatest.get(i).getPEOPLEHUBID() != null)) {
+                    Assert.assertEquals("The PEOPLEHUBID is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getUKEY(),
+                            dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getPEOPLEHUBID(),
+                            dataQualityBCSContext.recFromPersonLatest.get(i).getPEOPLEHUBID());
                 }
 
+                Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getUKEY() +
+                        " EMAIL => Person_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getEMAIL() +
+                        " Person_Latest =" + dataQualityBCSContext.recFromPersonLatest.get(i).getEMAIL());
+
+                if (dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getEMAIL() != null ||
+                        (dataQualityBCSContext.recFromPersonLatest.get(i).getEMAIL() != null)) {
+                    Assert.assertEquals("The EMAIL is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getUKEY(),
+                            dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getEMAIL(),
+                            dataQualityBCSContext.recFromPersonLatest.get(i).getEMAIL());
+                }
+                Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getSOURCEREF() +
+                        " DQ_ERR => Person_Diff_DeltaCurr_Excl =" + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getDQ_ERR() +
+                        " Person_Latest =" + dataQualityBCSContext.recFromPersonLatest.get(i).getDQ_ERR());
+
+                if (dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getDQ_ERR() != null ||
+                        (dataQualityBCSContext.recFromPersonLatest.get(i).getDQ_ERR() != null)) {
+                    Assert.assertEquals("The DQ_ERR is incorrect for UKEY = " + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getUKEY(),
+                            dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getDQ_ERR(),
+                            dataQualityBCSContext.recFromPersonLatest.get(i).getDQ_ERR());
+                }
             }
         }
     }
-*/
+
+
 
 
 
