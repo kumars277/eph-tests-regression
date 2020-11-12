@@ -50,6 +50,69 @@ public class BCSCurrentTableDataObject {
     private String seriescode;
     private String objecttype;
 
+    //for current extObject
+    private String object;
+    private String type;
+    private String name;
+    private String comments;
+    private String source;
+
+    //for current fullversionfamily
+    private String versiontype;
+    private String isbn;
+    private String projectno;
+    private String workmaster;
+
+    //for originatorAddress
+    private String additionaladdress;
+    private String addressid;
+    private String addressline1;
+    private String addressline2;
+    private String addressline3;
+    private String businesspartnerid;
+    private String city;
+    private String country;
+    private String district;
+    private String email;
+    private String fax;
+    private String houseno;
+    private String internet;
+    private String ismainaddress;
+    private String mobile;
+    private String postalcode;
+    private String street;
+    private String telephonemain;
+    private String telephoneother;
+
+    //for originators
+    //private String metadeleted;
+    //private String metamodifiedon;
+    //private String sourceref;
+    private String prefix;
+    private String sequence;
+    //private String businesspartnerid;
+    private String originatorid;
+    private String isperson;
+    private String locationid;
+    private String copyrightholdertype;
+    private String institution;
+    private String firstname;
+    private String department;
+    private String lastname;
+    private String searchterm;
+
+    //for stg_current_pricing
+    //  private String metadeleted;
+    //  private String metamodifiedon;
+    //  private String sourceref;
+    private String validfrom;
+    //  private String type;
+    private String currency;
+    private String priceapprox;
+    private String price;
+    private String validto;
+
+
     public String getClassificationcode() {return classificationcode;}
     public void setClassificationcode(String classificationcode) {this.classificationcode = classificationcode;}
 
@@ -355,4 +418,136 @@ public class BCSCurrentTableDataObject {
         this.objecttype = objecttype;
     }
 
+    public String getComments() {return comments;}
+    public void setComments(String comments) {this.comments = comments;}
+
+    public String getName() {return name;}
+    public void setName(String name) {this.name = name;}
+
+    public String getObject() {return object;}
+    public void setObject(String object) {this.object = object;}
+
+    public String getType() {return type;}
+    public void setType(String type) {this.type = type;}
+
+    public String getSource() {return source;}
+    public void setSource(String source) {this.source = source;}
+
+
+    public String getVersiontype() {return versiontype;}
+    public void setVersiontype(String versiontype) {this.versiontype = versiontype;}
+
+    public String getIsbn() {return isbn;}
+    public void setIsbn(String isbn) {this.isbn = isbn;}
+
+    public String getProjectno() {return projectno;}
+    public void setProjectno(String projectno) {this.projectno = projectno;}
+
+    public String getWorkmaster() {return workmaster;}
+    public void setWorkmaster(String workmaster) {this.workmaster = workmaster;}
+
+    public String getAdditionaladdress() {return additionaladdress;}
+    public void setAdditionaladdress(String additionaladdress) {this.additionaladdress = additionaladdress;}
+
+    public String getAddressid() {return addressid;}
+    public void setAddressid(String addressid) {this.addressid = addressid;}
+
+    public String getAddressline1() {return addressline1;}
+    public void setAddressline1(String addressline1) {this.addressline1 = addressline1;}
+
+    public String getAddressline2() {return addressline2;}
+    public void setAddressline2(String addressline2) {this.addressline2 = addressline2;}
+
+    public String getAddressline3() {return addressline3;}
+    public void setAddressline3(String addressline3) {this.addressline3 = addressline3;}
+
+    public String getBusinesspartnerid() {return businesspartnerid;}
+    public void setBusinesspartnerid(String businesspartnerid) {this.businesspartnerid = businesspartnerid;}
+
+    public String getCity() {return city;}
+    public void setCity(String city) {this.city = city;}
+
+    public String getCountry() {return country;}
+    public void setCountry(String country) {this.country = country;}
+
+    public String getDistrict() {return district;}
+    public void setDistrict(String district) {this.district = district;}
+
+    public String getEmail() {return email;}
+    public void setEmail(String email) {this.email = email;}
+
+    public String getFax() {return fax;}
+    public void setFax(String fax) {this.fax = fax;}
+
+    public String getHouseno() {return houseno;}
+    public void setHouseno(String houseno) {this.houseno = houseno;}
+
+    public String getInternet() {return internet;}
+    public void setInternet(String internet) {this.internet = internet;}
+
+    public String getIsmainaddress() {return ismainaddress;}
+    public void setIsmainaddress(String ismainaddress) {this.ismainaddress = ismainaddress;}
+
+    public String getMobile() {return mobile;}
+    public void setMobile(String mobile) {this.mobile = mobile;}
+
+    public String getPostalcode() {return postalcode;}
+    public void setPostalcode(String postalcode) {this.postalcode = postalcode;    }
+
+    public String getStreet() {return street;}
+    public void setStreet(String street) {this.street = street;}
+
+    public String getTelephonemain() {return telephonemain;}
+    public void setTelephonemain(String telephonemain) {this.telephonemain = telephonemain;}
+
+    public String getTelephoneother() {return telephoneother;}
+    public void setTelephoneother(String telephoneother) {this.telephoneother = telephoneother;}
+
+    public String getPrefix() {return prefix;}
+    public void setPrefix(String prefix) {this.prefix = prefix;}
+
+    public String getSequence() {return sequence;}
+    public void setSequence(String sequence) {this.sequence = sequence;}
+
+    public String getOriginatorid() {return originatorid;}
+    public void setOriginatorid(String originatorid) {this.originatorid = originatorid;}
+
+    public String getIsperson() {return isperson;}
+    public void setIsperson(String isperson) {this.isperson = isperson;}
+
+    public String getLocationid() {return locationid;}
+    public void setLocationid(String locationid) {this.locationid = locationid;}
+
+    public String getCopyrightholdertype() {return copyrightholdertype;}
+    public void setCopyrightholdertype(String copyrightholdertype) {this.copyrightholdertype = copyrightholdertype;}
+
+    public String getInstitution() {return institution;}
+    public void setInstitution(String institution) {this.institution = institution;}
+
+    public String getFirstname() {return firstname;}
+    public void setFirstname(String firstname) {this.firstname = firstname;}
+
+    public String getDepartment() {return department;}
+    public void setDepartment(String department) {this.department = department;}
+
+    public String getLastname() {return lastname;}
+    public void setLastname(String lastname) {this.lastname = lastname;}
+
+    public String getSearchterm() {return searchterm;}
+    public void setSearchterm(String searchterm) {this.searchterm = searchterm;}
+
+    public String getCurrency() {return currency;}
+    public void setCurrency(String currency) {this.currency = currency;}
+
+    public String getPrice() {return price;}
+    public void setPrice(String price) {this.price = price;}
+
+    public String getPriceapprox() {return priceapprox;}
+    public void setPriceapprox(String priceapprox) {this.priceapprox = priceapprox;}
+
+    public String getValidfrom() {return validfrom;}
+    public void setValidfrom(String validfrom) {this.validfrom = validfrom;}
+
+    public String getValidto() {return validto;}
+    public void setValidto(String validto) {this.validto = validto;}
 }

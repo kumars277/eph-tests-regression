@@ -39,6 +39,7 @@ public class ProductFinderTasks {
             HomePageAddress=Constants.PRODUCT_FINDER_EPH_SIT_UI;
         else if (TestContext.getValues().environment.equalsIgnoreCase("UAT"))
             HomePageAddress=Constants.PRODUCT_FINDER_EPH_UAT_UI;
+        else HomePageAddress=Constants.PRODUCT_FINDER_EPH_PROD_UI;
         if(DataQualityContext.uiUnderTest=="JF")HomePageAddress+="journals";
         tasks.openPage(HomePageAddress);
         Thread.sleep(1000);
@@ -99,6 +100,13 @@ public class ProductFinderTasks {
         String buildWorkIdLocator = String.format(ProductFinderConstants.buildWorkIdLocator, workId);
         tasks.click("XPATH", buildWorkIdLocator);
         Thread.sleep(5000);
+    }
+
+
+    public void clickLogo() throws InterruptedException {
+        //created by Nishant @ 23 Oct 2020
+        tasks.click("XPATH",ProductFinderConstants.elsevierLogo);
+        Thread.sleep(3000);
     }
 
     public void clickManifestation_tab() throws InterruptedException {
@@ -164,7 +172,7 @@ public class ProductFinderTasks {
             targetURL = Constants.PRODUCT_FINDER_EPH_SIT_UI + referenceUrl;
         else if (TestContext.getValues().environment.equalsIgnoreCase("UAT"))
             targetURL = Constants.PRODUCT_FINDER_EPH_UAT_UI + referenceUrl;
-
+        else targetURL = Constants.PRODUCT_FINDER_EPH_PROD_UI + referenceUrl;
         Log.info("Expected Target URL " + targetURL);
         if (targetURL.equalsIgnoreCase(tasks.getCurrentPageUrl())) return true;
         else return false;

@@ -7,6 +7,8 @@ public class ProductFinderConstants {
     public static String SCIENCE_ID = "@science.regn.net";
     public static String userDetail="//div[@class='pad-right']";
     public static String loginByEmail = "loginfmt";
+
+    public static String elsevierLogo = "//a/div[@class='elsevier-logo']";
     public static String searchBar = "//*[@id='mat-input-0'] | //div[@class='search-input']/div/input";
     public static String searchButton = "//i[@class='gm-ico-search']";
     public static String tab_product_andPackages="//div[@class='mat-tab-links']/div[2]/a[1]";
@@ -27,7 +29,9 @@ public class ProductFinderConstants {
     public static String peopleTab = "//*[@id='mat-tab-label-0-1']/div";
     public static String financialTab = "//*[@id='mat-tab-label-0-2']/div";
     public static String editorialTab = "//*[@id='mat-tab-label-0-3']/div";
-    public static String linkTab="//*[@id='mat-tab-label-0-4']/div";
+    //public static String linkTab="//*[@id='mat-tab-label-0-4']/div";
+    //added by Nishant @ 23Oct 2020
+    public static String linkTab="//*[@id='mat-tab-label-0-4']/div|//*[boolean(number(substring-before(substring-after(@id, \"mat-tab-label-\"), \"-4\")))]";
 
                 //String section = "//div[@class='section']"; //parent of - Editorial Information
                // String section = "//div[@class='section']"; //parent Information

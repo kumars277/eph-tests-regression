@@ -98,7 +98,21 @@ public class ApiWorksSearchSteps {
     @Given("^We set specific journal ids for search")
     public void setspecificJournalIds() {//created by Nishant @ 04 Aug 2020
         ids=new ArrayList<>();
-        ids.add("EPR-W-102NSN");
+        //production random work ids
+        ids.add("EPR-W-102TSF");
+        ids.add("EPR-W-115XJ7");
+    //    ids.add("EPR-W-115XRD");
+        ids.add("EPR-W-115XJ8");
+        ids.add("EPR-W-115XJ6");
+        ids.add("EPR-W-102RGY");
+    //    ids.add("EPR-W-10WMJG");
+    //    ids.add("EPR-W-10X0B9");
+    //    ids.add("EPR-W-1033SY");
+        ids.add("EPR-W-102VD5");
+        ids.add("EPR-W-102TX5");
+        ids.add("EPR-W-104Y84");
+        ids.add("EPR-W-102RV9");
+        ids.add("EPR-W-102SF9");
         Log.info("hard coded work ids are : " + ids);
 
     }

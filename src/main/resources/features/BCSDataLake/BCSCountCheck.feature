@@ -23,7 +23,6 @@ Feature:Validate data count for BCS tables in Data Lake
       | stg_current_text             |
       | stg_current_versionfamily    |
 
-
     #below scenario not applicable any more as previous tables are no longer valid
   @BCS
   Scenario Outline: Verify Data count for BCS stg_history tables are transferred from stg_previous tables

@@ -11,7 +11,7 @@ public class TestContext {
 
     public static TestProperties getValues() {
         TestProperties testProperties = new TestProperties();
-        System.setProperty("ENV","SIT");
+        System.setProperty("ENV","PROD");
        // System.setProperty("browser","chrome");
         String browserName = System.getProperty("browser");
         String gridRun = System.getProperty("gridRun");
@@ -19,7 +19,7 @@ public class TestContext {
         String environment = System.getProperty("ENV");
         testProperties.browserType = browserName != null ? browserName : "chromeHeadless";
         testProperties.gridRun = gridRun != null ? Boolean.TRUE : Boolean.FALSE;
-        testProperties.environment = environment !=null ? environment : EnumConstants.ENVIRONMENTS.SIT.name();
+        testProperties.environment = environment !=null ? environment : EnumConstants.ENVIRONMENTS.PRODUCTION.name();
         testProperties.targetDB = targetDB != null ? Boolean.TRUE : Boolean.FALSE;
         return testProperties;
     }

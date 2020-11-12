@@ -6,12 +6,14 @@ public class BCSInitialIngestDataObject {
     private String metamodifiedon;
     private String sourceref;
 
+    //for current classification table
     private String classificationcode;
     private String value;
     private String classificationtype;
     private String priority;
     private String businessunit;
 
+    //for current content table
     private String originimpid;
     private String subgroup;
     private String series;
@@ -48,6 +50,70 @@ public class BCSInitialIngestDataObject {
     private String seriescode;
     private String objecttype;
 
+    //for current extObject
+    private String object;
+    private String type;
+    private String name;
+    private String comments;
+    private String source;
+
+    //for current fullversionfamily
+    private String versiontype;
+    private String isbn;
+    private String projectno;
+    private String workmaster;
+
+    //for originatorAddress
+    private String additionaladdress;
+    private String addressid;
+    private String addressline1;
+    private String addressline2;
+    private String addressline3;
+    private String businesspartnerid;
+    private String city;
+    private String country;
+    private String district;
+    private String email;
+    private String fax;
+    private String houseno;
+    private String internet;
+    private String ismainaddress;
+    private String mobile;
+    private String postalcode;
+    private String street;
+    private String telephonemain;
+    private String telephoneother;
+
+    //for stg_current_originators
+    //private String metadeleted;
+    //private String metamodifiedon;
+    //private String sourceref;
+    private String prefix;
+    private String sequence;
+    //private String businesspartnerid;
+    private String originatorid;
+    private String isperson;
+    private String locationid;
+    private String copyrightholdertype;
+    private String institution;
+    private String firstname;
+    private String department;
+    private String lastname;
+    private String searchterm;
+
+    //for stg_current_pricing
+  //  private String metadeleted;
+  //  private String metamodifiedon;
+  //  private String sourceref;
+    private String validfrom;
+  //  private String type;
+    private String currency;
+    private String priceapprox;
+    private String price;
+    private String validto;
+
+
+
     public String getClassificationcode() {return classificationcode;}
     public void setClassificationcode(String classificationcode) {this.classificationcode = classificationcode;}
 
@@ -72,286 +138,245 @@ public class BCSInitialIngestDataObject {
     public String getValue() {return value;}
     public void setValue(String value) {this.value = value;}
 
-    public String getOriginimpid() {
-        return originimpid;
-    }
+    public String getOriginimpid() {return originimpid;}
+    public void setOriginimpid(String originimpid) {this.originimpid = originimpid;}
 
-    public void setOriginimpid(String originimpid) {
-        this.originimpid = originimpid;
-    }
+    public String getSubgroup() {return subgroup;}
+    public void setSubgroup(String subgroup) {this.subgroup = subgroup;}
 
-    public String getSubgroup() {
-        return subgroup;
-    }
+    public String getSeries() {return series;}
+    public void setSeries(String series) {this.series = series;}
 
-    public void setSubgroup(String subgroup) {
-        this.subgroup = subgroup;
-    }
+    public String getSeriesissn() {return seriesissn;}
+    public void setSeriesissn(String seriesissn) {this.seriesissn = seriesissn;}
 
-    public String getSeries() {
-        return series;
-    }
+    public String getSeriescode() {return seriescode;}
+    public void setSeriescode(String seriescode) {this.seriescode = seriescode;}
 
-    public void setSeries(String series) {
-        this.series = series;
-    }
+    public String getSeriesid() {return seriesid;}
+    public void setSeriesid(String seriesid) {this.seriesid = seriesid;}
 
-    public String getSeriesissn() {
-        return seriesissn;
-    }
+    public String getCopyrightyear() {return copyrightyear;}
+    public void setCopyrightyear(String copyrightyear) {this.copyrightyear = copyrightyear;}
 
-    public void setSeriesissn(String seriesissn) {
-        this.seriesissn = seriesissn;
-    }
+    public String getTitle() {return title;}
+    public void setTitle(String title) {this.title = title;}
 
-    public String getSeriescode() {
-        return seriescode;
-    }
+    public String getTitleid() {return titleid;}
+    public void setTitleid(String titleid) {this.titleid = titleid;}
 
-    public void setSeriescode(String seriescode) {
-        this.seriescode = seriescode;
-    }
+    public String getSubtitle() {return subtitle;}
+    public void setSubtitle(String subtitle) {this.subtitle = subtitle;}
 
-    public String getSeriesid() {
-        return seriesid;
-    }
+    public String getWorktitle() {return worktitle;}
+    public void setWorktitle(String worktitle) {this.worktitle = worktitle;}
 
-    public void setSeriesid(String seriesid) {
-        this.seriesid = seriesid;
-    }
+    public String getWork_master_flag() {return work_master_flag;}
+    public void setWork_master_flag(String work_master_flag) {this.work_master_flag = work_master_flag;}
 
-    public String getCopyrightyear() {
-        return copyrightyear;
-    }
+    public String getIsset() {return isset;}
+    public void setIsset(String isset) {this.isset = isset;}
 
-    public void setCopyrightyear(String copyrightyear) {
-        this.copyrightyear = copyrightyear;
-    }
+    public String getImpressionid() {return impressionid;}
+    public void setImpressionid(String impressionid) {this.impressionid = impressionid;}
 
-    public String getTitle() {
-        return title;
-    }
+    public String getDoistatus() {return doistatus;}
+    public void setDoistatus(String doistatus) {this.doistatus = doistatus;}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public String getImprint() {return imprint;}
+    public void setImprint(String imprint) {this.imprint = imprint;}
 
-    public String getTitleid() {
-        return titleid;
-    }
+    public String getDivision() {return division;}
+    public void setDivision(String division) {this.division = division;}
 
-    public void setTitleid(String titleid) {
-        this.titleid = titleid;
-    }
+    public String getLanguage() {return language;}
+    public void setLanguage(String language) {this.language = language;}
 
-    public String getSubtitle() {
-        return subtitle;
-    }
+    public String getLanguage2() {return language2;}
+    public void setLanguage2(String language2) {this.language2 = language2;}
 
-    public void setSubtitle(String subtitle) {
-        this.subtitle = subtitle;
-    }
+    public String getLanguage3() {return language3;}
+    public void setLanguage3(String language3) {this.language3 = language3;}
 
+    public String getRegstatus() {return regstatus;}
+    public void setRegstatus(String regstatus) {this.regstatus = regstatus;}
 
-    public String getWorktitle() {
-        return worktitle;
-    }
+    public String getApprovedondate() {return approvedondate;}
+    public void setApprovedondate(String approvedondate) {this.approvedondate = approvedondate;}
 
-    public void setWorktitle(String worktitle) {
-        this.worktitle = worktitle;
-    }
+    public String getDoi() {return doi;}
+    public void setDoi(String doi) {this.doi = doi;}
 
-    public String getWork_master_flag() {
-        return work_master_flag;
-    }
+    public String getVolumeno() {return volumeno;}
+    public void setVolumeno(String volumeno) {this.volumeno = volumeno;}
 
-    public void setWork_master_flag(String work_master_flag) {
-        this.work_master_flag = work_master_flag;
-    }
+    public String getVolumename() {return volumename;}
+    public void setVolumename(String volumename) {this.volumename = volumename;}
 
-    public String getIsset() {
-        return isset;
-    }
+    public void setEditionid(String editionid) {this.editionid = editionid;}
+    public String getEditionid() {return editionid;}
 
-    public void setIsset(String isset) {
-        this.isset = isset;
-    }
+    public String getEditionno() {return editionno;}
+    public void setEditionno(String editionno) {this.editionno = editionno;}
 
-    public String getImpressionid() {
-        return impressionid;
-    }
+    public String getSynctemplate() {return synctemplate;}
+    public void setSynctemplate(String synctemplate) {this.synctemplate = synctemplate;}
 
-    public void setImpressionid(String impressionid) {
-        this.impressionid = impressionid;
-    }
+    public String getOwnership() {return ownership;}
+    public void setOwnership(String ownership) {this.ownership = ownership;}
 
-    public String getDoistatus() {
-        return doistatus;
-    }
+    public String getFirstapproval() {return firstapproval;}
+    public void setFirstapproval(String firstapproval) {this.firstapproval = firstapproval;}
 
-    public void setDoistatus(String doistatus) {
-        this.doistatus = doistatus;
-    }
+    public String getCompanygroup() {return companygroup;}
+    public void setCompanygroup(String companygroup) {this.companygroup = companygroup;}
 
-    public String getImprint() {
-        return imprint;
-    }
+    public String getShorttitle() {return shorttitle;}
+    public void setShorttitle(String shorttitle) {this.shorttitle = shorttitle;}
 
-    public void setImprint(String imprint) {
-        this.imprint = imprint;
-    }
+    public String getPiidack() {return piidack;}
+    public void setPiidack(String piidack) {this.piidack = piidack;}
 
-    public String getDivision() {
-        return division;
-    }
+    public String getPublisher() {return publisher;}
+    public void setPublisher(String publisher) {this.publisher = publisher;}
 
-    public void setDivision(String division) {
-        this.division = division;
-    }
+    public void setObjecttype(String objecttype) {this.objecttype = objecttype;}
+    public String getObjecttype() {return objecttype;}
 
-    public String getLanguage() {
-        return language;
-    }
+    public String getComments() {return comments;}
+    public void setComments(String comments) {this.comments = comments;}
 
-    public void setLanguage(String language) {
-        this.language = language;
-    }
+    public String getName() {return name;}
+    public void setName(String name) {this.name = name;}
 
-    public String getLanguage2() {
-        return language2;
-    }
+    public String getObject() {return object;}
+    public void setObject(String object) {this.object = object;}
 
-    public void setLanguage2(String language2) {
-        this.language2 = language2;
-    }
+    public String getType() {return type;}
+    public void setType(String type) {this.type = type;}
 
-    public String getLanguage3() {
-        return language3;
-    }
+    public String getSource() {return source;}
+    public void setSource(String source) {this.source = source;}
 
-    public void setLanguage3(String language3) {
-        this.language3 = language3;
-    }
+    public String getVersiontype() {return versiontype;}
+    public void setVersiontype(String versiontype) {this.versiontype = versiontype;}
 
-    public String getRegstatus() {
-        return regstatus;
-    }
+    public String getIsbn() {return isbn;}
+    public void setIsbn(String isbn) {this.isbn = isbn;}
 
-    public void setRegstatus(String regstatus) {
-        this.regstatus = regstatus;
-    }
+    public String getProjectno() {return projectno;}
+    public void setProjectno(String projectno) {this.projectno = projectno;}
 
-    public String getApprovedondate() {
-        return approvedondate;
-    }
+    public String getWorkmaster() {return workmaster;}
+    public void setWorkmaster(String workmaster) {this.workmaster = workmaster;}
 
-    public void setApprovedondate(String approvedondate) {
-        this.approvedondate = approvedondate;
-    }
+    public String getAdditionaladdress() {return additionaladdress;}
+    public void setAdditionaladdress(String additionaladdress) {this.additionaladdress = additionaladdress;}
 
-    public String getDoi() {
-        return doi;
-    }
+    public String getAddressid() {return addressid;}
+    public void setAddressid(String addressid) {this.addressid = addressid;}
 
-    public void setDoi(String doi) {
-        this.doi = doi;
-    }
+    public String getAddressline1() {return addressline1;}
+    public void setAddressline1(String addressline1) {this.addressline1 = addressline1;}
 
-    public String getVolumeno() {
-        return volumeno;
-    }
+    public String getAddressline2() {return addressline2;}
+    public void setAddressline2(String addressline2) {this.addressline2 = addressline2;}
 
-    public void setVolumeno(String volumeno) {
-        this.volumeno = volumeno;
-    }
+    public String getAddressline3() {return addressline3;}
+    public void setAddressline3(String addressline3) {this.addressline3 = addressline3;}
 
-    public String getVolumename() {
-        return volumename;
-    }
+    public String getBusinesspartnerid() {return businesspartnerid;}
+    public void setBusinesspartnerid(String businesspartnerid) {this.businesspartnerid = businesspartnerid;}
 
-    public void setVolumename(String volumename) {
-        this.volumename = volumename;
-    }
+    public String getCity() {return city;}
+    public void setCity(String city) {this.city = city;}
 
-    public String getEditionid() {
-        return editionid;
-    }
+    public String getCountry() {return country;}
+    public void setCountry(String country) {this.country = country;}
 
-    public void setEditionid(String editionid) {
-        this.editionid = editionid;
-    }
+    public String getDistrict() {return district;}
+    public void setDistrict(String district) {this.district = district;}
 
-    public String getEditionno() {
-        return editionno;
-    }
+    public String getEmail() {return email;}
+    public void setEmail(String email) {this.email = email;}
 
-    public void setEditionno(String editionno) {
-        this.editionno = editionno;
-    }
+    public String getFax() {return fax;}
+    public void setFax(String fax) {this.fax = fax;}
 
-    public String getSynctemplate() {
-        return synctemplate;
-    }
+    public String getHouseno() {return houseno;}
+    public void setHouseno(String houseno) {this.houseno = houseno;}
 
-    public void setSynctemplate(String synctemplate) {
-        this.synctemplate = synctemplate;
-    }
+    public String getInternet() {return internet;}
+    public void setInternet(String internet) {this.internet = internet;}
 
-    public String getOwnership() {
-        return ownership;
-    }
+    public String getIsmainaddress() {return ismainaddress;}
+    public void setIsmainaddress(String ismainaddress) {this.ismainaddress = ismainaddress;}
 
-    public void setOwnership(String ownership) {
-        this.ownership = ownership;
-    }
+    public String getMobile() {return mobile;}
+    public void setMobile(String mobile) {this.mobile = mobile;}
 
-    public String getFirstapproval() {
-        return firstapproval;
-    }
+    public String getPostalcode() {return postalcode;}
+    public void setPostalcode(String postalcode) {this.postalcode = postalcode;    }
 
-    public void setFirstapproval(String firstapproval) {
-        this.firstapproval = firstapproval;
-    }
+    public String getStreet() {return street;}
+    public void setStreet(String street) {this.street = street;}
 
-    public String getCompanygroup() {
-        return companygroup;
-    }
+    public String getTelephonemain() {return telephonemain;}
+    public void setTelephonemain(String telephonemain) {this.telephonemain = telephonemain;}
 
-    public void setCompanygroup(String companygroup) {
-        this.companygroup = companygroup;
-    }
+    public String getTelephoneother() {return telephoneother;}
+    public void setTelephoneother(String telephoneother) {this.telephoneother = telephoneother;}
 
-    public String getShorttitle() {
-        return shorttitle;
-    }
 
-    public void setShorttitle(String shorttitle) {
-        this.shorttitle = shorttitle;
-    }
+    public String getPrefix() {return prefix;}
+    public void setPrefix(String prefix) {this.prefix = prefix;}
 
-    public String getPiidack() {
-        return piidack;
-    }
+    public String getSequence() {return sequence;}
+    public void setSequence(String sequence) {this.sequence = sequence;}
 
-    public void setPiidack(String piidack) {
-        this.piidack = piidack;
-    }
+    public String getOriginatorid() {return originatorid;}
+    public void setOriginatorid(String originatorid) {this.originatorid = originatorid;}
 
-    public String getPublisher() {
-        return publisher;
-    }
+    public String getIsperson() {return isperson;}
+    public void setIsperson(String isperson) {this.isperson = isperson;}
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
-    }
+    public String getLocationid() {return locationid;}
+    public void setLocationid(String locationid) {this.locationid = locationid;}
 
-    public String getObjecttype() {
-        return objecttype;
-    }
+    public String getCopyrightholdertype() {return copyrightholdertype;}
+    public void setCopyrightholdertype(String copyrightholdertype) {this.copyrightholdertype = copyrightholdertype;}
 
-    public void setObjecttype(String objecttype) {
-        this.objecttype = objecttype;
-    }
+    public String getInstitution() {return institution;}
+    public void setInstitution(String institution) {this.institution = institution;}
+
+    public String getFirstname() {return firstname;}
+    public void setFirstname(String firstname) {this.firstname = firstname;}
+
+    public String getDepartment() {return department;}
+    public void setDepartment(String department) {this.department = department;}
+
+    public String getLastname() {return lastname;}
+    public void setLastname(String lastname) {this.lastname = lastname;}
+
+    public String getSearchterm() {return searchterm;}
+    public void setSearchterm(String searchterm) {this.searchterm = searchterm;}
+
+    public String getCurrency() {return currency;}
+    public void setCurrency(String currency) {this.currency = currency;}
+
+    public String getPrice() {return price;}
+    public void setPrice(String price) {this.price = price;}
+
+    public String getPriceapprox() {return priceapprox;}
+    public void setPriceapprox(String priceapprox) {this.priceapprox = priceapprox;}
+
+    public String getValidfrom() {return validfrom;}
+    public void setValidfrom(String validfrom) {this.validfrom = validfrom;}
+
+    public String getValidto() {return validto;}
+    public void setValidto(String validto) {this.validto = validto;}
 
 }
+
+
 

@@ -42,7 +42,7 @@ Feature: Product Finder Selenium tests
       |Title  |
    # |Keyword|  EPH-1909 created for issue – “Product finder is not searching ‘Manifestation by keyword’.”
 
-  @PFUI
+  @PFUI @PFUIOnly
   Scenario Outline: When no product is found "There are no results that match your search" is displayed
     Given user is on Product Finder search page
     When user is searching for "<keyword>"
@@ -66,7 +66,7 @@ Feature: Product Finder Selenium tests
       |Book     |
       |Journal  |
 
-  @PFUI
+  @PFUI @PFUIOnly
   Scenario Outline: Search the work and filter them with Work Types
     Given user is on Product Finder search page
     And   Searches for works by given <keyword>
@@ -79,7 +79,7 @@ Feature: Product Finder Selenium tests
       |Cell      |   Book      |
       |neuro     |   Journal   |
 
-  @PFUI
+  @PFUI @PFUIOnly
   Scenario Outline: Search the work and filter them with Work Status
     Given user is on Product Finder search page
     And Searches for works by given <keyword>
@@ -93,7 +93,7 @@ Feature: Product Finder Selenium tests
       |Chemistry      |Planned             |
       |math           |No Longer Published |
 
-  @PFUI
+  @PFUI @PFUIOnly
   Scenario Outline: Search the work and filter them with Work Statuses and Types
     Given user is on Product Finder search page
     And Searches for works by given <keyword>
@@ -177,7 +177,7 @@ Examples:
     Given We get 2 random journal ids for search
     Then  search work and verify links
 
-  @PFDMC
+  @PFDMC @PFUIOnlyi
   Scenario: Search specific Journal and verify link tab
     Given We set specific journal ids for search
     Then  search work and verify links
