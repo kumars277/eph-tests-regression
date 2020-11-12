@@ -67,8 +67,6 @@ public class BCS_ETLCore_LatestDataChecksSteps {
         Log.info(Ids.toString());
     }
 
-
-
     @When ("^Get the records from the diff of delta_current and current_hist tables (.*)$")
     public void getRecFromDiffDeltaCurrAndCurrHist(String tableName){
         Log.info("We get the records from Diff of Delta Current and Current Hist of BCS Core table...");
@@ -949,8 +947,6 @@ public class BCS_ETLCore_LatestDataChecksSteps {
        }
     }
 
-
-
     @Given("^Get the (.*) from diff of person delta_current and current_hist tables$")
     public void getRandKeyFromPersonDiffDeltaAndCurrHist(String numberOfRecords) {
         // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
@@ -1053,6 +1049,10 @@ public class BCS_ETLCore_LatestDataChecksSteps {
             }
         }
     }
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 
     @Given("^Get the (.*) from diff of delta_current and exclude_delta tables (.*)$")
@@ -2076,12 +2076,6 @@ public class BCS_ETLCore_LatestDataChecksSteps {
             }
         }
     }
-
-
-
-
-
-
 
 
 }

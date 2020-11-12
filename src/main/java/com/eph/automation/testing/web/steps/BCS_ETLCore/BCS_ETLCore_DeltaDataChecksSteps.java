@@ -67,8 +67,6 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
         Log.info(Ids.toString());
     }
 
-
-
     @When ("^Get the Data from the Difference of Current and Previous transform_file Tables (.*)$")
     public void getRecFromDiffTransformFile(String tableName){
         Log.info("We get the records from Diff of Transform File BCS Core table...");
@@ -100,7 +98,6 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
         }
         dataQualityBCSContext.recFromDiffOfTransformFile = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
         Log.info(sql);
-
     }
 
     @When ("^We Get the records from delta current table BCS core (.*)$")
@@ -134,9 +131,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
         }
         dataQualityBCSContext.recFromDeltaCurrent = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
         Log.info(sql);
-
     }
-
 
     @And("^Compare the records of BCS Core delta current and BCS diff of Transform_File (.*)$")
     public void compareCurrentandCurrHist(String targetTableName) {
@@ -951,7 +946,6 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getSUBSCRIPTIONTYPE(),
                                 dataQualityBCSContext.recFromDeltaCurrent.get(i).getSUBSCRIPTIONTYPE());
                     }
-
                     Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getUKEY() +
                             " DELTA_MODE => WORK_Diff_Trans_File =" + dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getDELTA_MODE() +
                             " WORK_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getDELTA_MODE());
@@ -975,7 +969,6 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getUKEY(),
                                 dataQualityBCSContext.recFromDeltaCurrent.get(i).getUKEY());
                     }
-
                     Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getUKEY() +
                             " SOURCEREF => Work_Ident_Diff_Trans_File =" + dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getSOURCEREF() +
                             " Work_Ident_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF());
@@ -985,7 +978,6 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getSOURCEREF(),
                                 dataQualityBCSContext.recFromDeltaCurrent.get(i).getSOURCEREF());
                     }
-
                     Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getUKEY() +
                             " IDENTIFIER => Work_Ident_Diff_Trans_File =" + dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getIDENTIFIER() +
                             " Work_Ident_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getIDENTIFIER());
@@ -995,7 +987,6 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getIDENTIFIER(),
                                 dataQualityBCSContext.recFromDeltaCurrent.get(i).getIDENTIFIER());
                     }
-
                     Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getUKEY() +
                             " IDENTIFIERTYPE => Work_Ident_Diff_Trans_File =" + dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getIDENTIFIERTYPE() +
                             " Work_Ident_Delta_Curr =" + dataQualityBCSContext.recFromDeltaCurrent.get(i).getIDENTIFIERTYPE());
@@ -1020,11 +1011,9 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
 
                     break;
             }
-
-
-
-        }
+       }
     }
+
 
     @Given("^Get the (.*) of BCS Core data from person transform_file Tables$")
     public void getRandKeyFromPersonDiffTransFile(String numberOfRecords) {
@@ -1140,6 +1129,8 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
             }
         }
     }
+
+//////////////////////////////////////////////////////////////////////////////
 
     @Given("^Get the (.*) of BCS Core data from delta_Current_hist Tables (.*)$")
     public void getIdsFromDeltaHist(String numberOfRecords, String tableName) {
@@ -2204,10 +2195,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
         }
     }
 
-
-
-
-
+/////////////////////////////////////////////////////////////////////////////////////////////
 
 }
 

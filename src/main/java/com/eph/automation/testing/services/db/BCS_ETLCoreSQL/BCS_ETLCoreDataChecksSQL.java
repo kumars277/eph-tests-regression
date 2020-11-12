@@ -6,7 +6,7 @@ package com.eph.automation.testing.services.db.BCS_ETLCoreSQL;
 public class BCS_ETLCoreDataChecksSQL {
 
     public static String GET_RANDOM_ACCPROD_KEY_INBOUND =
-           "SELECT u_key as id \n" +
+           "SELECT sourceref \n" +
                    "FROM\n" +
                    "  (\n" +
                    "(\n" +
@@ -23,6 +23,204 @@ public class BCS_ETLCoreDataChecksSQL {
                    "      WHERE (classification.classificationcode = 'DCDFAC | Accounting class') \n" +
                    "   ) )  A \n" +
                    "WHERE ((A.sourceref IS NOT NULL) AND (A.accountableparent IS NOT NULL)) order by rand() limit %s";
+
+    public static String GET_RANDOM_WRK_PERS_KEY_INBOUND =
+            "SELECT u_key as sourceref\n" +
+                    "FROM \n" +
+                    "  ( \n" +
+                    "   SELECT DISTINCT \n" +
+                    "     NULLIF(sourceref, '') worksourceref \n" +
+                    "   , NULLIF(CAST(businesspartnerid AS varchar), '') personsourceref \n" +
+                    "   , NULLIF(rolecode.ephcode, '') roletype \n" +
+                    "   , concat(concat(NULLIF(sourceref, ''), NULLIF(rolecode.ephcode, '')), NULLIF(CAST(businesspartnerid AS varchar), '')) u_key \n" +
+                    "   , NULLIF(CAST(sequence AS varchar), '') sequence \n" +
+                    "   , NULLIF(CAST(locationid AS varchar), '') deduplicator \n" +
+                    "   , date_parse(NULLIF(metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
+                    "   , 'N' dq_err \n" +
+                    "   FROM \n" +
+                    "     ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originators \n" +
+                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".rolecode ON (split_part(copyrightholdertype, ' | ', 1) = rolecode.ppmcode))\n" +
+                    "UNION    SELECT\n" +
+                    "     NULLIF(sourceref, '') worksourceref \n" +
+                    "   , NULLIF(personid, '') personsourceref \n" +
+                    "   , NULLIF(rolecode.ephcode, '') roletype \n" +
+                    "   , concat(concat(sourceref, rolecode.ephcode), personid) u_key \n" +
+                    "   , (CASE WHEN (substr(split_part(NULLIF(responsibility, ''), ' | ', 1), -1, 1) = '2') THEN '2' ELSE '1' END) sequence \n" +
+                    "   , '0' deduplicator \n" +
+                    "   , date_parse(NULLIF(metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
+                    "   , 'N' dq_err \n" +
+                    "   FROM \n" +
+                    "     ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_responsibilities\n" +
+                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".rolecode ON (split_part(responsibility, ' | ', 1) = rolecode.ppmcode))\n" +
+                    ")  A \n" +
+                    "WHERE (((A.worksourceref IS NOT NULL) AND \n" +
+                    "(A.personsourceref IS NOT NULL)) AND (A.roletype IS NOT NULL))\n" +
+                    "order by rand() limit %s";
+
+    public static String GET_RANDOM_WORK_KEY_INBOUND =
+            "SELECT sourceref\n" +
+                    "FROM\n" +
+                    "  (\n" +
+                    "   SELECT DISTINCT\n" +
+                    "     NULLIF(content.sourceref, '') sourceref \n" +
+                    "   , NULLIF(content.title, '') title\n" +
+                    "   , NULLIF(content.subtitle, '') subtitle \n" +
+                    "   , NULLIF(content.volumeno, '') volumeno\n" +
+                    "   , content.copyrightyear copyrightyear\n" +
+                    "   , content.editionno editionno \n" +
+                    "   , substring (split_part(NULLIF(content.subgroup, ''), ' | ', 1), 2, 3) pmc \n" +
+                    "   , COALESCE(NULLIF(worktypecode.ephcode, ''), 'UNK') work_type \n" +
+                    "   , COALESCE(NULLIF(status.ephworkcode, ''), 'UNK') statuscode \n" +
+                    "   , split_part(NULLIF(content.imprint, ''), ' | ', 1) imprintcode \n" +
+                    "   , NULLIF(cast(opcocode.\"11icode\" as varchar), '') te_opcoc \n" +
+                    "   , NULLIF(cast(opcocode.r12code as varchar), '') opcov \n" +
+                    "   , NULLIF(cast(temapping.mapped_r12_sgmnt_value as varchar), '') resp_centre\n" +
+                    "   , substring(split_part(NULLIF(content.division, ''), ' | ', 1), 2, 3) pmg\n" +
+                    "   , NULLIF(languagecode.ephcode, '') languagecodev\n" +
+                    "   , CAST(NULL AS boolean) electro_rights_indicator\n" +
+                    "   , CAST(NULL AS varchar) f_oa_journal_typev\n" +
+                    "   , CAST(NULL AS varchar) f_society_ownershipv\n" +
+                    "   , CAST(NULL AS varchar) subscription_type \n" +
+                    "   , date_parse(NULLIF(content.metamodifiedon, ''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
+                    "   FROM\n" +
+                    "     (((((("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content\n" +
+                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily versionfamily ON (content.sourceref = versionfamily.workmasterprojectno))\n" +
+                    "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification classification ON ((content.sourceref = classification.sourceref) AND (classification.classificationcode = 'DCDFAC | Accounting class')))\n" +
+                    "   LEFT JOIN (\n" +
+                    "      SELECT DISTINCT \n" +
+                    "        masterstatus.sourceref \n" +
+                    "      , statuscode.ephworkcode \n" +
+                    "      FROM \n" +
+                    "        ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode \n" +
+                    "      INNER JOIN (\n" +
+                    "         SELECT\n" +
+                    "           workmasterprojectno sourceref \n" +
+                    "         , min(priority) statuspriority \n" +
+                    "         FROM \n" +
+                    "           (("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily versionfamily\n" +
+                    "         INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation ON (versionfamily.sourceref = sublocation.sourceref))\n" +
+                    "         INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode ON (split_part(sublocation.status, ' | ', 1) = statuscode.ppmcode))\n" +
+                    "         GROUP BY workmasterprojectno \n" +
+                    "      )  masterstatus ON (statuscode.priority = masterstatus.statuspriority))\n" +
+                    "   )  status ON (content.sourceref = status.sourceref))\n" +
+                    "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".opcocode opcocode ON (content.ownership = opcocode.ppmcode)\n" +
+                    "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".temapping temapping ON ((opcocode.\"11icode\" = temapping.r11_sgmnt_c_value) and (substring(split_part(NULLIF(content.division, ''), ' | ', 1), 2, 3) = temapping.r11_sgmnt_a_value) and (temapping.r11_sgmnt_b_value = '0') and (NULLIF(temapping.r11_sgmnt_d_value,'') is null) and (temapping.mapping_rule_number = 2)))\n" +
+                    "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".languagecode languagecode ON (split_part(content.language, ' | ', 1) = languagecode.ppmcode))\n" +
+                    "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".worktypecode worktypecode ON (split_part(classification.value, ' | ', 1) = worktypecode.ppmcode))\n" +
+                    ")  A \n" +
+                    "WHERE (A.sourceref IS NOT NULL) order by rand() limit %s";
+
+    public static String GET_WORK_INBOUND_DATA =
+            "select " +
+                    "sourceref as SOURCEREF \n" +
+                    ",title as TITLE \n" +
+                    ",subtitle as SUBTITLE \n" +
+                    ",volumeno as VOLUMENO \n" +
+                    ",copyrightyear as COPYRIGHTYEAR \n" +
+                    ",editionno as EDITIONNO \n" +
+                    ",pmc as PMC \n" +
+                    ",work_type as WORKTYPE \n" +
+                    ",statuscode as STATUSCODE \n" +
+                    ",imprintcode as IMPRINTCODE \n" +
+                    ",te_opcoc as TEOPCO \n" +
+                    ",opcov as OPCO \n" +
+                    ",resp_centre as RESPCENTRE \n" +
+                    ",pmg as PMG \n" +
+                    ",languagecodev as LANGUAGECODE \n" +
+                    ",electro_rights_indicator as ELECTRORIGHTSINDICATOR \n" +
+                    ",f_oa_journal_typev as FOAJOURNALTYPE \n" +
+                    ",f_society_ownershipv as FSOCIETYOWNERSHIP \n" +
+                    ",subscription_type as SUBSCRIPTIONTYPE \n" +
+                    "FROM\n" +
+             "  (\n" +
+             "   SELECT DISTINCT\n" +
+             "     NULLIF(content.sourceref, '') sourceref \n" +
+             "   , NULLIF(content.title, '') title\n" +
+             "   , NULLIF(content.subtitle, '') subtitle \n" +
+             "   , NULLIF(content.volumeno, '') volumeno\n" +
+             "   , content.copyrightyear copyrightyear\n" +
+             "   , content.editionno editionno \n" +
+             "   , substring (split_part(NULLIF(content.subgroup, ''), ' | ', 1), 2, 3) pmc \n" +
+             "   , COALESCE(NULLIF(worktypecode.ephcode, ''), 'UNK') work_type \n" +
+             "   , COALESCE(NULLIF(status.ephworkcode, ''), 'UNK') statuscode \n" +
+             "   , split_part(NULLIF(content.imprint, ''), ' | ', 1) imprintcode \n" +
+             "   , NULLIF(cast(opcocode.\"11icode\" as varchar), '') te_opcoc \n" +
+             "   , NULLIF(cast(opcocode.r12code as varchar), '') opcov \n" +
+             "   , NULLIF(cast(temapping.mapped_r12_sgmnt_value as varchar), '') resp_centre\n" +
+             "   , substring(split_part(NULLIF(content.division, ''), ' | ', 1), 2, 3) pmg\n" +
+             "   , NULLIF(languagecode.ephcode, '') languagecodev\n" +
+             "   , CAST(NULL AS boolean) electro_rights_indicator\n" +
+             "   , CAST(NULL AS varchar) f_oa_journal_typev\n" +
+             "   , CAST(NULL AS varchar) f_society_ownershipv\n" +
+             "   , CAST(NULL AS varchar) subscription_type \n" +
+             "   , date_parse(NULLIF(content.metamodifiedon, ''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
+             "   FROM\n" +
+             "     (((((("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content\n" +
+             "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily versionfamily ON (content.sourceref = versionfamily.workmasterprojectno))\n" +
+             "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification classification ON ((content.sourceref = classification.sourceref) AND (classification.classificationcode = 'DCDFAC | Accounting class')))\n" +
+             "   LEFT JOIN (\n" +
+             "      SELECT DISTINCT \n" +
+             "        masterstatus.sourceref \n" +
+             "      , statuscode.ephworkcode \n" +
+             "      FROM \n" +
+             "        ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode \n" +
+             "      INNER JOIN (\n" +
+             "         SELECT\n" +
+             "           workmasterprojectno sourceref \n" +
+             "         , min(priority) statuspriority \n" +
+             "         FROM \n" +
+             "           (("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily versionfamily\n" +
+             "         INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation ON (versionfamily.sourceref = sublocation.sourceref))\n" +
+             "         INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode ON (split_part(sublocation.status, ' | ', 1) = statuscode.ppmcode))\n" +
+             "         GROUP BY workmasterprojectno \n" +
+             "      )  masterstatus ON (statuscode.priority = masterstatus.statuspriority))\n" +
+             "   )  status ON (content.sourceref = status.sourceref))\n" +
+             "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".opcocode opcocode ON (content.ownership = opcocode.ppmcode)\n" +
+             "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".temapping temapping ON ((opcocode.\"11icode\" = temapping.r11_sgmnt_c_value) and (substring(split_part(NULLIF(content.division, ''), ' | ', 1), 2, 3) = temapping.r11_sgmnt_a_value) and (temapping.r11_sgmnt_b_value = '0') and (NULLIF(temapping.r11_sgmnt_d_value,'') is null) and (temapping.mapping_rule_number = 2)))\n" +
+             "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".languagecode languagecode ON (split_part(content.language, ' | ', 1) = languagecode.ppmcode))\n" +
+             "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".worktypecode worktypecode ON (split_part(classification.value, ' | ', 1) = worktypecode.ppmcode))\n" +
+             ")  A \n" +
+             "WHERE (A.sourceref IS NOT NULL) and sourceref in ('%s') order by sourceref desc";
+
+    public static String GET_WORK_PERS_INBOUND_DATA =
+            "select " +
+                    "worksourceref as WORKSOURCEREF \n" +
+                    ",personsourceref as PERSONSOURCEREF \n" +
+                    ",roletype as ROLETYPE \n" +
+                    ",u_key as UKEY \n" +
+                    ",sequence as SEQUENCE \n" +
+                    ",deduplicator as DEDUPLICATOR \n" +
+                    ",dq_err as DQ_ERR \n" +
+                    "FROM \n" +
+                    "  ( \n" +
+                    "   SELECT DISTINCT \n" +
+                    "     NULLIF(sourceref, '') worksourceref \n" +
+                    "   , NULLIF(CAST(businesspartnerid AS varchar), '') personsourceref \n" +
+                    "   , NULLIF(rolecode.ephcode, '') roletype \n" +
+                    "   , concat(concat(NULLIF(sourceref, ''), NULLIF(rolecode.ephcode, '')), NULLIF(CAST(businesspartnerid AS varchar), '')) u_key \n" +
+                    "   , NULLIF(CAST(sequence AS varchar), '') sequence \n" +
+                    "   , NULLIF(CAST(locationid AS varchar), '') deduplicator \n" +
+                    "   , date_parse(NULLIF(metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
+                    "   , 'N' dq_err \n" +
+                    "   FROM \n" +
+                    "     ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originators \n" +
+                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".rolecode ON (split_part(copyrightholdertype, ' | ', 1) = rolecode.ppmcode))\n" +
+                    "UNION    SELECT\n" +
+                    "     NULLIF(sourceref, '') worksourceref \n" +
+                    "   , NULLIF(personid, '') personsourceref \n" +
+                    "   , NULLIF(rolecode.ephcode, '') roletype \n" +
+                    "   , concat(concat(sourceref, rolecode.ephcode), personid) u_key \n" +
+                    "   , (CASE WHEN (substr(split_part(NULLIF(responsibility, ''), ' | ', 1), -1, 1) = '2') THEN '2' ELSE '1' END) sequence \n" +
+                    "   , '0' deduplicator \n" +
+                    "   , date_parse(NULLIF(metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
+                    "   , 'N' dq_err \n" +
+                    "   FROM \n" +
+                    "     ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_responsibilities\n" +
+                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".rolecode ON (split_part(responsibility, ' | ', 1) = rolecode.ppmcode))\n" +
+                    ")  A \n" +
+                    "WHERE (((A.worksourceref IS NOT NULL) AND \n" +
+                    "(A.personsourceref IS NOT NULL)) AND (A.roletype IS NOT NULL))\n" +
+                    "and u_key in ('%s') order by u_key desc";
 
 
     public static String GET_ACCPROD_REC_INBOUND_DATA =
@@ -47,16 +245,16 @@ public class BCS_ETLCoreDataChecksSQL {
                     "      LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".worktypecode ON (split_part(classification.value, ' | ', 1) = ppmcode))\n" +
                     "      WHERE (classification.classificationcode = 'DCDFAC | Accounting class') \n" +
                     "   ) )  A \n" +
-                    "WHERE ((A.sourceref IS NOT NULL) AND (A.accountableparent IS NOT NULL)) and u_key in ('%s') order by u_key desc";
+                    "WHERE ((A.sourceref IS NOT NULL) AND (A.accountableparent IS NOT NULL)) and sourceref in ('%s') order by sourceref desc";
 
 
 
 
     public static String GET_RANDOM_MANIF_KEY_INBOUND =
-            "select sourceref as id from( \n" +
+            "select sourceref from( \n" +
                     "SELECT DISTINCT product.sourceref, content.title, (CASE WHEN (intedition.classificationcode IS NULL) \n" +
                     "THEN false ELSE true END) intereditionflag, cast((date_parse(COALESCE(NULLIF(firstactual,''),\n" +
-                    "NULLIF(firstplanned,'')),'%d-%b-%Y')) as date ) firstpublisheddate, product.binding, \n" +
+                    "NULLIF(firstplanned,'')),'%%d-%%b-%%Y')) as date ) firstpublisheddate, product.binding, \n" +
                     "manifestationtypecode.ephcode manifestation_type, manifestationstatus.ephmanifestationcode status \n" +
                     "   , workprod.workmasterprojectno work_id, CAST(NULL AS timestamp)last_pub_date, 'N' dq_err \n" +
                     "   from ((((((("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product \n" +
@@ -137,7 +335,7 @@ public class BCS_ETLCoreDataChecksSQL {
 
 
     public static String GET_RANDOM_PERSON_KEY_INBOUND =
-            "SELECT sourceref as id \n" +
+            "SELECT sourceref \n" +
                     "FROM \n" +
                     "  ( \n" +
                     "   SELECT DISTINCT \n" +
@@ -159,34 +357,51 @@ public class BCS_ETLCoreDataChecksSQL {
                 ",peoplehub_id as PEOPLEHUBID" +
                 ",email_address as EMAIL" +
                 ",dq_err as DQ_ERR " +
-                "FROM\n" +
-                "  (\n" +
+                "FROM( \n" +
                 "   SELECT DISTINCT\n" +
                 "     businesspartnerid sourceref \n" +
                 "   , (CASE WHEN (isperson = 'N') THEN NULLIF(department, '') ELSE NULLIF(firstname, '') END) firstname \n" +
-                "   , (CASE WHEN (isperson = 'N') THEN NULLIF(institution, '') ELSE NULLIF(\"lastname\", '') END) familyname \n" +
+                "   , (CASE WHEN (isperson = 'N') THEN NULLIF(institution, '') ELSE NULLIF(lastname, '') END) familyname \n" +
                 "   , CAST(null AS varchar) peoplehub_id \n" +
                 "   , CAST(null AS varchar) email_address \n" +
                 "   , 'N' dq_err \n" +
                 "   FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originators \n" +
                 ")  A \n" +
-                "WHERE (A.sourceref IS NOT NULL) and sourceref in (%s) order by sourceref desc;";
+                "WHERE (A.sourceref IS NOT NULL) and sourceref in (%s) order by sourceref desc";
 
 
     public static String GET_RANDOM_WRK_RELT_KEY_INBOUND =
-            "select ukey as id from( \n" +
+            "select sourceref from( \n" +
                     "SELECT \n" +
                     "     concat(concat(CAST(sourceref AS varchar), split_part(relationtype, ' | ', 1)), CAST(projectno AS varchar)) sourceref \n" +
                     "   , sourceref parentref \n" +
                     "   , projectno childref \n" +
                     "   , relationtypecode.ephcode relationtyperef \n" +
-                    "   , date_parse(metamodifiedon,`'%d-%b-%Y %H:%i:%s') modifiedon \n" +
+                    "   , date_parse(metamodifiedon,'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
                     "   , 'N' dq_err \n" +
                     "   FROM \n" +
                     "     ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_relations \n" +
                     "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".relationtypecode ON \n" +
                     "   (split_part(relationtype, ' | ', 1) = relationtypecode.ppmcode))) order by rand() limit %s";
 
+    public static String GET_WORK_RELT_INBOUND_DATA =
+            "select " +
+                    "sourceref as SOURCEREF \n" +
+                    ",parentref as PARENTREF \n" +
+                    ",childref as CHILDREF \n" +
+                    ",relationtyperef as RELATIONTYPEREF \n" +
+                    ",dq_err as DQ_ERR from( \n" +
+                    "SELECT \n" +
+                    "     concat(concat(CAST(sourceref AS varchar), split_part(relationtype, ' | ', 1)), CAST(projectno AS varchar)) sourceref \n" +
+                    "   , sourceref parentref \n" +
+                    "   , projectno childref \n" +
+                    "   , relationtypecode.ephcode relationtyperef \n" +
+                    "   , date_parse(metamodifiedon,'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
+                    "   , 'N' dq_err \n" +
+                    "   FROM \n" +
+                    "     ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_relations \n" +
+                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".relationtypecode ON \n" +
+                    "   (split_part(relationtype, ' | ', 1) = relationtypecode.ppmcode))) where sourceref in ('%s') order by sourceref desc";
 
 
 
@@ -195,7 +410,153 @@ public class BCS_ETLCoreDataChecksSQL {
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_accountable_product_current_v \n" +
                     " order by rand() limit %s";
 
-    public static String GET_ACCPROD_REC_CURR_DATA =
+    public static String GET_RANDOM_MANIF_IDENT_KEY_INBOUND =
+            "select sourceref from(\n" +
+                    "SELECT \n" +
+                    "     sourceref \n" +
+                    "   , isbn13 identifier \n" +
+                    "   , 'ISBN' identifier_type \n" +
+                    "   FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product \n" +
+                    "   WHERE (isbn13 <> '') \n" +
+                    " UNION ALL SELECT \n" +
+                    "     sourceref \n" +
+                    "   , seriesissn identifier \n" +
+                    "   , 'ISSN' identifier_type \n" +
+                    "   FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content \n" +
+                    "   WHERE (seriesissn <> '') \n" +
+                    "   )order by rand() limit %s";
+
+    public static String GET_RANDOM_WORK_IDENT_KEY_INBOUND =
+            "WITH \n" +
+                    "  work_id AS (\n" +
+                    "   SELECT DISTINCT \"workmasterprojectno\"\n" +
+                    "   FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily \n" +
+                    ") \n" +
+                    "select sourceref from( \n" +
+                    "SELECT \n" +
+                    "  sourceref \n" +
+                    ", piidack identifier \n" +
+                    ", 'DAC-Key' identifier_type \n" +
+                    "FROM \n" +
+                    "  ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content \n" +
+                    " INNER JOIN work_id ON (content.sourceref = work_id.workmasterprojectno))\n" +
+                    "WHERE (piidack <> '') \n" +
+                    "UNION ALL SELECT\n" +
+                    "  sourceref \n" +
+                    ", doi identifier \n" +
+                    ", 'DOI' identifier_type \n" +
+                    "FROM \n" +
+                    "  ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content\n" +
+                    "INNER JOIN work_id ON (content.sourceref = work_id.workmasterprojectno)) \n" +
+                    "WHERE (doi <> '')\n" +
+                    "UNION ALL SELECT\n" +
+                    "  sourceref \n" +
+                    ", seriesissn identifier \n" +
+                    ", 'ISSN-L' identifier_type \n" +
+                    "FROM \n" +
+                    "  ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content\n" +
+                    "INNER JOIN work_id ON (content.sourceref = work_id.workmasterprojectno))\n" +
+                    "WHERE (seriesissn <> '')\n" +
+                    "UNION ALL SELECT\n" +
+                    "  sourceref \n" +
+                    ", orderno identifier \n" +
+                    ", 'PPM-PART' identifier_type \n" +
+                    "FROM \n" +
+                    "  ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
+                    "INNER JOIN work_id ON (product.sourceref = work_id.workmasterprojectno))\n" +
+                    "WHERE (orderno <> '')) order by rand() limit %s";
+
+    public static String GET_WORK_IDENT_INBOUND_DATA =
+              "WITH \n" +
+                      "  work_id AS (\n" +
+                      "   SELECT DISTINCT \"workmasterprojectno\"\n" +
+                      "   FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily \n" +
+                      ") \n" +
+                      "select \n" +
+                      "sourceref as SOURCEREF \n" +
+                      ",identifier as IDENTIFIER \n" +
+                      ",identifier_type as IDENTIFIERTYPE \n" +
+                      "from( \n" +
+                      "SELECT \n" +
+                      "  sourceref \n" +
+                      ", piidack identifier \n" +
+                      ", 'DAC-Key' identifier_type \n" +
+                      "FROM \n" +
+                      "  ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content \n" +
+                      " INNER JOIN work_id ON (content.sourceref = work_id.workmasterprojectno))\n" +
+                      "WHERE (piidack <> '') \n" +
+                      "UNION ALL SELECT\n" +
+                      "  sourceref \n" +
+                      ", doi identifier \n" +
+                      ", 'DOI' identifier_type \n" +
+                      "FROM \n" +
+                      "  ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content\n" +
+                      "INNER JOIN work_id ON (content.sourceref = work_id.workmasterprojectno)) \n" +
+                      "WHERE (doi <> '')\n" +
+                      "UNION ALL SELECT\n" +
+                      "  sourceref \n" +
+                      ", seriesissn identifier \n" +
+                      ", 'ISSN-L' identifier_type \n" +
+                      "FROM \n" +
+                      "  ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content\n" +
+                      "INNER JOIN work_id ON (content.sourceref = work_id.workmasterprojectno))\n" +
+                      "WHERE (seriesissn <> '')\n" +
+                      "UNION ALL SELECT\n" +
+                      "  sourceref \n" +
+                      ", orderno identifier \n" +
+                      ", 'PPM-PART' identifier_type \n" +
+                      "FROM \n" +
+                      "  ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
+                      "INNER JOIN work_id ON (product.sourceref = work_id.workmasterprojectno))\n" +
+                      "WHERE (orderno <> '')) where sourceref in ('%s') order by sourceref,identifier,identifier_type desc";
+
+    public static String GET_MANIF_IDENT_INBOUND_DATA =
+            "select " +
+                    "sourceref as SOURCEREF \n" +
+                    ",identifier as IDENTIFIER \n" +
+                    ",identifier_type as IDENTIFIERTYPE \n" +
+                    "from ( \n" +
+                    "SELECT\n" +
+                    "     sourceref \n" +
+                    "   , isbn13 identifier \n" +
+                    "   , 'ISBN' identifier_type \n" +
+                    "   FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product \n" +
+                    "   WHERE (isbn13 <> '') \n" +
+                    " UNION ALL  SELECT\n" +
+                    "     sourceref \n" +
+                    "   , seriesissn identifier \n" +
+                    "   , 'ISSN' identifier_type \n" +
+                    "   FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content \n" +
+                    "   WHERE (seriesissn <> '') \n" +
+                    "   )where sourceref in ('%s') order by sourceref,identifier,identifier_type desc";
+
+    public static String GET_MANIF_IDENT_CURR_DATA =
+            "select " +
+                    "sourceref as SOURCEREF \n" +
+                    ",identifier as IDENTIFIER \n" +
+                    ",identifier_type as IDENTIFIERTYPE \n" +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_identifier_current_v where sourceref in ('%s') order by sourceref,identifier,identifier_type desc";
+
+    public static String GET_WORK_IDENT_CURR_DATA =
+            "select " +
+                    "sourceref as SOURCEREF \n" +
+                    ",identifier as IDENTIFIER \n" +
+                    ",identifier_type as IDENTIFIERTYPE \n" +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_identifier_current_v where sourceref in ('%s') order by sourceref,identifier,identifier_type desc";
+
+    public static String GET_PERSON_CURR_DATA =
+            "select " +
+                    "sourceref as SOURCEREF" +
+                    ",firstname as FIRSTNAME" +
+                    ",familyname as FAMILYNAME" +
+                    ",peoplehub_id as PEOPLEHUBID" +
+                    ",email_address as EMAIL" +
+                    ",dq_err as DQ_ERR " +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_person_current_v where sourceref in \n" +
+                    "(%s) order by sourceref desc";
+
+
+    public static String GET_ACCPROD_REC_CURR_REC =
             "SELECT sourceref as SOURCEREF \n" +
                     ",accountableproduct as ACCOUNTABLEPRODUCT \n" +
                     ",accountablename as ACCOUNTABLENAME \n" +
@@ -205,6 +566,16 @@ public class BCS_ETLCoreDataChecksSQL {
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_accountable_product_current_v \n" +
                     "where u_key in ('%s') \n" +
                     "order by u_key desc";
+
+    public static String GET_ACCPROD_REC_CURR_DATA =
+            "SELECT sourceref as SOURCEREF \n" +
+                    ",accountableproduct as ACCOUNTABLEPRODUCT \n" +
+                    ",accountablename as ACCOUNTABLENAME \n" +
+                    ",accountableparent as ACCOUNTABLEPARENT \n" +
+                    ",dq_err as DQ_ERR \n" +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_accountable_product_current_v \n" +
+                    "where sourceref in ('%s') \n" +
+                    "order by sourceref desc";
 
 
 
@@ -645,6 +1016,15 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",dq_err as DQ_ERR \n" +
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_relationship_current_v where u_key in ('%s') order by u_key desc";
 
+    public static String GET_WORK_RELATION_CURR_DATA =
+            "select " +
+                    " u_key as UKEY \n" +
+                    ",parentref as PARENTREF \n" +
+                    ",childref as CHILDREF \n" +
+                    ",relationtyperef as RELATIONTYPEREF \n" +
+                    ",dq_err as DQ_ERR \n" +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_relationship_current_v where u_key in ('%s') order by u_key desc";
+
     public static String GET_WORK_RELATION_REC_DELTA_CURRENT =
             "select " +
                     "parentref as PARENTREF \n" +
@@ -727,6 +1107,29 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",f_society_ownership as FSOCIETYOWNERSHIP \n" +
                     ",subscription_type as SUBSCRIPTIONTYPE \n" +
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_current_v where u_key in ('%s') order by u_key desc";
+
+    public static String GET_WORK_CURR_DATA =
+            "select " +
+                    "sourceref as SOURCEREF \n" +
+                    ",title as TITLE \n" +
+                    ",subtitle as SUBTITLE \n" +
+                    ",volumeno as VOLUMENO \n" +
+                    ",copyrightyear as COPYRIGHTYEAR \n" +
+                    ",editionno as EDITIONNO \n" +
+                    ",pmc as PMC \n" +
+                    ",work_type as WORKTYPE \n" +
+                    ",statuscode as STATUSCODE \n" +
+                    ",imprintcode as IMPRINTCODE \n" +
+                    ",te_opco as TEOPCO \n" +
+                    ",opco as OPCO \n" +
+                    ",resp_centre as RESPCENTRE \n" +
+                    ",pmg as PMG \n" +
+                    ",languagecode as LANGUAGECODE \n" +
+                    ",electro_rights_indicator as ELECTRORIGHTSINDICATOR \n" +
+                    ",f_oa_journal_type as FOAJOURNALTYPE \n" +
+                    ",f_society_ownership as FSOCIETYOWNERSHIP \n" +
+                    ",subscription_type as SUBSCRIPTIONTYPE \n" +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_current_v where sourceref in ('%s') order by sourceref desc";
 
 
     public static String GET_WORK_REC_DIFF_DELTA_CURRENT =
@@ -913,7 +1316,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_person_current_v \n" +
                     " order by rand() limit %s";
 
-    public static String GET_PERSON_CURR_DATA =
+    public static String GET_PERSON_CURR_REC =
             "select " +
                     "sourceref as SOURCEREF" +
                     ",u_key as UKEY" +
