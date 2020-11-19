@@ -10,6 +10,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -41,30 +42,38 @@ public class WebDriverFactory implements Provider<WebDriver> {
             return null;
         } else {
             switch (TestContext.getValues().browserType.toLowerCase()) {
-               /* case "firefox":
+                case "firefox":
                     // set driver properties
+                    final FirefoxOptions firefoxOptions = new FirefoxOptions();
                     File pathBinary = new File("C:\\Program Files\\Mozilla Firefox\\firefox.exe");
                     FirefoxBinary firefoxBinary = new FirefoxBinary(pathBinary);
+
+                    firefoxBinary.addCommandLineOptions("--headless");
+                    firefoxOptions.setBinary(firefoxBinary);
+
                     FirefoxProfile profile = new FirefoxProfile();
                     profile.setPreference("javascript.enabled", true);
-                    profile.setEnableNativeEvents(true);
+                  //  profile.setEnableNativeEvents(true);
                     profile.setPreference("webdriver.load.strategy", "fast");
-
 
                     //Allow geo location :
                     profile.setPreference("geo.prompt.testing", true);
                     profile.setPreference("geo.prompt.testing.allow", true);
-                    return new FirefoxDriver(firefoxBinary,profile);*/
-               /* case "ie":
-                    InternetExplorerDriverManager.getInstance().setup();
+
+                    return new FirefoxDriver(firefoxOptions);
+                case "ie":
+                 //   InternetExplorerDriverManager.getInstance().setup();
                     DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
                     capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
-                    return new InternetExplorerDriver(capabilities);*/
+                    return new InternetExplorerDriver(capabilities);
                 case "chrome":
                     ChromeDriverManager.chromedriver().setup();
                     return new ChromeDriver();
                 default:
+
                     ChromeDriverManager.chromedriver().setup();
+                    ChromeDriverManager.chromedriver().properties("--headless");
+
                     return new ChromeDriver();
             }
         }

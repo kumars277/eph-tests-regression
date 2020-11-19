@@ -26,21 +26,25 @@ public class JRBIPersonDataChecksSQL {
 
 
     public static String GET_EPR_IDS_PERSON_FULLLOAD =
-            "SELECT epr as EPR FROM (SELECT DISTINCT \n" +
-                    "COALESCE(cr1.epr, cr2.epr) epr\n" +
-                    ", 'JRBI Person Extended' record_type, j.role_code role_code\n" +
-                    ", COALESCE(cr1.epr, cr2.epr)||j.role_code as u_key\n" +
-                    ", j.role_description role_description, p.given_name given_name\n" +
-                    ", p.family_name family_name, p.peoplehub_id peoplehub_id\n" +
-                    ", j.email email \n" +
-                    "FROM ((("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_person_unpivot_v j \n" +
-                    "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (j.email = p.email)) \n" +
-                    "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr1 ON ((((j.issn = cr1.identifier) AND (cr1.identifier_type = 'ISSN')) AND (cr1.record_level = 'n')) AND (cr1.record_level = 'Work')))\n" +
-                    "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work'))))where epr is not NULL\n" +
+            " SELECT epr FROM (SELECT DISTINCT \n" +
+                    " cr2.epr epr\n" +
+                    ", 'JRBI Person Extended' record_type, cr2.work_type work_type\n" +
+                    ", NULLIF(j.role_code,'') role_code\n" +
+                    ", cr2.epr||j.role_code as u_key\n" +
+                    ", NULLIF(j.role_description,'') role_description\n" +
+                    ", p.given_name given_name\n" +
+                    ", p.family_name family_name\n" +
+                    ", p.peoplehub_id peoplehub_id\n" +
+                    ", NULLIF(rtrim(ltrim(lower(j.email),' '),' '),'') email\n" +
+                    "FROM (("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_person_unpivot_v j \n" +
+                    "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (rtrim(ltrim(lower(j.email),' '),' ') = rtrim(ltrim(lower(p.email),' '),' ')))\n" +
+                    "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2\n" +
+                    "ON (((substr('00000',1,5-length(j.journal_number))||j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
+                    "AND (cr2.record_level = 'Work')))) where epr is not NULL\n" +
                     " order by rand() limit %s\n";
 
     public static String GET_PERSON_RECORDS_FULL_LOAD =
-            "select epr as EPR" +
+           /* "select epr as EPR" +
                     ",record_type as RECORD_TYPE" +
                     ",role_code as ROLE_CODE" +
                     ",u_key as U_KEY" +
@@ -60,7 +64,33 @@ public class JRBIPersonDataChecksSQL {
                     "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (j.email = p.email)) \n" +
                     "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr1 ON ((((j.issn = cr1.identifier) AND (cr1.identifier_type = 'ISSN')) AND (cr1.record_level = 'n')) AND (cr1.record_level = 'Work')))\n" +
                      "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work'))))\n" +
-                    "where EPR in ('%s')";
+                    "where EPR in ('%s')";*/
+
+            "select epr as EPR" +
+                    ",record_type as RECORD_TYPE" +
+                    ",role_code as ROLE_CODE" +
+                    ",u_key as U_KEY" +
+                    ",role_description as ROLE_DESCRIPTION" +
+                    ",given_name as GIVEN_NAME" +
+                    ",family_name as FAMILY_NAME" +
+                    ",peoplehub_id as PEOPLEHUB_ID" +
+                    ",email as EMAIL" +
+                    " FROM (SELECT DISTINCT \n" +
+                    " cr2.epr epr\n" +
+                    ", 'JRBI Person Extended' record_type, cr2.work_type work_type\n" +
+                    ", NULLIF(j.role_code,'') role_code\n" +
+                    ", cr2.epr||j.role_code as u_key\n" +
+                    ", NULLIF(j.role_description,'') role_description\n" +
+                    ", p.given_name given_name\n" +
+                    ", p.family_name family_name\n" +
+                    ", p.peoplehub_id peoplehub_id\n" +
+                    ", NULLIF(rtrim(ltrim(lower(j.email),' '),' '),'') email\n" +
+                    "FROM (("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_person_unpivot_v j \n" +
+                    "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (rtrim(ltrim(lower(j.email),' '),' ') = rtrim(ltrim(lower(p.email),' '),' ')))\n" +
+                    "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2\n" +
+                    "ON (((substr('00000',1,5-length(j.journal_number))||j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
+                    "AND (cr2.record_level = 'Work')))) where EPR in ('%s')";
+
 
     public static String GET_CURRENT_PERSON_RECORDS =
             "select epr as EPR" +
@@ -105,8 +135,8 @@ public class JRBIPersonDataChecksSQL {
                     ",delta_mode as DELTA_MODE" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_person_history_part where EPR in ('%s') AND " +
                     //"delta_ts like \'%%"+JRBIDataLakeCountChecksSQL.previousDate()+"%%\'";
-                    "delta_ts=(select max(delta_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_person_history_part\n " +
-                    "where delta_ts < (select max(delta_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_person_history_part))\n";
+                    "delta_ts=(select max(delta_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_person_history_part)\n ";
+
 
 
 
@@ -252,7 +282,7 @@ public class JRBIPersonDataChecksSQL {
                     "last_updated_date as LAST_UPDATED_DATE,\n" +
                     "delete_flag as DELETE_FLAG\n" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person\n" +
-                    " where EPR in ('%s')\n";
+                    " where EPR in ('%s') order by role_code,peoplehub_id\n";
 
 
     public static String GET_JRBI_PERSON_EXTENDED_RECORDS =
@@ -266,19 +296,19 @@ public class JRBIPersonDataChecksSQL {
                     "last_updated_date as LAST_UPDATED_DATE,\n" +
                     "delete_flag as DELETE_FLAG\n" +
                     " from "+GetJRBIDLDBUser.getProductExtdb()+".work_extended_person_role\n" +
-                    " where epr_id in ('%s')\n";
+                    " where epr_id in ('%s') order by role_code,peoplehub_id\n";
 
 
     public static String GET_RANDOM_EPR_DELTA_PERSON =
             "select epr as EPR" +
                     " from (\n" +
                     "--new\n" +
-                    "select c.epr, c.record_type, c.role_code , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email,'I' as delta_mode FROM jrbi_staging_sit.jrbi_transform_current_person c\n" +
+                    "select c.epr, c.record_type, c.role_code , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email,'I' as delta_mode FROM "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person c\n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_person p  on c.u_key = p.u_key\n" +
                     "where p.u_key is null\n" +
                     "union all\n" +
                     "-- deleted\n" +
-                    "select c.epr, c.record_type, c.role_code , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email, 'D' as delta_mode FROM  jrbi_staging_sit.jrbi_transform_previous_person  c\n" +
+                    "select c.epr, c.record_type, c.role_code , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email, 'D' as delta_mode FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_person  c\n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person p  on c.u_key = p.u_key\n" +
                     "where p.u_key is null\n" +
                     "union all\n" +

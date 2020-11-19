@@ -40,14 +40,20 @@ public class JRBICountChecksSteps {
     private static int JRBIPreviousHistoryCount;
     private static String JRBIDeltaCurrentSQLCount;
     private static String JRBIDeltaCurrentHistorySQLCount;
+    private static String JRBIDuplicateLatestSQLCount;
     private static int JRBIDeltaCurrentCount;
     private static int JRBIDeltaCurrentHistoryCount;
+    private static int JRBIDuplicateLatestCount;
     private static String JRBIworkExtendedSQLCount;
     private static int JRBIWorkExtCount;
     private static String JRBIManifExtendedSQLCount;
     private static String JRBIPersonExtendedSQLCount;
+    private static String JRBIManifStitchingSQLCount;
+    private static String JRBIWorkStitchingSQLCount;
     private static int JRBIManifExtCount;
     private static int JRBIPersonExtCount;
+    private static int JRBIManifStchCount;
+    private static int JRBIWorkStchCount;
 
 
 
@@ -461,5 +467,85 @@ public class JRBICountChecksSteps {
 
     }
 
+    @Then("^Get the total count of work extended table for Stitch$")
+    public void totalCountworkExtendedForStitch(){
+        Log.info("Getting Work Extended Table Count...");
+        JRBIworkExtendedSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_WORK_EXTENDED_COUNT_STCH;
+        Log.info(JRBIworkExtendedSQLCount);
+        List<Map<String, Object>> JRBIWorkExtTableCount = DBManager.getDBResultMap(JRBIworkExtendedSQLCount, Constants.AWS_URL);
+        JRBIWorkExtCount = ((Long) JRBIWorkExtTableCount.get(0).get("WORK_EXTENDED_COUNT")).intValue();
+    }
+
+    @Then("^Get the total count of manif extended table for stitch$")
+    public void totalCountManifExtendedForStitch(){
+        Log.info("Getting Manif Extended Table Count...");
+        JRBIManifExtendedSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_MANIF_EXTENDED_COUNT_STITCH;
+        Log.info(JRBIManifExtendedSQLCount);
+        List<Map<String, Object>> JRBIManifExtTableCount = DBManager.getDBResultMap(JRBIManifExtendedSQLCount, Constants.AWS_URL);
+        JRBIManifExtCount = ((Long) JRBIManifExtTableCount.get(0).get("MANIF_EXTENDED_COUNT")).intValue();
+    }
+
+    @Then("^Get the total count of stitching manif json table$")
+    public void totalCountStchManif(){
+        Log.info("Getting Manif Stitching Table Count...");
+        JRBIManifStitchingSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_MANIF_STITCHING_COUNT;
+        Log.info(JRBIManifStitchingSQLCount);
+        List<Map<String, Object>> JRBIManifStschTableCount = DBManager.getDBResultMap(JRBIManifStitchingSQLCount, Constants.EPH_URL);
+        JRBIManifStchCount = ((Long) JRBIManifStschTableCount.get(0).get("MANIF_STCH_COUNT")).intValue();
+    }
+
+    @And("^Compare the counts of stitching manif json and manif extended table are identical$")
+    public void compareStchManifandManifExt() {
+        Log.info("The count for Manif Ext table => " + JRBIManifExtCount + " and in Manif Stitching => " + JRBIManifStchCount);
+        Assert.assertEquals("The counts are not equal when compared with Manif Ext and Manif Stitching", JRBIManifExtCount, JRBIManifStchCount);
+
+    }
+
+
+    @Then("^Get the total count of stitching work json table$")
+    public void totalCountStchWork(){
+        Log.info("Getting Work Stitching Table Count...");
+        JRBIWorkStitchingSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_WORK_STITCHING_COUNT;
+        Log.info(JRBIWorkStitchingSQLCount);
+        List<Map<String, Object>> JRBIWorkStschTableCount = DBManager.getDBResultMap(JRBIWorkStitchingSQLCount, Constants.EPH_URL);
+        JRBIWorkStchCount = ((Long) JRBIWorkStschTableCount.get(0).get("WORK_STCH_COUNT")).intValue();
+    }
+
+    @And("^Compare the counts of stitching work json and work extended table are identical$")
+    public void compareStchWorkandWorkExt() {
+        Log.info("The count for Work Ext table => " + JRBIWorkExtCount + " and in Work Stitching => " + JRBIWorkStchCount);
+        Assert.assertEquals("The counts are not equal when compared with Work Ext and Work Stitching", JRBIWorkExtCount, JRBIWorkStchCount);
+
+    }
+
+    @Given("^Get the Duplicate count in (.*) table$")
+    public void getDuplicateCount(String tableName){
+        switch (tableName){
+            case "jrbi_transform_latest_work":
+                Log.info("Getting Duplicate Work Latest Table Count...");
+                JRBIDuplicateLatestSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DUPLICATE_WORK_LAtest_COUNT;
+                break;
+
+            case "jrbi_transform_latest_manifestation":
+                Log.info("Getting Duplicate Manifest Latest Table Count...");
+                JRBIDuplicateLatestSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DUPLICATE_MANIF_LATEST_COUNT;
+                break;
+
+            case "jrbi_transform_latest_person":
+                Log.info("Getting Duplicate person Latest Table Count...");
+                JRBIDuplicateLatestSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DUPLICATE_PERSON_LATEST_COUNT;
+                break;
+        }
+        Log.info(JRBIDuplicateLatestSQLCount);
+        List<Map<String, Object>> JRBIDupLatestTableCount = DBManager.getDBResultMap(JRBIDuplicateLatestSQLCount, Constants.AWS_URL);
+        JRBIDuplicateLatestCount = ((Long) JRBIDupLatestTableCount.get(0).get("Duplicate_Count")).intValue();
+    }
+
+    @Then("^Check the count should be equal to Zero (.*)$")
+    public void checkDupCountZero(String tableName){
+        Log.info("The Duplicate count for "+tableName+" => " + JRBIDuplicateLatestCount);
+        Assert.assertEquals("There are Duplicate Count of EPR IDs in "+tableName,0,JRBIDuplicateLatestCount);
+
+    }
 
 }

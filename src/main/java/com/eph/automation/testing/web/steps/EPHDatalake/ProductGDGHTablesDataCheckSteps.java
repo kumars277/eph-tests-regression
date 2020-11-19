@@ -33,7 +33,7 @@ public class ProductGDGHTablesDataCheckSteps {
 
     @Given("^We get (.*) random product ids of (.*)")
     public void getRandomProductIds(String numberOfRecords, String tableName) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random records ..");
 
@@ -150,7 +150,7 @@ public class ProductGDGHTablesDataCheckSteps {
                 }
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getPRODUCT_ID().equals("null"))) {  //In data lake null considering or getting as String
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getPRODUCT_ID()!= null)) {  //In data lake null considering or getting as String
                     Assert.assertEquals("The PRODUCT_ID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getPRODUCT_ID());
@@ -161,7 +161,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CLASSNAME() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME()!= null)) {
                     Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CLASSNAME(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME());
@@ -172,7 +172,7 @@ public class ProductGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_FROMBATCHID());
 
                     if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_FROMBATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_FROMBATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_FROMBATCHID()!= null)) {
                         Assert.assertEquals("The B_FROMBATCHID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_FROMBATCHID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_FROMBATCHID());
@@ -183,7 +183,7 @@ public class ProductGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID());
 
                     if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_TOBATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID()!= null)) {
                         Assert.assertEquals("The B_TOBATCHID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_TOBATCHID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID());
@@ -194,7 +194,7 @@ public class ProductGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID());
 
                     if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_BATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID()!= null)) {
                         Assert.assertEquals("The B_BATCHID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_BATCHID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID());
@@ -207,7 +207,7 @@ public class ProductGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREDATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE()!= null)) {
                     Assert.assertEquals("The B_CREDATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE().substring(0, 10));
@@ -218,7 +218,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDDATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE()!= null)) {
                     Assert.assertEquals("The B_UPDATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE().substring(0, 10));
@@ -228,7 +228,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREATOR() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR()!= null)) {
                     Assert.assertEquals("The B_CREATOR is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREATOR(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR());
@@ -239,7 +239,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDATOR() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR()!= null)) {
                     Assert.assertEquals("The B_UPDATOR is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDATOR(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR());
@@ -250,7 +250,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getS_PRODUCT_ID());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getS_PRODUCT_ID() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getS_PRODUCT_ID().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getS_PRODUCT_ID()!= null)) {
                     Assert.assertEquals("The S_PRODUCT_ID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getS_PRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getS_PRODUCT_ID());
@@ -261,7 +261,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE()!= null)) {
                     Assert.assertEquals("The EXTERNAL_REFERENCE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
@@ -272,7 +272,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getNAME());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getNAME() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getNAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getNAME()!= null)) {
                     Assert.assertEquals("The NAME is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getNAME(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getNAME());
@@ -284,7 +284,7 @@ public class ProductGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getS_NAME() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getS_NAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getS_NAME()!= null)) {
                     Assert.assertEquals("The S_NAME is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getS_NAME(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getS_NAME());
@@ -295,7 +295,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getSHORT_NAME());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getSHORT_NAME() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getSHORT_NAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getSHORT_NAME()!= null)) {
                     Assert.assertEquals("The SHORT_NAME is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getSHORT_NAME(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getSHORT_NAME());
@@ -306,7 +306,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getS_SHORT_NAME());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getS_SHORT_NAME() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getS_SHORT_NAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getS_SHORT_NAME()!= null)) {
                     Assert.assertEquals("The S_SHORT_NAME is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getS_SHORT_NAME(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getS_SHORT_NAME());
@@ -324,7 +324,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " SEPARATELY_SALE_INDICATOR => EPH="+seperately_sale_indicator_eph+
                         " DL="+seperately_sale_indicator_dl);
 
-                if (seperately_sale_indicator_eph != null || (!seperately_sale_indicator_dl.equals("null"))) {
+                if (seperately_sale_indicator_eph != null || (seperately_sale_indicator_dl!= null)) {
                     Assert.assertEquals("The SEPERATELY_SALE_INDICATOR is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             seperately_sale_indicator_eph, seperately_sale_indicator_dl);
                 }
@@ -341,7 +341,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " TRIAL_ALLOWED_INDICATOR => EPH="+trial_allowed_indicator_eph+
                         " DL="+trial_allowed_indicator_dl);
 
-                if (seperately_sale_indicator_eph != null || (!seperately_sale_indicator_dl.equals("null"))) {
+                if (seperately_sale_indicator_eph != null || (seperately_sale_indicator_dl!= null)) {
                     Assert.assertEquals("The TRIAL_ALLOWED_INDICATOR is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             trial_allowed_indicator_eph, trial_allowed_indicator_dl);
                 }
@@ -351,7 +351,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getLAUNCH_DATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getLAUNCH_DATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getLAUNCH_DATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getLAUNCH_DATE()!= null)) {
                     Assert.assertEquals("The LAUNCH_DATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getLAUNCH_DATE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getLAUNCH_DATE());
@@ -362,7 +362,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getCONTENT_FROM_DATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getCONTENT_FROM_DATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getCONTENT_FROM_DATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getCONTENT_FROM_DATE()!= null)) {
                     Assert.assertEquals("The CONTENT_FROM_DATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getCONTENT_FROM_DATE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getCONTENT_FROM_DATE());
@@ -373,7 +373,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getCONTENT_TO_DATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getCONTENT_TO_DATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getCONTENT_TO_DATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getCONTENT_TO_DATE()!= null)) {
                     Assert.assertEquals("The CONTENT_TO_DATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getCONTENT_TO_DATE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getCONTENT_TO_DATE());
@@ -385,7 +385,7 @@ public class ProductGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getCONTENT_DATE_OFFSET() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getCONTENT_DATE_OFFSET().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getCONTENT_DATE_OFFSET()!= null)) {
                     Assert.assertEquals("The CONTENT_DATE_OFFSET is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getCONTENT_DATE_OFFSET(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getCONTENT_DATE_OFFSET());
@@ -401,7 +401,7 @@ public class ProductGDGHTablesDataCheckSteps {
                 Log.info("ID => "+ dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID()+
                         " T_EVENT_DESCRIPTION => EPH="+summaryChanged_eph+
                         " DL="+summaryChanged_dl);
-                if (summaryChanged_eph != null || (!summaryChanged_dl.equals("null"))) {
+                if (summaryChanged_eph != null || (summaryChanged_dl!= null)) {
                     Assert.assertEquals("The T_SUMMARY_CHANGED is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             summaryChanged_eph, summaryChanged_dl);
                 }
@@ -411,7 +411,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getT_EVENT_DESCRIPTION());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getT_EVENT_DESCRIPTION() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getT_EVENT_DESCRIPTION().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getT_EVENT_DESCRIPTION()!= null)) {
                     Assert.assertEquals("The T_EVENT_DESCRIPTION is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getT_EVENT_DESCRIPTION(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getT_EVENT_DESCRIPTION());
@@ -422,7 +422,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_TYPE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_TYPE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_TYPE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_TYPE()!= null)) {
                     Assert.assertEquals("The F_TYPE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_TYPE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_TYPE());
@@ -434,7 +434,7 @@ public class ProductGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_STATUS() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_STATUS().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_STATUS()!= null)) {
                     Assert.assertEquals("The F_STATUS is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_STATUS(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_STATUS());
@@ -445,7 +445,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getf_accountable_product());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getf_accountable_product() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getf_accountable_product().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getf_accountable_product()!= null)) {
                     Assert.assertEquals("The f_accountable_product is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getf_accountable_product(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getf_accountable_product());
@@ -457,7 +457,7 @@ public class ProductGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_TAX_CODE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_TAX_CODE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_TAX_CODE()!= null)) {
                     Assert.assertEquals("The F_TAX_CODE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_TAX_CODE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_TAX_CODE());
@@ -469,7 +469,7 @@ public class ProductGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_REVENUE_MODEL() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_REVENUE_MODEL().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_REVENUE_MODEL()!= null)) {
                     Assert.assertEquals("The F_REVENUE_MODEL is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_REVENUE_MODEL(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_REVENUE_MODEL());
@@ -481,7 +481,7 @@ public class ProductGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_REVENUE_ACCOUNT() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_REVENUE_ACCOUNT().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_REVENUE_ACCOUNT()!= null)) {
                     Assert.assertEquals("The F_REVENUE_ACCOUNT is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_REVENUE_ACCOUNT(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_REVENUE_ACCOUNT());
@@ -494,7 +494,7 @@ public class ProductGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_WWORK() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_WWORK().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_WWORK()!= null)) {
                     Assert.assertEquals("The F_WWORK is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_WWORK(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_WWORK());
@@ -506,7 +506,7 @@ public class ProductGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_MANIFESTATION() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_MANIFESTATION().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_MANIFESTATION()!= null)) {
                     Assert.assertEquals("The F_MANIFESTATION is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_MANIFESTATION(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_MANIFESTATION());
@@ -517,7 +517,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_T_EVENT_TYPE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_T_EVENT_TYPE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_T_EVENT_TYPE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_T_EVENT_TYPE()!= null)) {
                     Assert.assertEquals("The F_T_EVENT_TYPE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_T_EVENT_TYPE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_T_EVENT_TYPE());
@@ -528,7 +528,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_EVENT() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT()!= null)) {
                     Assert.assertEquals("The F_EVENT is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_EVENT(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT());
@@ -539,7 +539,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_ONE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_SELF_ONE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_ONE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_ONE()!= null)) {
                     Assert.assertEquals("The F_SELF_ONE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_SELF_ONE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_ONE());
@@ -549,7 +549,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_TWO());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_SELF_TWO() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_TWO().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_TWO()!= null)) {
                     Assert.assertEquals("The F_SELF_TWO is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_SELF_TWO(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_TWO());
@@ -559,7 +559,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_THREE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_SELF_THREE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_THREE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_THREE()!= null)) {
                     Assert.assertEquals("The F_SELF_THREE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_SELF_THREE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_THREE());
@@ -569,7 +569,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_FOUR());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_SELF_FOUR() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_FOUR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_FOUR()!= null)) {
                     Assert.assertEquals("The F_SELF_FOUR is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_SELF_FOUR(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_FOUR());
@@ -580,7 +580,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_FIVE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_SELF_FIVE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_FIVE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_FIVE()!= null)) {
                     Assert.assertEquals("The F_SELF_FIVE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_SELF_FIVE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_FIVE());
@@ -591,7 +591,7 @@ public class ProductGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_SELF_SIX() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_SIX().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_SIX()!= null)) {
                     Assert.assertEquals("The F_SELF_SIX is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_SELF_SIX(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_SIX());
@@ -602,7 +602,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_SEVEN());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_SELF_SEVEN() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_SEVEN().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_SEVEN()!= null)) {
                     Assert.assertEquals("The F_SELF_SEVEN is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_SELF_SEVEN(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_SELF_SEVEN());
@@ -641,7 +641,7 @@ public class ProductGDGHTablesDataCheckSteps {
                     dataQualityEPHDLContext.tbProductDataObjectsFromDL.sort(Comparator.comparing(ProductDataDLObject::getB_FROMBATCHID));
                 }
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getACCOUNTABLE_PRODUCT_ID() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getACCOUNTABLE_PRODUCT_ID().equals("null"))) {  //In data lake null considering or getting as String
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getACCOUNTABLE_PRODUCT_ID()!= null)) {  //In data lake null considering or getting as String
                     Assert.assertEquals("The ACCOUNTABLE_PRODUCT_ID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getACCOUNTABLE_PRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getACCOUNTABLE_PRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getACCOUNTABLE_PRODUCT_ID());
@@ -652,7 +652,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CLASSNAME() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME()!= null)) {
                     Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getACCOUNTABLE_PRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CLASSNAME(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME());
@@ -664,7 +664,7 @@ public class ProductGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_FROMBATCHID());
 
                     if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_FROMBATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_FROMBATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_FROMBATCHID()!= null)) {
                         Assert.assertEquals("The B_FROMBATCHID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getACCOUNTABLE_PRODUCT_ID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_FROMBATCHID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_FROMBATCHID());
@@ -674,7 +674,7 @@ public class ProductGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID());
 
                     if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_TOBATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID()!= null)) {
                         Assert.assertEquals("The B_TOBATCHID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getACCOUNTABLE_PRODUCT_ID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_TOBATCHID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID());
@@ -685,7 +685,7 @@ public class ProductGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID());
 
                     if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_BATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID()!= null)) {
                         Assert.assertEquals("The B_BATCHID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getACCOUNTABLE_PRODUCT_ID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_BATCHID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID());
@@ -697,7 +697,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREDATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE()!= null)) {
                     Assert.assertEquals("The B_CREDATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getACCOUNTABLE_PRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE().substring(0, 10));
@@ -708,7 +708,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDDATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE()!= null)) {
                     Assert.assertEquals("The B_UPDATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getACCOUNTABLE_PRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE().substring(0, 10));
@@ -719,7 +719,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREATOR() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR()!= null)) {
                     Assert.assertEquals("The B_CREATOR is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getACCOUNTABLE_PRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREATOR(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR());
@@ -730,7 +730,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDATOR() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR()!= null)) {
                     Assert.assertEquals("The B_UPDATOR is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getACCOUNTABLE_PRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDATOR(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR());
@@ -741,7 +741,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE()!= null)) {
                     Assert.assertEquals("The EXTERNAL_REFERENCE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getACCOUNTABLE_PRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
@@ -752,7 +752,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getGL_PRODUCT_SEGMENT_CODE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getGL_PRODUCT_SEGMENT_CODE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getGL_PRODUCT_SEGMENT_CODE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getGL_PRODUCT_SEGMENT_CODE()!= null)) {
                     Assert.assertEquals("The GL_PRODUCT_SEGMENT_CODE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getACCOUNTABLE_PRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getGL_PRODUCT_SEGMENT_CODE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getGL_PRODUCT_SEGMENT_CODE());
@@ -763,7 +763,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getGL_PRODUCT_SEGMENT_NAME());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getGL_PRODUCT_SEGMENT_NAME() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getGL_PRODUCT_SEGMENT_NAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getGL_PRODUCT_SEGMENT_NAME()!= null)) {
                     Assert.assertEquals("The GL_PRODUCT_SEGMENT_NAME is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getACCOUNTABLE_PRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getGL_PRODUCT_SEGMENT_NAME(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getGL_PRODUCT_SEGMENT_NAME());
@@ -774,7 +774,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getT_EVENT_DESCRIPTION());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getT_EVENT_DESCRIPTION() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getT_EVENT_DESCRIPTION().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getT_EVENT_DESCRIPTION()!= null)) {
                     Assert.assertEquals("The T_EVENT_DESCRIPTION is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getACCOUNTABLE_PRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getT_EVENT_DESCRIPTION(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getT_EVENT_DESCRIPTION());
@@ -785,7 +785,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_GL_PRODUCT_SEGMENT_PARENT());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_GL_PRODUCT_SEGMENT_PARENT() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_GL_PRODUCT_SEGMENT_PARENT().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_GL_PRODUCT_SEGMENT_PARENT()!= null)) {
                     Assert.assertEquals("The F_GL_PRODUCT_SEGMENT_PARENT is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getACCOUNTABLE_PRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_GL_PRODUCT_SEGMENT_PARENT(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_GL_PRODUCT_SEGMENT_PARENT());
@@ -796,7 +796,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_T_EVENT_TYPE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_T_EVENT_TYPE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_T_EVENT_TYPE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_T_EVENT_TYPE()!= null)) {
                     Assert.assertEquals("The F_T_EVENT_TYPE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getACCOUNTABLE_PRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_T_EVENT_TYPE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_T_EVENT_TYPE());
@@ -808,7 +808,7 @@ public class ProductGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_EVENT() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT()!= null)) {
                     Assert.assertEquals("The F_EVENT is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getACCOUNTABLE_PRODUCT_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_EVENT(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT());
@@ -848,7 +848,7 @@ public class ProductGDGHTablesDataCheckSteps {
                 }
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getPRODUCT_REL_PACK_ID().equals("null"))) {  //In data lake null considering or getting as String
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getPRODUCT_REL_PACK_ID()!= null)) {  //In data lake null considering or getting as String
                     Assert.assertEquals("The PRODUCT_REL_PACK_ID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getPRODUCT_REL_PACK_ID());
@@ -860,7 +860,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL=" + dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CLASSNAME() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME()!= null)) {
                     Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CLASSNAME(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME());
@@ -872,7 +872,7 @@ public class ProductGDGHTablesDataCheckSteps {
                             " DL=" + dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_FROMBATCHID());
 
                     if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_FROMBATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_FROMBATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_FROMBATCHID()!= null)) {
                         Assert.assertEquals("The B_FROMBATCHID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_FROMBATCHID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_FROMBATCHID());
@@ -883,7 +883,7 @@ public class ProductGDGHTablesDataCheckSteps {
                             " DL=" + dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID());
 
                     if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_TOBATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID()!= null)) {
                         Assert.assertEquals("The B_TOBATCHID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_TOBATCHID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID());
@@ -894,7 +894,7 @@ public class ProductGDGHTablesDataCheckSteps {
                             " DL=" + dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID());
 
                     if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_BATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID()!= null)) {
                         Assert.assertEquals("The B_BATCHID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_BATCHID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID());
@@ -905,7 +905,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " B_CREDATE => EPH=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREDATE() +
                         " DL=" + dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE());
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREDATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE()!= null)) {
                     Assert.assertEquals("The B_CREDATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE().substring(0, 10));
@@ -915,7 +915,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL=" + dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDDATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE()!= null)) {
                     Assert.assertEquals("The B_UPDDATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE().substring(0, 10));
@@ -925,7 +925,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL=" + dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREATOR() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR()!= null)) {
                     Assert.assertEquals("The B_CREATOR is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREATOR(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR());
@@ -935,7 +935,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL=" + dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDATOR() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR()!= null)) {
                     Assert.assertEquals("The B_UPDATOR is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDATOR(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR());
@@ -946,7 +946,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL=" + dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE()!= null)) {
                     Assert.assertEquals("The EXTERNAL_REFERENCE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
@@ -956,7 +956,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL=" + dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getALLOCATION());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getALLOCATION() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getALLOCATION().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getALLOCATION()!= null)) {
                     Assert.assertEquals("The ALLOCATION is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getALLOCATION(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getALLOCATION());
@@ -967,7 +967,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL=" + dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_START_DATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE()!= null)) {
                     Assert.assertEquals("The EFFECTIVE_START_DATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_START_DATE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE());
@@ -977,7 +977,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL=" + dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_END_DATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE()!= null)) {
                     Assert.assertEquals("The EFFECTIVE_END_DATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_END_DATE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE());
@@ -989,7 +989,7 @@ public class ProductGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_PACKAGE_OWNER() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_PACKAGE_OWNER().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_PACKAGE_OWNER()!= null)) {
                     Assert.assertEquals("The F_PACKAGE_OWNER is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_PACKAGE_OWNER(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_PACKAGE_OWNER());
@@ -1001,7 +1001,7 @@ public class ProductGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_COMPONENT() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_COMPONENT().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_COMPONENT()!= null)) {
                     Assert.assertEquals("The F_COMPONENT is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_COMPONENT(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_COMPONENT());
@@ -1012,7 +1012,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL=" + dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_RELATIONSHIP_TYPE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_RELATIONSHIP_TYPE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_RELATIONSHIP_TYPE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_RELATIONSHIP_TYPE()!= null)) {
                     Assert.assertEquals("The F_RELATIONSHIP_TYPE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_RELATIONSHIP_TYPE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_RELATIONSHIP_TYPE());
@@ -1023,7 +1023,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL=" + dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_EVENT() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT()!= null)) {
                     Assert.assertEquals("The F_EVENT is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_REL_PACK_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_EVENT(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT());
@@ -1064,7 +1064,7 @@ public class ProductGDGHTablesDataCheckSteps {
                 }
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getPRODUCT_FIN_AATRIBS_ID().equals("null"))) {  //In data lake null considering or getting as String
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getPRODUCT_FIN_AATRIBS_ID()!= null)) {  //In data lake null considering or getting as String
                     Assert.assertEquals("The PRODUCT_FIN_AATRIBS_ID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getPRODUCT_FIN_AATRIBS_ID());
@@ -1076,7 +1076,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CLASSNAME() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME()!= null)) {
                     Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CLASSNAME(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME());
@@ -1088,7 +1088,7 @@ public class ProductGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_FROMBATCHID());
 
                     if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_BATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID()!= null)) {
                         Assert.assertEquals("The B_FROMBATCHID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_FROMBATCHID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_FROMBATCHID());
@@ -1099,7 +1099,7 @@ public class ProductGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID());
 
                     if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_TOBATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID()!= null)) {
                         Assert.assertEquals("The B_TOBATCHID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_TOBATCHID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID());
@@ -1111,7 +1111,7 @@ public class ProductGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID());
 
                     if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_BATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID()!= null)) {
                         Assert.assertEquals("The B_BATCHID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_BATCHID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID());
@@ -1123,7 +1123,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREDATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE()!= null)) {
                     Assert.assertEquals("The B_CREDATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE().substring(0, 10));
@@ -1134,7 +1134,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDDATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE()!= null)) {
                     Assert.assertEquals("The B_UPDATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE().substring(0, 10));
@@ -1145,7 +1145,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREATOR() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR()!= null)) {
                     Assert.assertEquals("The B_CREATOR is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREATOR(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR());
@@ -1156,7 +1156,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDATOR() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR()!= null)) {
                     Assert.assertEquals("The B_UPDATOR is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDATOR(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR());
@@ -1167,7 +1167,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE()!= null)) {
                     Assert.assertEquals("The EXTERNAL_REFERENCE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
@@ -1178,7 +1178,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_START_DATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE()!= null)) {
                     Assert.assertEquals("The EFFECTIVE_START_DATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_START_DATE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE());
@@ -1189,7 +1189,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_END_DATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE()!= null)) {
                     Assert.assertEquals("The EFFECTIVE_END_DATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_END_DATE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE());
@@ -1200,7 +1200,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_GL_COMPANY());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_GL_COMPANY() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_GL_COMPANY().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_GL_COMPANY()!= null)) {
                     Assert.assertEquals("The F_GL_COMPANY is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_GL_COMPANY(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_GL_COMPANY());
@@ -1211,7 +1211,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_GL_COST_RESP_CENTRE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_GL_COST_RESP_CENTRE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_GL_COST_RESP_CENTRE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_GL_COST_RESP_CENTRE()!= null)) {
                     Assert.assertEquals("The F_GL_COST_RESP_CENTRE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_GL_COST_RESP_CENTRE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_GL_COST_RESP_CENTRE());
@@ -1222,7 +1222,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_GL_REVENUE_RESP_CENTRE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_GL_REVENUE_RESP_CENTRE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_GL_REVENUE_RESP_CENTRE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_GL_REVENUE_RESP_CENTRE()!= null)) {
                     Assert.assertEquals("The F_GL_REVENUE_RESP_CENTRE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_GL_REVENUE_RESP_CENTRE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_GL_REVENUE_RESP_CENTRE());
@@ -1233,7 +1233,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_PRODUCT());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_PRODUCT() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_PRODUCT().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_PRODUCT()!= null)) {
                     Assert.assertEquals("The F_PRODUCT is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_PRODUCT(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_PRODUCT());
@@ -1245,7 +1245,7 @@ public class ProductGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_EVENT() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT()!= null)) {
                     Assert.assertEquals("The F_EVENT is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_FIN_AATRIBS_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_EVENT(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT());
@@ -1285,7 +1285,7 @@ public class ProductGDGHTablesDataCheckSteps {
                 }
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getPRODUCT_IDENTIFIER_ID().equals("null"))) {  //In data lake null considering or getting as String
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getPRODUCT_IDENTIFIER_ID()!= null)) {  //In data lake null considering or getting as String
                     Assert.assertEquals("The PRODUCT_IDENTIFIER_ID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getPRODUCT_IDENTIFIER_ID());
@@ -1298,7 +1298,7 @@ public class ProductGDGHTablesDataCheckSteps {
 
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CLASSNAME() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME()!= null)) {
                     Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CLASSNAME(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME());
@@ -1310,7 +1310,7 @@ public class ProductGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_FROMBATCHID());
 
                     if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_BATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID()!= null)) {
                         Assert.assertEquals("The B_FROMBATCHID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_FROMBATCHID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_FROMBATCHID());
@@ -1321,7 +1321,7 @@ public class ProductGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID());
 
                     if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_TOBATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID()!= null)) {
                         Assert.assertEquals("The B_TOBATCHID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_TOBATCHID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID());
@@ -1333,7 +1333,7 @@ public class ProductGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID());
 
                     if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_BATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID()!= null)) {
                         Assert.assertEquals("The B_BATCHID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_BATCHID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID());
@@ -1345,7 +1345,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREDATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE()!= null)) {
                     Assert.assertEquals("The B_CREDATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE().substring(0, 10));
@@ -1356,7 +1356,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDDATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE()!= null)) {
                     Assert.assertEquals("The B_UPDATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE().substring(0, 10));
@@ -1367,7 +1367,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREATOR() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR()!= null)) {
                     Assert.assertEquals("The B_CREATOR is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREATOR(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR());
@@ -1378,7 +1378,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDATOR() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR()!= null)) {
                     Assert.assertEquals("The B_UPDATOR is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDATOR(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR());
@@ -1389,7 +1389,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE()!= null)) {
                     Assert.assertEquals("The EXTERNAL_REFERENCE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
@@ -1400,7 +1400,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getIDENTIFIER());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getIDENTIFIER() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getIDENTIFIER().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getIDENTIFIER()!= null)) {
                     Assert.assertEquals("The IDENTIFIER is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getIDENTIFIER(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getIDENTIFIER());
@@ -1411,7 +1411,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getS_IDENTIFIER());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getS_IDENTIFIER() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getS_IDENTIFIER().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getS_IDENTIFIER()!= null)) {
                     Assert.assertEquals("The S_IDENTIFIER is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getS_IDENTIFIER(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getS_IDENTIFIER());
@@ -1422,7 +1422,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_START_DATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE()!= null)) {
                     Assert.assertEquals("The EFFECTIVE_START_DATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_START_DATE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE());
@@ -1433,7 +1433,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_END_DATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE()!= null)) {
                     Assert.assertEquals("The EFFECTIVE_END_DATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_END_DATE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE());
@@ -1444,7 +1444,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_TYPE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_TYPE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_TYPE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_TYPE()!= null)) {
                     Assert.assertEquals("The F_TYPE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_TYPE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_TYPE());
@@ -1455,7 +1455,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_PRODUCT());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_PRODUCT() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_PRODUCT().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_PRODUCT()!= null)) {
                     Assert.assertEquals("The F_PRODUCT is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_PRODUCT(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_PRODUCT());
@@ -1465,7 +1465,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_EVENT() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT()!= null)) {
                     Assert.assertEquals("The F_EVENT is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_IDENTIFIER_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_EVENT(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT());
@@ -1505,7 +1505,7 @@ public class ProductGDGHTablesDataCheckSteps {
                 }
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_RELATIONSHIP_ID() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getPRODUCT_RELATIONSHIP_ID().equals("null"))) {  //In data lake null considering or getting as String
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getPRODUCT_RELATIONSHIP_ID()!= null)) {  //In data lake null considering or getting as String
                     Assert.assertEquals("The PRODUCT_RELATIONSHIP_ID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_RELATIONSHIP_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_RELATIONSHIP_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getPRODUCT_RELATIONSHIP_ID());
@@ -1516,7 +1516,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CLASSNAME() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME()!= null)) {
                     Assert.assertEquals("The B_CLASSNAME is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_RELATIONSHIP_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CLASSNAME(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CLASSNAME());
@@ -1528,7 +1528,7 @@ public class ProductGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_FROMBATCHID());
 
                     if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_BATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID()!= null)) {
                         Assert.assertEquals("The B_FROMBATCHID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_RELATIONSHIP_ID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_FROMBATCHID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_FROMBATCHID());
@@ -1539,7 +1539,7 @@ public class ProductGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID());
 
                     if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_TOBATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID()!= null)) {
                         Assert.assertEquals("The B_TOBATCHID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_RELATIONSHIP_ID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_TOBATCHID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_TOBATCHID());
@@ -1551,7 +1551,7 @@ public class ProductGDGHTablesDataCheckSteps {
                             " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID());
 
                     if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_BATCHID() != null ||
-                            (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID().equals("null"))) {
+                            (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID()!= null)) {
                         Assert.assertEquals("The B_BATCHID is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_RELATIONSHIP_ID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_BATCHID(),
                                 dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_BATCHID());
@@ -1563,7 +1563,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREDATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE()!= null)) {
                     Assert.assertEquals("The B_CREDATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_RELATIONSHIP_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREDATE().substring(0, 10));
@@ -1574,7 +1574,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDDATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE()!= null)) {
                     Assert.assertEquals("The B_UPDATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_RELATIONSHIP_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDDATE().substring(0, 10),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDDATE().substring(0, 10));
@@ -1585,7 +1585,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREATOR() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR()!= null)) {
                     Assert.assertEquals("The B_CREATOR is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_RELATIONSHIP_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_CREATOR(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_CREATOR());
@@ -1596,7 +1596,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDATOR() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR()!= null)) {
                     Assert.assertEquals("The B_UPDATOR is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_RELATIONSHIP_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getB_UPDATOR(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getB_UPDATOR());
@@ -1607,7 +1607,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE()!= null)) {
                     Assert.assertEquals("The EXTERNAL_REFERENCE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_RELATIONSHIP_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEXTERNAL_REFERENCE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEXTERNAL_REFERENCE());
@@ -1618,7 +1618,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_PARENT());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_PARENT() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_PARENT().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_PARENT()!= null)) {
                     Assert.assertEquals("The F_PARENT is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_RELATIONSHIP_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_PARENT(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_PARENT());
@@ -1629,7 +1629,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_CHILD());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_CHILD() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_CHILD().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_CHILD()!= null)) {
                     Assert.assertEquals("The F_CHILD is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_RELATIONSHIP_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_CHILD(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_CHILD());
@@ -1640,7 +1640,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_START_DATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE()!= null)) {
                     Assert.assertEquals("The EFFECTIVE_START_DATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_RELATIONSHIP_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_START_DATE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_START_DATE());
@@ -1651,7 +1651,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_END_DATE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE()!= null)) {
                     Assert.assertEquals("The EFFECTIVE_END_DATE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_RELATIONSHIP_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getEFFECTIVE_END_DATE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getEFFECTIVE_END_DATE());
@@ -1662,7 +1662,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_RELATIOSHIP_TYPE());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_RELATIOSHIP_TYPE() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_RELATIOSHIP_TYPE().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_RELATIOSHIP_TYPE()!= null)) {
                     Assert.assertEquals("The F_RELATIOSHIP_TYPE is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_RELATIONSHIP_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_RELATIOSHIP_TYPE(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_RELATIOSHIP_TYPE());
@@ -1673,7 +1673,7 @@ public class ProductGDGHTablesDataCheckSteps {
                         " DL="+ dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT());
 
                 if (dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_EVENT() != null ||
-                        (!dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT().equals("null"))) {
+                        (dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT()!= null)) {
                     Assert.assertEquals("The F_EVENT is incorrect for id=" + dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getPRODUCT_RELATIONSHIP_ID(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromEPH.get(i).getF_EVENT(),
                             dataQualityEPHDLContext.tbProductDataObjectsFromDL.get(i).getF_EVENT());

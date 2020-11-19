@@ -15,12 +15,14 @@ public class LoadProperties {
     protected static Properties definition;
     protected static String propertiesFile;
 
-
-
     private static void findPropertiesFile() {
         //below line need to enable when running in jenkins.
-    propertiesFile = System.getProperty("user.dir") + "/src/main/resources/" + (System.getProperty("ENV") == null || "".equals(System.getProperty("ENV")) ? "UAT" : System.getProperty("ENV")) + ".properties";
-       //propertiesFile = System.getProperty("user.dir") + "/src/main/resources/SIT.properties";
+
+   propertiesFile = System.getProperty("user.dir") + "/src/main/resources/" + (System.getProperty("ENV") == null || "".equals(System.getProperty("ENV")) ? "UAT" : System.getProperty("ENV")) + ".properties";
+     // propertiesFile = System.getProperty("user.dir") + "/src/main/resources/SIT.properties";
+       // propertiesFile = System.getProperty("user.dir") + "/src/main/resources/UAT.properties";
+
+
         Log.info("Environment used for the testing: " + System.getProperty("ENV"));
         Log.info(("Properties.file: " + propertiesFile));
     }

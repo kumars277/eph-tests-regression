@@ -13,7 +13,7 @@ public class GetDLDBUser {
             }
 
         }else{
-            dbDL = "product_database_uat";
+            dbDL = "product_database_sit";
         }
         return dbDL;
     }
