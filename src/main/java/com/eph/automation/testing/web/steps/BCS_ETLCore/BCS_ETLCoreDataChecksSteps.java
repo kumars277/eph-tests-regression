@@ -41,20 +41,20 @@ public class BCS_ETLCoreDataChecksSteps {
                 randomIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 Ids = randomIds.stream().map(m -> (String) m.get("sourceref")).collect(Collectors.toList());
                 break;
-            /*case "etl_manifestation_current_v":
+            case "etl_manifestation_current_v":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_MANIF_KEY_INBOUND, numberOfRecords);
                 randomIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 Ids = randomIds.stream().map(m -> (String) m.get("sourceref")).collect(Collectors.toList());
-                break;*/
+                break;
             case "etl_manifestation_identifier_current_v":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_MANIF_IDENT_KEY_INBOUND, numberOfRecords);
                 randomIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 Ids = randomIds.stream().map(m -> (String) m.get("sourceref")).collect(Collectors.toList());
                 break;
-            /*case "etl_product_current_v":
+            case "etl_product_current_v":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_PRODUCT_KEY_CURRENT, numberOfRecords);
                 randomIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                break;*/
+                break;
             case "etl_work_person_role_current_v":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_WRK_PERS_KEY_INBOUND, numberOfRecords);
                 randomIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
@@ -128,16 +128,16 @@ public class BCS_ETLCoreDataChecksSteps {
             case "etl_accountable_product_current_v":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_ACCPROD_REC_CURR_DATA, Joiner.on("','").join(Ids));
                 break;
-          /*  case "etl_manifestation_current_v":
+            case "etl_manifestation_current_v":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_MANIF_CURR_REC, Joiner.on("','").join(Ids));
-                break;*/
+                break;
             case "etl_manifestation_identifier_current_v":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_MANIF_IDENT_CURR_DATA, Joiner.on("','").join(Ids));
                 break;
-           /* case "etl_product_current_v":
+           case "etl_product_current_v":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PRODUCT_CURR_REC, Joiner.on("','").join(Ids));
                 break;
-           */
+
             case "etl_work_identifier_current_v":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_IDENT_CURR_DATA, Joiner.on("','").join(Ids));
                 break;
@@ -225,101 +225,123 @@ public class BCS_ETLCoreDataChecksSteps {
                         break;
 
                     case "etl_person_current_v":
-                        dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getSOURCEREF)); //sort primarykey data in the lists
-                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getSOURCEREF));
+                        dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
 
-                        Log.info("Inbound -> SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
-                                "Person_Curr -> SOURCEREF => " + dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF());
+                        Log.info("Inbound -> UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
+                                "Person_Curr -> UKEY => " + dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY());
+                        if (dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() != null ||
+                                (dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY() != null)) {
+
+                            Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() + " is missing/not found in Person_Curr",
+                                    dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
+                                    dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY());
+                        }
+
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
+                                " SOURCEREF => Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                                " Person_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF());
+
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF() != null)) {
-
-                            Assert.assertEquals("The SOURCEREF is =" + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() + " is missing/not found in Person_Curr",
+                            Assert.assertEquals("The SOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " FIRSTNAME => Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getFIRSTNAME() +
                                 " Person_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getFIRSTNAME());
 
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getFIRSTNAME() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getFIRSTNAME() != null)) {
-                            Assert.assertEquals("The FIRSTNAME is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The FIRSTNAME is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getFIRSTNAME(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getFIRSTNAME());
                         }
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " FAMILYNAME => Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getFAMILYNAME() +
                                 " Person_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getFAMILYNAME());
 
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getFAMILYNAME() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getFAMILYNAME() != null)) {
-                            Assert.assertEquals("The FAMILYNAME is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The FAMILYNAME is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getFAMILYNAME(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getFAMILYNAME());
                         }
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " PEOPLEHUBID => Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getPEOPLEHUBID() +
                                 " Person_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getPEOPLEHUBID());
 
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getPEOPLEHUBID() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getPEOPLEHUBID() != null)) {
-                            Assert.assertEquals("The PEOPLEHUBID is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The PEOPLEHUBID is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getPEOPLEHUBID(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getPEOPLEHUBID());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " EMAIL => Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getEMAIL() +
                                 " Person_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getEMAIL());
 
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getEMAIL() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getEMAIL() != null)) {
-                            Assert.assertEquals("The EMAIL is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The EMAIL is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getEMAIL(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getEMAIL());
                         }
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " DQ_ERR => Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getDQ_ERR() +
                                 " Person_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getDQ_ERR());
 
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getDQ_ERR() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getDQ_ERR() != null)) {
-                            Assert.assertEquals("The DQ_ERR is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The DQ_ERR is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getDQ_ERR(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getDQ_ERR());
                         }
                         break;
                     case "etl_manifestation_identifier_current_v":
                         Log.info("etl_manifestation_identifier Inbound Records:");
-                        dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getSOURCEREF)); //sort primarykey data in the lists
-                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getSOURCEREF));
-                        Log.info("Manif_Ident_Inbound -> SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
-                                "Manif_Ident_Curr -> SOURCEREF => " + dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF());
+                        dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                        Log.info("Manif_Ident_Inbound -> UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
+                                "Manif_Ident_Curr -> UKEY => " + dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY());
+                        if (dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() != null ||
+                                (dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY() != null)) {
+                            Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() + " is missing/not found in Manif_Ident_Curr",
+                                    dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
+                                    dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY());
+                        }
+
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
+                                " SOURCEREF => Manif_Ident_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                                " Manif_Ident_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF() != null)) {
-                            Assert.assertEquals("The SOURCEREF is =" + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() + " is missing/not found in Manif_Ident_Curr",
+                            Assert.assertEquals("The SOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " IDENTIFIER => Manif_Ident_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getIDENTIFIER() +
                                 " Manif_Ident_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getIDENTIFIER());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getIDENTIFIER() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getIDENTIFIER() != null)) {
-                            Assert.assertEquals("The IDENTIFIER is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The IDENTIFIER is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getIDENTIFIER(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getIDENTIFIER());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " IDENTIFIERTYPE => Manif_Ident_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getIDENTIFIERTYPE() +
                                 " Manif_Ident_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getIDENTIFIERTYPE());
 
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getIDENTIFIERTYPE() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getIDENTIFIERTYPE() != null)) {
-                            Assert.assertEquals("The IDENTIFIERTYPE is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The IDENTIFIERTYPE is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getIDENTIFIERTYPE(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getIDENTIFIERTYPE());
                         }
@@ -327,34 +349,44 @@ public class BCS_ETLCoreDataChecksSteps {
 
                     case "etl_work_identifier_current_v":
                         Log.info("etl_work_identifier Inbound Records:");
-                        dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getSOURCEREF)); //sort primarykey data in the lists
-                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getSOURCEREF));
-                        Log.info("Work_Ident_Inbound -> SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
-                                "Work_Ident_Curr -> SOURCEREF => " + dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF());
+                        dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                        Log.info("Work_Ident_Inbound -> UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
+                                "Work_Ident_Curr -> UKEY => " + dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY());
+                        if (dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() != null ||
+                                (dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY() != null)) {
+                            Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() + " is missing/not found in Work_Ident_Curr",
+                                    dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
+                                    dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY());
+                        }
+
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
+                                " SOURCEREF => Work_Ident_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                                " Work_Ident_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF() != null)) {
-                            Assert.assertEquals("The SOURCEREF is =" + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() + " is missing/not found in Work_Ident_Curr",
+                            Assert.assertEquals("The SOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " IDENTIFIER => Work_Ident_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getIDENTIFIER() +
                                 " Work_Ident_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getIDENTIFIER());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getIDENTIFIER() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getIDENTIFIER() != null)) {
-                            Assert.assertEquals("The IDENTIFIER is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The IDENTIFIER is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getIDENTIFIER(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getIDENTIFIER());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " IDENTIFIERTYPE => Work_Ident_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getIDENTIFIERTYPE() +
                                 " Work_Ident_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getIDENTIFIERTYPE());
 
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getIDENTIFIERTYPE() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getIDENTIFIERTYPE() != null)) {
-                            Assert.assertEquals("The IDENTIFIERTYPE is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The IDENTIFIERTYPE is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getIDENTIFIERTYPE(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getIDENTIFIERTYPE());
                         }
@@ -362,53 +394,53 @@ public class BCS_ETLCoreDataChecksSteps {
 
                     case "etl_work_relationship_current_v":
                         Log.info("etl_work_relationship Inbound Records:");
-                        dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getSOURCEREF)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
-                        Log.info("Work_relat_Inbound -> SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("Work_relat_Inbound -> UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 "Work_relat_Curr -> UKEY => " + dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY());
-                        if (dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() != null ||
+                        if (dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY() != null)) {
-                            Assert.assertEquals("The SOURCEREF is =" + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() + " is missing/not found in Work_relat_Curr",
-                                    dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The UKEY is =" + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() + " is missing/not found in Work_relat_Curr",
+                                    dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " PARENTREF => Work_relat_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getPARENTREF() +
                                 " Work_relat_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getPARENTREF());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getPARENTREF() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getPARENTREF() != null)) {
-                            Assert.assertEquals("The PARENTREF is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The PARENTREF is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getPARENTREF(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getPARENTREF());
                         }
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " CHILDREF => Work_relat_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getCHILDREF() +
                                 " Work_relat_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getCHILDREF());
 
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getCHILDREF() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getCHILDREF() != null)) {
-                            Assert.assertEquals("The CHILDREF is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The CHILDREF is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getCHILDREF(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getCHILDREF());
                         }
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " RELATIONTYPEREF => Work_relat_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getRELATIONTYPEREF() +
                                 " Work_relat_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getRELATIONTYPEREF());
 
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getRELATIONTYPEREF() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getRELATIONTYPEREF() != null)) {
-                            Assert.assertEquals("The RELATIONTYPEREF is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The RELATIONTYPEREF is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getRELATIONTYPEREF(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getRELATIONTYPEREF());
                         }
-                    Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                    Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                             " DQ_ERR => Work_relat_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getDQ_ERR() +
                             " Work_relat_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getDQ_ERR());
 
                     if (dataQualityBCSContext.recordsFromInboundData.get(i).getDQ_ERR() != null ||
                             (dataQualityBCSContext.recordsFromCurrent.get(i).getDQ_ERR() != null)) {
-                        Assert.assertEquals("The DQ_ERR is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                        Assert.assertEquals("The DQ_ERR is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                 dataQualityBCSContext.recordsFromInboundData.get(i).getDQ_ERR(),
                                 dataQualityBCSContext.recordsFromCurrent.get(i).getDQ_ERR());
                     }
@@ -488,188 +520,198 @@ public class BCS_ETLCoreDataChecksSteps {
                         break;
                     case "etl_work_current_v":
                         Log.info("etl_work_current_v Records:");
-                        dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getSOURCEREF)); //sort primarykey data in the lists
-                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getSOURCEREF));
-                        Log.info("WORK_Curr -> SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
-                                "WORK_Curr -> SOURCEREF => " + dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF());
+                        dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                        Log.info("WORK_Curr -> UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
+                                "WORK_Curr -> UKEY => " + dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY());
+                        if (dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() != null ||
+                                (dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY() != null)) {
+                            Assert.assertEquals("The SOURCEREF is =" + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() + " is missing/not found in WORK_Curr",
+                                    dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
+                                    dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY());
+                        }
+
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
+                                " SOURCEREF => WORK_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                                " WORK_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF() != null)) {
-                            Assert.assertEquals("The SOURCEREF is =" + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() + " is missing/not found in WORK_Curr",
+                            Assert.assertEquals("The SOURCEREF is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " TITLE => WORK_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getTITLE() +
                                 " WORK_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getTITLE());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getTITLE() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getTITLE() != null)) {
-                            Assert.assertEquals("The TITLE is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The TITLE is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getTITLE(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getTITLE());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " SUBTITLE => WORK_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getSUBTITLE() +
                                 " WORK_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getSUBTITLE());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getSUBTITLE() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getSUBTITLE() != null)) {
-                            Assert.assertEquals("The SUBTITLE is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The SUBTITLE is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getSUBTITLE(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getSUBTITLE());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " VOLUMENO => WORK_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getVOLUMENO() +
                                 " WORK_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getVOLUMENO());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getVOLUMENO() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getVOLUMENO() != null)) {
-                            Assert.assertEquals("The VOLUMENO is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The VOLUMENO is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getVOLUMENO(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getVOLUMENO());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " COPYRIGHTYEAR => WORK_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getCOPYRIGHTYEAR() +
                                 " WORK_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getCOPYRIGHTYEAR());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getCOPYRIGHTYEAR() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getCOPYRIGHTYEAR() != null)) {
-                            Assert.assertEquals("The COPYRIGHTYEAR is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The COPYRIGHTYEAR is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getCOPYRIGHTYEAR(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getCOPYRIGHTYEAR());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " EDITIONNO => WORK_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getEDITIONNO() +
                                 " WORK_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getEDITIONNO());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getEDITIONNO() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getEDITIONNO() != null)) {
-                            Assert.assertEquals("The EDITIONNO is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The EDITIONNO is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getEDITIONNO(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getEDITIONNO());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " PMC => WORK_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getPMC() +
                                 " WORK_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getPMC());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getPMC() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getPMC() != null)) {
-                            Assert.assertEquals("The PMC is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The PMC is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getPMC(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getPMC());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " WORKTYPE => WORK_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getWORKTYPE() +
                                 " WORK_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getWORKTYPE());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getWORKTYPE() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getWORKTYPE() != null)) {
-                            Assert.assertEquals("The WORKTYPE is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The WORKTYPE is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getWORKTYPE(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getWORKTYPE());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " STATUSCODE => WORK_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getSTATUSCODE() +
                                 " WORK_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getSTATUSCODE());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getSTATUSCODE() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getSTATUSCODE() != null)) {
-                            Assert.assertEquals("The STATUSCODE is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The STATUSCODE is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getSTATUSCODE(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getSTATUSCODE());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " IMPRINTCODE => WORK_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getIMPRINTCODE() +
                                 " WORK_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getIMPRINTCODE());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getIMPRINTCODE() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getIMPRINTCODE() != null)) {
-                            Assert.assertEquals("The IMPRINTCODE is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The IMPRINTCODE is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getIMPRINTCODE(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getIMPRINTCODE());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " TEOPCO => WORK_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getTEOPCO() +
                                 " WORK_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getTEOPCO());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getTEOPCO() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getTEOPCO() != null)) {
-                            Assert.assertEquals("The TEOPCO is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The TEOPCO is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getTEOPCO(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getTEOPCO());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " OPCO => WORK_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getOPCO() +
                                 " WORK_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getOPCO());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getOPCO() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getOPCO() != null)) {
-                            Assert.assertEquals("The OPCO is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The OPCO is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getOPCO(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getOPCO());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " RESPCENTRE => WORK_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getRESPCENTRE() +
                                 " WORK_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getRESPCENTRE());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getRESPCENTRE() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getRESPCENTRE() != null)) {
-                            Assert.assertEquals("The RESPCENTRE is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The RESPCENTRE is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getRESPCENTRE(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getRESPCENTRE());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " LANGUAGECODE => WORK_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getLANGUAGECODE() +
                                 " WORK_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getLANGUAGECODE());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getLANGUAGECODE() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getLANGUAGECODE() != null)) {
-                            Assert.assertEquals("The LANGUAGECODE is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The LANGUAGECODE is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getLANGUAGECODE(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getLANGUAGECODE());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " ELECTRORIGHTSINDICATOR => WORK_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getELECTRORIGHTSINDICATOR() +
                                 " WORK_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getELECTRORIGHTSINDICATOR());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getELECTRORIGHTSINDICATOR() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getELECTRORIGHTSINDICATOR() != null)) {
-                            Assert.assertEquals("The ELECTRORIGHTSINDICATOR is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The ELECTRORIGHTSINDICATOR is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getELECTRORIGHTSINDICATOR(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getELECTRORIGHTSINDICATOR());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " FOAJOURNALTYPE => WORK_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getFOAJOURNALTYPE() +
                                 " WORK_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getFOAJOURNALTYPE());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getFOAJOURNALTYPE() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getFOAJOURNALTYPE() != null)) {
-                            Assert.assertEquals("The FOAJOURNALTYPE is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The FOAJOURNALTYPE is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getFOAJOURNALTYPE(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getFOAJOURNALTYPE());
                         }
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " FSOCIETYOWNERSHIP => WORK_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getFSOCIETYOWNERSHIP() +
                                 " WORK_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getFSOCIETYOWNERSHIP());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getFSOCIETYOWNERSHIP() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getFSOCIETYOWNERSHIP() != null)) {
-                            Assert.assertEquals("The FSOCIETYOWNERSHIP is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The FSOCIETYOWNERSHIP is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getFSOCIETYOWNERSHIP(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getFSOCIETYOWNERSHIP());
                         }
 
-                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY() +
                                 " SUBSCRIPTIONTYPE => WORK_Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getSUBSCRIPTIONTYPE() +
                                 " WORK_Curr =" + dataQualityBCSContext.recordsFromCurrent.get(i).getSUBSCRIPTIONTYPE());
                         if (dataQualityBCSContext.recordsFromInboundData.get(i).getSUBSCRIPTIONTYPE() != null ||
                                 (dataQualityBCSContext.recordsFromCurrent.get(i).getSUBSCRIPTIONTYPE() != null)) {
-                            Assert.assertEquals("The SUBSCRIPTIONTYPE is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                            Assert.assertEquals("The SUBSCRIPTIONTYPE is incorrect for UKEY = " + dataQualityBCSContext.recordsFromInboundData.get(i).getUKEY(),
                                     dataQualityBCSContext.recordsFromInboundData.get(i).getSUBSCRIPTIONTYPE(),
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getSUBSCRIPTIONTYPE());
                         }
                         break;
 
-               }
+                }
             }
         }
     }
