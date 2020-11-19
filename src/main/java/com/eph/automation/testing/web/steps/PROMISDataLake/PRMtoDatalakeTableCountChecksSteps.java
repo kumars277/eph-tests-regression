@@ -7,7 +7,6 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.services.db.PROMISDataLakeSQL.PRMtoDataLakeTableCountChecksSQL;
 import cucumber.api.java.en.*;
 import org.junit.*;
-
 import java.math.BigDecimal;
 import java.util.*;
 
