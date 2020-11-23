@@ -136,7 +136,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
 
 
 
-  @BCSCoreD
+  @BCSCore
   Scenario Outline: Verify Duplicate Entry for BCS COre in transform latest tables
     Given Get the BCCore Duplicate count in <SourceTableName> table
     Then Check the BCSCore count should be equal to Zero <SourceTableName>
