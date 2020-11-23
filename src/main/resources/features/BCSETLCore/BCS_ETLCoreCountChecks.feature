@@ -4,7 +4,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
 
 
 
-  @BCSCoreD
+  @BCSCore
   Scenario Outline: Verify Data Count for BCS_ETL Core tables is transferred from Inbound Tables
     Given Get the total count of BCS Core from Current Tables <tableName>
     Then  We know the total count of Inbound tables <tableName>
@@ -13,13 +13,14 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
       | tableName                                |
       |etl_accountable_product_current_v         |
       |etl_manifestation_current_v               |
-      |etl_person_current_v                      |
-      |etl_product_current_v                     |
+     |etl_person_current_v                      |
+     |etl_product_current_v                     |
       |etl_work_person_role_current_v            |
       |etl_work_relationship_current_v           |
       |etl_work_current_v                        |
       |etl_work_identifier_current_v             |
       |etl_manifestation_identifier_current_v    |
+      |all_manifestation_statuses_v               |
 
 
 

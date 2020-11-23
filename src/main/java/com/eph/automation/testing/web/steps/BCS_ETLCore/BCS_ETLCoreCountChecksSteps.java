@@ -84,6 +84,10 @@ public class BCS_ETLCoreCountChecksSteps {
                 Log.info("Getting BCS Core manif identifier Current Table Count...");
                 BCSCoreSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_BCS_ETL_CORE_MANIF_IDENTIF_CURR_COUNT;
                 break;
+            case "all_manifestation_statuses_v":
+                Log.info("Getting BCS Core manif statuses view Count...");
+                BCSCoreSQLCurrentCount = BCS_ETLCoreCountChecksSQL.GET_BCS_ETL_CORE_MANIF_STATUSES_COUNT;
+                break;
 
         }
         Log.info(BCSCoreSQLCurrentCount);
@@ -129,6 +133,10 @@ public class BCS_ETLCoreCountChecksSteps {
             case "etl_manifestation_identifier_current_v":
                 Log.info("Getting Inbound Current of Manif Identifier Table Count...");
                 BCSInboundCurrentSQLCount = BCS_ETLCoreCountChecksSQL.GET_MANIF_IDENTIF_INBOUND_CURRENT_COUNT;
+                break;
+            case "all_manifestation_statuses_v":
+                Log.info("Getting Inbound Current of Manif statuses Table Count...");
+                BCSInboundCurrentSQLCount = BCS_ETLCoreCountChecksSQL.GET_MANIF_STATUSES_INBOUND_COUNT;
                 break;
 
         }

@@ -31,7 +31,7 @@ public class BCS_ETLCoreDataChecksSteps {
 
     @Given("^Get the (.*) of BCS Core data from Inbound Tables (.*)$")
     public void getRandomIdsFromInound(String numberOfRecords, String tableName) {
-        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Core Inbound Tables....");
         List<Map<?, ?>> randomIds;
@@ -52,7 +52,7 @@ public class BCS_ETLCoreDataChecksSteps {
                 Ids = randomIds.stream().map(m -> (String) m.get("sourceref")).collect(Collectors.toList());
                 break;
             case "etl_product_current_v":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_PRODUCT_KEY_CURRENT, numberOfRecords);
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_PRODUCT_KEY_INBOUND, numberOfRecords);
                 randomIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 break;
             case "etl_work_person_role_current_v":
@@ -79,6 +79,11 @@ public class BCS_ETLCoreDataChecksSteps {
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_PERSON_KEY_INBOUND, numberOfRecords);
                 randomIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 Ids = randomIds.stream().map(m -> (Integer) m.get("sourceref")).map(String::valueOf).collect(Collectors.toList());
+                break;
+            case "all_manifestation_statuses_v":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_MANIF_STATUS_KEY_INBOUND, numberOfRecords);
+                randomIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomIds.stream().map(m -> (String) m.get("sourceref")).collect(Collectors.toList());
                 break;
        }
         Log.info(sql);
@@ -116,6 +121,9 @@ public class BCS_ETLCoreDataChecksSteps {
             case "etl_work_current_v":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_INBOUND_DATA, Joiner.on("','").join(Ids));
                 break;
+            case "all_manifestation_statuses_v":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_ALL_MANIF_STATUS_INBOUND_DATA, Joiner.on("','").join(Ids));
+                break;
         }
         dataQualityBCSContext.recordsFromInboundData = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
         Log.info(sql);
@@ -152,6 +160,9 @@ public class BCS_ETLCoreDataChecksSteps {
                 break;
             case "etl_work_current_v":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_CURR_DATA, Joiner.on("','").join(Ids));
+                break;
+            case "all_manifestation_statuses_v":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_MANIF_STATUSES_DATA, Joiner.on("','").join(Ids));
                 break;
         }
         dataQualityBCSContext.recordsFromCurrent = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
@@ -223,6 +234,87 @@ public class BCS_ETLCoreDataChecksSteps {
                                     dataQualityBCSContext.recordsFromCurrent.get(i).getDQ_ERR());
                         }
                         break;
+
+                    case "all_manifestation_statuses_v":
+                        Log.info("getting all_manifestation_statuses_v records ");
+                        dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getSOURCEREF)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getSOURCEREF));
+
+                        Log.info("Inbound -> SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                                "Manif_statuses -> SOURCEREF => " + dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF());
+                        if (dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() != null ||
+                                (dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF() != null)) {
+                            Assert.assertEquals("The SOURCEREF is =" + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() + " is missing/not found in Manif_statuses",
+                                    dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                                    dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF());
+                        }
+
+                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                                " REFKEYPRODPRIORITY => Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getREFKEYPRODPRIORITY() +
+                                " Manif_statuses =" + dataQualityBCSContext.recordsFromCurrent.get(i).getREFKEYPRODPRIORITY());
+
+                        if (dataQualityBCSContext.recordsFromInboundData.get(i).getREFKEYPRODPRIORITY() != null ||
+                                (dataQualityBCSContext.recordsFromCurrent.get(i).getREFKEYPRODPRIORITY() != null)) {
+                            Assert.assertEquals("The REFKEYPRODPRIORITY is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                                    dataQualityBCSContext.recordsFromInboundData.get(i).getREFKEYPRODPRIORITY(),
+                                    dataQualityBCSContext.recordsFromCurrent.get(i).getREFKEYPRODPRIORITY());
+                        }
+
+                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                                " DELIVERYSTATUSPRODPRIORITY => Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getDELIVERYSTATUSPRODPRIORITY() +
+                                " Manif_statuses =" + dataQualityBCSContext.recordsFromCurrent.get(i).getDELIVERYSTATUSPRODPRIORITY());
+
+                        if (dataQualityBCSContext.recordsFromInboundData.get(i).getDELIVERYSTATUSPRODPRIORITY() != null ||
+                                (dataQualityBCSContext.recordsFromCurrent.get(i).getDELIVERYSTATUSPRODPRIORITY() != null)) {
+                            Assert.assertEquals("The DELIVERYSTATUSPRODPRIORITY is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                                    dataQualityBCSContext.recordsFromInboundData.get(i).getDELIVERYSTATUSPRODPRIORITY(),
+                                    dataQualityBCSContext.recordsFromCurrent.get(i).getDELIVERYSTATUSPRODPRIORITY());
+                        }
+
+                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                                " DELTASTATUSPRODPRIORITY => Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getDELTASTATUSPRODPRIORITY() +
+                                " Manif_statuses =" + dataQualityBCSContext.recordsFromCurrent.get(i).getDELTASTATUSPRODPRIORITY());
+
+                        if (dataQualityBCSContext.recordsFromInboundData.get(i).getDELTASTATUSPRODPRIORITY() != null ||
+                                (dataQualityBCSContext.recordsFromCurrent.get(i).getDELTASTATUSPRODPRIORITY() != null)) {
+                            Assert.assertEquals("The DELTASTATUSPRODPRIORITY is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                                    dataQualityBCSContext.recordsFromInboundData.get(i).getDELTASTATUSPRODPRIORITY(),
+                                    dataQualityBCSContext.recordsFromCurrent.get(i).getDELTASTATUSPRODPRIORITY());
+                        }
+
+                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                                " REFKEYMANIFPRIORITY => Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getREFKEYMANIFPRIORITY() +
+                                " Manif_statuses =" + dataQualityBCSContext.recordsFromCurrent.get(i).getREFKEYMANIFPRIORITY());
+
+                        if (dataQualityBCSContext.recordsFromInboundData.get(i).getREFKEYMANIFPRIORITY() != null ||
+                                (dataQualityBCSContext.recordsFromCurrent.get(i).getREFKEYMANIFPRIORITY() != null)) {
+                            Assert.assertEquals("The REFKEYMANIFPRIORITY is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                                    dataQualityBCSContext.recordsFromInboundData.get(i).getREFKEYMANIFPRIORITY(),
+                                    dataQualityBCSContext.recordsFromCurrent.get(i).getREFKEYMANIFPRIORITY());
+                        }
+
+                    Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                            " DELIVERYSTATUSMANIFPRIORITY => Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getDELIVERYSTATUSMANIFPRIORITY() +
+                            " Manif_statuses =" + dataQualityBCSContext.recordsFromCurrent.get(i).getDELIVERYSTATUSMANIFPRIORITY());
+
+                    if (dataQualityBCSContext.recordsFromInboundData.get(i).getDELIVERYSTATUSMANIFPRIORITY() != null ||
+                            (dataQualityBCSContext.recordsFromCurrent.get(i).getDELIVERYSTATUSMANIFPRIORITY() != null)) {
+                        Assert.assertEquals("The DELIVERYSTATUSMANIFPRIORITY is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                                dataQualityBCSContext.recordsFromInboundData.get(i).getDELIVERYSTATUSMANIFPRIORITY(),
+                                dataQualityBCSContext.recordsFromCurrent.get(i).getDELIVERYSTATUSMANIFPRIORITY());
+                    }
+
+                    Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                            " DELTASTATUSMANIFPRIORITY => Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getDELTASTATUSMANIFPRIORITY() +
+                            " Manif_statuses =" + dataQualityBCSContext.recordsFromCurrent.get(i).getDELTASTATUSMANIFPRIORITY());
+
+                    if (dataQualityBCSContext.recordsFromInboundData.get(i).getDELTASTATUSMANIFPRIORITY() != null ||
+                            (dataQualityBCSContext.recordsFromCurrent.get(i).getDELTASTATUSMANIFPRIORITY() != null)) {
+                        Assert.assertEquals("The DELTASTATUSMANIFPRIORITY is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                                dataQualityBCSContext.recordsFromInboundData.get(i).getDELTASTATUSMANIFPRIORITY(),
+                                dataQualityBCSContext.recordsFromCurrent.get(i).getDELTASTATUSMANIFPRIORITY());
+                    }
+                    break;
 
                     case "etl_person_current_v":
                         dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
@@ -719,7 +811,7 @@ public class BCS_ETLCoreDataChecksSteps {
 
     @Given("^Get the (.*) of BCS Core data from Current Tables (.*)$")
     public void getRandomIdsFromCurrent(String numberOfRecords, String tableName) {
-        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Core Current Tables....");
 
@@ -1633,7 +1725,7 @@ public class BCS_ETLCoreDataChecksSteps {
 
     @Given("^Get the (.*) of BCS Core data from Person Current Tables$")
     public void getRandomKeyFrmPersonCurr(String numberOfRecords) {
-        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Core Person Current Tables....");
         sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_PERSON_KEY_CURRENT, numberOfRecords);

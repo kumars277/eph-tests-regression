@@ -31,7 +31,7 @@ public class BCS_ETLCore_LatestDataChecksSteps {
 
     @Given("^Get the (.*) from diff of delta_current and current_hist tables (.*)$")
     public void getIdsFromDiffOfDeltaCurrAndCurrHist(String numberOfRecords, String tableName) {
-        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Core Tables from Diff of Delta Current and Current Hist....");
 
@@ -949,7 +949,7 @@ public class BCS_ETLCore_LatestDataChecksSteps {
 
     @Given("^Get the (.*) from diff of person delta_current and current_hist tables$")
     public void getRandKeyFromPersonDiffDeltaAndCurrHist(String numberOfRecords) {
-        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Core Person Diff of Delta current and Current History Tables....");
         sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_PERSON_KEY_DIFF_DELTACURR_CURRHIST, numberOfRecords);
@@ -1057,7 +1057,7 @@ public class BCS_ETLCore_LatestDataChecksSteps {
 
     @Given("^Get the (.*) from diff of delta_current and exclude_delta tables (.*)$")
     public void getIdsFromDiffOfDeltaCurrAndExcl(String numberOfRecords, String tableName) {
-        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Core Tables from Diff of Delta Current and Exclude....");
 
@@ -1976,7 +1976,7 @@ public class BCS_ETLCore_LatestDataChecksSteps {
 
     @Given("^Get the (.*) from diff of Person delta_current and Person exclude_delta tables$")
     public void getRandKeyFromPersonDiffDeltaAndExcl(String numberOfRecords) {
-        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Core Person Diff of Delta current and Current History Tables....");
         sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_PERSON_KEY_DIFF_DELTACURR_EXCL, numberOfRecords);

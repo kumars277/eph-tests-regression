@@ -31,7 +31,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
 
     @Given("^Get the (.*) of BCS Core data from transform_file Tables (.*)$")
     public void getIdsFromTransformFile(String numberOfRecords, String tableName) {
-        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Core Transform_File Tables....");
 
@@ -1017,7 +1017,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
 
     @Given("^Get the (.*) of BCS Core data from person transform_file Tables$")
     public void getRandKeyFromPersonDiffTransFile(String numberOfRecords) {
-        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Core Person Diff of current and previous Transform File Tables....");
         sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_PERSON_KEY_DIFF_TRANS_FILE, numberOfRecords);
@@ -1134,7 +1134,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
 
     @Given("^Get the (.*) of BCS Core data from delta_Current_hist Tables (.*)$")
     public void getIdsFromDeltaHist(String numberOfRecords, String tableName) {
-        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Core Delta History Tables....");
 
@@ -2091,7 +2091,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
 
     @Given("^Get the (.*) of BCS Core data from person Delta_Hist Tables$")
     public void getRandKeyFrmPersonDeltaHist(String numberOfRecords) {
-        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Core Person Delta Hist Tables....");
         sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_KEY_PERS_DELTA_CURRENT_HIST, numberOfRecords);

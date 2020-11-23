@@ -332,40 +332,80 @@ public class BCS_ETLCoreDataChecksSQL {
                     "and u_key in ('%s') order by u_key desc";
 
     public static String GET_RANDOM_MANIF_KEY_INBOUND =
-            "select sourceref from( \n" +
-                    "SELECT DISTINCT product.sourceref, content.title, (CASE WHEN (intedition.classificationcode IS NULL) \n" +
-                    "THEN false ELSE true END) intereditionflag, cast((date_parse(COALESCE(NULLIF(firstactual,''),\n" +
-                    "NULLIF(firstplanned,'')),'%%d-%%b-%%Y')) as date ) firstpublisheddate, product.binding, \n" +
-                    "manifestationtypecode.ephcode manifestation_type, manifestationstatus.ephmanifestationcode status \n" +
-                    "   , workprod.workmasterprojectno work_id, CAST(NULL AS timestamp)last_pub_date, 'N' dq_err \n" +
-                    "   from ((((((("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product \n" +
+            "SELECT u_key as sourceref \n" +
+                    "FROM\n" +
+                    "  (\n" +
+                    "   SELECT DISTINCT\n" +
+                    "     NULLIF(product.sourceref, '') sourceref\n" +
+                    "   , NULLIF(product.sourceref, '') u_key\n" +
+                    "   , NULLIF(content.title, '') title\n" +
+                    "   , (CASE WHEN (NULLIF(intedition.classificationcode, '') IS NULL) THEN false ELSE true END) intereditionflag\n" +
+                    "   , CAST(date_parse(COALESCE(NULLIF(firstactual, ''), NULLIF(firstplanned, '')), '%d-%b-%Y') AS date) firstpublisheddate\n" +
+                    "   , NULLIF(product.binding, '') binding\n" +
+                    "   , NULLIF(manifestationtypecode.ephcode, '') manifestation_type\n" +
+                    "   , (CASE WHEN (product.metadeleted = 'Y') THEN 'NVM' ELSE COALESCE(NULLIF(manifestationstatus.eph_manifestation_status_code, ''), 'UNK') END) status\n" +
+                    "   , NULLIF(workprod.workmasterprojectno, '') work_id\n" +
+                    "   , CAST(null AS timestamp) last_pub_date\n" +
+                    "   , 'N' dq_err\n" +
+                    "   FROM\n" +
+                    "     ((((((((("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
                     "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content ON (product.sourceref = content.sourceref))\n" +
                     "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily workprod ON ((product.sourceref = workprod.sourceref) AND (workprod.workmasterprojectno IS NOT NULL)))\n" +
                     "   LEFT JOIN (\n" +
-                    "      SELECT sourceref, classificationcode \n" +
-                    "      FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification classification \n" +
-                    "      WHERE (classificationcode LIKE 'PARELIE%') \n" +
-                    "   ) intedition ON (product.sourceref = intedition.sourceref)) \n" +
+                    "      SELECT\n" +
+                    "        sourceref\n" +
+                    "      , classificationcode\n" +
+                    "      FROM\n" +
+                    "        "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification classification\n" +
+                    "      WHERE (classificationcode LIKE 'PARELIE%')\n" +
+                    "   )  intedition ON (product.sourceref = intedition.sourceref))\n" +
                     "   LEFT JOIN (\n" +
-                    "      SELECT sourceref, min(plannedpubdate) firstplanned \n" +
-                    "      FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation \n" +
-                    "      WHERE (plannedpubdate <> '') GROUP BY sourceref \n" +
-                    "   ) planneddates ON (product.sourceref = planneddates.sourceref))\n" +
+                    "      SELECT\n" +
+                    "        sourceref\n" +
+                    "      , min(plannedpubdate) firstplanned\n" +
+                    "      FROM\n" +
+                    "        "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation\n" +
+                    "      WHERE (plannedpubdate <> '')\n" +
+                    "      GROUP BY sourceref\n" +
+                    "   )  planneddates ON (product.sourceref = planneddates.sourceref))\n" +
                     "   LEFT JOIN (\n" +
-                    "      select sourceref, min(pubdateactual) firstactual \n" +
-                    "      FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation \n" +
-                    "      WHERE (pubdateactual <> '') GROUP BY sourceref \n" +
+                    "      SELECT\n" +
+                    "        sourceref\n" +
+                    "      , min(pubdateactual) firstactual\n" +
+                    "      FROM\n" +
+                    "        "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation\n" +
+                    "      WHERE (pubdateactual <> '')\n" +
+                    "      GROUP BY sourceref\n" +
                     "   )  actualdates ON (product.sourceref = actualdates.sourceref))\n" +
+                    "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".all_manifestation_statuses_v all_status ON (product.sourceref = all_status.sourceref))\n" +
                     "   LEFT JOIN (\n" +
-                    "      SELECT distinct sourceref, ephmanifestationcode \n" +
-                    "      FROM ((SELECT sourceref, min(priority) statuspriority \n" +
-                    "         FROM ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation\n" +
-                    "         INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode ON (split_part(status, ' | ', 1) = ppmcode))\n" +
-                    "         GROUP BY sourceref)  masterstatus\n" +
-                    "      INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode ON (statuspriority = priority)) \n" +
-                    "   )  manifestationstatus ON (product.sourceref = manifestationstatus.sourceref))\n" +
-                    "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".manifestationtypecode ON (split_part(product.versiontype, ' | ', 1) = manifestationtypecode.ppmcode))\n" +
-                    ") order by rand() limit %s";
+                    "      SELECT DISTINCT\n" +
+                    "        eph_manifestation_status_code\n" +
+                    "      , manifestation_priority\n" +
+                    "      FROM\n" +
+                    "        "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode\n" +
+                    "   )  manifestationstatus ON (COALESCE(NULLIF(all_status.ref_key_manifestation_priority, 6), NULLIF(all_status.delivery_status_manifestation_priority, 6), NULLIF(all_status.delta_status_manifestation_priority, 6), 6) = manifestationstatus.manifestation_priority))\n" +
+                    "   LEFT JOIN (\n" +
+                    "      SELECT\n" +
+                    "        sourceref\n" +
+                    "      , (CASE WHEN (producttype IN ('199 | E-book-199', 'VAC | VAC - Voucher Access Card', 'INK | Inkling E-Book')) THEN split_part(producttype, ' | ', 1) WHEN (binding IN ('BB | Book/Hardback', 'BC | Book/Paperback')) THEN split_part(binding, ' | ', 1) WHEN (versiontype IN ('BKH | Book - Hardback', 'BKP | Book - Paperback')) THEN split_part(versiontype, ' | ', 1) WHEN (deltabinding IN ('1 | 1 - Hardback', '2 | 2 - Paperback')) THEN split_part(deltabinding, ' | ', 1) WHEN (versiontype IN ('NBP | Non - Book Physical', 'ELP | Electronic - Physical', 'ELO | Electronic - Online', 'COMB | Combination Set', 'MVOL | Multivol. Run-on Set')) THEN split_part(versiontype, ' | ', 1) ELSE '' END) manifestation_type\n" +
+                    "      FROM\n" +
+                    "        (\n" +
+                    "         SELECT\n" +
+                    "           p.sourceref\n" +
+                    "         , p.versiontype\n" +
+                    "         , p.binding\n" +
+                    "         , a.value producttype\n" +
+                    "         , b.value deltabinding\n" +
+                    "         FROM\n" +
+                    "           (("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product p\n" +
+                    "         LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification a ON ((p.sourceref = a.sourceref) AND (a.classificationcode LIKE 'PTCO%')))\n" +
+                    "         LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification b ON ((p.sourceref = b.sourceref) AND (b.classificationcode LIKE 'PTDE%')))\n" +
+                    "      ) \n" +
+                    "   )  manif_type ON (product.sourceref = manif_type.sourceref))\n" +
+                    "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".manifestationtypecode ON (manifestation_type = manifestationtypecode.ppmcode))\n" +
+                    ")  A\n" +
+                    "WHERE (A.sourceref IS NOT NULL) order by rand() limit %s";
 
     public static String GET_MANIF_INBOUND_DATA =
             "select " +
@@ -899,6 +939,77 @@ public class BCS_ETLCoreDataChecksSQL {
             "SELECT u_key as u_key \n" +
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_current_v \n" +
                     " order by rand() limit %s";
+
+    public static String GET_RANDOM_PRODUCT_KEY_INBOUND =
+            "SELECT u_key as sourceref \n" +
+                    "FROM\n" +
+                    "  (\n" +
+                    "   SELECT DISTINCT\n" +
+                    "     NULLIF(product.sourceref, '') sourceref\n" +
+                    "   , split_part(NULLIF(product.binding, ''), ' | ', 1) bindingcode\n" +
+                    "   , concat(NULLIF(product.sourceref, ''), split_part(NULLIF(product.binding, ''), ' | ', 1)) u_key\n" +
+                    "   , concat(NULLIF(content.title, ''), ' OOA') name\n" +
+                    "   , NULLIF(content.shorttitle, '') shorttitle\n" +
+                    "   , CAST(date_parse((CASE WHEN ((publishedon = '') AND (pubdateplanned = '')) THEN CAST(null AS varchar) ELSE (CASE WHEN (publishedon = '') THEN pubdateplanned ELSE publishedon END) END), '%%d-%%b-%%Y') AS date) launchdate\n" +
+                    "   , NULLIF(taxcode.ephcode, '') taxcode\n" +
+                    "   , (CASE WHEN (product.metadeleted = 'Y') THEN 'NVP' ELSE COALESCE(NULLIF(status.eph_product_status_code, ''), 'UNK') END) status\n" +
+                    "   , NULLIF(product.sourceref, '') manifestationref\n" +
+                    "   , NULLIF(workcontent.sourceref, '') worksource\n" +
+                    "   , NULLIF(workcontent.work_type, '') work_type\n" +
+                    "   , (CASE WHEN (separately_sale.sourceref IS NULL) THEN false ELSE true END) separately_sale_indicator\n" +
+                    "   , CAST(null AS boolean) trial_allowed_indicator\n" +
+                    "   , (CASE WHEN (sales_rest.sourceref IS NULL) THEN false ELSE true END) restricted_sale_indicator\n" +
+                    "   , CAST(null AS varchar) f_work_source_ref\n" +
+                    "   , 'OOA' product_type\n" +
+                    "   , 'ONE' f_revenue_model\n" +
+                    "   , 'N' dq_err\n" +
+                    "   FROM\n" +
+                    "     ((((((((("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
+                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content ON (product.sourceref = content.sourceref))\n" +
+                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_fullversionfamily fullversionfamily ON ((product.sourceref = fullversionfamily.sourceref) AND (workmaster = 'YES')))\n" +
+                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_current_v workcontent ON (fullversionfamily.projectno = workcontent.sourceref))\n" +
+                    "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification classification ON ((product.sourceref = classification.sourceref) AND (classificationcode LIKE 'DCDFC1%')))\n" +
+                    "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".taxcode ON (split_part(classification.value, ' | ', 1) = taxcode.ppmcode))\n" +
+                    "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".all_manifestation_statuses_v manifestationstatus ON (product.sourceref = manifestationstatus.sourceref))\n" +
+                    "   LEFT JOIN (\n" +
+                    "      SELECT DISTINCT\n" +
+                    "        eph_product_status_code\n" +
+                    "      , product_priority\n" +
+                    "      FROM\n" +
+                    "        "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode\n" +
+                    "   )  status ON (COALESCE(NULLIF(manifestationstatus.ref_key_product_priority, 6), NULLIF(manifestationstatus.delivery_status_product_priority, 6), NULLIF(manifestationstatus.delta_status_product_priority, 6), 6) = status.product_priority))\n" +
+                    "   LEFT JOIN (\n" +
+                    "      SELECT DISTINCT sourceref\n" +
+                    "      FROM\n" +
+                    "        "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation\n" +
+                    "      WHERE (refkey IN ('IPR | IPR - In Preparation (Secret)', 'NR | NR - No rights', 'NRG | NRG - No sales rights', 'CSR | CSR - CS Research'))\n" +
+                    "UNION       SELECT DISTINCT sourceref\n" +
+                    "      FROM\n" +
+                    "        "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product\n" +
+                    "      WHERE (refkey IN ('IPR | IPR - In Preparation (Secret)', 'NR | NR - No rights', 'NRG | NRG - No sales rights', 'CSR | CSR - CS Research'))\n" +
+                    "UNION       SELECT DISTINCT sourceref\n" +
+                    "      FROM\n" +
+                    "        "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification\n" +
+                    "      WHERE (classificationcode LIKE 'MANOTAVA%')\n" +
+                    "   )  sales_rest ON (product.sourceref = sales_rest.sourceref))\n" +
+                    "   LEFT JOIN (\n" +
+                    "      SELECT DISTINCT sourceref\n" +
+                    "      FROM\n" +
+                    "        "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation\n" +
+                    "      WHERE (refkey IN ('NSS | NSS - Not sold separately', 'NSI | NSI - Non-saleable item'))\n" +
+                    "UNION       SELECT DISTINCT sourceref\n" +
+                    "      FROM\n" +
+                    "        "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product\n" +
+                    "      WHERE (refkey IN ('NSS | NSS - Not sold separately', 'NSI | NSI - Non-saleable item'))\n" +
+                    "UNION       SELECT sourceref\n" +
+                    "      FROM\n" +
+                    "        "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification\n" +
+                    "      WHERE ((split_part(classificationcode, ' | ', 1) IN ('DCADA', 'DCAADAUS', 'DCAANZ')) AND (split_part(value, ' | ', 1) IN ('NSS', 'NSI')))\n" +
+                    "   )  separately_sale ON (product.sourceref = separately_sale.sourceref))\n" +
+                    ")  A\n" +
+                    "WHERE (A.sourceref IS NOT NULL)order by  rand() limit %s \n";
+
+
 
     public static String GET_PRODUCT_CURR_REC =
             "select " +
@@ -2996,6 +3107,165 @@ public class BCS_ETLCoreDataChecksSQL {
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_latest \n" +
                     "where u_key in (%s) \n" +
                     "order by u_key desc";
+
+    public static String GET_RANDOM_MANIF_STATUS_KEY_INBOUND =
+            "select sourceref from(\n" +
+                    "select \n" +
+                    "       sourceref \n" +
+                    "     , min(ref_key_product_priority) ref_key_product_priority \n" +
+                    "     , min(delivery_status_product_priority) delivery_status_product_priority \n" +
+                    "     , min(delta_status_product_priority) delta_status_product_priority \n" +
+                    "     , min(ref_key_manifestation_priority) ref_key_manifestation_priority \n" +
+                    "     , min(delivery_status_manifestation_priority) delivery_status_manifestation_priority \n" +
+                    "     , min(delta_status_manifestation_priority) delta_status_manifestation_priority \n" +
+                    " from ( \n" +
+                    "  select \n" +
+                    "       sourceref \n" +
+                    "     , min(product_priority) ref_key_product_priority \n" +
+                    "     , min(manifestation_priority) ref_key_manifestation_priority \n" +
+                    "     , cast(null as integer) delivery_status_product_priority \n" +
+                    "     , cast(null as integer) delivery_status_manifestation_priority \n" +
+                    "     , cast(null as integer) delta_status_product_priority \n" +
+                    "     , cast(null as integer) delta_status_manifestation_priority \n" +
+                    "  from \n" +
+                    "    ( \n" +
+                    "     select sourceref, split_part(refkey,' | ',1) refkey, product_priority, manifestation_priority \n" +
+                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product\n" +
+                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(refkey,' | ',1) = ppm_code\n" +
+                    "     union\n" +
+                    "     select sourceref, split_part(refkey,' | ',1) refkey, product_priority, manifestation_priority\n" +
+                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation\n" +
+                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(refkey,' | ',1) = ppm_code\n" +
+                    "    )\n" +
+                    "  group by sourceref\n" +
+                    "  union all\n" +
+                    "  select\n" +
+                    "       sourceref\n" +
+                    "     , cast(null as integer) ref_key_product_priority\n" +
+                    "     , cast(null as integer) ref_key_manifestation_priority\n" +
+                    "     , min(product_priority) delivery_status_product_priority\n" +
+                    "     , min(manifestation_priority) delivery_status_manifestation_priority\n" +
+                    "     , cast(null as integer) delta_status_product_priority\n" +
+                    "     , cast(null as integer) delta_status_manifestation_priority\n" +
+                    "  from\n" +
+                    "    (\n" +
+                    "     select sourceref, split_part(deliverystatus,' | ',1) delivery_status, product_priority, manifestation_priority\n" +
+                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product\n" +
+                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(deliverystatus,' | ',1) = ppm_code\n" +
+                    "     union\n" +
+                    "     select sourceref, split_part(status,' | ',1) delivery_status, product_priority, manifestation_priority\n" +
+                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation\n" +
+                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(status,' | ',1) = ppm_code\n" +
+                    "    )\n" +
+                    "  group by sourceref\n" +
+                    "  union all\n" +
+                    "  select\n" +
+                    "       sourceref\n" +
+                    "     , cast(null as integer) ref_key_product_priority\n" +
+                    "     , cast(null as integer) ref_key_manifestation_priority\n" +
+                    "     , cast(null as integer) delivery_status_product_priority\n" +
+                    "     , cast(null as integer) delivery_status_manifestation_priority\n" +
+                    "     , min(product_priority) delta_status_product_priority\n" +
+                    "     , min(manifestation_priority) delta_status_manifestation_priority\n" +
+                    "  from\n" +
+                    "    (\n" +
+                    "     select sourceref, split_part(value,' | ',1) delta_status, product_priority, manifestation_priority\n" +
+                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification\n" +
+                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(value,' | ',1) = ppm_code\n" +
+                    "     where split_part(classificationcode,' | ',1) in ('DCADA','DCAADAUS','DCAANZ')\n" +
+                    "    )\n" +
+                    "  group by sourceref\n" +
+                    " )\n" +
+                    "group by sourceref\n" +
+                    ") order by rand() limit %s";
+
+    public static String GET_ALL_MANIF_STATUS_INBOUND_DATA =
+            "select sourceref as SOURCEREF \n" +
+                    ",ref_key_product_priority as REFKEYPRODPRIORITY \n" +
+                    ",delivery_status_product_priority as DELIVERYSTATUSPRODPRIORITY \n" +
+                    ",delta_status_product_priority as DELTASTATUSPRODPRIORITY \n" +
+                    ",ref_key_manifestation_priority as REFKEYMANIFPRIORITY \n" +
+                    ",delivery_status_manifestation_priority as DELIVERYSTATUSMANIFPRIORITY \n" +
+                    ",delta_status_manifestation_priority as DELTASTATUSMANIFPRIORITY \n" +
+                    " from(\n" +
+                    "select \n" +
+                    "       sourceref \n" +
+                    "     , min(ref_key_product_priority) ref_key_product_priority \n" +
+                    "     , min(delivery_status_product_priority) delivery_status_product_priority \n" +
+                    "     , min(delta_status_product_priority) delta_status_product_priority \n" +
+                    "     , min(ref_key_manifestation_priority) ref_key_manifestation_priority \n" +
+                    "     , min(delivery_status_manifestation_priority) delivery_status_manifestation_priority \n" +
+                    "     , min(delta_status_manifestation_priority) delta_status_manifestation_priority \n" +
+                    " from ( \n" +
+                    "  select \n" +
+                    "       sourceref \n" +
+                    "     , min(product_priority) ref_key_product_priority \n" +
+                    "     , min(manifestation_priority) ref_key_manifestation_priority \n" +
+                    "     , cast(null as integer) delivery_status_product_priority \n" +
+                    "     , cast(null as integer) delivery_status_manifestation_priority \n" +
+                    "     , cast(null as integer) delta_status_product_priority \n" +
+                    "     , cast(null as integer) delta_status_manifestation_priority \n" +
+                    "  from \n" +
+                    "    ( \n" +
+                    "     select sourceref, split_part(refkey,' | ',1) refkey, product_priority, manifestation_priority \n" +
+                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product\n" +
+                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(refkey,' | ',1) = ppm_code\n" +
+                    "     union\n" +
+                    "     select sourceref, split_part(refkey,' | ',1) refkey, product_priority, manifestation_priority\n" +
+                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation\n" +
+                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(refkey,' | ',1) = ppm_code\n" +
+                    "    )\n" +
+                    "  group by sourceref\n" +
+                    "  union all\n" +
+                    "  select\n" +
+                    "       sourceref\n" +
+                    "     , cast(null as integer) ref_key_product_priority\n" +
+                    "     , cast(null as integer) ref_key_manifestation_priority\n" +
+                    "     , min(product_priority) delivery_status_product_priority\n" +
+                    "     , min(manifestation_priority) delivery_status_manifestation_priority\n" +
+                    "     , cast(null as integer) delta_status_product_priority\n" +
+                    "     , cast(null as integer) delta_status_manifestation_priority\n" +
+                    "  from\n" +
+                    "    (\n" +
+                    "     select sourceref, split_part(deliverystatus,' | ',1) delivery_status, product_priority, manifestation_priority\n" +
+                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product\n" +
+                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(deliverystatus,' | ',1) = ppm_code\n" +
+                    "     union\n" +
+                    "     select sourceref, split_part(status,' | ',1) delivery_status, product_priority, manifestation_priority\n" +
+                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation\n" +
+                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(status,' | ',1) = ppm_code\n" +
+                    "    )\n" +
+                    "  group by sourceref\n" +
+                    "  union all\n" +
+                    "  select\n" +
+                    "       sourceref\n" +
+                    "     , cast(null as integer) ref_key_product_priority\n" +
+                    "     , cast(null as integer) ref_key_manifestation_priority\n" +
+                    "     , cast(null as integer) delivery_status_product_priority\n" +
+                    "     , cast(null as integer) delivery_status_manifestation_priority\n" +
+                    "     , min(product_priority) delta_status_product_priority\n" +
+                    "     , min(manifestation_priority) delta_status_manifestation_priority\n" +
+                    "  from\n" +
+                    "    (\n" +
+                    "     select sourceref, split_part(value,' | ',1) delta_status, product_priority, manifestation_priority\n" +
+                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification\n" +
+                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(value,' | ',1) = ppm_code\n" +
+                    "     where split_part(classificationcode,' | ',1) in ('DCADA','DCAADAUS','DCAANZ')\n" +
+                    "    )\n" +
+                    "  group by sourceref\n" +
+                    " )\n" +
+                    "group by sourceref\n" +
+                    ") where sourceref in ('%s') order by sourceref desc";
+
+    public static String GET_MANIF_STATUSES_DATA =
+            "select sourceref as SOURCEREF \n" +
+                    ",ref_key_product_priority as REFKEYPRODPRIORITY \n" +
+                    ",delivery_status_product_priority as DELIVERYSTATUSPRODPRIORITY \n" +
+                    ",delta_status_product_priority as DELTASTATUSPRODPRIORITY \n" +
+                    ",ref_key_manifestation_priority as REFKEYMANIFPRIORITY \n" +
+                    ",delivery_status_manifestation_priority as DELIVERYSTATUSMANIFPRIORITY \n" +
+                    ",delta_status_manifestation_priority as DELTASTATUSMANIFPRIORITY \n" +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".all_manifestation_statuses_v where sourceref in ('%s') order by sourceref desc";
 
 
 
