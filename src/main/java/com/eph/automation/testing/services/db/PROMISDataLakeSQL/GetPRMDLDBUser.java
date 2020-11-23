@@ -17,4 +17,36 @@ public class GetPRMDLDBUser {
         }
         return dbPRMDL;
     }
+
+    public static String getProdDataBase(){
+        String dbProdDL = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbProdDL = "product_database_sit";
+            }
+            else{
+                dbProdDL = "product_database_uat";
+            }
+
+        }else{
+            dbProdDL = "product_database_sit";
+        }
+        return dbProdDL;
+    }
+
+    public static String getProdStagingDataBase(){
+        String dbStageProdDL = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbStageProdDL = "product_staging_database_sit";
+            }
+            else{
+                dbStageProdDL = "product_staging_database_uat";
+            }
+
+        }else{
+            dbStageProdDL = "product_staging_database_sit";
+        }
+        return dbStageProdDL;
+    }
 }

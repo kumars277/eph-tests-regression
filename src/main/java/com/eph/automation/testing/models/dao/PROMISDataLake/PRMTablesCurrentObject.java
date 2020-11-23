@@ -1,6 +1,6 @@
 package com.eph.automation.testing.models.dao.PROMISDataLake;
 
-public class PRMTablesDLObject {
+public class PRMTablesCurrentObject {
 
     private String PUB_IDT;
     private String AUT_EDT_IDT;
@@ -107,14 +107,19 @@ public class PRMTablesDLObject {
     private String REL_START_DATE;
     private String MKT_IDT;
     private String MKT_DES;
-    private String DIV_IDT;
     private String MKT_SUB_IDT;
+    private String DIV_IDT;
+    private String Internal_Elsevier_Division;
+
+    public String getInternal_Elsevier_Division() {
+        return Internal_Elsevier_Division;
+    }
+    public void setInternal_Elsevier_Division(String Internal_Elsevier_Division) { this.Internal_Elsevier_Division = Internal_Elsevier_Division; }
 
     public String getMKT_SUB_IDT() {
         return MKT_SUB_IDT;
     }
     public void setMKT_SUB_IDT(String MKT_SUB_IDT) { this.MKT_SUB_IDT = MKT_SUB_IDT; }
-
 
     public String getMKT_IDT() {
         return MKT_IDT;
@@ -131,9 +136,7 @@ public class PRMTablesDLObject {
     }
     public void setDIV_IDT(String DIV_IDT) { this.DIV_IDT = DIV_IDT; }
 
-    public String getPUB_IDT() {
-        return PUB_IDT;
-    }
+    public String getPUB_IDT() { return PUB_IDT; }
     public void setPUB_IDT(String PUB_IDT) {
         this.PUB_IDT = PUB_IDT;
     }
