@@ -15,4 +15,11 @@ Examples:
 #|stg_current_fullversionfamily|       1         |
 #|stg_current_originatoraddress|       1         |
 #|stg_current_originators      |       1         |
-|stg_current_pricing           |       1         |
+#|stg_current_pricing          |       1         |
+#|stg_current_product          |       1         |
+#|stg_current_production       |       1         |
+|stg_current_relations        |       1         |
+|stg_current_responsibilities |       1         |
+|stg_current_sublocation      |       1         |
+|stg_current_text             |       1         |
+|stg_current_versionfamily    |       1         |

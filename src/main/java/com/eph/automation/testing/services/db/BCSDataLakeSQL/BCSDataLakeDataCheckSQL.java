@@ -6,36 +6,36 @@ public class BCSDataLakeDataCheckSQL {
 
     public static String randomId_ingestTableFor_stg_current_classification=
             "select sourceref from(SELECT cl.value, productprojectno sourceref\n" +
-              "FROM (bcs_ingestion_database_sit.initial_ingest f CROSS JOIN UNNEST(distributionclassification) x (cl)))\n" +
-              "where value is not null AND value!='' AND value!='0' order by rand() limit %s";
+                    "FROM (bcs_ingestion_database_sit.initial_ingest f CROSS JOIN UNNEST(distributionclassification) x (cl)))\n" +
+                    "where value is not null AND value!='' AND value!='0' order by rand() limit %s";
 
     public static String getInitialIngestDataFor_stg_current_classification=
-        "select * from(SELECT\n" +
-                "  metainfdeleted metadeleted\n" +
-                ", metainfmodifiedon metamodifiedon\n" +
-                ", productprojectno sourceref\n" +
-                ", cl.classificationcode\n" +
-                ", cl.value value\n" +
-                ", cl.classificationtype\n" +
-                ", cl.priority\n" +
-                ", cl.businessunit\n" +
-                "FROM  (bcs_ingestion_database_sit.initial_ingest f\n" +
-                "CROSS JOIN UNNEST(distributionclassification) x (cl)))\n" +
-                "where sourceref in ('%s')\n" +
-                "order by sourceref,value,classificationcode desc";
+            "select * from(SELECT\n" +
+                    "  metainfdeleted metadeleted\n" +
+                    ", metainfmodifiedon metamodifiedon\n" +
+                    ", productprojectno sourceref\n" +
+                    ", cl.classificationcode\n" +
+                    ", cl.value value\n" +
+                    ", cl.classificationtype\n" +
+                    ", cl.priority\n" +
+                    ", cl.businessunit\n" +
+                    "FROM  (bcs_ingestion_database_sit.initial_ingest f\n" +
+                    "CROSS JOIN UNNEST(distributionclassification) x (cl)))\n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by sourceref,value,classificationcode desc";
 
     public static String getCurrentTableDataFor_stg_current_classification=
-        "select metadeleted, metamodifiedon,sourceref,classificationcode,\n" +
-                "value,classificationtype,priority,businessunit\n" +
-                "from bcs_ingestion_database_sit.stg_current_classification \n" +
-                "where sourceref in ('%s')\n" +
-                "order by sourceref,value,classificationcode desc";
+            "select metadeleted, metamodifiedon,sourceref,classificationcode,\n" +
+                    "value,classificationtype,priority,businessunit\n" +
+                    "from bcs_ingestion_database_sit.stg_current_classification \n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by sourceref,value,classificationcode desc";
 
 
     //created by Nishant @ 21 Oct 2020
     public static String randomId_ingestTableFor_stg_current_content=
             "select sourceref from(SELECT df.productprojectno sourceref FROM\n" +
-            "bcs_ingestion_database_sit.initial_ingest df)  order by rand() limit %s";
+                    "bcs_ingestion_database_sit.initial_ingest df)  order by rand() limit %s";
 
 
     public static String getInitialIngestDataFor_stg_current_content=
@@ -295,18 +295,358 @@ public class BCSDataLakeDataCheckSQL {
                     "from (bcs_ingestion_database_sit.initial_ingest df\n" +
                     "CROSS JOIN UNNEST(productprice) x (cp)))\n" +
                     "where sourceref in ('%s')\n" +
-                    "order by sourceref,type,currency,validto desc;";
+                    "order by sourceref,type,currency,validto desc";
     public static String getCurrentTableDataFor_stg_current_pricing=
             "select metadeleted,metamodifiedon,sourceref,\n" +
                     "validfrom,type,currency,priceapprox,price,validto\n" +
                     "from bcs_ingestion_database_sit.stg_current_pricing\n" +
                     "where sourceref in ('%s')\n" +
-                    "order by sourceref,type,currency,validto desc;";
+                    "order by sourceref,type,currency,validto desc";
 
-    public static String randomId_ingestTableFor_stg_current_tableName=
-            "";
-    public static String getInitialIngestDataFor_stg_current_tableName=
-            "";
-    public static String getCurrentTableDataFor_stg_current_tableName=
-            "";
+    public static String randomId_ingestTableFor_stg_current_product=
+            "select sourceref from(select df.productprojectno sourceref\n" +
+                    "from (bcs_ingestion_database_sit.initial_ingest df)) \n" +
+                    "order by rand() limit %s";
+    public static String getInitialIngestDataFor_stg_current_product=
+            "select * from(select \n" +
+                    "  df.metainfdeleted metadeleted\n" +
+                    ", df.metainfmodifiedon metamodifiedon\n" +
+                    ", df.productprojectno sourceref\n" +
+                    ", df.productnoofvolumes\tnoofvolumes\n" +
+                    ", df.productrefkey\trefkey\n" +
+                    ", df.productexternaleditionid\texternaleditionid\n" +
+                    ", df.productisbn13\tisbn13\n" +
+                    ", df.productversiontype\tversiontype\n" +
+                    ", df.productpodsuitable\tpodsuitable\n" +
+                    ", df.productfirstrelease\tfirstrelease\n" +
+                    ", df.productorigtitle\torigtitle\n" +
+                    ", df.productinventoryukavailablestock\tukavailablestock\n" +
+                    ", df.productinventorygertotalstock\tgertotalstock\n" +
+                    ", df.productinventoryfraavailablestock\tfraavailablestock\n" +
+                    ", df.productinventoryausavailablestock\tausavailablestock\n" +
+                    ", df.productinventoryustotalstock\tustotalstock\n" +
+                    ", df.productinventoryuktotalstock\tuktotalstock\n" +
+                    ", df.productinventorygeravailablestock\tgeravailablestock\n" +
+                    ", df.productinventoryfratotalstock\tfratotalstock\n" +
+                    ", df.productinventoryusavailablestock\tusavailablestock\n" +
+                    ", df.productplanned\tplanned\n" +
+                    ", df.productprojectno\tprojectno\n" +
+                    ", df.productisbn\tisbn\n" +
+                    ", df.productcontractpubdate\tcontractpubdate\n" +
+                    ", df.productmodifiedon\tmodifiedon\n" +
+                    ", df.productunitcost\tunitcost\n" +
+                    ", df.productpublishedon\tpublishedon\n" +
+                    ", df.productdeliverystatus\tdeliverystatus\n" +
+                    ", df.productplannededitionsize\tplannededitionsize\n" +
+                    ", df.productlatestpubdate\tlatestpubdate\n" +
+                    ", df.productmedium\tmedium\n" +
+                    ", df.productorderno\torderno\n" +
+                    ", df.productfirstprinting\tfirstprinting\n" +
+                    ", df.productreason\treason\n" +
+                    ", df.productbudgetpubdate\tbudgetpubdate\n" +
+                    ", df.productpubdateplanned\tpubdateplanned\n" +
+                    ", df.productcreatedon\tcreatedon\n" +
+                    "--, df.productexternalimpressionid\texternalimpressionid\n" +
+                    ", df.productplannedfirstprint\tplannedfirstprint\n" +
+                    ", df.productbinding\tbinding\n" +
+                    "from (bcs_ingestion_database_sit.initial_ingest df))\n" +
+                    "where sourceref in('%s')\n" +
+                    "order by sourceref desc";
+    public static String getCurrentTableDataFor_stg_current_product=
+            "select metadeleted,metamodifiedon,sourceref,\n" +
+                    "noofvolumes,refkey,externaleditionid,\n" +
+                    "isbn13,versiontype,podsuitable,firstrelease,\n" +
+                    "origtitle,ukavailablestock,gertotalstock,\n" +
+                    "fraavailablestock,ausavailablestock,\n" +
+                    "ustotalstock,uktotalstock,geravailablestock,\n" +
+                    "fratotalstock,usavailablestock,planned,projectno,\n" +
+                    "isbn,contractpubdate,modifiedon,unitcost,\n" +
+                    "publishedon,deliverystatus,plannededitionsize,\n" +
+                    "latestpubdate,medium,orderno,firstprinting,\n" +
+                    "reason,budgetpubdate,pubdateplanned,createdon,\n" +
+                    "--externalimpressionid,\n" +
+                    "plannedfirstprint,binding\n" +
+                    "from bcs_ingestion_database_sit.stg_current_product \n" +
+                    "where sourceref in('%s')\n" +
+                    "order by sourceref desc";
+
+    public static String randomId_ingestTableFor_stg_current_production=
+            "select sourceref from(select df.productprojectno sourceref\n" +
+                    "from (bcs_ingestion_database_sit.initial_ingest df)) \n" +
+                    "order by rand() limit %s";
+    public static String getInitialIngestDataFor_stg_current_production=
+            "select * from(select \n" +
+                    "  df.metainfdeleted metadeleted\n" +
+                    ", df.metainfmodifiedon metamodifiedon\n" +
+                    ", df.productprojectno sourceref\n" +
+                    ", df.productionweight\tweight\n" +
+                    ", df.productionlineartbw\tlineartbw\n" +
+                    ", df.coverendpaperfrontpapercolour\tfrontpapercolour\n" +
+                    ", df.coverendpaperbackpapercolour\tbackpapercolour\n" +
+                    ", df.coverendpapergrammage\tgrammage\n" +
+                    ", df.coverendpaperbackcoverpms\tbackcoverpms\n" +
+                    ", df.coverendpaperfrontcoverpms\tfrontcoverpms\n" +
+                    ", df.productionapproxpages\tapproxpages\n" +
+                    "--, df.productionreprintno\treprintno\n" +
+                    ", df.productionlineartcolors\tlineartcolors\n" +
+                    ", df.productionsupplierb\tsupplierb\n" +
+                    ", df.productiontablesbw\ttablesbw\n" +
+                    ", df.productionauthoringsystem\tauthoringsystem\n" +
+                    ", df.productiontagging\ttagging\n" +
+                    ", df.productionsectioncolours\tsectioncolours\n" +
+                    ", df.productionaddillustration\taddillustration\n" +
+                    ", df.productionpagesroman\tpagesroman\n" +
+                    ", df.productionproductionmethod\tproductionmethod\n" +
+                    ", df.productionsupplierashortname\tsupplierashortname\n" +
+                    ", df.productionsupplierafullname\tsupplierafullname\n" +
+                    ", df.productionbindmeth\tbindmeth\n" +
+                    ", df.productionformat\tformat\n" +
+                    ", df.productiontrimsize\ttrimsize\n" +
+                    ", df.productiontrimother\ttrimother\n" +
+                    ", df.productionmstype\tmstype\n" +
+                    ", df.productionmanuscriptpages\tmanuscriptpages\n" +
+                    ", df.productiontablescolors\ttablescolors\n" +
+                    ", df.productionsupplierbfullname\tsupplierbfullname\n" +
+                    ", df.productionproductiondetails\tproductiondetails\n" +
+                    ", df.productionillustrationscolors\tillustrationscolors\n" +
+                    ", df.productiongraphicscolors\tgraphicscolors\n" +
+                    ", df.productionexternalads\texternalads\n" +
+                    ", df.productioninternalads\tinternalads\n" +
+                    ", df.productionhalftonesbw\thalftonesbw\n" +
+                    ", df.productionmapsbw\tmapsbw\n" +
+                    ", df.productionspinestyle\tspinestyle\n" +
+                    ", df.productioneonlypages\teonlypages\n" +
+                    ", df.productionsuppliera\tsuppliera\n" +
+                    ", df.productionsupplierbshortname\tsupplierbshortname\n" +
+                    ", df.productionillustrationsbw\tillustrationsbw\n" +
+                    ", df.productionextentprod\textentprod\n" +
+                    ", df.productionprintform\tprintform\n" +
+                    ", df.productionduotone\tduotone\n" +
+                    ", df.productioncopyedlevel\tcopyedlevel\n" +
+                    ", df.coverbindingexteriorpms\texteriorpms\n" +
+                    ", df.coverbindingfinishing\tfinishing\n" +
+                    ", df.coverbindingmaterial\tmaterial\n" +
+                    ", df.coverbindingpaperquality\tpaperquality\n" +
+                    ", df.coverbindinginteriorpms\tinteriorpms\n" +
+                    "--, df.coverbindinggrammage\tgrammage\n" +
+                    ", df.coverbindinginteriorcolour\tinteriorcolour\n" +
+                    ", df.coverbindingboardthickness\tboardthickness\n" +
+                    ", df.coverbindingspec\tspec\n" +
+                    ", df.productionmapscolor\tmapscolor\n" +
+                    ", df.productiontextdesigntype\ttextdesigntype\n" +
+                    ", df.productionclassification\tclassification\n" +
+                    ", df.productionhalftonescolors\thalftonescolors\n" +
+                    ", df.productionbiblioreference\tbiblioreference\n" +
+                    ", df.productionextentstatus\textentstatus\n" +
+                    ", df.productionpagesarabic\tpagesarabic\n" +
+                    ", df.productiongraphicsbw\tgraphicsbw\n" +
+                    "from (bcs_ingestion_database_sit.initial_ingest df))\n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by sourceref desc";
+    public static String getCurrentTableDataFor_stg_current_production=
+            "select  metadeleted\n" +
+                    ", metamodifiedon, sourceref, weight, lineartbw, frontpapercolour, backpapercolour\n" +
+                    ", grammage, backcoverpms, frontcoverpms, approxpages, lineartcolors,supplierb\n" +
+                    ", tablesbw, authoringsystem, tagging, sectioncolours, addillustration, pagesroman\n" +
+                    ", productionmethod, supplierashortname, supplierafullname, bindmeth, format, trimsize\n" +
+                    ", trimother, mstype, manuscriptpages, tablescolors, supplierbfullname, productiondetails\n" +
+                    ", illustrationscolors, graphicscolors, externalads, internalads, halftonesbw, mapsbw\n" +
+                    ", spinestyle, eonlypages, suppliera, supplierbshortname, illustrationsbw, extentprod\n" +
+                    ", printform, duotone, copyedlevel, exteriorpms, finishing, material, paperquality\n" +
+                    ", interiorpms, interiorcolour, boardthickness, spec, mapscolor, textdesigntype\n" +
+                    ", classification, halftonescolors, biblioreference, extentstatus, pagesarabic, graphicsbw \n" +
+                    "from bcs_ingestion_database_sit.stg_current_production \n" +
+                    "where sourceref in ('%s')order by sourceref desc";
+
+    public static String randomId_ingestTableFor_stg_current_relations=
+            "select sourceref from(select df.productprojectno sourceref, cj.projectno projectno\n" +
+                    "from (bcs_ingestion_database_sit.initial_ingest df      \n" +
+                    "CROSS JOIN UNNEST(productrelation) x (cj))) \n" +
+                    "where projectno is not null\n" +
+                    "order by rand() limit %s";
+    public static String getInitialIngestDataFor_stg_current_relations=
+            "select * from(select \n" +
+                    "  df.metainfdeleted metadeleted\n" +
+                    ", df.metainfmodifiedon metamodifiedon\n" +
+                    ", df.productprojectno sourceref\n" +
+                    ", cj.orderno orderno\n" +
+                    ", cj.relationtype\trelationtype\n" +
+                    ", cj.projectno projectno\n" +
+                    "--, cj.relimpressionid relimpressionid\n" +
+                    ", cj.isbn isbn\n" +
+                    "from (bcs_ingestion_database_sit.initial_ingest df \n" +
+                    "CROSS JOIN UNNEST(productrelation) x (cj)))\n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by sourceref,relationtype,projectno desc";
+    public static String getCurrentTableDataFor_stg_current_relations=
+            "select metadeleted,metamodifiedon,sourceref,orderno\n" +
+                    ",relationtype,projectno--,relimpressionid\n" +
+                    ",isbn\n" +
+                    "from bcs_ingestion_database_sit.stg_current_relations\n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by sourceref,relationtype,projectno desc";
+
+    public static String randomId_ingestTableFor_stg_current_responsibilities=
+            "select sourceref from(select \n" +
+                    " df.productprojectno sourceref, cj.responsibleperson\tresponsibleperson\n" +
+                    "from (bcs_ingestion_database_sit.initial_ingest df \n" +
+                    "CROSS JOIN UNNEST(contactsresponsibilities) x (cj)))\n" +
+                    "where responsibleperson is not null and responsibleperson!=''\n" +
+                    " order by rand() limit %s";
+    public static String getInitialIngestDataFor_stg_current_responsibilities=
+            "select * from(select \n" +
+                    "  df.metainfdeleted metadeleted\n" +
+                    ", df.metainfmodifiedon metamodifiedon\n" +
+                    ", df.productprojectno sourceref\n" +
+                    ", cj.responsibility responsibility\n" +
+                    ", cj.responsibleperson responsibleperson\n" +
+                    ", cj.personid personid\n" +
+                    "from (bcs_ingestion_database_sit.initial_ingest df \n" +
+                    "CROSS JOIN UNNEST(contactsresponsibilities) x (cj)))\n" +
+                    "where sourceref in ('%s')\n" +
+                    " order by  sourceref,responsibility,responsibleperson desc";
+    public static String getCurrentTableDataFor_stg_current_responsibilities=
+            "select metadeleted,metamodifiedon,sourceref,responsibility\n" +
+                    ",responsibleperson,personid\n" +
+                    "from bcs_ingestion_database_sit.stg_current_responsibilities \n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by  sourceref,responsibility,responsibleperson desc";
+
+    public static String randomId_ingestTableFor_stg_current_sublocation=
+            "select sourceref from(select \n" +
+                    " df.productprojectno sourceref\n" +
+                    ", cj.warehouse\twarehouse\n" +
+                    "from (bcs_ingestion_database_sit.initial_ingest df \n" +
+                    "CROSS JOIN UNNEST(productsublocation) x (cj)))\n" +
+                    "where warehouse is not null and warehouse!=''\n" +
+                    "order by rand() limit %s";
+    public static String getInitialIngestDataFor_stg_current_sublocation=
+            "select * from(select \n" +
+                    "  df.metainfdeleted metadeleted\n" +
+                    ", df.metainfmodifiedon metamodifiedon\n" +
+                    ", df.productprojectno sourceref\n" +
+                    ", cj.warehouse warehouse\n" +
+                    ", cj.pubdateactual pubdateactual\n" +
+                    ", cj.stocksplit stocksplit\n" +
+                    ", cj.refkey refkey\n" +
+                    ", cj.status status\n" +
+                    ", cj.plannedpubdate plannedpubdate\n" +
+                    "from (bcs_ingestion_database_sit.initial_ingest df \n" +
+                    "CROSS JOIN UNNEST(productsublocation) x (cj)))\n" +
+                    "where sourceref in('%s')\n" +
+                    "order by sourceref,warehouse desc";
+
+    public static String getCurrentTableDataFor_stg_current_sublocation=
+            "select metadeleted,metamodifiedon,sourceref,warehouse\n" +
+                    ",pubdateactual,stocksplit, refkey,status,plannedpubdate\n" +
+                    "from bcs_ingestion_database_sit.stg_current_sublocation\n" +
+                    "where sourceref in('%s')\n" +
+                    "order by sourceref,warehouse desc";
+
+
+    public static String randomId_ingestTableFor_stg_current_text=
+            "select sourceref from(select \n" +
+                    " df.productprojectno sourceref, cj.text\n" +
+                    "from bcs_ingestion_database_sit.initial_ingest df\n" +
+                    "CROSS JOIN UNNEST(distributiontext) x (cj)) \n" +
+                    "where text is not null and text!=''\n" +
+                    "order by rand() limit %s";
+    public static String getInitialIngestDataFor_stg_current_text=
+            "select * from(select \n" +
+                    "  df.metainfdeleted metadeleted\n" +
+                    ", df.metainfmodifiedon metamodifiedon\n" +
+                    ", df.productprojectno sourceref\n" +
+                    ", cj.tab\n" +
+                    ", cj.texttype\n" +
+                    ", cj.name\n" +
+                    ", cj.text\n" +
+                    ", cj.status\n" +
+                    "from bcs_ingestion_database_sit.initial_ingest df\n" +
+                    "CROSS JOIN UNNEST(distributiontext) x (cj))\n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by sourceref,texttype,text desc";
+    public static String getCurrentTableDataFor_stg_current_text=
+            "select metadeleted,metamodifiedon,sourceref,tab\n" +
+                    ",texttype,name, text,status\n" +
+                    "from bcs_ingestion_database_sit.stg_current_text\n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by sourceref,texttype,text desc";
+
+    public static String randomId_ingestTableFor_stg_current_versionfamily=
+            "select sourceref from(select \n" +
+                    " df.productprojectno sourceref\n" +
+                    ", cj.childprojectno childprojectno\n" +
+                    "from bcs_ingestion_database_sit.initial_ingest df\n" +
+                    "CROSS JOIN UNNEST(contentversionfamily) x (cj))\n" +
+                    "where childprojectno is not null and childprojectno!=''\n" +
+                    "order by rand() limit %s";
+    public static String getInitialIngestDataFor_stg_current_versionfamily=
+            "select * from(select \n" +
+                    "  df.metainfdeleted metadeleted\n" +
+                    ", df.metainfmodifiedon metamodifiedon\n" +
+                    ", df.productprojectno sourceref\n" +
+                    ", cj.workmasterisbn workmasterisbn\n" +
+                    ", cj.workmasterprojectno workmasterprojectno\n" +
+                    ", cj.childisbn childisbn\n" +
+                    ", cj.childprojectno childprojectno\n" +
+                    "from bcs_ingestion_database_sit.initial_ingest df\n" +
+                    "CROSS JOIN UNNEST(contentversionfamily) x (cj))\n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by sourceref,childprojectno desc";
+    public static String getCurrentTableDataFor_stg_current_versionfamily=
+            "select metadeleted,metamodifiedon,sourceref,workmasterisbn\n" +
+                    ",workmasterprojectno,childisbn,childprojectno\n" +
+                    "from bcs_ingestion_database_sit.stg_current_versionfamily\n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by sourceref,childprojectno desc";
+
+    /*public static String GET_MANIF_INBOUND_DATA =
+            "select " +
+                    "sourceref as SOURCEREF \n" +
+                    ",title as TITLE \n" +
+                    ",intereditionflag as INTEREDITIONFLAG \n" +
+                    ",firstpublisheddate as FIRSTPUBLISHEDDATE \n" +
+                    ",binding as BINDING \n" +
+                    ",manifestation_type as MANIFESTATIONTYPE \n" +
+                    ",status as STATUS \n" +
+                    ",work_id as WORKID \n" +
+                    ",last_pub_date as LASTPUBDATE \n" +
+                    ",dq_err as DQ_ERR \n" +
+                    "from(\n" +
+                    "SELECT DISTINCT product.sourceref, content.title, (CASE WHEN (intedition.classificationcode IS NULL) \n" +
+                    "THEN false ELSE true END) intereditionflag, cast((date_parse(COALESCE(NULLIF(firstactual,''),\n" +
+                    "NULLIF(firstplanned,'')),'%%d-%%b-%%Y')) as date ) firstpublisheddate, product.binding, \n" +
+                    " manifestationtypecode.ephcode manifestation_type, manifestationstatus.ephmanifestationcode status \n" +
+                    "   , workprod.workmasterprojectno work_id, CAST(NULL AS timestamp) last_pub_date, 'N' dq_err \n" +
+                    "   from ((((((("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
+                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content ON (product.sourceref = content.sourceref))\n" +
+                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily workprod ON ((product.sourceref = workprod.sourceref) AND (workprod.workmasterprojectno IS NOT NULL)))\n" +
+                    "   LEFT JOIN (\n" +
+                    "      SELECT sourceref, classificationcode \n" +
+                    "      FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification classification\n" +
+                    "      WHERE (classificationcode LIKE 'PARELIE%')\n" +
+                    "   ) intedition ON (product.sourceref = intedition.sourceref))\n" +
+                    "   LEFT JOIN (\n" +
+                    "      SELECT sourceref, min(plannedpubdate) firstplanned \n" +
+                    "      FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation\n" +
+                    "      WHERE (plannedpubdate <> '') GROUP BY sourceref \n" +
+                    "   ) planneddates ON (product.sourceref = planneddates.sourceref))\n" +
+                    "   LEFT JOIN (\n" +
+                    "      select sourceref, min(pubdateactual) firstactual \n" +
+                    "      FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation\n" +
+                    "      WHERE (pubdateactual <> '') GROUP BY sourceref \n" +
+                    "   )  actualdates ON (product.sourceref = actualdates.sourceref))\n" +
+                    "   LEFT JOIN (\n" +
+                    "      SELECT distinct sourceref, ephmanifestationcode \n" +
+                    "      FROM ((SELECT sourceref, min(priority) statuspriority \n" +
+                    "         FROM ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation\n" +
+                    "         INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode ON (split_part(status, ' | ', 1) = ppmcode))\n" +
+                    "         GROUP BY sourceref)  masterstatus\n" +
+                    "      INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode ON (statuspriority = priority))\n" +
+                    "   )  manifestationstatus ON (product.sourceref = manifestationstatus.sourceref))\n" +
+                    "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".manifestationtypecode ON (split_part(product.versiontype, ' | ', 1) = manifestationtypecode.ppmcode))\n" +
+                    ") where sourceref in ('%s') order by sourceref desc";
+                    */
+
+
 }
