@@ -100,8 +100,8 @@ public class BCS_ETLCoreDataChecksSQL {
                     ", NULLIF(cast(coalesce(rc_pmg_co.rc,rc_pmg.rc) as varchar), '') resp_centre\n" +
                     ", content.pmg pmg\n" +
                     ", NULLIF(languagecode.ephcode, '') languagecode\n" +
-                    ", CAST(NULL AS boolean) electro_rights_indicator\n" +
-                    ", CAST(NULL AS varchar) f_oa_journal_type\n" +
+                    ", CASE WHEN erights.value = 'Y | Yes' THEN true WHEN erights.value = 'N | No' THEN false ELSE null END electro_rights_indicator\n" +
+                    ", 'N' f_oa_journal_type \n" +
                     ", CAST(NULL AS varchar) f_society_ownership\n" +
                     ", CAST(NULL AS varchar) subscription_type\n" +
                     ", date_parse(NULLIF(content.metamodifiedon, ''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
@@ -126,6 +126,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product on content.sourceref = product.sourceref\n" +
                     "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily versionfamily ON (content.sourceref = versionfamily.workmasterprojectno)\n" +
                     "LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification classification ON ((content.sourceref = classification.sourceref) AND (classification.classificationcode = 'DCDFAC | Accounting class'))\n" +
+                    "LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification erights ON content.sourceref = erights.sourceref AND erights.classificationcode = 'PAERIGHTS | Electronic rights' \n"+
                     "LEFT JOIN (SELECT workmasterprojectno, min(manifestation_priority) work_priority FROM (  \n" +
                     "    SELECT m.sourceref, w.workmasterprojectno, coalesce(nullif(m.ref_key_manifestation_priority,6),nullif(m.delivery_status_manifestation_priority,6),nullif(m.delta_status_manifestation_priority,6),6) manifestation_priority\n" +
                     "    FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".all_manifestation_statuses_v m\n" +
@@ -156,8 +157,8 @@ public class BCS_ETLCoreDataChecksSQL {
                     ", cast(null as varchar) resp_centre\n" +
                     ", cast(null as varchar) pmg\n" +
                     ", cast(null as varchar) languagecode\n" +
-                    ", CAST(NULL AS boolean) electro_rights_indicator\n" +
-                    ", CAST(NULL AS varchar) f_oa_journal_type\n" +
+                    ", CAST(NULL AS boolean) electro_rights_indicator" +
+                    ", 'N' f_oa_journal_type \n" +
                     ", CAST(NULL AS varchar) f_society_ownership\n" +
                     ", CAST(NULL AS varchar) subscription_type\n" +
                     ", modifiedon modifiedon\n" +
@@ -216,8 +217,8 @@ public class BCS_ETLCoreDataChecksSQL {
                     ", NULLIF(cast(coalesce(rc_pmg_co.rc,rc_pmg.rc) as varchar), '') resp_centre\n" +
                     ", content.pmg pmg\n" +
                     ", NULLIF(languagecode.ephcode, '') languagecode\n" +
-                    ", CAST(NULL AS boolean) electro_rights_indicator\n" +
-                    ", CAST(NULL AS varchar) f_oa_journal_type\n" +
+                    ", CASE WHEN erights.value = 'Y | Yes' THEN true WHEN erights.value = 'N | No' THEN false ELSE null END electro_rights_indicator\n" +
+                    ", 'N' f_oa_journal_type \n" +
                     ", CAST(NULL AS varchar) f_society_ownership\n" +
                     ", CAST(NULL AS varchar) subscription_type\n" +
                     ", date_parse(NULLIF(content.metamodifiedon, ''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
@@ -242,6 +243,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product on content.sourceref = product.sourceref\n" +
                     "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily versionfamily ON (content.sourceref = versionfamily.workmasterprojectno)\n" +
                     "LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification classification ON ((content.sourceref = classification.sourceref) AND (classification.classificationcode = 'DCDFAC | Accounting class'))\n" +
+                    "LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification erights ON content.sourceref = erights.sourceref AND erights.classificationcode = 'PAERIGHTS | Electronic rights' \n"+
                     "LEFT JOIN (SELECT workmasterprojectno, min(manifestation_priority) work_priority FROM (  \n" +
                     "    SELECT m.sourceref, w.workmasterprojectno, coalesce(nullif(m.ref_key_manifestation_priority,6),nullif(m.delivery_status_manifestation_priority,6),nullif(m.delta_status_manifestation_priority,6),6) manifestation_priority\n" +
                     "    FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".all_manifestation_statuses_v m\n" +
@@ -272,8 +274,8 @@ public class BCS_ETLCoreDataChecksSQL {
                     ", cast(null as varchar) resp_centre\n" +
                     ", cast(null as varchar) pmg\n" +
                     ", cast(null as varchar) languagecode\n" +
-                    ", CAST(NULL AS boolean) electro_rights_indicator\n" +
-                    ", CAST(NULL AS varchar) f_oa_journal_type\n" +
+                    ", CAST(NULL AS boolean) electro_rights_indicator" +
+                    ", 'N' f_oa_journal_type \n" +
                     ", CAST(NULL AS varchar) f_society_ownership\n" +
                     ", CAST(NULL AS varchar) subscription_type\n" +
                     ", modifiedon modifiedon\n" +
@@ -332,80 +334,96 @@ public class BCS_ETLCoreDataChecksSQL {
                     "and u_key in ('%s') order by u_key desc";
 
     public static String GET_RANDOM_MANIF_KEY_INBOUND =
-            "SELECT u_key as sourceref \n" +
+            "with srcpubdates as (SELECT\n" +
+                    "content.ownership\n" +
+                    ", content.sourceref\n" +
+                    ", CAST(date_parse(NULLIF(product.publishedon, ''), '%%d-%%b-%%Y') AS date) publishedondate\n" +
+                    ", CAST(date_parse(NULLIF(product.pubdateplanned, ''), '%%d-%%b-%%Y') AS date) pubdateplanneddate\n" +
                     "FROM\n" +
-                    "  (\n" +
-                    "   SELECT DISTINCT\n" +
-                    "     NULLIF(product.sourceref, '') sourceref\n" +
-                    "   , NULLIF(product.sourceref, '') u_key\n" +
-                    "   , NULLIF(content.title, '') title\n" +
-                    "   , (CASE WHEN (NULLIF(intedition.classificationcode, '') IS NULL) THEN false ELSE true END) intereditionflag\n" +
-                    "   , CAST(date_parse(COALESCE(NULLIF(firstactual, ''), NULLIF(firstplanned, '')), '%d-%b-%Y') AS date) firstpublisheddate\n" +
-                    "   , NULLIF(product.binding, '') binding\n" +
-                    "   , NULLIF(manifestationtypecode.ephcode, '') manifestation_type\n" +
-                    "   , (CASE WHEN (product.metadeleted = 'Y') THEN 'NVM' ELSE COALESCE(NULLIF(manifestationstatus.eph_manifestation_status_code, ''), 'UNK') END) status\n" +
-                    "   , NULLIF(workprod.workmasterprojectno, '') work_id\n" +
-                    "   , CAST(null AS timestamp) last_pub_date\n" +
-                    "   , 'N' dq_err\n" +
-                    "   FROM\n" +
-                    "     ((((((((("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
-                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content ON (product.sourceref = content.sourceref))\n" +
-                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily workprod ON ((product.sourceref = workprod.sourceref) AND (workprod.workmasterprojectno IS NOT NULL)))\n" +
-                    "   LEFT JOIN (\n" +
-                    "      SELECT\n" +
-                    "        sourceref\n" +
-                    "      , classificationcode\n" +
-                    "      FROM\n" +
-                    "        "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification classification\n" +
-                    "      WHERE (classificationcode LIKE 'PARELIE%')\n" +
-                    "   )  intedition ON (product.sourceref = intedition.sourceref))\n" +
-                    "   LEFT JOIN (\n" +
-                    "      SELECT\n" +
-                    "        sourceref\n" +
-                    "      , min(plannedpubdate) firstplanned\n" +
-                    "      FROM\n" +
-                    "        "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation\n" +
-                    "      WHERE (plannedpubdate <> '')\n" +
-                    "      GROUP BY sourceref\n" +
-                    "   )  planneddates ON (product.sourceref = planneddates.sourceref))\n" +
-                    "   LEFT JOIN (\n" +
-                    "      SELECT\n" +
-                    "        sourceref\n" +
-                    "      , min(pubdateactual) firstactual\n" +
-                    "      FROM\n" +
-                    "        "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation\n" +
-                    "      WHERE (pubdateactual <> '')\n" +
-                    "      GROUP BY sourceref\n" +
-                    "   )  actualdates ON (product.sourceref = actualdates.sourceref))\n" +
-                    "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".all_manifestation_statuses_v all_status ON (product.sourceref = all_status.sourceref))\n" +
-                    "   LEFT JOIN (\n" +
-                    "      SELECT DISTINCT\n" +
-                    "        eph_manifestation_status_code\n" +
-                    "      , manifestation_priority\n" +
-                    "      FROM\n" +
-                    "        "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode\n" +
-                    "   )  manifestationstatus ON (COALESCE(NULLIF(all_status.ref_key_manifestation_priority, 6), NULLIF(all_status.delivery_status_manifestation_priority, 6), NULLIF(all_status.delta_status_manifestation_priority, 6), 6) = manifestationstatus.manifestation_priority))\n" +
-                    "   LEFT JOIN (\n" +
-                    "      SELECT\n" +
-                    "        sourceref\n" +
-                    "      , (CASE WHEN (producttype IN ('199 | E-book-199', 'VAC | VAC - Voucher Access Card', 'INK | Inkling E-Book')) THEN split_part(producttype, ' | ', 1) WHEN (binding IN ('BB | Book/Hardback', 'BC | Book/Paperback')) THEN split_part(binding, ' | ', 1) WHEN (versiontype IN ('BKH | Book - Hardback', 'BKP | Book - Paperback')) THEN split_part(versiontype, ' | ', 1) WHEN (deltabinding IN ('1 | 1 - Hardback', '2 | 2 - Paperback')) THEN split_part(deltabinding, ' | ', 1) WHEN (versiontype IN ('NBP | Non - Book Physical', 'ELP | Electronic - Physical', 'ELO | Electronic - Online', 'COMB | Combination Set', 'MVOL | Multivol. Run-on Set')) THEN split_part(versiontype, ' | ', 1) ELSE '' END) manifestation_type\n" +
-                    "      FROM\n" +
-                    "        (\n" +
-                    "         SELECT\n" +
-                    "           p.sourceref\n" +
-                    "         , p.versiontype\n" +
-                    "         , p.binding\n" +
-                    "         , a.value producttype\n" +
-                    "         , b.value deltabinding\n" +
-                    "         FROM\n" +
-                    "           (("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product p\n" +
-                    "         LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification a ON ((p.sourceref = a.sourceref) AND (a.classificationcode LIKE 'PTCO%')))\n" +
-                    "         LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification b ON ((p.sourceref = b.sourceref) AND (b.classificationcode LIKE 'PTDE%')))\n" +
-                    "      ) \n" +
-                    "   )  manif_type ON (product.sourceref = manif_type.sourceref))\n" +
-                    "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".manifestationtypecode ON (manifestation_type = manifestationtypecode.ppmcode))\n" +
-                    ")  A\n" +
-                    "WHERE (A.sourceref IS NOT NULL) order by rand() limit %s";
+                    "("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
+                    "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content ON (product.sourceref = content.sourceref))\n" +
+                    "UNION ALL SELECT\n" +
+                    "location.warehouse\n" +
+                    ", location.sourceref\n" +
+                    ", CAST(date_parse(NULLIF(location.pubdateactual, ''), '%%d-%%b-%%Y') AS date) publishedondate\n" +
+                    ", CAST(date_parse(NULLIF(location.plannedpubdate, ''), '%%d-%%b-%%Y') AS date) pubdateplanneddate\n" +
+                    "FROM\n" +
+                    ""+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation location\n" +
+                    ")\n" +
+                    "SELECT u_key as sourceref \n" +
+                    "FROM\n" +
+                    "(\n" +
+                    "SELECT DISTINCT\n" +
+                    "NULLIF(product.sourceref, '') sourceref\n" +
+                    ", NULLIF(product.sourceref, '') u_key\n" +
+                    ", NULLIF(content.title, '') title\n" +
+                    ", (CASE WHEN (NULLIF(intedition.classificationcode, '') IS NULL) THEN false ELSE true END) intereditionflag\n" +
+                    ", COALESCE(firstactual, firstplanned) firstpublisheddate\n" +
+                    ", NULLIF(product.binding, '') binding\n" +
+                    ", NULLIF(manifestationtypecode.ephcode, '') manifestation_type\n" +
+                    ", (CASE WHEN (product.metadeleted = 'Y') THEN 'NVM' ELSE COALESCE(NULLIF(manifestationstatus.eph_manifestation_status_code, ''), 'UNK') END) status\n" +
+                    ", NULLIF(workprod.workmasterprojectno, '') work_id\n" +
+                    ", CAST(null AS timestamp) last_pub_date\n" +
+                    ", 'N' dq_err\n" +
+                    "FROM\n" +
+                    "((((((((("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
+                    "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content ON (product.sourceref = content.sourceref))\n" +
+                    "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily workprod ON ((product.sourceref = workprod.sourceref) AND (workprod.workmasterprojectno IS NOT NULL)))\n" +
+                    "LEFT JOIN (\n" +
+                    "SELECT\n" +
+                    "sourceref\n" +
+                    ", classificationcode\n" +
+                    "FROM\n" +
+                    ""+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification classification\n" +
+                    "WHERE (classificationcode LIKE 'PARELIE%')\n" +
+                    ") intedition ON (product.sourceref = intedition.sourceref))\n" +
+                    "LEFT JOIN (\n" +
+                    "SELECT\n" +
+                    "sourceref\n" +
+                    ", min(pubdateplanneddate) firstplanned\n" +
+                    "FROM\n" +
+                    "srcpubdates\n" +
+                    "WHERE (pubdateplanneddate IS NOT NULL)\n" +
+                    "GROUP BY sourceref\n" +
+                    ") planneddates ON (product.sourceref = planneddates.sourceref))\n" +
+                    "LEFT JOIN (\n" +
+                    "SELECT\n" +
+                    "sourceref\n" +
+                    ", min(publishedondate) firstactual\n" +
+                    "FROM\n" +
+                    "srcpubdates\n" +
+                    "WHERE (publishedondate IS NOT NULL)\n" +
+                    "GROUP BY sourceref\n" +
+                    ") actualdates ON (product.sourceref = actualdates.sourceref))\n" +
+                    "LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".all_manifestation_statuses_v all_status ON (product.sourceref = all_status.sourceref))\n" +
+                    "LEFT JOIN (\n" +
+                    "SELECT DISTINCT\n" +
+                    "eph_manifestation_status_code\n" +
+                    ", manifestation_priority\n" +
+                    "FROM\n" +
+                    ""+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode\n" +
+                    ") manifestationstatus ON (COALESCE(NULLIF(all_status.ref_key_manifestation_priority, 6), NULLIF(all_status.delivery_status_manifestation_priority, 6), NULLIF(all_status.delta_status_manifestation_priority, 6), 6) = manifestationstatus.manifestation_priority))\n" +
+                    "LEFT JOIN (\n" +
+                    "SELECT\n" +
+                    "sourceref\n" +
+                    ", (CASE WHEN (producttype IN ('199 | E-book-199', 'VAC | VAC - Voucher Access Card', 'INK | Inkling E-Book')) THEN split_part(producttype, ' | ', 1) WHEN (binding IN ('BB | Book/Hardback', 'BC | Book/Paperback')) THEN split_part(binding, ' | ', 1) WHEN (versiontype IN ('BKH | Book - Hardback', 'BKP | Book - Paperback')) THEN split_part(versiontype, ' | ', 1) WHEN (deltabinding IN ('1 | 1 - Hardback', '2 | 2 - Paperback')) THEN split_part(deltabinding, ' | ', 1) WHEN (versiontype IN ('NBP | Non - Book Physical', 'ELP | Electronic - Physical', 'ELO | Electronic - Online', 'COMB | Combination Set', 'MVOL | Multivol. Run-on Set')) THEN split_part(versiontype, ' | ', 1) ELSE '' END) manifestation_type\n" +
+                    "FROM\n" +
+                    "(\n" +
+                    "SELECT\n" +
+                    "p.sourceref\n" +
+                    ", p.versiontype\n" +
+                    ", p.binding\n" +
+                    ", a.value producttype\n" +
+                    ", b.value deltabinding\n" +
+                    "FROM\n" +
+                    "(("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product p\n" +
+                    "LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification a ON ((p.sourceref = a.sourceref) AND (a.classificationcode LIKE 'PTCO%')))\n" +
+                    "LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification b ON ((p.sourceref = b.sourceref) AND (b.classificationcode LIKE 'PTDE%')))\n" +
+                    ")\n" +
+                    ") manif_type ON (product.sourceref = manif_type.sourceref))\n" +
+                    "LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".manifestationtypecode ON (manifestation_type = manifestationtypecode.ppmcode))\n" +
+                    ") A\n" +
+                    "WHERE (A.sourceref IS NOT NULL) order by rand() limit %s \n";
 
     public static String GET_MANIF_INBOUND_DATA =
             "select " +
@@ -500,7 +518,7 @@ public class BCS_ETLCoreDataChecksSQL {
                    "NULLIF(concat(concat(CAST(sourceref AS varchar), split_part(relationtype, ' | ', 1)), CAST(projectno AS varchar)),'') u_key\n" +
                    ", NULLIF(sourceref,'') parentref\n" +
                    ", NULLIF(projectno,'') childref\n" +
-                   ", NULLIF(relationtypecode.ephcode,'') relationtyperef\n" +
+                   ", NULLIF(relationtypecode.ephcode,' ') relationtyperef\n" +
                    ", date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
                    ", 'N' dq_err\n" +
                    "FROM\n" +
@@ -947,10 +965,10 @@ public class BCS_ETLCoreDataChecksSQL {
                     "   SELECT DISTINCT\n" +
                     "     NULLIF(product.sourceref, '') sourceref\n" +
                     "   , split_part(NULLIF(product.binding, ''), ' | ', 1) bindingcode\n" +
-                    "   , concat(NULLIF(product.sourceref, ''), split_part(NULLIF(product.binding, ''), ' | ', 1)) u_key\n" +
-                    "   , concat(NULLIF(content.title, ''), ' OOA') name\n" +
+                    "   , coalesce(product.sourceref, '') u_key \n" +
+                    "   , concat(coalesce(content.title, ''), 'Purchase') name \n" +
                     "   , NULLIF(content.shorttitle, '') shorttitle\n" +
-                    "   , CAST(date_parse((CASE WHEN ((publishedon = '') AND (pubdateplanned = '')) THEN CAST(null AS varchar) ELSE (CASE WHEN (publishedon = '') THEN pubdateplanned ELSE publishedon END) END), '%%d-%%b-%%Y') AS date) launchdate\n" +
+                    "   , CAST(date_parse((CASE WHEN ((publishedon = '') AND (pubdateplanned = '')) THEN CAST(null AS varchar) ELSE (CASE WHEN (publishedon = '') THEN pubdateplanned ELSE publishedon END) END), '%d-%b-%Y') AS date) launchdate\n" +
                     "   , NULLIF(taxcode.ephcode, '') taxcode\n" +
                     "   , (CASE WHEN (product.metadeleted = 'Y') THEN 'NVP' ELSE COALESCE(NULLIF(status.eph_product_status_code, ''), 'UNK') END) status\n" +
                     "   , NULLIF(product.sourceref, '') manifestationref\n" +
@@ -966,8 +984,8 @@ public class BCS_ETLCoreDataChecksSQL {
                     "   FROM\n" +
                     "     ((((((((("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
                     "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content ON (product.sourceref = content.sourceref))\n" +
-                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_fullversionfamily fullversionfamily ON ((product.sourceref = fullversionfamily.sourceref) AND (workmaster = 'YES')))\n" +
-                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_current_v workcontent ON (fullversionfamily.projectno = workcontent.sourceref))\n" +
+                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily versionfamily ON ((product.sourceref = versionfamily.sourceref) AND (versionfamily.workmasterprojectno IS NOT NULL)))\n" +
+                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_current_v workcontent ON (versionfamily.workmasterprojectno = workcontent.sourceref))\n" +
                     "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification classification ON ((product.sourceref = classification.sourceref) AND (classificationcode LIKE 'DCDFC1%')))\n" +
                     "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".taxcode ON (split_part(classification.value, ' | ', 1) = taxcode.ppmcode))\n" +
                     "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".all_manifestation_statuses_v manifestationstatus ON (product.sourceref = manifestationstatus.sourceref))\n" +
@@ -1007,7 +1025,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     "      WHERE ((split_part(classificationcode, ' | ', 1) IN ('DCADA', 'DCAADAUS', 'DCAANZ')) AND (split_part(value, ' | ', 1) IN ('NSS', 'NSI')))\n" +
                     "   )  separately_sale ON (product.sourceref = separately_sale.sourceref))\n" +
                     ")  A\n" +
-                    "WHERE (A.sourceref IS NOT NULL)order by  rand() limit %s \n";
+                    "WHERE (A.sourceref IS NOT NULL) order by  rand() limit %s \n";
 
 
 

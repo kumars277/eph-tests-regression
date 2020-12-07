@@ -33,10 +33,6 @@ public class BCS_ETLCoreCountChecksSteps {
     private static String BCSLatestSQLCurrentCount;
     private static int BCSumDeltaExclCount;
     private static String BCSCoreDuplicateLatestSQLCount;
-    private static int SDLatestCount;
-    private static String SDDeltaCurrHistSQLCount;
-    private static int SDDeltaCurrHistCount;
-    private static String SDExclSQLCount;
     private static int BCSCoreDuplicateLatestCount;
     private static int BCSLatestCount;
     private static String BCSSumDeltaExclSQLCurrentCount;
