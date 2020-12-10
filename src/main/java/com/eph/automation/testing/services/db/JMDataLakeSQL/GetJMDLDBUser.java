@@ -37,4 +37,36 @@ public class GetJMDLDBUser {
         }
         return dbJMDataLake;
     }
+
+    public static String getJMDB2(){
+        String dbJMDataLake = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbJMDataLake = "journalmaestro_staging_sit2";
+            }
+            else{
+                dbJMDataLake = "journalmaestro_staging_uat2";
+            }
+
+        }else{
+            dbJMDataLake = "journalmaestro_staging_sit2";
+        }
+        return dbJMDataLake;
+    }
+
+    public static String getProdStagingDataBase(){
+        String dbStageProdDL = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbStageProdDL = "product_staging_database_sit";
+            }
+            else{
+                dbStageProdDL = "product_staging_database_uat";
+            }
+
+        }else{
+            dbStageProdDL = "product_staging_database_sit";
+        }
+        return dbStageProdDL;
+    }
 }
