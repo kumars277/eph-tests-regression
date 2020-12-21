@@ -52,7 +52,7 @@ public class RESTEndPoints {
 
     public enum ActivityAuth {
         SIT_USER_NAME("jmfadmin_act"),
-        SIT_PASS_WORD("budge_plop_100th_map")
+        SIT_PASS_WORD("")
         ;
         private String authorization;
 
