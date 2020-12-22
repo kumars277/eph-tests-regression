@@ -964,7 +964,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     "   , coalesce(product.sourceref, '') u_key \n" +
                     "   , concat(coalesce(content.title, ''), ' Purchase') name\n" +
                     "   , NULLIF(content.shorttitle, '') shorttitle\n" +
-                    "   , CAST(date_parse((CASE WHEN ((publishedon = '') AND (pubdateplanned = '')) THEN CAST(null AS varchar) ELSE (CASE WHEN (publishedon = '') THEN pubdateplanned ELSE publishedon END) END), '%d-%b-%Y') AS date) launchdate\n" +
+                    "   , CAST(date_parse((CASE WHEN ((publishedon = '') AND (pubdateplanned = '')) THEN CAST(null AS varchar) ELSE (CASE WHEN (publishedon = '') THEN pubdateplanned ELSE publishedon END) END), '%%d-%%b-%%Y') AS date) launchdate\n" +
                     "   , NULLIF(taxcode.ephcode, '') taxcode\n" +
                     "   , CASE WHEN product.metadeleted = 'Y' THEN 'NVP' ELSE COALESCE(NULLIF(status.eph_product_status_code, ''), 'UNK') END status\n" +
                     "   , NULLIF(product.sourceref, '') manifestationref\n" +

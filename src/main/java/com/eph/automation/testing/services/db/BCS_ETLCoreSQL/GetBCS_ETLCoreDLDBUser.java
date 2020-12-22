@@ -6,14 +6,14 @@ public class GetBCS_ETLCoreDLDBUser {
         String dbBCS = null;
         if (System.getProperty("ENV") != null){
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
-                dbBCS = "bcs_ingestion_database_sit";
+                dbBCS = "bcs_ingestion_database_sit2";
             }
             else{
                 dbBCS = "bcs_ingestion_database_uat";
             }
 
         }else{
-            dbBCS = "bcs_ingestion_database_sit";
+            dbBCS = "bcs_ingestion_database_sit2";
           //  dbSDDL = "bcs_ingestion_database_uat";
         }
         return dbBCS;
@@ -23,14 +23,14 @@ public class GetBCS_ETLCoreDLDBUser {
         String dbProd = null;
         if (System.getProperty("ENV") != null){
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
-                dbProd = "product_staging_database_sit";
+                dbProd = "product_staging_database_sit2";
             }
             else{
                 dbProd = "product_staging_database_uat";
             }
 
         }else{
-            dbProd = "product_staging_database_sit";
+            dbProd = "product_staging_database_sit2";
             //  dbSDDL = "bcs_ingestion_database_uat";
         }
         return dbProd;
@@ -40,7 +40,7 @@ public class GetBCS_ETLCoreDLDBUser {
         String dbProdDB = null;
         if (System.getProperty("ENV") != null){
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
-                dbProdDB = "product_database_sit";
+                dbProdDB = "product_database_sit2";
             }
             else{
                 dbProdDB = "product_database_uat";
@@ -57,14 +57,14 @@ public class GetBCS_ETLCoreDLDBUser {
         String dbJM = null;
         if (System.getProperty("ENV") != null){
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
-                dbJM = "journalmaestro_sit";
+                dbJM = "journalmaestro_sit2";
             }
             else{
                 dbJM = "journalmaestro_uat";
             }
 
         }else{
-            dbJM = "journalmaestro_sit";
+            dbJM = "journalmaestro_sit2";
             //  dbSDDL = "bcs_ingestion_database_uat";
         }
         return dbJM;

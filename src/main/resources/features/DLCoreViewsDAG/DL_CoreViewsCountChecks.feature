@@ -31,9 +31,9 @@ Feature:Validate data of DL Core Views where data comes from BCS and JM Core
     Then  Compare data of BCS and JM Core with DL Core views <tableName> are identical
     Examples:
       | tableName                        |countOfRandomIds  |
-      |all_accountable_product_v         |10                |
-      |all_manifestation_identifiers_v   |10                |
-      |all_manifestation_v               |10                |
+    |all_accountable_product_v         |10                |
+     |all_manifestation_identifiers_v   |10                |
+     |all_manifestation_v               |10                |
       |all_person_v                      |10                |
       |all_product_v                     |10                |
       |all_work_identifier_v             |10                |
