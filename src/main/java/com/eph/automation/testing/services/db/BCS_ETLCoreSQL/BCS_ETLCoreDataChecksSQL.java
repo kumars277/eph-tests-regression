@@ -79,7 +79,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     "   , r.sourceref||rolecode.ephcode||w.peoplehub_id as u_key \n" +
                     "   , (CASE WHEN (substr(split_part(NULLIF(responsibility,''), ' | ', 1), -1, 1) = '2') THEN '2' ELSE '1' END) sequence\n" +
                     "   , '0' deduplicator\n" +
-                    "   , date_parse(NULLIF(metamodifiedon,''),'%d-%b-%Y %H:%i:%s') modifiedon\n" +
+                    "   , date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
                     "   , 'N' dq_err\n" +
                     "   FROM\n" +
                     "     ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_responsibilities r\n" +
@@ -345,7 +345,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     "   , r.sourceref||rolecode.ephcode||w.peoplehub_id as u_key \n" +
                     "   , (CASE WHEN (substr(split_part(NULLIF(responsibility,''), ' | ', 1), -1, 1) = '2') THEN '2' ELSE '1' END) sequence\n" +
                     "   , '0' deduplicator\n" +
-                    "   , date_parse(NULLIF(metamodifiedon,''),'%d-%b-%Y %H:%%i:%%s') modifiedon\n" +
+                    "   , date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
                     "   , 'N' dq_err\n" +
                     "   FROM\n" +
                     "     ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_responsibilities r\n" +
@@ -3171,6 +3171,33 @@ public class BCS_ETLCoreDataChecksSQL {
                     "group by sourceref\n" +
                     ") order by rand() limit %s";
 
+
+    public static String GET_RANDOM_MANIF_PUBDATES_KEY_INBOUND =
+      "select sourceref from(\n" +
+              "select \n" +
+              "a.sourceref, \n" +
+              "versionfamily.workmasterprojectno, \n" +
+              "min(publishedondate) min_actual_pubdate, \n" +
+              "min(pubdateplanneddate) min_planned_pubdate\n" +
+              "from (\n" +
+              "    select content.ownership\n" +
+              "         , content.sourceref\n" +
+              "         , cast(date_parse(nullif(product.publishedon, ''), '%%d-%%b-%%Y') as date) publishedondate\n" +
+              "         , cast(date_parse(nullif(product.pubdateplanned, ''), '%%d-%%b-%%Y') as date) pubdateplanneddate\n" +
+              "    from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
+              "    inner join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content on product.sourceref = content.sourceref\n" +
+              "    union all\n" +
+              "    select location.warehouse\n" +
+              "         , location.sourceref\n" +
+              "         , cast(date_parse(nullif(location.pubdateactual, ''), '%%d-%%b-%%Y') as date) publishedondate\n" +
+              "         , cast(date_parse(nullif(location.plannedpubdate, ''), '%%d-%%b-%%Y') as date) pubdateplanneddate\n" +
+              "    from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation location\n" +
+              "    ) a\n" +
+              "inner join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily versionfamily on a.sourceref = versionfamily.sourceref \n" +
+              "and nullif(versionfamily.workmasterprojectno,'')is not null\n" +
+              "group by a.sourceref, versionfamily.workmasterprojectno) order by rand() limit %s \n" ;
+
+
     public static String GET_ALL_MANIF_STATUS_INBOUND_DATA =
             "select sourceref as SOURCEREF \n" +
                     ",ref_key_product_priority as REFKEYPRODPRIORITY \n" +
@@ -3249,6 +3276,35 @@ public class BCS_ETLCoreDataChecksSQL {
                     "group by sourceref\n" +
                     ") where sourceref in ('%s') order by sourceref desc";
 
+    public static String GET_ALL_MANIF_PUBDATES_INBOUND_DATA =
+    "select sourceref as SOURCEREF " +
+            ",workmasterprojectno as WORKMASTERPROJECTNO" +
+            ",min_actual_pubdate as MINACTUALPUBDATE" +
+            ",min_planned_pubdate as MINPLANNEDPUBDATE" +
+            " from(\n" +
+            "select \n" +
+            "a.sourceref, \n" +
+            "versionfamily.workmasterprojectno, \n" +
+            "min(publishedondate) min_actual_pubdate, \n" +
+            "min(pubdateplanneddate) min_planned_pubdate\n" +
+            "from (\n" +
+            "    select content.ownership\n" +
+            "         , content.sourceref\n" +
+            "         , cast(date_parse(nullif(product.publishedon, ''), '%%d-%%b-%%Y') as date) publishedondate\n" +
+            "         , cast(date_parse(nullif(product.pubdateplanned, ''), '%%d-%%b-%%Y') as date) pubdateplanneddate\n" +
+            "    from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
+            "    inner join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content on product.sourceref = content.sourceref\n" +
+            "    union all\n" +
+            "    select location.warehouse\n" +
+            "         , location.sourceref\n" +
+            "         , cast(date_parse(nullif(location.pubdateactual, ''), '%%d-%%b-%%Y') as date) publishedondate\n" +
+            "         , cast(date_parse(nullif(location.plannedpubdate, ''), '%%d-%%b-%%Y') as date) pubdateplanneddate\n" +
+            "    from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation location\n" +
+            "    ) a\n" +
+            "inner join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily versionfamily on a.sourceref = versionfamily.sourceref \n" +
+            "and nullif(versionfamily.workmasterprojectno,'')is not null\n" +
+            "group by a.sourceref, versionfamily.workmasterprojectno) where sourceref in ('%s') order by sourceref desc";
+
     public static String GET_MANIF_STATUSES_DATA =
             "select sourceref as SOURCEREF \n" +
                     ",ref_key_product_priority as REFKEYPRODPRIORITY \n" +
@@ -3259,6 +3315,12 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",delta_status_manifestation_priority as DELTASTATUSMANIFPRIORITY \n" +
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".all_manifestation_statuses_v where sourceref in ('%s') order by sourceref desc";
 
+    public static String GET_MANIF_PUBDATES_DATA =
+            "select sourceref as SOURCEREF " +
+                    ",workmasterprojectno as WORKMASTERPROJECTNO" +
+                    ",min_actual_pubdate as MINACTUALPUBDATE" +
+                    ",min_planned_pubdate as MINPLANNEDPUBDATE" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".all_manifestation_pubdates_v where sourceref in ('%s') order by sourceref desc";
 
 
 

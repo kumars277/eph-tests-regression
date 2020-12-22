@@ -222,7 +222,7 @@ public class DL_CoreViewsCountChecksSteps {
     }
 
     @And ("^Get the Records from the DL core views (.*)$")
-    public void getRecFromAllViews(String tableName){
+    public void     getRecFromAllViews(String tableName){
         Log.info("We get the records from JM and BCS Core table...");
         switch (tableName) {
             case "all_accountable_product_v":

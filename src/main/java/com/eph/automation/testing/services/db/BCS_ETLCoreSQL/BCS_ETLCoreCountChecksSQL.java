@@ -100,6 +100,11 @@ public class BCS_ETLCoreCountChecksSQL {
     public static String GET_BCS_ETL_CORE_MANIF_STATUSES_COUNT =
             "select count(*) as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".all_manifestation_statuses_v";
 
+
+    public static String GET_BCS_ETL_CORE_MANIF_PUBDATES_COUNT =
+            "select count(*) as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".all_manifestation_pubdates_v";
+
+
     public static String GET_BCS_ETL_CORE_MANIF_IDENTIF_CURR_HIST_COUNT =
             "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_identifier_part where " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_identifier_part) ";
@@ -107,6 +112,31 @@ public class BCS_ETLCoreCountChecksSQL {
             "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_identifier_transform_file_history_part where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_identifier_transform_file_history_part) ";
 
+
+    public static String GET_MANIF_PUBDATES_INBOUND_COUNT =
+            "select count(*) as Source_Count from(\n" +
+                    "select \n" +
+                    "a.sourceref, \n" +
+                    "versionfamily.workmasterprojectno, \n" +
+                    "min(publishedondate) min_actual_pubdate, \n" +
+                    "min(pubdateplanneddate) min_planned_pubdate\n" +
+                    "from (\n" +
+                    "    select content.ownership\n" +
+                    "         , content.sourceref\n" +
+                    "         , cast(date_parse(nullif(product.publishedon, ''), '%d-%b-%Y') as date) publishedondate\n" +
+                    "         , cast(date_parse(nullif(product.pubdateplanned, ''), '%d-%b-%Y') as date) pubdateplanneddate\n" +
+                    "    from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
+                    "    inner join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content on product.sourceref = content.sourceref\n" +
+                    "    union all\n" +
+                    "    select location.warehouse\n" +
+                    "         , location.sourceref\n" +
+                    "         , cast(date_parse(nullif(location.pubdateactual, ''), '%d-%b-%Y') as date) publishedondate\n" +
+                    "         , cast(date_parse(nullif(location.plannedpubdate, ''), '%d-%b-%Y') as date) pubdateplanneddate\n" +
+                    "    from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation location\n" +
+                    "    ) a\n" +
+                    "inner join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily versionfamily on a.sourceref = versionfamily.sourceref \n" +
+                    "and nullif(versionfamily.workmasterprojectno,'')is not null\n" +
+                    "group by a.sourceref, versionfamily.workmasterprojectno) \n" ;
 
     public static String GET_MANIF_STATUSES_INBOUND_COUNT =
             "select Count(*) as Source_Count from(\n" +

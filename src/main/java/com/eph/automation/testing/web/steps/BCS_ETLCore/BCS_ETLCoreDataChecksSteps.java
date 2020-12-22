@@ -85,12 +85,15 @@ public class BCS_ETLCoreDataChecksSteps {
                 randomIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 Ids = randomIds.stream().map(m -> (String) m.get("sourceref")).collect(Collectors.toList());
                 break;
+            case "all_manifestation_pubdates_v":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_MANIF_PUBDATES_KEY_INBOUND, numberOfRecords);
+                randomIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomIds.stream().map(m -> (String) m.get("sourceref")).collect(Collectors.toList());
+                break;
        }
         Log.info(sql);
         Log.info(Ids.toString());
     }
-
-
 
 
     @When("^Get the Data from the Inbound Tables (.*)$")
@@ -123,6 +126,9 @@ public class BCS_ETLCoreDataChecksSteps {
                 break;
             case "all_manifestation_statuses_v":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_ALL_MANIF_STATUS_INBOUND_DATA, Joiner.on("','").join(Ids));
+                break;
+            case "all_manifestation_pubdates_v":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_ALL_MANIF_PUBDATES_INBOUND_DATA, Joiner.on("','").join(Ids));
                 break;
         }
         dataQualityBCSContext.recordsFromInboundData = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
@@ -164,6 +170,10 @@ public class BCS_ETLCoreDataChecksSteps {
             case "all_manifestation_statuses_v":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_MANIF_STATUSES_DATA, Joiner.on("','").join(Ids));
                 break;
+            case "all_manifestation_pubdates_v":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_MANIF_PUBDATES_DATA, Joiner.on("','").join(Ids));
+                break;
+
         }
         dataQualityBCSContext.recordsFromCurrent = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
         Log.info(sql);
@@ -315,6 +325,55 @@ public class BCS_ETLCoreDataChecksSteps {
                                 dataQualityBCSContext.recordsFromCurrent.get(i).getDELTASTATUSMANIFPRIORITY());
                     }
                     break;
+
+                    case "all_manifestation_pubdates_v":
+                        Log.info("getting all_manifestation_pubdates_v records ");
+                        dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getSOURCEREF)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getSOURCEREF));
+
+                        Log.info("Inbound -> SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                                "Manif_pubdates -> SOURCEREF => " + dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF());
+                        if (dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() != null ||
+                                (dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF() != null)) {
+                            Assert.assertEquals("The SOURCEREF is =" + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() + " is missing/not found in Manif_pubdates",
+                                    dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                                    dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF());
+                        }
+
+                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                                " WORKMASTERPROJECTNO => Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getWORKMASTERPROJECTNO() +
+                                " Manif_pubdates =" + dataQualityBCSContext.recordsFromCurrent.get(i).getWORKMASTERPROJECTNO());
+
+                        if (dataQualityBCSContext.recordsFromInboundData.get(i).getWORKMASTERPROJECTNO() != null ||
+                                (dataQualityBCSContext.recordsFromCurrent.get(i).getWORKMASTERPROJECTNO() != null)) {
+                            Assert.assertEquals("The WORKMASTERPROJECTNO is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                                    dataQualityBCSContext.recordsFromInboundData.get(i).getWORKMASTERPROJECTNO(),
+                                    dataQualityBCSContext.recordsFromCurrent.get(i).getWORKMASTERPROJECTNO());
+                        }
+
+                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                                " MINACTUALPUBDATE => Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getMINACTUALPUBDATE() +
+                                " Manif_pubdates =" + dataQualityBCSContext.recordsFromCurrent.get(i).getMINACTUALPUBDATE());
+
+                        if (dataQualityBCSContext.recordsFromInboundData.get(i).getMINACTUALPUBDATE() != null ||
+                                (dataQualityBCSContext.recordsFromCurrent.get(i).getMINACTUALPUBDATE() != null)) {
+                            Assert.assertEquals("The MINACTUALPUBDATE is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                                    dataQualityBCSContext.recordsFromInboundData.get(i).getMINACTUALPUBDATE(),
+                                    dataQualityBCSContext.recordsFromCurrent.get(i).getMINACTUALPUBDATE());
+                        }
+
+                        Log.info("SOURCEREF => " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF() +
+                                " MINPLANNEDPUBDATE => Inbound =" + dataQualityBCSContext.recordsFromInboundData.get(i).getMINPLANNEDPUBDATE() +
+                                " Manif_pubdates =" + dataQualityBCSContext.recordsFromCurrent.get(i).getMINPLANNEDPUBDATE());
+
+                        if (dataQualityBCSContext.recordsFromInboundData.get(i).getMINPLANNEDPUBDATE() != null ||
+                                (dataQualityBCSContext.recordsFromCurrent.get(i).getMINPLANNEDPUBDATE() != null)) {
+                            Assert.assertEquals("The MINPLANNEDPUBDATE is incorrect for SOURCEREF = " + dataQualityBCSContext.recordsFromInboundData.get(i).getSOURCEREF(),
+                                    dataQualityBCSContext.recordsFromInboundData.get(i).getMINPLANNEDPUBDATE(),
+                                    dataQualityBCSContext.recordsFromCurrent.get(i).getMINPLANNEDPUBDATE());
+                        }
+
+                        break;
 
                     case "etl_person_current_v":
                         dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
