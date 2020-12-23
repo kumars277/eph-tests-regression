@@ -6,15 +6,15 @@ public class GetBCS_ETLCoreDLDBUser {
         String dbBCS = null;
         if (System.getProperty("ENV") != null){
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
-                dbBCS = "bcs_ingestion_database_sit2";
+                dbBCS = "bcs_ingestion_database_sit";
             }
             else{
                 dbBCS = "bcs_ingestion_database_uat";
             }
 
         }else{
-            dbBCS = "bcs_ingestion_database_sit2";
-          //  dbSDDL = "bcs_ingestion_database_uat";
+            dbBCS = "bcs_ingestion_database_sit";
+            //dbBCS = "bcs_ingestion_database_uat";
         }
         return dbBCS;
     }
@@ -23,15 +23,15 @@ public class GetBCS_ETLCoreDLDBUser {
         String dbProd = null;
         if (System.getProperty("ENV") != null){
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
-                dbProd = "product_staging_database_sit2";
+                dbProd = "product_staging_database_sit";
             }
             else{
                 dbProd = "product_staging_database_uat";
             }
 
         }else{
-            dbProd = "product_staging_database_sit2";
-            //  dbSDDL = "bcs_ingestion_database_uat";
+            dbProd = "product_staging_database_sit";
+             // dbProd = "bcs_ingestion_database_uat";
         }
         return dbProd;
     }
@@ -40,7 +40,7 @@ public class GetBCS_ETLCoreDLDBUser {
         String dbProdDB = null;
         if (System.getProperty("ENV") != null){
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
-                dbProdDB = "product_database_sit2";
+                dbProdDB = "product_database_sit";
             }
             else{
                 dbProdDB = "product_database_uat";
@@ -48,7 +48,7 @@ public class GetBCS_ETLCoreDLDBUser {
 
         }else{
             dbProdDB = "product_database_sit";
-            //  dbSDDL = "bcs_ingestion_database_uat";
+             // dbProdDB = "bcs_ingestion_database_uat";
         }
         return dbProdDB;
     }
@@ -57,15 +57,15 @@ public class GetBCS_ETLCoreDLDBUser {
         String dbJM = null;
         if (System.getProperty("ENV") != null){
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
-                dbJM = "journalmaestro_sit2";
+                dbJM = "journalmaestro_sit";
             }
             else{
                 dbJM = "journalmaestro_uat";
             }
 
         }else{
-            dbJM = "journalmaestro_sit2";
-            //  dbSDDL = "bcs_ingestion_database_uat";
+            dbJM = "journalmaestro_sit";
+            //  dbJM = "bcs_ingestion_database_uat";
         }
         return dbJM;
     }

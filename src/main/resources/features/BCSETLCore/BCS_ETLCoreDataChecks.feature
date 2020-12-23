@@ -14,7 +14,7 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
       #|etl_manifestation_current_v              |10            |
      |etl_person_current_v                       |10              |
      # |etl_product_current_v                    |10            |
-      |etl_work_person_role_current_v            |10             |
+     |etl_work_person_role_current_v            |10             |
      |etl_work_relationship_current_v            |10              |
      |etl_work_current_v                         |10              |
      |etl_work_identifier_current_v              |10              |
@@ -136,6 +136,8 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
     Examples:
       |countOfRandomIds     |
       |   10                |
+
+    #################################################
 
   @BCSCore
   Scenario Outline: Verify Data from the difference of BCS Core Delta_Current and Current_history is transferred to BCS core exclude table
