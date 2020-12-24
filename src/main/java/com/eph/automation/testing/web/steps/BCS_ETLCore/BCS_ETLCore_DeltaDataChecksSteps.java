@@ -578,7 +578,6 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                     }
                     break;
 
-
                 case "etl_delta_current_manifestation_identifier":
                     Log.info("comparing delta_history and etl_delta_current_manifestation_identifier Records:");
                     dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
@@ -756,7 +755,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
 
     @Given("^Get the (.*) of BCS Core data from person Delta_Hist Tables$")
     public void getRandKeyFrmPersonDeltaHist(String numberOfRecords) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Core Person Delta Hist Tables....");
         sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_KEY_PERS_DELTA_CURRENT_HIST, numberOfRecords);

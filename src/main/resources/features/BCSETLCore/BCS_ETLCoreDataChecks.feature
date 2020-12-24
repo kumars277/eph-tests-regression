@@ -137,7 +137,7 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
       |countOfRandomIds     |
       |   10                |
 
-    #################################################
+
 
   @BCSCore
   Scenario Outline: Verify Data from the difference of BCS Core Delta_Current and Current_history is transferred to BCS core exclude table
@@ -167,6 +167,8 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
     Examples:
       |countOfRandomIds     |
       |   10                |
+
+     ################################################# till here new logic data comparison updated.
 
   @BCSCore
   Scenario Outline: Verify Data from the difference of BCS Core Delta_Current and Exclude is transferred to BCS core Latest table
