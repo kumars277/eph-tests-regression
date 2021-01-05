@@ -19,10 +19,17 @@ public class BCS_ETLExtendedCountChecksSteps {
     private String BCSExtendedSQLCurrentCount;
     private static int BCSExtendedCurrentCount;
 
-    private String BCSExtendedInboundCurrentSQLCount;
+    private String BCSExtendedSQLDeltaCurrentCount;
+    private static int BCSExtendedDeltaCurrentCount;
 
+    private String BCSExtendedInboundCurrentSQLCount;
     private static int BCSExtendedInboundCurrentCount;
 
+    private String BCSExtSQLDeltaCurrentHistCount;
+    private static int BCSExtDeltaHistCurrentCount;
+
+    private String BCSExtHistSQLCurrentCount;
+    private static int BCSExtCurrentHistCount;
 
     @Given("^Get the total count of BCS Extended from Current Tables (.*)$")
     public void getBCSExtendedCount(String tableName) {
@@ -63,8 +70,6 @@ public class BCS_ETLExtendedCountChecksSteps {
                 Log.info("Getting BCS Extended Work Person Role Current Table Count...");
                 BCSExtendedSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_BCS_EXTENDED_WORK_PERSON_ROLE_EXTENDED_CURR_COUNT;
                 break;
-
-
         }
         Log.info(BCSExtendedSQLCurrentCount);
         List<Map<String, Object>> BCS_ExtendedCurrentTableCount = DBManager.getDBResultMap(BCSExtendedSQLCurrentCount, Constants.AWS_URL);
@@ -123,7 +128,154 @@ public class BCS_ETLExtendedCountChecksSteps {
         Log.info("The count for table " + tableName + " => " + BCSExtendedCurrentCount + " and in Inbound  => " + BCSExtendedInboundCurrentCount);
         Assert.assertEquals("The counts are not equal when compared with " + tableName + " and Inbound ", BCSExtendedInboundCurrentCount,BCSExtendedCurrentCount);
 
+    }
 
+    @Given("^We know the total count of BCS Extended delta current (.*)$")
+    public void getBCSExtDeltaCurrentCount (String tableName) {
+        switch (tableName){
+            case "etl_delta_current_extended_availability":
+                Log.info("Getting BCS etl_delta_current_extended_availability Table Count...");
+                BCSExtendedSQLDeltaCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_AVAILABILITY_DELTA_CURR_COUNT;
+                break;
+            case "etl_delta_current_extended_manifestation":
+                Log.info("Getting BCS etl_delta_current_extended_manifestation Table Count...");
+                BCSExtendedSQLDeltaCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_EXT_DELTA_CURR_COUNT;
+                break;
+            case "etl_delta_current_extended_page_count":
+                Log.info("Getting BCS etl_delta_current_extended_page_count Table Count...");
+                BCSExtendedSQLDeltaCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_PAGE_COUNT_DELTA_CURR_COUNT;
+                break;
+            case "etl_delta_current_extended_url":
+                Log.info("Getting BCS etl_delta_current_extended_url Table Count...");
+                BCSExtendedSQLDeltaCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_URL_DELTA_CURR_COUNT;
+                break;
+            case "etl_delta_current_extended_work":
+                Log.info("Getting BCS etl_delta_current_extended_work Table Count...");
+                BCSExtendedSQLDeltaCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_EXT_DELTA_CURR_COUNT;
+                break;
+            case "etl_delta_current_extended_work_subject_area":
+                Log.info("Getting BCS etl_delta_current_extended_work_subject_area Table Count...");
+                BCSExtendedSQLDeltaCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_SUBJ_AREA_DELTA_CURR_COUNT;
+                break;
+            case "etl_delta_current_extended_manifestation_restrictions":
+                Log.info("Getting BCS etl_delta_current_extended_manifestation_restrictions Table Count...");
+                BCSExtendedSQLDeltaCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_REST_DELTA_CURR_COUNT;
+                break;
+            case "etl_delta_current_extended_product_prices":
+                Log.info("Getting BCS etl_delta_current_extended_product_prices Table Count...");
+                BCSExtendedSQLDeltaCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_PROD_PRICE_DELTA_CURR_COUNT;
+                break;
+            case "etl_delta_current_extended_work_person_role":
+                Log.info("Getting BCS etl_delta_current_extended_work_person_role Table Count...");
+                BCSExtendedSQLDeltaCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_PERS_ROLE_DELTA_CURR_COUNT;
+                break;
+
+        }
+        Log.info(BCSExtendedSQLDeltaCurrentCount);
+        List<Map<String, Object>> BCSCoreDeltaCurrentTableCount = DBManager.getDBResultMap(BCSExtendedSQLDeltaCurrentCount, Constants.AWS_URL);
+        BCSExtendedDeltaCurrentCount = ((Long) BCSCoreDeltaCurrentTableCount.get(0).get("Source_Count")).intValue();
+    }
+
+    @Then("^Get the count of BCS Extended delta history of current timestamp from (.*)$")
+    public void getBCSExtDeltaCurrentHistCount (String tableName) {
+        switch (tableName){
+            case "etl_delta_history_extended_availability_part":
+                Log.info("Getting BCS etl_delta_history_extended_availability_part Table Count...");
+                BCSExtSQLDeltaCurrentHistCount = BCS_ETLExtendedCountChecksSQL.GET_AVAILABILITY_DELTA_HIST_CURR_COUNT;
+                break;
+            case "etl_delta_history_extended_manifestation_part":
+                Log.info("Getting etl_delta_history_extended_manifestation_part Table Count...");
+                BCSExtSQLDeltaCurrentHistCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_EXT_DELTA_HIST_CURR_COUNT;
+                break;
+            case "etl_delta_history_extended_page_count_part":
+                Log.info("Getting etl_delta_history_extended_page_count_part Table Count...");
+                BCSExtSQLDeltaCurrentHistCount = BCS_ETLExtendedCountChecksSQL.GET_PAGE_COUNT_DELTA_HIST_CURR_COUNT;
+                break;
+            case "etl_delta_history_extended_url_part":
+                Log.info("Getting etl_delta_history_extended_url_part Table Count...");
+                BCSExtSQLDeltaCurrentHistCount = BCS_ETLExtendedCountChecksSQL.GET_URL_DELTA_HIST_CURR_COUNT;
+                break;
+            case "etl_delta_history_extended_work_part":
+                Log.info("Getting etl_delta_history_extended_work_part Table Count...");
+                BCSExtSQLDeltaCurrentHistCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_EXT_DELTA_HIST_CURR_COUNT;
+                break;
+            case "etl_delta_history_extended_work_subject_area_part":
+                Log.info("Getting etl_delta_history_extended_work_subject_area_part Table Count...");
+                BCSExtSQLDeltaCurrentHistCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_SUBJ_AREA_DELTA_HIST_CURR_COUNT;
+                break;
+            case "etl_delta_history_extended_manifestation_restrictions_part":
+                Log.info("Getting etl_delta_history_extended_manifestation_restrictions_part Table Count...");
+                BCSExtSQLDeltaCurrentHistCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_REST_DELTA_HIST_CURR_COUNT;
+                break;
+            case "etl_delta_history_extended_product_prices_part":
+                Log.info("Getting etl_delta_history_extended_product_prices_part Table Count...");
+                BCSExtSQLDeltaCurrentHistCount = BCS_ETLExtendedCountChecksSQL.GET_PROD_PRICE_DELTA_HIST_COUNT;
+                break;
+            case "etl_delta_history_extended_work_person_role_part":
+                Log.info("Getting etl_delta_history_extended_work_person_role_part Table Count...");
+                BCSExtSQLDeltaCurrentHistCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_PERS_ROLE_DELTA_HIST_COUNT;
+                break;
+
+        }
+        Log.info(BCSExtSQLDeltaCurrentHistCount);
+        List<Map<String, Object>> BCSCoreDeltaCurrentHistTableCount = DBManager.getDBResultMap(BCSExtSQLDeltaCurrentHistCount, Constants.AWS_URL);
+        BCSExtDeltaHistCurrentCount = ((Long) BCSCoreDeltaCurrentHistTableCount.get(0).get("Target_Count")).intValue();
+    }
+    @And("^Check count of BCS Extended delta current table (.*) and delta history (.*) are identical$")
+    public void compareBCSExtDeltaAndDeltaHistCounts(String srctable, String trgtTable){
+        Log.info("The count for Delta table "+srctable+" => " + BCSExtendedDeltaCurrentCount + " and in Delta Hist "+trgtTable+"  => " + BCSExtDeltaHistCurrentCount);
+        Assert.assertEquals("The counts are not equal when compared with "+srctable+" and "+trgtTable+" ", BCSExtDeltaHistCurrentCount, BCSExtendedDeltaCurrentCount);
+    }
+
+    @Then ("^Get the count of BCS Extended history (.*)$")
+    public void getBCSExtHistCount (String tableName) {
+        switch (tableName){
+            case "etl_transform_history_extended_availability_part":
+                Log.info("Getting etl_transform_history_extended_availability_part Table Count...");
+                BCSExtHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_AVAILABILITY_CURR_HIST_COUNT;
+                break;
+            case "etl_transform_history_extended_manifestation_part":
+                Log.info("Getting etl_transform_history_extended_manifestation_part Table Count...");
+                BCSExtHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_EXT_CURR_HIST_COUNT;
+                break;
+            case "etl_transform_history_extended_page_count_part":
+                Log.info("Getting etl_transform_history_extended_page_count_part Table Count...");
+                BCSExtHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_PAGE_COUNT_CURR_HIST_COUNT;
+                break;
+            case "etl_transform_history_extended_url_part":
+                Log.info("Getting etl_transform_history_extended_url_part Table Count...");
+                BCSExtHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_URL_CURR_HIST_COUNT;
+                break;
+            case "etl_transform_history_extended_work_part":
+                Log.info("Getting etl_transform_history_extended_work_part Table Count...");
+                BCSExtHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_EXT_CURR_HIST_COUNT;
+                break;
+            case "etl_transform_history_extended_work_subject_area_part":
+                Log.info("Getting etl_transform_history_extended_work_subject_area_part Table Count...");
+                BCSExtHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_SUBJ_AREA_CURR_HIST_COUNT;
+                break;
+            case "etl_transform_history_extended_manifestation_restrictions_part":
+                Log.info("Getting etl_transform_history_extended_manifestation_restrictions_part Table Count...");
+                BCSExtHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_REST_CURR_HIST_COUNT;
+                break;
+            case "etl_transform_history_extended_product_prices_part":
+                Log.info("Getting etl_transform_history_extended_product_prices_part Table Count...");
+                BCSExtHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_PROD_PRICE_CURR_HIST_COUNT;
+                break;
+            case "etl_transform_history_extended_work_person_role_part":
+                Log.info("Getting etl_transform_history_extended_work_person_role_part Table Count...");
+                BCSExtHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_PERS_ROLE_CURR_HIST_COUNT;
+                break;
+
+        }
+        Log.info(BCSExtHistSQLCurrentCount);
+        List<Map<String, Object>> BCS_ETLCoreCurrentHistTableCount = DBManager.getDBResultMap(BCSExtHistSQLCurrentCount, Constants.AWS_URL);
+        BCSExtCurrentHistCount = ((Long) BCS_ETLCoreCurrentHistTableCount.get(0).get("Source_Count")).intValue();
+    }
+    @And ("^Compare count of BCS Extended current (.*) and history (.*) are identical$")
+    public void compareBCSExtCurrAndCurrHistCounts(String srctable, String trgtTable){
+        Log.info("The count for Curr table "+srctable+" => " + BCSExtendedCurrentCount + " and in Curr Hist "+trgtTable+"  => " + BCSExtCurrentHistCount);
+        Assert.assertEquals("The counts are not equal when compared with "+srctable+" and "+trgtTable+" ", BCSExtendedCurrentCount, BCSExtCurrentHistCount);
     }
 
 }
