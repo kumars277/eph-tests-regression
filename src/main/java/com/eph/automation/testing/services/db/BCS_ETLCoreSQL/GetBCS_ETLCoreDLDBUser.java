@@ -53,6 +53,22 @@ public class GetBCS_ETLCoreDLDBUser {
         return dbProdDB;
     }
 
+    public static String getProductStagingDatabase(){
+        String dbProdStgDb = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbProdStgDb = "product_staging_database_sit";
+            }
+            else{
+                dbProdStgDb = "product_staging_database_uat";
+            }
+        }else{
+            dbProdStgDb = "product_staging_database_sit";
+            //  dbProdDb = "product_staging_database_uat";
+        }
+        return dbProdStgDb;
+    }
+
     public static String getJM_CoreDataBase(){
         String dbJM = null;
         if (System.getProperty("ENV") != null){
