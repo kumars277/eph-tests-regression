@@ -40,7 +40,7 @@ Feature:Validate data count for BCS Extended tables
       |etl_delta_current_extended_work_person_role                |etl_delta_history_extended_work_person_role_part  |
 
   @BCSExtended
-  Scenario Outline: Verify Data count for BCS core history tables are transferred from current tables
+  Scenario Outline: Verify Data count for BCS Extended history tables are transferred from current tables
     Given Get the total count of BCS Extended from Current Tables <SourceTableName>
     Then Get the count of BCS Extended history <TargettableName>
     And Compare count of BCS Extended current <SourceTableName> and history <TargettableName> are identical
@@ -56,3 +56,39 @@ Feature:Validate data count for BCS Extended tables
       |etl_manifestation_restrictions_extended_current_v |etl_transform_history_extended_manifestation_restrictions_part                    |
       |etl_product_prices_extended_current_v             |etl_transform_history_extended_product_prices_part         |
       |etl_work_person_role_extended_current_v           |etl_transform_history_extended_work_person_role_part|
+
+  @BCSExtended
+  Scenario Outline: Verify Data count for BCS Extended transform_file tables are transferred from current tables
+    Given Get the total count of BCS Extended from Current Tables <SourceTableName>
+    Then Get the count of BCS Extended transform_file <TargettableName>
+    And Compare BCS Extended count of current <SourceTableName> and tranform_file <TargettableName> are identical
+
+    Examples:
+      |SourceTableName                                      |TargettableName                                         |
+      |etl_availability_extended_current_v                  |etl_availability_extended_transform_file_history_part     |
+      |etl_manifestation_extended_current_v                 |etl_manifestation_extended_transform_file_history_part           |
+      |etl_page_count_extended_current_v                    |etl_page_count_extended_transform_file_history_part                  |
+      |etl_url_extended_current_v                           |etl_url_extended_transform_file_history_part                 |
+      |etl_work_extended_current_v                          |etl_work_extended_transform_file_history_part        |
+      |etl_work_subject_area_extended_current_v             |etl_work_subject_area_extended_transform_file_history_part       |
+      |etl_manifestation_restrictions_extended_current_v    |etl_manifestation_restrictions_extended_transform_file_history_part                    |
+      |etl_product_prices_extended_current_v                |etl_product_prices_extended_transform_file_history_part         |
+      |etl_work_person_role_extended_current_v              |etl_work_person_role_extended_transform_file_history_part|
+
+  @BCSExtended
+  Scenario Outline: Verify Data count for BCS Extended delta_current tables are transferred from transform_file tables
+    Given Get the total count of BCS Extended transform_file by diff of current and previous timestamp <SourceTableName>
+    Then We know the total count of BCS Extended delta current <TargetTableName>
+    And Compare count of BCS Ext tranform_file <SourceTableName> and delta current <TargetTableName> are identical
+
+    Examples:
+      |TargetTableName                                        |SourceTableName                                         |
+     |etl_delta_current_extended_availability                |etl_availability_extended_transform_file_history_part     |
+     |etl_delta_current_extended_manifestation               |etl_manifestation_extended_transform_file_history_part           |
+      |etl_delta_current_extended_page_count                  |etl_page_count_extended_transform_file_history_part                  |
+     |etl_delta_current_extended_url                         |etl_url_extended_transform_file_history_part                 |
+      |etl_delta_current_extended_work                        |etl_work_extended_transform_file_history_part        |
+     |etl_delta_current_extended_work_subject_area           |etl_work_subject_area_extended_transform_file_history_part       |
+      |etl_delta_current_extended_manifestation_restrictions  |etl_manifestation_restrictions_extended_transform_file_history_part                    |
+      |etl_delta_current_extended_product_prices              |etl_product_prices_extended_transform_file_history_part         |
+      |etl_delta_current_extended_work_person_role            |etl_work_person_role_extended_transform_file_history_part|

@@ -28,8 +28,14 @@ public class BCS_ETLExtendedCountChecksSteps {
     private String BCSExtSQLDeltaCurrentHistCount;
     private static int BCSExtDeltaHistCurrentCount;
 
+    private String BCSExtFileSQLCurrentCount;
+    private static int BCSExtCurrentFileCount;
+
     private String BCSExtHistSQLCurrentCount;
     private static int BCSExtCurrentHistCount;
+
+    private String BCSExtDiffTransformFileSQLCount;
+    private static int BCSExtDiffTransformFileCount;
 
     @Given("^Get the total count of BCS Extended from Current Tables (.*)$")
     public void getBCSExtendedCount(String tableName) {
@@ -276,6 +282,110 @@ public class BCS_ETLExtendedCountChecksSteps {
     public void compareBCSExtCurrAndCurrHistCounts(String srctable, String trgtTable){
         Log.info("The count for Curr table "+srctable+" => " + BCSExtendedCurrentCount + " and in Curr Hist "+trgtTable+"  => " + BCSExtCurrentHistCount);
         Assert.assertEquals("The counts are not equal when compared with "+srctable+" and "+trgtTable+" ", BCSExtendedCurrentCount, BCSExtCurrentHistCount);
+    }
+
+    @Then ("^Get the count of BCS Extended transform_file (.*)$")
+    public void getBCSExtFileCount (String tableName) {
+        switch (tableName){
+            case "etl_availability_extended_transform_file_history_part":
+                Log.info("Getting etl_availability_extended_transform_file_history_part Table Count...");
+                BCSExtFileSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_AVAILABILITY_CURR_FILE_COUNT;
+                break;
+            case "etl_manifestation_extended_transform_file_history_part":
+                Log.info("Getting etl_manifestation_extended_transform_file_history_part Table Count...");
+                BCSExtFileSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_EXT_CURR_FILE_COUNT;
+                break;
+            case "etl_page_count_extended_transform_file_history_part":
+                Log.info("Getting etl_page_count_extended_transform_file_history_part Table Count...");
+                BCSExtFileSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_PAGE_COUNT_CURR_FILE_COUNT;
+                break;
+            case "etl_url_extended_transform_file_history_part":
+                Log.info("Getting etl_url_extended_transform_file_history_part Table Count...");
+                BCSExtFileSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_URL_CURR_FILE_COUNT;
+                break;
+            case "etl_work_extended_transform_file_history_part":
+                Log.info("Getting etl_work_extended_transform_file_history_part Table Count...");
+                BCSExtFileSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_EXT_CURR_FILE_COUNT;
+                break;
+            case "etl_work_subject_area_extended_transform_file_history_part":
+                Log.info("Getting etl_work_subject_area_extended_transform_file_history_part Table Count...");
+                BCSExtFileSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_SUBJ_AREA_CURR_FILE_COUNT;
+                break;
+            case "etl_manifestation_restrictions_extended_transform_file_history_part":
+                Log.info("Getting etl_manifestation_restrictions_extended_transform_file_history_part Table Count...");
+                BCSExtFileSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_REST_CURR_FILE_COUNT;
+                break;
+            case "etl_product_prices_extended_transform_file_history_part":
+                Log.info("Getting etl_product_prices_extended_transform_file_history_part Table Count...");
+                BCSExtFileSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_PROD_PRICE_CURR_FILE_COUNT;
+                break;
+            case "etl_work_person_role_extended_transform_file_history_part":
+                Log.info("Getting etl_work_person_role_extended_transform_file_history_part Table Count...");
+                BCSExtFileSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_PERS_ROLE_CURR_FILE_COUNT;
+                break;
+
+        }
+        Log.info(BCSExtFileSQLCurrentCount);
+        List<Map<String, Object>> BCS_ETLExtCurrentFileTableCount = DBManager.getDBResultMap(BCSExtFileSQLCurrentCount, Constants.AWS_URL);
+        BCSExtCurrentFileCount = ((Long) BCS_ETLExtCurrentFileTableCount.get(0).get("Source_Count")).intValue();
+    }
+    @And ("^Compare BCS Extended count of current (.*) and tranform_file (.*) are identical$")
+    public void compareBCSExtCurrAndCurrFileCounts(String srctable, String trgtTable){
+        Log.info("The count for Curr table "+srctable+" => " + BCSExtendedCurrentCount + " and in Curr File "+trgtTable+"  => " + BCSExtCurrentFileCount);
+        Assert.assertEquals("The counts are not equal when compared with "+srctable+" and "+trgtTable+" ", BCSExtendedCurrentCount, BCSExtCurrentFileCount);
+    }
+
+
+    @Given("^Get the total count of BCS Extended transform_file by diff of current and previous timestamp (.*)$")
+    public void getDiffPrevCurrTranFileTimeStamp (String tableName) {
+        switch (tableName){
+            case "etl_availability_extended_transform_file_history_part":
+                Log.info("Getting Diff Curr and Previous TimeStamp for etl_availability_extended_transform_file_history_part Table Count...");
+                BCSExtDiffTransformFileSQLCount = BCS_ETLExtendedCountChecksSQL.GET_AVAILABILTIY_DIFF_TRANSFORM_FILE_COUNT;
+                break;
+            case "etl_manifestation_extended_transform_file_history_part":
+                Log.info("Getting Diff Curr and Previous TimeStamp for etl_manifestation_extended_transform_file_history_part Table Count...");
+                BCSExtDiffTransformFileSQLCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_EXT_DIFF_TRANSFORM_FILE_COUNT;
+                break;
+            case "etl_page_count_extended_transform_file_history_part":
+                Log.info("Getting Diff Curr and Previous TimeStamp for etl_page_count_extended_transform_file_history_part Table Count...");
+                BCSExtDiffTransformFileSQLCount = BCS_ETLExtendedCountChecksSQL.GET_PAGE_COUNT_DIFF_TRANSFORM_FILE_COUNT;
+                break;
+           case "etl_url_extended_transform_file_history_part":
+                Log.info("Getting Diff Curr and Previous TimeStamp for etl_url_extended_transform_file_history_part Table Count...");
+                BCSExtDiffTransformFileSQLCount = BCS_ETLExtendedCountChecksSQL.GET_URL_DIFF_TRANSFORM_FILE_COUNT;
+                break;
+            case "etl_work_extended_transform_file_history_part":
+                Log.info("Getting Diff Curr and Previous TimeStamp for etl_work_extended_transform_file_history_part Table Count...");
+                BCSExtDiffTransformFileSQLCount = BCS_ETLExtendedCountChecksSQL.GET_WRK_EXT_DIFF_TRANSFORM_FILE_COUNT;
+                break;
+            case "etl_work_subject_area_extended_transform_file_history_part":
+                Log.info("Getting Diff Curr and Previous TimeStamp for etl_work_subject_area_extended_transform_file_history_part Table Count...");
+                BCSExtDiffTransformFileSQLCount = BCS_ETLExtendedCountChecksSQL.GET_WRK_SUBJ_AREA_DIFF_TRANSFORM_FILE_COUNT;
+                break;
+         case "etl_manifestation_restrictions_extended_transform_file_history_part":
+                Log.info("Getting Diff Curr and Previous TimeStamp for etl_manifestation_restrictions_extended_transform_file_history_part Count...");
+                BCSExtDiffTransformFileSQLCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_RESTRICTION_TRANSFORM_FILE_COUNT;
+                break;
+           case "etl_product_prices_extended_transform_file_history_part":
+                Log.info("Getting Diff Curr and Previous TimeStamp for etl_product_prices_extended_transform_file_history_part Table Count...");
+                BCSExtDiffTransformFileSQLCount = BCS_ETLExtendedCountChecksSQL.GET_PROD_PRICE_DIFF_TRANSFORM_FILE_COUNT;
+                break;
+            case "etl_work_person_role_extended_transform_file_history_part":
+                Log.info("Getting Diff Curr and Previous TimeStamp for etl_work_person_role_extended_transform_file_history_part Table Count...");
+                BCSExtDiffTransformFileSQLCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_PERSON_ROLE_DIFF_TRANSFORM_FILE_COUNT;
+                break;
+
+        }
+        Log.info(BCSExtDiffTransformFileSQLCount);
+        List<Map<String, Object>> BCSDiffTransformFileTableCount = DBManager.getDBResultMap(BCSExtDiffTransformFileSQLCount, Constants.AWS_URL);
+        BCSExtDiffTransformFileCount = ((Long) BCSDiffTransformFileTableCount.get(0).get("target_Count")).intValue();
+    }
+
+    @And("^Compare count of BCS Ext tranform_file (.*) and delta current (.*) are identical$")
+    public void compareTransformFileAndDeltaCurrCounts(String srcTable,String trgtTable){
+        Log.info("The count for Diff of curr and previous timestamp of table "+srcTable+" => " + BCSExtDiffTransformFileCount + " and in "+trgtTable+" => " + BCSExtendedDeltaCurrentCount);
+        Assert.assertEquals("The counts are not equal when compared Diff of curr and previous timestamp of table "+srcTable+" and "+trgtTable, BCSExtDiffTransformFileCount, BCSExtendedDeltaCurrentCount);
     }
 
 }

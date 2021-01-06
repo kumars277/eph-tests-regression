@@ -488,6 +488,457 @@ public class BCS_ETLExtendedCountChecksSQL {
             "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_part where " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_part)";
 
+    public static String GET_AVAILABILITY_CURR_FILE_COUNT =
+            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part where " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part)";
+
+    public static String GET_MANIF_EXT_CURR_FILE_COUNT =
+            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part where " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part)";
+
+    public static String GET_PAGE_COUNT_CURR_FILE_COUNT =
+            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_transform_file_history_part where " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_transform_file_history_part)";
+
+    public static String GET_URL_CURR_FILE_COUNT =
+            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_transform_file_history_part where " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_transform_file_history_part)";
+
+    public static String GET_WORK_EXT_CURR_FILE_COUNT =
+            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_transform_file_history_part where " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_transform_file_history_part)";
+
+    public static String GET_WORK_SUBJ_AREA_CURR_FILE_COUNT =
+            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part where " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part)";
+
+    public static String GET_MANIF_REST_CURR_FILE_COUNT =
+            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part where " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part)";
+
+    public static String GET_PROD_PRICE_CURR_FILE_COUNT =
+            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_transform_file_history_part where " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_transform_file_history_part)";
+
+    public static String GET_WORK_PERS_ROLE_CURR_FILE_COUNT =
+            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part where " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part)";
+
+
+
+    public static String GET_AVAILABILTIY_DIFF_TRANSFORM_FILE_COUNT =
+            " with crr_dataset as(\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, application, deltaanswercodeuk, deltaanswercodeus, anzpubstatus,pubdateactual,status,metadeleted,producttype\n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part\n" +
+                    "  where transform_file_ts = (select max(transform_file_ts ) \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part)\n" +
+                    "  ),\n" +
+                    "  prev_dataset as (\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, application, deltaanswercodeuk, deltaanswercodeus, anzpubstatus,pubdateactual,status,metadeleted,producttype\n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part\n" +
+                    "  where transform_file_ts \n" +
+                    "  = (select distinct transform_file_ts from \n" +
+                    "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part dhap)where rn = 2))                                  \n" +
+                    "select count(*) as target_Count from( \n" +
+                    "    select crr.u_key as UKEY\n" +
+                    "    from crr_dataset crr\n" +
+                    "        left join prev_dataset prev on crr.u_key = prev.u_key\n" +
+                    "    where prev.u_key is null\n" +
+                    "    union\n" +
+                    "    select  prev.u_key as UKEY \n" +
+                    "    from prev_dataset prev\n" +
+                    "        left join crr_dataset crr on crr.u_key = prev.u_key\n" +
+                    "    where crr.u_key is null\n" +
+                    "    union\n" +
+                    "    select crr.u_key as UKEY\n" +
+                    "    from crr_dataset crr\n" +
+                    "        join prev_dataset prev on crr.u_key = prev.u_key\n" +
+                    "    where (coalesce(crr.eprid,'na') <> coalesce(prev.eprid,'na') or\n" +
+                    "            coalesce(crr.u_key,'na') <> coalesce(prev.u_key,'na') or\n" +
+                    "            coalesce (crr.sourceref, 'na') <> coalesce (prev.sourceref, 'na') or\n" +
+                    "            coalesce (crr.modifiedon, current_date) <> coalesce (prev.modifiedon, current_date) or\n" +
+                    "            coalesce (crr.application, 'na') <> coalesce (prev.application, 'na') or\n" +
+                    "            coalesce (crr.deltaanswercodeuk, 'na') <> coalesce (prev.deltaanswercodeuk, 'na') or\n" +
+                    "            coalesce (crr.deltaanswercodeus, 'na') <> coalesce (prev.deltaanswercodeus, 'na') or \n" +
+                    "            coalesce (crr.anzpubstatus, 'na') <> coalesce (prev.anzpubstatus, 'na') or \n" +
+                    "            coalesce (crr.pubdateactual, current_date) <> coalesce (prev.pubdateactual, current_date) or \n" +
+                    "            coalesce (crr.status, 'na') <> coalesce (prev.status, 'na') or \n" +
+                    "            coalesce (crr.metadeleted, false) <> coalesce (prev.metadeleted, false) or \n" +
+                    "            coalesce (crr.producttype, 'na') <> coalesce (prev.producttype, 'na')))";
+
+    public static String GET_MANIF_EXT_DIFF_TRANSFORM_FILE_COUNT =
+            " with crr_dataset as(\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, uktextbookind, ustextbookind,usdiscountcode,usdiscountname,emeadiscountcode,emeadiscountname,trimsize,weight,commcode,journalprodsitecode,journalissuetrimsize,warreference\n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part\n" +
+                    "  where transform_file_ts = (select max(transform_file_ts ) \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part)\n" +
+                    "  ),\n" +
+                    "  prev_dataset as (\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, uktextbookind, ustextbookind,usdiscountcode,usdiscountname,emeadiscountcode,emeadiscountname,trimsize,weight,commcode,journalprodsitecode,journalissuetrimsize,warreference\n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part\n" +
+                    "  where transform_file_ts \n" +
+                    "  = (select distinct transform_file_ts from \n" +
+                    "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part dhap)where rn = 2))                                  \n" +
+                    "select count(*) as target_Count from( \n" +
+                    "    select crr.u_key as UKEY\n" +
+                    "    from crr_dataset crr\n" +
+                    "        left join prev_dataset prev on crr.u_key = prev.u_key\n" +
+                    "    where prev.u_key is null\n" +
+                    "    union\n" +
+                    "    select  prev.u_key as UKEY \n" +
+                    "    from prev_dataset prev\n" +
+                    "        left join crr_dataset crr on crr.u_key = prev.u_key\n" +
+                    "    where crr.u_key is null\n" +
+                    "    union\n" +
+                    "    select crr.u_key as UKEY\n" +
+                    "    from crr_dataset crr\n" +
+                    "        join prev_dataset prev on crr.u_key = prev.u_key\n" +
+                    "    where (coalesce(crr.eprid,'na') <> coalesce(prev.eprid,'na') or\n" +
+                    "            coalesce(crr.u_key,'na') <> coalesce(prev.u_key,'na') or\n" +
+                    "            coalesce (crr.sourceref, 'na') <> coalesce (prev.sourceref, 'na') or\n" +
+                    "            coalesce (crr.modifiedon, current_date) <> coalesce (prev.modifiedon, current_date) or\n" +
+                    "            coalesce (crr.metadeleted, false) <> coalesce (prev.metadeleted, false) or \n" +
+                    "            coalesce (crr.manifestation_type, 'na') <> coalesce (prev.manifestation_type, 'na') or\n" +
+                    "            coalesce (crr.uktextbookind, false) <> coalesce (prev.uktextbookind, false) or\n" +
+                    "            coalesce (crr.ustextbookind, false) <> coalesce (prev.ustextbookind, false) or \n" +
+                    "            coalesce (crr.usdiscountcode, 'na') <> coalesce (prev.usdiscountcode, 'na') or \n" +
+                    "            coalesce (crr.usdiscountname, 'na') <> coalesce (prev.usdiscountname, 'na') or \n" +
+                    "            coalesce (crr.emeadiscountcode, 'na') <> coalesce (prev.emeadiscountcode, 'na') or \n" +
+                    "            coalesce (crr.emeadiscountname, 'na') <> coalesce (prev.emeadiscountname, 'na') or \n" +
+                    "            coalesce (crr.trimsize, 'na') <> coalesce (prev.trimsize, 'na') or \n" +
+                    "            coalesce (crr.weight, 0) <> coalesce (prev.weight, 0) or \n" +
+                    "            coalesce (crr.commcode, 'na') <> coalesce (prev.commcode, 'na') or \n" +
+                    "            coalesce (crr.journalprodsitecode, 'na') <> coalesce (prev.journalprodsitecode, 'na') or \n" +
+                    "            coalesce (crr.journalissuetrimsize, 'na') <> coalesce (prev.journalissuetrimsize, 'na') or \n" +
+                    "            coalesce (crr.warreference, 'na') <> coalesce (prev.warreference, 'na')))";
+
+    public static String GET_PAGE_COUNT_DIFF_TRANSFORM_FILE_COUNT =
+            " with crr_dataset as(\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, pagecounttypecode, pagecounttypename,pagecount\n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_transform_file_history_part\n" +
+                    "  where transform_file_ts = (select max(transform_file_ts ) \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_transform_file_history_part)\n" +
+                    "  ),\n" +
+                    "  prev_dataset as (\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, pagecounttypecode, pagecounttypename,pagecount\n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_transform_file_history_part\n" +
+                    "  where transform_file_ts \n" +
+                    "  = (select distinct transform_file_ts from \n" +
+                    "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_transform_file_history_part dhap)where rn = 2))                                  \n" +
+                    "select count(*) as target_Count from( \n" +
+                    "    select crr.u_key as UKEY\n" +
+                    "    from crr_dataset crr\n" +
+                    "        left join prev_dataset prev on crr.u_key = prev.u_key\n" +
+                    "    where prev.u_key is null\n" +
+                    "    union\n" +
+                    "    select  prev.u_key as UKEY \n" +
+                    "    from prev_dataset prev\n" +
+                    "        left join crr_dataset crr on crr.u_key = prev.u_key\n" +
+                    "    where crr.u_key is null\n" +
+                    "    union\n" +
+                    "    select crr.u_key as UKEY\n" +
+                    "    from crr_dataset crr\n" +
+                    "        join prev_dataset prev on crr.u_key = prev.u_key\n" +
+                    "    where (coalesce(crr.eprid,'na') <> coalesce(prev.eprid,'na') or\n" +
+                    "            coalesce(crr.u_key,'na') <> coalesce(prev.u_key,'na') or\n" +
+                    "            coalesce (crr.sourceref, 'na') <> coalesce (prev.sourceref, 'na') or\n" +
+                    "            coalesce (crr.modifiedon, current_date) <> coalesce (prev.modifiedon, current_date) or\n" +
+                    "            coalesce (crr.metadeleted, false) <> coalesce (prev.metadeleted, false) or \n" +
+                    "            coalesce (crr.manifestation_type, 'na') <> coalesce (prev.manifestation_type, 'na') or\n" +
+                    "            coalesce (crr.pagecounttypecode, 'na') <> coalesce (prev.pagecounttypecode, 'na') or \n" +
+                    "            coalesce (crr.pagecounttypename, 'na') <> coalesce (prev.pagecounttypename, 'na') or \n" +
+                    "            coalesce (crr.pagecount, 0) <> coalesce (prev.pagecount, 0)))";
+
+    public static String GET_URL_DIFF_TRANSFORM_FILE_COUNT =
+            " with crr_dataset as(\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, work_type, urltypecode, urltypename, source, name\n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_transform_file_history_part\n" +
+                    "  where transform_file_ts = (select max(transform_file_ts ) \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_transform_file_history_part)\n" +
+                    "  ),\n" +
+                    "  prev_dataset as (\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, work_type, urltypecode, urltypename, source, name\n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_transform_file_history_part\n" +
+                    "  where transform_file_ts \n" +
+                    "  = (select distinct transform_file_ts from \n" +
+                    "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_transform_file_history_part dhap)where rn = 2))                                  \n" +
+                    "select count(*) as target_Count from( \n" +
+                    "    select crr.u_key as UKEY\n" +
+                    "    from crr_dataset crr\n" +
+                    "        left join prev_dataset prev on crr.u_key = prev.u_key\n" +
+                    "    where prev.u_key is null\n" +
+                    "    union\n" +
+                    "    select  prev.u_key as UKEY \n" +
+                    "    from prev_dataset prev\n" +
+                    "        left join crr_dataset crr on crr.u_key = prev.u_key\n" +
+                    "    where crr.u_key is null\n" +
+                    "    union\n" +
+                    "    select crr.u_key as UKEY\n" +
+                    "    from crr_dataset crr\n" +
+                    "        join prev_dataset prev on crr.u_key = prev.u_key\n" +
+                    "    where (coalesce(crr.eprid,'na') <> coalesce(prev.eprid,'na') or\n" +
+                    "            coalesce(crr.u_key,'na') <> coalesce(prev.u_key,'na') or\n" +
+                    "            coalesce (crr.sourceref, 'na') <> coalesce (prev.sourceref, 'na') or\n" +
+                    "            coalesce (crr.modifiedon, current_date) <> coalesce (prev.modifiedon, current_date) or\n" +
+                    "            coalesce (crr.metadeleted, false) <> coalesce (prev.metadeleted, false) or \n" +
+                    "            coalesce (crr.work_type, 'na') <> coalesce (prev.work_type, 'na') or\n" +
+                    "            coalesce (crr.urltypecode, 'na') <> coalesce (prev.urltypecode, 'na') or \n" +
+                    "            coalesce (crr.urltypename, 'na') <> coalesce (prev.urltypename , 'na') or \n" +
+                    "            coalesce (crr.source, 'na') <> coalesce (prev.source, 'na') or \n" +
+                    "            coalesce (crr.name, 'na') <> coalesce (prev.name, 'na')))";
+
+    public static String GET_WRK_EXT_DIFF_TRANSFORM_FILE_COUNT =
+            " with crr_dataset as(\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, work_type, companygroup, imagefileref, workmasterisbn, textreftrade, features,awards,toc_long,toc_short,audience,authorbyline,description,sbu,profitcentre,review,journalelscomind,journalaimsscope,ddpeligibind,ptsjournalind,authorfeedbackind,deltabusinessunit,printername,primarysitesystem,primarysiteacronym,primarysitesupportlevel,fulfilmentsystem,fulfilmentjournalacronym,issueprodtypecode,cataloguevolumesqty,catalogueissuesqty,cataloguevolumefrom,cataloguevolumeto,rfissuesqty,rftotalpagesqty,rffvi,rflvi,journalprevioustitle,journalprimaryauthor\n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_transform_file_history_part\n" +
+                    "  where transform_file_ts = (select max(transform_file_ts ) \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_transform_file_history_part)\n" +
+                    "  ),\n" +
+                    "  prev_dataset as (\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, work_type, companygroup, imagefileref, workmasterisbn, textreftrade, features,awards,toc_long,toc_short,audience,authorbyline,description,sbu,profitcentre,review,journalelscomind,journalaimsscope,ddpeligibind,ptsjournalind,authorfeedbackind,deltabusinessunit,printername,primarysitesystem,primarysiteacronym,primarysitesupportlevel,fulfilmentsystem,fulfilmentjournalacronym,issueprodtypecode,cataloguevolumesqty,catalogueissuesqty,cataloguevolumefrom,cataloguevolumeto,rfissuesqty,rftotalpagesqty,rffvi,rflvi,journalprevioustitle,journalprimaryauthor\n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_transform_file_history_part\n" +
+                    "  where transform_file_ts \n" +
+                    "  = (select distinct transform_file_ts from \n" +
+                    "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_transform_file_history_part dhap)where rn = 2))  \n" +
+                    "select count(*) as target_Count from( \n" +
+                    "    select crr.u_key as UKEY\n" +
+                    "    from crr_dataset crr\n" +
+                    "        left join prev_dataset prev on crr.u_key = prev.u_key\n" +
+                    "    where prev.u_key is null\n" +
+                    "    union\n" +
+                    "    select  prev.u_key as UKEY \n" +
+                    "    from prev_dataset prev\n" +
+                    "        left join crr_dataset crr on crr.u_key = prev.u_key\n" +
+                    "    where crr.u_key is null\n" +
+                    "    union\n" +
+                    "    select crr.u_key as UKEY\n" +
+                    "    from crr_dataset crr\n" +
+                    "        join prev_dataset prev on crr.u_key = prev.u_key\n" +
+                    "    where (coalesce(crr.eprid,'na') <> coalesce(prev.eprid,'na') or\n" +
+                    "            coalesce(crr.u_key,'na') <> coalesce(prev.u_key,'na') or\n" +
+                    "            coalesce (crr.sourceref, 'na') <> coalesce (prev.sourceref, 'na') or\n" +
+                    "            coalesce (crr.modifiedon, current_date) <> coalesce (prev.modifiedon, current_date) or\n" +
+                    "            coalesce (crr.metadeleted, false) <> coalesce (prev.metadeleted, false) or \n" +
+                    "            coalesce (crr.work_type, 'na') <> coalesce (prev.work_type, 'na') or\n" +
+                    "            coalesce (crr.companygroup, 'na') <> coalesce (prev.companygroup, 'na') or \n" +
+                    "            coalesce (crr.imagefileref, 'na') <> coalesce (prev.imagefileref , 'na') or \n" +
+                    "            coalesce (crr.workmasterisbn, 'na') <> coalesce (prev.workmasterisbn, 'na') or \n" +
+                    "            coalesce (crr.textreftrade, 'na') <> coalesce (prev.textreftrade, 'na') or \n" +
+                    "            coalesce (crr.features, 'na') <> coalesce (prev.features, 'na') or \n" +
+                    "            coalesce (crr.awards, 'na') <> coalesce (prev.awards, 'na') or \n" +
+                    "            coalesce (crr.toc_long, 'na') <> coalesce (prev.toc_long, 'na') or \n" +
+                    "            coalesce (crr.toc_short, 'na') <> coalesce (prev.toc_short, 'na') or \n" +
+                    "            coalesce (crr.audience, 'na') <> coalesce (prev.audience, 'na') or \n" +
+                    "            coalesce (crr.authorbyline, 'na') <> coalesce (prev.authorbyline, 'na') or \n" +
+                    "            coalesce (crr.description, 'na') <> coalesce (prev.description, 'na') or \n" +
+                    "            coalesce (crr.sbu, 'na') <> coalesce (prev.sbu, 'na') or \n" +
+                    "            coalesce (crr.profitcentre, 'na') <> coalesce (prev.profitcentre, 'na') or \n" +
+                    "            coalesce (crr.review, 'na') <> coalesce (prev.review, 'na') or \n" +
+                    "            coalesce (crr.journalelscomind, 'na') <> coalesce (prev.journalelscomind, 'na') or \n" +
+                    "            coalesce (crr.journalaimsscope, 'na') <> coalesce (prev.journalaimsscope, 'na') or \n" +
+                    "            coalesce (crr.ddpeligibind, 'na') <> coalesce (prev.ddpeligibind, 'na') or \n" +
+                    "            coalesce (crr.ptsjournalind, 'na') <> coalesce (prev.ptsjournalind, 'na') or \n" +
+                    "            coalesce (crr.authorfeedbackind, 'na') <> coalesce (prev.authorfeedbackind, 'na') or \n" +
+                    "            coalesce (crr.deltabusinessunit, 'na') <> coalesce (prev.deltabusinessunit, 'na') or \n" +
+                    "            coalesce (crr.printername, 'na') <> coalesce (prev.printername, 'na') or \n" +
+                    "            coalesce (crr.primarysitesystem, 'na') <> coalesce (prev.primarysitesystem, 'na') or \n" +
+                    "            coalesce (crr.primarysiteacronym, 'na') <> coalesce (prev.primarysiteacronym, 'na') or \n" +
+                    "            coalesce (crr.primarysitesupportlevel, 'na') <> coalesce (prev.primarysitesupportlevel, 'na') or \n" +
+                    "            coalesce (crr.fulfilmentsystem, 'na') <> coalesce (prev.fulfilmentsystem, 'na') or \n" +
+                    "            coalesce (crr.fulfilmentjournalacronym, 'na') <> coalesce (prev.fulfilmentjournalacronym, 'na') or \n" +
+                    "            coalesce (crr.issueprodtypecode, 'na') <> coalesce (prev.issueprodtypecode, 'na') or \n" +
+                    "            coalesce (crr.cataloguevolumesqty, 0) <> coalesce (prev.cataloguevolumesqty, 0) or \n" +
+                    "            coalesce (crr.catalogueissuesqty, 0) <> coalesce (prev.catalogueissuesqty, 0) or \n" +
+                    "            coalesce (crr.issueprodtypecode, 'na') <> coalesce (prev.issueprodtypecode, 'na') or \n" +
+                    "            coalesce (crr.cataloguevolumesqty, 0) <> coalesce (prev.cataloguevolumesqty, 0) or \n" +
+                    "            coalesce (crr.catalogueissuesqty, 0) <> coalesce (prev.catalogueissuesqty, 0) or \n" +
+                    "            coalesce (crr.cataloguevolumefrom, 'na') <> coalesce (prev.cataloguevolumefrom, 'na') or \n" +
+                    "            coalesce (crr.cataloguevolumeto, 'na') <> coalesce (prev.cataloguevolumeto, 'na') or \n" +
+                    "            coalesce (crr.rfissuesqty, 0) <> coalesce (prev.rfissuesqty, 0) or \n" +
+                    "            coalesce (crr.rftotalpagesqty, 0) <> coalesce (prev.rftotalpagesqty, 0) or \n" +
+                    "            coalesce (crr.rffvi, 'na') <> coalesce (prev.rffvi, 'na') or \n" +
+                    "            coalesce (crr.rflvi, 'na') <> coalesce (prev.rflvi, 'na') or \n" +
+                    "            coalesce (crr.journalprevioustitle, 'na') <> coalesce (prev.journalprevioustitle, 'na') or \n" +
+                    "            coalesce (crr.journalprimaryauthor, 'na') <> coalesce (prev.journalprimaryauthor, 'na')))";
+
+
+    public static String GET_WRK_SUBJ_AREA_DIFF_TRANSFORM_FILE_COUNT =
+            " with crr_dataset as(\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, work_type, typecode, typedesc, subjcode, subjdesc, priority\n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part\n" +
+                    "  where transform_file_ts = (select max(transform_file_ts ) \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part)\n" +
+                    "  ),\n" +
+                    "  prev_dataset as (\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, work_type, typecode, typedesc, subjcode, subjdesc, priority\n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part\n" +
+                    "  where transform_file_ts \n" +
+                    "  = (select distinct transform_file_ts from \n" +
+                    "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part dhap)where rn = 2))  \n" +
+                    "select count(*) as target_Count from( \n" +
+                    "    select crr.u_key as UKEY\n" +
+                    "    from crr_dataset crr\n" +
+                    "        left join prev_dataset prev on crr.u_key = prev.u_key\n" +
+                    "    where prev.u_key is null\n" +
+                    "    union\n" +
+                    "    select  prev.u_key as UKEY \n" +
+                    "    from prev_dataset prev\n" +
+                    "        left join crr_dataset crr on crr.u_key = prev.u_key\n" +
+                    "    where crr.u_key is null\n" +
+                    "    union\n" +
+                    "    select crr.u_key as UKEY\n" +
+                    "    from crr_dataset crr\n" +
+                    "        join prev_dataset prev on crr.u_key = prev.u_key\n" +
+                    "    where (coalesce(crr.eprid,'na') <> coalesce(prev.eprid,'na') or\n" +
+                    "            coalesce(crr.u_key,'na') <> coalesce(prev.u_key,'na') or\n" +
+                    "            coalesce (crr.sourceref, 'na') <> coalesce (prev.sourceref, 'na') or\n" +
+                    "            coalesce (crr.modifiedon, current_date) <> coalesce (prev.modifiedon, current_date) or\n" +
+                    "            coalesce (crr.metadeleted, false) <> coalesce (prev.metadeleted, false) or \n" +
+                    "            coalesce (crr.work_type, 'na') <> coalesce (prev.work_type, 'na') or\n" +
+                    "            coalesce (crr.typecode, 'na') <> coalesce (prev.typecode, 'na') or \n" +
+                    "            coalesce (crr.typedesc, 'na') <> coalesce (prev.typedesc , 'na') or \n" +
+                    "            coalesce (crr.subjcode, 'na') <> coalesce (prev.subjcode, 'na') or \n" +
+                    "            coalesce (crr.subjdesc, 'na') <> coalesce (prev.subjdesc, 'na') or \n" +
+                    "            coalesce (crr.priority, 'na') <> coalesce (prev.priority, 'na')))";
+
+    public static String GET_MANIF_RESTRICTION_TRANSFORM_FILE_COUNT =
+            " with crr_dataset as(\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, restrictioncode, restrictionname\n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part\n" +
+                    "  where transform_file_ts = (select max(transform_file_ts ) \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part)\n" +
+                    "  ),\n" +
+                    "  prev_dataset as (\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, restrictioncode, restrictionname\n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part\n" +
+                    "  where transform_file_ts \n" +
+                    "  = (select distinct transform_file_ts from \n" +
+                    "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part dhap)where rn = 2))  \n" +
+                    "select count(*) as target_Count from( \n" +
+                    "    select crr.u_key as UKEY\n" +
+                    "    from crr_dataset crr\n" +
+                    "        left join prev_dataset prev on crr.u_key = prev.u_key\n" +
+                    "    where prev.u_key is null\n" +
+                    "    union\n" +
+                    "    select  prev.u_key as UKEY \n" +
+                    "    from prev_dataset prev\n" +
+                    "        left join crr_dataset crr on crr.u_key = prev.u_key\n" +
+                    "    where crr.u_key is null\n" +
+                    "    union\n" +
+                    "    select crr.u_key as UKEY\n" +
+                    "    from crr_dataset crr\n" +
+                    "        join prev_dataset prev on crr.u_key = prev.u_key\n" +
+                    "    where (coalesce(crr.eprid,'na') <> coalesce(prev.eprid,'na') or\n" +
+                    "            coalesce(crr.u_key,'na') <> coalesce(prev.u_key,'na') or\n" +
+                    "            coalesce (crr.manifestation_type, 'na') <> coalesce (prev.manifestation_type, 'na') or\n" +
+                    "            coalesce (crr.modifiedon, current_date) <> coalesce (prev.modifiedon, current_date) or\n" +
+                    "            coalesce (crr.metadeleted, false) <> coalesce (prev.metadeleted, false) or \n" +
+                    "            coalesce (crr.sourceref, 'na') <> coalesce (prev.sourceref, 'na') or\n" +
+                    "            coalesce (crr.restrictioncode, 'na') <> coalesce (prev.restrictioncode, 'na') or \n" +
+                    "            coalesce (crr.restrictionname, 'na') <> coalesce (prev.restrictionname , 'na')))";
+
+
+    public static String GET_PROD_PRICE_DIFF_TRANSFORM_FILE_COUNT =
+            " with crr_dataset as(\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, product_type, pricecurrency, priceamount, pricestartdate, priceenddate, priceregion,pricecategory,pricecustomercategory,pricepurchasequantity\n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_transform_file_history_part\n" +
+                    "  where transform_file_ts = (select max(transform_file_ts ) \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_transform_file_history_part)\n" +
+                    "  ),\n" +
+                    "  prev_dataset as (\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, product_type, pricecurrency, priceamount, pricestartdate, priceenddate, priceregion,pricecategory,pricecustomercategory,pricepurchasequantity\n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_transform_file_history_part\n" +
+                    "  where transform_file_ts \n" +
+                    "  = (select distinct transform_file_ts from \n" +
+                    "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_transform_file_history_part dhap)where rn = 2))  \n" +
+                    "select count(*) as target_Count from( \n" +
+                    "    select crr.u_key as UKEY\n" +
+                    "    from crr_dataset crr\n" +
+                    "        left join prev_dataset prev on crr.u_key = prev.u_key\n" +
+                    "    where prev.u_key is null\n" +
+                    "    union\n" +
+                    "    select  prev.u_key as UKEY \n" +
+                    "    from prev_dataset prev\n" +
+                    "        left join crr_dataset crr on crr.u_key = prev.u_key\n" +
+                    "    where crr.u_key is null\n" +
+                    "    union\n" +
+                    "    select crr.u_key as UKEY\n" +
+                    "    from crr_dataset crr\n" +
+                    "        join prev_dataset prev on crr.u_key = prev.u_key\n" +
+                    "    where (coalesce(crr.eprid,'na') <> coalesce(prev.eprid,'na') or\n" +
+                    "            coalesce(crr.u_key,'na') <> coalesce(prev.u_key,'na') or\n" +
+                    "            coalesce (crr.sourceref, 'na') <> coalesce (prev.sourceref, 'na') or\n" +
+                    "            coalesce (crr.modifiedon, current_date) <> coalesce (prev.modifiedon, current_date) or\n" +
+                    "            coalesce (crr.metadeleted, false) <> coalesce (prev.metadeleted, false) or \n" +
+                    "            coalesce (crr.product_type, 'na') <> coalesce (prev.product_type, 'na') or\n" +
+                    "            coalesce (crr.pricecurrency, 'na') <> coalesce (prev.pricecurrency, 'na') or \n" +
+                    "            coalesce (crr.priceamount, 0) <> coalesce (prev.priceamount , 0) or \n" +
+                    "            coalesce (crr.pricestartdate, current_date) <> coalesce (prev.pricestartdate, current_date) or \n" +
+                    "            coalesce (crr.priceenddate, current_date) <> coalesce (prev.priceenddate, current_date) or \n" +
+                    "            coalesce (crr.priceregion, 'na') <> coalesce (prev.priceregion, 'na') or \n" +
+                    "            coalesce (crr.pricecategory, 'na') <> coalesce (prev.pricecategory, 'na') or \n" +
+                    "            coalesce (crr.pricecustomercategory, 'na') <> coalesce (prev.pricecustomercategory, 'na') or \n" +
+                    "            coalesce (crr.pricepurchasequantity, 0) <> coalesce (prev.pricepurchasequantity, 0)))";
+
+    public static String GET_WORK_PERSON_ROLE_DIFF_TRANSFORM_FILE_COUNT =
+            " with crr_dataset as(\n" +
+                    "  select u_key, worksourceref, personsourceref, source, eprid, work_type, core_reference, roletype,rolename,title,person_first_name,person_family_name,email_address,honours,affiliation,imageurl,footnotetxt,notestxt,sequence,groupnumber,modifiedon,metadeleted \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part\n" +
+                    "  where transform_file_ts = (select max(transform_file_ts ) \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part)\n" +
+                    "  ),\n" +
+                    "  prev_dataset as (\n" +
+                    "  select u_key, worksourceref, personsourceref, source, eprid, work_type, core_reference, roletype,rolename,title,person_first_name,person_family_name,email_address,honours,affiliation,imageurl,footnotetxt,notestxt,sequence,groupnumber,modifiedon,metadeleted \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part\n" +
+                    "  where transform_file_ts \n" +
+                    "  = (select distinct transform_file_ts from \n" +
+                    "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
+                    "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part dhap)where rn = 2))  \n" +
+                    "select count(*) as target_Count from( \n" +
+                    "    select crr.u_key as UKEY\n" +
+                    "    from crr_dataset crr\n" +
+                    "        left join prev_dataset prev on crr.u_key = prev.u_key\n" +
+                    "    where prev.u_key is null\n" +
+                    "    union\n" +
+                    "    select  prev.u_key as UKEY \n" +
+                    "    from prev_dataset prev\n" +
+                    "        left join crr_dataset crr on crr.u_key = prev.u_key\n" +
+                    "    where crr.u_key is null\n" +
+                    "    union\n" +
+                    "    select crr.u_key as UKEY\n" +
+                    "    from crr_dataset crr\n" +
+                    "        join prev_dataset prev on crr.u_key = prev.u_key\n" +
+                    "    where (coalesce(crr.u_key,'na') <> coalesce(prev.u_key,'na') or\n" +
+                    "            coalesce(crr.worksourceref,'na') <> coalesce(prev.worksourceref,'na') or\n" +
+                    "            coalesce (crr.personsourceref, 'na') <> coalesce (prev.personsourceref, 'na') or\n" +
+                    "            coalesce (crr.source, 'na') <> coalesce (prev.source, 'na') or\n" +
+                    "            coalesce (crr.eprid, 'na') <> coalesce (prev.eprid, 'na') or \n" +
+                    "            coalesce (crr.work_type, 'na') <> coalesce (prev.work_type, 'na') or\n" +
+                    "            coalesce (crr.core_reference, 0) <> coalesce (prev.core_reference, 0) or \n" +
+                    "            coalesce (crr.roletype, 'na') <> coalesce (prev.roletype, 'na') or \n" +
+                    "            coalesce (crr.rolename, 'na') <> coalesce (prev.rolename, 'na') or \n" +
+                    "            coalesce (crr.title, 'na') <> coalesce (prev.title, 'na') or \n" +
+                    "            coalesce (crr.person_first_name, 'na') <> coalesce (prev.person_first_name, 'na') or \n" +
+                    "            coalesce (crr.person_family_name, 'na') <> coalesce (prev.person_family_name, 'na') or \n" +
+                    "            coalesce (crr.email_address, 'na') <> coalesce (prev.email_address, 'na') or \n" +
+                    "            coalesce (crr.honours, 'na') <> coalesce (prev.honours, 'na') or \n" +
+                    "            coalesce (crr.affiliation, 'na') <> coalesce (prev.affiliation, 'na') or \n" +
+                    "            coalesce (crr.imageurl, 'na') <> coalesce (prev.imageurl, 'na') or \n" +
+                    "            coalesce (crr.footnotetxt, 'na') <> coalesce (prev.footnotetxt, 'na') or \n" +
+                    "            coalesce (crr.notestxt, 'na') <> coalesce (prev.notestxt, 'na') or \n" +
+                    "            coalesce (crr.sequence, 'na') <> coalesce (prev.sequence, 'na') or \n" +
+                    "            coalesce (crr.groupnumber, 0) <> coalesce (prev.groupnumber, 0) or \n" +
+                    "            coalesce (crr.modifiedon, current_date) <> coalesce (prev.modifiedon, current_date) or \n" +
+                    "            coalesce (crr.metadeleted, false) <> coalesce (prev.metadeleted, false)))";
+
 
 }
 
