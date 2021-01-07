@@ -92,3 +92,39 @@ Feature:Validate data count for BCS Extended tables
       |etl_delta_current_extended_manifestation_restrictions  |etl_manifestation_restrictions_extended_transform_file_history_part                    |
       |etl_delta_current_extended_product_prices              |etl_product_prices_extended_transform_file_history_part         |
       |etl_delta_current_extended_work_person_role            |etl_work_person_role_extended_transform_file_history_part|
+
+  @BCSExtended
+  Scenario Outline: Verify Data count for BCS Extended delta_current_exclude are transferred from delta_current and current_history tables
+    Given Get the BCS Extended Ext total count difference between delta current and transform current history Table <TargetTable>
+    Then Get the BCS Extended <TargetTable> exclude data count
+    And Compare BCS Extended exclude count of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
+    Examples:
+      |FirstSourceTable                               |SecondSourceTable                                            |TargetTable                                          |
+      |etl_delta_current_extended_availability        |etl_transform_history_extended_availability_part               |etl_transform_history_extended_availability_excl_delta |
+      |etl_delta_current_extended_manifestation       |etl_transform_history_extended_manifestation_part              |etl_transform_history_extended_manifestation_excl_delta       |
+      |etl_delta_current_extended_page_count          |etl_transform_history_extended_page_count_part                  |etl_transform_history_extended_page_count_excl_delta              |
+      |etl_delta_current_extended_url                 |etl_transform_history_extended_url_part                        |etl_transform_history_extended_url_excl_delta             |
+      |etl_delta_current_extended_work                | etl_transform_history_extended_work_part                      |etl_transform_history_extended_work_excl_delta    |
+      |etl_delta_current_extended_work_subject_area   |etl_transform_history_extended_work_subject_area_part         |etl_transform_history_extended_work_subject_area_excl_delta   |
+      |etl_delta_current_extended_manifestation_restrictions|etl_transform_history_extended_manifestation_restrictions_part|etl_transform_history_extended_manifestation_restrictions_excl_delta                |
+      |etl_delta_current_extended_product_prices      |etl_transform_history_extended_product_prices_part            |etl_transform_history_extended_product_prices_excl_delta     |
+      |etl_delta_current_extended_work_person_role    |etl_transform_history_extended_work_person_role_part          |etl_transform_history_extended_work_person_role_excl_delta |
+
+
+  @BCSExtended
+  Scenario Outline: Verify Data count for BCS Extended delta_latest tables are transferred from delta_current and Current_Exclude tables
+    Given Get the sum of total count between BCS Extended delta current and Current_Exclude Table <TargetTable>
+    Then Get the BCS Extended <TargetTable> latest data count
+    And Compare BCS Extended latest counts of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
+    Examples:
+      |FirstSourceTable                                       |SecondSourceTable                                                          |TargetTable                                      |
+      |etl_delta_current_extended_availability                |etl_transform_history_extended_availability_excl_delta                     |etl_transform_history_extended_availability_latest |
+      |etl_delta_current_extended_manifestation               |etl_transform_history_extended_manifestation_excl_delta                     |etl_transform_history_extended_manifestation_latest       |
+      |etl_delta_current_extended_page_count                   |etl_transform_history_extended_page_count_excl_delta                            |etl_transform_history_extended_page_count_latest              |
+     |etl_delta_current_extended_url                        |etl_transform_history_extended_url_excl_delta                                  |etl_transform_history_extended_url_latest             |
+    |etl_delta_current_extended_work                      | etl_transform_history_extended_work_excl_delta                              |etl_transform_history_extended_work_latest    |
+      |etl_delta_current_extended_work_subject_area         |etl_transform_history_extended_work_subject_area_excl_delta                 |etl_transform_history_extended_work_subject_area_latest   |
+      |etl_delta_current_extended_manifestation_restrictions |etl_transform_history_extended_manifestation_restrictions_excl_delta        |etl_transform_history_extended_manifestation_restrictions_latest                |
+      |etl_delta_current_extended_product_prices             |etl_transform_history_extended_product_prices_excl_delta                   |etl_transform_history_extended_product_prices_latest     |
+      |etl_delta_current_extended_work_person_role            |etl_transform_history_extended_work_person_role_excl_delta             |etl_transform_history_extended_work_person_role_latest |
+

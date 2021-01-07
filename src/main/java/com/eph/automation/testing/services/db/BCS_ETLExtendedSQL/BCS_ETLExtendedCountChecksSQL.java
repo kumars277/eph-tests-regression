@@ -940,6 +940,172 @@ public class BCS_ETLExtendedCountChecksSQL {
                     "            coalesce (crr.metadeleted, false) <> coalesce (prev.metadeleted, false)))";
 
 
+    public static String GET_AVAILABILITY_DIFF_DELTA_AND_HIST_COUNT =
+            "select count(*) as Source_Count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_part c\n" +
+                    "left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_availability d on c.u_key  = d.u_key \n" +
+                    "where d.u_key is null and c.transform_ts = (\n" +
+                    "select max(c.transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_part c ))";
+
+    public static String GET_MANIF_EXT_DIFF_DELTA_AND_HIST_COUNT =
+            "select count(*) as Source_Count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_part c\n" +
+                    "left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_manifestation d on c.u_key  = d.u_key \n" +
+                    "where d.u_key is null and c.transform_ts = (\n" +
+                    "select max(c.transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_part c ))";
+
+    public static String GET_PAGE_COUNT_DIFF_DELTA_AND_HIST_COUNT =
+            "select count(*) as Source_Count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_part c\n" +
+                    "left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_page_count d on c.u_key  = d.u_key \n" +
+                    "where d.u_key is null and c.transform_ts = (\n" +
+                    "select max(c.transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_part c ))";
+
+    public static String GET_URL_DIFF_DELTA_AND_HIST_COUNT =
+            "select count(*) as Source_Count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_part c\n" +
+                    "left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_url d on c.u_key  = d.u_key \n" +
+                    "where d.u_key is null and c.transform_ts = (\n" +
+                    "select max(c.transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_part c ))";
+
+
+    public static String GET_WORK_EXT_DIFF_DELTA_AND_HIST_COUNT =
+            "select count(*) as Source_Count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_part c\n" +
+                    "left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work d on c.u_key  = d.u_key \n" +
+                    "where d.u_key is null and c.transform_ts = (\n" +
+                    "select max(c.transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_part c ))";
+
+    public static String GET_WRK_SUBJ_AREA_DIFF_DELTA_AND_HIST_COUNT =
+            "select count(*) as Source_Count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_part c\n" +
+                    "left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work_subject_area d on c.u_key  = d.u_key \n" +
+                    "where d.u_key is null and c.transform_ts = (\n" +
+                    "select max(c.transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_part c ))";
+
+    public static String GET_MANIF_RESTRICT_DIFF_DELTA_AND_HIST_COUNT =
+            "select count(*) as Source_Count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part c\n" +
+                    "left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_manifestation_restrictions d on c.u_key  = d.u_key \n" +
+                    "where d.u_key is null and c.transform_ts = (\n" +
+                    "select max(c.transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part c ))";
+
+    public static String GET_PROD_PRICE_DIFF_DELTA_AND_HIST_COUNT =
+            "select count(*) as Source_Count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_part c\n" +
+                    "left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_product_prices d on c.u_key  = d.u_key \n" +
+                    "where d.u_key is null and c.transform_ts = (\n" +
+                    "select max(c.transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_part c ))";
+
+    public static String GET_WORK_PERS_ROLE_DIFF_DELTA_AND_HIST_COUNT =
+            "select count(*) as Source_Count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_part c\n" +
+                    "left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work_person_role d on c.u_key  = d.u_key \n" +
+                    "where d.u_key is null and c.transform_ts = (\n" +
+                    "select max(c.transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_part c ))";
+
+
+    public static String GET_AVAILABILITY_EXCL_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_excl_delta";
+
+    public static String GET_MANIF_EXT_EXCL_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_excl_delta";
+
+    public static String GET_PAGE_COUNT_EXCL_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_excl_delta";
+
+    public static String GET_URL_EXCL_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_excl_delta";
+
+    public static String GET_WRK_EXT_EXCL_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_excl_delta";
+
+    public static String GET_WRK_SUBJ_AREA_EXCL_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_excl_delta";
+
+    public static String GET_MANIF_RESTRICT_EXCL_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_excl_delta";
+
+    public static String GET_PROD_PRICE_EXCL_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_excl_delta";
+
+    public static String GET_WORK_PERS_ROLE_EXCL_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_excl_delta";
+
+
+    public static String GET_AVAILABILITY_SUM_DELTACURR_EXCL_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_excl_delta as c union all \n" +
+                    "select d.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_availability as d)";
+
+    public static String GET_MANIF_EXT_SUM_DELTACURR_EXCL_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_excl_delta as c union all \n" +
+                    "select d.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_manifestation as d)";
+
+    public static String GET_PAGE_COUNT_SUM_DELTACURR_EXCL_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_excl_delta as c union all \n" +
+                    "select d.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_page_count as d)";
+
+    public static String GET_URL_SUM_DELTACURR_EXCL_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_excl_delta as c union all \n" +
+                    "select d.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_url as d)";
+
+    public static String GET_WRK_EXT_SUM_DELTACURR_EXCL_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_excl_delta as c union all \n" +
+                    "select d.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work as d)";
+
+    public static String GET_WRK_SUBJ_AREA_SUM_DELTACURR_EXCL_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_excl_delta as c union all \n" +
+                    "select d.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work_subject_area as d)";
+
+    public static String GET_MANIF_RESTRICT_SUM_DELTACURR_EXCL_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_excl_delta as c union all \n" +
+                    "select d.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_manifestation_restrictions as d)";
+
+    public static String GET_ROD_PRICE_SUM_DELTACURR_EXCL_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_excl_delta as c union all \n" +
+                    "select d.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_product_prices as d)";
+
+    public static String GET_WORK_PERS_ROLE_SUM_DELTACURR_EXCL_COUNT =
+            "select count(*) as source_count from \n" +
+                    "(select c.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_excl_delta as c union all \n" +
+                    "select d.u_key from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work_person_role as d)";
+
+    public static String GET_AVAILABILITY_LATEST_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_latest";
+
+    public static String GET_MANIF_EXT_LATEST_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_latest";
+
+    public static String GET_PAGE_COUNT_LATEST_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_latest";
+
+    public static String GET_URL_LATEST_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_latest";
+
+    public static String GET_WRK_EXT_LATEST_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_latest";
+
+    public static String GET_WRK_SUBJ_AREA_LATEST_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_latest";
+
+    public static String GET_MANIF_RESTRICT_LATEST_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_latest";
+
+    public static String GET_WRK_PERSON_ROLE_LATEST_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_latest";
+
+
+    public static String GET_PROD_PRICE_LATEST_COUNT =
+            "select count(*)as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_latest";
+
 }
 
 

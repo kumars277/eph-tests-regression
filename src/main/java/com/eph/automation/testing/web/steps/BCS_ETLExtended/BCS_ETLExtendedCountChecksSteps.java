@@ -37,6 +37,19 @@ public class BCS_ETLExtendedCountChecksSteps {
     private String BCSExtDiffTransformFileSQLCount;
     private static int BCSExtDiffTransformFileCount;
 
+    private String BCSExtDiffDeltaAndHistSQLCurrentCount;
+    private static int BCSExtDiffDeltaAndHistCurrentCount;
+
+    private String BCSExtExclSQLCurrentCount;
+    private static int BCSExtExcludeCount;
+
+    private String BCSExtSumDeltaExclSQLCurrentCount;
+    private static int BCSExtSumDeltaExclCount;
+
+    private String BCSExtLatestSQLCurrentCount;
+    private static int BCSExtLatestCount;
+
+
     @Given("^Get the total count of BCS Extended from Current Tables (.*)$")
     public void getBCSExtendedCount(String tableName) {
         switch (tableName) {
@@ -388,4 +401,198 @@ public class BCS_ETLExtendedCountChecksSteps {
         Assert.assertEquals("The counts are not equal when compared Diff of curr and previous timestamp of table "+srcTable+" and "+trgtTable, BCSExtDiffTransformFileCount, BCSExtendedDeltaCurrentCount);
     }
 
+
+    @Given ("^Get the BCS Extended Ext total count difference between delta current and transform current history Table (.*)$")
+    public void getBCSExtDiffDeltaCurrAndHistCount (String tableName) {
+        switch (tableName){
+            case "etl_transform_history_extended_availability_excl_delta":
+                Log.info("Getting Diff of Delta Current and Hist for availability Table Count...");
+                BCSExtDiffDeltaAndHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_AVAILABILITY_DIFF_DELTA_AND_HIST_COUNT;
+                break;
+            case "etl_transform_history_extended_manifestation_excl_delta":
+                Log.info("Getting Diff of Delta Current and Hist for Manifestation Extended Table Count...");
+                BCSExtDiffDeltaAndHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_EXT_DIFF_DELTA_AND_HIST_COUNT;
+                break;
+            case "etl_transform_history_extended_page_count_excl_delta":
+                Log.info("Getting BCS Diff of Delta Current and Hist for Page Count Ext Table Count...");
+                BCSExtDiffDeltaAndHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_PAGE_COUNT_DIFF_DELTA_AND_HIST_COUNT;
+                break;
+            case "etl_transform_history_extended_url_excl_delta":
+                Log.info("Getting BCS Diff of Delta Current and Hist for URL Table Count...");
+                BCSExtDiffDeltaAndHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_URL_DIFF_DELTA_AND_HIST_COUNT;
+                break;
+            case "etl_transform_history_extended_work_excl_delta":
+                Log.info("Getting BCS Diff of Delta Current and Hist for work extended Table Count...");
+                BCSExtDiffDeltaAndHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_EXT_DIFF_DELTA_AND_HIST_COUNT;
+                break;
+            case "etl_transform_history_extended_work_subject_area_excl_delta":
+                Log.info("Getting BCS Diff of Delta Current and Hist for work Subject area Table Count...");
+                BCSExtDiffDeltaAndHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WRK_SUBJ_AREA_DIFF_DELTA_AND_HIST_COUNT;
+                break;
+            case "etl_transform_history_extended_manifestation_restrictions_excl_delta":
+                Log.info("Getting BCS Diff of Delta Current and Hist for Manif Restrition Table Count...");
+                BCSExtDiffDeltaAndHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_RESTRICT_DIFF_DELTA_AND_HIST_COUNT;
+                break;
+            case "etl_transform_history_extended_product_prices_excl_delta":
+                Log.info("Getting BCS Diff of Delta Current and Hist for Product Price Ext Table Count...");
+                BCSExtDiffDeltaAndHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_PROD_PRICE_DIFF_DELTA_AND_HIST_COUNT;
+                break;
+            case "etl_transform_history_extended_work_person_role_excl_delta":
+                Log.info("Getting BCS Diff of Delta Current and Hist for Work person role Table Count...");
+                BCSExtDiffDeltaAndHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_PERS_ROLE_DIFF_DELTA_AND_HIST_COUNT;
+                break;
+
+        }
+        Log.info(BCSExtDiffDeltaAndHistSQLCurrentCount);
+        List<Map<String, Object>> BCSDeltaCurrAndHistTableCount = DBManager.getDBResultMap(BCSExtDiffDeltaAndHistSQLCurrentCount, Constants.AWS_URL);
+        BCSExtDiffDeltaAndHistCurrentCount = ((Long) BCSDeltaCurrAndHistTableCount.get(0).get("Source_Count")).intValue();
+    }
+
+
+    @Then ("^Get the BCS Extended (.*) exclude data count$")
+    public void getBCSExtExcludCount (String tableName) {
+        switch (tableName){
+            case "etl_transform_history_extended_availability_excl_delta":
+                Log.info("Getting Exclude for Availability Table Count...");
+                BCSExtExclSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_AVAILABILITY_EXCL_COUNT;
+                break;
+            case "etl_transform_history_extended_manifestation_excl_delta":
+                Log.info("Getting Exclude for Manifestation Extended Table Count...");
+                BCSExtExclSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_EXT_EXCL_COUNT;
+                break;
+            case "etl_transform_history_extended_page_count_excl_delta":
+                Log.info("Getting Exclude for Page Count Ext Table Count...");
+                BCSExtExclSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_PAGE_COUNT_EXCL_COUNT;
+                break;
+            case "etl_transform_history_extended_url_excl_delta":
+                Log.info("Getting Exclude for URL Table Count...");
+                BCSExtExclSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_URL_EXCL_COUNT;
+                break;
+            case "etl_transform_history_extended_work_excl_delta":
+                Log.info("Getting Exclude for work extended Table Count...");
+                BCSExtExclSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WRK_EXT_EXCL_COUNT;
+                break;
+            case "etl_transform_history_extended_work_subject_area_excl_delta":
+                Log.info("Getting Exclude for work Subject area Table Count...");
+                BCSExtExclSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WRK_SUBJ_AREA_EXCL_COUNT;
+                break;
+            case "etl_transform_history_extended_manifestation_restrictions_excl_delta":
+                Log.info("Getting Exclude for Manif Restrition Count...");
+                BCSExtExclSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_RESTRICT_EXCL_COUNT;
+                break;
+            case "etl_transform_history_extended_product_prices_excl_delta":
+                Log.info("Getting Exclude for Product Price Ext Table Count...");
+                BCSExtExclSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_PROD_PRICE_EXCL_COUNT;
+                break;
+            case "etl_transform_history_extended_work_person_role_excl_delta":
+                Log.info("Getting Exclude for Work person role Table Count...");
+                BCSExtExclSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_PERS_ROLE_EXCL_COUNT;
+                break;
+
+        }
+        Log.info(BCSExtExclSQLCurrentCount);
+        List<Map<String, Object>> BCSExclTableCount = DBManager.getDBResultMap(BCSExtExclSQLCurrentCount, Constants.AWS_URL);
+        BCSExtExcludeCount = ((Long) BCSExclTableCount.get(0).get("Target_Count")).intValue();
+    }
+    @And ("^Compare BCS Extended exclude count of (.*) and (.*) with (.*) are identical$")
+    public void compareBCSExtExclCounts(String srcTable1,String srcTable2, String trgtTable){
+        Log.info("The Diff of count for table "+srcTable1+" and "+srcTable2+" => " + BCSExtDiffDeltaAndHistCurrentCount + " and in "+trgtTable+" => " + BCSExtExcludeCount);
+        Assert.assertEquals("The counts are not equal when compared with Diff of "+srcTable1+" and "+srcTable2+"with "+trgtTable, BCSExtExcludeCount, BCSExtDiffDeltaAndHistCurrentCount);
+    }
+
+    @Given ("^Get the sum of total count between BCS Extended delta current and Current_Exclude Table (.*)$")
+    public void getBCSExtSumOfExclAndDeltaCurrCount (String tableName) {
+        switch (tableName) {
+            case "etl_transform_history_extended_availability_latest":
+                Log.info("Getting Sum of Delta Curr & Excl for Availability Table Count...");
+                BCSExtSumDeltaExclSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_AVAILABILITY_SUM_DELTACURR_EXCL_COUNT;
+                break;
+            case "etl_transform_history_extended_manifestation_latest":
+                Log.info("Getting Sum of Delta Curr & Excl for Manifestation Extended Table Count...");
+                BCSExtSumDeltaExclSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_EXT_SUM_DELTACURR_EXCL_COUNT;
+                break;
+            case "etl_transform_history_extended_page_count_latest":
+                Log.info("Getting Sum of Delta Curr & Excl for Page Count Ext Table Count...");
+                BCSExtSumDeltaExclSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_PAGE_COUNT_SUM_DELTACURR_EXCL_COUNT;
+                break;
+            case "etl_transform_history_extended_url_latest":
+                Log.info("Getting Sum of Delta Curr & Excl for URL Table Count...");
+                BCSExtSumDeltaExclSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_URL_SUM_DELTACURR_EXCL_COUNT;
+                break;
+            case "etl_transform_history_extended_work_latest":
+                Log.info("Getting Sum of Delta Curr & Excl for work extended Table Count...");
+                BCSExtSumDeltaExclSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WRK_EXT_SUM_DELTACURR_EXCL_COUNT;
+                break;
+            case "etl_transform_history_extended_work_subject_area_latest":
+                Log.info("Getting Sum of Delta Curr & Excl for work Subject area Table Count...");
+                BCSExtSumDeltaExclSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WRK_SUBJ_AREA_SUM_DELTACURR_EXCL_COUNT;
+                break;
+            case "etl_transform_history_extended_manifestation_restrictions_latest":
+                Log.info("Getting Sum of Delta Curr & Excl for Manif Restrition Count...");
+                BCSExtSumDeltaExclSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_RESTRICT_SUM_DELTACURR_EXCL_COUNT;
+                break;
+            case "etl_transform_history_extended_product_prices_latest":
+                Log.info("Getting Sum of Delta Curr & Excl for Product PRice Table Count...");
+                BCSExtSumDeltaExclSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_ROD_PRICE_SUM_DELTACURR_EXCL_COUNT;
+                break;
+            case "etl_transform_history_extended_work_person_role_latest":
+                Log.info("Getting Sum of Delta Curr & Excl for work person role Table Count...");
+                BCSExtSumDeltaExclSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_PERS_ROLE_SUM_DELTACURR_EXCL_COUNT;
+                break;
+
+        }
+        Log.info(BCSExtSumDeltaExclSQLCurrentCount);
+        List<Map<String, Object>> BCSSumDeltaExclTableCount = DBManager.getDBResultMap(BCSExtSumDeltaExclSQLCurrentCount, Constants.AWS_URL);
+        BCSExtSumDeltaExclCount = ((Long) BCSSumDeltaExclTableCount.get(0).get("source_count")).intValue();
+    }
+        @Then("^Get the BCS Extended (.*) latest data count$")
+        public void getBCSExtLatestCount(String tableName) {
+            switch (tableName){
+                case "etl_transform_history_extended_availability_latest":
+                    Log.info("Getting Latest for Availability Table Count...");
+                    BCSExtLatestSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_AVAILABILITY_LATEST_COUNT;
+                    break;
+                case "etl_transform_history_extended_manifestation_latest":
+                    Log.info("Getting Latest for Manifestation Extended Table Count...");
+                    BCSExtLatestSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_EXT_LATEST_COUNT;
+                    break;
+                case "etl_transform_history_extended_page_count_latest":
+                    Log.info("Getting Latest for Page count Table Count...");
+                    BCSExtLatestSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_PAGE_COUNT_LATEST_COUNT;
+                    break;
+                case "etl_transform_history_extended_url_latest":
+                    Log.info("Getting Latest for URL Table Count...");
+                    BCSExtLatestSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_URL_LATEST_COUNT;
+                    break;
+                case "etl_transform_history_extended_work_latest":
+                    Log.info("Getting Latest for Work extended Table Count...");
+                    BCSExtLatestSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WRK_EXT_LATEST_COUNT;
+                    break;
+                case "etl_transform_history_extended_work_subject_area_latest":
+                    Log.info("Getting Latest for work subject area Table Count...");
+                    BCSExtLatestSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WRK_SUBJ_AREA_LATEST_COUNT;
+                    break;
+                case "etl_transform_history_extended_manifestation_restrictions_latest":
+                    Log.info("Getting Latest for manifestation restriction Count...");
+                    BCSExtLatestSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_RESTRICT_LATEST_COUNT;
+                    break;
+                case "etl_transform_history_extended_product_prices_latest":
+                    Log.info("Getting Latest for product price Table Count...");
+                    BCSExtLatestSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_PROD_PRICE_LATEST_COUNT;
+                    break;
+                case "etl_transform_history_extended_work_person_role_latest":
+                    Log.info("Getting Latest for work person role Table Count...");
+                    BCSExtLatestSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WRK_PERSON_ROLE_LATEST_COUNT;
+                    break;
+            }
+            Log.info(BCSExtLatestSQLCurrentCount);
+            List<Map<String, Object>> BCSLatestTableCount = DBManager.getDBResultMap(BCSExtLatestSQLCurrentCount, Constants.AWS_URL);
+            BCSExtLatestCount = ((Long) BCSLatestTableCount.get(0).get("Target_Count")).intValue();
+        }
+
+    @And ("^Compare BCS Extended latest counts of (.*) and (.*) with (.*) are identical$")
+    public void compareBCSExtLatestCounts(String srcTable1,String srcTable2, String trgtTable){
+        Log.info("The Diff of count for table "+srcTable1+" and "+srcTable2+" => " + BCSExtSumDeltaExclCount + " and in "+trgtTable+" => " + BCSExtLatestCount);
+        Assert.assertEquals("The counts are not equal when compared with Diff of "+srcTable1+" and "+srcTable2+"with "+trgtTable, BCSExtLatestCount, BCSExtSumDeltaExclCount);
+    }
 }

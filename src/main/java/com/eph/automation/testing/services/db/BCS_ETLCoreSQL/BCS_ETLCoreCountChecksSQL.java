@@ -441,7 +441,7 @@ public class BCS_ETLCoreCountChecksSQL {
                        "   , NULLIF(product.sourceref, '') manifestationref\n" +
                        "   , NULLIF(workcontent.sourceref, '') worksource\n" +
                        "   , NULLIF(workcontent.work_type, '') work_type\n" +
-                       "   , CASE WHEN separately_sale.sourceref is null then false else true END  separately_sale_indicator \n" +
+                       "   , CASE WHEN separately_sale.sourceref is null then true else false END  separately_sale_indicator \n" +
                        "   , CAST(null AS boolean) trial_allowed_indicator\n" +
                        "   , CASE WHEN sales_rest.sourceref is null then false else true END restricted_sale_indicator \n" +
                        "   , CAST(null AS varchar) f_work_source_ref\n" +
