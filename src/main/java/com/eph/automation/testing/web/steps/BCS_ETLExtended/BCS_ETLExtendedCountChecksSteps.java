@@ -49,6 +49,9 @@ public class BCS_ETLExtendedCountChecksSteps {
     private String BCSExtLatestSQLCurrentCount;
     private static int BCSExtLatestCount;
 
+    private String BCSExtDuplicateLatestSQLCount;
+    private static int BCSExtDuplicateLatestCount;
+
 
     @Given("^Get the total count of BCS Extended from Current Tables (.*)$")
     public void getBCSExtendedCount(String tableName) {
@@ -595,4 +598,62 @@ public class BCS_ETLExtendedCountChecksSteps {
         Log.info("The Diff of count for table "+srcTable1+" and "+srcTable2+" => " + BCSExtSumDeltaExclCount + " and in "+trgtTable+" => " + BCSExtLatestCount);
         Assert.assertEquals("The counts are not equal when compared with Diff of "+srcTable1+" and "+srcTable2+"with "+trgtTable, BCSExtLatestCount, BCSExtSumDeltaExclCount);
     }
+
+    @Given("^Get the BCS Extended duplicate count in (.*) table$")
+    public void getDuplicateCount(String tableName){
+        switch (tableName){
+            case "etl_transform_history_extended_availability_latest":
+                Log.info("Getting Duplicate Availability Latest Table Count...");
+                BCSExtDuplicateLatestSQLCount = BCS_ETLExtendedCountChecksSQL.GET_DUPLICATES_LATEST_AVAILABILITY_COUNT;
+                break;
+            case "etl_transform_history_extended_manifestation_latest":
+                Log.info("Getting Duplicate MANIF Extended Latest Table Count...");
+                BCSExtDuplicateLatestSQLCount = BCS_ETLExtendedCountChecksSQL.GET_DUPLICATES_LATEST_MANIF_EXT_COUNT;
+                break;
+            case "etl_transform_history_extended_page_count_latest":
+                Log.info("Getting Duplicate Page count Latest Table Count...");
+                BCSExtDuplicateLatestSQLCount = BCS_ETLExtendedCountChecksSQL.GET_DUPLICATES_LATEST_PAGE_COUNT_COUNT;
+                break;
+            case "etl_transform_history_extended_url_latest":
+                Log.info("Getting Duplicate URL Latest Table Count...");
+                BCSExtDuplicateLatestSQLCount = BCS_ETLExtendedCountChecksSQL.GET_DUPLICATES_LATEST_URL_COUNT;
+                break;
+            case "etl_transform_history_extended_work_latest":
+                Log.info("Getting Duplicate Work Extended Latest Table Count...");
+                BCSExtDuplicateLatestSQLCount = BCS_ETLExtendedCountChecksSQL.GET_DUPLICATES_LATEST_WORK_EXT_COUNT;
+                break;
+
+            case "etl_transform_history_extended_work_subject_area_latest":
+                Log.info("Getting Duplicate WorkSubj Area Latest Table Count...");
+                BCSExtDuplicateLatestSQLCount = BCS_ETLExtendedCountChecksSQL.GET_DUPLICATES_LATEST_WORK_SUBJ_AREA_COUNT;
+                break;
+
+            case "etl_transform_history_extended_manifestation_restrictions_latest":
+                Log.info("Getting Duplicate Manif Restriction Latest Table Count...");
+                BCSExtDuplicateLatestSQLCount = BCS_ETLExtendedCountChecksSQL.GET_DUPLICATES_LATEST_MANIF_RESTRICT_COUNT;
+                break;
+            case "etl_transform_history_extended_product_prices_latest":
+                Log.info("Getting Duplicate Product Price Latest Table Count...");
+                BCSExtDuplicateLatestSQLCount = BCS_ETLExtendedCountChecksSQL.GET_DUPLICATES_LATEST_PROD_PRICE_COUNT;
+                break;
+            case "etl_transform_history_extended_work_person_role_latest":
+                Log.info("Getting Duplicate work person role Table Count...");
+                BCSExtDuplicateLatestSQLCount = BCS_ETLExtendedCountChecksSQL.GET_DUPLICATES_LATEST_WORK_PERS_ROLE_COUNT;
+                break;
+
+        }
+        Log.info(BCSExtDuplicateLatestSQLCount);
+        List<Map<String, Object>> BCSCoreDupLatestTableCount = DBManager.getDBResultMap(BCSExtDuplicateLatestSQLCount, Constants.AWS_URL);
+        BCSExtDuplicateLatestCount = ((Long) BCSCoreDupLatestTableCount.get(0).get("Duplicate_Count")).intValue();
+    }
+
+    @Then("^Check the BCS Extended count should be equal to Zero (.*)$")
+    public void checkDupCountZero(String tableName){
+        Log.info("The Duplicate count for "+tableName+" => " + BCSExtDuplicateLatestCount);
+        Assert.assertEquals("There are Duplicate Count of "+tableName,0,BCSExtDuplicateLatestCount);
+
+    }
+
+
+
 }

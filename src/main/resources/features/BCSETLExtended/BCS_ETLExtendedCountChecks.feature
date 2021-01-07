@@ -128,3 +128,19 @@ Feature:Validate data count for BCS Extended tables
       |etl_delta_current_extended_product_prices             |etl_transform_history_extended_product_prices_excl_delta                   |etl_transform_history_extended_product_prices_latest     |
       |etl_delta_current_extended_work_person_role            |etl_transform_history_extended_work_person_role_excl_delta             |etl_transform_history_extended_work_person_role_latest |
 
+
+  @BCSExtended
+  Scenario Outline: Verify Duplicate Entry for BCS Extended in transform latest tables
+    Given Get the BCS Extended duplicate count in <SourceTableName> table
+    Then Check the BCS Extended count should be equal to Zero <SourceTableName>
+    Examples:
+      |SourceTableName                      |
+      |etl_transform_history_extended_availability_latest           |
+      |etl_transform_history_extended_manifestation_latest                 |
+      |etl_transform_history_extended_page_count_latest                        |
+      |etl_transform_history_extended_url_latest                       |
+      |etl_transform_history_extended_work_latest              |
+      |etl_transform_history_extended_work_subject_area_latest             |
+      |etl_transform_history_extended_manifestation_restrictions_latest                          |
+      |etl_transform_history_extended_product_prices_latest               |
+      |etl_transform_history_extended_work_person_role_latest      |
