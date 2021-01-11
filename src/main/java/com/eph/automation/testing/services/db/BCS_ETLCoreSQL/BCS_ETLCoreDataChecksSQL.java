@@ -60,7 +60,8 @@ public class BCS_ETLCoreDataChecksSQL {
                     "   , 'N' dq_err\n" +
                     "FROM\n" +
                     "((SELECT sourceref,\n" +
-                    "businesspartnerid,\n" +
+                    " concat(cast(businesspartnerid as varchar),(CASE WHEN (isperson = 'N') THEN department ELSE firstname END),(CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)) businesspartnerid, \n" +
+                    " businesspartnerid old_businessparterid,\n" +
                     "copyrightholdertype,\n" +
                     "sequence,\n" +
                     "metamodifiedon,\n" +
@@ -326,7 +327,8 @@ public class BCS_ETLCoreDataChecksSQL {
                     "   , 'N' dq_err\n" +
                     "FROM\n" +
                     "((SELECT sourceref,\n" +
-                    "businesspartnerid,\n" +
+                    " concat(cast(businesspartnerid as varchar),(CASE WHEN (isperson = 'N') THEN department ELSE firstname END),(CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)) businesspartnerid, \n" +
+                    " businesspartnerid old_businessparterid,\n" +
                     "copyrightholdertype,\n" +
                     "sequence,\n" +
                     "metamodifiedon,\n" +
@@ -475,7 +477,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     "  ( \n" +
                     "   SELECT DISTINCT \n" +
                     "     businesspartnerid sourceref \n" +
-                    "     ,businesspartnerid u_key \n" +
+                    "   , concat(cast(businesspartnerid as varchar),(CASE WHEN (isperson = 'N') THEN department ELSE firstname END),(CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))u_key \n" +
                     "   , (CASE WHEN (isperson = 'N') THEN NULLIF(department, '') ELSE NULLIF(firstname, '') END) firstname \n" +
                     "   , (CASE WHEN (isperson = 'N') THEN NULLIF(institution, '') ELSE NULLIF(lastname, '') END) familyname \n" +
                     "   , CAST(null AS varchar) peoplehub_id \n" +
@@ -484,6 +486,8 @@ public class BCS_ETLCoreDataChecksSQL {
                     "   FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originators \n" +
                     ")  A \n" +
                     " WHERE (A.sourceref IS NOT NULL) order by rand() limit %s";
+
+
 
     public static String GET_PERSON_INBOUND_DATA =
         "select " +
@@ -497,7 +501,7 @@ public class BCS_ETLCoreDataChecksSQL {
                 "FROM( \n" +
                 "   SELECT DISTINCT\n" +
                 "     businesspartnerid sourceref \n" +
-                "     ,businesspartnerid u_key \n" +
+                "   , concat(cast(businesspartnerid as varchar),(CASE WHEN (isperson = 'N') THEN department ELSE firstname END),(CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))u_key \n" +
                 "   , (CASE WHEN (isperson = 'N') THEN NULLIF(department, '') ELSE NULLIF(firstname, '') END) firstname \n" +
                 "   , (CASE WHEN (isperson = 'N') THEN NULLIF(institution, '') ELSE NULLIF(lastname, '') END) familyname \n" +
                 "   , CAST(null AS varchar) peoplehub_id \n" +
@@ -505,7 +509,7 @@ public class BCS_ETLCoreDataChecksSQL {
                 "   , 'N' dq_err \n" +
                 "   FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originators \n" +
                 ")  A \n" +
-                "WHERE (A.sourceref IS NOT NULL) and u_key in (%s) order by u_key desc";
+                "WHERE (A.sourceref IS NOT NULL) and u_key in ('%s') order by u_key desc";
 
 
     public static String GET_RANDOM_WRK_RELT_KEY_INBOUND =
@@ -520,17 +524,18 @@ public class BCS_ETLCoreDataChecksSQL {
                    "FROM\n" +
                    "("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_relations\n" +
                    "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".relationtypecode ON (split_part(relationtype, ' | ', 1) = relationtypecode.ppmcode))\n" +
-                   "UNION ALL\n" +
+                   "UNION ALL \n" +
                    "SELECT DISTINCT\n" +
-                   "concat(CAST(seriesid AS varchar), 'CON', CAST(sourceref AS varchar)) u_key\n" +
-                   ", seriesid parentref\n" +
-                   ", sourceref childref\n" +
+                   "concat(CAST(content.seriesid AS varchar), 'CON', CAST(content.sourceref AS varchar)) u_key\n" +
+                   ", content.seriesid parentref\n" +
+                   ", content.sourceref childref\n" +
                    ", 'CON' relationtyperef\n" +
-                   ", date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
+                   ", date_parse(NULLIF(content.metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
                    ", 'N' dq_err\n" +
-                   "FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content\n" +
+                   " FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content\n" +
+                   "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily family on content.sourceref = family.sourceref and content.sourceref = family.workmasterprojectno \n" +
                    ")A WHERE A.parentref is not null and\n" +
-                   "A.childref is not null and\n" +
+                   " A.childref is not null and\n" +
                    "A.relationtyperef is not null  order by rand() limit %s";
 
     public static String GET_WORK_RELT_INBOUND_DATA =
@@ -550,17 +555,18 @@ public class BCS_ETLCoreDataChecksSQL {
                     "FROM\n" +
                     "("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_relations\n" +
                     " INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".relationtypecode ON (split_part(relationtype, ' | ', 1) = relationtypecode.ppmcode))\n" +
-                    "UNION ALL\n" +
+                    "UNION ALL \n" +
                     "SELECT DISTINCT\n" +
-                    "concat(CAST(seriesid AS varchar), 'CON', CAST(sourceref AS varchar)) u_key\n" +
-                    ", seriesid parentref\n" +
-                    ", sourceref childref\n" +
+                    "concat(CAST(content.seriesid AS varchar), 'CON', CAST(content.sourceref AS varchar)) u_key\n" +
+                    ", content.seriesid parentref\n" +
+                    ", content.sourceref childref\n" +
                     ", 'CON' relationtyperef\n" +
-                    ", date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
+                    ", date_parse(NULLIF(content.metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
                     ", 'N' dq_err\n" +
-                    "FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content\n" +
+                    " FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content\n" +
+                    "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily family on content.sourceref = family.sourceref and content.sourceref = family.workmasterprojectno \n" +
                     ")A WHERE A.parentref is not null and\n" +
-                    "A.childref is not null and\n" +
+                    " A.childref is not null and\n" +
                     "A.relationtyperef is not null and u_key in ('%s') order by u_key desc";
 
 
@@ -705,7 +711,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",email_address as EMAIL" +
                     ",dq_err as DQ_ERR " +
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_person_current_v where u_key in \n" +
-                    "(%s) order by u_key desc";
+                    "('%s') order by u_key desc";
 
 
     public static String GET_ACCPROD_REC_CURR_REC =
@@ -1077,7 +1083,6 @@ public class BCS_ETLCoreDataChecksSQL {
                     "delta_ts = (select max(delta_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_product_part)" +
                     " order by rand() limit %s";
 
-
     public static String GET_PRODUCT_REC_CURR_HIST_DATA =
             "select " +
                     "sourceref as SOURCEREF \n" +
@@ -1278,7 +1283,6 @@ public class BCS_ETLCoreDataChecksSQL {
                     "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_relationship_transform_file_history_part)" +
                     "and u_key in ('%s') \n" +
                     "order by u_key desc";
-
 
     public static String GET_RANDOM_WORK_KEY_CURRENT =
             "SELECT u_key as u_key \n" +
@@ -1528,7 +1532,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",email_address as EMAIL" +
                     ",dq_err as DQ_ERR " +
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_person_current_v where u_key in \n" +
-                    "(%s) order by u_key desc";
+                    "('%s') order by u_key desc";
 
     public static String GET_PERSON_REC_CURR_HIST_DATA =
             "select " +
@@ -1541,7 +1545,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",dq_err as DQ_ERR " +
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_part  where " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_part)" +
-                    "and u_key in (%s) \n" +
+                    "and u_key in ('%s') \n" +
                     "order by u_key desc";
 
     public static String GET_PERSON_REC_TRANS_FILE_DATA =
@@ -1555,7 +1559,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",dq_err as DQ_ERR " +
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_person_transform_file_history_part  where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_person_transform_file_history_part)" +
-                    "and u_key in (%s) \n" +
+                    "and u_key in ('%s') \n" +
                     "order by u_key desc";
 
     public static String GET_RANDOM_PERSON_KEY_DIFF_TRANS_FILE =
@@ -1635,7 +1639,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     "            coalesce (crr.familyname, 'na') <> coalesce (prev.familyname, 'na') or\n" +
                     "            coalesce (crr.peoplehub_id, 'na') <> coalesce (prev.peoplehub_id, 'na') or\n" +
                     "            coalesce (crr.email_address, 'na') <> coalesce (prev.email_address, 'na') or\n" +
-                    "            coalesce (crr.dq_err, 'na') <> coalesce (prev.dq_err, 'na')))where u_key in (%s) order by u_key desc ";
+                    "            coalesce (crr.dq_err, 'na') <> coalesce (prev.dq_err, 'na')))where u_key in ('%s') order by u_key desc ";
 
 
     public static String GET_RANDOM_ACCPROD_KEY_DIFF_TRANS_FILE =
@@ -2355,7 +2359,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",dq_err as DQ_ERR " +
                     ",delta_mode as DELTA_MODE "+
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_person where u_key in \n" +
-                    "(%s) order by u_key desc";
+                    "('%s') order by u_key desc";
 
     public static String GET_PERSON_REC_DELTA_CURR_HIST =
             "select " +
@@ -2369,7 +2373,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",delta_mode as DELTA_MODE "+
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_person_part  where " +
                     "delta_ts = (select max(delta_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_person_part)" +
-                    "and u_key in (%s) \n" +
+                    "and u_key in ('%s') \n" +
                     "order by u_key desc";
 
     public static String GET_RANDOM_KEY_PERS_DELTA_CURRENT_HIST =
@@ -3048,7 +3052,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     "left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_person d on c.u_key  = d.u_key \n" +
                     "where d.u_key is null and c.transform_ts = (\n" +
                     "select max(c.transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_part c ))\n" +
-                    " where u_key in (%s) order by u_key desc";
+                    " where u_key in ('%s') order by u_key desc";
 
     public static String GET_PERSON_REC_EXCL_DELTA =
             "select " +
@@ -3060,7 +3064,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",email_address as EMAIL" +
                     ",dq_err as DQ_ERR " +
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_excl_delta \n" +
-                    "where u_key in (%s) \n" +
+                    "where u_key in ('%s') \n" +
                     "order by u_key desc";
 
     public static String GET_RANDOM_PERSON_KEY_DIFF_DELTACURR_EXCL =
@@ -3070,8 +3074,6 @@ public class BCS_ETLCoreDataChecksSQL {
                     "select d.u_key \n" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_person as d) \n" +
                     " order by rand() limit %s";
-
-
 
     public static String GET_PERSON_REC_DIFF_DELTACURR_EXCL =
             "select " +
@@ -3085,7 +3087,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     "(select c.u_key,c.sourceref,c.firstname,c.familyname,c.peoplehub_id,c.email_address,c.dq_err from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_excl_delta as c union all \n" +
                     "select d.u_key,d.sourceref,d.firstname,d.familyname,d.peoplehub_id,d.email_address,d.dq_err \n" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_person as d) \n" +
-                    " where u_key in (%s) order by u_key desc";
+                    " where u_key in ('%s') order by u_key desc";
 
     public static String GET_PERSON_REC_LATEST =
             "select " +
@@ -3097,7 +3099,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",email_address as EMAIL" +
                     ",dq_err as DQ_ERR " +
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_latest \n" +
-                    "where u_key in (%s) \n" +
+                    "where u_key in ('%s') \n" +
                     "order by u_key desc";
 
     public static String GET_RANDOM_MANIF_STATUS_KEY_INBOUND =
@@ -3186,7 +3188,7 @@ public class BCS_ETLCoreDataChecksSQL {
               "         , cast(date_parse(nullif(product.pubdateplanned, ''), '%%d-%%b-%%Y') as date) pubdateplanneddate\n" +
               "    from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
               "    inner join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content on product.sourceref = content.sourceref\n" +
-              "    union all\n" +
+              "    union all \n" +
               "    select location.warehouse\n" +
               "         , location.sourceref\n" +
               "         , cast(date_parse(nullif(location.pubdateactual, ''), '%%d-%%b-%%Y') as date) publishedondate\n" +
@@ -3294,7 +3296,7 @@ public class BCS_ETLCoreDataChecksSQL {
             "         , cast(date_parse(nullif(product.pubdateplanned, ''), '%%d-%%b-%%Y') as date) pubdateplanneddate\n" +
             "    from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
             "    inner join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content on product.sourceref = content.sourceref\n" +
-            "    union all\n" +
+            "    union all \n" +
             "    select location.warehouse\n" +
             "         , location.sourceref\n" +
             "         , cast(date_parse(nullif(location.pubdateactual, ''), '%%d-%%b-%%Y') as date) publishedondate\n" +

@@ -61,6 +61,9 @@ public class BCS_ETLCore_LatestDataChecksSteps {
             case "etl_transform_history_work_identifier_excl_delta":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_WORK_IDENT_KEY_DIFF_DELTACURR_CURRHIST, numberOfRecords);
                 break;
+            case "etl_transform_history_person_excl_delta":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_PERSON_KEY_DIFF_DELTACURR_CURRHIST, numberOfRecords);
+                break;
        }
         List<Map<?, ?>> randomIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
         Ids = randomIds.stream().map(m -> (String) m.get("UKEY")).collect(Collectors.toList());
@@ -96,6 +99,9 @@ public class BCS_ETLCore_LatestDataChecksSteps {
             case "etl_transform_history_work_identifier_excl_delta":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_IDENT_REC_DIFF_DELTACURR_CURRHIST, Joiner.on("','").join(Ids));
                 break;
+            case "etl_transform_history_person_excl_delta":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PERSON_REC_DIFF_DELTACURR_CURRHIST, Joiner.on("','").join(Ids));
+                break;
         }
         dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
         Log.info(sql);
@@ -130,10 +136,12 @@ public class BCS_ETLCore_LatestDataChecksSteps {
             case "etl_transform_history_work_identifier_excl_delta":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_IDENT_REC_EXCL_DELTA, Joiner.on("','").join(Ids));
                 break;
+            case "etl_transform_history_person_excl_delta":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PERSON_REC_EXCL_DELTA, Joiner.on("','").join(Ids));
+                break;
         }
         dataQualityBCSContext.recFromExclDelta = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
         Log.info(sql);
-
     }
 
     @And("^Compare the records of Exclude with diff of delta_current and current_hist tables (.*)$")
@@ -373,77 +381,37 @@ public class BCS_ETLCore_LatestDataChecksSteps {
                             }
                         }
                     break;
+                case "etl_transform_history_person_excl_delta":
+                    Log.info("etl_transform_history_person_excl_delta Records:");
+                    dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                    dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                    String[] etl_person_current_v_col = {"getUKEY", "getSOURCEREF", "getFIRSTNAME", "getFAMILYNAME", "getPEOPLEHUBID", "getEMAIL", "getDQ_ERR"};
+                    for (String strTemp : etl_person_current_v_col) {
+                        java.lang.reflect.Method method;
+                        java.lang.reflect.Method method2;
+
+                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recFromDiffOfPersonDeltaAndCurrHist.get(i);
+                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromPersonExclDelta.get(i);
+
+                        method = objectToCompare1.getClass().getMethod(strTemp);
+                        method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                        Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfPersonDeltaAndCurrHist.get(i).getUKEY() +
+                                " " + strTemp + " => Person_Diff_DeltaCurr_CurrHist = " + method.invoke(objectToCompare1) +
+                                " Person_Excl_Delta = " + method2.invoke(objectToCompare2));
+                        if (method.invoke(objectToCompare1) != null ||
+                                (method2.invoke(objectToCompare2) != null)) {
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Person_Excl_Delta",
+                                    method.invoke(objectToCompare1),
+                                    method2.invoke(objectToCompare2));
+                        }
+                    }
+                    break;
             }
        }
     }
 
-    @Given("^Get the (.*) from diff of person delta_current and current_hist tables$")
-    public void getRandKeyFromPersonDiffDeltaAndCurrHist(String numberOfRecords) {
-        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
-        Log.info("numberOfRecords = " + numberOfRecords);
-        Log.info("Get random Ids for BCS Core Person Diff of Delta current and Current History Tables....");
-        sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_PERSON_KEY_DIFF_DELTACURR_CURRHIST, numberOfRecords);
-        List<Map<?, ?>> randomPersonIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-        Ids = randomPersonIds.stream().map(m -> (Integer) m.get("UKEY")).map(String::valueOf).collect(Collectors.toList());
-        Log.info(sql);
-        Log.info(Ids.toString());
-    }
-
-    @When("^Get the records from the diff of person delta_current and current_hist tables$")
-    public void getRecPersonDiffOFDeltaAndCurrHist(){
-        Log.info("Get Records from Person Diff of Delta current and Current History Tables");
-        sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PERSON_REC_DIFF_DELTACURR_CURRHIST, Joiner.on(",").join(Ids));
-        dataQualityBCSContext.recFromDiffOfPersonDeltaAndCurrHist = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
-        Log.info(sql);
-    }
-
-    @Then("^Get the records from person exclude BCS core table$")
-    public void getRecPersonExclDelta(){
-        Log.info("Get Records from Person Exclude Delta Table");
-        sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PERSON_REC_EXCL_DELTA, Joiner.on(",").join(Ids));
-        dataQualityBCSContext.recFromPersonExclDelta = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
-        Log.info(sql);
-    }
-
-    @And ("^Compare the records of Exclude with diff of person delta_current and current_hist tables$")
-    public void comparePersonExclAndDiffOfDeltaAndCurrHist()throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        if (dataQualityBCSContext.recFromDiffOfPersonDeltaAndCurrHist.isEmpty()) {
-            Log.info("No Data Found in  Diff of Delta and Current History table....");
-        } else {
-            Log.info("Sorting the Ids to compare the records between Person Exclude and Person Diff Delta and Current Hist...");
-            for (int i = 0; i < dataQualityBCSContext.recFromDiffOfPersonDeltaAndCurrHist.size(); i++) {
-                dataQualityBCSContext.recFromDiffOfPersonDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                dataQualityBCSContext.recFromPersonExclDelta.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
-
-                String[] etl_person_current_v_col = {"getUKEY", "getSOURCEREF", "getFIRSTNAME", "getFAMILYNAME", "getPEOPLEHUBID", "getEMAIL", "getDQ_ERR"};
-                for (String strTemp : etl_person_current_v_col) {
-                    java.lang.reflect.Method method;
-                    java.lang.reflect.Method method2;
-
-                    BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recFromDiffOfPersonDeltaAndCurrHist.get(i);
-                    BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromPersonExclDelta.get(i);
-
-                    method = objectToCompare1.getClass().getMethod(strTemp);
-                    method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfPersonDeltaAndCurrHist.get(i).getUKEY() +
-                            " " + strTemp + " => Person_Diff_DeltaCurr_CurrHist = " + method.invoke(objectToCompare1) +
-                            " Person_Excl_Delta = " + method2.invoke(objectToCompare2));
-                    if (method.invoke(objectToCompare1) != null ||
-                            (method2.invoke(objectToCompare2) != null)) {
-                        Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Person_Excl_Delta",
-                                method.invoke(objectToCompare1),
-                                method2.invoke(objectToCompare2));
-                    }
-                }
-            }
-        }
-    }
-
 ///////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
 
     @Given("^Get the (.*) from diff of delta_current and exclude_delta tables (.*)$")
     public void getIdsFromDiffOfDeltaCurrAndExcl(String numberOfRecords, String tableName) {
@@ -476,6 +444,10 @@ public class BCS_ETLCore_LatestDataChecksSteps {
             case "etl_transform_history_work_identifier_latest":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_WORK_IDENT_KEY_DIFF_DELTACURR_EXCL, numberOfRecords);
                 break;
+            case "etl_transform_history_person_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_PERSON_KEY_DIFF_DELTACURR_EXCL, numberOfRecords);
+                break;
+
         }
         List<Map<?, ?>> randomIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
         Ids = randomIds.stream().map(m -> (String) m.get("UKEY")).collect(Collectors.toList());
@@ -512,10 +484,12 @@ public class BCS_ETLCore_LatestDataChecksSteps {
             case "etl_transform_history_work_identifier_latest":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_IDENT_REC_DIFF_DELTACURR_EXCL, Joiner.on("','").join(Ids));
                 break;
+            case "etl_transform_history_person_latest":
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PERSON_REC_DIFF_DELTACURR_EXCL, Joiner.on("','").join(Ids));
+                break;
         }
         dataQualityBCSContext.recFromDiffOfDeltaAndExcl = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
         Log.info(sql);
-
     }
 
     @When ("^Get the records from (.*) BCS core latest table$")
@@ -546,10 +520,10 @@ public class BCS_ETLCore_LatestDataChecksSteps {
             case "etl_transform_history_work_identifier_latest":
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_IDENT_REC_LATEST, Joiner.on("','").join(Ids));
                 break;
+            case "etl_transform_history_person_latest" :
+                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PERSON_REC_LATEST, Joiner.on("','").join(Ids));
+                break;
         }
-        dataQualityBCSContext.recFromLatest = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
-        Log.info(sql);
-
     }
 
     @And("^Compare the records of Latest with diff of delta_current and Exclude_Delta tables (.*)$")
@@ -791,74 +765,36 @@ public class BCS_ETLCore_LatestDataChecksSteps {
                         }
                     }
                     break;
-            }
-        }
-    }
 
+                case "etl_transform_history_person_latest":
+                    Log.info("etl_transform_history_person_latest Records:");
+                    dataQualityBCSContext.recFromDiffOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                    dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                    String[] etl_person_current_v_col = {"getUKEY", "getSOURCEREF", "getFIRSTNAME", "getFAMILYNAME", "getPEOPLEHUBID", "getEMAIL", "getDQ_ERR"};
+                    for (String strTemp : etl_person_current_v_col) {
+                        java.lang.reflect.Method method;
+                        java.lang.reflect.Method method2;
 
-    @Given("^Get the (.*) from diff of Person delta_current and Person exclude_delta tables$")
-    public void getRandKeyFromPersonDiffDeltaAndExcl(String numberOfRecords) {
-      //  numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
-        Log.info("numberOfRecords = " + numberOfRecords);
-        Log.info("Get random Ids for BCS Core Person Diff of Delta current and Current History Tables....");
-        sql = String.format(BCS_ETLCoreDataChecksSQL.GET_RANDOM_PERSON_KEY_DIFF_DELTACURR_EXCL, numberOfRecords);
-        List<Map<?, ?>> randomPersonIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-        Ids = randomPersonIds.stream().map(m -> (Integer) m.get("UKEY")).map(String::valueOf).collect(Collectors.toList());
-        Log.info(sql);
-        Log.info(Ids.toString());
-    }
+                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i);
+                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromPersonLatest.get(i);
 
-    @When("^Get the records from the diff of Person delta_current and Person exclude_delta tables$")
-    public void getRecPersonDiffOfDeltaAndExcl(){
-        Log.info("Get Records from Person Diff of Delta current and Exclude Tables");
-        sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PERSON_REC_DIFF_DELTACURR_EXCL, Joiner.on(",").join(Ids));
-        dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
-        Log.info(sql);
-    }
+                        method = objectToCompare1.getClass().getMethod(strTemp);
+                        method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-    @Then("^Get the records from person Latest BCS core table$")
-    public void getRecPersonLatest(){
-        Log.info("Get Records from Person Latest Table");
-        sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PERSON_REC_LATEST, Joiner.on(",").join(Ids));
-        dataQualityBCSContext.recFromPersonLatest = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
-        Log.info(sql);
-    }
-
-    @And ("^Compare the records of Person Latest with diff of person delta_current and Exclude_delta tables$")
-    public void comparePersonLatestAndDiffOfDeltaAndExcl()throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        if (dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.isEmpty()) {
-            Log.info("No Data Found in Person Trans_File Diff....");
-        } else {
-            Log.info("Sorting the Ids to compare the records between Person Latest and Person Diff Delta and Excl...");
-            for (int i = 0; i < dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.size(); i++) {
-                dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                dataQualityBCSContext.recFromPersonLatest.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
-
-                String[] etl_person_current_v_col = {"getUKEY", "getSOURCEREF", "getFIRSTNAME", "getFAMILYNAME", "getPEOPLEHUBID", "getEMAIL", "getDQ_ERR"};
-                for (String strTemp : etl_person_current_v_col) {
-                    java.lang.reflect.Method method;
-                    java.lang.reflect.Method method2;
-
-                    BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i);
-                    BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromPersonLatest.get(i);
-
-                    method = objectToCompare1.getClass().getMethod(strTemp);
-                    method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                    Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getUKEY() +
-                            " " + strTemp + " => Person_Diff_DeltaCurr_Excl = " + method.invoke(objectToCompare1) +
-                            " Person_Latest = " + method2.invoke(objectToCompare2));
-                    if (method.invoke(objectToCompare1) != null ||
-                            (method2.invoke(objectToCompare2) != null)) {
-                        Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Person_Latest",
-                                method.invoke(objectToCompare1),
-                                method2.invoke(objectToCompare2));
+                        Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getUKEY() +
+                                " " + strTemp + " => Person_Diff_DeltaCurr_Excl = " + method.invoke(objectToCompare1) +
+                                " Person_Latest = " + method2.invoke(objectToCompare2));
+                        if (method.invoke(objectToCompare1) != null ||
+                                (method2.invoke(objectToCompare2) != null)) {
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Person_Latest",
+                                    method.invoke(objectToCompare1),
+                                    method2.invoke(objectToCompare2));
+                        }
                     }
-                }
+                    break;
             }
         }
     }
-
 
 }
 

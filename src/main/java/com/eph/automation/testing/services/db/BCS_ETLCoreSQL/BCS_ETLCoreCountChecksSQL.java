@@ -367,15 +367,16 @@ public class BCS_ETLCoreCountChecksSQL {
                     "FROM\n" +
                     "("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_relations\n" +
                     "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".relationtypecode ON (split_part(relationtype, ' | ', 1) = relationtypecode.ppmcode))\n" +
-                    "UNION ALL\n" +
+                    "UNION ALL \n" +
                     "SELECT DISTINCT\n" +
-                    "concat(CAST(seriesid AS varchar), 'CON', CAST(sourceref AS varchar)) u_key\n" +
-                    ", seriesid parentref\n" +
-                    ", sourceref childref\n" +
+                    "concat(CAST(content.seriesid AS varchar), 'CON', CAST(content.sourceref AS varchar)) u_key\n" +
+                    ", content.seriesid parentref\n" +
+                    ", content.sourceref childref\n" +
                     ", 'CON' relationtyperef\n" +
-                    ", date_parse(NULLIF(metamodifiedon,''),'%d-%b-%Y %H:%i:%s') modifiedon\n" +
+                    ", date_parse(NULLIF(content.metamodifiedon,''),'%d-%b-%Y %H:%i:%s') modifiedon\n" +
                     ", 'N' dq_err\n" +
-                    "FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content\n" +
+                    " FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content \n" +
+                    "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily family on content.sourceref = family.sourceref and content.sourceref = family.workmasterprojectno \n" +
                     ")A WHERE A.parentref is not null and\n" +
                     "A.childref is not null and \n" +
                     "A.relationtyperef is not null \n";
@@ -395,7 +396,8 @@ public class BCS_ETLCoreCountChecksSQL {
                     "   , 'N' dq_err\n" +
                     "FROM\n" +
                     "((SELECT sourceref,\n" +
-                    "businesspartnerid,\n" +
+                   " concat(cast(businesspartnerid as varchar),(CASE WHEN (isperson = 'N') THEN department ELSE firstname END),(CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)) businesspartnerid, \n" +
+                    "businesspartnerid old_businessparterid,\n" +
                     "copyrightholdertype,\n" +
                     "sequence,\n" +
                     "metamodifiedon,\n" +
@@ -481,7 +483,7 @@ public class BCS_ETLCoreCountChecksSQL {
                        "  ( \n" +
                        "   SELECT DISTINCT \n" +
                        "     businesspartnerid sourceref \n" +
-                       "     ,businesspartnerid u_key \n" +
+                       "   , concat(cast(businesspartnerid as varchar),(CASE WHEN (isperson = 'N') THEN department ELSE firstname END),(CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))u_key \n" +
                        "   , (CASE WHEN (isperson = 'N') THEN NULLIF(department, '') ELSE NULLIF(firstname, '') END) firstname \n" +
                        "   , (CASE WHEN (isperson = 'N') THEN NULLIF(institution, '') ELSE NULLIF(lastname, '') END) familyname \n" +
                        "   , CAST(null AS varchar) peoplehub_id \n" +
