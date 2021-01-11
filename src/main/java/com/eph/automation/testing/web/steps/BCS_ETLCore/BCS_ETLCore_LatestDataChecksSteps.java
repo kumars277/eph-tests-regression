@@ -413,7 +413,7 @@ public class BCS_ETLCore_LatestDataChecksSteps {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-    @Given("^Get the (.*) from diff of delta_current and exclude_delta tables (.*)$")
+    @Given("^Get the (.*) from sum of delta_current and exclude_delta tables (.*)$")
     public void getIdsFromDiffOfDeltaCurrAndExcl(String numberOfRecords, String tableName) {
          //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
@@ -456,7 +456,7 @@ public class BCS_ETLCore_LatestDataChecksSteps {
     }
 
 
-    @When ("^Get the records from the diff of delta_current and exclude_delta tables (.*)$")
+    @When ("^Get the records from the sum of delta_current and exclude_delta tables (.*)$")
     public void getRecFromDiffDeltaCurrAndExcl(String tableName){
         Log.info("We get the records from Diff of Delta Current and Excl of BCS Core table...");
         switch (tableName) {
@@ -526,7 +526,7 @@ public class BCS_ETLCore_LatestDataChecksSteps {
         }
     }
 
-    @And("^Compare the records of Latest with diff of delta_current and Exclude_Delta tables (.*)$")
+    @And("^Compare the records of Latest with sum of delta_current and Exclude_Delta tables (.*)$")
     public void compareLatestwithDiffOfDeltaAndExcl(String targetTableName)throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (dataQualityBCSContext.recFromDiffOfDeltaAndExcl.isEmpty()) {
             Log.info("No Data Found ....");
