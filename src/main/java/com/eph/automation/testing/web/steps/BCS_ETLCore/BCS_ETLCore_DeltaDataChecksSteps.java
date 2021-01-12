@@ -388,13 +388,13 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
 
-                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recFromPersonDiffOfTransformFile.get(i);
-                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromPersonDeltaCurrent.get(i);
+                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recFromDiffOfTransformFile.get(i);
+                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromDeltaCurrent.get(i);
 
                         method = objectToCompare1.getClass().getMethod(strTemp);
                         method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("UKEY => " + dataQualityBCSContext.recFromPersonDiffOfTransformFile.get(i).getUKEY() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getUKEY() +
                                 " " + strTemp + " => Person_Diff_Trans_File = " + method.invoke(objectToCompare1) +
                                 " Person_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||

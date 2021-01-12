@@ -524,6 +524,8 @@ public class BCS_ETLCore_LatestDataChecksSteps {
                 sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PERSON_REC_LATEST, Joiner.on("','").join(Ids));
                 break;
         }
+        dataQualityBCSContext.recFromLatest = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
+        Log.info(sql);
     }
 
     @And("^Compare the records of Latest with sum of delta_current and Exclude_Delta tables (.*)$")
@@ -775,13 +777,13 @@ public class BCS_ETLCore_LatestDataChecksSteps {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
 
-                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i);
-                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromPersonLatest.get(i);
+                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i);
+                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromLatest.get(i);
 
                         method = objectToCompare1.getClass().getMethod(strTemp);
                         method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfPersonDeltaAndExcl.get(i).getUKEY() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndExcl.get(i).getUKEY() +
                                 " " + strTemp + " => Person_Diff_DeltaCurr_Excl = " + method.invoke(objectToCompare1) +
                                 " Person_Latest = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||

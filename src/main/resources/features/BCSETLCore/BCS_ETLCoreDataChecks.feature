@@ -10,17 +10,17 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
    Then  Compare data of BCS Inbound and BCS Core <tableName> tables are identical
     Examples:
       | tableName                                |countOfRandomIds|
-    #|etl_accountable_product_current_v           |10               |
+   |etl_accountable_product_current_v           |10               |
       ##|etl_manifestation_current_v              |10            |
-     #|etl_person_current_v                       |10              |
+   |etl_person_current_v                       |10              |
      ## |etl_product_current_v                    |10            |
-    #|etl_work_person_role_current_v            |10             |
+    |etl_work_person_role_current_v            |10             |
     |etl_work_relationship_current_v            |10              |
-    #|etl_work_current_v                         |10              |
-    #|etl_work_identifier_current_v              |10              |
-    #|etl_manifestation_identifier_current_v     |10              |
-    #|all_manifestation_statuses_v               |10              |
-    #|all_manifestation_pubdates_v                |10              |
+    |etl_work_current_v                         |10              |
+    |etl_work_identifier_current_v              |10              |
+    |etl_manifestation_identifier_current_v     |10              |
+    |all_manifestation_statuses_v               |10              |
+    |all_manifestation_pubdates_v                |10              |
 
 
   @BCSCore
@@ -31,15 +31,15 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
     And Compare the records of BCS Core current and BCS Current_History <targetTable>
     Examples:
       | sourceTable                           |  targetTable                                        |countOfRandomIds     |
-     # | etl_accountable_product_current_v     |  etl_transform_history_accountable_product_part     |   10                |
-      #| etl_manifestation_current_v           |  etl_transform_history_manifestation_part           |   10                |
-      #|etl_manifestation_identifier_current_v |  etl_transform_history_manifestation_identifier_part|   10                |
-     #|   etl_person_current_v                   | etl_transform_history_person_part                   |   10                |
-      #|   etl_product_current_v                | etl_transform_history_product_part                 |   10                |
-      #| etl_work_person_role_current_v         | etl_transform_history_work_person_role_part        |   10                |
-      | etl_work_relationship_current_v        | etl_transform_history_work_relationship_part       |   10                |
-      #|etl_work_current_v                       |etl_transform_history_work_part                    |   10                |
-      #| etl_work_identifier_current_v           | etl_transform_history_work_identifier_part        |   10                |
+     | etl_accountable_product_current_v     |  etl_transform_history_accountable_product_part     |   10                |
+    | etl_manifestation_current_v           |  etl_transform_history_manifestation_part           |   10                |
+    |etl_manifestation_identifier_current_v |  etl_transform_history_manifestation_identifier_part|   10                |
+     |   etl_person_current_v                   | etl_transform_history_person_part                   |   10                |
+    |   etl_product_current_v                | etl_transform_history_product_part                 |   10                |
+    | etl_work_person_role_current_v         | etl_transform_history_work_person_role_part        |   10                |
+    | etl_work_relationship_current_v        | etl_transform_history_work_relationship_part       |   10                |
+    |etl_work_current_v                       |etl_transform_history_work_part                    |   10                |
+      | etl_work_identifier_current_v           | etl_transform_history_work_identifier_part        |   10                |
 
   @BCSCore
   Scenario Outline: Verify Data for BCS Core Transform_file tables are transferred from Current Tables
@@ -53,11 +53,11 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
       | etl_manifestation_current_v           |  etl_manifestation_transform_file_history_part                 |   10                |
       |etl_manifestation_identifier_current_v |  etl_manifestation_identifier_transform_file_history_part|   10                |
      |   etl_person_current_v                | etl_person_transform_file_history_part                         |   10                |
-      |   etl_product_current_v                | etl_product_transform_file_history_part                       |   10                |
-      | etl_work_person_role_current_v         | etl_work_person_role_transform_file_history_part              |   10                |
-      | etl_work_relationship_current_v        | etl_work_relationship_transform_file_history_part             |   10                |
-      |etl_work_current_v                       |etl_work_transform_file_history_part                          |   10                |
-      | etl_work_identifier_current_v           | etl_work_identifier_transform_file_history_part              |   10                |
+     |   etl_product_current_v                | etl_product_transform_file_history_part                       |   10                |
+     | etl_work_person_role_current_v         | etl_work_person_role_transform_file_history_part              |   10                |
+     | etl_work_relationship_current_v        | etl_work_relationship_transform_file_history_part             |   10                |
+   |etl_work_current_v                       |etl_work_transform_file_history_part                          |   10                |
+   | etl_work_identifier_current_v           | etl_work_identifier_transform_file_history_part              |   10                |
 
 
 
@@ -75,10 +75,10 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
       |etl_delta_current_manifestation_identifier |  etl_manifestation_identifier_transform_file_history_part    |   10                |
      |   etl_delta_current_person                | etl_person_transform_file_history_part                       |   10                |
       |   etl_delta_current_product               | etl_product_transform_file_history_part                      |   10                |
-      | etl_delta_current_work_person_role        | etl_work_person_role_transform_file_history_part             |   10                |
-      | etl_delta_current_work_relationship       | etl_work_relationship_transform_file_history_part            |   10                |
-      |etl_delta_current_work                     |etl_work_transform_file_history_part                          |   10                |
-      | etl_delta_current_work_identifier         | etl_work_identifier_transform_file_history_part              |   10                |
+     | etl_delta_current_work_person_role        | etl_work_person_role_transform_file_history_part             |   10                |
+     | etl_delta_current_work_relationship       | etl_work_relationship_transform_file_history_part            |   10                |
+    |etl_delta_current_work                     |etl_work_transform_file_history_part                          |   10                |
+    | etl_delta_current_work_identifier         | etl_work_identifier_transform_file_history_part              |   10                |
 
 
   @BCSCore
@@ -94,10 +94,10 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
       |etl_delta_current_manifestation_identifier |  etl_delta_history_manifestation_identifier_part    |   10                |
      |   etl_delta_current_person                | etl_delta_history_person_part                       |   10                |
       |   etl_delta_current_product               | etl_delta_history_product_part                      |   10                |
-      | etl_delta_current_work_person_role        | etl_delta_history_work_person_role_part             |   10                |
-      | etl_delta_current_work_relationship       | etl_delta_history_work_relationship_part            |   10                |
-      |etl_delta_current_work                     |etl_delta_history_work_part                          |   10                |
-      | etl_delta_current_work_identifier         | etl_delta_history_work_identifier_part              |   10                |
+     | etl_delta_current_work_person_role        | etl_delta_history_work_person_role_part             |   10                |
+     | etl_delta_current_work_relationship       | etl_delta_history_work_relationship_part            |   10                |
+     |etl_delta_current_work                     |etl_delta_history_work_part                          |   10                |
+     | etl_delta_current_work_identifier         | etl_delta_history_work_identifier_part              |   10                |
 
 
   @BCSCore
@@ -107,34 +107,34 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
     Then Get the records from <targetTable> exclude table
     And  Compare the records of Exclude with diff of delta_current and current_hist tables <targetTable>
     Examples:
-      | targetTable                                              |  countOfRandomIds     |
+     | targetTable                                              |  countOfRandomIds     |
      | etl_transform_history_accountable_product_excl_delta     |  10                |
     | etl_transform_history_manifestation_excl_delta           |  10                |
      |etl_transform_history_manifestation_identifier_excl_delta |  10                |
      |   etl_transform_history_person_excl_delta                | 10                |
-      |   etl_transform_history_product_excl_delta               | 10                |
+     |   etl_transform_history_product_excl_delta               | 10                |
      | etl_transform_history_work_person_role_excl_delta        | 10                |
-      | etl_transform_history_work_relationship_excl_delta       | 10                |
-      |etl_transform_history_work_excl_delta                     |10                |
+     | etl_transform_history_work_relationship_excl_delta       | 10                |
+     |etl_transform_history_work_excl_delta                     |10                |
      | etl_transform_history_work_identifier_excl_delta         |10                |
 
 
   @BCSCore
   Scenario Outline: Verify Data from the difference of BCS Core Delta_Current and Exclude is transferred to BCS core Latest table
-    Given Get the <countOfRandomIds> from diff of delta_current and exclude_delta tables <targetTable>
-    When Get the records from the diff of delta_current and exclude_delta tables <targetTable>
+    Given Get the <countOfRandomIds> from sum of delta_current and exclude_delta tables <targetTable>
+    When Get the records from the sum of delta_current and exclude_delta tables <targetTable>
     Then Get the records from <targetTable> BCS core latest table
-    And  Compare the records of Latest with diff of delta_current and Exclude_Delta tables <targetTable>
+    And  Compare the records of Latest with sum of delta_current and Exclude_Delta tables <targetTable>
     Examples:
-      | targetTable                                              |  countOfRandomIds     |
-    | etl_transform_history_accountable_product_latest     |  10                |
-     | etl_transform_history_manifestation_latest           |  10                |
-      |etl_transform_history_manifestation_identifier_latest |  10                |
-    |   etl_transform_history_person_latest                | 10                |
-      |   etl_transform_history_product_latest               | 10                |
-      | etl_transform_history_work_person_role_latest        | 10                |
-      | etl_transform_history_work_relationship_latest       | 10                |
-      |etl_transform_history_work_latest                     |10                |
-      | etl_transform_history_work_identifier_latest         |10                |
+      | targetTable                                               |  countOfRandomIds     |
+      | etl_transform_history_accountable_product_latest          |  10                |
+      | etl_transform_history_manifestation_latest                |  100                |
+      |etl_transform_history_manifestation_identifier_latest      |  10                |
+      |   etl_transform_history_person_latest                     | 10                |
+      |   etl_transform_history_product_latest                    | 100                |
+      | etl_transform_history_work_person_role_latest             | 10                |
+      | etl_transform_history_work_relationship_latest            | 10                |
+     |etl_transform_history_work_latest                          |100                |
+      | etl_transform_history_work_identifier_latest              |10                |
 
 

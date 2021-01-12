@@ -1111,13 +1111,13 @@ public class BCS_ETLCoreDataChecksSteps {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
 
-                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromPersonCurrent.get(i);
-                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromPersonTransFile.get(i);
+                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
+                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
 
                         method = objectToCompare1.getClass().getMethod(strTemp);
                         method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromPersonCurrent.get(i).getUKEY() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY() +
                                 " " + strTemp + " => Person_Curr = " + method.invoke(objectToCompare1) +
                                 " Person_Curr_File = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||

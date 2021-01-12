@@ -514,29 +514,30 @@ public class BCS_ETLCoreDataChecksSQL {
 
     public static String GET_RANDOM_WRK_RELT_KEY_INBOUND =
            "SELECT u_key as sourceref FROM (\n" +
-                   "SELECT DISTINCT\n" +
-                   "NULLIF(concat(concat(CAST(sourceref AS varchar), split_part(relationtype, ' | ', 1)), CAST(projectno AS varchar)),'') u_key\n" +
-                   ", NULLIF(sourceref,'') parentref\n" +
-                   ", NULLIF(projectno,'') childref\n" +
-                   ", NULLIF(relationtypecode.ephcode,' ') relationtyperef\n" +
-                   ", date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
-                   ", 'N' dq_err\n" +
-                   "FROM\n" +
-                   "("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_relations\n" +
-                   "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".relationtypecode ON (split_part(relationtype, ' | ', 1) = relationtypecode.ppmcode))\n" +
-                   "UNION ALL \n" +
-                   "SELECT DISTINCT\n" +
-                   "concat(CAST(content.seriesid AS varchar), 'CON', CAST(content.sourceref AS varchar)) u_key\n" +
-                   ", content.seriesid parentref\n" +
-                   ", content.sourceref childref\n" +
-                   ", 'CON' relationtyperef\n" +
-                   ", date_parse(NULLIF(content.metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
-                   ", 'N' dq_err\n" +
-                   " FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content\n" +
-                   "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily family on content.sourceref = family.sourceref and content.sourceref = family.workmasterprojectno \n" +
-                   ")A WHERE A.parentref is not null and\n" +
-                   " A.childref is not null and\n" +
-                   "A.relationtyperef is not null  order by rand() limit %s";
+                   "   SELECT DISTINCT\n"+
+                   "     NULLIF(concat(concat(CAST(relations.sourceref AS varchar), split_part(relations.relationtype, ' | ', 1)), CAST(relations.projectno AS varchar)), '') u_key\n"+
+                   "   , NULLIF(relations.sourceref, '') parentref\n"+
+                   "   , NULLIF(relations.projectno, '') childref\n"+
+                   "   , NULLIF(code.ephcode, '') relationtyperef\n"+
+                   "   , date_parse(NULLIF(relations.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n"+
+                   "   , 'N' dq_err\n"+
+                   "   FROM\n"+
+                   "     ((("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_relations relations\n"+
+                   "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".relationtypecode code ON (split_part(relations.relationtype, ' | ', 1) = code.ppmcode))\n"+
+                   "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily parent ON ((relations.sourceref = parent.sourceref) AND (relations.sourceref = parent.workmasterprojectno)))\n"+
+                   "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily child ON ((relations.projectno = child.sourceref) AND (relations.projectno = child.workmasterprojectno)))\n"+
+                   "UNION ALL    SELECT DISTINCT\n"+
+                   "     concat(CAST(content.seriesid AS varchar), 'CON', CAST(content.sourceref AS varchar)) u_key\n"+
+                   "   , content.seriesid parentref\n"+
+                   "   , content.sourceref childref\n"+
+                   "   , 'CON' relationtyperef\n"+
+                   "   , date_parse(NULLIF(content.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n"+
+                   "   , 'N' dq_err\n"+
+                   "   FROM\n"+
+                   "     ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content\n"+
+                   "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily family ON ((content.sourceref = family.sourceref) AND (content.sourceref = family.workmasterprojectno)))\n"+
+                   ")  A\n"+
+                   "WHERE ((((A.parentref IS NOT NULL) AND (A.parentref <> '')) AND (A.childref IS NOT NULL)) AND (A.relationtyperef IS NOT NULL))order by rand() limit %s";
 
     public static String GET_WORK_RELT_INBOUND_DATA =
             "select " +
@@ -545,29 +546,30 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",childref as CHILDREF \n" +
                     ",relationtyperef as RELATIONTYPEREF \n" +
                     ",dq_err as DQ_ERR from( \n" +
-                    "SELECT DISTINCT\n" +
-                    " NULLIF(concat(concat(CAST(sourceref AS varchar), split_part(relationtype, ' | ', 1)), CAST(projectno AS varchar)),'') u_key\n" +
-                    ", NULLIF(sourceref,'') parentref\n" +
-                    ", NULLIF(projectno,'') childref\n" +
-                    ", NULLIF(relationtypecode.ephcode,'') relationtyperef\n" +
-                    ", date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
-                    ", 'N' dq_err\n" +
-                    "FROM\n" +
-                    "("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_relations\n" +
-                    " INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".relationtypecode ON (split_part(relationtype, ' | ', 1) = relationtypecode.ppmcode))\n" +
-                    "UNION ALL \n" +
-                    "SELECT DISTINCT\n" +
-                    "concat(CAST(content.seriesid AS varchar), 'CON', CAST(content.sourceref AS varchar)) u_key\n" +
-                    ", content.seriesid parentref\n" +
-                    ", content.sourceref childref\n" +
-                    ", 'CON' relationtyperef\n" +
-                    ", date_parse(NULLIF(content.metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
-                    ", 'N' dq_err\n" +
-                    " FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content\n" +
-                    "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily family on content.sourceref = family.sourceref and content.sourceref = family.workmasterprojectno \n" +
-                    ")A WHERE A.parentref is not null and\n" +
-                    " A.childref is not null and\n" +
-                    "A.relationtyperef is not null and u_key in ('%s') order by u_key desc";
+                    "   SELECT DISTINCT\n"+
+                    "     NULLIF(concat(concat(CAST(relations.sourceref AS varchar), split_part(relations.relationtype, ' | ', 1)), CAST(relations.projectno AS varchar)), '') u_key\n"+
+                    "   , NULLIF(relations.sourceref, '') parentref\n"+
+                    "   , NULLIF(relations.projectno, '') childref\n"+
+                    "   , NULLIF(code.ephcode, '') relationtyperef\n"+
+                    "   , date_parse(NULLIF(relations.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n"+
+                    "   , 'N' dq_err\n"+
+                    "   FROM\n"+
+                    "     ((("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_relations relations\n"+
+                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".relationtypecode code ON (split_part(relations.relationtype, ' | ', 1) = code.ppmcode))\n"+
+                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily parent ON ((relations.sourceref = parent.sourceref) AND (relations.sourceref = parent.workmasterprojectno)))\n"+
+                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily child ON ((relations.projectno = child.sourceref) AND (relations.projectno = child.workmasterprojectno)))\n"+
+                    "UNION ALL    SELECT DISTINCT\n"+
+                    "     concat(CAST(content.seriesid AS varchar), 'CON', CAST(content.sourceref AS varchar)) u_key\n"+
+                    "   , content.seriesid parentref\n"+
+                    "   , content.sourceref childref\n"+
+                    "   , 'CON' relationtyperef\n"+
+                    "   , date_parse(NULLIF(content.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n"+
+                    "   , 'N' dq_err\n"+
+                    "   FROM\n"+
+                    "     ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content\n"+
+                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily family ON ((content.sourceref = family.sourceref) AND (content.sourceref = family.workmasterprojectno)))\n"+
+                    ")  A\n"+
+                    "WHERE ((((A.parentref IS NOT NULL) AND (A.parentref <> '')) AND (A.childref IS NOT NULL)) AND (A.relationtyperef IS NOT NULL)) and u_key in ('%s') order by u_key desc";
 
 
 
@@ -1590,7 +1592,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     "    from crr_dataset crr\n" +
                     "        join prev_dataset prev on crr.u_key = prev.u_key\n" +
                     "    where (coalesce(crr.sourceref, 0) <> coalesce(prev.sourceref,0 ) or\n" +
-                    "            coalesce(crr.u_key, 0) <> coalesce(prev.u_key, 0) or\n" +
+                    "            coalesce(crr.u_key, 'na') <> coalesce(prev.u_key, 'na') or\n" +
                     "            coalesce (crr.firstname, 'na') <> coalesce (prev.firstname, 'na') or\n" +
                     "            coalesce (crr.familyname, 'na') <> coalesce (prev.familyname, 'na') or\n" +
                     "            coalesce (crr.peoplehub_id, 'na') <> coalesce (prev.peoplehub_id, 'na') or\n" +
@@ -1634,7 +1636,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     "    from crr_dataset crr\n" +
                     "        join prev_dataset prev on crr.u_key = prev.u_key\n" +
                     "    where (coalesce(crr.sourceref, 0) <> coalesce(prev.sourceref,0 ) or\n" +
-                    "            coalesce(crr.u_key, 0) <> coalesce(prev.u_key, 0) or\n" +
+                    "            coalesce(crr.u_key, 'na') <> coalesce(prev.u_key, 'na') or\n" +
                     "            coalesce (crr.firstname, 'na') <> coalesce (prev.firstname, 'na') or\n" +
                     "            coalesce (crr.familyname, 'na') <> coalesce (prev.familyname, 'na') or\n" +
                     "            coalesce (crr.peoplehub_id, 'na') <> coalesce (prev.peoplehub_id, 'na') or\n" +
@@ -2444,7 +2446,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",last_pub_date as LASTPUBDATE \n" +
                     ",dq_err as DQ_ERR from \n" +
                     "(select c.u_key,c.sourceref,c.title,c.intereditionflag,c.firstpublisheddate,c.binding,c.manifestation_type,c.status,c.work_id,c.last_pub_date,c.dq_err from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_excl_delta as c union all \n" +
-                    "select d.u_key,d.sourceref,d.title,d.intereditionflag,d.firstpublisheddate,d.binding,d.manifestation_type,d.status,d.work_id,d.last_pub_date,d.dq_err \n" +
+                    "select d.u_key,d.sourceref,d.title,d.intereditionflag,d.firstpublisheddate,d.binding,d.manifestation_type,(CASE WHEN (delta_mode = 'D') THEN 'NVM' ELSE d.status END) status,d.work_id,d.last_pub_date,d.dq_err \n" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_manifestation as d) \n" +
                     " where u_key in ('%s') order by u_key desc";
 
@@ -2587,8 +2589,8 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",dq_err as DQ_ERR from \n" +
                     "(select c.sourceref,c.bindingcode,c.u_key,c.name,c.shorttitle,c.launchdate,c.taxcode,c.status,c.manifestationref,\n" +
                     "c.worksource,c.work_type,c.separately_sale_indicator,c.trial_allowed_indicator,c.f_work_source_ref,\n" +
-                    "c.product_type,c.f_revenue_model,c.dq_err  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_product_excl_delta as c union all \n" +
-                    "select d.sourceref,d.bindingcode,d.u_key,d.name,d.shorttitle,d.launchdate,d.taxcode,d.status,d.manifestationref, \n" +
+                    "c.product_type,c.f_revenue_model,c.dq_err from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_product_excl_delta as c union all \n" +
+                    "select d.sourceref,d.bindingcode,d.u_key,d.name,d.shorttitle,d.launchdate,d.taxcode,(CASE WHEN (delta_mode = 'D') THEN 'NVP' ELSE d.status END) status,d.manifestationref, \n" +
                     "d.worksource,d.work_type,d.separately_sale_indicator,d.trial_allowed_indicator,d.f_work_source_ref,d.product_type,d.f_revenue_model,d.dq_err \n" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_product as d) \n" +
                     " where u_key in ('%s') order by u_key desc";
@@ -2686,7 +2688,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     "c.pmg,c.languagecode,c.electro_rights_indicator,\n" +
                     "c.f_oa_journal_type,c.f_society_ownership,c.subscription_type from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_excl_delta as c union all \n" +
                     "select d.u_key,d.sourceref,d.title,d.subtitle,d.volumeno,d.copyrightyear,d.editionno,d.pmc \n" +
-                    ",d.work_type,d.statuscode,d.imprintcode,d.opco,d.resp_centre,d.te_opco,\n" +
+                    ",d.work_type,(CASE WHEN (delta_mode = 'D') THEN 'NVW' ELSE d.statuscode END) statuscode,d.imprintcode,d.opco,d.resp_centre,d.te_opco,\n" +
                     "d.pmg,d.languagecode,d.electro_rights_indicator,d.f_oa_journal_type,d.f_society_ownership,d.subscription_type \n" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_work as d) \n" +
                     " where u_key in ('%s') order by u_key desc";
