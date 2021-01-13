@@ -1,7 +1,7 @@
 package com.eph.automation.testing.models.contexts;
 
 import com.eph.automation.testing.annotations.StaticInjection;
-import com.eph.automation.testing.models.dao.BCS_ETLCore.BCS_ETLCoreDLAccessObject;
+import com.eph.automation.testing.models.dao.BCS_ETL.BCS_ETLCoreDLAccessObject;
 
 import java.util.List;
 
@@ -10,26 +10,18 @@ import java.util.List;
 
 public class BCSETL_CoreAccessDLContext {
     public static List<BCS_ETLCoreDLAccessObject> recordsFromInboundData;
-    public static List<BCS_ETLCoreDLAccessObject>   recordsFromCurrent;
-    public static List<BCS_ETLCoreDLAccessObject> recordsFromPersonCurrent;
+    public static List<BCS_ETLCoreDLAccessObject> recordsFromCurrent;
     public static List<BCS_ETLCoreDLAccessObject> recFromCurrentHist;
-    public static List<BCS_ETLCoreDLAccessObject> recFromPersonCurrentHist;
-    public static List<BCS_ETLCoreDLAccessObject> recFromPersonTransFile;
     public static List<BCS_ETLCoreDLAccessObject> recFromTransformFile;
     public static List<BCS_ETLCoreDLAccessObject> recFromDiffOfTransformFile;
     public static List<BCS_ETLCoreDLAccessObject>recFromDeltaCurrent;
     public static List<BCS_ETLCoreDLAccessObject>recFromDeltaCurrentHist;
-    public static List<BCS_ETLCoreDLAccessObject> recFromPersonDiffOfTransformFile;
-    public static List<BCS_ETLCoreDLAccessObject>recFromPersonDeltaCurrent;
-    public static List<BCS_ETLCoreDLAccessObject>recFromPersonDeltaCurrentHist;
     public static List<BCS_ETLCoreDLAccessObject> recFromDiffOfDeltaAndCurrHist;
     public static List<BCS_ETLCoreDLAccessObject>recFromExclDelta;
     public static List<BCS_ETLCoreDLAccessObject> recFromDiffOfPersonDeltaAndCurrHist;
-    public static List<BCS_ETLCoreDLAccessObject> recFromDiffOfPersonDeltaAndExcl;
     public static List<BCS_ETLCoreDLAccessObject>recFromPersonExclDelta;
-    public static List<BCS_ETLCoreDLAccessObject>recFromPersonLatest;
     public static List<BCS_ETLCoreDLAccessObject> recFromDiffOfDeltaAndExcl;
-    public static List<BCS_ETLCoreDLAccessObject>recFromLatest;
+    public static List<BCS_ETLCoreDLAccessObject> recFromLatest;
 
 
 
