@@ -1,4 +1,4 @@
-package com.eph.automation.testing.models.dao.BCS_ETLCore;
+package com.eph.automation.testing.models.dao.BCS_ETL;
 
 public class BCS_ETLCoreDLAccessObject {
 

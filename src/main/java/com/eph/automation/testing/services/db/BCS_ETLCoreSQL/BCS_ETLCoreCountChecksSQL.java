@@ -356,30 +356,31 @@ public class BCS_ETLCoreCountChecksSQL {
                     "WHERE (A.sourceref IS NOT NULL)";
 
     public static String GET_WRK_RELT_INBOUND_CURRENT_COUNT =
-            "SELECT count(*) as Source_Count FROM (\n" +
-                    "SELECT DISTINCT\n" +
-                    "NULLIF(concat(concat(CAST(sourceref AS varchar), split_part(relationtype, ' | ', 1)), CAST(projectno AS varchar)),'') u_key\n" +
-                    ", NULLIF(sourceref,'') parentref\n" +
-                    ", NULLIF(projectno,'') childref\n" +
-                    ", NULLIF(relationtypecode.ephcode,'') relationtyperef\n" +
-                    ", date_parse(NULLIF(metamodifiedon,''),'%d-%b-%Y %H:%i:%s') modifiedon\n" +
-                    ", 'N' dq_err\n" +
-                    "FROM\n" +
-                    "("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_relations\n" +
-                    "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".relationtypecode ON (split_part(relationtype, ' | ', 1) = relationtypecode.ppmcode))\n" +
-                    "UNION ALL \n" +
-                    "SELECT DISTINCT\n" +
-                    "concat(CAST(content.seriesid AS varchar), 'CON', CAST(content.sourceref AS varchar)) u_key\n" +
-                    ", content.seriesid parentref\n" +
-                    ", content.sourceref childref\n" +
-                    ", 'CON' relationtyperef\n" +
-                    ", date_parse(NULLIF(content.metamodifiedon,''),'%d-%b-%Y %H:%i:%s') modifiedon\n" +
-                    ", 'N' dq_err\n" +
-                    " FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content \n" +
-                    "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily family on content.sourceref = family.sourceref and content.sourceref = family.workmasterprojectno \n" +
-                    ")A WHERE A.parentref is not null and\n" +
-                    "A.childref is not null and \n" +
-                    "A.relationtyperef is not null \n";
+     "SELECT count(*) as Source_Count FROM (\n" +
+            "   SELECT DISTINCT\n"+
+            "     NULLIF(concat(concat(CAST(relations.sourceref AS varchar), split_part(relations.relationtype, ' | ', 1)), CAST(relations.projectno AS varchar)), '') u_key\n"+
+            "   , NULLIF(relations.sourceref, '') parentref\n"+
+            "   , NULLIF(relations.projectno, '') childref\n"+
+            "   , NULLIF(code.ephcode, '') relationtyperef\n"+
+            "   , date_parse(NULLIF(relations.metamodifiedon, ''), '%d-%b-%Y %H:%i:%s') modifiedon\n"+
+            "   , 'N' dq_err\n"+
+            "   FROM\n"+
+            "     ((("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_relations relations\n"+
+            "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".relationtypecode code ON (split_part(relations.relationtype, ' | ', 1) = code.ppmcode))\n"+
+            "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily parent ON ((relations.sourceref = parent.sourceref) AND (relations.sourceref = parent.workmasterprojectno)))\n"+
+            "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily child ON ((relations.projectno = child.sourceref) AND (relations.projectno = child.workmasterprojectno)))\n"+
+            "UNION ALL    SELECT DISTINCT\n"+
+            "     concat(CAST(content.seriesid AS varchar), 'CON', CAST(content.sourceref AS varchar)) u_key\n"+
+            "   , content.seriesid parentref\n"+
+            "   , content.sourceref childref\n"+
+            "   , 'CON' relationtyperef\n"+
+            "   , date_parse(NULLIF(content.metamodifiedon, ''), '%d-%b-%Y %H:%i:%s') modifiedon\n"+
+            "   , 'N' dq_err\n"+
+            "   FROM\n"+
+            "     ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content\n"+
+            "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily family ON ((content.sourceref = family.sourceref) AND (content.sourceref = family.workmasterprojectno)))\n"+
+            ")  A\n"+
+            "WHERE ((((A.parentref IS NOT NULL) AND (A.parentref <> '')) AND (A.childref IS NOT NULL)) AND (A.relationtyperef IS NOT NULL))";
 
 
     public static String GET_WRK_PERSON_INBOUND_CURRENT_COUNT =
@@ -868,7 +869,7 @@ public class BCS_ETLCoreCountChecksSQL {
                     "    from crr_dataset crr\n" +
                     "        join prev_dataset prev on crr.u_key = prev.u_key\n" +
                     "    where (coalesce(crr.sourceref, 0) <> coalesce(prev.sourceref,0 ) or\n" +
-                    "            coalesce(crr.u_key, 0) <> coalesce(prev.u_key, 0) or\n" +
+                    "            coalesce(crr.u_key, 'na') <> coalesce(prev.u_key, 'na') or\n" +
                     "            coalesce (crr.firstname, 'na') <> coalesce (prev.firstname, 'na') or\n" +
                     "            coalesce (crr.familyname, 'na') <> coalesce (prev.familyname, 'na') or\n" +
                     "            coalesce (crr.peoplehub_id, 'na') <> coalesce (prev.peoplehub_id, 'na') or\n" +

@@ -4,12 +4,11 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.BCSETL_CoreAccessDLContext;
-import com.eph.automation.testing.models.dao.BCS_ETLCore.BCS_ETLCoreDLAccessObject;
+import com.eph.automation.testing.models.dao.BCS_ETL.BCS_ETLCoreDLAccessObject;
 import com.eph.automation.testing.services.db.BCS_ETLCoreSQL.BCS_ETLCoreDataChecksSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 
@@ -738,13 +737,13 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
 
-                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recFromPersonDiffOfTransformFile.get(i);
-                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromPersonDeltaCurrent.get(i);
+                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recFromDeltaCurrentHist.get(i);
+                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromDeltaCurrent.get(i);
 
                         method = objectToCompare1.getClass().getMethod(strTemp);
                         method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("UKEY => " + dataQualityBCSContext.recFromPersonDiffOfTransformFile.get(i).getUKEY() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY() +
                                 " " + strTemp + " => Person_Delta_curr_hist = " + method.invoke(objectToCompare1) +
                                 " Person_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||

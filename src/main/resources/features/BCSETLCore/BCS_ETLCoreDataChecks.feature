@@ -11,9 +11,9 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
     Examples:
       | tableName                                |countOfRandomIds|
    |etl_accountable_product_current_v           |10               |
-      ##|etl_manifestation_current_v              |10            |
+   |etl_manifestation_current_v              |10            |
    |etl_person_current_v                       |10              |
-     ## |etl_product_current_v                    |10            |
+      |etl_product_current_v                    |10            |
     |etl_work_person_role_current_v            |10             |
     |etl_work_relationship_current_v            |10              |
     |etl_work_current_v                         |10              |
