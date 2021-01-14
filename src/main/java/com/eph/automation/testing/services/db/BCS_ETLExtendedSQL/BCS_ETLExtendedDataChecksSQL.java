@@ -7,7 +7,6 @@ public class BCS_ETLExtendedDataChecksSQL {
 
 
 
-    public static String GET_BCS_EXTENDED_WORK_PERSON_ROLE_EXTENDED_CURR_COUNT="select count(*) as Target_Count from " +GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_current_v";
 
     public static String GET_RANDOM_AVAILABILITY_KEY_INBOUND =
             "select eprid as EPRID from (\n" +
@@ -67,7 +66,7 @@ public class BCS_ETLExtendedDataChecksSQL {
             "select u_key as UKEY " +
                     ",sourceref as SOURCEREF" +
                     ",eprid as EPRID" +
-                   // ",productyype as PRODUCTTYPE" +
+                    ",producttype as PRODUCTTYPE" +
                     ",modifiedon as MODIFIEDON" +
                     ",application as APPLICATION" +
                     ",deltaanswercodeuk as deltaanswercodeuk" +
@@ -133,7 +132,7 @@ public class BCS_ETLExtendedDataChecksSQL {
             "select u_key as UKEY " +
                     ",sourceref as SOURCEREF" +
                     ",eprid as EPRID" +
-                  //  ",productyype as PRODUCTTYPE" +
+                    ",producttype as PRODUCTTYPE" +
                     ",modifiedon as MODIFIEDON" +
                     ",application as APPLICATION" +
                     ",deltaanswercodeuk as deltaanswercodeuk" +
@@ -1200,36 +1199,238 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",notestxt as notestxt" +
                     ",sequence as sequence" +
                     ",groupnumber as groupnumber" +
-                    ",metamodifiedon as metamodifiedon" +
+                  //  ",metamodifiedon as metamodifiedon" +
                     ",metadeleted as metadeleted" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_current_v where eprid in ('%s') order by eprid desc";
 
-    public static String GET_AVAILABILITY_DELTA_CURR_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_availability";
+    public static String GET_RANDOM_AVAILABILITY_KEY_CURRENT =
+            "select eprid as EPRID " +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_current_v order by rand() limit %s";
 
-    public static String GET_MANIF_EXT_DELTA_CURR_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_manifestation";
+    public static String GET_RANDOM_MANIF_EXT_KEY_CURRENT =
+            "select eprid as EPRID " +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_current_v order by rand() limit %s";
 
-    public static String GET_PAGE_COUNT_DELTA_CURR_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_page_count";
+    public static String GET_RANDOM_PAGE_COUNT_KEY_CURRENT =
+            "select eprid as EPRID " +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_current_v order by rand() limit %s";
 
-    public static String GET_URL_DELTA_CURR_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_url";
+    public static String GET_RANDOM_URL_EXT_KEY_CURRENT =
+            "select eprid as EPRID " +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_current_v order by rand() limit %s";
 
-    public static String GET_WORK_EXT_DELTA_CURR_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work";
+    public static String GET_RANDOM_WORK_EXT_KEY_CURRENT =
+            "select eprid as EPRID " +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_current_v order by rand() limit %s";
 
-    public static String GET_WORK_SUBJ_AREA_DELTA_CURR_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work_subject_area";
+    public static String GET_RANDOM_WORK_SUBJ_AREA_KEY_CURRENT =
+            "select eprid as EPRID " +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_current_v order by rand() limit %s";
 
-    public static String GET_MANIF_REST_DELTA_CURR_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_manifestation_restrictions";
+    public static String GET_RANDOM_MANIF_RESTRICT_KEY_CURRENT =
+            "select eprid as EPRID " +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_current_v order by rand() limit %s";
 
-    public static String GET_PROD_PRICE_DELTA_CURR_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_product_prices";
+    public static String GET_RANDOM_PROD_PRICE_KEY_CURRENT =
+            "select eprid as EPRID " +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_current_v order by rand() limit %s";
 
-    public static String GET_WORK_PERS_ROLE_DELTA_CURR_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work_person_role";
+    public static String GET_RANDOM_WORK_PERSON_ROLE_KEY_CURRENT =
+            "select eprid as EPRID " +
+                    "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_current_v order by rand() limit %s";
+
+    public static String GET_AVAILABILTYI_REC_CURR_HIST_DATA =
+            "select u_key as UKEY " +
+                    ",sourceref as SOURCEREF" +
+                    ",eprid as EPRID" +
+                    ",producttype as PRODUCTTYPE" +
+                    ",modifiedon as MODIFIEDON" +
+                    ",application as APPLICATION" +
+                    ",deltaanswercodeuk as deltaanswercodeuk" +
+                    ",deltaanswercodeus as deltaanswercodeus" +
+                    ",anzpubstatus as anzpubstatus" +
+                    ",pubdateactual as pubdateactual" +
+                    ",status as status" +
+                    ",metadeleted as metadeleted" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_part where " +
+                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_part)" +
+                    " and eprid in('%s') order by eprid desc";
+
+    public static String GET_MANIF_EXT_REC_CURR_HIST_DATA =
+            "select eprid as EPRID " +
+                    ",u_key as UKEY" +
+                    ",manifestation_type as manifestation_type" +
+                    ",sourceref as SOURCEREF" +
+                    ",modifiedon as MODIFIEDON" +
+                    ",metadeleted as metadeleted" +
+                    ",uktextbookind as uktextbookind" +
+                    ",ustextbookind as ustextbookind" +
+                    ",usdiscountcode as usdiscountcode" +
+                    ",usdiscountname as usdiscountname" +
+                    ",emeadiscountcode as emeadiscountcode" +
+                    ",emeadiscountname as emeadiscountname" +
+                    ",trimsize as trimsize" +
+                    ",weight as weight" +
+                    ",commcode as commcode" +
+                    ",journalprodsitecode as journalprodsitecode" +
+                    ",journalissuetrimsize as journalissuetrimsize" +
+                    ",warreference as warreference" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_part where " +
+                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_part)" +
+                    " and eprid in('%s') order by eprid desc";
+
+    public static String GET_PAGE_COUNT_REC_CURR_HIST_DATA =
+            "select eprid as EPRID " +
+                    ",u_key as UKEY" +
+                    ",manifestation_type as manifestation_type" +
+                    ",sourceref as SOURCEREF" +
+                    ",modifiedon as MODIFIEDON" +
+                    ",metadeleted as metadeleted" +
+                    ",pagecounttypecode as pagecounttypecode" +
+                    ",pagecounttypename as pagecounttypename" +
+                    ",pagecount as pagecount" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_part where " +
+                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_part)" +
+                    " and eprid in('%s') order by eprid desc";
+
+    public static String GET_URL_REC_CURR_HIST_DATA =
+            "select eprid as EPRID " +
+                    ",u_key as UKEY" +
+                    ",work_type as work_type" +
+                    ",sourceref as SOURCEREF" +
+                    ",modifiedon as MODIFIEDON" +
+                    ",metadeleted as metadeleted" +
+                    ",urltypecode as urltypecode" +
+                    ",urltypecode as urltypecode" +
+                    ",source as source" +
+                    ",name as name" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_part where " +
+                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_part)" +
+                    " and eprid in('%s') order by eprid desc";
+
+    public static String GET_WORK_EXT_REC_CURR_HIST_DATA =
+            "select eprid as EPRID " +
+                    ",u_key as UKEY" +
+                    ",work_type as work_type" +
+                    ",sourceref as SOURCEREF" +
+                    ",modifiedon as MODIFIEDON" +
+                    ",metadeleted as metadeleted" +
+                    ",companygroup as companygroup" +
+                    ",imagefileref as imagefileref" +
+                    ",workmasterisbn as workmasterisbn" +
+                    ",textreftrade as textreftrade" +
+                    ",features as features" +
+                    ",awards as awards" +
+                    ",toc_long as toc_long" +
+                    ",toc_short as toc_short" +
+                    ",audience as audience" +
+                    ",authorbyline as authorbyline" +
+                    ",description as description" +
+                    ",sbu as sbu" +
+                    ",profitcentre as profitcentre" +
+                    ",review as review" +
+                    ",journalelscomind as journalelscomind" +
+                    ",journalaimsscope as journalaimsscope" +
+                    ",ddpeligibind as ddpeligibind" +
+                    ",ptsjournalind as ptsjournalind" +
+                    ",authorfeedbackind as authorfeedbackind" +
+                    ",deltabusinessunit as deltabusinessunit" +
+                    ",printername as printername" +
+                    ",primarysitesystem as primarysitesystem" +
+                    ",primarysiteacronym as primarysiteacronym" +
+                    ",primarysitesupportlevel as primarysitesupportlevel" +
+                    ",fulfilmentsystem as fulfilmentsystem" +
+                    ",fulfilmentjournalacronym as fulfilmentjournalacronym" +
+                    ",issueprodtypecode as issueprodtypecode" +
+                    ",cataloguevolumesqty as cataloguevolumesqty" +
+                    ",catalogueissuesqty as catalogueissuesqty" +
+                    ",cataloguevolumefrom as cataloguevolumefrom" +
+                    ",cataloguevolumeto as cataloguevolumeto" +
+                    ",rfissuesqty as rfissuesqty" +
+                    ",rftotalpagesqty as rftotalpagesqty" +
+                    ",rffvi as rffvi" +
+                    ",rflvi as rflvi" +
+                    ",journalprevioustitle as journalprevioustitle" +
+                    ",journalprimaryauthor as journalprimaryauthor" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_part where " +
+                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_part)" +
+                    " and eprid in('%s') order by eprid desc";
+
+    public static String GET_WORK_SUB_AREA_REC_CURR_HIST_DATA =
+            "select eprid as EPRID " +
+                    ",u_key as UKEY" +
+                    ",work_type as work_type" +
+                    ",sourceref as SOURCEREF" +
+                    ",modifiedon as MODIFIEDON" +
+                    ",metadeleted as metadeleted" +
+                    ",typecode as typecode" +
+                    ",typedesc as typedesc" +
+                    ",subjcode as subjcode" +
+                    ",subjdesc as subjdesc" +
+                    ",priority as priority" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_part where " +
+                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_part)" +
+                    " and eprid in('%s') order by eprid desc";
+
+    public static String GET_MANIF_RESTRICT_CURR_HIST_DATA =
+            "select eprid as EPRID " +
+                    ",u_key as UKEY" +
+                    ",manifestation_type as manifestation_type" +
+                    ",sourceref as SOURCEREF" +
+                    ",modifiedon as MODIFIEDON" +
+                    ",metadeleted as metadeleted" +
+                    ",restrictioncode as restrictioncode" +
+                    ",restrictionname as restrictionname" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part where " +
+                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part)" +
+                    " and eprid in('%s') order by eprid desc";
+
+    public static String GET_PROD_PRICE_REC_CURR_HIST_DATA =
+            "select eprid as EPRID " +
+                    ",u_key as UKEY" +
+                    ",product_type as product_type" +
+                    ",sourceref as SOURCEREF" +
+                    ",modifiedon as MODIFIEDON" +
+                    ",metadeleted as metadeleted" +
+                    ",pricecurrency as pricecurrency" +
+                    ",priceamount as priceamount" +
+                    ",pricestartdate as pricestartdate" +
+                    ",priceenddate as priceenddate" +
+                    ",priceregion as priceregion" +
+                    ",pricecategory as pricecategory" +
+                    ",pricecustomercategory as pricecustomercategory" +
+                    ",pricepurchasequantity as pricepurchasequantity" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_part where " +
+                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_part)" +
+                    " and eprid in('%s') order by eprid desc";
+
+    public static String GET_WORK_PERS_ROLE_REC_CURR_HIST_DATA =
+            "select eprid as EPRID " +
+                    ",worksourceref as worksourceref" +
+                    ",personsourceref as personsourceref" +
+                    ",source as source" +
+                    ",work_type as work_type" +
+                    ",core_reference as core_reference" +
+                    ",roletype as roletype" +
+                    ",rolename as rolename" +
+                    ",title as title" +
+                    ",person_first_name as person_first_name" +
+                    ",person_family_name as person_family_name" +
+                    ",email_address as email_address" +
+                    ",honours as honours" +
+                    ",affiliation as affiliation" +
+                    ",imageurl as imageurl" +
+                    ",footnotetxt as footnotetxt" +
+                    ",notestxt as notestxt" +
+                    ",sequence as sequence" +
+                    ",groupnumber as groupnumber" +
+             //       ",metamodifiedon as metamodifiedon" +
+                    ",metadeleted as metadeleted" +
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_part where " +
+                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_part)" +
+                    " and eprid in('%s') order by eprid desc";
+
+
 
     public static String GET_AVAILABILITY_DELTA_HIST_CURR_COUNT =
             "select count(*) as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_availability_part where " +
@@ -1266,42 +1467,6 @@ public class BCS_ETLExtendedDataChecksSQL {
     public static String GET_WORK_PERS_ROLE_DELTA_HIST_COUNT =
             "select count(*) as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_work_person_role_part " +
                     "where delta_ts = (select max(delta_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_work_person_role_part)";
-
-    public static String GET_AVAILABILITY_CURR_HIST_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_part where " +
-                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_part)";
-
-    public static String GET_MANIF_EXT_CURR_HIST_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_part where " +
-                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_part)";
-
-    public static String GET_PAGE_COUNT_CURR_HIST_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_part where " +
-                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_part)";
-
-    public static String GET_URL_CURR_HIST_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_part where " +
-                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_part)";
-
-    public static String GET_WORK_EXT_CURR_HIST_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_part where " +
-                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_part)";
-
-    public static String GET_WORK_SUBJ_AREA_CURR_HIST_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_part where " +
-                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_part)";
-
-    public static String GET_MANIF_REST_CURR_HIST_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part where " +
-                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part)";
-
-    public static String GET_PROD_PRICE_CURR_HIST_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_part where " +
-                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_part)";
-
-    public static String GET_WORK_PERS_ROLE_CURR_HIST_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_part where " +
-                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_part)";
 
     public static String GET_AVAILABILITY_CURR_FILE_COUNT =
             "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part where " +
