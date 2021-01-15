@@ -103,10 +103,17 @@ public class BCS_ETLExtendedDLAccessObject {
     private String sequence;
     private String groupnumber;
     private String metamodifiedon;
+    private String DELTA_MODE;
+
 
     public String getfootnotetxt() { return footnotetxt; }
     public void setfootnotetxt(String footnotetxt) {
         this.footnotetxt = footnotetxt;
+    }
+
+    public String getDELTA_MODE() { return DELTA_MODE; }
+    public void setDELTA_MODE(String DELTA_MODE) {
+        this.DELTA_MODE = DELTA_MODE;
     }
 
     public String getmetamodifiedon() { return metamodifiedon; }

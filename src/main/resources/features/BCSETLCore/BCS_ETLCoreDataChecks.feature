@@ -60,8 +60,6 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
    | etl_work_identifier_current_v           | etl_work_identifier_transform_file_history_part              |   10                |
 
 
-
-
   @BCSCore
   Scenario Outline: Verify Data for BCS Core Delta_Current tables are transferred from Transform_file Tables
     Given Get the <countOfRandomIds> of BCS Core data from transform_file Tables <sourceTable>

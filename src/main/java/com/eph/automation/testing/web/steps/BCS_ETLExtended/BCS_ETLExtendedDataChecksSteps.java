@@ -105,7 +105,7 @@ public class BCS_ETLExtendedDataChecksSteps {
     }
 
     @Then("^Data from the BCS Extended Current Tables (.*)$")
-    public void getDataforInboundCheck(String tableName){
+    public void getDataforInboundCheck(String tableName) {
         Log.info("We get the records from Current BCS Extended table ...");
         switch (tableName) {
             case "etl_availability_extended_current_v":
@@ -146,13 +146,13 @@ public class BCS_ETLExtendedDataChecksSteps {
             Log.info("No Data Found ....");
         } else {
             Log.info("Sorting the Ids to compare the records between Ingest and BCS Ext current...");
-             for (int i = 0; i < dataQualityBCSContext.recordsFromInboundData.size(); i++) {
+            for (int i = 0; i < dataQualityBCSContext.recordsFromInboundData.size(); i++) {
                 switch (tableName) {
                     case "etl_availability_extended_current_v":
                         dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         Log.info("comparing inbound and etl_availability_extended_current_v records...");
-                        String[] all_availability_Col = {"getEPRID","getmetadeleted","getstatus","getpubdateactual","getanzpubstatus","getdeltaanswercodeuk","getdeltaanswercodeus","getUKEY","getSOURCEREF","getMODIFIEDON","getAPPLICATION"};
+                        String[] all_availability_Col = {"getEPRID", "getmetadeleted", "getstatus", "getpubdateactual", "getanzpubstatus", "getdeltaanswercodeuk", "getdeltaanswercodeus", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getAPPLICATION"};
                         for (String strTemp : all_availability_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -163,7 +163,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " +  dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID() +
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID() +
                                     " " + strTemp + " => Inbound = " + method.invoke(objectToCompare1) +
                                     " Availability_Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -178,7 +178,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         Log.info("comparing inbound and etl_manifestation_extended_current_v records...");
-                        String[] all_manif_ext_Col = {"getEPRID","getmetadeleted","getmanifestation_type","getuktextbookind","getustextbookind","getusdiscountcode","getusdiscountname","getUKEY","getSOURCEREF","getMODIFIEDON","getemeadiscountcode","getemeadiscountname","gettrimsize","getweight","getcommcode","getjournalprodsitecode","getjournalissuetrimsize","getwarreference"};
+                        String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type", "getuktextbookind", "getustextbookind", "getusdiscountcode", "getusdiscountname", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getemeadiscountcode", "getemeadiscountname", "gettrimsize", "getweight", "getcommcode", "getjournalprodsitecode", "getjournalissuetrimsize", "getwarreference"};
                         for (String strTemp : all_manif_ext_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -189,7 +189,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " +  dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID() +
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID() +
                                     " " + strTemp + " => Inbound = " + method.invoke(objectToCompare1) +
                                     " Manif_EXT__Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -204,7 +204,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         Log.info("comparing inbound and etl_page_count_extended_current_v records...");
-                        String[] all_pagecount_Col = {"getEPRID","getUKEY","getmanifestation_type","getSOURCEREF","getMODIFIEDON","getmetadeleted","getpagecounttypecode","getpagecounttypename","getpagecount"};
+                        String[] all_pagecount_Col = {"getEPRID", "getUKEY", "getmanifestation_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getpagecounttypecode", "getpagecounttypename", "getpagecount"};
                         for (String strTemp : all_pagecount_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -215,7 +215,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " +  dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID() +
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID() +
                                     " " + strTemp + " => Inbound = " + method.invoke(objectToCompare1) +
                                     " PageCount_Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -230,7 +230,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         Log.info("comparing inbound and etl_url_extended_current_v records...");
-                        String[] all_url_Col = {"getEPRID","getUKEY","getwork_type","getSOURCEREF","getMODIFIEDON","getmetadeleted","geturltypecode","geturltypecode","getsource","getname"};
+                        String[] all_url_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "geturltypecode", "geturltypecode", "getsource", "getname"};
                         for (String strTemp : all_url_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -241,7 +241,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " +  dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID() +
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID() +
                                     " " + strTemp + " => Inbound = " + method.invoke(objectToCompare1) +
                                     " URL_Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -256,11 +256,11 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         Log.info("comparing inbound and etl_work_extended_current_v records...");
-                        String[] all_work_ext_Col = {"getEPRID","getUKEY","getwork_type","getSOURCEREF","getMODIFIEDON","getmetadeleted","getcompanygroup","getimagefileref","getworkmasterisbn","gettextreftrade",
-                        "getfeatures","getawards","gettoc_long","gettoc_short","getaudience","getauthorbyline","getdescription","getsbu","getprofitcentre","getreview","getjournalelscomind",
-                        "getjournalaimsscope","getddpeligibind","getptsjournalind","getauthorfeedbackind","getdeltabusinessunit","getprintername","getprimarysitesystem","getprimarysiteacronym","getprimarysitesupportlevel",
-                        "getfulfilmentsystem","getfulfilmentjournalacronym","getissueprodtypecode","getcataloguevolumesqty","getcatalogueissuesqty","getcataloguevolumefrom",
-                        "getcataloguevolumeto","getrfissuesqty","getrftotalpagesqty","getrffvi","getrflvi","getjournalprevioustitle","getjournalprimaryauthor"};
+                        String[] all_work_ext_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getcompanygroup", "getimagefileref", "getworkmasterisbn", "gettextreftrade",
+                                "getfeatures", "getawards", "gettoc_long", "gettoc_short", "getaudience", "getauthorbyline", "getdescription", "getsbu", "getprofitcentre", "getreview", "getjournalelscomind",
+                                "getjournalaimsscope", "getddpeligibind", "getptsjournalind", "getauthorfeedbackind", "getdeltabusinessunit", "getprintername", "getprimarysitesystem", "getprimarysiteacronym", "getprimarysitesupportlevel",
+                                "getfulfilmentsystem", "getfulfilmentjournalacronym", "getissueprodtypecode", "getcataloguevolumesqty", "getcatalogueissuesqty", "getcataloguevolumefrom",
+                                "getcataloguevolumeto", "getrfissuesqty", "getrftotalpagesqty", "getrffvi", "getrflvi", "getjournalprevioustitle", "getjournalprimaryauthor"};
                         for (String strTemp : all_work_ext_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -271,7 +271,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " +  dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID() +
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID() +
                                     " " + strTemp + " => Inbound = " + method.invoke(objectToCompare1) +
                                     " work_ext_Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -286,7 +286,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         Log.info("comparing inbound and etl_work_subject_area_extended_current_v records...");
-                        String[] all_work_subj_area_ext_Col = {"getEPRID","getUKEY","getwork_type","getSOURCEREF","getMODIFIEDON","getmetadeleted","gettypecode","gettypedesc","getsubjcode","getsubjdesc",
+                        String[] all_work_subj_area_ext_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "gettypecode", "gettypedesc", "getsubjcode", "getsubjdesc",
                                 "getpriority"};
                         for (String strTemp : all_work_subj_area_ext_Col) {
                             java.lang.reflect.Method method;
@@ -298,7 +298,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " +  dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID() +
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID() +
                                     " " + strTemp + " => Inbound = " + method.invoke(objectToCompare1) +
                                     " work_subj_area_Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -313,7 +313,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         Log.info("comparing inbound and etl_manifestation_restrictions_extended_current_v records...");
-                        String[] all_manif_restrict_Col = {"getEPRID","getUKEY","getmanifestation_type","getSOURCEREF","getMODIFIEDON","getmetadeleted","getrestrictioncode","getrestrictionname"};
+                        String[] all_manif_restrict_Col = {"getEPRID", "getUKEY", "getmanifestation_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getrestrictioncode", "getrestrictionname"};
                         for (String strTemp : all_manif_restrict_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -324,7 +324,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " +  dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID() +
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID() +
                                     " " + strTemp + " => Inbound = " + method.invoke(objectToCompare1) +
                                     " manifestation_restrictions_Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -339,7 +339,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         Log.info("comparing inbound and etl_product_prices_extended_current_v records...");
-                        String[] all_prod_price_Col = {"getEPRID","getUKEY","getproduct_type","getSOURCEREF","getMODIFIEDON","getmetadeleted","getpricecurrency","getpriceamount","getpricestartdate","getpriceenddate","getpriceregion","getpricecategory","getpricecustomercategory","getpricepurchasequantity"};
+                        String[] all_prod_price_Col = {"getEPRID", "getUKEY", "getproduct_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getpricecurrency", "getpriceamount", "getpricestartdate", "getpriceenddate", "getpriceregion", "getpricecategory", "getpricecustomercategory", "getpricepurchasequantity"};
                         for (String strTemp : all_prod_price_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -350,7 +350,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " +  dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID() +
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID() +
                                     " " + strTemp + " => Inbound = " + method.invoke(objectToCompare1) +
                                     " product_price_Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -365,8 +365,8 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         Log.info("comparing inbound and etl_work_person_role_extended_current_v records...");
-                        String[] all_pers_role_Col = {"getEPRID","getUKEY","getwork_type","getSOURCEREF","getMODIFIEDON","getmetadeleted","getcore_reference","getworksourceref","getpersonsourceref","getsource","getroletype","getrolename",
-                                "gettitle","getperson_first_name","getperson_family_name","getemail_address","gethonours","getaffiliation","getimageurl","getfootnotetxt","getnotestxt","getsequence","getgroupnumber","getmetamodifiedon"};
+                        String[] all_pers_role_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getcore_reference", "getworksourceref", "getpersonsourceref", "getsource", "getroletype", "getrolename",
+                                "gettitle", "getperson_first_name", "getperson_family_name", "getemail_address", "gethonours", "getaffiliation", "getimageurl", "getfootnotetxt", "getnotestxt", "getsequence", "getgroupnumber", "getmetamodifiedon"};
                         for (String strTemp : all_pers_role_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -377,7 +377,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " +  dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID() +
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID() +
                                     " " + strTemp + " => Inbound = " + method.invoke(objectToCompare1) +
                                     " pers_role_Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -394,9 +394,9 @@ public class BCS_ETLExtendedDataChecksSteps {
     }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-   @Given("^Get the (.*) of BCS Extended data from Current Tables (.*)$")
+    @Given("^Get the (.*) of BCS Extended data from Current Tables (.*)$")
     public void getRandomIdsFromCurrent(String numberOfRecords, String tableName) {
-         //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Extended Current Tables....");
 
@@ -437,44 +437,43 @@ public class BCS_ETLExtendedDataChecksSteps {
     }
 
     @Then("^We Get the records from transform BCS Ext Current History (.*)$")
-   public void getRecFromCurrentHistory(String tableName){
-       Log.info("We get the records from Current_History BCS Extended table...");
-       switch (tableName) {
-           case "etl_transform_history_extended_availability_part":
-               sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_AVAILABILTYI_REC_CURR_HIST_DATA, Joiner.on("','").join(Ids));
-               break;
-           case "etl_transform_history_extended_manifestation_part":
-               sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_MANIF_EXT_REC_CURR_HIST_DATA, Joiner.on("','").join(Ids));
-               break;
-           case "etl_transform_history_extended_page_count_part":
-               sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_PAGE_COUNT_REC_CURR_HIST_DATA, Joiner.on("','").join(Ids));
-               break;
-           case "etl_transform_history_extended_url_part":
-               sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_URL_REC_CURR_HIST_DATA, Joiner.on("','").join(Ids));
-               break;
-           case "etl_transform_history_extended_work_part":
-               sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_WORK_EXT_REC_CURR_HIST_DATA, Joiner.on("','").join(Ids));
-               break;
-           case "etl_transform_history_extended_work_subject_area_part":
-               sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_WORK_SUB_AREA_REC_CURR_HIST_DATA, Joiner.on("','").join(Ids));
-               break;
-           case "etl_transform_history_extended_manifestation_restrictions_part":
-               sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_MANIF_RESTRICT_CURR_HIST_DATA, Joiner.on("','").join(Ids));
-               break;
-           case "etl_transform_history_extended_product_prices_part":
-               sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_PROD_PRICE_REC_CURR_HIST_DATA, Joiner.on("','").join(Ids));
-               break;
-           case "etl_transform_history_extended_work_person_role_part":
-               sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_WORK_PERS_ROLE_REC_CURR_HIST_DATA, Joiner.on("','").join(Ids));
-           break;
-       }
-       dataQualityBCSContext.recFromCurrentHist = DBManager.getDBResultAsBeanList(sql, BCS_ETLExtendedDLAccessObject.class, Constants.AWS_URL);
-       Log.info(sql);
-
-   }
+    public void getRecFromCurrentHistory(String tableName) {
+        Log.info("We get the records from Current_History BCS Extended table...");
+        switch (tableName) {
+            case "etl_transform_history_extended_availability_part":
+                sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_AVAILABILTYI_REC_CURR_HIST_DATA, Joiner.on("','").join(Ids));
+                break;
+            case "etl_transform_history_extended_manifestation_part":
+                sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_MANIF_EXT_REC_CURR_HIST_DATA, Joiner.on("','").join(Ids));
+                break;
+            case "etl_transform_history_extended_page_count_part":
+                sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_PAGE_COUNT_REC_CURR_HIST_DATA, Joiner.on("','").join(Ids));
+                break;
+            case "etl_transform_history_extended_url_part":
+                sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_URL_REC_CURR_HIST_DATA, Joiner.on("','").join(Ids));
+                break;
+            case "etl_transform_history_extended_work_part":
+                sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_WORK_EXT_REC_CURR_HIST_DATA, Joiner.on("','").join(Ids));
+                break;
+            case "etl_transform_history_extended_work_subject_area_part":
+                sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_WORK_SUB_AREA_REC_CURR_HIST_DATA, Joiner.on("','").join(Ids));
+                break;
+            case "etl_transform_history_extended_manifestation_restrictions_part":
+                sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_MANIF_RESTRICT_CURR_HIST_DATA, Joiner.on("','").join(Ids));
+                break;
+            case "etl_transform_history_extended_product_prices_part":
+                sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_PROD_PRICE_REC_CURR_HIST_DATA, Joiner.on("','").join(Ids));
+                break;
+            case "etl_transform_history_extended_work_person_role_part":
+                sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_WORK_PERS_ROLE_REC_CURR_HIST_DATA, Joiner.on("','").join(Ids));
+                break;
+        }
+        dataQualityBCSContext.recFromCurrentHist = DBManager.getDBResultAsBeanList(sql, BCS_ETLExtendedDLAccessObject.class, Constants.AWS_URL);
+        Log.info(sql);
+    }
 
     @And("^Compare the records of BCS Extended current and BCS Current_History (.*)$")
-    public void compareCurrentandCurrHist(String targetTableName)throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void compareCurrentandCurrHist(String targetTableName) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (dataQualityBCSContext.recordsFromCurrent.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
@@ -485,7 +484,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         Log.info("comparing etl_extended_availability_current and etl_transform_history_extended_availability_part records...");
-                        String[] all_availability_Col = {"getEPRID","getmetadeleted","getPRODUCTTYPE","getstatus","getpubdateactual","getanzpubstatus","getdeltaanswercodeuk","getdeltaanswercodeus","getUKEY","getSOURCEREF","getMODIFIEDON","getAPPLICATION"};
+                        String[] all_availability_Col = {"getEPRID", "getmetadeleted", "getPRODUCTTYPE", "getstatus", "getpubdateactual", "getanzpubstatus", "getdeltaanswercodeuk", "getdeltaanswercodeus", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getAPPLICATION"};
                         for (String strTemp : all_availability_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -496,7 +495,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " +  dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
                                     " " + strTemp + " => Availability_Curr = " + method.invoke(objectToCompare1) +
                                     " Availability_Curr_hist = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -511,7 +510,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         Log.info("comparing etl_manifestation_extended_current_v and etl_transform_history_extended_manifestation_part records...");
-                        String[] all_manif_ext_Col = {"getEPRID","getmetadeleted","getmanifestation_type","getuktextbookind","getustextbookind","getusdiscountcode","getusdiscountname","getUKEY","getSOURCEREF","getMODIFIEDON","getemeadiscountcode","getemeadiscountname","gettrimsize","getweight","getcommcode","getjournalprodsitecode","getjournalissuetrimsize","getwarreference"};
+                        String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type", "getuktextbookind", "getustextbookind", "getusdiscountcode", "getusdiscountname", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getemeadiscountcode", "getemeadiscountname", "gettrimsize", "getweight", "getcommcode", "getjournalprodsitecode", "getjournalissuetrimsize", "getwarreference"};
                         for (String strTemp : all_manif_ext_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -522,7 +521,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " +  dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
                                     " " + strTemp + " => Manif_EXT_Curr = " + method.invoke(objectToCompare1) +
                                     " Manif_EXT_Curr_hist = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -537,7 +536,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         Log.info("comparing etl_page_count_extended_current_v and etl_transform_history_extended_page_count_part records...");
-                        String[] all_pagecount_Col = {"getEPRID","getUKEY","getmanifestation_type","getSOURCEREF","getMODIFIEDON","getmetadeleted","getpagecounttypecode","getpagecounttypename","getpagecount"};
+                        String[] all_pagecount_Col = {"getEPRID", "getUKEY", "getmanifestation_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getpagecounttypecode", "getpagecounttypename", "getpagecount"};
                         for (String strTemp : all_pagecount_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -548,7 +547,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " +  dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
                                     " " + strTemp + " => PageCount_Curr = " + method.invoke(objectToCompare1) +
                                     " PageCount_Curr_hist = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -563,7 +562,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         Log.info("comparing etl_url_extended_current_v and etl_transform_history_extended_url_part records...");
-                        String[] all_url_Col = {"getEPRID","getUKEY","getwork_type","getSOURCEREF","getMODIFIEDON","getmetadeleted","geturltypecode","geturltypecode","getsource","getname"};
+                        String[] all_url_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "geturltypecode", "geturltypecode", "getsource", "getname"};
                         for (String strTemp : all_url_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -574,7 +573,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " +  dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
                                     " " + strTemp + " => URL_Curr = " + method.invoke(objectToCompare1) +
                                     " URL_Curr_hist = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -589,11 +588,11 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         Log.info("comparing etl_transform_history_extended_work_part and etl_work_extended_current_v records...");
-                        String[] all_work_ext_Col = {"getEPRID","getUKEY","getwork_type","getSOURCEREF","getMODIFIEDON","getmetadeleted","getcompanygroup","getimagefileref","getworkmasterisbn","gettextreftrade",
-                                "getfeatures","getawards","gettoc_long","gettoc_short","getaudience","getauthorbyline","getdescription","getsbu","getprofitcentre","getreview","getjournalelscomind",
-                                "getjournalaimsscope","getddpeligibind","getptsjournalind","getauthorfeedbackind","getdeltabusinessunit","getprintername","getprimarysitesystem","getprimarysiteacronym","getprimarysitesupportlevel",
-                                "getfulfilmentsystem","getfulfilmentjournalacronym","getissueprodtypecode","getcataloguevolumesqty","getcatalogueissuesqty","getcataloguevolumefrom",
-                                "getcataloguevolumeto","getrfissuesqty","getrftotalpagesqty","getrffvi","getrflvi","getjournalprevioustitle","getjournalprimaryauthor"};
+                        String[] all_work_ext_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getcompanygroup", "getimagefileref", "getworkmasterisbn", "gettextreftrade",
+                                "getfeatures", "getawards", "gettoc_long", "gettoc_short", "getaudience", "getauthorbyline", "getdescription", "getsbu", "getprofitcentre", "getreview", "getjournalelscomind",
+                                "getjournalaimsscope", "getddpeligibind", "getptsjournalind", "getauthorfeedbackind", "getdeltabusinessunit", "getprintername", "getprimarysitesystem", "getprimarysiteacronym", "getprimarysitesupportlevel",
+                                "getfulfilmentsystem", "getfulfilmentjournalacronym", "getissueprodtypecode", "getcataloguevolumesqty", "getcatalogueissuesqty", "getcataloguevolumefrom",
+                                "getcataloguevolumeto", "getrfissuesqty", "getrftotalpagesqty", "getrffvi", "getrflvi", "getjournalprevioustitle", "getjournalprimaryauthor"};
                         for (String strTemp : all_work_ext_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -604,7 +603,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " +  dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
                                     " " + strTemp + " => work_ext_Curr = " + method.invoke(objectToCompare1) +
                                     " work_ext_Curr_hist = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -619,7 +618,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         Log.info("comparing etl_transform_history_extended_work_subject_area_part and etl_work_subject_area_extended_current_v records...");
-                        String[] all_work_subj_area_ext_Col = {"getEPRID","getUKEY","getwork_type","getSOURCEREF","getMODIFIEDON","getmetadeleted","gettypecode","gettypedesc","getsubjcode","getsubjdesc",
+                        String[] all_work_subj_area_ext_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "gettypecode", "gettypedesc", "getsubjcode", "getsubjdesc",
                                 "getpriority"};
                         for (String strTemp : all_work_subj_area_ext_Col) {
                             java.lang.reflect.Method method;
@@ -631,7 +630,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " +  dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
                                     " " + strTemp + " => work_subj_area_Curr = " + method.invoke(objectToCompare1) +
                                     " work_subj_area_Curr_hist = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -646,7 +645,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         Log.info("comparing etl_transform_history_extended_manifestation_restrictions_part and etl_manifestation_restrictions_extended_current_v records...");
-                        String[] all_manif_restrict_Col = {"getEPRID","getUKEY","getmanifestation_type","getSOURCEREF","getMODIFIEDON","getmetadeleted","getrestrictioncode","getrestrictionname"};
+                        String[] all_manif_restrict_Col = {"getEPRID", "getUKEY", "getmanifestation_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getrestrictioncode", "getrestrictionname"};
                         for (String strTemp : all_manif_restrict_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -657,7 +656,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " +  dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
                                     " " + strTemp + " => manifestation_restrictions_Curr = " + method.invoke(objectToCompare1) +
                                     " manifestation_restrictions_Curr_hist = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -672,7 +671,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         Log.info("comparing etl_transform_history_extended_product_prices_part and etl_product_prices_extended_current_v records...");
-                        String[] all_prod_price_Col = {"getEPRID","getUKEY","getproduct_type","getSOURCEREF","getMODIFIEDON","getmetadeleted","getpricecurrency","getpriceamount","getpricestartdate","getpriceenddate","getpriceregion","getpricecategory","getpricecustomercategory","getpricepurchasequantity"};
+                        String[] all_prod_price_Col = {"getEPRID", "getUKEY", "getproduct_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getpricecurrency", "getpriceamount", "getpricestartdate", "getpriceenddate", "getpriceregion", "getpricecategory", "getpricecustomercategory", "getpricepurchasequantity"};
                         for (String strTemp : all_prod_price_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -683,7 +682,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " +  dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
                                     " " + strTemp + " => prod_price_Curr = " + method.invoke(objectToCompare1) +
                                     " prod_price_Curr_hist = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -698,8 +697,8 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         Log.info("comparing etl_transform_history_extended_work_person_role_part and etl_work_person_role_extended_current_v records...");
-                        String[] all_pers_role_Col = {"getEPRID","getUKEY","getwork_type","getSOURCEREF","getMODIFIEDON","getmetadeleted","getcore_reference","getworksourceref","getpersonsourceref","getsource","getroletype","getrolename",
-                                "gettitle","getperson_first_name","getperson_family_name","getemail_address","gethonours","getaffiliation","getimageurl","getfootnotetxt","getnotestxt","getsequence","getgroupnumber","getmetamodifiedon"};
+                        String[] all_pers_role_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getcore_reference", "getworksourceref", "getpersonsourceref", "getsource", "getroletype", "getrolename",
+                                "gettitle", "getperson_first_name", "getperson_family_name", "getemail_address", "gethonours", "getaffiliation", "getimageurl", "getfootnotetxt", "getnotestxt", "getsequence", "getgroupnumber", "getmetamodifiedon"};
                         for (String strTemp : all_pers_role_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -710,7 +709,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " +  dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
                                     " " + strTemp + " => pers_role_Curr = " + method.invoke(objectToCompare1) +
                                     " pers_role_Curr_hist = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -727,308 +726,295 @@ public class BCS_ETLExtendedDataChecksSteps {
     }
 
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-   /* @Then("^We Get the records from transform BCS Transform_File (.*)$")
-    public void getRecFromTransformFile(String tableName){
-        Log.info("We get the records from Transform_File BCS Core table...");
+    @Then("^We Get the records from transform BCS Ext Transform_File (.*)$")
+    public void getRecFromTransformFile(String tableName) {
+        Log.info("We get the records from Transform_File BCS Ext table...");
         switch (tableName) {
-            case "etl_accountable_product_transform_file_history_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_ACCPROD_REC_TRANS_FILE_DATA, Joiner.on("','").join(Ids));
+            case "etl_availability_extended_transform_file_history_part":
+                sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_AVAILABILTYI_REC_TRANS_FILE, Joiner.on("','").join(Ids));
                 break;
-            case "etl_manifestation_transform_file_history_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_MANIF_REC_TRANS_FILE_DATA, Joiner.on("','").join(Ids));
+            case "etl_manifestation_extended_transform_file_history_part":
+                sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_MANIF_EXT_REC_TRANS_FILE, Joiner.on("','").join(Ids));
                 break;
-            case "etl_manifestation_identifier_transform_file_history_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_MANIF_IDENT_REC_TRANS_FILE_DATA, Joiner.on("','").join(Ids));
+            case "etl_page_count_extended_transform_file_history_part":
+                sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_PAGE_COUNT_REC_TRANS_FILE, Joiner.on("','").join(Ids));
                 break;
-            case "etl_product_transform_file_history_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PRODUCT_REC_TRANS_FILE_DATA, Joiner.on("','").join(Ids));
+            case "etl_url_extended_transform_file_history_part":
+                sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_URL_REC_TRANS_FILE, Joiner.on("','").join(Ids));
                 break;
-            case "etl_work_person_role_transform_file_history_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_PERS_ROLE_REC_TRANS_FILE_DATA, Joiner.on("','").join(Ids));
+            case "etl_work_extended_transform_file_history_part":
+                sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_WORK_EXT_REC_TRANS_FILE, Joiner.on("','").join(Ids));
                 break;
-            case "etl_work_relationship_transform_file_history_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_RELATION_REC_TRANS_FILE_DATA, Joiner.on("','").join(Ids));
+            case "etl_work_subject_area_extended_transform_file_history_part":
+                sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_WORK_SUB_AREA_REC_TRANS_FILE, Joiner.on("','").join(Ids));
                 break;
-            case "etl_work_transform_file_history_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_REC_TRANS_FILE_DATA, Joiner.on("','").join(Ids));
+            case "etl_manifestation_restrictions_extended_transform_file_history_part":
+                sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_MANIF_RESTRICT_REC_TRANS_FILE, Joiner.on("','").join(Ids));
                 break;
-            case "etl_work_identifier_transform_file_history_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_WORK_IDENT_REC_TRANS_FILE_DATA, Joiner.on("','").join(Ids));
+            case "etl_product_prices_extended_transform_file_history_part":
+                sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_PROD_PRICE_REC_TRANS_FILE, Joiner.on("','").join(Ids));
                 break;
-            case "etl_person_transform_file_history_part":
-                sql = String.format(BCS_ETLCoreDataChecksSQL.GET_PERSON_REC_TRANS_FILE_DATA, Joiner.on("','").join(Ids));
+            case "etl_work_person_role_extended_transform_file_history_part":
+                sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_WORK_PERS_ROLE_REC_TRANS_FILE, Joiner.on("','").join(Ids));
                 break;
         }
-        dataQualityBCSContext.recFromTransformFile = DBManager.getDBResultAsBeanList(sql, BCS_ETLCoreDLAccessObject.class, Constants.AWS_URL);
+        dataQualityBCSContext.recFromTransformFile = DBManager.getDBResultAsBeanList(sql, BCS_ETLExtendedDLAccessObject.class, Constants.AWS_URL);
         Log.info(sql);
 
     }
 
-    @And("^Compare the records of BCS Core current and BCS Transform_File (.*)$")
-    public void compareCurrandTransFile(String targetTableName)throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    @And("^Compare the records of BCS Extended current and BCS Transform_File (.*)$")
+    public void compareCurrandTransFile(String targetTableName) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (dataQualityBCSContext.recordsFromCurrent.isEmpty()) {
-            Log.info("No Data Found in the Current Tables ....");
+            Log.info("No Data Found ....");
         } else {
-            Log.info("Sorting the Ids to compare the records between Current and transform_file tables...");
-        }
-        for (int i = 0; i < dataQualityBCSContext.recordsFromCurrent.size(); i++) {
-            switch (targetTableName) {
-                case "etl_accountable_product_transform_file_history_part":
-                    Log.info("compare current and etl_accountable_product_transform_file_history_part Records:");
-                    dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                    dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+            Log.info("Sorting the Ids to compare the records between Current and transform file...");
+            for (int i = 0; i < dataQualityBCSContext.recordsFromCurrent.size(); i++) {
+                switch (targetTableName) {
+                    case "etl_availability_extended_transform_file_history_part":
+                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        Log.info("comparing etl_extended_availability_current and etl_availability_extended_transform_file_history_part records...");
+                        String[] all_availability_Col = {"getEPRID", "getmetadeleted", "getPRODUCTTYPE", "getstatus", "getpubdateactual", "getanzpubstatus", "getdeltaanswercodeuk", "getdeltaanswercodeus", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getAPPLICATION"};
+                        for (String strTemp : all_availability_Col) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
 
-                    String[] etl_accountable_product_transform_file_history_part = {"getUKEY", "getSOURCEREF", "getACCOUNTABLEPRODUCT", "getACCOUNTABLENAME", "getACCOUNTABLEPARENT", "getDQ_ERR"};
-                    for (String strTemp : etl_accountable_product_transform_file_history_part) {
-                        java.lang.reflect.Method method;
-                        java.lang.reflect.Method method2;
+                            BCS_ETLExtendedDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
+                            BCS_ETLExtendedDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
 
-                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
-                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        method = objectToCompare1.getClass().getMethod(strTemp);
-                        method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF() +
-                                " " + strTemp + " => Acc_Prod_Curr = " + method.invoke(objectToCompare1) +
-                                " Acc_Prod_trans_file = " + method2.invoke(objectToCompare2));
-                        if (method.invoke(objectToCompare1) != null ||
-                                (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Acc_Prod_trans_file",
-                                    method.invoke(objectToCompare1),
-                                    method2.invoke(objectToCompare2));
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
+                                    " " + strTemp + " => Availability_Curr = " + method.invoke(objectToCompare1) +
+                                    " Availability_trans_file = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Availability_trans_file",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
                         }
-                    }
-                    break;
+                        break;
+                    case "etl_manifestation_extended_transform_file_history_part":
+                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        Log.info("comparing etl_manifestation_extended_current_v and etl_manifestation_extended_transform_file_history_part records...");
+                        String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type", "getuktextbookind", "getustextbookind", "getusdiscountcode", "getusdiscountname", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getemeadiscountcode", "getemeadiscountname", "gettrimsize", "getweight", "getcommcode", "getjournalprodsitecode", "getjournalissuetrimsize", "getwarreference"};
+                        for (String strTemp : all_manif_ext_Col) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
 
-                case "etl_manifestation_transform_file_history_part":
-                    Log.info("compare current and etl_manifestation_transform_file_history_part Records:");
-                    dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                    dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                            BCS_ETLExtendedDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
+                            BCS_ETLExtendedDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
 
-                    String[] etl_manifestation_transform_file_history_part = {"getUKEY", "getSOURCEREF", "getTITLE", "getINTEREDITIONFLAG", "getFIRSTPUBLISHEDDATE", "getBINDING", "getMANIFESTATIONTYPE", "getSTATUS"
-                            , "getWORKID", "getLASTPUBDATE", "getDQ_ERR"};
-                    for (String strTemp : etl_manifestation_transform_file_history_part) {
-                        java.lang.reflect.Method method;
-                        java.lang.reflect.Method method2;
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
-                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
-
-                        method = objectToCompare1.getClass().getMethod(strTemp);
-                        method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromCurrent.get(i).getSOURCEREF() +
-                                " " + strTemp + " => Manif_Curr = " + method.invoke(objectToCompare1) +
-                                " Manif_trans_file = " + method2.invoke(objectToCompare2));
-                        if (method.invoke(objectToCompare1) != null ||
-                                (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_trans_file",
-                                    method.invoke(objectToCompare1),
-                                    method2.invoke(objectToCompare2));
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
+                                    " " + strTemp + " => Manif_EXT_Curr = " + method.invoke(objectToCompare1) +
+                                    " Manif_EXT_trans_file = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_EXT_trans_file",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
                         }
-                    }
-                    break;
+                        break;
+                    case "etl_page_count_extended_transform_file_history_part":
+                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        Log.info("comparing etl_page_count_extended_current_v and etl_page_count_extended_transform_file_history_part records...");
+                        String[] all_pagecount_Col = {"getEPRID", "getUKEY", "getmanifestation_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getpagecounttypecode", "getpagecounttypename", "getpagecount"};
+                        for (String strTemp : all_pagecount_Col) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
 
-                case "etl_manifestation_identifier_transform_file_history_part":
-                    Log.info("compare current and etl_manifestation_identifier_transform_file_history_part Records:");
-                    dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                    dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                            BCS_ETLExtendedDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
+                            BCS_ETLExtendedDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
 
-                    String[] etl_manifestation_identifier_transform_file_history_part = {"getUKEY", "getSOURCEREF", "getIDENTIFIER", "getIDENTIFIERTYPE"};
-                    for (String strTemp : etl_manifestation_identifier_transform_file_history_part) {
-                        java.lang.reflect.Method method;
-                        java.lang.reflect.Method method2;
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
-                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
-
-                        method = objectToCompare1.getClass().getMethod(strTemp);
-                        method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY() +
-                                " " + strTemp + " => Manif_Ident_Curr = " + method.invoke(objectToCompare1) +
-                                " Manif_Ident_trans_file = " + method2.invoke(objectToCompare2));
-                        if (method.invoke(objectToCompare1) != null ||
-                                (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_Ident_trans_file",
-                                    method.invoke(objectToCompare1),
-                                    method2.invoke(objectToCompare2));
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
+                                    " " + strTemp + " => PageCount_Curr = " + method.invoke(objectToCompare1) +
+                                    " PageCount_trans_file = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PageCount_trans_file",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
                         }
-                    }
-                    break;
+                        break;
+                    case "etl_url_extended_transform_file_history_part":
+                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        Log.info("comparing etl_url_extended_current_v and etl_url_extended_transform_file_history_part records...");
+                        String[] all_url_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "geturltypecode", "geturltypecode", "getsource", "getname"};
+                        for (String strTemp : all_url_Col) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
 
-                case "etl_product_transform_file_history_part":
-                    Log.info("compare current and etl_product_transform_file_history_part Records:");
-                    dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                    dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                            BCS_ETLExtendedDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
+                            BCS_ETLExtendedDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
 
-                    String[] etl_product_transform_file_history_part = {"getUKEY", "getSOURCEREF", "getBINDINGCODE", "getNAME", "getSHORTTITLE", "getLAUNCHDATE",
-                            "getTAXCODE", "getSTATUS", "getMANIFESTATIONREF", "getWORKSOURCE", "getWORKTYPE", "getSEPRATELYSALEINDICATOR", "getTRIALALLOWEDINDICATOR", "getFWORKSOURCEREF",
-                            "getPRODUCTTYPE", "getREVENUEMODEL", "getDQ_ERR"};
-                    for (String strTemp : etl_product_transform_file_history_part) {
-                        java.lang.reflect.Method method;
-                        java.lang.reflect.Method method2;
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
-                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
-
-                        method = objectToCompare1.getClass().getMethod(strTemp);
-                        method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY() +
-                                " " + strTemp + " => Prod_Curr = " + method.invoke(objectToCompare1) +
-                                " Prod_trans_file = " + method2.invoke(objectToCompare2));
-                        if (method.invoke(objectToCompare1) != null ||
-                                (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Prod_trans_file",
-                                    method.invoke(objectToCompare1),
-                                    method2.invoke(objectToCompare2));
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
+                                    " " + strTemp + " => URL_Curr = " + method.invoke(objectToCompare1) +
+                                    " URL_trans_file = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in URL_trans_file",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
                         }
-                    }
-                    break;
+                        break;
+                    case "etl_work_extended_transform_file_history_part":
+                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        Log.info("comparing etl_work_extended_transform_file_history_part and etl_work_extended_current_v records...");
+                        String[] all_work_ext_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getcompanygroup", "getimagefileref", "getworkmasterisbn", "gettextreftrade",
+                                "getfeatures", "getawards", "gettoc_long", "gettoc_short", "getaudience", "getauthorbyline", "getdescription", "getsbu", "getprofitcentre", "getreview", "getjournalelscomind",
+                                "getjournalaimsscope", "getddpeligibind", "getptsjournalind", "getauthorfeedbackind", "getdeltabusinessunit", "getprintername", "getprimarysitesystem", "getprimarysiteacronym", "getprimarysitesupportlevel",
+                                "getfulfilmentsystem", "getfulfilmentjournalacronym", "getissueprodtypecode", "getcataloguevolumesqty", "getcatalogueissuesqty", "getcataloguevolumefrom",
+                                "getcataloguevolumeto", "getrfissuesqty", "getrftotalpagesqty", "getrffvi", "getrflvi", "getjournalprevioustitle", "getjournalprimaryauthor"};
+                        for (String strTemp : all_work_ext_Col) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
 
-                case "etl_work_person_role_transform_file_history_part":
-                    Log.info("compare current and etl_work_person_role_transform_file_history_part Records:");
-                    dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                    dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                            BCS_ETLExtendedDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
+                            BCS_ETLExtendedDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
 
-                    String[] etl_work_person_role_transform_file_history_part = {"getUKEY", "getWORKSOURCEREF", "getPERSONSOURCEREF", "getROLETYPE", "getSEQUENCE", "getDEDUPLICATOR", "getDQ_ERR"};
-                    for (String strTemp : etl_work_person_role_transform_file_history_part) {
-                        java.lang.reflect.Method method;
-                        java.lang.reflect.Method method2;
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
-                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
-
-                        method = objectToCompare1.getClass().getMethod(strTemp);
-                        method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY() +
-                                " " + strTemp + " => PERS_ROLE_Curr = " + method.invoke(objectToCompare1) +
-                                " PERS_ROLE_trans_file = " + method2.invoke(objectToCompare2));
-                        if (method.invoke(objectToCompare1) != null ||
-                                (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PERS_ROLE_trans_file",
-                                    method.invoke(objectToCompare1),
-                                    method2.invoke(objectToCompare2));
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
+                                    " " + strTemp + " => work_ext_Curr = " + method.invoke(objectToCompare1) +
+                                    " work_ext_trans_file = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_ext_trans_file",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
                         }
-                    }
-                    break;
+                        break;
+                    case "etl_work_subject_area_extended_transform_file_history_part":
+                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        Log.info("comparing etl_work_subject_area_extended_transform_file_history_part and etl_work_subject_area_extended_current_v records...");
+                        String[] all_work_subj_area_ext_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "gettypecode", "gettypedesc", "getsubjcode", "getsubjdesc",
+                                "getpriority"};
+                        for (String strTemp : all_work_subj_area_ext_Col) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
 
-                case "etl_work_relationship_transform_file_history_part":
-                    Log.info("compare current and etl_work_relationship_transform_file_history_part Records:");
-                    dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                    dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                            BCS_ETLExtendedDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
+                            BCS_ETLExtendedDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
 
-                    String[] etl_work_relationship_transform_file_history_part = {"getUKEY", "getPARENTREF", "getCHILDREF", "getRELATIONTYPEREF", "getLASTUDATEDDATE", "getDQ_ERR"};
-                    for (String strTemp : etl_work_relationship_transform_file_history_part) {
-                        java.lang.reflect.Method method;
-                        java.lang.reflect.Method method2;
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
-                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
-
-                        method = objectToCompare1.getClass().getMethod(strTemp);
-                        method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY() +
-                                " " + strTemp + " => WORK_RELAT_Curr = " + method.invoke(objectToCompare1) +
-                                " WORK_RELAT_trans_file = " + method2.invoke(objectToCompare2));
-                        if (method.invoke(objectToCompare1) != null ||
-                                (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in WORK_RELAT_trans_file",
-                                    method.invoke(objectToCompare1),
-                                    method2.invoke(objectToCompare2));
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
+                                    " " + strTemp + " => work_subj_area_Curr = " + method.invoke(objectToCompare1) +
+                                    " work_subj_area_trans_file = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_subj_area_trans_file",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
                         }
-                    }
-                    break;
+                        break;
+                    case "etl_manifestation_restrictions_extended_transform_file_history_part":
+                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        Log.info("comparing etl_manifestation_restrictions_extended_transform_file_history_part and etl_manifestation_restrictions_extended_current_v records...");
+                        String[] all_manif_restrict_Col = {"getEPRID", "getUKEY", "getmanifestation_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getrestrictioncode", "getrestrictionname"};
+                        for (String strTemp : all_manif_restrict_Col) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
 
-                case "etl_work_transform_file_history_part":
-                    Log.info("etl_work_transform_file_history_part Records:");
-                    dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                    dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
+                            BCS_ETLExtendedDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
+                            BCS_ETLExtendedDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
 
-                    String[] etl_work_transform_file_history_part = {"getUKEY", "getSOURCEREF", "getTITLE", "getSUBTITLE", "getVOLUMENO", "getCOPYRIGHTYEAR", "getEDITIONNO", "getPMC", "getWORKTYPE", "getSTATUSCODE", "getIMPRINTCODE", "getTEOPCO", "getOPCO"
-                            , "getRESPCENTRE", "getLANGUAGECODE", "getELECTRORIGHTSINDICATOR", "getFOAJOURNALTYPE", "getFSOCIETYOWNERSHIP", "getSUBSCRIPTIONTYPE"};
-                    for (String strTemp : etl_work_transform_file_history_part) {
-                        java.lang.reflect.Method method;
-                        java.lang.reflect.Method method2;
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
-                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
-
-                        method = objectToCompare1.getClass().getMethod(strTemp);
-                        method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY() +
-                                " " + strTemp + " => WORK_Curr = " + method.invoke(objectToCompare1) +
-                                " WORK_trans_file = " + method2.invoke(objectToCompare2));
-                        if (method.invoke(objectToCompare1) != null ||
-                                (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in WORK_trans_file",
-                                    method.invoke(objectToCompare1),
-                                    method2.invoke(objectToCompare2));
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
+                                    " " + strTemp + " => manifestation_restrictions_Curr = " + method.invoke(objectToCompare1) +
+                                    " manifestation_restrictions_trans_File = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifestation_restrictions_trans_File",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
                         }
-                    }
+                        break;
+                    case "etl_product_prices_extended_transform_file_history_part":
+                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        Log.info("comparing etl_product_prices_extended_transform_file_history_part and etl_product_prices_extended_current_v records...");
+                        String[] all_prod_price_Col = {"getEPRID", "getUKEY", "getproduct_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getpricecurrency", "getpriceamount", "getpricestartdate", "getpriceenddate", "getpriceregion", "getpricecategory", "getpricecustomercategory", "getpricepurchasequantity"};
+                        for (String strTemp : all_prod_price_Col) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
 
-                    break;
-                case "etl_work_identifier_transform_file_history_part":
-                    Log.info("etl_work_identifier_transform_file_history_part Records:");
-                    dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                    dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
-                    String[] etl_work_identifier_transform_file_history_part = {"getUKEY", "getSOURCEREF", "getIDENTIFIER", "getIDENTIFIERTYPE"};
-                    for (String strTemp : etl_work_identifier_transform_file_history_part) {
-                        java.lang.reflect.Method method;
-                        java.lang.reflect.Method method2;
+                            BCS_ETLExtendedDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
+                            BCS_ETLExtendedDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
 
-                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
-                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        method = objectToCompare1.getClass().getMethod(strTemp);
-                        method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY() +
-                                " " + strTemp + " => Work_Ident_Curr = " + method.invoke(objectToCompare1) +
-                                " Work_Ident_Curr_file = " + method2.invoke(objectToCompare2));
-                        if (method.invoke(objectToCompare1) != null ||
-                                (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Work_Ident_Curr_file",
-                                    method.invoke(objectToCompare1),
-                                    method2.invoke(objectToCompare2));
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
+                                    " " + strTemp + " => prod_price_Curr = " + method.invoke(objectToCompare1) +
+                                    " prod_price_trans_file = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in prod_price_trans_file",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
                         }
-                    }
-                    break;
-                case "etl_person_transform_file_history_part":
-                    Log.info("etl_person_transform_file_history_part Records:");
-                    dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY)); //sort primarykey data in the lists
-                    dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLCoreDLAccessObject::getUKEY));
-                    String[] etl_person_current_tranf_file_col = {"getUKEY", "getSOURCEREF", "getFIRSTNAME", "getFAMILYNAME", "getPEOPLEHUBID", "getEMAIL", "getDQ_ERR"};
-                    for (String strTemp : etl_person_current_tranf_file_col) {
-                        java.lang.reflect.Method method;
-                        java.lang.reflect.Method method2;
+                        break;
+                    case "etl_work_person_role_extended_transform_file_history_part":
+                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        Log.info("comparing etl_work_person_role_extended_transform_file_history_part and etl_work_person_role_extended_current_v records...");
+                        String[] all_pers_role_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getcore_reference", "getworksourceref", "getpersonsourceref", "getsource", "getroletype", "getrolename",
+                                "gettitle", "getperson_first_name", "getperson_family_name", "getemail_address", "gethonours", "getaffiliation", "getimageurl", "getfootnotetxt", "getnotestxt", "getsequence", "getgroupnumber", "getmetamodifiedon"};
+                        for (String strTemp : all_pers_role_Col) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
 
-                        BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
-                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
+                            BCS_ETLExtendedDLAccessObject objectToCompare1 = dataQualityBCSContext.recordsFromCurrent.get(i);
+                            BCS_ETLExtendedDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromTransformFile.get(i);
 
-                        method = objectToCompare1.getClass().getMethod(strTemp);
-                        method2 = objectToCompare2.getClass().getMethod(strTemp);
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("UKEY => " + dataQualityBCSContext.recordsFromCurrent.get(i).getUKEY() +
-                                " " + strTemp + " => Person_Curr = " + method.invoke(objectToCompare1) +
-                                " Person_Curr_File = " + method2.invoke(objectToCompare2));
-                        if (method.invoke(objectToCompare1) != null ||
-                                (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Person_Curr_File",
-                                    method.invoke(objectToCompare1),
-                                    method2.invoke(objectToCompare2));
+                            Log.info("EPRID => " + dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID() +
+                                    " " + strTemp + " => pers_role_Curr = " + method.invoke(objectToCompare1) +
+                                    " pers_role_trans_file = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in pers_role_Curr_hist",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
                         }
-                    }
+                        break;
                 }
             }
-
-        }*/
+        }
     }
+}

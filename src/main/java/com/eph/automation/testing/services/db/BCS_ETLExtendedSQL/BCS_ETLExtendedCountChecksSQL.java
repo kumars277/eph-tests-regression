@@ -893,7 +893,7 @@ public class BCS_ETLExtendedCountChecksSQL {
                     "            coalesce (crr.subjdesc, 'na') <> coalesce (prev.subjdesc, 'na') or \n" +
                     "            coalesce (crr.priority, 'na') <> coalesce (prev.priority, 'na')))";
 
-    public static String GET_MANIF_RESTRICTION_TRANSFORM_FILE_COUNT =
+    public static String GET_MANIF_RESTRICTION_DIFF_TRANSFORM_FILE_COUNT =
             " with crr_dataset as(\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, restrictioncode, restrictionname\n" +
                     "  from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part\n" +

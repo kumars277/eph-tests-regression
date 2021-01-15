@@ -13,7 +13,7 @@ public class GetBCS_ETLCoreDLDBUser {
             }
 
         }else{
-            dbBCS = "bcs_ingestion_database_sit2";
+            dbBCS = "bcs_ingestion_database_sit";
             //dbBCS = "bcs_ingestion_database_uat";
         }
         return dbBCS;

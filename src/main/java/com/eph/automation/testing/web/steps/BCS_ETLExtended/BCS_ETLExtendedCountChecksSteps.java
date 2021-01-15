@@ -381,7 +381,7 @@ public class BCS_ETLExtendedCountChecksSteps {
                 break;
          case "etl_manifestation_restrictions_extended_transform_file_history_part":
                 Log.info("Getting Diff Curr and Previous TimeStamp for etl_manifestation_restrictions_extended_transform_file_history_part Count...");
-                BCSExtDiffTransformFileSQLCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_RESTRICTION_TRANSFORM_FILE_COUNT;
+                BCSExtDiffTransformFileSQLCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_RESTRICTION_DIFF_TRANSFORM_FILE_COUNT;
                 break;
            case "etl_product_prices_extended_transform_file_history_part":
                 Log.info("Getting Diff Curr and Previous TimeStamp for etl_product_prices_extended_transform_file_history_part Table Count...");
