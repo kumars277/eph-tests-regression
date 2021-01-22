@@ -23,8 +23,6 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
       |all_manifestation_statuses_v               |
        |all_manifestation_pubdates_v              |
 
-
-
   @BCSCore
   Scenario Outline: Verify Data count for BCS core delta history tables are transferred from delta_current tables
     Given We know the total count of delta current <SourceTableName>

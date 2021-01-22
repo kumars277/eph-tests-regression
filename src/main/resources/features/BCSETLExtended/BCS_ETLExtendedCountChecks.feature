@@ -85,13 +85,13 @@ Feature:Validate data count for BCS Extended tables
       |TargetTableName                                        |SourceTableName                                         |
      |etl_delta_current_extended_availability                |etl_availability_extended_transform_file_history_part     |
      |etl_delta_current_extended_manifestation               |etl_manifestation_extended_transform_file_history_part           |
-      |etl_delta_current_extended_page_count                  |etl_page_count_extended_transform_file_history_part                  |
-     |etl_delta_current_extended_url                         |etl_url_extended_transform_file_history_part                 |
-      |etl_delta_current_extended_work                        |etl_work_extended_transform_file_history_part        |
-     |etl_delta_current_extended_work_subject_area           |etl_work_subject_area_extended_transform_file_history_part       |
-      |etl_delta_current_extended_manifestation_restrictions  |etl_manifestation_restrictions_extended_transform_file_history_part                    |
-      |etl_delta_current_extended_product_prices              |etl_product_prices_extended_transform_file_history_part         |
-      |etl_delta_current_extended_work_person_role            |etl_work_person_role_extended_transform_file_history_part|
+     |etl_delta_current_extended_page_count                  |etl_page_count_extended_transform_file_history_part                  |
+    |etl_delta_current_extended_url                         |etl_url_extended_transform_file_history_part                 |
+    |etl_delta_current_extended_work                        |etl_work_extended_transform_file_history_part        |
+    |etl_delta_current_extended_work_subject_area           |etl_work_subject_area_extended_transform_file_history_part       |
+     |etl_delta_current_extended_manifestation_restrictions  |etl_manifestation_restrictions_extended_transform_file_history_part                    |
+     |etl_delta_current_extended_product_prices              |etl_product_prices_extended_transform_file_history_part         |
+     |etl_delta_current_extended_work_person_role            |etl_work_person_role_extended_transform_file_history_part|
 
   @BCSExtended
   Scenario Outline: Verify Data count for BCS Extended delta_current_exclude are transferred from delta_current and current_history tables
