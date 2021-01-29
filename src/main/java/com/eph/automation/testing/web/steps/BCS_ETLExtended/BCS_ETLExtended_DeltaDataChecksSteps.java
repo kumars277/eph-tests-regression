@@ -140,7 +140,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                 sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_WORK_PERS_ROLE_REC_DELTA_CURR, Joiner.on("','").join(Ids));
                 break;
         }
-        dataQualityBCSContext.recFromDeltaCurrent = DBManager.getDBResultAsBeanList(sql, BCS_ETLExtendedDataChecksSQL.class, Constants.AWS_URL);
+        dataQualityBCSContext.recFromDeltaCurrent = DBManager.getDBResultAsBeanList(sql, BCS_ETLExtendedDLAccessObject.class, Constants.AWS_URL);
         Log.info(sql);
     }
 
@@ -473,7 +473,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                 sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_PAGE_COUNT_REC_DELTA_CURR_HIST, Joiner.on("','").join(Ids));
                 break;
         }
-        dataQualityBCSContext.recFromDeltaCurrentHist = DBManager.getDBResultAsBeanList(sql, BCS_ETLExtendedDataChecksSQL.class, Constants.AWS_URL);
+        dataQualityBCSContext.recFromDeltaCurrentHist = DBManager.getDBResultAsBeanList(sql, BCS_ETLExtendedDLAccessObject.class, Constants.AWS_URL);
         Log.info(sql);
 
     }
@@ -807,7 +807,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                 sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_WORK_PERS_ROLE_REC_DIFF_DELTACURR_CURRHIST, Joiner.on("','").join(Ids));
                 break;
         }
-        dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist = DBManager.getDBResultAsBeanList(sql, BCS_ETLExtendedDataChecksSQL.class, Constants.AWS_URL);
+        dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist = DBManager.getDBResultAsBeanList(sql, BCS_ETLExtendedDLAccessObject.class, Constants.AWS_URL);
         Log.info(sql);
     }
 
@@ -843,7 +843,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                 sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_WORK_PERS_ROLE_REC_EXCL_DELTA, Joiner.on("','").join(Ids));
                 break;
         }
-        dataQualityBCSContext.recFromExclDelta = DBManager.getDBResultAsBeanList(sql, BCS_ETLExtendedDataChecksSQL.class, Constants.AWS_URL);
+        dataQualityBCSContext.recFromExclDelta = DBManager.getDBResultAsBeanList(sql, BCS_ETLExtendedDLAccessObject.class, Constants.AWS_URL);
         Log.info(sql);
     }
 

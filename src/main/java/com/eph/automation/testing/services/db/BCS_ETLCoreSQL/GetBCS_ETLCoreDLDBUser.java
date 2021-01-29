@@ -23,15 +23,15 @@ public class GetBCS_ETLCoreDLDBUser {
         String dbProd = null;
         if (System.getProperty("ENV") != null){
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
-                dbProd = "product_staging_database_sit";
+                dbProd = "product_staging_database_sit2";
             }
             else{
-                dbProd = "product_staging_database_uat";
+                dbProd = "product_staging_database_uat2";
             }
 
         }else{
-            dbProd = "product_staging_database_sit";
-             // dbProd = "bcs_ingestion_database_uat";
+            dbProd = "product_staging_database_sit2";
+             // dbProd = "bcs_ingestion_database_uat2";
         }
         return dbProd;
     }

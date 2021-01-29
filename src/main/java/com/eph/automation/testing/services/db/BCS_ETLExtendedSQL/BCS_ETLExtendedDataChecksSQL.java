@@ -5,9 +5,6 @@ import com.eph.automation.testing.services.db.BCS_ETLCoreSQL.GetBCS_ETLCoreDLDBU
 
 public class BCS_ETLExtendedDataChecksSQL {
 
-
-
-
     public static String GET_RANDOM_AVAILABILITY_KEY_INBOUND =
             "select eprid as EPRID from (\n" +
                     "SELECT distinct cr.epr eprId, concat(A.sourceref,A.application) u_key, cr.product_type productType, A.* FROM ( \n" +

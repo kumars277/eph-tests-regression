@@ -83,14 +83,14 @@ Feature:Validate data checks for BCS ETL Extended in Data Lake Access Layer
     Examples:
         |targetTable                                                | sourceTable                                               |countOfRandomIds|
      |etl_delta_current_extended_availability                    |etl_delta_history_extended_availability_part               |10              |
-    #  |etl_delta_current_extended_manifestation                   |etl_delta_history_extended_manifestation_part              |10              |
-    # |etl_delta_current_extended_page_count                      |etl_delta_history_extended_page_count_part                 |10              |
-     # |etl_delta_current_extended_url                             |etl_delta_history_extended_url_part                        |10              |
-     # |etl_delta_current_extended_work                            |etl_delta_history_extended_work_part                       |10              |
-      #|etl_delta_current_extended_work_subject_area               |etl_delta_history_extended_work_subject_area_part          |10              |
-      #|etl_delta_current_extended_manifestation_restrictions      |etl_delta_history_extended_manifestation_restrictions_part |10              |
-      # |etl_delta_current_extended_product_prices                  |etl_delta_history_extended_product_prices_part             |10              |
-      # |etl_delta_current_extended_work_person_role                |etl_delta_history_extended_work_person_role_part           |10              |
+        |etl_delta_current_extended_manifestation                   |etl_delta_history_extended_manifestation_part              |10              |
+    |etl_delta_current_extended_page_count                      |etl_delta_history_extended_page_count_part                 |10              |
+      |etl_delta_current_extended_url                             |etl_delta_history_extended_url_part                        |10              |
+      |etl_delta_current_extended_work                            |etl_delta_history_extended_work_part                       |10              |
+      |etl_delta_current_extended_work_subject_area               |etl_delta_history_extended_work_subject_area_part          |10              |
+      |etl_delta_current_extended_manifestation_restrictions      |etl_delta_history_extended_manifestation_restrictions_part |10              |
+       |etl_delta_current_extended_product_prices                  |etl_delta_history_extended_product_prices_part             |10              |
+       |etl_delta_current_extended_work_person_role                |etl_delta_history_extended_work_person_role_part           |10              |
 
   @BCSExtended
   Scenario Outline: Verify Data from the difference of BCS Extended Delta_Current and Current_history is transferred to BCS Extended exclude table
@@ -101,14 +101,14 @@ Feature:Validate data checks for BCS ETL Extended in Data Lake Access Layer
     Examples:
       | targetTable                                                             |  countOfRandomIds |
       | etl_transform_history_extended_availability_excl_delta                  | 10                |
-      #| etl_transform_history_extended_manifestation_excl_delta                 | 10                |
-      #| etl_transform_history_extended_page_count_excl_delta                    | 10                |
-      #| etl_transform_history_extended_url_excl_delta                           | 10                |
-      #| etl_transform_history_extended_work_excl_delta                          | 10                |
-     # | etl_transform_history_extended_work_subject_area_excl_delta             | 10                |
-      #| etl_transform_history_extended_manifestation_restrictions_excl_delta    | 10                |
-     # | etl_transform_history_extended_product_prices_excl_delta                | 10                |
-     # | etl_transform_history_extended_work_person_role_excl_delta              | 10                |
+      | etl_transform_history_extended_manifestation_excl_delta                 | 10                |
+      | etl_transform_history_extended_page_count_excl_delta                    | 10                |
+      | etl_transform_history_extended_url_excl_delta                           | 10                |
+      | etl_transform_history_extended_work_excl_delta                          | 10                |
+      | etl_transform_history_extended_work_subject_area_excl_delta             | 10                |
+      | etl_transform_history_extended_manifestation_restrictions_excl_delta    | 10                |
+     | etl_transform_history_extended_product_prices_excl_delta                | 10                |
+      | etl_transform_history_extended_work_person_role_excl_delta              | 10                |
 
 
   @BCSExtended

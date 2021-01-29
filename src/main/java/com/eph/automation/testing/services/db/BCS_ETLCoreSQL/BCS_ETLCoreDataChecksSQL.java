@@ -52,6 +52,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     "SELECT DISTINCT\n" +
                     "     NULLIF(sourceref,'') worksourceref\n" +
                     "   , NULLIF(CAST(businesspartnerid AS varchar),'') personsourceref\n" +
+                    "   , NULLIF(CAST(old_businesspartnerid AS varchar),'') linking_id\n" +
                     "   , NULLIF(rolecode.ephcode,'') roletype\n" +
                     "   , NULLIF(sourceref,'')||NULLIF(rolecode.ephcode,'')||NULLIF(CAST(businesspartnerid AS varchar),'') as u_key\n" +
                     "   , NULLIF(CAST(sequence AS varchar),'') sequence\n" +
@@ -60,8 +61,10 @@ public class BCS_ETLCoreDataChecksSQL {
                     "   , 'N' dq_err\n" +
                     "FROM\n" +
                     "((SELECT sourceref,\n" +
-                    " concat(cast(businesspartnerid as varchar),(CASE WHEN (isperson = 'N') THEN department ELSE firstname END),(CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)) businesspartnerid, \n" +
-                    " businesspartnerid old_businessparterid,\n" +
+                    " lower(to_hex(md5(to_utf8(concat(cast(businesspartnerid as varchar)" +
+                    ",TRIM(UPPER((CASE WHEN (isperson = 'N') THEN department ELSE firstname END)))" +
+                    ",TRIM(UPPER((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))) businesspartnerid, \n" +
+                    "businesspartnerid old_businesspartnerid,\n" +
                     "copyrightholdertype,\n" +
                     "sequence,\n" +
                     "metamodifiedon,\n" +
@@ -75,9 +78,10 @@ public class BCS_ETLCoreDataChecksSQL {
                     "UNION \n" +
                     "SELECT\n" +
                     "     NULLIF(r.sourceref,'') worksourceref\n" +
-                    "   , NULLIF(w.peoplehub_id,'') personsourceref \n" +
+                    "   , NULLIF(lower(to_hex(md5(to_utf8(w.peoplehub_id)))),'') personsourceref \n" +
+                    "   , NULLIF(w.peoplehub_id,'') linking_id \n" +
                     "   , NULLIF(rolecode.ephcode,'') roletype\n" +
-                    "   , r.sourceref||rolecode.ephcode||w.peoplehub_id as u_key \n" +
+                    "   , r.sourceref||rolecode.ephcode||lower(to_hex(md5(to_utf8(w.peoplehub_id)))) as u_key \n" +
                     "   , (CASE WHEN (substr(split_part(NULLIF(responsibility,''), ' | ', 1), -1, 1) = '2') THEN '2' ELSE '1' END) sequence\n" +
                     "   , '0' deduplicator\n" +
                     "   , date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
@@ -88,8 +92,8 @@ public class BCS_ETLCoreDataChecksSQL {
                     "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".rolecode ON (split_part(responsibility, ' | ', 1) = rolecode.ppmcode)) \n" +
                     ") A\n" +
                     "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily vf on a.worksourceref = vf.workmasterprojectno and a.worksourceref = vf.sourceref\n" +
-                    "WHERE (((A.worksourceref IS NOT NULL) AND (A.personsourceref IS NOT NULL)) AND (A.roletype IS NOT NULL)) \n" +
-                     "order by rand() limit %s \n";
+                    "WHERE (((A.worksourceref IS NOT NULL) AND (A.personsourceref IS NOT NULL)) AND (A.roletype IS NOT NULL)) \n"+
+                   "order by rand() limit %s \n";
 
     public static String GET_RANDOM_WORK_KEY_INBOUND =
             "SELECT u_key as sourceref \n" +
@@ -306,7 +310,6 @@ public class BCS_ETLCoreDataChecksSQL {
                     "WHERE (A.sourceref IS NOT NULL) and u_key in ('%s') order by u_key desc";
 
     public static String GET_WORK_PERS_INBOUND_DATA =
-
             "select " +
                     "worksourceref as WORKSOURCEREF \n" +
                     ",personsourceref as PERSONSOURCEREF \n" +
@@ -319,6 +322,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     "SELECT DISTINCT\n" +
                     "     NULLIF(sourceref,'') worksourceref\n" +
                     "   , NULLIF(CAST(businesspartnerid AS varchar),'') personsourceref\n" +
+                    "   , NULLIF(CAST(old_businesspartnerid AS varchar),'') linking_id\n" +
                     "   , NULLIF(rolecode.ephcode,'') roletype\n" +
                     "   , NULLIF(sourceref,'')||NULLIF(rolecode.ephcode,'')||NULLIF(CAST(businesspartnerid AS varchar),'') as u_key\n" +
                     "   , NULLIF(CAST(sequence AS varchar),'') sequence\n" +
@@ -327,8 +331,10 @@ public class BCS_ETLCoreDataChecksSQL {
                     "   , 'N' dq_err\n" +
                     "FROM\n" +
                     "((SELECT sourceref,\n" +
-                    " concat(cast(businesspartnerid as varchar),(CASE WHEN (isperson = 'N') THEN department ELSE firstname END),(CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)) businesspartnerid, \n" +
-                    " businesspartnerid old_businessparterid,\n" +
+                    " lower(to_hex(md5(to_utf8(concat(cast(businesspartnerid as varchar)" +
+                    ",TRIM(UPPER((CASE WHEN (isperson = 'N') THEN department ELSE firstname END)))" +
+                    ",TRIM(UPPER((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))) businesspartnerid, \n" +
+                    "businesspartnerid old_businesspartnerid,\n" +
                     "copyrightholdertype,\n" +
                     "sequence,\n" +
                     "metamodifiedon,\n" +
@@ -342,9 +348,10 @@ public class BCS_ETLCoreDataChecksSQL {
                     "UNION \n" +
                     "SELECT\n" +
                     "     NULLIF(r.sourceref,'') worksourceref\n" +
-                    "   , NULLIF(w.peoplehub_id,'') personsourceref \n" +
+                    "   , NULLIF(lower(to_hex(md5(to_utf8(w.peoplehub_id)))),'') personsourceref \n" +
+                    "   , NULLIF(w.peoplehub_id,'') linking_id \n" +
                     "   , NULLIF(rolecode.ephcode,'') roletype\n" +
-                    "   , r.sourceref||rolecode.ephcode||w.peoplehub_id as u_key \n" +
+                    "   , r.sourceref||rolecode.ephcode||lower(to_hex(md5(to_utf8(w.peoplehub_id)))) as u_key \n" +
                     "   , (CASE WHEN (substr(split_part(NULLIF(responsibility,''), ' | ', 1), -1, 1) = '2') THEN '2' ELSE '1' END) sequence\n" +
                     "   , '0' deduplicator\n" +
                     "   , date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
@@ -355,7 +362,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".rolecode ON (split_part(responsibility, ' | ', 1) = rolecode.ppmcode)) \n" +
                     ") A\n" +
                     "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily vf on a.worksourceref = vf.workmasterprojectno and a.worksourceref = vf.sourceref\n" +
-                    "WHERE (((A.worksourceref IS NOT NULL) AND (A.personsourceref IS NOT NULL)) AND (A.roletype IS NOT NULL)) \n" +
+                    "WHERE (((A.worksourceref IS NOT NULL) AND (A.personsourceref IS NOT NULL)) AND (A.roletype IS NOT NULL)) \n"+
                     "and u_key in ('%s') order by u_key desc";
 
 
@@ -476,7 +483,9 @@ public class BCS_ETLCoreDataChecksSQL {
                     "  ( \n" +
                     "   SELECT DISTINCT \n" +
                     "     businesspartnerid sourceref \n" +
-                    "   , concat(cast(businesspartnerid as varchar),(CASE WHEN (isperson = 'N') THEN department ELSE firstname END),(CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))u_key \n" +
+                    "   , lower (to_hex(md5(to_utf8(concat(cast(businesspartnerid as varchar)" +
+                    "   ,TRIM(UPPER((CASE WHEN (isperson = 'N') THEN department ELSE firstname END)))" +
+                    "   ,TRIM(UPPER((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))))))))u_key \n" +
                     "   , (CASE WHEN (isperson = 'N') THEN NULLIF(department, '') ELSE NULLIF(firstname, '') END) firstname \n" +
                     "   , (CASE WHEN (isperson = 'N') THEN NULLIF(institution, '') ELSE NULLIF(lastname, '') END) familyname \n" +
                     "   , CAST(null AS varchar) peoplehub_id \n" +
@@ -500,7 +509,9 @@ public class BCS_ETLCoreDataChecksSQL {
                 "FROM( \n" +
                 "   SELECT DISTINCT\n" +
                 "     businesspartnerid sourceref \n" +
-                "   , concat(cast(businesspartnerid as varchar),(CASE WHEN (isperson = 'N') THEN department ELSE firstname END),(CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))u_key \n" +
+                "   , lower (to_hex(md5(to_utf8(concat(cast(businesspartnerid as varchar)" +
+                "   ,TRIM(UPPER((CASE WHEN (isperson = 'N') THEN department ELSE firstname END)))" +
+                "   ,TRIM(UPPER((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))))))))u_key \n" +
                 "   , (CASE WHEN (isperson = 'N') THEN NULLIF(department, '') ELSE NULLIF(firstname, '') END) firstname \n" +
                 "   , (CASE WHEN (isperson = 'N') THEN NULLIF(institution, '') ELSE NULLIF(lastname, '') END) familyname \n" +
                 "   , CAST(null AS varchar) peoplehub_id \n" +
