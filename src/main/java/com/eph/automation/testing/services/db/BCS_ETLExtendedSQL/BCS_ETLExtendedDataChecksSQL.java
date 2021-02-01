@@ -123,7 +123,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "A.sourceref = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
                     "cr.record_level = 'Product'\n" +
-                    "WHERE A.metadeleted = FALSE ) where eprid in ('%s') order by eprid desc\n";
+                    "WHERE A.metadeleted = FALSE ) where eprid in ('%s') order by eprid,u_key desc\n";
 
     public static String GET_AVAILABILITY_REC_CURR_DATA=
             "select u_key as UKEY " +
@@ -139,7 +139,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",status as status" +
                     ",metadeleted as metadeleted" +
                     " from "+ GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_current_v " +
-                    "where eprid in ('%s') order by eprid desc\n";
+                    "where eprid in ('%s') order by eprid,u_key desc\n";
 
     public static String GET_RANDOM_MANIF_EXT_KEY_INBOUND =
             "select eprid as EPRID from (\n" +
@@ -165,7 +165,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   LEFT JOIN "+ GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_production p ON (m.sourceref = p.sourceref))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ukt ON ((m.sourceref = ukt.sourceref) AND (ukt.classificationcode LIKE 'MAUKT%%')))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ust ON ((m.sourceref = ust.sourceref) AND (ust.classificationcode LIKE 'MAUST%%')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification usd ON ((m.sourceref = usd.sourceref) AND (usd.classificationcode LIKE 'MADISC%%')))\n" +
+                    "   LEFT JOIN "+ GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification usd ON ((m.sourceref = usd.sourceref) AND (usd.classificationcode LIKE 'MADISC %%')))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ukd ON ((m.sourceref = ukd.sourceref) AND (ukd.classificationcode LIKE 'MADISCEMEA%%')))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON ((m.sourceref = c.sourceref) AND (c.classificationcode LIKE 'DCDFC1%%')))\n" +
                     ")\n" +
@@ -174,7 +174,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "A.sourceref = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
                     "cr.record_level = 'Manifestation'\n" +
-                    "WHERE A.metadeleted = false) order by rand() limit %s \n";
+                    "WHERE A.metadeleted = false)order by rand() limit %s \n";
 
     public static String GET_MANIF_EXT_REC_INBOUND_DATA =
             "select eprid as EPRID " +
@@ -218,7 +218,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   LEFT JOIN "+ GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_production p ON (m.sourceref = p.sourceref))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ukt ON ((m.sourceref = ukt.sourceref) AND (ukt.classificationcode LIKE 'MAUKT%%')))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ust ON ((m.sourceref = ust.sourceref) AND (ust.classificationcode LIKE 'MAUST%%')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification usd ON ((m.sourceref = usd.sourceref) AND (usd.classificationcode LIKE 'MADISC%%')))\n" +
+                    "   LEFT JOIN "+ GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification usd ON ((m.sourceref = usd.sourceref) AND (usd.classificationcode LIKE 'MADISC %%')))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ukd ON ((m.sourceref = ukd.sourceref) AND (ukd.classificationcode LIKE 'MADISCEMEA%%')))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON ((m.sourceref = c.sourceref) AND (c.classificationcode LIKE 'DCDFC1%%')))\n" +
                     ")\n" +
@@ -227,7 +227,8 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "A.sourceref = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
                     "cr.record_level = 'Manifestation'\n" +
-                    "WHERE A.metadeleted = false) where eprid in ('%s') order by eprid desc\n";
+                    "WHERE A.metadeleted = false) where eprid in ('%s') order by eprid,u_key desc\n";
+
 
     public static String GET_MANIF_EXT_REC_CURR_DATA =
             "select eprid as EPRID " +
@@ -248,7 +249,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalprodsitecode as journalprodsitecode" +
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
-                    " from " +GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_current_v where eprid in ('%s') order by eprid desc \n";
+                    " from " +GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_current_v where eprid in ('%s') order by eprid,u_key desc \n";
 
     public static String GET_RANDOM_PAGE_COUNT_KEY_INBOUND=
             "select eprid as EPRID from (\n" +
@@ -331,7 +332,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "A.sourceref = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
                     "cr.record_level = 'Manifestation'\n" +
-                    "WHERE A.metadeleted = FALSE ) where eprid in ('%s') order by eprid desc";
+                    "WHERE A.metadeleted = FALSE ) where eprid in ('%s') order by eprid,u_key desc";
 
     public static String GET_PAGE_COUNT_REC_CURR_DATA =
             "select eprid as EPRID " +
@@ -343,7 +344,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",pagecounttypecode as pagecounttypecode" +
                     ",pagecounttypename as pagecounttypename" +
                     ",pagecount as pagecount" +
-                    " from " +GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_current_v where eprid in ('%s') order by eprid desc";
+                    " from " +GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
 
     public static String GET_RANDOM_URL_KEY_INBOUND=
             "select eprid as EPRID from (\n" +
@@ -397,7 +398,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "f.workmasterprojectno = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
                     "cr.record_level = 'Work'\n" +
-                    "WHERE A.metadeleted = FALSE) where eprid in ('%s') order by eprid desc";
+                    "WHERE A.metadeleted = FALSE) where eprid in ('%s') order by eprid,u_key desc";
 
     public static String GET_URL_REC_CURR_DATA =
             "select eprid as EPRID " +
@@ -410,7 +411,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",urltypecode as urltypecode" +
                     ",source as source" +
                     ",name as name" +
-                    " from " +GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_current_v where eprid in ('%s') order by eprid desc";
+                    " from " +GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
 
     public static String GET_WORK_EXT_REC_CURR_DATA =
             "select eprid as EPRID " +
@@ -456,7 +457,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",rflvi as rflvi" +
                     ",journalprevioustitle as journalprevioustitle" +
                     ",journalprimaryauthor as journalprimaryauthor" +
-                    " from " +GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_current_v where eprid in ('%s') order by eprid desc";
+                    " from " +GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
 
     public static String GET_RANDOM_WORK_EXT_KEY_INBOUND=
             "select eprid as EPRID from (\n" +
@@ -682,7 +683,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "A.sourceref = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
                     "cr.record_level = 'Work'\n" +
-                    "WHERE A.metadeleted = FALSE) where eprid in ('%s') order by eprid desc";
+                    "WHERE A.metadeleted = FALSE) where eprid in ('%s') order by eprid,u_key desc";
 
     public static String GET_RANDOM_WORK_SUBJ_AREA_KEY_INBOUND =
             "select eprid as EPRID " +
@@ -842,7 +843,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "A.sourceref = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
                     "cr.record_level = 'Work'\n" +
-                    "WHERE A.metadeleted = FALSE) where eprid in ('%s') order by eprid desc";
+                    "WHERE A.metadeleted = FALSE) where eprid in ('%s') order by eprid,u_key desc";
 
     public static String GET_WORK_SUBJ_AREA_REC_CURR_DATA=
             "select eprid as EPRID " +
@@ -856,7 +857,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",subjcode as subjcode" +
                     ",subjdesc as subjdesc" +
                     ",priority as priority" +
-                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_current_v where eprid in ('%s') order by eprid desc";
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
 
     public static String GET_RANDOM_MANIF_RESTRICT_KEY_INBOUND =
             "select eprid as EPRID from (\n" +
@@ -902,7 +903,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "A.sourceref = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
                     "cr.record_level = 'Manifestation'\n" +
-                    "WHERE A.metadeleted = FALSE) where eprid in ('%s') order by eprid desc";
+                    "WHERE A.metadeleted = FALSE) where eprid in ('%s') order by eprid,u_key desc";
 
     public static String GET_MANIF_RESTRICT_REC_CURR_DATA=
             "select eprid as EPRID " +
@@ -913,7 +914,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",metadeleted as metadeleted" +
                     ",restrictioncode as restrictioncode" +
                     ",restrictionname as restrictionname" +
-                    " from " +GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_current_v where eprid in ('%s') order by eprid desc";
+                    " from " +GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
 
     public static String GET_RANDOM_PROD_PRICE_KEY_INBOUND=
             "select eprid as EPRID" +
@@ -976,7 +977,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   INNER JOIN " +GetBCS_ETLCoreDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr\n" +
                     "ON (((A.sourceref = cr.identifier) \n" +
                     "AND (cr.identifier_type = 'external_reference'))\n" +
-                    "AND (cr.record_level = 'Product')))) where eprid in ('%s') order by eprid desc";
+                    "AND (cr.record_level = 'Product')))) where eprid in ('%s') order by eprid,u_key desc";
 
     public static String GET_PROD_PRICE_REC_CURR_DATA=
             "select eprid as EPRID " +
@@ -993,7 +994,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",pricecategory as pricecategory" +
                     ",pricecustomercategory as pricecustomercategory" +
                     ",pricepurchasequantity as pricepurchasequantity" +
-                    " from " +GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_current_v where eprid in ('%s') order by eprid desc";
+                    " from " +GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
 
     public static String GET_RANDOM_WORK_PERS_ROLE_KEY_INBOUND=
             "WITH\n" +
@@ -1171,7 +1172,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "LEFT JOIN orignotes h ON ((o.businesspartnerid = h.businesspartnerid) AND (split_part(h.notestype, ' | ', 1) = 'DEG')))\n" +
                     "LEFT JOIN orignotes a ON ((o.businesspartnerid = a.businesspartnerid) AND (split_part(a.notestype, ' | ', 1) = 'AFIL')))\n" +
                     "LEFT JOIN orignotes n ON ((o.businesspartnerid = n.businesspartnerid) AND (split_part(n.notestype, ' | ', 1) = 'BIO')))\n" +
-                    "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((concat(o.sourceref, rolecode.ephcode, CAST(o.businesspartnerid AS varchar)) = gwp.external_reference) AND (gwp.effective_end_date IS NULL)))) where eprid in ('%s') order by eprid desc";
+                    "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((concat(o.sourceref, rolecode.ephcode, CAST(o.businesspartnerid AS varchar)) = gwp.external_reference) AND (gwp.effective_end_date IS NULL)))) where eprid in ('%s') order by eprid,u_key desc";
     //"WHERE o.metadeleted = 'N'\n";
 
     public static String GET_WORK_PERS_ROLE_REC_CURR_DATA =
@@ -1196,7 +1197,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",groupnumber as groupnumber" +
                     //  ",metamodifiedon as metamodifiedon" +
                     ",metadeleted as metadeleted" +
-                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_current_v where eprid in ('%s') order by eprid desc";
+                    " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
 
     public static String GET_RANDOM_AVAILABILITY_KEY_CURRENT =
             "select eprid as EPRID " +
@@ -1249,7 +1250,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",metadeleted as metadeleted" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_part where " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_part)" +
-                    " and eprid in('%s') order by eprid desc";
+                    " and eprid in('%s') order by eprid,u_key desc";
 
     public static String GET_AVAILABILTYI_REC_TRANS_FILE =
             "select u_key as UKEY " +
@@ -1266,7 +1267,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",metadeleted as metadeleted" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part)" +
-                    " and eprid in('%s') order by eprid desc";
+                    " and eprid in('%s') order by eprid,u_key desc";
 
     public static String GET_MANIF_EXT_REC_CURR_HIST_DATA =
             "select eprid as EPRID " +
@@ -1289,7 +1290,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",warreference as warreference" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_part where " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_part)" +
-                    " and eprid in('%s') order by eprid desc";
+                    " and eprid in('%s') order by eprid,u_key desc";
 
     public static String GET_MANIF_EXT_REC_TRANS_FILE =
             "select eprid as EPRID " +
@@ -1312,7 +1313,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",warreference as warreference" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part)" +
-                    " and eprid in('%s') order by eprid desc";
+                    " and eprid in('%s') order by eprid,u_key desc";
 
     public static String GET_PAGE_COUNT_REC_CURR_HIST_DATA =
             "select eprid as EPRID " +
@@ -1326,7 +1327,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",pagecount as pagecount" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_part where " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_part)" +
-                    " and eprid in('%s') order by eprid desc";
+                    " and eprid in('%s') order by eprid,u_key desc";
 
     public static String GET_PAGE_COUNT_REC_TRANS_FILE =
             "select eprid as EPRID " +
@@ -1340,7 +1341,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",pagecount as pagecount" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_transform_file_history_part where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_transform_file_history_part)" +
-                    " and eprid in('%s') order by eprid desc";
+                    " and eprid in('%s') order by eprid,u_key desc";
 
     public static String GET_URL_REC_CURR_HIST_DATA =
             "select eprid as EPRID " +
@@ -1355,7 +1356,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",name as name" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_part where " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_part)" +
-                    " and eprid in('%s') order by eprid desc";
+                    " and eprid in('%s') order by eprid,u_key desc";
 
     public static String GET_URL_REC_TRANS_FILE =
             "select eprid as EPRID " +
@@ -1370,7 +1371,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",name as name" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_transform_file_history_part where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_transform_file_history_part)" +
-                    " and eprid in('%s') order by eprid desc";
+                    " and eprid in('%s') order by eprid,u_key desc";
 
     public static String GET_WORK_EXT_REC_CURR_HIST_DATA =
             "select eprid as EPRID " +
@@ -1418,7 +1419,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalprimaryauthor as journalprimaryauthor" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_part where " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_part)" +
-                    " and eprid in('%s') order by eprid desc";
+                    " and eprid in('%s') order by eprid,u_key desc";
 
     public static String GET_WORK_EXT_REC_TRANS_FILE =
             "select eprid as EPRID " +
@@ -1466,7 +1467,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalprimaryauthor as journalprimaryauthor" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_transform_file_history_part where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_transform_file_history_part)" +
-                    " and eprid in('%s') order by eprid desc";
+                    " and eprid in('%s') order by eprid,u_key desc";
 
     public static String GET_WORK_SUB_AREA_REC_CURR_HIST_DATA =
             "select eprid as EPRID " +
@@ -1482,7 +1483,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",priority as priority" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_part where " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_part)" +
-                    " and eprid in('%s') order by eprid desc";
+                    " and eprid in('%s') order by eprid,u_key desc";
 
     public static String GET_WORK_SUB_AREA_REC_TRANS_FILE =
             "select eprid as EPRID " +
@@ -1498,7 +1499,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",priority as priority" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part)" +
-                    " and eprid in('%s') order by eprid desc";
+                    " and eprid in('%s') order by eprid,u_key desc";
 
     public static String GET_MANIF_RESTRICT_CURR_HIST_DATA =
             "select eprid as EPRID " +
@@ -1511,7 +1512,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",restrictionname as restrictionname" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part where " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part)" +
-                    " and eprid in('%s') order by eprid desc";
+                    " and eprid in('%s') order by eprid,u_key desc";
 
     public static String GET_MANIF_RESTRICT_REC_TRANS_FILE =
             "select eprid as EPRID " +
@@ -1524,7 +1525,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",restrictionname as restrictionname" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part)" +
-                    " and eprid in('%s') order by eprid desc";
+                    " and eprid in('%s') order by eprid,u_key desc";
 
     public static String GET_PROD_PRICE_REC_CURR_HIST_DATA =
             "select eprid as EPRID " +
@@ -1543,7 +1544,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",pricepurchasequantity as pricepurchasequantity" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_part where " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_part)" +
-                    " and eprid in('%s') order by eprid desc";
+                    " and eprid in('%s') order by eprid,u_key desc";
 
     public static String GET_PROD_PRICE_REC_TRANS_FILE =
             "select eprid as EPRID " +
@@ -1562,7 +1563,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",pricepurchasequantity as pricepurchasequantity" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_transform_file_history_part where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_transform_file_history_part)" +
-                    " and eprid in('%s') order by eprid desc";
+                    " and eprid in('%s') order by eprid,u_key desc";
 
     public static String GET_WORK_PERS_ROLE_REC_CURR_HIST_DATA =
             "select eprid as EPRID " +
@@ -1588,7 +1589,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",metadeleted as metadeleted" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_part where " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_part)" +
-                    " and eprid in('%s') order by eprid desc";
+                    " and eprid in('%s') order by eprid,u_key desc";
 
     public static String GET_WORK_PERS_ROLE_REC_TRANS_FILE =
             "select eprid as EPRID " +
@@ -1614,7 +1615,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",metadeleted as metadeleted" +
                     " from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part)" +
-                    " and eprid in('%s') order by eprid desc";
+                    " and eprid in('%s') order by eprid,u_key desc";
 
     public static String GET_RANDOM_AVAILABILITY_KEY_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +

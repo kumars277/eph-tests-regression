@@ -77,7 +77,8 @@ public class BCS_ETLExtendedCountChecksSQL {
             "WHERE A.metadeleted = FALSE )\n";
 
 
-    public static String GET_MANIFESTATION_INBOUND_CURRENT_COUNT="select count(*) as Source_Count from (\n" +
+    public static String GET_MANIFESTATION_INBOUND_CURRENT_COUNT=
+            "select count(*) as Source_Count from (\n" +
             "SELECT distinct cr.epr eprId, A.sourceref u_key, cr.manifestation_type, A.* FROM ( \n" +
             "SELECT\n" +
             "     NULLIF(m.sourceref,'') sourceref \n" +
