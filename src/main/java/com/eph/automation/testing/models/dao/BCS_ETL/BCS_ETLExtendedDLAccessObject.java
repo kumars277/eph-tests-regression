@@ -31,10 +31,11 @@ public class BCS_ETLExtendedDLAccessObject {
     private String pagecounttypecode;
     private String pagecounttypename;
     private String pagecount;
+    private String typecode;
 
     private String urltypecode;
     private String urltypename;
-
+private String typedesc;
     private String name;
 
     private String companygroup;
@@ -104,11 +105,40 @@ public class BCS_ETLExtendedDLAccessObject {
     private String groupnumber;
     private String metamodifiedon;
     private String DELTA_MODE;
+    private String subjdesc;
+    private String subjcode;
+    private String priority;
 
 
     public String getfootnotetxt() { return footnotetxt; }
     public void setfootnotetxt(String footnotetxt) {
         this.footnotetxt = footnotetxt;
+    }
+
+    public String getpriority() { return priority; }
+    public void setpriority(String priority) {
+        this.priority = priority;
+    }
+
+    public String getsubjcode() { return subjcode; }
+    public void setsubjcode(String subjcode) {
+        this.subjcode = subjcode;
+    }
+    public String getsubjdesc() { return subjdesc; }
+    public void setsubjdesc(String subjdesc) {
+        this.subjdesc = subjdesc;
+    }
+
+
+
+    public String gettypecode() { return typecode; }
+    public void settypecode(String typecode) {
+        this.typecode = typecode;
+    }
+
+    public String gettypedesc() { return typedesc; }
+    public void settypedesc(String typedesc) {
+        this.typedesc = typedesc;
     }
 
     public String getDELTA_MODE() { return DELTA_MODE; }
