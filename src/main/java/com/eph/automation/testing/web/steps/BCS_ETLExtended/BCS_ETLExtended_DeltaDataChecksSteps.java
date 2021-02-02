@@ -155,6 +155,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_delta_current_extended_availability":
                         dataQualityBCSContext.recFromDiffOfTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromDiffOfTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+
                         Log.info("comparing etl_delta_current_extended_availability and etl_availability_extended_transform_file_history_part records...");
                         String[] all_availability_Col = {"getEPRID", "getmetadeleted", "getPRODUCTTYPE", "getstatus", "getpubdateactual", "getanzpubstatus", "getdeltaanswercodeuk", "getdeltaanswercodeus", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getAPPLICATION", "getDELTA_MODE"};
                         for (String strTemp : all_availability_Col) {
@@ -181,6 +184,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_delta_current_extended_manifestation":
                         dataQualityBCSContext.recFromDiffOfTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromDiffOfTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+
                         Log.info("comparing etl_delta_current_extended_manifestation and etl_manifestation_extended_transform_file_history_part records...");
                         String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type", "getuktextbookind", "getustextbookind", "getusdiscountcode", "getusdiscountname", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getemeadiscountcode", "getemeadiscountname", "gettrimsize", "getweight", "getcommcode", "getjournalprodsitecode", "getjournalissuetrimsize", "getwarreference", "getDELTA_MODE"};
                         for (String strTemp : all_manif_ext_Col) {
@@ -207,6 +213,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_delta_current_extended_page_count":
                         dataQualityBCSContext.recFromDiffOfTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromDiffOfTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+
                         Log.info("comparing etl_delta_current_extended_page_count and etl_page_count_extended_transform_file_history_part records...");
                         String[] all_pagecount_Col = {"getEPRID", "getUKEY", "getmanifestation_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getpagecounttypecode", "getpagecounttypename", "getpagecount", "getDELTA_MODE"};
                         for (String strTemp : all_pagecount_Col) {
@@ -233,6 +242,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_delta_current_extended_url":
                         dataQualityBCSContext.recFromDiffOfTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromDiffOfTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+
                         Log.info("comparing etl_delta_current_extended_url and etl_url_extended_transform_file_history_part records...");
                         String[] all_url_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "geturltypecode", "geturltypecode", "getsource", "getname", "getDELTA_MODE"};
                         for (String strTemp : all_url_Col) {
@@ -259,6 +271,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_delta_current_extended_work":
                         dataQualityBCSContext.recFromDiffOfTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromDiffOfTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+
                         Log.info("comparing etl_work_extended_transform_file_history_part and etl_delta_current_extended_work records...");
                         String[] all_work_ext_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getcompanygroup", "getimagefileref", "getworkmasterisbn", "gettextreftrade",
                                 "getfeatures", "getawards", "gettoc_long", "gettoc_short", "getaudience", "getauthorbyline", "getdescription", "getsbu", "getprofitcentre", "getreview", "getjournalelscomind",
@@ -289,6 +304,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_delta_current_extended_work_subject_area":
                         dataQualityBCSContext.recFromDiffOfTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromDiffOfTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+
                         Log.info("comparing etl_work_subject_area_extended_transform_file_history_part and etl_delta_current_extended_work_subject_area records...");
                         String[] all_work_subj_area_ext_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "gettypecode", "gettypedesc", "getsubjcode", "getsubjdesc",
                                 "getpriority", "getDELTA_MODE"};
@@ -316,6 +334,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_delta_current_extended_manifestation_restrictions":
                         dataQualityBCSContext.recFromDiffOfTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromDiffOfTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+
                         Log.info("comparing etl_manifestation_restrictions_extended_transform_file_history_part and etl_delta_current_extended_manifestation_restrictions records...");
                         String[] all_manif_restrict_Col = {"getEPRID", "getUKEY", "getmanifestation_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getrestrictioncode", "getrestrictionname", "getDELTA_MODE"};
                         for (String strTemp : all_manif_restrict_Col) {
@@ -342,8 +363,11 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_delta_current_extended_product_prices":
                         dataQualityBCSContext.recFromDiffOfTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromDiffOfTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+
                         Log.info("comparing etl_product_prices_extended_transform_file_history_part and etl_delta_current_extended_product_prices records...");
-                        String[] all_prod_price_Col = {"getEPRID", "getUKEY", "getproduct_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getpricecurrency", "getpriceamount", "getpricestartdate", "getpriceenddate"
+                        String[] all_prod_price_Col = {"getEPRID", "getUKEY", "getPRODUCTTYPE", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getpricecurrency", "getpriceamount", "getpricestartdate", "getpriceenddate"
                                 , "getpriceregion", "getpricecategory", "getpricecustomercategory", "getpricepurchasequantity", "getDELTA_MODE"};
                         for (String strTemp : all_prod_price_Col) {
                             java.lang.reflect.Method method;
@@ -369,6 +393,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_delta_current_extended_work_person_role":
                         dataQualityBCSContext.recFromDiffOfTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromDiffOfTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+
                         Log.info("comparing etl_work_person_role_extended_transform_file_history_part and etl_delta_current_extended_work_person_role records...");
                         String[] all_pers_role_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getcore_reference", "getworksourceref", "getpersonsourceref", "getsource", "getroletype", "getrolename",
                                 "gettitle", "getperson_first_name", "getperson_family_name", "getemail_address", "gethonours", "getaffiliation", "getimageurl", "getfootnotetxt", "getnotestxt", "getsequence", "getgroupnumber", "getmetamodifiedon", "getDELTA_MODE"};
@@ -489,6 +516,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_delta_current_extended_availability":
                         dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+                        dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+
                         Log.info("comparing etl_delta_current_extended_availability and etl_availability_extended_delta_history_part records...");
                         String[] all_availability_Col = {"getEPRID", "getmetadeleted", "getPRODUCTTYPE", "getstatus", "getpubdateactual", "getanzpubstatus", "getdeltaanswercodeuk", "getdeltaanswercodeus", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getAPPLICATION", "getDELTA_MODE"};
                         for (String strTemp : all_availability_Col) {
@@ -515,6 +545,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_delta_current_extended_manifestation":
                         dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+                        dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+
                         Log.info("comparing etl_delta_current_extended_manifestation and etl_manifestation_extended_delta_history_part records...");
                         String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type", "getuktextbookind", "getustextbookind", "getusdiscountcode", "getusdiscountname", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getemeadiscountcode", "getemeadiscountname", "gettrimsize", "getweight", "getcommcode", "getjournalprodsitecode", "getjournalissuetrimsize", "getwarreference", "getDELTA_MODE"};
                         for (String strTemp : all_manif_ext_Col) {
@@ -541,6 +574,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_delta_current_extended_page_count":
                         dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+                        dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+
                         Log.info("comparing etl_delta_current_extended_page_count and etl_page_count_extended_delta_history_part records...");
                         String[] all_pagecount_Col = {"getEPRID", "getUKEY", "getmanifestation_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getpagecounttypecode", "getpagecounttypename", "getpagecount", "getDELTA_MODE"};
                         for (String strTemp : all_pagecount_Col) {
@@ -567,6 +603,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_delta_current_extended_url":
                         dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+                        dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+
                         Log.info("comparing etl_delta_current_extended_url and etl_url_extended_delta_history_part records...");
                         String[] all_url_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "geturltypecode", "geturltypecode", "getsource", "getname", "getDELTA_MODE"};
                         for (String strTemp : all_url_Col) {
@@ -593,6 +632,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_delta_current_extended_work":
                         dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+                        dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+
                         Log.info("comparing etl_work_extended_delta_history_part and etl_delta_current_extended_work records...");
                         String[] all_work_ext_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getcompanygroup", "getimagefileref", "getworkmasterisbn", "gettextreftrade",
                                 "getfeatures", "getawards", "gettoc_long", "gettoc_short", "getaudience", "getauthorbyline", "getdescription", "getsbu", "getprofitcentre", "getreview", "getjournalelscomind",
@@ -623,6 +665,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_delta_current_extended_work_subject_area":
                         dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+                        dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+
                         Log.info("comparing etl_work_subject_area_extended_delta_history_part and etl_delta_current_extended_work_subject_area records...");
                         String[] all_work_subj_area_ext_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "gettypecode", "gettypedesc", "getsubjcode", "getsubjdesc",
                                 "getpriority", "getDELTA_MODE"};
@@ -650,6 +695,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_delta_current_extended_manifestation_restrictions":
                         dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+                        dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+
                         Log.info("comparing etl_manifestation_restrictions_extended_delta_history_part and etl_delta_current_extended_manifestation_restrictions records...");
                         String[] all_manif_restrict_Col = {"getEPRID", "getUKEY", "getmanifestation_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getrestrictioncode", "getrestrictionname", "getDELTA_MODE"};
                         for (String strTemp : all_manif_restrict_Col) {
@@ -676,8 +724,11 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_delta_current_extended_product_prices":
                         dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+                        dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+
                         Log.info("comparing etl_product_prices_extended_delta_history_part and etl_delta_current_extended_product_prices records...");
-                        String[] all_prod_price_Col = {"getEPRID", "getUKEY", "getproduct_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getpricecurrency", "getpriceamount", "getpricestartdate", "getpriceenddate"
+                        String[] all_prod_price_Col = {"getEPRID", "getUKEY", "getPRODUCTTYPE", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getpricecurrency", "getpriceamount", "getpricestartdate", "getpriceenddate"
                                 , "getpriceregion", "getpricecategory", "getpricecustomercategory", "getpricepurchasequantity", "getDELTA_MODE"};
                         for (String strTemp : all_prod_price_Col) {
                             java.lang.reflect.Method method;
@@ -703,6 +754,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_delta_current_extended_work_person_role":
                         dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+                        dataQualityBCSContext.recFromDeltaCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+
                         Log.info("comparing etl_work_person_role_extended_delta_history_part and etl_delta_current_extended_work_person_role records...");
                         String[] all_pers_role_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getcore_reference", "getworksourceref", "getpersonsourceref", "getsource", "getroletype", "getrolename",
                                 "gettitle", "getperson_first_name", "getperson_family_name", "getemail_address", "gethonours", "getaffiliation", "getimageurl", "getfootnotetxt", "getnotestxt", "getsequence", "getgroupnumber", "getmetamodifiedon", "getDELTA_MODE"};
@@ -860,6 +914,8 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_transform_history_extended_availability_excl_delta":
                         dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
                         Log.info("comparing etl_transform_history_extended_manifestation_excl_delta records...");
                         String[] all_availability_Col = {"getEPRID", "getmetadeleted", "getPRODUCTTYPE", "getstatus", "getpubdateactual", "getanzpubstatus", "getdeltaanswercodeuk", "getdeltaanswercodeus", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getAPPLICATION"};
                         for (String strTemp : all_availability_Col) {
@@ -886,6 +942,8 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_transform_history_extended_manifestation_excl_delta":
                         dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
                         Log.info("comparing etl_transform_history_extended_manifestation_excl_delta records...");
                         String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type", "getuktextbookind", "getustextbookind",
                                 "getusdiscountcode", "getusdiscountname", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getemeadiscountcode",
@@ -915,6 +973,8 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_transform_history_extended_page_count_excl_delta":
                         dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
                         Log.info("comparing etl_transform_history_extended_page_count_excl_delta records...");
                         String[] all_pagecount_Col = {"getEPRID", "getUKEY", "getmanifestation_type", "getSOURCEREF", "getMODIFIEDON",
                                 "getmetadeleted", "getpagecounttypecode", "getpagecounttypename", "getpagecount"};
@@ -942,6 +1002,8 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_transform_history_extended_url_excl_delta":
                         dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
                         Log.info("comparing etl_transform_history_extended_url_excl_delta records...");
                         String[] all_url_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted",
                                 "geturltypecode", "geturltypecode", "getsource", "getname"};
@@ -969,6 +1031,8 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_transform_history_extended_work_excl_delta":
                         dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
                         Log.info("comparing etl_transform_history_extended_work_excl_delta records...");
                         String[] all_work_ext_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getcompanygroup", "getimagefileref", "getworkmasterisbn", "gettextreftrade",
                                 "getfeatures", "getawards", "gettoc_long", "gettoc_short", "getaudience", "getauthorbyline", "getdescription", "getsbu", "getprofitcentre", "getreview", "getjournalelscomind",
@@ -999,6 +1063,8 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_transform_history_extended_work_subject_area_excl_delta":
                         dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
                         Log.info("comparing etl_transform_history_extended_work_subject_area_excl_delta records...");
                         String[] all_work_subj_area_ext_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "gettypecode", "gettypedesc", "getsubjcode", "getsubjdesc",
                                 "getpriority"};
@@ -1026,6 +1092,8 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_transform_history_extended_manifestation_restrictions_excl_delta":
                         dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
                         Log.info("comparing etl_transform_history_extended_manifestation_restrictions_excl_delta records...");
                         String[] all_manif_restrict_Col = {"getEPRID", "getUKEY", "getmanifestation_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted",
                                 "getrestrictioncode", "getrestrictionname"};
@@ -1053,8 +1121,10 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_transform_history_extended_product_prices_excl_delta":
                         dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
                         Log.info("comparing etl_transform_history_extended_product_prices_excl_delta records...");
-                        String[] all_prod_price_Col = {"getEPRID", "getUKEY", "getproduct_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getpricecurrency", "getpriceamount", "getpricestartdate", "getpriceenddate"
+                        String[] all_prod_price_Col = {"getEPRID", "getUKEY", "getPRODUCTTYPE", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getpricecurrency", "getpriceamount", "getpricestartdate", "getpriceenddate"
                                 , "getpriceregion", "getpricecategory", "getpricecustomercategory", "getpricepurchasequantity"};
                         for (String strTemp : all_prod_price_Col) {
                             java.lang.reflect.Method method;
@@ -1080,6 +1150,8 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_transform_history_extended_work_person_role_excl_delta":
                         dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromExclDelta.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
                         Log.info("comparing etl_transform_history_extended_work_person_role_excl_delta records...");
                         String[] all_pers_role_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getcore_reference", "getworksourceref", "getpersonsourceref", "getsource", "getroletype", "getrolename",
                                 "gettitle", "getperson_first_name", "getperson_family_name", "getemail_address", "gethonours", "getaffiliation", "getimageurl", "getfootnotetxt", "getnotestxt",
@@ -1094,7 +1166,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " + dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getEPRID() +
+                            Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getUKEY() +
                                     " " + strTemp + " => pers_role_delta_currhist = " + method.invoke(objectToCompare1) +
                                     " pers_role_exclude = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -1234,6 +1306,8 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_transform_history_extended_availability_latest":
                         dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
                         Log.info("comparing etl_transform_history_extended_manifestation_latest_delta records...");
                         String[] all_availability_Col = {"getEPRID", "getmetadeleted", "getPRODUCTTYPE", "getstatus", "getpubdateactual", "getanzpubstatus", "getdeltaanswercodeuk", "getdeltaanswercodeus", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getAPPLICATION"};
                         for (String strTemp : all_availability_Col) {
@@ -1260,6 +1334,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_transform_history_extended_manifestation_latest":
                         dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+
                         Log.info("comparing etl_transform_history_extended_manifestation_latest_delta records...");
                         String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type", "getuktextbookind", "getustextbookind",
                                 "getusdiscountcode", "getusdiscountname", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getemeadiscountcode",
@@ -1289,6 +1366,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_transform_history_extended_page_count_latest":
                         dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+
                         Log.info("comparing etl_transform_history_extended_page_count_latest_delta records...");
                         String[] all_pagecount_Col = {"getEPRID", "getUKEY", "getmanifestation_type", "getSOURCEREF", "getMODIFIEDON",
                                 "getmetadeleted", "getpagecounttypecode", "getpagecounttypename", "getpagecount"};
@@ -1316,6 +1396,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_transform_history_extended_url_latest":
                         dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+
                         Log.info("comparing etl_transform_history_extended_url_latest_delta records...");
                         String[] all_url_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted",
                                 "geturltypecode", "geturltypecode", "getsource", "getname"};
@@ -1343,6 +1426,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_transform_history_extended_work_latest":
                         dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+
                         Log.info("comparing etl_transform_history_extended_work_latest_delta records...");
                         String[] all_work_ext_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getcompanygroup", "getimagefileref", "getworkmasterisbn", "gettextreftrade",
                                 "getfeatures", "getawards", "gettoc_long", "gettoc_short", "getaudience", "getauthorbyline", "getdescription", "getsbu", "getprofitcentre", "getreview", "getjournalelscomind",
@@ -1373,6 +1459,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_transform_history_extended_work_subject_area_latest":
                         dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+
                         Log.info("comparing etl_transform_history_extended_work_subject_area_latest_delta records...");
                         String[] all_work_subj_area_ext_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "gettypecode", "gettypedesc", "getsubjcode", "getsubjdesc",
                                 "getpriority"};
@@ -1400,6 +1489,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_transform_history_extended_manifestation_restrictions_latest":
                         dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+
                         Log.info("comparing etl_transform_history_extended_manifestation_restrictions_latest_delta records...");
                         String[] all_manif_restrict_Col = {"getEPRID", "getUKEY", "getmanifestation_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted",
                                 "getrestrictioncode", "getrestrictionname"};
@@ -1427,8 +1519,11 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                     case "etl_transform_history_extended_product_prices_latest":
                         dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+
                         Log.info("comparing etl_transform_history_extended_product_prices_latest_delta records...");
-                        String[] all_prod_price_Col = {"getEPRID", "getUKEY", "getproduct_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getpricecurrency", "getpriceamount", "getpricestartdate", "getpriceenddate"
+                        String[] all_prod_price_Col = {"getEPRID", "getUKEY", "getPRODUCTTYPE", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getpricecurrency", "getpriceamount", "getpricestartdate", "getpriceenddate"
                                 , "getpriceregion", "getpricecategory", "getpricecustomercategory", "getpricepurchasequantity"};
                         for (String strTemp : all_prod_price_Col) {
                             java.lang.reflect.Method method;
@@ -1452,11 +1547,15 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                         }
                         break;
                     case "etl_transform_history_extended_work_person_role_latest":
-                        dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
-                        dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                       // dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID)); //sort primarykey data in the lists
+                        //dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
+                        dataQualityBCSContext.recFromSumOfDeltaAndExcl.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
+                        dataQualityBCSContext.recFromLatest.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
+
                         Log.info("comparing etl_transform_history_extended_work_person_role_latest_delta records...");
-                        String[] all_pers_role_Col = {"getEPRID", "getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getcore_reference", "getworksourceref", "getpersonsourceref", "getsource", "getroletype", "getrolename",
-                                "gettitle", "getperson_first_name", "getperson_family_name", "getemail_address", "gethonours", "getaffiliation", "getimageurl", "getfootnotetxt", "getnotestxt",
+                        String[] all_pers_role_Col = {"getUKEY", "getwork_type", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getcore_reference",
+                                "getworksourceref", "getpersonsourceref", "getsource", "getroletype", "getrolename", "gettitle", "getperson_first_name",
+                                "getperson_family_name", "getemail_address", "gethonours", "getaffiliation", "getimageurl", "getfootnotetxt", "getnotestxt",
                                 "getsequence", "getgroupnumber", "getmetamodifiedon"};
                         for (String strTemp : all_pers_role_Col) {
                             java.lang.reflect.Method method;
@@ -1468,7 +1567,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("EPRID => " + dataQualityBCSContext.recFromSumOfDeltaAndExcl.get(i).getEPRID() +
+                            Log.info("UKEY => " + dataQualityBCSContext.recFromSumOfDeltaAndExcl.get(i).getUKEY() +
                                     " " + strTemp + " => pers_role_delta_excl = " + method.invoke(objectToCompare1) +
                                     " pers_role_latest = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||

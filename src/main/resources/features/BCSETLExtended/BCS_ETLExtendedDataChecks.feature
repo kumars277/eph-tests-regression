@@ -74,7 +74,7 @@ Feature:Validate data checks for BCS ETL Extended in Data Lake Access Layer
       |etl_delta_current_extended_work_subject_area           |etl_work_subject_area_extended_transform_file_history_part         |10                   |
       |etl_delta_current_extended_manifestation_restrictions  |etl_manifestation_restrictions_extended_transform_file_history_part|10                   |
       |etl_delta_current_extended_product_prices              |etl_product_prices_extended_transform_file_history_part            |10                   |
-     |etl_delta_current_extended_work_person_role            |etl_work_person_role_extended_transform_file_history_part          |10                   |
+  |etl_delta_current_extended_work_person_role            |etl_work_person_role_extended_transform_file_history_part          |10                   |
 
   @BCSExtended
   Scenario Outline: Verify Data for BCS Extended Delta_Current tables are transferred from Delta_Current Hist Tables
@@ -104,14 +104,14 @@ Feature:Validate data checks for BCS ETL Extended in Data Lake Access Layer
       | targetTable                                                             |  countOfRandomIds |
       | etl_transform_history_extended_availability_excl_delta                  | 10                |
       | etl_transform_history_extended_manifestation_excl_delta                 | 10                |
-      | etl_transform_history_extended_page_count_excl_delta                    | 10                |
+     | etl_transform_history_extended_page_count_excl_delta                    | 10                |
       | etl_transform_history_extended_url_excl_delta                           | 10                |
       | etl_transform_history_extended_work_excl_delta                          | 10                |
       | etl_transform_history_extended_work_subject_area_excl_delta             | 10                |
       | etl_transform_history_extended_manifestation_restrictions_excl_delta    | 10                |
      | etl_transform_history_extended_product_prices_excl_delta                | 10                |
       | etl_transform_history_extended_work_person_role_excl_delta              | 10                |
-
+#work_person_role no records need to check again
 
   @BCSExtended
   Scenario Outline: Verify Data from the sum of BCS Extended Delta_Current and Exclude is transferred to BCS Extended Latest table
@@ -121,12 +121,12 @@ Feature:Validate data checks for BCS ETL Extended in Data Lake Access Layer
     And  Compare the records of Latest with sum of delta_current and Exclude_Delta for BCS Extended <targetTable>
     Examples:
       | targetTable                                               |  countOfRandomIds     |
-      |etl_transform_history_extended_availability_latest         |10                     |
-      |etl_transform_history_extended_manifestation_latest        |10                     |
+     |etl_transform_history_extended_availability_latest         |10                     |
+     |etl_transform_history_extended_manifestation_latest        |10                     |
      |etl_transform_history_extended_page_count_latest           |10                     |
     |etl_transform_history_extended_url_latest                  |10                     |
-      |etl_transform_history_extended_work_latest                 |10                     |
-      |etl_transform_history_extended_work_subject_area_latest        |10                     |
-      |etl_transform_history_extended_manifestation_restrictions_latest|10                     |
-      |etl_transform_history_extended_product_prices_latest            |10                     |
-      |etl_transform_history_extended_work_person_role_latest      |10                     |
+     |etl_transform_history_extended_work_latest                 |10                     |
+     |etl_transform_history_extended_work_subject_area_latest        |10                     |
+     |etl_transform_history_extended_manifestation_restrictions_latest|10                     |
+     |etl_transform_history_extended_product_prices_latest            |10                     |
+     |etl_transform_history_extended_work_person_role_latest      |10                     |
