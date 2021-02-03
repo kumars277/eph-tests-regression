@@ -1,9 +1,9 @@
-package com.eph.automation.testing.services.db.DL_CoreViewCountChecksSQL;
+package com.eph.automation.testing.services.db.DL_CoreViewSQL;
 
 
 import com.eph.automation.testing.services.db.BCS_ETLCoreSQL.GetBCS_ETLCoreDLDBUser;
 
-public class DL_CoreViewCountChecksSQL {
+public class DL_CoreViewChecksSQL {
 
 
     public static String GET_DL_CORE_ALL_ACC_PROD_VIEW_COUNT =

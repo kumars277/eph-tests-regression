@@ -86,5 +86,92 @@ public class GetBCS_ETLCoreDLDBUser {
         return dbJM;
     }
 
+    public static String getSDRMDataBase(){
+        String dbSDRM = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbSDRM = "sdrm_staging_sit";
+            }
+            else{
+                dbSDRM = "sdrm_staging_uat";
+            }
+
+        }else{
+            dbSDRM = "sdrm_staging_sit";
+            //  dbSDRM = "sdrm_staging_uat";
+        }
+        return dbSDRM;
+    }
+
+    public static String getSDBooksDataBase(){
+        String dbSDBooks = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbSDBooks = "sdbooks_staging_sit";
+            }
+            else{
+                dbSDBooks = "sdbooks_staging_uat";
+            }
+
+        }else{
+            dbSDBooks = "sdbooks_staging_sit";
+            //  dbSDBooks = "sdbooks_staging_uat";
+        }
+        return dbSDBooks;
+    }
+
+    public static String getPromisDataBase(){
+        String dbPRM = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbPRM = "promis_staging_sit";
+            }
+            else{
+                dbPRM = "promis_staging_uat";
+            }
+
+        }else{
+            dbPRM = "promis_staging_sit";
+            //  dbPRM = "promis_staging_uat";
+        }
+        return dbPRM;
+    }
+
+    public static String getDL_ExtViewDataBase(){
+        String dbProdExt = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbProdExt = "product_ext_database_sit";
+            }
+            else{
+                dbProdExt = "product_ext_database_uat";
+            }
+
+        }else{
+            dbProdExt = "product_ext_database_sit";
+            // dbProd = "bcs_ingestion_database_uat2";
+        }
+        return dbProdExt;
+    }
+
+    public static String getJRBIDataBase(){
+        String dbJRBI = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbJRBI = "jrbi_staging_sit";
+            }
+            else{
+                dbJRBI = "jrbi_staging_uat";
+            }
+
+        }else{
+            dbJRBI = "jrbi_staging_sit";
+            //  dbJRBI = "jrbi_staging_sit";
+        }
+        return dbJRBI;
+    }
+
+
+
 
 }

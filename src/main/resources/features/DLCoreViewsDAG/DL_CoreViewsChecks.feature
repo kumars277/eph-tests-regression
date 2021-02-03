@@ -1,4 +1,4 @@
-Feature:Validate data of DL Core Views where data comes from BCS and JM Core
+Feature:Validate data of DL All Core Views where data comes from BCS and JM Core
 
 #  Created by Dinesh on 09/12/2020
 
