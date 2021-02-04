@@ -18,9 +18,8 @@ Feature:Validate data count for BCS Extended tables
      | etl_work_extended_current_v      |
      | etl_work_subject_area_extended_current_v      |
       | etl_manifestation_restrictions_extended_current_v      |
-      | etl_product_prices_extended_current_v      |
-     #| etl_work_person_role_extended_current_v      |
-  # problem with work person role table taking too long to execute the query.
+     | etl_product_prices_extended_current_v      |
+    | etl_work_person_role_extended_current_v      |
 
   @BCSExtended
   Scenario Outline: Verify Data count for BCS Extended delta history tables are transferred from delta_current tables

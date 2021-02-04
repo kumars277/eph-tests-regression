@@ -291,7 +291,7 @@ public class DL_CoreViewsChecksSteps {
                                  " All_Views_Core = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views for EXTERNALREFERENCE:"+dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -319,7 +319,7 @@ public class DL_CoreViewsChecksSteps {
                                     " All_Views_Core = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views for EXTERNALREFERENCE:"+dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -347,7 +347,7 @@ public class DL_CoreViewsChecksSteps {
                                 " All_Views_Core = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views for EXTERNALREFERENCE:"+dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -374,7 +374,7 @@ public class DL_CoreViewsChecksSteps {
                                 " All_Views_Core = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views for EXTERNALREFERENCE:"+dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -401,7 +401,7 @@ public class DL_CoreViewsChecksSteps {
                                 " All_Views_Core = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views for EXTERNALREFERENCE:"+dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -429,7 +429,7 @@ public class DL_CoreViewsChecksSteps {
                                 " All_Views_Core = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views for EXTERNALREFERENCE:"+dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -457,7 +457,7 @@ public class DL_CoreViewsChecksSteps {
                                 " All_Views_Core = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views for EXTERNALREFERENCE:"+dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -485,7 +485,7 @@ public class DL_CoreViewsChecksSteps {
                                 " All_Views_Core = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views for EXTERNALREFERENCE:"+dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -512,7 +512,7 @@ public class DL_CoreViewsChecksSteps {
                                 " All_Views_Core = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views for EXTERNALREFERENCE:"+dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -539,7 +539,7 @@ public class DL_CoreViewsChecksSteps {
                                 " All_Views_Core = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views for EXTERNALREFERENCE:"+dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }

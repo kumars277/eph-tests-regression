@@ -171,7 +171,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " Availability_Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Availability_Curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Availability_Curr for EPRID:"+dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -200,7 +200,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " Manif_EXT__Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_EXT__Curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_EXT__Curr for EPRID:"+dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -229,7 +229,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " PageCount_Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PageCount_Curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PageCount_Curr for EPRID:"+dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -258,7 +258,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " URL_Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in URL_Curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in URL_Curr for EPRID:"+dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -291,7 +291,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " work_ext_Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_ext_Curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_ext_Curr for EPRID:"+dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -321,7 +321,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " work_subj_area_Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_subj_area_Curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_subj_area_Curr for EPRID:"+dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -351,7 +351,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " manifestation_restrictions_Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifestation_restrictions_Curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifestation_restrictions_Curr for EPRID:"+dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -381,7 +381,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " product_price_Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in product_price_Curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in product_price_Curr for EPRID:"+dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -411,7 +411,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " pers_role_Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in pers_role_Curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in pers_role_Curr for EPRID:"+dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -532,7 +532,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " Availability_Curr_hist = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Availability_Curr_hist",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Availability_Curr_hist for EPRID:"+dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -561,7 +561,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " Manif_EXT_Curr_hist = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_EXT_Curr_hist",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_EXT_Curr_hist for EPRID:"+dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -590,7 +590,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " PageCount_Curr_hist = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PageCount_Curr_hist",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PageCount_Curr_hist for EPRID:"+dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -619,7 +619,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " URL_Curr_hist = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in URL_Curr_hist",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in URL_Curr_hist for EPRID:"+dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -652,7 +652,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " work_ext_Curr_hist = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_ext_Curr_hist",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_ext_Curr_hist for EPRID:"+dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -682,7 +682,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " work_subj_area_Curr_hist = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_subj_area_Curr_hist",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_subj_area_Curr_hist for EPRID:"+dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -711,7 +711,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " manifestation_restrictions_Curr_hist = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifestation_restrictions_Curr_hist",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifestation_restrictions_Curr_hist for EPRID:"+dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -740,7 +740,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " prod_price_Curr_hist = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in prod_price_Curr_hist",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in prod_price_Curr_hist for EPRID:"+dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -770,7 +770,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " pers_role_Curr_hist = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in pers_role_Curr_hist",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in pers_role_Curr_hist for EPRID:"+dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -852,7 +852,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " Availability_trans_file = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Availability_trans_file",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Availability_trans_file for EPRID:"+dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -881,7 +881,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " Manif_EXT_trans_file = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_EXT_trans_file",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_EXT_trans_file for EPRID:"+dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -910,7 +910,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " PageCount_trans_file = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PageCount_trans_file",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PageCount_trans_file for EPRID:"+dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -939,7 +939,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " URL_trans_file = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in URL_trans_file",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in URL_trans_file for EPRID:"+dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -972,7 +972,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " work_ext_trans_file = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_ext_trans_file",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_ext_trans_file for EPRID:"+dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1002,7 +1002,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " work_subj_area_trans_file = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_subj_area_trans_file",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_subj_area_trans_file for EPRID:"+dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1031,7 +1031,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " manifestation_restrictions_trans_File = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifestation_restrictions_trans_File",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifestation_restrictions_trans_File for EPRID:"+dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1060,7 +1060,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " prod_price_trans_file = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in prod_price_trans_file",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in prod_price_trans_file for EPRID:"+dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1090,7 +1090,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " pers_role_trans_file = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in pers_role_Curr_hist",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in pers_role_Curr_hist for EPRID:"+dataQualityBCSContext.recordsFromCurrent.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }

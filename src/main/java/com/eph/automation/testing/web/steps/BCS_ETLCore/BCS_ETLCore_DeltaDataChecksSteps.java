@@ -173,7 +173,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 " Acc_Prod_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Acc_Prod_Delta_Curr",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Acc_Prod_Delta_Curr for UKEY:"+dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getUKEY(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -201,7 +201,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 " Manif_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_Delta_Curr",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_Delta_Curr for UKEY:"+dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getUKEY(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -228,7 +228,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 " Manif_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_Delta_Curr",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_Delta_Curr for UKEY:"+dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getUKEY(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -258,7 +258,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 " Prod_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Prod_Delta_Curr",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Prod_Delta_Curr for UKEY:"+dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getUKEY(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -286,7 +286,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 " PERS_ROLE_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PERS_ROLE_Delta_Curr",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PERS_ROLE_Delta_Curr for UKEY:"+dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getUKEY(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -314,7 +314,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 " WORK_RELAT_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in WORK_RELAT_Delta_Curr",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in WORK_RELAT_Delta_Curr for UKEY:"+dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getUKEY(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -344,7 +344,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 " WORK_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in WORK_Delta_Curr",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in WORK_Delta_Curr for UKEY:"+dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getUKEY(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -372,7 +372,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 " Work_Ident_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Work_Ident_Delta_Curr",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Work_Ident_Delta_Curr for UKEY:"+dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getUKEY(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -398,7 +398,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 " Person_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Person_Delta_Curr",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Person_Delta_Curr for UKEY:"+dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getUKEY(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -520,7 +520,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 " Acc_Prod_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Acc_Prod_Delta_Curr",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Acc_Prod_Delta_Curr for UKEY:"+dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -549,7 +549,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 " Manif_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_Delta_Curr",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_Delta_Curr for UKEY:"+dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -577,7 +577,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 " Manif_Ident_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_Delta_Curr",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_Delta_Curr for UKEY:"+dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -607,7 +607,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 " Prod_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Prod_Delta_Curr",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Prod_Delta_Curr for UKEY:"+dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -635,7 +635,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 " PERS_ROLE_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PERS_ROLE_Delta_Curr",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PERS_ROLE_Delta_Curr for UKEY:"+dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -663,7 +663,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 " WORK_RELAT_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in WORK_RELAT_Delta_Hist",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in WORK_RELAT_Delta_Hist for UKEY:"+dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -693,7 +693,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 " WORK_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in WORK_Delta_Curr",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in WORK_Delta_Curr for UKEY:"+dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -721,7 +721,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 " Work_Ident_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Work_Ident_Delta_Curr_hist",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Work_Ident_Delta_Curr_hist for UKEY:"+dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -748,7 +748,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
                                 " Person_Delta_Curr = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Person_Delta_Curr",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Person_Delta_Curr for UKEY:"+dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getUKEY(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }

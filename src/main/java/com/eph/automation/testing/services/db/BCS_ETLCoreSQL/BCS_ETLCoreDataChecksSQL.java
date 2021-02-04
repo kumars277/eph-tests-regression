@@ -6,7 +6,7 @@ package com.eph.automation.testing.services.db.BCS_ETLCoreSQL;
 public class BCS_ETLCoreDataChecksSQL {
 
     public static String GET_RANDOM_ACCPROD_KEY_INBOUND =
-    "SELECT sourceref\n" +
+    "SELECT u_key as sourceref\n" +
             "FROM\n" +
             "  (\n" +
             "   SELECT DISTINCT\n" +
@@ -738,7 +738,8 @@ public class BCS_ETLCoreDataChecksSQL {
                     "order by u_key desc";
 
     public static String GET_ACCPROD_REC_CURR_DATA =
-            "SELECT sourceref as SOURCEREF \n" +
+            "SELECT sourceref as SOURCEREF " +
+                    ",u_key as UKEY\n" +
                     ",accountableproduct as ACCOUNTABLEPRODUCT \n" +
                     ",accountablename as ACCOUNTABLENAME \n" +
                     ",accountableparent as ACCOUNTABLEPARENT \n" +

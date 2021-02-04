@@ -14,12 +14,11 @@ Feature:Validate data checks for BCS ETL Extended in Data Lake Access Layer
  | etl_manifestation_extended_current_v                    |10             |
   | etl_page_count_extended_current_v                       |10             |
       | etl_url_extended_current_v                              |10             |
-  | etl_work_extended_current_v                             |10             |
+ | etl_work_extended_current_v                             |10             |
      | etl_work_subject_area_extended_current_v                |10             |
       | etl_manifestation_restrictions_extended_current_v       |10             |
-  | etl_product_prices_extended_current_v                   |10             |
-    #  | etl_work_person_role_extended_current_v                 |10             |
-# problem with work person role table taking too long to execute the query.
+ | etl_product_prices_extended_current_v                   |10             |
+     | etl_work_person_role_extended_current_v                 |10             |
 
   @BCSExtended
   Scenario Outline: Verify Data for BCS Extended Current_History tables are transferred from Current Tables
@@ -37,8 +36,8 @@ Feature:Validate data checks for BCS ETL Extended in Data Lake Access Layer
       |etl_work_subject_area_extended_current_v          |etl_transform_history_extended_work_subject_area_part         |10                   |
       |etl_manifestation_restrictions_extended_current_v |etl_transform_history_extended_manifestation_restrictions_part|10                   |
       |etl_product_prices_extended_current_v             |etl_transform_history_extended_product_prices_part            |10                   |
-     # |etl_work_person_role_extended_current_v           |etl_transform_history_extended_work_person_role_part          |10                   |
-#Data mismatch
+     |etl_work_person_role_extended_current_v           |etl_transform_history_extended_work_person_role_part          |10                   |
+
 
   @BCSExtended
   Scenario Outline: Verify Data for BCS Extended Transform_file tables are transferred from Current Tables

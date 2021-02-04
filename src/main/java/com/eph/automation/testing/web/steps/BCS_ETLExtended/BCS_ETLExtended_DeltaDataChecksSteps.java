@@ -175,7 +175,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " Availability_delta_curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Availability_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Availability_delta_curr for EPRID:"+dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -204,7 +204,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " Manif_EXT_delta_curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_EXT_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_EXT_delta_curr EPRID:"+dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -233,7 +233,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " PageCount_delta_curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PageCount_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PageCount_delta_curr EPRID:"+dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -262,7 +262,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " URL_delta_curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in URL_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in URL_delta_curr EPRID:"+dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -295,7 +295,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " work_ext_delta_curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_ext_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_ext_delta_curr EPRID:"+dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -325,7 +325,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " work_subj_area_delta_curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_subj_area_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_subj_area_delta_curr EPRID:"+dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -354,7 +354,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " manifestation_restrictions_delta_curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifestation_restrictions_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifestation_restrictions_delta_curr EPRID:"+dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -384,7 +384,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " prod_price_delta_curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in prod_price_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in prod_price_delta_curr EPRID:"+dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -414,7 +414,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " pers_role_delta_curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in pers_role_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in pers_role_delta_curr EPRID:"+dataQualityBCSContext.recFromDiffOfTransformFile.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -536,7 +536,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " Availability_delta_curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Availability_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Availability_delta_curr for EPRID:"+dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -565,7 +565,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " Manif_EXT_delta_curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_EXT_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_EXT_delta_curr for EPRID:"+dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -594,7 +594,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " PageCount_delta_curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PageCount_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PageCount_delta_curr for EPRID:"+dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -623,7 +623,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " URL_delta_curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in URL_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in URL_delta_curr for EPRID:"+dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -656,7 +656,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " work_ext_delta_curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_ext_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_ext_delta_curr for EPRID:"+dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -686,7 +686,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " work_subj_area_delta_curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_subj_area_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_subj_area_delta_curr for EPRID:"+dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -715,7 +715,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " manifestation_restrictions_delta_curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifestation_restrictions_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifestation_restrictions_delta_curr for EPRID:"+dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -745,7 +745,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " prod_price_delta_curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in prod_price_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in prod_price_delta_curr for EPRID:"+dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -775,7 +775,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " pers_role_delta_curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in pers_role_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in pers_role_delta_curr for EPRID:"+dataQualityBCSContext.recFromDeltaCurrentHist.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -933,7 +933,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " Availability_Excl = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Availability_Excl",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Availability_Excl for EPRID:"+dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -964,7 +964,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " Manif_EXT_Excl = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_EXT_Excl",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_EXT_Excl for EPRID:"+dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -993,7 +993,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " PageCount_exclude = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PageCount_exclude",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PageCount_exclude for EPRID:"+dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1022,7 +1022,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " URL_exclude = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in URL_exclude",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in URL_exclude for EPRID:"+dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1054,7 +1054,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " work_ext_exclude = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_ext_currhist",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_ext_currhist for EPRID:"+dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1083,7 +1083,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " work_subj_area_excl = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_subj_area_delta_curr",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_subj_area_delta_curr for EPRID:"+dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1112,7 +1112,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " manifestation_restrictions_exclude = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifestation_restrictions_exclude",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifestation_restrictions_exclude for EPRID:"+dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1141,7 +1141,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " prod_price_exclude = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in prod_price_exclude",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in prod_price_exclude for EPRID:"+dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1171,7 +1171,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " pers_role_exclude = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in pers_role_exclude",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in pers_role_exclude for EPRID:"+dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1325,7 +1325,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " Availability_latest = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Availability_latest",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Availability_latest for EPRID:"+dataQualityBCSContext.recFromSumOfDeltaAndExcl.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1357,7 +1357,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " Manif_EXT_Latest = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_EXT_Latest",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_EXT_Latest for EPRID:"+dataQualityBCSContext.recFromSumOfDeltaAndExcl.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1387,7 +1387,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " PageCount_Manif_EXT_Latest = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PageCount_latest",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in PageCount_latest for EPRID:"+dataQualityBCSContext.recFromSumOfDeltaAndExcl.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1417,7 +1417,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " URL_latest = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in URL_latest",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in URL_latest for EPRID:"+dataQualityBCSContext.recFromSumOfDeltaAndExcl.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1450,7 +1450,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " work_ext_latest = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_ext_latest",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_ext_latest for EPRID:"+dataQualityBCSContext.recFromSumOfDeltaAndExcl.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1480,7 +1480,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " work_subj_area_latest = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_subj_area_latest",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in work_subj_area_latest for EPRID:"+dataQualityBCSContext.recFromSumOfDeltaAndExcl.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1510,7 +1510,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " manifestation_restrictions_latest = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifestation_restrictions_latest",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifestation_restrictions_latest for EPRID:"+dataQualityBCSContext.recFromSumOfDeltaAndExcl.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1540,7 +1540,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " prod_price_latest = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in prod_price_latest",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in prod_price_latest for EPRID:"+dataQualityBCSContext.recFromSumOfDeltaAndExcl.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -1572,7 +1572,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                                     " pers_role_latest = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in pers_role_latest",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in pers_role_latest for EPRID:"+dataQualityBCSContext.recFromSumOfDeltaAndExcl.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
