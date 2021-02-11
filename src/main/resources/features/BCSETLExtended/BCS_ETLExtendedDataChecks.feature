@@ -10,7 +10,7 @@ Feature:Validate data checks for BCS ETL Extended in Data Lake Access Layer
    Then  Compare data of BCS Inbound and BCS Extended <tableName> tables are identical
     Examples:
       | tableName                                               |countOfRandomIds |
-  | etl_availability_extended_current_v                     |10            |
+ | etl_availability_extended_current_v                     |10            |
  | etl_manifestation_extended_current_v                    |10             |
   | etl_page_count_extended_current_v                       |10             |
       | etl_url_extended_current_v                              |10             |

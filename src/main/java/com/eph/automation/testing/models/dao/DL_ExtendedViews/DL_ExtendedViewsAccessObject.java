@@ -7,7 +7,7 @@ public class DL_ExtendedViewsAccessObject {
     private String product_type;
     private String last_updated_date;
     private String application_name;
-    private String  delta_answer_code_uk;
+    private String delta_answer_code_uk;
     private String delta_answer_code_us;
     private String publication_status_anz;
     private String availability_format;
@@ -339,6 +339,10 @@ public class DL_ExtendedViewsAccessObject {
     public void setepr_id(String epr_id) {
         this.epr_id = epr_id;
     }
+
+    public String getdelta_answer_code_uk() { return delta_answer_code_uk; }
+    public void setdelta_answer_code_uk(String delta_answer_code_uk) {this.delta_answer_code_uk = delta_answer_code_uk;}
+
     public String getsource() { return source; }
     public void setsource(String source) {
         this.source = source;
@@ -351,19 +355,19 @@ public class DL_ExtendedViewsAccessObject {
     public void setlast_updated_date(String last_updated_date) {
         this.last_updated_date = last_updated_date;
     }
+
     public String getapplication_name() { return application_name; }
     public void setapplication_name(String application_name) {
         this.application_name = application_name;
     }
-    public String getdelta_answer_code_uk() { return delta_answer_code_uk; }
-    public void setdelta_answer_code_uk(String delta_answer_code_uk) {
-        this.delta_answer_code_uk = delta_answer_code_uk;
-    }
+
+
     public String getdelta_answer_code_us() { return delta_answer_code_us; }
     public void setdelta_answer_code_us(String delta_answer_code_us) {
         this.delta_answer_code_us = delta_answer_code_us;
     }
-    public String getpublication_status_anz() { return publication_status_anz; }
+    public String getpublication_status_anz() {
+        return publication_status_anz; }
     public void setpublication_status_anz(String publication_status_anz) {
         this.publication_status_anz = publication_status_anz;
     }

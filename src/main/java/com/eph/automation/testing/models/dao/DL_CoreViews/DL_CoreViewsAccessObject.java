@@ -75,11 +75,120 @@ public class DL_CoreViewsAccessObject {
     private String PLANNED_TERMINATION_DATE;
     private String ACTUAL_TERMINATION_DATE;
     private String ELECTRORIGHTINDICATOR;
+    private String LASTUPDATEDDATE;
+    private String DELETEFLAG;
+    private String SOURCESYSTEM;
+    private String SCENARIOCODE;
+    private String SCENARIONAME;
+    private String UPDATETYPE;
+    private String PRODUCTID;
+    private String ALLOCATION;
+    private String FPACKAGEOWNER;
+    private String FCOMPONENT;
+    private String FRELATIONSHIPTYPE;
+    private String f_legal_ownership;
+    private String legal_owner_reference;
+    private String f_ownership_description;
+    private String access_model_code;
+    private String access_model_description;
+    private String business_model_code;
+    private String business_model_description;
 
+
+    public String getFPACKAGEOWNER() { return FPACKAGEOWNER; }
+    public void setFPACKAGEOWNER(String FPACKAGEOWNER) {
+        this.FPACKAGEOWNER = FPACKAGEOWNER;
+    }
+
+    public String getbusiness_model_description() { return business_model_description; }
+    public void setbusiness_model_description(String business_model_description) {
+        this.business_model_description = business_model_description;
+    }
+
+    public String getbusiness_model_code() { return business_model_code; }
+    public void setbusiness_model_code(String business_model_code) {
+        this.business_model_code = business_model_code;
+    }
+
+    public String getaccess_model_code() { return access_model_code; }
+    public void setaccess_model_code(String access_model_code) {
+        this.access_model_code = access_model_code;
+    }
+
+    public String getaccess_model_description() { return access_model_description; }
+    public void setaccess_model_description(String access_model_description) {
+        this.access_model_description = access_model_description;
+    }
+
+    public String getlegal_owner_reference() { return legal_owner_reference; }
+    public void setlegal_owner_reference(String legal_owner_reference) {
+        this.legal_owner_reference = legal_owner_reference;
+    }
+
+    public String getf_ownership_description() { return f_ownership_description; }
+    public void setf_ownership_description(String f_ownership_description) {
+        this.f_ownership_description = f_ownership_description;
+    }
+
+    public String getf_legal_ownership() { return f_legal_ownership; }
+    public void setf_legal_ownership(String f_legal_ownership) {
+        this.f_legal_ownership = f_legal_ownership;
+    }
+
+    public String getFRELATIONSHIPTYPE() { return FRELATIONSHIPTYPE; }
+    public void setFRELATIONSHIPTYPE(String FRELATIONSHIPTYPE) {
+        this.FRELATIONSHIPTYPE = FRELATIONSHIPTYPE;
+    }
+
+    public String getFCOMPONENT() { return FCOMPONENT; }
+    public void setFCOMPONENT(String FCOMPONENT) {
+        this.FCOMPONENT = FCOMPONENT;
+    }
 
     public String getELECTRORIGHTINDICATOR() { return ELECTRORIGHTINDICATOR; }
     public void setELECTRORIGHTINDICATOR(String ELECTRORIGHTINDICATOR) {
         this.ELECTRORIGHTINDICATOR = ELECTRORIGHTINDICATOR;
+    }
+
+    public String getALLOCATION() { return ALLOCATION; }
+    public void setALLOCATION(String ALLOCATION) {
+        this.ALLOCATION = ALLOCATION;
+    }
+
+    public String getPRODUCTID() { return PRODUCTID; }
+    public void setPRODUCTID(String PRODUCTID) {
+        this.PRODUCTID = PRODUCTID;
+    }
+
+
+
+    public String getUPDATETYPE() { return UPDATETYPE; }
+    public void setUPDATETYPE(String UPDATETYPE) {
+        this.UPDATETYPE = UPDATETYPE;
+    }
+
+    public String getSCENARIOCODE() { return SCENARIOCODE; }
+    public void setSCENARIOCODE(String SCENARIOCODE) {
+        this.SCENARIOCODE = SCENARIOCODE;
+    }
+    public String getSCENARIONAME() { return SCENARIONAME; }
+    public void setSCENARIONAME(String SCENARIONAME) {
+        this.SCENARIONAME = SCENARIONAME;
+    }
+
+    public String getSOURCESYSTEM() { return SOURCESYSTEM; }
+    public void setSOURCESYSTEM(String SOURCESYSTEM) {
+        this.SOURCESYSTEM = SOURCESYSTEM;
+    }
+
+    public String getDELETEFLAG() { return DELETEFLAG; }
+    public void setDELETEFLAG(String DELETEFLAG) {
+        this.DELETEFLAG = DELETEFLAG;
+    }
+
+    public String getLASTUPDATEDDATE() { return LASTUPDATEDDATE; }
+    public void setLASTUPDATEDDATE(String LASTUPDATEDDATE) {
+        this.LASTUPDATEDDATE = LASTUPDATEDDATE;
     }
 
     public String getEXTERNALREFERENCE() { return EXTERNALREFERENCE; }

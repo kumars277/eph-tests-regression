@@ -15,7 +15,7 @@ Feature:Validate data of DL Extended Views where data comes from All Extended Vi
       |manifestation_extended_page_count                                  |
       |manifestation_extended                                             |
       |work_extended                                                      |
-#      |work_extended_editorial_board                                      |
+#     |work_extended_editorial_board                                      |
       |work_extended_metric                                               |
       |work_extended_person_role                                          |
       |work_extended_relationship_sibling                                 |

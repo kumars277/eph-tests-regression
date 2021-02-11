@@ -53,6 +53,23 @@ public class GetBCS_ETLCoreDLDBUser {
         return dbProdDB;
     }
 
+    public static String getdppDataBase(){
+        String dbDpp = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbDpp = "dpp_database_sit";
+            }
+            else{
+                dbDpp = "dpp_database_uat";
+            }
+
+        }else{
+            dbDpp = "dpp_database_sit";
+            // dbDpp = "dpp_database_uat";
+        }
+        return dbDpp;
+    }
+
     public static String getProductStagingDatabase(){
         String dbProdStgDb = null;
         if (System.getProperty("ENV") != null){

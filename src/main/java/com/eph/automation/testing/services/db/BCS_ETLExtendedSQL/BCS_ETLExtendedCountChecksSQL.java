@@ -391,15 +391,6 @@ public class BCS_ETLExtendedCountChecksSQL {
                     "WHERE A.metadeleted = 'N')";
 
     public static String GET_WORK_PERSON_ROLE_INBOUND_CURRENT_COUNT=
-            "WITH\n" +
-                    "  orignotes AS (\n" +
-                    "   SELECT DISTINCT\n" +
-                    "     businesspartnerid\n" +
-                    "   , notestype\n" +
-                    "   , notes\n" +
-                    "   FROM\n" +
-                    "     "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes\n" +
-                    ") \n" +
                     "select count(*) as Source_Count from (" +
                     "SELECT\n" +
                     "  concat(concat(r.sourceref, 'MARMAN'), r.personid) u_key\n" +
@@ -457,7 +448,7 @@ public class BCS_ETLExtendedCountChecksSQL {
                     "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes h ON (((o.businesspartnerid = h.businesspartnerid) AND (split_part(h.notestype, ' | ', 1) = 'DEG')) AND (o.sourceref = h.sourceref)))\n" +
                     "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes a ON (((o.businesspartnerid = a.businesspartnerid) AND (split_part(a.notestype, ' | ', 1) = 'AFIL')) AND (o.sourceref = a.sourceref)))\n" +
                     "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes n ON (((o.businesspartnerid = n.businesspartnerid) AND (split_part(n.notestype, ' | ', 1) = 'BIO')) AND (o.sourceref = n.sourceref)))\n" +
-                    "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))))))))) = gwp.external_reference) AND (gwp.effective_end_date IS NULL)))\n" +
+                    "JOIN "+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))))))))) = gwp.external_reference) AND (gwp.effective_end_date IS NULL)))\n" +
                     "WHERE (o.metadeleted = 'N'))\n";
 
 

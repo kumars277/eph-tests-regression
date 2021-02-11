@@ -235,8 +235,8 @@ public class BCS_ETLCoreCountChecksSQL {
                     ") \n" +
                     "select count(*) as Source_Count from( \n" +
                     "SELECT\n" +
-                    "  a.*\n" +
-                    ", concat(concat(sourceref, identifier), identifier_type) u_key\n" +
+                    "  A.*\n" +
+                    ", sourceref||identifier||identifier_type as u_key\n" +
                     "FROM\n" +
                     "  (\n" +
                     "   SELECT\n" +
@@ -247,9 +247,16 @@ public class BCS_ETLCoreCountChecksSQL {
                     "     ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content\n" +
                     "   INNER JOIN work_id ON (content.sourceref = work_id.workmasterprojectno))\n" +
                     "   WHERE (piidack <> '')\n" +
-                    "UNION ALL    SELECT\n" +
-                    "     NULLIF(sourceref, '') sourceref\n" +
-                    "   , NULLIF(orderno, '') identifier\n" +
+                    "UNION ALL SELECT DISTINCT\n" +
+                    "     NULLIF(seriesid, '') sourceref\n" +
+                    "   , NULLIF(seriesissn, '') identifier\n" +
+                    "   , 'ISSN-L' identifier_type\n" +
+                    " from ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content\n" +
+                    " INNER JOIN work_id ON (content.sourceref = work_id.workmasterprojectno))\n" +
+                    " WHERE (seriesissn <> '')" +
+                    " UNION ALL SELECT" +
+                    "     NULLIF(sourceref,'') sourceref\n" +
+                    "   , NULLIF(orderno,'') identifier\n" +
                     "   , 'PPM-PART' identifier_type\n" +
                     "   FROM\n" +
                     "     ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +

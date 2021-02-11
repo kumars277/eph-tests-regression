@@ -997,15 +997,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     " from " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
 
     public static String GET_RANDOM_WORK_PERS_ROLE_KEY_INBOUND=
-           "WITH\n" +
-                   "  orignotes AS (\n" +
-                   "   SELECT DISTINCT\n" +
-                   "     businesspartnerid\n" +
-                   "   , notestype\n" +
-                   "   , notes\n" +
-                    "   FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes\n" +
-                    ") \n" +
-                    "select eprid as EPRID from (\n" +
+                   "select eprid as EPRID from (\n" +
                    "SELECT\n" +
                    "  concat(concat(r.sourceref, 'MARMAN'), r.personid) u_key\n" +
                    ", NULLIF(r.sourceref, '') worksourceref\n" +
@@ -1062,19 +1054,11 @@ public class BCS_ETLExtendedDataChecksSQL {
                    "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes h ON (((o.businesspartnerid = h.businesspartnerid) AND (split_part(h.notestype, ' | ', 1) = 'DEG')) AND (o.sourceref = h.sourceref)))\n" +
                    "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes a ON (((o.businesspartnerid = a.businesspartnerid) AND (split_part(a.notestype, ' | ', 1) = 'AFIL')) AND (o.sourceref = a.sourceref)))\n" +
                    "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes n ON (((o.businesspartnerid = n.businesspartnerid) AND (split_part(n.notestype, ' | ', 1) = 'BIO')) AND (o.sourceref = n.sourceref)))\n" +
-                   "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))))))))) = gwp.external_reference) AND (gwp.effective_end_date IS NULL)))\n" +
+                   "JOIN "+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))))))))) = gwp.external_reference) AND (gwp.effective_end_date IS NULL)))\n" +
                    "WHERE (o.metadeleted = 'N')) order by rand() limit %s";
 
 
     public static String GET_WORK_PERS_ROLE_INBOUND_DATA=
-            "WITH\n" +
-                    "  orignotes AS (\n" +
-                    "   SELECT DISTINCT\n" +
-                    "     businesspartnerid\n" +
-                    "   , notestype\n" +
-                    "   , notes\n" +
-                    "   FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes\n" +
-                    ") \n" +
                     "select eprid as EPRID" +
                     ",u_key as UKEY " +
                     ",worksourceref as worksourceref" +
@@ -1154,10 +1138,8 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes h ON (((o.businesspartnerid = h.businesspartnerid) AND (split_part(h.notestype, ' | ', 1) = 'DEG')) AND (o.sourceref = h.sourceref)))\n" +
                     "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes a ON (((o.businesspartnerid = a.businesspartnerid) AND (split_part(a.notestype, ' | ', 1) = 'AFIL')) AND (o.sourceref = a.sourceref)))\n" +
                     "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes n ON (((o.businesspartnerid = n.businesspartnerid) AND (split_part(n.notestype, ' | ', 1) = 'BIO')) AND (o.sourceref = n.sourceref)))\n" +
-                    "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))))))))) = gwp.external_reference) AND (gwp.effective_end_date IS NULL)))\n" +
+                    "JOIN "+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))))))))) = gwp.external_reference) AND (gwp.effective_end_date IS NULL)))\n" +
                     "WHERE (o.metadeleted = 'N')) where eprid in ('%s') order by eprid,u_key desc";
-
-    //"WHERE o.metadeleted = 'N'\n";
 
     public static String GET_WORK_PERS_ROLE_REC_CURR_DATA =
             "select eprid as EPRID " +

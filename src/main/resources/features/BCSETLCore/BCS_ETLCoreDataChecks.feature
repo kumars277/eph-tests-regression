@@ -9,18 +9,18 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
     And   Data from the BCS Core Current Tables to compare Inbound Check <tableName>
    Then  Compare data of BCS Inbound and BCS Core <tableName> tables are identical
     Examples:
-      | tableName                                |countOfRandomIds|
-   |etl_accountable_product_current_v           |10               |
-   |etl_manifestation_current_v              |10            |
-   |etl_person_current_v                       |10              |
-      |etl_product_current_v                    |10            |
-    |etl_work_person_role_current_v            |10             |
+      | tableName                               |countOfRandomIds|
+   |etl_accountable_product_current_v           |10              |
+   |etl_manifestation_current_v                 |10              |
+   |etl_person_current_v                        |10              |
+      |etl_product_current_v                    |10              |
+    |etl_work_person_role_current_v             |10              |
     |etl_work_relationship_current_v            |10              |
- |etl_work_current_v                         |10              |
-     |etl_work_identifier_current_v              |10              |
+ |etl_work_current_v                            |10              |
+     |etl_work_identifier_current_v             |100              |
     |etl_manifestation_identifier_current_v     |10              |
     |all_manifestation_statuses_v               |10              |
-    |all_manifestation_pubdates_v                |10              |
+    |all_manifestation_pubdates_v               |10              |
 
 
   @BCSCore

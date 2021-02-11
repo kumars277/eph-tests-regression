@@ -18,7 +18,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
     |etl_work_person_role_current_v            |
       |etl_work_relationship_current_v           |
      |etl_work_current_v                        |
-    |etl_work_identifier_current_v             |
+   |etl_work_identifier_current_v             |
      |etl_manifestation_identifier_current_v    |
       |all_manifestation_statuses_v               |
       |all_manifestation_pubdates_v              |
