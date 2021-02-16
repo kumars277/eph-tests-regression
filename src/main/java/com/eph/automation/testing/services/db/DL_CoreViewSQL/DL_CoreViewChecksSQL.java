@@ -1654,7 +1654,7 @@ public class DL_CoreViewChecksSQL {
                     ", false delete_flag \n" +
                     ", 'JM' source_system \n" +
                     " FROM "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_subject_area_dq\n" +
-                    " WHERE subject_area_type = 'SD')and external_reference in ('%s') order by external_reference desc \n";
+                    " WHERE subject_area_type = 'SD')where external_reference in ('%s') order by external_reference desc \n";
 
     public static String GET_DL_CORE_ALL_WORK_SUB_AREA_VIEW_REC =
             "select external_reference as EXTERNALREFERENCE" +

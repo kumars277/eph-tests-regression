@@ -598,12 +598,12 @@ public class BCS_ETLCoreDataChecksSQL {
                     "   , 'ISBN' identifier_type\n" +
                     "   FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product\n" +
                     "   WHERE (isbn13 <> '')\n" +
-                    "UNION ALL    SELECT\n" +
+                   /* "UNION ALL    SELECT\n" +
                     "     NULLIF(sourceref,'') sourceref\n" +
                     "   , NULLIF(seriesissn,'') identifier\n" +
                     "   , 'ISSN' identifier_type\n" +
                     "   FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content\n" +
-                    "   WHERE (seriesissn <> '')\n" +
+                    "   WHERE (seriesissn <> '')\n" +*/
                     ")A WHERE A.sourceref is not null and A.identifier is not null) order by rand() limit %s";
 
     public static String GET_RANDOM_WORK_IDENT_KEY_INBOUND =
@@ -702,12 +702,12 @@ public class BCS_ETLCoreDataChecksSQL {
                      "   , 'ISBN' identifier_type\n" +
                      "   FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product\n" +
                      "   WHERE (isbn13 <> '')\n" +
-                     "UNION ALL    SELECT\n" +
+                 /*    "UNION ALL    SELECT\n" +
                      "     NULLIF(sourceref,'') sourceref\n" +
                      "   , NULLIF(seriesissn,'') identifier\n" +
                      "   , 'ISSN' identifier_type\n" +
                      "   FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content\n" +
-                     "   WHERE (seriesissn <> '')\n" +
+                     "   WHERE (seriesissn <> '')\n" +*/
                      ")A WHERE A.sourceref is not null and A.identifier is not null) where u_key in ('%s') order by u_key desc";
 
 

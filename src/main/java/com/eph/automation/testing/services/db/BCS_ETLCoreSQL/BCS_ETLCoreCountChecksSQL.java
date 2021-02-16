@@ -219,12 +219,12 @@ public class BCS_ETLCoreCountChecksSQL {
                     "   , 'ISBN' identifier_type\n" +
                     "   FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product\n" +
                     "   WHERE (isbn13 <> '')\n" +
-                    "UNION ALL    SELECT\n" +
+                   /* "UNION ALL    SELECT\n" +
                     "     NULLIF(sourceref,'') sourceref\n" +
                     "   , NULLIF(seriesissn,'') identifier\n" +
                     "   , 'ISSN' identifier_type\n" +
                     "   FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content\n" +
-                    "   WHERE (seriesissn <> '')\n" +
+                    "   WHERE (seriesissn <> '')\n" + */
                     ")A WHERE A.sourceref is not null and A.identifier is not null)";
 
     public static String GET_WRK_IDENTIF_INBOUND_CURRENT_COUNT =
