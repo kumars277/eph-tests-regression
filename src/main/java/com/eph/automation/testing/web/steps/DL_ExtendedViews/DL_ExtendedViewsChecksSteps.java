@@ -494,7 +494,7 @@ public class DL_ExtendedViewsChecksSteps {
                         method = objectToCompare1.getClass().getMethod(strTemp);
                         method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("EPRID => " + dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getepr_id() +
+                        Log.info("EPRID => " + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id() +
                                 " " + strTemp + " => All_Views_EXT = " + method.invoke(objectToCompare1) +
                                 " Ext_Tables = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||

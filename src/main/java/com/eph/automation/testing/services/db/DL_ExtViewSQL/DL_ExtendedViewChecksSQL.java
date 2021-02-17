@@ -104,7 +104,7 @@ public class DL_ExtendedViewChecksSQL {
             ", availability_start_date availability_start_date\n"+
             ", availability_status availability_status\n"+
             ", delete_flag delete_flag\n"+
-            " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".product_availability_extended_allsource_v where epr_id in ('%s')) " +
+            " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".product_availability_extended_allsource_v where product_type in ('OOA','SUB') and epr_id in ('%s')) " +
             " order by epr_id,last_updated_date,application_name,availability_start_date,delta_answer_code_uk,availability_status,publication_status_anz," +
             " availability_format,delta_answer_code_us,delete_flag desc";
 
@@ -431,7 +431,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",delete_flag as delete_flag\n" +
                     " from(" +
                     "SELECT DISTINCT\n" +
-                    "  max(epr_id) epr_id\n" +
+                    "  epr_id epr_id\n" +
                     ", max(work_type) work_type\n" +
                     ", max(last_updated_date) last_updated_date\n" +
                     ", max(journal_els_com_ind) journal_els_com_ind\n" +
@@ -467,7 +467,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", max(business_unit_desc) business_unit_desc\n" +
                     ", case when sum(cast(delete_flag as integer)) = count(cast(delete_flag as integer)) then true else false end as delete_flag\n" +
                     " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_allsource_v" +
-                    " where epr_id in ('%s')) order by epr_id,image_file_ref,key_features,author_by_line_text" +
+                    " where epr_id in ('%s')group by epr_id) order by epr_id,image_file_ref,key_features,author_by_line_text" +
                     ",profit_centre,last_updated_date,primary_site_system,primary_site_acronym,primary_site_support_level,issue_prod_type_code," +
                     "catalogue_volumes_qty,catalogue_issues_qty,catalogue_volume_from,catalogue_volume_to,rf_issues_qty,rf_total_pages_qty," +
                     "rf_fvi,rf_lvi,business_unit_desc desc";

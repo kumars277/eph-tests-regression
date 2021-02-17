@@ -36,7 +36,7 @@ Feature:Validate data of DL Extended Views where data comes from All Extended Vi
    |manifestation_extended_restriction                                 |10              |
      |manifestation_extended_page_count                                  |10              |
      |manifestation_extended                                             |10              |
-      |work_extended                                                      |10              |
+    |work_extended                                                      |10              |
       |work_extended_editorial_board                                      |10              |
      |work_extended_metric                                               |10              |
     |work_extended_person_role                                          |10              |
