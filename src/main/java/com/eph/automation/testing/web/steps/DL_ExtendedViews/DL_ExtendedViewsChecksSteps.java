@@ -6,6 +6,8 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 //import com.eph.automation.testing.models.contexts.DL_CoreViewsAccessContext;
 //import com.eph.automation.testing.models.dao.DL_CoreViews.DL_CoreViewsAccessObject;
+import com.eph.automation.testing.models.contexts.DL_ExtViewsAccessContext;
+import com.eph.automation.testing.models.dao.DL_ExtendedViews.DL_ExtendedViewsAccessObject;
 import com.eph.automation.testing.services.db.DL_ExtViewSQL.DL_ExtendedViewChecksSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
@@ -25,7 +27,7 @@ public class DL_ExtendedViewsChecksSteps {
     private static String DLAllExtSQLViewCount;
     private static int DLAllExtCount;
 
-  //  public DL_CoreViewsAccessContext dataQualityDLCoreViewContext;
+    public DL_ExtViewsAccessContext dataQualityDLExtViewContext;
     private static String sql;
     private static List<String> Ids;
 
@@ -57,10 +59,10 @@ public class DL_ExtendedViewsChecksSteps {
                 Log.info("Getting DL work_extended Count...");
                 DLExtSQLViewCount = DL_ExtendedViewChecksSQL.GET_DL_WORK_EXT_COUNT;
                 break;
-           /* case "work_extended_editorial_board":
+            case "work_extended_editorial_board":
                 Log.info("Getting DL work_extended_editorial_board Count...");
-                DLExtSQLViewCount = DL_CoreViewChecksSQL.GET_DL_CORE_ALL_WRK_PERS_ROLE_VIEW_COUNT;
-                break;*/
+                DLExtSQLViewCount = DL_ExtendedViewChecksSQL.GET_DL_WORK_EDIT_BOARD_EXT_COUNT;
+                break;
             case "work_extended_metric":
                 Log.info("Getting Dl work_extended_metric Count...");
                 DLExtSQLViewCount = DL_ExtendedViewChecksSQL.GET_DL_WORK_EXT_METRIC_COUNT;
@@ -115,10 +117,10 @@ public class DL_ExtendedViewsChecksSteps {
                 Log.info("Getting DL All work_extended Count...");
                 DLAllExtSQLViewCount = DL_ExtendedViewChecksSQL.GET_DL_ALL_WORK_EXT_COUNT;
                 break;
-          /*  case "work_extended_editorial_board":
+            case "work_extended_editorial_board":
                 Log.info("Getting DL All work_extended_editorial_board Count...");
-                DLAllExtSQLViewCount = DL_CoreViewChecksSQL.GET_DL_CORE_ALL_WRK_PERS_ROLE_VIEW_COUNT;
-                break;*/
+                DLAllExtSQLViewCount = DL_ExtendedViewChecksSQL.GET_DL_ALL_WRK_EDIT_BOARD_VIEW_COUNT;
+                break;
             case "work_extended_metric":
                 Log.info("Getting Dl All work_extended_metric Count...");
                 DLAllExtSQLViewCount = DL_ExtendedViewChecksSQL.GET_DL_ALL_WORK_EXT_METRIC_COUNT;
@@ -153,410 +155,492 @@ public class DL_ExtendedViewsChecksSteps {
         Assert.assertEquals("The counts are not equal when compared with "+tableName+" and All Extended ", DLExtViewCount, DLAllExtCount);
     }
 
-  /*  @Given("^Get the (.*) from JM and BCS Core Tables (.*)$")
-    public void getRandomIdsFromBCSJM(String numberOfRecords, String tableName) {
+   @Given("^Get the (.*) from All Extended views (.*)$")
+    public void getRandomIdsFromAllExtViews(String numberOfRecords, String tableName) {
        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
-        Log.info("Get random Ids from JM and BCS Core Tables....");
+        Log.info("Get random Ids from All Ext Views....");
 
         switch (tableName) {
-            case "all_accountable_product_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_ACC_PROD_RAND_ID, numberOfRecords);
+            case "product_extended_availability":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_DL_ALL_PROD_EXT_AVAILABILITY_RAND_ID, numberOfRecords);
                 break;
-            case "all_manifestation_identifiers_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_MANIF_IDENT_RAND_ID, numberOfRecords);
+            case "product_extended_pricing":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_DL_ALL_PROD_EXT_PRICING_RAND_ID, numberOfRecords);
                 break;
-            case "all_manifestation_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_MANIF_RAND_ID, numberOfRecords);
+            case "manifestation_extended_restriction":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_DL_ALL_MANIF_EXT_RESTRICT_RAND_ID, numberOfRecords);
                 break;
-            case "all_person_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_PERSON_RAND_ID, numberOfRecords);
+            case "manifestation_extended_page_count":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_DL_ALL_MANIF_EXT_PAGE_COUNT_RAND_ID, numberOfRecords);
                 break;
-            case "all_product_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_PRODUCT_RAND_ID, numberOfRecords);
+            case "manifestation_extended":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_DL_ALL_MANIF_EXT_RAND_ID, numberOfRecords);
                 break;
-            case "all_work_identifier_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_IDENT_RAND_ID, numberOfRecords);
+            case "work_extended":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_DL_ALL_WORK_EXT_RAND_ID, numberOfRecords);
                 break;
-            case "all_work_person_role_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_PERS_ROLE_RAND_ID, numberOfRecords);
+            case "work_extended_editorial_board":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_DL_ALL_WORK_EXT_EDITORIAL_RAND_ID, numberOfRecords);
                 break;
-            case "all_work_relationship_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_RELATION_RAND_ID, numberOfRecords);
+            case "work_extended_metric":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_DL_ALL_WORK_EXT_METRIC_RAND_ID, numberOfRecords);
                 break;
-            case "all_work_subject_areas_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_SUBJ_AREA_RAND_ID, numberOfRecords);
+            case "work_extended_person_role":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_DL_ALL_WORK_EXT_PERS_ROLE_RAND_ID, numberOfRecords);
                 break;
-            case "all_work_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_RAND_ID, numberOfRecords);
+            case "work_extended_relationship_sibling":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_DL_ALL_WORK_EXT_RELT_SIBLING_RAND_ID, numberOfRecords);
+                break;
+            case "work_extended_subject_area":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_DL_ALL_WORK_EXT_SUBJ_AREA_RAND_ID, numberOfRecords);
+                break;
+            case "work_extended_url":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_DL_ALL_WORK_EXT_URL_RAND_ID, numberOfRecords);
                 break;
         }
         List<Map<?, ?>> randomIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-        Ids = randomIds.stream().map(m -> (String) m.get("external_reference")).collect(Collectors.toList());
+        Ids = randomIds.stream().map(m -> (String) m.get("EPRID")).collect(Collectors.toList());
         Log.info(sql);
         Log.info(Ids.toString());
     }
 
-    @Then("^Get the Records from the JM and BCS Core Tables (.*)$")
-    public void getRecFromJMAndBCS(String tableName){
-        Log.info("We get the records from JM and BCS Core table...");
+    @Then("^Get the Records from the All Extended views (.*)$")
+    public void getRecFromAllExtViews(String tableName){
+        Log.info("We get the records from All Extended views...");
         switch (tableName) {
-            case "all_accountable_product_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_ACC_PROD_REC, Joiner.on("','").join(Ids));
+            case "product_extended_availability":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_ALL_PROD_EXT_AVAILABILITY_REC, Joiner.on("','").join(Ids));
                 break;
-            case "all_manifestation_identifiers_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_MANIF_IDENT_REC, Joiner.on("','").join(Ids));
+            case "product_extended_pricing":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_ALL_PROD_PRICING_EXT_REC, Joiner.on("','").join(Ids));
                 break;
-            case "all_manifestation_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_MANIF_REC, Joiner.on("','").join(Ids));
+            case "manifestation_extended":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_ALL_MANIF_EXT_REC, Joiner.on("','").join(Ids));
                 break;
-            case "all_person_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_PERSON_REC, Joiner.on("','").join(Ids));
+            case "manifestation_extended_page_count":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_ALL_MANIF_PAGE_COUNT_EXT_REC, Joiner.on("','").join(Ids));
                 break;
-            case "all_product_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_PRODUCT_REC, Joiner.on("','").join(Ids));
+            case "manifestation_extended_restriction":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_ALL_MANIF_RESTRICT_EXT_REC, Joiner.on("','").join(Ids));
                 break;
-            case "all_work_identifier_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_IDENT_REC, Joiner.on("','").join(Ids));
+            case "work_extended":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_ALL_WORK_EXT_REC, Joiner.on("','").join(Ids));
                 break;
-            case "all_work_person_role_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_PERS_ROLE_REC, Joiner.on("','").join(Ids));
+            case "work_extended_metric":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_ALL_WORK_METRIC_EXT_REC, Joiner.on("','").join(Ids));
                 break;
-            case "all_work_relationship_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_RELATION_REC, Joiner.on("','").join(Ids));
+            case "work_extended_person_role":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_ALL_WORK_PERSON_ROLE_EXT_REC, Joiner.on("','").join(Ids));
                 break;
-            case "all_work_subject_areas_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_SUBJ_AREA_REC, Joiner.on("','").join(Ids));
+            case "work_extended_relationship_sibling":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_ALL_WORK_RELATIONSHIP_SIBLING_EXT_REC, Joiner.on("','").join(Ids));
                 break;
-            case "all_work_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_REC, Joiner.on("','").join(Ids));
+            case "work_extended_subject_area":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_ALL_WORK_SUB_AREA_EXT_REC, Joiner.on("','").join(Ids));
+                break;
+            case "work_extended_url":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_ALL_WORK_URL_EXT_REC, Joiner.on("','").join(Ids));
+                break;
+            case "work_extended_editorial_board":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_ALL_WORK_EDITORIAL_EXT_REC, Joiner.on("','").join(Ids));
                 break;
         }
-        dataQualityDLCoreViewContext.recordsFromBCSJMData = DBManager.getDBResultAsBeanList(sql, DL_CoreViewsAccessObject.class, Constants.AWS_URL);
+        dataQualityDLExtViewContext.recordsFromAllExt = DBManager.getDBResultAsBeanList(sql, DL_ExtendedViewsAccessObject.class, Constants.AWS_URL);
         Log.info(sql);
 
     }
 
-    @And ("^Get the Records from the DL core views (.*)$")
-    public void     getRecFromAllViews(String tableName){
-        Log.info("We get the records from JM and BCS Core table...");
+    @And("^Get the Records from the Extended Tables (.*)$")
+    public void getRecFromExtTables(String tableName){
+        Log.info("We get the records from Extended Tables...");
         switch (tableName) {
-            case "all_accountable_product_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_DL_CORE_ALL_ACC_PROD_VIEW_REC, Joiner.on("','").join(Ids));
+            case "product_extended_availability":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_PROD_EXT_AVAILABILITY_REC, Joiner.on("','").join(Ids));
                 break;
-            case "all_manifestation_identifiers_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_DL_CORE_ALL_MANIF_IDENT_VIEW_REC, Joiner.on("','").join(Ids));
+            case "product_extended_pricing":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_PROD_PRICING_EXT_REC, Joiner.on("','").join(Ids));
                 break;
-            case "all_manifestation_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_DL_CORE_ALL_MANIF_VIEW_REC, Joiner.on("','").join(Ids));
+            case "manifestation_extended":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_MANIF_EXT_REC, Joiner.on("','").join(Ids));
                 break;
-            case "all_person_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_DL_CORE_ALL_PERSON_VIEW_REC, Joiner.on("','").join(Ids));
+            case "manifestation_extended_page_count":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_MANIF_PAGE_COUNT_EXT_REC, Joiner.on("','").join(Ids));
                 break;
-            case "all_product_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_DL_CORE_ALL_PRODUCT_VIEW_REC, Joiner.on("','").join(Ids));
+            case "manifestation_extended_restriction":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_MANIF_RESTRICT_EXT_REC, Joiner.on("','").join(Ids));
                 break;
-            case "all_work_identifier_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_DL_CORE_ALL_WRK_IDENT_VIEW_REC, Joiner.on("','").join(Ids));
+            case "work_extended":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_WORK_EXT_REC, Joiner.on("','").join(Ids));
                 break;
-            case "all_work_person_role_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_DL_CORE_ALL_WRK_PERS_ROLE_VIEW_REC, Joiner.on("','").join(Ids));
+            case "work_extended_metric":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_WORK_METRIC_EXT_REC, Joiner.on("','").join(Ids));
                 break;
-            case "all_work_relationship_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_DL_CORE_ALL_WRK_RELT_VIEW_REC, Joiner.on("','").join(Ids));
+            case "work_extended_person_role":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_WORK_PERSON_ROLE_EXT_REC, Joiner.on("','").join(Ids));
                 break;
-            case "all_work_subject_areas_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_DL_CORE_ALL_WORK_SUB_AREA_VIEW_REC, Joiner.on("','").join(Ids));
+            case "work_extended_relationship_sibling":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_WORK_RELATIONSHIP_SIBLING_EXT_REC, Joiner.on("','").join(Ids));
                 break;
-            case "all_work_v":
-                sql = String.format(DL_CoreViewChecksSQL.GET_DL_CORE_ALL_WORK_VIEW_REC, Joiner.on("','").join(Ids));
+            case "work_extended_subject_area":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_WORK_SUB_AREA_EXT_REC, Joiner.on("','").join(Ids));
+                break;
+            case "work_extended_url":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_WORK_URL_EXT_REC, Joiner.on("','").join(Ids));
+                break;
+            case "work_extended_editorial_board":
+                sql = String.format(DL_ExtendedViewChecksSQL.GET_WORK_EDITORIAL_EXT_REC, Joiner.on("','").join(Ids));
                 break;
         }
-        dataQualityDLCoreViewContext.recordsFromAllViews = DBManager.getDBResultAsBeanList(sql, DL_CoreViewsAccessObject.class, Constants.AWS_URL);
+        dataQualityDLExtViewContext.recordsFromExtTable = DBManager.getDBResultAsBeanList(sql, DL_ExtendedViewsAccessObject.class, Constants.AWS_URL);
         Log.info(sql);
 
     }
 
-    @And("^Compare data of BCS and JM Core with DL Core views (.*) are identical$")
-    public void compareCurrentandCurrHist(String targetTableName) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        if (dataQualityDLCoreViewContext.recordsFromBCSJMData.isEmpty()) {
-            Log.info("No Data Found in the BCS/JM Core Tables ....");
+    @And("^Compare data of All Extended views with Extended Tables (.*) are identical$")
+    public void compareExtTablesandAllExtViews(String targetTableName) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if (dataQualityDLExtViewContext.recordsFromAllExt.isEmpty()) {
+            Log.info("No Data Found in the All Ext Views ....");
         } else {
-            Log.info("Sorting the Ids to compare the records between DL core All views...");
+            Log.info("Sorting the Ids..");
         }
-        for (int i = 0; i < dataQualityDLCoreViewContext.recordsFromBCSJMData.size(); i++) {
+        for (int i = 0; i < dataQualityDLExtViewContext.recordsFromAllExt.size(); i++) {
             switch (targetTableName) {
-                case "all_accountable_product_v":
+                case "product_extended_availability":
 
-                    Log.info("all_accountable_product_v Records:");
-                    dataQualityDLCoreViewContext.recordsFromBCSJMData.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE)); //sort primarykey data in the lists
-                    dataQualityDLCoreViewContext.recordsFromAllViews.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE));
-
-                    String[] all_accountable_prod_Col = {"getEXTERNALREFERENCE","getGL_PRODUCT_SEGMENT_CODE","getGL_PRODUCT_SEGMENT_PARENT","getWORKSOURCEREF","getDQ_ERR"};
-                    for (String strTemp : all_accountable_prod_Col) {
+                    Log.info("product_extended_availability Records:");
+                    String[] all_prod_avail_Col = {"getepr_id", "getproduct_type", "getlast_updated_date", "getapplication_name", "getdelta_answer_code_uk",
+                            "getdelta_answer_code_us","getpublication_status_anz","getavailability_format","getavailability_start_date","getavailability_status","getdelete_flag"};
+                    for (String strTemp : all_prod_avail_Col) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
 
-                        DL_CoreViewsAccessObject objectToCompare1 = dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i);
-                        DL_CoreViewsAccessObject objectToCompare2 = dataQualityDLCoreViewContext.recordsFromAllViews.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare1 = dataQualityDLExtViewContext.recordsFromAllExt.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare2 = dataQualityDLExtViewContext.recordsFromExtTable.get(i);
+
 
                         method = objectToCompare1.getClass().getMethod(strTemp);
                         method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("EXTERNALREFERENCE => " +  dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE() +
-                                " " + strTemp + " => BCS/DL = " + method.invoke(objectToCompare1) +
-                                 " All_Views_Core = " + method2.invoke(objectToCompare2));
+                        Log.info("EPRID => " + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id() +
+                                " " + strTemp + " =>  = All_Views_EXT" + method.invoke(objectToCompare1) +
+                                " Ext_Tables  = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " are mismatch/not found in Ext_Tables for EPRID:" + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
                     }
                     break;
-                    case "all_manifestation_identifiers_v":
+                case "product_extended_pricing":
 
-                        Log.info("all_manifestation_identifiers_v Records:");
-                        dataQualityDLCoreViewContext.recordsFromBCSJMData.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE)); //sort primarykey data in the lists
-                        dataQualityDLCoreViewContext.recordsFromAllViews.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE));
+                    Log.info("product_extended_pricing Records:");
+                    //dataQualityDLExtViewContext.recordsFromSourceIngestTable.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id)); //sort primarykey data in the lists
+                    //dataQualityDLExtViewContext.recordsFromAllExtViews.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id));
 
-                        String[] all_manifestation_identifiers_col = {"getEXTERNALREFERENCE","getIDENTIFIER","getEFFECTIVE_START_DATE","getEFFECTIVE_END_DATE","getF_TYPE","getF_MANIFESTATION","getMANIFESTATIONSOURCEREF"};
-                        for (String strTemp : all_manifestation_identifiers_col) {
-                            java.lang.reflect.Method method;
-                            java.lang.reflect.Method method2;
-
-                            DL_CoreViewsAccessObject objectToCompare1 = dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i);
-                            DL_CoreViewsAccessObject objectToCompare2 = dataQualityDLCoreViewContext.recordsFromAllViews.get(i);
-
-                            method = objectToCompare1.getClass().getMethod(strTemp);
-                            method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                            Log.info("EXTERNALREFERENCE => " +  dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE() +
-                                    " " + strTemp + " => BCS/DL = " + method.invoke(objectToCompare1) +
-                                    " All_Views_Core = " + method2.invoke(objectToCompare2));
-                            if (method.invoke(objectToCompare1) != null ||
-                                    (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
-                                        method.invoke(objectToCompare1),
-                                        method2.invoke(objectToCompare2));
-                            }
-                        }
-                        break;
-                case "all_manifestation_v":
-
-                    Log.info("all_manifestation_v Records:");
-                    dataQualityDLCoreViewContext.recordsFromBCSJMData.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE)); //sort primarykey data in the lists
-                    dataQualityDLCoreViewContext.recordsFromAllViews.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE));
-
-                    String[] all_manifestation_v = {"getEXTERNALREFERENCE","getEPH_MANIF_ID","getMANIF_KEY_TITLE","getMANIF_KEY_TITLE","getFIRSTPUBLISHEDDATE","getLASTPUBDATE","getF_TYPE","getFORMAT_TYPE"};
-                    for (String strTemp : all_manifestation_v) {
+                    String[] all_prod_price_Col = {"getepr_id","getproduct_type", "getlast_updated_date", "getprice_currency", "getprice_amount",
+                            "getprice_start_date","getprice_end_date","getprice_region","getprice_category","getprice_customer_category","getprice_purchase_quantity"};
+                    for (String strTemp : all_prod_price_Col) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
 
-                        DL_CoreViewsAccessObject objectToCompare1 = dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i);
-                        DL_CoreViewsAccessObject objectToCompare2 = dataQualityDLCoreViewContext.recordsFromAllViews.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare1 = dataQualityDLExtViewContext.recordsFromAllExt.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare2 = dataQualityDLExtViewContext.recordsFromExtTable.get(i);
 
                         method = objectToCompare1.getClass().getMethod(strTemp);
                         method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("EXTERNALREFERENCE => " +  dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE() +
-                                " " + strTemp + " => BCS/DL = " + method.invoke(objectToCompare1) +
-                                " All_Views_Core = " + method2.invoke(objectToCompare2));
+                        Log.info("EPRID => " + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id() +
+                                " " + strTemp + " => All_Views_EXT = " + method.invoke(objectToCompare1) +
+                                " Ext_Tables  = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " are mismatch/not found in Ext Tables for EPRID:" + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
                     }
                     break;
-                case "all_person_v":
-                    Log.info("all_person_v Records:");
-                    dataQualityDLCoreViewContext.recordsFromBCSJMData.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE)); //sort primarykey data in the lists
-                    dataQualityDLCoreViewContext.recordsFromAllViews.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE));
+                case "manifestation_extended":
 
-                    String[] all_person_v = {"getEXTERNALREFERENCE","getGIVENNAME","getFAMILYNAME","getPEOPLEHUBID","getEMAIL","getDQ_ERR"};
-                    for (String strTemp : all_person_v) {
+                    Log.info("manifestation_extended Records:");
+                    //                    dataQualityDLExtViewContext.recordsFromSourceIngestTable.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id)); //sort primarykey data in the lists
+                    //                   dataQualityDLExtViewContext.recordsFromAllExtViews.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id));
+
+                    String[] all_manif_ext_Col = {"getepr_id","getlast_updated_date", "getmanifestation_type", "getuk_textbook_ind", "getus_textbook_ind", "getmanifestation_trim_text",
+                            "getcommodity_code","getdiscount_code_emea","getdiscount_code_us","getmanifestation_weight","getjournal_issue_trim_size","getwar_reference","getdelete_flag"};
+                    for (String strTemp : all_manif_ext_Col) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
 
-                        DL_CoreViewsAccessObject objectToCompare1 = dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i);
-                        DL_CoreViewsAccessObject objectToCompare2 = dataQualityDLCoreViewContext.recordsFromAllViews.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare1 = dataQualityDLExtViewContext.recordsFromAllExt.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare2 = dataQualityDLExtViewContext.recordsFromExtTable.get(i);
 
                         method = objectToCompare1.getClass().getMethod(strTemp);
                         method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("EXTERNALREFERENCE => " +  dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE() +
-                                " " + strTemp + " => BCS/DL = " + method.invoke(objectToCompare1) +
-                                " All_Views_Core = " + method2.invoke(objectToCompare2));
+                        Log.info("EPRID => " + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id() +
+                                " " + strTemp + " => All_Views_EXT = " + method.invoke(objectToCompare1) +
+                                " Ext_Tables = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " are mismatch/not found in Ext Table for EPRID:" + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
                     }
                     break;
-                case "all_product_v":
-                    Log.info("all_product_v Records:");
-                    dataQualityDLCoreViewContext.recordsFromBCSJMData.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE)); //sort primarykey data in the lists
-                    dataQualityDLCoreViewContext.recordsFromAllViews.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE));
+                case "manifestation_extended_page_count":
 
-                    String[] all_product_v = {"getEXTERNALREFERENCE","getNAME","getSHORTNAME","getSEPRATELYSALEINDICATOR","getTRIALALLOWEDINDICATOR","getRESTRICTEDSALEINDICATOR","getLAUNCHDATE","getCONTENTFROMDATE","getCONTENTTODATE","getCONTENTDATEOFFSET","getF_TYPE","getF_STATUS","getF_ACCOUNTABLEPRODUCT","getF_TAXCODE","getF_REVENUEMODEL","getF_REVENUEACC","getF_WWORK","getWORKREFERENCE","getF_MANIFESTATION","getMANIFESTATIONREF","getDQ_ERR","getUPDATE_TYPE","getWORKROLLUPTYPE"};
-                    for (String strTemp : all_product_v) {
+                    Log.info("manifestation_extended_page_count Records:");
+                    //  dataQualityDLExtViewContext.recordsFromSourceIngestTable.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id)); //sort primarykey data in the lists
+                    // dataQualityDLExtViewContext.recordsFromAllExtViews.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id));
+
+                    String[] all_manif_page_ext_Col = {"getepr_id","getmanifestation_type","getlast_updated_date", "getcount_type_code", "getcount_type_name", "getcount", "getdelete_flag"};
+                    for (String strTemp : all_manif_page_ext_Col) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
 
-                        DL_CoreViewsAccessObject objectToCompare1 = dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i);
-                        DL_CoreViewsAccessObject objectToCompare2 = dataQualityDLCoreViewContext.recordsFromAllViews.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare1 = dataQualityDLExtViewContext.recordsFromAllExt.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare2 = dataQualityDLExtViewContext.recordsFromExtTable.get(i);
 
                         method = objectToCompare1.getClass().getMethod(strTemp);
                         method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("EXTERNALREFERENCE => " +  dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE() +
-                                " " + strTemp + " => BCS/DL = " + method.invoke(objectToCompare1) +
-                                " All_Views_Core = " + method2.invoke(objectToCompare2));
+                        Log.info("EPRID => " + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id() +
+                                " " + strTemp + " => All_Views_EXT = " + method.invoke(objectToCompare1) +
+                                " EXt_Tables = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
-                                    method.invoke(objectToCompare1),
-                                    method2.invoke(objectToCompare2));
-                        }
-                    }
-                    break;
-                case "all_work_identifier_v":
-                    Log.info("all_work_identifier_v Records:");
-                    dataQualityDLCoreViewContext.recordsFromBCSJMData.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE)); //sort primarykey data in the lists
-                    dataQualityDLCoreViewContext.recordsFromAllViews.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE));
-
-
-                    String[] all_work_identifier_v = {"getEXTERNALREFERENCE","getIDENTIFIER","getEFFECTIVE_START_DATE","getEFFECTIVE_END_DATE","getF_TYPE","getF_WWORK","getWORKSOURCEREF"};
-                    for (String strTemp : all_work_identifier_v) {
-                        java.lang.reflect.Method method;
-                        java.lang.reflect.Method method2;
-
-                        DL_CoreViewsAccessObject objectToCompare1 = dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i);
-                        DL_CoreViewsAccessObject objectToCompare2 = dataQualityDLCoreViewContext.recordsFromAllViews.get(i);
-
-                        method = objectToCompare1.getClass().getMethod(strTemp);
-                        method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                        Log.info("EXTERNALREFERENCE => " +  dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE() +
-                                " " + strTemp + " => BCS/DL = " + method.invoke(objectToCompare1) +
-                                " All_Views_Core = " + method2.invoke(objectToCompare2));
-                        if (method.invoke(objectToCompare1) != null ||
-                                (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
-                                    method.invoke(objectToCompare1),
-                                    method2.invoke(objectToCompare2));
-                        }
-                    }
-                    break;
-                case "all_work_person_role_v":
-
-                    Log.info("all_work_person_role_v Records:");
-                    dataQualityDLCoreViewContext.recordsFromBCSJMData.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE)); //sort primarykey data in the lists
-                    dataQualityDLCoreViewContext.recordsFromAllViews.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE));
-
-                    String[] all_work_person_role_v = {"getEXTERNALREFERENCE","getEFFECTIVE_START_DATE","getEFFECTIVE_END_DATE","getF_ROLE","getF_WWORK","getWORKSOURCEREF","getPERSONSOURCEREF","getPERSONEMAIL","getDQ_ERR"};
-                    for (String strTemp : all_work_person_role_v) {
-                        java.lang.reflect.Method method;
-                        java.lang.reflect.Method method2;
-
-                        DL_CoreViewsAccessObject objectToCompare1 = dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i);
-                        DL_CoreViewsAccessObject objectToCompare2 = dataQualityDLCoreViewContext.recordsFromAllViews.get(i);
-
-                        method = objectToCompare1.getClass().getMethod(strTemp);
-                        method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                        Log.info("EXTERNALREFERENCE => " +  dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE() +
-                                " " + strTemp + " => BCS/DL = " + method.invoke(objectToCompare1) +
-                                " All_Views_Core = " + method2.invoke(objectToCompare2));
-                        if (method.invoke(objectToCompare1) != null ||
-                                (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " are mismatch/not found in Ext_Tables for EPRID:" + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
                     }
                     break;
 
-                case "all_work_relationship_v":
-                    Log.info("all_work_relationship_v Records:");
-                    dataQualityDLCoreViewContext.recordsFromBCSJMData.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE)); //sort primarykey data in the lists
-                    dataQualityDLCoreViewContext.recordsFromAllViews.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE));
+                case "manifestation_extended_restriction":
 
-                    String[] all_work_relationship_v = {"getEXTERNALREFERENCE","getEFFECTIVE_START_DATE","getEFFECTIVE_END_DATE","getDQ_ERR","getPARENTWORKSOURCEREF","getCHILDWORKSOURCEREF"};
-                    for (String strTemp : all_work_relationship_v) {
+                    Log.info("manifestation_extended_restriction Records:");
+                    //dataQualityDLExtViewContext.recordsFromSourceIngestTable.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id)); //sort primarykey data in the lists
+                    //dataQualityDLExtViewContext.recordsFromAllExtViews.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id));
+
+                    String[] all_manif_restrict_ext_Col = {"getepr_id", "getmanifestation_type","getlast_updated_date", "getrestriction_code", "getrestriction_name","getdelete_flag"};
+                    for (String strTemp : all_manif_restrict_ext_Col) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
 
-                        DL_CoreViewsAccessObject objectToCompare1 = dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i);
-                        DL_CoreViewsAccessObject objectToCompare2 = dataQualityDLCoreViewContext.recordsFromAllViews.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare1 = dataQualityDLExtViewContext.recordsFromAllExt.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare2 = dataQualityDLExtViewContext.recordsFromExtTable.get(i);
 
                         method = objectToCompare1.getClass().getMethod(strTemp);
                         method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("EXTERNALREFERENCE => " +  dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE() +
-                                " " + strTemp + " => BCS/DL = " + method.invoke(objectToCompare1) +
-                                " All_Views_Core = " + method2.invoke(objectToCompare2));
+                        Log.info("EPRID => " + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id() +
+                                " " + strTemp + " => All_Views_EXT = " + method.invoke(objectToCompare1) +
+                                " Ext_tables = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " are mismatch/not found in Ext_tables for EPRID:" + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
                     }
                     break;
-                case "all_work_subject_areas_v":
-                    Log.info("all_work_subject_areas_v Records:");
-                    dataQualityDLCoreViewContext.recordsFromBCSJMData.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE)); //sort primarykey data in the lists
-                    dataQualityDLCoreViewContext.recordsFromAllViews.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE));
-
-                    String[] all_work_subject_areas_v = {"getEXTERNALREFERENCE","getEFFECTIVE_START_DATE","getEFFECTIVE_END_DATE","getDQ_ERR","getF_SUBJECTAREA","getF_WWORK","getWORKSOURCEREF","getSUBJECTAREAREF"};
-                    for (String strTemp : all_work_subject_areas_v) {
+                case "work_extended":
+                    Log.info("work_extended Records:");
+                    // dataQualityDLExtViewContext.recordsFromSourceIngestTable.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id)); //sort primarykey data in the lists
+                    //dataQualityDLExtViewContext.recordsFromAllExtViews.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id));
+                    String[] all_work_ext_Col = {"getepr_id", "getwork_type","getlast_updated_date", "getjournal_els_com_ind", "getjourns_aims_scope","getdelta_business_unit","getimage_file_ref","getmaster_isbn","getauthor_by_line_text",
+                            "getkey_features","getproduct_awards","getproduct_long_desc","getproduct_short_desc","getreview_quotes","gettoc_long","gettoc_short","getaudience_text",
+                            "getbook_sub_business_unit","getinternal_els_div","getprofit_centre","gettext_ref_trade","getprimary_site_system","getprimary_site_acronym","getprimary_site_support_level","getissue_prod_type_code",
+                            "getcatalogue_volumes_qty","getcatalogue_issues_qty","getcatalogue_volume_from","getcatalogue_volume_to","getrf_issues_qty","getrf_total_pages_qty","getrf_fvi",
+                            "getrf_lvi","getbusiness_unit_desc","getdelete_flag"};
+                    for (String strTemp : all_work_ext_Col) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
 
-                        DL_CoreViewsAccessObject objectToCompare1 = dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i);
-                        DL_CoreViewsAccessObject objectToCompare2 = dataQualityDLCoreViewContext.recordsFromAllViews.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare1 = dataQualityDLExtViewContext.recordsFromAllExt.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare2 = dataQualityDLExtViewContext.recordsFromExtTable.get(i);
 
                         method = objectToCompare1.getClass().getMethod(strTemp);
                         method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("EXTERNALREFERENCE => " +  dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE() +
-                                " " + strTemp + " => BCS/DL = " + method.invoke(objectToCompare1) +
-                                " All_Views_Core = " + method2.invoke(objectToCompare2));
+                        Log.info("EPRID => " + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id() +
+                                " " + strTemp + " => All_Views_EXT = " + method.invoke(objectToCompare1) +
+                                " Ext_tables = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " are mismatch/not found in Ext_tables for EPRID:" + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
                     }
                     break;
-                case "all_work_v":
-                    Log.info("all_work_v Records:");
-                    dataQualityDLCoreViewContext.recordsFromBCSJMData.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE)); //sort primarykey data in the lists
-                    dataQualityDLCoreViewContext.recordsFromAllViews.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE));
+                case "work_extended_metric":
+                    Log.info("work_extended_metric Records:");
+                    dataQualityDLExtViewContext.recordsFromAllExt.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id)); //sort primarykey data in the lists
+                    dataQualityDLExtViewContext.recordsFromExtTable.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id));
 
-                    String[] all_work_v = {"getEXTERNALREFERENCE","getEPR","getWORKTITLE","getWORKSUBTITLE","getELECTRORIGHTINDICATOR","getVOLUME","getCOPYRIGHTYEAR","getEDITIONNO","getF_PMC","getF_OA_JOURNAL_TYPE","getF_TYPE","getF_STATUS","getF_IMPRINT","getF_SOCIETY_OWNERSHIP","getRESP_CENTRE","getOPCO","getLANGUAGECODE","getSUBSCRIPTIONTYPE","getPLANNED_LAUNCH_DATE","getACTUAL_LAUNCH_DATE","getPLANNED_TERMINATION_DATE","getACTUAL_TERMINATION_DATE","getDQ_ERR","getUPDATE_TYPE"};
-                    for (String strTemp : all_work_v) {
+                    String[] all_work_metric_ext_Col = {"getepr_id", "getwork_type","getlast_updated_date", "getmetric_code", "getmetric_name","getmetric","getmetric_year","getmetric_url","getdelete_flag"};
+                    for (String strTemp : all_work_metric_ext_Col) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
 
-                        DL_CoreViewsAccessObject objectToCompare1 = dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i);
-                        DL_CoreViewsAccessObject objectToCompare2 = dataQualityDLCoreViewContext.recordsFromAllViews.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare1 = dataQualityDLExtViewContext.recordsFromAllExt.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare2 = dataQualityDLExtViewContext.recordsFromExtTable.get(i);
 
                         method = objectToCompare1.getClass().getMethod(strTemp);
                         method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("EXTERNALREFERENCE => " +  dataQualityDLCoreViewContext.recordsFromBCSJMData.get(i).getEXTERNALREFERENCE() +
-                                " " + strTemp + " => BCS/DL = " + method.invoke(objectToCompare1) +
-                                " All_Views_Core = " + method2.invoke(objectToCompare2));
+                        Log.info("EPRID => " + dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getepr_id() +
+                                " " + strTemp + " => All_Views_EXT = " + method.invoke(objectToCompare1) +
+                                " Ext_Tables = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
                                 (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in All Views",
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " are mismatch/not found in Ext_Tables for EPRID:" + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id(),
+                                    method.invoke(objectToCompare1),
+                                    method2.invoke(objectToCompare2));
+                        }
+                    }
+                    break;
+                case "work_extended_person_role":
+
+                    Log.info("work_extended_person_role Records:");
+
+                    String[] all_work_pers_role_ext_Col = {"getepr_id", "getwork_type","getlast_updated_date", "getcore_work_person_role_id", "getrole_code","getrole_name","getsequence_number","getgroup_number","getfirst_name",
+                            "getlast_name","getpeoplehub_id","getemail","gettitle","gethonours","getaffiliation","getimage_url","getfootnote_txt","getnotes_txt","getdelete_flag"};
+                    for (String strTemp : all_work_pers_role_ext_Col) {
+                        java.lang.reflect.Method method;
+                        java.lang.reflect.Method method2;
+
+                        DL_ExtendedViewsAccessObject objectToCompare1 = dataQualityDLExtViewContext.recordsFromAllExt.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare2 = dataQualityDLExtViewContext.recordsFromExtTable.get(i);
+
+                        method = objectToCompare1.getClass().getMethod(strTemp);
+                        method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                        Log.info("EPRID => " + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id() +
+                                " " + strTemp + " => All_Views_EXT = " + method.invoke(objectToCompare1) +
+                                " Ext_table = " + method2.invoke(objectToCompare2));
+                        if (method.invoke(objectToCompare1) != null ||
+                                (method2.invoke(objectToCompare2) != null)) {
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " are mismatch/not found in Ext_table for EPRID:" + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id(),
+                                    method.invoke(objectToCompare1),
+                                    method2.invoke(objectToCompare2));
+                        }
+                    }
+                    break;
+                case "work_extended_relationship_sibling":
+
+                    Log.info("work_extended_relationship_sibling Records:");
+                    //  dataQualityDLExtViewContext.recordsFromSourceIngestTable.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id)); //sort primarykey data in the lists
+                    // dataQualityDLExtViewContext.recordsFromAllExtViews.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id));
+
+                    String[] all_work_relation_sibling_ext_Col = {"getepr_id", "getwork_type","getlast_updated_date","getrole_code","getrole_name","getsequence_number","getgroup_number","getfirst_name",
+                            "getlast_name","getpeoplehub_id","getemail","gettitle","gethonours","getaffiliation","getimage_url","getfootnote_txt","getnotes_txt","getdelete_flag"};
+                    for (String strTemp : all_work_relation_sibling_ext_Col) {
+                        java.lang.reflect.Method method;
+                        java.lang.reflect.Method method2;
+
+                        DL_ExtendedViewsAccessObject objectToCompare1 = dataQualityDLExtViewContext.recordsFromAllExt.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare2 = dataQualityDLExtViewContext.recordsFromExtTable.get(i);
+
+                        method = objectToCompare1.getClass().getMethod(strTemp);
+                        method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                        Log.info("EPRID => " + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id() +
+                                " " + strTemp + " => All_Views_EXT = " + method.invoke(objectToCompare1) +
+                                " Ext_table = " + method2.invoke(objectToCompare2));
+                        if (method.invoke(objectToCompare1) != null ||
+                                (method2.invoke(objectToCompare2) != null)) {
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " are mismatch/not found in Ext_table for EPRID:" + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id(),
+                                    method.invoke(objectToCompare1),
+                                    method2.invoke(objectToCompare2));
+                        }
+                    }
+                    break;
+                case "work_extended_subject_area":
+
+                    Log.info("work_extended_subject_area Records:");
+                    // dataQualityDLExtViewContext.recordsFromSourceIngestTable.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id)); //sort primarykey data in the lists
+                    //dataQualityDLExtViewContext.recordsFromAllExtViews.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id));
+
+                    String[] all_work_subj_area_ext_Col = {"getepr_id", "getwork_type","getlast_updated_date", "getcode", "getname","getpriority","gettype_code","gettype_name","getdelete_flag"};
+                    for (String strTemp : all_work_subj_area_ext_Col) {
+                        java.lang.reflect.Method method;
+                        java.lang.reflect.Method method2;
+
+                        DL_ExtendedViewsAccessObject objectToCompare1 = dataQualityDLExtViewContext.recordsFromAllExt.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare2 = dataQualityDLExtViewContext.recordsFromExtTable.get(i);
+
+                        method = objectToCompare1.getClass().getMethod(strTemp);
+                        method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                        Log.info("EPRID => " + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id() +
+                                " " + strTemp + " => All_Views_EXT = " + method.invoke(objectToCompare1) +
+                                " Ext_tables = " + method2.invoke(objectToCompare2));
+                        if (method.invoke(objectToCompare1) != null ||
+                                (method2.invoke(objectToCompare2) != null)) {
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " are mismatch/not found in All Views for EPRID:" + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id(),
+                                    method.invoke(objectToCompare1),
+                                    method2.invoke(objectToCompare2));
+                        }
+                    }
+                    break;
+                case "work_extended_url":
+
+                    Log.info("work_extended_url Records:");
+                    // dataQualityDLExtViewContext.recordsFromSourceIngestTable.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id)); //sort primarykey data in the lists
+                    // dataQualityDLExtViewContext.recordsFromAllExtViews.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id));
+
+                    String[] all_work_url_ext_Col = {"getepr_id","getwork_type","getlast_updated_date", "geturl_type_code", "geturl_type_name","geturl","geturl_title","getdelete_flag"};
+                    for (String strTemp : all_work_url_ext_Col) {
+                        java.lang.reflect.Method method;
+                        java.lang.reflect.Method method2;
+
+                        DL_ExtendedViewsAccessObject objectToCompare1 = dataQualityDLExtViewContext.recordsFromAllExt.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare2 = dataQualityDLExtViewContext.recordsFromExtTable.get(i);
+
+                        method = objectToCompare1.getClass().getMethod(strTemp);
+                        method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                        Log.info("EPRID => " + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id() +
+                                " " + strTemp + " => All_Views_EXT = " + method.invoke(objectToCompare1) +
+                                " Ext_tables = " + method2.invoke(objectToCompare2));
+                        if (method.invoke(objectToCompare1) != null ||
+                                (method2.invoke(objectToCompare2) != null)) {
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " are mismatch/not found in Ext_tables for EPRID:" + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id(),
+                                    method.invoke(objectToCompare1),
+                                    method2.invoke(objectToCompare2));
+                        }
+                    }
+                    break;
+                case "work_extended_editorial_board":
+
+                    Log.info("work_extended_editorial_board Records:");
+                    dataQualityDLExtViewContext.recordsFromAllExt.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id)); //sort primarykey data in the lists
+                    dataQualityDLExtViewContext.recordsFromExtTable.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id));
+
+                    String[] all_work_edit_ext_Col = {"getepr_id", "getwork_type","getlast_updated_date", "getrole_code", "getrole_name","getsequence_number","getgroup_number","getfirst_name","getlast_name" ,
+                            "gettitle","gethonours","getaffiliation","getimage_url","getfootnote_txt","getnotes_txt","getdelete_flag"};
+                    for (String strTemp : all_work_edit_ext_Col) {
+                        java.lang.reflect.Method method;
+                        java.lang.reflect.Method method2;
+
+                        DL_ExtendedViewsAccessObject objectToCompare1 = dataQualityDLExtViewContext.recordsFromAllExt.get(i);
+                        DL_ExtendedViewsAccessObject objectToCompare2 = dataQualityDLExtViewContext.recordsFromExtTable.get(i);
+
+                        method = objectToCompare1.getClass().getMethod(strTemp);
+                        method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                        Log.info("EPRID => " + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id() +
+                                " " + strTemp + " => All_Views_EXT = " + method.invoke(objectToCompare1) +
+                                " Ext_Tables = " + method2.invoke(objectToCompare2));
+                        if (method.invoke(objectToCompare1) != null ||
+                                (method2.invoke(objectToCompare2) != null)) {
+                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " are mismatch/not found in Ext_Tables for EPRID:" + dataQualityDLExtViewContext.recordsFromAllExt.get(i).getepr_id(),
                                     method.invoke(objectToCompare1),
                                     method2.invoke(objectToCompare2));
                         }
@@ -564,7 +648,9 @@ public class DL_ExtendedViewsChecksSteps {
                     break;
             }
         }
-    }*/
+
+    }
+
 }
 
 

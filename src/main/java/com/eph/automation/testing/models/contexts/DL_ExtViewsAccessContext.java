@@ -11,7 +11,8 @@ import java.util.List;
 public class DL_ExtViewsAccessContext {
     public static List<DL_ExtendedViewsAccessObject> recordsFromSourceIngestTable;
     public static List<DL_ExtendedViewsAccessObject> recordsFromAllExtViews;
-
+    public static List<DL_ExtendedViewsAccessObject> recordsFromAllExt;
+    public static List<DL_ExtendedViewsAccessObject> recordsFromExtTable;
 
 
 
