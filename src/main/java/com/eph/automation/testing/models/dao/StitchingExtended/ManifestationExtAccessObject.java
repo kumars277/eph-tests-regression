@@ -28,7 +28,7 @@ public class ManifestationExtAccessObject {
     public String gettype() {
         return type;
     }
-    public void settype(String ype) {
+    public void settype(String type) {
         this.type = type;
     }
 

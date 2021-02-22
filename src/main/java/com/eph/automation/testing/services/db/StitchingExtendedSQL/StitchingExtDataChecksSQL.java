@@ -40,13 +40,13 @@ public class StitchingExtDataChecksSQL {
                     ",manifestation_weight as manifestation_weight\n" +
                     ",journal_issue_trim_size as journal_issue_trim_size\n" +
                     ",war_reference as war_reference\n" +
-                    " from "+GetStitchDLDBUser.getProdExtDB()+".manifestation_extended where epr_id in ('%s')\n";
+                    " from "+GetStitchDLDBUser.getProdExtDB()+".manifestation_extended where epr_id in ('EPR-M-10HSTY')\n";
 
     public static String GET_RANDOM_EPR_MANIF_EXTENDED =
             "select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".manifestation_extended where delete_flag=false order by rand() limit %s\n";
 
     public static String GET_MANIF_EXT_JSON_REC =
-            "select json as json, epr_id as epr_id, type as type from "+GetStitchDLDBUser.getStitchingExtdb()+".stch_manifestation_ext_json WHERE epr_id in ('%s')\n";
+            "select json as json, epr_id as epr_id, type as type from "+GetStitchDLDBUser.getStitchingExtdb()+".stch_manifestation_ext_json WHERE epr_id in ('EPR-M-10HSTY')\n";
 
 
 
