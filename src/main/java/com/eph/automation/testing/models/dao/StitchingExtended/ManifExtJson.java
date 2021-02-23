@@ -1,6 +1,8 @@
 package com.eph.automation.testing.models.dao.StitchingExtended;
 //package com.eph.automation.testing.models.api;
 
+import com.eph.automation.testing.models.dao.StitchingExtended.ManifExtPgCountJson;
+
 public class ManifExtJson {
 
     private String journalIssueTrimSize;
@@ -83,6 +85,8 @@ public class ManifExtJson {
         this.warReference = warReference;
     }
 
-
+    private ManifExtPgCountJson[] manifestationExtendedPageCounts;
+    public ManifExtPgCountJson[] getManifestationExtendedPageCounts() {return manifestationExtendedPageCounts;}
+    public void setManifestationExtendedPageCounts(ManifExtPgCountJson[] manifestationExtendedPageCounts) {this.manifestationExtendedPageCounts = manifestationExtendedPageCounts;}
 }
 

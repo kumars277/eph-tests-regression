@@ -1508,7 +1508,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",languagecode as LANGUAGECODE \n" +
                     ",electro_rights_indicator as ELECTRORIGHTSINDICATOR \n" +
                     ",f_oa_journal_type as FOAJOURNALTYPE \n" +
-                    ",f_society_ownership as FOAJOURNALTYPE \n" +
+                    ",f_society_ownership as FSOCIETYOWNERSHIP \n" +
                     ",subscription_type as SUBSCRIPTIONTYPE \n" +
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_part  where " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_part)" +
@@ -1536,7 +1536,7 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",languagecode as LANGUAGECODE \n" +
                     ",electro_rights_indicator as ELECTRORIGHTSINDICATOR \n" +
                     ",f_oa_journal_type as FOAJOURNALTYPE \n" +
-                    ",f_society_ownership as FOAJOURNALTYPE \n" +
+                    ",f_society_ownership as FSOCIETYOWNERSHIP \n" +
                     ",subscription_type as SUBSCRIPTIONTYPE \n" +
                     "from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_transform_file_history_part  where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_transform_file_history_part)" +
@@ -3195,74 +3195,141 @@ public class BCS_ETLCoreDataChecksSQL {
 
     public static String GET_RANDOM_MANIF_STATUS_KEY_INBOUND =
             "select sourceref from(\n" +
-                    "select \n" +
-                    "       sourceref \n" +
-                    "     , min(ref_key_product_priority) ref_key_product_priority \n" +
-                    "     , min(delivery_status_product_priority) delivery_status_product_priority \n" +
-                    "     , min(delta_status_product_priority) delta_status_product_priority \n" +
-                    "     , min(ref_key_manifestation_priority) ref_key_manifestation_priority \n" +
-                    "     , min(delivery_status_manifestation_priority) delivery_status_manifestation_priority \n" +
-                    "     , min(delta_status_manifestation_priority) delta_status_manifestation_priority \n" +
-                    " from ( \n" +
-                    "  select \n" +
-                    "       sourceref \n" +
-                    "     , min(product_priority) ref_key_product_priority \n" +
-                    "     , min(manifestation_priority) ref_key_manifestation_priority \n" +
-                    "     , cast(null as integer) delivery_status_product_priority \n" +
-                    "     , cast(null as integer) delivery_status_manifestation_priority \n" +
-                    "     , cast(null as integer) delta_status_product_priority \n" +
-                    "     , cast(null as integer) delta_status_manifestation_priority \n" +
-                    "  from \n" +
-                    "    ( \n" +
-                    "     select sourceref, split_part(refkey,' | ',1) refkey, product_priority, manifestation_priority \n" +
-                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product\n" +
-                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(refkey,' | ',1) = ppm_code\n" +
-                    "     union\n" +
-                    "     select sourceref, split_part(refkey,' | ',1) refkey, product_priority, manifestation_priority\n" +
-                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation\n" +
-                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(refkey,' | ',1) = ppm_code\n" +
-                    "    )\n" +
-                    "  group by sourceref\n" +
-                    "  union all\n" +
-                    "  select\n" +
-                    "       sourceref\n" +
-                    "     , cast(null as integer) ref_key_product_priority\n" +
-                    "     , cast(null as integer) ref_key_manifestation_priority\n" +
-                    "     , min(product_priority) delivery_status_product_priority\n" +
-                    "     , min(manifestation_priority) delivery_status_manifestation_priority\n" +
-                    "     , cast(null as integer) delta_status_product_priority\n" +
-                    "     , cast(null as integer) delta_status_manifestation_priority\n" +
-                    "  from\n" +
-                    "    (\n" +
-                    "     select sourceref, split_part(deliverystatus,' | ',1) delivery_status, product_priority, manifestation_priority\n" +
-                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product\n" +
-                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(deliverystatus,' | ',1) = ppm_code\n" +
-                    "     union\n" +
-                    "     select sourceref, split_part(status,' | ',1) delivery_status, product_priority, manifestation_priority\n" +
-                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation\n" +
-                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(status,' | ',1) = ppm_code\n" +
-                    "    )\n" +
-                    "  group by sourceref\n" +
-                    "  union all\n" +
-                    "  select\n" +
-                    "       sourceref\n" +
-                    "     , cast(null as integer) ref_key_product_priority\n" +
-                    "     , cast(null as integer) ref_key_manifestation_priority\n" +
-                    "     , cast(null as integer) delivery_status_product_priority\n" +
-                    "     , cast(null as integer) delivery_status_manifestation_priority\n" +
-                    "     , min(product_priority) delta_status_product_priority\n" +
-                    "     , min(manifestation_priority) delta_status_manifestation_priority\n" +
-                    "  from\n" +
-                    "    (\n" +
-                    "     select sourceref, split_part(value,' | ',1) delta_status, product_priority, manifestation_priority\n" +
-                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification\n" +
-                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(value,' | ',1) = ppm_code\n" +
-                    "     where split_part(classificationcode,' | ',1) in ('DCADA','DCAADAUS','DCAANZ')\n" +
-                    "    )\n" +
-                    "  group by sourceref\n" +
-                    " )\n" +
-                    "group by sourceref\n" +
-                    ") order by rand() limit %s";
+                    "select\n" +
+                    "   a.sourceref,\n" +
+                    "   versionfamily.workmasterprojectno,\n" +
+                    "   coalesce(nullif(min(div_class_manifestation_priority), 6),\n" +
+                    "            nullif(min(ref_key_manifestation_priority), 6),\n" +
+                    "            nullif(min(delivery_status_manifestation_priority), 6),\n" +
+                    "            nullif(min(delta_status_manifestation_priority), 6), 6) manifestation_priority,\n" +
+                    "   coalesce(nullif(min(div_class_product_priority), 6),\n" +
+                    "            nullif(min(ref_key_product_priority), 6),\n" +
+                    "            nullif(min(delivery_status_product_priority), 6),\n" +
+                    "            nullif(min(delta_status_product_priority), 6), 6) product_priority,\n" +
+                    "   min(div_class_product_priority) div_class_product_priority,\n" +
+                    "   min(ref_key_product_priority) ref_key_product_priority,\n" +
+                    "   min(delivery_status_product_priority) delivery_status_product_priority,\n" +
+                    "   min(delta_status_product_priority) delta_status_product_priority,\n" +
+                    "   min(div_class_product_priority) div_class_manifestation_priority,\n" +
+                    "   min(ref_key_manifestation_priority) ref_key_manifestation_priority,\n" +
+                    "   min(delivery_status_manifestation_priority) delivery_status_manifestation_priority,\n" +
+                    "   min(delta_status_manifestation_priority) delta_status_manifestation_priority\n" +
+                    "from\n" +
+                    "   (\n" +
+                    "      select\n" +
+                    "         sourceref,\n" +
+                    "         product_priority div_class_product_priority,\n" +
+                    "         manifestation_priority div_class_manifestation_priority,\n" +
+                    "         cast(null as integer) ref_key_product_priority,\n" +
+                    "         cast(null as integer) ref_key_manifestation_priority,\n" +
+                    "         cast(null as integer) delivery_status_product_priority,\n" +
+                    "         cast(null as integer) delivery_status_manifestation_priority,\n" +
+                    "         cast(null as integer) delta_status_product_priority,\n" +
+                    "         cast(null as integer) delta_status_manifestation_priority\n" +
+                    "      from\n" +
+                    "         "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification\n" +
+                    "         inner join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode\n" +
+                    "            on ('NLP' = ppm_code)\n" +
+                    "      where\n" +
+                    "         classificationcode like 'DIVTO%%'\n" +
+                    "         and nullif(value, '') is not null\n" +
+                    "      union all\n" +
+                    "      select\n" +
+                    "         sourceref,\n" +
+                    "         cast(null as integer) div_class_product_priority,\n" +
+                    "         cast(null as integer) div_class_manifestation_priority,\n" +
+                    "         min(product_priority) ref_key_product_priority,\n" +
+                    "         min(manifestation_priority) ref_key_manifestation_priority,\n" +
+                    "         cast(null as integer) delivery_status_product_priority,\n" +
+                    "         cast(null as integer) delivery_status_manifestation_priority,\n" +
+                    "         cast(null as integer) delta_status_product_priority,\n" +
+                    "         cast(null as integer) delta_status_manifestation_priority\n" +
+                    "      from\n" +
+                    "         (\n" +
+                    "            select\n" +
+                    "               sourceref,\n" +
+                    "               split_part(refkey, ' | ', 1) refkey,\n" +
+                    "               product_priority,\n" +
+                    "               manifestation_priority\n" +
+                    "            from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product\n" +
+                    "                 left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode\n" +
+                    "                    on (split_part(refkey, ' | ', 1) = ppm_code)\n" +
+                    "            union\n" +
+                    "            select\n" +
+                    "               sourceref,\n" +
+                    "               split_part(refkey, ' | ', 1) refkey,\n" +
+                    "               product_priority,\n" +
+                    "               manifestation_priority\n" +
+                    "            from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation\n" +
+                    "                 left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode\n" +
+                    "                    on (split_part(refkey, ' | ', 1) = ppm_code)\n" +
+                    "         )\n" +
+                    "      group by sourceref\n" +
+                    "      union all\n" +
+                    "      select\n" +
+                    "         sourceref,\n" +
+                    "         cast(null as integer) div_class_product_priority,\n" +
+                    "         cast(null as integer) div_class_manifestation_priority,\n" +
+                    "         cast(null as integer) ref_key_product_priority,\n" +
+                    "         cast(null as integer) ref_key_manifestation_priority,\n" +
+                    "         min(product_priority) delivery_status_product_priority,\n" +
+                    "         min(manifestation_priority) delivery_status_manifestation_priority,\n" +
+                    "         cast(null as integer) delta_status_product_priority,\n" +
+                    "         cast(null as integer) delta_status_manifestation_priority\n" +
+                    "      from\n" +
+                    "         (\n" +
+                    "            select\n" +
+                    "               sourceref,\n" +
+                    "               split_part(deliverystatus, ' | ', 1) delivery_status,\n" +
+                    "               product_priority,\n" +
+                    "               manifestation_priority\n" +
+                    "            from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product\n" +
+                    "                 left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode\n" +
+                    "                    on (split_part(deliverystatus, ' | ', 1) = ppm_code)\n" +
+                    "            union\n" +
+                    "            select\n" +
+                    "               sourceref,\n" +
+                    "               split_part(status, ' | ', 1) delivery_status,\n" +
+                    "               product_priority,\n" +
+                    "               manifestation_priority\n" +
+                    "            from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation\n" +
+                    "                 left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode\n" +
+                    "                    on (split_part(status, ' | ', 1) = ppm_code)\n" +
+                    "            where\n" +
+                    "               not (refkey = '' and status = 'IPL | Planned')\n" +
+                    "         )\n" +
+                    "      group by sourceref\n" +
+                    "      union all\n" +
+                    "      select\n" +
+                    "         sourceref,\n" +
+                    "         cast(null as integer) div_class_product_priority,\n" +
+                    "         cast(null as integer) div_class_manifestation_priority,\n" +
+                    "         cast(null as integer) ref_key_product_priority,\n" +
+                    "         cast(null as integer) ref_key_manifestation_priority,\n" +
+                    "         cast(null as integer) delivery_status_product_priority,\n" +
+                    "         cast(null as integer) delivery_status_manifestation_priority,\n" +
+                    "         min(product_priority) delta_status_product_priority,\n" +
+                    "         min(manifestation_priority) delta_status_manifestation_priority\n" +
+                    "      from\n" +
+                    "         (\n" +
+                    "            select\n" +
+                    "               sourceref,\n" +
+                    "               split_part(value, ' | ', 1) delta_status,\n" +
+                    "               product_priority,\n" +
+                    "               manifestation_priority\n" +
+                    "            from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification\n" +
+                    "                 left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode\n" +
+                    "                    on (split_part(value, ' | ', 1) = ppm_code)\n" +
+                    "            where\n" +
+                    "               split_part(classificationcode, ' | ', 1) in ('DCADA', 'DCAADAUS', 'DCAANZ')\n" +
+                    "         )\n" +
+                    "      group by sourceref\n" +
+                    "   ) a\n" +
+                    "   inner join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily versionfamily\n" +
+                    "      on (a.sourceref = versionfamily.sourceref\n" +
+                    "      and nullif(versionfamily.workmasterprojectno, '') is not null)\n" +
+                    "group by a.sourceref, versionfamily.workmasterprojectno\n" +
+                    ")order by rand() limit %s";
 
 
     public static String GET_RANDOM_MANIF_PUBDATES_KEY_INBOUND =
@@ -3300,74 +3367,142 @@ public class BCS_ETLCoreDataChecksSQL {
                     ",delivery_status_manifestation_priority as DELIVERYSTATUSMANIFPRIORITY \n" +
                     ",delta_status_manifestation_priority as DELTASTATUSMANIFPRIORITY \n" +
                     " from(\n" +
-                    "select \n" +
-                    "       sourceref \n" +
-                    "     , min(ref_key_product_priority) ref_key_product_priority \n" +
-                    "     , min(delivery_status_product_priority) delivery_status_product_priority \n" +
-                    "     , min(delta_status_product_priority) delta_status_product_priority \n" +
-                    "     , min(ref_key_manifestation_priority) ref_key_manifestation_priority \n" +
-                    "     , min(delivery_status_manifestation_priority) delivery_status_manifestation_priority \n" +
-                    "     , min(delta_status_manifestation_priority) delta_status_manifestation_priority \n" +
-                    " from ( \n" +
-                    "  select \n" +
-                    "       sourceref \n" +
-                    "     , min(product_priority) ref_key_product_priority \n" +
-                    "     , min(manifestation_priority) ref_key_manifestation_priority \n" +
-                    "     , cast(null as integer) delivery_status_product_priority \n" +
-                    "     , cast(null as integer) delivery_status_manifestation_priority \n" +
-                    "     , cast(null as integer) delta_status_product_priority \n" +
-                    "     , cast(null as integer) delta_status_manifestation_priority \n" +
-                    "  from \n" +
-                    "    ( \n" +
-                    "     select sourceref, split_part(refkey,' | ',1) refkey, product_priority, manifestation_priority \n" +
-                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product\n" +
-                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(refkey,' | ',1) = ppm_code\n" +
-                    "     union\n" +
-                    "     select sourceref, split_part(refkey,' | ',1) refkey, product_priority, manifestation_priority\n" +
-                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation\n" +
-                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(refkey,' | ',1) = ppm_code\n" +
-                    "    )\n" +
-                    "  group by sourceref\n" +
-                    "  union all\n" +
-                    "  select\n" +
-                    "       sourceref\n" +
-                    "     , cast(null as integer) ref_key_product_priority\n" +
-                    "     , cast(null as integer) ref_key_manifestation_priority\n" +
-                    "     , min(product_priority) delivery_status_product_priority\n" +
-                    "     , min(manifestation_priority) delivery_status_manifestation_priority\n" +
-                    "     , cast(null as integer) delta_status_product_priority\n" +
-                    "     , cast(null as integer) delta_status_manifestation_priority\n" +
-                    "  from\n" +
-                    "    (\n" +
-                    "     select sourceref, split_part(deliverystatus,' | ',1) delivery_status, product_priority, manifestation_priority\n" +
-                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product\n" +
-                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(deliverystatus,' | ',1) = ppm_code\n" +
-                    "     union\n" +
-                    "     select sourceref, split_part(status,' | ',1) delivery_status, product_priority, manifestation_priority\n" +
-                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation\n" +
-                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(status,' | ',1) = ppm_code\n" +
-                    "    )\n" +
-                    "  group by sourceref\n" +
-                    "  union all\n" +
-                    "  select\n" +
-                    "       sourceref\n" +
-                    "     , cast(null as integer) ref_key_product_priority\n" +
-                    "     , cast(null as integer) ref_key_manifestation_priority\n" +
-                    "     , cast(null as integer) delivery_status_product_priority\n" +
-                    "     , cast(null as integer) delivery_status_manifestation_priority\n" +
-                    "     , min(product_priority) delta_status_product_priority\n" +
-                    "     , min(manifestation_priority) delta_status_manifestation_priority\n" +
-                    "  from\n" +
-                    "    (\n" +
-                    "     select sourceref, split_part(value,' | ',1) delta_status, product_priority, manifestation_priority\n" +
-                    "     from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification\n" +
-                    "     left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode on split_part(value,' | ',1) = ppm_code\n" +
-                    "     where split_part(classificationcode,' | ',1) in ('DCADA','DCAADAUS','DCAANZ')\n" +
-                    "    )\n" +
-                    "  group by sourceref\n" +
-                    " )\n" +
-                    "group by sourceref\n" +
-                    ") where sourceref in ('%s') order by sourceref desc";
+                    "select\n" +
+                    "   a.sourceref,\n" +
+                    "   versionfamily.workmasterprojectno,\n" +
+                    "   coalesce(nullif(min(div_class_manifestation_priority), 6),\n" +
+                    "            nullif(min(ref_key_manifestation_priority), 6),\n" +
+                    "            nullif(min(delivery_status_manifestation_priority), 6),\n" +
+                    "            nullif(min(delta_status_manifestation_priority), 6), 6) manifestation_priority,\n" +
+                    "   coalesce(nullif(min(div_class_product_priority), 6),\n" +
+                    "            nullif(min(ref_key_product_priority), 6),\n" +
+                    "            nullif(min(delivery_status_product_priority), 6),\n" +
+                    "            nullif(min(delta_status_product_priority), 6), 6) product_priority,\n" +
+                    "   min(div_class_product_priority) div_class_product_priority,\n" +
+                    "   min(ref_key_product_priority) ref_key_product_priority,\n" +
+                    "   min(delivery_status_product_priority) delivery_status_product_priority,\n" +
+                    "   min(delta_status_product_priority) delta_status_product_priority,\n" +
+                    "   min(div_class_product_priority) div_class_manifestation_priority,\n" +
+                    "   min(ref_key_manifestation_priority) ref_key_manifestation_priority,\n" +
+                    "   min(delivery_status_manifestation_priority) delivery_status_manifestation_priority,\n" +
+                    "   min(delta_status_manifestation_priority) delta_status_manifestation_priority\n" +
+                    "from\n" +
+                    "   (\n" +
+                    "      select\n" +
+                    "         sourceref,\n" +
+                    "         product_priority div_class_product_priority,\n" +
+                    "         manifestation_priority div_class_manifestation_priority,\n" +
+                    "         cast(null as integer) ref_key_product_priority,\n" +
+                    "         cast(null as integer) ref_key_manifestation_priority,\n" +
+                    "         cast(null as integer) delivery_status_product_priority,\n" +
+                    "         cast(null as integer) delivery_status_manifestation_priority,\n" +
+                    "         cast(null as integer) delta_status_product_priority,\n" +
+                    "         cast(null as integer) delta_status_manifestation_priority\n" +
+                    "      from\n" +
+                    "         "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification\n" +
+                    "         inner join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode\n" +
+                    "            on ('NLP' = ppm_code)\n" +
+                    "      where\n" +
+                    "         classificationcode like 'DIVTO%%'\n" +
+                    "         and nullif(value, '') is not null\n" +
+                    "      union all\n" +
+                    "      select\n" +
+                    "         sourceref,\n" +
+                    "         cast(null as integer) div_class_product_priority,\n" +
+                    "         cast(null as integer) div_class_manifestation_priority,\n" +
+                    "         min(product_priority) ref_key_product_priority,\n" +
+                    "         min(manifestation_priority) ref_key_manifestation_priority,\n" +
+                    "         cast(null as integer) delivery_status_product_priority,\n" +
+                    "         cast(null as integer) delivery_status_manifestation_priority,\n" +
+                    "         cast(null as integer) delta_status_product_priority,\n" +
+                    "         cast(null as integer) delta_status_manifestation_priority\n" +
+                    "      from\n" +
+                    "         (\n" +
+                    "            select\n" +
+                    "               sourceref,\n" +
+                    "               split_part(refkey, ' | ', 1) refkey,\n" +
+                    "               product_priority,\n" +
+                    "               manifestation_priority\n" +
+                    "            from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product\n" +
+                    "                 left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode\n" +
+                    "                    on (split_part(refkey, ' | ', 1) = ppm_code)\n" +
+                    "            union\n" +
+                    "            select\n" +
+                    "               sourceref,\n" +
+                    "               split_part(refkey, ' | ', 1) refkey,\n" +
+                    "               product_priority,\n" +
+                    "               manifestation_priority\n" +
+                    "            from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation\n" +
+                    "                 left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode\n" +
+                    "                    on (split_part(refkey, ' | ', 1) = ppm_code)\n" +
+                    "         )\n" +
+                    "      group by sourceref\n" +
+                    "      union all\n" +
+                    "      select\n" +
+                    "         sourceref,\n" +
+                    "         cast(null as integer) div_class_product_priority,\n" +
+                    "         cast(null as integer) div_class_manifestation_priority,\n" +
+                    "         cast(null as integer) ref_key_product_priority,\n" +
+                    "         cast(null as integer) ref_key_manifestation_priority,\n" +
+                    "         min(product_priority) delivery_status_product_priority,\n" +
+                    "         min(manifestation_priority) delivery_status_manifestation_priority,\n" +
+                    "         cast(null as integer) delta_status_product_priority,\n" +
+                    "         cast(null as integer) delta_status_manifestation_priority\n" +
+                    "      from\n" +
+                    "         (\n" +
+                    "            select\n" +
+                    "               sourceref,\n" +
+                    "               split_part(deliverystatus, ' | ', 1) delivery_status,\n" +
+                    "               product_priority,\n" +
+                    "               manifestation_priority\n" +
+                    "            from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product\n" +
+                    "                 left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode\n" +
+                    "                    on (split_part(deliverystatus, ' | ', 1) = ppm_code)\n" +
+                    "            union\n" +
+                    "            select\n" +
+                    "               sourceref,\n" +
+                    "               split_part(status, ' | ', 1) delivery_status,\n" +
+                    "               product_priority,\n" +
+                    "               manifestation_priority\n" +
+                    "            from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation\n" +
+                    "                 left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode\n" +
+                    "                    on (split_part(status, ' | ', 1) = ppm_code)\n" +
+                    "            where\n" +
+                    "               not (refkey = '' and status = 'IPL | Planned')\n" +
+                    "         )\n" +
+                    "      group by sourceref\n" +
+                    "      union all\n" +
+                    "      select\n" +
+                    "         sourceref,\n" +
+                    "         cast(null as integer) div_class_product_priority,\n" +
+                    "         cast(null as integer) div_class_manifestation_priority,\n" +
+                    "         cast(null as integer) ref_key_product_priority,\n" +
+                    "         cast(null as integer) ref_key_manifestation_priority,\n" +
+                    "         cast(null as integer) delivery_status_product_priority,\n" +
+                    "         cast(null as integer) delivery_status_manifestation_priority,\n" +
+                    "         min(product_priority) delta_status_product_priority,\n" +
+                    "         min(manifestation_priority) delta_status_manifestation_priority\n" +
+                    "      from\n" +
+                    "         (\n" +
+                    "            select\n" +
+                    "               sourceref,\n" +
+                    "               split_part(value, ' | ', 1) delta_status,\n" +
+                    "               product_priority,\n" +
+                    "               manifestation_priority\n" +
+                    "            from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification\n" +
+                    "                 left join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode\n" +
+                    "                    on (split_part(value, ' | ', 1) = ppm_code)\n" +
+                    "            where\n" +
+                    "               split_part(classificationcode, ' | ', 1) in ('DCADA', 'DCAADAUS', 'DCAANZ')\n" +
+                    "         )\n" +
+                    "      group by sourceref\n" +
+                    "   ) a\n" +
+                    "   inner join "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily versionfamily\n" +
+                    "      on (a.sourceref = versionfamily.sourceref\n" +
+                    "      and nullif(versionfamily.workmasterprojectno, '') is not null)\n" +
+                    "group by a.sourceref, versionfamily.workmasterprojectno\n" +
+                    ")where sourceref in ('%s') order by sourceref desc";
+
 
     public static String GET_ALL_MANIF_PUBDATES_INBOUND_DATA =
     "select sourceref as SOURCEREF " +

@@ -15,8 +15,13 @@ public class StitchingExtContext {
 //   // public static List<JRBIDLPersonAccessObject>JRBIWorkExtJson;
 
     public static List<ManifestationExtAccessObject> recordsFromManifExtended;
+    public static List<ManifestationExtAccessObject> recordsFromManifExtPageCount;
     public static ManifExtJsonObject  recordsFromManifStitching;
+    public static WorkExtJsonObject  recordsFromWorkStitching;
     public static List<ManifestationExtAccessObject> recFromManifStitchExtended;
+    public static List<WorkExtAccessObject> recFromWorkTypeStitchExtended;
+
+    public static List<WorkExtAccessObject> recordsFromWorkExtended;
 
 
 

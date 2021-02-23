@@ -5,8 +5,8 @@ public class ManifestationExtAccessObject {
     private String epr_id;
     private String manifestation_type;
     private String last_updated_date;
-    private String uk_textbook_ind;
-    private String us_textbook_ind;
+    private boolean uk_textbook_ind;
+    private boolean us_textbook_ind;
     private String manifestation_trim_text;
     private String commodity_code;
     private String discount_code_emea;
@@ -16,7 +16,31 @@ public class ManifestationExtAccessObject {
     private String war_reference;
     private String type;
 
+    private String count_type_code;
+    private String count_type_name;
+    private String count;
 
+
+    public String getcount_type_code() {
+        return count_type_code;
+    }
+    public void setcount_type_code(String count_type_code) {
+        this.count_type_code = count_type_code;
+    }
+
+    public String getcount_type_name() {
+        return count_type_name;
+    }
+    public void setcount_type_name(String count_type_name) {
+        this.count_type_name = count_type_name;
+    }
+
+    public String getcount() {
+        return count;
+    }
+    public void setcount(String count) {
+        this.count = count;
+    }
 
     public String getmanifestation_type() {
         return manifestation_type;
@@ -39,10 +63,10 @@ public class ManifestationExtAccessObject {
         this.last_updated_date = last_updated_date;
     }
 
-    public String getuk_textbook_ind() {
+    public boolean getuk_textbook_ind() {
         return uk_textbook_ind;
     }
-    public void setuk_textbook_ind(String uk_textbook_ind) {
+    public void setuk_textbook_ind(boolean uk_textbook_ind) {
         this.uk_textbook_ind = uk_textbook_ind;
     }
 
@@ -63,10 +87,10 @@ public class ManifestationExtAccessObject {
         this.commodity_code = commodity_code;
     }
 
-    public String getus_textbook_ind() {
+    public boolean getus_textbook_ind() {
         return us_textbook_ind;
     }
-    public void setus_textbook_ind(String us_textbook_ind) {
+    public void setus_textbook_ind(boolean us_textbook_ind) {
         this.us_textbook_ind = us_textbook_ind;
     }
 

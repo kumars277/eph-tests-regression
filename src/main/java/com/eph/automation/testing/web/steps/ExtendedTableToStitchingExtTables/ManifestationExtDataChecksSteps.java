@@ -4,6 +4,7 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.StitchingExtContext;
+import com.eph.automation.testing.models.dao.StitchingExtended.ManifExtPgCountJson;
 import com.eph.automation.testing.models.dao.StitchingExtended.ManifestationExtAccessObject;
 import com.eph.automation.testing.models.dao.StitchingExtended.ManifExtJsonObject;
 import com.eph.automation.testing.services.db.StitchingExtendedSQL.StitchingExtDataChecksSQL;
@@ -122,25 +123,33 @@ public class ManifestationExtDataChecksSteps {
                             dataQualityStitchContext.recordsFromManifExtended.get(i).getjournal_issue_trim_size(),
                             dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getjournalIssueTrimSize());
                 }
-
+                String uk_textbook_ind;
+                if(dataQualityStitchContext.recordsFromManifExtended.get(i).getuk_textbook_ind()){
+                    uk_textbook_ind ="true";
+                }else{
+                    uk_textbook_ind="false";
+                }
                 Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() +
-                        " Manif_Extended -> ukTextbookInd => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getuk_textbook_ind() +
+                        " Manif_Extended -> ukTextbookInd => " + uk_textbook_ind +
                         " Manif_JSON -> ukTextbookInd => " + dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getukTextbookInd());
-                if (dataQualityStitchContext.recordsFromManifExtended.get(i).getuk_textbook_ind() != null ||
+                if (uk_textbook_ind != null ||
                         (dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getukTextbookInd() != null)) {
                     Assert.assertEquals("The ukTextbookInd is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id(),
-                            dataQualityStitchContext.recordsFromManifExtended.get(i).getuk_textbook_ind(),
-                            dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getukTextbookInd());
+                            uk_textbook_ind, dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getukTextbookInd());
                 }
 
+                String us_textbook_ind;
+                if(dataQualityStitchContext.recordsFromManifExtended.get(i).getus_textbook_ind()){
+                    us_textbook_ind ="true";
+                }else{
+                    us_textbook_ind="false";
+                }
                 Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() +
-                        " Manif_Extended -> usTextbookInd => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getus_textbook_ind() +
+                        " Manif_Extended -> usTextbookInd => " + us_textbook_ind +
                         " Manif_JSON -> usTextbookInd => " + dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getusTextbookInd());
-                if (dataQualityStitchContext.recordsFromManifExtended.get(i).getus_textbook_ind() != null ||
-                        (dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getusTextbookInd() != null)) {
+                if (us_textbook_ind!= null || (dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getusTextbookInd() != null)) {
                     Assert.assertEquals("The usTextbookInd is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id(),
-                            dataQualityStitchContext.recordsFromManifExtended.get(i).getus_textbook_ind(),
-                            dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getusTextbookInd());
+                            us_textbook_ind,dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getusTextbookInd());
                 }
 
                 Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() +
@@ -188,5 +197,91 @@ public class ManifestationExtDataChecksSteps {
 
     }
 
-}
+    @Given("^We get the (.*) random manifestation Ext page count EPR ids (.*)$")
+    public void getRandomManifExtPgCountIds(String numberOfRecords, String tableName) {
+        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        Log.info("numberOfRecords = " + numberOfRecords);
+        Log.info("Get random Manif Ext Page count EPR Ids...");
+        switch (tableName) {
+            case "manifestation_extended_page_count":
+                sql = String.format(StitchingExtDataChecksSQL.GET_RANDOM_EPR_MANIF_EXT_PAGE_COUNT, numberOfRecords);
+                List<Map<?, ?>> randomManifExtendedEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomManifExtendedEPRIds.stream().map(m -> (String) m.get("epr_id")).collect(Collectors.toList());
+                break;
 
+        }
+        Log.info(sql);
+        Log.info(Ids.toString());
+    }
+
+    @Then("^Get the records from Manifestation extended page count table$")
+    public void getRecordsFromManifExtPageCountTable() {
+        Log.info("We get the records from Manif Extended Page count Tables...");
+        sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_PAFE_COUNT_REC, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityStitchContext.recordsFromManifExtPageCount = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare Manif Extended page count and Manif Extended Stitching Table$")
+    public void compareManifExtPageCountAndStitchingManifExt() {
+        if (dataQualityStitchContext.recordsFromManifExtPageCount.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            for (int i = 0; i < dataQualityStitchContext.recordsFromManifExtPageCount.size(); i++) {
+                String manifId = dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id();
+                getManifExtendedJSONRec(manifId);
+                getType(manifId);
+                Log.info("Manif_Ext_PageCount -> EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() +
+                        " Manif_JSON -> EPR => " + dataQualityStitchContext.recordsFromManifStitching.getId());
+                if (dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() != null ||
+                        (dataQualityStitchContext.recordsFromManifStitching.getId() != null)) {
+                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() + " is missing/not found in Manif_Stitching table",
+                            dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id(),
+                            dataQualityStitchContext.recordsFromManifStitching.getId());
+                }
+
+                Log.info(" EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() +
+                        " Manif_Ext_PageCount -> manif_type => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getmanifestation_type() +
+                        " Manif_JSON -> Type => " + dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
+                if (dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getmanifestation_type() != null ||
+                        (dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype() != null)) {
+                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() + " is missing/not found in Manif_Stitching table",
+                            dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getmanifestation_type(),
+                            dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
+                }
+
+                if (dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getManifestationExtendedPageCounts() != null) {
+                    ManifExtPgCountJson[] extmanifPgCount_temp = dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getManifestationExtendedPageCounts().clone();
+                    for (int j = 0; j < extmanifPgCount_temp.length; j++)
+                    {
+
+                        // test case failed bcoz page count node need to be sorted,
+                        //eg:the records in the table will be 1,2,3 for EPR-1s
+                        //and in JSON it will be 2,,3,1 for EPR1s
+                        Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getepr_id() +
+                                " Manif_Ext_PageCount -> Country_Code => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getcount_type_code() +
+                                " Manif_JSON -> Country_Code => " + extmanifPgCount_temp[j].getExtendedPageCount().getType().get("code"));
+                        Assert.assertEquals("The CountryCode is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getepr_id(),
+                                dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getcount_type_code(),
+                                extmanifPgCount_temp[j].getExtendedPageCount().getType().get("code"));
+
+                        Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getepr_id() +
+                                " Manif_Ext_PageCount -> Country_name => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getcount_type_name() +
+                                " Manif_JSON -> Country_name => " + extmanifPgCount_temp[j].getExtendedPageCount().getType().get("name"));
+                        Assert.assertEquals("The CountryName is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getepr_id(),
+                                dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getcount_type_name(),
+                                extmanifPgCount_temp[j].getExtendedPageCount().getType().get("name"));
+
+                        Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getepr_id() +
+                                " Manif_Ext_PageCount -> page Count => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getcount() +
+                                " Manif_JSON -> page Count => " + extmanifPgCount_temp[j].getExtendedPageCount().getCount());
+                        Assert.assertEquals("The page Count is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getepr_id(),
+                                dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getcount(),
+                                extmanifPgCount_temp[j].getExtendedPageCount().getCount());
+
+                    }
+                }
+            }
+        }
+    }
+}

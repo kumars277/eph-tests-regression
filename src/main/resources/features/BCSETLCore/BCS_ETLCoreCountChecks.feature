@@ -1,10 +1,12 @@
 Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
 
 #  Created by Dinesh on 30/09/2020
+  #confluence latest vesrion used:v.68 updated the script on 23/2/2020
+  #confluence Link: https://confluence.cbsels.com/display/EPH/Core+Transformed+View+Mappings
 
 
 
-  @BCSCore
+  @BCSCoreCount
   Scenario Outline: Verify Data Count for BCS_ETL Core tables is transferred from Inbound Tables
     Given Get the total count of BCS Core from Current Tables <tableName>
     Then  We know the total count of Inbound tables <tableName>
@@ -23,7 +25,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
       |all_manifestation_statuses_v               |
       |all_manifestation_pubdates_v              |
 
-  @BCSCore
+  @BCSCoreCount
   Scenario Outline: Verify Data count for BCS core delta history tables are transferred from delta_current tables
     Given We know the total count of delta current <SourceTableName>
     Then Get the count of delta history of current timestamp from <TargettableName>
@@ -40,7 +42,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
       |etl_delta_current_work_identifier              |etl_delta_history_work_identifier_part           |
       |etl_delta_current_manifestation_identifier     |etl_delta_history_manifestation_identifier_part  |
 
-  @BCSCore
+  @BCSCoreCount
   Scenario Outline: Verify Data count for BCS core history tables are transferred from current tables
     Given Get the total count of BCS Core from Current Tables <SourceTableName>
     Then Get the count of BCS core history <TargettableName>
@@ -58,7 +60,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
       |etl_work_identifier_current_v              |etl_transform_history_work_identifier_part         |
       |etl_manifestation_identifier_current_v     |etl_transform_history_manifestation_identifier_part|
 
-  @BCSCore
+  @BCSCoreCount
   Scenario Outline: Verify Data count for BCS core transform_file tables are transferred from current tables
     Given Get the total count of BCS Core from Current Tables <SourceTableName>
     Then Get the count of BCS core transform_file <TargettableName>
@@ -76,7 +78,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
       |etl_work_identifier_current_v              |etl_work_identifier_transform_file_history_part         |
       |etl_manifestation_identifier_current_v     |etl_manifestation_identifier_transform_file_history_part|
 
-  @BCSCore
+  @BCSCoreCount
   Scenario Outline: Verify Data count for BCS core delta_current tables are transferred from transform_file tables
     Given Get the total count of BCS Core transform_file by diff of current and previous timestamp <SourceTableName>
     Then We know the total count of delta current <TargetTableName>
@@ -96,7 +98,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
 
 
 
-  @BCSCore
+  @BCSCoreCount
   Scenario Outline: Verify Data count for BCS Core delta_current_exclude are transferred from delta_current and current_history tables
     Given Get the BCSCore total count difference between delta current and transform current history Table <TargetTable>
     Then Get the BCSCore <TargetTable> exclude data count
@@ -115,7 +117,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
 
 
 
-    @BCSCore
+    @BCSCoreCount
     Scenario Outline: Verify Data count for BCSCore delta_latest tables are transferred from delta_current and Current_Exclude tables
     Given Get the sum of total count between BCSCore delta current and and Current_Exclude Table <TargetTable>
     Then Get the BCSCore <TargetTable> latest data count
@@ -132,10 +134,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
       |etl_delta_current_work_identifier          |etl_transform_history_work_identifier_excl_delta                   |etl_transform_history_work_identifier_latest     |
       |etl_delta_current_manifestation_identifier |etl_transform_history_manifestation_identifier_excl_delta          |etl_transform_history_manifestation_identifier_latest |
 
-
-
-
-  @BCSCore
+  @BCSCoreCount
   Scenario Outline: Verify Duplicate Entry for BCS COre in transform latest tables
     Given Get the BCCore Duplicate count in <SourceTableName> table
     Then Check the BCSCore count should be equal to Zero <SourceTableName>
@@ -143,8 +142,8 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
       |SourceTableName                      |
       |etl_transform_history_accountable_product_latest           |
     |etl_transform_history_manifestation_latest                 |
-    |etl_transform_history_person_latest                        |
-    |etl_transform_history_product_latest                       |
+   |etl_transform_history_person_latest                        |
+   |etl_transform_history_product_latest                       |
     |etl_transform_history_work_person_role_latest              |
     |etl_transform_history_work_relationship_latest             |
     |etl_transform_history_work_latest                          |

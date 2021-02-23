@@ -11,3 +11,12 @@ Feature:Validate data for  Manifestation Ext Stitching tables in EPH
       |tableName                   |countOfRandomIds|
       |manifestation_extended               |1                 |
 
+  @ExtStitching
+  Scenario Outline: Verify Data from the Manif_extended page count tables transferred to Manif Extended Stitching table
+    Given We get the <countOfRandomIds> random manifestation Ext page count EPR ids <tableName>
+    And Get the records from Manifestation extended page count table
+    Then Compare Manif Extended page count and Manif Extended Stitching Table
+    Examples:
+      |tableName                   |countOfRandomIds|
+      |manifestation_extended_page_count               |1                 |
+
