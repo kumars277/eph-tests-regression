@@ -90,7 +90,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
       |etl_delta_current_manifestation                |etl_manifestation_transform_file_history_part           |
       |etl_delta_current_person                       |etl_person_transform_file_history_part                  |
       |etl_delta_current_product                      |etl_product_transform_file_history_part                 |
-      |etl_delta_current_work_person_role             |etl_work_person_role_transform_file_history_part        |
+      |etl_delta_current_work_person_role             |etl_work_person_role_transform_file_history_part         |
       |etl_delta_current_work_relationship            |etl_work_relationship_transform_file_history_part       |
       |etl_delta_current_work                         |etl_work_transform_file_history_part                    |
       |etl_delta_current_work_identifier              |etl_work_identifier_transform_file_history_part         |
@@ -123,15 +123,15 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
     Then Get the BCSCore <TargetTable> latest data count
     And Compare BCSCore latest counts of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
     Examples:
-      |FirstSourceTable                           |SecondSourceTable                                                  |TargetTable                                      |
-      |etl_delta_current_accountable_product      |etl_transform_history_accountable_product_excl_delta               |etl_transform_history_accountable_product_latest |
-      |etl_delta_current_manifestation            |etl_transform_history_manifestation_excl_delta                     |etl_transform_history_manifestation_latest       |
-      |etl_delta_current_person                   |etl_transform_history_person_excl_delta                            |etl_transform_history_person_latest              |
-      |etl_delta_current_product                  |etl_transform_history_product_excl_delta                           |etl_transform_history_product_latest             |
-      |etl_delta_current_work_person_role         | etl_transform_history_work_person_role_excl_delta                 |etl_transform_history_work_person_role_latest    |
-      |etl_delta_current_work_relationship        |etl_transform_history_work_relationship_excl_delta                 |etl_transform_history_work_relationship_latest   |
-      |etl_delta_current_work                     |etl_transform_history_work_excl_delta                              |etl_transform_history_work_latest                |
-      |etl_delta_current_work_identifier          |etl_transform_history_work_identifier_excl_delta                   |etl_transform_history_work_identifier_latest     |
+      |FirstSourceTable                           |SecondSourceTable                                                  |TargetTable                                           |
+      |etl_delta_current_accountable_product      |etl_transform_history_accountable_product_excl_delta               |etl_transform_history_accountable_product_latest      |
+      |etl_delta_current_manifestation            |etl_transform_history_manifestation_excl_delta                     |etl_transform_history_manifestation_latest            |
+      |etl_delta_current_person                   |etl_transform_history_person_excl_delta                            |etl_transform_history_person_latest                   |
+      |etl_delta_current_product                  |etl_transform_history_product_excl_delta                           |etl_transform_history_product_latest                  |
+      |etl_delta_current_work_person_role         | etl_transform_history_work_person_role_excl_delta                 |etl_transform_history_work_person_role_latest         |
+      |etl_delta_current_work_relationship        |etl_transform_history_work_relationship_excl_delta                 |etl_transform_history_work_relationship_latest        |
+      |etl_delta_current_work                     |etl_transform_history_work_excl_delta                              |etl_transform_history_work_latest                     |
+      |etl_delta_current_work_identifier          |etl_transform_history_work_identifier_excl_delta                   |etl_transform_history_work_identifier_latest          |
       |etl_delta_current_manifestation_identifier |etl_transform_history_manifestation_identifier_excl_delta          |etl_transform_history_manifestation_identifier_latest |
 
   @BCSCoreCount
@@ -139,11 +139,11 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
     Given Get the BCCore Duplicate count in <SourceTableName> table
     Then Check the BCSCore count should be equal to Zero <SourceTableName>
     Examples:
-      |SourceTableName                      |
-      |etl_transform_history_accountable_product_latest           |
+    |SourceTableName                                            |
+    |etl_transform_history_accountable_product_latest           |
     |etl_transform_history_manifestation_latest                 |
-   |etl_transform_history_person_latest                        |
-   |etl_transform_history_product_latest                       |
+    |etl_transform_history_person_latest                        |
+    |etl_transform_history_product_latest                       |
     |etl_transform_history_work_person_role_latest              |
     |etl_transform_history_work_relationship_latest             |
     |etl_transform_history_work_latest                          |

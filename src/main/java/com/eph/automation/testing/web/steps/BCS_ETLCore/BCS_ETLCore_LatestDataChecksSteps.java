@@ -390,12 +390,12 @@ public class BCS_ETLCore_LatestDataChecksSteps {
                         java.lang.reflect.Method method2;
 
                         BCS_ETLCoreDLAccessObject objectToCompare1 = dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.get(i);
-                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromPersonExclDelta.get(i);
+                        BCS_ETLCoreDLAccessObject objectToCompare2 = dataQualityBCSContext.recFromExclDelta.get(i);
 
                         method = objectToCompare1.getClass().getMethod(strTemp);
                         method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfPersonDeltaAndCurrHist.get(i).getUKEY() +
+                        Log.info("UKEY => " + dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.get(i).getUKEY() +
                                 " " + strTemp + " => Person_Diff_DeltaCurr_CurrHist = " + method.invoke(objectToCompare1) +
                                 " Person_Excl_Delta = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
