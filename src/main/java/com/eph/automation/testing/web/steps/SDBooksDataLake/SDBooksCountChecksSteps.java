@@ -75,7 +75,7 @@ public class SDBooksCountChecksSteps {
     @And("^Compare count of SD Full load with current (.*) table are identical$")
     public void compareFullAndCurrentCounts(String tableName){
         Log.info("The count for table sdbooks_inbound_part => " + SDFullSourceCount + " and in "+tableName+" => " + SDCurrentCount);
-        Assert.assertEquals("The counts are not equal when compared with sdbooks_inbound_part and "+tableName, SDCurrentCount, SDFullSourceCount);
+        Assert.assertEquals("The counts are not equal when compared with sdbooks_inbound_part and "+tableName, SDFullSourceCount,SDCurrentCount );
     }
 
     @Then("^Get the count of SD transform_current_history (.*)$")
@@ -94,7 +94,7 @@ public class SDBooksCountChecksSteps {
     @And("^Check count of SD current table (.*) and SD current history (.*) are identical$")
     public void compareCurrentAndHistCounts(String srcTable, String trgtTable){
         Log.info("The count for table "+srcTable+" => " + SDCurrentCount + " and in "+trgtTable+" => " + SDCurrentHistCount);
-        Assert.assertEquals("The counts are not equal when compared with "+srcTable+" and "+trgtTable, SDCurrentHistCount, SDCurrentCount);
+        Assert.assertEquals("The counts are not equal when compared with "+srcTable+" and "+trgtTable, SDCurrentCount,SDCurrentHistCount );
     }
 
 
@@ -114,7 +114,7 @@ public class SDBooksCountChecksSteps {
     @And("^Check count of SD current table (.*) and SD tranform_file (.*) are identical$")
     public void compareCurrntAndTransformCounts(String srcTable, String trgtTable){
         Log.info("The count for table "+srcTable+" => " + SDCurrentCount + " and in "+trgtTable+" => " + SDTransformFileCount);
-        Assert.assertEquals("The counts are not equal when compared with "+srcTable+" and "+trgtTable, SDTransformFileCount, SDCurrentCount);
+        Assert.assertEquals("The counts are not equal when compared with "+srcTable+" and "+trgtTable, SDCurrentCount,SDTransformFileCount );
     }
 
     @Given("^Get the difference of total count between current and previous time stamps of transform_file of SDbooks data (.*)$")

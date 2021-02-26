@@ -166,6 +166,16 @@ public class SDBooksDataChecksSteps {
                             dataQualitySDContext.recordsFromInboundData.get(i).getEPRID(),
                             dataQualitySDContext.recordsFromCurrentUrl.get(i).getEPRID());
                 }
+                Log.info("ISBN => " + dataQualitySDContext.recordsFromInboundData.get(i).getISBN() +
+                        " EPRID => Full_Load =" + dataQualitySDContext.recordsFromInboundData.get(i).getWORK_TYPE() +
+                        " Current_URL=" + dataQualitySDContext.recordsFromCurrentUrl.get(i).getWORK_TYPE());
+
+                if (dataQualitySDContext.recordsFromInboundData.get(i).getEPRID() != null ||
+                        (dataQualitySDContext.recordsFromCurrentUrl.get(i).getEPRID() != null)) {
+                    Assert.assertEquals("The WORK_TYPE is incorrect for ISBN = " + dataQualitySDContext.recordsFromInboundData.get(i).getISBN() ,
+                            dataQualitySDContext.recordsFromInboundData.get(i).getWORK_TYPE(),
+                            dataQualitySDContext.recordsFromCurrentUrl.get(i).getWORK_TYPE());
+                }
             }
         }
     }
@@ -644,7 +654,7 @@ public class SDBooksDataChecksSteps {
         dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl = DBManager.getDBResultAsBeanList(sql, SDBooksDLAccessObject.class, Constants.AWS_URL);
     }
 
-    @Then("^Get the records from url exclude table$")
+    @Then("^We know the records from SDBooks URL Excl Table$")
     public void getUrlExclude() {
         Log.info("We get the Exclude URL records...");
         sql = String.format(SDBooksDataChecksSQL.GET_REC_EXCL_URL, Joiner.on("','").join(Ids));

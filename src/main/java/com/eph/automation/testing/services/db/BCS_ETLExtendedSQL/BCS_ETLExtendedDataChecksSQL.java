@@ -7,57 +7,61 @@ public class BCS_ETLExtendedDataChecksSQL {
 
     public static String GET_RANDOM_AVAILABILITY_KEY_INBOUND =
             "select eprid as EPRID from (\n" +
-                    "SELECT distinct cr.epr eprId, concat(A.sourceref,A.application) u_key, cr.product_type productType, A.* FROM ( \n" +
-                    "SELECT \n" +
-                    "     NULLIF(p.sourceref,'') sourceref \n" +
-                    "   , date_parse(NULLIF(p.metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
-                    "   , 'Delta Books' application \n" +
-                    "   , split_part(NULLIF(duk.value,''), ' | ', 1) deltaanswercodeuk \n" +
-                    "   , split_part(NULLIF(dus.value,''), ' | ', 1) deltaanswercodeus \n" +
-                    "   , split_part (NULLIF(dan.value,''), ' | ', 1) anzpubstatus \n" +
-                    "   , cast(null as date) pubdateactual \n" +
-                    "   , cast(null as varchar) status \n" +
-                    "   , CASE WHEN p.metadeleted = 'Y' THEN true else false END metadeleted \n" +
+                    "SELECT DISTINCT\n" +
+                    "  cr.epr eprId\n" +
+                    ", concat(A.sourceref, A.application) u_key\n" +
+                    ", cr.product_type productType\n" +
+                    ", a.*\n" +
+                    "FROM\n" +
+                    "  ((\n" +
+                    "   SELECT\n" +
+                    "     NULLIF(p.sourceref, '') sourceref\n" +
+                    "   , date_parse(NULLIF(p.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
+                    "   , 'Delta Books' application\n" +
+                    "   , split_part(NULLIF(duk.value, ''), ' | ', 1) deltaanswercodeuk\n" +
+                    "   , split_part(NULLIF(dus.value, ''), ' | ', 1) deltaanswercodeus\n" +
+                    "   , split_part(NULLIF(dan.value, ''), ' | ', 1) anzpubstatus\n" +
+                    "   , CAST(null AS date) pubdateactual\n" +
+                    "   , CAST(null AS varchar) status\n" +
+                    "   , (CASE WHEN (p.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                     "   FROM\n" +
-                    "     ((("+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product p \n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification duk ON ((p.sourceref = duk.sourceref) AND (split_part(duk.classificationcode, ' | ', 1) = 'DCADA')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification dus ON ((p.sourceref = dus.sourceref) AND (split_part(dus.classificationcode, ' | ', 1) = 'DCAADAUS')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification dan ON ((p.sourceref = dan.sourceref) AND (split_part(dan.classificationcode, ' | ', 1) = 'DCAANZ')))\n" +
-                    "UNION    SELECT \n" +
-                    "     NULLIF(sourceref,'') sourceref \n" +
-                    "   , date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
-                    "   , NULLIF(locationcode.ephcode,'') application \n" +
-                    "   , null deltaanswercodeuk \n" +
-                    "   , null deltaanswercodeus \n" +
-                    "   , null anzpubstatus \n" +
-                    "   , cast(date_parse(coalesce(NULLIF(pubdateactual,''),NULLIF(plannedpubdate,'')),'%%d-%%b-%%Y') as date) pubdateactual \n" +
-                    "   , split_part (NULLIF(status,''), ' | ', 1) status \n" +
-                    "   , CASE WHEN metadeleted = 'Y' THEN true else false END metadeleted \n" +
+                    "     ((("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product p\n" +
+                    "   LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification duk ON ((p.sourceref = duk.sourceref) AND (split_part(duk.classificationcode, ' | ', 1) = 'DCADA')))\n" +
+                    "   LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification dus ON ((p.sourceref = dus.sourceref) AND (split_part(dus.classificationcode, ' | ', 1) = 'DCAADAUS')))\n" +
+                    "   LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification dan ON ((p.sourceref = dan.sourceref) AND (split_part(dan.classificationcode, ' | ', 1) = 'DCAANZ')))\n" +
+                    "UNION    SELECT\n" +
+                    "     NULLIF(sourceref, '') sourceref\n" +
+                    "   , date_parse(NULLIF(metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
+                    "   , NULLIF(locationcode.ephcode, '') application\n" +
+                    "   , null deltaanswercodeuk\n" +
+                    "   , null deltaanswercodeus\n" +
+                    "   , null anzpubstatus\n" +
+                    "   , CAST(date_parse(COALESCE(NULLIF(pubdateactual, ''), NULLIF(plannedpubdate, '')), '%%d-%%b-%%Y') AS date) pubdateactual\n" +
+                    "   , split_part(NULLIF(status, ''), ' | ', 1) status\n" +
+                    "   , (CASE WHEN (metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                     "   FROM\n" +
-                    "     "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation \n" +
-                    "   INNER JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".locationcode ON (split_part(sublocation.warehouse, ' | ', 1) = locationcode.ppmcode)\n" +
-                    "   WHERE NULLIF(trim(sublocation.refkey,' '),'') IS NOT NULL\n" +
-                    "UNION SELECT\n" +
-                    "     NULLIF(product.sourceref,'') sourceref \n" +
-                    "   , date_parse(NULLIF(product.metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
-                    "   , NULLIF(locationcode.ephcode,'') application \n" +
-                    "   , null deltaanswercodeuk \n" +
-                    "   , null deltaanswercodeus \n" +
-                    "   , null anzpubstatus \n" +
-                    "   , cast(date_parse(coalesce(NULLIF(product.publishedon,''),NULLIF(product.pubdateplanned,'')),'%%d-%%b-%%Y') as date) pubdateactual \n" +
-                    "   , split_part (NULLIF(product.deliverystatus,''), ' | ', 1) status \n" +
-                    "   , CASE WHEN product.metadeleted = 'Y' THEN true else false END metadeleted \n" +
-                    "   FROM \n" +
-                    "     "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
-                    "   INNER JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content on product.sourceref = content.sourceref \n" +
-                    "   INNER JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".locationcode ON (content.ownership = locationcode.ppmcode)\n" +
-                    "   WHERE NULLIF(trim(product.refkey,' '),'') IS NOT NULL  \n" +
-                    ")A \n" +
-                    "INNER JOIN " + GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON \n" +
-                    "A.sourceref = cr.identifier AND \n" +
-                    "cr.identifier_type = 'external_reference' AND \n" +
-                    "cr.record_level = 'Product'\n" +
-                    "WHERE A.metadeleted = FALSE ) order by rand() limit %s \n";
+                    "     ("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation\n" +
+                    "   INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".locationcode ON (split_part(sublocation.warehouse, ' | ', 1) = locationcode.ppmcode))\n" +
+                    "   WHERE (NULLIF(trim(sublocation.refkey, ' '), '') IS NOT NULL)\n" +
+                    "UNION    SELECT\n" +
+                    "     NULLIF(product.sourceref, '') sourceref\n" +
+                    "   , date_parse(NULLIF(product.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
+                    "   , NULLIF(locationcode.ephcode, '') application\n" +
+                    "   , null deltaanswercodeuk\n" +
+                    "   , null deltaanswercodeus\n" +
+                    "   , null anzpubstatus\n" +
+                    "   , CAST(date_parse(COALESCE(NULLIF(product.publishedon, ''), NULLIF(product.pubdateplanned, '')), '%%d-%%b-%%Y') AS date) pubdateactual\n" +
+                    "   , split_part(NULLIF(product.deliverystatus, ''), ' | ', 1) status\n" +
+                    "   , (CASE WHEN (product.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
+                    "   FROM\n" +
+                    "     (("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
+                    "   INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content ON (product.sourceref = content.sourceref))\n" +
+                    "   INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".locationcode ON (content.ownership = locationcode.ppmcode))\n" +
+                    "   WHERE (NULLIF(trim(product.refkey, ' '), '') IS NOT NULL)\n" +
+                    ")  A\n" +
+                    "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((concat(A.sourceref, '-OOA') = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Product')))\n" +
+                    "WHERE (A.metadeleted = false)\n" +
+                    ")order by rand() limit %s \n";
 
     public static String GET_AVAILABILITY_REC_INBOUND_DATA =
             "select u_key as UKEY " +
@@ -73,57 +77,61 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",status as status" +
                     ",metadeleted as metadeleted" +
                     " from (\n" +
-                    "SELECT distinct cr.epr eprId, concat(A.sourceref,A.application) u_key, cr.product_type productType, A.* FROM ( \n" +
-                    "SELECT \n" +
-                    "     NULLIF(p.sourceref,'') sourceref \n" +
-                    "   , date_parse(NULLIF(p.metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
-                    "   , 'Delta Books' application \n" +
-                    "   , split_part(NULLIF(duk.value,''), ' | ', 1) deltaanswercodeuk \n" +
-                    "   , split_part(NULLIF(dus.value,''), ' | ', 1) deltaanswercodeus \n" +
-                    "   , split_part (NULLIF(dan.value,''), ' | ', 1) anzpubstatus \n" +
-                    "   , cast(null as date) pubdateactual \n" +
-                    "   , cast(null as varchar) status \n" +
-                    "   , CASE WHEN p.metadeleted = 'Y' THEN true else false END metadeleted \n" +
+                    "SELECT DISTINCT\n" +
+                    "  cr.epr eprId\n" +
+                    ", concat(A.sourceref, A.application) u_key\n" +
+                    ", cr.product_type productType\n" +
+                    ", a.*\n" +
+                    "FROM\n" +
+                    "  ((\n" +
+                    "   SELECT\n" +
+                    "     NULLIF(p.sourceref, '') sourceref\n" +
+                    "   , date_parse(NULLIF(p.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
+                    "   , 'Delta Books' application\n" +
+                    "   , split_part(NULLIF(duk.value, ''), ' | ', 1) deltaanswercodeuk\n" +
+                    "   , split_part(NULLIF(dus.value, ''), ' | ', 1) deltaanswercodeus\n" +
+                    "   , split_part(NULLIF(dan.value, ''), ' | ', 1) anzpubstatus\n" +
+                    "   , CAST(null AS date) pubdateactual\n" +
+                    "   , CAST(null AS varchar) status\n" +
+                    "   , (CASE WHEN (p.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                     "   FROM\n" +
-                    "     ((("+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product p \n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification duk ON ((p.sourceref = duk.sourceref) AND (split_part(duk.classificationcode, ' | ', 1) = 'DCADA')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification dus ON ((p.sourceref = dus.sourceref) AND (split_part(dus.classificationcode, ' | ', 1) = 'DCAADAUS')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification dan ON ((p.sourceref = dan.sourceref) AND (split_part(dan.classificationcode, ' | ', 1) = 'DCAANZ')))\n" +
-                    "UNION    SELECT \n" +
-                    "     NULLIF(sourceref,'') sourceref \n" +
-                    "   , date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
-                    "   , NULLIF(locationcode.ephcode,'') application \n" +
-                    "   , null deltaanswercodeuk \n" +
-                    "   , null deltaanswercodeus \n" +
-                    "   , null anzpubstatus \n" +
-                    "   , cast(date_parse(coalesce(NULLIF(pubdateactual,''),NULLIF(plannedpubdate,'')),'%%d-%%b-%%Y') as date) pubdateactual \n" +
-                    "   , split_part (NULLIF(status,''), ' | ', 1) status \n" +
-                    "   , CASE WHEN metadeleted = 'Y' THEN true else false END metadeleted \n" +
+                    "     ((("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product p\n" +
+                    "   LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification duk ON ((p.sourceref = duk.sourceref) AND (split_part(duk.classificationcode, ' | ', 1) = 'DCADA')))\n" +
+                    "   LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification dus ON ((p.sourceref = dus.sourceref) AND (split_part(dus.classificationcode, ' | ', 1) = 'DCAADAUS')))\n" +
+                    "   LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification dan ON ((p.sourceref = dan.sourceref) AND (split_part(dan.classificationcode, ' | ', 1) = 'DCAANZ')))\n" +
+                    "UNION    SELECT\n" +
+                    "     NULLIF(sourceref, '') sourceref\n" +
+                    "   , date_parse(NULLIF(metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
+                    "   , NULLIF(locationcode.ephcode, '') application\n" +
+                    "   , null deltaanswercodeuk\n" +
+                    "   , null deltaanswercodeus\n" +
+                    "   , null anzpubstatus\n" +
+                    "   , CAST(date_parse(COALESCE(NULLIF(pubdateactual, ''), NULLIF(plannedpubdate, '')), '%%d-%%b-%%Y') AS date) pubdateactual\n" +
+                    "   , split_part(NULLIF(status, ''), ' | ', 1) status\n" +
+                    "   , (CASE WHEN (metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                     "   FROM\n" +
-                    "     "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation \n" +
-                    "   INNER JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".locationcode ON (split_part(sublocation.warehouse, ' | ', 1) = locationcode.ppmcode)\n" +
-                    "   WHERE NULLIF(trim(sublocation.refkey,' '),'') IS NOT NULL\n" +
-                    "UNION SELECT\n" +
-                    "     NULLIF(product.sourceref,'') sourceref \n" +
-                    "   , date_parse(NULLIF(product.metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
-                    "   , NULLIF(locationcode.ephcode,'') application \n" +
-                    "   , null deltaanswercodeuk \n" +
-                    "   , null deltaanswercodeus \n" +
-                    "   , null anzpubstatus \n" +
-                    "   , cast(date_parse(coalesce(NULLIF(product.publishedon,''),NULLIF(product.pubdateplanned,'')),'%%d-%%b-%%Y') as date) pubdateactual \n" +
-                    "   , split_part (NULLIF(product.deliverystatus,''), ' | ', 1) status \n" +
-                    "   , CASE WHEN product.metadeleted = 'Y' THEN true else false END metadeleted \n" +
-                    "   FROM \n" +
-                    "     "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
-                    "   INNER JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content on product.sourceref = content.sourceref \n" +
-                    "   INNER JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".locationcode ON (content.ownership = locationcode.ppmcode)\n" +
-                    "   WHERE NULLIF(trim(product.refkey,' '),'') IS NOT NULL  \n" +
-                    ")A \n" +
-                    "INNER JOIN " + GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON \n" +
-                    "A.sourceref = cr.identifier AND \n" +
-                    "cr.identifier_type = 'external_reference' AND \n" +
-                    "cr.record_level = 'Product'\n" +
-                    "WHERE A.metadeleted = FALSE ) where eprid in ('%s') order by eprid,u_key desc\n";
+                    "     ("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation\n" +
+                    "   INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".locationcode ON (split_part(sublocation.warehouse, ' | ', 1) = locationcode.ppmcode))\n" +
+                    "   WHERE (NULLIF(trim(sublocation.refkey, ' '), '') IS NOT NULL)\n" +
+                    "UNION    SELECT\n" +
+                    "     NULLIF(product.sourceref, '') sourceref\n" +
+                    "   , date_parse(NULLIF(product.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
+                    "   , NULLIF(locationcode.ephcode, '') application\n" +
+                    "   , null deltaanswercodeuk\n" +
+                    "   , null deltaanswercodeus\n" +
+                    "   , null anzpubstatus\n" +
+                    "   , CAST(date_parse(COALESCE(NULLIF(product.publishedon, ''), NULLIF(product.pubdateplanned, '')), '%%d-%%b-%%Y') AS date) pubdateactual\n" +
+                    "   , split_part(NULLIF(product.deliverystatus, ''), ' | ', 1) status\n" +
+                    "   , (CASE WHEN (product.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
+                    "   FROM\n" +
+                    "     (("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
+                    "   INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content ON (product.sourceref = content.sourceref))\n" +
+                    "   INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".locationcode ON (content.ownership = locationcode.ppmcode))\n" +
+                    "   WHERE (NULLIF(trim(product.refkey, ' '), '') IS NOT NULL)\n" +
+                    ")  A\n" +
+                    "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((concat(A.sourceref, '-OOA') = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Product')))\n" +
+                    "WHERE (A.metadeleted = false)\n" +
+                    ")where eprid in ('%s') order by eprid,u_key desc\n";
 
     public static String GET_AVAILABILITY_REC_CURR_DATA=
             "select u_key as UKEY " +
@@ -920,26 +928,24 @@ public class BCS_ETLExtendedDataChecksSQL {
             "select eprid as EPRID" +
                     " from (\n" +
                     "SELECT DISTINCT\n" +
-                    "     cr.epr eprId\n" +
-                    "   , cr.product_type\n" +
-                    "   , concat(coalesce(A.sourceref, ''), coalesce(split_part(NULLIF(type, ''), ' | ', 1),''), coalesce(currency, ''), coalesce(validfrom, ''), coalesce(validto, ''), coalesce(cast(price as varchar), '')) u_key \n" +
-                    "   , A.sourceref sourceref\n" +
-                    "   , date_parse(NULLIF(metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
-                    "   , NULLIF(currency, '') priceCurrency\n" +
-                    "   , price priceAmount\n" +
-                    "   , CAST(date_parse(NULLIF(validfrom, ''), '%%d-%%b-%%Y') AS date) priceStartDate\n" +
-                    "   , CAST(date_parse(NULLIF(validto, ''), '%%d-%%b-%%Y') AS date) priceEndDate\n" +
-                    "   , CAST(null AS varchar) priceRegion\n" +
-                    "   , split_part(NULLIF(type, ''),' | ',1) priceCategory\n" +
-                    "   , CAST(null AS varchar) priceCustomerCategory\n" +
-                    "   , CAST(null AS Integer) pricePurchaseQuantity\n" +
-                    "   , (CASE WHEN (metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
-                    "   FROM\n" +
-                    "     (" +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_pricing A\n" +
-                    "   INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr\n" +
-                    "ON (((A.sourceref = cr.identifier) \n" +
-                    "AND (cr.identifier_type = 'external_reference'))\n" +
-                    "AND (cr.record_level = 'Product')))) order by rand() limit %s";
+                    "  cr.epr eprId\n" +
+                    ", cr.product_type\n" +
+                    ", concat(COALESCE(A.sourceref, ''), COALESCE(split_part(NULLIF(type, ''), ' | ', 1), ''), COALESCE(currency, ''), COALESCE(validfrom, ''), COALESCE(validto, ''), COALESCE(CAST(price AS varchar), '')) u_key\n" +
+                    ", A.sourceref sourceref\n" +
+                    ", date_parse(NULLIF(metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
+                    ", NULLIF(currency, '') priceCurrency\n" +
+                    ", price priceAmount\n" +
+                    ", CAST(date_parse(NULLIF(validfrom, ''), '%%d-%%b-%%Y') AS date) priceStartDate\n" +
+                    ", CAST(date_parse(NULLIF(validto, ''), '%%d-%%b-%%Y') AS date) priceEndDate\n" +
+                    ", CAST(null AS varchar) priceRegion\n" +
+                    ", split_part(NULLIF(type, ''), ' | ', 1) priceCategory\n" +
+                    ", CAST(null AS varchar) priceCustomerCategory\n" +
+                    ", CAST(null AS integer) pricePurchaseQuantity\n" +
+                    ", (CASE WHEN (metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
+                    "FROM\n" +
+                    "  ("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_pricing A\n" +
+                    "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((concat(A.sourceref, '-OOA') = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Product')))\n" +
+                    "WHERE (A.metadeleted = 'N'))order by rand() limit %s";
 
     public static String GET_PROD_PRICE_INBOUND_DATA =
             "select eprid as EPRID " +
@@ -958,26 +964,24 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",pricepurchasequantity as pricepurchasequantity" +
                     " from (\n" +
                     "SELECT DISTINCT\n" +
-                    "     cr.epr eprId\n" +
-                    "   , cr.product_type\n" +
-                    "   , concat(coalesce(A.sourceref, ''), coalesce(split_part(NULLIF(type, ''), ' | ', 1),''), coalesce(currency, ''), coalesce(validfrom, ''), coalesce(validto, ''), coalesce(cast(price as varchar), '')) u_key \n" +
-                    "   , A.sourceref sourceref\n" +
-                    "   , date_parse(NULLIF(metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
-                    "   , NULLIF(currency, '') priceCurrency\n" +
-                    "   , price priceAmount\n" +
-                    "   , CAST(date_parse(NULLIF(validfrom, ''), '%%d-%%b-%%Y') AS date) priceStartDate\n" +
-                    "   , CAST(date_parse(NULLIF(validto, ''), '%%d-%%b-%%Y') AS date) priceEndDate\n" +
-                    "   , CAST(null AS varchar) priceRegion\n" +
-                    "   , split_part(NULLIF(type, ''),' | ',1) priceCategory\n" +
-                    "   , CAST(null AS varchar) priceCustomerCategory\n" +
-                    "   , CAST(null AS Integer) pricePurchaseQuantity\n" +
-                    "   , (CASE WHEN (metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
-                    "   FROM\n" +
-                    "     (" +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_pricing A\n" +
-                    "   INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr\n" +
-                    "ON (((A.sourceref = cr.identifier) \n" +
-                    "AND (cr.identifier_type = 'external_reference'))\n" +
-                    "AND (cr.record_level = 'Product')))) where eprid in ('%s') order by eprid,u_key desc";
+                    "  cr.epr eprId\n" +
+                    ", cr.product_type\n" +
+                    ", concat(COALESCE(A.sourceref, ''), COALESCE(split_part(NULLIF(type, ''), ' | ', 1), ''), COALESCE(currency, ''), COALESCE(validfrom, ''), COALESCE(validto, ''), COALESCE(CAST(price AS varchar), '')) u_key\n" +
+                    ", A.sourceref sourceref\n" +
+                    ", date_parse(NULLIF(metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
+                    ", NULLIF(currency, '') priceCurrency\n" +
+                    ", price priceAmount\n" +
+                    ", CAST(date_parse(NULLIF(validfrom, ''), '%%d-%%b-%%Y') AS date) priceStartDate\n" +
+                    ", CAST(date_parse(NULLIF(validto, ''), '%%d-%%b-%%Y') AS date) priceEndDate\n" +
+                    ", CAST(null AS varchar) priceRegion\n" +
+                    ", split_part(NULLIF(type, ''), ' | ', 1) priceCategory\n" +
+                    ", CAST(null AS varchar) priceCustomerCategory\n" +
+                    ", CAST(null AS integer) pricePurchaseQuantity\n" +
+                    ", (CASE WHEN (metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
+                    "FROM\n" +
+                    "  ("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_pricing A\n" +
+                    "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((concat(A.sourceref, '-OOA') = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Product')))\n" +
+                    "WHERE (A.metadeleted = 'N'))where eprid in ('%s') order by eprid,u_key desc";
 
     public static String GET_PROD_PRICE_REC_CURR_DATA=
             "select eprid as EPRID " +
@@ -998,64 +1002,66 @@ public class BCS_ETLExtendedDataChecksSQL {
 
     public static String GET_RANDOM_WORK_PERS_ROLE_KEY_INBOUND=
                    "select eprid as EPRID from (\n" +
-                   "SELECT\n" +
-                   "  concat(concat(r.sourceref, 'MARMAN'), r.personid) u_key\n" +
-                   ", NULLIF(r.sourceref, '') worksourceref\n" +
-                   ", NULLIF(r.personid, '') personsourceref\n" +
-                   ", 'BCS' source\n" +
-                   ", cr.epr eprId\n" +
-                   ", cr.work_type work_type\n" +
-                   ", CAST(null AS integer) core_reference\n" +
-                   ", 'MARMAN' roletype\n" +
-                   ", 'Marketing Manager' rolename\n" +
-                   ", CAST(null AS varchar) title\n" +
-                   ", split_part(split_part(r.responsibleperson, ',', 2), ' (', 1) person_first_name\n" +
-                   ", split_part(r.responsibleperson, ',', 1) person_family_name\n" +
-                   ", CAST(null AS varchar) email_address\n" +
-                   ", CAST(null AS varchar) honours\n" +
-                   ", CAST(null AS varchar) affiliation\n" +
-                   ", CAST(null AS varchar) imageUrl\n" +
-                   ", CAST(null AS varchar) footnoteTxt\n" +
-                   ", CAST(null AS varchar) notesTxt\n" +
-                   ", (CASE WHEN (substr(split_part(NULLIF(r.responsibility, ''), ' | ', 1), -1, 1) = '2') THEN '2' ELSE '1' END) sequence\n" +
-                   ", CAST(null AS integer) groupNumber\n" +
-                   ", date_parse(NULLIF(r.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') metamodifiedon\n" +
-                   ", (CASE WHEN (r.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
-                   " FROM\n" +
-                   "  ("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_responsibilities r\n" +
-                   "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((r.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
-                   "UNION ALL SELECT\n" +
-                   "  concat(o.sourceref, rolecode.ephcode, CAST(o.businesspartnerid AS varchar)) u_key\n" +
-                   ", NULLIF(o.sourceref, '') worksourceref\n" +
-                   ", NULLIF(CAST(o.businesspartnerid AS varchar), '') personsourceref\n" +
-                   ", 'BCS' source\n" +
-                   ", cr.epr eprId\n" +
-                   ", cr.work_type work_type\n" +
-                   ", gwp.work_person_role_id core_reference\n" +
-                   ", NULLIF(rolecode.ephcode, '') roletype\n" +
-                   ", NULLIF(rolecode.ephname, '') rolename\n" +
-                   ", CAST(null AS varchar) title\n" +
-                   ", (CASE WHEN (isperson = 'N') THEN NULLIF(department, '') ELSE NULLIF(firstname, '') END) person_first_name\n" +
-                   ", (CASE WHEN (isperson = 'N') THEN NULLIF(institution, '') ELSE NULLIF(lastname, '') END) person_family_name\n" +
-                   ", CAST(null AS varchar) email_address\n" +
-                   ", h.notes honours\n" +
-                   ", a.notes affiliation\n" +
-                   ", concat(concat('https://covers.elsevier.com/author/186/1', lpad(CAST(o.businesspartnerid AS varchar), 6, '000000')), '.jpg') imageUrl\n" +
-                   ", CAST(null AS varchar) footnoteTxt\n" +
-                   ", n.notes notesTxt\n" +
-                   ", CAST(o.sequence AS varchar)\n" +
-                   ", CAST(null AS integer) groupNumber\n" +
-                   ", date_parse(NULLIF(o.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
-                   ", (CASE WHEN (o.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
-                   " FROM\n" +
-                   "  (((((("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originators o\n" +
-                   "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".rolecode ON (split_part(copyrightholdertype, ' | ', 1) = rolecode.ppmcode))\n" +
-                   "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((o.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
-                   "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes h ON (((o.businesspartnerid = h.businesspartnerid) AND (split_part(h.notestype, ' | ', 1) = 'DEG')) AND (o.sourceref = h.sourceref)))\n" +
-                   "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes a ON (((o.businesspartnerid = a.businesspartnerid) AND (split_part(a.notestype, ' | ', 1) = 'AFIL')) AND (o.sourceref = a.sourceref)))\n" +
-                   "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes n ON (((o.businesspartnerid = n.businesspartnerid) AND (split_part(n.notestype, ' | ', 1) = 'BIO')) AND (o.sourceref = n.sourceref)))\n" +
-                   "JOIN "+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))))))))) = gwp.external_reference) AND (gwp.effective_end_date IS NULL)))\n" +
-                   "WHERE (o.metadeleted = 'N')) order by rand() limit %s";
+                           "SELECT\n" +
+                           "  concat(concat(r.sourceref, 'MARMAN'), lower(to_hex(md5(to_utf8(wd.peoplehub_id)))), '-', substr(r.responsibility, -2, 1)) u_key\n" +
+                           ", NULLIF(r.sourceref, '') worksourceref\n" +
+                           ", lower(to_hex(md5(to_utf8(wd.peoplehub_id)))) personsourceref\n" +
+                           ", 'BCS' source\n" +
+                           ", cr.epr eprId\n" +
+                           ", cr.work_type work_type\n" +
+                           ", CAST(null AS integer) core_reference\n" +
+                           ", 'MARMAN' roletype\n" +
+                           ", 'Marketing Manager' rolename\n" +
+                           ", CAST(null AS varchar) title\n" +
+                           ", wd.given_name person_first_name\n" +
+                           ", wd.family_name person_family_name\n" +
+                           ", wd.email email_address\n" +
+                           ", CAST(null AS varchar) honours\n" +
+                           ", CAST(null AS varchar) affiliation\n" +
+                           ", CAST(null AS varchar) imageUrl\n" +
+                           ", CAST(null AS varchar) footnoteTxt\n" +
+                           ", CAST(null AS varchar) notesTxt\n" +
+                           ", (CASE WHEN (substr(split_part(NULLIF(r.responsibility, ''), ' | ', 1), -1, 1) = '2') THEN '2' ELSE '1' END) sequence\n" +
+                           ", CAST(null AS integer) groupNumber\n" +
+                           ", date_parse(NULLIF(r.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') metamodifiedon\n" +
+                           ", (CASE WHEN (r.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
+                           "FROM\n" +
+                           "  (("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_responsibilities r\n" +
+                           "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((r.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
+                           "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".workday_reference_v wd ON (trim(lower(r.email)) = trim(lower(wd.email))))\n" +
+                           "WHERE (split_part(r.responsibility, ' | ', 1) = 'MARMAN')\n" +
+                           "UNION ALL SELECT\n" +
+                           "  concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))), '-', CAST(o.sequence AS varchar)) u_key\n" +
+                           ", NULLIF(o.sourceref, '') worksourceref\n" +
+                           ", lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))) personsourceref\n" +
+                           ", 'BCS' source\n" +
+                           ", cr.epr eprId\n" +
+                           ", cr.work_type work_type\n" +
+                           ", gwp.work_person_role_id core_reference\n" +
+                           ", NULLIF(rolecode.ephcode, '') roletype\n" +
+                           ", NULLIF(rolecode.ephname, '') rolename\n" +
+                           ", CAST(null AS varchar) title\n" +
+                           ", (CASE WHEN (isperson = 'N') THEN NULLIF(department, '') ELSE NULLIF(firstname, '') END) person_first_name\n" +
+                           ", (CASE WHEN (isperson = 'N') THEN NULLIF(institution, '') ELSE NULLIF(lastname, '') END) person_family_name\n" +
+                           ", CAST(null AS varchar) email_address\n" +
+                           ", h.notes honours\n" +
+                           ", a.notes affiliation\n" +
+                           ", concat(concat('https://covers.elsevier.com/author/186/1', lpad(CAST(o.businesspartnerid AS varchar), 6, '000000')), '.jpg') imageUrl\n" +
+                           ", CAST(null AS varchar) footnoteTxt\n" +
+                           ", n.notes notesTxt\n" +
+                           ", CAST(o.sequence AS varchar)\n" +
+                           ", CAST(null AS integer) groupNumber\n" +
+                           ", date_parse(NULLIF(o.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
+                           ", (CASE WHEN (o.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
+                           "FROM\n" +
+                           "  (((((("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originators o\n" +
+                           "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".rolecode ON (split_part(copyrightholdertype, ' | ', 1) = rolecode.ppmcode))\n" +
+                           "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((o.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
+                           "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes h ON (((o.businesspartnerid = h.businesspartnerid) AND (split_part(h.notestype, ' | ', 1) = 'DEG')) AND (o.sourceref = h.sourceref)))\n" +
+                           "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes a ON (((o.businesspartnerid = a.businesspartnerid) AND (split_part(a.notestype, ' | ', 1) = 'AFIL')) AND (o.sourceref = a.sourceref)))\n" +
+                           "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes n ON (((o.businesspartnerid = n.businesspartnerid) AND (split_part(n.notestype, ' | ', 1) = 'BIO')) AND (o.sourceref = n.sourceref)))\n" +
+                           "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))))))))) = gwp.external_reference) AND (gwp.effective_end_date IS NULL)))\n" +
+                           "WHERE (o.metadeleted = 'N')) order by rand() limit %s";
 
 
     public static String GET_WORK_PERS_ROLE_INBOUND_DATA=
@@ -1082,64 +1088,66 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",metamodifiedon as metamodifiedon" +
                     ",metadeleted as metadeleted" +
                     " from (\n" +
-                    "SELECT\n" +
-                    "  concat(concat(r.sourceref, 'MARMAN'), r.personid) u_key\n" +
-                    ", NULLIF(r.sourceref, '') worksourceref\n" +
-                    ", NULLIF(r.personid, '') personsourceref\n" +
-                    ", 'BCS' source\n" +
-                    ", cr.epr eprId\n" +
-                    ", cr.work_type work_type\n" +
-                    ", CAST(null AS integer) core_reference\n" +
-                    ", 'MARMAN' roletype\n" +
-                    ", 'Marketing Manager' rolename\n" +
-                    ", CAST(null AS varchar) title\n" +
-                    ", split_part(split_part(r.responsibleperson, ',', 2), ' (', 1) person_first_name\n" +
-                    ", split_part(r.responsibleperson, ',', 1) person_family_name\n" +
-                    ", CAST(null AS varchar) email_address\n" +
-                    ", CAST(null AS varchar) honours\n" +
-                    ", CAST(null AS varchar) affiliation\n" +
-                    ", CAST(null AS varchar) imageUrl\n" +
-                    ", CAST(null AS varchar) footnoteTxt\n" +
-                    ", CAST(null AS varchar) notesTxt\n" +
-                    ", (CASE WHEN (substr(split_part(NULLIF(r.responsibility, ''), ' | ', 1), -1, 1) = '2') THEN '2' ELSE '1' END) sequence\n" +
-                    ", CAST(null AS integer) groupNumber\n" +
-                    ", date_parse(NULLIF(r.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') metamodifiedon\n" +
-                    ", (CASE WHEN (r.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
-                    " FROM\n" +
-                    "  ("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_responsibilities r\n" +
-                    "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((r.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
-                    "UNION ALL SELECT\n" +
-                    "  concat(o.sourceref, rolecode.ephcode, CAST(o.businesspartnerid AS varchar)) u_key\n" +
-                    ", NULLIF(o.sourceref, '') worksourceref\n" +
-                    ", NULLIF(CAST(o.businesspartnerid AS varchar), '') personsourceref\n" +
-                    ", 'BCS' source\n" +
-                    ", cr.epr eprId\n" +
-                    ", cr.work_type work_type\n" +
-                    ", gwp.work_person_role_id core_reference\n" +
-                    ", NULLIF(rolecode.ephcode, '') roletype\n" +
-                    ", NULLIF(rolecode.ephname, '') rolename\n" +
-                    ", CAST(null AS varchar) title\n" +
-                    ", (CASE WHEN (isperson = 'N') THEN NULLIF(department, '') ELSE NULLIF(firstname, '') END) person_first_name\n" +
-                    ", (CASE WHEN (isperson = 'N') THEN NULLIF(institution, '') ELSE NULLIF(lastname, '') END) person_family_name\n" +
-                    ", CAST(null AS varchar) email_address\n" +
-                    ", h.notes honours\n" +
-                    ", a.notes affiliation\n" +
-                    ", concat(concat('https://covers.elsevier.com/author/186/1', lpad(CAST(o.businesspartnerid AS varchar), 6, '000000')), '.jpg') imageUrl\n" +
-                    ", CAST(null AS varchar) footnoteTxt\n" +
-                    ", n.notes notesTxt\n" +
-                    ", CAST(o.sequence AS varchar)\n" +
-                    ", CAST(null AS integer) groupNumber\n" +
-                    ", date_parse(NULLIF(o.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
-                    ", (CASE WHEN (o.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
-                    " FROM\n" +
-                    "  (((((("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originators o\n" +
-                    "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".rolecode ON (split_part(copyrightholdertype, ' | ', 1) = rolecode.ppmcode))\n" +
-                    "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((o.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
-                    "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes h ON (((o.businesspartnerid = h.businesspartnerid) AND (split_part(h.notestype, ' | ', 1) = 'DEG')) AND (o.sourceref = h.sourceref)))\n" +
-                    "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes a ON (((o.businesspartnerid = a.businesspartnerid) AND (split_part(a.notestype, ' | ', 1) = 'AFIL')) AND (o.sourceref = a.sourceref)))\n" +
-                    "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes n ON (((o.businesspartnerid = n.businesspartnerid) AND (split_part(n.notestype, ' | ', 1) = 'BIO')) AND (o.sourceref = n.sourceref)))\n" +
-                    "JOIN "+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))))))))) = gwp.external_reference) AND (gwp.effective_end_date IS NULL)))\n" +
-                    "WHERE (o.metadeleted = 'N')) where eprid in ('%s') order by eprid,u_key desc";
+                            "SELECT\n" +
+                            "  concat(concat(r.sourceref, 'MARMAN'), lower(to_hex(md5(to_utf8(wd.peoplehub_id)))), '-', substr(r.responsibility, -2, 1)) u_key\n" +
+                            ", NULLIF(r.sourceref, '') worksourceref\n" +
+                            ", lower(to_hex(md5(to_utf8(wd.peoplehub_id)))) personsourceref\n" +
+                            ", 'BCS' source\n" +
+                            ", cr.epr eprId\n" +
+                            ", cr.work_type work_type\n" +
+                            ", CAST(null AS integer) core_reference\n" +
+                            ", 'MARMAN' roletype\n" +
+                            ", 'Marketing Manager' rolename\n" +
+                            ", CAST(null AS varchar) title\n" +
+                            ", wd.given_name person_first_name\n" +
+                            ", wd.family_name person_family_name\n" +
+                            ", wd.email email_address\n" +
+                            ", CAST(null AS varchar) honours\n" +
+                            ", CAST(null AS varchar) affiliation\n" +
+                            ", CAST(null AS varchar) imageUrl\n" +
+                            ", CAST(null AS varchar) footnoteTxt\n" +
+                            ", CAST(null AS varchar) notesTxt\n" +
+                            ", (CASE WHEN (substr(split_part(NULLIF(r.responsibility, ''), ' | ', 1), -1, 1) = '2') THEN '2' ELSE '1' END) sequence\n" +
+                            ", CAST(null AS integer) groupNumber\n" +
+                            ", date_parse(NULLIF(r.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') metamodifiedon\n" +
+                            ", (CASE WHEN (r.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
+                            "FROM\n" +
+                            "  (("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_responsibilities r\n" +
+                            "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((r.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
+                            "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".workday_reference_v wd ON (trim(lower(r.email)) = trim(lower(wd.email))))\n" +
+                            "WHERE (split_part(r.responsibility, ' | ', 1) = 'MARMAN')\n" +
+                            "UNION ALL SELECT\n" +
+                            "  concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))), '-', CAST(o.sequence AS varchar)) u_key\n" +
+                            ", NULLIF(o.sourceref, '') worksourceref\n" +
+                            ", lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))) personsourceref\n" +
+                            ", 'BCS' source\n" +
+                            ", cr.epr eprId\n" +
+                            ", cr.work_type work_type\n" +
+                            ", gwp.work_person_role_id core_reference\n" +
+                            ", NULLIF(rolecode.ephcode, '') roletype\n" +
+                            ", NULLIF(rolecode.ephname, '') rolename\n" +
+                            ", CAST(null AS varchar) title\n" +
+                            ", (CASE WHEN (isperson = 'N') THEN NULLIF(department, '') ELSE NULLIF(firstname, '') END) person_first_name\n" +
+                            ", (CASE WHEN (isperson = 'N') THEN NULLIF(institution, '') ELSE NULLIF(lastname, '') END) person_family_name\n" +
+                            ", CAST(null AS varchar) email_address\n" +
+                            ", h.notes honours\n" +
+                            ", a.notes affiliation\n" +
+                            ", concat(concat('https://covers.elsevier.com/author/186/1', lpad(CAST(o.businesspartnerid AS varchar), 6, '000000')), '.jpg') imageUrl\n" +
+                            ", CAST(null AS varchar) footnoteTxt\n" +
+                            ", n.notes notesTxt\n" +
+                            ", CAST(o.sequence AS varchar)\n" +
+                            ", CAST(null AS integer) groupNumber\n" +
+                            ", date_parse(NULLIF(o.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
+                            ", (CASE WHEN (o.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
+                            "FROM\n" +
+                            "  (((((("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originators o\n" +
+                            "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".rolecode ON (split_part(copyrightholdertype, ' | ', 1) = rolecode.ppmcode))\n" +
+                            "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((o.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
+                            "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes h ON (((o.businesspartnerid = h.businesspartnerid) AND (split_part(h.notestype, ' | ', 1) = 'DEG')) AND (o.sourceref = h.sourceref)))\n" +
+                            "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes a ON (((o.businesspartnerid = a.businesspartnerid) AND (split_part(a.notestype, ' | ', 1) = 'AFIL')) AND (o.sourceref = a.sourceref)))\n" +
+                            "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes n ON (((o.businesspartnerid = n.businesspartnerid) AND (split_part(n.notestype, ' | ', 1) = 'BIO')) AND (o.sourceref = n.sourceref)))\n" +
+                            "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))))))))) = gwp.external_reference) AND (gwp.effective_end_date IS NULL)))\n" +
+                            "WHERE (o.metadeleted = 'N')) where eprid in ('%s') order by eprid,u_key desc";
 
     public static String GET_WORK_PERS_ROLE_REC_CURR_DATA =
             "select eprid as EPRID " +

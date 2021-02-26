@@ -1,10 +1,12 @@
 Feature:Validate data count for BCS Extended tables
 
 #  Created by Dinesh S on 05/01/2020
+  #confluence link: https://confluence.cbsels.com/display/EPH/Extended+Transformed+View+Mappings
+  #confluence version: v68
 
 
 
-  @BCSExtended
+  @BCSExtendedCount
   Scenario Outline: Verify Data Count for BCS Extended tables is transferred from Inbound Tables
     Given Get the total count of BCS Extended from Current Tables <tableName>
     When We know the total count of BCS Extended Inbound tables <tableName>
@@ -18,10 +20,10 @@ Feature:Validate data count for BCS Extended tables
      | etl_work_extended_current_v      |
      | etl_work_subject_area_extended_current_v      |
       | etl_manifestation_restrictions_extended_current_v      |
-     | etl_product_prices_extended_current_v      |
-    | etl_work_person_role_extended_current_v      |
+    | etl_product_prices_extended_current_v      |
+| etl_work_person_role_extended_current_v      |
 
-  @BCSExtended
+  @BCSExtendedCount
   Scenario Outline: Verify Data count for BCS Extended delta history tables are transferred from delta_current tables
     Given We know the total count of BCS Extended delta current <SourceTableName>
     Then Get the count of BCS Extended delta history of current timestamp from <TargettableName>
@@ -38,7 +40,7 @@ Feature:Validate data count for BCS Extended tables
       |etl_delta_current_extended_product_prices                  |etl_delta_history_extended_product_prices_part           |
       |etl_delta_current_extended_work_person_role                |etl_delta_history_extended_work_person_role_part  |
 
-  @BCSExtended
+  @BCSExtendedCount
   Scenario Outline: Verify Data count for BCS Extended history tables are transferred from current tables
     Given Get the total count of BCS Extended from Current Tables <SourceTableName>
     Then Get the count of BCS Extended history <TargettableName>
@@ -55,10 +57,10 @@ Feature:Validate data count for BCS Extended tables
       |etl_manifestation_restrictions_extended_current_v |etl_transform_history_extended_manifestation_restrictions_part                    |
       |etl_product_prices_extended_current_v             |etl_transform_history_extended_product_prices_part         |
       |etl_work_person_role_extended_current_v           |etl_transform_history_extended_work_person_role_part|
-    #count mismatch for all tables
 
 
-  @BCSExtended
+
+  @BCSExtendedCount
   Scenario Outline: Verify Data count for BCS Extended transform_file tables are transferred from current tables
     Given Get the total count of BCS Extended from Current Tables <SourceTableName>
     Then Get the count of BCS Extended transform_file <TargettableName>
@@ -76,7 +78,7 @@ Feature:Validate data count for BCS Extended tables
       |etl_product_prices_extended_current_v                |etl_product_prices_extended_transform_file_history_part         |
       |etl_work_person_role_extended_current_v              |etl_work_person_role_extended_transform_file_history_part|
 
-  @BCSExtended
+  @BCSExtendedCount
   Scenario Outline: Verify Data count for BCS Extended delta_current tables are transferred from transform_file tables
     Given Get the total count of BCS Extended transform_file by diff of current and previous timestamp <SourceTableName>
     Then We know the total count of BCS Extended delta current <TargetTableName>
@@ -93,8 +95,8 @@ Feature:Validate data count for BCS Extended tables
      |etl_delta_current_extended_manifestation_restrictions  |etl_manifestation_restrictions_extended_transform_file_history_part                    |
      |etl_delta_current_extended_product_prices              |etl_product_prices_extended_transform_file_history_part         |
      |etl_delta_current_extended_work_person_role            |etl_work_person_role_extended_transform_file_history_part|
-#count mismatch
-  @BCSExtended
+
+  @BCSExtendedCount
   Scenario Outline: Verify Data count for BCS Extended delta_current_exclude are transferred from delta_current and current_history tables
     Given Get the BCS Extended Ext total count difference between delta current and transform current history Table <TargetTable>
     Then Get the BCS Extended <TargetTable> exclude data count
@@ -112,7 +114,7 @@ Feature:Validate data count for BCS Extended tables
       |etl_delta_current_extended_work_person_role    |etl_transform_history_extended_work_person_role_part          |etl_transform_history_extended_work_person_role_excl_delta |
 
 
-  @BCSExtended
+  @BCSExtendedCount
   Scenario Outline: Verify Data count for BCS Extended delta_latest tables are transferred from delta_current and Current_Exclude tables
     Given Get the sum of total count between BCS Extended delta current and Current_Exclude Table <TargetTable>
     Then Get the BCS Extended <TargetTable> latest data count
@@ -130,7 +132,7 @@ Feature:Validate data count for BCS Extended tables
       |etl_delta_current_extended_work_person_role            |etl_transform_history_extended_work_person_role_excl_delta             |etl_transform_history_extended_work_person_role_latest |
 
 
-  @BCSExtended
+  @BCSExtendedCount
   Scenario Outline: Verify Duplicate Entry for BCS Extended in transform latest tables
     Given Get the BCS Extended duplicate count in <SourceTableName> table
     Then Check the BCS Extended count should be equal to Zero <SourceTableName>
@@ -146,4 +148,4 @@ Feature:Validate data count for BCS Extended tables
       |etl_transform_history_extended_product_prices_latest               |
       |etl_transform_history_extended_work_person_role_latest      |
 
-    #duplicates  are there
+

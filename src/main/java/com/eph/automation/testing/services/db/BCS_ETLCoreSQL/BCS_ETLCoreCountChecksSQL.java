@@ -8,7 +8,7 @@ public class BCS_ETLCoreCountChecksSQL {
             "select count(*) as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_accountable_product_current_v";
 
     public static String GET_BCS_ETL_CORE_ACC_PROD_CURR_HIST_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_accountable_product_part  where " +
+            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_accountable_product_part  where delete_flag=false and " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_accountable_product_part)";
 
     public static String GET_BCS_ETL_CORE_ACC_PROD_CURR_FILE_COUNT =
@@ -20,7 +20,7 @@ public class BCS_ETLCoreCountChecksSQL {
                "select count(*) as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_current_v";
 
     public static String GET_BCS_ETL_CORE_MANIF_CURR_HIST_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_part where " +
+            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_part where delete_flag=false and " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_part) ";
 
     public static String GET_BCS_ETL_CORE_MANIF_CURR_FILE_COUNT =
@@ -30,9 +30,11 @@ public class BCS_ETLCoreCountChecksSQL {
 
      public static String GET_BCS_ETL_CORE_PERSON_CURR_COUNT =
                "select count(*) as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_person_current_v";
+
     public static String GET_BCS_ETL_CORE_PERSON_CURR_HIST_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_part where " +
+            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_part where delete_flag=false and " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_person_part) ";
+
     public static String GET_BCS_ETL_CORE_PERSON_CURR_FILE_COUNT =
             "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_person_transform_file_history_part where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_person_transform_file_history_part) ";
@@ -42,20 +44,20 @@ public class BCS_ETLCoreCountChecksSQL {
                "select count(*) as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_current_v";
 
     public static String GET_BCS_ETL_CORE_PRODUCT_CURR_HIST_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_product_part where " +
+            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_product_part where delete_flag=false and " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_product_part) ";
+
     public static String GET_BCS_ETL_CORE_PRODUCT_CURR_FILE_COUNT =
             "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_transform_file_history_part where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_transform_file_history_part) ";
-
-
 
     public static String GET_BCS_ETL_CORE_WRK_PERS_CURR_COUNT =
                "select count(*) as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_current_v";
 
     public static String GET_BCS_ETL_CORE_WRK_PERS_CURR_HIST_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_person_role_part where " +
+            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_person_role_part where delete_flag=false and " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_person_role_part) ";
+
     public static String GET_BCS_ETL_CORE_WRK_PERS_CURR_FILE_COUNT =
             "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_transform_file_history_part where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_transform_file_history_part) ";
@@ -66,7 +68,7 @@ public class BCS_ETLCoreCountChecksSQL {
             "select count(*) as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_relationship_current_v";
 
     public static String GET_BCS_ETL_CORE_WRK_RELT_CURR_HIST_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_relationship_part where " +
+            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_relationship_part where delete_flag=false and " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_relationship_part) ";
     public static String GET_BCS_ETL_CORE_WRK_RELT_CURR_FILE_COUNT =
             "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_relationship_transform_file_history_part where " +
@@ -76,7 +78,7 @@ public class BCS_ETLCoreCountChecksSQL {
     public static String GET_BCS_ETL_CORE_WRK_CURR_COUNT =
             "select count(*) as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_current_v";
     public static String GET_BCS_ETL_CORE_WRK_CURR_HIST_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_part where " +
+            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_part where delete_flag=false and " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_part) ";
     public static String GET_BCS_ETL_CORE_WRK_CURR_FILE_COUNT =
             "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_transform_file_history_part where " +
@@ -87,7 +89,7 @@ public class BCS_ETLCoreCountChecksSQL {
             "select count(*) as Target_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_identifier_current_v";
 
     public static String GET_BCS_ETL_CORE_WRK_IDENTIF_CURR_HIST_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_identifier_part where " +
+            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_identifier_part where delete_flag=false and " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_identifier_part) ";
     public static String GET_BCS_ETL_CORE_WRK_IDENTIF_CURR_FILE_COUNT =
             "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_identifier_transform_file_history_part where " +
@@ -106,7 +108,7 @@ public class BCS_ETLCoreCountChecksSQL {
 
 
     public static String GET_BCS_ETL_CORE_MANIF_IDENTIF_CURR_HIST_COUNT =
-            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_identifier_part where " +
+            "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_identifier_part where delete_flag=false and " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_identifier_part) ";
     public static String GET_BCS_ETL_CORE_MANIF_IDENTIF_CURR_FILE_COUNT =
             "select count(*) as Source_Count from "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_identifier_transform_file_history_part where " +

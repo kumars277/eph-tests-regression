@@ -12,14 +12,22 @@ public class SDBooksDataChecksSQL {
 
 
     public static String GET_RANDOM_ISBN_INBOUND =
-           "select isbn as ISBN from " +
-                   "(select src.unformatted_isbn as isbn, src.book_title as book_title, src.shortcut_url as url, " +
-                   "'SDDC' as url_code, 'Science Direct' as url_name, 'Science Direct (To=URL)'  as url_title, " +
-                   "inbound_ts as inbound_ts, crf.epr as epr_id\n" +
-                   " FROM "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_inbound_part src\n" +
-                   " LEFT OUTER JOIN "+GetSDBooksDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v crf\n" +
-                   " ON src.unformatted_isbn = crf.identifier AND crf.identifier_type = 'ISBN' AND crf.record_level = 'Work'\n" +
-                   " WHERE crf.epr is not null and inbound_ts = (select max(inbound_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_inbound_part)) order by rand() limit %s";
+            "select isbn as ISBN from" +
+                    " (SELECT\n" +
+                    "  src.unformatted_isbn   as isbn\n" +
+                    ", src.book_title         as book_title\n" +
+                    ", src.shortcut_url       as url\n" +
+                    ", 'SDDC'                     as url_code\n" +
+                    ", 'Science Direct'           as url_name\n" +
+                    ", 'Science Direct (To=URL)'  as url_title\n" +
+                    ", inbound_ts               as inbound_ts\n" +
+                    ", crf.epr                as epr_id\n" +
+                    ", crf.work_type          as work_type\n" +
+                    "FROM "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_inbound_part src\n" +
+                    "LEFT OUTER JOIN "+GetSDBooksDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v crf\n" +
+                    " ON src.unformatted_isbn = crf.identifier AND crf.identifier_type = 'ISBN' AND crf.record_level = 'Work'\n" +
+                    " WHERE crf.epr is not null) where inbound_ts = (select max(inbound_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_inbound_part) order by rand() limit %s";
+
 
     public static String GET_REC_URL_INBOUND =
             "select isbn as ISBN" +
@@ -29,15 +37,23 @@ public class SDBooksDataChecksSQL {
                     ",url_name as URL_NAME" +
                     ",url_title as URL_TITLE" +
                     ",epr_id as EPRID" +
+                    ",work_type as WORK_TYPE" +
                     " from " +
-                    "(select src.unformatted_isbn as isbn, src.book_title as book_title, src.shortcut_url as url, " +
-                    "'SDDC' as url_code, 'Science Direct' as url_name, 'Science Direct (To=URL)'  as url_title, " +
-                    "inbound_ts as inbound_ts, crf.epr as epr_id\n" +
-                    " FROM "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_inbound_part src\n" +
+                    " (SELECT\n" +
+                    "  src.unformatted_isbn   as isbn\n" +
+                    ", src.book_title         as book_title\n" +
+                    ", src.shortcut_url       as url\n" +
+                    ", 'SDDC'                     as url_code\n" +
+                    ", 'Science Direct'           as url_name\n" +
+                    ", 'Science Direct (To=URL)'  as url_title\n" +
+                    ", inbound_ts               as inbound_ts\n" +
+                    ", crf.epr                as epr_id\n" +
+                    ", crf.work_type          as work_type\n" +
+                    "FROM "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_inbound_part src\n" +
                     " LEFT OUTER JOIN "+GetSDBooksDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v crf\n" +
                     " ON src.unformatted_isbn = crf.identifier AND crf.identifier_type = 'ISBN' AND crf.record_level = 'Work'\n" +
-                    " WHERE crf.epr is not null and inbound_ts = (select max(inbound_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_inbound_part))\n " +
-                    "where isbn in ('%s') order by isbn desc";
+                    " WHERE crf.epr is not null) where inbound_ts = (select max(inbound_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_inbound_part)\n" +
+                    "and isbn in ('%s') order by isbn desc";
 
 
     public static String GET_REC_CURRENT_URL =
