@@ -83,7 +83,7 @@ public class APIService {
                .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
                .when()
                .get("/product-hub-products/products/" + productID);
-      // response.prettyPrint();
+     //  response.prettyPrint();
         return  response.thenReturn().as(ProductApiObject.class);
     }
 
@@ -227,7 +227,7 @@ public class APIService {
         Assert.assertTrue("Verify that the searched work exists and is accessible trough the API",getWorkResponse.statusCode()==200);
 
         //Log.info("print response start#######################");
-        // getWorkResponse.prettyPrint();
+         getWorkResponse.prettyPrint();
         // Log.info("print response end ########################");
 
         return getWorkResponse.thenReturn().as(WorkApiObject.class);
@@ -243,12 +243,14 @@ public class APIService {
     }
 
     public static WorksMatchedApiObject searchForWorksByIdentifierResult(String identifier) throws AzureOauthTokenFetchingException {
-        return given()
+       Response response=
+         given()
                 .baseUri(SearchAPI_EndPoint)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
                 .when()
-                .get("/product-hub-works/works?queryType=identifier&queryValue="+identifier)
-                .thenReturn().as(WorksMatchedApiObject.class);
+                .get("/product-hub-works/works?queryType=identifier&queryValue="+identifier);
+       response.prettyPrint();
+       return response.thenReturn().as(WorksMatchedApiObject.class);
     }
 
     public static WorksMatchedApiObject searchForWorksByIdentifierAndTypeResult(String identifier, String identifierType) throws AzureOauthTokenFetchingException {
@@ -268,7 +270,7 @@ public class APIService {
              .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
              .when()
              .get("/product-hub-works/works?queryType=search&queryValue="+searchFor);
-       // response.prettyPrint();
+        response.prettyPrint();
         return response.thenReturn().as(WorksMatchedApiObject.class);
     }
 

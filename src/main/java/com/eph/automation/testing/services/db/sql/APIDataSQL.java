@@ -151,7 +151,7 @@ public class APIDataSQL {
             "               work_id AS WORK_ID,\n" +
             "               work_title AS WORK_TITLE,\n" +
             "               work_sub_title AS WORK_SUBTITLE,\n" +
-            "               volume AS VOLUME,\n" +
+            "               --volume AS VOLUME,\n" +
             "               f_llanguage AS LANGUAGE_CODE,\n" +
             "               electro_rights_indicator AS ELECTRONIC_RIGHTS_IND,\n" +
             "               f_pmc AS PMC,\n" +
@@ -163,7 +163,6 @@ public class APIDataSQL {
             "               f_accountable_product AS f_accountable_product,\n"+
             "               f_legal_ownership AS LEGAL_OWNERSHIP,\n"+
             "               edition_number AS EDITION_NUMBER,\n" +
-            "               volume AS VOLUME,\n" +
             "               copyright_year AS COPYRIGHT_YEAR\n" +
             "              FROM semarchy_eph_mdm.gd_wwork " +
             "  WHERE work_id IN ('%s')";
@@ -307,7 +306,7 @@ public class APIDataSQL {
             "              ,p.f_tax_code AS TAX_CODE\n" +
             "              ,p.f_manifestation AS F_PRODUCT_MANIFESTATION_TYP\n" +
             " from semarchy_eph_mdm.gd_product p inner join semarchy_eph_mdm.gd_manifestation m\n" +
-                    "on m.manifestation_id = p.f_manifestation where m.manifestation_id='%s';";
+                    "on m.manifestation_id = p.f_manifestation where m.manifestation_id='%s'";
 
     public static String SelectProductByWorkId="SELECT \n" +
             "              product_id AS PRODUCT_ID -- Title\n" +
@@ -322,7 +321,7 @@ public class APIDataSQL {
             "              ,f_wwork AS F_PRODUCT_WORK\n" +
             "              ,f_tax_code AS TAX_CODE\n" +
             "              ,f_manifestation AS F_PRODUCT_MANIFESTATION_TYP\n" +
-            " from semarchy_eph_mdm.gd_product where f_wwork ='%s';";
+            " from semarchy_eph_mdm.gd_product where f_wwork ='%s'";
 
     //created by Nishant @ 24 Apr 2020
     public static String selectWorkPersonByworkId ="Select " +

@@ -1,5 +1,6 @@
 package com.eph.automation.testing.configuration;
 
+import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.services.security.DecryptionService;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -15,12 +16,12 @@ public class LoadProperties {
 
     private static void findPropertiesFile() {
         //below line need to enable when running in jenkins.
-        System.setProperty("ENV","SIT");
+        System.setProperty("ENV","UAT");
 
         propertiesFile = System.getProperty("user.dir") + "/src/main/resources/" + (System.getProperty("ENV") == null || "".equals(System.getProperty("ENV")) ? "UAT" : System.getProperty("ENV")) + ".properties";
         // propertiesFile = System.getProperty("user.dir") + "/src/main/resources/SIT.properties";
         // propertiesFile = System.getProperty("user.dir") + "/src/main/resources/UAT.properties";
-        // Log.info("Environment used for the testing: " + System.getProperty("ENV"));
+      //  Log.info("Environment used for the testing: " + System.getProperty("ENV"));
         // Log.info(("Properties.file: " + propertiesFile));
     }
 

@@ -12,6 +12,7 @@ import com.eph.automation.testing.models.api.ProductsMatchedApiObject;
 import com.eph.automation.testing.models.api.WorkApiObject;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.*;
+import com.eph.automation.testing.services.api.APIService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 
 import static com.eph.automation.testing.models.contexts.DataQualityContext.personWorkRoleDataObjectsFromEPHGD;
@@ -47,7 +48,7 @@ public class ApiProductsSearchSteps {
 
     @StaticInjection
     public DataQualityContext dataQualityContext;
-
+    public APIService apiService=new APIService();
     private String sql;
     private static List<String> packageIds;
     private static List<String> ids;
@@ -74,8 +75,7 @@ public class ApiProductsSearchSteps {
     }
 
     @Given("We get (.*) random product id with work")
-    public void getRandomProductIdWithWork()
-    {//created by Nishant @ 7 May 2020
+    public void getRandomProductIdWithWork(){//created by Nishant @ 7 May 2020
         sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_WITH_WORK);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
@@ -276,7 +276,7 @@ public class ApiProductsSearchSteps {
         sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_MANIFESTATIONTYPE,manifestationType);
         List<Map<String,Object>> countByManifestationType = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         int count=((Long)countByManifestationType.get(0).get("count")).intValue();
-        Log.info("products count by workType in DB is: "+count);
+        Log.info("products count by manifestationType in DB is: "+count);
         return count;
     }
 
@@ -309,9 +309,9 @@ public class ApiProductsSearchSteps {
     public void compareSearchResultsWithDB() throws IOException, AzureOauthTokenFetchingException {
         int bound = productDataObjects.size();
         for (int i = 0; i < bound; i++) {
-            boolean code = checkProductExists(productDataObjects.get(i).getPRODUCT_ID());
+            boolean code = apiService.checkProductExists(productDataObjects.get(i).getPRODUCT_ID());
             if (code) {
-                response = searchForProductResult(productDataObjects.get(i).getPRODUCT_ID());
+                response = apiService.searchForProductResult(productDataObjects.get(i).getPRODUCT_ID());
                 response.compareWithDB();
             }
         }

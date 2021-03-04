@@ -21,6 +21,11 @@ public class WorkExtendedPersons {
     public HashMap<String, Object> getExtendedPerson() {return extendedPerson;}
     public void setExtendedPerson(HashMap<String, Object> extendedPerson) {this.extendedPerson = extendedPerson;}
 
+    //added by Nishant @ 29 Jan 2021
+    private String sequenceNumber;
+    public String getSequenceNumber() {return sequenceNumber;}
+    public void setSequenceNumber(String sequenceNumber) {this.sequenceNumber = sequenceNumber;}
+
     public void compareWithDB()
     {
         Assert.assertEquals(extendedRole.get("code"), DataQualityContext.workExtendedTestClass.getWorkExtended().getWorkExtendedPersons());

@@ -3,6 +3,7 @@ package com.eph.automation.testing.models.api;
  * Created by GVLAYKOV
  * updated by Nishant @ 30 Mar 2020 as per latest API changes
  * moving all relevant tags inside newly added workCore object
+ * updated by Nishant @ 04 Feb 2021, EPHD-2747
  */
 
 import com.eph.automation.testing.configuration.Constants;
@@ -28,105 +29,45 @@ import java.util.Map;
 public class WorkApiObject {
 
     private List<WorkDataObject> workDataObjectsFromEPHGD;
-
-    public List<WorkDataObject> getWorkDataObjectsFromEPHGD() {
-        return workDataObjectsFromEPHGD;
-    }
-
-        public void setWorkDataObjectsFromEPHGD(List<WorkDataObject> workDataObjectsFromEPHGD) {
-        this.workDataObjectsFromEPHGD = workDataObjectsFromEPHGD;
-    }
+    public List<WorkDataObject> getWorkDataObjectsFromEPHGD() {return workDataObjectsFromEPHGD;}
+    public void setWorkDataObjectsFromEPHGD(List<WorkDataObject> workDataObjectsFromEPHGD) {this.workDataObjectsFromEPHGD = workDataObjectsFromEPHGD;}
 
     private List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD;
-
-    public List<AccountableProductDataObject> getAccountableProductDataObjectsFromEPHGD() {
-        return accountableProductDataObjectsFromEPHGD;
-    }
-
-    public void setAccountableProductDataObjectsFromEPHGD(List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD) {
-        this.accountableProductDataObjectsFromEPHGD = accountableProductDataObjectsFromEPHGD;
-    }
+    public List<AccountableProductDataObject> getAccountableProductDataObjectsFromEPHGD() {return accountableProductDataObjectsFromEPHGD;}
+    public void setAccountableProductDataObjectsFromEPHGD(List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD) {this.accountableProductDataObjectsFromEPHGD = accountableProductDataObjectsFromEPHGD;}
 
     private WorkExtendedTestClass workExtendedTestClass;
-
-    public WorkExtendedTestClass getWorkExtendedTestClass() {
-        return workExtendedTestClass;
-    }
-
-    public void setWorkExtendedTestClass(WorkExtendedTestClass workExtendedTestClass) {
-        this.workExtendedTestClass = workExtendedTestClass;
-    }
+    public WorkExtendedTestClass getWorkExtendedTestClass() {return workExtendedTestClass;}
+    public void setWorkExtendedTestClass(WorkExtendedTestClass workExtendedTestClass) {this.workExtendedTestClass = workExtendedTestClass;}
 
     private String createdDate;
-
-    public String getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
-    }
+    public String getCreatedDate() {return createdDate;}
+    public void setCreatedDate(String createdDate) {this.createdDate = createdDate;}
 
     private String updatedDate;
-
-    public String getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(String updatedDate) {
-        this.updatedDate = updatedDate;
-    }
+    public String getUpdatedDate() {return updatedDate;}
+    public void setUpdatedDate(String updatedDate) {this.updatedDate = updatedDate;}
 
     private String id;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    public String getId() {return id;}
+    public void setId(String id) {this.id = id;}
 
     private workCore workCore;
-
-    public workCore getWorkCore() {
-        return workCore;
-    }
-
-    public void setWorkCore(workCore workCore) {
-        this.workCore = workCore;
-    }
+    public workCore getWorkCore() {return workCore;}
+    public void setWorkCore(workCore workCore) {this.workCore = workCore;}
 
     private WorkExtended workExtended;
-
-    public WorkExtended getWorkExtended() {
-        return workExtended;
-    }
-
-    public void setWorkExtended(WorkExtended workExtended) {
-        this.workExtended = workExtended;
-    }
+    public WorkExtended getWorkExtended() {return workExtended;}
+    public void setWorkExtended(WorkExtended workExtended) {this.workExtended = workExtended;}
 
     private WorkManifestationApiObject[] manifestations;
-
-    public WorkManifestationApiObject[] getManifestations() {
-        return manifestations;
-    }
-
-    public void setManifestations(WorkManifestationApiObject[] manifestations) {
-        this.manifestations = manifestations;
-    }
+    public WorkManifestationApiObject[] getManifestations() {return manifestations;}
+    public void setManifestations(WorkManifestationApiObject[] manifestations) {this.manifestations = manifestations;}
 
     //created by Nishant @ 17 Apr 2020
     private List<ManifestationProductAPIObject> products;
-
-    public List<ManifestationProductAPIObject> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<ManifestationProductAPIObject> products) {
-        this.products = products;
-    }
+    public List<ManifestationProductAPIObject> getProducts() {return products;}
+    public void setProducts(List<ManifestationProductAPIObject> products) {this.products = products;}
 
     public void compareWithDB() {//implemented by Nishant @ 23 Apr 2020
         //1
@@ -162,7 +103,7 @@ public class WorkApiObject {
         String sql ="";
         if(TestContext.getValues().environment=="UAT")
              sql = "SELECT \"json\" FROM ephuat_extended_data_stitch.stch_work_ext_json where epr_id='" + workId + "'";
-        else sql = "SELECT \"json\" FROM ephsit_extended_data_stitch.stch_work_ext_json where epr_id='" + workId + "'";
+            else sql = "SELECT \"json\" FROM ephsit_extended_data_stitch.stch_work_ext_json where epr_id='" + workId + "'";
 
 
         List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL);

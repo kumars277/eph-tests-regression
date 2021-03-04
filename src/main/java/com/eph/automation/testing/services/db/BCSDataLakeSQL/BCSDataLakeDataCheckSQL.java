@@ -4,6 +4,7 @@ package com.eph.automation.testing.services.db.BCSDataLakeSQL;
 
 public class BCSDataLakeDataCheckSQL {
 
+
     public static String randomId_ingestTableFor_stg_current_classification=
             "select sourceref from(SELECT cl.value, productprojectno sourceref\n" +
                     "FROM (bcs_ingestion_database_sit.initial_ingest f CROSS JOIN UNNEST(distributionclassification) x (cl)))\n" +
@@ -648,5 +649,277 @@ public class BCSDataLakeDataCheckSQL {
                     ") where sourceref in ('%s') order by sourceref desc";
                     */
 
+    public static String randomId_stg_current_classification=
+            "select sourceref from bcs_ingestion_database_sit.stg_current_classification \n" +
+                    "where value is not null AND value!='' AND value!='0' order by rand() limit 1";
+    public static String getData_stg_current_classification=
+            "select metadeleted, metamodifiedon,sourceref,classificationcode,\n" +
+                    "value,classificationtype,priority,businessunit\n" +
+                    "from bcs_ingestion_database_sit.stg_current_classification \n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by sourceref,value,classificationcode desc";
+    public static String getData_stg_history_classification_part=
+            "select metadeleted, metamodifiedon,sourceref,classificationcode,\n" +
+                    "value,classificationtype,priority,businessunit\n" +
+                    "from bcs_ingestion_database_sit.stg_history_classification_part \n" +
+                    "where sourceref in ('%s') and \n" +
+                    "inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_classification_part)\n" +
+                    "order by sourceref,value,classificationcode desc";
+
+    public static String randomId_stg_current_content=
+            "select sourceref from bcs_ingestion_database_sit.stg_current_content order by rand() limit %s";
+    public static String getData_stg_current_content=
+          "select metadeleted,metamodifiedon,sourceref,\n" +
+                  "originimpid,subgroup,series,copyrightyear,\n" +
+                  "title,worktitle,isset,doistatus,\n" +
+                  "imprint,division,language3,regstatus,approvedondate,\n" +
+                  "language2,doi,volumeno,editionid,synctemplate,\n" +
+                  "volumename,seriesissn,seriesid,ownership,\n" +
+                  "firstapproval,companygroup,shorttitle,editionno,\n" +
+                  "work_master_flag,language,piidack,publisher,\n" +
+                  "titleid,subtitle,seriescode,objecttype\n" +
+                  "from bcs_ingestion_database_sit.stg_current_content \n" +
+                  "where sourceref in ('%s')\n" +
+                  "order by sourceref desc";
+    public static String getData_stg_history_content_part=
+            "select metadeleted,metamodifiedon,sourceref,\n" +
+                    "originimpid,subgroup,series,copyrightyear,\n" +
+                    "title,worktitle,isset,doistatus,\n" +
+                    "imprint,division,language3,regstatus,approvedondate,\n" +
+                    "language2,doi,volumeno,editionid,synctemplate,\n" +
+                    "volumename,seriesissn,seriesid,ownership,\n" +
+                    "firstapproval,companygroup,shorttitle,editionno,\n" +
+                    "work_master_flag,language,piidack,publisher,\n" +
+                    "titleid,subtitle,seriescode,objecttype\n" +
+                    "from bcs_ingestion_database_sit.stg_history_content_part\n" +
+                    "where sourceref in ('%s')\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_content_part)\n" +
+                    "order by sourceref desc";
+
+    public static String randomId_stg_current_extobject=
+            "select sourceref from bcs_ingestion_database_sit.stg_current_extobject \n" +
+                    "where name is not null AND name!='' order by rand() limit %s";
+    public static String getData_stg_current_extobject=
+            "select metadeleted,metamodifiedon,sourceref,\n" +
+                    "object,type,name,comments,source \n" +
+                    "from bcs_ingestion_database_sit.stg_current_extobject \n" +
+                    "where sourceref in ('%s') \n" +
+                    "order by sourceref,name,object desc";
+    public static String getData_stg_history_extobject_part=
+            "select metadeleted,metamodifiedon,sourceref,\n" +
+                    "object,type,name,comments,source \n" +
+                    "from bcs_ingestion_database_sit.stg_history_extobject_part\n" +
+                    "where sourceref in ('%s') \n" +
+                    "and inbound_ts=(select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_extobject_part\")\n" +
+                    "order by sourceref,name,object desc";
+
+    public static String randomId_stg_current_fullversionfamily=
+            "select sourceref from bcs_ingestion_database_sit.stg_current_fullversionfamily where projectno is not null AND projectno!='' order by rand() limit %s";
+    public static String getData_stg_current_fullversionfamily=
+            "select metadeleted,metamodifiedon,sourceref,\n" +
+                    "versiontype,editionno,isbn,projectno,workmaster\n" +
+                    "from bcs_ingestion_database_sit.stg_current_fullversionfamily \n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by sourceref,projectno desc";
+    public static String getData_stg_history_fullversionfamily_part=
+            "select metadeleted,metamodifiedon,sourceref,\n" +
+                    "versiontype,editionno,isbn,projectno,workmaster\n" +
+                    "from bcs_ingestion_database_sit.stg_history_fullversionfamily_part \n" +
+                    "where sourceref in ('%s')\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_fullversionfamily_part)\n" +
+                    "order by sourceref,projectno desc";
+
+
+    public static String randomId_stg_current_originators=
+            "select sourceref from bcs_ingestion_database_sit.stg_current_originators where businesspartnerid is not null order by rand() limit %s";
+    public static String getData_stg_current_originators=
+            "select metadeleted,metamodifiedon,sourceref, prefix,sequence,businesspartnerid,originatorid,\n" +
+                    "isperson,locationid,copyrightholdertype,institution,\n" +
+                    "firstname,department,lastname,searchterm\n" +
+                    "from bcs_ingestion_database_sit.stg_current_originators \n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by sourceref,copyrightholdertype,businesspartnerid desc";
+    public static String getData_stg_history_originators_part=
+            "select metadeleted,metamodifiedon,sourceref, prefix,sequence,businesspartnerid,originatorid,\n" +
+                    "isperson,locationid,copyrightholdertype,institution,\n" +
+                    "firstname,department,lastname,searchterm\n" +
+                    "from bcs_ingestion_database_sit.stg_history_originators_part \n" +
+                    "where sourceref in ('%s')\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_originators_part)\n" +
+                    "order by sourceref,copyrightholdertype,businesspartnerid desc";
+
+
+    public static String randomId_stg_current_pricing=
+            "select sourceref from bcs_ingestion_database_sit.stg_current_pricing \n" +
+                    "where validto is not null and validto !='' order by rand() limit %s";
+    public static String getData_stg_current_pricing=
+            "select metadeleted,metamodifiedon,sourceref,\n" +
+                    "validfrom,type,currency,priceapprox,price,validto\n" +
+                    "from bcs_ingestion_database_sit.stg_current_pricing\n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by sourceref,type,currency,validto desc";
+    public static String getData_stg_history_pricing_part =
+            "select metadeleted,metamodifiedon,sourceref,\n" +
+                    "validfrom,type,currency,priceapprox,price,validto\n" +
+                    "from bcs_ingestion_database_sit.stg_history_pricing_part\n" +
+                    "where sourceref in ('%s')\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_pricing_part)\n" +
+                    "order by sourceref,type,currency,validto desc";
+    public static String randomId_stg_current_product=
+            "select sourceref from bcs_ingestion_database_sit.stg_current_product order by rand() limit %s";
+    public static String getData_stg_current_product=
+            "select metadeleted,metamodifiedon,sourceref,\n" +
+                    "noofvolumes,refkey,externaleditionid,\n" +
+                    "isbn13,versiontype,podsuitable,firstrelease,\n" +
+                    "origtitle,ukavailablestock,gertotalstock,\n" +
+                    "fraavailablestock,ausavailablestock,\n" +
+                    "ustotalstock,uktotalstock,geravailablestock,\n" +
+                    "fratotalstock,usavailablestock,planned,projectno,\n" +
+                    "isbn,contractpubdate,modifiedon,unitcost,\n" +
+                    "publishedon,deliverystatus,plannededitionsize,\n" +
+                    "latestpubdate,medium,orderno,firstprinting,\n" +
+                    "reason,budgetpubdate,pubdateplanned,createdon,\n" +
+                    "--externalimpressionid,\n plannedfirstprint,binding\n" +
+                    "from bcs_ingestion_database_sit.stg_current_product \n" +
+                    "where sourceref in('%s')\n" +
+                    "order by sourceref desc";
+    public static String getData_stg_history_product_part=
+            "select metadeleted,metamodifiedon,sourceref,\n" +
+                    "noofvolumes,refkey,externaleditionid,\n" +
+                    "isbn13,versiontype,podsuitable,firstrelease,\n" +
+                    "origtitle,ukavailablestock,gertotalstock,\n" +
+                    "fraavailablestock,ausavailablestock,\n" +
+                    "ustotalstock,uktotalstock,geravailablestock,\n" +
+                    "fratotalstock,usavailablestock,planned,projectno,\n" +
+                    "isbn,contractpubdate,modifiedon,unitcost,\n" +
+                    "publishedon,deliverystatus,plannededitionsize,\n" +
+                    "latestpubdate,medium,orderno,firstprinting,\n" +
+                    "reason,budgetpubdate,pubdateplanned,createdon,\n" +
+                    "--externalimpressionid,\n" +
+                    "plannedfirstprint,binding\n" +
+                    "from bcs_ingestion_database_sit.stg_history_product_part \n" +
+                    "where sourceref in('%s')\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_product_part)\n" +
+                    "order by sourceref desc";
+
+    public static String randomId_stg_current_production=
+            "select sourceref from bcs_ingestion_database_sit.stg_current_production order by rand() limit %s";
+    public static String getData_stg_current_production=
+            "select  metadeleted\n" +
+                    ", metamodifiedon, sourceref, weight, lineartbw, frontpapercolour, backpapercolour\n" +
+                    ", grammage, backcoverpms, frontcoverpms, approxpages, --reprintno,\n lineartcolors,supplierb\n" +
+                    ", tablesbw, authoringsystem, tagging, sectioncolours, addillustration, pagesroman\n" +
+                    ", productionmethod, supplierashortname, supplierafullname, bindmeth, format, trimsize\n" +
+                    ", trimother, mstype, manuscriptpages, tablescolors, supplierbfullname, productiondetails\n" +
+                    ", illustrationscolors, graphicscolors, externalads, internalads, halftonesbw, mapsbw\n" +
+                    ", spinestyle, eonlypages, suppliera, supplierbshortname, illustrationsbw, extentprod\n" +
+                    ", printform, duotone, copyedlevel, exteriorpms, finishing, material, paperquality\n" +
+                    ", interiorpms, interiorcolour, boardthickness, spec, mapscolor, textdesigntype\n" +
+                    ", classification, halftonescolors, biblioreference, extentstatus, pagesarabic, graphicsbw \n" +
+                    "from bcs_ingestion_database_sit.stg_current_production \n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by sourceref desc";
+    public static String getData_stg_history_production_part=
+            "select  metadeleted\n" +
+                    ", metamodifiedon, sourceref, weight, lineartbw, frontpapercolour, backpapercolour\n" +
+                    ", grammage, backcoverpms, frontcoverpms, approxpages, --reprintno,\n lineartcolors,supplierb\n" +
+                    ", tablesbw, authoringsystem, tagging, sectioncolours, addillustration, pagesroman\n" +
+                    ", productionmethod, supplierashortname, supplierafullname, bindmeth, format, trimsize\n" +
+                    ", trimother, mstype, manuscriptpages, tablescolors, supplierbfullname, productiondetails\n" +
+                    ", illustrationscolors, graphicscolors, externalads, internalads, halftonesbw, mapsbw\n" +
+                    ", spinestyle, eonlypages, suppliera, supplierbshortname, illustrationsbw, extentprod\n" +
+                    ", printform, duotone, copyedlevel, exteriorpms, finishing, material, paperquality\n" +
+                    ", interiorpms, interiorcolour, boardthickness, spec, mapscolor, textdesigntype\n" +
+                    ", classification, halftonescolors, biblioreference, extentstatus, pagesarabic, graphicsbw \n" +
+                    "from bcs_ingestion_database_sit.stg_history_production_part \n" +
+                    "where sourceref in ('%s')\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_production_part)\n" +
+                    "order by sourceref desc";
+
+    public static String randomId_stg_current_relations=
+            "select sourceref from bcs_ingestion_database_sit.stg_current_relations \n" +
+                    "where projectno is not null and projectno!=''\n" +
+                    "order by rand() limit %s";
+    public static String getData_stg_current_relations=
+            "select metadeleted,metamodifiedon,sourceref,orderno\n" +
+                    ",relationtype,projectno,--relimpressionid,\n isbn\n" +
+                    "from bcs_ingestion_database_sit.stg_current_relations\n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by sourceref,relationtype,projectno desc";
+    public static String getData_stg_history_relations_part=
+            "select metadeleted,metamodifiedon,sourceref,orderno\n" +
+                    ",relationtype,projectno,--relimpressionid,\n isbn\n" +
+                    "from bcs_ingestion_database_sit.stg_history_relations_part\n" +
+                    "where sourceref in ('%s')\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_relations_part)\n" +
+                    "order by sourceref,relationtype,projectno desc";
+
+    public static String randomId_stg_current_responsibilities=
+            "select sourceref from bcs_ingestion_database_sit.stg_current_responsibilities where responsibleperson is not null and responsibleperson!=''\n" +
+                    "order by rand() limit %s";
+    public static String getData_stg_current_responsibilities=
+            "select metadeleted,metamodifiedon,sourceref,responsibility\n" +
+                    ",responsibleperson,personid\n" +
+                    "from bcs_ingestion_database_sit.stg_current_responsibilities \n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by  sourceref,responsibility,responsibleperson desc";
+    public static String getData_stg_history_responsibilities_part=
+            "select metadeleted,metamodifiedon,sourceref,responsibility\n" +
+                    ",responsibleperson,personid\n" +
+                    "from bcs_ingestion_database_sit.stg_history_responsibilities_part \n" +
+                    "where sourceref in ('%s') and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_responsibilities_part)\n" +
+                    "order by  sourceref,responsibility,responsibleperson desc";
+
+    public static String randomId_stg_current_sublocation=
+            "select sourceref from bcs_ingestion_database_sit.stg_current_sublocation where warehouse is not null and warehouse!=''\n" +
+                    "order by rand() limit %s";
+    public static String getData_stg_current_sublocation=
+            "select metadeleted,metamodifiedon,sourceref,warehouse\n" +
+                    ",pubdateactual,stocksplit, refkey,status,plannedpubdate\n" +
+                    "from bcs_ingestion_database_sit.stg_current_sublocation\n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by sourceref,warehouse desc";
+    public static String getData_stg_history_sublocation_part=
+            "select metadeleted,metamodifiedon,sourceref,warehouse\n" +
+                    ",pubdateactual,stocksplit, refkey,status,plannedpubdate\n" +
+                    "from bcs_ingestion_database_sit.stg_history_sublocation_part\n" +
+                    "where sourceref in ('%s')\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_sublocation_part)\n" +
+                    "order by sourceref,warehouse desc";
+    public static String randomId_stg_current_text=
+            "select sourceref from bcs_ingestion_database_sit.stg_current_text \n" +
+                    "where text is not null and text!=''\n" +
+                    "order by rand() limit %s";
+    public static String getData_stg_current_text=
+            "select metadeleted,metamodifiedon,sourceref,tab\n" +
+                    ",texttype,name, text,status\n" +
+                    "from bcs_ingestion_database_sit.stg_current_text\n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by sourceref,texttype,text desc";
+    public static String getData_stg_history_text_part=
+            "select metadeleted,metamodifiedon,sourceref,tab\n" +
+                    ",texttype,name, text,status\n" +
+                    "from bcs_ingestion_database_sit.stg_history_text_part\n" +
+                    "where sourceref in ('%s')\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_text_part)\n" +
+                    "order by sourceref,texttype,text desc";
+
+
+    public static String randomId_stg_current_versionfamily=
+            "select sourceref from bcs_ingestion_database_sit.stg_current_versionfamily where childprojectno is not null and childprojectno!=''\n" +
+                    "order by rand() limit %s";
+    public static String getData_stg_current_versionfamily=
+            "select metadeleted,metamodifiedon,sourceref,workmasterisbn\n" +
+                    ",workmasterprojectno,childisbn, childprojectno\n" +
+                    "from bcs_ingestion_database_sit.stg_current_versionfamily\n" +
+                    "where sourceref in ('%s')\n" +
+                    "order by sourceref,childprojectno desc";
+    public static String getData_stg_history_versionfamily_part=
+            "select metadeleted,metamodifiedon,sourceref,workmasterisbn\n" +
+                    ",workmasterprojectno,childisbn, childprojectno\n" +
+                    "from bcs_ingestion_database_sit.stg_history_versionfamily_part\n" +
+                    "where sourceref in ('%s')\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_versionfamily_part)\n" +
+                    "order by sourceref,childprojectno desc";
 
 }

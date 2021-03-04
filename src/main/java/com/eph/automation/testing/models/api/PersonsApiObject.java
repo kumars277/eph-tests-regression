@@ -27,7 +27,7 @@ public class PersonsApiObject {
 
     private String id;
     private HashMap<String, Object> role;
-    private HashMap<String, Object> person;
+    private HashMap<String, String> person;
     private String effectiveStartDate;
     private String effectiveEndDate;
 
@@ -37,8 +37,8 @@ public class PersonsApiObject {
     public HashMap<String, Object> getRole() {return role;}
     public void setRole(HashMap<String, Object> role) {this.role = role;}
 
-    public HashMap<String, Object> getPerson() {return person;}
-    public void setPerson(HashMap<String, Object> person) {this.person = person;}
+    public HashMap<String, String> getPerson() {return person;}
+    public void setPerson(HashMap<String, String> person) {this.person = person;}
 
     public String getEffectiveStartDate(){return effectiveStartDate;}
     public void setEffectiveStartDate(String effectiveStartDate){this.effectiveStartDate=effectiveStartDate;}

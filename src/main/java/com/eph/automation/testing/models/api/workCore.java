@@ -9,7 +9,6 @@ import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
 import org.junit.Assert;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,219 +16,103 @@ import java.util.Map;
 
 /*
 * created by Nishant @ 8 May 2020
+* updated by Nishant @ 29 Jan 2021, EPHD-2747
 * */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class workCore {
 
     private List<WorkDataObject> workDataObjectsFromEPHGD;
-
-    public List<WorkDataObject> getWorkDataObjectsFromEPHGD() {
-        return workDataObjectsFromEPHGD;
-    }
-
-    public void setWorkDataObjectsFromEPHGD(List<WorkDataObject> workDataObjectsFromEPHGD) {
-        this.workDataObjectsFromEPHGD = workDataObjectsFromEPHGD;
-    }
+    public List<WorkDataObject> getWorkDataObjectsFromEPHGD() {return workDataObjectsFromEPHGD;}
+    public void setWorkDataObjectsFromEPHGD(List<WorkDataObject> workDataObjectsFromEPHGD) {this.workDataObjectsFromEPHGD = workDataObjectsFromEPHGD;}
 
     private List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD;
-
-    public List<AccountableProductDataObject> getAccountableProductDataObjectsFromEPHGD() {
-        return accountableProductDataObjectsFromEPHGD;
-    }
-
-    public void setAccountableProductDataObjectsFromEPHGD(List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD) {
-        this.accountableProductDataObjectsFromEPHGD = accountableProductDataObjectsFromEPHGD;
-    }
+    public List<AccountableProductDataObject> getAccountableProductDataObjectsFromEPHGD() {return accountableProductDataObjectsFromEPHGD;}
+    public void setAccountableProductDataObjectsFromEPHGD(List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD) {this.accountableProductDataObjectsFromEPHGD = accountableProductDataObjectsFromEPHGD;}
 
     private String title;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public String getTitle() {return title;}
+    public void setTitle(String title) {this.title = title;}
 
     private String subTitle;
-
-    public String getSubTitle() {
-        return subTitle;
-    }
-
-    public void setSubTitle(String subTitle) {
-        this.subTitle = subTitle;
-    }
+    public String getSubTitle() {return subTitle;}
+    public void setSubTitle(String subTitle) {this.subTitle = subTitle;}
 
     private String electronicRightsInd;
-
-    public String getElectronicRightsInd() {
-        return electronicRightsInd;
-    }
-
-    public void setElectronicRightsInd(String electronicRightsInd) {
-        this.electronicRightsInd = electronicRightsInd;
-    }
+    public String getElectronicRightsInd() {return electronicRightsInd;}
+    public void setElectronicRightsInd(String electronicRightsInd) {this.electronicRightsInd = electronicRightsInd;}
 
     private HashMap<String, Object> language;
-
-    public HashMap<String, Object> getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(HashMap<String, Object> language) {
-        this.language = language;
-    }
+    public HashMap<String, Object> getLanguage() {return language;}
+    public void setLanguage(HashMap<String, Object> language) {this.language = language;}
 
     private String editionNumber;
-
-    public String getEditionNumber() {
-        return editionNumber;
-    }
-
-    public void setEditionNumber(String editionNumber) {
-        this.editionNumber = editionNumber;
-    }
+    public String getEditionNumber() {return editionNumber;}
+    public void setEditionNumber(String editionNumber) {this.editionNumber = editionNumber;}
 
     private HashMap<String, Object> subscriptionType;
-
-    public HashMap<String, Object> getSubscriptionType() {
-        return subscriptionType;
-    }
-
-    public void setsubscriptionType(HashMap<String, Object> subscriptionType) {
-        this.subscriptionType = subscriptionType;
-    }
+    public HashMap<String, Object> getSubscriptionType() {return subscriptionType;}
+    public void setSubscriptionType(HashMap<String, Object> subscriptionType) {this.subscriptionType = subscriptionType;}
 
     private String volume;
-
-    public String getVolume() {
-        return volume;
-    }
-
-    public void setVolume(String volume) {
-        this.volume = volume;
-    }
+    public String getVolume() {return volume;}
+    public void setVolume(String volume) {this.volume = volume;}
 
     private String copyrightYear;
-
-    public String getCopyrightYear() {
-        return copyrightYear;
-    }
-
-    public void setCopyrightYear(String copyrightYear) {
-        this.copyrightYear = copyrightYear;
-    }
+    public String getCopyrightYear() {return copyrightYear;}
+    public void setCopyrightYear(String copyrightYear) {this.copyrightYear = copyrightYear;}
 
     private WorkIdentifiersApiObject[] identifiers;
-
-    public WorkIdentifiersApiObject[] getIdentifiers() {
-        return identifiers;
-    }
-
-    public void setIdentifiers(WorkIdentifiersApiObject[] identifiers) {
-        this.identifiers = identifiers;
-    }
+    public WorkIdentifiersApiObject[] getIdentifiers() {return identifiers;}
+    public void setIdentifiers(WorkIdentifiersApiObject[] identifiers) {this.identifiers = identifiers;}
 
     private HashMap<String, Object> type;
-
-    public HashMap<String, Object> getType() {
-        return type;
-    }
-
-    public void setType(HashMap<String, Object> type) {
-        this.type = type;
-    }
+    public HashMap<String, Object> getType() {return type;}
+    public void setType(HashMap<String, Object> type) {this.type = type;}
 
     private HashMap<String, Object> status;
-
-    public HashMap<String, Object> getStatus() {
-        return status;
-    }
-
-    public void setStatus(HashMap<String, Object> status) {
-        this.status = status;
-    }
+    public HashMap<String, Object> getStatus() {return status;}
+    public void setStatus(HashMap<String, Object> status) {this.status = status;}
 
     private HashMap<String, Object> imprint;
-
-    public HashMap<String, Object> getImprint() {
-        return imprint;
-    }
-
-    public void setImprint(HashMap<String, Object> imprint) {
-        this.imprint = imprint;
-    }
+    public HashMap<String, Object> getImprint() {return imprint;}
+    public void setImprint(HashMap<String, Object> imprint) {this.imprint = imprint;}
 
     private HashMap<String, Object> societyOwnership;
+    public HashMap<String, Object> getSocietyOwnership() {return societyOwnership;}
+    public void setSocietyOwnership(HashMap<String, Object> societyOwnership) {this.societyOwnership = societyOwnership;}
 
-    public HashMap<String, Object> getSocietyOwnership() {
-        return societyOwnership;
-    }
 
-    public void setSocietyOwnership(HashMap<String, Object> societyOwnership) {
-        this.societyOwnership = societyOwnership;
-    }
+    private HashMap<String, Object> legalOwnership;
+    public HashMap<String, Object> getLegalOwnership() {return legalOwnership;}
+    public void setLegalOwnership(HashMap<String, Object> legalOwnership) {this.legalOwnership = legalOwnership;}
 
     private HashMap<String, Object> openAccessType;
-
-    public HashMap<String, Object> getOpenAccessType() {
-        return openAccessType;
-    }
-
-    public void setOpenAccessType(HashMap<String, Object> openAccessType) {
-        this.openAccessType = openAccessType;
-    }
+    public HashMap<String, Object> getOpenAccessType() {return openAccessType;}
+    public void setOpenAccessType(HashMap<String, Object> openAccessType) {this.openAccessType = openAccessType;}
 
     private PMCApiObject pmc;
-
-    public PMCApiObject getPmc() {
-        return pmc;
-    }
-
-    public void setPmc(PMCApiObject pmc) {
-        this.pmc = pmc;
-    }
+    public PMCApiObject getPmc() {return pmc;}
+    public void setPmc(PMCApiObject pmc) {this.pmc = pmc;}
 
     private AccountableProductAPIObject accountableProduct;
-
-    public AccountableProductAPIObject getAccountableProduct() {
-        return accountableProduct;
-    }
-
-    public void setAccountableProduct(AccountableProductAPIObject accountableProduct) {
-        this.accountableProduct = accountableProduct;
-    }
+    public AccountableProductAPIObject getAccountableProduct() {return accountableProduct;}
+    public void setAccountableProduct(AccountableProductAPIObject accountableProduct) {this.accountableProduct = accountableProduct;}
 
     private FinancialAttributesApiObject[] workFinancialAttributes;
-
-    public FinancialAttributesApiObject[] getWorkFinancialAttributes() {
-        return workFinancialAttributes;
-    }
-
-    public void setWorkFinancialAttributes(FinancialAttributesApiObject[] workFinancialAttributes) {
-        this.workFinancialAttributes = workFinancialAttributes;
-    }
+    public FinancialAttributesApiObject[] getWorkFinancialAttributes() {return workFinancialAttributes;}
+    public void setWorkFinancialAttributes(FinancialAttributesApiObject[] workFinancialAttributes) {this.workFinancialAttributes = workFinancialAttributes;}
 
     private PersonsApiObject[] workPersons;
+    public PersonsApiObject[] getWorkPersons() {return workPersons;}
+    public void setWorkPersons(PersonsApiObject[] workPersons) {this.workPersons = workPersons;}
 
-    public PersonsApiObject[] getWorkPersons() {
-        return workPersons;
-    }
-
-    public void setWorkPersons(PersonsApiObject[] workPersons) {
-        this.workPersons = workPersons;
-    }
+    private SubjectAreasApiObject[] workSubjectAreas;
+    public SubjectAreasApiObject[] getWorkSubjectAreas() {return workSubjectAreas;}
+    public void setWorkSubjectAreas(SubjectAreasApiObject[] workSubjectAreas) {this.workSubjectAreas = workSubjectAreas;}
 
     private WorkRelationshipsAPIObject workRelationships;
-
-    public WorkRelationshipsAPIObject getWorkRelationships() {
-        return workRelationships;
-    }
-
-    public void setWorkRelationships(WorkRelationshipsAPIObject workRelationships) {
-        this.workRelationships = workRelationships;
-    }
+    public WorkRelationshipsAPIObject getWorkRelationships() {return workRelationships;}
+    public void setWorkRelationships(WorkRelationshipsAPIObject workRelationships) {this.workRelationships = workRelationships;}
 
     //subjectAreas//EPR-103R9H
     //commented by Nishant @ 13 Apr 2020,yet to implement
@@ -256,18 +139,17 @@ public class workCore {
             printLog("language code");
         }
 
-//subscription type, if not null -EPR-W-101055
+            //subscription type, if not null -EPR-W-101055
 
         if (!(editionNumber == null)) {
             int apiEditionNumber = Integer.valueOf(editionNumber);
-            Assert.assertEquals(apiEditionNumber, this.workDataObjectsFromEPHGD.get(0).getEDITION_NUMBER());
+            Assert.assertEquals(editionNumber, this.workDataObjectsFromEPHGD.get(0).getEDITION_NUMBER());
             printLog("EditionNumber");
         }
 
 
         //  int apiVolume =Integer.valueOf(volume);
-        Assert.assertEquals(volume, this.workDataObjectsFromEPHGD.get(0).getVOLUME());
-        printLog("volume");
+        //Assert.assertEquals(volume, this.workDataObjectsFromEPHGD.get(0).getVOLUME());        printLog("volume");
         //if(Integer.parseInt(this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR())!=0) {
         if (this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR() != null) {
             Assert.assertEquals(copyrightYear, this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR());

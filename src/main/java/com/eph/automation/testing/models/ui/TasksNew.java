@@ -25,7 +25,7 @@ public class TasksNew {
 
     @Inject
     public TasksNew() {
-        // this.driver = new MarionetteDriver().getFirefoxDriver();
+       //  this.driver = new MarionetteDriver().getFirefoxDriver();
           this.driver = new MarionetteDriver().getChromeDriver();
      //   this.driver=new WebDriverFactory().get();
         this.wait = new WebDriverWait(driver,10);

@@ -1,11 +1,13 @@
 package com.eph.automation.testing.models.contexts;
 
 import com.eph.automation.testing.annotations.StaticInjection;
+import com.eph.automation.testing.models.api.AvailabilityExtendedTestClass;
 import com.eph.automation.testing.models.api.ManifestationExtendedTestClass;
 import com.eph.automation.testing.models.api.WorkExtendedTestClass;
 import com.eph.automation.testing.models.dao.*;
 import com.eph.automation.testing.services.db.sql.WorkRelationshipDataObject;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by RAVIVARMANS on 26/11/2018.
@@ -26,6 +28,7 @@ public class DataQualityContext {
     public static List<ManifestationDataObject> manifestationDataObjectsFromEPHSA;
     public static List<ManifestationDataObject> manifestationDataObjectsFromEPHDQ;
     public static List<ManifestationDataObject> manifestationDataObjectsFromEPHGD;
+
 
     public static List<ProductDataObject> productDataObjectsFromPMX;
     public static List<ProductDataObject> productDataObjectsFromEPHSTG;
@@ -79,6 +82,7 @@ public class DataQualityContext {
     public static List<WorkSubjectAreaLinkDataObject> workSubjectAreaDataObjectsFromGD;
 
     public static List<String> ids;
+    public static List<Map<?, ?>> randomIdsData;
 
     //public static List<ProductDataObject> productEntityObjectsFromSource;
     //public static List<ProductDataObject> productEntityObjectsFromEPH;
@@ -88,6 +92,7 @@ public class DataQualityContext {
 
     public static WorkExtendedTestClass workExtendedTestClass;
     public static ManifestationExtendedTestClass manifestationExtendedTestClass;
+    public static AvailabilityExtendedTestClass availabilityExtendedTestClass;
     public static String uiUnderTest;
 
 

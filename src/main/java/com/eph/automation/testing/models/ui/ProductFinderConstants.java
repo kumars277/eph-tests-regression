@@ -21,6 +21,7 @@ public class ProductFinderConstants {
     public static String itemDetail="(//div[contains(@class,'item-detail')])";
     public static String itemDetailInner="//div[@class='ng-star-inserted']";
     public static String searchNoResults = "//div[contains(text(),'There are no results')]";
+    public static String searchSuggesion="//div[contains(@class,'search-suggestion')]";
     public static String  filterTypeBook = "//span[contains(text(),'Book')]";
     public static String buildWorkIdLocator = "//a[contains(@href,'/work/%s/overview')]";
     public static String buildProductIdLocator="//*[contains(text(),'%s')]/parent::div/preceding-sibling::div/a";

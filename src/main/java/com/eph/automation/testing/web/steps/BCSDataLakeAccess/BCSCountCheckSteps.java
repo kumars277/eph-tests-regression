@@ -73,7 +73,7 @@ public class BCSCountCheckSteps {
     @And("^Compare count of initial ingest with current table (.*)$")
     public void compareCountOfInitialIngestWithCurrentTable(String tableName) {
         Log.info(tableName+ " : initial_ingest count = " + BCSFullSourceCount + " Vs BCS current table count = " + BCSCurrentCount);
-        Assert.assertEquals("counts are not equal for initial_ingest and "+tableName, BCSFullSourceCount, BCSCurrentCount);
+        Assert.assertEquals("counts are not equal for initial_ingest and "+tableName+"\n", BCSFullSourceCount, BCSCurrentCount);
     }
 
 
@@ -173,7 +173,7 @@ public class BCSCountCheckSteps {
     @And("^Check count of current table (.*) and history (.*) are identical$")
     public void compareCurrentandHistoryCount(String SrctableName,String trgttableName){
         Log.info( "Count check : "+SrctableName + " = " + BCSCurrentCount + " Vs "+trgttableName+" = " + BCSHistoryCount);
-        Assert.assertEquals("counts are not equal for "+SrctableName+" and "+trgttableName, BCSCurrentCount, BCSHistoryCount);
+        Assert.assertEquals("counts are not equal for "+SrctableName+" and "+trgttableName+"\n", BCSCurrentCount, BCSHistoryCount);
     }
 
 }

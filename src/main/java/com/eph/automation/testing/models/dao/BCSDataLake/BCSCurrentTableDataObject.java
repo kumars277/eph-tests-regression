@@ -19,6 +19,7 @@ public class BCSCurrentTableDataObject {
     private String classificationtype;
     private String priority;
     private String businessunit;
+    //for stg_current_content
     private String originimpid;
     private String subgroup;
     private String series;
@@ -274,6 +275,8 @@ public class BCSCurrentTableDataObject {
     private String childisbn;
     private String childprojectno;
 
+
+
     public String getClassificationcode() {return classificationcode;}
     public void setClassificationcode(String classificationcode) {this.classificationcode = classificationcode;}
 
@@ -297,6 +300,7 @@ public class BCSCurrentTableDataObject {
 
     public String getValue() {return value;}
     public void setValue(String value) {this.value = value;}
+
 
     public String getOriginimpid() {return originimpid;}
     public void setOriginimpid(String originimpid) {this.originimpid = originimpid;}
@@ -431,6 +435,7 @@ public class BCSCurrentTableDataObject {
     public String getWorkmaster() {return workmaster;}
     public void setWorkmaster(String workmaster) {this.workmaster = workmaster;}
 
+
     public String getAdditionaladdress() {return additionaladdress;}
     public void setAdditionaladdress(String additionaladdress) {this.additionaladdress = additionaladdress;}
 
@@ -487,6 +492,7 @@ public class BCSCurrentTableDataObject {
 
     public String getTelephoneother() {return telephoneother;}
     public void setTelephoneother(String telephoneother) {this.telephoneother = telephoneother;}
+
 
     public String getPrefix() {return prefix;}
     public void setPrefix(String prefix) {this.prefix = prefix;}
