@@ -88,5 +88,9 @@ public class ManifExtJson {
     private ManifExtPgCountJson[] manifestationExtendedPageCounts;
     public ManifExtPgCountJson[] getManifestationExtendedPageCounts() {return manifestationExtendedPageCounts;}
     public void setManifestationExtendedPageCounts(ManifExtPgCountJson[] manifestationExtendedPageCounts) {this.manifestationExtendedPageCounts = manifestationExtendedPageCounts;}
+
+    private ManifExtRestrictionJson[] manifestationExtendedRestrictions;
+    public ManifExtRestrictionJson[] getManifestationExtendedRestrictions() {return manifestationExtendedRestrictions;}
+    public void setManifestationExtendedRestrictions(ManifExtRestrictionJson[] manifestationExtendedRestrictions) {this.manifestationExtendedRestrictions = manifestationExtendedRestrictions;}
 }
 

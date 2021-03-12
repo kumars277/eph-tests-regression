@@ -31,16 +31,16 @@ Feature:Validate data of DL Extended Views where data comes from All Extended Vi
    Then  Compare data of All Extended views with Extended Tables <tableName> are identical
     Examples:
       | tableName                                                         |countOfRandomIds|
-     |product_extended_availability                                      |10              |
-     |product_extended_pricing                                           |10              |
-   |manifestation_extended_restriction                                 |10              |
-     |manifestation_extended_page_count                                  |10              |
-     |manifestation_extended                                             |10              |
-    |work_extended                                                      |10              |
-      |work_extended_editorial_board                                      |10              |
-     |work_extended_metric                                               |10              |
-    |work_extended_person_role                                          |10              |
-     |work_extended_relationship_sibling                                 |10              |
-    |work_extended_subject_area                                         |10              |
-     |work_extended_url                                                  |10              |
+     |product_extended_availability                                      |50              |
+     |product_extended_pricing                                           |50              |
+   |manifestation_extended_restriction                                 |50              |
+     |manifestation_extended_page_count                                  |50              |
+     |manifestation_extended                                             |50              |
+    |work_extended                                                      |50              |
+      |work_extended_editorial_board                                      |50              |
+     |work_extended_metric                                               |50              |
+    |work_extended_person_role                                          |50              |
+     |work_extended_relationship_sibling                                 |50              |
+    |work_extended_subject_area                                         |50              |
+     |work_extended_url                                                  |50              |
 ##

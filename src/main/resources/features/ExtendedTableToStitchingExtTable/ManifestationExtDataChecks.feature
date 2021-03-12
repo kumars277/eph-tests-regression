@@ -9,7 +9,7 @@ Feature:Validate data for  Manifestation Ext Stitching tables in EPH
     Then Compare Manif Extended and Manif Extended Stitching Table
     Examples:
       |tableName                   |countOfRandomIds|
-      |manifestation_extended               |1                 |
+      |manifestation_extended      |20                 |
 
   @ExtStitching
   Scenario Outline: Verify Data from the Manif_extended page count tables transferred to Manif Extended Stitching table
@@ -17,6 +17,16 @@ Feature:Validate data for  Manifestation Ext Stitching tables in EPH
     And Get the records from Manifestation extended page count table
     Then Compare Manif Extended page count and Manif Extended Stitching Table
     Examples:
-      |tableName                   |countOfRandomIds|
-      |manifestation_extended_page_count               |1                 |
+      |tableName                                       |countOfRandomIds|
+      |manifestation_extended_page_count               |20             |
+
+
+  @ExtStitching
+  Scenario Outline: Verify Data from the Manif_extended restrictions tables transferred to Manif Extended Stitching table
+    Given We get the <countOfRandomIds> random manifestation Ext restrictions EPR ids <tableName>
+    And   Get the records from Manifestation extended restrictions table
+    Then  Compare Manif Extended restrictions and Manif Extended Stitching Table
+    Examples:
+      |tableName                                        |countOfRandomIds|
+      |manifestation_extended_restriction               |20            |
 

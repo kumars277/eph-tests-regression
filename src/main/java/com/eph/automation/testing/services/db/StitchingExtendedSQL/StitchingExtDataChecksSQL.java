@@ -47,10 +47,14 @@ public class StitchingExtDataChecksSQL {
                     " from "+GetStitchDLDBUser.getProdExtDB()+".manifestation_extended where epr_id in ('%s') and delete_flag=false\n";
 
     public static String GET_MANIF_EXT_JSON_REC =
-            "select json as json, epr_id as epr_id, type as type from "+GetStitchDLDBUser.getStitchingExtdb()+".stch_manifestation_ext_json WHERE epr_id in ('%s')\n";
+            "select json as json, epr_id as epr_id, type as type from "+GetStitchDLDBUser.getStitchingExtdb()+".stch_manifestation_ext_json WHERE epr_id in ('%s')\n"; //EPR-M-115H09
 
     public static String GET_RANDOM_EPR_MANIF_EXT_PAGE_COUNT =
             "select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".manifestation_extended_page_count where delete_flag=false order by rand() limit %s\n";
+
+    public static String GET_RANDOM_EPR_MANIF_EXT_RESTRICT_COUNT =
+            "select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".manifestation_extended_restriction where delete_flag=false order by rand() limit %s\n";
+
 
     public static String GET_MANIF_EXT_PAFE_COUNT_REC =
             "select epr_id as epr_id\n" +
@@ -60,10 +64,41 @@ public class StitchingExtDataChecksSQL {
                     ",count_type_name as count_type_name\n" +
                     ",count as count\n" +
                     ",delete_flag as delete_flag\n" +
-                    " from "+GetStitchDLDBUser.getProdExtDB()+".manifestation_extended_page_count where epr_id in ('%s') and delete_flag=false\n";
+                    " from "+GetStitchDLDBUser.getProdExtDB()+".manifestation_extended_page_count where epr_id in ('%s') and delete_flag=false\n";  //EPR-M-115H09
+
+
+    public static String GET_MANIF_EXT_RESTRICT_REC =
+            "select epr_id as epr_id\n" +
+                    ",manifestation_type as manifestation_type\n" +
+                    ",last_updated_date as last_updated_date\n" +
+                    ",restriction_code  as restriction_code \n" +
+                    ",restriction_name as restriction_name\n" +
+                    " from "+GetStitchDLDBUser.getProdExtDB()+".manifestation_extended_restriction where epr_id in ('%s') and delete_flag=false\n";  //EPR-M-115H09
+
+    public static String GET_PROD_EXT_AVAIL_REC =
+            "select epr_id as epr_id\n" +
+                    ",product_type as product_type\n" +
+                    ",last_updated_date as last_updated_date\n" +
+                    ",application_name  as application_name \n" +
+                    ",delta_answer_code_uk as delta_answer_code_uk\n" +
+                    ",delta_answer_code_us as delta_answer_code_us\n" +
+                    ",publication_status_anz as publication_status_anz\n" +
+                    ",availability_format as availability_format\n" +
+                    ",availability_start_date as availability_start_date\n" +
+                    ",availability_status  as availability_status \n" +
+                    " from "+GetStitchDLDBUser.getProdExtDB()+".product_extended_availability where epr_id in ('%s') and delete_flag=false\n";  //EPR-M-115H09
+
+
 
     public static String GET_RANDOM_EPR_WORK_EXTENDED =
             "select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".work_extended where delete_flag=false order by rand() limit %s\n";
+
+    public static String GET_COUNT_WORK_EXT_TABLE =
+            "select count(*) as Source_Count from "+GetStitchDLDBUser.getProdExtDB()+".work_extended where delete_flag=false";
+
+    public static String GET_COUNT_WORK_EXT_STITCH_TABLE =
+            "select count(*) as Target_Count from "+GetStitchDLDBUser.getStitchingExtdb()+".stch_work_ext_json\n";
+
 
     public static String GET_WORK_EXT_REC =
             "select epr_id as epr_id\n" +
@@ -102,12 +137,18 @@ public class StitchingExtDataChecksSQL {
                     ",business_unit_desc as business_unit_desc\n" +
                     ",journal_prod_site_code as journal_prod_site_code\n" +
                     ",delete_flag as delete_flag\n" +
-                    " from "+GetStitchDLDBUser.getProdExtDB()+".work_extended where epr_id in ('EPR-W-108SKT')\n";
+                    " from "+GetStitchDLDBUser.getProdExtDB()+".work_extended where epr_id in ('%s')\n";
 
     public static String GET_WORK_EXT_JSON_REC =
-            "select json as json, epr_id as epr_id, type as type from "+GetStitchDLDBUser.getStitchingExtdb()+".stch_work_ext_json WHERE epr_id in ('EPR-W-108SKT')\n";
+            "select json as json, epr_id as epr_id, type as type from "+GetStitchDLDBUser.getStitchingExtdb()+".stch_work_ext_json WHERE epr_id in ('%s')\n";
 
 
+    public static String GET_RANDOM_EPR_PROD_EXTENDED_AVAILABILITY =
+            "select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".product_extended_availability where delete_flag=false order by rand() limit %s\n";
+
+
+    public static String GET_PROD_EXT_AVAIL_JSON_REC =
+            "select json as json, epr_id as epr_id, type as type from "+GetStitchDLDBUser.getStitchingExtdb()+".stch_product_ext_json WHERE epr_id in ('%s') and  extension_type='Availability'\n"; //EPR-M-115H09
 
 
 }

@@ -1173,47 +1173,47 @@ public class BCS_ETLExtendedCountChecksSQL {
 
     public static String GET_DUPLICATES_LATEST_AVAILABILITY_COUNT =
             "select count(*) as Duplicate_Count " +
-                    "from (SELECT count(*) FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_latest " +
+                    "from (SELECT count(*) FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_latest where delete_flag = false " +
                     "group by u_key having count(*)>1)";
 
     public static String GET_DUPLICATES_LATEST_MANIF_EXT_COUNT =
             "select count(*) as Duplicate_Count " +
-                    "from (SELECT count(*) FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_latest " +
+                    "from (SELECT count(*) FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_latest where delete_flag = false " +
                     "group by u_key having count(*)>1)";
 
     public static String GET_DUPLICATES_LATEST_PAGE_COUNT_COUNT =
             "select count(*) as Duplicate_Count " +
-                    "from (SELECT count(*) FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_latest " +
+                    "from (SELECT count(*) FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_latest where delete_flag = false " +
                     "group by u_key having count(*)>1)";
 
     public static String GET_DUPLICATES_LATEST_URL_COUNT =
             "select count(*) as Duplicate_Count " +
-                    "from (SELECT count(*) FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_latest " +
+                    "from (SELECT count(*) FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_latest where delete_flag = false " +
                     "group by u_key having count(*)>1)";
 
     public static String GET_DUPLICATES_LATEST_WORK_EXT_COUNT =
             "select count(*) as Duplicate_Count " +
-                    "from (SELECT count(*) FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_latest " +
+                    "from (SELECT count(*) FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_latest where delete_flag = false " +
                     "group by u_key having count(*)>1)";
 
     public static String GET_DUPLICATES_LATEST_WORK_SUBJ_AREA_COUNT =
             "select count(*) as Duplicate_Count " +
-                    "from (SELECT count(*) FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_latest " +
+                    "from (SELECT count(*) FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_latest where delete_flag = false " +
                     "group by u_key having count(*)>1)";
 
     public static String GET_DUPLICATES_LATEST_MANIF_RESTRICT_COUNT =
             "select count(*) as Duplicate_Count " +
-                    "from (SELECT count(*) FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_latest " +
+                    "from (SELECT count(*) FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_latest where delete_flag = false " +
                     "group by u_key having count(*)>1)";
 
     public static String GET_DUPLICATES_LATEST_PROD_PRICE_COUNT =
             "select count(*) as Duplicate_Count " +
-                    "from (SELECT count(*) FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_latest " +
+                    "from (SELECT count(*) FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_latest where delete_flag = false " +
                     "group by u_key having count(*)>1)";
 
     public static String GET_DUPLICATES_LATEST_WORK_PERS_ROLE_COUNT =
             "select count(*) as Duplicate_Count " +
-                    "from (SELECT count(*) FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_latest " +
+                    "from (SELECT count(*) FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_latest where delete_flag = false " +
                     "group by u_key having count(*)>1)";
 
 

@@ -5,6 +5,7 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.StitchingExtContext;
 import com.eph.automation.testing.models.dao.StitchingExtended.ManifExtPgCountJson;
+import com.eph.automation.testing.models.dao.StitchingExtended.ManifExtRestrictionJson;
 import com.eph.automation.testing.models.dao.StitchingExtended.ManifestationExtAccessObject;
 import com.eph.automation.testing.models.dao.StitchingExtended.ManifExtJsonObject;
 import com.eph.automation.testing.services.db.StitchingExtendedSQL.StitchingExtDataChecksSQL;
@@ -76,6 +77,13 @@ public class ManifestationExtDataChecksSteps {
         dataQualityStitchContext.recFromManifStitchExtended = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.EPH_URL);
     }
 
+   /* public void getIndividualRecFromManifExtPageCountTable(String manifPageCountId) {
+        Log.info("We get the Individual records from Manif Extended Page count Tables...");
+        sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_PAFE_COUNT_REC,manifPageCountId);
+        Log.info(sql);
+        dataQualityStitchContext.recordsFromManifExtPageCounts = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.AWS_URL);
+    }*/
+
     @And("^Compare Manif Extended and Manif Extended Stitching Table$")
     public void compareManifExtendedAndStitchingManifExt() {
         if (dataQualityStitchContext.recordsFromManifExtended.isEmpty()) {
@@ -96,12 +104,12 @@ public class ManifestationExtDataChecksSteps {
 
                 Log.info(" EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() +
                         " Manif_Extended -> manif_type => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getmanifestation_type() +
-                        " Manif_JSON -> Type => " + dataQualityStitchContext.recFromManifStitchExtended.get(i).gettype());
+                        " Manif_JSON -> Type => " + dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
                 if (dataQualityStitchContext.recordsFromManifExtended.get(i).getmanifestation_type() != null ||
                         (dataQualityStitchContext.recFromManifStitchExtended.get(i).gettype() != null)) {
                     Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() + " is missing/not found in Manif_Stitching table",
                             dataQualityStitchContext.recordsFromManifExtended.get(i).getmanifestation_type(),
-                            dataQualityStitchContext.recFromManifStitchExtended.get(i).gettype());
+                            dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
                 }
 
                 Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() +
@@ -214,6 +222,7 @@ public class ManifestationExtDataChecksSteps {
         Log.info(Ids.toString());
     }
 
+
     @Then("^Get the records from Manifestation extended page count table$")
     public void getRecordsFromManifExtPageCountTable() {
         Log.info("We get the records from Manif Extended Page count Tables...");
@@ -229,59 +238,189 @@ public class ManifestationExtDataChecksSteps {
         } else {
             for (int i = 0; i < dataQualityStitchContext.recordsFromManifExtPageCount.size(); i++) {
                 String manifId = dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id();
+              //  getIndividualRecFromManifExtPageCountTable(manifId);
                 getManifExtendedJSONRec(manifId);
                 getType(manifId);
-                Log.info("Manif_Ext_PageCount -> EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() +
-                        " Manif_JSON -> EPR => " + dataQualityStitchContext.recordsFromManifStitching.getId());
-                if (dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() != null ||
-                        (dataQualityStitchContext.recordsFromManifStitching.getId() != null)) {
-                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() + " is missing/not found in Manif_Stitching table",
-                            dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id(),
-                            dataQualityStitchContext.recordsFromManifStitching.getId());
-                }
-
-                Log.info(" EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() +
-                        " Manif_Ext_PageCount -> manif_type => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getmanifestation_type() +
-                        " Manif_JSON -> Type => " + dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
-                if (dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getmanifestation_type() != null ||
-                        (dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype() != null)) {
-                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() + " is missing/not found in Manif_Stitching table",
-                            dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getmanifestation_type(),
-                            dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
-                }
-
                 if (dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getManifestationExtendedPageCounts() != null) {
                     ManifExtPgCountJson[] extmanifPgCount_temp = dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getManifestationExtendedPageCounts().clone();
-                    for (int j = 0; j < extmanifPgCount_temp.length; j++)
-                    {
+                    for (int j = 0; j < extmanifPgCount_temp.length; j++) {
 
                         // test case failed bcoz page count node need to be sorted,
                         //eg:the records in the table will be 1,2,3 for EPR-1s
                         //and in JSON it will be 2,,3,1 for EPR1s
-                        Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getepr_id() +
-                                " Manif_Ext_PageCount -> Country_Code => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getcount_type_code() +
-                                " Manif_JSON -> Country_Code => " + extmanifPgCount_temp[j].getExtendedPageCount().getType().get("code"));
-                        Assert.assertEquals("The CountryCode is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getepr_id(),
-                                dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getcount_type_code(),
-                                extmanifPgCount_temp[j].getExtendedPageCount().getType().get("code"));
+//                        String sourceEpr = dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getepr_id();
+//                        String trgtEpr = manifId;
+//
+                      //  for(int t=0;t<=extmanifPgCount_temp.length;t++){
+                            String sourceCode = dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getcount_type_code();
+                            String trgetCode =String.valueOf(extmanifPgCount_temp[j].getExtendedPageCount().getType().get("code"));
 
-                        Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getepr_id() +
-                                " Manif_Ext_PageCount -> Country_name => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getcount_type_name() +
-                                " Manif_JSON -> Country_name => " + extmanifPgCount_temp[j].getExtendedPageCount().getType().get("name"));
-                        Assert.assertEquals("The CountryName is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getepr_id(),
-                                dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getcount_type_name(),
-                                extmanifPgCount_temp[j].getExtendedPageCount().getType().get("name"));
 
-                        Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getepr_id() +
-                                " Manif_Ext_PageCount -> page Count => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getcount() +
-                                " Manif_JSON -> page Count => " + extmanifPgCount_temp[j].getExtendedPageCount().getCount());
-                        Assert.assertEquals("The page Count is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getepr_id(),
-                                dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getcount(),
-                                extmanifPgCount_temp[j].getExtendedPageCount().getCount());
+                            if(sourceCode.equals(trgetCode)){
+
+                                Log.info("Manif_Ext_PageCount -> EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() +
+                                        " Manif_JSON -> EPR => " + dataQualityStitchContext.recordsFromManifStitching.getId());
+                                if (dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() != null ||
+                                        (dataQualityStitchContext.recordsFromManifStitching.getId() != null)) {
+                                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() + " is missing/not found in Manif_Stitching table",
+                                            dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id(),
+                                            dataQualityStitchContext.recordsFromManifStitching.getId());
+                                }
+
+                                Log.info(" EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() +
+                                        " Manif_Ext_PageCount -> manif_type => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getmanifestation_type() +
+                                        " Manif_JSON -> Type => " + dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
+                                if (dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getmanifestation_type() != null ||
+                                        (dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype() != null)) {
+                                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() + " is missing/not found in Manif_Stitching table",
+                                            dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getmanifestation_type(),
+                                            dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
+                                }
+
+                                 System.out.println("source-->"+sourceCode+" AND "+"target------>"+trgetCode);
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() +
+                                        " Manif_Ext_PageCount -> Country_Code => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getcount_type_code() +
+                                        " Manif_JSON -> Country_Code => " + extmanifPgCount_temp[j].getExtendedPageCount().getType().get("code"));
+                                Assert.assertEquals("The CountryCode is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getcount_type_code(),
+                                        extmanifPgCount_temp[j].getExtendedPageCount().getType().get("code"));
+
+                               Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() +
+                                       " Manif_Ext_PageCount -> Country_name => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getcount_type_name() +
+                                       " Manif_JSON -> Country_name => " + extmanifPgCount_temp[j].getExtendedPageCount().getType().get("name"));
+                               Assert.assertEquals("The CountryName is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id(),
+                                       dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getcount_type_name(),
+                                       extmanifPgCount_temp[j].getExtendedPageCount().getType().get("name"));
+
+                               Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() +
+                                       " Manif_Ext_PageCount -> page Count => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getcount() +
+                                       " Manif_JSON -> page Count => " + extmanifPgCount_temp[j].getExtendedPageCount().getCount());
+                               Assert.assertEquals("The page Count is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id(),
+                                       dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getcount(),
+                                       extmanifPgCount_temp[j].getExtendedPageCount().getCount());
+
+                                System.out.println("--Satisfy Success--");
+                                j=0;
+                                break;
+                            }else{
+                                j= j++;
+                            }
+                       // }
 
                     }
                 }
             }
         }
     }
+
+
+    @Given("^We get the (.*) random manifestation Ext restrictions EPR ids (.*)$")
+    public void getRandomManifExtRestrictIds(String numberOfRecords, String tableName) {
+        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        Log.info("numberOfRecords = " + numberOfRecords);
+        Log.info("Get random Manif Ext Restrict count EPR Ids...");
+        switch (tableName) {
+            case "manifestation_extended_restriction":
+                sql = String.format(StitchingExtDataChecksSQL.GET_RANDOM_EPR_MANIF_EXT_RESTRICT_COUNT, numberOfRecords);
+                List<Map<?, ?>> randomManifExtendedEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomManifExtendedEPRIds.stream().map(m -> (String) m.get("epr_id")).collect(Collectors.toList());
+                break;
+
+        }
+        Log.info(sql);
+        Log.info(Ids.toString());
+    }
+
+    @Then("^Get the records from Manifestation extended restrictions table$")
+    public void getRecordsFromManifExtRestrictTable() {
+        Log.info("We get the records from Manif Extended Restrict Tables...");
+        sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_RESTRICT_REC, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityStitchContext.recordsFromManifExtRestrict = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.AWS_URL);
+    }
+
+
+  /*  public void getIndividualRecFromManifExtRestrictTable(String manifRestrictId) {
+        Log.info("We get the Individual records from Manif Extended Restriction Tables...");
+        sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_RESTRICT_REC,manifRestrictId);
+        Log.info(sql);
+        dataQualityStitchContext.recordsFromManifExtRestricts = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.AWS_URL);
+    }*/
+
+    @And("^Compare Manif Extended restrictions and Manif Extended Stitching Table$")
+    public void compareManifExtRestrictAndStitchingManifExt() {
+        if (dataQualityStitchContext.recordsFromManifExtRestrict.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            for (int i = 0; i < dataQualityStitchContext.recordsFromManifExtRestrict.size(); i++) {
+                String manifId = dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id();
+               // getIndividualRecFromManifExtRestrictTable(manifId);
+                getManifExtendedJSONRec(manifId);
+                getType(manifId);
+                if (dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getManifestationExtendedRestrictions() != null) {
+                    ManifExtRestrictionJson[] extmanifRestrict_temp = dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getManifestationExtendedRestrictions().clone();
+                    for (int j = 0; j < extmanifRestrict_temp.length; j++) {
+
+                        // test case failed bcoz page count node need to be sorted,
+                        //eg:the records in the table will be 1,2,3 for EPR-1s
+                        //and in JSON it will be 2,,3,1 for EPR1s
+//                        String sourceEpr = dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getepr_id();
+//                        String trgtEpr = manifId;
+//
+                       // for(int t=0;t<=extmanifRestrict_temp.length;t++){
+                            String sourceCode = dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getrestriction_code();
+                            String trgetCode =String.valueOf(extmanifRestrict_temp[j].getExtendedRestriction().getType().get("code"));
+
+
+                            if(sourceCode.equals(trgetCode)){
+
+                                Log.info("Manif_Ext_Restrict -> EPR => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id() +
+                                        " Manif_JSON_Restrict -> EPR => " + dataQualityStitchContext.recordsFromManifStitching.getId());
+                                if (dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id() != null ||
+                                        (dataQualityStitchContext.recordsFromManifStitching.getId() != null)) {
+                                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id() + " is missing/not found in Manif_Stitching table",
+                                            dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id(),
+                                            dataQualityStitchContext.recordsFromManifStitching.getId());
+                                }
+
+                                Log.info(" EPR => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id() +
+                                        " Manif_Ext_Restrict -> manif_type => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getmanifestation_type() +
+                                        " Manif_JSON_Restrict -> Type => " + dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
+                                if (dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getmanifestation_type() != null ||
+                                        (dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype() != null)) {
+                                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id() + " is missing/not found in Manif_Stitching table",
+                                            dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getmanifestation_type(),
+                                            dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
+                                }
+
+                                System.out.println("source-->"+sourceCode+" AND "+"target------>"+trgetCode);
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id() +
+                                        " Manif_Ext_Restrict -> Restrict_COde => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getrestriction_code() +
+                                        " Manif_JSON -> Restrict_COde => " + extmanifRestrict_temp[j].getExtendedRestriction().getType().get("code"));
+                                Assert.assertEquals("The Restrict_COde is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getrestriction_code(),
+                                        extmanifRestrict_temp[j].getExtendedRestriction().getType().get("code"));
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id() +
+                                        " Manif_Ext_Restrict -> Restrict_name => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getrestriction_name() +
+                                        " Manif_JSON -> Restrict_name => " + extmanifRestrict_temp[j].getExtendedRestriction().getType().get("name"));
+                                Assert.assertEquals("The Restrict_name is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getrestriction_name(),
+                                        extmanifRestrict_temp[j].getExtendedRestriction().getType().get("name"));
+
+                                System.out.println("--Satisfy Success--");
+                                j=0;
+                                break;
+                            }else{
+                                j= j++;
+                            }
+                       // }
+
+                    }
+                }
+            }
+        }
+    }
+
+
 }

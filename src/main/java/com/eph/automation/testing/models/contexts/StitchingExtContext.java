@@ -16,9 +16,17 @@ public class StitchingExtContext {
 
     public static List<ManifestationExtAccessObject> recordsFromManifExtended;
     public static List<ManifestationExtAccessObject> recordsFromManifExtPageCount;
+    public static List<ManifestationExtAccessObject> recordsFromManifExtRestrict;
+    public static List<ManifestationExtAccessObject> recordsFromManifExtRestricts;
+    public static List<ManifestationExtAccessObject> recordsFromManifExtPageCounts;
     public static ManifExtJsonObject  recordsFromManifStitching;
+    public static ProdExtJsonObject  recordsFromProdStitching;
     public static WorkExtJsonObject  recordsFromWorkStitching;
     public static List<ManifestationExtAccessObject> recFromManifStitchExtended;
+
+    public static List<ProductExtAccessObject> recFromProdStitchAvailExtended;
+    public static List<ProductExtAccessObject> recordsFromProdExtAvail;
+    public static List<ProductExtAccessObject> recordsFromProdExtAvails;
     public static List<WorkExtAccessObject> recFromWorkTypeStitchExtended;
 
     public static List<WorkExtAccessObject> recordsFromWorkExtended;

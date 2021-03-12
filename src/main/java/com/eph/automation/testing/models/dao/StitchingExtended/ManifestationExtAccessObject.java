@@ -20,6 +20,22 @@ public class ManifestationExtAccessObject {
     private String count_type_name;
     private String count;
 
+    private String restriction_name;
+    private String restriction_code;
+
+    public String getrestriction_name() {
+        return restriction_name;
+    }
+    public void setrestriction_name(String restriction_name) {
+        this.restriction_name = restriction_name;
+    }
+
+    public String getrestriction_code() {
+        return restriction_code;
+    }
+    public void setrestriction_code(String restriction_code) {
+        this.restriction_code = restriction_code;
+    }
 
     public String getcount_type_code() {
         return count_type_code;

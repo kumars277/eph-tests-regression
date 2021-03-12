@@ -77,6 +77,7 @@ public class Constants {
     public static  String AWS_URL = "AWS_URL";
     public static String MYSQL_JM_URL = "MYSQL_JM_URL";
     public static String PROMIS_URL = "PROMIS_URL";
+    public static String EPH_URL2 = "EPH_URL2";
 
 
     //Wiremock

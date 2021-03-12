@@ -146,6 +146,7 @@ public class WorkExtJson {
     public void setissueProdTypeCode(String issueProdTypeCode) {
         this.issueProdTypeCode = issueProdTypeCode;
     }
+
     private String catalogueVolumesQty;
     public String getcatalogueVolumesQty() {
         return catalogueVolumesQty;
@@ -177,6 +178,7 @@ public class WorkExtJson {
     public void setcatalogueVolumeTo(String catalogueVolumeTo) {
         this.catalogueVolumeTo = catalogueVolumeTo;
     }
+
     private String rfIssuesQty;
     public String getrfIssuesQty() {
         return rfIssuesQty;
@@ -184,6 +186,7 @@ public class WorkExtJson {
     public void setrfIssuesQty(String rfIssuesQty) {
         this.rfIssuesQty = rfIssuesQty;
     }
+
     private String rfTotalPagesQty;
     public String getrfTotalPagesQty() {
         return rfTotalPagesQty;
@@ -199,6 +202,7 @@ public class WorkExtJson {
     public void setrfFvi(String rfFvi) {
         this.rfFvi = rfFvi;
     }
+
     private String rfLvi;
     public String getrfLvi() {
         return rfLvi;
@@ -206,6 +210,7 @@ public class WorkExtJson {
     public void setrfLvi(String rfLvi) {
         this.rfLvi = rfLvi;
     }
+
     private String ptsBusinessUnitDesc;
     public String getptsBusinessUnitDesc() {
         return ptsBusinessUnitDesc;
@@ -213,6 +218,15 @@ public class WorkExtJson {
     public void setptsBusinessUnitDesc(String ptsBusinessUnitDesc) {
         this.ptsBusinessUnitDesc = ptsBusinessUnitDesc;
     }
+
+    private String bookSubBusinessUnit;
+    public String getbookSubBusinessUnit() {
+        return bookSubBusinessUnit;
+    }
+    public void setbookSubBusinessUnit(String bookSubBusinessUnit) {
+        this.bookSubBusinessUnit = bookSubBusinessUnit;
+    }
+
 
 
 

@@ -11,3 +11,11 @@ Feature:Validate data for  Work Ext Stitching tables in EPH
       |tableName                   |countOfRandomIds|
       |work_extended               |1                 |
 
+
+  Scenario: Verify count between work extended and work stitching table
+    Given We get the counts from the WorkExtended Table
+    And Get the counts from Work Stitching Table
+    Then Compare work Extended and work Extended Stitching Table Counts
+
+
+
