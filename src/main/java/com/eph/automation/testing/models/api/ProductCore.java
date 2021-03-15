@@ -16,7 +16,7 @@ import java.util.List;
 * created by Nishant @ 8 May 2020
 * */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class productCore
+public class ProductCore
 {
     private static List<ProductDataObject> productDataObjectsFromEPHGD;
 
@@ -63,18 +63,20 @@ public class productCore
 
     public void compareWithDB(String productId){
         getProductDataFromEPHGD(productId);
-        Log.info("verifying product id..."+productId);
+        Log.info("verifying productCode data ..."+productId);
     //    Log.info("\n-name\n-shortName\n-separatelySaleableInd\n-trialAllowedInd\n-launchDate\n-product type code\n-product status code\n" +
     //            "-revenueModel code\n-etaxProductCode code\n");
         Assert.assertEquals(name, this.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME());
       printLog("name");
         Assert.assertEquals(shortName, this.productDataObjectsFromEPHGD.get(0).getPRODUCT_SHORT_NAME());
         printLog("shortName");
+        if(separatelySaleableInd!=null){
         Assert.assertEquals(separatelySaleableInd,this.productDataObjectsFromEPHGD.get(0).getBoolSEPARATELY_SALEABLE_IND());
-        printLog("separatelySaleableInd");
+        printLog("separatelySaleableInd");}
+        if(trialAllowedInd!=null) {
         Assert.assertEquals(trialAllowedInd, this.productDataObjectsFromEPHGD.get(0).getBoolTRIAL_ALLOWED_IND());
         printLog("trialAllowedInd");
-
+        }
         Assert.assertEquals(launchDate, this.productDataObjectsFromEPHGD.get(0).getFIRST_PUB_DATE());
         printLog("launchDate");
 

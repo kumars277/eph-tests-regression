@@ -24,8 +24,8 @@ public class MarionetteDriver implements Provider<WebDriver>{
 
         switch(chromeDriverVersion) //created by Nishant @ 12 June 2020
         {
-            case "81":
-                String _driver = "\\chromedriver_81.exe";
+            case "84":
+                String _driver = "\\chromedriver_84.exe";
                 String directoryPath = null;
                 final String osName = System.getProperty("os.name").toLowerCase();
                 if (osName.contains("windows")) {directoryPath = System.getProperty("user.dir");}
@@ -54,7 +54,7 @@ public class MarionetteDriver implements Provider<WebDriver>{
         profile.setPreference("security.insecure_field_warning.contextual.enabled", false);
 
         final FirefoxBinary firefoxBinary = new FirefoxBinary();
-        firefoxBinary.addCommandLineOptions("--headless");
+        //firefoxBinary.addCommandLineOptions("--headless");
         firefoxOptions.setBinary(firefoxBinary);
 
         final DesiredCapabilities capabilities = DesiredCapabilities.firefox();
@@ -73,7 +73,9 @@ public class MarionetteDriver implements Provider<WebDriver>{
         final String osName = System.getProperty("os.name").toLowerCase();
 
         if (osName.toLowerCase().contains("windows")) {
-            pathToDriver = "D://geckodriver.exe";
+
+            pathToDriver = System.getProperty("user.dir")+"\\geckodriver.exe";
+
         }
         final File file = new File(pathToDriver);
         System.setProperty("webdriver.gecko.driver", file.getAbsolutePath());
