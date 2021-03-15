@@ -165,6 +165,7 @@ public class WorkExtended {
 
     public void compareWithDB()
     {
+        Log.info("----- verifiying workExtended data...");
         //Assert.assertEquals(primarySiteSystem, DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSystem());    printLog("primarySiteSystem");
      //   Assert.assertEquals(primarySiteAcronym, DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteAcronym());        printLog("primarySiteAcronym");
     //    Assert.assertEquals(primarySiteSupportLevel, DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSupportLevel());        printLog("primarySiteSupportLevel");

@@ -113,7 +113,7 @@ public class ProductFinderUISteps {
     @Given("^user is on Product Finder search page$")
     public void userOpensHomePage() throws InterruptedException, ParseException {
         //updated by Nishant @ 15 May 2020
-        DataQualityContext.uiUnderTest = "JF";
+        DataQualityContext.uiUnderTest = "PF";
         productFinderTasks.openHomePage();
         productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
         tasks.waitUntilPageLoad();
@@ -353,11 +353,12 @@ public class ProductFinderUISteps {
 
         switch (workStatus) {
             case "Launched":
-                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Launched"))
+                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Launched")|
+                        productFinderTasks.prop_info.getProperty("Work Status").contains("Published"))
                     flag = true;
                 break;
             case "Planned":
-                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Approved"))
+                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Planned"))
                     flag = true;
                 break;
             case "Approved":
@@ -365,7 +366,8 @@ public class ProductFinderUISteps {
                     flag = true;
                 break;
             case "No Longer Published":
-                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Discontinued"))
+                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Discontinued")|
+                        productFinderTasks.prop_info.getProperty("Work Status").contains("Divested"))
                     flag = true;
                 break;
         }

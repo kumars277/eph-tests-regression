@@ -78,10 +78,18 @@ public class ApiSearchDataCheckStitchingLayerSteps {
         switch (stich_table)
         {
             case "stch_product_ext_json_byAvailability": response = apiService.searchForProductResult(randomIdsData.get(i).get("epr_id").toString());
-                compare_stch_product_ext_json_byAvailability(i);break;
+
+                AvailabilityExtendedTestClass jsonValue = new Gson().fromJson(randomIdsData.get(i).get("json").toString(), AvailabilityExtendedTestClass.class);
+                if (jsonValue.getAvailabilityExtended().getApplications() != null | response.getAvailabilityExtended().getApplications() != null)
+                {compare_stch_product_ext_json_byAvailability(jsonValue, response.getAvailabilityExtended());}
+                break;
 
             case "stch_product_ext_json_byPricing":response = apiService.searchForProductResult(randomIdsData.get(i).get("epr_id").toString());
-                compare_stch_product_ext_json_byPricing(i);break;
+                PricingExtendedTestClass pricingJsonValue = new Gson().fromJson(randomIdsData.get(i).get("json").toString(),PricingExtendedTestClass.class);
+                if(pricingJsonValue.getPricingExtended().getExtendedPrices()!=null|response.getPricingExtended().getExtendedPrices()!=null)
+                {
+            compare_stch_product_ext_json_byPricing(pricingJsonValue,response.getPricingExtended());}
+                break;
 
             case "stch_product_core_json":response = apiService.searchForProductResult(randomIdsData.get(i).get("epr_id").toString());
                 compare_stch_product_core_json(i); break;
@@ -107,14 +115,12 @@ public class ApiSearchDataCheckStitchingLayerSteps {
 
 
 
-    public void compare_stch_product_ext_json_byAvailability(int cnt) {
+    public void compare_stch_product_ext_json_byAvailability(AvailabilityExtendedTestClass jsonValue,AvailabilityExtendedAPIObj apiResponseAvailabilityExtended) {
         //created by Nishant @ 01 Feb 2021, EPHD-2747
 
-        AvailabilityExtendedTestClass jsonValue = new Gson().fromJson(randomIdsData.get(cnt).get("json").toString(), AvailabilityExtendedTestClass.class);
-
-        if (jsonValue.getAvailabilityExtended().getApplications() != null | response.getAvailabilityExtended().getApplications() != null) {
+        //if (jsonValue.getAvailabilityExtended().getApplications() != null | response.getAvailabilityExtended().getApplications() != null) {
         ArrayList<AvailabilityExtApplicationsAPIObj> jsonValue_arr = new ArrayList<>(Arrays.asList((jsonValue.getAvailabilityExtended().getApplications())));
-        ArrayList<AvailabilityExtApplicationsAPIObj> apiResponse_arr = new ArrayList<>(Arrays.asList(response.getAvailabilityExtended().getApplications()));
+        ArrayList<AvailabilityExtApplicationsAPIObj> apiResponse_arr = new ArrayList<>(Arrays.asList(apiResponseAvailabilityExtended.getApplications()));
 
         for (int i = 0; i < apiResponse_arr.size(); i++) {
             Log.info("----->verification for application - " + i);
@@ -133,14 +139,14 @@ public class ApiSearchDataCheckStitchingLayerSteps {
             Assert.assertEquals(jsonValue_arr.get(i).getPublicationStatusANZ(), apiResponse_arr.get(i).getPublicationStatusANZ());
             printLog("PublicationStatusANZ");
         }
-        }
+       // }
     }
 
-    public void compare_stch_product_ext_json_byPricing(int cnt){
+    public void compare_stch_product_ext_json_byPricing(PricingExtendedTestClass jsonValue,PricingExtendedAPIObj pricingExtendedAPIObj){
         //created by Nishant @ 02 Feb 2021, EPHD-2747
-        PricingExtendedTestClass jsonValue = new Gson().fromJson(randomIdsData.get(cnt).get("json").toString(),PricingExtendedTestClass.class);
+
         ArrayList<PricingExtendedPricesAPIObj> jsonValue_arr= new ArrayList<>(Arrays.asList((jsonValue.getPricingExtended().getExtendedPrices())));
-        ArrayList<PricingExtendedPricesAPIObj> apiResponse_arr=new ArrayList<>(Arrays.asList(response.getPricingExtended().getExtendedPrices()));
+        ArrayList<PricingExtendedPricesAPIObj> apiResponse_arr=new ArrayList<>(Arrays.asList(pricingExtendedAPIObj.getExtendedPrices()));
 
         for(int i=0;i<apiResponse_arr.size();i++)
         {

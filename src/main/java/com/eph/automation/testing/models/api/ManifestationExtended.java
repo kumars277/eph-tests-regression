@@ -62,6 +62,8 @@ public class ManifestationExtended {
 
     public void compareWithDB() {
 
+        Log.info("----- verifying ManifestationExtended data...");
+
         Assert.assertEquals(ukTextbookInd, DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getUkTextbookInd());
         printLog("ukTextbookInd");
 

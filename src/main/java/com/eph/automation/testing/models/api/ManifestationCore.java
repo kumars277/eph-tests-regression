@@ -42,7 +42,7 @@ public class ManifestationCore {
     public void setStatus(HashMap<String, Object> status) {this.status = status;}
 
     public void compareWithDB(String manifestationId) {
-        Log.info("verifying ManifestationCore data...");
+        Log.info("----- verifying ManifestationCore data...");
         Assert.assertEquals(keyTitle, DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_KEY_TITLE());        printLog("manifestation keyTitle");
 
 

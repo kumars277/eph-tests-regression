@@ -45,11 +45,11 @@ Feature: Product Finder Selenium tests
     Examples:
       |keyword        |workStatus          |
       |Physics        |Launched            |
-      #|Chemistry      |Planned             |
-      |Chemistry      |Approved             |
+      |Chemistry      |Planned             |
+   #   |Chemistry      |Approved             |
     #  |math           |No Longer Published |
 
-  @PFRegressionSuite @PFProddd @PFOnly
+  @PFRegressionSuite @PFProd @PFOnly
   Scenario Outline: Search the work and filter them with Work Types
     Given user is on Product Finder search page
     And   Searches for works by given <keyword>
@@ -62,7 +62,7 @@ Feature: Product Finder Selenium tests
       |Cell      |   Book      |
       |neuro     |   Journal   |
 
-  @PFRegressionSuite @PFProddd  @PFOnly
+  @PFRegressionSuite @PFProd  @PFOnly
   Scenario Outline: Search the work and filter them with Work Statuses and Types
     Given user is on Product Finder search page
     And Searches for works by given <keyword>
@@ -76,7 +76,7 @@ Feature: Product Finder Selenium tests
       |keyword        |workStatus          |workType  |
       |clinical       |Launched            |Journal   |
       |surgical       |Planned             |Book      |
-      |nurse          |No Longer Published |Book      |
+   #   |nurse          |No Longer Published |Book      |
 
   @PFRegressionSuite
   Scenario Outline: search work by multiple options
@@ -200,7 +200,7 @@ Examples:
 
   #below scenarios can be ignored, already covered in one of the above
 
-  @PFDMC @PFProd
+  @PFDMC @PFProddd
   Scenario: Search specific Journal and verify link tab
     Given We set specific journal ids for search
     Then  search work and verify links

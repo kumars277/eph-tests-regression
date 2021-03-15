@@ -44,7 +44,7 @@ public class WorkManifestationApiObject {
     public ManifestationExtended getManifestationExtended() {return manifestationExtended;}
     public void setManifestationExtended(ManifestationExtended manifestationExtended) {this.manifestationExtended = manifestationExtended;}
 
-    private void getManifestationDetailByID(String manifestationID) {
+    public void getManifestationDetailByID(String manifestationID) {
         List<String> ids = new ArrayList<>();
         ids.add(manifestationID);
         String sql = String.format(APIDataSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_GD_BY_ID, Joiner.on("','").join(ids));

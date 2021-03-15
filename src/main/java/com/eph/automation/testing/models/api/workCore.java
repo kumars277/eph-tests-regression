@@ -119,7 +119,7 @@ public class workCore {
     //if(!(this.subjectAreas==null)&&!(this.subjectAreas.length==0)){for (SubjectAreasApiObject sa : this.subjectAreas) {sa.compareWithDB(this.id);}}
 
     public void compareWithDB(String workId) {
-        Log.info("\nVerifying workCore... " + workId);
+        Log.info("----- Verifying workCore data... " + workId);
 
         getWorkDataFromEPHGD(workId);
 

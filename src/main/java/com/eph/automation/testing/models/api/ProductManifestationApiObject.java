@@ -5,6 +5,7 @@ package com.eph.automation.testing.models.api;
  * updated by Nishant @ 04 Feb 2021, EPHD-2747
  */
 
+import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.dao.ManifestationDataObject;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.util.List;
@@ -53,7 +54,23 @@ public class ProductManifestationApiObject {
     }
 */
     public void compareWithDB(){
+        WorkManifestationApiObject workManifestationApiObject = new WorkManifestationApiObject();
+        workManifestationApiObject.getManifestationDetailByID(this.id);
         manifestationCore.compareWithDB(this.id);
+
+        //created by Nishant @ 08 Mar 2021 EPHD-2898
+        if(manifestationExtended!=null) {
+            workManifestationApiObject.getJsonToObject_extendedManifestation(this.id);
+            manifestationExtended.compareWithDB();
+        }
+
+        Log.info("----- verifying Manifestation work data...");
         work.getWorkCore().compareWithDB(work.getId());
+
+        if(work.getWorkExtended()!=null){
+        WorkApiObject workApiObject = new WorkApiObject();
+        workApiObject.getJsonToObject_extendedWork(work.getId());
+        work.getWorkExtended().compareWithDB();
+        }
     }
 }

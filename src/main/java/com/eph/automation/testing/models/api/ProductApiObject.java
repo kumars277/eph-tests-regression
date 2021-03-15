@@ -7,13 +7,18 @@ package com.eph.automation.testing.models.api;
  */
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
+import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.dao.ProductDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
+import com.eph.automation.testing.web.steps.ApiSearchDataCheckStitchingLayerSteps;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
+import com.google.gson.Gson;
 import org.junit.Assert;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.eph.automation.testing.models.contexts.DataQualityContext.randomIdsData;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductApiObject {
@@ -83,10 +88,37 @@ public class ProductApiObject {
 
         productCore.compareWithDB(this.id);
 
+        if(availabilityExtended!=null) {//created by Nishant @ 8 Mar 2021 EPHD-2898
+            Log.info("---- verifying product availabilityExtended data...");
+            ApiSearchDataCheckStitchingLayerSteps apiSearchDataCheckStitchingLayer = new ApiSearchDataCheckStitchingLayerSteps();
+            String sql =   "select epr_id,  \"json\" from ephsit_extended_data_stitch.stch_product_ext_json where extension_type = 'Availability' and epr_id='"+id+"'";
+            randomIdsData = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            AvailabilityExtendedTestClass jsonValue = new Gson().fromJson(randomIdsData.get(0).get("json").toString(), AvailabilityExtendedTestClass.class);
+            apiSearchDataCheckStitchingLayer.compare_stch_product_ext_json_byAvailability(jsonValue,availabilityExtended);
+        }
+
+        if(pricingExtended!=null){//created by Nishant @ 8 Mar 2021 EPHD-2898
+            Log.info("---- verifying product pricingExtended data...");
+            ApiSearchDataCheckStitchingLayerSteps apiSearchDataCheckStitchingLayer = new ApiSearchDataCheckStitchingLayerSteps();
+            String sql =   "select  epr_id ,json from ephsit_extended_data_stitch.stch_product_ext_json where extension_type = 'Prices' and epr_id='"+id+"'";
+            randomIdsData = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            PricingExtendedTestClass jsonValue = new Gson().fromJson(randomIdsData.get(0).get("json").toString(), PricingExtendedTestClass.class);
+            apiSearchDataCheckStitchingLayer.compare_stch_product_ext_json_byPricing(jsonValue,pricingExtended);
+        }
+
         if(manifestation!=null) {manifestation.compareWithDB();}
 
         //implemented by Nishant @ 8 May 2020
-      //  if(work!=null){work.workCore.compareWithDB(work.id);}   //compare product work - EPR-111MK1
+        if(work!=null)
+        {
+            work.getWorkCore().compareWithDB(work.getId());
+            if(work.getWorkExtended()!=null)
+            {
+                WorkApiObject workApiObject = new WorkApiObject();
+                workApiObject.getJsonToObject_extendedWork(work.getId());
+                work.getWorkExtended().compareWithDB();
+            }
+        }
 
     }
 
