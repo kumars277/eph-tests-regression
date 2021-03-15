@@ -1,13 +1,13 @@
 Feature:Validate data for PRM between Oracle and Data Lake - Inbound
   @PRMDL
   Scenario Outline: Verify that all PRM PRMAUTPUBT is transferred from PRM Oracle to DL Inbound
-    Given We get the <countOfRandomIds> random PRM ids of <table>
+    Given We get the <numberOfRecords> random PRM ids of <table>
     When We get the PRM PRMAUTPUBT records from Oracle of <table>
     Then We get the PRM PRMAUTPUBT records from DL of <table>
    And Compare PRM PRMAUTPUBT records in PRM Oracle and DL of <table>
     Examples:
-      | countOfRandomIds | table  |
-        | 15               | PRMAUTPUBT|
+      | numberOfRecords | table  |
+      | 15              | PRMAUTPUBT|
   @PRMDL
   Scenario Outline: Verify that all PRM PRMCLSCODT is transferred from PRM Oracle to DL Inbound
     Given We get the <countOfRandomIds> random PRM ids of <table>

@@ -196,6 +196,7 @@
             <systemPath>${project.basedir}/lib/smartbear/soapui/5.1.2/soapui-5.1.2.jar</systemPath></dependency>
         <dependency><groupId>smartbear</groupId><artifactId>soapui-maven-plugin</artifactId><version>5.1.2</version><scope>system</scope>
             <systemPath>${project.basedir}/lib/smartbear/soapui-maven-plugin/5.1.2/soapui-maven-plugin-5.1.2.jar</systemPath></dependency>
+        <dependency><groupId>com.amazonaws</groupId><artifactId>aws-java-sdk-secretsmanager</artifactId><version>1.11.355 </version></dependency>
 
 
 
