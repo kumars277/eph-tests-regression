@@ -98,6 +98,7 @@ public class DBManager {
             QueryRunner query = new QueryRunner();
             mapList = (List) query.query(connection, sql, new MapListHandler());
         } catch (SQLException sqlException) {
+         //   System.getProperties().forEach((k, v) -> System.out.println(k + ":" + v));
             sqlException.printStackTrace();
         } finally {
             DbUtils.closeQuietly(connection);
@@ -117,6 +118,7 @@ public class DBManager {
             QueryRunner query = new QueryRunner();
             mapList = (List) query.query(connection, sql, new MapListHandler());
         } catch (SQLException sqlException) {
+          //  System.getProperties().forEach((k, v) -> System.out.println(k + ":" + v));
             sqlException.printStackTrace();
         } finally {
             DbUtils.closeQuietly(connection);

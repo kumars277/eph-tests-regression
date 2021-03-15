@@ -2,6 +2,7 @@ package com.eph.automation.testing.models.api;
 /**
  * Created by GVLAYKOV
  * updated by Nishant @ 4 May 2020
+ * updated by Nishant @ 04 Feb 2021, EPHD-2747
  */
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class ManifestationWorkApiObject {
+public class ManifestationWorkApiObject {
     public ManifestationWorkApiObject() {}
     private List<WorkDataObject> workDataObjectsFromEPHGD;
 
@@ -29,14 +30,19 @@ class ManifestationWorkApiObject {
     public void setId(String id) {this.id = id;}
 
     private workCore workCore;
-    public ManifestationWorkApiObject.workCore getWorkCore() {return workCore;}
-    public void setWorkCore(ManifestationWorkApiObject.workCore workCore) {this.workCore = workCore;}
+    public com.eph.automation.testing.models.api.workCore getWorkCore() {return workCore;}
+    public void setWorkCore(com.eph.automation.testing.models.api.workCore workCore) {this.workCore = workCore;}
 
+    /*
+            private workCore workCore;
+            public ManifestationWorkApiObject.workCore getWorkCore() {return workCore;}
+            public void setWorkCore(ManifestationWorkApiObject.workCore workCore) {this.workCore = workCore;}
+        */
     private List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD;
     public List<AccountableProductDataObject> getAccountableProductDataObjectsFromEPHGD() {return accountableProductDataObjectsFromEPHGD;}
     public void setAccountableProductDataObjectsFromEPHGD(List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD) {this.accountableProductDataObjectsFromEPHGD = accountableProductDataObjectsFromEPHGD;}
 
-
+/*
     @JsonIgnoreProperties(ignoreUnknown = true)
     public class workCore{
 
@@ -119,70 +125,70 @@ class ManifestationWorkApiObject {
         //subjectAreas//EPR-103R9H
     }
 
-
+*/
 
     public void compareWithDB(){
         getWorkDataFromEPHGD(this.id);
         Log.info("comparing work id..."+this.id);
         Log.info("-title\n-subTitle \n-electronicRightsInd \n-language code \n-editionNumber \n-volume \n-copyrightYear");
 
-        Assert.assertEquals(workCore.title, this.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
-       if(!(workCore.subTitle==null &&this.workDataObjectsFromEPHGD.get(0).getWORK_SUBTITLE()==null))
-        Assert.assertEquals(workCore.subTitle, this.workDataObjectsFromEPHGD.get(0).getWORK_SUBTITLE());
-        Assert.assertEquals(Boolean.valueOf(workCore.electronicRightsInd), Boolean.valueOf(this.workDataObjectsFromEPHGD.get(0).getELECTRONIC_RIGHTS_IND()));
+        Assert.assertEquals(workCore.getTitle(), this.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+       if(!(workCore.getSubTitle()==null &&this.workDataObjectsFromEPHGD.get(0).getWORK_SUBTITLE()==null))
+        Assert.assertEquals(workCore.getSubTitle(), this.workDataObjectsFromEPHGD.get(0).getWORK_SUBTITLE());
+        Assert.assertEquals(Boolean.valueOf(workCore.getElectronicRightsInd()), Boolean.valueOf(this.workDataObjectsFromEPHGD.get(0).getELECTRONIC_RIGHTS_IND()));
         if(!(this.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE()==null)) {
-            Assert.assertEquals(workCore.language.get("code"), this.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE());
+            Assert.assertEquals(workCore.getLanguage().get("code"), this.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE());
         }
-        if(!(workCore.editionNumber==null)){
-            int apiEditionNumber = Integer.valueOf(workCore.editionNumber);
+        if(!(workCore.getEditionNumber()==null)){
+            int apiEditionNumber = Integer.valueOf(workCore.getEditionNumber());
             Assert.assertEquals(apiEditionNumber, this.workDataObjectsFromEPHGD.get(0).getEDITION_NUMBER());
         }
 
-        int apiVolume =Integer.valueOf(workCore.volume);
+        int apiVolume =Integer.valueOf(workCore.getVolume());
         Assert.assertEquals(apiVolume, this.workDataObjectsFromEPHGD.get(0).getVOLUME());
 
         if(Integer.parseInt(this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR())!=0) {
-            int apiCopyrightYear = Integer.valueOf(workCore.copyrightYear);
+            int apiCopyrightYear = Integer.valueOf(workCore.getCopyrightYear());
             Assert.assertEquals(apiCopyrightYear, this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR());
         }
 
         //IDENTIFIERS - EPR-11119M
-        if(!(workCore.identifiers==null &&this.workDataObjectsFromEPHGD.get(0).getIDENTIFIER()==null) )
-            for(WorkIdentifiersApiObject identifier:workCore.identifiers){identifier.compareWithDB();}
+        if(!(workCore.getIdentifiers()==null &&this.workDataObjectsFromEPHGD.get(0).getIDENTIFIER()==null) )
+            for(WorkIdentifiersApiObject identifier:workCore.getIdentifiers()){identifier.compareWithDB();}
             Log.info( "-work type code \n-work status code \n-imprint \n-openAccessType code \n-pmc \n-pmg\n");
-        Assert.assertEquals(workCore.type.get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
-        Assert.assertEquals(workCore.status.get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
-        if(!(workCore.imprint.get("code")==null)||!((this.workDataObjectsFromEPHGD==null)||(this.workDataObjectsFromEPHGD.isEmpty()))) {
-            Assert.assertEquals(workCore.imprint.get("code"), this.workDataObjectsFromEPHGD.get(0).getIMPRINT());
+        Assert.assertEquals(workCore.getType().get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
+        Assert.assertEquals(workCore.getStatus().get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
+        if(!(workCore.getImprint().get("code")==null)||!((this.workDataObjectsFromEPHGD==null)||(this.workDataObjectsFromEPHGD.isEmpty()))) {
+            Assert.assertEquals(workCore.getImprint().get("code"), this.workDataObjectsFromEPHGD.get(0).getIMPRINT());
         }
-        Assert.assertEquals(workCore.openAccessType.get("code"),this.workDataObjectsFromEPHGD.get(0).getOPEN_ACCESS_TYPE());
-        Assert.assertEquals(workCore.pmc.getCode(), this.workDataObjectsFromEPHGD.get(0).getPMC());
-        Assert.assertEquals(workCore.pmc.getPmg().get("code"), getPMGcodeByPMC(this.workDataObjectsFromEPHGD.get(0).getPMC()));
+        Assert.assertEquals(workCore.getOpenAccessType().get("code"),this.workDataObjectsFromEPHGD.get(0).getOPEN_ACCESS_TYPE());
+        Assert.assertEquals(workCore.getPmc().getCode(), this.workDataObjectsFromEPHGD.get(0).getPMC());
+        Assert.assertEquals(workCore.getPmc().getPmg().get("code"), getPMGcodeByPMC(this.workDataObjectsFromEPHGD.get(0).getPMC()));
 
         if(this.workDataObjectsFromEPHGD.get(0).getF_accountable_product()!=null) {
             //accountable products varification implemmented by Nishant on 4 May 2020
-            Log.info("work type..."+workCore.type.get("code"));
+            Log.info("work type..."+workCore.getType().get("code"));
             Log.info("comparing accountable product id..." + this.workDataObjectsFromEPHGD.get(0).getF_accountable_product());
             getAccountableProductFromEPHGD(this.workDataObjectsFromEPHGD.get(0).getF_accountable_product());
-            Log.info("getGlProductSegmentCode - " + workCore.accountableProduct.getGlProductSegmentCode());
-            Assert.assertEquals(workCore.accountableProduct.getGlProductSegmentCode(), this.accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_CODE());
-            Log.info("glProductSegmentName - " + workCore.accountableProduct.getGlProductSegmentName());
-            Assert.assertEquals(workCore.accountableProduct.getGlProductSegmentName(), this.accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_NAME());
-            Log.info("glProductParentValue_code - " + workCore.accountableProduct.getGlProductParentValue().get("code"));
-            Assert.assertEquals(workCore.accountableProduct.getGlProductParentValue().get("code"), this.accountableProductDataObjectsFromEPHGD.get(0).getF_GL_PRODUCT_SEGMENT_PARENT());
+            Log.info("getGlProductSegmentCode - " + workCore.getAccountableProduct().getGlProductSegmentCode());
+            Assert.assertEquals(workCore.getAccountableProduct().getGlProductSegmentCode(), this.accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_CODE());
+            Log.info("glProductSegmentName - " + workCore.getAccountableProduct().getGlProductSegmentName());
+            Assert.assertEquals(workCore.getAccountableProduct().getGlProductSegmentName(), this.accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_NAME());
+            Log.info("glProductParentValue_code - " + workCore.getAccountableProduct().getGlProductParentValue().get("code"));
+            Assert.assertEquals(workCore.getAccountableProduct().getGlProductParentValue().get("code"), this.accountableProductDataObjectsFromEPHGD.get(0).getF_GL_PRODUCT_SEGMENT_PARENT());
         }
 
-        if(!(workCore.workFinancialAttributes==null)&&!(workCore.workFinancialAttributes.length==0)){
-            for (FinancialAttributesApiObject attribute : workCore.workFinancialAttributes) {attribute.compareWithDB(this.id);}
+        if(!(workCore.getWorkFinancialAttributes()==null)&&!(workCore.getWorkFinancialAttributes().length==0)){
+            for (FinancialAttributesApiObject attribute : workCore.getWorkFinancialAttributes()) {attribute.compareWithDB(this.id);}
         }
 
-        if(!(workCore.workPersons==null)&&!(workCore.workPersons.length==0)){
-            for (PersonsApiObject person : workCore.workPersons) {person.compareWithDB_work();}
+        if(!(workCore.getWorkPersons()==null)&&!(workCore.getWorkPersons().length==0)){
+            for (PersonsApiObject person : workCore.getWorkPersons()) {person.compareWithDB_work();}
         }
 
         //workRelationships - EPR-11119M
         //The data is stored in table semarchy_eph_mdm.gd_work_relationship.
-        if(workCore.workRelationships!=null)workCore.workRelationships.compareWithDB(this.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+        if(workCore.getWorkRelationships()!=null)workCore.getWorkRelationships().compareWithDB(this.workDataObjectsFromEPHGD.get(0).getWORK_ID());
     }
 
     private void getWorkDataFromEPHGD(String workID) {

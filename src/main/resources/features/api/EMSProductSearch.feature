@@ -48,7 +48,7 @@ Feature: Search API: Products
       |PRODUCT_MANIFESTATION_IDENTIFIER |
       |PRODUCT_MANIFESTATION_WORK_IDENTIFIER|
 
-  @searchAPI
+  @searchAPI @searchAPIDebug
   Scenario Outline: search product with search option
     Given We get 1 random search ids for products
     And We get the search data from EPH GD for products
@@ -71,12 +71,12 @@ Feature: Search API: Products
       | PRODUCT_WORK_PERSONS_FULLNAME              |
       | PRODUCT_MANIFESTATION_WORK_PERSONS_FULLNAME|
 
-  @searchAPI
+  @searchAPI @searchAPIDebug
   Scenario: search product by person ID
     Given We get 1 search ids from the db for person roles of products
     Then the product response returned when searched by personID is verified
 
-  @searchAPI
+  @searchAPI @searchAPIDebug
   Scenario Outline: Product search E2E
     Given We get product by ID <id>
     And We get the search data from EPH GD for products
@@ -89,30 +89,31 @@ Feature: Search API: Products
       | EPR-11BBFN                           |
       | EPR-11BBFR                           |
 
-  @searchAPI
+  @searchAPI @searchAPIDebug
   Scenario: search product by PMC
     Given We get 1 random search ids for products
     And We get the search data from EPH GD for products
     Then the product details are retrieved by PMC Code and compared
 
-  @searchAPI
+  @searchAPI @searchAPIDebug
   Scenario: search product by PMG
     Given We get 1 random search ids for products
     And We get the search data from EPH GD for products
     Then the product details are retrieved by PMG Code and compared
    ##created by Nishant
-  @searchAPI
+
+  @searchAPI @searchAPIDebug
   Scenario: search products in Package - IsInPackage
     Given We get 1 random package id
     Then the product response returned when searched by packages is verified
 
-  @searchAPI
+  @searchAPI @searchAPIDebug
   Scenario: search packages by products - hasComponents
     Given We get 1 random package id
     And We get 1 random search ids from package
     Then the product response returned when searched by components is verified
 
-  @searchAPI
+  @searchAPI @searchAPIDebug
   Scenario Outline: search product by accountableProduct
     Given We get 1 random search ids for products
     And We get the search data from EPH GD for products
@@ -123,7 +124,7 @@ Feature: Search API: Products
     |PRODUCT_MANIFESTATION_WORK_ACCOUNTABLE_PRODUCT|
   #  |PRODUCT_ACCOUNTABLE_PRODUCT| NA as per Lujiang on 13 May 2020
 
-  @searchAPI
+  @searchAPI @searchAPIDebug
   Scenario Outline: search product by parameters
     Given We get 1 random search ids for products
     And We get the search data from EPH GD for products

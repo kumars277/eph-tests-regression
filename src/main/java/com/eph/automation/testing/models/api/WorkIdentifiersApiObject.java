@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class WorkIdentifiersApiObject {
+public class WorkIdentifiersApiObject {
     public WorkIdentifiersApiObject() {}
 
     private  List<WorkDataObject> DBworkIdentifier;
