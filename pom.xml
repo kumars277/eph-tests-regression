@@ -133,7 +133,9 @@
         <dependency><groupId>org.awaitility</groupId><artifactId>awaitility</artifactId><version>3.1.6</version><scope>compile</scope></dependency>
         <dependency><groupId>com.amazonaws</groupId><artifactId>aws-java-sdk-s3</artifactId><version>1.11.164</version></dependency>
         <dependency><groupId>com.amazonaws</groupId><artifactId>aws-java-sdk</artifactId><version>1.11.274</version></dependency>
+        <dependency><groupId>com.amazonaws</groupId><artifactId>aws-java-sdk-core</artifactId><version>1.11.307</version></dependency>
         <dependency><groupId>com.syncron.amazonaws</groupId><artifactId>simba-athena-jdbc-driver</artifactId><version>2.0.2</version></dependency>
+        <dependency><groupId>software.amazon.awssdk</groupId><artifactId>bom</artifactId><version>2.16.18</version><type>pom</type><scope>import</scope></dependency>
 
         <!-- Web Services dependencies-->
         <dependency><groupId>com.jayway.restassured</groupId><artifactId>rest-assured</artifactId><version>${rest-assured.version}</version></dependency>

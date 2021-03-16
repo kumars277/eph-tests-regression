@@ -7,6 +7,7 @@ import com.eph.automation.testing.models.dao.ProductDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
+import net.minidev.json.parser.ParseException;
 import org.junit.Assert;
 
 import java.util.ArrayList;
@@ -61,7 +62,7 @@ public class ProductCore
     public void setProductPersons(PersonsApiObject[] productPersons) {this.productPersons = productPersons;}
 
 
-    public void compareWithDB(String productId){
+    public void compareWithDB(String productId) {
         getProductDataFromEPHGD(productId);
         Log.info("verifying productCode data ..."+productId);
     //    Log.info("\n-name\n-shortName\n-separatelySaleableInd\n-trialAllowedInd\n-launchDate\n-product type code\n-product status code\n" +

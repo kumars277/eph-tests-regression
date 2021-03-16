@@ -3,6 +3,7 @@ package com.eph.automation.testing.configuration;
 import com.eph.automation.testing.models.EnumConstants;
 import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.services.db.sql.GetEPHDBUser;
+import net.minidev.json.parser.ParseException;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -28,7 +29,10 @@ public class DBManager {
 
     public static List getDBResultAsBeanList(String sql, Class klass, String dbEndPoint) {
         Properties dbProps = new Properties();
-        dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(getDatabaseEnvironmentKey(dbEndPoint)));
+        //updated by Nishant @ 15 Mar 2021 for secret manager
+       // dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(getDatabaseEnvironmentKey(dbEndPoint)));
+             dbProps.setProperty("jdbcUrl", SecretsManagerHandler.getSecret(dbEndPoint));
+
 
 //        Yank.setupConnectionPool("pool", dbProps);
         Yank.setupDefaultConnectionPool(dbProps);
@@ -114,7 +118,10 @@ public class DBManager {
             if (connection == null) {
                 DbUtils.loadDriver(driver);
             }
-            connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
+            //updated by Nishant @ 15 Mar 2021 for secret manager
+           //  connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
+            connection = DriverManager.getConnection(SecretsManagerHandler.getSecret(URL));
+
             QueryRunner query = new QueryRunner();
             mapList = (List) query.query(connection, sql, new MapListHandler());
         } catch (SQLException sqlException) {

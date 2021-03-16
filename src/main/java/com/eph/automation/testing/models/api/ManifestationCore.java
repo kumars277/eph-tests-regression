@@ -7,6 +7,7 @@ import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ManifestationDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.google.common.base.Joiner;
+import net.minidev.json.parser.ParseException;
 import org.junit.Assert;
 
 import java.util.*;
@@ -68,7 +69,7 @@ public class ManifestationCore {
 }
     //}
 
-    private void getManifestationByID(String manifestationID) {
+    private void getManifestationByID(String manifestationID) throws ParseException {
         List<String> ids = new ArrayList<>();
         ids.add(manifestationID);
         String sql = String.format(APIDataSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_GD_BY_ID, Joiner.on("','").join(ids));

@@ -14,6 +14,7 @@ import com.eph.automation.testing.web.steps.ApiSearchDataCheckStitchingLayerStep
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
+import net.minidev.json.parser.ParseException;
 import org.junit.Assert;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +80,7 @@ public class ProductApiObject {
         }
         */
 
-    public void compareWithDB(){
+    public void compareWithDB() {
         getProductDataFromEPHGD(this.id);
         createdDate=createdDate.replace("T"," ").replace("Z","");
         updatedDate=updatedDate.replace("T"," ").replace("Z","");

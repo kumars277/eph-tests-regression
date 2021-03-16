@@ -6,6 +6,7 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.dao.ProductDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.google.common.base.Joiner;
+import net.minidev.json.parser.ParseException;
 import org.junit.Assert;
 
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class ManifestationProductAPIObject {
         productDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
     }
 
-    public void compareWithDB(){
+    public void compareWithDB() {
         Log.info("verifying product..."+this.id);
 
         getProductDataFromEPHGD(this.id);

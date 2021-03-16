@@ -168,7 +168,7 @@ public class TranslationTestSteps {
     }
 
     @When("^We get the data for translations$")
-    public void getTranslationData(){
+    public void getTranslationData() throws net.minidev.json.parser.ParseException {
         sql = String.format(TranslationsSQL.GET_PMX_TRANSLATIONS, Joiner.on("','").join(ids));
         Log.info(sql);
         translationContext.translationDataFromPMX = DBManager.getDBResultAsBeanList(sql, TranslationsDataObject.class, Constants.PMX_URL);
@@ -229,7 +229,7 @@ public class TranslationTestSteps {
     }
 
     @And("^The translations data between STG and SA is identical$")
-    public void checkTranslationSAData() {
+    public void checkTranslationSAData() throws net.minidev.json.parser.ParseException {
         for (int i = 0; i < translationContext.translationDataFromStg.size(); i++) {
             sql = TranslationsSQL.Get_work_id.replace("PARAM1", translationContext.translationDataFromStg.get(i).PARENT_PMX_SOURCE);
             Log.info(sql);

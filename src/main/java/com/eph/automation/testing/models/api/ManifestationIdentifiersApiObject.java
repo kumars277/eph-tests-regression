@@ -10,6 +10,7 @@ import com.eph.automation.testing.models.dao.ManifestationIdentifierObject;
 import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import net.minidev.json.parser.ParseException;
 import org.junit.Assert;
 
 import java.util.HashMap;
@@ -35,12 +36,12 @@ public class ManifestationIdentifiersApiObject {
 
     public void setEffectiveStartDate(String effectiveStartDate) {this.effectiveStartDate = effectiveStartDate;}
 
-    private void getManifestationIdentifierByID(String identifierID){
+    private void getManifestationIdentifierByID(String identifierID) {
         String sql = String.format(APIDataSQL.SELECT_GD_MANIFESTATION_IDENTIFIER_BY_ID, identifierID);
         manifestationIDentifiersDO = DBManager.getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
     }
 
-    public void compareWithDB(){
+    public void compareWithDB() {
         Log.info("verifying manifestation identifier... "+this.identifier);
 
         if(this.identifier!=null) {
