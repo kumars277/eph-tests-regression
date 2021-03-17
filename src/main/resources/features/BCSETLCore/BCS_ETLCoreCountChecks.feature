@@ -1,7 +1,7 @@
 Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
 
 #  Created by Dinesh on 30/09/2020
-  #confluence latest vesrion used:v.68 updated the script on 23/2/2020
+  #confluence latest vesrion used:v.70 updated the script on 17/03/2020
   #confluence Link: https://confluence.cbsels.com/display/EPH/Core+Transformed+View+Mappings
 
 
@@ -14,7 +14,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
     Examples:
       | tableName                                |
     |etl_accountable_product_current_v         |
-     |etl_manifestation_current_v               |
+    |etl_manifestation_current_v               |
    |etl_person_current_v                      |
       |etl_product_current_v                     |
     |etl_work_person_role_current_v            |

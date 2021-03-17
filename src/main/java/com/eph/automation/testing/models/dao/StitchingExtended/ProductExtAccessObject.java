@@ -13,7 +13,71 @@ public class ProductExtAccessObject {
     private String availability_start_date;
     private String availability_status;
     private String type;
+    private String price_currency;
+    private String price_amount;
+    private String price_end_date;
+    private String price_start_date;
+    private String price_region;
+    private String price_category;
+    private String price_customer_category;
+    private String price_purchase_quantity;
 
+
+    public String getprice_region() {
+        return price_region;
+    }
+    public void setprice_region(String price_region) {
+        this.price_region = price_region;
+    }
+
+    public String getprice_start_date() {
+        return price_start_date;
+    }
+    public void setprice_start_date(String price_start_date) {
+        this.price_start_date = price_start_date;
+    }
+
+    public String getprice_customer_category() {
+        return price_customer_category;
+    }
+    public void setprice_customer_category(String price_customer_category) {
+        this.price_customer_category = price_customer_category;
+    }
+
+    public String getprice_purchase_quantity() {
+        return price_purchase_quantity;
+    }
+    public void setprice_purchase_quantity(String price_purchase_quantity) {
+        this.price_purchase_quantity = price_purchase_quantity;
+    }
+
+    public String getprice_category() {
+        return price_category;
+    }
+    public void setprice_category(String price_category) {
+        this.price_category = price_category;
+    }
+
+    public String getprice_currency() {
+        return price_currency;
+    }
+    public void setprice_currency(String price_currency) {
+        this.price_currency = price_currency;
+    }
+
+    public String getprice_end_date() {
+        return price_end_date;
+    }
+    public void setprice_end_date(String price_end_date) {
+        this.price_end_date = price_end_date;
+    }
+
+    public String getprice_amount() {
+        return price_amount;
+    }
+    public void setprice_amount(String price_amount) {
+        this.price_amount = price_amount;
+    }
 
     public String getproduct_type() {
         return product_type;

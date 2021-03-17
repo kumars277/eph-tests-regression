@@ -9,12 +9,12 @@ public class GetStitchDLDBUser {
                 dbProdExt = "product_ext_database_sit";
             }
             else{
-                dbProdExt = "product_ext_database_uat";
+                dbProdExt = "product_ext_database_uat2";
             }
 
         }else{
             //dbProdExt = "product_ext_database_sit";
-            dbProdExt = "product_ext_database_uat";
+            dbProdExt = "product_ext_database_uat2";
         }
         return dbProdExt;
     }

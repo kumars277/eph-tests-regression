@@ -150,6 +150,27 @@ public class StitchingExtDataChecksSQL {
     public static String GET_PROD_EXT_AVAIL_JSON_REC =
             "select json as json, epr_id as epr_id, type as type from "+GetStitchDLDBUser.getStitchingExtdb()+".stch_product_ext_json WHERE epr_id in ('%s') and  extension_type='Availability'\n"; //EPR-M-115H09
 
+    public static String GET_RANDOM_EPR_PROD_EXTENDED_PRICING =
+            "select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".product_extended_pricing where delete_flag=false order by rand() limit %s\n";
+
+
+    public static String GET_PROD_EXT_PRICING_REC =
+            "select epr_id as epr_id\n" +
+                    ",product_type as product_type\n" +
+                    ",last_updated_date as last_updated_date\n" +
+                    ",price_currency as price_currency \n" +
+                    ",price_amount as price_amount\n" +
+                    ",price_start_date as price_start_date\n" +
+                    ",price_end_date as price_end_date\n" +
+                    ",price_region as price_region\n" +
+                    ",price_category as price_category\n" +
+                    ",price_customer_category as price_customer_category\n" +
+                    ",price_purchase_quantity as price_purchase_quantity\n" +
+                    " from "+GetStitchDLDBUser.getProdExtDB()+".product_extended_pricing where epr_id in ('%s') and delete_flag=false\n";  //EPR-M-115H09
+
+    public static String GET_PROD_EXT_PRICING_JSON_REC =
+            "select json as json, epr_id as epr_id, type as type from "+GetStitchDLDBUser.getStitchingExtdb()+".stch_product_ext_json WHERE epr_id in ('%s') and extension_type='Prices'\n"; //EPR-M-115H09
+
 
 }
 

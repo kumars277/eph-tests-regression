@@ -26,6 +26,7 @@ public class StitchingExtContext {
 
     public static List<ProductExtAccessObject> recFromProdStitchAvailExtended;
     public static List<ProductExtAccessObject> recordsFromProdExtAvail;
+    public static List<ProductExtAccessObject> recordsFromProdExtPrice;
     public static List<ProductExtAccessObject> recordsFromProdExtAvails;
     public static List<WorkExtAccessObject> recFromWorkTypeStitchExtended;
 

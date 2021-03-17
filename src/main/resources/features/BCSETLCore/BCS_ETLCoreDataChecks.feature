@@ -1,7 +1,7 @@
 Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
 
 #  Created by Dinesh on 06/50/2020
-  #confluence latest vesrion used:v.68 updated the script on 23/2/2020
+  #confluence latest vesrion used:v.70 updated the script on 17/03/2020
    #confluence Link: https://confluence.cbsels.com/display/EPH/Core+Transformed+View+Mappings
 
   @BCSCore
@@ -18,7 +18,7 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
       |etl_product_current_v                    |50              |
       |etl_work_person_role_current_v             |50              |
       |etl_work_relationship_current_v            |50              |
-      |etl_work_current_v                            |50              |
+     |etl_work_current_v                            |50              |
       |etl_work_identifier_current_v             |50              |
       |etl_manifestation_identifier_current_v     |50              |
       |all_manifestation_statuses_v               |50              |
