@@ -30,15 +30,15 @@ public class DBManager {
     public static List getDBResultAsBeanList(String sql, Class klass, String dbEndPoint) {
         Properties dbProps = new Properties();
         //updated by Nishant @ 15 Mar 2021 for secret manager
-       // dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(getDatabaseEnvironmentKey(dbEndPoint)));
-             dbProps.setProperty("jdbcUrl", SecretsManagerHandler.getSecret(dbEndPoint));
+        //dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(getDatabaseEnvironmentKey(dbEndPoint)));
+        dbProps.setProperty("jdbcUrl", SecretsManagerHandler.getSecret(dbEndPoint));
 
 
-//        Yank.setupConnectionPool("pool", dbProps);
+        //Yank.setupConnectionPool("pool", dbProps);
         Yank.setupDefaultConnectionPool(dbProps);
 
         List klassList = Yank.queryBeanList(sql,klass, null);
-//        Yank.releaseDataSource();
+        //Yank.releaseDataSource();
         Yank.releaseDefaultConnectionPool();
         return klassList;
     }
@@ -119,7 +119,7 @@ public class DBManager {
                 DbUtils.loadDriver(driver);
             }
             //updated by Nishant @ 15 Mar 2021 for secret manager
-           //  connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
+           //connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
             connection = DriverManager.getConnection(SecretsManagerHandler.getSecret(URL));
 
             QueryRunner query = new QueryRunner();

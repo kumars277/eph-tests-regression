@@ -1,5 +1,7 @@
 package com.eph.automation.testing.configuration;
-
+/*
+* implemented by Nishant @ 15 Mar 2021
+* */
 import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
 import com.amazonaws.services.secretsmanager.model.*;
@@ -19,109 +21,105 @@ public class SecretsManagerHandler {
 
         String secretName = "";
         String region = "eu-west-1";
+
         switch (TestContext.getValues().environment) {
-            case "SIT":
-                secretName=getSITSecretName(connectionURL);
-
-                /*switch (connectionURL) {
-                    case "AWS_URL":     secretName = "eph_sit_aws_url";     break;
-                    case "PROMIS_URL":  secretName = "eph_sit_promis_url";  break;
-                    case "MYSQL_JM_URL":secretName = "eph_mysql_jm_sit";    break;
-                    case "EPH_URL":     secretName = "eph_sit_url";         break;
-                    default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
-                }*/
-                break;
-
-            case "UAT":secretName=getUATSecretName(connectionURL);
-                break;
-
-            case "UAT2":secretName=getUAT2SecretName(connectionURL);
-                break;
-
+            case "SIT":secretName=getSITSecretName(connectionURL);  break;
+            case "UAT":secretName=getUATSecretName(connectionURL);  break;
+            case "UAT2":secretName=getUAT2SecretName(connectionURL);break;
         }
 
-
-        AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard()
-                .withRegion(region)
-                .build();
+        AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard().withRegion(region).build();
 
         String secret = "";
         String decodedBinarySecret = "";
 
-        GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest()
-                .withSecretId(secretName);
+        GetSecretValueRequest getSecretValueRequest = new GetSecretValueRequest().withSecretId(secretName);
         GetSecretValueResult getSecretValueResult = null;
 
-        try {
-            getSecretValueResult = client.getSecretValue(getSecretValueRequest);
-        } catch (DecryptionFailureException | InternalServiceErrorException | InvalidParameterException | InvalidRequestException | ResourceNotFoundException e) {
-            throw e;
-        }
+        try {getSecretValueResult = client.getSecretValue(getSecretValueRequest);}
+        catch (DecryptionFailureException | InternalServiceErrorException | InvalidParameterException | InvalidRequestException | ResourceNotFoundException e) {throw e;}
 
-        if (getSecretValueResult.getSecretString() != null) {
-            secret = getSecretValueResult.getSecretString();
-
-        } else {
-            decodedBinarySecret = new String(Base64.getDecoder().decode(getSecretValueResult.getSecretBinary()).array());
-        }
+        if (getSecretValueResult.getSecretString() != null) {secret = getSecretValueResult.getSecretString();}
+        else {decodedBinarySecret = new String(Base64.getDecoder().decode(getSecretValueResult.getSecretBinary()).array());}
 
         JSONParser parser = new JSONParser();
-        try {
-            object = (JSONObject) parser.parse(secret);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        try {object = (JSONObject) parser.parse(secret);}
+        catch (ParseException e) {e.printStackTrace();}
 
         String DBconnection = "";
-        switch (connectionURL) {
-            case "AWS_URL":
-                return object.getAsString("SIT_AWS_URL");
-            case "PROMIS_URL":
-                return object.getAsString("SIT_PROMIS_URL");
-            case "MYSQL_JM_URL":
-                return object.getAsString("MYSQL_JM_URL");
-            case "EPH_URL":
-                DBconnection = DecryptionService.decrypt(object.getAsString("EPH_SIT_URL"));
-
+        switch(TestContext.getValues().environment) {
+            case "SIT": DBconnection = getSITdbConnection(connectionURL);break;
+            case "UAT": DBconnection = getUATdbConnection(connectionURL);break;
+            case "UAT2":DBconnection = getUAT2dbConnection(connectionURL);break;
+            default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
         }
 
         return DBconnection;
     }
 
     public static String getSITSecretName(String connectionURL){
-        String secretName="";
+        //created by Nishant @ 15 Mar 2021
         switch (connectionURL) {
-            case "AWS_URL":     secretName = "eph_sit_aws_url";     break;
-            case "PROMIS_URL":  secretName = "eph_sit_promis_url";  break;
-            case "MYSQL_JM_URL":secretName = "eph_mysql_jm_sit";    break;
-            case "EPH_URL":     secretName = "eph_sit_url";         break;
+            case "AWS_URL":     return "eph_sit_aws_url";
+            case "PROMIS_URL":  return "eph_sit_promis_url";
+            case "MYSQL_JM_URL":return "eph_mysql_jm_sit";
+            case "EPH_URL":     return "eph_sit_url";
             default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
         }
-        return secretName;
     }
 
     public static String getUATSecretName(String connectionURL){
-        String secretName="";
+        //created by Nishant @ 15 Mar 2021
         switch (connectionURL) {
-            case "AWS_URL":     secretName = "";  break;
-            case "PROMIS_URL":  secretName = "";  break;
-            case "MYSQL_JM_URL":secretName = "";  break;
-            case "EPH_URL":     secretName = "";  break;
+            case "AWS_URL":     return "";
+            case "PROMIS_URL":  return "";
+            case "MYSQL_JM_URL":return "";
+            case "EPH_URL":     return "";
             default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
         }
-        return secretName;
     }
 
     public static String getUAT2SecretName(String connectionURL){
-        String secretName="";
+        //created by Nishant @ 15 Mar 2021
         switch (connectionURL) {
-            case "AWS_URL":     secretName = "";  break;
-            case "PROMIS_URL":  secretName = "";  break;
-            case "MYSQL_JM_URL":secretName = "";  break;
-            case "EPH_URL":     secretName = "";  break;
+            case "AWS_URL":     return "";
+            case "PROMIS_URL":  return "";
+            case "MYSQL_JM_URL":return "";
+            case "EPH_URL":     return "";
             default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
         }
-        return secretName;
     }
 
+    public static String getSITdbConnection(String connectionURL){
+        //created by Nishant @ 17 Mar 2021
+        switch (connectionURL) {
+            case "AWS_URL":            return DecryptionService.decrypt(object.getAsString("SIT_AWS_URL"));
+            case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString("SIT_PROMIS_URL"));
+            case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString("MYSQL_JM_URL"));
+            case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_SIT_URL"));
+            default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
+        }
+    }
+
+    public static String getUATdbConnection(String connectionURL){
+        //created by Nishant @ 17 Mar 2021
+        switch (connectionURL) {
+            case "AWS_URL":            return DecryptionService.decrypt(object.getAsString(""));
+            case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString(""));
+            case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString(""));
+            case "EPH_URL":            return DecryptionService.decrypt(object.getAsString(""));
+            default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
+        }
+    }
+
+    public static String getUAT2dbConnection(String connectionURL){
+        //created by Nishant @ 17 Mar 2021
+        switch (connectionURL) {
+            case "AWS_URL":            return DecryptionService.decrypt(object.getAsString(""));
+            case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString(""));
+            case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString(""));
+            case "EPH_URL":            return DecryptionService.decrypt(object.getAsString(""));
+            default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
+        }
+    }
 }

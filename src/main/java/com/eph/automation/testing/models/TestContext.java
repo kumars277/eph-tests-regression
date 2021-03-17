@@ -1,6 +1,5 @@
 package com.eph.automation.testing.models;
 
-
 import com.eph.automation.testing.annotations.StaticInjection;
 
 /**
@@ -12,6 +11,7 @@ public class TestContext {
     public static TestProperties getValues() {
         TestProperties testProperties = new TestProperties();
         System.setProperty("ENV","SIT");
+
        // System.setProperty("browser","chrome");
         String browserName = System.getProperty("browser");
         String gridRun = System.getProperty("gridRun");
