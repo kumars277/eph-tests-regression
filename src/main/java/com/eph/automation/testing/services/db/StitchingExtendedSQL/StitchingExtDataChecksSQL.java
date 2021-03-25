@@ -139,20 +139,15 @@ public class StitchingExtDataChecksSQL {
                     ",delete_flag as delete_flag\n" +
                     " from "+GetStitchDLDBUser.getProdExtDB()+".work_extended where epr_id in ('%s')\n";
 
-    public static String GET_WORK_EXT_JSON_REC =
-            "select json as json, epr_id as epr_id, type as type from "+GetStitchDLDBUser.getStitchingExtdb()+".stch_work_ext_json WHERE epr_id in ('%s')\n";
-
 
     public static String GET_RANDOM_EPR_PROD_EXTENDED_AVAILABILITY =
             "select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".product_extended_availability where delete_flag=false order by rand() limit %s\n";
-
 
     public static String GET_PROD_EXT_AVAIL_JSON_REC =
             "select json as json, epr_id as epr_id, type as type from "+GetStitchDLDBUser.getStitchingExtdb()+".stch_product_ext_json WHERE epr_id in ('%s') and  extension_type='Availability'\n"; //EPR-M-115H09
 
     public static String GET_RANDOM_EPR_PROD_EXTENDED_PRICING =
             "select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".product_extended_pricing where delete_flag=false order by rand() limit %s\n";
-
 
     public static String GET_PROD_EXT_PRICING_REC =
             "select epr_id as epr_id\n" +
@@ -171,6 +166,77 @@ public class StitchingExtDataChecksSQL {
     public static String GET_PROD_EXT_PRICING_JSON_REC =
             "select json as json, epr_id as epr_id, type as type from "+GetStitchDLDBUser.getStitchingExtdb()+".stch_product_ext_json WHERE epr_id in ('%s') and extension_type='Prices'\n"; //EPR-M-115H09
 
+    public static String GET_RANDOM_EPR_WORK_EXT_METRIC =
+            "select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".work_extended_metric where delete_flag=false order by rand() limit %s\n";
+
+    public static String GET_RANDOM_EPR_WORK_EXT_URL =
+            "select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".work_extended_url where delete_flag=false order by rand() limit %s\n";
+
+    public static String GET_RANDOM_EPR_WORK_EXT_SUBJ_AREA =
+            "select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".work_extended_subject_area where delete_flag=false order by rand() limit %s\n";
+
+    public static String GET_RANDOM_EPR_WORK_EXT_PERSON_ROLE =
+            "select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".work_extended_person_role where delete_flag=false order by rand() limit %s\n";
+
+
+    public static String GET_WORK_EXT_METRIC_REC =
+            "select epr_id as epr_id\n" +
+                    ",work_type as work_type\n" +
+                    ",last_updated_date as last_updated_date\n" +
+                    ",metric_code  as metric_code \n" +
+                    ",metric_name as metric_name\n" +
+                    ",metric as metric\n" +
+                    ",metric_year as metric_year\n" +
+                    ",metric_url as metric_url\n" +
+                    ",delete_flag as delete_flag\n" +
+                    " from "+GetStitchDLDBUser.getProdExtDB()+".work_extended_metric where epr_id in ('%s') and delete_flag=false\n";  //EPR-W-102TR5
+
+    public static String GET_WORK_EXT_URL_REC =
+            "select epr_id as epr_id\n" +
+                    ",work_type as work_type\n" +
+                    ",last_updated_date as last_updated_date\n" +
+                    ",url_type_code  as url_type_code \n" +
+                    ",url_type_name as url_type_name\n" +
+                    ",url as url\n" +
+                    ",url_title as url_title\n" +
+                    " from "+GetStitchDLDBUser.getProdExtDB()+".work_extended_url where epr_id in ('%s') and delete_flag=false\n";  //EPR-W-102TR5
+
+
+    public static String GET_WORK_EXT_SUB_AREA_REC =
+            "select epr_id as epr_id\n" +
+                    ",work_type as work_type\n" +
+                    ",last_updated_date as last_updated_date\n" +
+                    ",code  as code \n" +
+                    ",name as name\n" +
+                    ",priority as priority\n" +
+                    ",type_code as type_code\n" +
+                    ",type_name as type_name\n" +
+                    " from "+GetStitchDLDBUser.getProdExtDB()+".work_extended_subject_area where epr_id in ('%s') and delete_flag=false\n";  //EPR-W-102TR5
+
+
+    public static String GET_WORK_EXT_PERS_ROLE_REC =
+            "select epr_id as epr_id\n" +
+                    ",work_type as work_type\n" +
+                    ",last_updated_date as last_updated_date\n" +
+                    ",core_work_person_role_id  as core_work_person_role_id \n" +
+                    ",role_code as role_code\n" +
+                    ",role_name as role_name\n" +
+                    ",sequence_number as sequence_number\n" +
+                    ",group_number as group_number\n" +
+                    ",first_name as first_name\n" +
+                    ",last_name as last_name\n" +
+                    ",peoplehub_id as peoplehub_id\n" +
+                    ",email as email\n" +
+                    ",title as title\n" +
+                    ",honours as honours\n" +
+                    ",affiliation as affiliation\n" +
+                    ",image_url as image_url\n" +
+                    ",footnote_txt as footnote_txt\n" +
+                    ",notes_txt as notes_txt\n" +
+                    " from "+GetStitchDLDBUser.getProdExtDB()+".work_extended_person_role where epr_id in ('%s') and delete_flag=false\n";  //EPR-W-102TR5
+
+    public static String GET_WORK_EXT_JSON_REC =
+            "select json as json, epr_id as epr_id, type as type from "+GetStitchDLDBUser.getStitchingExtdb()+".stch_work_ext_json WHERE epr_id in ('%s')\n";//EPR-W-102TR5
 
 }
 

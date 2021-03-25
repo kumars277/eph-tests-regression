@@ -687,11 +687,11 @@ public class BCS_ETLCoreCountChecksSQL {
                        "FROM\n" +
                        "  (\n" +
                        "   SELECT DISTINCT\n" +
-                    //   "     NULLIF(sourceref, '') sourceref\n" +
-                       "     NULLIF(CAST(accountableproduct AS varchar), '') accountableproduct\n" +
+                       "     NULLIF(sourceref, '') sourceref\n" +
+                       "   , NULLIF(CAST(accountableproduct AS varchar), '') accountableproduct\n" +
                        "   , NULLIF(accountablename, '') accountablename\n" +
                        "   , NULLIF(accountableparent, '') accountableparent\n" +
-                       "   , NULLIF(accountableparent, '') u_key\n" +
+                       "   , concat(NULLIF(sourceref, ''), NULLIF(accountableparent, '')) u_key \n" +
                        "   , 'N' dq_err\n" +
                        "   FROM\n" +
                        "     ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification classification\n" +

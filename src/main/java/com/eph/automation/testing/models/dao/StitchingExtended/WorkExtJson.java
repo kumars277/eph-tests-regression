@@ -230,9 +230,21 @@ public class WorkExtJson {
 
 
 
-//    private ManifExtPgCountJson[] manifExtPageCount;
-//    public ManifExtPgCountJson[] getmanifExtPageCount() {return manifExtPageCount;}
-//    public void setManifExtPageCount(ManifExtPgCountJson[] manifExtPageCount) {this.manifExtPageCount = manifExtPageCount;}
+      private WorkExtMetricJson[] workExtendedMetrics;
+      public WorkExtMetricJson[] getWorkExtMetric() {return workExtendedMetrics;}
+      public void setWorkExtMetric(WorkExtMetricJson[] workExtendedMetrics) {this.workExtendedMetrics = workExtendedMetrics;}
+
+    private WorkExtUrlJson[] workExtendedUrls;
+    public WorkExtUrlJson[] getWorkExtendedUrls() {return workExtendedUrls;}
+    public void setWorkExtendedUrls(WorkExtUrlJson[] workExtendedUrls) {this.workExtendedUrls = workExtendedUrls;}
+
+    private WorkExtSubAreaJson[] workExtendedSubjectAreas;
+    public WorkExtSubAreaJson[] getWorkExtendedSubjectAreas() {return workExtendedSubjectAreas;}
+    public void setWorkExtendedSubjectAreas(WorkExtSubAreaJson[] workExtendedSubjectAreas) {this.workExtendedSubjectAreas = workExtendedSubjectAreas;}
+
+    private WorkExtPersonRoleJson[] workExtendedPersons;
+        public WorkExtPersonRoleJson[] getWorkExtendedPersons() {return workExtendedPersons;}
+    public void setWorkExtendedPersons(WorkExtPersonRoleJson[] workExtendedPersons) {this.workExtendedPersons = workExtendedPersons;}
 
 
 }

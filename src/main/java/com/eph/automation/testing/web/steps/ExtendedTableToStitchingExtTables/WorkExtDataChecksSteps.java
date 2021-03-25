@@ -4,8 +4,8 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.StitchingExtContext;
-import com.eph.automation.testing.models.dao.StitchingExtended.WorkExtJsonObject;
-import com.eph.automation.testing.models.dao.StitchingExtended.WorkExtAccessObject;
+import com.eph.automation.testing.models.dao.StitchingExtended.*;
+import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.StitchingExtendedSQL.StitchingExtDataChecksSQL;
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
@@ -14,6 +14,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import org.junit.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -46,7 +47,7 @@ public class WorkExtDataChecksSteps {
         Log.info("Getting Count for Work extended...");
         WorkExtStitchingSQLSourceCount = StitchingExtDataChecksSQL.GET_COUNT_WORK_EXT_STITCH_TABLE;
         Log.info(WorkExtStitchingSQLSourceCount);
-        List<Map<String, Object>> WorkExtStitchingTableCount = DBManager.getDBResultMap(WorkExtStitchingSQLSourceCount, Constants.EPH_URL);
+        List<Map<String, Object>> WorkExtStitchingTableCount = DBManager.getDBResultMap(WorkExtStitchingSQLSourceCount, Constants.EPH_URL2);
         WorkExtStitchingSourceCount = ((Long) WorkExtStitchingTableCount.get(0).get("Target_count")).intValue();
     }
 
@@ -56,19 +57,32 @@ public class WorkExtDataChecksSteps {
         Assert.assertEquals("The counts are not equal when compared with work_ext table and work_ext_stitch", WorkExtTableSourceCount,WorkExtStitchingSourceCount );
     }
 
-    @Given("^We get the (.*) random work Ext EPR ids (.*)$")
-    public void getRandomManifExtEPRIds(String numberOfRecords, String tableName) {
+    @Given("^We get the (.*) random work EPR ids (.*)$")
+    public void getRandomWorkExtEPRIds(String numberOfRecords, String tableName) {
         //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Work Ext EPR Ids...");
         switch (tableName) {
             case "work_extended":
                 sql = String.format(StitchingExtDataChecksSQL.GET_RANDOM_EPR_WORK_EXTENDED, numberOfRecords);
-                List<Map<?, ?>> randomWorkExtendedEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                Ids = randomWorkExtendedEPRIds.stream().map(m -> (String) m.get("epr_id")).collect(Collectors.toList());
+                break;
+            case "work_extended_metric":
+                sql = String.format(StitchingExtDataChecksSQL.GET_RANDOM_EPR_WORK_EXT_METRIC, numberOfRecords);
+                break;
+            case "work_extended_url":
+                sql = String.format(StitchingExtDataChecksSQL.GET_RANDOM_EPR_WORK_EXT_URL, numberOfRecords);
+                break;
+            case "work_extended_subject_area":
+                sql = String.format(StitchingExtDataChecksSQL.GET_RANDOM_EPR_WORK_EXT_SUBJ_AREA, numberOfRecords);
+                break;
+            case "work_extended_person_role":
+                sql = String.format(StitchingExtDataChecksSQL.GET_RANDOM_EPR_WORK_EXT_PERSON_ROLE, numberOfRecords);
                 break;
 
+
         }
+        List<Map<?, ?>> randomWorkExtendedEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+        Ids = randomWorkExtendedEPRIds.stream().map(m -> (String) m.get("epr_id")).collect(Collectors.toList());
         Log.info(sql);
         Log.info(Ids.toString());
     }
@@ -87,15 +101,15 @@ public class WorkExtDataChecksSteps {
         Log.info(workId);
         sql = String.format(StitchingExtDataChecksSQL.GET_WORK_EXT_JSON_REC, workId);
         Log.info(sql);
-        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL2);
         StitchingExtContext.recordsFromWorkStitching = new Gson().fromJson(jsonValue.get(0).get("json"), WorkExtJsonObject.class);
     }
 
     public void getWorkType(String workId){
         Log.info("We get the type from Work Stitching Extended Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_WORK_EXT_JSON_REC, workId);
-        Log.info(sql);
-        dataQualityStitchContext.recFromWorkTypeStitchExtended = DBManager.getDBResultAsBeanList(sql, WorkExtAccessObject.class, Constants.EPH_URL);
+        //Log.info(sql);
+        dataQualityStitchContext.recFromWorkTypeStitchExtended = DBManager.getDBResultAsBeanList(sql, WorkExtAccessObject.class, Constants.EPH_URL2);
     }
 
     @And("^Compare work Extended and work Extended Stitching Table$")
@@ -118,12 +132,12 @@ public class WorkExtDataChecksSteps {
 
                 Log.info(" EPR => " + dataQualityStitchContext.recordsFromWorkExtended.get(i).getepr_id() +
                         " Work_Extended -> work_type => " + dataQualityStitchContext.recordsFromWorkExtended.get(i).getwork_type() +
-                        " Work_JSON -> Type => " + dataQualityStitchContext.recFromWorkTypeStitchExtended.get(i).gettype());
+                        " Work_JSON -> Type => " + dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
                 if (dataQualityStitchContext.recordsFromWorkExtended.get(i).getwork_type() != null ||
-                        (dataQualityStitchContext.recFromWorkTypeStitchExtended.get(i).gettype() != null)) {
+                        (dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype() != null)) {
                     Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromWorkExtended.get(i).getepr_id() + " is missing/not found in Work_Stitching table",
                             dataQualityStitchContext.recordsFromWorkExtended.get(i).getwork_type(),
-                            dataQualityStitchContext.recFromWorkTypeStitchExtended.get(i).gettype());
+                            dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
                 }
                 //journalElsComInd not passing in to the stitching json if the value is false, it seems like only true and null no false value holding in DB.
                String journalElsComInd_workExtTable;
@@ -479,5 +493,698 @@ public class WorkExtDataChecksSteps {
 
     }
 
+    @Then("^Get the records from work extended metric table$")
+    public void getRecordsFromWorkExtMEtricTable() {
+        Log.info("We get the records from work Extended metric Tables...");
+        sql = String.format(StitchingExtDataChecksSQL.GET_WORK_EXT_METRIC_REC, Joiner.on("','").join(Ids));
+          Log.info(sql);
+        dataQualityStitchContext.recordsFromWorkExtMetric = DBManager.getDBResultAsBeanList(sql, WorkExtAccessObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare work Extended metric and work Extended Stitching Table$")
+    public void compareWorkExtMetricAndStitchingWorkExt() {
+        if (dataQualityStitchContext.recordsFromWorkExtMetric.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+         //   List <Integer> ignore = new ArrayList();
+            for (int i = 0; i < dataQualityStitchContext.recordsFromWorkExtMetric.size(); i++) {
+                String workId = dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id();
+                getWorkExtendedJSONRec(workId);
+                getWorkType(workId);
+                if (dataQualityStitchContext.recordsFromWorkStitching.getWorkExtended().getWorkExtMetric() != null) {
+                    WorkExtMetricJson[] extworkMetric_temp = dataQualityStitchContext.recordsFromWorkStitching.getWorkExtended().getWorkExtMetric().clone();
+                    for (int j = 0; j < extworkMetric_temp.length; j++) {
+                     //    if(ignore.contains(j)) continue;
+                        String sourceCode = dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_code();
+                        //String sourceEpr = dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id();
+                        //String trgtEpr = dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id();
+                        String trgetCode =String.valueOf(extworkMetric_temp[j].getExtendedMetric().getType().get("code"));
+                        String sourceMetricURL = dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_url();
+                        String trgetMetricURL =  extworkMetric_temp[j].getExtendedMetric().getMetricURL();
+                        String sourceMetricYr = dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_year();
+                        String trgetMetricYr =  extworkMetric_temp[j].getExtendedMetric().getMetricYear();
+                        if(sourceMetricURL!=null && sourceMetricYr==null){
+                            if(sourceCode.equals(trgetCode)&&(sourceMetricURL.equals(trgetMetricURL))){
+                                Log.info("Work_Ext_Metric -> EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_JSON -> EPR => " + dataQualityStitchContext.recordsFromWorkStitching.getId());
+                                if (dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() != null ||
+                                        (dataQualityStitchContext.recordsFromWorkStitching.getId() != null)) {
+                                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() + " is missing/not found in Work_Stiching table",
+                                            dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id(),
+                                            dataQualityStitchContext.recordsFromWorkStitching.getId());
+                                }
+
+                                Log.info(" EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_Ext_Metric -> work_type => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getwork_type() +
+                                        " Work_JSON -> Type => " + dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
+                                if (dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getwork_type() != null ||
+                                        (dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype() != null)) {
+                                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() + " is missing/not found in Work_Stiching table",
+                                            dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getwork_type(),
+                                            dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
+                                }
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_Ext_Metric -> Metric_Code => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_code() +
+                                        " Work_JSON -> Metric_Code => " + extworkMetric_temp[j].getExtendedMetric().getType().get("code"));
+                                Assert.assertEquals("The Metric_Code is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_code(),
+                                        extworkMetric_temp[j].getExtendedMetric().getType().get("code"));
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_Ext_Metric -> Metric_Name => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_name() +
+                                        " Work_JSON -> Metric_Name => " + extworkMetric_temp[j].getExtendedMetric().getType().get("name"));
+                                Assert.assertEquals("The Metric_Name is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_name(),
+                                        extworkMetric_temp[j].getExtendedMetric().getType().get("name"));
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_Ext_Metric -> metric => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric() +
+                                        " Work_JSON -> metric => " + extworkMetric_temp[j].getExtendedMetric().getMetric());
+                                Assert.assertEquals("The metric is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric(),
+                                        extworkMetric_temp[j].getExtendedMetric().getMetric());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_Ext_Metric -> metricURL => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_url() +
+                                        " Work_JSON -> metricURL => " + extworkMetric_temp[j].getExtendedMetric().getMetricURL());
+                                Assert.assertEquals("The metricURL is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_url(),
+                                        extworkMetric_temp[j].getExtendedMetric().getMetricURL());
+                               j=0;
+                               //  ignore.add(j);
+                                break;
+                            }else{
+                                j= j++;
+                            }
+                            //}
+
+                        }else if(sourceMetricYr!=null&&sourceMetricURL==null){
+                            if(sourceCode.equals(trgetCode)&&(sourceMetricYr.equals(trgetMetricYr))){
+                                Log.info("Work_Ext_Metric -> EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_JSON -> EPR => " + dataQualityStitchContext.recordsFromWorkStitching.getId());
+                                if (dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() != null ||
+                                        (dataQualityStitchContext.recordsFromWorkStitching.getId() != null)) {
+                                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() + " is missing/not found in Work_Stiching table",
+                                            dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id(),
+                                            dataQualityStitchContext.recordsFromWorkStitching.getId());
+                                }
+
+                                Log.info(" EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_Ext_Metric -> work_type => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getwork_type() +
+                                        " Work_JSON -> Type => " + dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
+                                if (dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getwork_type() != null ||
+                                        (dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype() != null)) {
+                                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() + " is missing/not found in Work_Stiching table",
+                                            dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getwork_type(),
+                                            dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
+                                }
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_Ext_Metric -> Metric_Code => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_code() +
+                                        " Work_JSON -> Metric_Code => " + extworkMetric_temp[j].getExtendedMetric().getType().get("code"));
+                                Assert.assertEquals("The Metric_Code is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_code(),
+                                        extworkMetric_temp[j].getExtendedMetric().getType().get("code"));
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_Ext_Metric -> Metric_Name => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_name() +
+                                        " Work_JSON -> Metric_Name => " + extworkMetric_temp[j].getExtendedMetric().getType().get("name"));
+                                Assert.assertEquals("The Metric_Name is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_name(),
+                                        extworkMetric_temp[j].getExtendedMetric().getType().get("name"));
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_Ext_Metric -> metric => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric() +
+                                        " Work_JSON -> metric => " + extworkMetric_temp[j].getExtendedMetric().getMetric());
+                                Assert.assertEquals("The metric is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric(),
+                                        extworkMetric_temp[j].getExtendedMetric().getMetric());
+                               Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_Ext_Metric -> metricYear => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_year() +
+                                        " Work_JSON -> metricYear => " + extworkMetric_temp[j].getExtendedMetric().getMetricYear());
+                                Assert.assertEquals("The metricYear is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_year(),
+                                        extworkMetric_temp[j].getExtendedMetric().getMetricYear());
+                                j=0;
+                              //   ignore.add(j);
+                                break;
+                            }else{
+                                j= j++;
+                            }
+
+                        }else {
+                            if(sourceCode.equals(trgetCode)){
+                                Log.info("Work_Ext_Metric -> EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_JSON -> EPR => " + dataQualityStitchContext.recordsFromWorkStitching.getId());
+                                if (dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() != null ||
+                                        (dataQualityStitchContext.recordsFromWorkStitching.getId() != null)) {
+                                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() + " is missing/not found in Work_Stiching table",
+                                            dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id(),
+                                            dataQualityStitchContext.recordsFromWorkStitching.getId());
+                                }
+
+                                Log.info(" EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_Ext_Metric -> work_type => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getwork_type() +
+                                        " Work_JSON -> Type => " + dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
+                                if (dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getwork_type() != null ||
+                                        (dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype() != null)) {
+                                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() + " is missing/not found in Work_Stiching table",
+                                            dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getwork_type(),
+                                            dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
+                                }
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_Ext_Metric -> Metric_Code => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_code() +
+                                        " Work_JSON -> Metric_Code => " + extworkMetric_temp[j].getExtendedMetric().getType().get("code"));
+                                Assert.assertEquals("The Metric_Code is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_code(),
+                                        extworkMetric_temp[j].getExtendedMetric().getType().get("code"));
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_Ext_Metric -> Metric_Name => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_name() +
+                                        " Work_JSON -> Metric_Name => " + extworkMetric_temp[j].getExtendedMetric().getType().get("name"));
+                                Assert.assertEquals("The Metric_Name is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_name(),
+                                        extworkMetric_temp[j].getExtendedMetric().getType().get("name"));
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_Ext_Metric -> metric => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric() +
+                                        " Work_JSON -> metric => " + extworkMetric_temp[j].getExtendedMetric().getMetric());
+                                Assert.assertEquals("The metric is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric(),
+                                        extworkMetric_temp[j].getExtendedMetric().getMetric());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_Ext_Metric -> metricURL => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_url() +
+                                        " Work_JSON -> metricURL => " + extworkMetric_temp[j].getExtendedMetric().getMetricURL());
+                                Assert.assertEquals("The metricURL is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_url(),
+                                        extworkMetric_temp[j].getExtendedMetric().getMetricURL());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id() +
+                                        " Work_Ext_Metric -> metricYear => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_year() +
+                                        " Work_JSON -> metricYear => " + extworkMetric_temp[j].getExtendedMetric().getMetricYear());
+                                Assert.assertEquals("The metricYear is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtMetric.get(i).getmetric_year(),
+                                        extworkMetric_temp[j].getExtendedMetric().getMetricYear());
+                                j=0;
+                               //  ignore.add(j);
+                                break;
+                            }else{
+                                j= j++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Then("^Get the records from work extended url table$")
+    public void getRecordsFromWorkExtUrltTable() {
+        Log.info("We get the records from work Extended url Tables...");
+        sql = String.format(StitchingExtDataChecksSQL.GET_WORK_EXT_URL_REC, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityStitchContext.recordsFromWorkExtUrl = DBManager.getDBResultAsBeanList(sql, WorkExtAccessObject.class, Constants.AWS_URL);
+    }
+
+
+    @And("^Compare work Extended url and work Extended Stitching Table$")
+    public void compareWorkExtUrlAndStitchingWorkExt() {
+        if (dataQualityStitchContext.recordsFromWorkExtUrl.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            //   List <Integer> ignore = new ArrayList();
+            for (int i = 0; i < dataQualityStitchContext.recordsFromWorkExtUrl.size(); i++) {
+                String workId = dataQualityStitchContext.recordsFromWorkExtUrl.get(i).getepr_id();
+                getWorkExtendedJSONRec(workId);
+                getWorkType(workId);
+                if (dataQualityStitchContext.recordsFromWorkStitching.getWorkExtended().getWorkExtendedUrls() != null) {
+                    WorkExtUrlJson[] extworkUrl_temp = dataQualityStitchContext.recordsFromWorkStitching.getWorkExtended().getWorkExtendedUrls().clone();
+                    for (int j = 0; j < extworkUrl_temp.length; j++) {
+                        //    if(ignore.contains(j)) continue;
+                        String sourceUrl = dataQualityStitchContext.recordsFromWorkExtUrl.get(i).geturl();
+                        String trgetUrl =  extworkUrl_temp[j].getExtendedUrl().getUrl();
+                        String sourceCode = dataQualityStitchContext.recordsFromWorkExtUrl.get(i).geturl_type_code();
+                        String trgetCode = String.valueOf(extworkUrl_temp[j].getExtendedUrl().getType().get("code"));
+                      //  if(sourceMetricURL!=null && sourceMetricYr==null){
+                            if(sourceUrl.equals(trgetUrl)&&sourceCode.equals(trgetCode)){
+                                Log.info("Work_Ext_URL -> EPR => " + dataQualityStitchContext.recordsFromWorkExtUrl.get(i).getepr_id() +
+                                        " Work_JSON -> EPR => " + dataQualityStitchContext.recordsFromWorkStitching.getId());
+                                if (dataQualityStitchContext.recordsFromWorkExtUrl.get(i).getepr_id() != null ||
+                                        (dataQualityStitchContext.recordsFromWorkStitching.getId() != null)) {
+                                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromWorkExtUrl.get(i).getepr_id() + " is missing/not found in Work_Stiching table",
+                                            dataQualityStitchContext.recordsFromWorkExtUrl.get(i).getepr_id(),
+                                            dataQualityStitchContext.recordsFromWorkStitching.getId());
+                                }
+
+                                Log.info(" EPR => " + dataQualityStitchContext.recordsFromWorkExtUrl.get(i).getepr_id() +
+                                        " Work_Ext_URL -> work_type => " + dataQualityStitchContext.recordsFromWorkExtUrl.get(i).getwork_type() +
+                                        " Work_JSON -> Type => " + dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
+                                if (dataQualityStitchContext.recordsFromWorkExtUrl.get(i).getwork_type() != null ||
+                                        (dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype() != null)) {
+                                    Assert.assertEquals("The worktype => " + dataQualityStitchContext.recordsFromWorkExtUrl.get(i).getepr_id() + " is missing/not found in Work_Stiching table",
+                                            dataQualityStitchContext.recordsFromWorkExtUrl.get(i).getwork_type(),
+                                            dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
+                                }
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtUrl.get(i).getepr_id() +
+                                        " Work_Ext_URL -> url_Code => " + dataQualityStitchContext.recordsFromWorkExtUrl.get(i).geturl_type_code() +
+                                        " Work_JSON -> UrlCode => " + extworkUrl_temp[j].getExtendedUrl().getType().get("code"));
+                                Assert.assertEquals("The url_Code is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtUrl.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtUrl.get(i).geturl_type_code(),
+                                        extworkUrl_temp[j].getExtendedUrl().getType().get("code"));
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtUrl.get(i).getepr_id() +
+                                        " Work_Ext_URL -> url_name => " + dataQualityStitchContext.recordsFromWorkExtUrl.get(i).geturl_type_name() +
+                                        " Work_JSON -> UrlName => " + extworkUrl_temp[j].getExtendedUrl().getType().get("name"));
+                                Assert.assertEquals("The url_Name is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtUrl.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtUrl.get(i).geturl_type_name(),
+                                        extworkUrl_temp[j].getExtendedUrl().getType().get("name"));
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtUrl.get(i).getepr_id() +
+                                        " Work_Ext_URL -> url => " + dataQualityStitchContext.recordsFromWorkExtUrl.get(i).geturl() +
+                                        " Work_JSON -> URL => " + extworkUrl_temp[j].getExtendedUrl().getUrl());
+                                Assert.assertEquals("The url is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtUrl.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtUrl.get(i).geturl(),
+                                        extworkUrl_temp[j].getExtendedUrl().getUrl());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtUrl.get(i).getepr_id() +
+                                        " Work_Ext_URL -> urlTitle => " + dataQualityStitchContext.recordsFromWorkExtUrl.get(i).geturl_title() +
+                                        " Work_JSON -> URLtitle => " + extworkUrl_temp[j].getExtendedUrl().getUrlTitle());
+                                Assert.assertEquals("The urlTitle is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtUrl.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtUrl.get(i).geturl_title(),
+                                        extworkUrl_temp[j].getExtendedUrl().getUrlTitle());
+
+                                j=0;
+                                //  ignore.add(j);
+                                break;
+                            }else{
+                                j= j++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    @Then("^Get the records from work extended subj area table$")
+    public void getRecordsFromWorkExtSubAreaTable() {
+        Log.info("We get the records from work Extended Subject Area Tables...");
+        sql = String.format(StitchingExtDataChecksSQL.GET_WORK_EXT_SUB_AREA_REC, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityStitchContext.recordsFromWorkExtSubjArea = DBManager.getDBResultAsBeanList(sql, WorkExtAccessObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare work Extended subj area and work Extended Stitching Table$")
+    public void compareWorkExtSubAreaAndStitchingWorkExt() {
+        if (dataQualityStitchContext.recordsFromWorkExtSubjArea.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            //   List <Integer> ignore = new ArrayList();
+            for (int i = 0; i < dataQualityStitchContext.recordsFromWorkExtSubjArea.size(); i++) {
+                String workId = dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id();
+                getWorkExtendedJSONRec(workId);
+                getWorkType(workId);
+                if (dataQualityStitchContext.recordsFromWorkStitching.getWorkExtended().getWorkExtendedSubjectAreas() != null) {
+                    WorkExtSubAreaJson[] extworkSubj_temp = dataQualityStitchContext.recordsFromWorkStitching.getWorkExtended().getWorkExtendedSubjectAreas().clone();
+                    for (int j = 0; j < extworkSubj_temp.length; j++) {
+                        //    if(ignore.contains(j)) continue;
+                        String sourceCode = dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getcode();
+                        String trgetCode =  extworkSubj_temp[j].getExtendedSubArea().getCode();
+                        //  if(sourceMetricURL!=null && sourceMetricYr==null){
+                        if(sourceCode.equals(trgetCode)){
+                            Log.info("Work_Ext_Sub_Area -> EPR => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id() +
+                                    " Work_JSON -> EPR => " + dataQualityStitchContext.recordsFromWorkStitching.getId());
+                            if (dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id() != null ||
+                                    (dataQualityStitchContext.recordsFromWorkStitching.getId() != null)) {
+                                Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id() + " is missing/not found in Work_Stiching table",
+                                        dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkStitching.getId());
+                            }
+
+                            Log.info(" EPR => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id() +
+                                    " Work_Ext_Sub_Area -> work_type => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getwork_type() +
+                                    " Work_JSON -> Type => " + dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
+                            if (dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getwork_type() != null ||
+                                    (dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype() != null)) {
+                                Assert.assertEquals("The worktype => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id() + " is missing/not found in Work_Stiching table",
+                                        dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getwork_type(),
+                                        dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
+                            }
+                            Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id() +
+                                    " Work_Ext_Sub_Area -> Code => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getcode() +
+                                    " Work_JSON -> Code => " + extworkSubj_temp[j].getExtendedSubArea().getCode());
+                            Assert.assertEquals("The Code is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id(),
+                                    dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getcode(),
+                                    extworkSubj_temp[j].getExtendedSubArea().getCode());
+
+                            Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id() +
+                                    " Work_Ext_Sub_Area -> name => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getname() +
+                                    " Work_JSON -> Name => " + extworkSubj_temp[j].getExtendedSubArea().getName());
+                            Assert.assertEquals("The Name is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id(),
+                                    dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getname(),
+                                    extworkSubj_temp[j].getExtendedSubArea().getName());
+
+                            Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id() +
+                                    " Work_Ext_Sub_Area -> TypeCode => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).gettype_code() +
+                                    " Work_JSON -> TypeCode => " + extworkSubj_temp[j].getExtendedSubArea().getType().get("code"));
+                            Assert.assertEquals("The TypeCode is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id(),
+                                    dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).gettype_code(),
+                                    extworkSubj_temp[j].getExtendedSubArea().getType().get("code"));
+
+                            Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id() +
+                                    " Work_Ext_Sub_Area -> TypeName => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).gettype_name() +
+                                    " Work_JSON -> TypeName => " + extworkSubj_temp[j].getExtendedSubArea().getType().get("name"));
+                            Assert.assertEquals("The TypeName is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id(),
+                                    dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).gettype_name(),
+                                    extworkSubj_temp[j].getExtendedSubArea().getType().get("name"));
+
+                            Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id() +
+                                    " Work_Ext_Sub_Area -> Priority => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getpriority() +
+                                    " Work_JSON -> Priority => " + extworkSubj_temp[j].getExtendedSubArea().getPriority());
+                            Assert.assertEquals("The Priority is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id(),
+                                    dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getpriority(),
+                                    extworkSubj_temp[j].getExtendedSubArea().getPriority());
+
+                            j=0;
+                            //  ignore.add(j);
+                            break;
+                        }else{
+                            j= j++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Then("^Get the records from work extended person role table$")
+    public void getRecordsFromWorkExtPersRoleTable() {
+        Log.info("We get the records from work Extended Person Role Tables...");
+        sql = String.format(StitchingExtDataChecksSQL.GET_WORK_EXT_PERS_ROLE_REC, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityStitchContext.recordsFromWorkExtPersRole = DBManager.getDBResultAsBeanList(sql, WorkExtAccessObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare work Extended person role and work Extended Stitching Table$")
+    public void compareWorkExtPersRoleAndStitchingWorkExt() {
+        if (dataQualityStitchContext.recordsFromWorkExtPersRole.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            //   List <Integer> ignore = new ArrayList();
+            for (int i = 0; i < dataQualityStitchContext.recordsFromWorkExtPersRole.size(); i++) {
+                String workId = dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id();
+                getWorkExtendedJSONRec(workId);
+                getWorkType(workId);
+                if (dataQualityStitchContext.recordsFromWorkStitching.getWorkExtended().getWorkExtendedPersons() != null) {
+                    WorkExtPersonRoleJson[] extworkPerson_temp = dataQualityStitchContext.recordsFromWorkStitching.getWorkExtended().getWorkExtendedPersons().clone();
+                    for (int j = 0; j < extworkPerson_temp.length; j++) {
+                        //    if(ignore.contains(j)) continue;
+                        String sourceCode = dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getrole_code();
+                        String trgetCode =  extworkPerson_temp[j].getExtendedRole().getCode();
+                       String sourceFirstName = dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getfirst_name();
+                       String trgtFirstName = extworkPerson_temp[j].getExtendedPerson().getFirstName();
+                        String sourceLastName = dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getlast_name();
+                        String trgtLastName = extworkPerson_temp[j].getExtendedPerson().getLastName();
+                        String sourceSeqNum = dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getsequence_number();
+                        String trgtSeqNum = extworkPerson_temp[j].getSequenceNumber();
+
+                        if(sourceFirstName!=null && sourceSeqNum==null) {
+                            if (sourceCode.equals(trgetCode) && sourceLastName.equals(trgtLastName) && sourceFirstName.equals(trgtFirstName)) {
+                                Log.info("Work_Ext_perso_role -> EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_JSON -> EPR => " + dataQualityStitchContext.recordsFromWorkStitching.getId());
+                                if (dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() != null ||
+                                        (dataQualityStitchContext.recordsFromWorkStitching.getId() != null)) {
+                                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() + " is missing/not found in Work_Stiching table",
+                                            dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                            dataQualityStitchContext.recordsFromWorkStitching.getId());
+                                }
+
+                                Log.info(" EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> work_type => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getwork_type() +
+                                        " Work_JSON -> Type => " + dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
+                                if (dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getwork_type() != null ||
+                                        (dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype() != null)) {
+                                    Assert.assertEquals("The worktype => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() + " is missing/not found in Work_Stiching table",
+                                            dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getwork_type(),
+                                            dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
+                                }
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> Role_Code => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getrole_code() +
+                                        " Work_JSON -> Role_Code => " + extworkPerson_temp[j].getExtendedRole().getCode());
+                                Assert.assertEquals("The Code is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getrole_code(),
+                                        extworkPerson_temp[j].getExtendedRole().getCode());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> Role_Name => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getrole_name() +
+                                        " Work_JSON -> Role_Name => " + extworkPerson_temp[j].getExtendedRole().getName());
+                                Assert.assertEquals("The Name is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getrole_name(),
+                                        extworkPerson_temp[j].getExtendedRole().getName());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> firstName => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getfirst_name() +
+                                        " Work_JSON -> firstName => " + extworkPerson_temp[j].getExtendedPerson().getFirstName());
+                                Assert.assertEquals("The Name is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getfirst_name(),
+                                        extworkPerson_temp[j].getExtendedPerson().getFirstName());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> lastName => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getlast_name() +
+                                        " Work_JSON -> lastName => " + extworkPerson_temp[j].getExtendedPerson().getLastName());
+                                Assert.assertEquals("The Name is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getlast_name(),
+                                        extworkPerson_temp[j].getExtendedPerson().getLastName());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> email => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getemail() +
+                                        " Work_JSON -> email => " + extworkPerson_temp[j].getExtendedPerson().getEmail());
+                                Assert.assertEquals("The email is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getemail(),
+                                        extworkPerson_temp[j].getExtendedPerson().getEmail());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> imageurl => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getimage_url() +
+                                        " Work_JSON -> imageurl => " + extworkPerson_temp[j].getExtendedPerson().getImageUrl());
+                                Assert.assertEquals("The imageurl is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getimage_url(),
+                                        extworkPerson_temp[j].getExtendedPerson().getImageUrl());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> Affiliation => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getaffiliation() +
+                                        " Work_JSON -> Affiliation => " + extworkPerson_temp[j].getExtendedPerson().getAffiliation());
+                                Assert.assertEquals("The Affiliation is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getaffiliation(),
+                                        extworkPerson_temp[j].getExtendedPerson().getAffiliation());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> Honours => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).gethonours() +
+                                        " Work_JSON -> Honours => " + extworkPerson_temp[j].getExtendedPerson().getHonours());
+                                Assert.assertEquals("The Honours is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).gethonours(),
+                                        extworkPerson_temp[j].getExtendedPerson().getHonours());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> CoreWorkPersonRoleId => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getcore_work_person_role_id() +
+                                        " Work_JSON -> CoreWorkPersonRoleId => " + extworkPerson_temp[j].getCoreWorkPersonRoleId());
+                                Assert.assertEquals("The CoreWorkPersonRoleId is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getcore_work_person_role_id(),
+                                        extworkPerson_temp[j].getCoreWorkPersonRoleId());
+
+                                j = 0;
+                                //  ignore.add(j);
+                                break;
+                            } else {
+                                j = j++;
+                            }
+                        }else if(sourceFirstName==null && sourceSeqNum!=null) {
+                            if (sourceCode.equals(trgetCode) && sourceLastName.equals(trgtLastName)&&sourceSeqNum.equals(trgtSeqNum)) {
+                                Log.info("Work_Ext_perso_role -> EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_JSON -> EPR => " + dataQualityStitchContext.recordsFromWorkStitching.getId());
+                                if (dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() != null ||
+                                        (dataQualityStitchContext.recordsFromWorkStitching.getId() != null)) {
+                                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() + " is missing/not found in Work_Stiching table",
+                                            dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                            dataQualityStitchContext.recordsFromWorkStitching.getId());
+                                }
+
+                                Log.info(" EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> work_type => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getwork_type() +
+                                        " Work_JSON -> Type => " + dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
+                                if (dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getwork_type() != null ||
+                                        (dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype() != null)) {
+                                    Assert.assertEquals("The worktype => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() + " is missing/not found in Work_Stiching table",
+                                            dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getwork_type(),
+                                            dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
+                                }
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> Role_Code => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getrole_code() +
+                                        " Work_JSON -> Role_Code => " + extworkPerson_temp[j].getExtendedRole().getCode());
+                                Assert.assertEquals("The Code is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getrole_code(),
+                                        extworkPerson_temp[j].getExtendedRole().getCode());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> Role_Name => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getrole_name() +
+                                        " Work_JSON -> Role_Name => " + extworkPerson_temp[j].getExtendedRole().getName());
+                                Assert.assertEquals("The Name is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getrole_name(),
+                                        extworkPerson_temp[j].getExtendedRole().getName());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> lastName => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getlast_name() +
+                                        " Work_JSON -> lastName => " + extworkPerson_temp[j].getExtendedPerson().getLastName());
+                                Assert.assertEquals("The Name is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getlast_name(),
+                                        extworkPerson_temp[j].getExtendedPerson().getLastName());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> email => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getemail() +
+                                        " Work_JSON -> email => " + extworkPerson_temp[j].getExtendedPerson().getEmail());
+                                Assert.assertEquals("The email is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getemail(),
+                                        extworkPerson_temp[j].getExtendedPerson().getEmail());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> imageurl => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getimage_url() +
+                                        " Work_JSON -> imageurl => " + extworkPerson_temp[j].getExtendedPerson().getImageUrl());
+                                Assert.assertEquals("The imageurl is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getimage_url(),
+                                        extworkPerson_temp[j].getExtendedPerson().getImageUrl());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> Affiliation => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getaffiliation() +
+                                        " Work_JSON -> Affiliation => " + extworkPerson_temp[j].getExtendedPerson().getAffiliation());
+                                Assert.assertEquals("The Affiliation is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getaffiliation(),
+                                        extworkPerson_temp[j].getExtendedPerson().getAffiliation());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> Honours => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).gethonours() +
+                                        " Work_JSON -> Honours => " + extworkPerson_temp[j].getExtendedPerson().getHonours());
+                                Assert.assertEquals("The Honours is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).gethonours(),
+                                        extworkPerson_temp[j].getExtendedPerson().getHonours());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> SequenceNumber => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getsequence_number() +
+                                        " Work_JSON -> SequenceNumber => " + extworkPerson_temp[j].getSequenceNumber());
+                                Assert.assertEquals("The SequenceNumber is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getsequence_number(),
+                                        extworkPerson_temp[j].getSequenceNumber());
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> CoreWorkPersonRoleId => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getcore_work_person_role_id() +
+                                        " Work_JSON -> CoreWorkPersonRoleId => " + extworkPerson_temp[j].getCoreWorkPersonRoleId());
+                                Assert.assertEquals("The CoreWorkPersonRoleId is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getcore_work_person_role_id(),
+                                        extworkPerson_temp[j].getCoreWorkPersonRoleId());
+
+                                j = 0;
+                                //  ignore.add(j);
+                                break;
+                            } else {
+                                j = j++;
+                            }
+                        }else{
+                            if (sourceCode.equals(trgetCode) && sourceLastName.equals(trgtLastName)&&sourceFirstName.equals(trgtFirstName)&&sourceSeqNum.equals(trgtSeqNum)) {
+                                Log.info("Work_Ext_perso_role -> EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_JSON -> EPR => " + dataQualityStitchContext.recordsFromWorkStitching.getId());
+                                if (dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() != null ||
+                                        (dataQualityStitchContext.recordsFromWorkStitching.getId() != null)) {
+                                    Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() + " is missing/not found in Work_Stiching table",
+                                            dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                            dataQualityStitchContext.recordsFromWorkStitching.getId());
+                                }
+
+                                Log.info(" EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> work_type => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getwork_type() +
+                                        " Work_JSON -> Type => " + dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
+                                if (dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getwork_type() != null ||
+                                        (dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype() != null)) {
+                                    Assert.assertEquals("The worktype => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() + " is missing/not found in Work_Stiching table",
+                                            dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getwork_type(),
+                                            dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
+                                }
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> Role_Code => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getrole_code() +
+                                        " Work_JSON -> Role_Code => " + extworkPerson_temp[j].getExtendedRole().getCode());
+                                Assert.assertEquals("The Code is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getrole_code(),
+                                        extworkPerson_temp[j].getExtendedRole().getCode());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> Role_Name => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getrole_name() +
+                                        " Work_JSON -> Role_Name => " + extworkPerson_temp[j].getExtendedRole().getName());
+                                Assert.assertEquals("The Name is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getrole_name(),
+                                        extworkPerson_temp[j].getExtendedRole().getName());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> lastName => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getfirst_name() +
+                                        " Work_JSON -> lastName => " + extworkPerson_temp[j].getExtendedPerson().getLastName());
+                                Assert.assertEquals("The Name is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getfirst_name(),
+                                        extworkPerson_temp[j].getExtendedPerson().getFirstName());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> lastName => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getlast_name() +
+                                        " Work_JSON -> lastName => " + extworkPerson_temp[j].getExtendedPerson().getLastName());
+                                Assert.assertEquals("The Name is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getlast_name(),
+                                        extworkPerson_temp[j].getExtendedPerson().getLastName());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> email => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getemail() +
+                                        " Work_JSON -> email => " + extworkPerson_temp[j].getExtendedPerson().getEmail());
+                                Assert.assertEquals("The email is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getemail(),
+                                        extworkPerson_temp[j].getExtendedPerson().getEmail());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> imageurl => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getimage_url() +
+                                        " Work_JSON -> imageurl => " + extworkPerson_temp[j].getExtendedPerson().getImageUrl());
+                                Assert.assertEquals("The imageurl is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getimage_url(),
+                                        extworkPerson_temp[j].getExtendedPerson().getImageUrl());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> Affiliation => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getaffiliation() +
+                                        " Work_JSON -> Affiliation => " + extworkPerson_temp[j].getExtendedPerson().getAffiliation());
+                                Assert.assertEquals("The Affiliation is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getaffiliation(),
+                                        extworkPerson_temp[j].getExtendedPerson().getAffiliation());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> Honours => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).gethonours() +
+                                        " Work_JSON -> Honours => " + extworkPerson_temp[j].getExtendedPerson().getHonours());
+                                Assert.assertEquals("The Honours is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).gethonours(),
+                                        extworkPerson_temp[j].getExtendedPerson().getHonours());
+
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> SequenceNumber => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getsequence_number() +
+                                        " Work_JSON -> SequenceNumber => " + extworkPerson_temp[j].getSequenceNumber());
+                                Assert.assertEquals("The SequenceNumber is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getsequence_number(),
+                                        extworkPerson_temp[j].getSequenceNumber());
+                                Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id() +
+                                        " Work_Ext_perso_role -> CoreWorkPersonRoleId => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getcore_work_person_role_id() +
+                                        " Work_JSON -> CoreWorkPersonRoleId => " + extworkPerson_temp[j].getCoreWorkPersonRoleId());
+                                Assert.assertEquals("The CoreWorkPersonRoleId is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getepr_id(),
+                                        dataQualityStitchContext.recordsFromWorkExtPersRole.get(i).getcore_work_person_role_id(),
+                                        extworkPerson_temp[j].getCoreWorkPersonRoleId());
+
+                                j = 0;
+                                //  ignore.add(j);
+                                break;
+                            } else {
+                                j = j++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 }

@@ -39,6 +39,187 @@ private String review_quotes;
     private String journal_prod_site_code;
     private String type;
 
+    private String metric_code;
+    private String metric_name;
+    private String metric;
+    private String metric_year;
+    private String  metric_url;
+
+    private String url_type_code;
+    private String  url_type_name;
+    private String url;
+    private String url_title;
+
+    private String code;
+    private String name;
+    private String priority;
+    private String type_code;
+    private String type_name;
+
+    private String core_work_person_role_id;
+    private String role_code;
+    private String role_name;
+    private String sequence_number;
+    private String group_number;
+    private String first_name;
+    private String last_name;
+    private String peoplehub_id;
+    private String email;
+    private String title;
+    private String honours;
+    private String affiliation;
+    private String image_url;
+    private String footnote_txt;
+    private String notes_txt;
+
+
+
+    public String getcore_work_person_role_id() { return core_work_person_role_id; }
+    public void setcore_work_person_role_id(String core_work_person_role_id) {
+        this.core_work_person_role_id = core_work_person_role_id;
+    }
+
+    public String getrole_code() { return role_code; }
+    public void setrole_code(String role_code) {
+        this.role_code = role_code;
+    }
+
+    public String getsequence_number() { return sequence_number; }
+    public void setsequence_number(String sequence_number) {
+        this.sequence_number = sequence_number;
+    }
+
+    public String getemail() { return email; }
+    public void setemail(String email) {
+        this.email = email;
+    }
+
+    public String getfootnote_txt() { return footnote_txt; }
+    public void setfootnote_txt(String footnote_txt) {
+        this.footnote_txt = footnote_txt;
+    }
+
+    public String getnotes_txt() { return notes_txt; }
+    public void setnotes_txt(String notes_txt) {
+        this.notes_txt = notes_txt;
+    }
+
+    public String getimage_url() { return image_url; }
+    public void setimage_url(String image_url) {
+        this.image_url = image_url;
+    }
+
+    public String getaffiliation() { return affiliation; }
+    public void setaffiliation(String affiliation) {
+        this.affiliation = affiliation;
+    }
+
+    public String gethonours() { return honours; }
+    public void sethonours(String honours) {
+        this.honours = honours;
+    }
+
+    public String gettitle() { return title; }
+    public void settitle(String title) {
+        this.title = title;
+    }
+
+    public String getpeoplehub_id() { return peoplehub_id; }
+    public void setpeoplehub_id(String peoplehub_id) {
+        this.peoplehub_id = peoplehub_id;
+    }
+
+    public String getlast_name() { return last_name; }
+    public void setlast_name(String last_name) {
+        this.last_name = last_name;
+    }
+
+    public String getfirst_name() { return first_name; }
+    public void setfirst_name(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public String getgroup_number() { return group_number; }
+    public void setgroup_number(String group_number) {
+        this.group_number = group_number;
+    }
+
+    public String getrole_name() { return role_name; }
+    public void setrole_name(String role_name) {
+        this.role_name = role_name;
+    }
+
+    public String gettype_name() { return type_name; }
+    public void settype_name(String type_name) {
+        this.type_name = type_name;
+    }
+
+
+    public String getcode() { return code; }
+    public void setcode(String code) {
+        this.code = code;
+    }
+
+    public String getname() { return name; }
+    public void setname(String name) {
+        this.name = name;
+    }
+
+    public String gettype_code() { return type_code; }
+    public void settype_code(String type_code) {
+        this.type_code = type_code;
+    }
+
+    public String getpriority() { return priority; }
+    public void setpriority(String priority) {
+        this.priority = priority;
+    }
+
+    public String geturl_type_code() { return url_type_code; }
+    public void seturl_type_code(String url_type_code) {
+        this.url_type_code = url_type_code;
+    }
+
+
+    public String geturl_type_name() { return url_type_name; }
+    public void seturl_type_name(String url_type_name) {
+        this.url_type_name = url_type_name;
+    }
+
+    public String geturl_title() { return url_title; }
+    public void seturl_title(String url_title) {
+        this.url_title = url_title;
+    }
+
+    public String geturl() { return url; }
+    public void seturl(String url) {
+        this.url = url;
+    }
+
+    public String getmetric() { return metric; }
+    public void setmetric(String metric) {
+        this.metric = metric;
+    }
+
+    public String getmetric_url() { return metric_url; }
+    public void setmetric_url(String metric_url) {
+        this.metric_url = metric_url;
+    }
+
+    public String getmetric_year() { return metric_year; }
+    public void setmetric_year(String metric_year) {
+        this.metric_year = metric_year;
+    }
+
+    public String getmetric_code() { return metric_code; }
+    public void setmetric_code(String metric_code) {
+        this.metric_code = metric_code;
+    }
+
+    public String getmetric_name() { return metric_name; }
+    public void setmetric_name(String metric_name) {
+        this.metric_name = metric_name;
+    }
 
     public String gettype() { return type; }
     public void settype(String type) {

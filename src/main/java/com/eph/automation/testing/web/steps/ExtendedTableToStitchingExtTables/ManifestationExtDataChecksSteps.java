@@ -17,6 +17,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class ManifestationExtDataChecksSteps {
     public void getRecordsFromManifExtendedTable() {
         Log.info("We get the records from Manif Extended Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_REC, Joiner.on("','").join(Ids));
-        Log.info(sql);
+       // Log.info(sql);
         dataQualityStitchContext.recordsFromManifExtended = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.AWS_URL);
     }
 
@@ -66,23 +67,17 @@ public class ManifestationExtDataChecksSteps {
         Log.info(manifId);
         sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_JSON_REC, manifId);
         Log.info(sql);
-        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL2);
         StitchingExtContext.recordsFromManifStitching = new Gson().fromJson(jsonValue.get(0).get("json"), ManifExtJsonObject.class);
     }
 
     public void getType(String manifId){
         Log.info("We get the type from Manif Stitching Extended Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_JSON_REC, manifId);
-        Log.info(sql);
-        dataQualityStitchContext.recFromManifStitchExtended = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.EPH_URL);
+       // Log.info(sql);
+        dataQualityStitchContext.recFromManifStitchExtended = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.EPH_URL2);
     }
 
-   /* public void getIndividualRecFromManifExtPageCountTable(String manifPageCountId) {
-        Log.info("We get the Individual records from Manif Extended Page count Tables...");
-        sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_PAFE_COUNT_REC,manifPageCountId);
-        Log.info(sql);
-        dataQualityStitchContext.recordsFromManifExtPageCounts = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.AWS_URL);
-    }*/
 
     @And("^Compare Manif Extended and Manif Extended Stitching Table$")
     public void compareManifExtendedAndStitchingManifExt() {
@@ -145,7 +140,6 @@ public class ManifestationExtDataChecksSteps {
                     Assert.assertEquals("The ukTextbookInd is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id(),
                             uk_textbook_ind, dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getukTextbookInd());
                 }
-
                 String us_textbook_ind;
                 if(dataQualityStitchContext.recordsFromManifExtended.get(i).getus_textbook_ind()){
                     us_textbook_ind ="true";
@@ -218,8 +212,8 @@ public class ManifestationExtDataChecksSteps {
                 break;
 
         }
-        Log.info(sql);
-        Log.info(Ids.toString());
+      //  Log.info(sql);
+      Log.info(Ids.toString());
     }
 
 
@@ -227,7 +221,7 @@ public class ManifestationExtDataChecksSteps {
     public void getRecordsFromManifExtPageCountTable() {
         Log.info("We get the records from Manif Extended Page count Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_PAFE_COUNT_REC, Joiner.on("','").join(Ids));
-        Log.info(sql);
+      //  Log.info(sql);
         dataQualityStitchContext.recordsFromManifExtPageCount = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.AWS_URL);
     }
 
@@ -236,28 +230,18 @@ public class ManifestationExtDataChecksSteps {
         if (dataQualityStitchContext.recordsFromManifExtPageCount.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
+            //List <Integer> ignore = new ArrayList();
             for (int i = 0; i < dataQualityStitchContext.recordsFromManifExtPageCount.size(); i++) {
                 String manifId = dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id();
-              //  getIndividualRecFromManifExtPageCountTable(manifId);
                 getManifExtendedJSONRec(manifId);
                 getType(manifId);
                 if (dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getManifestationExtendedPageCounts() != null) {
                     ManifExtPgCountJson[] extmanifPgCount_temp = dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getManifestationExtendedPageCounts().clone();
                     for (int j = 0; j < extmanifPgCount_temp.length; j++) {
-
-                        // test case failed bcoz page count node need to be sorted,
-                        //eg:the records in the table will be 1,2,3 for EPR-1s
-                        //and in JSON it will be 2,,3,1 for EPR1s
-//                        String sourceEpr = dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getepr_id();
-//                        String trgtEpr = manifId;
-//
-                      //  for(int t=0;t<=extmanifPgCount_temp.length;t++){
+                      //  if(ignore.contains(j)) continue;
                             String sourceCode = dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getcount_type_code();
                             String trgetCode =String.valueOf(extmanifPgCount_temp[j].getExtendedPageCount().getType().get("code"));
-
-
                             if(sourceCode.equals(trgetCode)){
-
                                 Log.info("Manif_Ext_PageCount -> EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() +
                                         " Manif_JSON -> EPR => " + dataQualityStitchContext.recordsFromManifStitching.getId());
                                 if (dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() != null ||
@@ -266,7 +250,6 @@ public class ManifestationExtDataChecksSteps {
                                             dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id(),
                                             dataQualityStitchContext.recordsFromManifStitching.getId());
                                 }
-
                                 Log.info(" EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() +
                                         " Manif_Ext_PageCount -> manif_type => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getmanifestation_type() +
                                         " Manif_JSON -> Type => " + dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
@@ -276,8 +259,6 @@ public class ManifestationExtDataChecksSteps {
                                             dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getmanifestation_type(),
                                             dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
                                 }
-
-                                 System.out.println("source-->"+sourceCode+" AND "+"target------>"+trgetCode);
                                 Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id() +
                                         " Manif_Ext_PageCount -> Country_Code => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getcount_type_code() +
                                         " Manif_JSON -> Country_Code => " + extmanifPgCount_temp[j].getExtendedPageCount().getType().get("code"));
@@ -298,9 +279,8 @@ public class ManifestationExtDataChecksSteps {
                                Assert.assertEquals("The page Count is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getepr_id(),
                                        dataQualityStitchContext.recordsFromManifExtPageCount.get(i).getcount(),
                                        extmanifPgCount_temp[j].getExtendedPageCount().getCount());
-
-                                System.out.println("--Satisfy Success--");
                                 j=0;
+                               // ignore.add(j);
                                 break;
                             }else{
                                 j= j++;
@@ -327,7 +307,7 @@ public class ManifestationExtDataChecksSteps {
                 break;
 
         }
-        Log.info(sql);
+       // Log.info(sql);
         Log.info(Ids.toString());
     }
 
@@ -335,45 +315,27 @@ public class ManifestationExtDataChecksSteps {
     public void getRecordsFromManifExtRestrictTable() {
         Log.info("We get the records from Manif Extended Restrict Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_RESTRICT_REC, Joiner.on("','").join(Ids));
-        Log.info(sql);
+       // Log.info(sql);
         dataQualityStitchContext.recordsFromManifExtRestrict = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.AWS_URL);
     }
-
-
-  /*  public void getIndividualRecFromManifExtRestrictTable(String manifRestrictId) {
-        Log.info("We get the Individual records from Manif Extended Restriction Tables...");
-        sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_RESTRICT_REC,manifRestrictId);
-        Log.info(sql);
-        dataQualityStitchContext.recordsFromManifExtRestricts = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.AWS_URL);
-    }*/
 
     @And("^Compare Manif Extended restrictions and Manif Extended Stitching Table$")
     public void compareManifExtRestrictAndStitchingManifExt() {
         if (dataQualityStitchContext.recordsFromManifExtRestrict.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
+          //  List <Integer> ignore = new ArrayList();
             for (int i = 0; i < dataQualityStitchContext.recordsFromManifExtRestrict.size(); i++) {
                 String manifId = dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id();
-               // getIndividualRecFromManifExtRestrictTable(manifId);
                 getManifExtendedJSONRec(manifId);
                 getType(manifId);
                 if (dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getManifestationExtendedRestrictions() != null) {
                     ManifExtRestrictionJson[] extmanifRestrict_temp = dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getManifestationExtendedRestrictions().clone();
                     for (int j = 0; j < extmanifRestrict_temp.length; j++) {
-
-                        // test case failed bcoz page count node need to be sorted,
-                        //eg:the records in the table will be 1,2,3 for EPR-1s
-                        //and in JSON it will be 2,,3,1 for EPR1s
-//                        String sourceEpr = dataQualityStitchContext.recordsFromManifExtPageCount.get(j).getepr_id();
-//                        String trgtEpr = manifId;
-//
-                       // for(int t=0;t<=extmanifRestrict_temp.length;t++){
-                            String sourceCode = dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getrestriction_code();
+                    //    if(ignore.contains(j)) continue;
+                          String sourceCode = dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getrestriction_code();
                             String trgetCode =String.valueOf(extmanifRestrict_temp[j].getExtendedRestriction().getType().get("code"));
-
-
                             if(sourceCode.equals(trgetCode)){
-
                                 Log.info("Manif_Ext_Restrict -> EPR => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id() +
                                         " Manif_JSON_Restrict -> EPR => " + dataQualityStitchContext.recordsFromManifStitching.getId());
                                 if (dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id() != null ||
@@ -382,7 +344,6 @@ public class ManifestationExtDataChecksSteps {
                                             dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id(),
                                             dataQualityStitchContext.recordsFromManifStitching.getId());
                                 }
-
                                 Log.info(" EPR => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id() +
                                         " Manif_Ext_Restrict -> manif_type => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getmanifestation_type() +
                                         " Manif_JSON_Restrict -> Type => " + dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
@@ -393,7 +354,6 @@ public class ManifestationExtDataChecksSteps {
                                             dataQualityStitchContext.recFromManifStitchExtended.get(0).gettype());
                                 }
 
-                                System.out.println("source-->"+sourceCode+" AND "+"target------>"+trgetCode);
                                 Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id() +
                                         " Manif_Ext_Restrict -> Restrict_COde => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getrestriction_code() +
                                         " Manif_JSON -> Restrict_COde => " + extmanifRestrict_temp[j].getExtendedRestriction().getType().get("code"));
@@ -407,9 +367,8 @@ public class ManifestationExtDataChecksSteps {
                                 Assert.assertEquals("The Restrict_name is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getepr_id(),
                                         dataQualityStitchContext.recordsFromManifExtRestrict.get(i).getrestriction_name(),
                                         extmanifRestrict_temp[j].getExtendedRestriction().getType().get("name"));
-
-                                System.out.println("--Satisfy Success--");
                                 j=0;
+                              //  ignore.add(j);
                                 break;
                             }else{
                                 j= j++;

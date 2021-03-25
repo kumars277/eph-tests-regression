@@ -18,7 +18,7 @@ Feature:Validate data for  Manifestation Ext Stitching tables in EPH
     Then Compare Manif Extended page count and Manif Extended Stitching Table
     Examples:
       |tableName                                       |countOfRandomIds|
-      |manifestation_extended_page_count               |20             |
+      |manifestation_extended_page_count               |10             |
 
 
   @ExtStitching
@@ -28,5 +28,5 @@ Feature:Validate data for  Manifestation Ext Stitching tables in EPH
     Then  Compare Manif Extended restrictions and Manif Extended Stitching Table
     Examples:
       |tableName                                        |countOfRandomIds|
-      |manifestation_extended_restriction               |20            |
+      |manifestation_extended_restriction               |10            |
 

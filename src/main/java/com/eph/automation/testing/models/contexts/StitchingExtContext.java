@@ -16,6 +16,10 @@ public class StitchingExtContext {
 
     public static List<ManifestationExtAccessObject> recordsFromManifExtended;
     public static List<ManifestationExtAccessObject> recordsFromManifExtPageCount;
+    public static List<WorkExtAccessObject> recordsFromWorkExtMetric;
+    public static List<WorkExtAccessObject> recordsFromWorkExtUrl;
+    public static List<WorkExtAccessObject> recordsFromWorkExtSubjArea;
+    public static List<WorkExtAccessObject> recordsFromWorkExtPersRole;
     public static List<ManifestationExtAccessObject> recordsFromManifExtRestrict;
     public static List<ManifestationExtAccessObject> recordsFromManifExtRestricts;
     public static List<ManifestationExtAccessObject> recordsFromManifExtPageCounts;

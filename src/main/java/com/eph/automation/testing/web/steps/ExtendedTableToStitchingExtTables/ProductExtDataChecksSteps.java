@@ -44,7 +44,7 @@ public class ProductExtDataChecksSteps {
                 Ids = randomProdExtendedEPRIds.stream().map(m -> (String) m.get("epr_id")).collect(Collectors.toList());
                 break;
         }
-        Log.info(sql);
+      //  Log.info(sql);
         Log.info(Ids.toString());
     }
 
@@ -52,7 +52,7 @@ public class ProductExtDataChecksSteps {
     public void getRecordsFromProdExtendedAvailabilityTable() {
         Log.info("We get the records from Prod Extended Avaiability Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_PROD_EXT_AVAIL_REC, Joiner.on("','").join(Ids));
-        Log.info(sql);
+      //  Log.info(sql);
         dataQualityStitchContext.recordsFromProdExtAvail = DBManager.getDBResultAsBeanList(sql, ProductExtAccessObject.class, Constants.AWS_URL);
     }
 
@@ -60,7 +60,7 @@ public class ProductExtDataChecksSteps {
         Log.info("We get the type from Prod Stitching Extended Availability Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_PROD_EXT_AVAIL_JSON_REC, ProdAvailId);
        // Log.info(sql);
-        dataQualityStitchContext.recFromProdStitchAvailExtended = DBManager.getDBResultAsBeanList(sql, ProductExtAccessObject.class, Constants.EPH_URL);
+        dataQualityStitchContext.recFromProdStitchAvailExtended = DBManager.getDBResultAsBeanList(sql, ProductExtAccessObject.class, Constants.EPH_URL2);
     }
 
   /*  public void getIndividualRecFromProdExtAvailTable(String prodAvailId) {
@@ -76,7 +76,7 @@ public class ProductExtDataChecksSteps {
         Log.info(prodAvailId);
         sql = String.format(StitchingExtDataChecksSQL.GET_PROD_EXT_AVAIL_JSON_REC, prodAvailId);
         Log.info(sql);
-        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL2);
         StitchingExtContext.recordsFromProdStitching = new Gson().fromJson(jsonValue.get(0).get("json"), ProdExtJsonObject.class);
     }
 
@@ -85,6 +85,7 @@ public class ProductExtDataChecksSteps {
         if (dataQualityStitchContext.recordsFromProdExtAvail.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
+            List <Integer> ignore = new ArrayList();
             for (int i = 0; i < dataQualityStitchContext.recordsFromProdExtAvail.size(); i++) {
                 String prodAvailId = dataQualityStitchContext.recordsFromProdExtAvail.get(i).getepr_id();
               //  getIndividualRecFromProdExtAvailTable(prodAvailId);
@@ -93,6 +94,7 @@ public class ProductExtDataChecksSteps {
                 if (dataQualityStitchContext.recordsFromProdStitching.getAvailabilityExtended().getApplications() != null) {
                     ArrayList<Applications> extprodAvail_temp = new ArrayList(Arrays.asList(dataQualityStitchContext.recordsFromProdStitching.getAvailabilityExtended().getApplications()));
                     for (int j = 0; j < extprodAvail_temp.size(); j++) {
+                        if(ignore.contains(j)) continue;
                         String sourceAppName = dataQualityStitchContext.recordsFromProdExtAvail.get(i).getapplication_name();
                         String trgetAppName = extprodAvail_temp.get(j).getApplicationName();
                         String sourceAvailFormat = dataQualityStitchContext.recordsFromProdExtAvail.get(i).getavailability_format();
@@ -118,7 +120,6 @@ public class ProductExtDataChecksSteps {
                                             dataQualityStitchContext.recordsFromProdExtAvail.get(i).getproduct_type(),
                                             dataQualityStitchContext.recFromProdStitchAvailExtended.get(0).gettype());
                                 }
-                                System.out.println(prodAvailId + " = sourceApp-->" + sourceAppName + " AND " + "targetApp------>" + trgetAppName);
 
                                 Log.info("EPR => " + dataQualityStitchContext.recordsFromProdExtAvail.get(i).getepr_id() +
                                         " Prod_Ext_Availability -> App_Name => " + dataQualityStitchContext.recordsFromProdExtAvail.get(i).getapplication_name() +
@@ -162,15 +163,8 @@ public class ProductExtDataChecksSteps {
                                         dataQualityStitchContext.recordsFromProdExtAvail.get(i).getavailability_status(),
                                         extprodAvail_temp.get(j).getAvailabilityStatus());
 
-                                /*Log.info("EPR => " + dataQualityStitchContext.recordsFromProdExtAvail.get(i).getepr_id() +
-                                        " Prod_Ext_Availability -> AvailabilityFormat => " + dataQualityStitchContext.recordsFromProdExtAvail.get(i).getavailability_format() +
-                                        " Prod_JSON_Avail -> AvailabilityFormat => " + extprodAvail_temp.get(j).getAvailabilityFormat());
-                                Assert.assertEquals("The AvailabilityFormat is incorrect for EPR => " + dataQualityStitchContext.recordsFromProdExtAvail.get(i).getepr_id(),
-                                        dataQualityStitchContext.recordsFromProdExtAvail.get(i).getavailability_format(),
-                                        extprodAvail_temp.get(j).getAvailabilityFormat());*/
-
-                                System.out.println("--Satisfy Success--");
-                                j = 0;
+                               // j = 0;
+                                ignore.add(j);
                                 break;
                             } else {
                                 j = j++;
@@ -197,7 +191,6 @@ public class ProductExtDataChecksSteps {
                                             dataQualityStitchContext.recordsFromProdExtAvail.get(i).getproduct_type(),
                                             dataQualityStitchContext.recFromProdStitchAvailExtended.get(0).gettype());
                                 }
-                                System.out.println(prodAvailId + " = sourceApp-->" + sourceAppName + " AND " + "targetApp------>" + trgetAppName);
 
                                 Log.info("EPR => " + dataQualityStitchContext.recordsFromProdExtAvail.get(i).getepr_id() +
                                         " Prod_Ext_Availability -> App_Name => " + dataQualityStitchContext.recordsFromProdExtAvail.get(i).getapplication_name() +
@@ -248,8 +241,8 @@ public class ProductExtDataChecksSteps {
                                         dataQualityStitchContext.recordsFromProdExtAvail.get(i).getavailability_format(),
                                         extprodAvail_temp.get(j).getAvailabilityFormat());
 
-                                System.out.println("--Satisfy Success--");
-                                j = 0;
+//                                j = 0;
+                                ignore.add(j);
                                 break;
                             } else {
                                 j = j++;
@@ -273,7 +266,7 @@ public class ProductExtDataChecksSteps {
                 Ids = randomProdExtendedPriceEPRIds.stream().map(m -> (String) m.get("epr_id")).collect(Collectors.toList());
                 break;
         }
-        Log.info(sql);
+         Log.info(sql);
         Log.info(Ids.toString());
     }
 
@@ -282,7 +275,7 @@ public class ProductExtDataChecksSteps {
     public void getRecordsFromProdExtendedPricingTable() {
         Log.info("We get the records from Prod Extended Pricing Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_PROD_EXT_PRICING_REC, Joiner.on("','").join(Ids));
-        Log.info(sql);
+       // Log.info(sql);
         dataQualityStitchContext.recordsFromProdExtPrice = DBManager.getDBResultAsBeanList(sql, ProductExtAccessObject.class, Constants.AWS_URL);
     }
 
@@ -307,13 +300,16 @@ public class ProductExtDataChecksSteps {
         if (dataQualityStitchContext.recordsFromProdExtPrice.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
+            List <Integer> ignore = new ArrayList();
             for (int i = 0; i < dataQualityStitchContext.recordsFromProdExtPrice.size(); i++) {
                 String prodAvailId = dataQualityStitchContext.recordsFromProdExtPrice.get(i).getepr_id();
                 getProdExtendedPricingJSONRec(prodAvailId);
                 getProdTypeForPrice(prodAvailId);
+
                 if (dataQualityStitchContext.recordsFromProdStitching.getPricingExtended().getExtendedPrices() != null) {
                     ArrayList<ExtendedPrices> extprodPricing_temp = new ArrayList(Arrays.asList(dataQualityStitchContext.recordsFromProdStitching.getPricingExtended().getExtendedPrices()));
                     for (int j = 0; j < extprodPricing_temp.size(); j++) {
+                        if(ignore.contains(j)) continue;
                         String sourceCurrency = dataQualityStitchContext.recordsFromProdExtPrice.get(i).getprice_currency();
                         String trgetCurrency = extprodPricing_temp.get(j).getCurrency();
                         String sourceAmt=dataQualityStitchContext.recordsFromProdExtPrice.get(i).getprice_amount();
@@ -324,8 +320,6 @@ public class ProductExtDataChecksSteps {
                         String trgtCustomCategory= extprodPricing_temp.get(j).getCustomerCategory();
                         String sourceRegion = dataQualityStitchContext.recordsFromProdExtPrice.get(i).getprice_region();
                         String trgtRegion = extprodPricing_temp.get(j).getRegion();
-
-
                         if(sourceCategory==null && sourceCustomCategory==null ){
                             if (sourceCurrency.equals(trgetCurrency)&&(sourceAmt.equals(trgtAmt))){
                                 Log.info("Prod_Ext_Pricing -> EPR => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getepr_id() +
@@ -346,8 +340,6 @@ public class ProductExtDataChecksSteps {
                                             dataQualityStitchContext.recordsFromProdExtPrice.get(i).getproduct_type(),
                                             dataQualityStitchContext.recFromProdStitchAvailExtended.get(0).gettype());
                                 }
-                                System.out.println(prodAvailId + " = sourceCurr-->" + sourceCurrency + " AND " + "targetCurr------>" + trgetCurrency);
-
                                 Log.info("EPR => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getepr_id() +
                                         " Prod_Ext_Price -> Currency => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getprice_currency() +
                                         " Prod_JSON_Price -> Currency => " + extprodPricing_temp.get(j).getCurrency());
@@ -361,13 +353,6 @@ public class ProductExtDataChecksSteps {
                                 Assert.assertEquals("The Amount is incorrect for EPR => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getepr_id(),
                                         dataQualityStitchContext.recordsFromProdExtPrice.get(i).getprice_amount(),
                                         extprodPricing_temp.get(j).getAmount());
-
-                                /*Log.info("EPR => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getepr_id() +
-                                        " Prod_Ext_Price -> CustomerCategory => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getprice_customer_category() +
-                                        " Prod_JSON_Price -> CustomerCategory => " + extprodPricing_temp.get(j).getCustomerCategory());
-                                Assert.assertEquals("The CustomerCategory is incorrect for EPR => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getepr_id(),
-                                        dataQualityStitchContext.recordsFromProdExtPrice.get(i).getprice_customer_category(),
-                                        extprodPricing_temp.get(j).getCustomerCategory());*/
 
                                 Log.info("EPR => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getepr_id() +
                                         " Prod_Ext_Price -> EndDate => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getprice_end_date() +
@@ -389,8 +374,8 @@ public class ProductExtDataChecksSteps {
                                 Assert.assertEquals("The Region is incorrect for EPR => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getepr_id(),
                                         dataQualityStitchContext.recordsFromProdExtPrice.get(i).getprice_region(),
                                         extprodPricing_temp.get(j).getRegion());
-                                System.out.println("--Satisfy Success--");
-                                j = 0;
+                               // j = 0;
+                                ignore.add(j);
                                 break;
                             } else {
                                 j = j++;
@@ -415,7 +400,6 @@ public class ProductExtDataChecksSteps {
                                             dataQualityStitchContext.recordsFromProdExtPrice.get(i).getproduct_type(),
                                             dataQualityStitchContext.recFromProdStitchAvailExtended.get(0).gettype());
                                 }
-                                System.out.println(prodAvailId + " = sourceCurr-->" + sourceCurrency + " AND " + "targetCurr------>" + trgetCurrency);
 
                                 Log.info("EPR => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getepr_id() +
                                         " Prod_Ext_Price -> Currency => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getprice_currency() +
@@ -458,15 +442,12 @@ public class ProductExtDataChecksSteps {
                                 Assert.assertEquals("The Region is incorrect for EPR => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getepr_id(),
                                         dataQualityStitchContext.recordsFromProdExtPrice.get(i).getprice_region(),
                                         extprodPricing_temp.get(j).getRegion());
-
-
-                                System.out.println("--Satisfy Success--");
-                                j = 0;
+                              // j = 0;
+                                ignore.add(j);
                                 break;
                             } else {
                                 j = j++;
                             }
-
                         }else if(sourceCategory!=null && sourceCustomCategory!=null) {
                             if (sourceCurrency.equals(trgetCurrency)&&(sourceAmt.equals(trgtAmt))&&(sourceCategory.equals(trgtCategory))&&(sourceCategory.equals(trgtCategory))) {
                                 Log.info("Prod_Ext_Pricing -> EPR => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getepr_id() +
@@ -477,7 +458,6 @@ public class ProductExtDataChecksSteps {
                                             dataQualityStitchContext.recordsFromProdExtPrice.get(i).getepr_id(),
                                             dataQualityStitchContext.recordsFromProdStitching.getId());
                                 }
-
                                 Log.info(" EPR => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getepr_id() +
                                         " Prod_Ext_Price -> prod_type => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getproduct_type() +
                                         " Prod_JSON_Price -> Type => " + dataQualityStitchContext.recFromProdStitchAvailExtended.get(0).gettype());
@@ -487,8 +467,6 @@ public class ProductExtDataChecksSteps {
                                             dataQualityStitchContext.recordsFromProdExtPrice.get(i).getproduct_type(),
                                             dataQualityStitchContext.recFromProdStitchAvailExtended.get(0).gettype());
                                 }
-                                System.out.println(prodAvailId + " = sourceCurr-->" + sourceCurrency + " AND " + "targetCurr------>" + trgetCurrency);
-
                                 Log.info("EPR => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getepr_id() +
                                         " Prod_Ext_Price -> Currency => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getprice_currency() +
                                         " Prod_JSON_Price -> Currency => " + extprodPricing_temp.get(j).getCurrency());
@@ -537,10 +515,8 @@ public class ProductExtDataChecksSteps {
                                 Assert.assertEquals("The Region is incorrect for EPR => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getepr_id(),
                                         dataQualityStitchContext.recordsFromProdExtPrice.get(i).getprice_region(),
                                         extprodPricing_temp.get(j).getRegion());
-
-
-                                System.out.println("--Satisfy Success--");
-                                j = 0;
+                               // j = 0;
+                                ignore.add(j);
                                 break;
                             } else {
                                 j = j++;
@@ -567,8 +543,6 @@ public class ProductExtDataChecksSteps {
                                             dataQualityStitchContext.recordsFromProdExtPrice.get(i).getproduct_type(),
                                             dataQualityStitchContext.recFromProdStitchAvailExtended.get(0).gettype());
                                 }
-                                System.out.println(prodAvailId + " = sourceCurr-->" + sourceCurrency + " AND " + "targetCurr------>" + trgetCurrency);
-
                                 Log.info("EPR => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getepr_id() +
                                         " Prod_Ext_Price -> Currency => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getprice_currency() +
                                         " Prod_JSON_Price -> Currency => " + extprodPricing_temp.get(j).getCurrency());
@@ -610,8 +584,8 @@ public class ProductExtDataChecksSteps {
                                 Assert.assertEquals("The Region is incorrect for EPR => " + dataQualityStitchContext.recordsFromProdExtPrice.get(i).getepr_id(),
                                         dataQualityStitchContext.recordsFromProdExtPrice.get(i).getprice_region(),
                                         extprodPricing_temp.get(j).getRegion());
-                                System.out.println("--Satisfy Success--");
-                                j = 0;
+                               // j = 0;
+                                ignore.add(j);
                                 break;
                             } else {
                                 j = j++;
