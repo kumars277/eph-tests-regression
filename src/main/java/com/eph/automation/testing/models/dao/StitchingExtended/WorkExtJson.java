@@ -246,6 +246,9 @@ public class WorkExtJson {
         public WorkExtPersonRoleJson[] getWorkExtendedPersons() {return workExtendedPersons;}
     public void setWorkExtendedPersons(WorkExtPersonRoleJson[] workExtendedPersons) {this.workExtendedPersons = workExtendedPersons;}
 
+    private WorkExtRelationshipsJson workExtendedRelationships;
+    public WorkExtRelationshipsJson getWorkExtendedRelationships() {return workExtendedRelationships;}
+    public void setWorkExtendedPersons(WorkExtRelationshipsJson workExtendedRelationships) {this.workExtendedRelationships = workExtendedRelationships;}
 
 }
 

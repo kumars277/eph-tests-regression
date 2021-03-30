@@ -178,6 +178,9 @@ public class StitchingExtDataChecksSQL {
     public static String GET_RANDOM_EPR_WORK_EXT_PERSON_ROLE =
             "select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".work_extended_person_role where delete_flag=false order by rand() limit %s\n";
 
+    public static String GET_RANDOM_EPR_WORK_EXT_RELATIONSHIP_SIBLING =
+            "select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".work_extended_relationship_sibling where delete_flag=false order by rand() limit %s\n";
+
 
     public static String GET_WORK_EXT_METRIC_REC =
             "select epr_id as epr_id\n" +
@@ -237,6 +240,23 @@ public class StitchingExtDataChecksSQL {
 
     public static String GET_WORK_EXT_JSON_REC =
             "select json as json, epr_id as epr_id, type as type from "+GetStitchDLDBUser.getStitchingExtdb()+".stch_work_ext_json WHERE epr_id in ('%s')\n";//EPR-W-102TR5
+
+
+    public static String GET_WORK_EXT_RELATION_SIBLINGS_REC =
+            "select epr_id as epr_id\n" +
+                    ",work_type as work_type\n" +
+                    ",last_updated_date as last_updated_date\n" +
+                    ",related_epr_id  as related_epr_id \n" +
+                    ",related_title as related_title\n" +
+                    ",related_type_code as related_type_code\n" +
+                    ",related_type_name as related_type_name\n" +
+                    ",related_type_roll_up as related_type_roll_up\n" +
+                    ",related_status_code as related_status_code\n" +
+                    ",related_status_name as related_status_name\n" +
+                    ",related_status_roll_up as related_status_roll_up\n" +
+                    ",relationship_code as relationship_code\n" +
+                    ",relationship_name as relationship_name\n" +
+                    " from "+GetStitchDLDBUser.getProdExtDB()+".work_extended_relationship_sibling where epr_id in ('%s') and delete_flag=false\n";  //EPR-W-102TR5
 
 }
 

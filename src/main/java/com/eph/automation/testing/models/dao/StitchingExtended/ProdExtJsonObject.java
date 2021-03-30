@@ -17,7 +17,7 @@ public class ProdExtJsonObject {
 
     private AvailExtJson availabilityExtended;
     public AvailExtJson getAvailabilityExtended() {return availabilityExtended;}
-    public void setAvailabilityExtended(AvailExtJson availExtended) {this.availabilityExtended = availabilityExtended;}
+    public void setAvailabilityExtended(AvailExtJson availabilityExtended) {this.availabilityExtended = availabilityExtended;}
 
     private PricingExtJson pricingExtended;
     public PricingExtJson getPricingExtended() {return pricingExtended;}

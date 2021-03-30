@@ -72,7 +72,65 @@ private String review_quotes;
     private String footnote_txt;
     private String notes_txt;
 
+    private String related_epr_id;
+    private String related_title;
+    private String related_type_code;
+    private String related_type_name;
+    private String related_type_roll_up;
+    private String related_status_code;
+    private String  related_status_name;
+    private String related_status_roll_up;
+    private String relationship_code;
+    private String relationship_name;
 
+    public String getrelated_type_roll_up() { return related_type_roll_up; }
+    public void setrelated_type_roll_up(String related_type_roll_up) {
+        this.related_type_roll_up = related_type_roll_up;
+    }
+
+    public String getrelationship_name() { return relationship_name; }
+    public void setrelationship_name(String relationship_name) {
+        this.relationship_name = relationship_name;
+    }
+
+    public String getrelationship_code() { return relationship_code; }
+    public void setrelationship_code(String relationship_code) {
+        this.relationship_code = relationship_code;
+    }
+
+    public String getrelated_status_roll_up() { return related_status_roll_up; }
+    public void setrelated_status_roll_up(String related_status_roll_up) {
+        this.related_status_roll_up = related_status_roll_up;
+    }
+
+    public String getrelated_status_name() { return related_status_name; }
+    public void setrelated_status_name(String related_status_name) {
+        this.related_status_name = related_status_name;
+    }
+
+    public String getrelated_status_code() { return related_status_code; }
+    public void setrelated_status_code(String related_status_code) {
+        this.related_status_code = related_status_code;
+    }
+
+    public String getrelated_type_name() { return related_type_name; }
+    public void setrelated_type_name(String related_type_name) {
+        this.related_type_name = related_type_name;
+    }
+
+    public String getrelated_type_code() { return related_type_code; }
+    public void setrelated_type_code(String related_type_code) {
+        this.related_type_code = related_type_code;
+    }
+
+    public String getrelated_title() { return related_title; }
+    public void setrelated_title(String related_title) {
+        this.related_title = related_title;
+    }
+    public String getrelated_epr_id() { return related_epr_id; }
+    public void setrelated_epr_id(String related_epr_id) {
+        this.related_epr_id = related_epr_id;
+    }
 
     public String getcore_work_person_role_id() { return core_work_person_role_id; }
     public void setcore_work_person_role_id(String core_work_person_role_id) {
