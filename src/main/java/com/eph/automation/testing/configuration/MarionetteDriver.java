@@ -49,9 +49,18 @@ public class MarionetteDriver implements Provider<WebDriver>{
         final FirefoxOptions firefoxOptions = new FirefoxOptions();
         FirefoxProfile profile = new FirefoxProfile();
 
-        profile.setPreference("pdfjs.disabled", true);
-        profile.setPreference("security.insecure_password.ui.enabled", false);
+        //Set the preference to disable insecure password warning
         profile.setPreference("security.insecure_field_warning.contextual.enabled", false);
+        profile.setPreference("security.insecure_password.ui.enabled", false);
+
+        profile.setPreference("network.http.phishy-userpass-length", 255);
+        profile.setPreference("network.automatic-ntlm-auth.trusted-uris", "https://journal-maestro-v5-eipsit.apps.ose-nonprod.cp.tio.systems");
+
+        profile.setPreference("pdfjs.disabled", true);
+        profile.setPreference("javascript.enabled", true);
+        profile.setAcceptUntrustedCertificates(true);
+        profile.setPreference("webdriver.load.strategy", "fast");
+
 
         final FirefoxBinary firefoxBinary = new FirefoxBinary();
         //firefoxBinary.addCommandLineOptions("--headless");
@@ -60,7 +69,14 @@ public class MarionetteDriver implements Provider<WebDriver>{
         final DesiredCapabilities capabilities = DesiredCapabilities.firefox();
         // This tells the driver is will use marionette (geckodriver)
         capabilities.setCapability("marionette", true);
-        setGeckoDriver();
+
+        String _driver = "\\geckodriver_29.exe";
+        String directoryPath = null;
+        final String osName = System.getProperty("os.name").toLowerCase();
+        if (osName.contains("windows")) {directoryPath = System.getProperty("user.dir");}
+        System.setProperty("webdriver.gecko.driver",directoryPath+_driver);
+
+        //setGeckoDriver();
         final WebDriver driver = new FirefoxDriver(firefoxOptions);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().window().maximize();
@@ -69,13 +85,9 @@ public class MarionetteDriver implements Provider<WebDriver>{
 
     private void setGeckoDriver() {
         String pathToDriver = null;
-
         final String osName = System.getProperty("os.name").toLowerCase();
-
         if (osName.toLowerCase().contains("windows")) {
-
             pathToDriver = System.getProperty("user.dir")+"\\geckodriver.exe";
-
         }
         final File file = new File(pathToDriver);
         System.setProperty("webdriver.gecko.driver", file.getAbsolutePath());

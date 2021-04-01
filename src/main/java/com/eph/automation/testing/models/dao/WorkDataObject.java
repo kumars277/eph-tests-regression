@@ -81,8 +81,9 @@ public class WorkDataObject {
     public void setWORK_TITLE(String WORK_TITLE) {this.WORK_TITLE = WORK_TITLE;}
 
     public String getELECTRONIC_RIGHTS_IND() {
+        if(ELECTRONIC_RIGHTS_IND!=null){
         if(ELECTRONIC_RIGHTS_IND.equalsIgnoreCase("t"))ELECTRONIC_RIGHTS_IND= "True";
-        if(ELECTRONIC_RIGHTS_IND.equalsIgnoreCase("f")) ELECTRONIC_RIGHTS_IND= "False";
+        if(ELECTRONIC_RIGHTS_IND.equalsIgnoreCase("f")) ELECTRONIC_RIGHTS_IND= "False";}
         return ELECTRONIC_RIGHTS_IND;}
 
     public void setELECTRONIC_RIGHTS_IND(String ELECTRONIC_RIGHTS_IND) {this.ELECTRONIC_RIGHTS_IND = ELECTRONIC_RIGHTS_IND;}

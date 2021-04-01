@@ -1,4 +1,4 @@
-package com.eph.automation.testing.web.steps.JMDataLake;
+package com.eph.automation.testing.web.steps.JM;
 // Created by Thomas Kruck on 20/03/20
 
 

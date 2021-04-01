@@ -1,4 +1,4 @@
-package com.eph.automation.testing.web.steps.JMDataLake;
+package com.eph.automation.testing.web.steps.JM;
 
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
@@ -16,9 +16,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
 public class JMTablesDataChecksSteps {

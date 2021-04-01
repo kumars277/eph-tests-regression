@@ -26,11 +26,15 @@ public class WorkExtendedPersons {
     public String getSequenceNumber() {return sequenceNumber;}
     public void setSequenceNumber(String sequenceNumber) {this.sequenceNumber = sequenceNumber;}
 
+    //added by Nishant @ 31 Mar 2021
+    private String coreWorkPersonRoleId;
+    public String getCoreWorkPersonRoleId() {return coreWorkPersonRoleId;}
+    public void setCoreWorkPersonRoleId(String coreWorkPersonRoleId) {this.coreWorkPersonRoleId = coreWorkPersonRoleId;}
+
     public void compareWithDB()
     {
         Assert.assertEquals(extendedRole.get("code"), DataQualityContext.workExtendedTestClass.getWorkExtended().getWorkExtendedPersons());
-        printLog(extendedRole.get("code").toString());
-
+//        printLog(extendedRole.get("code").toString());
     }
 
     private void printLog(String verified){Log.info("verified..."+verified);}

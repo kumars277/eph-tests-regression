@@ -31,7 +31,7 @@ public class DBManager {
         Properties dbProps = new Properties();
         //updated by Nishant @ 15 Mar 2021 for secret manager
         //dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(getDatabaseEnvironmentKey(dbEndPoint)));
-        dbProps.setProperty("jdbcUrl", SecretsManagerHandler.getSecret(dbEndPoint));
+        dbProps.setProperty("jdbcUrl", SecretsManagerHandler.getPostgreDBConnection(dbEndPoint));
 
 
         //Yank.setupConnectionPool("pool", dbProps);
@@ -120,7 +120,7 @@ public class DBManager {
             }
             //updated by Nishant @ 15 Mar 2021 for secret manager
            //connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
-            connection = DriverManager.getConnection(SecretsManagerHandler.getSecret(URL));
+            connection = DriverManager.getConnection(SecretsManagerHandler.getPostgreDBConnection(URL));
 
             QueryRunner query = new QueryRunner();
             mapList = (List) query.query(connection, sql, new MapListHandler());

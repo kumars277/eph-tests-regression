@@ -14,10 +14,7 @@ import net.minidev.json.parser.ParseException;
 import java.util.Base64;
 
 
-
 public class SecretsManagerHandler {
-
-
 
     public static String getPostgreDBConnection(String connectionURL) {
 

@@ -132,9 +132,10 @@ public class workCore {
             printLog("subTitle");
         }
 
-        Assert.assertEquals(Boolean.valueOf(electronicRightsInd), Boolean.valueOf(this.workDataObjectsFromEPHGD.get(0).getELECTRONIC_RIGHTS_IND()));
-        printLog("electronicRightsInd");
-
+        if(electronicRightsInd!=null|this.workDataObjectsFromEPHGD.get(0).getELECTRONIC_RIGHTS_IND()!=null) {
+            Assert.assertEquals(Boolean.valueOf(electronicRightsInd), Boolean.valueOf(this.workDataObjectsFromEPHGD.get(0).getELECTRONIC_RIGHTS_IND()));
+            printLog("electronicRightsInd");
+        }
         if (!(this.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE() == null)) {
             Assert.assertEquals(language.get("code"), this.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE());
             printLog("language code");

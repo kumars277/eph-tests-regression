@@ -1,4 +1,4 @@
-package com.eph.automation.testing.web.steps.JMDataLake;
+package com.eph.automation.testing.web.steps.JM;
 
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;

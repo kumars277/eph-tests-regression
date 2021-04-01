@@ -8,6 +8,7 @@ package com.eph.automation.testing.models.ui;
  */
 import com.eph.automation.testing.configuration.MarionetteDriver;
 import com.eph.automation.testing.configuration.WebDriverFactory;
+import com.eph.automation.testing.helper.Log;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.openqa.selenium.*;
@@ -26,8 +27,8 @@ public class TasksNew {
     @Inject
     public TasksNew() {
        //  this.driver = new MarionetteDriver().getFirefoxDriver();
-          this.driver = new MarionetteDriver().getChromeDriver();
-     //   this.driver=new WebDriverFactory().get();
+       //   this.driver = new MarionetteDriver().getChromeDriver();
+        this.driver=new WebDriverFactory().get();
         this.wait = new WebDriverWait(driver,10);
        // this.pageLoadTimeout=60000;
     }
@@ -58,6 +59,12 @@ public class TasksNew {
         }
     }
 
+public String authenticateUri(String uri)
+{
+    String id="";
+    String pwd = "";
+    return "https://"+id+":"+pwd+"@"+uri;
+}
 
     public void openPage(final String url) {driver.get(url);}
 

@@ -4,7 +4,7 @@ Feature:data check between stitching layer and PF API's
 
   @stitchingData @extendedData
   Scenario Outline: data check for stch_table json with PF APIs
-    Given we get 10 random ids from <stcTable>
+    Given we get 1 random ids from <stcTable>
     And call PF search API for ids and compare with json for <stcTable>
     Examples:
     |stcTable|

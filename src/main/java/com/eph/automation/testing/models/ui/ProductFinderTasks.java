@@ -33,13 +33,9 @@ public class ProductFinderTasks {
     public Properties prop_editorial2 = new Properties();
     public List<Properties> list_people=new ArrayList();
     public Properties prop_links = new Properties();
+
     public void openHomePage() throws InterruptedException {//updated by Nishant @ 18 May 2020
-
-
-
-
-
-        String HomePageAddress="";
+     String HomePageAddress="";
        switch (TestContext.getValues().environment)
        {
            case "SIT":HomePageAddress=Constants.PRODUCT_FINDER_EPH_SIT_UI;break;
@@ -47,13 +43,7 @@ public class ProductFinderTasks {
            case "UAT2":HomePageAddress=Constants.PRODUCT_FINDER_EPH_UAT2_UI;break;
            default:HomePageAddress=Constants.PRODUCT_FINDER_EPH_PROD_UI;break;
        }
-       /*
-        if (TestContext.getValues().environment.equalsIgnoreCase("SIT"))
-            HomePageAddress=Constants.PRODUCT_FINDER_EPH_SIT_UI;
-        else if (TestContext.getValues().environment.equalsIgnoreCase("UAT"))
-            HomePageAddress=Constants.PRODUCT_FINDER_EPH_UAT_UI;
-        else HomePageAddress=Constants.PRODUCT_FINDER_EPH_PROD_UI;
-        */
+
         if(DataQualityContext.uiUnderTest=="JF")HomePageAddress+="journals";
         tasks.openPage(HomePageAddress);
         Thread.sleep(1000);
