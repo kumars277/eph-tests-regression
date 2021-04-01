@@ -67,7 +67,7 @@ public class ManifestationExtDataChecksSteps {
         Log.info(manifId);
         sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_JSON_REC, manifId);
         Log.info(sql);
-        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL2);
+        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         StitchingExtContext.recordsFromManifStitching = new Gson().fromJson(jsonValue.get(0).get("json"), ManifExtJsonObject.class);
     }
 
@@ -75,7 +75,7 @@ public class ManifestationExtDataChecksSteps {
         Log.info("We get the type from Manif Stitching Extended Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_MANIF_EXT_JSON_REC, manifId);
        // Log.info(sql);
-        dataQualityStitchContext.recFromManifStitchExtended = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.EPH_URL2);
+        dataQualityStitchContext.recFromManifStitchExtended = DBManager.getDBResultAsBeanList(sql, ManifestationExtAccessObject.class, Constants.EPH_URL);
     }
 
 

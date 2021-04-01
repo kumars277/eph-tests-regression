@@ -1,4 +1,5 @@
 package com.eph.automation.testing.services.api;
+//updated by Nishant @ 30 Mar 2021 for secret manager EPHD-3045
 
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.api.AccessToken;
@@ -10,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Response.Status;
-
+import net.minidev.json.JSONObject;
 import jdk.nashorn.internal.ir.ObjectNode;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
@@ -23,10 +24,11 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 
-import static com.eph.automation.testing.configuration.Constants.*;
+import static com.eph.automation.testing.configuration.SecretsManagerHandler.getSecretKeyObj;
 
 public class AuthorizationService {
     private static AccessToken token;
+    private static JSONObject secretObject;
 
 //    public static String getAuthToken() {
 //        RestAssured.useRelaxedHTTPSValidation();
@@ -41,11 +43,12 @@ public class AuthorizationService {
 //                .extract().path("access_token");
 //    }
 
-
-
     public static synchronized AccessToken getAuthToken() throws AzureOauthTokenFetchingException
     {
-        if ((token == null) || (!token.isValid(Long.valueOf(expiryOffsetSeconds))))
+        if(secretObject==null){secretObject=getSecretKeyObj("eu-west-1","eph_api_oauth2_token");};
+
+
+        if ((token == null) || (!token.isValid(Long.valueOf(secretObject.getAsString("expiryOffsetSeconds")))))
         {
             Log.info("Oauth Token being Requested");
             token = getAzureAccessTokenFetch();
@@ -55,9 +58,9 @@ public class AuthorizationService {
             Log.info("Oauth Token cached version used");
         }
 
-        if (!token.isValid(Long.valueOf(expiryOffsetSeconds)))
+        if (!token.isValid(Long.valueOf(secretObject.getAsString("expiryOffsetSeconds"))))
         {
-            throw new AzureOauthTokenFetchingException("Could not get a valid token, expiry: " + token.getExpiresOnAsString() + " offset: " + expiryOffsetSeconds);
+            throw new AzureOauthTokenFetchingException("Could not get a valid token, expiry: " + token.getExpiresOnAsString() + " offset: " + secretObject.getAsString("expiryOffsetSeconds"));
         }
 
         return token;
@@ -82,26 +85,32 @@ public class AuthorizationService {
             URI tokenRequestUri = null;
             try
             {
-                tokenRequestUri = URI.create(uriPrefix + tenantId + uriPostfix);
+                tokenRequestUri = URI.create(
+                        secretObject.getAsString("uriPrefix") +
+                                secretObject.getAsString("tenantId") +
+                                secretObject.getAsString("uriPostfix"));
             }
             catch (Exception e)
             {
-                throw new AzureOauthTokenFetchingException("Error creating URI from: " + uriPrefix + tenantId + uriPostfix, e);
+                throw new AzureOauthTokenFetchingException("Error creating URI from: " +
+                        secretObject.getAsString("uriPrefix") +
+                        secretObject.getAsString("tenantId") +
+                        secretObject.getAsString("uriPostfix"), e);
 
             }
 
             RequestConfig config = RequestConfig.custom()
-                    .setConnectTimeout(Integer.parseInt(httptimeoutmilliseconds))
-                    .setConnectionRequestTimeout(Integer.parseInt(httptimeoutmilliseconds))
-                    .setSocketTimeout(Integer.parseInt(httptimeoutmilliseconds))
+                    .setConnectTimeout(Integer.parseInt(secretObject.getAsString("httptimeoutmilliseconds")))
+                    .setConnectionRequestTimeout(Integer.parseInt(secretObject.getAsString("httptimeoutmilliseconds")))
+                    .setSocketTimeout(Integer.parseInt(secretObject.getAsString("httptimeoutmilliseconds")))
                     .build();
             client = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
 
             HttpPost httpPost = new HttpPost(tokenRequestUri);
             List<NameValuePair> params = new ArrayList<>();
             params.add(new BasicNameValuePair("grant_type", "client_credentials"));
-            params.add(new BasicNameValuePair("client_id", clientId));
-            params.add(new BasicNameValuePair("client_secret", clientSecret));
+            params.add(new BasicNameValuePair("client_id", secretObject.getAsString("clientId")));
+            params.add(new BasicNameValuePair("client_secret", secretObject.getAsString("clientSecret")));
             httpPost.setEntity(new UrlEncodedFormEntity(params,StandardCharsets.UTF_8));
 
             try

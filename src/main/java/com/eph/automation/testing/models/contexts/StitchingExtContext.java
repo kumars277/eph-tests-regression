@@ -21,6 +21,7 @@ public class StitchingExtContext {
     public static List<WorkExtAccessObject> recordsFromWorkExtSubjArea;
     public static List<WorkExtAccessObject> recordsFromWorkExtPersRole;
     public static List<WorkExtAccessObject> recordsFromWorkExtRelationSiblings;
+    public static List<WorkExtAccessObject> recordsFromWorkExtEditorial;
     public static List<ManifestationExtAccessObject> recordsFromManifExtRestrict;
     public static List<ManifestationExtAccessObject> recordsFromManifExtRestricts;
     public static List<ManifestationExtAccessObject> recordsFromManifExtPageCounts;

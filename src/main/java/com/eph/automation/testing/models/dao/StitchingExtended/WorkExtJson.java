@@ -248,7 +248,11 @@ public class WorkExtJson {
 
     private WorkExtRelationshipsJson workExtendedRelationships;
     public WorkExtRelationshipsJson getWorkExtendedRelationships() {return workExtendedRelationships;}
-    public void setWorkExtendedPersons(WorkExtRelationshipsJson workExtendedRelationships) {this.workExtendedRelationships = workExtendedRelationships;}
+    public void setWorkExtRelationships(WorkExtRelationshipsJson workExtendedRelationships) {this.workExtendedRelationships = workExtendedRelationships;}
+
+    private WorkExtEditorialBoardJson[] workExtendedEditorialBoard;
+    public WorkExtEditorialBoardJson[] getWorkExtendedEditorialBoard() {return workExtendedEditorialBoard;}
+    public void setWorkExtendedEditorialBoard(WorkExtEditorialBoardJson[] workExtendedEditorialBoard) {this.workExtendedEditorialBoard = workExtendedEditorialBoard;}
 
 }
 

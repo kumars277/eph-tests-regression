@@ -48,7 +48,7 @@ public class WorkExtDataChecksSteps {
         Log.info("Getting Count for Work extended...");
         WorkExtStitchingSQLSourceCount = StitchingExtDataChecksSQL.GET_COUNT_WORK_EXT_STITCH_TABLE;
         Log.info(WorkExtStitchingSQLSourceCount);
-        List<Map<String, Object>> WorkExtStitchingTableCount = DBManager.getDBResultMap(WorkExtStitchingSQLSourceCount, Constants.EPH_URL2);
+        List<Map<String, Object>> WorkExtStitchingTableCount = DBManager.getDBResultMap(WorkExtStitchingSQLSourceCount, Constants.EPH_URL);
         WorkExtStitchingSourceCount = ((Long) WorkExtStitchingTableCount.get(0).get("Target_count")).intValue();
     }
 
@@ -82,8 +82,9 @@ public class WorkExtDataChecksSteps {
             case "work_extended_relationship_sibling":
                 sql = String.format(StitchingExtDataChecksSQL.GET_RANDOM_EPR_WORK_EXT_RELATIONSHIP_SIBLING, numberOfRecords);
                 break;
-
-
+            case "work_extended_editorial_board":
+                sql = String.format(StitchingExtDataChecksSQL.GET_RANDOM_EPR_WORK_EXT_EDITORIAL_BOARD, numberOfRecords);
+                break;
         }
         List<Map<?, ?>> randomWorkExtendedEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
         Ids = randomWorkExtendedEPRIds.stream().map(m -> (String) m.get("epr_id")).collect(Collectors.toList());
@@ -105,7 +106,7 @@ public class WorkExtDataChecksSteps {
         Log.info(workId);
         sql = String.format(StitchingExtDataChecksSQL.GET_WORK_EXT_JSON_REC, workId);
         Log.info(sql);
-        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL2);
+        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         StitchingExtContext.recordsFromWorkStitching = new Gson().fromJson(jsonValue.get(0).get("json"), WorkExtJsonObject.class);
     }
 
@@ -113,7 +114,7 @@ public class WorkExtDataChecksSteps {
         Log.info("We get the type from Work Stitching Extended Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_WORK_EXT_JSON_REC, workId);
         //Log.info(sql);
-        dataQualityStitchContext.recFromWorkTypeStitchExtended = DBManager.getDBResultAsBeanList(sql, WorkExtAccessObject.class, Constants.EPH_URL2);
+        dataQualityStitchContext.recFromWorkTypeStitchExtended = DBManager.getDBResultAsBeanList(sql, WorkExtAccessObject.class, Constants.EPH_URL);
     }
 
     @And("^Compare work Extended and work Extended Stitching Table$")
@@ -1204,7 +1205,7 @@ public class WorkExtDataChecksSteps {
         if (dataQualityStitchContext.recordsFromWorkExtRelationSiblings.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
-            //   List <Integer> ignore = new ArrayList();
+              List <Integer> ignore = new ArrayList();
             for (int i = 0; i < dataQualityStitchContext.recordsFromWorkExtRelationSiblings.size(); i++) {
                 String workId = dataQualityStitchContext.recordsFromWorkExtRelationSiblings.get(i).getepr_id();
                 getWorkExtendedJSONRec(workId);
@@ -1213,7 +1214,7 @@ public class WorkExtDataChecksSteps {
                     //ArrayList<WorkExtRelationshipsJson.ExtendedSiblings> extworkRelation_temp = new ArrayList(Arrays.asList(dataQualityStitchContext.recordsFromWorkStitching.getWorkExtended()));
                     WorkExtRelationshipsJson.ExtendedSiblings[] extworkRelation_temp = dataQualityStitchContext.recordsFromWorkStitching.getWorkExtended().getWorkExtendedRelationships().getExtendedSiblings().clone();
                     for (int j = 0; j < extworkRelation_temp.length; j++) {
-                        //    if(ignore.contains(j)) continue;
+                        if(ignore.contains(j)) continue;
 
                         String sourceRelatId = dataQualityStitchContext.recordsFromWorkExtRelationSiblings.get(i).getrelated_epr_id();
                         String trgetRelateId = extworkRelation_temp[j].getId();
@@ -1307,20 +1308,147 @@ public class WorkExtDataChecksSteps {
                             Assert.assertEquals("The RelationNames is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtRelationSiblings.get(i).getepr_id(),
                                     dataQualityStitchContext.recordsFromWorkExtRelationSiblings.get(i).getrelationship_name(),
                                     extworkRelation_temp[j].getType().get("name"));
-
-
-                            /*  Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id() +
-                                    " Work_Ext_Sub_Area -> Priority => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getpriority() +
-                                    " Work_JSON -> Priority => " + extworkSubj_temp[j].getExtendedSubArea().getPriority());
-                            Assert.assertEquals("The Priority is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id(),
-                                    dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getpriority(),
-                                    extworkSubj_temp[j].getExtendedSubArea().getPriority());
-*/
                             j = 0;
-                            //  ignore.add(j);
+                             ignore.add(j);
                             break;
                         } else {
                             j = j++;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Then("^Get the records from work extended editorial board table$")
+    public void getRecordsFromWorkExtEditorialBoard() {
+        Log.info("We get the records from work Extended editorial board Tables...");
+        sql = String.format(StitchingExtDataChecksSQL.GET_WORK_EXT_EDITORIAL_BOARD_REC, Joiner.on("','").join(Ids));
+        Log.info(sql);
+        dataQualityStitchContext.recordsFromWorkExtEditorial = DBManager.getDBResultAsBeanList(sql, WorkExtAccessObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare work Extended editorial and work Extended Stitching Table$")
+    public void compareWorkExtEditorialAndStitchingWorkExt() {
+        if (dataQualityStitchContext.recordsFromWorkExtEditorial.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            List <Integer> ignore = new ArrayList();
+            for (int i = 0; i < dataQualityStitchContext.recordsFromWorkExtEditorial.size(); i++) {
+                String workId = dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id();
+                getWorkExtendedJSONRec(workId);
+                getWorkType(workId);
+                if (dataQualityStitchContext.recordsFromWorkStitching.getWorkExtended().getWorkExtendedEditorialBoard() != null) {
+                    //ArrayList<WorkExtRelationshipsJson.ExtendedSiblings> extworkRelation_temp = new ArrayList(Arrays.asList(dataQualityStitchContext.recordsFromWorkStitching.getWorkExtended()));
+                    WorkExtEditorialBoardJson[] extworkEditorial_temp = dataQualityStitchContext.recordsFromWorkStitching.getWorkExtended().getWorkExtendedEditorialBoard().clone();
+                    for (int j = 0; j < extworkEditorial_temp.length; j++) {
+                       // if(ignore.contains(j)) continue;
+                        try {
+                            String sourceFirstName = dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getfirst_name();
+                            String trgetFirstName = extworkEditorial_temp[j].getExtendedBoardMember().getFirstName();
+                            String sourceLastName = dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getlast_name();
+                            String trgetLastName = extworkEditorial_temp[j].getExtendedBoardMember().getLastName();
+                            String sourceGrpNumber = dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getgroup_number();
+                            String trgetGrpNumber = extworkEditorial_temp[j].getGroupNumber();
+                            String sourceSeqNumber = dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getsequence_number();
+                            String trgetSeqNumber = extworkEditorial_temp[j].getSequenceNumber();
+                            String sourceAff = dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getaffiliation();
+                            String trgetSeqAff = extworkEditorial_temp[j].getExtendedBoardMember().getAffiliation();
+
+
+                            if (sourceFirstName != null && sourceLastName != null && sourceGrpNumber != null) {
+                                if (sourceFirstName.equals(trgetFirstName) && sourceLastName.equals(trgetLastName)
+                                        && sourceGrpNumber.equals(trgetGrpNumber) && sourceAff.equals(trgetSeqAff)) {
+                                    Log.info("Work_Editorial -> EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id() +
+                                            " Work_JSON -> EPR => " + dataQualityStitchContext.recordsFromWorkStitching.getId());
+                                    if (dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id() != null ||
+                                            (dataQualityStitchContext.recordsFromWorkStitching.getId() != null)) {
+                                        Assert.assertEquals("The EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id() + " is missing/not found in Work_Stiching table",
+                                                dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id(),
+                                                dataQualityStitchContext.recordsFromWorkStitching.getId());
+                                    }
+
+                                    Log.info(" EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id() +
+                                            " Work_Editorial -> work_type => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getwork_type() +
+                                            " Work_JSON -> Type => " + dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
+                                    if (dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getwork_type() != null ||
+                                            (dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype() != null)) {
+                                        Assert.assertEquals("The worktype => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id() + " is missing/not found in Work_Stiching table",
+                                                dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getwork_type(),
+                                                dataQualityStitchContext.recFromWorkTypeStitchExtended.get(0).gettype());
+                                    }
+                                    Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id() +
+                                            " Work_Editorial -> firstName => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getfirst_name() +
+                                            " Work_JSON -> firstName => " + extworkEditorial_temp[j].getExtendedBoardMember().getFirstName());
+                                    Assert.assertEquals("The firstName is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id(),
+                                            dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getfirst_name(),
+                                            extworkEditorial_temp[j].getExtendedBoardMember().getFirstName());
+
+                                    Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id() +
+                                            " Work_Editorial -> lastName => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getlast_name() +
+                                            " Work_JSON -> lastName => " + extworkEditorial_temp[j].getExtendedBoardMember().getLastName());
+                                    Assert.assertEquals("The lastName is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id(),
+                                            dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getlast_name(),
+                                            extworkEditorial_temp[j].getExtendedBoardMember().getLastName());
+
+                                    Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id() +
+                                            " Work_Editorial -> title => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).gettitle() +
+                                            " Work_JSON -> title => " + extworkEditorial_temp[j].getExtendedBoardMember().getTitle());
+                                    Assert.assertEquals("The Title is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id(),
+                                            dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).gettitle(),
+                                            extworkEditorial_temp[j].getExtendedBoardMember().getTitle());
+
+                                    Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id() +
+                                            " Work_Editorial -> Affiliation => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getaffiliation() +
+                                            " Work_JSON -> Affiliation => " + extworkEditorial_temp[j].getExtendedBoardMember().getAffiliation());
+                                    Assert.assertEquals("The Affiliation is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id(),
+                                            dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getaffiliation(),
+                                            extworkEditorial_temp[j].getExtendedBoardMember().getAffiliation());
+
+                                    Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id() +
+                                            " Work_Editorial -> imageUrl => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getimage_url() +
+                                            " Work_JSON -> imageUrl => " + extworkEditorial_temp[j].getExtendedBoardMember().getImageUrl());
+                                    Assert.assertEquals("The imageUrl is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id(),
+                                            dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getimage_url(),
+                                            extworkEditorial_temp[j].getExtendedBoardMember().getImageUrl());
+
+                                    Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id() +
+                                            " Work_Editorial -> notes => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getnotes_txt() +
+                                            " Work_JSON -> notes => " + extworkEditorial_temp[j].getExtendedBoardMember().getNotes());
+                                    Assert.assertEquals("The notes is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id(),
+                                            dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getnotes_txt(),
+                                            extworkEditorial_temp[j].getExtendedBoardMember().getNotes());
+
+                                    Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id() +
+                                            " Work_Editorial -> GroupNumber => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getgroup_number() +
+                                            " Work_JSON -> GroupNumber => " + extworkEditorial_temp[j].getGroupNumber());
+                                    Assert.assertEquals("The GroupNumber     is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id(),
+                                            dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getgroup_number(),
+                                            extworkEditorial_temp[j].getGroupNumber());
+
+                                    Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id() +
+                                            " Work_Editorial -> SequenceNumber => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getsequence_number() +
+                                            " Work_JSON -> SequenceNumber => " + extworkEditorial_temp[j].getSequenceNumber());
+                                    Assert.assertEquals("The notes is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id(),
+                                            dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getsequence_number(),
+                                            extworkEditorial_temp[j].getSequenceNumber());
+
+                                    Log.info("EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id() +
+                                            " Work_Editorial -> Role_Code => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getrole_code() +
+                                            " Work_JSON -> Role_Code => " + extworkEditorial_temp[j].getExtendedBoardRole().getCode());
+                                    Assert.assertEquals("The Role_Code is incorrect for EPR => " + dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id(),
+                                            dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getrole_code(),
+                                            extworkEditorial_temp[j].getExtendedBoardRole().getCode());
+                                    j = 0;
+                                    // ignore.add(j);
+                                    break;
+                                } else {
+                                    j = j++;
+                                }
+
+                            }
+                        }catch (NullPointerException e){
+                            System.out.println(e);
                         }
                     }
                 }

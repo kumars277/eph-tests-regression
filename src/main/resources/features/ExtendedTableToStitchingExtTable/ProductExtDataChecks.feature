@@ -9,7 +9,7 @@ Feature:Validate data for  Product Ext Stitching tables in EPH
     Then Compare Product Extended Availability and Product Extended Stitching JSON
     Examples:
       |tableName                                   |countOfRandomIds|
-      |product_extended_availability               |50                 |
+      |product_extended_availability               |10                 |
 
 
   @ExtStitching
@@ -19,7 +19,7 @@ Feature:Validate data for  Product Ext Stitching tables in EPH
     Then Compare Product Extended Pricing and Product Extended Stitching JSON
     Examples:
       |tableName                                   |countOfRandomIds|
-      |product_extended_pricing                    |50                |
+      |product_extended_pricing                    |10                |
 
 
 

@@ -181,6 +181,9 @@ public class StitchingExtDataChecksSQL {
     public static String GET_RANDOM_EPR_WORK_EXT_RELATIONSHIP_SIBLING =
             "select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".work_extended_relationship_sibling where delete_flag=false order by rand() limit %s\n";
 
+    public static String GET_RANDOM_EPR_WORK_EXT_EDITORIAL_BOARD =
+            "select epr_id as epr_id from "+GetStitchDLDBUser.getProdExtDB()+".work_extended_editorial_board where delete_flag=false order by rand() limit %s\n";
+
 
     public static String GET_WORK_EXT_METRIC_REC =
             "select epr_id as epr_id\n" +
@@ -257,6 +260,24 @@ public class StitchingExtDataChecksSQL {
                     ",relationship_code as relationship_code\n" +
                     ",relationship_name as relationship_name\n" +
                     " from "+GetStitchDLDBUser.getProdExtDB()+".work_extended_relationship_sibling where epr_id in ('%s') and delete_flag=false\n";  //EPR-W-102TR5
+
+    public static String GET_WORK_EXT_EDITORIAL_BOARD_REC =
+            "select epr_id as epr_id\n" +
+                    ",work_type as work_type\n" +
+                    ",last_updated_date as last_updated_date\n" +
+                    ",role_code as role_code\n" +
+                    ",role_name as role_name\n" +
+                    ",sequence_number as sequence_number\n" +
+                    ",group_number as group_number\n" +
+                    ",first_name as first_name\n" +
+                    ",last_name as last_name\n" +
+                    ",title as title\n" +
+                    ",honours as honours\n" +
+                    ",affiliation as affiliation\n" +
+                    ",image_url as image_url \n" +
+                    ",footnote_txt as footnote_txt\n" +
+                    ",notes_txt as notes_txt\n" +
+                    " from "+GetStitchDLDBUser.getProdExtDB()+".work_extended_editorial_board where epr_id in ('%s') and delete_flag=false\n";  //EPR-W-102TR5
 
 }
 

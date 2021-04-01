@@ -9,7 +9,7 @@ Feature:Validate data for  Manifestation Ext Stitching tables in EPH
     Then Compare Manif Extended and Manif Extended Stitching Table
     Examples:
       |tableName                   |countOfRandomIds|
-      |manifestation_extended      |20                 |
+      |manifestation_extended      |10                 |
 
   @ExtStitching
   Scenario Outline: Verify Data from the Manif_extended page count tables transferred to Manif Extended Stitching table

@@ -83,6 +83,7 @@ private String review_quotes;
     private String relationship_code;
     private String relationship_name;
 
+
     public String getrelated_type_roll_up() { return related_type_roll_up; }
     public void setrelated_type_roll_up(String related_type_roll_up) {
         this.related_type_roll_up = related_type_roll_up;

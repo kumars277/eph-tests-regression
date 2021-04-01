@@ -60,7 +60,7 @@ public class ProductExtDataChecksSteps {
         Log.info("We get the type from Prod Stitching Extended Availability Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_PROD_EXT_AVAIL_JSON_REC, ProdAvailId);
        // Log.info(sql);
-        dataQualityStitchContext.recFromProdStitchAvailExtended = DBManager.getDBResultAsBeanList(sql, ProductExtAccessObject.class, Constants.EPH_URL2);
+        dataQualityStitchContext.recFromProdStitchAvailExtended = DBManager.getDBResultAsBeanList(sql, ProductExtAccessObject.class, Constants.EPH_URL);
     }
 
   /*  public void getIndividualRecFromProdExtAvailTable(String prodAvailId) {
@@ -76,7 +76,7 @@ public class ProductExtDataChecksSteps {
         Log.info(prodAvailId);
         sql = String.format(StitchingExtDataChecksSQL.GET_PROD_EXT_AVAIL_JSON_REC, prodAvailId);
         Log.info(sql);
-        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL2);
+        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         StitchingExtContext.recordsFromProdStitching = new Gson().fromJson(jsonValue.get(0).get("json"), ProdExtJsonObject.class);
     }
 
@@ -283,7 +283,7 @@ public class ProductExtDataChecksSteps {
         Log.info("We get the type from Prod Stitching Extended Availability Tables...");
         sql = String.format(StitchingExtDataChecksSQL.GET_PROD_EXT_PRICING_JSON_REC, ProdAvailId);
         // Log.info(sql);
-        dataQualityStitchContext.recFromProdStitchAvailExtended = DBManager.getDBResultAsBeanList(sql, ProductExtAccessObject.class, Constants.EPH_URL2);
+        dataQualityStitchContext.recFromProdStitchAvailExtended = DBManager.getDBResultAsBeanList(sql, ProductExtAccessObject.class, Constants.EPH_URL);
     }
 
     public void getProdExtendedPricingJSONRec(String prodAvailId) {
@@ -291,7 +291,7 @@ public class ProductExtDataChecksSteps {
         Log.info(prodAvailId);
         sql = String.format(StitchingExtDataChecksSQL.GET_PROD_EXT_PRICING_JSON_REC, prodAvailId);
         Log.info(sql);
-        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL2);
+        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         StitchingExtContext.recordsFromProdStitching = new Gson().fromJson(jsonValue.get(0).get("json"), ProdExtJsonObject.class);
     }
 
