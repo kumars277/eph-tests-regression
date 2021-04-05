@@ -2,7 +2,7 @@ Feature:Validate data for DPP tables between EPH and Data Lake - Outbound
 
 #  Created by Thomas Kruck on 12/03/2020
 
-  @DLDDP
+  @DLD
   Scenario Outline: Verify the count for all DPP data tables from DPP to DL
     Given We know the number of DPP <tableName> data in EPH
     When The DPP <tableName> data is in the DL
@@ -18,7 +18,7 @@ Feature:Validate data for DPP tables between EPH and Data Lake - Outbound
     | package_item       |
     | package_item_audit |
 
-  @DLDDP
+  @DLD
   Scenario Outline: Validate DPP Table data is transferred from EPH to DL Outbound
     Given We get <countOfRandomIds> random DPP ids of <tableName>
     When We get the DPP <tableName> records from EPH

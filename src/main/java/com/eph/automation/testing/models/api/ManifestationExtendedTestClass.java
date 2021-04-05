@@ -1,7 +1,8 @@
-package com.eph.automation.testing.models.dao.StitchingExtended;
+package com.eph.automation.testing.models.api;
 
-//package com.eph.automation.testing.models.api;
-public class WorkExtJsonObject {
+import org.apache.xmlbeans.impl.xb.xsdschema.Public;
+
+public class ManifestationExtendedTestClass {
 
     private String schemaVersion;
     public String getSchemaVersion() {return schemaVersion;}
@@ -15,7 +16,7 @@ public class WorkExtJsonObject {
     public String getId() {return id;}
     public void setId(String id) {this.id = id;}
 
-    private WorkExtJson workExtended;
-    public WorkExtJson getWorkExtended() {return workExtended;}
-    public void setWorkExtended(WorkExtJson workExtended) {this.workExtended = workExtended;}
+    private ManifestationExtended manifestationExtended;
+    public ManifestationExtended getManifestationExtended() {return manifestationExtended;}
+    public void setManifestationExtended(ManifestationExtended manifestationExtended) {this.manifestationExtended = manifestationExtended;}
 }

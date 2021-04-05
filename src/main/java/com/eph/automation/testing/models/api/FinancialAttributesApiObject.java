@@ -47,8 +47,7 @@ public class FinancialAttributesApiObject {
 
 
     public void compareWithDB(String workID){
-        Log.info("verifying below financial attributes for work... "+workID);
-
+        Log.info("verifying financial attributes for work... "+workID);
         getFinancialData(workID);
         Assert.assertEquals(financialAttribs.financialDataFromGD.get(0).getGl_company(), this.glCompany.get("code"));
         printLog("glCompany code");

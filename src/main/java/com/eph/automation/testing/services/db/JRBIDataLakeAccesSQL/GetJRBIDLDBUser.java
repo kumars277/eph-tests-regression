@@ -13,8 +13,8 @@ public class GetJRBIDLDBUser {
             }
 
         }else{
-           dbJRBIDL = "jrbi_staging_sit";
-           // dbJRBIDL = "jrbi_staging_uat";
+            dbJRBIDL = "jrbi_staging_sit";
+          //  dbJRBIDL = "jrbi_staging_uat";
         }
         return dbJRBIDL;
     }
@@ -61,8 +61,8 @@ public class GetJRBIDLDBUser {
                 dbProdExtdb = "product_ext_database_uat";
             }
         }else{
-           dbProdExtdb = "product_ext_database_sit";
-           //dbProdExtdb = "product_ext_database_uat";
+            dbProdExtdb = "product_ext_database_sit";
+          //  dbProdExtdb = "product_ext_database_uat";
         }
         return dbProdExtdb;
     }
@@ -77,8 +77,8 @@ public class GetJRBIDLDBUser {
                 dbStitching = "ephuat_extended_data_stitch";
             }
         }else{
-            dbStitching = "ephsit_extended_data_stitch";
-          // dbStitching = "ephuat_extended_data_stitch";
+            //dbStitching = "ephsit_extended_data_stitch";
+            dbStitching = "ephuat_extended_data_stitch";
         }
         return dbStitching;
     }

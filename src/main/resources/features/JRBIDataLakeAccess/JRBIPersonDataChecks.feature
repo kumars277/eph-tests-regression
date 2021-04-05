@@ -10,7 +10,7 @@ Feature:Validate data for JRBI Person tables in Data Lake
     And   Compare the records of person full load and current person
     Examples:
       | tableName                        |    countOfRandomIds|
-      |jrbi_journal_data_full             |1000              |
+      |jrbi_journal_data_full             |10                 |
 
 
   @JRBI

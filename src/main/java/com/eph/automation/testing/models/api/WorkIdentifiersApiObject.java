@@ -45,9 +45,9 @@ public class WorkIdentifiersApiObject {
     }
 
     public void compareWithDB(){
-        Log.info("verifiying work identifiers... "+this.identifier);
         getWorkIdentifierByID(this.identifier);
+        Log.info("verifiying work identifiers... "+this.DBworkIdentifier.get(0).getF_TYPE());
         Assert.assertEquals(this.identifierType.get("code"), this.DBworkIdentifier.get(0).getF_TYPE());
-        Log.info("verified...work identifier type");
+        Log.info("verified identifier ..."+this.identifier);
     }
 }

@@ -60,10 +60,10 @@ public class JRBIPersonDataChecksSQL {
                     ", j.role_description role_description, p.given_name given_name\n" +
                     ", p.family_name family_name, p.peoplehub_id peoplehub_id\n" +
                     ", j.email email\n" +
-                    "FROM ((("+GetBCS_ETLCoreDLDBUser.getJRBIDataBase()+".jrbi_person_unpivot_v j \n" +
-                    "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getProductDatabase()+".workday_reference_v p ON (j.email = p.email)) \n" +
-                    "LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr1 ON ((((j.issn = cr1.identifier) AND (cr1.identifier_type = 'ISSN')) AND (cr1.record_level = 'n')) AND (cr1.record_level = 'Work')))\n" +
-                     "LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work'))))\n" +
+                    "FROM ((("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_person_unpivot_v j \n" +
+                    "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (j.email = p.email)) \n" +
+                    "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr1 ON ((((j.issn = cr1.identifier) AND (cr1.identifier_type = 'ISSN')) AND (cr1.record_level = 'n')) AND (cr1.record_level = 'Work')))\n" +
+                     "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work'))))\n" +
                     "where EPR in ('%s')";*/
 
             "select epr as EPR" +
@@ -134,7 +134,7 @@ public class JRBIPersonDataChecksSQL {
                     ",type as TYPE" +
                     ",delta_mode as DELTA_MODE" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_person_history_part where EPR in ('%s') AND " +
-                    //"delta_ts like \'%%"+BCS_ETLCoreCountChecksSQL.previousDate()+"%%\'";
+                    //"delta_ts like \'%%"+JRBIDataLakeCountChecksSQL.previousDate()+"%%\'";
                     "delta_ts=(select max(delta_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_person_history_part)\n ";
 
 
@@ -170,7 +170,7 @@ public class JRBIPersonDataChecksSQL {
                     ",peoplehub_id as PEOPLEHUB_ID" +
                     ",email as EMAIL" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part where EPR in ('%s') AND " +
-                    //"transform_ts like \'%%"+BCS_ETLCoreCountChecksSQL.currentDate()+"%%\' " +
+                    //"transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\' " +
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part)\n " +
                     "and delete_flag=false";
 
@@ -185,7 +185,7 @@ public class JRBIPersonDataChecksSQL {
                     ",peoplehub_id as PEOPLEHUB_ID" +
                     ",email as EMAIL" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part where EPR in ('%s') AND " +
-                    //"transform_ts like \'%%"+BCS_ETLCoreCountChecksSQL.previousDate()+"%%\'";
+                    //"transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.previousDate()+"%%\'";
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part\n " +
                     "where transform_ts < (select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part))\n";
 
@@ -197,7 +197,7 @@ public class JRBIPersonDataChecksSQL {
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person B on A.u_key  = B.u_key\n" +
                     "where B.u_key is null and " +
-                   // "A.transform_ts like \'%%"+BCS_ETLCoreCountChecksSQL.currentDate()+"%%\')\n" +
+                   // "A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\')\n" +
                     "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A))\n " +
                     " order by rand() limit %s\n";
 
@@ -218,7 +218,7 @@ public class JRBIPersonDataChecksSQL {
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person B on A.u_key  = B.u_key\n" +
                     "where B.u_key is null and " +
-                   // "A.transform_ts like \'%%"+BCS_ETLCoreCountChecksSQL.currentDate()+"%%\' " +
+                   // "A.transform_ts like \'%%"+JRBIDataLakeCountChecksSQL.currentDate()+"%%\' " +
                     "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A)\n " +
                     "AND A.epr in ('%s'))\n";
 

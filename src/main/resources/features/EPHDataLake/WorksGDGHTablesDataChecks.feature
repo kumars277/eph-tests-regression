@@ -50,7 +50,7 @@ Feature:Validate data for Work tables between EPH and Data Lake - Outbound
       | 100               | gd_work_relationship|
       | 100                | gh_work_relationship|
 
-  @DLD
+  @DLw
   Scenario Outline: Validate data is transferred from work_subject_area_link EPH to DL Outbound
     Given We get <countOfRandomIds> random work ids of <table>
     When We get the work subject from EPH of <table>
@@ -62,7 +62,7 @@ Feature:Validate data for Work tables between EPH and Data Lake - Outbound
       | 100                | gh_work_subject_area_link|
 
 
-  @DLD
+  @DLw
   Scenario Outline: Validate data is transferred from work_copyright_owner_link EPH to DL Outbound
     Given We get <countOfRandomIds> random work ids of <table>
     When We get the work copyright from EPH of <table>
@@ -74,7 +74,7 @@ Feature:Validate data for Work tables between EPH and Data Lake - Outbound
       | 100                | gh_work_copyright_owner_link|
 
 
-  @DLD
+  @DLw
   Scenario Outline: Validate data is transferred from work_relationship_edition EPH to DL Outbound
     Given We get <countOfRandomIds> random work ids of <table>
     When We get the work relationship_edition from EPH of <table>
