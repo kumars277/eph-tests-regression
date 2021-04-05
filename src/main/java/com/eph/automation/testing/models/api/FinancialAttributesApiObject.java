@@ -19,7 +19,7 @@ import java.util.HashMap;
 
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class FinancialAttributesApiObject {
+public class FinancialAttributesApiObject {
     @StaticInjection
     private FinancialAttribsContext financialAttribs;
     public FinancialAttributesApiObject() {}

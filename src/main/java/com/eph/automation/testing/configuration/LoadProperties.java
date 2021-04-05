@@ -2,7 +2,6 @@ package com.eph.automation.testing.configuration;
 
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.services.security.DecryptionService;
-
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Properties;
@@ -17,14 +16,16 @@ public class LoadProperties {
 
     private static void findPropertiesFile() {
         //below line need to enable when running in jenkins.
-
-   propertiesFile = System.getProperty("user.dir") + "/src/main/resources/" + (System.getProperty("ENV") == null || "".equals(System.getProperty("ENV")) ? "SIT" : System.getProperty("ENV")) + ".properties";
-     // propertiesFile = System.getProperty("user.dir") + "/src/main/resources/SIT.properties";
-       // propertiesFile = System.getProperty("user.dir") + "/src/main/resources/UAT.properties";
+    //    System.setProperty("ENV","SIT");
 
 
-        Log.info("Environment used for the testing: " + System.getProperty("ENV"));
-        Log.info(("Properties.file: " + propertiesFile));
+        propertiesFile = System.getProperty("user.dir") + "/src/main/resources/" + (System.getProperty("ENV") == null || "".equals(System.getProperty("ENV")) ? "UAT" : System.getProperty("ENV")) + ".properties";
+        // propertiesFile = System.getProperty("user.dir") + "/src/main/resources/SIT.properties";
+        // propertiesFile = System.getProperty("user.dir") + "/src/main/resources/UAT.properties";
+      //  Log.info("Environment used for the testing: " + System.getProperty("ENV"));
+        // Log.info(("Properties.file: " + propertiesFile));
+
+
     }
 
     private static void initialise() {

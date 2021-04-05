@@ -88,7 +88,7 @@ public class Constants {
     public static final String AUTHORIZATION_HEADER = "X-ADFS-JWT"; //for v1 API
     //public static final String AUTHORIZATION_HEADER = "X-JWT-Assertion"; //for v2 API
 
-    public static String ENCRYPTION_PASSWORD = "CMXEncrypt$";
+    public static String ENCRYPTION_PASSWORD = "encryptionPassword";
 
     //Wiremock
     public static String WIRE_MOCK_END_POINT = "http://10.48.67.42:8080/api/";

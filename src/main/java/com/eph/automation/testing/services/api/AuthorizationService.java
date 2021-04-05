@@ -87,8 +87,8 @@ public class AuthorizationService {
             {
                 tokenRequestUri = URI.create(
                         secretObject.getAsString("uriPrefix") +
-                                secretObject.getAsString("tenantId") +
-                                secretObject.getAsString("uriPostfix"));
+                        secretObject.getAsString("tenantId") +
+                        secretObject.getAsString("uriPostfix"));
             }
             catch (Exception e)
             {

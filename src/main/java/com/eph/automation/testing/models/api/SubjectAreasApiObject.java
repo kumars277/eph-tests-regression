@@ -1,6 +1,7 @@
 package com.eph.automation.testing.models.api;
 /**
  * Created by GVLAYKOV
+ * updated by Nishant @ 16 Feb 2021, EPHD-2747
  */
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
@@ -13,12 +14,30 @@ import org.junit.Assert;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class SubjectAreasApiObject {
+public class SubjectAreasApiObject {
 
     public static List<SubjectAreaDataObject> subjectAreaDataObjectsFromGD_child;
     public static List<SubjectAreaDataObject> subjectAreaDataObjectsFromGD_parent;
-    public SubjectAreasApiObject() {
-    }
+    public SubjectAreasApiObject() {}
+
+    private SubjectAreaApiObject subjectArea;
+    public SubjectAreaApiObject getSubjectArea() {return subjectArea;}
+    public void setSubjectArea(SubjectAreaApiObject subjectArea) {this.subjectArea = subjectArea;}
+
+    private String effectiveStartDate;
+    public String getEffectiveStartDate() {return effectiveStartDate;}
+    public void setEffectiveStartDate(String effectiveStartDate) {this.effectiveStartDate = effectiveStartDate;}
+
+    private String effectiveEndDate;
+    public String getEffectiveEndDate() {return effectiveEndDate;}
+    public void setEffectiveEndDate(String effectiveEndDate) {this.effectiveEndDate = effectiveEndDate;}
+
+    private Boolean primaryInd;
+    public Boolean getPrimaryInd() {return primaryInd;}
+    public void setPrimaryInd(Boolean primaryInd) {this.primaryInd = primaryInd;}
+
+
+
     public void compareWithDB(String workID){
         getSubjectAreaDataEPHGDbyCodeAndWorkid(this.subjectArea.getCode(), workID);
         Assert.assertEquals(this.subjectArea.getName(), subjectAreaDataObjectsFromGD_child.get(0).getSUBJECT_AREA_NAME());
@@ -28,43 +47,6 @@ class SubjectAreasApiObject {
 
     }
 
-    public SubjectAreaApiObject getSubjectArea() {
-        return subjectArea;
-    }
-
-    public void setSubjectArea(SubjectAreaApiObject subjectArea) {
-        this.subjectArea = subjectArea;
-    }
-
-    public Boolean getPrimaryInd() {
-        return primaryInd;
-    }
-
-    public void setPrimaryInd(Boolean primaryInd) {
-        this.primaryInd = primaryInd;
-    }
-
-    public String getEffectiveStartDate() {
-        return effectiveStartDate;
-    }
-
-    public void setEffectiveStartDate(String effectiveStartDate) {
-        this.effectiveStartDate = effectiveStartDate;
-    }
-
-    private SubjectAreaApiObject subjectArea;
-    private Boolean primaryInd;
-    private String effectiveStartDate;
-
-    public String getEffectiveEndDate() {
-        return effectiveEndDate;
-    }
-
-    public void setEffectiveEndDate(String effectiveEndDate) {
-        this.effectiveEndDate = effectiveEndDate;
-    }
-
-    private String effectiveEndDate;
 
     private void getSubjectAreaDataEPHGDbyCodeAndWorkid(String code, String workID) {
         Log.info("Get the subject area data from EPH GD  ..");

@@ -15,6 +15,7 @@ import com.eph.automation.testing.services.db.sql.PersonDataSQL;
 import com.eph.automation.testing.services.db.sql.PersonWorkRoleDataSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
+import net.minidev.json.parser.ParseException;
 import org.junit.Assert;
 
 import java.util.HashMap;
@@ -27,7 +28,7 @@ class PersonsApiObject {
 
     private String id;
     private HashMap<String, Object> role;
-    private HashMap<String, Object> person;
+    private HashMap<String, String> person;
     private String effectiveStartDate;
     private String effectiveEndDate;
 
@@ -37,8 +38,8 @@ class PersonsApiObject {
     public HashMap<String, Object> getRole() {return role;}
     public void setRole(HashMap<String, Object> role) {this.role = role;}
 
-    public HashMap<String, Object> getPerson() {return person;}
-    public void setPerson(HashMap<String, Object> person) {this.person = person;}
+    public HashMap<String, String> getPerson() {return person;}
+    public void setPerson(HashMap<String, String> person) {this.person = person;}
 
     public String getEffectiveStartDate(){return effectiveStartDate;}
     public void setEffectiveStartDate(String effectiveStartDate){this.effectiveStartDate=effectiveStartDate;}
@@ -62,7 +63,7 @@ class PersonsApiObject {
         dataQualityContext.personDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
     }
 
-    public void compareWithDB_product(){
+    public void compareWithDB_product() {
         //created by Nishant @ 22 Nov 2019
         //Updated by Nishant @ 30 Apr 2020
         Log.info("verifying product person... "+this.id);
@@ -90,7 +91,7 @@ class PersonsApiObject {
         printLog("email");
     }
 
-    public void compareWithDB_work(){
+    public void compareWithDB_work() {
         //Updated by Nishant @ 22 Nov 2019
         Log.info("verifiying work person... "+this.id);
         if(dataQualityContext.personDataObjectsFromEPHGD!=null){dataQualityContext.personDataObjectsFromEPHGD.clear();}

@@ -8,53 +8,71 @@ import java.util.Objects;
  */
 public class WorkDataObject {
 
-    private String PARENT_ACC_PROD;
-    private String PRIMARY_ISBN;
+
+    private String WORK_ID;
+    private String F_WWORK;
+    private String B_CLASSNAME;
+    private String UPDATED;
+    private String EXTERNAL_REFERENCE;
     private String WORK_TITLE;
     private String WORK_SUBTITLE;
-    private String PRODUCT_ID;
-    private String IDENTIFIER;
-    private String DAC_KEY;
-    private String PROJECT_NUM;
-    private String ISSN_L;
-    private String JOURNAL_NUMBER;
     private String ELECTRONIC_RIGHTS_IND;
-    private String BOOK_EDITION_NAME;
     private String BOOK_VOLUME_NAME;
-    private String PMC;
-    private String PMG;
-    private String WORK_ID;
-    private String WORK_STATUS;
-    private String WORK_SUBSTATUS;
+    private String VOLUME;
+    private String COPYRIGHT_YEAR;
+    private String BOOK_EDITION_NAME;
+    private String EDITION_NUMBER;
+    private String PLANNED_LAUNCH_DATE;
+    private String ACTUAL_LAUNCH_DATE;
+    private String PLANNED_DISCONTINUE_DATE;
+    private String ACTUAL_DISCONTINUE_DATE;
+    private String SUMMARY_CHANGED;
+    private String EVENT_DESCRIPTION;
+    private String F_TYPE;
     private String WORK_TYPE;
-    private String IMPRINT;
+    private String WORK_SUBSTATUS;
+    private String WORK_STATUS;
+    private String f_accountable_product;
+    private String PMC;
     private String OPEN_ACCESS_JNL_TYPE_CODE;
     private String OPEN_ACCESS_TYPE;
+    private String IMPRINT;
+    private String LEGAL_OWNERSHIP;
+    private String SOCIETY_OWNERSHIP;
+    private String SUBSCRIPTION_TYPE;
+    private String LANGUAGE_CODE;
+    private String F_EVENT;
+
+    private String PRODUCT_ID;
     private String PRODUCT_WORK_ID;
+    private String PRODUCT_WORK_PUB_DATE;
+    private String PARENT_ACC_PROD;
+    private String PROJECT_NUM;
+    private String IDENTIFIER;
+    private String PRIMARY_ISBN;
+    private String ISSN_L;
+    private String DAC_KEY;
+    private String JOURNAL_NUMBER;
+    private String JOURNAL_ACRONYM;
     private String F_ACC_PROD_HIERARCHY;
     private String F_RESPONSIBILITY_CENTRE;
     private String F_OPCO_R12;
-    private String PRODUCT_WORK_PUB_DATE;
-    private String JOURNAL_ACRONYM;
-    private String f_accountable_product;
-    private String UPDATED;
-    private int VOLUME;
-    private int EDITION_NUMBER;
-    private int COPYRIGHT_YEAR;
-    private String ACC_PROD_ID;
     private String B_LOADID;
-    private String F_EVENT;
-    private String B_CLASSNAME;
-    private String F_WWORK;
-    private String IDENTIFER;
     private String SA;
     private String STG;
     private String RECORD_END_DATE;
-    private String LANGUAGE_CODE;
-    private String SUBSCRIPTION_TYPE;
     private int PMX_SOURCE_REFERENCE;
     private String OWNERSHIP;
-    private String F_TYPE;
+    private String PMG;
+
+    //for Data Model Changes: created by Nishant @ 11 Jun 2020 for
+    public String getPLANNED_LAUNCH_DATE() {return PLANNED_LAUNCH_DATE;}
+    public void setPLANNED_LAUNCH_DATE(String PLANNED_LAUNCH_DATE) {this.PLANNED_LAUNCH_DATE = PLANNED_LAUNCH_DATE;}
+
+    public String getLEGAL_OWNERSHIP() {return LEGAL_OWNERSHIP;}
+    public void setLEGAL_OWNERSHIP(String LEGAL_OWNERSHIP) {this.LEGAL_OWNERSHIP = LEGAL_OWNERSHIP;}
+
+
 
     public String getPRODUCT_ID() {return PRODUCT_ID;}
     public void setPRODUCT_ID(String PRODUCT_ID) {this.PRODUCT_ID = PRODUCT_ID;}
@@ -62,10 +80,10 @@ public class WorkDataObject {
     public String getWORK_TITLE() {return WORK_TITLE;}
     public void setWORK_TITLE(String WORK_TITLE) {this.WORK_TITLE = WORK_TITLE;}
 
-    public String getELECTRONIC_RIGHTS_IND()
-    {
+    public String getELECTRONIC_RIGHTS_IND() {
+        if(ELECTRONIC_RIGHTS_IND!=null){
         if(ELECTRONIC_RIGHTS_IND.equalsIgnoreCase("t"))ELECTRONIC_RIGHTS_IND= "True";
-        if(ELECTRONIC_RIGHTS_IND.equalsIgnoreCase("f")) ELECTRONIC_RIGHTS_IND= "False";
+        if(ELECTRONIC_RIGHTS_IND.equalsIgnoreCase("f")) ELECTRONIC_RIGHTS_IND= "False";}
         return ELECTRONIC_RIGHTS_IND;}
 
     public void setELECTRONIC_RIGHTS_IND(String ELECTRONIC_RIGHTS_IND) {this.ELECTRONIC_RIGHTS_IND = ELECTRONIC_RIGHTS_IND;}
@@ -78,9 +96,6 @@ public class WorkDataObject {
 
     public String getIDENTIFIER() {return IDENTIFIER;}
     public void setIDENTIFIER(String IDENTIFIER) {this.IDENTIFIER = IDENTIFIER;}
-
-    public String getIDENTIFER() {return IDENTIFER;}
-    public void setIDENTIFER(String IDENTIFER) {this.IDENTIFER = IDENTIFER;}
 
     public String getPRIMARY_ISBN() {return PRIMARY_ISBN;}
     public void setPRIMARY_ISBN(String PRIMARY_ISBN) {this.PRIMARY_ISBN = PRIMARY_ISBN;}
@@ -163,23 +178,20 @@ public class WorkDataObject {
     public String getUPDATED() {return UPDATED;}
     public void setUPDATED(String UPDATED) {this.UPDATED = UPDATED;}
 
-    public int getVOLUME() {return VOLUME;}
-    public void setVOLUME(int VOLUME) {this.VOLUME = VOLUME;}
+    public String getVOLUME() {return VOLUME;}
+    public void setVOLUME(String VOLUME) {this.VOLUME = VOLUME;}
 
-    public int getEDITION_NUMBER() {return EDITION_NUMBER;}
-    public void setEDITION_NUMBER(int EDITION_NUMBER) {this.EDITION_NUMBER = EDITION_NUMBER;}
+    public String getEDITION_NUMBER() {return EDITION_NUMBER;}
+    public void setEDITION_NUMBER(String EDITION_NUMBER) {this.EDITION_NUMBER = EDITION_NUMBER;}
 
-    public int getCOPYRIGHT_YEAR() {return COPYRIGHT_YEAR;}
-    public void setCOPYRIGHT_YEAR(int COPYRIGHT_YEAR) {this.COPYRIGHT_YEAR = COPYRIGHT_YEAR;}
+    public String getCOPYRIGHT_YEAR() {return COPYRIGHT_YEAR;}
+    public void setCOPYRIGHT_YEAR(String COPYRIGHT_YEAR) {this.COPYRIGHT_YEAR = COPYRIGHT_YEAR;}
 
     public int getPMX_SOURCE_REFERENCE() {return PMX_SOURCE_REFERENCE;}
     public void setPMX_SOURCE_REFERENCE(int PMX_SOURCE_REFERENCE) {this.PMX_SOURCE_REFERENCE = PMX_SOURCE_REFERENCE;}
 
     public String getF_accountable_product() {return f_accountable_product;}
     public void setF_accountable_product(String f_accountable_product) {this.f_accountable_product = f_accountable_product;}
-
-    public String getACC_PROD_ID() {return ACC_PROD_ID;}
-    public void setACC_PROD_ID(String ACC_PROD_ID) {this.ACC_PROD_ID = ACC_PROD_ID;}
 
     public String getPARENT_ACC_PROD() {return PARENT_ACC_PROD;}
     public void setPARENT_ACC_PROD(String PARENT_ACC_PROD) {this.PARENT_ACC_PROD = PARENT_ACC_PROD;}

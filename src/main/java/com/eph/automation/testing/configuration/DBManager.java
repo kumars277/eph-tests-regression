@@ -102,7 +102,7 @@ public class DBManager {
             QueryRunner query = new QueryRunner();
             mapList = (List) query.query(connection, sql, new MapListHandler());
         } catch (SQLException sqlException) {
-            //   System.getProperties().forEach((k, v) -> System.out.println(k + ":" + v));
+         //   System.getProperties().forEach((k, v) -> System.out.println(k + ":" + v));
             sqlException.printStackTrace();
         } finally {
             DbUtils.closeQuietly(connection);
@@ -119,13 +119,13 @@ public class DBManager {
                 DbUtils.loadDriver(driver);
             }
             //updated by Nishant @ 15 Mar 2021 for secret manager
-            //connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
+           //connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
             connection = DriverManager.getConnection(SecretsManagerHandler.getPostgreDBConnection(URL));
 
             QueryRunner query = new QueryRunner();
             mapList = (List) query.query(connection, sql, new MapListHandler());
         } catch (SQLException sqlException) {
-            //  System.getProperties().forEach((k, v) -> System.out.println(k + ":" + v));
+          //  System.getProperties().forEach((k, v) -> System.out.println(k + ":" + v));
             sqlException.printStackTrace();
         } finally {
             DbUtils.closeQuietly(connection);

@@ -3,19 +3,20 @@ package com.eph.automation.testing.models.api;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ManifestationDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.google.common.base.Joiner;
+import net.minidev.json.parser.ParseException;
 import org.junit.Assert;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+
+import java.util.*;
 
 /*
 * created by Nishant @ 13 May 2020
 * */
-public class manifestationCore {
-    private List<ManifestationDataObject> manifestationDataObjectFromEPHGD;
+public class ManifestationCore {
+   // private List<ManifestationDataObject> manifestationDataObjectFromEPHGD;
 
     private String keyTitle;
     public String getKeyTitle() {return keyTitle;}
@@ -41,40 +42,42 @@ public class manifestationCore {
     public HashMap<String, Object> getStatus() {return status;}
     public void setStatus(HashMap<String, Object> status) {this.status = status;}
 
-    public void compareWithDB(String manifestationId){
-        getManifestationByID(manifestationId);
-        Log.info("verifying manifestation id..."+manifestationId);
+    public void compareWithDB(String manifestationId) {
+        Log.info("----- verifying ManifestationCore data...");
+        Assert.assertEquals(keyTitle, DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_KEY_TITLE());        printLog("manifestation keyTitle");
 
-        Assert.assertEquals(keyTitle, manifestationDataObjectFromEPHGD.get(0).getMANIFESTATION_KEY_TITLE());
-        printLog("manifestation keyTitle");
 
-        if(!(manifestationDataObjectFromEPHGD.get(0).getInternationalEditionInd()==null&&internationalEditionInd==null)) {
-            Assert.assertEquals(Boolean.valueOf(internationalEditionInd), Boolean.valueOf(manifestationDataObjectFromEPHGD.get(0).getInternationalEditionInd()));
-            printLog("internationalEditionInd");
-        }
-
-        Assert.assertEquals(firstPubDate, manifestationDataObjectFromEPHGD.get(0).getFIRST_PUB_DATE());
-        printLog("firstPubDate");
-
-        if(identifiers!=null){
-            for (ManifestationIdentifiersApiObject identif : identifiers){identif.compareWithDB();}
-            printLog("identifiers");
-        }
-
-        Assert.assertEquals(type.get("code"), manifestationDataObjectFromEPHGD.get(0).getF_TYPE());
-        printLog("manifestation type");
-
-        Assert.assertEquals(status.get("code"), manifestationDataObjectFromEPHGD.get(0).getF_STATUS());
-        printLog("manifestation status code");
+    if (DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getInternationalEditionInd() != null | internationalEditionInd != null) {
+        Assert.assertEquals(Boolean.valueOf(internationalEditionInd), Boolean.valueOf(DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getInternationalEditionInd()));
+        printLog("internationalEditionInd");
     }
 
-    private void getManifestationByID(String manifestationID) {
+    Assert.assertEquals(firstPubDate, DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getFIRST_PUB_DATE());    printLog("firstPubDate");
+
+    if (identifiers != null) {
+        for (ManifestationIdentifiersApiObject identif : identifiers) {
+            identif.compareWithDB();
+        }
+        printLog("identifiers");
+    }
+
+    Assert.assertEquals(type.get("code"), DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getF_TYPE());
+    printLog("manifestation type");
+
+    Assert.assertEquals(status.get("code"), DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getF_STATUS());
+    printLog("manifestation status code");
+}
+    //}
+
+    private void getManifestationByID(String manifestationID) throws ParseException {
         List<String> ids = new ArrayList<>();
         ids.add(manifestationID);
         String sql = String.format(APIDataSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_GD_BY_ID, Joiner.on("','").join(ids));
-        if(manifestationDataObjectFromEPHGD!=null){manifestationDataObjectFromEPHGD.clear();}
-        manifestationDataObjectFromEPHGD = DBManager.getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
+        if (DataQualityContext.manifestationDataObjectsFromEPHGD != null) {
+            DataQualityContext.manifestationDataObjectsFromEPHGD.clear();
+        }
+        DataQualityContext.manifestationDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
     }
 
-    private void printLog(String verified){Log.info("verified..."+verified);}
+    private void printLog(String verified) {Log.info("verified..." + verified);}
 }

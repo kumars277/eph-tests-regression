@@ -10,18 +10,14 @@ import com.eph.automation.testing.models.dao.*;
 import com.eph.automation.testing.services.api.APIService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
-
 import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
-
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.*;
-
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
-
 import org.junit.Assert;
 
 /*
@@ -50,7 +46,7 @@ public class ApiWorksSearchSteps {
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
         //added by Nishant @ 27 Dec for debugging failures
-        //ids.clear();ids.add("EPR-W-108TJK");Log.info("hard coded work ids are : " + ids);
+        ids.clear();ids.add("EPR-W-1169HK");Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
@@ -91,14 +87,20 @@ public class ApiWorksSearchSteps {
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random Journal ids  : " + ids);
         //for debugging failure
-       // ids.clear(); ids.add("EPR-W-102NSN");  Log.info("hard coded work ids are : " + ids);
+       // ids.clear(); ids.add("EPR-W-108RHX");  Log.info("hard coded work ids are : " + ids); //EPR-W-108VK7, EPR-W-108RJG   , EPR-W-108V6K
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
     @Given("^We set specific journal ids for search")
     public void setspecificJournalIds() {//created by Nishant @ 04 Aug 2020
         ids=new ArrayList<>();
-        ids.add("EPR-W-102NSN");
+        //production random work ids
+        ids.add("EPR-W-102RGY");
+        ids.add("EPR-W-102RB6");
+        ids.add("EPR-W-102NHD");
+        ids.add("EPR-W-102RRG");
+        ids.add("EPR-W-102VF4");
+
         Log.info("hard coded work ids are : " + ids);
 
     }
@@ -728,7 +730,7 @@ public class ApiWorksSearchSteps {
 
     public String getPMGcodeByPMC(String pmcCode) {
         sql = String.format(APIDataSQL.EPH_GD_PMG_CODE_EXTRACT_BYPMC, pmcCode);
-        // Log.info(sql);
+         Log.info(sql);
         List<Map<String, Object>> getPMG = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         String pmgCode = ((String) getPMG.get(0).get("f_pmg"));
         Log.info("pmg code..." + pmgCode);
