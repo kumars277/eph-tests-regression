@@ -26,6 +26,11 @@ public class PricingExtendedPricesAPIObj {
     public String getCustomerCategory() {return customerCategory;}
     public void setCustomerCategory(String customerCategory) {this.customerCategory = customerCategory;}
 
+    //new tag - created by Nishant @ 05 Apr 2021
+    private String category;
+    public String getCategory() {return category;}
+    public void setCategory(String category) {this.category = category;}
+
     private String purchaseQuantity;
     public String getPurchaseQuantity() {return purchaseQuantity;}
     public void setPurchaseQuantity(String purchaseQuantity) {this.purchaseQuantity = purchaseQuantity;}

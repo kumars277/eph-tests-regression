@@ -62,7 +62,7 @@ public class ProductFinderUISteps {
     private static String productId;
     private static List<String> productIdList;
     private static List<String> productTitleList;
-    private static List<String> workIdList = new ArrayList<String>();
+    private static List<String> workIdList = new ArrayList<>();
     private static List<String> workStatusCode;
     private static List<String> workStatusCodesofLaunchedToList, workStatusCodesofPlannedToList, workStatusCodesofNoLongerPubList;
 
@@ -73,7 +73,7 @@ public class ProductFinderUISteps {
     private static String[] Book_Types = {"Books Series", "Major Ref Work", "Other Book", "Reference Book", "Serial", "Text Book"};
     private static String[] Journal_Types = {"Abstracts Journal", "B2B Journal", "Journal", "Newsletter"};
     private static String[] Other_Types = {"Drug Monograph", "Medical Procedure"};
-    String allWorkTypesCode[] = {"BKS", "MRW", "OTH", "SER", "TBK", "RBK", "ABS", "JNL", "JBB", "NWL", "DMG", "MPR"};
+    String[] allWorkTypesCode = {"BKS", "MRW", "OTH", "SER", "TBK", "RBK", "ABS", "JNL", "JBB", "NWL", "DMG", "MPR"};
     private static List<ManifestationIdentifierObject> manifestationIdentifiers;
     private List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD;
     private FinancialAttribsContext financialAttribs = new FinancialAttribsContext();
@@ -98,7 +98,7 @@ public class ProductFinderUISteps {
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
-        //ids.clear(); ids.add("EPR-W-10D3SM");      Log.info("hard coded work ids are : " + ids);
+        ids.clear(); ids.add("EPR-W-10WN1D");      Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
@@ -111,7 +111,7 @@ public class ProductFinderUISteps {
     }
 
     @Given("^user is on Product Finder search page$")
-    public void userOpensHomePage() throws InterruptedException, ParseException {
+    public void userOpensHomePage() throws InterruptedException {
         //updated by Nishant @ 15 May 2020
         DataQualityContext.uiUnderTest = "PF";
         productFinderTasks.openHomePage();
@@ -121,7 +121,7 @@ public class ProductFinderUISteps {
     }
 
     @Given("^user is on Journal Finder search page$")
-    public void userOpensJFHomePage() throws InterruptedException, ParseException {
+    public void userOpensJFHomePage() throws InterruptedException {
         //Created by Nishant @ 03 Jul 2020
         DataQualityContext.uiUnderTest = "JF";
         productFinderTasks.openHomePage();
@@ -185,13 +185,13 @@ public class ProductFinderUISteps {
         //updated by Nishant @ 21 May 2020
         switch (chooseWorkType) {
             case "Book":
-                sql = String.format(ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_BOOK);
+                sql = ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_BOOK;
                 break;
             case "Journal":
-                sql = String.format(ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_JOURNAL);
+                sql = ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_JOURNAL;
                 break;
             case "Other":
-                sql = String.format(ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_OTHER);
+                sql = ProductFinderSQL.SELECT_AVAILABLE_WORK_TYPES_FOR_OTHER;
                 break;
         }
 
@@ -218,7 +218,7 @@ public class ProductFinderUISteps {
     }
 
     @Given("^Search for the Work by Work Ids Filter workType and verify the work Type is \"([^\"]*)\"$")
-    public void verify_the_result(String chooseWorkType) throws InterruptedException {
+    public void verify_the_result(String chooseWorkType) {
         try {
             for (String workId : workIdList) {
                 productFinderTasks.searchFor(workId);
@@ -300,11 +300,11 @@ public class ProductFinderUISteps {
 
 
     @Then("^Verify the Work Status is \"([^\"]*)\"$")
-    public void verify_the_Work_Status_is(String workStatus) throws Throwable {
+    public void verify_the_Work_Status_is(String workStatus) {
         //updated by Nishant @ 22 May 2020
-        String workStatusCodesofLaunched[] = {"WDA", "WLA", "WPU", "WSC"};
-        String workStatusCodesofNoLongerPub[] = {"WDI", "WDV", "WTA"};
-        String workStatusCodesofPlanned[] = {"WAM", "WAP", "WCO", "WIP", "WPL", "WSP"};
+        String[] workStatusCodesofLaunched = {"WDA", "WLA", "WPU", "WSC"};
+        String[] workStatusCodesofNoLongerPub = {"WDI", "WDV", "WTA"};
+        String[] workStatusCodesofPlanned = {"WAM", "WAP", "WCO", "WIP", "WPL", "WSP"};
         boolean flag = false;
 
         workStatusUIValidation(workStatus);
@@ -318,24 +318,24 @@ public class ProductFinderUISteps {
 
             if (workStatus.equalsIgnoreCase("Launched")) {
                 workStatusCodesofLaunchedToList = Arrays.asList(workStatusCodesofLaunched);
-                for (int i = 0; i < workStatusCodesofLaunchedToList.size(); i++) {
-                    if (workStatusCode.get(0).contains(workStatusCodesofLaunchedToList.get(i))) {
+                for (String s : workStatusCodesofLaunchedToList) {
+                    if (workStatusCode.get(0).contains(s)) {
                         flag = true;
                         break;
                     }
                 }
             } else if (workStatus.equalsIgnoreCase("Planned")) {
                 workStatusCodesofPlannedToList = Arrays.asList(workStatusCodesofPlanned);
-                for (int i = 0; i < workStatusCodesofPlannedToList.size(); i++) {
-                    if (workStatusCode.get(0).contains(workStatusCodesofPlannedToList.get(i))) {
+                for (String s : workStatusCodesofPlannedToList) {
+                    if (workStatusCode.get(0).contains(s)) {
                         flag = true;
                         break;
                     }
                 }
             } else if (workStatus.equalsIgnoreCase("No Longer Published")) {
                 workStatusCodesofNoLongerPubList = Arrays.asList(workStatusCodesofNoLongerPub);
-                for (int i = 0; i < workStatusCodesofNoLongerPubList.size(); i++) {
-                    if (workStatusCode.get(0).contains(workStatusCodesofNoLongerPubList.get(i))) {
+                for (String s : workStatusCodesofNoLongerPubList) {
+                    if (workStatusCode.get(0).contains(s)) {
                         flag = true;
                         break;
                     }
@@ -347,7 +347,7 @@ public class ProductFinderUISteps {
     }
 
 
-    public void workStatusUIValidation(String workStatus) {//created by Nishant @23 Oct 2020
+    private void workStatusUIValidation(String workStatus) {//created by Nishant @23 Oct 2020
         boolean flag = false;
         productFinderTasks.getUI_WorkOverview_Information();
 
@@ -377,35 +377,35 @@ public class ProductFinderUISteps {
     }
 
 
-    public boolean verifyWorkTypeForWorkId(String workId, String chooseWorkType) {//by Nishant @ 02 Jun 2020
+    private boolean verifyWorkTypeForWorkId(String workId, String chooseWorkType) {//by Nishant @ 02 Jun 2020
         Log.info("verifying work type for the work id...");
         boolean isWorkTypeCorrect = false;
         switch (chooseWorkType) {
             case "Book":
-                for (int i = 0; i < Book_Types.length; i++) {
-                    isWorkTypeCorrect = productFinderTasks.isPageContainingString(Book_Types[i]);
+                for (String book_type : Book_Types) {
+                    isWorkTypeCorrect = productFinderTasks.isPageContainingString(book_type);
                     if (isWorkTypeCorrect) {
-                        Log.info("Work Id=> " + workId + " and work Type: " + Book_Types[i]);
+                        Log.info("Work Id=> " + workId + " and work Type: " + book_type);
                         break;
                     }
                 }
                 break;
 
             case "Journal":
-                for (int i = 0; i < Journal_Types.length; i++) {
-                    isWorkTypeCorrect = productFinderTasks.isPageContainingString(Journal_Types[i]);
+                for (String journal_type : Journal_Types) {
+                    isWorkTypeCorrect = productFinderTasks.isPageContainingString(journal_type);
                     if (isWorkTypeCorrect) {
-                        Log.info("Work Id=> " + workId + " and work Type: " + Journal_Types[i]);
+                        Log.info("Work Id=> " + workId + " and work Type: " + journal_type);
                         break;
                     }
                 }
                 break;
 
             case "Other":
-                for (int i = 0; i < Other_Types.length; i++) {
-                    isWorkTypeCorrect = productFinderTasks.isPageContainingString(Other_Types[i]);
+                for (String other_type : Other_Types) {
+                    isWorkTypeCorrect = productFinderTasks.isPageContainingString(other_type);
                     if (isWorkTypeCorrect) {
-                        Log.info("Work Id=> " + workId + " and work Type: " + Other_Types[i]);
+                        Log.info("Work Id=> " + workId + " and work Type: " + other_type);
                         break;
                     }
                 }
@@ -482,7 +482,7 @@ public class ProductFinderUISteps {
     //manifestation steps
 
     @Given("^get (\\d+) random manifestation id$")
-    public void getRandomManifestationIdFromDB(int arg0) throws Throwable {
+    public void getRandomManifestationIdFromDB(int arg0) {
         getRandomProductIds("1");
         getProductsDataFromEPHGD();
         Log.info("selected random manifestation id..." + dataQualityContext.productDataObjectsFromEPHGD.get(0).getF_PRODUCT_MANIFESTATION_TYP());
@@ -617,13 +617,13 @@ public class ProductFinderUISteps {
     @And("^Searches for Product by id$")
     public void searches_for_Product_by_id() throws Throwable {
         productId = productIdList.toString();
-        productId = productId.replaceAll("\\[", "").replaceAll("\\]", "");
+        productId = productId.replaceAll("\\[", "").replaceAll("]", "");
         productFinderTasks.searchFor(productId);
     }
 
     @Given("^We get the id and title for product search from DB$")
-    public void getProductId() throws Throwable {
-        sql = String.format(ProductFinderSQL.SELECT_PRODUCTID_TITLE_FOR_SEARCH);
+    public void getProductId() {
+        sql = ProductFinderSQL.SELECT_PRODUCTID_TITLE_FOR_SEARCH;
         //  Log.info(sql);
         availableProduct = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         if (availableProduct.size() > 0) {
@@ -634,13 +634,13 @@ public class ProductFinderUISteps {
         }
     }
 
-    public void getFirstIdOnPage() {//by Nishant @ 2 Jun 2020
+    private void getFirstIdOnPage() {//by Nishant @ 2 Jun 2020
         List<WebElement> itemInfo = tasks.findmultipleElements("XPATH", ProductFinderConstants.itemDetail);
         ArrayList<String> idFound = new ArrayList<>();
         for (int i = 0; i < itemInfo.size(); i++) {
             List<WebElement> itemInfo_in = tasks.findmultipleElements("XPATH", ProductFinderConstants.itemDetail + "[" + (i + 1) + "]" + ProductFinderConstants.itemDetailInner);
-            for (int i2 = 0; i2 < itemInfo_in.size(); i2++) {
-                String text = itemInfo_in.get(i2).getText();
+            for (WebElement webElement : itemInfo_in) {
+                String text = webElement.getText();
                 if (text.contains("ID")) {
                     idFound.add(text);
                     break;
@@ -664,10 +664,10 @@ public class ProductFinderUISteps {
 
     @Then("^Verify PF/JF UI work overview values$")
     public void verifyPFJFUIWorkOverviewValues() throws Throwable {
-     //   verifyWorkOverviewInformationUI();
-     //   verifyWorkFinancialInformation();
+        verifyWorkOverviewInformationUI();
+        verifyWorkFinancialInformation();
         verifyPeople();
-        if (DataQualityContext.uiUnderTest == "JF") {
+        if (uiUnderTest.equals("JF")) {
             verifyEditorialInfo();
             verifyLink(); //defect EPHD-2254
         }
@@ -691,7 +691,7 @@ public class ProductFinderUISteps {
     }
 
 
-    public void verifyWorkOverviewInformationUI() throws ParseException {//created by Nishant @ 4 Jun 2020
+    private void verifyWorkOverviewInformationUI() throws ParseException {//created by Nishant @ 4 Jun 2020
         Log.info("\nVerifying Work Overview - Core tab...");
         Log.info("...................................\n");
         productFinderTasks.getUI_WorkOverview_Information();
@@ -700,7 +700,7 @@ public class ProductFinderUISteps {
         validateSubjectArea();
     }
 
-    public void verifyWorkFinancialInformation() {//created by Nishant @ 17 Jun 2020
+    private void verifyWorkFinancialInformation() {//created by Nishant @ 17 Jun 2020
         Log.info("\nverifiying Work Overview - Financial tab");
         Log.info("...................................\n");
         productFinderTasks.getUI_WorkOverview_Financial();
@@ -708,7 +708,7 @@ public class ProductFinderUISteps {
         validateCompanyCodes();
     }
 
-    public void verifyEditorialInfo() {
+    private void verifyEditorialInfo() {
         //created by Nishant @ 07 Jul 2020 for JRBI data validation on JF UI
         Log.info("\nverifying Work Overview - Editorial tab");
         Log.info("...................................\n");
@@ -775,9 +775,9 @@ public class ProductFinderUISteps {
         //get extended record for manifestation
         List<String> manifestationId = apiWorksSearchSteps.getManifestationIdsForWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
         DataQualityContext.manifestationExtendedTestClass = null;
-        for (int cnt = 0; cnt < manifestationId.size(); cnt++) {
+        for (String s : manifestationId) {
             try {
-                workManifestationApiObject.getJsonToObject_extendedManifestation(manifestationId.get(cnt));
+                workManifestationApiObject.getJsonToObject_extendedManifestation(s);
                 break;
             } catch (Exception e) {
                 Log.info(e.getMessage());
@@ -811,26 +811,26 @@ public class ProductFinderUISteps {
 
     }
 
-    public void verifyPeople() { //created by Nishant @ 10 Jul 2020 for JRBI data validation on JF UI
+    private void verifyPeople() { //created by Nishant @ 10 Jul 2020 for JRBI data validation on JF UI
         Log.info("\nverifying Work Overview - People tab");
         Log.info("...................................\n");
         productFinderTasks.getUI_People();
         verifyPeopleInfo();
 
-        if (DataQualityContext.uiUnderTest == "JF") {
+        if (uiUnderTest.equals("JF")) {
             verifyDuplicatePeopleRoles();
             verifyValidPersonRole();
         }
     }
 
-    public void verifyLink() throws IOException {//created by Nishant @ 15 Jul 2020
+    private void verifyLink() throws IOException {//created by Nishant @ 15 Jul 2020
         Log.info("\nverifying Work Overview - Links tab");
         Log.info("...................................\n");
         productFinderTasks.getUI_Links();
 
-        String url = "";
-        HttpURLConnection huc = null;
-        int respCode = 0;
+        String url;
+        HttpURLConnection huc;
+        int respCode;
 
         //List<WebElement> links = productFinderTasks.getLinks(); //capture links from entire page
         Collection<Object> links = productFinderTasks.prop_links.values(); //capture links only within the links tab
@@ -840,7 +840,6 @@ public class ProductFinderUISteps {
         int l = 0;
         while (it.hasNext()) {
             l++;
-            brokenLink = false;
             //url = it.next().getAttribute("href");
             url = it.next().toString();
 
@@ -907,7 +906,7 @@ public class ProductFinderUISteps {
 
     }
 
-    public void verifyDuplicatePeopleRoles() {//created by Nishant @ 10 Jul 2020
+    private void verifyDuplicatePeopleRoles() {//created by Nishant @ 10 Jul 2020
         Log.info("Test : verifying duplicate People Role...");
         Set uniqueRole = new HashSet();
         List<String> duplicate = new ArrayList();
@@ -926,21 +925,20 @@ public class ProductFinderUISteps {
 
     }
 
-    public void verifyPeopleInfo() {
+    private void verifyPeopleInfo() {
         //created by Nishant @ 14 Jul 2020
         compareCorePersonWithDB();
         //commented by Nishant @24 Feb 2021, need clarification from mark why Extended work person not reflecting in PF
-        /*if (DataQualityContext.workExtendedTestClass != null
-                && DataQualityContext.workExtendedTestClass.getWorkExtended().getWorkExtendedPersons() != null) {
+        if (DataQualityContext.workExtendedTestClass != null) {
             compareExtendedPersonWithDB();
         }
-        */
+
     }
 
-    public void verifyValidPersonRole() {//created by Nishant @ 15 Oct 2020 as part of EPHD-2241
+    private void verifyValidPersonRole() {//created by Nishant @ 15 Oct 2020 as part of EPHD-2241
         Log.info("...................................................");
         Log.info("Test: verify if there is any role other than expeted");
-        String validRoles[] = {
+        String[] validRoles = {
                 "Advertising Production Manager",
                 "Business Controller",
                 "Journal Manager",
@@ -960,16 +958,16 @@ public class ProductFinderUISteps {
 
     }
 
-    public List<Map<String, String>> getPersonsByWorkId(String workId) {//created by Nishant @ 14 Jul 2020
+    private List<Map<String, String>> getPersonsByWorkId(String workId) {//created by Nishant @ 14 Jul 2020
         sql = String.format(PersonWorkRoleDataSQL.getPersonsByWorkId, workId);
-        List<Map<String, String>> lst_workPersons = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        return lst_workPersons;
+        return (List<Map<String, String>>) DBManager.getDBResultMap(sql, Constants.EPH_URL);
     }
 
-    public void compareCorePersonWithDB() {//created by Nishant @ 15 Jul 2020
+    private void compareCorePersonWithDB() {//created by Nishant @ 15 Jul 2020
+        Log.info("verifying workCorePerson...");
         List<Map<String, String>> workPerson = getPersonsByWorkId(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
         List<Integer> ignore = new ArrayList();
-        for (int i = 0; i < workPerson.size(); i++) {
+        for (Map<String, String> person : workPerson) {
             if (dataQualityContext.personDataObjectsFromEPHGD != null) {
                 dataQualityContext.personDataObjectsFromEPHGD.clear();
             }
@@ -977,28 +975,26 @@ public class ProductFinderUISteps {
                 dataQualityContext.personWorkRoleDataObjectsFromEPHGD.clear();
             }
 
-            String DB_workPersonRole = lov_personRole(workPerson.get(i).get("f_role"));
-
-
+            String DB_workPersonRole = lov_personRole(person.get("f_role"));
 
             Log.info("verifying Core work person... " + DB_workPersonRole);
 
             for (int cnt = 0; cnt < productFinderTasks.list_people.size(); cnt++) {
                 if (ignore.contains(cnt)) continue;
-                Object temp = workPerson.get(i).get("f_person");
+                Object temp = person.get("f_person");
                 String personId = temp.toString();
                 personsApiObject.getPersonDataFromEPHGD(personId);
                 String DB_workPersonName = dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " +
                         dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME();
                 if (productFinderTasks.list_people.get(cnt).getProperty("Role").contentEquals(DB_workPersonRole)
-                & productFinderTasks.list_people.get(cnt).getProperty("PersonName").trim().contentEquals(DB_workPersonName)) {
+                        & productFinderTasks.list_people.get(cnt).getProperty("PersonName").trim().contentEquals(DB_workPersonName)) {
                     //Assert.assertEquals(DB_workPersonRole, productFinderTasks.list_people.get(cnt).getProperty("Role")); printLog("person role ");
                     //Assert.assertEquals((productFinderTasks.list_people.get(cnt).getProperty("PersonName")).trim(),DB_workPersonName);printLog("PersonName");
                     printLog("person role and PersonName");
 
                     if (!(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_EMAIL_ID() == null &&
                             productFinderTasks.list_people.get(cnt).getProperty("Email").equalsIgnoreCase(""))) {
-                        Assert.assertTrue(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_EMAIL_ID().equalsIgnoreCase(productFinderTasks.list_people.get(cnt).getProperty("Email")));
+                        assertTrue(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_EMAIL_ID().equalsIgnoreCase(productFinderTasks.list_people.get(cnt).getProperty("Email")));
                         printLog("email");
                     }
 
@@ -1009,70 +1005,58 @@ public class ProductFinderUISteps {
         }
     }
 
-    public void compareExtendedPersonWithDB() {//created by Nishant @ 14 Jul 2020
+    private void compareExtendedPersonWithDB() {//created by Nishant @ 14 Jul 2020
+        if(DataQualityContext.workExtendedTestClass.getWorkExtended().getWorkExtendedPersons() != null) {
+            WorkExtendedPersons[] workExtendedPersons = DataQualityContext.workExtendedTestClass.getWorkExtended().getWorkExtendedPersons().clone();
 
-        WorkExtendedPersons[] workExtendedPersons = DataQualityContext.workExtendedTestClass.getWorkExtended().getWorkExtendedPersons().clone();
+            for (WorkExtendedPersons workExtendedPerson : workExtendedPersons) {
+                String extRoleName = workExtendedPerson.getExtendedRole().get("name").toString();
+                String extPersonFullName = workExtendedPerson.getExtendedPerson().get("firstName") + " " +
+                        workExtendedPerson.getExtendedPerson().get("lastName");
+                String extEmailId = "";
+                if(workExtendedPerson.getExtendedPerson().get("email")!=null)
+                    extEmailId=workExtendedPerson.getExtendedPerson().get("email").toString();
 
-        for (int i = 0; i < workExtendedPersons.length; i++) {
-            String extRoleName = workExtendedPersons[i].getExtendedRole().get("name").toString();
-            String extPersonFullName = workExtendedPersons[i].getExtendedPerson().get("firstName") + " " +
-                    workExtendedPersons[i].getExtendedPerson().get("lastName");
-            String extEmailId = workExtendedPersons[i].getExtendedPerson().get("email").toString();
-
-            boolean extPersonFound = false;
-            List<Integer> ignore = new ArrayList();
-            for (int uiperson = 0; uiperson < productFinderTasks.list_people.size(); uiperson++) {
-                if (ignore.contains(uiperson)) continue;
-                if (productFinderTasks.list_people.get(uiperson).getProperty("Role").equalsIgnoreCase(extRoleName)) {
-                    Log.info("verifying work extended person..." + extRoleName);
-                    printLog("person role");
-                    extPersonFound = true;
-                    Assert.assertEquals(productFinderTasks.list_people.get(uiperson).getProperty("PersonName").trim(), extPersonFullName);
-                    printLog("PersonName");
-                    Assert.assertEquals(productFinderTasks.list_people.get(uiperson).getProperty("Email"), extEmailId);
-                    printLog("Email");
-                    ignore.add(uiperson);
-                    break;
+                boolean extPersonFound = false;
+                List<Integer> ignore = new ArrayList();
+                for (int uiperson = 0; uiperson < productFinderTasks.list_people.size(); uiperson++) {
+                    if (ignore.contains(uiperson)) continue;
+                    if (productFinderTasks.list_people.get(uiperson).getProperty("Role").equalsIgnoreCase(extRoleName)&
+                            productFinderTasks.list_people.get(uiperson).getProperty("PersonName").trim().equalsIgnoreCase(extPersonFullName)) {
+                        Log.info("verifying work extended person..." + extRoleName +"-"+extPersonFullName);
+                        extPersonFound = true;
+                        printLog("person role");
+                        printLog("PersonName");
+                        assertEquals(productFinderTasks.list_people.get(uiperson).getProperty("Email"), extEmailId);
+                        printLog("Email");
+                        ignore.add(uiperson);
+                        break;
+                    }
                 }
+                assertTrue("Extended person not found " + extRoleName, extPersonFound);
             }
-            Assert.assertTrue("Extended person not found " + extRoleName, extPersonFound);
         }
     }
 
-    public String lov_personRole(String roleCode) {//created by Nishant @ 15 Jul 2020
+    private String lov_personRole(String roleCode) {//created by Nishant @ 15 Jul 2020
         String value_Role = "";
         switch (roleCode) {
-            case "PO":
-                value_Role = "Product Owner";
-                break;
-            case "AU":
-                value_Role = "Author";
-                break;
-            case "ED":
-                value_Role = "Editor";
-                break;
-            case "PD":
-                value_Role = "Publishing Director";
-                break;
-            case "PU":
-                value_Role = "Publisher";
-                break;
-            case "AE":
-                value_Role = "Acquisition Editor";
-                break;
-            case "BC":
-                value_Role = "Business Controller";
-                break;
-            case "SVP":
-                value_Role = "Senior Vice President";
-                break;
+            case "PO":value_Role = "Product Owner";break;
+            case "AU":value_Role = "Author";break;
+            case "ED":value_Role = "Editor";break;
+            case "PD":value_Role = "Publishing Director";break;
+            case "PU":value_Role = "Publisher";break;
+            case "AE":value_Role = "Acquisition Editor";break;
+            case "BC":value_Role = "Business Controller";break;
+            case "SVP":value_Role = "Senior Vice President";break;
         }
         return value_Role;
     }
 
-    public void validateCompanyCodes() {//created by Nishant @ 17 Jun 2020
+    private void validateCompanyCodes() {//created by Nishant @ 17 Jun 2020
 
         getFinancialData(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+
         if (financialAttribs.financialDataFromGD != null & financialAttribs.financialDataFromGD.size()!=0) {
             sql = "select l_description FROM semarchy_eph_mdm.gd_x_lov_gl_company WHERE code='" + financialAttribs.financialDataFromGD.get(0).getGl_company() + "'";
             List<Map<String, String>> glCompnyName = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -1114,7 +1098,7 @@ public class ProductFinderUISteps {
         accountableProductDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, AccountableProductDataObject.class, Constants.EPH_URL);
     }
 
-    public void validateAccountableProduct() {//created by Nishant @ 16 Jun 2020
+    private void validateAccountableProduct() {//created by Nishant @ 16 Jun 2020
 
         String DBValue_accProdSegment = "-";
         if (DataQualityContext.workDataObjectsFromEPHGD.get(0).getF_accountable_product() != null) {
@@ -1131,55 +1115,52 @@ public class ProductFinderUISteps {
         }
         Assert.assertEquals(productFinderTasks.prop_AccProducts.getProperty("Accountable Product Segment"), DBValue_accProdSegment);
         Log.info("verified...Accountable Product Segment");
-
-
     }
 
-    public void validateSubjectArea() {//created by Nishant @ 15 Jun 2020
+    private void validateSubjectArea() {//created by Nishant @ 15 Jun 2020
         Log.info("verifing......Subject Area");
         List<Map<String, Object>> subArea = getSubjectArea();
 
         HashSet hs_uniqueSubParents = new HashSet();//finding unique parents
-        for (int cnt = 0; cnt < subArea.size(); cnt++) {
-            hs_uniqueSubParents.add(subArea.get(cnt).get("f_parent_subject_area"));
+        for (Map<String, Object> stringObjectMap : subArea) {
+            hs_uniqueSubParents.add(stringObjectMap.get("f_parent_subject_area"));
         }
         Assert.assertEquals(productFinderTasks.prop_subArea.size(), hs_uniqueSubParents.size());
         Log.info("verified...number of sub area");
 
-        for (int i = 0; i < subArea.size(); i++) {
+        for (Map<String, Object> stringObjectMap : subArea) {
             //get primary sub area name
-            String ValuePrimarySubArea = "";
-            if (subArea.get(i).get("f_parent_subject_area") == null)
-                ValuePrimarySubArea = subArea.get(i).get("name").toString();
+            String ValuePrimarySubArea;
+            if (stringObjectMap.get("f_parent_subject_area") == null)
+                ValuePrimarySubArea = stringObjectMap.get("name").toString();
             else {
-                sql = "select name from semarchy_eph_mdm.gd_subject_area where subject_area_id='" + subArea.get(i).get("f_parent_subject_area") + "'";
+                sql = "select name from semarchy_eph_mdm.gd_subject_area where subject_area_id='" + stringObjectMap.get("f_parent_subject_area") + "'";
                 List<Map<String, String>> PrimSubArea = DBManager.getDBResultMap(sql, Constants.EPH_URL);
                 ValuePrimarySubArea = PrimSubArea.get(0).get("name");
             }
 
             //get area type name
-            sql = "select l_description from semarchy_eph_mdm.gd_x_lov_subject_area_type where code ='" + subArea.get(i).get("f_type") + "'";
+            sql = "select l_description from semarchy_eph_mdm.gd_x_lov_subject_area_type where code ='" + stringObjectMap.get("f_type") + "'";
             List<Map<String, Object>> subAreaType = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
             //get secondary sub area
-            String secondaryArea = subAreaType.get(0).get("l_description").toString() + " / " + subArea.get(i).get("name");
+            String secondaryArea = subAreaType.get(0).get("l_description").toString() + " / " + stringObjectMap.get("name");
 
             boolean subAreaMatched = false;
             if (productFinderTasks.prop_subArea.getProperty(ValuePrimarySubArea).contains(secondaryArea)) {
                 subAreaMatched = true;
             }
-            Assert.assertTrue(subAreaMatched);
+            assertTrue(subAreaMatched);
             Log.info("verified..." + secondaryArea);
         }
     }
 
-    public List<Map<String, Object>> getSubjectArea() {//created by Nishant @ 16 Jun 2020
+    private List<Map<String, Object>> getSubjectArea() {//created by Nishant @ 16 Jun 2020
         sql = String.format(ProductFinderSQL.SELECT_SUBJECT_AREA, DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
-        List<Map<String, Object>> subArea = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        return subArea;
+        return (List<Map<String, Object>>) DBManager.getDBResultMap(sql, Constants.EPH_URL);
     }
 
-    public void validateIdentifiers() {//created by Nishant @ 15 Jun 2020
+    private void validateIdentifiers() {//created by Nishant @ 15 Jun 2020
         Log.info("verifying......Identifiers");
         List<Map<String, Object>> identifierDetail = getIdentifier();
 
@@ -1196,12 +1177,11 @@ public class ProductFinderUISteps {
 
     public List<Map<String, Object>> getIdentifier() {//created by Nishant @ 15 jun 2020
         sql = String.format(ProductFinderSQL.SELECT_IDENTIFIER_OF_WORK, DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
-        List<Map<String, Object>> identifierDetail = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        return identifierDetail;
+        return (List<Map<String, Object>>) DBManager.getDBResultMap(sql, Constants.EPH_URL);
     }
 
 
-    public void validate_workOverview_info() throws ParseException {
+    private void validate_workOverview_info() throws ParseException {
         //created by Nishant @08 Jun 2020
         //updated by Nishant @09 Jul 2020
         coreDataValidation();
@@ -1219,7 +1199,7 @@ public class ProductFinderUISteps {
         }
     }
 
-    public void coreDataValidation() {
+    private void coreDataValidation() {
         Log.info("Core data validation...");
         if (productFinderTasks.prop_info.containsKey("Sub Title") & !getValue_subTitle().equalsIgnoreCase("")) {
             Assert.assertEquals(productFinderTasks.prop_info.getProperty("Sub Title"), getValue_subTitle());
@@ -1250,7 +1230,7 @@ public class ProductFinderUISteps {
 
     }
 
-    public void dataModelValidation() throws ParseException {
+    private void dataModelValidation() throws ParseException {
         Log.info("Data Model changes validation...");
 
         if (productFinderTasks.prop_info.containsKey("Planned Launch Date")) {
@@ -1308,146 +1288,57 @@ public class ProductFinderUISteps {
     }
 
 
-    public String getValue_subTitle() {
+    private String getValue_subTitle() {
         String valueSubTitle = "";
         if (DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_SUBTITLE() != null)
             valueSubTitle = DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_SUBTITLE();
         return valueSubTitle;
     }
 
-    public String getDBWorkType() {
+    private String getDBWorkType() {
         String DBWorkType = "";
         switch (DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE()) {
-            case "BKS":
-                DBWorkType = "Books Series";
-                break;
-            case "MRW":
-                DBWorkType = "Major Ref work";
-                break;
-            case "OTH":
-                DBWorkType = "Other Book";
-                break;
-            case "RBK":
-                DBWorkType = "Reference Book";
-                break;
-            case "SER":
-                DBWorkType = "Serial";
-                break;
-            case "TBK":
-                DBWorkType = "Text Book";
-                break;
-            case "ABS":
-                DBWorkType = "Abstracts Journal";
-                break;
-            case "JBB":
-                DBWorkType = "B2B Journal";
-                break;
-            case "JNL":
-                DBWorkType = "Journal";
-                break;
-            case "NWL":
-                DBWorkType = "Newsletter";
-                break;
+            case "BKS":DBWorkType = "Books Series";break;
+            case "MRW":DBWorkType = "Major Ref work";break;
+            case "OTH":DBWorkType = "Other Book";break;
+            case "RBK":DBWorkType = "Reference Book";break;
+            case "SER":DBWorkType = "Serial";break;
+            case "TBK":DBWorkType = "Text Book";break;
+            case "ABS":DBWorkType = "Abstracts Journal";break;
+            case "JBB":DBWorkType = "B2B Journal";break;
+            case "JNL":DBWorkType = "Journal";break;
+            case "NWL":DBWorkType = "Newsletter";break;
         }
         return DBWorkType;
     }
 
-    public String getDBWorkStatus() {
-        String DBWorkStatus = "";
-        switch (DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS()) {
-            case "UNK":
-                DBWorkStatus = "Unknown";
-                break;
-            case "WID":
-                DBWorkStatus = "In Development";
-                break;
-            case "WDA":
-                DBWorkStatus = "Discontinue Approved";
-                break;
-            case "WLA":
-                DBWorkStatus = "Launched";
-                break;
-            case "WPU":
-                DBWorkStatus = "Published";
-                break;
-            case "WSC":
-                DBWorkStatus = "Submissions Closed";
-                break;
-            case "WWI":
-                DBWorkStatus = "Withdrawn";
-                break;
-            case "WDI":
-                 DBWorkStatus = "Discontinued";
-                //DBWorkStatus = "Stopped";
-                break;
-            case "WDV":
-                DBWorkStatus = "Divested";
-                break;
-            case "WTA":
-                DBWorkStatus = "Transferred";
-                break;
-            case "WAM":
-                DBWorkStatus = "Announced to Market";
-                break;
-            case "WAP":
-                DBWorkStatus = "Approved";
-                break;
-            case "WCO":
-                DBWorkStatus = "Contracted";
-                break;
-            case "WIP":
-                DBWorkStatus = "Idea";
-                break;
-            case "WPL":
-                DBWorkStatus = "Planned";
-                break;
-            case "WSP":
-                DBWorkStatus = "Submitted and Transmitted to Production";
-                break;
-            case "WPA":
-                DBWorkStatus = "Proposal Agreed";
-                break;
-            case "WCD":
-                DBWorkStatus = "Content Delivered";
-                break;
-            case "WWA":
-                DBWorkStatus = "Withdrawn/Abandoned";
-                break;
-        }
-        return DBWorkStatus;
+    private String getDBWorkStatus() {
+        //updated by Nishant @ 05 apr 2021
+        sql = String.format("select l_description from semarchy_eph_mdm.gd_x_lov_work_status gxlws where code ='%s'",DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
+        List<Map<String, Object>> workStatusDespription = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        return workStatusDespription.get(0).get("l_description").toString();
     }
 
-    public String getFormat_PlannedLaunchDate() throws ParseException {//created by Nishant @ 11 Jun 2020
+    private String getFormat_PlannedLaunchDate() throws ParseException {//created by Nishant @ 11 Jun 2020
         String f1date = DataQualityContext.workDataObjectsFromEPHGD.get(0).getPLANNED_LAUNCH_DATE();
         Date date = new SimpleDateFormat("yyyy-MM-dd").parse(f1date);
-        String formatedDate = new SimpleDateFormat("d MMM yyyy").format(date);
-        return formatedDate;
+        return new SimpleDateFormat("d MMM yyyy").format(date);
     }
 
-    public String getValue_LegalOwnership() {//created by Nishant @ 11 Jun 2020
+    private String getValue_LegalOwnership() {//created by Nishant @ 11 Jun 2020
         String legalOwnership = "";
         switch (DataQualityContext.workDataObjectsFromEPHGD.get(0).getLEGAL_OWNERSHIP()) {
-            case "ELS":
-                legalOwnership = "Elsevier";
-                break;
-            case "SOC":
-                legalOwnership = "Society";
-                break;
-            case "COM":
-                legalOwnership = "Company";
-                break;
-            case "UNI":
-                legalOwnership = "University";
-                break;
-            case "JVE":
-                legalOwnership = "Joint Venture";
-                //legalOwnership = "Third Party";
+            case "ELS":legalOwnership = "Elsevier";break;
+            case "SOC":legalOwnership = "Society";break;
+            case "COM":legalOwnership = "Company";break;
+            case "UNI":legalOwnership = "University";break;
+            case "JVE":legalOwnership = "Joint Venture";//legalOwnership = "Third Party";
                 break;
         }
         return legalOwnership;
     }
 
-    public String[] getValue_OwnershipDescription() {//created by Nishant @ 12 Jun 2020
+    private String[] getValue_OwnershipDescription() {//created by Nishant @ 12 Jun 2020
         String[] OwnerShip = new String[2];
         sql = String.format(ProductFinderSQL.SELECT_OWNERSHIP_DESCRIPTION, DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
         List<Map<String, Object>> OwnershipDescription = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -1462,13 +1353,13 @@ public class ProductFinderUISteps {
         return OwnerShip;
     }
 
-    public ArrayList<String> getValue_BusinessModelFromEPHGD() {//created by Nishant @ 9 Jun 2020
+    private ArrayList<String> getValue_BusinessModelFromEPHGD() {//created by Nishant @ 9 Jun 2020
         sql = String.format(ProductFinderSQL.SELECT_BUSINESS_MODEL, DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
         List<Map<String, Object>> BusinessModelDB = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ArrayList<String> businessModelValue = new ArrayList<>();
 
-        for (int i = 0; i < BusinessModelDB.size(); i++) {
-            switch (BusinessModelDB.get(i).get("business_model").toString()) {
+        for (Map<String, Object> stringObjectMap : BusinessModelDB) {
+            switch (stringObjectMap.get("business_model").toString()) {
                 case "SBD":
                     businessModelValue.add("Subsidized");
                     break;
@@ -1483,12 +1374,12 @@ public class ProductFinderUISteps {
         return businessModelValue;
     }
 
-    public ArrayList<String> getValue_AccessModelFromEPHGD() {//created by Nishant @ 9 Jun 2020
+    private ArrayList<String> getValue_AccessModelFromEPHGD() {//created by Nishant @ 9 Jun 2020
         sql = String.format(ProductFinderSQL.SELECT_ACCESS_MODEL, DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
         List<Map<String, Object>> AccessModel = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ArrayList<String> accessModelValue = new ArrayList<>();
-        for (int i = 0; i < AccessModel.size(); i++) {
-            switch (AccessModel.get(i).get("access_model").toString()) {
+        for (Map<String, Object> stringObjectMap : AccessModel) {
+            switch (stringObjectMap.get("access_model").toString()) {
                 case "OP":
                     accessModelValue.add("Open");
                     break;
@@ -1503,598 +1394,36 @@ public class ProductFinderUISteps {
         return accessModelValue;
     }
 
-    public String getValue_ImprintFromEPHGD() {//created by Nishant @ 11 Jun 2020
+    private String getValue_ImprintFromEPHGD() {//created by Nishant @ 11 Jun 2020
         String Value_imprint = "";
         if (DataQualityContext.workDataObjectsFromEPHGD.get(0).getIMPRINT() != null) {
             sql = String.format(ProductFinderSQL.SELECT_IMPRINT_INFO, DataQualityContext.workDataObjectsFromEPHGD.get(0).getIMPRINT());
             List<Map<String, String>> imprintInfo = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            Value_imprint = imprintInfo.get(0).get("l_description").toString();
+            Value_imprint = imprintInfo.get(0).get("l_description");
         }
         return Value_imprint;
     }
 
-    public String getValue_volume() {//updated by Nishant @ 15 Oct 2020 for EPHD-2241
-        String valueVolume = "";
-        if (DataQualityContext.workDataObjectsFromEPHGD.get(0).getVOLUME() != null &
-                !DataQualityContext.workDataObjectsFromEPHGD.get(0).getVOLUME().equalsIgnoreCase("0"))
+    private String getValue_volume() {//updated by Nishant @ 15 Oct 2020 for EPHD-2241
+        String valueVolume="";
+        if (DataQualityContext.workDataObjectsFromEPHGD.get(0).getVOLUME() != null)
+           //!DataQualityContext.workDataObjectsFromEPHGD.get(0).getVOLUME().equalsIgnoreCase("0"))
             valueVolume = DataQualityContext.workDataObjectsFromEPHGD.get(0).getVOLUME();
 
         return valueVolume;
     }
 
-    public String getValue_language() {//created by Nishant @ 11 Jun 2020
+    private String getValue_language() {//created by Nishant @ 11 Jun 2020
         String value_language = "";
         if (DataQualityContext.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE() != null) {
             sql = String.format(ProductFinderSQL.SELECT_LANGUAGE_INFO, DataQualityContext.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE());
             List<Map<String, String>> languageInfo = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            value_language = languageInfo.get(0).get("l_description").toString();
-/*
-            switch (DataQualityContext.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE()) {
-                case "EE":
-                    value_language = "Ewe";
-                    break;
-                case "EL":
-                    value_language = "Greek Modern";
-                    break;
-                case "EN":
-                    value_language = "English";
-                    break;
-                case "Code":
-                    value_language = "Description";
-                    break;
-                case "AA":
-                    value_language = "Afar";
-                    break;
-                case "AB":
-                    value_language = "Abkhazian";
-                    break;
-                case "AE":
-                    value_language = "Avestan";
-                    break;
-                case "AF":
-                    value_language = "Afrikaans";
-                    break;
-                case "AK":
-                    value_language = "Akan";
-                    break;
-                case "AM":
-                    value_language = "Amharic";
-                    break;
-                case "AN":
-                    value_language = "Aragonese";
-                    break;
-                case "AR":
-                    value_language = "Arabic";
-                    break;
-                case "AS":
-                    value_language = "Assamese";
-                    break;
-                case "AV":
-                    value_language = "Avaric";
-                    break;
-                case "AY":
-                    value_language = "Aymara";
-                    break;
-                case "AZ":
-                    value_language = "Azerbaijani";
-                    break;
-                case "BA":
-                    value_language = "Bashkir";
-                    break;
-                case "BE":
-                    value_language = "Belarusian";
-                    break;
-                case "BG":
-                    value_language = "Bulgarian";
-                    break;
-                case "BH":
-                    value_language = "Bihari languages";
-                    break;
-                case "BI":
-                    value_language = "Bislama";
-                    break;
-                case "BM":
-                    value_language = "Bambara";
-                    break;
-                case "BN":
-                    value_language = "Bengali";
-                    break;
-                case "BO":
-                    value_language = "Tibetan";
-                    break;
-                case "BR":
-                    value_language = "Breton";
-                    break;
-                case "BS":
-                    value_language = "Bosnian";
-                    break;
-                case "CA":
-                    value_language = "Catalan";
-                    break;
-                case "CE":
-                    value_language = "Chechen";
-                    break;
-                case "CH":
-                    value_language = "Chamorro";
-                    break;
-                case "CO":
-                    value_language = "Corsican";
-                    break;
-                case "CR":
-                    value_language = "Cree";
-                    break;
-                case "CS":
-                    value_language = "Czech";
-                    break;
-                case "CU":
-                    value_language = "Church Slavic";
-                    break;
-                case "CV":
-                    value_language = "Chuvash";
-                    break;
-                case "CY":
-                    value_language = "Welsh";
-                    break;
-                case "DA":
-                    value_language = "Danish";
-                    break;
-                case "DE":
-                    value_language = "German";
-                    break;
-                case "DV":
-                    value_language = "Divehi";
-                    break;
-                case "DZ":
-                    value_language = "Dzongkha";
-                    break;
-                case "ES":
-                    value_language = "Spanish";
-                    break;
-                case "ET":
-                    value_language = "Estonian";
-                    break;
-                case "EO":
-                    value_language = "Esperanto";
-                    break;
-                case "EU":
-                    value_language = "Basque";
-                    break;
-                case "FA":
-                    value_language = "Persian";
-                    break;
-                case "FF":
-                    value_language = "Fulah";
-                    break;
-                case "FI":
-                    value_language = "Finnish";
-                    break;
-                case "FJ":
-                    value_language = "Fijian";
-                    break;
-                case "FO":
-                    value_language = "Faroese";
-                    break;
-                case "FR":
-                    value_language = "French";
-                    break;
-                case "FY":
-                    value_language = "Western Frisian";
-                    break;
-                case "GA":
-                    value_language = "Irish";
-                    break;
-                case "GD":
-                    value_language = "Gaelic";
-                    break;
-                case "GL":
-                    value_language = "Galician";
-                    break;
-                case "GN":
-                    value_language = "Guarani";
-                    break;
-                case "GU":
-                    value_language = "Gujarati";
-                    break;
-                case "GV":
-                    value_language = "Manx";
-                    break;
-                case "HA":
-                    value_language = "Hausa";
-                    break;
-                case "HE":
-                    value_language = "Hebrew";
-                    break;
-                case "HI":
-                    value_language = "Hindi";
-                    break;
-                case "HO":
-                    value_language = "Hiri Motu";
-                    break;
-                case "HR":
-                    value_language = "Croatian";
-                    break;
-                case "HT":
-                    value_language = "Haitian";
-                    break;
-                case "HU":
-                    value_language = "Hungarian";
-                    break;
-                case "HY":
-                    value_language = "Armenian";
-                    break;
-                case "HZ":
-                    value_language = "Herero";
-                    break;
-                case "IA":
-                    value_language = "Interlingua";
-                    break;
-                case "ID":
-                    value_language = "Indonesian";
-                    break;
-                case "IE":
-                    value_language = "Interlingue";
-                    break;
-                case "IG":
-                    value_language = "Igbo";
-                    break;
-                case "II":
-                    value_language = "Sichuan Yi";
-                    break;
-                case "IK":
-                    value_language = "Inupiaq";
-                    break;
-                case "IO":
-                    value_language = "Ido";
-                    break;
-                case "IS":
-                    value_language = "Icelandic";
-                    break;
-                case "IT":
-                    value_language = "Italian";
-                    break;
-                case "IU":
-                    value_language = "Inuktitut";
-                    break;
-                case "JA":
-                    value_language = "Japanese";
-                    break;
-                case "JV":
-                    value_language = "Javanese";
-                    break;
-                case "KA":
-                    value_language = "Georgian";
-                    break;
-                case "KG":
-                    value_language = "Kongo";
-                    break;
-                case "KI":
-                    value_language = "Kikuyu";
-                    break;
-                case "KJ":
-                    value_language = "Kuanyama";
-                    break;
-                case "KK":
-                    value_language = "Kazakh";
-                    break;
-                case "KL":
-                    value_language = "Kalaallisut";
-                    break;
-                case "KM":
-                    value_language = "Central Khmer";
-                    break;
-                case "KN":
-                    value_language = "Kannada";
-                    break;
-                case "KO":
-                    value_language = "Korean";
-                    break;
-                case "KR":
-                    value_language = "Kanuri";
-                    break;
-                case "KS":
-                    value_language = "Kashmiri";
-                    break;
-                case "KU":
-                    value_language = "Kurdish";
-                    break;
-                case "KV":
-                    value_language = "Komi";
-                    break;
-                case "KW":
-                    value_language = "Cornish";
-                    break;
-                case "KY":
-                    value_language = "Kirghiz";
-                    break;
-                case "LA":
-                    value_language = "Latin";
-                    break;
-                case "LB":
-                    value_language = "Luxembourgish";
-                    break;
-                case "LG":
-                    value_language = "Ganda";
-                    break;
-                case "LI":
-                    value_language = "Limburgan";
-                    break;
-                case "LN":
-                    value_language = "Lingala";
-                    break;
-                case "LO":
-                    value_language = "Lao";
-                    break;
-                case "LT":
-                    value_language = "Lithuanian";
-                    break;
-                case "LU":
-                    value_language = "Luba-Katanga";
-                    break;
-                case "LV":
-                    value_language = "Latvian";
-                    break;
-                case "MG":
-                    value_language = "Malagasy";
-                    break;
-                case "MH":
-                    value_language = "Marshallese";
-                    break;
-                case "MI":
-                    value_language = "Maori";
-                    break;
-                case "MK":
-                    value_language = "Macedonian";
-                    break;
-                case "ML":
-                    value_language = "Malayalam";
-                    break;
-                case "MN":
-                    value_language = "Mongolian";
-                    break;
-                case "MR":
-                    value_language = "Marathi";
-                    break;
-                case "MS":
-                    value_language = "Malay";
-                    break;
-                case "MT":
-                    value_language = "Maltese";
-                    break;
-                case "MY":
-                    value_language = "Burmese";
-                    break;
-                case "NA":
-                    value_language = "Nauru";
-                    break;
-                case "NB":
-                    value_language = "Norwegian Bokmål";
-                    break;
-                case "NG":
-                    value_language = "Ndonga";
-                    break;
-                case "NL":
-                    value_language = "Dutch";
-                    break;
-                case "ND":
-                    value_language = "North Ndebele";
-                    break;
-                case "NE":
-                    value_language = "Nepali";
-                    break;
-                case "NN":
-                    value_language = "Norwegian Nynorsk";
-                    break;
-                case "NO":
-                    value_language = "Norwegian";
-                    break;
-                case "NR":
-                    value_language = "Ndebele South";
-                    break;
-                case "NV":
-                    value_language = "Navajo; Navaho";
-                    break;
-                case "NY":
-                    value_language = "Nyanja";
-                    break;
-                case "OC":
-                    value_language = "Occitan";
-                    break;
-                case "OJ":
-                    value_language = "Ojibwa";
-                    break;
-                case "OM":
-                    value_language = "Oromo";
-                    break;
-                case "OR":
-                    value_language = "Oriya";
-                    break;
-                case "OS":
-                    value_language = "Ossetian";
-                    break;
-                case "PA":
-                    value_language = "Punjabi";
-                    break;
-                case "PI":
-                    value_language = "Pali";
-                    break;
-                case "PL":
-                    value_language = "Polish";
-                    break;
-                case "PS":
-                    value_language = "Pushto";
-                    break;
-                case "PT":
-                    value_language = "Portuguese";
-                    break;
-                case "QU":
-                    value_language = "Quechua";
-                    break;
-                case "RM":
-                    value_language = "Romansh";
-                    break;
-                case "RN":
-                    value_language = "Rundi";
-                    break;
-                case "RO":
-                    value_language = "Romanian";
-                    break;
-                case "RU":
-                    value_language = "Russian";
-                    break;
-                case "RW":
-                    value_language = "Kinyarwanda";
-                    break;
-                case "SA":
-                    value_language = "Sanskrit";
-                    break;
-                case "SC":
-                    value_language = "Sardinian";
-                    break;
-                case "SD":
-                    value_language = "Sindhi";
-                    break;
-                case "SE":
-                    value_language = "Northern Sami";
-                    break;
-                case "SG":
-                    value_language = "Sango";
-                    break;
-                case "SI":
-                    value_language = "Sinhalese";
-                    break;
-                case "SK":
-                    value_language = "Slovak";
-                    break;
-                case "SL":
-                    value_language = "Slovenian";
-                    break;
-                case "SM":
-                    value_language = "Samoan";
-                    break;
-                case "SN":
-                    value_language = "Shona";
-                    break;
-                case "SO":
-                    value_language = "Somali";
-                    break;
-                case "SQ":
-                    value_language = "Albanian";
-                    break;
-                case "SR":
-                    value_language = "Serbian";
-                    break;
-                case "SS":
-                    value_language = "Swati";
-                    break;
-                case "ST":
-                    value_language = "Sotho Southern";
-                    break;
-                case "SU":
-                    value_language = "Sundanese";
-                    break;
-                case "SV":
-                    value_language = "Swedish";
-                    break;
-                case "SW":
-                    value_language = "Swahili";
-                    break;
-                case "TA":
-                    value_language = "Tamil";
-                    break;
-                case "TE":
-                    value_language = "Telugu";
-                    break;
-                case "TG":
-                    value_language = "Tajik";
-                    break;
-                case "TH":
-                    value_language = "Thai";
-                    break;
-                case "TI":
-                    value_language = "Tigrinya";
-                    break;
-                case "TK":
-                    value_language = "Turkmen";
-                    break;
-                case "TL":
-                    value_language = "Tagalog";
-                    break;
-                case "TN":
-                    value_language = "Tswana";
-                    break;
-                case "TO":
-                    value_language = "Tonga";
-                    break;
-                case "TR":
-                    value_language = "Turkish";
-                    break;
-                case "TS":
-                    value_language = "Tsonga";
-                    break;
-                case "TT":
-                    value_language = "Tatar";
-                    break;
-                case "TW":
-                    value_language = "Twi";
-                    break;
-                case "TY":
-                    value_language = "Tahitian";
-                    break;
-                case "UG":
-                    value_language = "Uighur";
-                    break;
-                case "UK":
-                    value_language = "Ukrainian";
-                    break;
-                case "UR":
-                    value_language = "Urdu";
-                    break;
-                case "UZ":
-                    value_language = "Uzbek";
-                    break;
-                case "VE":
-                    value_language = "Venda";
-                    break;
-                case "VI":
-                    value_language = "Vietnamese";
-                    break;
-                case "VO":
-                    value_language = "Volapük";
-                    break;
-                case "WA":
-                    value_language = "Walloon";
-                    break;
-                case "WO":
-                    value_language = "Wolof";
-                    break;
-                case "XH":
-                    value_language = "Xhosa";
-                    break;
-                case "YI":
-                    value_language = "Yiddish";
-                    break;
-                case "YO":
-                    value_language = "Yoruba";
-                    break;
-                case "ZA":
-                    value_language = "Zhuang";
-                    break;
-                case "ZH":
-                    value_language = "Chinese";
-                    break;
-                case "ZU":
-                    value_language = "Zulu";
-                    break;
-                case "ZZ":
-                    value_language = "Multiple Languages (unspecified)";
-                    break;
-            }
-       */
-        }
+            value_language = languageInfo.get(0).get("l_description");
+}
         return value_language;
     }
 
-    public String[] getValue_PMC() {//created by Nishant @15 Jun 2020
+    private String[] getValue_PMC() {//created by Nishant @15 Jun 2020
         String[] pmcInfo = new String[2];
         String pmcCode = DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC();
         sql = String.format(ProductFinderSQL.SELECT_PMC_INFO, pmcCode);
@@ -2112,7 +1441,7 @@ public class ProductFinderUISteps {
     @And("^Searches journal work by person (.*)")
     public void searchesJournalByfullName(String personSearchOption) throws AzureOauthTokenFetchingException, InterruptedException {
         //created by Nishant @ 10 Jul 2020
-        WorksMatchedApiObject returnedWorks = null;
+        WorksMatchedApiObject returnedWorks;
 
         while (!tasks.isObjectpresent("XPATH", ProductFinderConstants.searchBar)) {
             tasks.driver.navigate().refresh();
@@ -2120,7 +1449,7 @@ public class ProductFinderUISteps {
         }
 
         for (int i = 0; i < dataQualityContext.personDataObjectsFromEPHGD.size(); i++) {
-            String queryValue = "";
+            String queryValue;
 
             productFinderTasks.selectSearchType("Person");
             queryValue = dataQualityContext.personDataObjectsFromEPHGD.get(i).getPERSON_FIRST_NAME() +
@@ -2179,6 +1508,7 @@ public class ProductFinderUISteps {
                 String[] showingProducts = ProductFound.split(" ");
                 totalProductFound = Integer.valueOf(showingProducts[showingProducts.length - 1]);
             }
+            assert returnedWorks != null;
             Assert.assertEquals(returnedWorks.getTotalMatchCount(), totalProductFound);
             Log.info(journalSearchOption + " matched for UI and API");
             Log.info("....................................");

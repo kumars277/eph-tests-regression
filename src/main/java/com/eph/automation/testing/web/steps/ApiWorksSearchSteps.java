@@ -28,7 +28,7 @@ import org.junit.Assert;
 public class ApiWorksSearchSteps {
     @StaticInjection
     public DataQualityContext dataQualityContext;
-    public APIService apiService=new APIService();
+    private APIService apiService=new APIService();
     private String sql;
     //private static List<String> ids;
     private static List<String> manifestaionids;
@@ -46,11 +46,11 @@ public class ApiWorksSearchSteps {
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
         //added by Nishant @ 27 Dec for debugging failures
-        ids.clear();ids.add("EPR-W-1169HK");Log.info("hard coded work ids are : " + ids);
+       // ids.clear();ids.add("EPR-W-1169HK");Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
-    public void getRandomWorkIdWithProducts() {
+    private void getRandomWorkIdWithProducts() {
         sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_IDS_WITH_PRODUCT);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
@@ -87,7 +87,7 @@ public class ApiWorksSearchSteps {
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random Journal ids  : " + ids);
         //for debugging failure
-       // ids.clear(); ids.add("EPR-W-108RHX");  Log.info("hard coded work ids are : " + ids); //EPR-W-108VK7, EPR-W-108RJG   , EPR-W-108V6K
+        ids.clear(); ids.add("EPR-W-102SN4");  Log.info("hard coded work ids are : " + ids); //EPR-W-108VK7, EPR-W-108RJG   , EPR-W-108V6K
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
@@ -191,7 +191,7 @@ public class ApiWorksSearchSteps {
     }
 
     @Then("^the work details are retrieved by manifestationType and compared$")
-    public void compareWorksByManifestationTypeWithDB() throws Throwable {
+    public void compareWorksByManifestationTypeWithDB() {
         WorksMatchedApiObject returnedWorks;
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
         for (int i = 0; i < bound; i++) {
@@ -206,7 +206,7 @@ public class ApiWorksSearchSteps {
                 returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByManifestationType(searchKeyword, ManifestationType));
             } catch (Exception e) {
                 System.out.println(e.getMessage());
-                Assert.assertFalse(true);
+                Assert.fail();
 
             }
         }
@@ -290,18 +290,24 @@ public class ApiWorksSearchSteps {
             Log.info("###########-----getWorkByIdentifier - " + identifierType);
             Log.info("#######################################################");
 
-            if (identifierType.equals("WORK_IDENTIFIER")) {
-                getWorkIdentifiersByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-                returnedWorks = apiService.searchForWorksByIdentifierResult(workIdentifiers.get(i).getIDENTIFIER());
-            } else if (identifierType.equals("WORK_MANIFESTATION_IDENTIFIER")) {
-                List<Map<String, Object>> manifIdentifiers = getEPHGDManifestationIdentifiersByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-                returnedWorks = apiService.searchForWorksByIdentifierResult(manifIdentifiers.get(i).get("identifier").toString());
-            } else if (identifierType.equals("WORK_ID")) {
-                returnedWorks = apiService.searchForWorksByIdentifierResult(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-            } else if (identifierType.equals("WORK_MANIFESTATION_ID")) {
-                getManifestationsByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-                returnedWorks = apiService.searchForWorksByIdentifierResult(dataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_ID());
+            switch (identifierType) {
+                case "WORK_IDENTIFIER":
+                    getWorkIdentifiersByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                    returnedWorks = apiService.searchForWorksByIdentifierResult(workIdentifiers.get(i).getIDENTIFIER());
+                    break;
+                case "WORK_MANIFESTATION_IDENTIFIER":
+                    List<Map<String, Object>> manifIdentifiers = getEPHGDManifestationIdentifiersByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                    returnedWorks = apiService.searchForWorksByIdentifierResult(manifIdentifiers.get(i).get("identifier").toString());
+                    break;
+                case "WORK_ID":
+                    returnedWorks = apiService.searchForWorksByIdentifierResult(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                    break;
+                case "WORK_MANIFESTATION_ID":
+                    getManifestationsByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                    returnedWorks = apiService.searchForWorksByIdentifierResult(dataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_ID());
+                    break;
             }
+            assert returnedWorks != null;
             Log.info(returnedWorks.toString());
             returnedWorks.verifyWorksAreReturned();
             returnedWorks.verifyWorkWithIdIsReturned(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
@@ -345,9 +351,9 @@ public class ApiWorksSearchSteps {
                 case "JOURNAL_ACRONYM":
                     getWorkIdentifiersByWorkID(workId);
                     String jacronymValue = "";
-                    for (int cnt = 0; cnt < workIdentifiers.size(); cnt++) {
-                        if (workIdentifiers.get(cnt).getF_TYPE().equalsIgnoreCase("JOURNAL ACRONYM"))
-                            jacronymValue = workIdentifiers.get(cnt).getIDENTIFIER();
+                    for (WorkDataObject workIdentifier : workIdentifiers) {
+                        if (workIdentifier.getF_TYPE().equalsIgnoreCase("JOURNAL ACRONYM"))
+                            jacronymValue = workIdentifier.getIDENTIFIER();
                         break;
                     }
                     returnedWorks = apiService.searchForWorksBySearchOptionResult(jacronymValue);
@@ -356,9 +362,9 @@ public class ApiWorksSearchSteps {
                 case "JOURNAL_NUMBER":
                     getWorkIdentifiersByWorkID(workId);
                     String jNumber = "";
-                    for (int cnt = 0; cnt < workIdentifiers.size(); cnt++) {
-                        if (workIdentifiers.get(cnt).getF_TYPE().equalsIgnoreCase("ELSEVIER JOURNAL NUMBER"))
-                            jNumber = workIdentifiers.get(cnt).getIDENTIFIER();
+                    for (WorkDataObject workIdentifier : workIdentifiers) {
+                        if (workIdentifier.getF_TYPE().equalsIgnoreCase("ELSEVIER JOURNAL NUMBER"))
+                            jNumber = workIdentifier.getIDENTIFIER();
                         break;
                     }
                     returnedWorks = apiService.searchForWorksBySearchOptionResult(jNumber);
@@ -367,9 +373,9 @@ public class ApiWorksSearchSteps {
                 case "ISSN":
                     getWorkIdentifiersByWorkID(workId);
                     String issn = "";
-                    for (int cnt = 0; cnt < workIdentifiers.size(); cnt++) {
-                        if (workIdentifiers.get(cnt).getF_TYPE().equalsIgnoreCase("ISSN-L"))
-                            issn = workIdentifiers.get(cnt).getIDENTIFIER();
+                    for (WorkDataObject workIdentifier : workIdentifiers) {
+                        if (workIdentifier.getF_TYPE().equalsIgnoreCase("ISSN-L"))
+                            issn = workIdentifier.getIDENTIFIER();
                         break;
                     }
                     returnedWorks = apiService.searchForWorksBySearchOptionResult(issn);
@@ -450,6 +456,7 @@ public class ApiWorksSearchSteps {
                     returnedWorks = apiService.searchForWorksBySearchOptionResult(dataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME());
                     break;
             }
+            assert returnedWorks != null;
             returnedWorks.verifyWorksAreReturned();
             returnedWorks.verifyWorkWithIdIsReturned(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
         }
@@ -475,9 +482,9 @@ public class ApiWorksSearchSteps {
                 case "JOURNAL_ACRONYM":
                     getWorkIdentifiersByWorkID(workId);
                     String jacronymValue = "";
-                    for (int cnt = 0; cnt < workIdentifiers.size(); cnt++) {
-                        if (workIdentifiers.get(cnt).getF_TYPE().equalsIgnoreCase("JOURNAL ACRONYM")) {
-                            jacronymValue = workIdentifiers.get(cnt).getIDENTIFIER();
+                    for (WorkDataObject workIdentifier : workIdentifiers) {
+                        if (workIdentifier.getF_TYPE().equalsIgnoreCase("JOURNAL ACRONYM")) {
+                            jacronymValue = workIdentifier.getIDENTIFIER();
                             break;
                         }
                     }
@@ -487,9 +494,9 @@ public class ApiWorksSearchSteps {
                 case "JOURNAL_NUMBER":
                     getWorkIdentifiersByWorkID(workId);
                     String jNumber = "";
-                    for (int cnt = 0; cnt < workIdentifiers.size(); cnt++) {
-                        if (workIdentifiers.get(cnt).getF_TYPE().equalsIgnoreCase("ELSEVIER JOURNAL NUMBER")) {
-                            jNumber = workIdentifiers.get(cnt).getIDENTIFIER();
+                    for (WorkDataObject workIdentifier : workIdentifiers) {
+                        if (workIdentifier.getF_TYPE().equalsIgnoreCase("ELSEVIER JOURNAL NUMBER")) {
+                            jNumber = workIdentifier.getIDENTIFIER();
                             break;
                         }
                     }
@@ -499,15 +506,16 @@ public class ApiWorksSearchSteps {
                 case "ISSN":
                     getWorkIdentifiersByWorkID(workId);
                     String issn = "";
-                    for (int cnt = 0; cnt < workIdentifiers.size(); cnt++) {
-                        if (workIdentifiers.get(cnt).getF_TYPE().equalsIgnoreCase("ISSN-L")) {
-                            issn = workIdentifiers.get(cnt).getIDENTIFIER();
+                    for (WorkDataObject workIdentifier : workIdentifiers) {
+                        if (workIdentifier.getF_TYPE().equalsIgnoreCase("ISSN-L")) {
+                            issn = workIdentifier.getIDENTIFIER();
                             break;
                         }
                     }
                     returnedWorks = apiService.searchForWorksBySearchOptionResult(issn);
                     break;
             }
+            assert returnedWorks != null;
             returnedWorks.verifyWorksAreReturned();
             returnedWorks.verifyWorkWithIdIsReturned(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
         }
@@ -541,14 +549,14 @@ public class ApiWorksSearchSteps {
 
     @When("^the work response count is compared with the count in the DB for Person Id$")
     public void compareSearchResultCountForPersonIdresponse() throws AzureOauthTokenFetchingException {
-        WorksMatchedApiObject returnedWorks = null;
+        WorksMatchedApiObject returnedWorks;
         int bound = ids.size();
-        for (int i = 0; i < bound; i++) {
-            Log.info("personId to be tested..." + ids.get(i));
-            returnedWorks = apiService.searchForWorksByPersonIDResult(ids.get(i));
+        for (String id : ids) {
+            Log.info("personId to be tested..." + id);
+            returnedWorks = apiService.searchForWorksByPersonIDResult(id);
             returnedWorks.verifyWorksAreReturned();
             Log.info("Total API count matched..." + returnedWorks.getTotalMatchCount());
-            returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByPersonIDs(ids.get(i)));
+            returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByPersonIDs(id));
         }
     }
 
@@ -627,6 +635,7 @@ public class ApiWorksSearchSteps {
                     break;
             }
 
+            assert returnedWorks != null;
             returnedWorks.verifyWorksAreReturned();
 
             Log.info("Total API count matched..." + returnedWorks.getTotalMatchCount());
@@ -639,11 +648,11 @@ public class ApiWorksSearchSteps {
     }
 
 
-    public WorksMatchedApiObject callAPI_workByOption(String personSearchOption, String queryValue) throws AzureOauthTokenFetchingException {
+    WorksMatchedApiObject callAPI_workByOption(String personSearchOption, String queryValue) throws AzureOauthTokenFetchingException {
         //created by Nishant @ 10 Jul 2020
         //verify Journal Finder search result with API
        Log.info("calling workAPI for... "+personSearchOption);
-        WorksMatchedApiObject returnedWorks = null;
+        WorksMatchedApiObject returnedWorks;
         returnedWorks = apiService.searchForWorksByQueryTypeResult(personSearchOption, queryValue);
         return returnedWorks;
     }
@@ -728,7 +737,7 @@ public class ApiWorksSearchSteps {
         return count;
     }
 
-    public String getPMGcodeByPMC(String pmcCode) {
+    String getPMGcodeByPMC(String pmcCode) {
         sql = String.format(APIDataSQL.EPH_GD_PMG_CODE_EXTRACT_BYPMC, pmcCode);
          Log.info(sql);
         List<Map<String, Object>> getPMG = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -737,7 +746,7 @@ public class ApiWorksSearchSteps {
         return pmgCode;
     }
 
-    public List<String> getManifestationIdsForWorkID(String workID) {
+    List<String> getManifestationIdsForWorkID(String workID) {
         //  Log.info("Get manifestationApiObject ids ..");
 
         sql = String.format(APIDataSQL.SELECT_MANIFESTATION_IDS_BY_WORKID, workID);
@@ -751,14 +760,14 @@ public class ApiWorksSearchSteps {
     }
 
     //created by Nishant @ 22 Apr 2020
-    public void getProductDetailByManifestationId(String manifestationId) {
+    void getProductDetailByManifestationId(String manifestationId) {
         Log.info("get product by manifestation id of the work...");
         sql = String.format(APIDataSQL.SelectProductByManifestationId, manifestationId);
         productDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
         Assert.assertFalse("Verify that product by manifestation id is extracted successfully from the DB", productDataObjectsFromEPHGD.isEmpty());
     }
 
-    public void getProductDetailByWorkId(String workId) {
+    void getProductDetailByWorkId(String workId) {
         Log.info("get product by work id...");
         sql = String.format(APIDataSQL.SelectProductByWorkId, workId);
         productDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);

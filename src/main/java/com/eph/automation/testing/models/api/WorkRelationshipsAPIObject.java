@@ -16,6 +16,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
 import org.junit.Assert;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 
@@ -34,70 +36,82 @@ public class WorkRelationshipsAPIObject {
     public void setWorkChild(WorkRelationshipsAPIObject.workChild[] workChild) {this.workChild = workChild;}
 
     public void compareWithDB(String WorkId) {
+        //updated by Nishant @ 05 Apr 2021
         Log.info("verifying workRelationship..." + WorkId);
         if (workParent != null) {
+            ArrayList<workParent> list_workParent= new ArrayList<>(Arrays.asList(workParent));
             getWorkRelationshipParentRecordsEPHGD(WorkId);
-            for (workParent parent : workParent) {
-                printLog("workParent "+parent.id);
-                //Log.info("-Relationship type code\n-Relationship effectiveStartDate");
-                Assert.assertEquals(parent.type.get("code"), dataQualityContext.workRelationshipParentDataObjectsFromEPGD.get(0).getF_RELATIONSHIP_TYPE());
-                printLog("relationshipType");
+            for (int wp=0;wp<workParent.length;wp++) {
+                for(int wp2=0;wp2<workParent.length;wp2++) {
+                    if (!list_workParent.get(wp).id.equalsIgnoreCase(dataQualityContext.workRelationshipParentDataObjectsFromEPGD.get(wp2).getF_PARENT()));
+                        else
+                    {
+                        printLog("verifying workParent "+list_workParent.get(wp).id);
+                        Assert.assertEquals(list_workParent.get(wp).type.get("code"), dataQualityContext.workRelationshipParentDataObjectsFromEPGD.get(wp2).getF_RELATIONSHIP_TYPE());
+                    printLog("relationshipType");
 
-                Assert.assertEquals(parent.effectiveStartDate, dataQualityContext.workRelationshipParentDataObjectsFromEPGD.get(0).getEFFECTIVE_START_DATE());
-                printLog("effectiveStartDate");
+                    Assert.assertEquals(list_workParent.get(wp).effectiveStartDate, dataQualityContext.workRelationshipParentDataObjectsFromEPGD.get(wp2).getEFFECTIVE_START_DATE());
+                    printLog("effectiveStartDate");
 
-                getWorksDataFromEPHGD(parent.id);
-                //Log.info("comparing\n-title\n-work Type code\n-work status code");
-                Assert.assertEquals(parent.workSummary.title, dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
-                printLog("work Title");
+                    getWorksDataFromEPHGD(list_workParent.get(wp).id);
+                    //Log.info("comparing\n-title\n-work Type code\n-work status code");
+                    Assert.assertEquals(list_workParent.get(wp).workSummary.title, dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+                    printLog("work Title");
 
-                Assert.assertEquals(parent.workSummary.type.get("code"), dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
-                printLog("work Type");
+                    Assert.assertEquals(list_workParent.get(wp).workSummary.type.get("code"), dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
+                    printLog("work Type");
 
-                Assert.assertEquals(parent.workSummary.status.get("code"), dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
-                printLog("work Status");
+                    Assert.assertEquals(list_workParent.get(wp).workSummary.status.get("code"), dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
+                    printLog("work Status");}
+                }
             }
         }
         if (workChild != null) {
+            ArrayList<workChild> list_workChild=new ArrayList(Arrays.asList(workChild));
             getWorkRelationshipChildRecordsEPHGD(WorkId);
-            for (workChild child : workChild) {
+            for (int wc=0;wc<workChild.length;wc++) {
+                for(int wc2=0;wc2<workChild.length;wc2++) {
+                    if(!list_workChild.get(wc).id.equalsIgnoreCase(dataQualityContext.workRelationshipChildDataObjectsFromEPGD.get(wc2).getF_CHILD()));
+                    else {
+                        printLog("verifying workChild " + list_workChild.get(wc).id);
+                        // Log.info("-Relationship type code\n-Relationship effectiveStartDate");
+                        Assert.assertEquals(list_workChild.get(wc).type.get("code"), dataQualityContext.workRelationshipChildDataObjectsFromEPGD.get(wc2).getF_RELATIONSHIP_TYPE());
+                        printLog("relationshipType");
 
-                printLog("workChild "+child.id);
-               // Log.info("-Relationship type code\n-Relationship effectiveStartDate");
-                Assert.assertEquals(child.type.get("code"), dataQualityContext.workRelationshipChildDataObjectsFromEPGD.get(0).getF_RELATIONSHIP_TYPE());
-                printLog("relationshipType");
+                        Assert.assertEquals(list_workChild.get(wc).effectiveStartDate, dataQualityContext.workRelationshipChildDataObjectsFromEPGD.get(wc2).getEFFECTIVE_START_DATE());
+                        printLog("effectiveStartDate");
 
-                Assert.assertEquals(child.effectiveStartDate, dataQualityContext.workRelationshipChildDataObjectsFromEPGD.get(0).getEFFECTIVE_START_DATE());
-                printLog("effectiveStartDate");
+                        getWorksDataFromEPHGD(list_workChild.get(wc).id);
+                   //     Log.info("comparing \n-title\n-work Type code\n-work status code");
+                        Assert.assertEquals(list_workChild.get(wc).workSummary.title, dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+                        printLog("work Title");
 
-                getWorksDataFromEPHGD(child.id);
-                Log.info("comparing \n-title\n-work Type code\n-work status code");
-                Assert.assertEquals(child.workSummary.title, dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
-                printLog("work Title");
+                        Assert.assertEquals(list_workChild.get(wc).workSummary.type.get("code"), dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
+                        printLog("work Type");
 
-                Assert.assertEquals(child.workSummary.type.get("code"), dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
-                printLog("work Type");
+                        Assert.assertEquals(list_workChild.get(wc).workSummary.status.get("code"), dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
+                        printLog("work Status");
+                    }
+                }
 
-                Assert.assertEquals(child.workSummary.status.get("code"), dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
-                printLog("work Status");
             }
 
         }
     }
 
-    public void getWorkRelationshipParentRecordsEPHGD(String workId){
+    private void getWorkRelationshipParentRecordsEPHGD(String workId){
         Log.info("getParent record of..."+workId);
         String sql=String.format(WorkRelationshipSQL.getWorkParent,workId);
         dataQualityContext.workRelationshipParentDataObjectsFromEPGD = DBManager.getDBResultAsBeanList(sql, WorkRelationshipDataObject.class, Constants.EPH_URL);
     }
 
-    public void getWorkRelationshipChildRecordsEPHGD(String workId){
+    private void getWorkRelationshipChildRecordsEPHGD(String workId){
         Log.info("getChild record of..."+workId);
         String sql=String.format(WorkRelationshipSQL.getWorkChild,workId);
         dataQualityContext.workRelationshipChildDataObjectsFromEPGD = DBManager.getDBResultAsBeanList(sql, WorkRelationshipDataObject.class, Constants.EPH_URL);
     }
 
-    public void getWorksDataFromEPHGD(String workId) {
+    private void getWorksDataFromEPHGD(String workId) {
         Log.info("getWork record ..."+workId);
         String sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, workId);
         dataQualityContext.workDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);

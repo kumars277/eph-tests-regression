@@ -65,6 +65,7 @@ public class WorkDataObject {
     private String OWNERSHIP;
     private String PMG;
 
+
     //for Data Model Changes: created by Nishant @ 11 Jun 2020 for
     public String getPLANNED_LAUNCH_DATE() {return PLANNED_LAUNCH_DATE;}
     public void setPLANNED_LAUNCH_DATE(String PLANNED_LAUNCH_DATE) {this.PLANNED_LAUNCH_DATE = PLANNED_LAUNCH_DATE;}
