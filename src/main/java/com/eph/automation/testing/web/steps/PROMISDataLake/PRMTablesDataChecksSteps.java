@@ -32,7 +32,7 @@ public class PRMTablesDataChecksSteps {
 
     @Given("^We get the (.*) random PRM ids of (.*)$")
     public void getRandomPRMIds(String numberOfRecords, String tableName) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+//        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random record...");
         switch (tableName) {
@@ -305,8 +305,6 @@ public class PRMTablesDataChecksSteps {
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getBIO_IMAGE(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getBIO_IMAGE());
                 }
-
-
             }
         }
     }
@@ -347,7 +345,6 @@ public class PRMTablesDataChecksSteps {
                     Assert.assertEquals("The CLS_COD =" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_COD() + " is missing/not found in Data Lake",
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_COD(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD());
-
                 }
 
                 Log.info("CLS_COD => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_COD() +
@@ -358,7 +355,6 @@ public class PRMTablesDataChecksSteps {
                     Assert.assertEquals("The CLS_DES is incorrect for CLS_COD=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_COD(),
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_DES(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getCLS_DES());
-
                 }
 
                 Log.info("CLS_COD => " + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_COD() +
@@ -369,7 +365,6 @@ public class PRMTablesDataChecksSteps {
                     Assert.assertEquals("The CLS_GRP_COD is incorrect for CLS_COD=" + dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_COD(),
                             dataQualityPRMContext.tbPRMDataObjectsFromOracle.get(i).getCLS_GRP_COD(),
                             dataQualityPRMContext.tbPRMDataObjectsFromDL.get(i).getCLS_GRP_COD());
-
                 }
             }
         }

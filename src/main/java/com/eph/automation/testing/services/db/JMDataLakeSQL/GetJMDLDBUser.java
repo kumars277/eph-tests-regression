@@ -21,4 +21,20 @@ public class GetJMDLDBUser {
         }
         return new String[]{dbJMSQL,dbJMDL};
     }
+
+    public static String getJMDB(){
+        String dbJMDataLake = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbJMDataLake = "journalmaestro_sit";
+            }
+            else{
+                dbJMDataLake = "journalmaestro_uat";
+            }
+
+        }else{
+            dbJMDataLake = "journalmaestro_sit";
+        }
+        return dbJMDataLake;
+    }
 }
