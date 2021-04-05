@@ -4,7 +4,7 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
 
 
 
-  @JRBI
+  @JRBItest
   Scenario Outline: Verify Data Count for JRBI transform_Current_tables is transferred from Source Table
     Given Get the total count of JRBI Data from Full Load <tableName>
     Then  We know the total count of Current JRBI data from <tableName>

@@ -21,10 +21,10 @@ import org.junit.Assert;
 import java.util.HashMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PersonsApiObject {
+class PersonsApiObject {
     @StaticInjection
     private DataQualityContext dataQualityContext;
-    public PersonsApiObject() {}
+    private PersonsApiObject() {}
 
     private String id;
     private HashMap<String, Object> role;
@@ -53,12 +53,12 @@ public class PersonsApiObject {
         dataQualityContext.personProductRoleDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, PersonProductRoleDataObject.class, Constants.EPH_URL);
     }
 
-    public void getPersonWorkRoleRecordsEPHGD(String workPersonRoleID) {
+    private void getPersonWorkRoleRecordsEPHGD(String workPersonRoleID) {
         String sql = String.format(PersonWorkRoleDataSQL.GET_DATA_PERSONS_WORK_ROLE_EPHGD, workPersonRoleID);
         dataQualityContext.personWorkRoleDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
     }
 
-    public void getPersonDataFromEPHGD(String personID) {
+    private void getPersonDataFromEPHGD(String personID) {
         String sql = String.format(PersonDataSQL.GET_DATA_PERSONS_EPHGD, personID);
         dataQualityContext.personDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
     }
@@ -119,7 +119,6 @@ public class PersonsApiObject {
         Assert.assertEquals(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPEOPLEHUB_ID(),this.person.get("peoplehubId"));
            printLog("peoplehubId");}
     }
-
     private void printLog(String verified){Log.info("verified..."+verified);}
 
 }

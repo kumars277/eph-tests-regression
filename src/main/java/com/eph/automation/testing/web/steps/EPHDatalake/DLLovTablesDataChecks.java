@@ -25,7 +25,7 @@ public class DLLovTablesDataChecks {
 
     @Given("^We get (.*) random Lov Codes of (.*)")
     public void getRandomLovIds(String numberOfRecords, String tableName) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+          numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random record...");
         //Get property when run with jenkins
@@ -396,7 +396,7 @@ public class DLLovTablesDataChecks {
                             LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getB_BATCHID());
                 }
                 if (LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getB_CREDATE() != null ||
-                        (LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getB_CREDATE()!= null)) {
+                        (LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getB_CREDATE())!= null) {
                     Assert.assertEquals("The B_CREDATE is incorrect for id=" + lovCode,
                             LovTablesDLContext.LovTableDataObjectsFromEPH.get(i).getB_CREDATE().substring(0, 10),
                             LovTablesDLContext.LovTableDataObjectsFromDL.get(i).getB_CREDATE().substring(0, 10));

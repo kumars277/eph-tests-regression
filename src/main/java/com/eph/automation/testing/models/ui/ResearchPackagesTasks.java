@@ -205,8 +205,8 @@ public class ResearchPackagesTasks {
             if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.PENDING_JOURNAL)){
                     tasks.click("XPATH",ResearchPackagesConstants.PENDING_JOURNAL);
                     tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_DROPDOWN);
-                    tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_PENDING);
-                    tasks.keyboardEvents("XPATH", ResearchPackagesConstants.CHOOSE_REASON_PENDING,"RETURN");
+                    WebElement reqElement = tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_PENDING);
+                    tasks.keyboardEvents(reqElement,"RETURN");
                     tasks.sendKeys("XPATH", ResearchPackagesConstants.ADD_REMARKS,"Awaiting for the Response");
                     tasks.click("XPATH", ResearchPackagesConstants.EXCLUDE_ADD);
             }
@@ -223,8 +223,8 @@ public class ResearchPackagesTasks {
             if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.INCLUDE_JOURNAL)){
                 tasks.click("XPATH",ResearchPackagesConstants.INCLUDE_JOURNAL);
                 tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_DROPDOWN);
-                tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_INCLUDE);
-                tasks.keyboardEvents("XPATH", ResearchPackagesConstants.CHOOSE_REASON_INCLUDE,"RETURN");
+                WebElement reqElement = tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_INCLUDE);
+                tasks.keyboardEvents(reqElement,"RETURN");
                 tasks.sendKeys("XPATH", ResearchPackagesConstants.ADD_REMARKS,"Adding as New Journal");
                 tasks.click("XPATH", ResearchPackagesConstants.EXCLUDE_ADD);
             }
