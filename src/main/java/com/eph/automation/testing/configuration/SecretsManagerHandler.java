@@ -14,10 +14,7 @@ import net.minidev.json.parser.ParseException;
 import java.util.Base64;
 
 
-
 public class SecretsManagerHandler {
-
-
 
     public static String getPostgreDBConnection(String connectionURL) {
 
@@ -65,6 +62,7 @@ public class SecretsManagerHandler {
     public static String getUAT2SecretName(String connectionURL){
         //created by Nishant @ 15 Mar 2021
         switch (connectionURL) {
+            case "AWS_URL":     return "eph_aws_uat_url";
             case "EPH_URL":     return "eph_postgre_uat2_url";
             default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
         }
@@ -84,7 +82,7 @@ public class SecretsManagerHandler {
     public static String getUATdbConnection(JSONObject object,String connectionURL){
         //created by Nishant @ 17 Mar 2021
         switch (connectionURL) {
-            case "AWS_URL":            return DecryptionService.decrypt(object.getAsString(""));
+            case "AWS_URL":            return DecryptionService.decrypt(object.getAsString("UAT_AWS_URL"));
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString(""));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString(""));
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_UAT_URL"));
@@ -95,7 +93,7 @@ public class SecretsManagerHandler {
     public static String getUAT2dbConnection(JSONObject object,String connectionURL){
         //created by Nishant @ 17 Mar 2021
         switch (connectionURL) {
-            case "AWS_URL":            return DecryptionService.decrypt(object.getAsString(""));
+            case "AWS_URL":            return DecryptionService.decrypt(object.getAsString("UAT_AWS_URL"));
             case "PROMIS_URL":         return DecryptionService.decrypt(object.getAsString(""));
             case "MYSQL_JM_URL":       return DecryptionService.decrypt(object.getAsString(""));
             case "EPH_URL":            return DecryptionService.decrypt(object.getAsString("EPH_POSTGRE_UAT2_URL"));
@@ -126,7 +124,7 @@ public class SecretsManagerHandler {
         catch (ParseException e) {e.printStackTrace();
         }
 
-         return object;
+        return object;
     }
 
 }
