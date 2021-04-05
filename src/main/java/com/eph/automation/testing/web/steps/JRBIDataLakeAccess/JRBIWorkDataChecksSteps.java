@@ -2019,13 +2019,13 @@ public class JRBIWorkDataChecksSteps {
         }
     }
 
-    @ Then("^Get the records from work extended person role table$")
+    /*@ Then("^Get the records from work extended person role table$")
     public void getRecPersonRole(String workId){
         Log.info("We get the records from Person Extended Roles...");
         sql = String.format(JRBIWorkDataChecksSQL.GET_JRBI_PERSON_ROLE_REC, workId);
         Log.info(sql);
         JRBIAccessDLContext.recordsFromPersonExtended = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
-    }
+    }*/
 
     @Then("^Get the records from work extended stitching table$")
     public void getworkExtendedJSONRec(String workId){
@@ -2043,7 +2043,7 @@ public class JRBIWorkDataChecksSteps {
         } else {
             for (int i = 0; i < dataQualityJRBIContext.recordsFromExtendeWork.size(); i++) {
                 String workId=dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID();
-                getRecPersonRole(workId);
+             //   getRecPersonRole(workId);
                 getworkExtendedJSONRec(workId);
                 Log.info("Work_Extended -> EPR => " + dataQualityJRBIContext.recordsFromExtendeWork.get(i).getEPR_ID() +
                         " Work_JSON -> EPR => " + JRBIAccessDLContext.recordsFromWorkStitching.getId());

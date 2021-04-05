@@ -189,10 +189,10 @@ public class WorksIdSteps {
                             "ELSEVIER JOURNAL NUMBER", dataFromSAFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The JOURNAL_NUMBER  is incorrect for id=" + dataQualityContext.productIdFromStg,
-                            dataFromSTG.get(0).getJOURNAL_NUMBER(), dataFromSAFtype.get(0).getIDENTIFIER());
+                            dataFromSTG.get(0).getJOURNAL_NUMBER(), dataFromSAFtype.get(0).getIDENTIFER());
 
                     Log.info("The value in STG is : " + dataFromSTG.get(0).getJOURNAL_NUMBER());
-                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFIER());
+                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFER());
 
                     Log.info("Journal number is correct");
                     sql = WorksIdentifierSQL.getIdentifierID
@@ -215,10 +215,10 @@ public class WorksIdSteps {
                             "ISSN-L", dataFromSAFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The ISSN_L is incorrect for id=" + dataQualityContext.productIdFromStg,
-                            dataFromSTG.get(0).getISSN_L(), dataFromSAFtype.get(0).getIDENTIFIER());
+                            dataFromSTG.get(0).getISSN_L(), dataFromSAFtype.get(0).getIDENTIFER());
 
                     Log.info("The value in STG is : " + dataFromSTG.get(0).getISSN_L());
-                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFIER());
+                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFER());
 
                     sql = WorksIdentifierSQL.getIdentifierID
                             .replace("PARAM1", "ISSN-L")
@@ -241,10 +241,10 @@ public class WorksIdSteps {
                             "JOURNAL ACRONYM", dataFromSAFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The JOURNAL_ACRONYM is incorrect for id=" + dataQualityContext.productIdFromStg,
-                            dataFromSTG.get(0).getJOURNAL_ACRONYM(), dataFromSAFtype.get(0).getIDENTIFIER());
+                            dataFromSTG.get(0).getJOURNAL_ACRONYM(), dataFromSAFtype.get(0).getIDENTIFER());
 
                     Log.info("The value in STG is : " + dataFromSTG.get(0).getJOURNAL_ACRONYM());
-                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFIER());
+                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFER());
 
                     sql = WorksIdentifierSQL.getIdentifierID
                             .replace("PARAM1", "JOURNAL ACRONYM")
@@ -266,10 +266,10 @@ public class WorksIdSteps {
                             "DAC-K", dataFromSAFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The DAC_KEY is incorrect for id=" + dataQualityContext.productIdFromStg,
-                            dataFromSTG.get(0).getDAC_KEY(), dataFromSAFtype.get(0).getIDENTIFIER());
+                            dataFromSTG.get(0).getDAC_KEY(), dataFromSAFtype.get(0).getIDENTIFER());
 
                     Log.info("The value in STG is : " + dataFromSTG.get(0).getDAC_KEY());
-                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFIER());
+                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFER());
                     sql = WorksIdentifierSQL.getIdentifierID
                             .replace("PARAM1", "DAC-K")
                             .replace("PARAM2", "DAC_KEY")
@@ -291,10 +291,10 @@ public class WorksIdSteps {
                             "PPM-PART", dataFromSAFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The PROJECT_NUM is incorrect for id=" + dataQualityContext.productIdFromStg,
-                            dataFromSTG.get(0).getPROJECT_NUM(), dataFromSAFtype.get(0).getIDENTIFIER());
+                            dataFromSTG.get(0).getPROJECT_NUM(), dataFromSAFtype.get(0).getIDENTIFER());
 
                     Log.info("The value in STG is : " + dataFromSTG.get(0).getPROJECT_NUM());
-                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFIER());
+                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFER());
                     sql = WorksIdentifierSQL.getIdentifierID
                             .replace("PARAM1", "PPM-PART")
                             .replace("PARAM2", "PROJECT_NUM")
@@ -340,7 +340,7 @@ public class WorksIdSteps {
                             "ELSEVIER JOURNAL NUMBER", dataFromGDFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The Journal Number is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
-                            dataFromSTG.get(0).getJOURNAL_NUMBER(), dataFromGDFtype.get(0).getIDENTIFIER());
+                            dataFromSTG.get(0).getJOURNAL_NUMBER(), dataFromGDFtype.get(0).getIDENTIFER());
 
                 }
                 if (dataFromSTG.get(0).getISSN_L() != null) {
@@ -354,7 +354,7 @@ public class WorksIdSteps {
                             "ISSN-L", dataFromGDFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The ISSN_L is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
-                            dataFromSTG.get(0).getISSN_L(), dataFromGDFtype.get(0).getIDENTIFIER());
+                            dataFromSTG.get(0).getISSN_L(), dataFromGDFtype.get(0).getIDENTIFER());
 
                 }
                 if (dataFromSTG.get(0).getJOURNAL_ACRONYM() != null) {
@@ -368,7 +368,7 @@ public class WorksIdSteps {
                             "JOURNAL ACRONYM", dataFromGDFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The JOURNAL_ACRONYM is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
-                            dataFromSTG.get(0).getJOURNAL_ACRONYM(), dataFromGDFtype.get(0).getIDENTIFIER());
+                            dataFromSTG.get(0).getJOURNAL_ACRONYM(), dataFromGDFtype.get(0).getIDENTIFER());
                 }
                 if (dataFromSTG.get(0).getDAC_KEY() != null) {
                     sql = WorksIdentifierSQL.getTypeIdGD
@@ -381,7 +381,7 @@ public class WorksIdSteps {
                             "DAC-K", dataFromGDFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The DAC_KEY is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
-                            dataFromSTG.get(0).getDAC_KEY(), dataFromGDFtype.get(0).getIDENTIFIER());
+                            dataFromSTG.get(0).getDAC_KEY(), dataFromGDFtype.get(0).getIDENTIFER());
 
                 }
                 if (dataFromSTG.get(0).getPROJECT_NUM() != null) {
@@ -395,7 +395,7 @@ public class WorksIdSteps {
                             "PPM-PART", dataFromGDFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The PROJECT_NUM is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
-                            dataFromSTG.get(0).getPROJECT_NUM(), dataFromGDFtype.get(0).getIDENTIFIER());
+                            dataFromSTG.get(0).getPROJECT_NUM(), dataFromGDFtype.get(0).getIDENTIFER());
                 }
             }
         }else{
