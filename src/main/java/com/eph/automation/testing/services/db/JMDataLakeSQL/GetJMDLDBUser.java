@@ -54,6 +54,22 @@ public class GetJMDLDBUser {
         return dbJMDataLake;
     }
 
+    public static String getProdDataBase(){
+        String dbProdDL = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbProdDL = "product_database_sit";
+            }
+            else{
+                dbProdDL = "product_database_uat";
+            }
+
+        }else{
+            dbProdDL = "product_database_sit";
+        }
+        return dbProdDL;
+    }
+
     public static String getProdStagingDataBase(){
         String dbStageProdDL = null;
         if (System.getProperty("ENV") != null){
@@ -66,6 +82,22 @@ public class GetJMDLDBUser {
 
         }else{
             dbStageProdDL = "product_staging_database_sit";
+        }
+        return dbStageProdDL;
+    }
+
+    public static String getProdStagingDataBase2(){
+        String dbStageProdDL = null;
+        if (System.getProperty("ENV") != null){
+            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
+                dbStageProdDL = "product_staging_database_sit2";
+            }
+            else{
+                dbStageProdDL = "product_staging_database_uat2";
+            }
+
+        }else{
+            dbStageProdDL = "product_staging_database_uat2";
         }
         return dbStageProdDL;
     }

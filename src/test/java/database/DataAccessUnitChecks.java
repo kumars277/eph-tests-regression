@@ -23,13 +23,15 @@ public class DataAccessUnitChecks {
     @Test
     @Ignore
     public void testDecrypt() {
- //       System.out.println(DecryptionService.decrypt(PMX_URL));
+        System.out.println(DecryptionService.decrypt("D850IuF7l4WxllwIa6PhOhqZ+fRSCXa90GeIPTMzCapIh/U5i/M5HsxI5rK1CgeyRPGHN6zMGj9yyd+VPmvEpEoFmocNl4UGFFdmrCcq0l1z4JGWMK6CiCGVlUXqrIC1IeVB3IeYqjaJvMnNjOnDfrYC6eQxtXciGO/dvizn2DrSOW78nqjaVzq/cDEb3YLHN8zrrdTRiBU="));
     }
 
     @Test
     @Ignore
     public void testEncrypt() {
-//           System.out.println(DecryptionService.encrypt(PROMIS_ORACLE));
+           System.out.println(DecryptionService.encrypt("jdbc:postgresql://eph-uat-eph-uat2-rds.cucvf0thmu0s.eu-west-1.rds.amazonaws.com/ephuat2?user=semarchy_eph_mdm_ro&password=*U38Gbb-sy&ssl=false"));
+
+
     }
 
     @Test

@@ -60,10 +60,10 @@ public class Constants {
 //    public static String PMX_STG_SIT_URL = "PMX_STG_SIT_URL";
 //    public static String PMX_STG_UAT_URL = "PMX_STG_UAT_URL";
 
-    //EPH Database Constants
-//    public static String EPH_SIT_URL = "EPH_SIT_URL";
+//    EPH Database Constants
+    public static String EPH_SIT_URL = "EPH_SIT_URL";
 //    public static String EPH_DEV_URL = "EPH_DEV_URL";
-
+//
 
     //MySql Database
     public static String MYSQL_SIT_DB_URL_KEY = "MYSQL_SIT_URL";
@@ -78,10 +78,12 @@ public class Constants {
     //Base Constants
     public static String PMX_URL = "PMX_URL";
     public static String EPH_URL = "EPH_URL";
+    public static String EPH_URL2 = "EPH_SIT2_URL";
+    public static String EPH_UAT_URL2 = "EPH_UAT2_URL";
     public static String API_ENDPOINT = "API_ENDPOINT";
     public static String MYSQL_DB_URL_KEY = "MYSQL_URL";
     public static String WFT_URL = "WFT_URL";
-    public static  String AWS_URL = "AWS_URL";
+    public static String AWS_URL = "AWS_URL";
     public static String MYSQL_JM_URL = "MYSQL_JM_URL";
     public static String PROMIS_URL = "PROMIS_URL";
 

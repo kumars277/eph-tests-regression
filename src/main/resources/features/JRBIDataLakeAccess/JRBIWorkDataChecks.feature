@@ -94,4 +94,4 @@ Feature:Validate data for JRBI Work tables in Data Lake
     Then compare work extended and work extended person role with work stitching table
     Examples:
       |tableName                   |countOfRandomIds|
-      |work_extended               |10                 |
+      |work_extended               |4                 |

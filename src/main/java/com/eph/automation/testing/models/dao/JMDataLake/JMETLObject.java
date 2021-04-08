@@ -348,6 +348,615 @@ public class JMETLObject {
     private String ddp_eligible_indwebshop_ind;
     private String medline_indthomson_reuters_ind;
     private String takeover_yeardoi_prefix;
+    private String scenario;
+    private String upsert;
+    private String jm_source_reference;
+    private String acc_prod_id;
+    private String dq_err;
+    private boolean electro_rights_indicator;
+    private String volume;
+    private String copyright_year;
+    private String edition_number;
+    private String planned_launch_date;
+    private String planned_termination_date;
+    private String f_type;
+    private String f_status;
+    private String f_accountable_product;
+    private String f_pmc;
+    private String f_oa_type;
+    private String f_imprint;
+    private String opco;
+    private String f_society_ownership;
+    private String resp_centre;
+    private String language_code;
+    private String work_source_reference;
+    private String identifier;
+    private String effective_start_date;
+    private String f_subject_area;
+    private String subject_area_type;
+    private String start_date;
+    private String end_date;
+    private String f_person;
+    private String person_source_reference;
+    private String employee_number;
+    private String f_role;
+    private String internal_email;
+    private String w0_chronicle_id;
+    private String w0_journal_number;
+    private String w0_journey_identifier;
+    private String m0_manifestation_id;
+    private String m0_manifestation_type;
+    private String m0_journal_number;
+    private String w0_issn_l;
+    private String m0_manifestation_title;
+    private String m0_issn;
+    private String w0_eph_work_id;
+    private String m0_eph_manifestation_id;
+    private String manifestation_source_reference;
+    private String eph_product_id;
+    private String base_title;
+    private String separately_saleable_ind;
+    private String trial_allowed_ind;
+    private String tax_code;
+    private String open_access_journal_type;
+    private String subscription;
+    private String bulk_sales;
+    private String back_files;
+    private String open_access;
+    private String reprints;
+    private String author_charges;
+    private String one_off_access;
+    private String packages;
+    private String availability_status;
+    private String work_status;
+    private String work_type;
+    private String pu_internal_email;
+    private String pu_employee_number;
+    private String name;
+    private String f_revenue_model;
+    private String ult_work_ref;
+    private String po_internal_email;
+    private String po_employee_number;
+    private String po_role;
+    private String sa_id;
+    private String sa_code;
+    private String sa_name;
+    private String sa_level;
+    private String sa_parent_id;
+    private String manifestaton_key_title;
+    private String work_external_ref;
+    private String legalowner_external_ref;
+    private String f_ownership_description;
+    private String work_legalowner_external_ref;
+    private String legal_owner_id;
+    private String f_wwork;
+    private String external_reference;
+    private String product_id;
+    private String shortName;
+    private String f_tax_code;
+    private String f_revenue_account;
+    private String f_parent;
+    private String f_child;
+    private String person_id;
+    private String given_name;
+    private String family_name;
+    private String subject_area_id;
+    private String code;
+    private String f_manifestation;
+    private String manifestation_identifier_id;
+    private String s_identifier;
+    private String gl_product_segment_code;
+    private String gl_product_segment_name;
+    private String accountable_product_id;
+    private String scenario_name;
+    private String jm_source_ref_new;
+    private String manifestation_key_title;
+    private Boolean separately_sale_indicatore;
+    private Boolean trial_allowed_indicator;
+    private String short_name;
+    private Boolean restricted_sale_indicator;
+    private String work_sub_title;
+    private String access_model_code;
+    private String f_access_model;
+    private String f_business_model;
+    private String scenario_code;
+    private String employee_number_new;
+    private String employee_number_old;
+    private String internal_email_old;
+    private String internal_email_new;
+    private String jm_source_ref_old;
+    private String external_work_ref;
+    private String access_model_description;
+    private String identifier_old;
+    private String identifier_new;
+    private String manifestation_ref;
+    private String external_reference_core;
+    private String business_model_code;
+    private String work_business_model_id;
+    private String business_model_description;
+    private String work_access_model_id;
+    private String work_productgroup_id;
+    private String f_productgroup;
+    private String productgroup_id;
+    private String pricing_option_id;
+    private String pricing_option_code;
+    private String pricing_option_description;
+    private String pricing_option_help;
+    private String bm_pg_options_id;
+    private String options;
+    private String effective_to_date;
+    private String WORK_BUSINESS_MODEL_ID;
+    private String F_PRODUCT_WORK;
+    private String BUSINESS_MODEL_CODE;
+    private String BUSINESS_MODEL_DESCRIPTION;
+    private String WORK_ACCESS_MODEL_ID;
+    private String ACCESS_MODEL_CODE;
+    private String ACCESS_MODEL_DESCRIPTION;
+    private String WORK_PRODUCT_GROUP_ID;
+    private String F_PRODUCT_GROUP;
+    private String PRODUCT_GROUP_ID;
+    private String productgroup_code;
+    private String PRODUCT_GROUP_CODE;
+    private String productgroup_description;
+    private String PRODUCT_GROUP_DESCRIPTION;
+    private String f_pricing_option;
+    private String F_PRICING_OPTION;
+
+    public String getF_PRICING_OPTION() { return F_PRICING_OPTION; }
+    public void setF_PRICING_OPTION(String F_PRICING_OPTION) { this.F_PRICING_OPTION = F_PRICING_OPTION; }
+
+    public String getf_pricing_option() { return f_pricing_option; }
+    public void setf_pricing_option(String f_pricing_option) { this.f_pricing_option = f_pricing_option; }
+
+    public String getPRODUCT_GROUP_DESCRIPTION() { return PRODUCT_GROUP_DESCRIPTION; }
+    public void setPRODUCT_GROUP_DESCRIPTION(String PRODUCT_GROUP_DESCRIPTION) { this.PRODUCT_GROUP_DESCRIPTION = PRODUCT_GROUP_DESCRIPTION; }
+
+    public String getproductgroup_description() { return productgroup_description; }
+    public void setproductgroup_description(String productgroup_description) { this.productgroup_description = productgroup_description; }
+
+    public String getPRODUCT_GROUP_CODE() { return PRODUCT_GROUP_CODE; }
+    public void setPRODUCT_GROUP_CODE(String PRODUCT_GROUP_CODE) { this.PRODUCT_GROUP_CODE = PRODUCT_GROUP_CODE; }
+
+    public String getproductgroup_code() { return productgroup_code; }
+    public void setproductgroup_code(String productgroup_code) { this.productgroup_code = productgroup_code; }
+
+    public String getPRODUCT_GROUP_ID() { return PRODUCT_GROUP_ID; }
+    public void setPRODUCT_GROUP_ID(String PRODUCT_GROUP_ID) { this.PRODUCT_GROUP_ID = PRODUCT_GROUP_ID; }
+
+    public String getF_PRODUCT_GROUP() { return F_PRODUCT_GROUP; }
+    public void setF_PRODUCT_GROUP(String F_PRODUCT_GROUP) { this.F_PRODUCT_GROUP = F_PRODUCT_GROUP; }
+
+    public String getWORK_PRODUCT_GROUP_ID() { return WORK_PRODUCT_GROUP_ID; }
+    public void setWORK_PRODUCT_GROUP_ID(String WORK_PRODUCT_GROUP_ID) { this.WORK_PRODUCT_GROUP_ID = WORK_PRODUCT_GROUP_ID; }
+
+    public String getACCESS_MODEL_DESCRIPTION() { return ACCESS_MODEL_DESCRIPTION; }
+    public void setACCESS_MODEL_DESCRIPTION(String ACCESS_MODEL_DESCRIPTION) { this.ACCESS_MODEL_DESCRIPTION = ACCESS_MODEL_DESCRIPTION; }
+
+    public String getACCESS_MODEL_CODE() { return ACCESS_MODEL_CODE; }
+    public void setACCESS_MODEL_CODE(String ACCESS_MODEL_CODE) { this.ACCESS_MODEL_CODE = ACCESS_MODEL_CODE; }
+
+    public String getWORK_ACCESS_MODEL_ID() { return WORK_ACCESS_MODEL_ID; }
+    public void setWORK_ACCESS_MODEL_ID(String WORK_ACCESS_MODEL_ID) { this.WORK_ACCESS_MODEL_ID = WORK_ACCESS_MODEL_ID; }
+
+    public String getBUSINESS_MODEL_DESCRIPTION() { return BUSINESS_MODEL_DESCRIPTION; }
+    public void setBUSINESS_MODEL_DESCRIPTION(String BUSINESS_MODEL_DESCRIPTION) { this.BUSINESS_MODEL_DESCRIPTION = BUSINESS_MODEL_DESCRIPTION; }
+
+    public String getBUSINESS_MODEL_CODE() { return BUSINESS_MODEL_CODE; }
+    public void setBUSINESS_MODEL_CODE(String BUSINESS_MODEL_CODE) { this.BUSINESS_MODEL_CODE = BUSINESS_MODEL_CODE; }
+
+    public String getF_PRODUCT_WORK() { return F_PRODUCT_WORK; }
+    public void setF_PRODUCT_WORK(String F_PRODUCT_WORK) { this.F_PRODUCT_WORK = F_PRODUCT_WORK; }
+
+    public String getWORK_BUSINESS_MODEL_ID() { return WORK_BUSINESS_MODEL_ID; }
+    public void setWORK_BUSINESS_MODEL_ID(String WORK_BUSINESS_MODEL_ID) { this.WORK_BUSINESS_MODEL_ID = WORK_BUSINESS_MODEL_ID; }
+
+    public String geteffective_to_date() { return effective_to_date; }
+    public void seteffective_to_date(String effective_to_date) { this.effective_to_date = effective_to_date; }
+
+    public String getoptions() { return options; }
+    public void setoptions(String options) { this.options = options; }
+
+    public String getbm_pg_options_id() { return bm_pg_options_id; }
+    public void setbm_pg_options_id(String bm_pg_options_id) { this.bm_pg_options_id = bm_pg_options_id; }
+
+    public String getpricing_option_help() { return pricing_option_help; }
+    public void setpricing_option_help(String pricing_option_help) { this.pricing_option_help = pricing_option_help; }
+
+    public String getpricing_option_description() { return pricing_option_description; }
+    public void setpricing_option_description(String pricing_option_description) { this.pricing_option_description = pricing_option_description; }
+
+    public String getpricing_option_code() { return pricing_option_code; }
+    public void setpricing_option_code(String pricing_option_code) { this.pricing_option_code = pricing_option_code; }
+
+    public String getpricing_option_id() { return pricing_option_id; }
+    public void setpricing_option_id(String pricing_option_id) { this.pricing_option_id = pricing_option_id; }
+
+    public String getproductgroup_id() { return productgroup_id; }
+    public void setproductgroup_id(String productgroup_id) { this.productgroup_id = productgroup_id; }
+
+    public String getf_productgroup() { return f_productgroup; }
+    public void setf_productgroup(String f_productgroup) { this.f_productgroup = f_productgroup; }
+
+    public String getwork_productgroup_id() { return work_productgroup_id; }
+    public void setwork_productgroup_id(String work_productgroup_id) { this.work_productgroup_id = work_productgroup_id; }
+
+    public String getwork_access_model_id() { return work_access_model_id; }
+    public void setwork_access_model_id(String work_access_model_id) { this.work_access_model_id = work_access_model_id; }
+
+    public String getbusiness_model_description() { return business_model_description; }
+    public void setbusiness_model_description(String business_model_description) { this.business_model_description = business_model_description; }
+
+    public String getwork_business_model_id() { return work_business_model_id; }
+    public void setwork_business_model_id(String work_business_model_id) { this.work_business_model_id = work_business_model_id; }
+
+    public String getbusiness_model_code() { return business_model_code; }
+    public void setbusiness_model_code(String business_model_code) { this.business_model_code = business_model_code; }
+
+    public String getexternal_reference_core() { return external_reference_core; }
+    public void setexternal_reference_core(String external_reference_core) { this.external_reference_core = external_reference_core; }
+
+    public String getmanifestation_ref() { return manifestation_ref; }
+    public void setmanifestation_ref(String manifestation_ref) { this.manifestation_ref = manifestation_ref; }
+
+    public String getidentifier_new() { return identifier_new; }
+    public void setidentifier_new(String identifier_new) { this.identifier_new = identifier_new; }
+
+    public String getidentifier_old() { return identifier_old; }
+    public void setidentifier_old(String identifier_old) { this.identifier_old = identifier_old; }
+
+    public String getaccess_model_description() { return access_model_description; }
+    public void setaccess_model_description(String access_model_description) { this.access_model_description = access_model_description; }
+
+    public String getexternal_work_ref() { return external_work_ref; }
+    public void setexternal_work_ref(String external_work_ref) { this.external_work_ref = external_work_ref; }
+
+    public String getjm_source_ref_old() { return jm_source_ref_old; }
+    public void setjm_source_ref_old(String jm_source_ref_old) { this.jm_source_ref_old = jm_source_ref_old; }
+
+    public String getinternal_email_new() { return internal_email_new; }
+    public void setinternal_email_new(String internal_email_new) { this.internal_email_new = internal_email_new; }
+
+    public String getinternal_email_old() { return internal_email_old; }
+    public void setinternal_email_old(String internal_email_old) { this.internal_email_old = internal_email_old; }
+
+    public String getemployee_number_old() { return employee_number_old; }
+    public void setemployee_number_old(String employee_number_old) { this.employee_number_old = employee_number_old; }
+
+    public String getemployee_number_new() { return employee_number_new; }
+    public void setemployee_number_new(String employee_number_new) { this.employee_number_new = employee_number_new; }
+
+    public String getscenario_code() { return scenario_code; }
+    public void setscenario_code(String scenario_code) { this.scenario_code = scenario_code; }
+
+    public String getf_business_model() { return f_business_model; }
+    public void setf_business_model(String f_business_model) { this.f_business_model = f_business_model; }
+
+    public String getf_access_model() { return f_access_model; }
+    public void setf_access_model(String f_access_model) { this.f_access_model = f_access_model; }
+
+    public String getaccess_model_code() { return access_model_code; }
+    public void setaccess_model_code(String access_model_code) { this.access_model_code = access_model_code; }
+
+    public String getwork_sub_title() { return work_sub_title; }
+    public void setwork_sub_title(String work_sub_title) { this.work_sub_title = work_sub_title; }
+
+    public String getshort_name() { return short_name; }
+    public void setshort_name(String short_name) { this.short_name = short_name; }
+
+    public Boolean getseparately_sale_indicatore() { return separately_sale_indicatore; }
+    public void setseparately_sale_indicatore(Boolean separately_sale_indicatore) { this.separately_sale_indicatore = separately_sale_indicatore; }
+
+    public Boolean gettrial_allowed_indicator() { return trial_allowed_indicator; }
+    public void settrial_allowed_indicator(Boolean trial_allowed_indicator) { this.trial_allowed_indicator = trial_allowed_indicator; }
+
+    public Boolean getrestricted_sale_indicator() { return restricted_sale_indicator; }
+    public void setrestricted_sale_indicator(Boolean restricted_sale_indicator) { this.restricted_sale_indicator = restricted_sale_indicator; }
+
+    public String getmanifestation_key_title() { return manifestation_key_title; }
+    public void setmanifestation_key_title(String manifestation_key_title) { this.manifestation_key_title = manifestation_key_title; }
+
+    public String getjm_source_ref_new() { return jm_source_ref_new; }
+    public void setjm_source_ref_new(String jm_source_ref_new) { this.jm_source_ref_new = jm_source_ref_new; }
+
+    public String getscenario_name() { return scenario_name; }
+    public void setscenario_name(String scenario_name) { this.scenario_name = scenario_name; }
+
+    public String getaccountable_product_id() { return accountable_product_id; }
+    public void setaccountable_product_id(String accountable_product_id) { this.accountable_product_id = accountable_product_id; }
+
+    public String getgl_product_segment_code() { return gl_product_segment_code; }
+    public void setgl_product_segment_code(String gl_product_segment_code) { this.gl_product_segment_code = gl_product_segment_code; }
+
+    public String getgl_product_segment_name() { return gl_product_segment_name; }
+    public void setgl_product_segment_name(String gl_product_segment_name) { this.gl_product_segment_name = gl_product_segment_name; }
+
+    public String getmanifestation_identifier_id() { return manifestation_identifier_id; }
+    public void setmanifestation_identifier_id(String manifestation_identifier_id) { this.manifestation_identifier_id = manifestation_identifier_id; }
+
+    public String getf_manifestation() { return f_manifestation; }
+    public void setf_manifestation(String f_manifestation) { this.f_manifestation = f_manifestation; }
+
+    public String getcode() { return code; }
+    public void setcode(String code) { this.code = code; }
+
+    public String getsubject_area_id() { return subject_area_id; }
+    public void setsubject_area_id(String subject_area_id) { this.subject_area_id = subject_area_id; }
+
+    public String getgiven_name() { return given_name; }
+    public void setgiven_name(String given_name) { this.given_name = given_name; }
+
+    public String getfamily_name() { return family_name; }
+    public void setfamily_name(String family_name) { this.family_name = family_name; }
+
+    public String getperson_id() { return person_id; }
+    public void setperson_id(String person_id) { this.person_id = person_id; }
+
+    public String getf_child() { return f_child; }
+    public void setf_child(String f_child) { this.f_child = f_child; }
+
+    public String getf_parent() { return f_parent; }
+    public void setf_parent(String f_parent) { this.f_parent = f_parent; }
+
+    public String getf_revenue_account() { return f_revenue_account; }
+    public void setf_revenue_account(String f_revenue_account) { this.f_revenue_account = f_revenue_account; }
+
+    public String getf_tax_code() { return f_tax_code; }
+    public void setf_tax_code(String f_tax_code) { this.f_tax_code = f_tax_code; }
+
+    public String getshortName() { return shortName; }
+    public void setshortName(String shortName) { this.shortName = shortName; }
+
+    public String getexternal_reference() { return external_reference; }
+    public void setexternal_reference(String external_reference) { this.external_reference = external_reference; }
+
+    public String getproduct_id() { return product_id; }
+    public void setproduct_id(String product_id) { this.product_id = product_id; }
+
+    public String getf_wwork() { return f_wwork; }
+    public void setf_wwork(String f_wwork) { this.f_wwork = f_wwork; }
+
+    public String getwork_external_ref() { return work_external_ref; }
+    public void setwork_external_ref(String work_external_ref) { this.work_external_ref = work_external_ref; }
+
+    public String getlegalowner_external_ref() { return legalowner_external_ref; }
+    public void setlegalowner_external_ref(String legalowner_external_ref) { this.legalowner_external_ref = legalowner_external_ref; }
+
+    public String getf_ownership_description() { return f_ownership_description; }
+    public void setf_ownership_description(String f_ownership_description) { this.f_ownership_description = f_ownership_description; }
+
+    public String getwork_legalowner_external_ref() { return work_legalowner_external_ref; }
+    public void setwork_legalowner_external_ref(String work_legalowner_external_ref) { this.work_legalowner_external_ref = work_legalowner_external_ref; }
+
+    public String getlegal_owner_id() { return legal_owner_id; }
+    public void setlegal_owner_id(String legal_owner_id) { this.legal_owner_id = legal_owner_id; }
+
+    public String getmanifestaton_key_title() { return manifestaton_key_title; }
+    public void setmanifestaton_key_title(String manifestaton_key_title) { this.manifestaton_key_title = manifestaton_key_title; }
+
+    public String getsa_id() { return sa_id; }
+    public void setsa_id(String sa_id) { this.sa_id = sa_id; }
+
+    public String getsa_code() { return sa_code; }
+    public void setsa_code(String sa_code) { this.sa_code = sa_code; }
+
+    public String getsa_name() { return sa_name; }
+    public void setsa_name(String sa_name) { this.sa_name = sa_name; }
+
+    public String getsa_level() { return sa_level; }
+    public void setsa_level(String sa_level) { this.sa_level = sa_level; }
+
+    public String getsa_parent_id() { return sa_parent_id; }
+    public void setsa_parent_id(String sa_parent_id) { this.sa_parent_id = sa_parent_id; }
+
+    public String getpo_internal_email() { return po_internal_email; }
+    public void setpo_internal_email(String po_internal_email) { this.po_internal_email = po_internal_email; }
+
+    public String getpo_employee_number() { return po_employee_number; }
+    public void setpo_employee_number(String po_employee_number) { this.po_employee_number = po_employee_number; }
+
+    public String getpo_role() { return po_role; }
+    public void setpo_role(String po_role) { this.po_role = po_role; }
+
+    public String getname() { return name; }
+    public void setname(String name) { this.name = name; }
+
+    public String getf_revenue_model() { return f_revenue_model; }
+    public void setf_revenue_model(String f_revenue_model) { this.f_revenue_model = f_revenue_model; }
+
+    public String getult_work_ref() { return ult_work_ref; }
+    public void setult_work_ref(String ult_work_ref) { this.ult_work_ref = ult_work_ref; }
+    
+    public String geteph_product_id() { return eph_product_id; }
+    public void seteph_product_id(String eph_product_id) { this.eph_product_id = eph_product_id; }
+
+    public String getbase_title() { return base_title; }
+    public void setbase_title(String base_title) { this.base_title = base_title; }
+
+    public String getseparately_saleable_ind() { return separately_saleable_ind; }
+    public void setseparately_saleable_ind(String separately_saleable_ind) { this.separately_saleable_ind = separately_saleable_ind; }
+
+    public String gettrial_allowed_ind() { return trial_allowed_ind; }
+    public void settrial_allowed_ind(String trial_allowed_ind) { this.trial_allowed_ind = trial_allowed_ind; }
+
+    public String gettax_code() { return tax_code; }
+    public void settax_code(String tax_code) { this.tax_code = tax_code; }
+
+    public String getopen_access_journal_type() { return open_access_journal_type; }
+    public void setopen_access_journal_type(String open_access_journal_type) { this.open_access_journal_type = open_access_journal_type; }
+
+    public String getsubscription() { return subscription; }
+    public void setsubscription(String subscription) { this.subscription = subscription; }
+
+    public String getbulk_sales() { return bulk_sales; }
+    public void setbulk_sales(String bulk_sales) { this.bulk_sales = bulk_sales; }
+
+    public String getback_files() { return back_files; }
+    public void setback_files(String back_files) { this.back_files = back_files; }
+
+    public String getopen_access() { return open_access; }
+    public void setopen_access(String open_access) { this.open_access = open_access; }
+
+    public String getreprints() { return reprints; }
+    public void setreprints(String reprints) { this.reprints = reprints; }
+
+    public String getauthor_charges() { return author_charges; }
+    public void setauthor_charges(String author_charges) { this.author_charges = author_charges; }
+
+    public String getone_off_access() { return one_off_access; }
+    public void setone_off_access(String one_off_access) { this.one_off_access = one_off_access; }
+
+    public String getpackages() { return packages; }
+    public void setpackages(String packages) { this.packages = packages; }
+
+    public String getavailability_status() { return availability_status; }
+    public void setavailability_status(String availability_status) { this.availability_status = availability_status; }
+
+    public String getwork_status() { return work_status; }
+    public void setwork_status(String work_status) { this.work_status = work_status; }
+
+    public String getwork_type() { return work_type; }
+    public void setwork_type(String work_type) { this.work_type = work_type; }
+
+    public String getpu_internal_email() { return pu_internal_email; }
+    public void setpu_internal_email(String pu_internal_email) { this.pu_internal_email = pu_internal_email; }
+
+    public String getpu_employee_number() { return pu_employee_number; }
+    public void setpu_employee_number(String pu_employee_number) { this.pu_employee_number = pu_employee_number; }
+
+    public String getmanifestation_source_reference() { return manifestation_source_reference; }
+    public void setmanifestation_source_reference(String manifestation_source_reference) { this.manifestation_source_reference = manifestation_source_reference; }
+
+    public String getw0_chronicle_id() { return w0_chronicle_id; }
+    public void setw0_chronicle_id(String w0_chronicle_id) { this.w0_chronicle_id = w0_chronicle_id; }
+
+    public String getw0_journal_number() { return w0_journal_number; }
+    public void setw0_journal_number(String w0_journal_number) { this.w0_journal_number = w0_journal_number; }
+
+    public String getw0_journey_identifier() { return w0_journey_identifier; }
+    public void setw0_journey_identifier(String w0_journey_identifier) { this.w0_journey_identifier = w0_journey_identifier; }
+
+    public String getm0_manifestation_id() { return m0_manifestation_id; }
+    public void setm0_manifestation_id(String m0_manifestation_id) { this.m0_manifestation_id = m0_manifestation_id; }
+
+    public String getm0_manifestation_type() { return m0_manifestation_type; }
+    public void setm0_manifestation_type(String m0_manifestation_type) { this.m0_manifestation_type = m0_manifestation_type; }
+
+    public String getm0_journal_number() { return m0_journal_number; }
+    public void setm0_journal_number(String m0_journal_number) { this.m0_journal_number = m0_journal_number; }
+
+    public String getw0_issn_l() { return w0_issn_l; }
+    public void setw0_issn_l(String w0_issn_l) { this.w0_issn_l = w0_issn_l; }
+
+    public String getm0_manifestation_title() { return m0_manifestation_title; }
+    public void setm0_manifestation_title(String m0_manifestation_title) { this.m0_manifestation_title = m0_manifestation_title; }
+
+    public String getm0_issn() { return m0_issn; }
+    public void setm0_issn(String m0_issn) { this.m0_issn = m0_issn; }
+
+    public String getw0_eph_work_id() { return w0_eph_work_id; }
+    public void setw0_eph_work_id(String w0_eph_work_id) { this.w0_eph_work_id = w0_eph_work_id; }
+
+    public String getm0_eph_manifestation_id() { return m0_eph_manifestation_id; }
+    public void setm0_eph_manifestation_id(String m0_eph_manifestation_id) { this.m0_eph_manifestation_id = m0_eph_manifestation_id; }
+
+    public String getf_person() { return f_person; }
+    public void setf_person(String f_person) { this.f_person = f_person; }
+
+    public String getperson_source_reference() { return person_source_reference; }
+    public void setperson_source_reference(String person_source_reference) { this.person_source_reference = person_source_reference; }
+
+    public String getemployee_number() { return employee_number; }
+    public void setemployee_number(String employee_number) { this.employee_number = employee_number; }
+
+    public String getf_role() { return f_role; }
+    public void setf_role(String f_role) { this.f_role = f_role; }
+
+    public String getinternal_email() { return internal_email; }
+    public void setinternal_email(String internal_email) { this.internal_email = internal_email; }
+
+    public String getf_subject_area() { return f_subject_area; }
+    public void setf_subject_area(String f_subject_area) { this.f_subject_area = f_subject_area; }
+
+    public String getsubject_area_type() { return subject_area_type; }
+    public void setsubject_area_type(String subject_area_type) { this.subject_area_type = subject_area_type; }
+
+    public String getstart_date() { return start_date; }
+    public void setstart_date(String start_date) { this.start_date = start_date; }
+
+    public String getend_date() { return end_date; }
+    public void setend_date(String end_date) { this.end_date = end_date; }
+
+    public String getwork_source_reference() { return work_source_reference; }
+    public void setwork_source_reference(String work_source_reference) { this.work_source_reference = work_source_reference; }
+
+    public String getidentifier() { return identifier; }
+    public void setidentifier(String identifier) { this.identifier = identifier; }
+    
+    public String geteffective_start_date() { return effective_start_date; }
+    public void seteffective_start_date(String effective_start_date) { this.effective_start_date = effective_start_date; }
+
+    public boolean getelectro_rights_indicator() { return electro_rights_indicator; }
+    public void setelectro_rights_indicator(boolean electro_rights_indicator) { this.electro_rights_indicator = electro_rights_indicator; }
+
+    public String getvolume() { return volume; }
+    public void setvolume(String volume) { this.volume = volume; }
+
+    public String getcopyright_year() { return copyright_year; }
+    public void setcopyright_year(String copyright_year) { this.copyright_year = copyright_year; }
+
+    public String getedition_number() { return edition_number; }
+    public void setedition_number(String edition_number) { this.edition_number = edition_number; }
+
+    public String getplanned_launch_date() { return planned_launch_date; }
+    public void setplanned_launch_date(String planned_launch_date) { this.planned_launch_date = planned_launch_date; }
+
+    public String getplanned_termination_date() { return planned_termination_date; }
+    public void setplanned_termination_date(String planned_termination_date) { this.planned_termination_date = planned_termination_date; }
+
+    public String getf_type() { return f_type; }
+    public void setf_type(String f_type) { this.f_type = f_type; }
+
+    public String getf_status() { return f_status; }
+    public void setf_status(String f_status) { this.f_status = f_status; }
+
+    public String getf_accountable_product() { return f_accountable_product; }
+    public void setf_accountable_product(String f_accountable_product) { this.f_accountable_product = f_accountable_product; }
+
+    public String getf_pmc() { return f_pmc; }
+    public void setf_pmc(String f_pmc) { this.f_pmc = f_pmc; }
+
+    public String getf_oa_type() { return f_oa_type; }
+    public void setf_oa_type(String f_oa_type) { this.f_oa_type = f_oa_type; }
+
+    public String getf_imprint() { return f_imprint; }
+    public void setf_imprint(String f_imprint) { this.f_imprint = f_imprint; }
+
+    public String getopco() { return opco; }
+    public void setopco(String opco) { this.opco = opco; }
+
+    public String getf_society_ownership() { return f_society_ownership; }
+    public void setf_society_ownership(String f_society_ownership) { this.f_society_ownership = f_society_ownership; }
+
+    public String getresp_centre() { return resp_centre; }
+    public void setresp_centre(String resp_centre) { this.resp_centre = resp_centre; }
+
+    public String getlanguage_code() { return language_code; }
+    public void setlanguage_code(String language_code) { this.language_code = language_code; }
+
+    public String getscenario() { return scenario; }
+    public void setscenario(String scenario) { this.scenario = scenario; }
+
+    public String getupsert() { return upsert; }
+    public void setupsert(String upsert) { this.upsert = upsert; }
+
+    public String getjm_source_reference() { return jm_source_reference; }
+    public void setjm_source_reference(String jm_source_reference) { this.jm_source_reference = jm_source_reference; }
+
+    public String getacc_prod_id() { return acc_prod_id; }
+    public void setacc_prod_id(String acc_prod_id) { this.acc_prod_id = acc_prod_id; }
+
+    public String getdq_err() { return dq_err; }
+    public void setdq_err(String dq_err) { this.dq_err = dq_err; }
 
     public String getddp_eligible_indwebshop_ind() { return ddp_eligible_indwebshop_ind; }
     public void setddp_eligible_indwebshop_ind(String ddp_eligible_indwebshop_ind) { this.ddp_eligible_indwebshop_ind = ddp_eligible_indwebshop_ind; }

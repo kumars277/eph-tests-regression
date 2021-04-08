@@ -4517,4 +4517,25 @@ public class PromisETLDataCheck {
             }
         }
     }
+
+    @Given("^We get the (.*) random Promis Latest ids of (.*)$")
+    public void getRandomJMDBIds(String numberOfRecords, String latesttablename) {
+//  numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        Log.info("numberOfRecords = " + numberOfRecords);
+        Log.info("Getting random IDs...");
+        switch (latesttablename) {
+            case "promis_transform_latest_pricing":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_PRICING_IDs, numberOfRecords);
+                List<Map<?, ?>> randomLatestPricingIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomLatestPricingIds.stream().map(m -> (Integer) m.get("PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
+                break;
+            case "promis_transform_latest_works":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_WORKS_IDs, numberOfRecords);
+                List<Map<?, ?>> randomLatestWorksIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomLatestWorksIds.stream().map(m -> (Integer) m.get("PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
+                break;
+        }
+        Log.info(sql);
+        Log.info(Ids.toString());
+    }
     }
