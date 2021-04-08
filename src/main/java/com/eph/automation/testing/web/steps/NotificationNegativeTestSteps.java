@@ -13,6 +13,7 @@ import com.eph.automation.testing.services.db.sql.NotificationsSQL;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
+import net.minidev.json.parser.ParseException;
 import org.junit.Assert;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class NotificationNegativeTestSteps {
     private int attemptsAfter;
 
     @Given("^A incorrect product data is inserted$")
-    public void incorrectProductInsert() {
+    public void incorrectProductInsert() throws ParseException {
         sql = NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1", "EPR-W-TSTW10:RBK");
         notificationCountContext.getWriteAttemptsBeforeNegWork =
                 DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -68,7 +69,7 @@ public class NotificationNegativeTestSteps {
     }
 
     @When("^The data and the notifications are created$")
-    public void checkDataExists() {
+    public void checkDataExists() throws ParseException {
         sql = NotificationsSQL.EPH_GET_TEST_DATA_Work.replace("PARAM1", "EPR-W-TSTW10");
         notificationCountContext.getWorkTDNegative = DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
         Assert.assertEquals("The Work test data is missing", 1
@@ -90,7 +91,7 @@ public class NotificationNegativeTestSteps {
     }
 
     @Then("^The product notification is not processed$")
-    public void checkNotificationStatus() throws InterruptedException {
+    public void checkNotificationStatus() throws InterruptedException, ParseException {
         int j = 0;
         sql= NotificationsSQL.EPH_GET_Notify_Status.replace("PARAM1",loadBatchContext.batchId);
         do {
@@ -157,7 +158,7 @@ public class NotificationNegativeTestSteps {
 
 
     @Given("^A incorrect work and product data is inserted$")
-    public void incorrectProductWorkInsert() {
+    public void incorrectProductWorkInsert() throws ParseException {
         sql = NotificationsSQL.GET_FAILED_NOT_PAYLOAD;
         notificationCountContext.getFailedPayloadNotBefore =
                 DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -173,7 +174,7 @@ public class NotificationNegativeTestSteps {
     }
 
     @When("^The incorrect data and the notifications are created$")
-    public void checkIncorrectDataExists() {
+    public void checkIncorrectDataExists() throws ParseException {
         sql = NotificationsSQL.EPH_GET_TEST_DATA_Work.replace("PARAM1", "EPR-W-TSTW20");
         notificationCountContext.getWorkTDNegative = DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
         Assert.assertEquals("The Work test data is missing", 1
@@ -195,7 +196,7 @@ public class NotificationNegativeTestSteps {
     }
 
     @Then("^The work and product notifications are not processed$")
-    public void checkNotifications() throws InterruptedException {
+    public void checkNotifications() throws InterruptedException, ParseException {
         int j = 0;
         sql= NotificationsSQL.EPH_GET_Notify_Status.replace("PARAM1",loadBatchContext.batchId);
         do {
@@ -239,7 +240,7 @@ public class NotificationNegativeTestSteps {
     }
 
     @Given("^A correct manifestation is updated connected to incorrect product$")
-    public void manifestationUpdate() {
+    public void manifestationUpdate() throws ParseException {
         sql = NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1", "EPR-W-TSTW10:RBK");
         notificationCountContext.getWriteAttemptsBeforeNegWork =
                 DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -276,7 +277,7 @@ public class NotificationNegativeTestSteps {
     }
 
     @Given("^A correct manifestation is updated connected to incorrect work and product$")
-    public void manifestationIsUpdated() {
+    public void manifestationIsUpdated() throws ParseException {
         sql = NotificationsSQL.GET_FAILED_NOT_PAYLOAD;
         notificationCountContext.getFailedPayloadNotBefore =
                 DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -292,7 +293,7 @@ public class NotificationNegativeTestSteps {
     }
 
     @Given("^An incorrect product is updated connected to correct work$")
-    public void productUpdate() throws InterruptedException {
+    public void productUpdate() throws InterruptedException, ParseException {
         sql = NotificationsSQL.EPH_GET_Write_Attempts.replace("PARAM1", "EPR-W-TSTW10:RBK");
         notificationCountContext.getWriteAttemptsBeforeNegWork =
                 DBManager.getDBResultAsBeanList(sql, NotificationDataObject.class, Constants.EPH_URL);
@@ -332,7 +333,7 @@ public class NotificationNegativeTestSteps {
     }
 
     @Then("^The failed product notification is not processed$")
-    public void checkProductNotificationStatus() throws InterruptedException {
+    public void checkProductNotificationStatus() throws InterruptedException, ParseException {
         int j = 0;
         sql= NotificationsSQL.EPH_GET_Notify_Status.replace("PARAM1",loadBatchContext.batchId);
         do {

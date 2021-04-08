@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class WorkIdentifiersApiObject {
+public class WorkIdentifiersApiObject {
     public WorkIdentifiersApiObject() {}
 
     private  List<WorkDataObject> DBworkIdentifier;
@@ -45,9 +45,9 @@ class WorkIdentifiersApiObject {
     }
 
     public void compareWithDB(){
+        Log.info("verifiying work identifiers... "+this.identifier);
         getWorkIdentifierByID(this.identifier);
-        Log.info("verifiying work identifiers... "+this.DBworkIdentifier.get(0).getF_TYPE());
         Assert.assertEquals(this.identifierType.get("code"), this.DBworkIdentifier.get(0).getF_TYPE());
-        Log.info("verified identifier ..."+this.identifier);
+        Log.info("verified...work identifier type");
     }
 }

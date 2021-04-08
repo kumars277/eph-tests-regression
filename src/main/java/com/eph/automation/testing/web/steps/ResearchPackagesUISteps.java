@@ -41,7 +41,7 @@ public class ResearchPackagesUISteps {
 
 
     @Then("^Verify the status of the journal \"([^\"]*)\" is excluded in DB$")
-    public void verify_the_status_of_the_journal_is_excluded_in_DB(String ISSN, String journalStatus) throws Throwable {
+    public void verify_the_status_of_the_journal_is_excluded_in_DB(String ISSN, String journalStatus) {
         sql = String.format(ResearchPackagesSQL.SELECT_RECENT_STATUS_UPDATED_JOURNAL_FROM_EPH_RESEARCH_PACKAGES, ISSN);
         Log.info(sql);
         List<Map<?, ?>> excludeJournalCollectionStatus = DBManager.getDBResultMap(sql, Constants.WFT_URL);
@@ -67,7 +67,7 @@ public class ResearchPackagesUISteps {
     }
 
     @Then("^Check for MCC availability and Click the same$")
-    public void enterMathCoreCollection() throws Throwable {
+    public void enterMathCoreCollection() {
         Assert.assertTrue("MCC are Available", researchPackagesTasks.clickMathCoreCollections());
     }
 
@@ -117,7 +117,7 @@ public class ResearchPackagesUISteps {
             int filterCount = Integer.parseInt(filterCountText);
             int totItems = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.UNSAVED_ROW).size();
             Log.info("Total Unsaved Result =>"+ totItems);
-            Assert.assertTrue("Results and count displayed are equal",filterCount==totItems);
+            Assert.assertEquals("Results and count displayed are equal", filterCount, totItems);
             for(int i=0;i<totItems;i++) {
                 Log.info("ISSN displayed in the Result => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+" is Unsaved");
             }
@@ -180,10 +180,10 @@ public class ResearchPackagesUISteps {
             Log.info("Count for Owner in the Filter => "+filterCountOwner);
             Log.info("Count for Pub Director in the Filter => "+filterCountPubDir);
             Log.info("Count for PMG in the Filter => "+filterCountPmg);
-            Assert.assertTrue("Counts in the Include filters and result counts are matching",filterCountInclude==totItems);
-            Assert.assertTrue("Counts in the PMG filters and result counts are matching",filterCountPmg==totItems);
-            Assert.assertTrue("Counts in the Ownership filters and result counts are matching",filterCountOwner==totItems);
-            Assert.assertTrue("Counts in the Pub Director filters and result counts are matching",filterCountPubDir==totItems);
+            Assert.assertEquals("Counts in the Include filters and result counts are matching", filterCountInclude, totItems);
+            Assert.assertEquals("Counts in the PMG filters and result counts are matching", filterCountPmg, totItems);
+            Assert.assertEquals("Counts in the Ownership filters and result counts are matching", filterCountOwner, totItems);
+            Assert.assertEquals("Counts in the Pub Director filters and result counts are matching", filterCountPubDir, totItems);
             for(int i=0;i<totItems;i++) {
                 Log.info("Results Displayed => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+"=> "
                            +tasks.findmultipleElements("XPATH",ResearchPackagesConstants.PMG_COLUMN).get(i).getText()+"=> "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.OWNER_COLUMN).get(i).getText()
@@ -201,7 +201,7 @@ public class ResearchPackagesUISteps {
             Log.info("Filter Count displayed for Remarks is => "+filterCount);
             int totItems = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.COMMENT_CLICKABLE).size();
             Log.info("Total Result Displayed for Remarks is =>"+ totItems);
-            Assert.assertTrue("Results and count displayed are equal",filterCount==totItems);
+            Assert.assertEquals("Results and count displayed are equal", filterCount, totItems);
             for(int i=0;i<totItems;i++) {
                 Log.info("ISSN displayed in the Result => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+" has Remarks");
             }
@@ -218,7 +218,7 @@ public class ResearchPackagesUISteps {
             Log.info("Filter Count displayed for Included is => "+filterCount);
             int totItems = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.IS_INCLUDED).size();
             Log.info("Total Result Displayed for Included is =>"+ totItems);
-            Assert.assertTrue("Results and count displayed are equal",filterCount==totItems);
+            Assert.assertEquals("Results and count displayed are equal", filterCount, totItems);
             for(int i=0;i<totItems;i++) {
                 Log.info("ISSN displayed in the Result => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+" is Included");
             }
@@ -232,7 +232,7 @@ public class ResearchPackagesUISteps {
             Log.info("Filter Count displayed for Excluded is => "+filterCount);
             int totItems = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.IS_EXCLUDED).size();
             Log.info("Total Result Displayed for Excluded is =>"+ totItems);
-            Assert.assertTrue("Results and count displayed are equal",filterCount==totItems);
+            Assert.assertEquals("Results and count displayed are equal", filterCount, totItems);
             for(int i=0;i<totItems;i++) {
                 Log.info("ISSN displayed in the Result => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+" is Excluded");
             }
@@ -247,7 +247,7 @@ public class ResearchPackagesUISteps {
             Log.info("Filter Count displayed for Pending is => "+filterCount);
             int totItems = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.IS_PENDING).size();
             Log.info("Total Result Displayed for Pending is =>"+ totItems);
-            Assert.assertTrue("Results and count displayed are equal",filterCount==totItems);
+            Assert.assertEquals("Results and count displayed are equal", filterCount, totItems);
             for(int i=0;i<totItems;i++) {
                 Log.info("ISSN displayed in the Result => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+" in Pending");
             }
@@ -260,13 +260,13 @@ public class ResearchPackagesUISteps {
         Log.info(sql);
         List<Map<?, ?>> addJournalStatusList = DBManager.getDBResultMap(sql, Constants.WFT_URL);
         addJournalStatus = addJournalStatusList.get(0).get("NEWLY_ADDED_JOURNAL_STATUS").toString();
-        Log.info("Journal "+ISSN+" Added to the Collection=> "+addJournalStatus.toString());
+        Log.info("Journal "+ISSN+" Added to the Collection=> "+ addJournalStatus);
         Assert.assertTrue("Journal Added Successfully to the Collections", addJournalStatus.equalsIgnoreCase("true"));
     }
 
 
     @And("^Verify the status of the journal \"([^\"]*)\" is \"([^\"]*)\" in DB$")
-    public void journalStatusInDb(String ISSN, String status) throws Throwable {
+    public void journalStatusInDb(String ISSN, String status) {
         sql = String.format(ResearchPackagesSQL.SELECT_RECENT_STATUS_UPDATED_JOURNAL_FROM_EPH_RESEARCH_PACKAGES, ISSN);
         Log.info(sql);
         List<Map<?, ?>> journalStatusList = DBManager.getDBResultMap(sql, Constants.WFT_URL);
@@ -276,7 +276,7 @@ public class ResearchPackagesUISteps {
     }
 
     @Then("^Exclude from the collection$")
-    public void excludeJournal() throws Throwable {
+    public void excludeJournal() {
         researchPackagesTasks.excludeJournal();
         tasks.clearText("ID",ResearchPackagesConstants.SEARCH_FILTER);
     }
@@ -358,7 +358,7 @@ public class ResearchPackagesUISteps {
             Log.info("Filtered by Ownership=> "+OwnershipVal);
             Log.info("Filter Count Displayed=> "+filterCount);
             Log.info("Total Results Found => "+totItems);
-            Assert.assertTrue("Count in the filter and total result displayed matches",filterCount==totItems);
+            Assert.assertEquals("Count in the filter and total result displayed matches", filterCount, totItems);
             for(int i=0;i<totItems;i++){
                 Log.info("Ownership with ISSN displayed => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.OWNER_COLUMN).get(i).getText()+" - "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText());
                 boolean assertionCondition = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.OWNER_COLUMN).get(i).getText().equalsIgnoreCase((OwnershipVal));
@@ -386,7 +386,7 @@ public class ResearchPackagesUISteps {
             Log.info("Filtered by PMG "+pmgVal);
             Log.info("Filter Count Displayed=> "+filterCount);
             Log.info("Total Results Found => "+totItems);
-            Assert.assertTrue("Count in the filter and total result displayed matches",filterCount==totItems);
+            Assert.assertEquals("Count in the filter and total result displayed matches", filterCount, totItems);
             for(int i=0;i<totItems;i++){
                 Log.info("PMG with ISSN displayed => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.PMG_COLUMN).get(i).getText()+" - "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText());
                 boolean assertionCondition = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.PMG_COLUMN).get(i).getText().equalsIgnoreCase((pmgVal));
@@ -403,7 +403,7 @@ public class ResearchPackagesUISteps {
             Log.info("Filtered by Publishing Director "+pubDirectorVal);
             Log.info("Filter Count Displayed=> "+filterCount);
             Log.info("Total Results Found => "+totItems);
-            Assert.assertTrue("Count in the filter and total result displayed matches",filterCount==totItems);
+            Assert.assertEquals("Count in the filter and total result displayed matches", filterCount, totItems);
             for(int i=0;i<totItems;i++){
                 Log.info("Publishing Directors with ISSN displayed => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.PUBDIRECTOR_COLUMN).get(i).getText()+" - "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText());
                 boolean assertionCondition = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.PUBDIRECTOR_COLUMN).get(i).getText().equalsIgnoreCase((pubDirectorVal));
@@ -445,7 +445,7 @@ public class ResearchPackagesUISteps {
     }
 
     @And("^Verify the status of the journal before include \"([^\"]*)\" in DB$")
-    public void journalStatusbeforeInDb(String ISSN) throws Throwable {
+    public void journalStatusbeforeInDb(String ISSN) {
         sql = String.format(ResearchPackagesSQL.SELECT_RECENT_STATUS_UPDATED_JOURNAL_FROM_EPH_RESEARCH_PACKAGES, ISSN);
         Log.info(sql);
         List<Map<?, ?>> journalStatusList = DBManager.getDBResultMap(sql, Constants.WFT_URL);
@@ -488,7 +488,7 @@ public class ResearchPackagesUISteps {
     }
 
     @And("^Submit the Prospective First Lists$")
-    public void submitFirstProspList() throws Throwable {
+    public void submitFirstProspList() {
         try{
             if (tasks.verifyElementisDisplayed("XPATH", ResearchPackagesConstants.NO_COLLECTIONS) ||
                     (tasks.verifyElementTextisDisplayed("There is currently no active collection"))) {
@@ -510,7 +510,7 @@ public class ResearchPackagesUISteps {
     }
 
     @Then("^Submit the Second Prospective First Lists$")
-    public void submitSecondProspList() throws Throwable {
+    public void submitSecondProspList() {
         try{
             if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.CREATE_PROSPECTIVE_LIST_II)) {
                 tasks.click("XPATH", ResearchPackagesConstants.CREATE_PROSPECTIVE_LIST_II);

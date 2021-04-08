@@ -10,13 +10,14 @@ import com.eph.automation.testing.models.dao.ManifestationIdentifierObject;
 import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import net.minidev.json.parser.ParseException;
 import org.junit.Assert;
 
 import java.util.HashMap;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class ManifestationIdentifiersApiObject {
+public class ManifestationIdentifiersApiObject {
     public ManifestationIdentifiersApiObject() {}
 
     private List<ManifestationIdentifierObject> manifestationIDentifiersDO;
@@ -29,24 +30,26 @@ class ManifestationIdentifiersApiObject {
     public HashMap<String, Object> getIdentifierType() {return identifierType;}
     public void setIdentifierType(HashMap<String, Object> identifierType) {this.identifierType = identifierType;}
 
-    private String effective_start_date;
-    public String getEffective_start_date() {return effective_start_date;}
-    public void setEffective_start_date(String effective_start_date) {this.effective_start_date = effective_start_date;}
+    private String effectiveStartDate;
 
-    private void getManifestationIdentifierByID(String identifierID){
+    public String getEffectiveStartDate() {return effectiveStartDate;}
+
+    public void setEffectiveStartDate(String effectiveStartDate) {this.effectiveStartDate = effectiveStartDate;}
+
+    private void getManifestationIdentifierByID(String identifierID) {
         String sql = String.format(APIDataSQL.SELECT_GD_MANIFESTATION_IDENTIFIER_BY_ID, identifierID);
         manifestationIDentifiersDO = DBManager.getDBResultAsBeanList(sql, ManifestationIdentifierObject.class, Constants.EPH_URL);
     }
 
-    public void compareWithDB(){
+    public void compareWithDB() {
         Log.info("verifying manifestation identifier... "+this.identifier);
 
         if(this.identifier!=null) {
             getManifestationIdentifierByID(this.identifier);
             Assert.assertEquals(this.identifierType.get("code"), manifestationIDentifiersDO.get(0).getF_type());
             Log.info("verified...identifier type");
-    if(!(this.effective_start_date==null && manifestationIDentifiersDO.get(0).getEffective_end_date()==null))
-        Assert.assertEquals(this.effective_start_date,manifestationIDentifiersDO.get(0).getEffective_start_date());
+    if(!(this.effectiveStartDate==null && manifestationIDentifiersDO.get(0).getEffective_start_date()==null))
+        Assert.assertEquals(this.effectiveStartDate,manifestationIDentifiersDO.get(0).getEffective_start_date());
             Log.info("verified...effective start date");
         }
     }

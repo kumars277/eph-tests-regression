@@ -11,7 +11,7 @@ import java.util.List;
 @StaticInjection
 
 public class PromisContext {
-    public static List<PRMTablesDLObject> tbPRMDataObjectsFromDL;
+    public static List<PRMTablesCurrentObject> tbPRMDataObjectsFromDL;
     public static List<PRMTablesCurrentObject> tbPRMDataObjectsFromCurrent;
     public static List<PRMTablesETLObject> tbPRMDataObjectsFromDeltaQuery;
     public static List<PRMTablesETLObject> tbPRMDataObjectsFromDelta;

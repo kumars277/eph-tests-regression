@@ -11,18 +11,13 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ManifestationDataObject;
-import com.eph.automation.testing.models.api.ManifestationProductAPIObject;
-import com.eph.automation.testing.models.dao.ProductDataObject;
-import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.util.TypeKey;
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
-import org.junit.Assert;
+import net.minidev.json.parser.ParseException;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,57 +26,33 @@ public class WorkManifestationApiObject {
     public WorkManifestationApiObject() {
     }
 
-    private List<ManifestationDataObject> manifestationDataObjectFromEPHGD;
+   // private List<ManifestationDataObject> manifestationDataObjectFromEPHGD;
 
     private String id;
+    public String getId() {return id;}
+    public void setId(String id) {this.id = id;}
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    private manifestationCore manifestationCore;
-
-    public manifestationCore getManifestationCore() {
-        return manifestationCore;
-    }
-
-    public void setManifestationCore(manifestationCore manifestationCore) {
-        this.manifestationCore = manifestationCore;
-    }
+    private ManifestationCore manifestationCore;
+    public ManifestationCore getManifestationCore() {return manifestationCore;}
+    public void setManifestationCore(ManifestationCore manifestationCore) {this.manifestationCore = manifestationCore;}
 
     //created by Nishant @ 17 Apr 2020
     private List<ManifestationProductAPIObject> products;
-
-    public List<ManifestationProductAPIObject> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<ManifestationProductAPIObject> products) {
-        this.products = products;
-    }
+    public List<ManifestationProductAPIObject> getProducts() {return products;}
+    public void setProducts(List<ManifestationProductAPIObject> products) {this.products = products;}
 
     private ManifestationExtended manifestationExtended;
+    public ManifestationExtended getManifestationExtended() {return manifestationExtended;}
+    public void setManifestationExtended(ManifestationExtended manifestationExtended) {this.manifestationExtended = manifestationExtended;}
 
-    public ManifestationExtended getManifestationExtended() {
-        return manifestationExtended;
-    }
-
-    public void setManifestationExtended(ManifestationExtended manifestationExtended) {
-        this.manifestationExtended = manifestationExtended;
-    }
-
-    private void getManifestationDetailByID(String manifestationID) {
+    public void getManifestationDetailByID(String manifestationID) {
         List<String> ids = new ArrayList<>();
         ids.add(manifestationID);
         String sql = String.format(APIDataSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_GD_BY_ID, Joiner.on("','").join(ids));
-        if (manifestationDataObjectFromEPHGD != null) {
-            manifestationDataObjectFromEPHGD.clear();
+        if (DataQualityContext.manifestationDataObjectsFromEPHGD != null) {
+            DataQualityContext.manifestationDataObjectsFromEPHGD.clear();
         }
-        manifestationDataObjectFromEPHGD = DBManager.getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
+        DataQualityContext.manifestationDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
     }
 
     public void compareWithDB() {

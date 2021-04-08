@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class WorksIdSteps {
@@ -126,7 +127,7 @@ public class WorksIdSteps {
             if(CollectionUtils.isEmpty(workid)) {
                 Log.info("Skipping as there are no found records for searched criteria");
             } else {
-                ArrayList<String> dataFromSTGCount = new ArrayList<String>();
+                ArrayList<String> dataFromSTGCount = new ArrayList<>();
 
                 if (dataFromSTG.get(0).getJOURNAL_NUMBER() != null) {
                     dataFromSTGCount.add(dataFromSTG.get(0).getJOURNAL_NUMBER());
@@ -160,9 +161,9 @@ public class WorksIdSteps {
             if (CollectionUtils.isEmpty(workid)) {
                 Log.info("Skipping as there are no found records for searched criteria");
             } else {
-                Assert.assertTrue("Load ID is empty!", dataFromSAId.get(0).getB_LOADID() != null);
+                Assert.assertNotNull("Load ID is empty!", dataFromSAId.get(0).getB_LOADID());
 
-                Assert.assertTrue("F_EVENT is empty!", dataFromSAId.get(0).getF_EVENT() != null);
+                Assert.assertNotNull("F_EVENT is empty!", dataFromSAId.get(0).getF_EVENT());
 
                 Assert.assertEquals("The classname is incorrect for id=" + dataQualityContext.productIdFromStg,
                         "WorkIdentifier", dataFromSAId.get(0).getB_CLASSNAME());
@@ -319,15 +320,9 @@ public class WorksIdSteps {
             } else {
                 Assert.assertEquals("There are missing identifiers", dataFromGDId.size(), dataFromSAId.size());
 
-                assertTrue("Expecting the Product details from PMX and EPH Consistent ",
-                        dataFromSAId.get(0).getF_EVENT()
-                                .equals(dataFromGDId.get(0).getF_EVENT()));
-                assertTrue("Expecting the Product details from PMX and EPH Consistent ",
-                        dataFromSAId.get(0).getB_CLASSNAME()
-                                .equals(dataFromGDId.get(0).getB_CLASSNAME()));
-
-                assertTrue("Expecting the EPH Work ID to be consistent  ",
-                        dataFromSAId.get(0).getF_WWORK().equals(dataFromGDId.get(0).getF_WWORK()));
+                assertEquals("Expecting the Product details from PMX and EPH Consistent ", dataFromSAId.get(0).getF_EVENT(), dataFromGDId.get(0).getF_EVENT());
+                assertEquals("Expecting the Product details from PMX and EPH Consistent ", dataFromSAId.get(0).getB_CLASSNAME(), dataFromGDId.get(0).getB_CLASSNAME());
+                assertEquals("Expecting the EPH Work ID to be consistent  ", dataFromSAId.get(0).getF_WWORK(), dataFromGDId.get(0).getF_WWORK());
 
                 if (dataFromSTG.get(0).getJOURNAL_NUMBER() != null) {
                     sql = WorksIdentifierSQL.getTypeIdGD
@@ -511,8 +506,8 @@ public class WorksIdSteps {
             if (CollectionUtils.isEmpty(workid) || CollectionUtils.isEmpty(pmxSource)) {
                 Log.info("No identifiers were updated");
             } else {
-                for (int i = 0; i < workid.size(); i++) {
-                    sql = WorksIdentifierSQL.getPmxSourceRef.replace("PARAM1", workid.get(i));
+                for (String s : workid) {
+                    sql = WorksIdentifierSQL.getPmxSourceRef.replace("PARAM1", s);
                     Log.info(sql);
                     pmxSource = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                             Constants.EPH_URL);
@@ -522,7 +517,7 @@ public class WorksIdSteps {
                     stgNewID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                             Constants.EPH_URL);
 
-                    sql = String.format(WorksIdentifierSQL.getEndDatedIdentifierData.replace("PARAM1", workid.get(i)));
+                    sql = String.format(WorksIdentifierSQL.getEndDatedIdentifierData.replace("PARAM1", s));
                     Log.info(sql);
                     endDatedID = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
                             Constants.EPH_URL);

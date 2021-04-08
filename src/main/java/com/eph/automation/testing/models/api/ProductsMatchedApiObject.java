@@ -4,6 +4,7 @@ package com.eph.automation.testing.models.api;
  */
 import com.eph.automation.testing.helper.Log;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import net.minidev.json.parser.ParseException;
 import org.junit.Assert;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -36,7 +37,7 @@ public class ProductsMatchedApiObject {
         return found;
     }
 
-    public boolean verifyProductWithIdIsReturned(String productID){
+    public boolean verifyProductWithIdIsReturned(String productID) {
         int i=0;    boolean found=false;
         int bound = items.length;
         while(i<bound&&!found){

@@ -3,6 +3,7 @@ package com.eph.automation.testing.configuration;
 import com.eph.automation.testing.models.EnumConstants;
 import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.services.db.sql.GetEPHDBUser;
+import net.minidev.json.parser.ParseException;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -28,13 +29,16 @@ public class DBManager {
 
     public static List getDBResultAsBeanList(String sql, Class klass, String dbEndPoint) {
         Properties dbProps = new Properties();
-        dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(getDatabaseEnvironmentKey(dbEndPoint)));
+        //updated by Nishant @ 15 Mar 2021 for secret manager
+        //dbProps.setProperty("jdbcUrl", LoadProperties.getDBConnection(getDatabaseEnvironmentKey(dbEndPoint)));
+        dbProps.setProperty("jdbcUrl", SecretsManagerHandler.getPostgreDBConnection(dbEndPoint));
 
-//        Yank.setupConnectionPool("pool", dbProps);
+
+        //Yank.setupConnectionPool("pool", dbProps);
         Yank.setupDefaultConnectionPool(dbProps);
 
         List klassList = Yank.queryBeanList(sql,klass, null);
-//        Yank.releaseDataSource();
+        //Yank.releaseDataSource();
         Yank.releaseDefaultConnectionPool();
         return klassList;
     }
@@ -60,7 +64,7 @@ public class DBManager {
             //Get SIT
         } else if (EnumConstants.ENVIRONMENTS.UAT.name().equalsIgnoreCase(TestContext.getValues().environment) && !TestContext.getValues().targetDB) {
             //GET UAT
-           // dbEndPointKey = Constants.PMX_URL;
+            // dbEndPointKey = Constants.PMX_URL;
         }
         return dbEndPointKey;
     }
@@ -98,6 +102,7 @@ public class DBManager {
             QueryRunner query = new QueryRunner();
             mapList = (List) query.query(connection, sql, new MapListHandler());
         } catch (SQLException sqlException) {
+         //   System.getProperties().forEach((k, v) -> System.out.println(k + ":" + v));
             sqlException.printStackTrace();
         } finally {
             DbUtils.closeQuietly(connection);
@@ -113,10 +118,14 @@ public class DBManager {
             if (connection == null) {
                 DbUtils.loadDriver(driver);
             }
-            connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
+            //updated by Nishant @ 15 Mar 2021 for secret manager
+           //connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
+            connection = DriverManager.getConnection(SecretsManagerHandler.getPostgreDBConnection(URL));
+
             QueryRunner query = new QueryRunner();
             mapList = (List) query.query(connection, sql, new MapListHandler());
         } catch (SQLException sqlException) {
+          //  System.getProperties().forEach((k, v) -> System.out.println(k + ":" + v));
             sqlException.printStackTrace();
         } finally {
             DbUtils.closeQuietly(connection);

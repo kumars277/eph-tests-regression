@@ -33,7 +33,7 @@ public class ManifestationGDGHTablesDataCheckSteps {
 
     @Given("^We get (.*) random manifestation ids of (.*)")
     public void getRandomManifestationIds(String numberOfRecords, String tableName) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random record...");
 

@@ -9,6 +9,7 @@ import com.eph.automation.testing.models.dao.PROMISDataLake.PRMTablesETLObject;
 import com.eph.automation.testing.services.db.PROMISDataLakeSQL.PromisETLDataCheckSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.*;
+import net.minidev.json.parser.ParseException;
 import org.apache.poi.ss.formula.functions.IDStarAlgorithm;
 import org.junit.Assert;
 
@@ -54,7 +55,7 @@ public class PromisETLDataCheck {
     }
 
     @When("^We get the Promis Inbound records from (.*)$")
-    public void getRecordsInbound(String Inboundtablename) {
+    public void getRecordsInbound(String Inboundtablename) throws ParseException {
         Log.info("We get the records from Inbound..");
         switch (Inboundtablename) {
             case "promis_prmautpubt_part":
@@ -91,7 +92,7 @@ public class PromisETLDataCheck {
     }
 
     @Then("^We get the Promis Current records from (.*)$")
-    public void getRecordsAutPubtDL(String Currenttablename) {
+    public void getRecordsAutPubtDL(String Currenttablename) throws ParseException {
         Log.info("We get the Current records..");
         switch (Currenttablename) {
             case "promis_prmautpubt_current":
@@ -125,7 +126,7 @@ public class PromisETLDataCheck {
         Log.info(sql);
         PromisDataContext.tbPRMDataObjectsFromCurrent = DBManager.getDBResultAsBeanList(sql, PRMTablesCurrentObject.class, Constants.AWS_URL);
     }
-
+/*
     @And("^Compare Promis records in Inbound and Current of (.*)$")
     public void comparePromDataInboundtoCurrent(String Inboundtablename) {
         if (PromisDataContext.tbPRMDataObjectsFromDL.isEmpty()) {
@@ -1311,7 +1312,7 @@ public class PromisETLDataCheck {
             }
         }
     }
-
+*/
     @Given("^We get the (.*) random Promis DeltaQuery ids of (.*)$")
     public void getRandomPromisDeltaIds(String numberOfRecords, String Deltatablename) {
 //        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
@@ -1325,7 +1326,7 @@ public class PromisETLDataCheck {
     }
 
     @When("^We get Promis Delta Query records from (.*)$")
-    public void getDeltaQueryRecords(String DeltaQueryTable) {
+    public void getDeltaQueryRecords(String DeltaQueryTable) throws ParseException {
         Log.info("We get the records from DeltaQuery..");
         switch (DeltaQueryTable) {
             case "promis_transform_file_history_subject_areas_part":
@@ -1356,7 +1357,7 @@ public class PromisETLDataCheck {
     }
 
     @Then("^We get the Promis Delta records from (.*)$")
-    public void getRecordsInDelta(String Deltatablename) {
+    public void getRecordsInDelta(String Deltatablename) throws ParseException {
         Log.info("We get the PreviousHistory records..");
         sql = String.format(PromisETLDataCheckSQL.GET_DELTA, Deltatablename, Joiner.on("','").join(Ids));
         Log.info(sql);
@@ -2115,7 +2116,7 @@ public class PromisETLDataCheck {
     }
 
     @When("^We get Promis History Excluding Query records from (.*)$")
-    public void getHistExclQueryRecords(String tablename) {
+    public void getHistExclQueryRecords(String tablename) throws ParseException {
         Log.info("We get the records from History Excluding Query..");
         switch (tablename) {
             case "subject_areas":
@@ -2146,7 +2147,7 @@ public class PromisETLDataCheck {
     }
 
     @Then("^We get the Promis History Excluding records from (.*)$")
-    public void getRecordsInHistExcltablename(String HistExcltablename) {
+    public void getRecordsInHistExcltablename(String HistExcltablename) throws ParseException {
         Log.info("We get the History Excluding records..");
         switch (HistExcltablename) {
             case "promis_transform_history_subject_areas_part":
@@ -2927,7 +2928,7 @@ public class PromisETLDataCheck {
     }
 
     @When("^We get Promis Latest Query records from (.*)$")
-    public void getLatestQueryRecords(String tablename) {
+    public void getLatestQueryRecords(String tablename) throws ParseException {
         Log.info("We get the records from Latest Query..");
         switch (tablename) {
             case "subject_areas":
@@ -2958,7 +2959,7 @@ public class PromisETLDataCheck {
     }
 
     @Then("^We get the Promis Latest records from (.*)$")
-    public void getRecordsInLatesttablename(String Latesttablename) {
+    public void getRecordsInLatesttablename(String Latesttablename) throws ParseException {
         Log.info("We get the History Excluding records..");
         switch (Latesttablename) {
             case "promis_transform_latest_subject_areas":
@@ -3729,7 +3730,7 @@ public class PromisETLDataCheck {
     }
 
     @When("^We get Promis transform mapping records from (.*)$")
-    public void getTransformMappingRecords(String tablename) {
+    public void getTransformMappingRecords(String tablename) throws ParseException {
         Log.info("We get the records from Transform Mapping Query..");
         switch (tablename) {
             case "subject_areas":
@@ -3760,7 +3761,7 @@ public class PromisETLDataCheck {
     }
 
     @Then("^We get the Promis Transform mapping current records from (.*)$")
-    public void getRecordsInCurrenttablename(String Currenttablename) {
+    public void getRecordsInCurrenttablename(String Currenttablename) throws ParseException {
         Log.info("We get the History Excluding records..");
         switch (Currenttablename) {
             case "promis_transform_Current_subject_areas":

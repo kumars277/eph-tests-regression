@@ -1,5 +1,5 @@
 package com.eph.automation.testing.models.ui;
-
+//updated by Nishant @ 03032021 for UAT2 environment
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.Product;
@@ -33,12 +33,17 @@ public class ProductFinderTasks {
     public Properties prop_editorial2 = new Properties();
     public List<Properties> list_people=new ArrayList();
     public Properties prop_links = new Properties();
+
     public void openHomePage() throws InterruptedException {//updated by Nishant @ 18 May 2020
-        String HomePageAddress="";
-        if (TestContext.getValues().environment.equalsIgnoreCase("SIT"))
-            HomePageAddress=Constants.PRODUCT_FINDER_EPH_SIT_UI;
-        else if (TestContext.getValues().environment.equalsIgnoreCase("UAT"))
-            HomePageAddress=Constants.PRODUCT_FINDER_EPH_UAT_UI;
+     String HomePageAddress="";
+       switch (TestContext.getValues().environment)
+       {
+           case "SIT":HomePageAddress=Constants.PRODUCT_FINDER_EPH_SIT_UI;break;
+           case "UAT":HomePageAddress=Constants.PRODUCT_FINDER_EPH_UAT_UI;break;
+           case "UAT2":HomePageAddress=Constants.PRODUCT_FINDER_EPH_UAT2_UI;break;
+           default:HomePageAddress=Constants.PRODUCT_FINDER_EPH_PROD_UI;break;
+       }
+
         if(DataQualityContext.uiUnderTest=="JF")HomePageAddress+="journals";
         tasks.openPage(HomePageAddress);
         Thread.sleep(1000);
@@ -48,15 +53,19 @@ public class ProductFinderTasks {
 
     public void loginByScienceAccount(String scienceEmailId) throws InterruptedException {
         //updated by Nishant @ 13 Feb 2020
-        //  if(!tasks.isObjectpresent("XPATH",ProductFinderConstants.userDetail))
-        try {
-            tasks.sendKeys("NAME", ProductFinderConstants.loginByEmail, System.getenv("username") + scienceEmailId);
-            tasks.click("ID", ProductFinderConstants.nextButton);
-            Log.info("signed in with science id...");
-        } catch (Exception e) {
-            Log.info("User already signed in...");
-            Log.info(e.getMessage());
-        }
+          /*if(tasks.isObjectpresent("XPATH",ProductFinderConstants.userDetail))
+          {}
+          else {
+              */
+              try {
+                  tasks.sendKeys("NAME", ProductFinderConstants.loginByEmail, System.getenv("username") + scienceEmailId);
+                  tasks.click("ID", ProductFinderConstants.nextButton);
+                  Log.info("signed in with science id...");
+              } catch (Exception e) {
+                  Log.info("User already signed in...");
+                  Log.info(e.getMessage());
+              }
+         // }
     }
 
     public void selectSearchType(String searchType) { //created by Nishant @ 10 Jul 2020
@@ -76,7 +85,7 @@ public class ProductFinderTasks {
             tasks.driver.navigate().refresh();
             Thread.sleep(3000);
         }
-        Log.info("Searching " + searchID + " on Product Finder/Journal Finder");
+        Log.info("Searching " + searchID + " on "+DataQualityContext.uiUnderTest);
         tasks.clearText("XPATH", ProductFinderConstants.searchBar);
         tasks.sendKeys("XPATH", ProductFinderConstants.searchBar, searchID);
         tasks.click("XPATH", ProductFinderConstants.searchButton);
@@ -99,6 +108,13 @@ public class ProductFinderTasks {
         String buildWorkIdLocator = String.format(ProductFinderConstants.buildWorkIdLocator, workId);
         tasks.click("XPATH", buildWorkIdLocator);
         Thread.sleep(5000);
+    }
+
+
+    public void clickLogo() throws InterruptedException {
+        //created by Nishant @ 23 Oct 2020
+        tasks.click("XPATH",ProductFinderConstants.elsevierLogo);
+        Thread.sleep(3000);
     }
 
     public void clickManifestation_tab() throws InterruptedException {
@@ -164,7 +180,9 @@ public class ProductFinderTasks {
             targetURL = Constants.PRODUCT_FINDER_EPH_SIT_UI + referenceUrl;
         else if (TestContext.getValues().environment.equalsIgnoreCase("UAT"))
             targetURL = Constants.PRODUCT_FINDER_EPH_UAT_UI + referenceUrl;
-
+        else if (TestContext.getValues().environment.equalsIgnoreCase("UAT2"))
+            targetURL = Constants.PRODUCT_FINDER_EPH_UAT2_UI + referenceUrl;
+        else targetURL = Constants.PRODUCT_FINDER_EPH_PROD_UI + referenceUrl;
         Log.info("Expected Target URL " + targetURL);
         if (targetURL.equalsIgnoreCase(tasks.getCurrentPageUrl())) return true;
         else return false;
@@ -199,6 +217,7 @@ public class ProductFinderTasks {
 
     public void getUI_WorkOverview_Information() {
         //created by Nishant @5 Jun 2020
+        //updated UI changes and locator by Nishant @ 15 Oct 2020 for EPHD-2241
 
         //capture Information values
         List<WebElement> rows_info = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailInformation1 + "/table/tbody/tr");
@@ -217,11 +236,24 @@ public class ProductFinderTasks {
         }
 
         //capture identifiers values
-        List<WebElement> rows_identifiers = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr");
-        for (int i = 0; i < rows_identifiers.size(); i++) {
-            String key = tasks.findElement("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr[" + (i + 1) + "]/td[1]").getText();
-            String value = tasks.findElement("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr[" + (i + 1) + "]/td[2]").getText();
-            prop_identifier.setProperty(key, value);
+        //updated by Nishant @ 15 Oct 2020 for EPHD-2041 regression testing
+        if(DataQualityContext.uiUnderTest=="PF")  //for Product Finder UI
+        {
+            List<WebElement> rows_identifiers = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr");
+            for (int i = 1; i < rows_identifiers.size(); i++) {
+                String key = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr[" + i + "]/td[1]").get(1).getText();
+                String value = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr[" + i + "]/td[2]").get(1).getText();
+                prop_identifier.setProperty(key, value);
+            }
+        }
+        else //for Journal Finder UI
+        {
+            List<WebElement> rows_identifiers = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr");
+            for (int i = 1; i <= rows_identifiers.size(); i++) {
+                  String key = tasks.findElement("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr[" + (i ) + "]/td[1]").getText();
+                  String value = tasks.findElement("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr[" + (i) + "]/td[2]").getText();
+                prop_identifier.setProperty(key, value);
+            }
         }
     }
 

@@ -6,6 +6,7 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.dao.ProductDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.google.common.base.Joiner;
+import net.minidev.json.parser.ParseException;
 import org.junit.Assert;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.List;
 
 /*
 Created by Nishant @ 27 Nov 2019
+updated by Nishant @ 04 Feb 2021, EPHD-2747
 * */
 public class ManifestationProductAPIObject {
 
@@ -27,6 +29,14 @@ public class ManifestationProductAPIObject {
     public ProductSummary getProductSummary() {return productSummary;}
     public void setProductSummary(ProductSummary productSummary) {this.productSummary = productSummary;}
 
+    private ManifestationCore manifestationCore;
+    public ManifestationCore getManifestationCore() {return manifestationCore;}
+    public void setManifestationCore(ManifestationCore manifestationCore) {this.manifestationCore = manifestationCore;}
+
+    private ManifestationWorkApiObject work;
+    public ManifestationWorkApiObject getWork() {return work;}
+    public void setWork(ManifestationWorkApiObject work) {this.work = work;}
+/*
     static class ProductSummary {
         String name;
         public String getName() {return name;}
@@ -39,7 +49,7 @@ public class ManifestationProductAPIObject {
         HashMap<String, Object> status;
         public HashMap<String, Object> getStatus() {return status;}
         public void setStatus(HashMap status) {this.status = status;}
-    }
+    }*/
 
     private void getProductDataFromEPHGD(String productID) {
         List<String> ids = new ArrayList<>();
@@ -48,7 +58,7 @@ public class ManifestationProductAPIObject {
         productDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
     }
 
-    public void compareWithDB(){
+    public void compareWithDB() {
         Log.info("verifying product..."+this.id);
 
         getProductDataFromEPHGD(this.id);

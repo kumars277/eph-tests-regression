@@ -10,18 +10,27 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class AccessToken
 {
 	private String tokenType;
-	
+	public String getTokenType(){return tokenType;}
+
 	private Long expiresIn;
-	
+	public Long getExpiresIn(){return expiresIn;}
+
 	private Long extExpiresIn;
+	public Long getExtExpiresIn(){return extExpiresIn;}
 
 	private Long expiresOn;
-	
+	public Long getExpiresOn(){return expiresOn;}
+	public String getExpiresOnAsString(){return toDate(expiresOn);}
+
 	private Long notBefore;
-	
+	public Long getNotBefore(){return notBefore;}
+	public String getNotBeforeAsString(){return toDate(notBefore);}
+
 	private String resource;
-	
+	public String getResource(){return resource;}
+
 	private String token;
+	public String getToken(){return token;}
 	
 	@JsonCreator
 	public AccessToken(@JsonProperty(value = "token_type", required = true) String tokenType, 
@@ -41,50 +50,7 @@ public class AccessToken
 		this.token = token;
 	}
 	
-	public String getTokenType()
-	{
-		return tokenType;
-	}
 
-	public Long getExpiresIn()
-	{
-		return expiresIn;
-	}
-
-	public Long getExtExpiresIn()
-	{
-		return extExpiresIn;
-	}
-
-	public Long getExpiresOn()
-	{
-		return expiresOn;
-	}
-
-	public String getExpiresOnAsString()
-	{
-		return toDate(expiresOn);
-	}
-
-	public Long getNotBefore()
-	{
-		return notBefore;
-	}
-
-	public String getNotBeforeAsString()
-	{
-		return toDate(notBefore);
-	}
-
-	public String getResource()
-	{
-		return resource;
-	}
-
-	public String getToken()
-	{
-		return token;
-	}
 
 	public boolean isValid(Long expiryOffsetSeconds)
 	{

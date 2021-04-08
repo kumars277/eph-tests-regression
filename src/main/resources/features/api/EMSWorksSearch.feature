@@ -3,22 +3,6 @@ Feature: Customer Search API: Works
   I would like to search works from Enterprise Customer Hub using EIP Search
   So that I can use the details to validate business needs
 
-
-  @APIv3
-  Scenario: verify Work Extended by specific ID
-    Given We get 1 random search ids for Extended works
-    And We get the work search data from EPH GD
-    Then the work details are retrieved and compared
-
-  @APIv3
-  Scenario: verify Manifestation Extended specific ID
-    Given We get 2 random search ids for Extended manifestation
-    And get work by manifestation
-    And We get the work search data from EPH GD
-    Then the work details are retrieved and compared
-
-   #{'datafile':'C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\Elastic search,APIv3 and JRBI data/stch_work_ext_json_202006181758.csv'}
-
    #new search fields included as part of Journal Finder #EPR-W-108TJK
   @searchAPI @JFSearch
   Scenario Outline: Search journal by search option
@@ -43,11 +27,9 @@ Feature: Customer Search API: Works
       |PERSON_NAME        |
       |PEOPLE_HUB_ID      |
       |PERSON_ID      |
-    #need to update for below as per EPHD-1414, comment by Nishant @ 08 Jul 2020
+      #updated below as per EPHD-1414 by Nishant @ 08 Jul 2020
       |personFullNameCurrent|
       |personIdCurrent|
-      |personName|
-      |personId  |
 
 
 
@@ -98,10 +80,10 @@ Feature: Customer Search API: Works
     Then the works retrieved by search <option> details are retrieved and compared
     Examples:
       | option                                 |
-      | WORK_IDENTIFIER                        |
-      | WORK_ID                                |
-      | WORK_MANIFESTATION_ID                  |
-      | WORK_MANIFESTATION_IDENTIFIER          |
+   #   | WORK_IDENTIFIER                        |
+   #   | WORK_ID                                |
+   #   | WORK_MANIFESTATION_ID                  |
+   #   | WORK_MANIFESTATION_IDENTIFIER          |
       | WORK_PRODUCT_ID                        |
       | WORK_MANIFESTATION_PRODUCT_ID          |
       | WORK_TITLE                             |
@@ -172,3 +154,18 @@ Feature: Customer Search API: Works
     And We get the work search data from EPH GD
     Then the work details are retrieved by search with PMG code and compared
 
+  @APIv3
+  Scenario: verify Manifestation Extended specific ID
+    Given We get 2 random search ids for Extended manifestation
+    And get work by manifestation
+    And We get the work search data from EPH GD
+    Then the work details are retrieved and compared
+
+   #{'datafile':'C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\Elastic search,APIv3 and JRBI data/stch_work_ext_json_202006181758.csv'}
+
+# covered in above tests
+  @APIv3
+  Scenario: verify Work Extended by specific ID
+    Given We get 1 random search ids for Extended works
+    And We get the work search data from EPH GD
+    Then the work details are retrieved and compared

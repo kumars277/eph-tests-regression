@@ -35,6 +35,7 @@ public class ProductDataObject {
     private String DQ_ERR;
     private String CREATED;
     private String UPDATED;
+    private String IDENTIFIER;
 
     //SA
     private String F_EVENT;
@@ -47,6 +48,9 @@ public class ProductDataObject {
 
     public String getWORK_STATUS() {return WORK_STATUS;}
     public void setWORK_STATUS(String WORK_STATUS) {this.WORK_STATUS = WORK_STATUS;}
+
+    public void setIDENTIFIER(String IDENTIFIER) {this.IDENTIFIER = IDENTIFIER;}
+    public String getIDENTIFIER() {return IDENTIFIER;}
 
     public String getCREATED() {return CREATED;}
     public void setCREATED(String CREATED) {this.CREATED = CREATED;}
@@ -70,7 +74,11 @@ public class ProductDataObject {
     public void setSEPARATELY_SALEABLE_IND(String SEPARATELY_SALEABLE_IND) {this.SEPARATELY_SALEABLE_IND = SEPARATELY_SALEABLE_IND;}
 
     public Boolean getBoolTRIAL_ALLOWED_IND() {if(TRIAL_ALLOWED_IND.equalsIgnoreCase("t")) return true; else return false;}
-    public Boolean getBoolSEPARATELY_SALEABLE_IND() {if(SEPARATELY_SALEABLE_IND.equalsIgnoreCase("t")) return true; else return false;}
+
+    public Boolean getBoolSEPARATELY_SALEABLE_IND()
+    {
+        if(SEPARATELY_SALEABLE_IND.equalsIgnoreCase("t")) return true; else return false;
+    }
 
     public String getTRIAL_ALLOWED_IND() {return TRIAL_ALLOWED_IND;}
     public void setTRIAL_ALLOWED_IND(String TRIAL_ALLOWED_IND) {this.TRIAL_ALLOWED_IND = TRIAL_ALLOWED_IND;}

@@ -1009,68 +1009,68 @@ public class JRBIManifestationDataChecksSteps {
         }
     }
 
-    @Then("^Get the records from Manifestation extended stitching table$")
-    public void getManifExtendedJSONRec(String manifId) {
-        Log.info("We get the JSON from Manifestation Stitching Tables...");
-        Log.info(manifId);
-        sql = String.format(JRBIManifestationDataChecksSQL.GET_MANIF_JSON_RECORDS, manifId);
-        Log.info(sql);
-        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        JRBIAccessDLContext.recordsFromManifStitching = new Gson().fromJson(jsonValue.get(0).get("json"), JRBIManifExtJsonObject.class);
-    }
-
-    @And("^compare manifestation extended and manifestation extended person role with manifestation stitching table$")
-    public void compareManifExtendedAndStitching() {
-        if (dataQualityJRBIContext.recordsFromProdManifExtended.isEmpty()) {
-            Log.info("No Data Found ....");
-        } else {
-            for (int i = 0; i < dataQualityJRBIContext.recordsFromProdManifExtended.size(); i++) {
-                String manifId = dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR();
-                getManifExtendedJSONRec(manifId);
-                Log.info("Manif_Extended -> EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() +
-                        " Manif_JSON -> EPR => " + JRBIAccessDLContext.recordsFromManifStitching.getId());
-                if (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() != null ||
-                        (JRBIAccessDLContext.recordsFromManifStitching.getId() != null)) {
-                    Assert.assertEquals("The EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() + " is missing/not found in Manif_Stitching table",
-                            dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR(),
-                            JRBIAccessDLContext.recordsFromManifStitching.getId());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() +
-                        " Manif_Extended -> journalProdSiteCode => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_PROD_SITE() +
-                        " Manif_JSON -> journalProdSiteCode => " + JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalProdSiteCode());
-                if (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_PROD_SITE() != null ||
-                        (JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalProdSiteCode() != null)) {
-                    Assert.assertEquals("The journalProdSiteCode is incorrect for EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_PROD_SITE(),
-                            JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalProdSiteCode());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() +
-                        " Manif_Extended -> journalIssueTrimSize => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_ISSUE_TRIM_SIZE() +
-                        " Manif_JSON -> journalIssueTrimSize => " + JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalIssueTrimSize());
-                if (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null ||
-                        (JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalIssueTrimSize() != null)) {
-                    Assert.assertEquals("The journalIssueTrimSize is incorrect for EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_ISSUE_TRIM_SIZE(),
-                            JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalIssueTrimSize());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() +
-                        " Manif_Extended -> warReference => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getWAR_REFERENCE() +
-                        " Manif_JSON -> warReference => " + JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getWarReference());
-                if (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getWAR_REFERENCE() != null ||
-                        (JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getWarReference() != null)) {
-                    Assert.assertEquals("The warReference is incorrect for EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getWAR_REFERENCE(),
-                            JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getWarReference());
-                }
-
-            }
-
-        }
-
-    }
+//    @Then("^Get the records from Manifestation extended stitching table$")
+//    public void getManifExtendedJSONRec(String manifId) {
+//        Log.info("We get the JSON from Manifestation Stitching Tables...");
+//        Log.info(manifId);
+//        sql = String.format(JRBIManifestationDataChecksSQL.GET_MANIF_JSON_RECORDS, manifId);
+//        Log.info(sql);
+//        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+//        JRBIAccessDLContext.recordsFromManifStitching = new Gson().fromJson(jsonValue.get(0).get("json"), JRBIManifExtJsonObject.class);
+//    }
+//
+//    @And("^compare manifestation extended and manifestation extended person role with manifestation stitching table$")
+//    public void compareManifExtendedAndStitching() {
+//        if (dataQualityJRBIContext.recordsFromProdManifExtended.isEmpty()) {
+//            Log.info("No Data Found ....");
+//        } else {
+//            for (int i = 0; i < dataQualityJRBIContext.recordsFromProdManifExtended.size(); i++) {
+//                String manifId = dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR();
+//                getManifExtendedJSONRec(manifId);
+//                Log.info("Manif_Extended -> EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() +
+//                        " Manif_JSON -> EPR => " + JRBIAccessDLContext.recordsFromManifStitching.getId());
+//                if (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() != null ||
+//                        (JRBIAccessDLContext.recordsFromManifStitching.getId() != null)) {
+//                    Assert.assertEquals("The EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() + " is missing/not found in Manif_Stitching table",
+//                            dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR(),
+//                            JRBIAccessDLContext.recordsFromManifStitching.getId());
+//                }
+//
+//                Log.info("EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() +
+//                        " Manif_Extended -> journalProdSiteCode => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_PROD_SITE() +
+//                        " Manif_JSON -> journalProdSiteCode => " + JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalProdSiteCode());
+//                if (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_PROD_SITE() != null ||
+//                        (JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalProdSiteCode() != null)) {
+//                    Assert.assertEquals("The journalProdSiteCode is incorrect for EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR(),
+//                            dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_PROD_SITE(),
+//                            JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalProdSiteCode());
+//                }
+//
+//                Log.info("EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() +
+//                        " Manif_Extended -> journalIssueTrimSize => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_ISSUE_TRIM_SIZE() +
+//                        " Manif_JSON -> journalIssueTrimSize => " + JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalIssueTrimSize());
+//                if (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null ||
+//                        (JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalIssueTrimSize() != null)) {
+//                    Assert.assertEquals("The journalIssueTrimSize is incorrect for EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR(),
+//                            dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_ISSUE_TRIM_SIZE(),
+//                            JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalIssueTrimSize());
+//                }
+//
+//                Log.info("EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() +
+//                        " Manif_Extended -> warReference => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getWAR_REFERENCE() +
+//                        " Manif_JSON -> warReference => " + JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getWarReference());
+//                if (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getWAR_REFERENCE() != null ||
+//                        (JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getWarReference() != null)) {
+//                    Assert.assertEquals("The warReference is incorrect for EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR(),
+//                            dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getWAR_REFERENCE(),
+//                            JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getWarReference());
+//                }
+//
+//            }
+//
+//        }
+//
+//    }
 
 }
 
