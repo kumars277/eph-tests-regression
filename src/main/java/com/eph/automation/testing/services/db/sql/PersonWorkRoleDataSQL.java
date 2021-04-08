@@ -459,6 +459,7 @@ public class PersonWorkRoleDataSQL {
             "    on STG_10_PMX_WORK_PERSON_ROLE.\"WORK_PERSON_ROLE_SOURCE_REF\" = a.external_reference\n" +
             "where perd.dq_err != 'Y' and word.dq_err != 'Y'\t\n" +
             "and work_person_role_id in ('%s') ";
+    public static String getPersonsByWorkId;
 }
 
 

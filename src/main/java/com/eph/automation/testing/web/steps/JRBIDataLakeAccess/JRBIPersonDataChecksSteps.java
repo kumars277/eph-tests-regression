@@ -31,7 +31,7 @@ public class JRBIPersonDataChecksSteps {
 
     @Given("^We get the (.*) random Person EPR ids (.*)$")
     public void getRandomPersonEPRIds(String numberOfRecords, String tableName) {
-       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Person EPR Ids...");
         switch (tableName) {
@@ -798,8 +798,7 @@ public class JRBIPersonDataChecksSteps {
         Log.info(sql);
         dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
     }
-
-    @Then("^Get the records from person exclude table$")
+    @And("^Get the records from person exclude jrbi ext table$")
     public void getExcludePersonRecords(){
         Log.info("We get the records fromPerson Exclude...");
         sql = String.format(JRBIPersonDataChecksSQL.GET_RECORDS_FROM_PERSON_EXCLUDE, Joiner.on("','").join(Ids));

@@ -28,140 +28,107 @@ public class JRBIDataLakeCountChecksSQL {
 
 
     public static String GET_JRBI_WORK_SOURCE_COUNT =
-            "WITH jrbi_catalogue_max as(SELECT\n" +
-                    "  cr2.epr epr\n" +
-                    ", MAX(CAST(NULLIF(j.catalogue_volumes_qty, '') AS integer)) catalogue_volumes_qty\n" +
-                    ", MAX(CAST(NULLIF(j.catalogue_issues_qty, '') AS integer)) catalogue_issues_qty\n" +
-                    ", MAX(NULLIF(j.catalogue_volume_from,'')) catalogue_volume_from\n" +
-                    ", MAX(NULLIF(j.catalogue_volume_to,'')) catalogue_volume_to\n" +
-                    ", MAX(CAST(NULLIF(j.rf_issues_qty, '') AS integer)) rf_issues_qty\n" +
-                    ", MAX(CAST(NULLIF(j.rf_total_pages_qty, '') AS integer)) rf_total_pages_qty\n" +
-                    ", MAX(NULLIF(j.rf_fvi,'')) rf_fvi\n" +
-                    ", MAX(NULLIF(j.rf_lvi,'')) rf_lvi\n" +
-                    " FROM\n" +
-                    "(("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
-                    "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((substr('00000',1,5-length(j.journal_number))\n" +
-                    "||j.journal_number = cr2.identifier)\n" +
-                    " AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work'))))\n" +
-                    " GROUP BY cr2.epr),\n" +
-                    " jrbi_joined as (SELECT DISTINCT cr2.epr epr, 'JRBI Work Extended' record_type, cr2.work_type work_type\n" +
-                    ", NULLIF(j.primary_site_system,'') primary_site_system\n" +
-                    ", NULLIF(j.primary_site_acronym,'') primary_site_acronym\n" +
-                    ", NULLIF(j.primary_site_support_level,'') primary_site_support_level\n" +
-                    ", NULLIF(j.fulfilment_system,'') fulfilment_system\n" +
-                    ", NULLIF(j.fulfilment_journal_acronym,'') fulfilment_journal_acronym\n" +
-                    ", NULLIF(j.issue_prod_type_code,'') issue_prod_type_code\n" +
-                    ", CAST(NULLIF(j.catalogue_volumes_qty, '') AS integer) catalogue_volumes_qty\n" +
-                    ", CAST(NULLIF(j.catalogue_issues_qty, '') AS integer) catalogue_issues_qty\n" +
-                    ", NULLIF(j.catalogue_volume_from,'') catalogue_volume_from\n" +
-                    ", NULLIF(j.catalogue_volume_to,'') catalogue_volume_to\n" +
-                    ", CAST(NULLIF(j.rf_issues_qty, '') AS integer) rf_issues_qty\n" +
-                    ", CAST(NULLIF(j.rf_total_pages_qty, '') AS integer) rf_total_pages_qty\n" +
-                    ", NULLIF(j.rf_fvi,'') rf_fvi\n" +
-                    ", NULLIF(j.rf_lvi,'') rf_lvi\n" +
-                    ", NULLIF(j.business_unit_desc,'') business_unit_desc\n" +
-                    "FROM\n" +
-                    "(("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON\n" + "(((substr('00000',1,5-length(j.journal_number))||j.journal_number = cr2.identifier) AND\n" +
-                    "(cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work')))))\n" +
-                    "SELECT count(*) as Source_Count from (SELECT DISTINCT\n" +
-                    "ji.epr epr\n" +
-                    ",ji.record_type record_type\n" +
-                    ",ji.work_type work_type\n" +
-                    ",ji.primary_site_system primary_site_system\n" +
-                    ",ji.primary_site_acronym primary_site_acronym\n" +
-                    ",ji.primary_site_support_level primary_site_support_level\n" +
-                    ",ji.fulfilment_system fulfilment_system\n" +
-                    ",ji.fulfilment_journal_acronym fulfilment_journal_acronym\n" +
-                    ",ji.issue_prod_type_code issue_prod_type_code\n" +
-                    ", COALESCE(ji.catalogue_volumes_qty,m.catalogue_volumes_qty) catalogue_volumes_qty\n" +
-                    ", COALESCE(ji.catalogue_issues_qty,m.catalogue_issues_qty) catalogue_issues_qty\n" +
-                    ", COALESCE(ji.catalogue_volume_from,m.catalogue_volume_from) catalogue_volume_from\n" +
-                    ", COALESCE(ji.catalogue_volume_to,m.catalogue_volume_to) catalogue_volume_to\n" +
-                    ", COALESCE(ji.rf_issues_qty,m.rf_issues_qty) rf_issues_qty\n" +
-                    ", COALESCE(ji.rf_total_pages_qty,m.rf_total_pages_qty) rf_total_pages_qty\n" +
-                    ", COALESCE(ji.rf_fvi,m.rf_fvi) rf_fvi\n" +
-                    ", COALESCE(ji.rf_lvi,m.rf_lvi) rf_lvi\n" +
-                    ", ji.business_unit_desc business_unit_desc\n" +
-                    " FROM\n" +
-                    "jrbi_joined ji LEFT JOIN  jrbi_catalogue_max m on ji.epr = m.epr)where epr is not NULL\n";
-         /*   "select Count(*) as Source_Count from(SELECT DISTINCT\n" +
-                    "  COALESCE(cr1.epr, cr2.epr) epr\n" +
-                    ", 'JRBI Work Extended' record_type\n" +
-                    ", j.primary_site_system primary_site_system\n" +
-                    ", j.primary_site_acronym primary_site_acronym\n" +
-                    ", j.primary_site_support_level primary_site_support_level\n" +
-                    ", j.fulfilment_system fulfilment_system\n" +
-                    ", j.fulfilment_journal_acronym fulfilment_journal_acronym\n" +
-                    ", j.issue_prod_type_code issue_prod_type_code\n" +
-                    ", CAST(NULLIF(j.catalogue_volumes_qty, '') AS integer) catalogue_volumes_qty\n" +
-                    ", CAST(NULLIF(j.catalogue_issues_qty, '') AS integer) catalogue_issues_qty\n" +
-                    ", j.catalogue_volume_from catalogue_volume_from\n" +
-                    ", j.catalogue_volume_to catalogue_volume_to\n" +
-                    ", CAST(NULLIF(j.rf_issues_qty, '') AS integer) rf_issues_qty\n" +
-                    ", CAST(NULLIF(j.rf_total_pages_qty, '') AS integer) rf_total_pages_qty\n" +
-                    ", j.rf_fvi rf_fvi\n" +
-                    ", j.rf_lvi rf_lvi\n" +
-                    ", j.business_unit_desc business_unit_desc\n" +
-                    "FROM\n" +
-                    "  (("+GetBCS_ETLCoreDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
-                    "LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr1 ON (((j.issn = cr1.identifier) AND (cr1.identifier_type = 'ISSN')) AND (cr1.record_level = 'Work')))\n" +
-                    "LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work')))) where epr is not NULL\n";
-*/
-    public static String GET_JRBI_MANIF_SOURCE_COUNT =
-                 " select Count(*) as Source_Count from(SELECT DISTINCT\n" +
-                         " cr2.epr epr\n" +
-                         ", 'JRBI Manifestation Extended' record_type\n" +
-                         ", cr2.manifestation_type manifestation_type\n" +
-                         ", NULLIF(j.journal_prod_site_code,'') journal_prod_site_code\n" +
-                         ", NULLIF(j.journal_issue_trim_size,'') journal_issue_trim_size\n" +
-                         ", NULLIF(j.war_reference,'') war_reference\n" +
-                         " FROM\n" +
-                         "("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
-                         "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON\n" +
-                         "((((substr('00000',1,5-length(j.journal_number))||j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
-                         "AND (cr2.record_level = 'Manifestation')) AND (cr2.manifestation_type = 'JPR'))))where epr is not NULL\n";
+         "WITH\n" +
+                 "  jrbi_catalogue_max AS (\n" +
+                 "   SELECT\n" +
+                 "     cr2.epr epr\n" +
+                 "   , max(CAST(NULLIF(j.catalogue_volumes_qty, '') AS integer)) catalogue_volumes_qty\n" +
+                 "   , max(CAST(NULLIF(j.catalogue_issues_qty, '') AS integer)) catalogue_issues_qty\n" +
+                 "   , max(NULLIF(j.catalogue_volume_from, '')) catalogue_volume_from\n" +
+                 "   , max(NULLIF(j.catalogue_volume_to, '')) catalogue_volume_to\n" +
+                 "   , max(CAST(NULLIF(j.rf_issues_qty, '') AS integer)) rf_issues_qty\n" +
+                 "   , max(CAST(NULLIF(j.rf_total_pages_qty, '') AS integer)) rf_total_pages_qty\n" +
+                 "   , max(NULLIF(j.rf_fvi, '')) rf_fvi\n" +
+                 "   , max(NULLIF(j.rf_lvi, '')) rf_lvi\n" +
+                 "   FROM\n" +
+                 "     ("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
+                 "   INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((concat(substr('00000', 1, (5 - length(j.journal_number))), j.journal_number) = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work')))\n" +
+                 "   GROUP BY cr2.epr\n" +
+                 ") \n" +
+                 ", jrbi_joined AS (\n" +
+                 "   SELECT DISTINCT\n" +
+                 "     cr2.epr epr\n" +
+                 "   , 'JRBI Work Extended' record_type\n" +
+                 "   , cr2.work_type work_type\n" +
+                 "   , NULLIF(j.primary_site_system, '') primary_site_system\n" +
+                 "   , NULLIF(j.primary_site_acronym, '') primary_site_acronym\n" +
+                 "   , NULLIF(j.primary_site_support_level, '') primary_site_support_level\n" +
+                 "   , NULLIF(j.fulfilment_system, '') fulfilment_system\n" +
+                 "   , NULLIF(j.fulfilment_journal_acronym, '') fulfilment_journal_acronym\n" +
+                 "   , NULLIF(j.issue_prod_type_code, '') issue_prod_type_code\n" +
+                 "   , CAST(NULLIF(j.catalogue_volumes_qty, '') AS integer) catalogue_volumes_qty\n" +
+                 "   , CAST(NULLIF(j.catalogue_issues_qty, '') AS integer) catalogue_issues_qty\n" +
+                 "   , NULLIF(j.catalogue_volume_from, '') catalogue_volume_from\n" +
+                 "   , NULLIF(j.catalogue_volume_to, '') catalogue_volume_to\n" +
+                 "   , CAST(NULLIF(j.rf_issues_qty, '') AS integer) rf_issues_qty\n" +
+                 "   , CAST(NULLIF(j.rf_total_pages_qty, '') AS integer) rf_total_pages_qty\n" +
+                 "   , NULLIF(j.rf_fvi, '') rf_fvi\n" +
+                 "   , NULLIF(j.rf_lvi, '') rf_lvi\n" +
+                 "   , NULLIF(j.business_unit_desc, '') business_unit_desc\n" +
+                 "   , NULLIF(j.journal_prod_site_code, '') journal_prod_site_code\n" +
+                 "   FROM\n" +
+                 "     ("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
+                 "   INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((concat(substr('00000', 1, (5 - length(j.journal_number))), j.journal_number) = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work')))\n" +
+                 ") \n" +
+                 "SELECT count(*) as Source_Count from (SELECT DISTINCT\n" +
+                 "  ji.epr epr\n" +
+                 ", ji.record_type record_type\n" +
+                 ", ji.work_type work_type\n" +
+                 ", ji.primary_site_system primary_site_system\n" +
+                 ", ji.primary_site_acronym primary_site_acronym\n" +
+                 ", ji.primary_site_support_level primary_site_support_level\n" +
+                 ", ji.fulfilment_system fulfilment_system\n" +
+                 ", ji.fulfilment_journal_acronym fulfilment_journal_acronym\n" +
+                 ", ji.issue_prod_type_code issue_prod_type_code\n" +
+                 ", COALESCE(ji.catalogue_volumes_qty, m.catalogue_volumes_qty) catalogue_volumes_qty\n" +
+                 ", COALESCE(ji.catalogue_issues_qty, m.catalogue_issues_qty) catalogue_issues_qty\n" +
+                 ", COALESCE(ji.catalogue_volume_from, m.catalogue_volume_from) catalogue_volume_from\n" +
+                 ", COALESCE(ji.catalogue_volume_to, m.catalogue_volume_to) catalogue_volume_to\n" +
+                 ", COALESCE(ji.rf_issues_qty, m.rf_issues_qty) rf_issues_qty\n" +
+                 ", COALESCE(ji.rf_total_pages_qty, m.rf_total_pages_qty) rf_total_pages_qty\n" +
+                 ", COALESCE(ji.rf_fvi, m.rf_fvi) rf_fvi\n" +
+                 ", COALESCE(ji.rf_lvi, m.rf_lvi) rf_lvi\n" +
+                 ", ji.business_unit_desc business_unit_desc\n" +
+                 ", ji.journal_prod_site_code journal_prod_site_code\n" +
+                 "FROM\n" +
+                 "  (jrbi_joined ji\n" +
+                 "LEFT JOIN jrbi_catalogue_max m ON (ji.epr = m.epr)))\n";
 
-         /*   "select Count(*) as Source_Count from(SELECT DISTINCT\n" +
-                    "  COALESCE(cr1.epr, cr2.epr) epr\n" +
-                    ", 'JRBI Manifestation' record_type\n" +
-                    ", j.journal_prod_site_code journal_prod_site_code\n" +
-                    ", j.journal_issue_trim_size journal_issue_trim_size\n" +
-                    ", j.war_reference war_reference\n" +
-                    "FROM\n" +
-                    "  (("+GetBCS_ETLCoreDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
-                    "LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr1 ON ((((j.issn = cr1.identifier) AND (cr1.identifier_type = 'ISSN')) AND (cr1.record_level = 'Manifestation')) AND (cr1.manifestation_type = 'JPR')))\n" +
-                    "LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON ((((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Manifestation')) AND (cr2.manifestation_type = 'JPR')))) where epr is not NULL\n";
-*/
+    public static String GET_JRBI_MANIF_SOURCE_COUNT =
+                "select Count(*) as Source_Count from(\n" +
+                        "SELECT DISTINCT\n" +
+                        "  cr2.epr epr\n" +
+                        ", 'JRBI Manifestation Extended' record_type\n" +
+                        ", cr2.manifestation_type manifestation_type\n" +
+                        ", NULLIF(j.journal_issue_trim_size, '') journal_issue_trim_size\n" +
+                        ", NULLIF(j.war_reference, '') war_reference\n" +
+                        "FROM\n" +
+                        "  ("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full j\n" +
+                        "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON \n" +
+                        "((((concat(substr('00000', 1, (5 - length(j.journal_number))), j.journal_number) = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
+                        " AND (cr2.record_level = 'Manifestation')) AND (cr2.manifestation_type = 'JPR'))))\n";
 
         public static String GET_JRBI_PERSON_SOURCE_COUNT =
-                " SELECT COUNT(*) as Source_Count FROM (SELECT DISTINCT \n" +
-                        " cr2.epr epr\n" +
-                        ", 'JRBI Person Extended' record_type, cr2.work_type work_type\n" +
-                        ", NULLIF(j.role_code,'') role_code\n" +
-                        ", cr2.epr||j.role_code as u_key\n" +
-                        ", NULLIF(j.role_description,'') role_description\n" +
-                        ", p.given_name given_name\n" +
-                        ", p.family_name family_name\n" +
-                        ", p.peoplehub_id peoplehub_id\n" +
-                        ", NULLIF(rtrim(ltrim(lower(j.email),' '),' '),'') email\n" +
-                        "FROM (("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_person_unpivot_v j \n" +
-                        "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (rtrim(ltrim(lower(j.email),' '),' ') = rtrim(ltrim(lower(p.email),' '),' ')))\n" +
-                        "JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2\n" +
-                        "ON (((substr('00000',1,5-length(j.journal_number))||j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER'))\n" +
-                        "AND (cr2.record_level = 'Work')))) where epr is not NULL\n";
+               "select Count(*) as Source_Count from(\n" +
+                       "SELECT DISTINCT\n" +
+                       "  cr2.epr epr\n" +
+                       ", 'JRBI Person Extended' record_type\n" +
+                       ", cr2.work_type work_type\n" +
+                       ", NULLIF(j.role_code, '') role_code\n" +
+                       ", concat(cr2.epr, j.role_code) u_key\n" +
+                       ", NULLIF(j.role_description, '') role_description\n" +
+                       ", COALESCE(p.given_name, jel.given_name) given_name\n" +
+                       ", COALESCE(p.family_name, jel.family_name) family_name\n" +
+                       ", COALESCE(p.peoplehub_id, jel.peoplehub_id) peoplehub_id\n" +
+                       ", NULLIF(COALESCE(rtrim(ltrim(lower(j.email), ' '), ' '), rtrim(ltrim(lower(jel.email), ' '), ' ')), '') email\n" +
+                       "FROM\n" +
+                       "  ((("+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_person_unpivot_v j\n" +
+                       "INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((concat(substr('00000', 1, (5 - length(j.journal_number))), j.journal_number) = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work')))\n" +
+                       "LEFT JOIN "+GetJRBIDLDBUser.getProductDatabase()+".workday_reference_v p ON (rtrim(ltrim(lower(j.email), ' '), ' ') = rtrim(ltrim(lower(p.email), ' '), ' ')))\n" +
+                       "LEFT JOIN "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_email_lookup jel ON (rtrim(ltrim(lower(jel.email), ' '), ' ') = rtrim(ltrim(lower(j.email), ' '), ' ')))\n" +
+                       "WHERE ((NULLIF(COALESCE(rtrim(ltrim(lower(j.email), ' '), ' '), rtrim(ltrim(lower(jel.email), ' '), ' ')), '') IS NOT NULL) \n" +
+                       "AND (COALESCE(p.peoplehub_id, jel.peoplehub_id) IS NOT NULL)))\n";
 
-      /*          "SELECT COUNT(*) as Source_Count FROM (SELECT DISTINCT \n" +
-                        "COALESCE(cr1.epr, cr2.epr) epr\n" +
-                        ", 'JRBI Person Extended' record_type, j.role_code role_code\n" +
-                        ", COALESCE(cr1.epr, cr2.epr)||j.role_code as u_key\n" +
-                        ", j.role_description role_description, p.given_name given_name\n" +
-                        ", p.family_name family_name, p.peoplehub_id peoplehub_id\n" +
-                        ", j.email email \n" +
-                        "FROM ((("+GetBCS_ETLCoreDLDBUser.getJRBIDataBase()+".jrbi_person_unpivot_v j \n" +
-                        "INNER JOIN "+GetBCS_ETLCoreDLDBUser.getProductDatabase()+".workday_reference_v p ON (j.email = p.email)) \n" +
-                        "LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr1 ON ((((j.issn = cr1.identifier) AND (cr1.identifier_type = 'ISSN')) AND (cr1.record_level = 'n')) AND (cr1.record_level = 'Work'))) \n" +
-                        "LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((j.journal_number = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work'))))where epr is not NULL\n";
-*/
     public static String GET_JRBI_CURRENT_WORK_COUNT = "select count(*) as Current_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work\n";
     public static String GET_JRBI_CURRENT_MANIF_COUNT = "select count(*) as Current_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation\n";
     public static String GET_JRBI_CURRENT_PERSON_COUNT = "select count(*) as Current_Count from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person\n";
@@ -190,7 +157,7 @@ public class JRBIDataLakeCountChecksSQL {
     public static String GET_JRBI_COUNT_DIFF_MANIF_HISTORY_AND_DELTA_MANIF =
             "select count(*) as source_count from \n" +
                     "(select A.epr, A.journal_issue_trim_size\n" +
-                    ", A.journal_prod_site_code, A.record_type, A.war_reference\n" +
+                    ", A.record_type, A.war_reference\n" +
                     ", A.last_updated_date, A.transform_ts, A.delete_flag \n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation B on A.epr  = B.epr \n" +
@@ -314,10 +281,10 @@ public class JRBIDataLakeCountChecksSQL {
 
     public  static String GET_JRBI_COUNT_SUM_DELTA_MANIF_AND_MANIF_EXCLUDE =
          "select count(*) as source_count from \n" +
-                 "(select a.epr, a.record_type, a.journal_prod_site_code, \n" +
+                 "(select a.epr, a.record_type, \n" +
                  "a.journal_issue_trim_size, a.war_reference, a.transform_ts, a.last_updated_date, a.delete_flag\n" +
                  "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_manifestation_excl_delta \n" +
-                 "as a union all select b.epr, b.record_type, b.journal_prod_site_code, \n" +
+                 "as a union all select b.epr, b.record_type, \n" +
                  "b.journal_issue_trim_size, b.war_reference,b.transform_ts,null as col11, null as col12 \n" +
                  "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation as b)\n ";
 
@@ -403,20 +370,20 @@ public class JRBIDataLakeCountChecksSQL {
 
     public static String GET_COUNT_DIFF_CURRENT_PREVIOUS_MANIF =
             "select count(*) as source_count from (\n" +
-                    "select c.epr , c.record_type , c.manifestation_type, c.journal_prod_site_code , c.journal_issue_trim_size , c.war_reference FROM "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation c\n" +
+                    "select c.epr , c.record_type , c.manifestation_type , c.journal_issue_trim_size , c.war_reference FROM "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation c\n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_manifestation p  on c.epr = p.epr\n" +
                     "where p.epr is null\n" +
                     "union all\n" +
-                    "select c.epr , c.record_type , c.manifestation_type, c.journal_prod_site_code , c.journal_issue_trim_size , c.war_reference  FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_manifestation  c\n" +
+                    "select c.epr , c.record_type , c.manifestation_type , c.journal_issue_trim_size , c.war_reference  FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_manifestation  c\n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation p  on c.epr = p.epr\n" +
                     "where p.epr is null\n" +
                     "union all\n" +
-                    "select c.epr , c.record_type , c.manifestation_type, c.journal_prod_site_code , c.journal_issue_trim_size , c.war_reference FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_manifestation c\n" +
+                    "select c.epr , c.record_type , c.manifestation_type , c.journal_issue_trim_size , c.war_reference FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_manifestation c\n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation p  on c.epr = p.epr\n" +
                     "where (c.epr !=(p.epr) or\n" +
                     "c.record_type != (p.record_type) or \n" +
                     "c.manifestation_type !=  (p.manifestation_type ) or\n" +
-                    "c.journal_prod_site_code !=  (p.journal_prod_site_code ) or\n" +
+               //     "c.journal_prod_site_code !=  (p.journal_prod_site_code ) or\n" +
                     "c.journal_issue_trim_size !=  (p.journal_issue_trim_size ) or\n" +
                     "c.war_reference !=  (p.war_reference )))\n";
 

@@ -56,7 +56,7 @@ public class ResearchPackagesUISteps {
             tasks.click("XPATH", ResearchPackagesConstants.CREATE_PROSPECTIVE_LIST);
         }
         tasks.sendKeys("ID",ResearchPackagesConstants.SEARCH_FILTER,ISSN);
-       tasks.waitTime(2);
+        tasks.waitTime(2);
     }
 
     @Given("^User logged into the application as a Product Owner$")
@@ -102,12 +102,12 @@ public class ResearchPackagesUISteps {
         if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.unsavedFilterCheckbox)){
             tasks.waitTime(2);
             tasks.click("XPATH",ResearchPackagesConstants.unsavedFilterCheckbox);
-           // Assert.assertTrue("Filter is Checked",tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.unsavedFilterIsChecked));
+            // Assert.assertTrue("Filter is Checked",tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.unsavedFilterIsChecked));
         }
     }
 
-   @And("^Verify the result displayed for the Unsaved Changes$")
-     public void verifyUnsavedFilter() throws InterruptedException {
+    @And("^Verify the result displayed for the Unsaved Changes$")
+    public void verifyUnsavedFilter() throws InterruptedException {
         if(tasks.verifyElementisDisplayed("TAG",ResearchPackagesConstants.resultTable)) {
             String getTextUnsavedJournals = tasks.getTextofElement("XPATH",ResearchPackagesConstants.UNSAVED_JOURNAL_TEXT);
             String filterCountText  = tasks.getTextofElement("XPATH",ResearchPackagesConstants.UNSAVE_FILTER_COUNT);
@@ -115,11 +115,11 @@ public class ResearchPackagesUISteps {
             Log.info("Message displayed near Save button =>"+getTextUnsavedJournals);
             Assert.assertTrue("Count displayed near Filter and Count displayed near to Save button are equal",getTextUnsavedJournals.contains(filterCountText));
             int filterCount = Integer.parseInt(filterCountText);
-            int totItems = tasks.multipleElements("XPATH",ResearchPackagesConstants.UNSAVED_ROW).size();
+            int totItems = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.UNSAVED_ROW).size();
             Log.info("Total Unsaved Result =>"+ totItems);
             Assert.assertTrue("Results and count displayed are equal",filterCount==totItems);
             for(int i=0;i<totItems;i++) {
-                Log.info("ISSN displayed in the Result => "+tasks.multipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+" is Unsaved");
+                Log.info("ISSN displayed in the Result => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+" is Unsaved");
             }
             tasks.click("XPATH","//div[@class='company-header']");
             tasks.waitTime(2);
@@ -157,11 +157,11 @@ public class ResearchPackagesUISteps {
 
     @Then("^Choose the filter with Included Status$")
     public void chooseFilterIncluded() throws InterruptedException {
-       if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.includeFilterCheckbox)){
-           tasks.waitTime(1);
-           tasks.click("XPATH",ResearchPackagesConstants.includeFilterCheckbox);
-           Assert.assertTrue("Include Filter is Checked",tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.includeFilterIsChecked));
-       }
+        if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.includeFilterCheckbox)){
+            tasks.waitTime(1);
+            tasks.click("XPATH",ResearchPackagesConstants.includeFilterCheckbox);
+            Assert.assertTrue("Include Filter is Checked",tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.includeFilterIsChecked));
+        }
     }
     @Then("^Verify the result displayed from multiple filters$")
     public void verifyResultByMultipleFilter() throws InterruptedException {
@@ -174,7 +174,7 @@ public class ResearchPackagesUISteps {
             int filterCountOwner = Integer.parseInt(filterCountOwnerText);
             int filterCountPubDir = Integer.parseInt(filterCountPubDirText);
             int filterCountPmg = Integer.parseInt(filterCountPmgText);
-            int totItems = tasks.multipleElements("XPATH",ResearchPackagesConstants.ROW_RESULT).size();
+            int totItems = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ROW_RESULT).size();
             Log.info("Total Result Displayed => "+totItems);
             Log.info("Count for Included in the Filter => "+filterCountInclude);
             Log.info("Count for Owner in the Filter => "+filterCountOwner);
@@ -185,9 +185,9 @@ public class ResearchPackagesUISteps {
             Assert.assertTrue("Counts in the Ownership filters and result counts are matching",filterCountOwner==totItems);
             Assert.assertTrue("Counts in the Pub Director filters and result counts are matching",filterCountPubDir==totItems);
             for(int i=0;i<totItems;i++) {
-                Log.info("Results Displayed => "+tasks.multipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+"=> "
-                           +tasks.multipleElements("XPATH",ResearchPackagesConstants.PMG_COLUMN).get(i).getText()+"=> "+tasks.multipleElements("XPATH",ResearchPackagesConstants.OWNER_COLUMN).get(i).getText()
-                            +"=> "+tasks.multipleElements("XPATH",ResearchPackagesConstants.PUBDIRECTOR_COLUMN).get(i).getText());
+                Log.info("Results Displayed => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+"=> "
+                        +tasks.findmultipleElements("XPATH",ResearchPackagesConstants.PMG_COLUMN).get(i).getText()+"=> "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.OWNER_COLUMN).get(i).getText()
+                        +"=> "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.PUBDIRECTOR_COLUMN).get(i).getText());
             }
 
         }
@@ -199,11 +199,11 @@ public class ResearchPackagesUISteps {
             String filterCountText  = tasks.getTextofElement("XPATH",ResearchPackagesConstants.Remarks_Filter_Count);
             int filterCount = Integer.parseInt(filterCountText);
             Log.info("Filter Count displayed for Remarks is => "+filterCount);
-            int totItems = tasks.multipleElements("XPATH",ResearchPackagesConstants.COMMENT_CLICKABLE).size();
+            int totItems = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.COMMENT_CLICKABLE).size();
             Log.info("Total Result Displayed for Remarks is =>"+ totItems);
             Assert.assertTrue("Results and count displayed are equal",filterCount==totItems);
             for(int i=0;i<totItems;i++) {
-                Log.info("ISSN displayed in the Result => "+tasks.multipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+" has Remarks");
+                Log.info("ISSN displayed in the Result => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+" has Remarks");
             }
         }
     }
@@ -216,11 +216,11 @@ public class ResearchPackagesUISteps {
             String filterCountText  = tasks.getTextofElement("XPATH",ResearchPackagesConstants.INCLUDE_FILTER_COUNT);
             int filterCount = Integer.parseInt(filterCountText);
             Log.info("Filter Count displayed for Included is => "+filterCount);
-            int totItems = tasks.multipleElements("XPATH",ResearchPackagesConstants.IS_INCLUDED).size();
+            int totItems = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.IS_INCLUDED).size();
             Log.info("Total Result Displayed for Included is =>"+ totItems);
             Assert.assertTrue("Results and count displayed are equal",filterCount==totItems);
             for(int i=0;i<totItems;i++) {
-                Log.info("ISSN displayed in the Result => "+tasks.multipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+" is Included");
+                Log.info("ISSN displayed in the Result => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+" is Included");
             }
         }
     }
@@ -230,11 +230,11 @@ public class ResearchPackagesUISteps {
             String filterCountText  = tasks.getTextofElement("XPATH",ResearchPackagesConstants.EXCLUDE_FILTER_COUNT);
             int filterCount = Integer.parseInt(filterCountText);
             Log.info("Filter Count displayed for Excluded is => "+filterCount);
-            int totItems = tasks.multipleElements("XPATH",ResearchPackagesConstants.IS_EXCLUDED).size();
+            int totItems = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.IS_EXCLUDED).size();
             Log.info("Total Result Displayed for Excluded is =>"+ totItems);
             Assert.assertTrue("Results and count displayed are equal",filterCount==totItems);
             for(int i=0;i<totItems;i++) {
-                Log.info("ISSN displayed in the Result => "+tasks.multipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+" is Excluded");
+                Log.info("ISSN displayed in the Result => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+" is Excluded");
             }
         }
     }
@@ -245,11 +245,11 @@ public class ResearchPackagesUISteps {
             String filterCountText  = tasks.getTextofElement("XPATH",ResearchPackagesConstants.PENDING_FILTER_COUNT);
             int filterCount = Integer.parseInt(filterCountText);
             Log.info("Filter Count displayed for Pending is => "+filterCount);
-            int totItems = tasks.multipleElements("XPATH",ResearchPackagesConstants.IS_PENDING).size();
+            int totItems = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.IS_PENDING).size();
             Log.info("Total Result Displayed for Pending is =>"+ totItems);
             Assert.assertTrue("Results and count displayed are equal",filterCount==totItems);
             for(int i=0;i<totItems;i++) {
-                Log.info("ISSN displayed in the Result => "+tasks.multipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+" in Pending");
+                Log.info("ISSN displayed in the Result => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText()+" in Pending");
             }
         }
     }
@@ -292,12 +292,12 @@ public class ResearchPackagesUISteps {
     }
 
     @Then("^Search publisher of the journal with \"([^\"]*)\" given$")
-        public void searchJournalPublisher(String publisher){
+    public void searchJournalPublisher(String publisher){
         researchPackagesTasks.searchJournal(publisher);
     }
     @Then("^Search title keyword of the journal with \"([^\"]*)\" given$")
     public void searchJournalbyTitle(String journaltitle){
-            researchPackagesTasks.searchJournal(journaltitle);
+        researchPackagesTasks.searchJournal(journaltitle);
     }
 
 
@@ -306,12 +306,12 @@ public class ResearchPackagesUISteps {
     public void journalDisplayedbyIssn(String issnVal) throws InterruptedException {
         if(tasks.verifyElementisDisplayed("TAG",ResearchPackagesConstants.resultTable)){
             Log.info("Searched ISSN is => "+issnVal);
-            int totItems = tasks.multipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).size();
+            int totItems = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).size();
             Log.info("Total Results Displayed => "+totItems);
             for(int i=0;i<totItems;i++){
-                Log.info("ISSN displayed in the Result => "+tasks.multipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText());
-                boolean assertionCondition = tasks.multipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText().equalsIgnoreCase((issnVal));
-                    Assert.assertTrue("ISSN for the journals listed out matches with Searched Value",assertionCondition);
+                Log.info("ISSN displayed in the Result => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText());
+                boolean assertionCondition = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText().equalsIgnoreCase((issnVal));
+                Assert.assertTrue("ISSN for the journals listed out matches with Searched Value",assertionCondition);
             }
         }
     }
@@ -320,12 +320,12 @@ public class ResearchPackagesUISteps {
     public void journalDisplayedByPub(String pubVal) throws InterruptedException {
         if(tasks.verifyElementisDisplayed("TAG",ResearchPackagesConstants.resultTable)){
             Log.info("Searched Publisher is => "+pubVal);
-            int totItems = tasks.multipleElements("XPATH",ResearchPackagesConstants.PUBLISHER_COLUMN).size();
+            int totItems = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.PUBLISHER_COLUMN).size();
             Log.info("Total Result Displayed => "+totItems);
             for(int i=0;i<totItems;i++){
-                Log.info("Publisher With Journals Displayed => "+tasks.multipleElements("XPATH",ResearchPackagesConstants.PUBLISHER_COLUMN).get(i).getText()+"-"+
-                                                                tasks.multipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText());
-                boolean assertionCondition = tasks.multipleElements("XPATH",ResearchPackagesConstants.PUBLISHER_COLUMN).get(i).getText().equalsIgnoreCase((pubVal));
+                Log.info("Publisher With Journals Displayed => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.PUBLISHER_COLUMN).get(i).getText()+"-"+
+                        tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText());
+                boolean assertionCondition = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.PUBLISHER_COLUMN).get(i).getText().equalsIgnoreCase((pubVal));
                 Assert.assertTrue("Publisher for the journals listed out matches with Searched Value",assertionCondition);
             }
         }
@@ -333,12 +333,12 @@ public class ResearchPackagesUISteps {
 
     @Then("^Choose the \"([^\"]*)\" filter$")
     public void chooseFilterForPubDirector(String pubDirectoVal) throws Throwable {
-               if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.PubDirector_Filter_Rapes_Relaxed)) {
-                   tasks.waitTime(1);
-                   tasks.click("XPATH", ResearchPackagesConstants.PubDirector_Filter_Rapes_Relaxed);
-                   Assert.assertTrue("Ownership Filter Selected",tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.PubDirector_Filter_Rapes_Relaxed_IS_CHECKED));
-               }
-               Log.info("Filter By Pub Director => "+pubDirectoVal);
+        if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.PubDirector_Filter_Rapes_Relaxed)) {
+            tasks.waitTime(1);
+            tasks.click("XPATH", ResearchPackagesConstants.PubDirector_Filter_Rapes_Relaxed);
+            Assert.assertTrue("Ownership Filter Selected",tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.PubDirector_Filter_Rapes_Relaxed_IS_CHECKED));
+        }
+        Log.info("Filter By Pub Director => "+pubDirectoVal);
     }
     @Then("^Choose the Ownership Type \"([^\"]*)\" filter$")
     public void chooseFilterForOwnership(String ownerShipVal) throws Throwable{
@@ -352,7 +352,7 @@ public class ResearchPackagesUISteps {
     @Then("^Verify the result displayed for the Ownership Type \"([^\"]*)\"$")
     public void verifyResultOfOwnership(String OwnershipVal) throws Throwable {
         if(tasks.verifyElementisDisplayed("TAG",ResearchPackagesConstants.resultTable)){
-            int totItems = tasks.multipleElements("XPATH",ResearchPackagesConstants.OWNER_COLUMN).size();
+            int totItems = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.OWNER_COLUMN).size();
             String filterCountText  = tasks.getTextofElement("XPATH",ResearchPackagesConstants.Ownership_Filter_ELSOWN_Count);
             int filterCount = Integer.parseInt(filterCountText);
             Log.info("Filtered by Ownership=> "+OwnershipVal);
@@ -360,8 +360,8 @@ public class ResearchPackagesUISteps {
             Log.info("Total Results Found => "+totItems);
             Assert.assertTrue("Count in the filter and total result displayed matches",filterCount==totItems);
             for(int i=0;i<totItems;i++){
-                Log.info("Ownership with ISSN displayed => "+tasks.multipleElements("XPATH",ResearchPackagesConstants.OWNER_COLUMN).get(i).getText()+" - "+tasks.multipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText());
-                boolean assertionCondition = tasks.multipleElements("XPATH",ResearchPackagesConstants.OWNER_COLUMN).get(i).getText().equalsIgnoreCase((OwnershipVal));
+                Log.info("Ownership with ISSN displayed => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.OWNER_COLUMN).get(i).getText()+" - "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText());
+                boolean assertionCondition = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.OWNER_COLUMN).get(i).getText().equalsIgnoreCase((OwnershipVal));
                 Assert.assertTrue("Ownership for the journals listed out matches with Searched Value",assertionCondition);
             }
         }
@@ -370,7 +370,7 @@ public class ResearchPackagesUISteps {
     @Then("^Choose the PMG \"([^\"]*)\" filter$")
     public void chooseFilterForPmg(String pmgVal) throws Throwable{
         if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.PMG_Filter_MCC)){
-           tasks.waitTime(1);
+            tasks.waitTime(1);
             tasks.click("XPATH",ResearchPackagesConstants.PMG_Filter_MCC);
             Assert.assertTrue("PMG Filter Selected",tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.PMG_FILTER_IS_CHECKED));
         }
@@ -380,7 +380,7 @@ public class ResearchPackagesUISteps {
     @And("^Verify the result displayed for the PMG \"([^\"]*)\"$")
     public void verifyResultOfPmg(String pmgVal) throws Throwable {
         if(tasks.verifyElementisDisplayed("TAG",ResearchPackagesConstants.resultTable)){
-            int totItems = tasks.multipleElements("XPATH",ResearchPackagesConstants.PMG_COLUMN).size();
+            int totItems = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.PMG_COLUMN).size();
             String filterCountText  = tasks.getTextofElement("XPATH",ResearchPackagesConstants.PMG_FILTER_MCC_COUNT);
             int filterCount = Integer.parseInt(filterCountText);
             Log.info("Filtered by PMG "+pmgVal);
@@ -388,8 +388,8 @@ public class ResearchPackagesUISteps {
             Log.info("Total Results Found => "+totItems);
             Assert.assertTrue("Count in the filter and total result displayed matches",filterCount==totItems);
             for(int i=0;i<totItems;i++){
-                Log.info("PMG with ISSN displayed => "+tasks.multipleElements("XPATH",ResearchPackagesConstants.PMG_COLUMN).get(i).getText()+" - "+tasks.multipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText());
-                boolean assertionCondition = tasks.multipleElements("XPATH",ResearchPackagesConstants.PMG_COLUMN).get(i).getText().equalsIgnoreCase((pmgVal));
+                Log.info("PMG with ISSN displayed => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.PMG_COLUMN).get(i).getText()+" - "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText());
+                boolean assertionCondition = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.PMG_COLUMN).get(i).getText().equalsIgnoreCase((pmgVal));
                 Assert.assertTrue("PMG for the journals listed out matches with the Filtered Value",assertionCondition);
             }
         }
@@ -397,7 +397,7 @@ public class ResearchPackagesUISteps {
     @Then("^Verify the result displayed for the \"([^\"]*)\"$")
     public void verifyResultOfPubDirector(String pubDirectorVal) throws Throwable {
         if(tasks.verifyElementisDisplayed("TAG",ResearchPackagesConstants.resultTable)){
-            int totItems = tasks.multipleElements("XPATH",ResearchPackagesConstants.PUBDIRECTOR_COLUMN).size();
+            int totItems = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.PUBDIRECTOR_COLUMN).size();
             String filterCountText  = tasks.getTextofElement("XPATH",ResearchPackagesConstants.PubDirector_Filter_Rapes_Relaxed_count);
             int filterCount = Integer.parseInt(filterCountText);
             Log.info("Filtered by Publishing Director "+pubDirectorVal);
@@ -405,8 +405,8 @@ public class ResearchPackagesUISteps {
             Log.info("Total Results Found => "+totItems);
             Assert.assertTrue("Count in the filter and total result displayed matches",filterCount==totItems);
             for(int i=0;i<totItems;i++){
-                Log.info("Publishing Directors with ISSN displayed => "+tasks.multipleElements("XPATH",ResearchPackagesConstants.PUBDIRECTOR_COLUMN).get(i).getText()+" - "+tasks.multipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText());
-                boolean assertionCondition = tasks.multipleElements("XPATH",ResearchPackagesConstants.PUBDIRECTOR_COLUMN).get(i).getText().equalsIgnoreCase((pubDirectorVal));
+                Log.info("Publishing Directors with ISSN displayed => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.PUBDIRECTOR_COLUMN).get(i).getText()+" - "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText());
+                boolean assertionCondition = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.PUBDIRECTOR_COLUMN).get(i).getText().equalsIgnoreCase((pubDirectorVal));
                 Assert.assertTrue("Publishing Director for the journals listed out matches with Searched Value",assertionCondition);
             }
         }
@@ -415,11 +415,11 @@ public class ResearchPackagesUISteps {
     public void journalDisplayedbyTitle(String journalTitle) throws InterruptedException {
         if(tasks.verifyElementisDisplayed("TAG",ResearchPackagesConstants.resultTable)){
             Log.info("Searched keyword title is => "+journalTitle);
-            int totItems = tasks.multipleElements("XPATH",ResearchPackagesConstants.TITLE_COLUMN).size();
+            int totItems = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.TITLE_COLUMN).size();
             Log.info("Total Results Displayed => "+totItems);
             for(int i=0;i<totItems;i++){
-                Log.info("Journals displayed in the result => "+tasks.multipleElements("XPATH",ResearchPackagesConstants.TITLE_COLUMN).get(i).getText());
-                boolean assertionCondition = tasks.multipleElements("XPATH",ResearchPackagesConstants.TITLE_COLUMN).get(i).getText().contains(journalTitle);
+                Log.info("Journals displayed in the result => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.TITLE_COLUMN).get(i).getText());
+                boolean assertionCondition = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.TITLE_COLUMN).get(i).getText().contains(journalTitle);
                 Assert.assertTrue("Journals displayed based on the Searched text",assertionCondition);
             }
         }
@@ -428,12 +428,12 @@ public class ResearchPackagesUISteps {
     @And("^Verify the journalno of the journal with \"([^\"]*)\" is displayed$")
     public void journalDisplayedbyjournalno(String journalVal) throws InterruptedException {
         if(tasks.verifyElementisDisplayed("TAG",ResearchPackagesConstants.resultTable)){
-            int totItems = tasks.multipleElements("XPATH",ResearchPackagesConstants.JOURNALNO_COLUMN).size();
+            int totItems = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.JOURNALNO_COLUMN).size();
             Log.info("Filtered by Journal Number "+journalVal);
             Log.info("Total Results Found => "+totItems);
             for(int i=0;i<totItems;i++){
-                Log.info("Journal Number with ISSN displayed => "+tasks.multipleElements("XPATH",ResearchPackagesConstants.JOURNALNO_COLUMN).get(i).getText()+" -> "+tasks.multipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText());
-                boolean assertionCondition = tasks.multipleElements("XPATH",ResearchPackagesConstants.JOURNALNO_COLUMN).get(i).getText().equalsIgnoreCase((journalVal));
+                Log.info("Journal Number with ISSN displayed => "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.JOURNALNO_COLUMN).get(i).getText()+" -> "+tasks.findmultipleElements("XPATH",ResearchPackagesConstants.ISSN_COLUMN).get(i).getText());
+                boolean assertionCondition = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.JOURNALNO_COLUMN).get(i).getText().equalsIgnoreCase((journalVal));
                 Assert.assertTrue("journals listed out matches with the given Journal Number",assertionCondition);
             }
         }
@@ -515,7 +515,7 @@ public class ResearchPackagesUISteps {
             if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.CREATE_PROSPECTIVE_LIST_II)) {
                 tasks.click("XPATH", ResearchPackagesConstants.CREATE_PROSPECTIVE_LIST_II);
             }
-            int totPendingJournal = tasks.multipleElements("XPATH",ResearchPackagesConstants.CHECK_IS_PENDING).size();
+            int totPendingJournal = tasks.findmultipleElements("XPATH",ResearchPackagesConstants.CHECK_IS_PENDING).size();
             if(totPendingJournal>0){
                 for(int i=0;i<=totPendingJournal;i++){
                     tasks.click("XPATH",ResearchPackagesConstants.pendingFilterCheckbox);
@@ -525,12 +525,12 @@ public class ResearchPackagesUISteps {
                 researchPackagesTasks.saveCollections();
                 tasks.waitTime(2);
             }
-                tasks.click("XPATH",ResearchPackagesConstants.CONFIRM_COLLECTION);
-                tasks.click("XPATH",ResearchPackagesConstants.SUBMIT_COLLECTION);
-                if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.ADD_COMMENT_BOX)){
-                    tasks.click("XPATH",ResearchPackagesConstants.SUBMIT_LIST);
-                }
-               tasks.waitTime(1);
+            tasks.click("XPATH",ResearchPackagesConstants.CONFIRM_COLLECTION);
+            tasks.click("XPATH",ResearchPackagesConstants.SUBMIT_COLLECTION);
+            if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.ADD_COMMENT_BOX)){
+                tasks.click("XPATH",ResearchPackagesConstants.SUBMIT_LIST);
+            }
+            tasks.waitTime(1);
         }catch (Exception e){
             e.printStackTrace();
         }

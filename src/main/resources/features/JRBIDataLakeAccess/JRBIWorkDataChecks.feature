@@ -58,7 +58,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
   Scenario Outline: Verify Data from the difference of Delta_current_work and work_history is transferred to work exclude table
     Given We get the <countOfRandomIds> random EPR ids <tableName>
     When Get the records from the difference of Delta_current_work and work_history
-    Then Get the records from work exclude table
+    And Get the records from work jrbi ext exclude table
     And  Compare the records of Work Exclude with difference of Delta_current_work and work_history
     Examples:
       |tableName                                | countOfRandomIds|
@@ -74,24 +74,3 @@ Feature:Validate data for JRBI Work tables in Data Lake
       |tableName                                | countOfRandomIds|
       |jrbi_transform_latest_work               |10                 |
 
-
-  @JRBIExtended
-  Scenario Outline: Verify Data from the work_latest transferred to work Extended table
-    Given We get the <countOfRandomIds> random EPR ids <tableName>
-    When Get the records from work latest table
-    Then Get the records from work extended table
-    And  Compare the records of Work Latest with work_Extended
-    Examples:
-      |tableName                                | countOfRandomIds|
-      |jrbi_transform_latest_work               |10                 |
-
-
-
-  @JRBIStitching
-  Scenario Outline: Verify Data from the work_extended transferred to work Extended Stitching table-testing
-    Given We get the <countOfRandomIds> random EPR ids <tableName>
-    And Get the records from work extended table
-    Then compare work extended and work extended person role with work stitching table
-    Examples:
-      |tableName                   |countOfRandomIds|
-      |work_extended               |10                 |

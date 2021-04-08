@@ -21,10 +21,10 @@ import org.junit.Assert;
 import java.util.HashMap;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-class PersonsApiObject {
+public class PersonsApiObject {
     @StaticInjection
     private DataQualityContext dataQualityContext;
-    private PersonsApiObject() {}
+    public PersonsApiObject() {}
 
     private String id;
     private HashMap<String, Object> role;
@@ -58,7 +58,7 @@ class PersonsApiObject {
         dataQualityContext.personWorkRoleDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
     }
 
-    private void getPersonDataFromEPHGD(String personID) {
+    public void getPersonDataFromEPHGD(String personID) {
         String sql = String.format(PersonDataSQL.GET_DATA_PERSONS_EPHGD, personID);
         dataQualityContext.personDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
     }

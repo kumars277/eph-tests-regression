@@ -30,7 +30,7 @@ public class WorksIdSteps {
     public DataQualityContext dataQualityContext;
     public String sql;
     private String numberOfRecords;
-//    private static List<WorkDataObject> data;
+    //    private static List<WorkDataObject> data;
     private static List<WorkDataObject> dataFromSTG;
     private static List<WorkDataObject> dataFromSA;
     private static List<WorkDataObject> dataFromSAId;
@@ -56,24 +56,24 @@ public class WorksIdSteps {
         }
         Log.info("numberOfRecords = " + numberOfRecords);
 
-            if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                sql = String.format(WorksIdentifierSQL.getRandomProductNum, type, numberOfRecords);
+        if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            sql = String.format(WorksIdentifierSQL.getRandomProductNum, type, numberOfRecords);
 
-                List<Map<?, ?>> workIds = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
-                ids = workIds.stream().map(m -> (BigDecimal) m.get("random_value")).map(String::valueOf).collect(Collectors.toList());
-                Log.info("ids : " + ids);
+            List<Map<?, ?>> workIds = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
+            ids = workIds.stream().map(m -> (BigDecimal) m.get("random_value")).map(String::valueOf).collect(Collectors.toList());
+            Log.info("ids : " + ids);
 
 //                data = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-                System.out.print(sql);
+            System.out.print(sql);
 
 
 //                dataQualityContext.productIdFromStg = data.get(0).random_value;
 
 
 
-                Log.info("\n The product number is " + dataQualityContext.productIdFromStg);
-            }else {
-                Log.info("Skipping test because Delta load is performed");
+            Log.info("\n The product number is " + dataQualityContext.productIdFromStg);
+        }else {
+            Log.info("Skipping test because Delta load is performed");
                 /*
                 sql = WorkCountSQL.GET_REFRESH_DATE;
                 refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
@@ -81,7 +81,7 @@ public class WorksIdSteps {
                 sql = WorksIdentifierSQL.getRandomProductNumDelta
                         .replace("PARAM1", type)
                         .replace("PARAM2", refreshDate.get(1).refresh_timestamp);*/
-            }
+        }
 //        }else {
 //            sql = WorksIdentifierSQL.getRandomProductNum
 //                    .replace("PARAM1", type);
@@ -115,7 +115,7 @@ public class WorksIdSteps {
                         , dataFromSA.get(0).getWORK_ID());
                 dataFromGDId = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
             }
-    }else{
+        }else{
             Log.info("Skipping test because DELTA LOAD is performed");
         }
     }
@@ -149,7 +149,7 @@ public class WorksIdSteps {
 
                 Assert.assertEquals("The number of non-null identifiers don't match", dataFromSTGCount.size(), dataFromSAId.size());
             }
-    }else{
+        }else{
             Log.info("Skipping test because DELTA LOAD is performed");
         }
     }
@@ -189,10 +189,10 @@ public class WorksIdSteps {
                             "ELSEVIER JOURNAL NUMBER", dataFromSAFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The JOURNAL_NUMBER  is incorrect for id=" + dataQualityContext.productIdFromStg,
-                            dataFromSTG.get(0).getJOURNAL_NUMBER(), dataFromSAFtype.get(0).getIDENTIFER());
+                            dataFromSTG.get(0).getJOURNAL_NUMBER(), dataFromSAFtype.get(0).getIDENTIFIER());
 
                     Log.info("The value in STG is : " + dataFromSTG.get(0).getJOURNAL_NUMBER());
-                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFER());
+                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFIER());
 
                     Log.info("Journal number is correct");
                     sql = WorksIdentifierSQL.getIdentifierID
@@ -215,10 +215,10 @@ public class WorksIdSteps {
                             "ISSN-L", dataFromSAFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The ISSN_L is incorrect for id=" + dataQualityContext.productIdFromStg,
-                            dataFromSTG.get(0).getISSN_L(), dataFromSAFtype.get(0).getIDENTIFER());
+                            dataFromSTG.get(0).getISSN_L(), dataFromSAFtype.get(0).getIDENTIFIER());
 
                     Log.info("The value in STG is : " + dataFromSTG.get(0).getISSN_L());
-                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFER());
+                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFIER());
 
                     sql = WorksIdentifierSQL.getIdentifierID
                             .replace("PARAM1", "ISSN-L")
@@ -241,10 +241,10 @@ public class WorksIdSteps {
                             "JOURNAL ACRONYM", dataFromSAFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The JOURNAL_ACRONYM is incorrect for id=" + dataQualityContext.productIdFromStg,
-                            dataFromSTG.get(0).getJOURNAL_ACRONYM(), dataFromSAFtype.get(0).getIDENTIFER());
+                            dataFromSTG.get(0).getJOURNAL_ACRONYM(), dataFromSAFtype.get(0).getIDENTIFIER());
 
                     Log.info("The value in STG is : " + dataFromSTG.get(0).getJOURNAL_ACRONYM());
-                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFER());
+                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFIER());
 
                     sql = WorksIdentifierSQL.getIdentifierID
                             .replace("PARAM1", "JOURNAL ACRONYM")
@@ -266,10 +266,10 @@ public class WorksIdSteps {
                             "DAC-K", dataFromSAFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The DAC_KEY is incorrect for id=" + dataQualityContext.productIdFromStg,
-                            dataFromSTG.get(0).getDAC_KEY(), dataFromSAFtype.get(0).getIDENTIFER());
+                            dataFromSTG.get(0).getDAC_KEY(), dataFromSAFtype.get(0).getIDENTIFIER());
 
                     Log.info("The value in STG is : " + dataFromSTG.get(0).getDAC_KEY());
-                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFER());
+                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFIER());
                     sql = WorksIdentifierSQL.getIdentifierID
                             .replace("PARAM1", "DAC-K")
                             .replace("PARAM2", "DAC_KEY")
@@ -291,10 +291,10 @@ public class WorksIdSteps {
                             "PPM-PART", dataFromSAFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The PROJECT_NUM is incorrect for id=" + dataQualityContext.productIdFromStg,
-                            dataFromSTG.get(0).getPROJECT_NUM(), dataFromSAFtype.get(0).getIDENTIFER());
+                            dataFromSTG.get(0).getPROJECT_NUM(), dataFromSAFtype.get(0).getIDENTIFIER());
 
                     Log.info("The value in STG is : " + dataFromSTG.get(0).getPROJECT_NUM());
-                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFER());
+                    Log.info("The value in SA is : " + dataFromSAFtype.get(0).getIDENTIFIER());
                     sql = WorksIdentifierSQL.getIdentifierID
                             .replace("PARAM1", "PPM-PART")
                             .replace("PARAM2", "PROJECT_NUM")
@@ -340,7 +340,7 @@ public class WorksIdSteps {
                             "ELSEVIER JOURNAL NUMBER", dataFromGDFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The Journal Number is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
-                            dataFromSTG.get(0).getJOURNAL_NUMBER(), dataFromGDFtype.get(0).getIDENTIFER());
+                            dataFromSTG.get(0).getJOURNAL_NUMBER(), dataFromGDFtype.get(0).getIDENTIFIER());
 
                 }
                 if (dataFromSTG.get(0).getISSN_L() != null) {
@@ -354,7 +354,7 @@ public class WorksIdSteps {
                             "ISSN-L", dataFromGDFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The ISSN_L is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
-                            dataFromSTG.get(0).getISSN_L(), dataFromGDFtype.get(0).getIDENTIFER());
+                            dataFromSTG.get(0).getISSN_L(), dataFromGDFtype.get(0).getIDENTIFIER());
 
                 }
                 if (dataFromSTG.get(0).getJOURNAL_ACRONYM() != null) {
@@ -368,7 +368,7 @@ public class WorksIdSteps {
                             "JOURNAL ACRONYM", dataFromGDFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The JOURNAL_ACRONYM is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
-                            dataFromSTG.get(0).getJOURNAL_ACRONYM(), dataFromGDFtype.get(0).getIDENTIFER());
+                            dataFromSTG.get(0).getJOURNAL_ACRONYM(), dataFromGDFtype.get(0).getIDENTIFIER());
                 }
                 if (dataFromSTG.get(0).getDAC_KEY() != null) {
                     sql = WorksIdentifierSQL.getTypeIdGD
@@ -381,7 +381,7 @@ public class WorksIdSteps {
                             "DAC-K", dataFromGDFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The DAC_KEY is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
-                            dataFromSTG.get(0).getDAC_KEY(), dataFromGDFtype.get(0).getIDENTIFER());
+                            dataFromSTG.get(0).getDAC_KEY(), dataFromGDFtype.get(0).getIDENTIFIER());
 
                 }
                 if (dataFromSTG.get(0).getPROJECT_NUM() != null) {
@@ -395,7 +395,7 @@ public class WorksIdSteps {
                             "PPM-PART", dataFromGDFtype.get(0).getF_TYPE());
 
                     Assert.assertEquals("The PROJECT_NUM is incorrect for id=" + dataFromSA.get(0).getWORK_ID(),
-                            dataFromSTG.get(0).getPROJECT_NUM(), dataFromGDFtype.get(0).getIDENTIFER());
+                            dataFromSTG.get(0).getPROJECT_NUM(), dataFromGDFtype.get(0).getIDENTIFIER());
                 }
             }
         }else{
@@ -406,25 +406,25 @@ public class WorksIdSteps {
     @Given("^We know the work identifiers count in staging from column (.*) and (.*)$")
     public void getSTGCount(String column, String type){
 
-            if ((System.getProperty("LOAD") == null) || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE, column);
-                System.out.print(sql);
-                List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
-                stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
+        if ((System.getProperty("LOAD") == null) || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE, column);
+            System.out.print(sql);
+            List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
+            stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
 
-                Log.info("\n The count in stg for " + column + " is " + stgCount);
-            }else {
-                sql = WorkCountSQL.GET_REFRESH_DATE;
-                Log.info(sql);
-                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+            Log.info("\n The count in stg for " + column + " is " + stgCount);
+        }else {
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            Log.info(sql);
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
 
-                sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA, column,refreshDate,type);
-                System.out.print(sql);
-                List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
-                stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
-                Log.info("\n The count in stg for " + column + " is " + stgCount);
-            }
+            sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA, column,refreshDate,type);
+            System.out.print(sql);
+            List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
+            stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
+            Log.info("\n The count in stg for " + column + " is " + stgCount);
+        }
     }
 
     @When("^We get the work identifier count from SA and GD (.*)$")
@@ -468,36 +468,36 @@ public class WorksIdSteps {
             numberOfRecords = "5";
         }
         Log.info("numberOfRecords = " + numberOfRecords);
-            if ((System.getProperty("LOAD") == null) || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                Log.info("There is no delta load performed");
-            } else {
-                sql = WorksIdentifierSQL.getEndDatedIdentifierDataFromGD.replace("PARAM1",numberOfRecords);
-                Log.info(sql);
-                List<Map<?, ?>> randomWorkID = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        if ((System.getProperty("LOAD") == null) || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            Log.info("There is no delta load performed");
+        } else {
+            sql = WorksIdentifierSQL.getEndDatedIdentifierDataFromGD.replace("PARAM1",numberOfRecords);
+            Log.info(sql);
+            List<Map<?, ?>> randomWorkID = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
-                workid = randomWorkID.stream().map(m -> (String) m.get("F_WWORK")).collect(Collectors.toList());
-                Log.info(workid.toString());
-                if (CollectionUtils.isEmpty(workid)){
-                    Log.info("No identifiers were updated");
-                } else {
-                    Log.info("There are "+workid.size()+" updated identifiers");
-                }
+            workid = randomWorkID.stream().map(m -> (String) m.get("F_WWORK")).collect(Collectors.toList());
+            Log.info(workid.toString());
+            if (CollectionUtils.isEmpty(workid)){
+                Log.info("No identifiers were updated");
+            } else {
+                Log.info("There are "+workid.size()+" updated identifiers");
             }
+        }
 
     }
 
 
     @When("^We get the data for the identifier from staging$")
     public void getNewStgData(){
-            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                Log.info("There is no delta load performed");
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            Log.info("There is no delta load performed");
+        } else {
+            if (CollectionUtils.isEmpty(workid)) {
+                Log.info("No identifiers were updated");
             } else {
-                if (CollectionUtils.isEmpty(workid)) {
-                    Log.info("No identifiers were updated");
-                } else {
-                    Log.info("There are " + workid.size() + " updated identifiers");
-                }
+                Log.info("There are " + workid.size() + " updated identifiers");
             }
+        }
 
 //
     }
