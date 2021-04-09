@@ -344,8 +344,8 @@ public class JRBIWorkDataChecksSteps {
         dataQualityJRBIContext.recordsFromDiffDeltaAndWorkHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
     }
 
-    @And("^Get the records from work jrbi ext exclude table$")
-    public void getRecordsFromExcludeWork() {
+    @Then("^Get the records from work jrbi ext exclude table for data check$")
+    public void getRecordsFromExcludeJrbiWork() {
         Log.info("We get the records from Excude Work...");
         sql = String.format(JRBIWorkDataChecksSQL.GET_RECORDS_FROM_WORK_EXCLUDE, Joiner.on("','").join(Ids));
         Log.info(sql);

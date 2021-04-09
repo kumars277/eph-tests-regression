@@ -7,7 +7,7 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
 
 
 
-  @JRBItest
+  @JRBI
   Scenario Outline: Verify Data Count for JRBI transform_Current_tables is transferred from Source Table
     Given Get the total count of JRBI Data from Full Load <tableName>
     Then  We know the total count of Current JRBI data from <tableName>
@@ -103,38 +103,4 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
         |jrbi_transform_latest_manifestation  |
         |jrbi_transform_latest_person         |
 
-
-
-  @JRBIExtended
-  Scenario: Verify Data count for JRBI work_extended tables are transferred from work_latest tables
-    Given Get the total count of work latest table
-    Then Get the total count of work extended table
-    And Compare the counts of work latest and work extended table are identical
-
-
-  @JRBIExtended
-  Scenario: Verify Data count for JRBI manif_extended tables are transferred from manif_latest tables
-    Given Get the total count of manif latest table
-    Then Get the total count of manif extended table
-    And Compare the counts of manif latest and manif extended table are identical
-
-  @JRBIExtended
-  Scenario: Verify Data count for JRBI person_extended tables are transferred from person_latest tables
-    Given Get the total count of person latest table
-    Then Get the total count of person extended table
-    And Compare the counts of person latest and person extended table are identical
-
-
-  @JRBIStitching
-  Scenario: Verify Data count for JRBI stch_manifestation_ext_json tables are transferred from manif_extended tables
-    Given Get the total count of manif extended table for stitch
-    Then Get the total count of stitching manif json table
-    And Compare the counts of stitching manif json and manif extended table are identical
-
-
-  @JRBIStitching
-  Scenario: Verify Data count for JRBI stch_work_ext_json tables are transferred from work_extended tables
-    Given Get the total count of work extended table for Stitch
-    Then Get the total count of stitching work json table
-    And Compare the counts of stitching work json and work extended table are identical
 

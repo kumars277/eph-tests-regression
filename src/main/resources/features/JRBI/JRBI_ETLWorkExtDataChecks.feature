@@ -1,6 +1,10 @@
 Feature:Validate data for JRBI Work tables in Data Lake
 
 #  Created by Dinesh on 26/05/2020
+  #updated Dinesh on 07/04/2021
+  #confluence Version: v.3
+  #Confluence LinK: https://confluence.cbsels.com/pages/viewpage.action?pageId=168466078
+
 
   @JRBI
   Scenario Outline: Verify Data for JRBI transform_Current_work is transferred from journal_data_full
@@ -58,7 +62,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
   Scenario Outline: Verify Data from the difference of Delta_current_work and work_history is transferred to work exclude table
     Given We get the <countOfRandomIds> random EPR ids <tableName>
     When Get the records from the difference of Delta_current_work and work_history
-    And Get the records from work jrbi ext exclude table
+    And Get the records from work jrbi ext exclude table for data check
     And  Compare the records of Work Exclude with difference of Delta_current_work and work_history
     Examples:
       |tableName                                | countOfRandomIds|

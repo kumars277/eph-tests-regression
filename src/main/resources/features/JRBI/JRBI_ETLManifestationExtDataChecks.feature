@@ -1,6 +1,10 @@
 Feature:Validate data for JRBI Manifestation tables in Data Lake
 
 #  Created by Dinesh on 26/05/2020
+  #updated Dinesh on 07/04/2021
+  #confluence Version: v.3
+  #Confluence LinK: https://confluence.cbsels.com/pages/viewpage.action?pageId=168466078
+
 
   @JRBI
   Scenario Outline: Verify Data for JRBI transform_Current_manifestation is transferred from data_full_manifestation
@@ -13,7 +17,7 @@ Feature:Validate data for JRBI Manifestation tables in Data Lake
       |jrbi_journal_data_full|       10        |
 
 
-  @JRBIM
+  @JRBI
   Scenario Outline: Verify Data for JRBI transform_Current_manifestation_history is transferred from Current manifestation
     Given We get the <countOfRandomIds> random manifestation EPR ids <sourceTable>
     When Get the records from transform current manifestation
@@ -23,7 +27,7 @@ Feature:Validate data for JRBI Manifestation tables in Data Lake
       | sourceTable                        | countOfRandomIds|
       |jrbi_transform_current_manifestation| 10               |
 
-  @JRBIM
+  @JRBI
   Scenario Outline: Verify Data for JRBI transform_Previous_manifestation_history is transferred from Previous manifestation
     Given We get the <countOfRandomIds> random manifestation EPR ids <sourceTable>
     When We get the records from transform previous manifestation
@@ -34,7 +38,7 @@ Feature:Validate data for JRBI Manifestation tables in Data Lake
       |jrbi_transform_previous_manifestation|   10                 |
 
 
-  @JRBIM
+  @JRBI
   Scenario Outline: Verify Data from the difference of current_manif and previous_manif is transferred to delta current manif table
     Given We get the <countOfRandomIds> random manifestation EPR ids <tableRef>
     When Get the records from the difference of current_manifestation and previous_manifestation

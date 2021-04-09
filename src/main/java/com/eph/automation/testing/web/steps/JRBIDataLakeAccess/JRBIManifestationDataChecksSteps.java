@@ -309,7 +309,7 @@ public class JRBIManifestationDataChecksSteps {
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                    Log.info("EPR => " +  dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR() +
+                    Log.info("EPR => " +  dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR() +
                             " " + strTemp + " => DeltaManif_Hist = " + method.invoke(objectToCompare1) +
                             " Exclude_Manif = " + method2.invoke(objectToCompare2));
                     if (method.invoke(objectToCompare1) != null ||
@@ -360,7 +360,7 @@ public class JRBIManifestationDataChecksSteps {
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                    Log.info("EPR => " +  dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR() +
+                    Log.info("EPR => " +  dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getEPR() +
                             " " + strTemp + " => Previous_Manif = " + method.invoke(objectToCompare1) +
                             " Manif_History = " + method2.invoke(objectToCompare2));
                     if (method.invoke(objectToCompare1) != null ||
@@ -417,49 +417,6 @@ public class JRBIManifestationDataChecksSteps {
                     if (method.invoke(objectToCompare1) != null ||
                             (method2.invoke(objectToCompare2) != null)) {
                         Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifest_hsistory for EPR:"+dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR(),
-                                method.invoke(objectToCompare1),
-                                method2.invoke(objectToCompare2));
-                    }
-                }
-            }
-        }
-    }
-
-    @Then("^Get the records from manif extended table$")
-    public void getExtendedManifRecords() {
-        Log.info("We get the Manif Extended records...");
-        sql = String.format(JRBIManifestationDataChecksSQL.GET_JRBI_MANIF_EXTENDED_RECORDS, Joiner.on("','").join(Ids));
-        Log.info(sql);
-        dataQualityJRBIContext.recordsFromLAtestManif = DBManager.getDBResultAsBeanList(sql, JRBIDLManifestationAccessObject.class, Constants.AWS_URL);
-    }
-
-    @And("^Compare the records of manif Latest with manif_Extended")
-    public void compareManifExtendedRecords() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        if (dataQualityJRBIContext.recordsFromLAtestManif.isEmpty()) {
-            Log.info("No Data Found ....");
-        } else {
-            Log.info("Sorting the EPR Ids to compare the records Manif Extended...");
-            for (int i = 0; i < dataQualityJRBIContext.recordsFromLAtestManif.size(); i++) {
-
-                dataQualityJRBIContext.recordsFromLAtestManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromExtendedManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR_ID));
-
-                String[] etl_curr_manifest = {"getEPR","getRECORD_TYPE","getMANIFESTATION_TYPE","getJOURNAL_ISSUE_TRIM_SIZE","getWAR_REFERENCE","getDELETE_FLAG","getLAST_UPDATED_DATE"};
-                for (String strTemp : etl_curr_manifest) {
-                    java.lang.reflect.Method method;
-                    java.lang.reflect.Method method2;
-                    JRBIDLManifestationAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromLAtestManif.get(i);
-                    JRBIDLManifestationAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromExtendedManif.get(i);
-
-                    method = objectToCompare1.getClass().getMethod(strTemp);
-                    method2 = objectToCompare2.getClass().getMethod(strTemp);
-
-                    Log.info("EPR => " +  dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR() +
-                            " " + strTemp + " => Latest_Manif = " + method.invoke(objectToCompare1) +
-                            " Manif_extended = " + method2.invoke(objectToCompare2));
-                    if (method.invoke(objectToCompare1) != null ||
-                            (method2.invoke(objectToCompare2) != null)) {
-                        Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifest_hsistory for EPR:"+dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR(),
                                 method.invoke(objectToCompare1),
                                 method2.invoke(objectToCompare2));
                     }
