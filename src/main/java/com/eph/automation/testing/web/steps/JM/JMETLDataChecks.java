@@ -1765,30 +1765,30 @@ public class JMETLDataChecks {
             case "gd_work_identifier":
             case "gd_work_person_role":
                 sql = String.format(JMETLDataChecksSQL.GET_STITCHING_WORK_CORE_EPR_IDs, numberOfRecords);
-                List<Map<?, ?>> randomWorkIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+                List<Map<?, ?>> randomWorkIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
                 Ids = randomWorkIds.stream().map(m -> (String) m.get("EPR_ID")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "gd_product":
             case "gd_person":
             case "gd_accountable_product":
                 sql = String.format(JMETLDataChecksSQL.GET_STITCHING_PRODUCT_CORE_EPR_IDs, numberOfRecords);
-                List<Map<?, ?>> randomProductIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+                List<Map<?, ?>> randomProductIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
                 Ids = randomProductIds.stream().map(m -> (String) m.get("EPR_ID")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "gd_work_relationship":
                 sql = String.format(JMETLDataChecksSQL.GET_GD_WORK_RELATIONSHIP_PARENT_IDs, numberOfRecords);
-                List<Map<?, ?>> randomParentIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+                List<Map<?, ?>> randomParentIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
                 Ids = randomParentIds.stream().map(m -> (String) m.get("F_PARENT")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "gd_subject_area":
                 sql = String.format(JMETLDataChecksSQL.GET_STITCHING_SubjectArea_EPR_IDs, numberOfRecords);
-                List<Map<?, ?>> subjectAreaIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+                List<Map<?, ?>> subjectAreaIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
                 Ids = subjectAreaIds.stream().map(m -> (String) m.get("EPR_ID")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "gd_manifestation":
             case "gd_manifestation_identifier":
                 sql = String.format(JMETLDataChecksSQL.GET_GD_MANIFESTATION_IDs, numberOfRecords);
-                List<Map<?, ?>> randomManifestationIdentifierIds = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+                List<Map<?, ?>> randomManifestationIdentifierIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
                 Ids = randomManifestationIdentifierIds.stream().map(m -> (String) m.get("F_WWORK")).map(String::valueOf).collect(Collectors.toList());
                 break;
         }
@@ -1815,7 +1815,7 @@ public class JMETLDataChecks {
                 break;
         }
         Log.info(sql);
-        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_SIT_URL);
+        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         if (SemarchytableName.equals("gd_person") || SemarchytableName.equals("gd_manifestation") || SemarchytableName.equals("gd_manifestation_identifier")) {
             JMContext.StitchingManifestationObject = new Gson().fromJson(jsonValue.get(0).get("json"), StitchManifestationObjectJson.class);
         } else {
@@ -1859,7 +1859,7 @@ public class JMETLDataChecks {
                 break;
         }
         Log.info(sql);
-        JMContext.JMObjectsFromDL = DBManager.getDBResultAsBeanList(sql, JMETLObject.class, Constants.EPH_SIT_URL);
+        JMContext.JMObjectsFromDL = DBManager.getDBResultAsBeanList(sql, JMETLObject.class, Constants.EPH_URL);
         System.out.println(JMContext.JMObjectsFromDL.size());
     }
 
@@ -2568,7 +2568,7 @@ public class JMETLDataChecks {
                 break;
         }
         Log.info(sql);
-        JMContext.JMTransformObjectsFromDL = DBManager.getDBResultAsBeanList(sql, JMETLObject.class, Constants.EPH_UAT_URL2);
+        JMContext.JMTransformObjectsFromDL = DBManager.getDBResultAsBeanList(sql, JMETLObject.class, Constants.EPH_URL);
     }
 
     @And("^Compare JM records in Staging and Semarchy of (.*)$")
