@@ -2,7 +2,7 @@ Feature:Validate data of DL Extended Views where data comes from BCS,SDRM,JM Ext
 
 #  Created by Dinesh on 03/02/2021
 
-  @DLExtView
+  @DLExtViews
   Scenario Outline: Verify Data Count for All Extended views is transferred from Source Ingestion
     Given Get the total count of All Extended views <tableName>
     Then  We know the total count of Source Ingestion <tableName>

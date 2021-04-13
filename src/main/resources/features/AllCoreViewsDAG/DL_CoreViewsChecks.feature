@@ -28,7 +28,7 @@ Feature:Validate data of DL All Core Views where data comes from BCS and JM Core
       |all_work_access_model_v                    |
       |all_work_business_model_v                  |
 
-  @DLCoreView
+  @DLCoreViews
   Scenario Outline: Verify Data for DL core views is transferred from BCS and JM core Tables
     Given Get the <countOfRandomIds> from JM and BCS Core Tables <tableName>
     Then  Get the Records from the JM and BCS Core Tables <tableName>
