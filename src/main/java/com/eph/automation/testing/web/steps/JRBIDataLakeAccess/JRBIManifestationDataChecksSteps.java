@@ -13,6 +13,7 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class JRBIManifestationDataChecksSteps {
 
     @Given("^We get the (.*) random manifestation EPR ids (.*)$")
     public void getRandomManifEPRIds(String numberOfRecords, String tableName) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Manif EPR Ids...");
         switch (tableName) {
@@ -99,7 +100,7 @@ public class JRBIManifestationDataChecksSteps {
     }
 
     @And("^Compare the records of manifestation full load and current manifestation$")
-    public void compareDataFullandCurrentManif() {
+    public void compareDataFullandCurrentManif() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (dataQualityJRBIContext.recordsFromDataFullLoadManif.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
@@ -109,88 +110,25 @@ public class JRBIManifestationDataChecksSteps {
                 dataQualityJRBIContext.recordsFromDataFullLoadManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR)); //sort data in the lists
                 dataQualityJRBIContext.recordsFromFromCurrentManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR));
 
-                Log.info("Full Load -> EPR => " + dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getEPR() +
-                        "Current_Manif -> EPR => " + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR());
-                if (dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getEPR() != null ||
-                        (dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR() != null)) {
+                String[] etl_curr_manifest = {"getEPR","getRECORD_TYPE","getMANIFESTATION_TYPE","getJOURNAL_ISSUE_TRIM_SIZE","getWAR_REFERENCE"};
+                for (String strTemp : etl_curr_manifest) {
+                    java.lang.reflect.Method method;
+                    java.lang.reflect.Method method2;
+                    JRBIDLManifestationAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i);
+                    JRBIDLManifestationAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromCurrentManif.get(i);
 
-                    Assert.assertEquals("The EPR is =" + dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getEPR() + " is missing/not found in Current_Manif table",
-                            dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR());
-                }
+                    method = objectToCompare1.getClass().getMethod(strTemp);
+                    method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getEPR() +
-                        " RECORD_TYPE => Full_Load =" + dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getRECORD_TYPE() +
-                        " Current_Manif=" + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getRECORD_TYPE());
-
-                if (dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getRECORD_TYPE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getRECORD_TYPE() != null)) {
-
-                    String recordType = dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getRECORD_TYPE();
-                    if (recordType.isEmpty()) {
-                        recordType = null;
+                    Log.info("EPR => " +  dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getEPR() +
+                            " " + strTemp + " => Manif_Full_Load = " + method.invoke(objectToCompare1) +
+                            " Current_manifest = " + method2.invoke(objectToCompare2));
+                    if (method.invoke(objectToCompare1) != null ||
+                            (method2.invoke(objectToCompare2) != null)) {
+                        Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Current_manifest for EPR:"+dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getEPR(),
+                                method.invoke(objectToCompare1),
+                                method2.invoke(objectToCompare2));
                     }
-                    Assert.assertEquals("The RECORD_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getEPR(),
-                            recordType, dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getRECORD_TYPE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getEPR() +
-                        " MANIFESTATION_TYPE => Full_Load =" + dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getMANIFESTATION_TYPE() +
-                        " Current_Manif=" + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getMANIFESTATION_TYPE());
-
-                if (dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getMANIFESTATION_TYPE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getMANIFESTATION_TYPE() != null)) {
-
-                    String manifType = dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getMANIFESTATION_TYPE();
-                    if (manifType.isEmpty()) {
-                        manifType = null;
-                    }
-                    Assert.assertEquals("The MANIFESTATION_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getEPR(),
-                            manifType, dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getMANIFESTATION_TYPE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getEPR() +
-                        " JOURNAL_PROD_SITE => Full_Load =" + dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getJOURNAL_PROD_SITE() +
-                        " Current_Manif=" + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getJOURNAL_PROD_SITE());
-
-                if (dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getJOURNAL_PROD_SITE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getJOURNAL_PROD_SITE() != null)) {
-
-                    String journalProdSite = dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getJOURNAL_PROD_SITE();
-                    if (journalProdSite.isEmpty()) {
-                        journalProdSite = null;
-                    }
-                    Assert.assertEquals("The JOURNAL_PROD_SITE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getEPR(),
-                            journalProdSite, dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getJOURNAL_PROD_SITE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getEPR() +
-                        " JOURNAL_ISSUE_TRIM_SIZE => Full_Load =" + dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE() +
-                        " Current_Manif=" + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE());
-
-                if (dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null)) {
-                    String journalIssueTrim = dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE();
-                    if (journalIssueTrim.isEmpty()) {
-                        journalIssueTrim = null;
-                    }
-                    Assert.assertEquals("The JOURNAL_ISSUE_TRIM_SIZE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getEPR(),
-                            journalIssueTrim, dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getEPR() +
-                        " WAR_REFERENCE => Full_Load =" + dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getWAR_REFERENCE() +
-                        " Current_Manif=" + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getWAR_REFERENCE());
-
-                if (dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getWAR_REFERENCE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getWAR_REFERENCE() != null)) {
-
-                    String war_reference = dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getWAR_REFERENCE();
-                    if (war_reference.isEmpty()) {
-                        war_reference = null;
-                    }
-                    Assert.assertEquals("The WAR_REFERENCE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i).getEPR(),
-                            war_reference, dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getWAR_REFERENCE());
                 }
             }
         }
@@ -205,7 +143,7 @@ public class JRBIManifestationDataChecksSteps {
     }
 
     @And("^Compare the records of current manifestation and current manifestation history$")
-    public void compareCurrentManifandManifHistory() {
+    public void compareCurrentManifandManifHistory() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (dataQualityJRBIContext.recordsFromFromCurrentManif.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
@@ -215,68 +153,25 @@ public class JRBIManifestationDataChecksSteps {
                 dataQualityJRBIContext.recordsFromFromCurrentManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR)); //sort data in the lists
                 dataQualityJRBIContext.recordsFromFromCurrentManifHistory.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR));
 
-                Log.info("Current_Manif -> EPR => " + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR() +
-                        "Current_Manif_hist -> EPR => " + dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i).getEPR());
-                if (dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR() != null ||
-                        (dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i).getEPR() != null)) {
-                    Assert.assertEquals("The EPR is =" + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR() + " is missing/not found in Current_Manif table",
-                            dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i).getEPR());
-                }
+                String[] etl_curr_manifest = {"getEPR","getRECORD_TYPE","getMANIFESTATION_TYPE","getJOURNAL_ISSUE_TRIM_SIZE","getWAR_REFERENCE"};
+                for (String strTemp : etl_curr_manifest) {
+                    java.lang.reflect.Method method;
+                    java.lang.reflect.Method method2;
+                    JRBIDLManifestationAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromCurrentManif.get(i);
+                    JRBIDLManifestationAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i);
 
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR() +
-                        " RECORD_TYPE => Current_Manif =" + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getRECORD_TYPE() +
-                        " Current_Manif_hist=" + dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i).getRECORD_TYPE());
+                    method = objectToCompare1.getClass().getMethod(strTemp);
+                    method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                if (dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getRECORD_TYPE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i).getRECORD_TYPE() != null)) {
-                    Assert.assertEquals("The RECORD_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getRECORD_TYPE(),
-                            dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i).getRECORD_TYPE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR() +
-                        " MANIFESTATION_TYPE => Current_Manif =" + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getMANIFESTATION_TYPE() +
-                        " Current_Manif_hist=" + dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i).getMANIFESTATION_TYPE());
-
-                if (dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getMANIFESTATION_TYPE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i).getMANIFESTATION_TYPE() != null)) {
-                    Assert.assertEquals("The MANIFESTATION_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getMANIFESTATION_TYPE(),
-                            dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i).getMANIFESTATION_TYPE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR() +
-                        " JOURNAL_PROD_SITE => Current_Manif =" + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getJOURNAL_PROD_SITE() +
-                        " Current_Manif_hist=" + dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i).getJOURNAL_PROD_SITE());
-
-                if (dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getJOURNAL_PROD_SITE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i).getJOURNAL_PROD_SITE() != null)) {
-                    Assert.assertEquals("The JOURNAL_PROD_SITE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getJOURNAL_PROD_SITE(),
-                            dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i).getJOURNAL_PROD_SITE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR() +
-                        " JOURNAL_ISSUE_TRIM_SIZE => Current_Manif =" + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE() +
-                        " Current_Manif_hist=" + dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i).getJOURNAL_ISSUE_TRIM_SIZE());
-
-                if (dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null)) {
-                    Assert.assertEquals("The JOURNAL_ISSUE_TRIM_SIZE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE(),
-                            dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i).getJOURNAL_ISSUE_TRIM_SIZE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR() +
-                        " WAR_REFERENCE => Current_Manif =" + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getWAR_REFERENCE() +
-                        " Current_Manif_hist=" + dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i).getWAR_REFERENCE());
-
-                if (dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getWAR_REFERENCE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i).getWAR_REFERENCE() != null)) {
-                    Assert.assertEquals("The WAR_REFERENCE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getWAR_REFERENCE(),
-                            dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i).getWAR_REFERENCE());
+                    Log.info("EPR => " +  dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR() +
+                            " " + strTemp + " => Current_manifest = " + method.invoke(objectToCompare1) +
+                            " manifest_hsistory = " + method2.invoke(objectToCompare2));
+                    if (method.invoke(objectToCompare1) != null ||
+                            (method2.invoke(objectToCompare2) != null)) {
+                        Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifest_hsistory for EPR:"+dataQualityJRBIContext.recordsFromFromCurrentManif.get(i).getEPR(),
+                                method.invoke(objectToCompare1),
+                                method2.invoke(objectToCompare2));
+                    }
                 }
             }
         }
@@ -299,7 +194,7 @@ public class JRBIManifestationDataChecksSteps {
     }
 
     @And("^Compare the records of Delta Current manifestation with difference of current and previous manifestation$")
-    public void compareDeltawithCrrentPReviousManifRecords() {
+    public void compareDeltawithCrrentPReviousManifRecords() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
@@ -309,88 +204,25 @@ public class JRBIManifestationDataChecksSteps {
                 dataQualityJRBIContext.recordsFromFromDeltaManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR)); //sort data in the lists
                 dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR));
 
-                Log.info("Current_PRevious -> EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getEPR() +
-                        "Delta_Manif -> EPR => " + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR());
-                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getEPR() != null ||
-                        (dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR() != null)) {
-                    Assert.assertEquals("The EPR is =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getEPR() + " is missing/not found in Delta_Manif table",
-                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR());
-                }
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getEPR() +
-                        " RECORD_TYPE => Current_Previous =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getRECORD_TYPE() +
-                        " Delta_Manif =" + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getRECORD_TYPE());
+                String[] etl_curr_manifest = {"getEPR","getRECORD_TYPE","getMANIFESTATION_TYPE","getJOURNAL_ISSUE_TRIM_SIZE","getWAR_REFERENCE","getTYPE","getDELTA_MODE"};
+                for (String strTemp : etl_curr_manifest) {
+                    java.lang.reflect.Method method;
+                    java.lang.reflect.Method method2;
+                    JRBIDLManifestationAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromDeltaManif.get(i);
+                    JRBIDLManifestationAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i);
 
-                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getRECORD_TYPE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getRECORD_TYPE() != null)) {
-                    Assert.assertEquals("The RECORD_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getRECORD_TYPE(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getRECORD_TYPE());
-                }
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getEPR() +
-                        " MANIFESTATION_TYPE => Current_Previous =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getMANIFESTATION_TYPE() +
-                        " Delta_Manif=" + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getMANIFESTATION_TYPE());
+                    method = objectToCompare1.getClass().getMethod(strTemp);
+                    method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getMANIFESTATION_TYPE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getMANIFESTATION_TYPE() != null)) {
-                    Assert.assertEquals("The MANIFESTATION_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getMANIFESTATION_TYPE(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getMANIFESTATION_TYPE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getEPR() +
-                        " JOURNAL_PROD_SITE => Current_PRevious =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getJOURNAL_PROD_SITE() +
-                        " Delta_Manif =" + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getJOURNAL_PROD_SITE());
-
-                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getJOURNAL_PROD_SITE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getJOURNAL_PROD_SITE() != null)) {
-                    Assert.assertEquals("The JOURNAL_PROD_SITE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getJOURNAL_PROD_SITE(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getJOURNAL_PROD_SITE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getEPR() +
-                        " JOURNAL_ISSUE_TRIM_SIZE => Current_Previous =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE() +
-                        " Delta_Manif =" + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE());
-
-                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null)) {
-                    Assert.assertEquals("The JOURNAL_ISSUE_TRIM_SIZE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getEPR() +
-                        " WAR_REFERENCE => Current_PRevious =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getWAR_REFERENCE() +
-                        " Delta_Manif =" + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getWAR_REFERENCE());
-
-                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getWAR_REFERENCE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getWAR_REFERENCE() != null)) {
-                    Assert.assertEquals("The WAR_REFERENCE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getWAR_REFERENCE(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getWAR_REFERENCE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getEPR() +
-                        " TYPE => Current_PRevious =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getTYPE() +
-                        " Delta_Manif =" + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getTYPE());
-
-                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getTYPE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getTYPE() != null)) {
-                    Assert.assertEquals("The TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getTYPE(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getTYPE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getEPR() +
-                        " DELTA_MODE => Current_PRevious =" + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getDELTA_MODE() +
-                        " Delta_Manif =" + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getDELTA_MODE());
-
-                if (dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getDELTA_MODE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getDELTA_MODE() != null)) {
-                    Assert.assertEquals("The DELTA_MODE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i).getDELTA_MODE(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getDELTA_MODE());
+                    Log.info("EPR => " +  dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR() +
+                            " " + strTemp + " => DeltaManif = " + method.invoke(objectToCompare1) +
+                            " Curr_Previous_Manif = " + method2.invoke(objectToCompare2));
+                    if (method.invoke(objectToCompare1) != null ||
+                            (method2.invoke(objectToCompare2) != null)) {
+                        Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifest_hsistory for EPR:"+dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR(),
+                                method.invoke(objectToCompare1),
+                                method2.invoke(objectToCompare2));
+                    }
                 }
             }
         }
@@ -406,7 +238,7 @@ public class JRBIManifestationDataChecksSteps {
 
 
     @And("^Compare the records of delta manifestation and delta manifestation history$")
-    public void compareDeltaManifandDeltaManifHistory() {
+    public void compareDeltaManifandDeltaManifHistory() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (dataQualityJRBIContext.recordsFromFromDeltaManif.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
@@ -416,91 +248,25 @@ public class JRBIManifestationDataChecksSteps {
                 dataQualityJRBIContext.recordsFromFromDeltaManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR)); //sort data in the lists
                 dataQualityJRBIContext.recordsFromFromDeltaManifHistory.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR));
 
-                Log.info("Delta_Manif -> EPR => " + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR() +
-                        "Delta_Manif_History -> EPR => " + dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getEPR());
-                if (dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR() != null ||
-                        (dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getEPR() != null)) {
-                    Assert.assertEquals("The EPR is =" + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR() + " is missing/not found in Delta_Manif table",
-                            dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getEPR());
-                }
+                String[] etl_curr_manifest = {"getEPR","getRECORD_TYPE","getMANIFESTATION_TYPE","getJOURNAL_ISSUE_TRIM_SIZE","getWAR_REFERENCE","getTYPE","getDELTA_MODE"};
+                for (String strTemp : etl_curr_manifest) {
+                    java.lang.reflect.Method method;
+                    java.lang.reflect.Method method2;
+                    JRBIDLManifestationAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromDeltaManif.get(i);
+                    JRBIDLManifestationAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i);
 
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR() +
-                        " RECORD_TYPE => Delta_Manif =" + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getRECORD_TYPE() +
-                        " Delta_Manif_History=" + dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getRECORD_TYPE());
+                    method = objectToCompare1.getClass().getMethod(strTemp);
+                    method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                if (dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getRECORD_TYPE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getRECORD_TYPE() != null)) {
-                    Assert.assertEquals("The RECORD_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getRECORD_TYPE(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getRECORD_TYPE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR() +
-                        " MANIFESTATION_TYPE => Delta_Manif =" + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getMANIFESTATION_TYPE() +
-                        " Delta_Manif_History=" + dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getMANIFESTATION_TYPE());
-
-                if (dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getMANIFESTATION_TYPE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getMANIFESTATION_TYPE() != null)) {
-                    Assert.assertEquals("The MANIFESTATION_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getMANIFESTATION_TYPE(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getMANIFESTATION_TYPE());
-                }
-
-
-           /*     Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR() +
-                        " JOURNAL_PROD_SITE => Delta_Manif =" + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getJOURNAL_PROD_SITE() +
-                        " Delta_Manif_History=" + dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getJOURNAL_PROD_SITE());
-
-                if (dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getJOURNAL_PROD_SITE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getJOURNAL_PROD_SITE() != null)) {
-                    Assert.assertEquals("The JOURNAL_PROD_SITE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR() ,
-                            dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getJOURNAL_PROD_SITE(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getJOURNAL_PROD_SITE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR() +
-                        " JOURNAL_ISSUE_TRIM_SIZE => Delta_Manif =" + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE() +
-                        " Delta_Manif_History=" + dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getJOURNAL_ISSUE_TRIM_SIZE());
-
-                if (dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null)) {
-                    Assert.assertEquals("The JOURNAL_ISSUE_TRIM_SIZE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR() ,
-                            dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getJOURNAL_ISSUE_TRIM_SIZE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR() +
-                        " WAR_REFERENCE => Delta_Manif =" + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getWAR_REFERENCE() +
-                        " Delta_Manif_History=" + dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getWAR_REFERENCE());
-
-                if (dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getWAR_REFERENCE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getWAR_REFERENCE() != null)) {
-                    Assert.assertEquals("The WAR_REFERENCE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR() ,
-                            dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getWAR_REFERENCE(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getWAR_REFERENCE());
-                }
-*/
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR() +
-                        " TYPE => Delta_Manif =" + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getTYPE() +
-                        " Delta_Manif_History=" + dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getTYPE());
-
-                if (dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getTYPE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getTYPE() != null)) {
-                    Assert.assertEquals("The TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getTYPE(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getTYPE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR() +
-                        " DELTA_MODE => Delta_Manif =" + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getDELTA_MODE() +
-                        " Delta_Manif_History=" + dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getDELTA_MODE());
-
-                if (dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getDELTA_MODE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getDELTA_MODE() != null)) {
-                    Assert.assertEquals("The DELTA_MODE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getDELTA_MODE(),
-                            dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i).getDELTA_MODE());
+                    Log.info("EPR => " +  dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR() +
+                            " " + strTemp + " => DeltaManif = " + method.invoke(objectToCompare1) +
+                            " Delta_Manfi_hist = " + method2.invoke(objectToCompare2));
+                    if (method.invoke(objectToCompare1) != null ||
+                            (method2.invoke(objectToCompare2) != null)) {
+                        Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifest_hsistory for EPR:"+dataQualityJRBIContext.recordsFromFromDeltaManif.get(i).getEPR(),
+                                method.invoke(objectToCompare1),
+                                method2.invoke(objectToCompare2));
+                    }
                 }
             }
         }
@@ -514,7 +280,7 @@ public class JRBIManifestationDataChecksSteps {
         dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLManifestationAccessObject.class, Constants.AWS_URL);
     }
 
-    @Then("^Get the records from manifestation exclude table$")
+    @And ("^Get the records from manifestation jrbi exclude extended tables$")
     public void getManifExcludeRecords() {
         Log.info("We get the Manif Exclude records...");
         sql = String.format(JRBIManifestationDataChecksSQL.GET_RECORDS_FROM_MANIF_EXCLUDE, Joiner.on("','").join(Ids));
@@ -523,7 +289,7 @@ public class JRBIManifestationDataChecksSteps {
     }
 
     @And("^Compare the records of Manif Exclude with difference of Delta_current_manif and manif_history$")
-    public void compareExcludeManifRecords() {
+    public void compareExcludeManifRecords()throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
@@ -533,96 +299,29 @@ public class JRBIManifestationDataChecksSteps {
                 dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR)); //sort data in the lists
                 dataQualityJRBIContext.recordsFromExcludeManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR));
 
-                Log.info("ManifDelta_History -> EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR() +
-                        "Manif_Exclude -> EPR => " + dataQualityJRBIContext.recordsFromExcludeManif.get(i).getEPR());
-                if (dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR() != null ||
-                        (dataQualityJRBIContext.recordsFromExcludeManif.get(i).getEPR() != null)) {
-                    Assert.assertEquals("The EPR is =" + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR() + " is missing/not found in ManifDelta_History table",
-                            dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromExcludeManif.get(i).getEPR());
-                }
+                String[] etl_curr_manifest = {"getEPR","getRECORD_TYPE","getMANIFESTATION_TYPE","getJOURNAL_ISSUE_TRIM_SIZE","getWAR_REFERENCE","getLAST_UPDATED_DATE","getDELETE_FLAG"};
+                for (String strTemp : etl_curr_manifest) {
+                    java.lang.reflect.Method method;
+                    java.lang.reflect.Method method2;
+                    JRBIDLManifestationAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i);
+                    JRBIDLManifestationAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromExcludeManif.get(i);
 
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR() +
-                        " RECORD_TYPE => ManifDelta_History =" + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getRECORD_TYPE() +
-                        " Manif_Exclude=" + dataQualityJRBIContext.recordsFromExcludeManif.get(i).getRECORD_TYPE());
+                    method = objectToCompare1.getClass().getMethod(strTemp);
+                    method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                if (dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getRECORD_TYPE() != null ||
-                        (dataQualityJRBIContext.recordsFromExcludeManif.get(i).getRECORD_TYPE() != null)) {
-                    Assert.assertEquals("The RECORD_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getRECORD_TYPE(),
-                            dataQualityJRBIContext.recordsFromExcludeManif.get(i).getRECORD_TYPE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR() +
-                        " MANIFESTATION_TYPE => ManifDelta_History =" + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getMANIFESTATION_TYPE() +
-                        " Manif_Exclude=" + dataQualityJRBIContext.recordsFromExcludeManif.get(i).getMANIFESTATION_TYPE());
-
-                if (dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getMANIFESTATION_TYPE() != null ||
-                        (dataQualityJRBIContext.recordsFromExcludeManif.get(i).getMANIFESTATION_TYPE() != null)) {
-                    Assert.assertEquals("The MANIFESTATION_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getMANIFESTATION_TYPE(),
-                            dataQualityJRBIContext.recordsFromExcludeManif.get(i).getMANIFESTATION_TYPE());
-                }
-
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR() +
-                        " JOURNAL_PROD_SITE => ManifDelta_History =" + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getJOURNAL_PROD_SITE() +
-                        " Manif_Exclude=" + dataQualityJRBIContext.recordsFromExcludeManif.get(i).getJOURNAL_PROD_SITE());
-
-                if (dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getJOURNAL_PROD_SITE() != null ||
-                        (dataQualityJRBIContext.recordsFromExcludeManif.get(i).getJOURNAL_PROD_SITE() != null)) {
-                    Assert.assertEquals("The JOURNAL_PROD_SITE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getJOURNAL_PROD_SITE(),
-                            dataQualityJRBIContext.recordsFromExcludeManif.get(i).getJOURNAL_PROD_SITE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR() +
-                        " JOURNAL_ISSUE_TRIM_SIZE => ManifDelta_History =" + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getJOURNAL_ISSUE_TRIM_SIZE() +
-                        " Manif_Exclude=" + dataQualityJRBIContext.recordsFromExcludeManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE());
-
-                if (dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null ||
-                        (dataQualityJRBIContext.recordsFromExcludeManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null)) {
-                    Assert.assertEquals("The JOURNAL_ISSUE_TRIM_SIZE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getJOURNAL_ISSUE_TRIM_SIZE(),
-                            dataQualityJRBIContext.recordsFromExcludeManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR() +
-                        " WAR_REFERENCE => ManifDelta_History =" + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getWAR_REFERENCE() +
-                        " Manif_Exclude=" + dataQualityJRBIContext.recordsFromExcludeManif.get(i).getWAR_REFERENCE());
-
-                if (dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getWAR_REFERENCE() != null ||
-                        (dataQualityJRBIContext.recordsFromExcludeManif.get(i).getWAR_REFERENCE() != null)) {
-                    Assert.assertEquals("The WAR_REFERENCE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getWAR_REFERENCE(),
-                            dataQualityJRBIContext.recordsFromExcludeManif.get(i).getWAR_REFERENCE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR() +
-                        " LAST_UPDATED_DATE => ManifDelta_History =" + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getLAST_UPDATED_DATE() +
-                        " Manif_Exclude=" + dataQualityJRBIContext.recordsFromExcludeManif.get(i).getLAST_UPDATED_DATE());
-
-                if (dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getLAST_UPDATED_DATE() != null ||
-                        (dataQualityJRBIContext.recordsFromExcludeManif.get(i).getLAST_UPDATED_DATE() != null)) {
-                    Assert.assertEquals("The LAST_UPDATED_DATE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getLAST_UPDATED_DATE(),
-                            dataQualityJRBIContext.recordsFromExcludeManif.get(i).getLAST_UPDATED_DATE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR() +
-                        " DELETE_FLAG => ManifDelta_History =" + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getDELETE_FLAG() +
-                        " Manif_Exclude=" + dataQualityJRBIContext.recordsFromExcludeManif.get(i).getDELETE_FLAG());
-
-                if (dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getDELETE_FLAG() != null ||
-                        (dataQualityJRBIContext.recordsFromExcludeManif.get(i).getDELETE_FLAG() != null)) {
-                    Assert.assertEquals("The DELETE_FLAG is incorrect for EPR = " + dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getDELETE_FLAG(),
-                            dataQualityJRBIContext.recordsFromExcludeManif.get(i).getDELETE_FLAG());
+                    Log.info("EPR => " +  dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR() +
+                            " " + strTemp + " => DeltaManif_Hist = " + method.invoke(objectToCompare1) +
+                            " Exclude_Manif = " + method2.invoke(objectToCompare2));
+                    if (method.invoke(objectToCompare1) != null ||
+                            (method2.invoke(objectToCompare2) != null)) {
+                        Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifest_hsistory for EPR:"+dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i).getEPR(),
+                                method.invoke(objectToCompare1),
+                                method2.invoke(objectToCompare2));
+                    }
                 }
             }
         }
     }
-
 
     @When("^We get the records from transform previous manifestation$")
     public void getRecordsFromPreviousManif() {
@@ -641,7 +340,7 @@ public class JRBIManifestationDataChecksSteps {
     }
 
     @And("^Compare the records of previous manifestation and previous manifestation history$")
-    public void comparePreviousManifandHistory() {
+    public void comparePreviousManifandHistory() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (dataQualityJRBIContext.recordsFromFromPreviousManif.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
@@ -651,68 +350,25 @@ public class JRBIManifestationDataChecksSteps {
                 dataQualityJRBIContext.recordsFromFromPreviousManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR)); //sort data in the lists
                 dataQualityJRBIContext.recordsFromFromPreviousManifHistory.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR));
 
-                Log.info("Previous_Manif -> EPR => " + dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getEPR() +
-                        "Previous_Manif_hist -> EPR => " + dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i).getEPR());
-                if (dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getEPR() != null ||
-                        (dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i).getEPR() != null)) {
-                    Assert.assertEquals("The EPR is =" + dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getEPR() + " is missing/not found in Previous_Manif_hist table",
-                            dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i).getEPR());
-                }
+                String[] etl_curr_manifest = {"getEPR","getRECORD_TYPE","getMANIFESTATION_TYPE","getJOURNAL_ISSUE_TRIM_SIZE","getWAR_REFERENCE"};
+                for (String strTemp : etl_curr_manifest) {
+                    java.lang.reflect.Method method;
+                    java.lang.reflect.Method method2;
+                    JRBIDLManifestationAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromPreviousManif.get(i);
+                    JRBIDLManifestationAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i);
 
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getEPR() +
-                        " RECORD_TYPE => Previous_Manif =" + dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getRECORD_TYPE() +
-                        " Previous_Manif_hist=" + dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i).getRECORD_TYPE());
+                    method = objectToCompare1.getClass().getMethod(strTemp);
+                    method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                if (dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getRECORD_TYPE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i).getRECORD_TYPE() != null)) {
-                    Assert.assertEquals("The RECORD_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getRECORD_TYPE(),
-                            dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i).getRECORD_TYPE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getEPR() +
-                        " MANIFESTATION_TYPE => Previous_Manif =" + dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getMANIFESTATION_TYPE() +
-                        " Previous_Manif_hist=" + dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i).getMANIFESTATION_TYPE());
-
-                if (dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getMANIFESTATION_TYPE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i).getMANIFESTATION_TYPE() != null)) {
-                    Assert.assertEquals("The MANIFESTATION_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getMANIFESTATION_TYPE(),
-                            dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i).getMANIFESTATION_TYPE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getEPR() +
-                        " JOURNAL_PROD_SITE => Previous_Manif =" + dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getJOURNAL_PROD_SITE() +
-                        " Previous_Manif_hist=" + dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i).getJOURNAL_PROD_SITE());
-
-                if (dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getJOURNAL_PROD_SITE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i).getJOURNAL_PROD_SITE() != null)) {
-                    Assert.assertEquals("The JOURNAL_PROD_SITE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getJOURNAL_PROD_SITE(),
-                            dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i).getJOURNAL_PROD_SITE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getEPR() +
-                        " JOURNAL_ISSUE_TRIM_SIZE => Previous_Manif =" + dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE() +
-                        " Previous_Manif_hist=" + dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i).getJOURNAL_ISSUE_TRIM_SIZE());
-
-                if (dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null)) {
-                    Assert.assertEquals("The JOURNAL_ISSUE_TRIM_SIZE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE(),
-                            dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i).getJOURNAL_ISSUE_TRIM_SIZE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getEPR() +
-                        " WAR_REFERENCE => Previous_Manif =" + dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getWAR_REFERENCE() +
-                        " Previous_Manif_hist=" + dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i).getWAR_REFERENCE());
-
-                if (dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getWAR_REFERENCE() != null ||
-                        (dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i).getWAR_REFERENCE() != null)) {
-                    Assert.assertEquals("The WAR_REFERENCE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getWAR_REFERENCE(),
-                            dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i).getWAR_REFERENCE());
+                    Log.info("EPR => " +  dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getEPR() +
+                            " " + strTemp + " => Previous_Manif = " + method.invoke(objectToCompare1) +
+                            " Manif_History = " + method2.invoke(objectToCompare2));
+                    if (method.invoke(objectToCompare1) != null ||
+                            (method2.invoke(objectToCompare2) != null)) {
+                        Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifest_hsistory for EPR:"+dataQualityJRBIContext.recordsFromFromPreviousManif.get(i).getEPR(),
+                                method.invoke(objectToCompare1),
+                                method2.invoke(objectToCompare2));
+                    }
                 }
             }
         }
@@ -735,7 +391,7 @@ public class JRBIManifestationDataChecksSteps {
     }
 
     @And("^Compare the records of Manifestation Latest with addition of Delta_current_Manifestation and Manifestation_Exclude$")
-    public void compareLatestManifRecords() {
+    public void compareLatestManifRecords() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
@@ -745,332 +401,28 @@ public class JRBIManifestationDataChecksSteps {
                 dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR)); //sort data in the lists
                 dataQualityJRBIContext.recordsFromLAtestManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR));
 
-                Log.info("Delta_Current_Exclude -> EPR => " + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR() +
-                        "Manif_Latest -> EPR => " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR());
-                if (dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR() != null ||
-                        (dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR() != null)) {
-                    Assert.assertEquals("The EPR is =" + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR() + " is missing/not found in Manif_latest table",
-                            dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR());
-                }
+                String[] etl_curr_manifest = {"getEPR","getRECORD_TYPE","getMANIFESTATION_TYPE","getJOURNAL_ISSUE_TRIM_SIZE","getWAR_REFERENCE"};
+                for (String strTemp : etl_curr_manifest) {
+                    java.lang.reflect.Method method;
+                    java.lang.reflect.Method method2;
+                    JRBIDLManifestationAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i);
+                    JRBIDLManifestationAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromLAtestManif.get(i);
 
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR() +
-                        " MANIFESTATION_TYPE => Delta_Current_Exclude =" + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getMANIFESTATION_TYPE() +
-                        " Manif_Latest=" + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getMANIFESTATION_TYPE());
+                    method = objectToCompare1.getClass().getMethod(strTemp);
+                    method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                if (dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getMANIFESTATION_TYPE() != null ||
-                        (dataQualityJRBIContext.recordsFromLAtestManif.get(i).getMANIFESTATION_TYPE() != null)) {
-                    Assert.assertEquals("The MANIFESTATION_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getMANIFESTATION_TYPE(),
-                            dataQualityJRBIContext.recordsFromLAtestManif.get(i).getMANIFESTATION_TYPE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR() +
-                        " RECORD_TYPE => Delta_Current_Exclude =" + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getRECORD_TYPE() +
-                        " Manif_Latest=" + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getRECORD_TYPE());
-
-                if (dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getRECORD_TYPE() != null ||
-                        (dataQualityJRBIContext.recordsFromLAtestManif.get(i).getRECORD_TYPE() != null)) {
-                    Assert.assertEquals("The RECORD_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getRECORD_TYPE(),
-                            dataQualityJRBIContext.recordsFromLAtestManif.get(i).getRECORD_TYPE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR() +
-                        " JOURNAL_PROD_SITE => Delta_Current_Exclude =" + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getJOURNAL_PROD_SITE() +
-                        " Manif_Latest=" + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getJOURNAL_PROD_SITE());
-
-                if (dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getJOURNAL_PROD_SITE() != null ||
-                        (dataQualityJRBIContext.recordsFromLAtestManif.get(i).getJOURNAL_PROD_SITE() != null)) {
-                    Assert.assertEquals("The JOURNAL_PROD_SITE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getJOURNAL_PROD_SITE(),
-                            dataQualityJRBIContext.recordsFromLAtestManif.get(i).getJOURNAL_PROD_SITE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR() +
-                        " JOURNAL_ISSUE_TRIM_SIZE => Delta_Current_Exclude =" + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getJOURNAL_ISSUE_TRIM_SIZE() +
-                        " Manif_Latest=" + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE());
-
-                if (dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null ||
-                        (dataQualityJRBIContext.recordsFromLAtestManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null)) {
-                    Assert.assertEquals("The JOURNAL_ISSUE_TRIM_SIZE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getJOURNAL_ISSUE_TRIM_SIZE(),
-                            dataQualityJRBIContext.recordsFromLAtestManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR() +
-                        " WAR_REFERENCE => Delta_Current_Exclude =" + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getWAR_REFERENCE() +
-                        " Manif_Latest=" + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getWAR_REFERENCE());
-
-                if (dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getWAR_REFERENCE() != null ||
-                        (dataQualityJRBIContext.recordsFromLAtestManif.get(i).getWAR_REFERENCE() != null)) {
-                    Assert.assertEquals("The WAR_REFERENCE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getWAR_REFERENCE(),
-                            dataQualityJRBIContext.recordsFromLAtestManif.get(i).getWAR_REFERENCE());
-                }
-
-            /*    Log.info("EPR => " + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR() +
-                        " LAST_UPDATED_DATE => Delta_Current_Exclude =" + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getLAST_UPDATED_DATE() +
-                        " Manif_Latest=" + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getLAST_UPDATED_DATE());
-
-                if (dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getLAST_UPDATED_DATE() != null ||
-                        (dataQualityJRBIContext.recordsFromLAtestManif.get(i).getLAST_UPDATED_DATE() != null)) {
-                    Assert.assertEquals("The LAST_UPDATED_DATE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR() ,
-                            dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getLAST_UPDATED_DATE(),
-                            dataQualityJRBIContext.recordsFromLAtestManif.get(i).getLAST_UPDATED_DATE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR() +
-                        " DELETE_FLAG => Delta_Current_Exclude =" + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getDELETE_FLAG() +
-                        " Manif_Latest=" + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getDELETE_FLAG());
-
-                if (dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getDELETE_FLAG() != null ||
-                        (dataQualityJRBIContext.recordsFromLAtestManif.get(i).getDELETE_FLAG() != null)) {
-                    Assert.assertEquals("The DELETE_FLAG is incorrect for EPR = " + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR() ,
-                            dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getDELETE_FLAG(),
-                            dataQualityJRBIContext.recordsFromLAtestManif.get(i).getDELETE_FLAG());
-                }*/
-            }
-        }
-    }
-
-    @Then("^Get the records from manif extended table$")
-    public void getExtendedManifRecords() {
-        Log.info("We get the Manif Extended records...");
-        sql = String.format(JRBIManifestationDataChecksSQL.GET_JRBI_MANIF_EXTENDED_RECORDS, Joiner.on("','").join(Ids));
-        Log.info(sql);
-        dataQualityJRBIContext.recordsFromLAtestManif = DBManager.getDBResultAsBeanList(sql, JRBIDLManifestationAccessObject.class, Constants.AWS_URL);
-    }
-
-    @And("^Compare the records of manif Latest with manif_Extended")
-    public void compareManifExtendedRecords() {
-        if (dataQualityJRBIContext.recordsFromLAtestManif.isEmpty()) {
-            Log.info("No Data Found ....");
-        } else {
-            Log.info("Sorting the EPR Ids to compare the records Manif Extended...");
-            for (int i = 0; i < dataQualityJRBIContext.recordsFromLAtestManif.size(); i++) {
-
-                dataQualityJRBIContext.recordsFromLAtestManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromExtendedManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR_ID));
-
-                Log.info("Manif_Latest -> EPR => " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR() +
-                        "Manif_Extended -> EPR => " + dataQualityJRBIContext.recordsFromExtendedManif.get(i).getEPR_ID());
-                if (dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR() != null ||
-                        (dataQualityJRBIContext.recordsFromExtendedManif.get(i).getEPR() != null)) {
-                    Assert.assertEquals("The EPR is =" + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR() + " is missing/not found in Manif_latest table",
-                            dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromExtendedManif.get(i).getEPR());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR() +
-                        " MANIFESTATION_TYPE => Manif_Latest =" + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getMANIFESTATION_TYPE() +
-                        " Manif_Extended=" + dataQualityJRBIContext.recordsFromExtendedManif.get(i).getMANIFESTATION_TYPE());
-
-                if (dataQualityJRBIContext.recordsFromLAtestManif.get(i).getMANIFESTATION_TYPE() != null ||
-                        (dataQualityJRBIContext.recordsFromExtendedManif.get(i).getMANIFESTATION_TYPE() != null)) {
-                    Assert.assertEquals("The MANIFESTATION_TYPE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromLAtestManif.get(i).getMANIFESTATION_TYPE(),
-                            dataQualityJRBIContext.recordsFromExtendedManif.get(i).getMANIFESTATION_TYPE());
-                }
-
-                String journalProdCodeExt = dataQualityJRBIContext.recordsFromLAtestManif.get(i).getJOURNAL_PROD_SITE();
-                String journalIssueTrimSize = dataQualityJRBIContext.recordsFromLAtestManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE();
-                String warRefExt = dataQualityJRBIContext.recordsFromLAtestManif.get(i).getWAR_REFERENCE();
-                if (dataQualityJRBIContext.recordsFromLAtestManif.get(i).getDELETE_FLAG() == "1") {
-                    journalProdCodeExt = null;
-                    journalIssueTrimSize = null;
-                    warRefExt = null;
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR() +
-                        " JOURNAL_PROD_SITE => Manif_Latest =" + journalProdCodeExt +
-                        " Manif_Extended=" + dataQualityJRBIContext.recordsFromExtendedManif.get(i).getJOURNAL_PROD_SITE());
-
-                if (journalProdCodeExt != null || dataQualityJRBIContext.recordsFromExtendedManif.get(i).getJOURNAL_PROD_SITE() != null) {
-                    Assert.assertEquals("The JOURNAL_PROD_SITE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR(),
-                            journalProdCodeExt, dataQualityJRBIContext.recordsFromExtendedManif.get(i).getJOURNAL_PROD_SITE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR() +
-                        " JOURNAL_ISSUE_TRIM_SIZE => Delta_Current_Exclude =" + journalIssueTrimSize +
-                        " Manif_Latest=" + dataQualityJRBIContext.recordsFromExtendedManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE());
-
-                if (journalIssueTrimSize != null || dataQualityJRBIContext.recordsFromExtendedManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null) {
-                    Assert.assertEquals("The JOURNAL_ISSUE_TRIM_SIZE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR(),
-                            journalIssueTrimSize, dataQualityJRBIContext.recordsFromExtendedManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR() +
-                        " WAR_REFERENCE => MAnif_Latest =" + warRefExt +
-                        " Manif_Extend=" + dataQualityJRBIContext.recordsFromExtendedManif.get(i).getWAR_REFERENCE());
-
-                if (warRefExt != null || dataQualityJRBIContext.recordsFromExtendedManif.get(i).getWAR_REFERENCE() != null) {
-                    Assert.assertEquals("The WAR_REFERENCE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR(),
-                            warRefExt, dataQualityJRBIContext.recordsFromLAtestManif.get(i).getWAR_REFERENCE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR() +
-                        " LAST_UPDATED_DATE => Manif_Latest =" + dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getLAST_UPDATED_DATE() +
-                        " Manif_Extended=" + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getLAST_UPDATED_DATE());
-
-                if (dataQualityJRBIContext.recordsFromLAtestManif.get(i).getLAST_UPDATED_DATE() != null ||
-                        (dataQualityJRBIContext.recordsFromExtendedManif.get(i).getLAST_UPDATED_DATE() != null)) {
-                    Assert.assertEquals("The LAST_UPDATED_DATE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromLAtestManif.get(i).getLAST_UPDATED_DATE(),
-                            dataQualityJRBIContext.recordsFromExtendedManif.get(i).getLAST_UPDATED_DATE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR() +
-                        " DELETE_FLAG => Manif_Latest =" + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getDELETE_FLAG() +
-                        " Manif_Extended=" + dataQualityJRBIContext.recordsFromExtendedManif.get(i).getDELETE_FLAG());
-
-                if (dataQualityJRBIContext.recordsFromLAtestManif.get(i).getDELETE_FLAG() != null ||
-                        (dataQualityJRBIContext.recordsFromExtendedManif.get(i).getDELETE_FLAG() != null)) {
-                    Assert.assertEquals("The DELETE_FLAG is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromLAtestManif.get(i).getDELETE_FLAG(),
-                            dataQualityJRBIContext.recordsFromExtendedManif.get(i).getDELETE_FLAG());
+                    Log.info("EPR => " +  dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR() +
+                            " " + strTemp + " => Delta_Exclde_Manif = " + method.invoke(objectToCompare1) +
+                            " Latest_Manif = " + method2.invoke(objectToCompare2));
+                    if (method.invoke(objectToCompare1) != null ||
+                            (method2.invoke(objectToCompare2) != null)) {
+                        Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in manifest_hsistory for EPR:"+dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i).getEPR(),
+                                method.invoke(objectToCompare1),
+                                method2.invoke(objectToCompare2));
+                    }
                 }
             }
         }
     }
-
-    @Then("^Get the records from Manif extended table$")
-    public void getRecordsFromProductDBManifestationExtended() {
-        Log.info("We get the records from ProductDB Manif Extended...");
-        sql = String.format(JRBIManifestationDataChecksSQL.Get_ProductDB_Manif_Extended_Records, Joiner.on("','").join(Ids));
-        Log.info(sql);
-        dataQualityJRBIContext.recordsFromProdManifExtended = DBManager.getDBResultAsBeanList(sql, JRBIDLManifestationAccessObject.class, Constants.AWS_URL);
-    }
-
-    @And("^Compare the records of transform latest manifestation and manifestation extended$")
-    public void compareLatestManifWithProductDBRecords() {
-        if (dataQualityJRBIContext.recordsFromLAtestManif.isEmpty()) {
-            Log.info("No Data Found ....");
-        } else {
-            Log.info("Sorting the EPR Ids to compare the records Latest Manif Exclude...");
-            for (int i = 0; i < dataQualityJRBIContext.recordsFromLAtestManif.size(); i++) {
-
-                dataQualityJRBIContext.recordsFromLAtestManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromProdManifExtended.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR));
-
-                Log.info("Transform_latest_Manifestation -> EPR => " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR() +
-                        "ProductDB_Manif_Extended -> EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR());
-                if (dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR() != null ||
-                        (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() != null)) {
-                    Assert.assertEquals("The EPR is =" + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR() + " is missing/not found in Delta_Current_Exclude table",
-                            dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR() +
-                        " JOURNAL_PROD_SITE => Transform_Latest_Manifestation =" + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getJOURNAL_PROD_SITE() +
-                        " ProductDB_Manifestation_Extended=" + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_PROD_SITE());
-
-                if (dataQualityJRBIContext.recordsFromLAtestManif.get(i).getJOURNAL_PROD_SITE() != null ||
-                        (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_PROD_SITE() != null)) {
-                    Assert.assertEquals("The JOURNAL_PROD_SITE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromLAtestManif.get(i).getJOURNAL_PROD_SITE(),
-                            dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_PROD_SITE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR() +
-                        " JOURNAL_ISSUE_TRIM_SIZE => Transform_Latest_Manifestation =" + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE() +
-                        " ProductDB_Manifestation_Extended=" + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_ISSUE_TRIM_SIZE());
-
-                if (dataQualityJRBIContext.recordsFromLAtestManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null ||
-                        (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null)) {
-                    Assert.assertEquals("The JOURNAL_ISSUE_TRIM_SIZE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromLAtestManif.get(i).getJOURNAL_ISSUE_TRIM_SIZE(),
-                            dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_ISSUE_TRIM_SIZE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR() +
-                        " WAR_REFERENCE => Transform_Latest_Manifestation =" + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getWAR_REFERENCE() +
-                        " ProductDB_Manifestation_Extended=" + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getWAR_REFERENCE());
-
-                if (dataQualityJRBIContext.recordsFromLAtestManif.get(i).getWAR_REFERENCE() != null ||
-                        (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getWAR_REFERENCE() != null)) {
-                    Assert.assertEquals("The WAR_REFERENCE is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromLAtestManif.get(i).getWAR_REFERENCE(),
-                            dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getWAR_REFERENCE());
-                }
-
-                Log.info("EPR => " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR() +
-                        " DELETE_FLAG => Transform_Latest_Manifestation =" + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getDELETE_FLAG() +
-                        " ProductDB_Manifestation_Extended=" + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getDELETE_FLAG());
-
-                if (dataQualityJRBIContext.recordsFromLAtestManif.get(i).getDELETE_FLAG() != null ||
-                        (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getDELETE_FLAG() != null)) {
-                    Assert.assertEquals("The DELETE_FLAG is incorrect for EPR = " + dataQualityJRBIContext.recordsFromLAtestManif.get(i).getEPR(),
-                            dataQualityJRBIContext.recordsFromLAtestManif.get(i).getDELETE_FLAG(),
-                            dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getDELETE_FLAG());
-                }
-            }
-        }
-    }
-
-//    @Then("^Get the records from Manifestation extended stitching table$")
-//    public void getManifExtendedJSONRec(String manifId) {
-//        Log.info("We get the JSON from Manifestation Stitching Tables...");
-//        Log.info(manifId);
-//        sql = String.format(JRBIManifestationDataChecksSQL.GET_MANIF_JSON_RECORDS, manifId);
-//        Log.info(sql);
-//        List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-//        JRBIAccessDLContext.recordsFromManifStitching = new Gson().fromJson(jsonValue.get(0).get("json"), JRBIManifExtJsonObject.class);
-//    }
-//
-//    @And("^compare manifestation extended and manifestation extended person role with manifestation stitching table$")
-//    public void compareManifExtendedAndStitching() {
-//        if (dataQualityJRBIContext.recordsFromProdManifExtended.isEmpty()) {
-//            Log.info("No Data Found ....");
-//        } else {
-//            for (int i = 0; i < dataQualityJRBIContext.recordsFromProdManifExtended.size(); i++) {
-//                String manifId = dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR();
-//                getManifExtendedJSONRec(manifId);
-//                Log.info("Manif_Extended -> EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() +
-//                        " Manif_JSON -> EPR => " + JRBIAccessDLContext.recordsFromManifStitching.getId());
-//                if (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() != null ||
-//                        (JRBIAccessDLContext.recordsFromManifStitching.getId() != null)) {
-//                    Assert.assertEquals("The EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() + " is missing/not found in Manif_Stitching table",
-//                            dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR(),
-//                            JRBIAccessDLContext.recordsFromManifStitching.getId());
-//                }
-//
-//                Log.info("EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() +
-//                        " Manif_Extended -> journalProdSiteCode => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_PROD_SITE() +
-//                        " Manif_JSON -> journalProdSiteCode => " + JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalProdSiteCode());
-//                if (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_PROD_SITE() != null ||
-//                        (JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalProdSiteCode() != null)) {
-//                    Assert.assertEquals("The journalProdSiteCode is incorrect for EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR(),
-//                            dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_PROD_SITE(),
-//                            JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalProdSiteCode());
-//                }
-//
-//                Log.info("EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() +
-//                        " Manif_Extended -> journalIssueTrimSize => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_ISSUE_TRIM_SIZE() +
-//                        " Manif_JSON -> journalIssueTrimSize => " + JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalIssueTrimSize());
-//                if (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_ISSUE_TRIM_SIZE() != null ||
-//                        (JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalIssueTrimSize() != null)) {
-//                    Assert.assertEquals("The journalIssueTrimSize is incorrect for EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR(),
-//                            dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getJOURNAL_ISSUE_TRIM_SIZE(),
-//                            JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getJournalIssueTrimSize());
-//                }
-//
-//                Log.info("EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR() +
-//                        " Manif_Extended -> warReference => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getWAR_REFERENCE() +
-//                        " Manif_JSON -> warReference => " + JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getWarReference());
-//                if (dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getWAR_REFERENCE() != null ||
-//                        (JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getWarReference() != null)) {
-//                    Assert.assertEquals("The warReference is incorrect for EPR => " + dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getEPR(),
-//                            dataQualityJRBIContext.recordsFromProdManifExtended.get(i).getWAR_REFERENCE(),
-//                            JRBIAccessDLContext.recordsFromManifStitching.getManifestationExtended().getWarReference());
-//                }
-//
-//            }
-//
-//        }
-//
-//    }
-
 }
 

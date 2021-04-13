@@ -1,6 +1,7 @@
 package com.eph.automation.testing.services.db.sql;
 
 public class APIDataSQL {
+    public static  String SELECT_RANDOM_PRODUCT_IDS_FOR_SEARCH_BOOKS = "";
     public static String SELECT_RANDOM_PRODUCT_IDS_FOR_SEARCH = "SELECT \"product_id\" as PRODUCT_ID\n" +
             "FROM semarchy_eph_mdm.gd_product WHERE f_manifestation is not null\n" +
 //            "WHERE exists\n" +

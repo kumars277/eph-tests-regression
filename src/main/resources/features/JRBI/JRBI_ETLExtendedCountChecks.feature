@@ -1,19 +1,22 @@
 Feature:Validate data count for JRBI Work,Manifestation and Person tables in Data Lake
 
 #  Created by Dinesh on 26/05/2020
+  #updated Dinesh on 07/04/2021
+  #confluence Version: v.3
+  #Confluence LinK: https://confluence.cbsels.com/pages/viewpage.action?pageId=168466078
 
 
 
-  @JRBItest
+  @JRBI
   Scenario Outline: Verify Data Count for JRBI transform_Current_tables is transferred from Source Table
     Given Get the total count of JRBI Data from Full Load <tableName>
     Then  We know the total count of Current JRBI data from <tableName>
     And Compare count of Full load with current <tableName> table are identical
     Examples:
       | tableName                                |
-   |jrbi_transform_current_work              |
-    |jrbi_transform_current_manifestation       |
-    |jrbi_transform_current_person              |
+      |jrbi_transform_current_work                 |
+      |jrbi_transform_current_manifestation       |
+      |jrbi_transform_current_person              |
 
 
   @JRBI
@@ -41,6 +44,20 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
 
 
   @JRBI
+  Scenario Outline: Verify Data count for JRBI delta_current tables are transferred from Current and Previous tables
+    Given Get the difference of total count between current and previous Table <TargetTable>
+    Then We know the delta current count for tables <TargetTable>
+    And Compare delta count of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
+    Examples:
+      |FirstSourceTable                     |SecondSourceTable                     |TargetTable                            |
+      |jrbi_transform_current_work          |jrbi_transform_previous_work          |jrbi_delta_current_work |
+      | jrbi_transform_current_manifestation|jrbi_transform_previous_manifestation |jrbi_delta_current_manifestation|
+      |jrbi_transform_current_person        |jrbi_transform_previous_person        |jrbi_delta_current_person|
+
+
+
+
+  @JRBI
   Scenario Outline: Verify Data count for JRBI delta_current_exclude are transferred from delta_current and current_history tables
     Given Get the total count difference between delta current and transform current history Table <TargetTable>
     Then Get the JRBI <TargetTable> exclude data count
@@ -64,16 +81,6 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
 
 
 
-  @JRBI
-  Scenario Outline: Verify Data count for JRBI delta_current tables are transferred from Current and Previous tables
-    Given Get the difference of total count between current and previous Table <TargetTable>
-    Then We know the delta current count for tables <TargetTable>
-    And Compare delta count of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
-    Examples:
-      |FirstSourceTable                 |SecondSourceTable                               |TargetTable                            |
-      |jrbi_transform_current_work          |jrbi_transform_previous_work          |jrbi_delta_current_work |
-      | jrbi_transform_current_manifestation|jrbi_transform_previous_manifestation |jrbi_delta_current_manifestation|
-      |jrbi_transform_current_person        |jrbi_transform_previous_person        |jrbi_delta_current_person|
 
   @JRBI
   Scenario Outline: Verify Data count for JRBI delta_current_history tables are transferred from delta_current_work tables
@@ -96,38 +103,4 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
         |jrbi_transform_latest_manifestation  |
         |jrbi_transform_latest_person         |
 
-
-
-  @JRBIExtended
-  Scenario: Verify Data count for JRBI work_extended tables are transferred from work_latest tables
-    Given Get the total count of work latest table
-    Then Get the total count of work extended table
-    And Compare the counts of work latest and work extended table are identical
-
-
-  @JRBIExtended
-  Scenario: Verify Data count for JRBI manif_extended tables are transferred from manif_latest tables
-    Given Get the total count of manif latest table
-    Then Get the total count of manif extended table
-    And Compare the counts of manif latest and manif extended table are identical
-
-  @JRBIExtended
-  Scenario: Verify Data count for JRBI person_extended tables are transferred from person_latest tables
-    Given Get the total count of person latest table
-    Then Get the total count of person extended table
-    And Compare the counts of person latest and person extended table are identical
-
-
-  @JRBIStitching
-  Scenario: Verify Data count for JRBI stch_manifestation_ext_json tables are transferred from manif_extended tables
-    Given Get the total count of manif extended table for stitch
-    Then Get the total count of stitching manif json table
-    And Compare the counts of stitching manif json and manif extended table are identical
-
-
-  @JRBIStitching
-  Scenario: Verify Data count for JRBI stch_work_ext_json tables are transferred from work_extended tables
-    Given Get the total count of work extended table for Stitch
-    Then Get the total count of stitching work json table
-    And Compare the counts of stitching work json and work extended table are identical
 

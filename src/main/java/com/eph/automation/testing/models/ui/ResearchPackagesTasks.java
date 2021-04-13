@@ -17,7 +17,7 @@ public class ResearchPackagesTasks {
         tasks.openPage(Constants.RESEARCH_PACKAGES_SIT_UI);
     }
 
-    public void loginByScienceAccount(String scienceEmailId) {
+    public void loginByScienceAccount(String scienceEmailId) throws InterruptedException{
         String methodName="loginByScienceAccount";
         try{
             if(tasks.verifyElementisDisplayed("NAME",ResearchPackagesConstants.LoginByEmail)){
@@ -29,7 +29,7 @@ public class ResearchPackagesTasks {
         }
     }
 
-    public void impersonateUser() {
+    public void impersonateUser() throws InterruptedException {
         String methodName = "impersonateUser";
         try{
          if(!tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.USER_ROLE)){
@@ -48,7 +48,7 @@ public class ResearchPackagesTasks {
         }
     }
 
-    public void specialCollectionJournals() {
+    public void specialCollectionJournals() throws InterruptedException {
         String methodName="specialCollectionJournals";
         try{
             if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.SELECT_DJC)){
@@ -205,8 +205,8 @@ public class ResearchPackagesTasks {
             if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.PENDING_JOURNAL)){
                     tasks.click("XPATH",ResearchPackagesConstants.PENDING_JOURNAL);
                     tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_DROPDOWN);
-                //    WebElement reqElement = tasks.findElement("XPATH", ResearchPackagesConstants.CHOOSE_REASON_PENDING);
-                    tasks.keyboardEvents("XPATH", ResearchPackagesConstants.CHOOSE_REASON_PENDING,"RETURN");
+                  //  WebElement reqElement = tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_PENDING);
+                    tasks.keyboardEvents("XPATH", ResearchPackagesConstants.CHOOSE_REASON_INCLUDE,"RETURN");
                     tasks.sendKeys("XPATH", ResearchPackagesConstants.ADD_REMARKS,"Awaiting for the Response");
                     tasks.click("XPATH", ResearchPackagesConstants.EXCLUDE_ADD);
             }
@@ -223,7 +223,7 @@ public class ResearchPackagesTasks {
             if(tasks.verifyElementisDisplayed("XPATH",ResearchPackagesConstants.INCLUDE_JOURNAL)){
                 tasks.click("XPATH",ResearchPackagesConstants.INCLUDE_JOURNAL);
                 tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_DROPDOWN);
-           //     WebElement reqElement = tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_INCLUDE);
+             //   WebElement reqElement = tasks.click("XPATH", ResearchPackagesConstants.CHOOSE_REASON_INCLUDE);
                 tasks.keyboardEvents("XPATH", ResearchPackagesConstants.CHOOSE_REASON_INCLUDE,"RETURN");
                 tasks.sendKeys("XPATH", ResearchPackagesConstants.ADD_REMARKS,"Adding as New Journal");
                 tasks.click("XPATH", ResearchPackagesConstants.EXCLUDE_ADD);

@@ -1,6 +1,11 @@
 Feature:Validate data for JRBI Person tables in Data Lake
 
 #  Created by Dinesh on 26/05/2020
+  #  Created by Dinesh on 26/05/2020
+  #updated Dinesh on 07/04/2021
+  #confluence Version: v.3
+  #Confluence LinK: https://confluence.cbsels.com/pages/viewpage.action?pageId=168466078
+
 
   @JRBI
   Scenario Outline: Verify Data for JRBI transform_current_person is transferred from person_data_full
@@ -10,7 +15,7 @@ Feature:Validate data for JRBI Person tables in Data Lake
     And   Compare the records of person full load and current person
     Examples:
       | tableName                        |    countOfRandomIds|
-      |jrbi_journal_data_full             |1000              |
+      |jrbi_journal_data_full             |10            |
 
 
   @JRBI
@@ -24,7 +29,7 @@ Feature:Validate data for JRBI Person tables in Data Lake
       |jrbi_transform_current_person|   10                 |
 
 
-  @JRBI
+  @JRBIP
   Scenario Outline: Verify Data for JRBI transform_previous_person_history is transferred from Previous Person
     Given We get the <countOfRandomIds> random Person EPR ids <sourceTable>
     When Get the records from transform previous person
@@ -61,7 +66,7 @@ Feature:Validate data for JRBI Person tables in Data Lake
   Scenario Outline: Verify Data from the difference of Delta_person and person_history is transferred to person exclude table
     Given We get the <countOfRandomIds> random Person EPR ids <tableName>
     When Get the records from the difference of Delta_current_person and person_history
-    Then Get the records from person exclude table
+    And Get the records from person exclude jrbi ext table
     And  Compare the records of Person Exclude with difference of Delta_current_person and person_history
     Examples:
       |tableName                                | countOfRandomIds|
@@ -76,13 +81,3 @@ Feature:Validate data for JRBI Person tables in Data Lake
     Examples:
       |tableName                                | countOfRandomIds|
       |jrbi_transform_latest_person               |10                 |
-
-  @JRBIExtended
-  Scenario Outline: Verify Data for product person extended is transferred from jrbi_transform_latest_person
-    Given We get the <countOfRandomIds> random Person EPR ids <sourceTable>
-    When Get the records from Person latest table
-    Then Get the records from person extended table
-    And Compare the records of transform latest person and person extended
-    Examples:
-      | sourceTable                       |  countOfRandomIds|
-      |jrbi_transform_latest_person       | 10               |

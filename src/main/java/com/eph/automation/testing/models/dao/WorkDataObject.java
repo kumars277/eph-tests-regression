@@ -65,6 +65,9 @@ public class WorkDataObject {
     private String OWNERSHIP;
     private String PMG;
 
+    public String getIDENTIFIER() {return IDENTIFIER;}
+    public void setIDENTIFIER(String IDENTIFIER) {this.IDENTIFIER = IDENTIFIER;}
+
 
     //for Data Model Changes: created by Nishant @ 11 Jun 2020 for
     public String getPLANNED_LAUNCH_DATE() {return PLANNED_LAUNCH_DATE;}
@@ -94,9 +97,6 @@ public class WorkDataObject {
 
     public String getSUBSCRIPTION_TYPE() {return SUBSCRIPTION_TYPE;}
     public void setSUBSCRIPTION_TYPE(String SUBSCRIPTION_TYPE) {this.SUBSCRIPTION_TYPE = SUBSCRIPTION_TYPE;}
-
-    public String getIDENTIFIER() {return IDENTIFIER;}
-    public void setIDENTIFIER(String IDENTIFIER) {this.IDENTIFIER = IDENTIFIER;}
 
     public String getPRIMARY_ISBN() {return PRIMARY_ISBN;}
     public void setPRIMARY_ISBN(String PRIMARY_ISBN) {this.PRIMARY_ISBN = PRIMARY_ISBN;}
@@ -194,6 +194,7 @@ public class WorkDataObject {
     public String getF_accountable_product() {return f_accountable_product;}
     public void setF_accountable_product(String f_accountable_product) {this.f_accountable_product = f_accountable_product;}
 
+
     public String getPARENT_ACC_PROD() {return PARENT_ACC_PROD;}
     public void setPARENT_ACC_PROD(String PARENT_ACC_PROD) {this.PARENT_ACC_PROD = PARENT_ACC_PROD;}
 
@@ -257,4 +258,6 @@ public class WorkDataObject {
                 WORK_STATUS, WORK_SUBSTATUS, WORK_TYPE, IMPRINT, OPEN_ACCESS_TYPE, PRODUCT_WORK_ID,
                 F_ACC_PROD_HIERARCHY, F_RESPONSIBILITY_CENTRE, F_OPCO_R12, PRODUCT_WORK_PUB_DATE, JOURNAL_ACRONYM);
     }
+
+
 }

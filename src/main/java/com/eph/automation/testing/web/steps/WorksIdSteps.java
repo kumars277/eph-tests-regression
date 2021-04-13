@@ -31,7 +31,7 @@ public class WorksIdSteps {
     public DataQualityContext dataQualityContext;
     public String sql;
     private String numberOfRecords;
-//    private static List<WorkDataObject> data;
+    //    private static List<WorkDataObject> data;
     private static List<WorkDataObject> dataFromSTG;
     private static List<WorkDataObject> dataFromSA;
     private static List<WorkDataObject> dataFromSAId;
@@ -57,24 +57,24 @@ public class WorksIdSteps {
         }
         Log.info("numberOfRecords = " + numberOfRecords);
 
-            if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                sql = String.format(WorksIdentifierSQL.getRandomProductNum, type, numberOfRecords);
+        if(System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            sql = String.format(WorksIdentifierSQL.getRandomProductNum, type, numberOfRecords);
 
-                List<Map<?, ?>> workIds = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
-                ids = workIds.stream().map(m -> (BigDecimal) m.get("random_value")).map(String::valueOf).collect(Collectors.toList());
-                Log.info("ids : " + ids);
+            List<Map<?, ?>> workIds = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
+            ids = workIds.stream().map(m -> (BigDecimal) m.get("random_value")).map(String::valueOf).collect(Collectors.toList());
+            Log.info("ids : " + ids);
 
 //                data = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-                System.out.print(sql);
+            System.out.print(sql);
 
 
 //                dataQualityContext.productIdFromStg = data.get(0).random_value;
 
 
 
-                Log.info("\n The product number is " + dataQualityContext.productIdFromStg);
-            }else {
-                Log.info("Skipping test because Delta load is performed");
+            Log.info("\n The product number is " + dataQualityContext.productIdFromStg);
+        }else {
+            Log.info("Skipping test because Delta load is performed");
                 /*
                 sql = WorkCountSQL.GET_REFRESH_DATE;
                 refreshDate =DBManager.getDBResultAsBeanList(sql, WorkDataObject.class,
@@ -82,7 +82,7 @@ public class WorksIdSteps {
                 sql = WorksIdentifierSQL.getRandomProductNumDelta
                         .replace("PARAM1", type)
                         .replace("PARAM2", refreshDate.get(1).refresh_timestamp);*/
-            }
+        }
 //        }else {
 //            sql = WorksIdentifierSQL.getRandomProductNum
 //                    .replace("PARAM1", type);
@@ -116,7 +116,7 @@ public class WorksIdSteps {
                         , dataFromSA.get(0).getWORK_ID());
                 dataFromGDId = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
             }
-    }else{
+        }else{
             Log.info("Skipping test because DELTA LOAD is performed");
         }
     }
@@ -150,7 +150,7 @@ public class WorksIdSteps {
 
                 Assert.assertEquals("The number of non-null identifiers don't match", dataFromSTGCount.size(), dataFromSAId.size());
             }
-    }else{
+        }else{
             Log.info("Skipping test because DELTA LOAD is performed");
         }
     }
@@ -401,25 +401,25 @@ public class WorksIdSteps {
     @Given("^We know the work identifiers count in staging from column (.*) and (.*)$")
     public void getSTGCount(String column, String type){
 
-            if ((System.getProperty("LOAD") == null) || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE, column);
-                System.out.print(sql);
-                List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
-                stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
+        if ((System.getProperty("LOAD") == null) || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_TABLE, column);
+            System.out.print(sql);
+            List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
+            stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
 
-                Log.info("\n The count in stg for " + column + " is " + stgCount);
-            }else {
-                sql = WorkCountSQL.GET_REFRESH_DATE;
-                Log.info(sql);
-                List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-                String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
+            Log.info("\n The count in stg for " + column + " is " + stgCount);
+        }else {
+            sql = WorkCountSQL.GET_REFRESH_DATE;
+            Log.info(sql);
+            List<Map<String, Object>> refreshDateNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+            String refreshDate = (String) refreshDateNumber.get(1).get("refresh_timestamp");
 
-                sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA, column,refreshDate,type);
-                System.out.print(sql);
-                List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
-                stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
-                Log.info("\n The count in stg for " + column + " is " + stgCount);
-            }
+            sql = String.format(WorksIdentifierSQL.COUNT_OF_RECORDS_WITH_ISBN_IN_EPH_STG_WORK_DELTA, column,refreshDate,type);
+            System.out.print(sql);
+            List<Map<String, Object>> stgCountNumber = DBManager.getDBResultMapWithSetSchema(sql, Constants.EPH_URL);
+            stgCount = ((Long) stgCountNumber.get(0).get("count")).intValue();
+            Log.info("\n The count in stg for " + column + " is " + stgCount);
+        }
     }
 
     @When("^We get the work identifier count from SA and GD (.*)$")
@@ -463,36 +463,36 @@ public class WorksIdSteps {
             numberOfRecords = "5";
         }
         Log.info("numberOfRecords = " + numberOfRecords);
-            if ((System.getProperty("LOAD") == null) || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                Log.info("There is no delta load performed");
-            } else {
-                sql = WorksIdentifierSQL.getEndDatedIdentifierDataFromGD.replace("PARAM1",numberOfRecords);
-                Log.info(sql);
-                List<Map<?, ?>> randomWorkID = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        if ((System.getProperty("LOAD") == null) || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            Log.info("There is no delta load performed");
+        } else {
+            sql = WorksIdentifierSQL.getEndDatedIdentifierDataFromGD.replace("PARAM1",numberOfRecords);
+            Log.info(sql);
+            List<Map<?, ?>> randomWorkID = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
-                workid = randomWorkID.stream().map(m -> (String) m.get("F_WWORK")).collect(Collectors.toList());
-                Log.info(workid.toString());
-                if (CollectionUtils.isEmpty(workid)){
-                    Log.info("No identifiers were updated");
-                } else {
-                    Log.info("There are "+workid.size()+" updated identifiers");
-                }
+            workid = randomWorkID.stream().map(m -> (String) m.get("F_WWORK")).collect(Collectors.toList());
+            Log.info(workid.toString());
+            if (CollectionUtils.isEmpty(workid)){
+                Log.info("No identifiers were updated");
+            } else {
+                Log.info("There are "+workid.size()+" updated identifiers");
             }
+        }
 
     }
 
 
     @When("^We get the data for the identifier from staging$")
     public void getNewStgData(){
-            if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
-                Log.info("There is no delta load performed");
+        if (System.getProperty("LOAD") == null || System.getProperty("LOAD").equalsIgnoreCase("FULL_LOAD")) {
+            Log.info("There is no delta load performed");
+        } else {
+            if (CollectionUtils.isEmpty(workid)) {
+                Log.info("No identifiers were updated");
             } else {
-                if (CollectionUtils.isEmpty(workid)) {
-                    Log.info("No identifiers were updated");
-                } else {
-                    Log.info("There are " + workid.size() + " updated identifiers");
-                }
+                Log.info("There are " + workid.size() + " updated identifiers");
             }
+        }
 
 //
     }

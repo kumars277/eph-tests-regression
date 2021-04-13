@@ -1,6 +1,10 @@
 Feature:Validate data for JRBI Manifestation tables in Data Lake
 
 #  Created by Dinesh on 26/05/2020
+  #updated Dinesh on 07/04/2021
+  #confluence Version: v.3
+  #Confluence LinK: https://confluence.cbsels.com/pages/viewpage.action?pageId=168466078
+
 
   @JRBI
   Scenario Outline: Verify Data for JRBI transform_Current_manifestation is transferred from data_full_manifestation
@@ -60,7 +64,7 @@ Feature:Validate data for JRBI Manifestation tables in Data Lake
   Scenario Outline: Verify Data from the difference of Delta_manif and manif_history is transferred to manif exclude table
     Given We get the <countOfRandomIds> random manifestation EPR ids <tableName>
     When Get the records from the difference of Delta_current_manif and manif_history
-    Then Get the records from manifestation exclude table
+    And Get the records from manifestation jrbi exclude extended tables
     And  Compare the records of Manif Exclude with difference of Delta_current_manif and manif_history
     Examples:
       |tableName                                      | countOfRandomIds|
@@ -76,22 +80,4 @@ Feature:Validate data for JRBI Manifestation tables in Data Lake
       |tableName                                | countOfRandomIds|
       |jrbi_transform_latest_manifestation      |10                 |
 
-  @JRBIExtended
-  Scenario Outline: Verify Data for product manifestation extended is transferred from jrbi_transform_latest_manifestation
-    Given We get the <countOfRandomIds> random manifestation EPR ids <sourceTable>
-    When Get the records from manifestation latest table
-    Then Get the records from Manif extended table
-    And Compare the records of transform latest manifestation and manifestation extended
-    Examples:
-      | sourceTable                       |  countOfRandomIds|
-      |jrbi_transform_latest_manifestation| 10               |
-
-  @JRBIStitching
-  Scenario Outline: Verify Data from the Manif_extended transferred to Manif Extended Stitching table-testing
-    Given We get the <countOfRandomIds> random manifestation EPR ids <tableName>
-    And Get the records from Manif extended table
-    Then compare manifestation extended and manifestation extended person role with manifestation stitching table
-    Examples:
-      |tableName                   |countOfRandomIds|
-      |manifestation_extended               |10                 |
 
