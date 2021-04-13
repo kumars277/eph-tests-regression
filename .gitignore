@@ -15,5 +15,5 @@ gen
 .project 
 
 # Maven
-target/
+#target/
 configTest.properties
