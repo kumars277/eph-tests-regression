@@ -1,0 +1,2458 @@
+[
+  {
+    "line": 1,
+    "elements": [
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 113033600,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 11,
+        "name": "When no product is found \"There are no results that match your search\" is displayed",
+        "description": "",
+        "id": "product-finder-selenium-tests;when-no-product-is-found-\"there-are-no-results-that-match-your-search\"-is-displayed;;2",
+        "after": [
+          {
+            "result": {
+              "duration": 172600,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 25551014900,
+              "status": "passed"
+            },
+            "line": 6,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 7821996200,
+              "status": "passed"
+            },
+            "line": 7,
+            "name": "user is searching for \"abcdefg1234567890\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "abcdefg1234567890",
+                  "offset": 23
+                }
+              ],
+              "location": "ProductFinderUISteps.search_for_string(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 74704900,
+              "status": "passed"
+            },
+            "line": 8,
+            "name": "No results message is displayed for \"abcdefg1234567890\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "abcdefg1234567890",
+                  "offset": 37
+                }
+              ],
+              "location": "ProductFinderUISteps.no_results_message_is_displayed_for(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 4,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 4,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 116000,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 12,
+        "name": "When no product is found \"There are no results that match your search\" is displayed",
+        "description": "",
+        "id": "product-finder-selenium-tests;when-no-product-is-found-\"there-are-no-results-that-match-your-search\"-is-displayed;;3",
+        "after": [
+          {
+            "result": {
+              "duration": 181100,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 70715092500,
+              "status": "passed"
+            },
+            "line": 6,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 6619347100,
+              "status": "passed"
+            },
+            "line": 7,
+            "name": "user is searching for \"invalidSearch\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "invalidSearch",
+                  "offset": 23
+                }
+              ],
+              "location": "ProductFinderUISteps.search_for_string(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 68278800,
+              "status": "passed"
+            },
+            "line": 8,
+            "name": "No results message is displayed for \"invalidSearch\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "invalidSearch",
+                  "offset": 37
+                }
+              ],
+              "location": "ProductFinderUISteps.no_results_message_is_displayed_for(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 4,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 4,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 128500,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 13,
+        "name": "When no product is found \"There are no results that match your search\" is displayed",
+        "description": "",
+        "id": "product-finder-selenium-tests;when-no-product-is-found-\"there-are-no-results-that-match-your-search\"-is-displayed;;4",
+        "after": [
+          {
+            "result": {
+              "duration": 252000,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 71005595300,
+              "status": "passed"
+            },
+            "line": 6,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 6634268600,
+              "status": "passed"
+            },
+            "line": 7,
+            "name": "user is searching for \"1234567890\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "1234567890",
+                  "offset": 23
+                }
+              ],
+              "location": "ProductFinderUISteps.search_for_string(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 72759300,
+              "status": "passed"
+            },
+            "line": 8,
+            "name": "No results message is displayed for \"1234567890\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "1234567890",
+                  "offset": 37
+                }
+              ],
+              "location": "ProductFinderUISteps.no_results_message_is_displayed_for(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 4,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 4,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 98100,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 24,
+        "name": "verify search Suggestion displayed",
+        "description": "",
+        "id": "product-finder-selenium-tests;verify-search-suggestion-displayed;;2",
+        "after": [
+          {
+            "result": {
+              "duration": 109900,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 71011474000,
+              "status": "passed"
+            },
+            "line": 19,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 6638726600,
+              "status": "passed"
+            },
+            "line": 20,
+            "name": "user is searching for \"Euroopean Joournal\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Euroopean Joournal",
+                  "offset": 23
+                }
+              ],
+              "location": "ProductFinderUISteps.search_for_string(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 59071600,
+              "status": "passed"
+            },
+            "line": 21,
+            "name": "capture search suggestion for \"Euroopean Joournal\" and validate with \"european journal\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Euroopean Joournal",
+                  "offset": 31
+                },
+                {
+                  "val": "european journal",
+                  "offset": 70
+                }
+              ],
+              "location": "ProductFinderUISteps.searchSuggestion_is_displayed_for(String,String)"
+            },
+            "matchedColumns": [
+              0,
+              1
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 17,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 17,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 81400,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 25,
+        "name": "verify search Suggestion displayed",
+        "description": "",
+        "id": "product-finder-selenium-tests;verify-search-suggestion-displayed;;3",
+        "after": [
+          {
+            "result": {
+              "duration": 685700,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 70369062400,
+              "status": "passed"
+            },
+            "line": 19,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 6649703800,
+              "status": "passed"
+            },
+            "line": 20,
+            "name": "user is searching for \"Eropean Joournal\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Eropean Joournal",
+                  "offset": 23
+                }
+              ],
+              "location": "ProductFinderUISteps.search_for_string(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 74453300,
+              "status": "passed"
+            },
+            "line": 21,
+            "name": "capture search suggestion for \"Eropean Joournal\" and validate with \"european journal\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Eropean Joournal",
+                  "offset": 31
+                },
+                {
+                  "val": "european journal",
+                  "offset": 68
+                }
+              ],
+              "location": "ProductFinderUISteps.searchSuggestion_is_displayed_for(String,String)"
+            },
+            "matchedColumns": [
+              0,
+              1
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 17,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 17,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 154900,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 26,
+        "name": "verify search Suggestion displayed",
+        "description": "",
+        "id": "product-finder-selenium-tests;verify-search-suggestion-displayed;;4",
+        "after": [
+          {
+            "result": {
+              "duration": 121700,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 69745959900,
+              "status": "passed"
+            },
+            "line": 19,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 6609222800,
+              "status": "passed"
+            },
+            "line": 20,
+            "name": "user is searching for \"Americaan\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Americaan",
+                  "offset": 23
+                }
+              ],
+              "location": "ProductFinderUISteps.search_for_string(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 67707800,
+              "status": "passed"
+            },
+            "line": 21,
+            "name": "capture search suggestion for \"Americaan\" and validate with \"american\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Americaan",
+                  "offset": 31
+                },
+                {
+                  "val": "american",
+                  "offset": 61
+                }
+              ],
+              "location": "ProductFinderUISteps.searchSuggestion_is_displayed_for(String,String)"
+            },
+            "matchedColumns": [
+              0,
+              1
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 17,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 17,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 112500,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 27,
+        "name": "verify search Suggestion displayed",
+        "description": "",
+        "id": "product-finder-selenium-tests;verify-search-suggestion-displayed;;5",
+        "after": [
+          {
+            "result": {
+              "duration": 165700,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 69576376800,
+              "status": "passed"
+            },
+            "line": 19,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 6593318400,
+              "status": "passed"
+            },
+            "line": 20,
+            "name": "user is searching for \"Aerican\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Aerican",
+                  "offset": 23
+                }
+              ],
+              "location": "ProductFinderUISteps.search_for_string(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 68257100,
+              "status": "passed"
+            },
+            "line": 21,
+            "name": "capture search suggestion for \"Aerican\" and validate with \"american\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Aerican",
+                  "offset": 31
+                },
+                {
+                  "val": "american",
+                  "offset": 59
+                }
+              ],
+              "location": "ProductFinderUISteps.searchSuggestion_is_displayed_for(String,String)"
+            },
+            "matchedColumns": [
+              0,
+              1
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 17,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 17,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 131200,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 28,
+        "name": "verify search Suggestion displayed",
+        "description": "",
+        "id": "product-finder-selenium-tests;verify-search-suggestion-displayed;;6",
+        "after": [
+          {
+            "result": {
+              "duration": 119300,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 70716562200,
+              "status": "passed"
+            },
+            "line": 19,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 6552860200,
+              "status": "passed"
+            },
+            "line": 20,
+            "name": "user is searching for \"Amercan\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Amercan",
+                  "offset": 23
+                }
+              ],
+              "location": "ProductFinderUISteps.search_for_string(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 70210100,
+              "status": "passed"
+            },
+            "line": 21,
+            "name": "capture search suggestion for \"Amercan\" and validate with \"american\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Amercan",
+                  "offset": 31
+                },
+                {
+                  "val": "american",
+                  "offset": 59
+                }
+              ],
+              "location": "ProductFinderUISteps.searchSuggestion_is_displayed_for(String,String)"
+            },
+            "matchedColumns": [
+              0,
+              1
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 17,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 17,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 96900,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 29,
+        "name": "verify search Suggestion displayed",
+        "description": "",
+        "id": "product-finder-selenium-tests;verify-search-suggestion-displayed;;7",
+        "after": [
+          {
+            "result": {
+              "duration": 127500,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 69773644400,
+              "status": "passed"
+            },
+            "line": 19,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 6615674400,
+              "status": "passed"
+            },
+            "line": 20,
+            "name": "user is searching for \"Neveer\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Neveer",
+                  "offset": 23
+                }
+              ],
+              "location": "ProductFinderUISteps.search_for_string(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 67274200,
+              "status": "passed"
+            },
+            "line": 21,
+            "name": "capture search suggestion for \"Neveer\" and validate with \"never\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Neveer",
+                  "offset": 31
+                },
+                {
+                  "val": "never",
+                  "offset": 58
+                }
+              ],
+              "location": "ProductFinderUISteps.searchSuggestion_is_displayed_for(String,String)"
+            },
+            "matchedColumns": [
+              0,
+              1
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 17,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 17,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 89900,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 30,
+        "name": "verify search Suggestion displayed",
+        "description": "",
+        "id": "product-finder-selenium-tests;verify-search-suggestion-displayed;;8",
+        "after": [
+          {
+            "result": {
+              "duration": 127700,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 69349909000,
+              "status": "passed"
+            },
+            "line": 19,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 6671076800,
+              "status": "passed"
+            },
+            "line": 20,
+            "name": "user is searching for \"Actualitées pharmaceutiques\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Actualitées pharmaceutiques",
+                  "offset": 23
+                }
+              ],
+              "location": "ProductFinderUISteps.search_for_string(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 70112900,
+              "status": "passed"
+            },
+            "line": 21,
+            "name": "capture search suggestion for \"Actualitées pharmaceutiques\" and validate with \"actualites pharmaceutiques\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Actualitées pharmaceutiques",
+                  "offset": 31
+                },
+                {
+                  "val": "actualites pharmaceutiques",
+                  "offset": 79
+                }
+              ],
+              "location": "ProductFinderUISteps.searchSuggestion_is_displayed_for(String,String)"
+            },
+            "matchedColumns": [
+              0,
+              1
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 17,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 17,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 90500,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 31,
+        "name": "verify search Suggestion displayed",
+        "description": "",
+        "id": "product-finder-selenium-tests;verify-search-suggestion-displayed;;9",
+        "after": [
+          {
+            "result": {
+              "duration": 136900,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 69559707500,
+              "status": "passed"
+            },
+            "line": 19,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 6597417200,
+              "status": "passed"
+            },
+            "line": 20,
+            "name": "user is searching for \"amrica\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "amrica",
+                  "offset": 23
+                }
+              ],
+              "location": "ProductFinderUISteps.search_for_string(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 65404800,
+              "status": "passed"
+            },
+            "line": 21,
+            "name": "capture search suggestion for \"amrica\" and validate with \"america\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "amrica",
+                  "offset": 31
+                },
+                {
+                  "val": "america",
+                  "offset": 58
+                }
+              ],
+              "location": "ProductFinderUISteps.searchSuggestion_is_displayed_for(String,String)"
+            },
+            "matchedColumns": [
+              0,
+              1
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 17,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 17,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 85100,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 32,
+        "name": "verify search Suggestion displayed",
+        "description": "",
+        "id": "product-finder-selenium-tests;verify-search-suggestion-displayed;;10",
+        "after": [
+          {
+            "result": {
+              "duration": 254100,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 70201780000,
+              "status": "passed"
+            },
+            "line": 19,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 6512690400,
+              "status": "passed"
+            },
+            "line": 20,
+            "name": "user is searching for \"africa\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "africa",
+                  "offset": 23
+                }
+              ],
+              "location": "ProductFinderUISteps.search_for_string(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 110034400,
+              "status": "passed"
+            },
+            "line": 21,
+            "name": "capture search suggestion for \"africa\" and validate with \"africa\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "africa",
+                  "offset": 31
+                },
+                {
+                  "val": "africa",
+                  "offset": 58
+                }
+              ],
+              "location": "ProductFinderUISteps.searchSuggestion_is_displayed_for(String,String)"
+            },
+            "matchedColumns": [
+              0,
+              1
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 17,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 17,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 108700,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 33,
+        "name": "verify search Suggestion displayed",
+        "description": "",
+        "id": "product-finder-selenium-tests;verify-search-suggestion-displayed;;11",
+        "after": [
+          {
+            "result": {
+              "duration": 218300,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 70253009300,
+              "status": "passed"
+            },
+            "line": 19,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 6590634800,
+              "status": "passed"
+            },
+            "line": 20,
+            "name": "user is searching for \"america\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "america",
+                  "offset": 23
+                }
+              ],
+              "location": "ProductFinderUISteps.search_for_string(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 143033500,
+              "status": "passed"
+            },
+            "line": 21,
+            "name": "capture search suggestion for \"america\" and validate with \"america\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "america",
+                  "offset": 31
+                },
+                {
+                  "val": "america",
+                  "offset": 59
+                }
+              ],
+              "location": "ProductFinderUISteps.searchSuggestion_is_displayed_for(String,String)"
+            },
+            "matchedColumns": [
+              0,
+              1
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 17,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 17,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 237100,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 34,
+        "name": "verify search Suggestion displayed",
+        "description": "",
+        "id": "product-finder-selenium-tests;verify-search-suggestion-displayed;;12",
+        "after": [
+          {
+            "result": {
+              "duration": 132200,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 69683341800,
+              "status": "passed"
+            },
+            "line": 19,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 6562123700,
+              "status": "passed"
+            },
+            "line": 20,
+            "name": "user is searching for \"anerica\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "anerica",
+                  "offset": 23
+                }
+              ],
+              "location": "ProductFinderUISteps.search_for_string(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 76303400,
+              "status": "passed"
+            },
+            "line": 21,
+            "name": "capture search suggestion for \"anerica\" and validate with \"america\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "anerica",
+                  "offset": 31
+                },
+                {
+                  "val": "america",
+                  "offset": 59
+                }
+              ],
+              "location": "ProductFinderUISteps.searchSuggestion_is_displayed_for(String,String)"
+            },
+            "matchedColumns": [
+              0,
+              1
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 17,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 17,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 83000,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 35,
+        "name": "verify search Suggestion displayed",
+        "description": "",
+        "id": "product-finder-selenium-tests;verify-search-suggestion-displayed;;13",
+        "after": [
+          {
+            "result": {
+              "duration": 133400,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 70419697100,
+              "status": "passed"
+            },
+            "line": 19,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 6582408400,
+              "status": "passed"
+            },
+            "line": 20,
+            "name": "user is searching for \"anrica\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "anrica",
+                  "offset": 23
+                }
+              ],
+              "location": "ProductFinderUISteps.search_for_string(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "When "
+          },
+          {
+            "result": {
+              "duration": 59391500,
+              "status": "passed"
+            },
+            "line": 21,
+            "name": "capture search suggestion for \"anrica\" and validate with \"africa\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "anrica",
+                  "offset": 31
+                },
+                {
+                  "val": "africa",
+                  "offset": 58
+                }
+              ],
+              "location": "ProductFinderUISteps.searchSuggestion_is_displayed_for(String,String)"
+            },
+            "matchedColumns": [
+              0,
+              1
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 17,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 17,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 901700,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 47,
+        "name": "Search the work and filter them with Work Status",
+        "description": "",
+        "id": "product-finder-selenium-tests;search-the-work-and-filter-them-with-work-status;;2",
+        "after": [
+          {
+            "result": {
+              "duration": 414000,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 70270454300,
+              "status": "passed"
+            },
+            "line": 39,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 5609434700,
+              "status": "passed"
+            },
+            "line": 40,
+            "name": "Searches for works by given Physics",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Physics",
+                  "offset": 28
+                }
+              ],
+              "location": "ProductFinderUISteps.searches_for_works_by_given(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 3289577200,
+              "status": "passed"
+            },
+            "line": 41,
+            "name": "Filter the Search Result by \"Launched\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Launched",
+                  "offset": 29
+                }
+              ],
+              "location": "ProductFinderUISteps.filter_Search_Result_by_workType(String)"
+            },
+            "matchedColumns": [
+              1
+            ],
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 11161020100,
+              "status": "passed"
+            },
+            "line": 42,
+            "name": "Search items are listed and click a work id from the result",
+            "match": {
+              "location": "ProductFinderUISteps.search_items_are_listed_and_click_aWorkId()"
+            },
+            "keyword": "Then "
+          },
+          {
+            "result": {
+              "duration": 5832300,
+              "status": "passed"
+            },
+            "line": 43,
+            "name": "Verify user is forwarded to the searched work page from Search Result",
+            "match": {
+              "location": "ProductFinderUISteps.verifyUserIsForwardedToSearchedWorkPageFromSearchResult()"
+            },
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 1477887700,
+              "status": "passed"
+            },
+            "line": 44,
+            "name": "Verify the Work Status is \"Launched\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Launched",
+                  "offset": 27
+                }
+              ],
+              "location": "ProductFinderUISteps.verify_the_Work_Status_is(String)"
+            },
+            "matchedColumns": [
+              1
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 37,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 37,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 100500,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 48,
+        "name": "Search the work and filter them with Work Status",
+        "description": "",
+        "id": "product-finder-selenium-tests;search-the-work-and-filter-them-with-work-status;;3",
+        "after": [
+          {
+            "result": {
+              "duration": 164900,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 70031732600,
+              "status": "passed"
+            },
+            "line": 39,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 5570508900,
+              "status": "passed"
+            },
+            "line": 40,
+            "name": "Searches for works by given Chemistry",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Chemistry",
+                  "offset": 28
+                }
+              ],
+              "location": "ProductFinderUISteps.searches_for_works_by_given(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 3263296800,
+              "status": "passed"
+            },
+            "line": 41,
+            "name": "Filter the Search Result by \"Planned\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Planned",
+                  "offset": 29
+                }
+              ],
+              "location": "ProductFinderUISteps.filter_Search_Result_by_workType(String)"
+            },
+            "matchedColumns": [
+              1
+            ],
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 11659230100,
+              "status": "passed"
+            },
+            "line": 42,
+            "name": "Search items are listed and click a work id from the result",
+            "match": {
+              "location": "ProductFinderUISteps.search_items_are_listed_and_click_aWorkId()"
+            },
+            "keyword": "Then "
+          },
+          {
+            "result": {
+              "duration": 5888200,
+              "status": "passed"
+            },
+            "line": 43,
+            "name": "Verify user is forwarded to the searched work page from Search Result",
+            "match": {
+              "location": "ProductFinderUISteps.verifyUserIsForwardedToSearchedWorkPageFromSearchResult()"
+            },
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 1318130600,
+              "status": "passed"
+            },
+            "line": 44,
+            "name": "Verify the Work Status is \"Planned\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Planned",
+                  "offset": 27
+                }
+              ],
+              "location": "ProductFinderUISteps.verify_the_Work_Status_is(String)"
+            },
+            "matchedColumns": [
+              1
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 37,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 37,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 92400,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 62,
+        "name": "Search the work and filter them with Work Types",
+        "description": "",
+        "id": "product-finder-selenium-tests;search-the-work-and-filter-them-with-work-types;;2",
+        "after": [
+          {
+            "result": {
+              "duration": 252200,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 69955555600,
+              "status": "passed"
+            },
+            "line": 54,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 5583276400,
+              "status": "passed"
+            },
+            "line": 55,
+            "name": "Searches for works by given Cell",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Cell",
+                  "offset": 28
+                }
+              ],
+              "location": "ProductFinderUISteps.searches_for_works_by_given(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 3232795700,
+              "status": "passed"
+            },
+            "line": 56,
+            "name": "Filter the Search Result by \"Book\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Book",
+                  "offset": 29
+                }
+              ],
+              "location": "ProductFinderUISteps.filter_Search_Result_by_workType(String)"
+            },
+            "matchedColumns": [
+              1
+            ],
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 11287189700,
+              "status": "passed"
+            },
+            "line": 57,
+            "name": "Search items are listed and click a work id from the result",
+            "match": {
+              "location": "ProductFinderUISteps.search_items_are_listed_and_click_aWorkId()"
+            },
+            "keyword": "Then "
+          },
+          {
+            "result": {
+              "duration": 5389700,
+              "status": "passed"
+            },
+            "line": 58,
+            "name": "Verify user is forwarded to the searched work page from Search Result",
+            "match": {
+              "location": "ProductFinderUISteps.verifyUserIsForwardedToSearchedWorkPageFromSearchResult()"
+            },
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 452964000,
+              "status": "passed"
+            },
+            "line": 59,
+            "name": "Verify the Work id Type is \"Book\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Book",
+                  "offset": 28
+                }
+              ],
+              "location": "ProductFinderUISteps.verifyWorkType(String)"
+            },
+            "matchedColumns": [
+              1
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 52,
+            "name": "@PFOnly"
+          },
+          {
+            "line": 52,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 52,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 179800,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 63,
+        "name": "Search the work and filter them with Work Types",
+        "description": "",
+        "id": "product-finder-selenium-tests;search-the-work-and-filter-them-with-work-types;;3",
+        "after": [
+          {
+            "result": {
+              "duration": 105200,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 70074878300,
+              "status": "passed"
+            },
+            "line": 54,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 5551375500,
+              "status": "passed"
+            },
+            "line": 55,
+            "name": "Searches for works by given neuro",
+            "match": {
+              "arguments": [
+                {
+                  "val": "neuro",
+                  "offset": 28
+                }
+              ],
+              "location": "ProductFinderUISteps.searches_for_works_by_given(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 3232546400,
+              "status": "passed"
+            },
+            "line": 56,
+            "name": "Filter the Search Result by \"Journal\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Journal",
+                  "offset": 29
+                }
+              ],
+              "location": "ProductFinderUISteps.filter_Search_Result_by_workType(String)"
+            },
+            "matchedColumns": [
+              1
+            ],
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 11968055400,
+              "status": "passed"
+            },
+            "line": 57,
+            "name": "Search items are listed and click a work id from the result",
+            "match": {
+              "location": "ProductFinderUISteps.search_items_are_listed_and_click_aWorkId()"
+            },
+            "keyword": "Then "
+          },
+          {
+            "result": {
+              "duration": 5339200,
+              "status": "passed"
+            },
+            "line": 58,
+            "name": "Verify user is forwarded to the searched work page from Search Result",
+            "match": {
+              "location": "ProductFinderUISteps.verifyUserIsForwardedToSearchedWorkPageFromSearchResult()"
+            },
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 464251700,
+              "status": "passed"
+            },
+            "line": 59,
+            "name": "Verify the Work id Type is \"Journal\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Journal",
+                  "offset": 28
+                }
+              ],
+              "location": "ProductFinderUISteps.verifyWorkType(String)"
+            },
+            "matchedColumns": [
+              1
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 52,
+            "name": "@PFOnly"
+          },
+          {
+            "line": 52,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 52,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 173600,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 77,
+        "name": "Search the work and filter them with Work Statuses and Types",
+        "description": "",
+        "id": "product-finder-selenium-tests;search-the-work-and-filter-them-with-work-statuses-and-types;;2",
+        "after": [
+          {
+            "result": {
+              "duration": 125800,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 69975339300,
+              "status": "passed"
+            },
+            "line": 67,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 5571499700,
+              "status": "passed"
+            },
+            "line": 68,
+            "name": "Searches for works by given clinical",
+            "match": {
+              "arguments": [
+                {
+                  "val": "clinical",
+                  "offset": 28
+                }
+              ],
+              "location": "ProductFinderUISteps.searches_for_works_by_given(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 3230730400,
+              "status": "passed"
+            },
+            "line": 69,
+            "name": "Filter the Search Result by \"Launched\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Launched",
+                  "offset": 29
+                }
+              ],
+              "location": "ProductFinderUISteps.filter_Search_Result_by_workType(String)"
+            },
+            "matchedColumns": [
+              1
+            ],
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 3242627300,
+              "status": "passed"
+            },
+            "line": 70,
+            "name": "Filter the Search Result by \"Journal\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Journal",
+                  "offset": 29
+                }
+              ],
+              "location": "ProductFinderUISteps.filter_Search_Result_by_workType(String)"
+            },
+            "matchedColumns": [
+              2
+            ],
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 12385269900,
+              "status": "passed"
+            },
+            "line": 71,
+            "name": "Search items are listed and click a work id from the result",
+            "match": {
+              "location": "ProductFinderUISteps.search_items_are_listed_and_click_aWorkId()"
+            },
+            "keyword": "Then "
+          },
+          {
+            "result": {
+              "duration": 5368500,
+              "status": "passed"
+            },
+            "line": 72,
+            "name": "Verify user is forwarded to the searched work page from Search Result",
+            "match": {
+              "location": "ProductFinderUISteps.verifyUserIsForwardedToSearchedWorkPageFromSearchResult()"
+            },
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 449691500,
+              "status": "passed"
+            },
+            "line": 73,
+            "name": "Verify the Work id Type is \"Journal\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Journal",
+                  "offset": 28
+                }
+              ],
+              "location": "ProductFinderUISteps.verifyWorkType(String)"
+            },
+            "matchedColumns": [
+              2
+            ],
+            "keyword": "Then "
+          },
+          {
+            "result": {
+              "duration": 2478307400,
+              "status": "passed"
+            },
+            "line": 74,
+            "name": "Verify the Work Status is \"Launched\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Launched",
+                  "offset": 27
+                }
+              ],
+              "location": "ProductFinderUISteps.verify_the_Work_Status_is(String)"
+            },
+            "matchedColumns": [
+              1
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 65,
+            "name": "@PFOnly"
+          },
+          {
+            "line": 65,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 65,
+            "name": "@PFProd"
+          }
+        ]
+      },
+      {
+        "before": [
+          {
+            "result": {
+              "duration": 71100,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.setUp()"
+            }
+          }
+        ],
+        "line": 78,
+        "name": "Search the work and filter them with Work Statuses and Types",
+        "description": "",
+        "id": "product-finder-selenium-tests;search-the-work-and-filter-them-with-work-statuses-and-types;;3",
+        "after": [
+          {
+            "result": {
+              "duration": 211500,
+              "status": "passed"
+            },
+            "match": {
+              "location": "ApplicationHooks.closeDriver()"
+            }
+          }
+        ],
+        "type": "scenario",
+        "keyword": "Scenario Outline",
+        "steps": [
+          {
+            "result": {
+              "duration": 69966905300,
+              "status": "passed"
+            },
+            "line": 67,
+            "name": "user is on Product Finder search page",
+            "match": {
+              "location": "ProductFinderUISteps.userOpensHomePage()"
+            },
+            "keyword": "Given "
+          },
+          {
+            "result": {
+              "duration": 5554906800,
+              "status": "passed"
+            },
+            "line": 68,
+            "name": "Searches for works by given surgical",
+            "match": {
+              "arguments": [
+                {
+                  "val": "surgical",
+                  "offset": 28
+                }
+              ],
+              "location": "ProductFinderUISteps.searches_for_works_by_given(String)"
+            },
+            "matchedColumns": [
+              0
+            ],
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 3217369500,
+              "status": "passed"
+            },
+            "line": 69,
+            "name": "Filter the Search Result by \"Planned\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Planned",
+                  "offset": 29
+                }
+              ],
+              "location": "ProductFinderUISteps.filter_Search_Result_by_workType(String)"
+            },
+            "matchedColumns": [
+              1
+            ],
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 3231897000,
+              "status": "passed"
+            },
+            "line": 70,
+            "name": "Filter the Search Result by \"Book\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Book",
+                  "offset": 29
+                }
+              ],
+              "location": "ProductFinderUISteps.filter_Search_Result_by_workType(String)"
+            },
+            "matchedColumns": [
+              2
+            ],
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 11585719400,
+              "status": "passed"
+            },
+            "line": 71,
+            "name": "Search items are listed and click a work id from the result",
+            "match": {
+              "location": "ProductFinderUISteps.search_items_are_listed_and_click_aWorkId()"
+            },
+            "keyword": "Then "
+          },
+          {
+            "result": {
+              "duration": 5413600,
+              "status": "passed"
+            },
+            "line": 72,
+            "name": "Verify user is forwarded to the searched work page from Search Result",
+            "match": {
+              "location": "ProductFinderUISteps.verifyUserIsForwardedToSearchedWorkPageFromSearchResult()"
+            },
+            "keyword": "And "
+          },
+          {
+            "result": {
+              "duration": 741527900,
+              "status": "passed"
+            },
+            "line": 73,
+            "name": "Verify the Work id Type is \"Book\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Book",
+                  "offset": 28
+                }
+              ],
+              "location": "ProductFinderUISteps.verifyWorkType(String)"
+            },
+            "matchedColumns": [
+              2
+            ],
+            "keyword": "Then "
+          },
+          {
+            "result": {
+              "duration": 41733348500,
+              "status": "passed"
+            },
+            "line": 74,
+            "name": "Verify the Work Status is \"Planned\"",
+            "match": {
+              "arguments": [
+                {
+                  "val": "Planned",
+                  "offset": 27
+                }
+              ],
+              "location": "ProductFinderUISteps.verify_the_Work_Status_is(String)"
+            },
+            "matchedColumns": [
+              1
+            ],
+            "keyword": "Then "
+          }
+        ],
+        "tags": [
+          {
+            "line": 65,
+            "name": "@PFOnly"
+          },
+          {
+            "line": 65,
+            "name": "@PFRegressionSuite"
+          },
+          {
+            "line": 65,
+            "name": "@PFProd"
+          }
+        ]
+      }
+    ],
+    "name": "Product Finder Selenium tests",
+    "description": "",
+    "id": "product-finder-selenium-tests",
+    "keyword": "Feature",
+    "uri": "productfinder/ProductFinderUI.feature"
+  }
+]

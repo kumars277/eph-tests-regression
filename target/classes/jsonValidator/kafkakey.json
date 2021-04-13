@@ -1,0 +1,30 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://elsevier.com/eph/kafkakey.json",
+	"type": "object",
+	"title": "Kafka Key",
+	"description": "The EPH Kafka Key",
+	"required": [
+		"entityId",
+		"typeCode"
+	],
+	"properties": {
+		"entityId": {
+			"$id": "#/properties/entityId",
+			"type": "string",
+			"examples": [
+				"EPR-1234AF", "EPR-W-1234AG", "EPR-M-1234AH"
+			],
+			"pattern": "^(.*)$"
+		},
+		"typeCode": {
+			"$id": "#/properties/typeCode",
+			"type": "string",
+			"examples": [
+				"ADV", "OAA"
+			],
+			"pattern": "^(.*)$"
+		}
+	},
+	"additionalProperties": false
+}
