@@ -9,7 +9,7 @@ public class SDRMExtendedAccessObject {
     private String AVAILABILITY_FORMAT;
     private String AVAILABILITY_START_DATE;
     private String DELETE_FLAG;
-    
+
     private String AVAILABILITY_STATUS;
 
     public String getAVAILABILITY_STATUS()
