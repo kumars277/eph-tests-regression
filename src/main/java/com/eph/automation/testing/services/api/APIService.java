@@ -84,7 +84,7 @@ public class APIService {
                .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
                .when()
                .get("/product-hub-products/products/" + productID);
-       response.prettyPrint();
+     //  response.prettyPrint();
         return  response.thenReturn().as(ProductApiObject.class);
     }
 
