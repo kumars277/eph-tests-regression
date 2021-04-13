@@ -3,6 +3,7 @@ package com.eph.automation.testing.web.steps;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.models.api.*;
 import com.eph.automation.testing.services.api.APIService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
@@ -24,8 +25,8 @@ import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
 public class ApiSearchDataCheckStitchingLayerSteps {
 
     private String sql;
-    public APIService apiService=new APIService();
-    public ApiWorksSearchSteps apiWorksSearchSteps=new ApiWorksSearchSteps();
+    private APIService apiService=new APIService();
+    private ApiWorksSearchSteps apiWorksSearchSteps=new ApiWorksSearchSteps();
     private ProductApiObject response;
     private WorkApiObject workResponse;
 
@@ -33,25 +34,28 @@ public class ApiSearchDataCheckStitchingLayerSteps {
     @Given("^we get (.*) random ids from (.*)")
     public void getRandomIds_FromStitching_Table(String noOfRandomRecords,String stc_table){
         //created by Nishant @ 29 Jan 2021
+        String dbEnv;
+        if(TestContext.getValues().environment.equals("UAT")) dbEnv = "uat"; else dbEnv="sit";
+
         switch (stc_table)
         {
             case "stch_product_ext_json_byAvailability":
-                sql=String.format(stitchingDataSQL.GETRandomIds_stch_product_ext_json_byAvailability,noOfRandomRecords);  break;
+                sql=String.format(stitchingDataSQL.GETRandomIds_stch_product_ext_json_byAvailability,dbEnv,noOfRandomRecords);  break;
 
             case "stch_product_ext_json_byPricing":
-                sql=String.format(stitchingDataSQL.GETRandomIds_stch_product_ext_json_byPrices,noOfRandomRecords);  break;
+                sql=String.format(stitchingDataSQL.GETRandomIds_stch_product_ext_json_byPrices,dbEnv,noOfRandomRecords);  break;
 
             case "stch_product_core_json":
-                sql=String.format(stitchingDataSQL.GETRandomIds_stch_product_core_json,noOfRandomRecords); break;
+                sql=String.format(stitchingDataSQL.GETRandomIds_stch_product_core_json,dbEnv,noOfRandomRecords); break;
 
             case "stch_manifestation_ext_json":
-                sql=String.format(stitchingDataSQL.GETRandomIds_stch_manifestation_ext_json,noOfRandomRecords); break;
+                sql=String.format(stitchingDataSQL.GETRandomIds_stch_manifestation_ext_json,dbEnv,noOfRandomRecords); break;
 
             case "stch_work_ext_json":
-                sql=String.format(stitchingDataSQL.GETRandomIds_stch_work_ext_json,noOfRandomRecords);break;
+                sql=String.format(stitchingDataSQL.GETRandomIds_stch_work_ext_json,dbEnv,noOfRandomRecords);break;
 
             case "stch_work_core_json":
-                sql=String.format(stitchingDataSQL.GETRandomIds_stch_work_core_json,noOfRandomRecords);break;
+                sql=String.format(stitchingDataSQL.GETRandomIds_stch_work_core_json,dbEnv,noOfRandomRecords);break;
         }
 
         //for debugging failure overwrite sql value
@@ -159,7 +163,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
         }
     }
 
-    public void compare_stch_product_core_json(int cnt){
+    private void compare_stch_product_core_json(int cnt){
         //created by Nishant @ 04 Feb 2021, EPHD-2747
         ProductCoreTestClass jsonValue = new Gson().fromJson(randomIdsData.get(cnt).get("json").toString(),ProductCoreTestClass.class);
 
@@ -425,7 +429,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
         Log.info("");
     }
 
-    public void compare_stch_manifestation_ext_json(int cnt){
+    private void compare_stch_manifestation_ext_json(int cnt){
         //created by Nishant @ 05 Feb 2021, EPHD-2747
         Log.info("----->verification for manifestationExtended ");
         ManifestationExtendedTestClass jsonValue = new Gson().fromJson(randomIdsData.get(cnt).get("json").toString(),ManifestationExtendedTestClass.class);
@@ -470,7 +474,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
 
     }
 
-    public void compare_stch_work_ext_json(int cnt){
+    private void compare_stch_work_ext_json(int cnt){
         //created by Nishant @08 Feb 2021, EPHD-2747
         Log.info("verification for workExtended");
         WorkExtendedTestClass jsonValue = new Gson().fromJson(randomIdsData.get(cnt).get("json").toString(),WorkExtendedTestClass.class);
@@ -582,7 +586,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
 
     }
 
-    public void compare_stch_work_core_json(int cnt){
+    private void compare_stch_work_core_json(int cnt){
         //created by Nishant @16 Feb 2021, EPHD-2747
         Log.info("");
         Log.info("verification for workCore");

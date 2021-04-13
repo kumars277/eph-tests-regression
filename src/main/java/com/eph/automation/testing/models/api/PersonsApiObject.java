@@ -63,7 +63,7 @@ public class PersonsApiObject {
         dataQualityContext.personDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
     }
 
-    public void compareWithDB_product() {
+    void compareWithDB_product() {
         //created by Nishant @ 22 Nov 2019
         //Updated by Nishant @ 30 Apr 2020
         Log.info("verifying product person... "+this.id);
@@ -77,7 +77,7 @@ public class PersonsApiObject {
         Assert.assertEquals(dataQualityContext.personProductRoleDataObjectsFromEPHGD.get(0).getF_PERSON(), String.valueOf(this.person.get("id")));
         printLog("person id");
 
-        getPersonDataFromEPHGD( this.person.get("id").toString());
+        getPersonDataFromEPHGD(this.person.get("id"));
         Assert.assertEquals(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME(), this.person.get("firstName"));
         printLog("firstName");
 
@@ -91,7 +91,7 @@ public class PersonsApiObject {
         printLog("email");
     }
 
-    public void compareWithDB_work() {
+    void compareWithDB_work() {
         //Updated by Nishant @ 22 Nov 2019
         Log.info("verifiying work person... "+this.id);
         if(dataQualityContext.personDataObjectsFromEPHGD!=null){dataQualityContext.personDataObjectsFromEPHGD.clear();}
@@ -105,7 +105,7 @@ public class PersonsApiObject {
         Assert.assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON(), String.valueOf(this.person.get("id")));
         printLog("person id");
 
-        getPersonDataFromEPHGD( this.person.get("id").toString());
+        getPersonDataFromEPHGD(this.person.get("id"));
         Assert.assertEquals(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME(), this.person.get("firstName"));
         printLog("firstName");
 

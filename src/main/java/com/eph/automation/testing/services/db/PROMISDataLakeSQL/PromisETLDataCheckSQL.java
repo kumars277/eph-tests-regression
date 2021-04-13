@@ -366,7 +366,7 @@ public class PromisETLDataCheckSQL {
             "quantity as QUANTITY,\n" +
             "customer_category as CUSTOMER_CATEGORY from "+ GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s')";
 
-    public static String GET_PERSON_ROLES = "select pub_idt as PUB_IDT,\n" +
+    public static String GET_PERSON_ROLES = "select * from (select pub_idt as PUB_IDT,\n" +
             "epr_id as EPR_ID,\n" +
             "u_key as U_KEY,\n" +
             "role_description as ROLE_DESCRIPTION,\n" +
@@ -380,7 +380,7 @@ public class PromisETLDataCheckSQL {
             "image_url as IMAGE_URL,\n" +
             "footnote_txt as FOOTNOTE_TXT,\n" +
             "notes_txt as NOTES_TXT,\n" +
-            "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s')";
+            "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s')) order by pub_idt desc, sequence_number desc, initials desc, affiliation desc";
 
     public static String GET_WORKS = "select pub_idt as PUB_IDT,\n" +
             "epr_id as EPR_ID,\n" +
@@ -390,7 +390,7 @@ public class PromisETLDataCheckSQL {
             "primary_author as PRIMARY_AUTHOR,\n" +
             "previous_title as PREVIOUS_TITLE,\n" +
             "internal_elsevier_division,\n" +
-            "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s')";
+            "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s') order by u_key desc";
 
     public static String GET_METRICS = "select pub_idt as PUB_IDT,\n" +
             "epr_id as EPR_ID,\n" +
@@ -737,7 +737,7 @@ public class PromisETLDataCheckSQL {
             "from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_history_pricing_part tdh\n" +
             "where u_key not in (select u_key from "+GetPRMDLDBUser.getPRMDataBase()+".promis_delta_current_pricing) and U_key in ('%s')";
 
-    public static String GET_PERSON_ROLES_HistExclQUERY = "select\n" +
+    public static String GET_PERSON_ROLES_HistExclQUERY = "select * from (select\n" +
             "  pub_idt\n" +
             ", epr_id\n" +
             ", u_key\n" +
@@ -758,7 +758,7 @@ public class PromisETLDataCheckSQL {
             ", last_updated_date\n" +
             ", delete_flag\n" +
             "from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_history_person_roles_part tdh\n" +
-            "where u_key not in (select u_key from "+GetPRMDLDBUser.getPRMDataBase()+".promis_delta_current_person_roles) and U_key in ('%s')";
+            "where u_key not in (select u_key from "+GetPRMDLDBUser.getPRMDataBase()+".promis_delta_current_person_roles) and U_key in ('%s')) order by pub_idt desc, sequence_number desc, initials desc , affiliation desc";
 
     public static String GET_WORKS_HistExclQUERY = "select\n" +
             "  pub_idt\n" +
@@ -775,7 +775,7 @@ public class PromisETLDataCheckSQL {
             ",internal_elsevier_division\n" +
             ", delete_flag\n" +
             "from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_history_works_part tdh\n" +
-            "where u_key not in (select u_key from "+GetPRMDLDBUser.getPRMDataBase()+".promis_delta_current_works) and U_key in ('%s')";
+            "where u_key not in (select u_key from "+GetPRMDLDBUser.getPRMDataBase()+".promis_delta_current_works) and U_key in ('%s') order by u_key desc";
 
     public static String GET_METRICS_HistExclQUERY = "select\n" +
             "  pub_idt\n" +
@@ -1204,6 +1204,11 @@ public class PromisETLDataCheckSQL {
             "INNER JOIN "+GetPRMDLDBUser.getProdDataBase()+".gd_x_lov_work_type t ON t.code = w.f_type\n" +
             "INNER JOIN "+GetPRMDLDBUser.getProdDataBase()+".gd_x_lov_work_status s ON s.code = w.f_status\n" +
             "WHERE (rel.rtp_rtp_cod = 'JNPUB')) where U_KEY in ('%s')";
+
+    public static String GET_LATEST_PRICING_IDs= "select pub_idt as PUB_IDT from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_pricing limit %s ";
+
+    public static String GET_LATEST_WORKS_IDs= "select pub_idt as PUB_IDT from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_works limit %s ";
+
 }
 
 

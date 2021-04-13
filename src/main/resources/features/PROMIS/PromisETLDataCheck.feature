@@ -82,3 +82,20 @@ Feature:Validate data checks for Promis between transform tables
       | 5               |urls           |promis_transform_current_urls          |
       | 5               |work_rels      |promis_transform_current_work_rels     |
 
+  @PROMISETL
+  Scenario Outline: Verify that all Promis data is transferred between Latest and All_source tables
+    Given We get the <numberOfRecords> random Promis Latest ids of <latesttablename>
+#    When We get Promis transform mapping records from <allsourcetablename>
+#    Then We get the Promis Transform mapping current records from <latesttablename>
+#    And Compare Promis records for transform mapping and current of <allsourcetablename>
+    Examples:
+      |numberOfRecords  |latesttablename                       |allsourcetablename                                  |
+      | 5               |promis_transform_latest_pricing       |product_extended_pricing_allsource_v                |
+      | 5               |promis_transform_latest_works         |work_extended_allsource_v                           |
+      | 5               |promis_transform_latest_metrics       |work_extended_metric_allsource_v                    |
+      | 5               |promis_transform_latest_person_roles  |work_extended_editorial_board_allsource_v           |
+      | 5               |promis_transform_latest_work_rels     |work_extended_relationship_sibling_allsource_v      |
+      | 5               |promis_transform_latest_subject_areas |work_extended_subject_area_allsource_v              |
+      | 5               |promis_transform_latest_urls          |work_extended_url_allsource_v                       |
+
+
