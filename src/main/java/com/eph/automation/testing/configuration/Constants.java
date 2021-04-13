@@ -85,7 +85,7 @@ public class Constants {
     public static final String EIP_NOTIFICATION_ORG_SDW_END_POINT_SIT = "https://customer-notification-sdw-service-eipsit.apps.ose-nonprod.cp.tio.systems";
 
     /*Authorization OATH2 constants*/
-    public static final String AUTHORIZATION_HEADER = "X-ADFS-JWT"; //for v1 API
+    public static final String AUTHORIZATION_HEADER = "X-ADFS-JWT"; //for v1 and v3 API
     //public static final String AUTHORIZATION_HEADER = "X-JWT-Assertion"; //for v2 API
 
     public static String ENCRYPTION_PASSWORD = "CMXEncrypt$";

@@ -59,7 +59,8 @@ public class ApiSearchDataCheckStitchingLayerSteps {
         }
 
         //for debugging failure overwrite sql value
-       // sql="select  epr_id , \"json\" from ephsit_extended_data_stitch.stch_product_core_json where epr_id='EPR-10RXK4'";
+       // sql="select  epr_id , \"json\" from ephuat_extended_data_stitch.stch_product_core_json where epr_id='EPR-10Y6GT'";
+
 
 
         randomIdsData = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -235,22 +236,24 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                 Assert.assertEquals(jsonValue.getManifestation().getManifestationCore().getFirstPubDate(), response.getManifestation().getManifestationCore().getFirstPubDate());
                 printLog("FirstPubDate");
 
-                ArrayList<ManifestationIdentifiersApiObject> manifestationIdentifiers_json = new ArrayList<>(Arrays.asList(jsonValue.getManifestation().getManifestationCore().getIdentifiers()));
-                ArrayList<ManifestationIdentifiersApiObject> manifestationIdentifiers_api = new ArrayList<>(Arrays.asList(response.getManifestation().getManifestationCore().getIdentifiers()));
-                if (manifestationIdentifiers_api.size() != 0 | manifestationIdentifiers_json.size() != 0) {
-                    for (int mi = 0; mi < manifestationIdentifiers_api.size(); mi++) {
-                        Log.info("----->verification for manifestationIdentifiers "+mi);
-                        Assert.assertEquals(manifestationIdentifiers_api.get(mi).getIdentifier(), manifestationIdentifiers_json.get(mi).getIdentifier());
-                        printLog("Identifier");
-                        Assert.assertEquals(manifestationIdentifiers_api.get(mi).getIdentifierType().get("code"), manifestationIdentifiers_json.get(mi).getIdentifierType().get("code"));
-                        printLog("IdentifierType code");
-                        Assert.assertEquals(manifestationIdentifiers_api.get(mi).getIdentifierType().get("name"), manifestationIdentifiers_json.get(mi).getIdentifierType().get("name"));
-                        printLog("IdentifierType name");
-                        Assert.assertEquals(manifestationIdentifiers_api.get(mi).getEffectiveStartDate(), manifestationIdentifiers_json.get(mi).getEffectiveStartDate());
-                        printLog("Effective_start_date");
+                if(jsonValue.getManifestation().getManifestationCore().getIdentifiers()!=null|
+                        response.getManifestation().getManifestationCore().getIdentifiers()!=null) {
+                    ArrayList<ManifestationIdentifiersApiObject> manifestationIdentifiers_json = new ArrayList<>(Arrays.asList(jsonValue.getManifestation().getManifestationCore().getIdentifiers()));
+                    ArrayList<ManifestationIdentifiersApiObject> manifestationIdentifiers_api = new ArrayList<>(Arrays.asList(response.getManifestation().getManifestationCore().getIdentifiers()));
+                    if (manifestationIdentifiers_api.size() != 0 | manifestationIdentifiers_json.size() != 0) {
+                        for (int mi = 0; mi < manifestationIdentifiers_api.size(); mi++) {
+                            Log.info("----->verification for manifestationIdentifiers " + mi);
+                            Assert.assertEquals(manifestationIdentifiers_api.get(mi).getIdentifier(), manifestationIdentifiers_json.get(mi).getIdentifier());
+                            printLog("Identifier");
+                            Assert.assertEquals(manifestationIdentifiers_api.get(mi).getIdentifierType().get("code"), manifestationIdentifiers_json.get(mi).getIdentifierType().get("code"));
+                            printLog("IdentifierType code");
+                            Assert.assertEquals(manifestationIdentifiers_api.get(mi).getIdentifierType().get("name"), manifestationIdentifiers_json.get(mi).getIdentifierType().get("name"));
+                            printLog("IdentifierType name");
+                            Assert.assertEquals(manifestationIdentifiers_api.get(mi).getEffectiveStartDate(), manifestationIdentifiers_json.get(mi).getEffectiveStartDate());
+                            printLog("Effective_start_date");
+                        }
                     }
                 }
-
 
                 Assert.assertEquals(jsonValue.getManifestation().getManifestationCore().getType().get("code"), response.getManifestation().getManifestationCore().getType().get("code"));
                 printLog("manifestation Type code");
