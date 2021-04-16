@@ -32,7 +32,7 @@ public class getBCSDataBase {
                     dbProdDb = "product_staging_database_sit";
                 }
                 else{
-                    dbProdDb = "product_staging_database_uat";
+                    dbProdDb = "product_staging_database_uat2";
                 }
             }else{
                 dbProdDb = "product_staging_database_sit";
@@ -48,7 +48,7 @@ public class getBCSDataBase {
                     dbProdGDdb = "product_database_sit";
                 }
                 else{
-                    dbProdGDdb = "product_database_uat";
+                    dbProdGDdb = "product_database_uat2";
                 }
             }else{
                 dbProdGDdb = "product_database_sit";
@@ -64,7 +64,7 @@ public class getBCSDataBase {
                     dbProdExtdb = "product_ext_database_sit";
                 }
                 else{
-                    dbProdExtdb = "product_ext_database_uat";
+                    dbProdExtdb = "product_ext_database_uat2";
                 }
             }else{
                 dbProdExtdb = "product_ext_database_sit";
