@@ -31,7 +31,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
 
     @Given("^Get the (.*) of BCS Core data from transform_file Tables (.*)$")
     public void getIdsFromTransformFile(String numberOfRecords, String tableName) {
-        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Core Transform_File Tables....");
 
@@ -413,7 +413,7 @@ public class BCS_ETLCore_DeltaDataChecksSteps {
 
     @Given("^Get the (.*) of BCS Core data from delta_Current_hist Tables (.*)$")
     public void getIdsFromDeltaHist(String numberOfRecords, String tableName) {
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Core Delta History Tables....");
 

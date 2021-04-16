@@ -1,7 +1,7 @@
 #created by Nishant @ 29 Sep 2020
 Feature:Validate data check for BCS tables in Data Lake
 
-  @BCSDatacheckDebug
+  @BCSInbound
 Scenario Outline: Verify Data for BCS is transferred from initial ingest
 Given We get the <countOfRandomIds> random ids from initial ingest <targetTable>
 When Get the data records from initial ingest for <targetTable>
@@ -25,6 +25,7 @@ Examples:
 |stg_current_versionfamily    |       1         |
 
 
+  @BCSInbound
   Scenario Outline: Data check for BCS stg_previous tables are transferred to stg_Current_history
     Given We get <countOfRandomIds> randomIds for BCS Current table <SourceTableName>
     When Get data from BCS stg_current <SourceTableName>
