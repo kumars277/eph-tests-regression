@@ -32,7 +32,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
 
     @Given("^Get the (.*) of BCS Extended data from transform_file Tables (.*)$")
     public void getIdsFromTransformFile(String numberOfRecords, String tableName) {
-        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Extended Transform_File Tables....");
 
@@ -430,7 +430,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
 
     @Given("^Get the (.*) of BCS Extended data from delta_Current_hist Tables (.*)$")
     public void getIdsFromDeltaHistBCSExt(String numberOfRecords, String tableName) {
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Extended Delta History Tables....");
         switch (tableName) {
@@ -790,7 +790,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
 /////////////////////////////////////////////////////////////////////////////////////////////
     @Given("^Get the (.*) from diff of BCS Ext delta_current and current_hist tables (.*)$")
     public void getIdsFromDiffOfDeltaCurrAndHistBCSExt (String numberOfRecords, String tableName){
-    //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+    numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
     Log.info("numberOfRecords = " + numberOfRecords);
     Log.info("Get random Ids for BCS Ext Tables from Diff of Delta Current and Current Hist....");
 
@@ -1184,7 +1184,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
 
     @Given("^Get the (.*) from sum of delta_current and exclude_delta for BCS Extended (.*)$")
     public void getIdsFromDiffOfDeltaCurrAndExcl(String numberOfRecords, String tableName) {
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Extended Tables from Diff of Delta Current and Exclude....");
 
