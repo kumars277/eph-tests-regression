@@ -13,8 +13,8 @@ public class GetBCS_ETLExtendedDLDBUser {
             }
 
         }else{
-            //dbBCS = "bcs_ingestion_database_sit";
-            dbBCS = "bcs_ingestion_database_uat2";
+            dbBCS = "bcs_ingestion_database_sit";
+         //   dbBCS = "bcs_ingestion_database_uat2";
         }
         return dbBCS;
     }
@@ -30,8 +30,8 @@ public class GetBCS_ETLExtendedDLDBUser {
             }
 
         }else{
-           // dbProd = "product_staging_database_sit";
-              dbProd = "product_staging_database_uat2";
+           dbProd = "product_staging_database_sit";
+            //  dbProd = "product_staging_database_uat2";
         }
         return dbProd;
     }
@@ -47,8 +47,8 @@ public class GetBCS_ETLExtendedDLDBUser {
             }
 
         }else{
-            //dbProdDB = "product_database_sit";
-            dbProdDB = "product_database_uat2";
+            dbProdDB = "product_database_sit";
+          //  dbProdDB = "product_database_uat2";
         }
         return dbProdDB;
     }
@@ -63,8 +63,8 @@ public class GetBCS_ETLExtendedDLDBUser {
                 dbProdStgDb = "product_staging_database_uat";
             }
         }else{
-            //dbProdStgDb = "product_staging_database_sit";
-            dbProdStgDb = "product_staging_database_uat2";
+            dbProdStgDb = "product_staging_database_sit";
+           // dbProdStgDb = "product_staging_database_uat2";
         }
         return dbProdStgDb;
     }
@@ -80,8 +80,8 @@ public class GetBCS_ETLExtendedDLDBUser {
             }
 
         }else{
-           // dbJM = "journalmaestro_sit";
-             dbJM = "journalmaestro_uat2";
+            dbJM = "journalmaestro_sit";
+           //  dbJM = "journalmaestro_uat2";
         }
         return dbJM;
     }
@@ -97,8 +97,8 @@ public class GetBCS_ETLExtendedDLDBUser {
             }
 
         }else{
-          //  dbSDRM = "sdrm_staging_sit";
-             dbSDRM = "sdrm_staging_uat2";
+            dbSDRM = "sdrm_staging_sit";
+          //   dbSDRM = "sdrm_staging_uat2";
         }
         return dbSDRM;
     }
@@ -114,8 +114,8 @@ public class GetBCS_ETLExtendedDLDBUser {
             }
 
         }else{
-            //dbSDBooks = "sdbooks_staging_sit";
-              dbSDBooks = "sdbooks_staging_uat2";
+                dbSDBooks = "sdbooks_staging_sit";
+              //dbSDBooks = "sdbooks_staging_uat2";
         }
         return dbSDBooks;
     }
@@ -131,8 +131,8 @@ public class GetBCS_ETLExtendedDLDBUser {
             }
 
         }else{
-            //dbPRM = "promis_staging_sit";
-              dbPRM = "promis_staging_uat2";
+            dbPRM = "promis_staging_sit";
+            //dbPRM = "promis_staging_uat2";
         }
         return dbPRM;
     }
@@ -148,8 +148,8 @@ public class GetBCS_ETLExtendedDLDBUser {
             }
 
         }else{
-           // dbProdExt = "product_ext_database_sit";
-            dbProdExt = "product_ext_database_uat2";
+            dbProdExt = "product_ext_database_sit";
+          //  dbProdExt = "product_ext_database_uat2";
         }
         return dbProdExt;
     }
@@ -165,8 +165,8 @@ public class GetBCS_ETLExtendedDLDBUser {
             }
 
         }else{
-          //  dbJRBI = "jrbi_staging_sit";
-             dbJRBI = "jrbi_staging_uat2";
+           dbJRBI = "jrbi_staging_sit";
+          //   dbJRBI = "jrbi_staging_uat2";
         }
         return dbJRBI;
     }
