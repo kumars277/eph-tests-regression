@@ -13,10 +13,9 @@ import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
 import org.junit.Assert;
-import org.omg.CORBA.PUBLIC_MEMBER;
+
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
