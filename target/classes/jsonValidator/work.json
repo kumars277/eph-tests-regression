@@ -1,0 +1,184 @@
+{
+	"definitions": {
+		"products": {
+			"$id": "#/properties/products",
+			"type": "array",
+			"default": null,
+			"title": "The Products Schema",
+			"items": {
+				"$id": "#/properties/products/items",
+				"type": "object",
+				"title": "The Items Schema",
+				"required": [
+					"productSummary"
+				],
+				"properties": {
+					"productSummary": {
+						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/productSummary"
+					}
+				},
+				"additionalProperties": false
+			}
+		}
+	},
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"$id": "https://elsevier.com/work.json",
+	"type": "object",
+	"title": "Work",
+	"description": "The EPH Work-Centric Schema",
+	"required": [
+		"schemaVersion",
+		"id",
+		"createdDate",
+		"updatedDate",
+		"title",
+		"type",
+		"status"
+	],
+	"properties": {
+		"schemaVersion": {
+			"$id": "#/properties/schemaVersion",
+			"type": "string",
+			"title": "The Schema Version",
+			"pattern": "^(.*)$"
+		},
+		"id": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/id"
+		},
+		"createdDate": {
+			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/createdDate"
+		},
+		"updatedDate": {
+			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/updatedDate"
+		},
+		"title": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/title"
+		},
+		"subTitle": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/subTitle"
+		},
+		"shortTitle": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/shortTitle"
+		},
+		"electronicRightsInd": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/electronicRightsInd"
+		},
+		"language": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/language"
+		},
+		"subscriptionType": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/subscriptionType"
+		},
+		"fulfilmentSystem": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/fulfilmentSystem"
+		},
+		"editionNumber": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/editionNumber"
+		},
+		"volume": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/volume"
+		},
+		"copyrightYear": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/copyrightYear"
+		},
+		"identifiers": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/identifiers"
+		},
+		"type": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/type"
+		},
+		"status": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/status"
+		},
+		"imprint": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/imprint"
+		},
+		"ownershipType": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/ownershipType"
+		},
+		"copyrightOwners": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/copyrightOwners"
+		},
+		"accessModel": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/accessModel"
+		},
+		"pmc": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/pmc"
+		},
+		"editions": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/editions"
+		},
+		"accountableProduct": {
+			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/accountableProduct"
+		},
+		"financialAttributes": {
+			"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/financialAttributes"
+		},
+		"persons": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/persons"
+		},
+		"catalogueYears": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/catalogueYears"
+		},
+		"subjectAreas": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/subjectAreas"
+		},
+		"relationships": {
+			"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/relationships"
+		},
+		"manifestations": {
+			"$id": "#/properties/manifestations",
+			"type": "array",
+			"default": null,
+			"title": "The Manifestations Schema",
+			"items": {
+				"$id": "#/properties/manifestation/items",
+				"type": "object",
+				"title": "The Items Schema",
+				"required": [
+					"id",
+					"keyTitle",
+					"type",
+					"status"
+				],
+				"properties": {
+					"id": {
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/id"
+					},
+					"keyTitle": {
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/keyTitle"
+					},
+					"internationalEditionInd": {
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/internationalEditionInd"
+					},
+					"firstPubDate": {
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/firstPubDate"
+					},
+					"lastPubDate": {
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/lastPubDate"
+					},
+					"identifiers": {
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/identifiers"
+					},
+					"type": {
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/type"
+					},
+					"status": {
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/status"
+					},
+					"format": {
+						"$ref": "file:src/main/resources/jsonValidator/commonManifestation.json#/format"
+					},
+					"products": {
+						"$ref": "#/definitions/products"
+					}
+				},
+				"additionalProperties": false
+			}
+		},
+		"products": {
+			"$ref": "#/definitions/products"
+		}
+	},
+	"additionalProperties": false
+}

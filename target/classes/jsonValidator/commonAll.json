@@ -1,0 +1,480 @@
+{
+	"createdDate": {
+		"$id": "#/properties/createdDate",
+		"type": "string",
+		"title": "The UTC Createddate Schema - date and time the product or work was created in Semarchy",
+		"examples": [
+			"2019-02-07T13:20:30.001Z"
+		],
+		"pattern": "^(.*)$"
+	},
+	"updatedDate": {
+		"$id": "#/properties/updatedDate",
+		"type": "string",
+		"title": "The UTC Updateddate Schema - date and time the JSON message was generated",
+		"examples": [
+			"2019-02-07T13:20:30.001Z"
+		],
+		"pattern": "^(.*)$"
+	},
+	"code": {
+		"$id": "#/properties/code",
+		"type": "string",
+		"title": "The Code Schema",
+		"examples": [
+			"JBF"
+		],
+		"pattern": "^(.*)$"
+	},
+	"name": {
+		"$id": "#/properties/name",
+		"type": "string",
+		"title": "The Name Schema",
+		"examples": [
+			"Journal Backfiles"
+		],
+		"pattern": "^(.*)$"
+	},
+	"type": {
+		"$id": "#/properties/type",
+		"type": "object",
+		"title": "The Type Schema",
+		"required": [
+			"code",
+			"name"
+		],
+		"properties": {
+			"code": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+			},
+			"name": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+			}
+		},
+		"additionalProperties": false
+	},
+	"workManifestationType": {
+		"$id": "#/properties/workManifestationType",
+		"type": "object",
+		"title": "The WorkManifestationType Schema",
+		"required": [
+			"code",
+			"name",
+			"typeRollUp"
+		],
+		"properties": {
+			"code": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+			},
+			"name": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+			},
+			"typeRollUp": {
+				"$id": "#/properties/type/properties/typeRollUp",
+				"type": "string",
+				"title": "The Typerollup Schema",
+				"examples": [
+					"Journal"
+				],
+				"pattern": "^(.*)$"
+			}
+		},
+		"additionalProperties": false
+	},
+	"status": {
+		"$id": "#/properties/status",
+		"type": "object",
+		"title": "The Status Schema",
+		"required": [
+			"code",
+			"name",
+			"statusRollUp"
+		],
+		"properties": {
+			"code": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+			},
+			"name": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+			},
+			"statusRollUp": {
+				"$id": "#/properties/type/properties/statusRollUp",
+				"type": "string",
+				"title": "The Statusrollup Schema",
+				"examples": [
+					"Journal"
+				],
+				"pattern": "^(.*)$"
+			}
+		},
+		"additionalProperties": false
+	},
+	"effectiveStartDate": {
+		"$id": "#/properties/effectiveStartDate",
+		"type": "string",
+		"title": "The Effectivestartdate Schema",
+		"examples": [
+			"2017-12-20"
+		],
+		"pattern": "^(.*)$"
+	},
+	"effectiveEndDate": {
+		"$id": "#/properties/effectiveEndDate",
+		"type": "string",
+		"title": "The Effectiveenddate Schema",
+		"examples": [
+			"2018-12-20"
+		],
+		"pattern": "^(.*)$"
+	},
+	"identifiers": {
+		"$id": "#/properties/identifiers",
+		"type": "array",
+		"default": null,
+		"title": "The Identifiers Schema",
+		"items": {
+			"$id": "#/properties/identifiers/items",
+			"type": "object",
+			"title": "The Items Schema",
+			"required": [
+				"identifier",
+				"identifierType"
+			],
+			"properties": {
+				"identifier": {
+					"$id": "#/properties/identifiers/items/properties/identifier",
+					"type": "string",
+					"title": "The Identifier Schema",
+					"examples": [
+						"1234-5678"
+					],
+					"pattern": "^(.*)$"
+				},
+				"identifierType": {
+					"$id": "#/properties/identifierType",
+					"type": "object",
+					"title": "The Identifiertype Schema",
+					"required": [
+						"code",
+						"name"
+					],
+					"properties": {
+						"code": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+						},
+						"name": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+						}
+					},
+					"additionalProperties": false
+				},
+				"effectiveStartDate": {
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
+				},
+				"effectiveEndDate": {
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
+				}
+			},
+			"additionalProperties": false
+		}
+	},
+	"accountableProduct": {
+		"$id": "#/properties/accountableProduct",
+		"type": "object",
+		"title": "The Accountableproduct Schema",
+		"required": [
+			"glProductSegmentCode",
+			"glProductSegmentName",
+			"glProductParentValue"
+		],
+		"properties": {
+			"glProductSegmentCode": {
+				"$id": "#/properties/accountableProduct/properties/glProductSegmentCode",
+				"type": "string",
+				"title": "The Glproductsegmentcode Schema",
+				"examples": [
+					"01259"
+				],
+				"pattern": "^(.*)$"
+			},
+			"glProductSegmentName": {
+				"$id": "#/properties/accountableProduct/properties/glProductSegmentName",
+				"type": "string",
+				"title": "The Glproductsegmentname Schema",
+				"examples": [
+					"Journal of Sample Products"
+				],
+				"pattern": "^(.*)$"
+			},
+			"glProductParentValue": {
+				"$id": "#/properties/accountableProduct/properties/glProductParentValue",
+				"type": "object",
+				"title": "The Glproductparentvalue Schema",
+				"required": [
+					"code",
+					"name"
+				],
+				"properties": {
+					"code": {
+						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+					},
+					"name": {
+						"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+					}
+				},
+				"additionalProperties" : false
+			}
+		},
+		"additionalProperties": false
+	},
+	"financialAttributes": {
+		"$id": "#/properties/financialAttributes",
+		"type": "array",
+		"title": "The Financialattributes Schema",
+		"default": null,
+		"items": {
+			"$id": "#/properties/financialAttributes/items",
+			"type": "object",
+			"title": "The Items Schema",
+			"required": [
+				"glCompany",
+				"costResponsibilityCentre",
+				"revenueResponsibilityCentre"
+			],
+			"properties": {
+				"glCompany": {
+					"$id": "#/properties/financialAttributes/items/properties/glCompany",
+					"type": "object",
+					"title": "The Glcompany Schema",
+					"required": [
+						"code",
+						"name"
+					],
+					"properties": {
+						"code": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+						},
+						"name": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+						}
+					},
+					"additionalProperties": false
+				},
+				"costResponsibilityCentre": {
+					"$id": "#/properties/financialAttributes/items/properties/costResponsibilityCentre",
+					"type": "object",
+					"title": "The Costresponsibilitycentre Schema",
+					"required": [
+						"code",
+						"name"
+					],
+					"properties": {
+						"code": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+						},
+						"name": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+						}
+					},
+					"additionalProperties": false
+				},
+				"revenueResponsibilityCentre": {
+					"$id": "#/properties/financialAttributes/items/properties/revenueResponsibilityCentre",
+					"type": "object",
+					"title": "The Revenueresponsibilitycentre Schema",
+					"required": [
+						"code",
+						"name"
+					],
+					"properties": {
+						"code": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+						},
+						"name": {
+							"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+						}
+					},
+					"additionalProperties": false
+				},
+				"effectiveStartDate": {
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
+				},
+				"effectiveEndDate": {
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
+				}
+			},
+			"additionalProperties": false
+		}
+	},
+	"persons": {
+		"$id": "#/properties/persons",
+		"type": "array",
+		"default": null,
+		"title": "The Persons Schema",
+		"items": {
+			"$id": "#/properties/persons/items",
+			"type": "object",
+			"title": "The Items Schema",
+			"required": [
+				"id",
+				"role",
+				"person"
+			],
+			"properties": {
+				"id": {
+					"$id": "#/properties/persons/items/properties/id",
+					"type": "integer",
+					"title": "The Id Schema",
+					"examples": [
+						1234858765
+					]
+				},
+				"role": {
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/role"
+				},
+				"person": {
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/person"
+				},
+				"effectiveStartDate": {
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveStartDate"
+				},
+				"effectiveEndDate": {
+					"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/effectiveEndDate"
+				}
+			},
+			"additionalProperties": false
+		}
+	},
+	"person": {
+		"$id": "#/properties/person",
+		"type": "object",
+		"title": "The Person Schema",
+		"required": [
+			"id",
+			"lastName"
+		],
+		"properties": {
+			"id": {
+				"$id": "#/properties/person/properties/id",
+				"type": "integer",
+				"title": "The Personid Schema",
+				"examples": [
+					15864548
+				]
+			},
+			"firstName": {
+				"$id": "#/properties/person/properties/firstName",
+				"type": "string",
+				"title": "The Firstname Schema",
+				"examples": [
+					"Andrew"
+				]
+			},
+			"lastName": {
+				"$id": "#/properties/person/properties/lastName",
+				"type": "string",
+				"title": "The Lastname Schema",
+				"examples": [
+					"Binks"
+				]
+			},
+			"peoplehubId": {
+				"$id": "#/properties/person/properties/peoplehubId",
+				"type": "string",
+				"title": "The Peoplehubid Schema",
+				"examples": [
+					"00000194001"
+				],
+				"pattern": "^(.*)$"
+			}
+		},
+		"additionalProperties": false
+	},
+	"role": {
+		"$id": "#/properties/role",
+		"type": "object",
+		"title": "The Role Schema",
+		"required": [
+			"code",
+			"name"
+		],
+		"properties": {
+			"code": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+			},
+			"name": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+			}
+		},
+		"additionalProperties": false
+	},
+	"productSummary": {
+		"$id": "#/properties/productSummary",
+		"type": "object",
+		"title": "The Productsummary Schema",
+		"required": [
+			"id",
+			"name",
+			"type",
+			"status"
+		],
+		"properties": {
+			"id": {
+				"$id": "#/properties/id",
+				"type": "string",
+				"title": "The Id Schema",
+				"examples": [
+					"EPR-1234AF"
+				],
+				"pattern": "^(.*)$"
+			},
+			"name": {
+				"$id": "#/properties/name",
+				"type": "string",
+				"title": "The Name Schema",
+				"examples": [
+					"Sample Product Open Access"
+				]
+			},
+			"type": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/type"
+			},
+			"status": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/status"
+			}
+		},
+		"additionalProperties": false
+	},
+	"workSummary": {
+		"$id": "#/properties/workSummary",
+		"type": "object",
+		"title": "The Worksummary Schema",
+		"required": [
+			"id",
+			"title",
+			"type",
+			"status"
+		],
+		"properties": {
+			"id": {
+				"$id": "#/properties/id",
+				"type": "string",
+				"title": "The Id Schema",
+				"examples": [
+					"EPR-W-000001"
+				],
+				"pattern": "^(.*)$"
+			},
+			"title": {
+				"$ref": "file:src/main/resources/jsonValidator/commonWork.json#/title"
+			},
+			"type": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/workManifestationType"
+			},
+			"status": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/status"
+			}
+		},
+		"additionalProperties": false
+	}
+}

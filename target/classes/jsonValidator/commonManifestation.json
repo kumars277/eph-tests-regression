@@ -1,0 +1,97 @@
+{
+	"id": {
+		"$id": "#/properties/id",
+		"type": "string",
+		"title": "The Id Schema",
+		"examples": [
+			"EPR-M-1458AF"
+		],
+		"pattern": "^(.*)$"
+	},
+	"keyTitle": {
+		"$id": "#/properties/keyTitle",
+		"type": "string",
+		"title": "The Keytitle Schema",
+		"examples": [
+			"Sample Product (Online)"
+		]
+	},
+	"internationalEditionInd": {
+		"$id": "#/properties/internationalEditionInd",
+		"type": "boolean",
+		"title": "The InternationaleditionIndicator Schema",
+		"examples": [
+			false
+		]
+	},
+	"firstPubDate": {
+		"$id": "#/properties/firstPubDate",
+		"type": "string",
+		"format": "date",
+		"title": "The Firstpubdate Schema",
+		"examples": [
+			"2014-12-20"
+		],
+		"pattern": "^(.*)$"
+	},
+	"lastPubDate": {
+		"$id": "#/properties/lastPubDate",
+		"type": "string",
+		"format": "date",
+		"title": "The Lastpubdate Schema",
+		"examples": [
+			"2014-12-20"
+		]
+	},
+	"identifiers": {
+		"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/identifiers"
+	},
+	"type": {
+		"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/workManifestationType"
+	},
+	"status": {
+		"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/status"
+	},
+	"format": {
+		"$id": "#/properties/format",
+		"type": "object",
+		"title": "The Format Schema",
+		"required": [
+			"code",
+			"name"
+		],
+		"properties": {
+			"code": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/code"
+			},
+			"name": {
+				"$ref": "file:src/main/resources/jsonValidator/commonAll.json#/name"
+			},
+			"lvl1": {
+				"$id": "#/properties/format/properties/lvl1",
+				"type": "string",
+				"title": "The Lvl1 Schema",
+				"examples": [
+					null
+				]
+			},
+			"lvl2": {
+				"$id": "#/properties/format/properties/lvl2",
+				"type": "string",
+				"title": "The Lvl2 Schema",
+				"examples": [
+					null
+				]
+			},
+			"lvl3": {
+				"$id": "#/properties/format/properties/lvl3",
+				"type": "string",
+				"title": "The Lvl3 Schema",
+				"examples": [
+					null
+				]
+			}
+		},
+		"additionalProperties": false
+	}
+}
