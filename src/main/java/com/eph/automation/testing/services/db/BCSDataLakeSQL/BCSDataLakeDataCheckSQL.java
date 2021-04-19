@@ -1,13 +1,15 @@
 //created by Nishant @ 29 Sep 2020
+//updation on 19-04-2021 Dinesh removed hardcoded DB.
 
 package com.eph.automation.testing.services.db.BCSDataLakeSQL;
+
 
 public class BCSDataLakeDataCheckSQL {
 
 
     public static String randomId_ingestTableFor_stg_current_classification=
             "select sourceref from(SELECT cl.value, productprojectno sourceref\n" +
-                    "FROM (bcs_ingestion_database_sit.initial_ingest f CROSS JOIN UNNEST(distributionclassification) x (cl)))\n" +
+                    "FROM (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest f CROSS JOIN UNNEST(distributionclassification) x (cl)))\n" +
                     "where value is not null AND value!='' AND value!='0' order by rand() limit %s";
 
     public static String getInitialIngestDataFor_stg_current_classification=
@@ -20,7 +22,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", cl.classificationtype\n" +
                     ", cl.priority\n" +
                     ", cl.businessunit\n" +
-                    "FROM  (bcs_ingestion_database_sit.initial_ingest f\n" +
+                    "FROM  (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest f\n" +
                     "CROSS JOIN UNNEST(distributionclassification) x (cl)))\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,value,classificationcode desc";
@@ -28,7 +30,7 @@ public class BCSDataLakeDataCheckSQL {
     public static String getCurrentTableDataFor_stg_current_classification=
             "select metadeleted, metamodifiedon,sourceref,classificationcode,\n" +
                     "value,classificationtype,priority,businessunit\n" +
-                    "from bcs_ingestion_database_sit.stg_current_classification \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_classification \n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,value,classificationcode desc";
 
@@ -36,7 +38,7 @@ public class BCSDataLakeDataCheckSQL {
     //created by Nishant @ 21 Oct 2020
     public static String randomId_ingestTableFor_stg_current_content=
             "select sourceref from(SELECT df.productprojectno sourceref FROM\n" +
-                    "bcs_ingestion_database_sit.initial_ingest df)  order by rand() limit %s";
+                    "bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df)  order by rand() limit %s";
 
 
     public static String getInitialIngestDataFor_stg_current_content=
@@ -79,7 +81,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", df.contentsubtitle\t\"subtitle\"\n" +
                     ", df.contentseriescode\t\"seriescode\"\n" +
                     ", df.contentobjtype\t\"objecttype\"\n" +
-                    "FROM bcs_ingestion_database_sit.initial_ingest df) \n" +
+                    "FROM bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df) \n" +
                     "  where sourceref in ('%s') order by sourceref desc";
 
     public static String getCurrentTableDataFor_stg_current_content=
@@ -87,13 +89,13 @@ public class BCSDataLakeDataCheckSQL {
                     "isset,doistatus,imprint,division,language3,regstatus,approvedondate,language2,doi," +
                     "volumeno,editionid,synctemplate,volumename,seriesissn,seriesid,ownership,firstapproval,companygroup," +
                     "shorttitle,editionno,work_master_flag,language,piidack,publisher,titleid,subtitle,seriescode,objecttype " +
-                    "from bcs_ingestion_database_sit.stg_current_content \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_content \n" +
                     "where sourceref in ('%s') order by sourceref desc";
 
     //added by Nishant @ 22 Oct 2020
     public static String randomId_ingestTableFor_stg_current_extobject=
             "select sourceref from(select productprojectno sourceref, cj.object, cj.name\n" +
-                    "from (bcs_ingestion_database_sit.initial_ingest df\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
                     "CROSS JOIN UNNEST(\"productexternalobjects\") x (cj)))\n" +
                     "where name is not null and name !='' and name!='0'\n" +
                     "order by rand() limit %s";
@@ -108,20 +110,20 @@ public class BCSDataLakeDataCheckSQL {
                     ", cj.name\n" +
                     ", cj.comments\n" +
                     ", cj.source\n" +
-                    "from (bcs_ingestion_database_sit.initial_ingest df\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
                     "CROSS JOIN UNNEST(productexternalobjects) x (cj)))\n" +
                     "where sourceref in ('%s') \n" +
                     "order by sourceref,name,object desc";
 
     public static String getCurrentTableDataFor_stg_current_extobject=
             "select metadeleted,metamodifiedon,sourceref,object,type,name,comments,source \n" +
-                    "from bcs_ingestion_database_sit.stg_current_extobject \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_extobject \n" +
                     "where sourceref in ('%s') order by sourceref,name,object desc";
 
 
     public static String randomId_ingestTableFor_stg_current_fullversionfamily=
             "select sourceref from (select productprojectno sourceref, fv.projectno\n" +
-                    "from (bcs_ingestion_database_sit.initial_ingest df\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
                     "CROSS JOIN UNNEST(contentfullversionfamily) x (fv)))\n" +
                     "where projectno is not null and projectno!=''\n" +
                     "order by rand() limit %s";
@@ -136,7 +138,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", fv.isbn\n" +
                     ", fv.projectno\n" +
                     ", fv.workmaster\n" +
-                    "from (bcs_ingestion_database_sit.initial_ingest df\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
                     "CROSS JOIN UNNEST(contentfullversionfamily) x (fv)))\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,projectno desc";
@@ -144,7 +146,7 @@ public class BCSDataLakeDataCheckSQL {
     public static String getCurrentTableDataFor_stg_current_fullversionfamily=
             "select metadeleted,metamodifiedon,sourceref,\n" +
                     "versiontype,editionno,isbn,projectno,workmaster\n" +
-                    "from bcs_ingestion_database_sit.stg_current_fullversionfamily \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_fullversionfamily \n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,projectno desc";
 
@@ -156,7 +158,7 @@ public class BCSDataLakeDataCheckSQL {
                     "  --, df.productprojectno sourceref\n" +
                     "  , co.businesspartnerid businesspartnerid\n" +
                     "  , co.authoraddress\n" +
-                    "  from (bcs_ingestion_database_sit.initial_ingest df\n" +
+                    "  from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
                     "  CROSS JOIN UNNEST(contactsoriginators) x (co))),\n" +
                     "  address as (\n" +
                     "  select\n" +
@@ -195,7 +197,7 @@ public class BCSDataLakeDataCheckSQL {
                     "  --, df.productprojectno sourceref\n" +
                     "  , co.businesspartnerid businesspartnerid\n" +
                     "  , co.authoraddress\n" +
-                    "  from (bcs_ingestion_database_sit.initial_ingest df\n" +
+                    "  from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
                     "  CROSS JOIN UNNEST(contactsoriginators) x (co))),\n" +
                     "  address as (\n" +
                     "  select\n" +
@@ -232,7 +234,7 @@ public class BCSDataLakeDataCheckSQL {
             "select metadeleted,metamodifiedon,businesspartnerid,addressline2,\n" +
                     "country,fax,street,additionaladdress,city,addressline1,addressid,telephonemain,\n" +
                     "ismainaddress,internet,houseno,email,addressline3,telephoneother,postalcode,\n" +
-                    "mobile,district from bcs_ingestion_database_sit.stg_current_originatoraddress \n" +
+                    "mobile,district from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_originatoraddress \n" +
                     "where businesspartnerid in (%s)\n" +
                     "order by businesspartnerid,country,metamodifiedon desc";
 
@@ -241,7 +243,7 @@ public class BCSDataLakeDataCheckSQL {
     public static String randomId_ingestTableFor_stg_current_originators=
             "select sourceref from " +
                     "(select df.productprojectno sourceref, co.businesspartnerid businesspartnerid\n" +
-                    "from (bcs_ingestion_database_sit.initial_ingest df CROSS JOIN UNNEST(contactsoriginators) x (co)))\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df CROSS JOIN UNNEST(contactsoriginators) x (co)))\n" +
                     "where businesspartnerid is not null order by rand() limit %s";
 
     public static String getInitialIngestDataFor_stg_current_originators=
@@ -261,7 +263,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", co.department\tdepartment\n" +
                     ", co.lastname\tlastname\n" +
                     ", co.searchterm\tsearchterm\n" +
-                    "from (bcs_ingestion_database_sit.initial_ingest df\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
                     "CROSS JOIN UNNEST(contactsoriginators) x (co)))\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,copyrightholdertype,businesspartnerid desc";
@@ -270,7 +272,7 @@ public class BCSDataLakeDataCheckSQL {
             "select metadeleted,metamodifiedon,sourceref, prefix,sequence,businesspartnerid,originatorid,\n" +
                     "isperson,locationid,copyrightholdertype,institution,\n" +
                     "firstname,department,lastname,searchterm\n" +
-                    "from bcs_ingestion_database_sit.stg_current_originators \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_originators \n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,copyrightholdertype,businesspartnerid desc";
 
@@ -278,7 +280,7 @@ public class BCSDataLakeDataCheckSQL {
             "select sourceref from(select \n" +
                     " df.productprojectno sourceref\n" +
                     ", cp.validupto validto\n" +
-                    "from (bcs_ingestion_database_sit.initial_ingest df\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
                     "CROSS JOIN UNNEST(productprice) x (cp)))\n" +
                     "where validto is not null and validto!=''\n" +
                     "order by rand() limit %s";
@@ -293,20 +295,20 @@ public class BCSDataLakeDataCheckSQL {
                     ", cp.priceapprox priceapprox\n" +
                     ", cp.price price\n" +
                     ", cp.validupto validto\n" +
-                    "from (bcs_ingestion_database_sit.initial_ingest df\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
                     "CROSS JOIN UNNEST(productprice) x (cp)))\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,type,currency,validto desc";
     public static String getCurrentTableDataFor_stg_current_pricing=
             "select metadeleted,metamodifiedon,sourceref,\n" +
                     "validfrom,type,currency,priceapprox,price,validto\n" +
-                    "from bcs_ingestion_database_sit.stg_current_pricing\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_pricing\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,type,currency,validto desc";
 
     public static String randomId_ingestTableFor_stg_current_product=
             "select sourceref from(select df.productprojectno sourceref\n" +
-                    "from (bcs_ingestion_database_sit.initial_ingest df)) \n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df)) \n" +
                     "order by rand() limit %s";
     public static String getInitialIngestDataFor_stg_current_product=
             "select * from(select \n" +
@@ -350,7 +352,7 @@ public class BCSDataLakeDataCheckSQL {
                     "--, df.productexternalimpressionid\texternalimpressionid\n" +
                     ", df.productplannedfirstprint\tplannedfirstprint\n" +
                     ", df.productbinding\tbinding\n" +
-                    "from (bcs_ingestion_database_sit.initial_ingest df))\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df))\n" +
                     "where sourceref in('%s')\n" +
                     "order by sourceref desc";
     public static String getCurrentTableDataFor_stg_current_product=
@@ -367,13 +369,13 @@ public class BCSDataLakeDataCheckSQL {
                     "reason,budgetpubdate,pubdateplanned,createdon,\n" +
                     "--externalimpressionid,\n" +
                     "plannedfirstprint,binding\n" +
-                    "from bcs_ingestion_database_sit.stg_current_product \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_product \n" +
                     "where sourceref in('%s')\n" +
                     "order by sourceref desc";
 
     public static String randomId_ingestTableFor_stg_current_production=
             "select sourceref from(select df.productprojectno sourceref\n" +
-                    "from (bcs_ingestion_database_sit.initial_ingest df)) \n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df)) \n" +
                     "order by rand() limit %s";
     public static String getInitialIngestDataFor_stg_current_production=
             "select * from(select \n" +
@@ -441,7 +443,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", df.productionextentstatus\textentstatus\n" +
                     ", df.productionpagesarabic\tpagesarabic\n" +
                     ", df.productiongraphicsbw\tgraphicsbw\n" +
-                    "from (bcs_ingestion_database_sit.initial_ingest df))\n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df))\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref desc";
     public static String getCurrentTableDataFor_stg_current_production=
@@ -456,12 +458,12 @@ public class BCSDataLakeDataCheckSQL {
                     ", printform, duotone, copyedlevel, exteriorpms, finishing, material, paperquality\n" +
                     ", interiorpms, interiorcolour, boardthickness, spec, mapscolor, textdesigntype\n" +
                     ", classification, halftonescolors, biblioreference, extentstatus, pagesarabic, graphicsbw \n" +
-                    "from bcs_ingestion_database_sit.stg_current_production \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_production \n" +
                     "where sourceref in ('%s')order by sourceref desc";
 
     public static String randomId_ingestTableFor_stg_current_relations=
             "select sourceref from(select df.productprojectno sourceref, cj.projectno projectno\n" +
-                    "from (bcs_ingestion_database_sit.initial_ingest df      \n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df      \n" +
                     "CROSS JOIN UNNEST(productrelation) x (cj))) \n" +
                     "where projectno is not null\n" +
                     "order by rand() limit %s";
@@ -475,7 +477,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", cj.projectno projectno\n" +
                     "--, cj.relimpressionid relimpressionid\n" +
                     ", cj.isbn isbn\n" +
-                    "from (bcs_ingestion_database_sit.initial_ingest df \n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df \n" +
                     "CROSS JOIN UNNEST(productrelation) x (cj)))\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,relationtype,projectno desc";
@@ -483,14 +485,14 @@ public class BCSDataLakeDataCheckSQL {
             "select metadeleted,metamodifiedon,sourceref,orderno\n" +
                     ",relationtype,projectno--,relimpressionid\n" +
                     ",isbn\n" +
-                    "from bcs_ingestion_database_sit.stg_current_relations\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_relations\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,relationtype,projectno desc";
 
     public static String randomId_ingestTableFor_stg_current_responsibilities=
             "select sourceref from(select \n" +
                     " df.productprojectno sourceref, cj.responsibleperson\tresponsibleperson\n" +
-                    "from (bcs_ingestion_database_sit.initial_ingest df \n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df \n" +
                     "CROSS JOIN UNNEST(contactsresponsibilities) x (cj)))\n" +
                     "where responsibleperson is not null and responsibleperson!=''\n" +
                     " order by rand() limit %s";
@@ -502,14 +504,14 @@ public class BCSDataLakeDataCheckSQL {
                     ", cj.responsibility responsibility\n" +
                     ", cj.responsibleperson responsibleperson\n" +
                     ", cj.personid personid\n" +
-                    "from (bcs_ingestion_database_sit.initial_ingest df \n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df \n" +
                     "CROSS JOIN UNNEST(contactsresponsibilities) x (cj)))\n" +
                     "where sourceref in ('%s')\n" +
                     " order by  sourceref,responsibility,responsibleperson desc";
     public static String getCurrentTableDataFor_stg_current_responsibilities=
             "select metadeleted,metamodifiedon,sourceref,responsibility\n" +
                     ",responsibleperson,personid\n" +
-                    "from bcs_ingestion_database_sit.stg_current_responsibilities \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_responsibilities \n" +
                     "where sourceref in ('%s')\n" +
                     "order by  sourceref,responsibility,responsibleperson desc";
 
@@ -517,7 +519,7 @@ public class BCSDataLakeDataCheckSQL {
             "select sourceref from(select \n" +
                     " df.productprojectno sourceref\n" +
                     ", cj.warehouse\twarehouse\n" +
-                    "from (bcs_ingestion_database_sit.initial_ingest df \n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df \n" +
                     "CROSS JOIN UNNEST(productsublocation) x (cj)))\n" +
                     "where warehouse is not null and warehouse!=''\n" +
                     "order by rand() limit %s";
@@ -532,7 +534,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", cj.refkey refkey\n" +
                     ", cj.status status\n" +
                     ", cj.plannedpubdate plannedpubdate\n" +
-                    "from (bcs_ingestion_database_sit.initial_ingest df \n" +
+                    "from (bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df \n" +
                     "CROSS JOIN UNNEST(productsublocation) x (cj)))\n" +
                     "where sourceref in('%s')\n" +
                     "order by sourceref,warehouse desc";
@@ -540,7 +542,7 @@ public class BCSDataLakeDataCheckSQL {
     public static String getCurrentTableDataFor_stg_current_sublocation=
             "select metadeleted,metamodifiedon,sourceref,warehouse\n" +
                     ",pubdateactual,stocksplit, refkey,status,plannedpubdate\n" +
-                    "from bcs_ingestion_database_sit.stg_current_sublocation\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_sublocation\n" +
                     "where sourceref in('%s')\n" +
                     "order by sourceref,warehouse desc";
 
@@ -548,7 +550,7 @@ public class BCSDataLakeDataCheckSQL {
     public static String randomId_ingestTableFor_stg_current_text=
             "select sourceref from(select \n" +
                     " df.productprojectno sourceref, cj.text\n" +
-                    "from bcs_ingestion_database_sit.initial_ingest df\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
                     "CROSS JOIN UNNEST(distributiontext) x (cj)) \n" +
                     "where text is not null and text!=''\n" +
                     "order by rand() limit %s";
@@ -562,14 +564,14 @@ public class BCSDataLakeDataCheckSQL {
                     ", cj.name\n" +
                     ", cj.text\n" +
                     ", cj.status\n" +
-                    "from bcs_ingestion_database_sit.initial_ingest df\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
                     "CROSS JOIN UNNEST(distributiontext) x (cj))\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,texttype,text desc";
     public static String getCurrentTableDataFor_stg_current_text=
             "select metadeleted,metamodifiedon,sourceref,tab\n" +
                     ",texttype,name, text,status\n" +
-                    "from bcs_ingestion_database_sit.stg_current_text\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_text\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,texttype,text desc";
 
@@ -577,7 +579,7 @@ public class BCSDataLakeDataCheckSQL {
             "select sourceref from(select \n" +
                     " df.productprojectno sourceref\n" +
                     ", cj.childprojectno childprojectno\n" +
-                    "from bcs_ingestion_database_sit.initial_ingest df\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
                     "CROSS JOIN UNNEST(contentversionfamily) x (cj))\n" +
                     "where childprojectno is not null and childprojectno!=''\n" +
                     "order by rand() limit %s";
@@ -590,14 +592,14 @@ public class BCSDataLakeDataCheckSQL {
                     ", cj.workmasterprojectno workmasterprojectno\n" +
                     ", cj.childisbn childisbn\n" +
                     ", cj.childprojectno childprojectno\n" +
-                    "from bcs_ingestion_database_sit.initial_ingest df\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".initial_ingest df\n" +
                     "CROSS JOIN UNNEST(contentversionfamily) x (cj))\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,childprojectno desc";
     public static String getCurrentTableDataFor_stg_current_versionfamily=
             "select metadeleted,metamodifiedon,sourceref,workmasterisbn\n" +
                     ",workmasterprojectno,childisbn,childprojectno\n" +
-                    "from bcs_ingestion_database_sit.stg_current_versionfamily\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_versionfamily\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,childprojectno desc";
 
@@ -650,24 +652,24 @@ public class BCSDataLakeDataCheckSQL {
                     */
 
     public static String randomId_stg_current_classification=
-            "select sourceref from bcs_ingestion_database_sit.stg_current_classification \n" +
+            "select sourceref from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_classification \n" +
                     "where value is not null AND value!='' AND value!='0' order by rand() limit 1";
     public static String getData_stg_current_classification=
             "select metadeleted, metamodifiedon,sourceref,classificationcode,\n" +
                     "value,classificationtype,priority,businessunit\n" +
-                    "from bcs_ingestion_database_sit.stg_current_classification \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_classification \n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,value,classificationcode desc";
     public static String getData_stg_history_classification_part=
             "select metadeleted, metamodifiedon,sourceref,classificationcode,\n" +
                     "value,classificationtype,priority,businessunit\n" +
-                    "from bcs_ingestion_database_sit.stg_history_classification_part \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_classification_part \n" +
                     "where sourceref in ('%s') and \n" +
-                    "inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_classification_part)\n" +
+                    "inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_classification_part)\n" +
                     "order by sourceref,value,classificationcode desc";
 
     public static String randomId_stg_current_content=
-            "select sourceref from bcs_ingestion_database_sit.stg_current_content order by rand() limit %s";
+            "select sourceref from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_content order by rand() limit %s";
     public static String getData_stg_current_content=
           "select metadeleted,metamodifiedon,sourceref,\n" +
                   "originimpid,subgroup,series,copyrightyear,\n" +
@@ -678,7 +680,7 @@ public class BCSDataLakeDataCheckSQL {
                   "firstapproval,companygroup,shorttitle,editionno,\n" +
                   "work_master_flag,language,piidack,publisher,\n" +
                   "titleid,subtitle,seriescode,objecttype\n" +
-                  "from bcs_ingestion_database_sit.stg_current_content \n" +
+                  "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_content \n" +
                   "where sourceref in ('%s')\n" +
                   "order by sourceref desc";
     public static String getData_stg_history_content_part=
@@ -691,82 +693,82 @@ public class BCSDataLakeDataCheckSQL {
                     "firstapproval,companygroup,shorttitle,editionno,\n" +
                     "work_master_flag,language,piidack,publisher,\n" +
                     "titleid,subtitle,seriescode,objecttype\n" +
-                    "from bcs_ingestion_database_sit.stg_history_content_part\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_content_part\n" +
                     "where sourceref in ('%s')\n" +
-                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_content_part)\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_content_part)\n" +
                     "order by sourceref desc";
 
     public static String randomId_stg_current_extobject=
-            "select sourceref from bcs_ingestion_database_sit.stg_current_extobject \n" +
+            "select sourceref from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_extobject \n" +
                     "where name is not null AND name!='' order by rand() limit %s";
     public static String getData_stg_current_extobject=
             "select metadeleted,metamodifiedon,sourceref,\n" +
                     "object,type,name,comments,source \n" +
-                    "from bcs_ingestion_database_sit.stg_current_extobject \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_extobject \n" +
                     "where sourceref in ('%s') \n" +
                     "order by sourceref,name,object desc";
     public static String getData_stg_history_extobject_part=
             "select metadeleted,metamodifiedon,sourceref,\n" +
                     "object,type,name,comments,source \n" +
-                    "from bcs_ingestion_database_sit.stg_history_extobject_part\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_extobject_part\n" +
                     "where sourceref in ('%s') \n" +
-                    "and inbound_ts=(select max(inbound_ts) from \"bcs_ingestion_database_sit\".\"stg_history_extobject_part\")\n" +
+                    "and inbound_ts=(select max(inbound_ts) from \"bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+"\".\"stg_history_extobject_part\")\n" +
                     "order by sourceref,name,object desc";
 
     public static String randomId_stg_current_fullversionfamily=
-            "select sourceref from bcs_ingestion_database_sit.stg_current_fullversionfamily where projectno is not null AND projectno!='' order by rand() limit %s";
+            "select sourceref from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_fullversionfamily where projectno is not null AND projectno!='' order by rand() limit %s";
     public static String getData_stg_current_fullversionfamily=
             "select metadeleted,metamodifiedon,sourceref,\n" +
                     "versiontype,editionno,isbn,projectno,workmaster\n" +
-                    "from bcs_ingestion_database_sit.stg_current_fullversionfamily \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_fullversionfamily \n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,projectno desc";
     public static String getData_stg_history_fullversionfamily_part=
             "select metadeleted,metamodifiedon,sourceref,\n" +
                     "versiontype,editionno,isbn,projectno,workmaster\n" +
-                    "from bcs_ingestion_database_sit.stg_history_fullversionfamily_part \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_fullversionfamily_part \n" +
                     "where sourceref in ('%s')\n" +
-                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_fullversionfamily_part)\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_fullversionfamily_part)\n" +
                     "order by sourceref,projectno desc";
 
 
     public static String randomId_stg_current_originators=
-            "select sourceref from bcs_ingestion_database_sit.stg_current_originators where businesspartnerid is not null order by rand() limit %s";
+            "select sourceref from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_originators where businesspartnerid is not null order by rand() limit %s";
     public static String getData_stg_current_originators=
             "select metadeleted,metamodifiedon,sourceref, prefix,sequence,businesspartnerid,originatorid,\n" +
                     "isperson,locationid,copyrightholdertype,institution,\n" +
                     "firstname,department,lastname,searchterm\n" +
-                    "from bcs_ingestion_database_sit.stg_current_originators \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_originators \n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,copyrightholdertype,businesspartnerid desc";
     public static String getData_stg_history_originators_part=
             "select metadeleted,metamodifiedon,sourceref, prefix,sequence,businesspartnerid,originatorid,\n" +
                     "isperson,locationid,copyrightholdertype,institution,\n" +
                     "firstname,department,lastname,searchterm\n" +
-                    "from bcs_ingestion_database_sit.stg_history_originators_part \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originators_part \n" +
                     "where sourceref in ('%s')\n" +
-                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_originators_part)\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_originators_part)\n" +
                     "order by sourceref,copyrightholdertype,businesspartnerid desc";
 
 
     public static String randomId_stg_current_pricing=
-            "select sourceref from bcs_ingestion_database_sit.stg_current_pricing \n" +
+            "select sourceref from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_pricing \n" +
                     "where validto is not null and validto !='' order by rand() limit %s";
     public static String getData_stg_current_pricing=
             "select metadeleted,metamodifiedon,sourceref,\n" +
                     "validfrom,type,currency,priceapprox,price,validto\n" +
-                    "from bcs_ingestion_database_sit.stg_current_pricing\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_pricing\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,type,currency,validto desc";
     public static String getData_stg_history_pricing_part =
             "select metadeleted,metamodifiedon,sourceref,\n" +
                     "validfrom,type,currency,priceapprox,price,validto\n" +
-                    "from bcs_ingestion_database_sit.stg_history_pricing_part\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_pricing_part\n" +
                     "where sourceref in ('%s')\n" +
-                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_pricing_part)\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_pricing_part)\n" +
                     "order by sourceref,type,currency,validto desc";
     public static String randomId_stg_current_product=
-            "select sourceref from bcs_ingestion_database_sit.stg_current_product order by rand() limit %s";
+            "select sourceref from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_product order by rand() limit %s";
     public static String getData_stg_current_product=
             "select metadeleted,metamodifiedon,sourceref,\n" +
                     "noofvolumes,refkey,externaleditionid,\n" +
@@ -780,7 +782,7 @@ public class BCSDataLakeDataCheckSQL {
                     "latestpubdate,medium,orderno,firstprinting,\n" +
                     "reason,budgetpubdate,pubdateplanned,createdon,\n" +
                     "--externalimpressionid,\n plannedfirstprint,binding\n" +
-                    "from bcs_ingestion_database_sit.stg_current_product \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_product \n" +
                     "where sourceref in('%s')\n" +
                     "order by sourceref desc";
     public static String getData_stg_history_product_part=
@@ -797,13 +799,13 @@ public class BCSDataLakeDataCheckSQL {
                     "reason,budgetpubdate,pubdateplanned,createdon,\n" +
                     "--externalimpressionid,\n" +
                     "plannedfirstprint,binding\n" +
-                    "from bcs_ingestion_database_sit.stg_history_product_part \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_product_part \n" +
                     "where sourceref in('%s')\n" +
-                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_product_part)\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_product_part)\n" +
                     "order by sourceref desc";
 
     public static String randomId_stg_current_production=
-            "select sourceref from bcs_ingestion_database_sit.stg_current_production order by rand() limit %s";
+            "select sourceref from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_production order by rand() limit %s";
     public static String getData_stg_current_production=
             "select  metadeleted\n" +
                     ", metamodifiedon, sourceref, weight, lineartbw, frontpapercolour, backpapercolour\n" +
@@ -816,7 +818,7 @@ public class BCSDataLakeDataCheckSQL {
                     ", printform, duotone, copyedlevel, exteriorpms, finishing, material, paperquality\n" +
                     ", interiorpms, interiorcolour, boardthickness, spec, mapscolor, textdesigntype\n" +
                     ", classification, halftonescolors, biblioreference, extentstatus, pagesarabic, graphicsbw \n" +
-                    "from bcs_ingestion_database_sit.stg_current_production \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_production \n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref desc";
     public static String getData_stg_history_production_part=
@@ -831,95 +833,95 @@ public class BCSDataLakeDataCheckSQL {
                     ", printform, duotone, copyedlevel, exteriorpms, finishing, material, paperquality\n" +
                     ", interiorpms, interiorcolour, boardthickness, spec, mapscolor, textdesigntype\n" +
                     ", classification, halftonescolors, biblioreference, extentstatus, pagesarabic, graphicsbw \n" +
-                    "from bcs_ingestion_database_sit.stg_history_production_part \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_production_part \n" +
                     "where sourceref in ('%s')\n" +
-                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_production_part)\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_production_part)\n" +
                     "order by sourceref desc";
 
     public static String randomId_stg_current_relations=
-            "select sourceref from bcs_ingestion_database_sit.stg_current_relations \n" +
+            "select sourceref from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_relations \n" +
                     "where projectno is not null and projectno!=''\n" +
                     "order by rand() limit %s";
     public static String getData_stg_current_relations=
             "select metadeleted,metamodifiedon,sourceref,orderno\n" +
                     ",relationtype,projectno,--relimpressionid,\n isbn\n" +
-                    "from bcs_ingestion_database_sit.stg_current_relations\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_relations\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,relationtype,projectno desc";
     public static String getData_stg_history_relations_part=
             "select metadeleted,metamodifiedon,sourceref,orderno\n" +
                     ",relationtype,projectno,--relimpressionid,\n isbn\n" +
-                    "from bcs_ingestion_database_sit.stg_history_relations_part\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_relations_part\n" +
                     "where sourceref in ('%s')\n" +
-                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_relations_part)\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_relations_part)\n" +
                     "order by sourceref,relationtype,projectno desc";
 
     public static String randomId_stg_current_responsibilities=
-            "select sourceref from bcs_ingestion_database_sit.stg_current_responsibilities where responsibleperson is not null and responsibleperson!=''\n" +
+            "select sourceref from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_responsibilities where responsibleperson is not null and responsibleperson!=''\n" +
                     "order by rand() limit %s";
     public static String getData_stg_current_responsibilities=
             "select metadeleted,metamodifiedon,sourceref,responsibility\n" +
                     ",responsibleperson,personid\n" +
-                    "from bcs_ingestion_database_sit.stg_current_responsibilities \n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_responsibilities \n" +
                     "where sourceref in ('%s')\n" +
                     "order by  sourceref,responsibility,responsibleperson desc";
     public static String getData_stg_history_responsibilities_part=
             "select metadeleted,metamodifiedon,sourceref,responsibility\n" +
                     ",responsibleperson,personid\n" +
-                    "from bcs_ingestion_database_sit.stg_history_responsibilities_part \n" +
-                    "where sourceref in ('%s') and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_responsibilities_part)\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_responsibilities_part \n" +
+                    "where sourceref in ('%s') and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_responsibilities_part)\n" +
                     "order by  sourceref,responsibility,responsibleperson desc";
 
     public static String randomId_stg_current_sublocation=
-            "select sourceref from bcs_ingestion_database_sit.stg_current_sublocation where warehouse is not null and warehouse!=''\n" +
+            "select sourceref from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_sublocation where warehouse is not null and warehouse!=''\n" +
                     "order by rand() limit %s";
     public static String getData_stg_current_sublocation=
             "select metadeleted,metamodifiedon,sourceref,warehouse\n" +
                     ",pubdateactual,stocksplit, refkey,status,plannedpubdate\n" +
-                    "from bcs_ingestion_database_sit.stg_current_sublocation\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_sublocation\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,warehouse desc";
     public static String getData_stg_history_sublocation_part=
             "select metadeleted,metamodifiedon,sourceref,warehouse\n" +
                     ",pubdateactual,stocksplit, refkey,status,plannedpubdate\n" +
-                    "from bcs_ingestion_database_sit.stg_history_sublocation_part\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_sublocation_part\n" +
                     "where sourceref in ('%s')\n" +
-                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_sublocation_part)\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_sublocation_part)\n" +
                     "order by sourceref,warehouse desc";
     public static String randomId_stg_current_text=
-            "select sourceref from bcs_ingestion_database_sit.stg_current_text \n" +
+            "select sourceref from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_text \n" +
                     "where text is not null and text!=''\n" +
                     "order by rand() limit %s";
     public static String getData_stg_current_text=
             "select metadeleted,metamodifiedon,sourceref,tab\n" +
                     ",texttype,name, text,status\n" +
-                    "from bcs_ingestion_database_sit.stg_current_text\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_text\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,texttype,text desc";
     public static String getData_stg_history_text_part=
             "select metadeleted,metamodifiedon,sourceref,tab\n" +
                     ",texttype,name, text,status\n" +
-                    "from bcs_ingestion_database_sit.stg_history_text_part\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_text_part\n" +
                     "where sourceref in ('%s')\n" +
-                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_text_part)\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_text_part)\n" +
                     "order by sourceref,texttype,text desc";
 
 
     public static String randomId_stg_current_versionfamily=
-            "select sourceref from bcs_ingestion_database_sit.stg_current_versionfamily where childprojectno is not null and childprojectno!=''\n" +
+            "select sourceref from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_versionfamily where childprojectno is not null and childprojectno!=''\n" +
                     "order by rand() limit %s";
     public static String getData_stg_current_versionfamily=
             "select metadeleted,metamodifiedon,sourceref,workmasterisbn\n" +
                     ",workmasterprojectno,childisbn, childprojectno\n" +
-                    "from bcs_ingestion_database_sit.stg_current_versionfamily\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_current_versionfamily\n" +
                     "where sourceref in ('%s')\n" +
                     "order by sourceref,childprojectno desc";
     public static String getData_stg_history_versionfamily_part=
             "select metadeleted,metamodifiedon,sourceref,workmasterisbn\n" +
                     ",workmasterprojectno,childisbn, childprojectno\n" +
-                    "from bcs_ingestion_database_sit.stg_history_versionfamily_part\n" +
+                    "from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_versionfamily_part\n" +
                     "where sourceref in ('%s')\n" +
-                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_sit.stg_history_versionfamily_part)\n" +
+                    "and inbound_ts=(select max(inbound_ts) from bcs_ingestion_database_"+getBCSDataBase.getBCSDataBase()+".stg_history_versionfamily_part)\n" +
                     "order by sourceref,childprojectno desc";
 
 }
