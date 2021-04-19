@@ -8,9 +8,13 @@ public class GetStitchDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbProdExt = "product_ext_database_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
+                dbProdExt = "product_ext_database_uat";
+            }
+             else{
                 dbProdExt = "product_ext_database_uat2";
             }
+
 
         }else{
             //dbProdExt = "product_ext_database_sit";
