@@ -73,7 +73,7 @@ public class JRBICountChecksSteps {
                 JRBIFullSQLSourceCount = JRBIDataLakeCountChecksSQL.GET_JRBI_PERSON_SOURCE_COUNT;
                 break;
         }
-     //   Log.info(JRBIFullSQLSourceCount);
+        Log.info(JRBIFullSQLSourceCount);
         List<Map<String, Object>> JRBIFullSourceTableCount = DBManager.getDBResultMap(JRBIFullSQLSourceCount, Constants.AWS_URL);
         JRBIFullSourceCount = ((Long) JRBIFullSourceTableCount.get(0).get("Source_Count")).intValue();
     }

@@ -7,7 +7,7 @@ Feature:Validate data for JRBI Person tables in Data Lake
   #Confluence LinK: https://confluence.cbsels.com/pages/viewpage.action?pageId=168466078
 
 
-  @JRBI
+  @JRBIETLExtended
   Scenario Outline: Verify Data for JRBI transform_current_person is transferred from person_data_full
     Given We get the <countOfRandomIds> random Person EPR ids <tableName>
     When  Get the records from data full load for Person
@@ -18,7 +18,7 @@ Feature:Validate data for JRBI Person tables in Data Lake
       |jrbi_journal_data_full             |10            |
 
 
-  @JRBI
+  @JRBIETLExtended
   Scenario Outline: Verify Data for JRBI transform_Current_person_history is transferred from Current PErson
     Given We get the <countOfRandomIds> random Person EPR ids <sourceTable>
     When Get the records from transform current person
@@ -29,7 +29,7 @@ Feature:Validate data for JRBI Person tables in Data Lake
       |jrbi_transform_current_person|   10                 |
 
 
-  @JRBIP
+  @JRBIETLExtended
   Scenario Outline: Verify Data for JRBI transform_previous_person_history is transferred from Previous Person
     Given We get the <countOfRandomIds> random Person EPR ids <sourceTable>
     When Get the records from transform previous person
@@ -40,7 +40,7 @@ Feature:Validate data for JRBI Person tables in Data Lake
       |jrbi_transform_previous_person|   10                 |
 
 
-  @JRBI
+  @JRBIETLExtended
   Scenario Outline: Verify Data from the difference of current_person and previous_person is transferred to delta current person table
     Given We get the <countOfRandomIds> random Person EPR ids <tableReference>
     When Get the records from the difference of current_person and previous_person
@@ -51,7 +51,7 @@ Feature:Validate data for JRBI Person tables in Data Lake
       |jrbi_current_previous_person       |10                 |
 
 
-  @JRBI
+  @JRBIETLExtended
   Scenario Outline: Verify Data for JRBI transform_Delta_person_history is transferred from Delta Person
     Given We get the <countOfRandomIds> random Person EPR ids <sourceTable>
     When Get the records from transform Delta Current person
@@ -62,7 +62,7 @@ Feature:Validate data for JRBI Person tables in Data Lake
       |jrbi_delta_current_person| 10                 |
 
 
-  @JRBI
+  @JRBIETLExtended
   Scenario Outline: Verify Data from the difference of Delta_person and person_history is transferred to person exclude table
     Given We get the <countOfRandomIds> random Person EPR ids <tableName>
     When Get the records from the difference of Delta_current_person and person_history
@@ -72,7 +72,7 @@ Feature:Validate data for JRBI Person tables in Data Lake
       |tableName                                | countOfRandomIds|
       |jrbi_transform_history_person_excl_delta|10                |
 
-  @JRBI
+  @JRBIETLExtended
   Scenario Outline: Verify Data from the addition of Delta_current_person and person_Exclude is transferred to person Latest table
     Given We get the <countOfRandomIds> random Person EPR ids <tableName>
     When Get the records from the addition of Delta_Person and Person_Exclude
