@@ -8,8 +8,10 @@ public class GetSDBooksDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbSDDL = "sdbooks_staging_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbSDDL = "sdbooks_staging_uat";
+            }else{
+                dbSDDL = "sdbooks_staging_uat2";
             }
 
         }else{
@@ -25,8 +27,10 @@ public class GetSDBooksDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbProdDb = "product_staging_database_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbProdDb = "product_staging_database_uat";
+            }else{
+                dbProdDb = "product_staging_database_uat2";
             }
         }else{
             dbProdDb = "product_staging_database_sit";

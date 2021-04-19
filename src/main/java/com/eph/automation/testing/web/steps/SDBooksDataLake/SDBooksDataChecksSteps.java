@@ -31,7 +31,7 @@ public class SDBooksDataChecksSteps {
 
     @Given("^We get the (.*) random ISBN ids (.*)$")
     public void getRandomISBNIds(String numberOfRecords, String tableName) {
-      // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random URL ISBN Ids...");
         switch (tableName) {
