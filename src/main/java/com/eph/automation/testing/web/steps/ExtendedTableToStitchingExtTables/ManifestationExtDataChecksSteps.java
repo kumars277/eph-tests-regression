@@ -38,7 +38,7 @@ public class ManifestationExtDataChecksSteps {
 
     @Given("^We get the (.*) random manifestation Ext EPR ids (.*)$")
     public void getRandomManifExtEPRIds(String numberOfRecords, String tableName) {
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Manif Ext EPR Ids...");
         switch (tableName) {
@@ -201,7 +201,7 @@ public class ManifestationExtDataChecksSteps {
 
     @Given("^We get the (.*) random manifestation Ext page count EPR ids (.*)$")
     public void getRandomManifExtPgCountIds(String numberOfRecords, String tableName) {
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Manif Ext Page count EPR Ids...");
         switch (tableName) {
@@ -296,7 +296,7 @@ public class ManifestationExtDataChecksSteps {
 
     @Given("^We get the (.*) random manifestation Ext restrictions EPR ids (.*)$")
     public void getRandomManifExtRestrictIds(String numberOfRecords, String tableName) {
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Manif Ext Restrict count EPR Ids...");
         switch (tableName) {
