@@ -6,7 +6,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
   #Confluence LinK: https://confluence.cbsels.com/pages/viewpage.action?pageId=168466078
 
 
-  @JRBI
+  @JRBIETLExtended
   Scenario Outline: Verify Data for JRBI transform_Current_work is transferred from journal_data_full
     Given We get the <countOfRandomIds> random EPR ids <sourceTable>
     When We get the records from data jrbi_journal_data_full
@@ -16,7 +16,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
       | sourceTable         | countOfRandomIds|
       |jrbi_journal_data_full|      10         |
 
-  @JRBI
+  @JRBIETLExtended
   Scenario Outline: Verify Data for JRBI transform_Current_work_history is transferred from Current Work
     Given We get the <countOfRandomIds> random EPR ids <sourceTable>
     When We get the records from transform current work
@@ -26,7 +26,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
       | sourceTable               | countOfRandomIds|
       |jrbi_transform_current_work| 10                |
 
-  @JRBI
+  @JRBIETLExtended
   Scenario Outline: Verify Data for JRBI transform_Previous_work_history is transferred from Previous Work
     Given We get the <countOfRandomIds> random EPR ids <sourceTable>
     When We get the records from transform previous work
@@ -36,7 +36,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
       | sourceTable                  | countOfRandomIds|
       |jrbi_transform_previous_work  |10                 |
 
-  @JRBI
+  @JRBIETLExtended
   Scenario Outline: Verify Data from the difference of current_work and previous_work is transferred to delta current work table
     Given We get the <countOfRandomIds> random EPR ids <tableReference>
     When Get the records from the difference of current_work and previous_work
@@ -47,7 +47,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
       |jrbi_transform_previous_current_work| 10                 |
 
 
-  @JRBI
+  @JRBIETLExtended
   Scenario Outline: Verify Data for JRBI delta_current_work_history is transferred from delta current Work
     Given We get the <countOfRandomIds> random EPR ids <sourceTable>
     When We get the records from transform delta current work
@@ -58,7 +58,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
       |jrbi_delta_current_work|         10                 |
 
 
-  @JRBI
+  @JRBIETLExtended
   Scenario Outline: Verify Data from the difference of Delta_current_work and work_history is transferred to work exclude table
     Given We get the <countOfRandomIds> random EPR ids <tableName>
     When Get the records from the difference of Delta_current_work and work_history
@@ -68,7 +68,7 @@ Feature:Validate data for JRBI Work tables in Data Lake
       |tableName                                | countOfRandomIds|
       |jrbi_transform_history_work_excl_delta   |10                 |
 
-  @JRBI
+  @JRBIETLExtended
   Scenario Outline: Verify Data from the addition of Delta_current_work and work_Exclude is transferred to work Latest table
     Given We get the <countOfRandomIds> random EPR ids <tableName>
     When Get the records from the addition of Delta_current_work and work_Exclude
