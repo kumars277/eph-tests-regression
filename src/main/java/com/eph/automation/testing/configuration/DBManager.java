@@ -98,7 +98,8 @@ public class DBManager {
             if (connection == null) {
                 DbUtils.loadDriver(athenaDriver);
             }
-            connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
+          //  connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
+            connection = DriverManager.getConnection(SecretsManagerHandler.getPostgreDBConnection(URL));
             QueryRunner query = new QueryRunner();
             mapList = (List) query.query(connection, sql, new MapListHandler());
         } catch (SQLException sqlException) {

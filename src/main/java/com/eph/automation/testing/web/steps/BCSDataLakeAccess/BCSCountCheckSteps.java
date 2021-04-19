@@ -41,7 +41,8 @@ public class BCSCountCheckSteps {
             case "stg_current_text":              BCSFullSourceCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_TEXT_SOURCE_COUNT; break;
             case "stg_current_versionfamily":     BCSFullSourceCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_VERSIONFAMILY_SOURCE_COUNT; break;
         }
-        List<Map<String, Object>> BCSFullSourceTableCount = DBManager.getDLResultMap(BCSFullSourceCount_SQL, Constants.AWS_URL);
+     //   List<Map<String, Object>> BCSFullSourceTableCount = DBManager.getDLResultMap(BCSFullSourceCount_SQL, Constants.AWS_URL);
+        List<Map<String, Object>> BCSFullSourceTableCount = DBManager.getDBResultMap(BCSFullSourceCount_SQL, Constants.AWS_URL);
         BCSFullSourceCount = ((Long) BCSFullSourceTableCount.get(0).get("Source_Count")).intValue();
         Log.info(tableName+" source count :" +BCSFullSourceCount);
     }
