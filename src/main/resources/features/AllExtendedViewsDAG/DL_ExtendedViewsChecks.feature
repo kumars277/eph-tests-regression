@@ -2,7 +2,7 @@ Feature:Validate data of DL Extended Views where data comes from All Extended Vi
 
 #  Created by Dinesh on 17/02/2021
 
-  @DLExtView2
+  @DLExtViews
   Scenario Outline: Verify Data Count for DL extended tables is transferred from All Extended views
     Given Get the total count of DL Extended views <tableName>
     Then  We know the total count of All Extended views <tableName>
@@ -23,7 +23,7 @@ Feature:Validate data of DL Extended Views where data comes from All Extended Vi
       |work_extended_url                                                  |
 
 
- @DLExtView2
+ @DLExtViews
  Scenario Outline: Verify Data for DL Ext tables is transferred from All Extended Views
     Given Get the <countOfRandomIds> from All Extended views <tableName>
     Then  Get the Records from the All Extended views <tableName>

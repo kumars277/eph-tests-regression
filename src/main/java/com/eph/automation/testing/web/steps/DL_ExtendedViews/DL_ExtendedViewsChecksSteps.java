@@ -157,7 +157,7 @@ public class DL_ExtendedViewsChecksSteps {
 
    @Given("^Get the (.*) from All Extended views (.*)$")
     public void getRandomIdsFromAllExtViews(String numberOfRecords, String tableName) {
-       // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids from All Ext Views....");
 
