@@ -25,7 +25,7 @@ public class PromisETLDataCheck {
 
     @Given("^We get the (.*) random Promis ids of (.*)$")
     public void getRandomPromisIds(String numberOfRecords, String Currenttablename) {
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random records...");
         switch (Currenttablename) {
