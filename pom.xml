@@ -79,7 +79,7 @@
                 <configuration>
                     <skipTests>false</skipTests>
                     <systemPropertyVariables>
-                        <env>${ENV}</env>
+                        <ENV>${ENV}</ENV>
                         <load>${LOAD}</load>
                         <browser>chrome</browser>
                         <encryptionPasswordEOAS>EOAS Secret Password</encryptionPasswordEOAS>
