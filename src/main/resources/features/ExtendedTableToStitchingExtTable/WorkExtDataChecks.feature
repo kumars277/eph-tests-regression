@@ -64,7 +64,7 @@ Feature:Validate data for  Work Ext Stitching tables in EPH
     Then Compare work Extended editorial and work Extended Stitching Table
     Examples:
       |tableName                                                    |countOfRandomIds|
-      |work_extended_editorial_board                                | 2      |
+      |work_extended_editorial_board                                | 1      |
 
 
   Scenario: Verify count between work extended and work stitching table
