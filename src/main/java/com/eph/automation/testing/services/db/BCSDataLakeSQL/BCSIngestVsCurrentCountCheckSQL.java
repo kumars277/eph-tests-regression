@@ -1,5 +1,6 @@
 /* Created by Nishant @ 04 Aug 2020 */
 //resumed automation on 23 Sep 2020
+//updation on 19-04-2021 Dinesh removed hardcoded DB.
 package com.eph.automation.testing.services.db.BCSDataLakeSQL;
 
 public class BCSIngestVsCurrentCountCheckSQL {

@@ -5,14 +5,19 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.Product;
 import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
+import com.eph.automation.testing.services.api.AuthorizationService;
+import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.google.inject.Inject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.html5.LocalStorage;
+import org.openqa.selenium.html5.WebStorage;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
 
 public class ProductFinderTasks {
 
@@ -34,6 +39,14 @@ public class ProductFinderTasks {
     public List<Properties> list_people=new ArrayList();
     public Properties prop_links = new Properties();
 
+
+    public void authentication_browser() throws AzureOauthTokenFetchingException, ExecutionException, InterruptedException {
+        LocalStorage local = ((WebStorage) tasks.driver).getLocalStorage();
+        String accessToken=  AuthorizationService.getCookies();
+        local.setItem("adal.idtoken", accessToken);
+        local.clear();
+    }
+
     public void openHomePage() throws InterruptedException {//updated by Nishant @ 18 May 2020
      String HomePageAddress="";
        switch (TestContext.getValues().environment)
@@ -44,7 +57,7 @@ public class ProductFinderTasks {
            default:HomePageAddress=Constants.PRODUCT_FINDER_EPH_PROD_UI;break;
        }
 
-        if(DataQualityContext.uiUnderTest=="JF")HomePageAddress+="journals";
+        if(DataQualityContext.uiUnderTest.equalsIgnoreCase("JF"))HomePageAddress+="journals";
         tasks.openPage(HomePageAddress);
         Thread.sleep(1000);
         tasks.waitUntilPageLoad();
@@ -109,7 +122,6 @@ public class ProductFinderTasks {
         tasks.click("XPATH", buildWorkIdLocator);
         Thread.sleep(5000);
     }
-
 
     public void clickLogo() throws InterruptedException {
         //created by Nishant @ 23 Oct 2020
@@ -325,7 +337,8 @@ public class ProductFinderTasks {
 
     }
 
-    public void getUI_Links() {//created by Nishant @15 Jul 2020
+    public void getUI_Links() {
+        //created by Nishant @15 Jul 2020
 
         //click on Editorial tab
         tasks.click("XPATH", ProductFinderConstants.linkTab);
@@ -339,10 +352,14 @@ public class ProductFinderTasks {
         }
     }
 
-
-    public List<WebElement> getLinks()
-{
+    public List<WebElement> getLinks(){
     List<WebElement> links= tasks.findmultipleElements("XPATH","//a");
     return links;
-}
+    }
+
+    public void closeBrowser()
+    {
+        tasks.closeBrowser();
+    }
+
 }

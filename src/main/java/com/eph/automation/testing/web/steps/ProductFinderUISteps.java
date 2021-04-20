@@ -16,6 +16,7 @@ import com.eph.automation.testing.models.dao.*;
 import com.eph.automation.testing.models.ui.ProductFinderConstants;
 import com.eph.automation.testing.models.ui.ProductFinderTasks;
 import com.eph.automation.testing.models.ui.TasksNew;
+import com.eph.automation.testing.services.api.AuthorizationService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.eph.automation.testing.services.db.sql.PersonWorkRoleDataSQL;
@@ -37,6 +38,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import org.bouncycastle.crypto.engines.AESEngine;
@@ -111,13 +113,13 @@ public class ProductFinderUISteps {
     }
 
     @Given("^user is on Product Finder search page$")
-    public void userOpensHomePage() throws InterruptedException {
+    public void userOpensPFHomePage() throws InterruptedException, AzureOauthTokenFetchingException, ExecutionException {
         //updated by Nishant @ 15 May 2020
         DataQualityContext.uiUnderTest = "PF";
         productFinderTasks.openHomePage();
+      //  productFinderTasks.authentication_browser();
         productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
         tasks.waitUntilPageLoad();
-
     }
 
     @Given("^user is on Journal Finder search page$")
@@ -129,6 +131,16 @@ public class ProductFinderUISteps {
         tasks.waitUntilPageLoad();
 
     }
+
+    @Given("^user is on Product/Journal Finder search page (.*)$")
+    public void userOpensHomePage(String ui) throws InterruptedException, AzureOauthTokenFetchingException, ExecutionException {
+        //created by Nishant @ 20 Apr 2021
+        DataQualityContext.uiUnderTest = ui;
+        productFinderTasks.openHomePage();
+        productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
+        tasks.waitUntilPageLoad();
+    }
+
 
     @Then("^Search works by (.*)$")
     public void search_works_by_options(String option) throws Throwable {
@@ -548,12 +560,8 @@ public class ProductFinderUISteps {
 
     @Then("^No results message is displayed for \"([^\"]*)\"$")
     public void no_results_message_is_displayed_for(String searchText) throws Throwable {
-
-
         Assert.assertTrue("No Records found for the keyword " + searchText, tasks.verifyElementisDisplayed("XPATH", ProductFinderConstants.searchNoResults));
         //  Assert.assertTrue("No Records found for the keyword "+searchText,true);
-
-
     }
 
     @Then("^capture search suggestion for \"([^\"]*)\" and validate with \"([^\"]*)\"$")
@@ -1516,6 +1524,9 @@ public class ProductFinderUISteps {
 
 
     }
-
-
+@And("^closer the browser$")
+public void closeBrowser()
+{
+    tasks.closeBrowser();
+}
 }

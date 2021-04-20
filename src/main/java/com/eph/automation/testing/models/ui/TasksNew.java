@@ -30,7 +30,7 @@ public class TasksNew {
        //   this.driver = new MarionetteDriver().getChromeDriver();
         this.driver=new WebDriverFactory().get();
         this.wait = new WebDriverWait(driver,10);
-       // this.pageLoadTimeout=60000;
+        this.pageLoadTimeout=30000;
     }
 
 
@@ -166,8 +166,6 @@ public String authenticateUri(String uri)
         }
     }
 
-
-
     public void javaScriptExecutor(WebElement element){
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();",element);
     }
@@ -252,7 +250,6 @@ public String authenticateUri(String uri)
         return element.getText();
     }
 
-
     public void waitTime(int seconds) throws InterruptedException {TimeUnit.SECONDS.sleep(seconds);}
 
     public String getCurrentPageUrl() {return driver.getCurrentUrl();}
@@ -260,7 +257,6 @@ public String authenticateUri(String uri)
     public void acceptAlert(){
         driver.switchTo().alert().accept();
         }
-
 
     public void keyboardEvents(String locatorType, String locatorValue, String keyName){
         try{

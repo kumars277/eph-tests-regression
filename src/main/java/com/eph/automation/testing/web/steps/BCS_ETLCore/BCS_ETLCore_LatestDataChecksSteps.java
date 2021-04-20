@@ -31,7 +31,7 @@ public class BCS_ETLCore_LatestDataChecksSteps {
 
     @Given("^Get the (.*) from diff of delta_current and current_hist tables (.*)$")
     public void getIdsFromDiffOfDeltaCurrAndCurrHist(String numberOfRecords, String tableName) {
-         //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Core Tables from Diff of Delta Current and Current Hist....");
 
@@ -414,7 +414,7 @@ public class BCS_ETLCore_LatestDataChecksSteps {
 
     @Given("^Get the (.*) from sum of delta_current and exclude_delta tables (.*)$")
     public void getIdsFromDiffOfDeltaCurrAndExcl(String numberOfRecords, String tableName) {
-         //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Core Tables from Diff of Delta Current and Exclude....");
 

@@ -19,7 +19,10 @@ import java.util.Properties;
 
 /**
  * Created by RAVIVARMANS on 11/25/2018.
+//updated Dinesh on 19/04/2021 replaced the connection with SecretManager instead of Load properties
+
  */
+
 public class DBManager {
 
     private static Connection connection = null;
@@ -98,7 +101,6 @@ public class DBManager {
             if (connection == null) {
                 DbUtils.loadDriver(athenaDriver);
             }
-          //  connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
             connection = DriverManager.getConnection(SecretsManagerHandler.getPostgreDBConnection(URL));
             QueryRunner query = new QueryRunner();
             mapList = (List) query.query(connection, sql, new MapListHandler());
@@ -158,7 +160,7 @@ public class DBManager {
             if (connection == null) {
                 DbUtils.loadDriver(driver);
             }
-            connection = DriverManager.getConnection(LoadProperties.getDBConnection(URL));
+            connection = DriverManager.getConnection(SecretsManagerHandler.getPostgreDBConnection(URL));
             connection.setSchema(GetEPHDBUser.getDBUser());
             QueryRunner query = new QueryRunner();
             klassList = (List) query.query(connection, sql, new BeanListHandler(klass));

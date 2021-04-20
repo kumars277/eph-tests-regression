@@ -1,6 +1,6 @@
 package com.eph.automation.testing.common.hooks;
 
-
+import com.eph.automation.testing.models.ui.TasksNew;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.TestContext;
 import com.google.inject.Inject;
@@ -15,19 +15,27 @@ import org.openqa.selenium.WebDriver;
 public class ApplicationHooks {
     @Inject
     private Provider<WebDriver> driverProvider;
+    private TasksNew tasksNew;
 
     @Before
     public void setUp() {
         //Set up the test pre-requisite
-        Log.startLog("Test is starting ...");
+        Log.info("Test is starting ...");
 
     }
     @After(order = 99)
     public void closeDriver() {
-        Log.endLog("Test is ending ...");
+        Log.endLog("Test is ending hook ...");
         if (TestContext.getValues().gridRun && null != driverProvider) {
             driverProvider.get().quit();
         }
+    }
+
+    @After("@PFProd")
+    public void closeBrowser()
+    {
+        Log.endLog("UI test ending...");
+        tasksNew.driver.quit();
     }
 
 }

@@ -21,6 +21,7 @@ import java.net.URL;
 
 /**
  * Created by RAVIVARMANS on 11/24/2018.
+ * updated by Nishant @20 April 2021
  */
 
 public class WebDriverFactory implements Provider<WebDriver> {
@@ -42,41 +43,20 @@ public class WebDriverFactory implements Provider<WebDriver> {
         } else {
             switch (TestContext.getValues().browserType.toLowerCase()) {
                 case "firefox":
-  /*                  // set driver properties
-                    final FirefoxOptions firefoxOptions = new FirefoxOptions();
-                    File pathBinary = new File("C:\\Program Files\\Mozilla Firefox\\firefox.exe");
-                    FirefoxBinary firefoxBinary = new FirefoxBinary(pathBinary);
-
-                 //   firefoxBinary.addCommandLineOptions("--headless");
-                    firefoxOptions.setBinary(firefoxBinary);
-
-                    FirefoxProfile profile = new FirefoxProfile();
-                    profile.setPreference("javascript.enabled", true);
-                  //  profile.setEnableNativeEvents(true);
-                    profile.setPreference("webdriver.load.strategy", "fast");
-
-                    //Allow geo location :
-                    profile.setPreference("geo.prompt.testing", true);
-                    profile.setPreference("geo.prompt.testing.allow", true);
-
-                  return new FirefoxDriver(firefoxOptions);
-*/
                     return new MarionetteDriver().getFirefoxDriver();
+
+                case "chrome":
+                     return new MarionetteDriver().getChromeDriver();
+
                 case "ie":
-                 //   InternetExplorerDriverManager.getInstance().setup();
+                    //   InternetExplorerDriverManager.getInstance().setup();
                     DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
                     capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
                     return new InternetExplorerDriver(capabilities);
-                case "chrome":
 
-                   // ChromeDriverManager.chromedriver().setup();
-                   // return new ChromeDriver();
-                   return new MarionetteDriver().getChromeDriver();
                 default:
-
                     //ChromeDriverManager.chromedriver().setup();
                     //ChromeDriverManager.chromedriver().properties("--headless");
-
                     return new ChromeDriver();
             }
         }
