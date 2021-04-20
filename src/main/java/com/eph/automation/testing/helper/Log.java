@@ -11,12 +11,12 @@ public class Log {
 
     //We can use it when starting tests
     public static void startLog (String testClassName){
-        Log.info("Test is Starting...");
+        Log.info("Test is Starting log...");
     }
 
     //We can use it when ending tests
     public static void endLog (String testClassName){
-        Log.info("Test is Ending...");
+        Log.info("Test is Ending log...");
     }
 
     //Info Level Logs

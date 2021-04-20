@@ -20,7 +20,7 @@ public class ApplicationHooks {
     @Before
     public void setUp() {
         //Set up the test pre-requisite
-        Log.info("Test is starting ...");
+        Log.info("Test is starting hook ...");
 
     }
     @After(order = 99)
