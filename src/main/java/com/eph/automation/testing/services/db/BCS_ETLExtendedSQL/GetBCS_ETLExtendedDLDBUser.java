@@ -8,8 +8,10 @@ public class GetBCS_ETLExtendedDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbBCS = "bcs_ingestion_database_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbBCS = "bcs_ingestion_database_uat";
+            }else{
+                dbBCS = "bcs_ingestion_database_uat2";
             }
 
         }else{
@@ -25,8 +27,10 @@ public class GetBCS_ETLExtendedDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbProd = "product_staging_database_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbProd = "product_staging_database_uat";
+            }else{
+                dbProd = "product_staging_database_uat2";
             }
 
         }else{
@@ -42,8 +46,10 @@ public class GetBCS_ETLExtendedDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbProdDB = "product_database_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbProdDB = "product_database_uat";
+            }else{
+                dbProdDB = "product_database_uat2";
             }
 
         }else{
@@ -59,8 +65,10 @@ public class GetBCS_ETLExtendedDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbProdStgDb = "product_staging_database_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbProdStgDb = "product_staging_database_uat";
+            }else{
+                dbProdStgDb = "product_staging_database_uat2";
             }
         }else{
             dbProdStgDb = "product_staging_database_sit";
@@ -75,8 +83,10 @@ public class GetBCS_ETLExtendedDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbJM = "journalmaestro_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbJM = "journalmaestro_uat";
+            }else{
+                dbJM = "journalmaestro_uat2";
             }
 
         }else{
@@ -92,8 +102,10 @@ public class GetBCS_ETLExtendedDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbSDRM = "sdrm_staging_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbSDRM = "sdrm_staging_uat";
+            }else{
+                dbSDRM = "sdrm_staging_uat2";
             }
 
         }else{
@@ -109,8 +121,10 @@ public class GetBCS_ETLExtendedDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbSDBooks = "sdbooks_staging_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbSDBooks = "sdbooks_staging_uat";
+            }else{
+                dbSDBooks = "sdbooks_staging_uat2";
             }
 
         }else{
@@ -126,8 +140,10 @@ public class GetBCS_ETLExtendedDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbPRM = "promis_staging_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbPRM = "promis_staging_uat";
+            }else{
+                dbPRM = "promis_staging_uat2";
             }
 
         }else{
@@ -143,8 +159,10 @@ public class GetBCS_ETLExtendedDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbProdExt = "product_ext_database_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbProdExt = "product_ext_database_uat";
+            }else{
+                dbProdExt = "product_ext_database_uat2";
             }
 
         }else{
@@ -160,8 +178,10 @@ public class GetBCS_ETLExtendedDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbJRBI = "jrbi_staging_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbJRBI = "jrbi_staging_uat";
+            }else{
+                dbJRBI = "jrbi_staging_uat2";
             }
 
         }else{

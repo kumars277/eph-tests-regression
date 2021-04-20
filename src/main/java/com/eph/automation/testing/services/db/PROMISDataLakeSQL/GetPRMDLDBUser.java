@@ -8,8 +8,10 @@ public class GetPRMDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbPRMDL = "promis_staging_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbPRMDL = "promis_staging_uat";
+            }else{
+                dbPRMDL = "promis_staging_uat2";
             }
 
         }else{
@@ -24,8 +26,10 @@ public class GetPRMDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbProdDL = "product_database_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbProdDL = "product_database_uat";
+            }else{
+                dbProdDL = "product_database_uat2";
             }
 
         }else{
@@ -40,8 +44,10 @@ public class GetPRMDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbStageProdDL = "product_staging_database_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbStageProdDL = "product_staging_database_uat";
+            }else{
+                dbStageProdDL = "product_staging_database_uat2";
             }
 
         }else{

@@ -8,8 +8,10 @@ public class GetSDRMDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbSDRM = "sdrm_staging_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbSDRM = "sdrm_staging_uat";
+            }else{
+                dbSDRM = "sdrm_staging_uat2";
             }
 
         }else{
@@ -26,8 +28,10 @@ public class GetSDRMDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbProdstgDb = "product_staging_database_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbProdstgDb = "product_staging_database_uat";
+            }else{
+                dbProdstgDb = "product_staging_database_uat2";
             }
         }else{
             dbProdstgDb = "product_staging_database_sit";
@@ -44,8 +48,10 @@ public class GetSDRMDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbProdstgDb = "product_ext_database_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbProdstgDb = "product_ext_database_uat";
+            }else{
+                dbProdstgDb = "product_ext_database_uat2";
             }
         }else{
             dbProdstgDb = "product_ext_database_sit";

@@ -23,7 +23,7 @@ Feature:Validate data of DL Extended Views where data comes from BCS,SDRM,JM Ext
       |work_extended_editorial_board_allsource_v                                  |
 
 
-  @DLExtView
+  @DLExtViews
   Scenario Outline: Verify Data for DL all source extended views is transferred from Source  Ingestion Tables
     Given Get the <countOfRandomIds> from source ingestion Tables <tableName>
     Then  Get the Records from the source ingestion Tables <tableName>

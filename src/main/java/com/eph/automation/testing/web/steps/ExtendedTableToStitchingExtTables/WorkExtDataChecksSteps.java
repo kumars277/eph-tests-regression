@@ -60,7 +60,7 @@ public class WorkExtDataChecksSteps {
 
     @Given("^We get the (.*) random work EPR ids (.*)$")
     public void getRandomWorkExtEPRIds(String numberOfRecords, String tableName) {
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Work Ext EPR Ids...");
         switch (tableName) {

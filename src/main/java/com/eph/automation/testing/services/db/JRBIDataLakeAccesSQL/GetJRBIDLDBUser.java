@@ -8,8 +8,10 @@ public class GetJRBIDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbJRBIDL = "jrbi_staging_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbJRBIDL = "jrbi_staging_uat";
+            }else{
+                dbJRBIDL = "jrbi_staging_uat2";
             }
 
         }else{
@@ -25,8 +27,10 @@ public class GetJRBIDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbProdDb = "product_staging_database_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbProdDb = "product_staging_database_uat";
+            }else{
+                dbProdDb = "product_staging_database_uat2";
             }
         }else{
           dbProdDb = "product_staging_database_sit";
@@ -41,8 +45,11 @@ public class GetJRBIDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbProdGDdb = "product_database_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbProdGDdb = "product_database_uat";
+            }
+            else {
+                dbProdGDdb = "product_database_uat2";
             }
         }else{
             dbProdGDdb = "product_database_sit";
@@ -57,8 +64,11 @@ public class GetJRBIDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbProdExtdb = "product_ext_database_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbProdExtdb = "product_ext_database_uat";
+            }
+            else{
+                dbProdExtdb = "product_ext_database_uat2";
             }
         }else{
           dbProdExtdb = "product_ext_database_sit";
@@ -73,7 +83,7 @@ public class GetJRBIDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbStitching = "ephsit_extended_data_stitch";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbStitching = "ephuat_extended_data_stitch";
             }
         }else{

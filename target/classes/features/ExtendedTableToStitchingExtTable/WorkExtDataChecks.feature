@@ -57,14 +57,14 @@ Feature:Validate data for  Work Ext Stitching tables in EPH
       |tableName                                                    |countOfRandomIds|
       |work_extended_relationship_sibling                           |10           |
 
-  @WorkExtStitching
+  @WorkExtStitchingEditorial
   Scenario Outline: Verify Data from the work_extended_editorial_board tables transferred to Work Extended Stitching table
     Given We get the <countOfRandomIds> random work EPR ids <tableName>
     And Get the records from work extended editorial board table
     Then Compare work Extended editorial and work Extended Stitching Table
     Examples:
       |tableName                                                    |countOfRandomIds|
-      |work_extended_editorial_board                                | 2      |
+      |work_extended_editorial_board                                | 1      |
 
 
   Scenario: Verify count between work extended and work stitching table

@@ -34,7 +34,7 @@ public class ProductExtDataChecksSteps {
 
     @Given("^We get the (.*) random Prod Ext Availability EPR ids (.*)$")
     public void getRandomProdExtAvailabilityEPRIds(String numberOfRecords, String tableName) {
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Prod Ext Availability EPR Ids...");
         switch (tableName) {
@@ -256,7 +256,7 @@ public class ProductExtDataChecksSteps {
 
     @Given("^We get the (.*) random Prod Ext Pricing EPR ids from Pricing Extended Table (.*)$")
     public void getRandomProdExtPricingEPRIds(String numberOfRecords, String tableName) {
-        //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Prod Ext Pricing EPR Ids...");
         switch (tableName) {
