@@ -210,8 +210,6 @@ Examples:
     Given We get 2 random journal ids for search
     Then  search work and verify links
 
-
-
   @PFDMC
   Scenario Outline: Search the work and verify data model changes
     Given user is on Product Finder search page

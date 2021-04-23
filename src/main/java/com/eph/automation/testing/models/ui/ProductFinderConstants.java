@@ -20,12 +20,16 @@ public class ProductFinderConstants {
     public static String nextButton = "idSIButton9";
     public static String itemDetail="(//div[contains(@class,'item-detail')])";
     public static String itemDetailInner="//div[@class='ng-star-inserted']";
+    public static String itemidentifier="//div[contains(@class,'identifiers')]/child::div";
     public static String searchNoResults = "//div[contains(text(),'There are no results')]";
     public static String searchSuggesion="//div[contains(@class,'search-suggestion')]";
     public static String  filterTypeBook = "//span[contains(text(),'Book')]";
-    public static String buildWorkIdLocator = "//a[contains(@href,'/work/%s/overview')]";
+//    public static String buildWorkIdLocator = "//a[contains(@href,'/work/%s/overview')]";
+    public static String buildIdLocator = "//a[contains(@href,'/%s/overview')]";
     public static String buildProductIdLocator="//*[contains(text(),'%s')]/parent::div/preceding-sibling::div/a";
     public static String linkManifestationIdLocator = "//*[contains(text(),'%s')]/parent::div/preceding-sibling::div/a";
+
+    public static String FilterLocator = "//div[@class='filter-panel']/form/child::section";
 
     public static String peopleTab = "//*[@id='mat-tab-label-0-1']/div";
     public static String financialTab = "//*[@id='mat-tab-label-0-2']/div";

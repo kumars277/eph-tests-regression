@@ -19,23 +19,35 @@ public class SecretsManagerHandler {
     public static String getPostgreDBConnection(String connectionURL) {
 
         String secretName = "";
+        String DBconnection = "";
 
         switch (TestContext.getValues().environment) {
-            case "SIT":secretName=getSITSecretName(connectionURL);  break;
-            case "UAT":secretName=getUATSecretName(connectionURL);  break;
-            case "UAT2":secretName=getUAT2SecretName(connectionURL);break;
+            case "SIT":
+                secretName=getSITSecretName(connectionURL);
+                DBconnection = getSITdbConnection(getSecretKeyObj("eu-west-1",secretName),connectionURL);
+                break;
+
+            case "UAT":
+                secretName=getUATSecretName(connectionURL);
+                DBconnection = getUATdbConnection(getSecretKeyObj("eu-west-1",secretName),connectionURL);
+                break;
+
+            case "UAT2":
+                secretName=getUAT2SecretName(connectionURL);
+                DBconnection = getUAT2dbConnection(getSecretKeyObj("eu-west-1",secretName),connectionURL);
+                break;
+            default: throw new IllegalArgumentException("Illegal argument: " +TestContext.getValues().environment);
         }
 
+        /*
         JSONObject object = getSecretKeyObj("eu-west-1",secretName);
-
-        String DBconnection = "";
-        switch(TestContext.getValues().environment) {
+      switch(TestContext.getValues().environment) {
             case "SIT": DBconnection = getSITdbConnection(object,connectionURL);break;
             case "UAT": DBconnection = getUATdbConnection(object,connectionURL);break;
             case "UAT2":DBconnection = getUAT2dbConnection(object,connectionURL);break;
             default:throw new IllegalArgumentException("Illegal argument: " + connectionURL);
         }
-
+*/
         return DBconnection;
     }
 

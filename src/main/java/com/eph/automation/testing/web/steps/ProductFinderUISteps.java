@@ -43,6 +43,7 @@ import java.util.stream.Collectors;
 
 import org.bouncycastle.crypto.engines.AESEngine;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import javax.net.ssl.SSLHandshakeException;
 
@@ -66,7 +67,7 @@ public class ProductFinderUISteps {
     private static List<String> productTitleList;
     private static List<String> workIdList = new ArrayList<>();
     private static List<String> workStatusCode;
-    private static List<String> workStatusCodesofLaunchedToList, workStatusCodesofPlannedToList, workStatusCodesofNoLongerPubList;
+   // private static List<String> workStatusCodesofLaunchedToList, workStatusCodesofPlannedToList, workStatusCodesofNoLongerPubList;
 
     private static List<Map<?, ?>> availableProduct;
     private static List<Map<?, ?>> tempDBResultMap;
@@ -104,7 +105,6 @@ public class ProductFinderUISteps {
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
-
     @And("We get the work search data from EPH GD for (.*)")
     public void getSpecificWorksDataFromEPHGD(String WorkId) {
         sql = String.format(ProductFinderSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, WorkId);
@@ -140,7 +140,6 @@ public class ProductFinderUISteps {
         productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
         tasks.waitUntilPageLoad();
     }
-
 
     @Then("^Search works by (.*)$")
     public void search_works_by_options(String option) throws Throwable {
@@ -254,7 +253,7 @@ public class ProductFinderUISteps {
     }
 
 
-    @Given("^Searches for works by given ([^\"]*)$")
+    @Given("^Searches for given ([^\"]*)$")
     public void searches_for_works_by_given(String searchKeyword) throws InterruptedException {
         Log.info("searching keyword..." + searchKeyword);
         productFinderTasks.searchFor(searchKeyword);
@@ -273,11 +272,28 @@ public class ProductFinderUISteps {
         Thread.sleep(1000);
     }
 
-    @Then("^Search items are listed and click a work id from the result")
+    @Given("^Filter the Search Result by filter \"([^\"]*)\" and value \"(.*)\"$")
+    public void filter_Search_Result_Randomly(String FilterType, String filterValue ) throws InterruptedException {
+        //created by Nishant @ 22 Apr 2021
+        productFinderTasks.filter_Search_Result_Randomly(FilterType,filterValue);
+        Thread.sleep(1000);
+    }
+
+    @Then("^Search items are listed and click an id from the result")
     public void search_items_are_listed_and_click_aWorkId() throws InterruptedException {
         //created by Nishant @ 22 May 2020
         getFirstIdOnPage();
         productFinderTasks.clickWork(ProductFinderTasks.searchResultWorkId);
+    }
+
+    @Given("^Filter the Search Result by filter \"([^\"]*)\" and value \"(.*)\" and click first id$")
+    public void filter_Search_Result_and_clickFirstId(String FilterType, String filterValue ) throws InterruptedException {
+        //created by Nishant @ 22 Apr 2021
+        productFinderTasks.filter_Search_Result_Randomly(FilterType,filterValue);
+
+        getFirstIdOnPage();
+        productFinderTasks.clickWork(ProductFinderTasks.searchResultWorkId);
+        Thread.sleep(1000);
     }
 
     @Then("^Search items are listed and click specific work (.*) from the result")
@@ -314,9 +330,11 @@ public class ProductFinderUISteps {
     @Then("^Verify the Work Status is \"([^\"]*)\"$")
     public void verify_the_Work_Status_is(String workStatus) {
         //updated by Nishant @ 22 May 2020
+        //updated by Nishant @ 22 Apr 2021
         String[] workStatusCodesofLaunched = {"WDA", "WLA", "WPU", "WSC"};
         String[] workStatusCodesofNoLongerPub = {"WDI", "WDV", "WTA"};
         String[] workStatusCodesofPlanned = {"WAM", "WAP", "WCO", "WIP", "WPL", "WSP"};
+        String[] workStatusCodesofApproved = {"WAP"};
         boolean flag = false;
 
         workStatusUIValidation(workStatus);
@@ -328,34 +346,22 @@ public class ProductFinderUISteps {
             List<Map<?, ?>> workTypeStatusCode = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             workStatusCode = workTypeStatusCode.stream().map(m -> (String) m.get("WORK_STATUS")).map(String::valueOf).collect(Collectors.toList());
 
-            if (workStatus.equalsIgnoreCase("Launched")) {
-                workStatusCodesofLaunchedToList = Arrays.asList(workStatusCodesofLaunched);
-                for (String s : workStatusCodesofLaunchedToList) {
-                    if (workStatusCode.get(0).contains(s)) {
-                        flag = true;
-                        break;
-                    }
-                }
-            } else if (workStatus.equalsIgnoreCase("Planned")) {
-                workStatusCodesofPlannedToList = Arrays.asList(workStatusCodesofPlanned);
-                for (String s : workStatusCodesofPlannedToList) {
-                    if (workStatusCode.get(0).contains(s)) {
-                        flag = true;
-                        break;
-                    }
-                }
-            } else if (workStatus.equalsIgnoreCase("No Longer Published")) {
-                workStatusCodesofNoLongerPubList = Arrays.asList(workStatusCodesofNoLongerPub);
-                for (String s : workStatusCodesofNoLongerPubList) {
-                    if (workStatusCode.get(0).contains(s)) {
-                        flag = true;
-                        break;
-                    }
-                }
+            switch (workStatus) {
+                case "Approved":            if(Arrays.stream(workStatusCodesofApproved).anyMatch(workStatusCode::contains))flag = true; break;
+                case "Launched":            if(Arrays.stream(workStatusCodesofLaunched).anyMatch(workStatusCode::contains))flag = true; break;
+                case "Planned":             if(Arrays.stream(workStatusCodesofPlanned).anyMatch(workStatusCode::contains))flag = true; break;
+                case "No Longer Published": if(Arrays.stream(workStatusCodesofNoLongerPub).anyMatch(workStatusCode::contains))flag = true; break;
             }
             assertTrue("The given work Id is successfully filtered by the Work Status and verified by DB: " + workStatus, flag);
         }
+    }
 
+
+    @Then("^Verify the Product filter is \"([^\"]*)\"$")
+    public void verify_the_Product_Status_is(String filterType) {
+    //created by Nishant @ 21 April 2021 EPHD-3053
+        productFinderTasks.verifyUserIsOnOverviewPage();
+        productStatusUIValidation(filterType);
     }
 
 
@@ -364,30 +370,47 @@ public class ProductFinderUISteps {
         productFinderTasks.getUI_WorkOverview_Information();
 
         switch (workStatus) {
+
             case "Launched":
                 if (productFinderTasks.prop_info.getProperty("Work Status").contains("Launched")|
-                        productFinderTasks.prop_info.getProperty("Work Status").contains("Published"))
-                    flag = true;
-                break;
+                        productFinderTasks.prop_info.getProperty("Work Status").contains("Published"))flag = true;   break;
+
             case "Planned":
-                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Planned"))
-                    flag = true;
-                break;
+                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Planned"))flag = true;          break;
+
             case "Approved":
-                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Approved"))
-                    flag = true;
-                break;
+                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Approved"))flag = true;         break;
+
             case "No Longer Published":
                 if (productFinderTasks.prop_info.getProperty("Work Status").contains("Discontinued")|
-                        productFinderTasks.prop_info.getProperty("Work Status").contains("Divested"))
-                    flag = true;
-                break;
+                        productFinderTasks.prop_info.getProperty("Work Status").contains("Divested"))flag = true;     break;
         }
 
 
         assertTrue("The given work Id is successfully filtered by the Work Status and verified in UI: " + workStatus, flag);
     }
 
+    private void productStatusUIValidation(String filterType) {//created by Nishant @21 Apr 2021
+        boolean flag = false;
+        productFinderTasks.getUI_WorkOverview_Information();
+
+        //for Product status
+        switch (DataQualityContext.prop_filters.getProperty(filterType)) {
+            case "No Longer Published":
+                if (productFinderTasks.prop_info.getProperty(filterType).contains("Discontinued")|
+                        productFinderTasks.prop_info.getProperty(filterType).contains("Divested")|
+                        productFinderTasks.prop_info.getProperty(filterType).contains("Stopped"))
+                    flag = true;break;
+            case "Never Published":
+                if (productFinderTasks.prop_info.getProperty(filterType).contains("Withdrawn"))
+                    flag = true;break;
+
+            default:
+                if(productFinderTasks.prop_info.getProperty(filterType).contains(DataQualityContext.prop_filters.getProperty(filterType)))
+                    flag = true;break;
+        }
+        assertTrue("The searcg is successfully filtered and verified in UI: " + filterType, flag);
+    }
 
     private boolean verifyWorkTypeForWorkId(String workId, String chooseWorkType) {//by Nishant @ 02 Jun 2020
         Log.info("verifying work type for the work id...");
@@ -475,6 +498,14 @@ public class ProductFinderUISteps {
         Assert.assertTrue("searched key is on search result", productSearched);
     }
 
+    @When("^Search for given (.*) and switch to Products and Packages tab$")
+    public void searchAndswitch_to_ProductsandPackages_tab(String searchKeyword) throws InterruptedException {
+        //created by Nishant @ 23 Apr 2021
+        Log.info("searching keyword..." + searchKeyword);
+        productFinderTasks.searchFor(searchKeyword);
+        productFinderTasks.clickProductAndPackages_tab();
+    }
+
     @Then("^The searched product is listed and clicked$")
     public void checkSearchResultsAndClickproduct() throws Throwable {
         //created by Nishant @ 19 May 2020
@@ -486,7 +517,7 @@ public class ProductFinderUISteps {
 
     @And("^User is forwarded to the searched product page from DB$")
     public void verifyUserIsForwardedToProductPageFromDB() {
-        assertTrue(productFinderTasks.isUserOnProductPage(DataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_ID()));
+        productFinderTasks.verifyUserIsOnOverviewPage();
     }
 
 
@@ -643,18 +674,20 @@ public class ProductFinderUISteps {
     }
 
     private void getFirstIdOnPage() {//by Nishant @ 2 Jun 2020
+
+        Log.info("looking for products on ");
         List<WebElement> itemInfo = tasks.findmultipleElements("XPATH", ProductFinderConstants.itemDetail);
         ArrayList<String> idFound = new ArrayList<>();
         for (int i = 0; i < itemInfo.size(); i++) {
-            List<WebElement> itemInfo_in = tasks.findmultipleElements("XPATH", ProductFinderConstants.itemDetail + "[" + (i + 1) + "]" + ProductFinderConstants.itemDetailInner);
+        //    List<WebElement> itemInfo_in = tasks.findmultipleElements("XPATH", ProductFinderConstants.itemDetail + "[" + (i + 1) + "]" + ProductFinderConstants.itemDetailInner);
+            List<WebElement> itemInfo_in = tasks.findmultipleElements("XPATH", ProductFinderConstants.itemDetail + "[" + (i + 1) + "]" + ProductFinderConstants.itemidentifier);
             for (WebElement webElement : itemInfo_in) {
                 String text = webElement.getText();
-                if (text.contains("ID")) {
-                    idFound.add(text);
-                    break;
-                }
+                if (text.contains("ID")) {idFound.add(text);break;}
             }
         }
+        Assert.assertTrue("at leaset one id present on page ",!idFound.isEmpty());
+
         Log.info("first work id on search result page is : " + idFound.get(0));
         ProductFinderTasks.searchResultWorkId = idFound.get(0).split(" ")[2];
     }
@@ -668,7 +701,6 @@ public class ProductFinderUISteps {
         // List<String> manifestationId= apiWorksSearchSteps.getManifestationIdsForWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
         //   workManifestationApiObject.getJsonToObject_extendedManifestation(manifestationId.get(0));
     }
-
 
     @Then("^Verify PF/JF UI work overview values$")
     public void verifyPFJFUIWorkOverviewValues() throws Throwable {
@@ -1188,7 +1220,6 @@ public class ProductFinderUISteps {
         return (List<Map<String, Object>>) DBManager.getDBResultMap(sql, Constants.EPH_URL);
     }
 
-
     private void validate_workOverview_info() throws ParseException {
         //created by Nishant @08 Jun 2020
         //updated by Nishant @09 Jul 2020
@@ -1294,7 +1325,6 @@ public class ProductFinderUISteps {
         }
 
     }
-
 
     private String getValue_subTitle() {
         String valueSubTitle = "";

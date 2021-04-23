@@ -1,5 +1,6 @@
 package com.eph.automation.testing.common.hooks;
 
+import com.eph.automation.testing.models.ui.ProductFinderConstants;
 import com.eph.automation.testing.models.ui.TasksNew;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.TestContext;
@@ -25,17 +26,18 @@ public class ApplicationHooks {
     }
     @After(order = 99)
     public void closeDriver() {
-        Log.endLog("Test is ending hook ...");
+        Log.info("Test is ending hook ...");
         if (TestContext.getValues().gridRun && null != driverProvider) {
             driverProvider.get().quit();
         }
     }
 
-    @After("@PFProd")
+
+    @After("@UI")
     public void closeBrowser()
     {
-        Log.endLog("UI test ending...");
-        tasksNew.driver.quit();
+        Log.info("UI test ending...");
+        driverProvider.get().quit();
     }
 
 }
