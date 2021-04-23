@@ -21,10 +21,10 @@ public class ApplicationHooks {
     @Before
     public void setUp() {
         //Set up the test pre-requisite
-        Log.info("Test is starting hook ...");
+        Log.info("Test is starting ...");
 
     }
-    @After(order = 99)
+    @After("@UI")
     public void closeDriver() {
         Log.info("Test is ending hook ...");
         if (TestContext.getValues().gridRun && null != driverProvider) {
@@ -37,7 +37,6 @@ public class ApplicationHooks {
     public void closeBrowser()
     {
         Log.info("UI test ending...");
-        driverProvider.get().quit();
     }
 
 }
