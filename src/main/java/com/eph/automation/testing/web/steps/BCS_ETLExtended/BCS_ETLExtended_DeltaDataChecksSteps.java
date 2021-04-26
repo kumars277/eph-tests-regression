@@ -4,12 +4,11 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.BCSETL_ExtendedAccessDLContext;
-import com.eph.automation.testing.models.dao.BCS_ETL.BCS_ETLExtendedDLAccessObject;
+import com.eph.automation.testing.models.dao.BCS.BCS_ETLExtendedDLAccessObject;
 import com.eph.automation.testing.services.db.BCS_ETLExtendedSQL.BCS_ETLExtendedDataChecksSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
-import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 

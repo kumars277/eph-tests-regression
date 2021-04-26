@@ -4,7 +4,7 @@ package com.eph.automation.testing.web.steps.PROMISDataLake;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
-import com.eph.automation.testing.services.db.PROMISDataLakeSQL.PRMtoDataLakeTableCountChecksSQL;
+import com.eph.automation.testing.services.db.PROMISDataLakeSQL.PRMTableOutboundCountChecksSQL;
 import cucumber.api.java.en.*;
 import org.junit.*;
 import java.math.BigDecimal;
@@ -20,30 +20,30 @@ public class PRMtoDatalakeTableCountChecksSteps {
     public void getPRMoracleCount(String tableName) {
         switch (tableName){
             case "PRMAUTPUBT":
-                PRMOracle = PRMtoDataLakeTableCountChecksSQL.GET_PRMAUTPUBT_COUNT_ORACLE;
+                PRMOracle = PRMTableOutboundCountChecksSQL.GET_PRMAUTPUBT_COUNT_ORACLE;
                 break;
             case "PRMCLSCODT":
-                PRMOracle = PRMtoDataLakeTableCountChecksSQL.GET_PRMCLSCODT_COUNT_ORACLE;
+                PRMOracle = PRMTableOutboundCountChecksSQL.GET_PRMCLSCODT_COUNT_ORACLE;
                 break;
 
             case "PRMCLST":
-                PRMOracle = PRMtoDataLakeTableCountChecksSQL.GET_PRMCLST_COUNT_ORACLE;
+                PRMOracle = PRMTableOutboundCountChecksSQL.GET_PRMCLST_COUNT_ORACLE;
                 break;
 
             case "PRMLONDEST":
-                PRMOracle = PRMtoDataLakeTableCountChecksSQL.GET_PRMLONDEST_COUNT_ORACLE;
+                PRMOracle = PRMTableOutboundCountChecksSQL.GET_PRMLONDEST_COUNT_ORACLE;
                 break;
 
             case "PRMPRICEST":
-                PRMOracle = PRMtoDataLakeTableCountChecksSQL.GET_PRMPRICEST_COUNT_ORACLE;
+                PRMOracle = PRMTableOutboundCountChecksSQL.GET_PRMPRICEST_COUNT_ORACLE;
                 break;
 
             case "PRMPUBINFT":
-                PRMOracle = PRMtoDataLakeTableCountChecksSQL.GET_PRMPUBINFT_COUNT_ORACLE;
+                PRMOracle = PRMTableOutboundCountChecksSQL.GET_PRMPUBINFT_COUNT_ORACLE;
                 break;
 
             case "PRMPUBRELT":
-                PRMOracle = PRMtoDataLakeTableCountChecksSQL.GET_PRMPUBRELT_COUNT_ORACLE;
+                PRMOracle = PRMTableOutboundCountChecksSQL.GET_PRMPUBRELT_COUNT_ORACLE;
                 break;
 
         }
@@ -57,31 +57,31 @@ public class PRMtoDatalakeTableCountChecksSteps {
     public void getPRMDLCount(String tableName) {
         switch (tableName){
             case "PRMAUTPUBT":
-                PRMDL = PRMtoDataLakeTableCountChecksSQL.GET_PRMAUTPUBT_COUNT_DL;
+                PRMDL = PRMTableOutboundCountChecksSQL.GET_PRMAUTPUBT_COUNT_DL;
                 break;
 
             case "PRMCLSCODT":
-                PRMDL = PRMtoDataLakeTableCountChecksSQL.GET_PRMCLSCODT_COUNT_DL;
+                PRMDL = PRMTableOutboundCountChecksSQL.GET_PRMCLSCODT_COUNT_DL;
                 break;
 
             case "PRMCLST":
-                PRMDL = PRMtoDataLakeTableCountChecksSQL.GET_PRMCLST_COUNT_DL;
+                PRMDL = PRMTableOutboundCountChecksSQL.GET_PRMCLST_COUNT_DL;
                 break;
 
             case "PRMLONDEST":
-                PRMDL = PRMtoDataLakeTableCountChecksSQL.GET_PRMLONDEST_COUNT_DL;
+                PRMDL = PRMTableOutboundCountChecksSQL.GET_PRMLONDEST_COUNT_DL;
                 break;
 
             case "PRMPRICEST":
-                PRMDL = PRMtoDataLakeTableCountChecksSQL.GET_PRMPRICEST_COUNT_DL;
+                PRMDL = PRMTableOutboundCountChecksSQL.GET_PRMPRICEST_COUNT_DL;
                 break;
 
             case "PRMPUBINFT":
-                PRMDL = PRMtoDataLakeTableCountChecksSQL.GET_PRMPUBINFT_COUNT_DL;
+                PRMDL = PRMTableOutboundCountChecksSQL.GET_PRMPUBINFT_COUNT_DL;
                 break;
 
             case "PRMPUBRELT":
-                PRMDL = PRMtoDataLakeTableCountChecksSQL.GET_PRMPUBRELT_COUNT_DL;
+                PRMDL = PRMTableOutboundCountChecksSQL.GET_PRMPUBRELT_COUNT_DL;
                 break;
 
         }

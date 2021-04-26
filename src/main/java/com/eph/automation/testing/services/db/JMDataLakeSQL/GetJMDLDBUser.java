@@ -10,13 +10,17 @@ public class GetJMDLDBUser {
                 dbJMDL = "journalmaestro_staging_sit";
                 dbJMSQL = "jmf_sit_application";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbJMDL = "journalmaestro_staging_uat";
-                dbJMSQL = "jmf_sit_application";
+                dbJMSQL = "jmf_uat_application";
+            }
+            else{
+                dbJMDL = "journalmaestro_staging_uat2";
+                dbJMSQL = "jmf_uat_application";
             }
 
         }else{
-            dbJMDL = "journalmaestro_staging_uat";
+            dbJMDL = "journalmaestro_staging_uat2";
             dbJMSQL = "jmf_sit_application";
         }
         return new String[]{dbJMSQL,dbJMDL};
@@ -28,12 +32,15 @@ public class GetJMDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbJMDataLake = "journalmaestro_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbJMDataLake = "journalmaestro_uat";
+            }else{
+                dbJMDataLake = "journalmaestro_uat2";
             }
 
         }else{
-            dbJMDataLake = "journalmaestro_sit";
+          //  dbJMDataLake = "journalmaestro_sit";
+            dbJMDataLake = "journalmaestro_uat2";
         }
         return dbJMDataLake;
     }
@@ -44,7 +51,9 @@ public class GetJMDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbJMDataLake = "journalmaestro_staging_sit2";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
+                dbJMDataLake = "journalmaestro_staging_uat";
+            }else{
                 dbJMDataLake = "journalmaestro_staging_uat2";
             }
 
@@ -60,12 +69,15 @@ public class GetJMDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbProdDL = "product_database_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbProdDL = "product_database_uat";
+            }else{
+                dbProdDL = "product_database_uat2";
             }
 
         }else{
             dbProdDL = "product_database_sit";
+           // dbProdDL = "product_database_sit";
         }
         return dbProdDL;
     }
@@ -76,12 +88,15 @@ public class GetJMDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbStageProdDL = "product_staging_database_sit";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbStageProdDL = "product_staging_database_uat";
+            }else{
+                dbStageProdDL = "product_staging_database_uat2";
             }
 
         }else{
-            dbStageProdDL = "product_staging_database_sit";
+           // dbStageProdDL = "product_staging_database_sit";
+            dbStageProdDL = "product_staging_database_uat2";
         }
         return dbStageProdDL;
     }
@@ -92,11 +107,14 @@ public class GetJMDLDBUser {
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbStageProdDL = "product_staging_database_sit2";
             }
-            else{
+            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
+                dbStageProdDL = "product_staging_database_uat";
+            }else{
                 dbStageProdDL = "product_staging_database_uat2";
             }
 
         }else{
+           // dbStageProdDL = "product_staging_database_sit";
             dbStageProdDL = "product_staging_database_uat2";
         }
         return dbStageProdDL;

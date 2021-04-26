@@ -4,7 +4,7 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.BCSETL_CoreAccessDLContext;
-import com.eph.automation.testing.models.dao.BCS_ETL.BCS_ETLCoreDLAccessObject;
+import com.eph.automation.testing.models.dao.BCS.BCS_ETLCoreDLAccessObject;
 import com.eph.automation.testing.services.db.BCS_ETLCoreSQL.BCS_ETLCoreDataChecksSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;

@@ -107,9 +107,7 @@ public class ProductFinderUISteps {
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
-        ids.clear();
-        ids.add("EPR-W-10WN1D");
-        Log.info("hard coded work ids are : " + ids);
+        ids.clear(); ids.add("EPR-W-10WN1D");      Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
@@ -393,17 +391,14 @@ public class ProductFinderUISteps {
                 break;
 
             case "Planned":
-                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Planned")) flag = true;
-                break;
+                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Planned"))flag = true;          break;
 
             case "Approved":
-                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Approved")) flag = true;
-                break;
+                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Approved"))flag = true;         break;
 
             case "No Longer Published":
-                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Discontinued") |
-                        productFinderTasks.prop_info.getProperty("Work Status").contains("Divested")) flag = true;
-                break;
+                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Discontinued")|
+                        productFinderTasks.prop_info.getProperty("Work Status").contains("Divested"))flag = true;     break;
         }
 
 
@@ -417,20 +412,17 @@ public class ProductFinderUISteps {
         //for Product status
         switch (DataQualityContext.prop_filters.getProperty(filterType)) {
             case "No Longer Published":
-                if (productFinderTasks.prop_info.getProperty(filterType).contains("Discontinued") |
-                        productFinderTasks.prop_info.getProperty(filterType).contains("Divested") |
+                if (productFinderTasks.prop_info.getProperty(filterType).contains("Discontinued")|
+                        productFinderTasks.prop_info.getProperty(filterType).contains("Divested")|
                         productFinderTasks.prop_info.getProperty(filterType).contains("Stopped"))
-                    flag = true;
-                break;
+                    flag = true;break;
             case "Never Published":
                 if (productFinderTasks.prop_info.getProperty(filterType).contains("Withdrawn"))
-                    flag = true;
-                break;
+                    flag = true;break;
 
             default:
-                if (productFinderTasks.prop_info.getProperty(filterType).contains(DataQualityContext.prop_filters.getProperty(filterType)))
-                    flag = true;
-                break;
+                if(productFinderTasks.prop_info.getProperty(filterType).contains(DataQualityContext.prop_filters.getProperty(filterType)))
+                    flag = true;break;
         }
         assertTrue("The searcg is successfully filtered and verified in UI: " + filterType, flag);
     }
@@ -704,13 +696,10 @@ public class ProductFinderUISteps {
             List<WebElement> itemInfo_in = tasks.findmultipleElements("XPATH", ProductFinderConstants.itemDetail + "[" + (i + 1) + "]" + ProductFinderConstants.itemidentifier);
             for (WebElement webElement : itemInfo_in) {
                 String text = webElement.getText();
-                if (text.contains("ID")) {
-                    idFound.add(text);
-                    break;
-                }
+                if (text.contains("ID")) {idFound.add(text);break;}
             }
         }
-        Assert.assertTrue("at leaset one id present on page ", !idFound.isEmpty());
+        Assert.assertTrue("at leaset one id present on page ",!idFound.isEmpty());
 
         Log.info("first work id on search result page is : " + idFound.get(0));
         ProductFinderTasks.searchResultWorkId = idFound.get(0).split(" ")[2];
@@ -1107,30 +1096,14 @@ public class ProductFinderUISteps {
     private String lov_personRole(String roleCode) {//created by Nishant @ 15 Jul 2020
         String value_Role = "";
         switch (roleCode) {
-            case "PO":
-                value_Role = "Product Owner";
-                break;
-            case "AU":
-                value_Role = "Author";
-                break;
-            case "ED":
-                value_Role = "Editor";
-                break;
-            case "PD":
-                value_Role = "Publishing Director";
-                break;
-            case "PU":
-                value_Role = "Publisher";
-                break;
-            case "AE":
-                value_Role = "Acquisition Editor";
-                break;
-            case "BC":
-                value_Role = "Business Controller";
-                break;
-            case "SVP":
-                value_Role = "Senior Vice President";
-                break;
+            case "PO":value_Role = "Product Owner";break;
+            case "AU":value_Role = "Author";break;
+            case "ED":value_Role = "Editor";break;
+            case "PD":value_Role = "Publishing Director";break;
+            case "PU":value_Role = "Publisher";break;
+            case "AE":value_Role = "Acquisition Editor";break;
+            case "BC":value_Role = "Business Controller";break;
+            case "SVP":value_Role = "Senior Vice President";break;
         }
         return value_Role;
     }
@@ -1380,36 +1353,16 @@ public class ProductFinderUISteps {
     private String getDBWorkType() {
         String DBWorkType = "";
         switch (DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE()) {
-            case "BKS":
-                DBWorkType = "Books Series";
-                break;
-            case "MRW":
-                DBWorkType = "Major Ref work";
-                break;
-            case "OTH":
-                DBWorkType = "Other Book";
-                break;
-            case "RBK":
-                DBWorkType = "Reference Book";
-                break;
-            case "SER":
-                DBWorkType = "Serial";
-                break;
-            case "TBK":
-                DBWorkType = "Text Book";
-                break;
-            case "ABS":
-                DBWorkType = "Abstracts Journal";
-                break;
-            case "JBB":
-                DBWorkType = "B2B Journal";
-                break;
-            case "JNL":
-                DBWorkType = "Journal";
-                break;
-            case "NWL":
-                DBWorkType = "Newsletter";
-                break;
+            case "BKS":DBWorkType = "Books Series";break;
+            case "MRW":DBWorkType = "Major Ref work";break;
+            case "OTH":DBWorkType = "Other Book";break;
+            case "RBK":DBWorkType = "Reference Book";break;
+            case "SER":DBWorkType = "Serial";break;
+            case "TBK":DBWorkType = "Text Book";break;
+            case "ABS":DBWorkType = "Abstracts Journal";break;
+            case "JBB":DBWorkType = "B2B Journal";break;
+            case "JNL":DBWorkType = "Journal";break;
+            case "NWL":DBWorkType = "Newsletter";break;
         }
         return DBWorkType;
     }
@@ -1430,20 +1383,11 @@ public class ProductFinderUISteps {
     private String getValue_LegalOwnership() {//created by Nishant @ 11 Jun 2020
         String legalOwnership = "";
         switch (DataQualityContext.workDataObjectsFromEPHGD.get(0).getLEGAL_OWNERSHIP()) {
-            case "ELS":
-                legalOwnership = "Elsevier";
-                break;
-            case "SOC":
-                legalOwnership = "Society";
-                break;
-            case "COM":
-                legalOwnership = "Company";
-                break;
-            case "UNI":
-                legalOwnership = "University";
-                break;
-            case "JVE":
-                legalOwnership = "Joint Venture";//legalOwnership = "Third Party";
+            case "ELS":legalOwnership = "Elsevier";break;
+            case "SOC":legalOwnership = "Society";break;
+            case "COM":legalOwnership = "Company";break;
+            case "UNI":legalOwnership = "University";break;
+            case "JVE":legalOwnership = "Joint Venture";//legalOwnership = "Third Party";
                 break;
         }
         return legalOwnership;
