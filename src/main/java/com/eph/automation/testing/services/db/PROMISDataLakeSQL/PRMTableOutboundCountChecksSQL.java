@@ -2,7 +2,7 @@ package com.eph.automation.testing.services.db.PROMISDataLakeSQL;
 
 import com.eph.automation.testing.configuration.Constants;
 
-public class PRMtoDataLakeTableCountChecksSQL {
+public class PRMTableOutboundCountChecksSQL {
 
     public static String GET_PRMAUTPUBT_COUNT_ORACLE = "select count(*) as Total_Count from PRM.PRMAUTPUBT";
 

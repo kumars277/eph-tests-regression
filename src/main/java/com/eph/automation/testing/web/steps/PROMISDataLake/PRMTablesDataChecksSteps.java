@@ -5,7 +5,7 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityPRMContext;
 import com.eph.automation.testing.models.dao.PROMISDataLake.PRMTablesDLObject;
-import com.eph.automation.testing.services.db.PROMISDataLakeSQL.PRMtoDataLakeDataChecksSQL;
+import com.eph.automation.testing.services.db.PROMISDataLakeSQL.PRMOutboundDataChecksSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -25,7 +25,7 @@ public class PRMTablesDataChecksSteps {
     public DataQualityPRMContext dataQualityPRMContext;
     private static String sql;
     private static List<String> Ids;
-    private PRMtoDataLakeDataChecksSQL prmObj = new PRMtoDataLakeDataChecksSQL();
+    private PRMOutboundDataChecksSQL prmObj = new PRMOutboundDataChecksSQL();
 
     // private SimpleDateFormat formatter1=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
     // private SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -37,41 +37,41 @@ public class PRMTablesDataChecksSteps {
         Log.info("Get random record...");
         switch (tableName) {
             case "PRMAUTPUBT":
-                sql = String.format(PRMtoDataLakeDataChecksSQL.GET_PUBIDS_IDS, numberOfRecords);
+                sql = String.format(PRMOutboundDataChecksSQL.GET_PUBIDS_IDS, numberOfRecords);
                 List<Map<?, ?>> randomPubIds = DBManager.getDBResultMap(sql, Constants.PROMIS_URL);
                 Ids = randomPubIds.stream().map(m -> (BigDecimal) m.get("PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "PRMCLSCODT":
-                sql = String.format(PRMtoDataLakeDataChecksSQL.GET_CLSCOD_IDS, numberOfRecords);
+                sql = String.format(PRMOutboundDataChecksSQL.GET_CLSCOD_IDS, numberOfRecords);
                 List<Map<?, ?>> randomClscodIds = DBManager.getDBResultMap(sql, Constants.PROMIS_URL);
                 Ids = randomClscodIds.stream().map(m -> (String) m.get("CLS_COD")).collect(Collectors.toList());
                 break;
             case "PRMCLST":
-                sql = String.format(PRMtoDataLakeDataChecksSQL.GET_CLSTPUBIDT_IDS, numberOfRecords);
+                sql = String.format(PRMOutboundDataChecksSQL.GET_CLSTPUBIDT_IDS, numberOfRecords);
                 List<Map<?, ?>> randomPubIdtIds = DBManager.getDBResultMap(sql, Constants.PROMIS_URL);
                 Ids = randomPubIdtIds.stream().map(m -> (BigDecimal) m.get("PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
                 break;
 
             case "PRMLONDEST":
-                sql = String.format(PRMtoDataLakeDataChecksSQL.GET_PUBIDT_LONDEST_IDS, numberOfRecords);
+                sql = String.format(PRMOutboundDataChecksSQL.GET_PUBIDT_LONDEST_IDS, numberOfRecords);
                 List<Map<?, ?>> randomPrmLondestIds = DBManager.getDBResultMap(sql, Constants.PROMIS_URL);
                 Ids = randomPrmLondestIds.stream().map(m -> (BigDecimal) m.get("PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
                 break;
 
             case "PRMPRICEST":
-                sql = String.format(PRMtoDataLakeDataChecksSQL.GET_PUBIDT_PRICEST_IDS, numberOfRecords);
+                sql = String.format(PRMOutboundDataChecksSQL.GET_PUBIDT_PRICEST_IDS, numberOfRecords);
                 List<Map<?, ?>> randomFamilyIds = DBManager.getDBResultMap(sql, Constants.PROMIS_URL);
                 Ids = randomFamilyIds.stream().map(m -> (BigDecimal) m.get("PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
                 break;
 
             case "PRMPUBINFT":
-                sql = String.format(PRMtoDataLakeDataChecksSQL.GET_PUBIDT_PUBINFT_IDS, numberOfRecords);
+                sql = String.format(PRMOutboundDataChecksSQL.GET_PUBIDT_PUBINFT_IDS, numberOfRecords);
                 List<Map<?, ?>> randomPrmPubinftIds = DBManager.getDBResultMap(sql, Constants.PROMIS_URL);
                 Ids = randomPrmPubinftIds.stream().map(m -> (BigDecimal) m.get("PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
                 break;
 
             case "PRMPUBRELT":
-                sql = String.format(PRMtoDataLakeDataChecksSQL.GET_PUBIDT_PUBRELT_IDS, numberOfRecords);
+                sql = String.format(PRMOutboundDataChecksSQL.GET_PUBIDT_PUBRELT_IDS, numberOfRecords);
                 List<Map<?, ?>> randomPubreltIds = DBManager.getDBResultMap(sql, Constants.PROMIS_URL);
                 Ids = randomPubreltIds.stream().map(m -> (BigDecimal) m.get("PUB_PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
                 break;

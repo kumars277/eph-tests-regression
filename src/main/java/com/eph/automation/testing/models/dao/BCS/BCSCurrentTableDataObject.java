@@ -1,18 +1,24 @@
-//created by Nishant @ 26 Nov 2020
-package com.eph.automation.testing.models.dao.BCSDataLake;
+//created by Nishant @ 21 Oct 2020
+/*there are 14 current tables where data need to be verified.
+for each table respective column variables are aligned.
+any variable already used is commented and kept as is for reference.
+*/
 
-public class BCSHistoryTableDataObject {
+package com.eph.automation.testing.models.dao.BCS;
 
-    //for stg_current_classification
-    private String businessunit;
-    private String classificationcode;
-    private String classificationtype;
+
+public class BCSCurrentTableDataObject {
+
     private String metadeleted;
     private String metamodifiedon;
-    private String priority;
     private String sourceref;
-    private String value;
 
+    //for stg_current_classification
+    private String classificationcode;
+    private String value;
+    private String classificationtype;
+    private String priority;
+    private String businessunit;
     //for stg_current_content
     private String originimpid;
     private String subgroup;
@@ -63,11 +69,32 @@ public class BCSHistoryTableDataObject {
     private String projectno;
     private String workmaster;
 
+    //for stg_current_originatoraddress
+    private String additionaladdress;
+    private String addressid;
+    private String addressline1;
+    private String addressline2;
+    private String addressline3;
+    private String businesspartnerid;
+    private String city;
+    private String country;
+    private String district;
+    private String email;
+    private String fax;
+    private String houseno;
+    private String internet;
+    private String ismainaddress;
+    private String mobile;
+    private String postalcode;
+    private String street;
+    private String telephonemain;
+    private String telephoneother;
+
     //for stg_current_originators
     //private String metadeleted;
     //private String metamodifiedon;
     //private String sourceref;
-    private String businesspartnerid;
+    //private String businesspartnerid;
     private String prefix;
     private String sequence;
     private String originatorid;
@@ -132,7 +159,6 @@ public class BCSHistoryTableDataObject {
     private	String	unitcost;
     private	String	usavailablestock;
     private	String	ustotalstock;
-
 
     //for stg_current_production
     //private String metadeleted;
@@ -251,30 +277,29 @@ public class BCSHistoryTableDataObject {
 
 
 
+    public String getClassificationcode() {return classificationcode;}
+    public void setClassificationcode(String classificationcode) {this.classificationcode = classificationcode;}
+
+    public String getClassificationtype() {return classificationtype;}
+    public void setClassificationtype(String classificationtype) {this.classificationtype = classificationtype;}
+
     public String getMetadeleted() {return metadeleted;}
     public void setMetadeleted(String metadeleted) {this.metadeleted = metadeleted;}
 
     public String getMetamodifiedon() {return metamodifiedon;}
     public void setMetamodifiedon(String metamodifiedon) {this.metamodifiedon = metamodifiedon;}
 
-    public String getSourceref() {return sourceref;}
-    public void setSourceref(String sourceref) {this.sourceref = sourceref;}
-
-    public String getClassificationtype() {return classificationtype;}
-    public void setClassificationtype(String classificationtype) {this.classificationtype = classificationtype;}
+    public String getBusinessunit() {return businessunit;}
+    public void setBusinessunit(String businessunit) {this.businessunit = businessunit;}
 
     public String getPriority() {return priority;}
     public void setPriority(String priority) {this.priority = priority;}
 
+    public String getSourceref() {return sourceref;}
+    public void setSourceref(String sourceref) {this.sourceref = sourceref;}
+
     public String getValue() {return value;}
     public void setValue(String value) {this.value = value;}
-
-    public String getBusinessunit() {return businessunit;}
-    public void setBusinessunit(String businessunit) {this.businessunit = businessunit;}
-
-    public String getClassificationcode() {return classificationcode;}
-    public void setClassificationcode(String classificationcode) {this.classificationcode = classificationcode;}
-
 
 
     public String getOriginimpid() {return originimpid;}
@@ -382,8 +407,6 @@ public class BCSHistoryTableDataObject {
     public String getObjecttype() {return objecttype;}
     public void setObjecttype(String objecttype) {this.objecttype = objecttype;}
 
-
-
     public String getComments() {return comments;}
     public void setComments(String comments) {this.comments = comments;}
 
@@ -400,7 +423,6 @@ public class BCSHistoryTableDataObject {
     public void setSource(String source) {this.source = source;}
 
 
-
     public String getVersiontype() {return versiontype;}
     public void setVersiontype(String versiontype) {this.versiontype = versiontype;}
 
@@ -412,6 +434,64 @@ public class BCSHistoryTableDataObject {
 
     public String getWorkmaster() {return workmaster;}
     public void setWorkmaster(String workmaster) {this.workmaster = workmaster;}
+
+
+    public String getAdditionaladdress() {return additionaladdress;}
+    public void setAdditionaladdress(String additionaladdress) {this.additionaladdress = additionaladdress;}
+
+    public String getAddressid() {return addressid;}
+    public void setAddressid(String addressid) {this.addressid = addressid;}
+
+    public String getAddressline1() {return addressline1;}
+    public void setAddressline1(String addressline1) {this.addressline1 = addressline1;}
+
+    public String getAddressline2() {return addressline2;}
+    public void setAddressline2(String addressline2) {this.addressline2 = addressline2;}
+
+    public String getAddressline3() {return addressline3;}
+    public void setAddressline3(String addressline3) {this.addressline3 = addressline3;}
+
+    public String getBusinesspartnerid() {return businesspartnerid;}
+    public void setBusinesspartnerid(String businesspartnerid) {this.businesspartnerid = businesspartnerid;}
+
+    public String getCity() {return city;}
+    public void setCity(String city) {this.city = city;}
+
+    public String getCountry() {return country;}
+    public void setCountry(String country) {this.country = country;}
+
+    public String getDistrict() {return district;}
+    public void setDistrict(String district) {this.district = district;}
+
+    public String getEmail() {return email;}
+    public void setEmail(String email) {this.email = email;}
+
+    public String getFax() {return fax;}
+    public void setFax(String fax) {this.fax = fax;}
+
+    public String getHouseno() {return houseno;}
+    public void setHouseno(String houseno) {this.houseno = houseno;}
+
+    public String getInternet() {return internet;}
+    public void setInternet(String internet) {this.internet = internet;}
+
+    public String getIsmainaddress() {return ismainaddress;}
+    public void setIsmainaddress(String ismainaddress) {this.ismainaddress = ismainaddress;}
+
+    public String getMobile() {return mobile;}
+    public void setMobile(String mobile) {this.mobile = mobile;}
+
+    public String getPostalcode() {return postalcode;}
+    public void setPostalcode(String postalcode) {this.postalcode = postalcode;    }
+
+    public String getStreet() {return street;}
+    public void setStreet(String street) {this.street = street;}
+
+    public String getTelephonemain() {return telephonemain;}
+    public void setTelephonemain(String telephonemain) {this.telephonemain = telephonemain;}
+
+    public String getTelephoneother() {return telephoneother;}
+    public void setTelephoneother(String telephoneother) {this.telephoneother = telephoneother;}
 
 
     public String getPrefix() {return prefix;}
@@ -446,10 +526,6 @@ public class BCSHistoryTableDataObject {
 
     public String getSearchterm() {return searchterm;}
     public void setSearchterm(String searchterm) {this.searchterm = searchterm;}
-
-    public String getBusinesspartnerid() {return businesspartnerid;}
-    public void setBusinesspartnerid(String businesspartnerid) {this.businesspartnerid = businesspartnerid;}
-
 
     public String getCurrency() {return currency;}
     public void setCurrency(String currency) {this.currency = currency;}
@@ -568,7 +644,6 @@ public class BCSHistoryTableDataObject {
 
     public String getUstotalstock() {return ustotalstock;}
     public void setUstotalstock(String ustotalstock) {this.ustotalstock = ustotalstock;}
-
 
     public String getAddillustration() {return addillustration;}
     public void setAddillustration(String addillustration) {this.addillustration = addillustration;}
@@ -798,6 +873,5 @@ public class BCSHistoryTableDataObject {
 
     public String getWorkmasterprojectno() {return workmasterprojectno;}
     public void setWorkmasterprojectno(String workmasterprojectno) {this.workmasterprojectno = workmasterprojectno;}
-
 
 }

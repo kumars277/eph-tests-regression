@@ -1,5 +1,5 @@
 //created by Nishant @ 26 Nov 2020
-package com.eph.automation.testing.models.dao.BCSDataLake;
+package com.eph.automation.testing.models.dao.BCS;
 
 public class BCSPreviousTableDataObject {
     private String businessunit;

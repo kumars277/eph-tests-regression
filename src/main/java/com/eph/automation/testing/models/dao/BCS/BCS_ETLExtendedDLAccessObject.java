@@ -1,4 +1,4 @@
-package com.eph.automation.testing.models.dao.BCS_ETL;
+package com.eph.automation.testing.models.dao.BCS;
 
 public class BCS_ETLExtendedDLAccessObject {
 

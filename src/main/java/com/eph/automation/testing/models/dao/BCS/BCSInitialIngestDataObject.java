@@ -4,7 +4,7 @@ for each table respective column variables are aligned.
 any variable already used is commented and kept as is for reference.
 */
 
-package com.eph.automation.testing.models.dao.BCSDataLake;
+package com.eph.automation.testing.models.dao.BCS;
 public class BCSInitialIngestDataObject {
 
 

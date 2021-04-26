@@ -5,8 +5,10 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.BCSDataQualityContext;
+import com.eph.automation.testing.models.dao.BCS.BCSCurrentTableDataObject;
+import com.eph.automation.testing.models.dao.BCS.BCSHistoryTableDataObject;
+import com.eph.automation.testing.models.dao.BCS.BCSInitialIngestDataObject;
 import com.eph.automation.testing.services.db.BCSDataLakeSQL.BCSDataLakeDataCheckSQL;
-import com.eph.automation.testing.models.dao.BCSDataLake.*;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -14,12 +16,11 @@ import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import org.junit.Assert;
 
-import javax.xml.crypto.Data;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import static java.util.Comparator.*;
+
 public class BCSDataCheckSteps {
 
     private static String sql;
