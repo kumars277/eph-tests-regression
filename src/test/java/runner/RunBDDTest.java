@@ -12,8 +12,9 @@ import org.junit.runner.RunWith;
         strict = false,
         features = "src/main/resources/features",
         format = { "pretty","json:target/cucumber.json" },
-        tags = { "@stitchingData" },
+        plugin= {"json:target/cucumber.json" },
         glue = {"com.eph.automation.testing.web.steps", "com.eph.automation.testing.common.hooks"})
+
 public class RunBDDTest {
     public RunBDDTest() {
     }

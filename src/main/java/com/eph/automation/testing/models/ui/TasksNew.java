@@ -31,8 +31,19 @@ public class TasksNew {
         this.driver=new WebDriverFactory().get();
         this.wait = new WebDriverWait(driver,10);
         this.pageLoadTimeout=30000;
+        loginWithScience();
     }
 
+public void loginWithScience()
+{
+    openPage("https://productfinder.elsevier.net");
+    try {
+        sendKeys("NAME", ProductFinderConstants.loginByEmail,
+                System.getenv("username") + ProductFinderConstants.SCIENCE_ID);
+        click("ID", ProductFinderConstants.nextButton);
+    }
+    catch(Exception e){Log.error(e.getMessage());}
+}
 
     public WebElement findElementByText(final String text) {
         //updated by Nishant @ 19 May 2020

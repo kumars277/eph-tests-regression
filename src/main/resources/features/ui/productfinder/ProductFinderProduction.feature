@@ -1,6 +1,6 @@
 Feature: Product Finder production smoke tests
 
-  @PFProd @UI
+  @PFProd @UI @PFRegressionSuite
   Scenario Outline: When no product is found "There are no results that match your search" is displayed
     Given user is on Product/Journal Finder search page <ui>
     When user is searching for "<keyword>"
@@ -14,7 +14,7 @@ Feature: Product Finder production smoke tests
       |JF|invalidSearch|
       |JF|1234567890|
 
-  @PFProd @UI
+  @PFProd @UI @PFRegressionSuite
   Scenario Outline: verify search Suggestion displayed
     Given user is on Product/Journal Finder search page <ui>
     When user is searching for "<keyword>"
@@ -34,7 +34,7 @@ Feature: Product Finder production smoke tests
       |PF|anerica                   |america                   |
       |PF|anrica                    |africa                    |
 
-  @PFProd @UI
+  @PFProd @UI @PFRegressionSuite
   Scenario Outline: Search and filter with Work Types
     Given user is on Product Finder search page
     And   Searches for given <keyword>
@@ -47,7 +47,7 @@ Feature: Product Finder production smoke tests
       |Cell      |   Book      |
       |neuro     |   Journal   |
 
-  @PFProd @UI
+  @PFProd @UI @PFRegressionSuite
   Scenario Outline: Search and filter them with Work Statuses and Types
     Given user is on Product Finder search page
     And Searches for given <keyword>
@@ -62,7 +62,7 @@ Feature: Product Finder production smoke tests
       |clinical       |Launched            |Journal   |
       |surgical       |Planned             |Book      |
 
-  @PFProd @UI
+  @PFProd @UI @PFRegressionSuite
   Scenario Outline: Search and filter with Work Status
     Given user is on Product/Journal Finder search page <ui>
     And Searches for given <keyword>
@@ -77,7 +77,7 @@ Feature: Product Finder production smoke tests
       |PF |clinic         |No Longer Published |
       |JF |math           |Launched            |
 
-  @PFProd @UI
+  @PFProd @UI @PFRegressionSuite
   Scenario Outline: Search and filter with Product Status or Product Type
     Given user is on Product/Journal Finder search page <ui>
     When Search for given <keyword> and switch to Products and Packages tab
@@ -89,8 +89,7 @@ Feature: Product Finder production smoke tests
       |PF   |Chemistry     |Product Type      |               |
       |JF   |clinic        |Product Type      |Open Access    |
 
-
-  @PFProd @UI
+  @PFProd @UI @PFRegressionSuite
   Scenario Outline: Search and filter with Product Status and Product Type
     Given user is on Product/Journal Finder search page <ui>
     When Search for given <keyword> and switch to Products and Packages tab
