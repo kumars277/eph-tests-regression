@@ -3,7 +3,7 @@ Feature: Search API: Products
   I would like to search products from Enterprise Customer Hub using EIP Search
   So that I can use the details to validate business needs
 
-  @searchAPI
+  @searchAPIdebug
   Scenario: search product by ID
     Given We get 1 random search ids for products
     And We get the search data from EPH GD for products

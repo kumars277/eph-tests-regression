@@ -5,14 +5,19 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.Product;
 import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
+import com.eph.automation.testing.services.api.AuthorizationService;
+import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.google.inject.Inject;
+import cucumber.api.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.html5.LocalStorage;
+import org.openqa.selenium.html5.WebStorage;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
+import java.util.concurrent.ExecutionException;
+
+import static org.junit.Assert.assertTrue;
 
 public class ProductFinderTasks {
 
@@ -34,6 +39,15 @@ public class ProductFinderTasks {
     public List<Properties> list_people=new ArrayList();
     public Properties prop_links = new Properties();
 
+
+
+    public void authentication_browser() throws AzureOauthTokenFetchingException, ExecutionException, InterruptedException {
+        LocalStorage local = ((WebStorage) tasks.driver).getLocalStorage();
+        String accessToken=  AuthorizationService.getCookies();
+        local.setItem("adal.idtoken", accessToken);
+        local.clear();
+    }
+
     public void openHomePage() throws InterruptedException {//updated by Nishant @ 18 May 2020
      String HomePageAddress="";
        switch (TestContext.getValues().environment)
@@ -44,7 +58,7 @@ public class ProductFinderTasks {
            default:HomePageAddress=Constants.PRODUCT_FINDER_EPH_PROD_UI;break;
        }
 
-        if(DataQualityContext.uiUnderTest=="JF")HomePageAddress+="journals";
+        if(DataQualityContext.uiUnderTest.equalsIgnoreCase("JF"))HomePageAddress+="journals";
         tasks.openPage(HomePageAddress);
         Thread.sleep(1000);
         tasks.waitUntilPageLoad();
@@ -53,10 +67,6 @@ public class ProductFinderTasks {
 
     public void loginByScienceAccount(String scienceEmailId) throws InterruptedException {
         //updated by Nishant @ 13 Feb 2020
-          /*if(tasks.isObjectpresent("XPATH",ProductFinderConstants.userDetail))
-          {}
-          else {
-              */
               try {
                   tasks.sendKeys("NAME", ProductFinderConstants.loginByEmail, System.getenv("username") + scienceEmailId);
                   tasks.click("ID", ProductFinderConstants.nextButton);
@@ -65,7 +75,7 @@ public class ProductFinderTasks {
                   Log.info("User already signed in...");
                   Log.info(e.getMessage());
               }
-         // }
+
     }
 
     public void selectSearchType(String searchType) { //created by Nishant @ 10 Jul 2020
@@ -96,6 +106,7 @@ public class ProductFinderTasks {
         return tasks.doesPageContainsText(text);
     }
 
+
     public void clickProductAndPackages_tab() throws InterruptedException {
         //created by Nishant @ 19 May 2020
         tasks.verifyElementisClickable("XPATH", ProductFinderConstants.tab_product_andPackages);
@@ -105,11 +116,10 @@ public class ProductFinderTasks {
 
     public void clickWork(String workId) throws InterruptedException {
         //created by Nishant @ 22 May 2020
-        String buildWorkIdLocator = String.format(ProductFinderConstants.buildWorkIdLocator, workId);
-        tasks.click("XPATH", buildWorkIdLocator);
+        String IdLocator = String.format(ProductFinderConstants.buildIdLocator, workId);
+        tasks.click("XPATH", IdLocator);
         Thread.sleep(5000);
     }
-
 
     public void clickLogo() throws InterruptedException {
         //created by Nishant @ 23 Oct 2020
@@ -175,7 +185,16 @@ public class ProductFinderTasks {
         String targetURL = "";
         String referenceUrl="work/" + workID + "/overview";
 
-        if(DataQualityContext.uiUnderTest=="JF")referenceUrl="journals/"+referenceUrl;
+        if(DataQualityContext.uiUnderTest.equalsIgnoreCase("JF"))referenceUrl="journals/"+referenceUrl;
+
+     switch(TestContext.getValues().environment)
+     {
+         case"SIT":         targetURL = Constants.PRODUCT_FINDER_EPH_SIT_UI + referenceUrl; break;
+         case"UAT":         targetURL = Constants.PRODUCT_FINDER_EPH_UAT_UI + referenceUrl; break;
+         case"UAT2":        targetURL = Constants.PRODUCT_FINDER_EPH_UAT2_UI + referenceUrl; break;
+         case"PRODUCTION":  targetURL = Constants.PRODUCT_FINDER_EPH_PROD_UI + referenceUrl; break;
+     }
+     /*
         if (TestContext.getValues().environment.equalsIgnoreCase("SIT"))
             targetURL = Constants.PRODUCT_FINDER_EPH_SIT_UI + referenceUrl;
         else if (TestContext.getValues().environment.equalsIgnoreCase("UAT"))
@@ -183,18 +202,27 @@ public class ProductFinderTasks {
         else if (TestContext.getValues().environment.equalsIgnoreCase("UAT2"))
             targetURL = Constants.PRODUCT_FINDER_EPH_UAT2_UI + referenceUrl;
         else targetURL = Constants.PRODUCT_FINDER_EPH_PROD_UI + referenceUrl;
+        */
         Log.info("Expected Target URL " + targetURL);
         if (targetURL.equalsIgnoreCase(tasks.getCurrentPageUrl())) return true;
         else return false;
     }
 
+
     public boolean isUserOnProductPage(String productId) {
-        //created by Nishant @ 19 May 2020
+        //created by Nishant @ 23 Apr 2020
+        Log.info("verifying if user is on the product page overview...");
         String targetURL = "";
-        if (TestContext.getValues().environment.equalsIgnoreCase("SIT"))
-            targetURL = Constants.PRODUCT_FINDER_EPH_SIT_UI + "product/" + productId + "/overview";
-        else if (TestContext.getValues().environment.equalsIgnoreCase("UAT"))
-            targetURL = Constants.PRODUCT_FINDER_EPH_UAT_UI + "product/" + productId + "/overview";
+        String referenceUrl="product/" + productId + "/overview";
+
+        if(DataQualityContext.uiUnderTest.equalsIgnoreCase("JF"))referenceUrl="journals/"+referenceUrl;
+
+        switch(TestContext.getValues().environment) {
+            case "SIT":targetURL = Constants.PRODUCT_FINDER_EPH_SIT_UI + referenceUrl; break;
+            case "UAT":targetURL = Constants.PRODUCT_FINDER_EPH_UAT_UI  + referenceUrl;break;
+            case "UAT2":targetURL = Constants.PRODUCT_FINDER_EPH_UAT2_UI  + referenceUrl; break;
+            case "PRODUCTION":targetURL = Constants.PRODUCT_FINDER_EPH_PROD_UI + referenceUrl; break;
+        }
 
         Log.info("Target URL " + targetURL);
         if (targetURL.equalsIgnoreCase(tasks.getCurrentPageUrl())) return true;
@@ -237,7 +265,7 @@ public class ProductFinderTasks {
 
         //capture identifiers values
         //updated by Nishant @ 15 Oct 2020 for EPHD-2041 regression testing
-        if(DataQualityContext.uiUnderTest=="PF")  //for Product Finder UI
+        if(DataQualityContext.uiUnderTest.equalsIgnoreCase("PF"))  //for Product Finder UI
         {
             List<WebElement> rows_identifiers = tasks.findmultipleElements("XPATH", ProductFinderConstants.DetailIdentifiers + "/table/tbody/tr");
             for (int i = 1; i < rows_identifiers.size(); i++) {
@@ -325,7 +353,8 @@ public class ProductFinderTasks {
 
     }
 
-    public void getUI_Links() {//created by Nishant @15 Jul 2020
+    public void getUI_Links() {
+        //created by Nishant @15 Jul 2020
 
         //click on Editorial tab
         tasks.click("XPATH", ProductFinderConstants.linkTab);
@@ -339,10 +368,74 @@ public class ProductFinderTasks {
         }
     }
 
+    public void filter_Search_Result_Randomly(String filterType, String filterValue) throws InterruptedException {
+//created by Nishant @ 23 Apr 2021
 
-    public List<WebElement> getLinks()
-{
+        //find out how many types of filter available on search result page
+        List<WebElement> filterTypes = tasks.findmultipleElements("XPATH",ProductFinderConstants.FilterLocator);
+
+        //identify and select intended filter type for the scenarios
+        for(int f=0;f<filterTypes.size();f++)
+        {
+            if(filterTypes.get(f).getText().contains(filterType))
+            {
+                Log.info("filter type to be chosen -"+ filterType);
+
+                    if(!filterValue.isEmpty())
+                    {
+                        tasks.click("XPATH", "//span[contains(text(),'" + filterValue + "')]");
+                        Thread.sleep(1000);
+                        DataQualityContext.prop_filters.setProperty(filterType, filterValue);
+                        break;
+                    }
+                    else {
+                        //find out how many options are available under intended filter type
+                        String filterOptionIdentifier = ProductFinderConstants.FilterLocator + "[" + (f + 1) + "]" + "/child::div";
+                        List<WebElement> filterOptions = tasks.findmultipleElements("XPATH", filterOptionIdentifier);
+
+                        //choose a randomly from available options
+                        int cnt = getRandomCount(filterOptions.size()) + 1;
+                        WebElement filterChosen = tasks.findElement("XPATH", filterOptionIdentifier + "[" + cnt + "]//label/span");
+
+                        //capture filter name chosen randomly and click it
+
+                        DataQualityContext.prop_filters.setProperty(filterType, filterChosen.getText());
+                        filterChosen.click();
+                        Thread.sleep(1000);
+
+                        break;
+                    }
+            }
+        }
+        Log.info("Filtered by "+filterType +" - "+ DataQualityContext.prop_filters.getProperty(filterType));
+    }
+
+
+    public List<WebElement> getLinks(){
     List<WebElement> links= tasks.findmultipleElements("XPATH","//a");
     return links;
-}
+    }
+
+    public void closeBrowser()
+    {
+        tasks.closeBrowser();
+    }
+
+    public int getRandomCount(int limit)
+    {//created by Nishant @ 22 Apr 2021
+        Random random = new Random();
+        return random.nextInt(limit);
+    }
+
+    public void verifyUserIsOnOverviewPage()
+    {//created by Nishant @ 23 Apr 2021
+        if(TestContext.getValues().environment.equalsIgnoreCase("UAT")|
+                TestContext.getValues().environment.equalsIgnoreCase("SIT"))
+        {
+            if(DataQualityContext.productDataObjectsFromEPHGD!=null)
+                ProductFinderTasks.searchResultWorkId=DataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_ID();
+        }
+
+        assertTrue(isUserOnProductPage(ProductFinderTasks.searchResultWorkId));
+    }
 }

@@ -56,6 +56,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
 
             case "stch_work_core_json":
                 sql=String.format(stitchingDataSQL.GETRandomIds_stch_work_core_json,dbEnv,noOfRandomRecords);break;
+
         }
 
         //for debugging failure overwrite sql value

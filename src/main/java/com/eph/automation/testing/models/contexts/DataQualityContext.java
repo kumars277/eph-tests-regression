@@ -9,6 +9,7 @@ import com.eph.automation.testing.services.db.sql.WorkRelationshipDataObject;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Created by RAVIVARMANS on 26/11/2018.
@@ -24,15 +25,11 @@ public class DataQualityContext {
     public static List<WorkDataObject> workDataObjectsFromEPHGD;
     public static List<WorkDataObject> workDataObjectsAccProd;
 
-
-
-
     public static List<ManifestationDataObject> manifestationDataObjectsFromEPHSTG;
     public static List<ManifestationDataObject> manifestationDataObjectsFromPMX;
     public static List<ManifestationDataObject> manifestationDataObjectsFromEPHSA;
     public static List<ManifestationDataObject> manifestationDataObjectsFromEPHDQ;
     public static List<ManifestationDataObject> manifestationDataObjectsFromEPHGD;
-
 
     public static List<ProductDataObject> productDataObjectsFromPMX;
     public static List<ProductDataObject> productDataObjectsFromEPHSTG;
@@ -98,6 +95,7 @@ public class DataQualityContext {
     public static ManifestationExtendedTestClass manifestationExtendedTestClass;
     public static AvailabilityExtendedTestClass availabilityExtendedTestClass;
     public static String uiUnderTest;
+    public static Properties prop_filters = new Properties();
 
 
 

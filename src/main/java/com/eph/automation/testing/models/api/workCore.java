@@ -186,7 +186,6 @@ public class workCore {
 
         //societyOwnership, if not null -EPR-W-101055
         //legalOwnership, if not null -EPR-W-101055
-        //legalOwnership, if not null -EPR-W-101055
         //workLegalOwners, if not null -EPR-W-101055
         //workAccessModels, if not null -EPR-W-101055
         //workBusinessModels, if not null -EPR-W-101055
