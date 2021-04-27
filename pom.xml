@@ -177,7 +177,7 @@
 new cucumber ends-->
 
 
-        <dependency><groupId>ru.yandex.qatools.allure</groupId><artifactId>allure-cucumber-jvm-adaptor</artifactId><version>1.6.4</version></dependency>
+        <dependency><groupId>ru.yandex.qatools.allure</groupId><artifactId>allure-cucumber-jvm-adaptor</artifactId><version>1.6.1</version></dependency>
 
         <!-- other dependencies-->
         <dependency><groupId>javassist</groupId><artifactId>javassist</artifactId><version>${javaassist.version}</version></dependency>
