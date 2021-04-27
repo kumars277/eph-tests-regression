@@ -1,7 +1,5 @@
 package com.eph.automation.testing.common.hooks;
 
-import com.eph.automation.testing.models.ui.ProductFinderConstants;
-import com.eph.automation.testing.models.ui.TasksNew;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.TestContext;
 import com.google.inject.Inject;
@@ -16,7 +14,7 @@ import org.openqa.selenium.WebDriver;
 public class ApplicationHooks {
     @Inject
     private Provider<WebDriver> driverProvider;
-    private TasksNew tasksNew;
+
 
     @Before
     public void setUp() {

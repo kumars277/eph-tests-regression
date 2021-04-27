@@ -119,15 +119,8 @@ Examples:
 
   #below scenarios can be ignored, already covered in one of the above
 
-  @PFDMC @PFProddd
-  Scenario: Search specific Journal and verify link tab
-    Given We set specific journal ids for search
-    Then  search work and verify links
 
-  @PFDMC
-  Scenario: Search the Journal and verify link tab
-    Given We get 2 random journal ids for search
-    Then  search work and verify links
+
 
   @PFDMC
   Scenario Outline: Search the work and verify data model changes

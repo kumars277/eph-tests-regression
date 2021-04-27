@@ -7,6 +7,7 @@ import com.eph.automation.testing.models.api.WorkExtendedTestClass;
 import com.eph.automation.testing.models.dao.*;
 import com.eph.automation.testing.services.db.sql.WorkRelationshipDataObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -94,8 +95,11 @@ public class DataQualityContext {
     public static WorkExtendedTestClass workExtendedTestClass;
     public static ManifestationExtendedTestClass manifestationExtendedTestClass;
     public static AvailabilityExtendedTestClass availabilityExtendedTestClass;
+
     public static String uiUnderTest;
     public static Properties prop_filters = new Properties();
+    public static ArrayList<String> RowData;
+    public static ArrayList<String> DataToWrite = new ArrayList<>();
 
 
 

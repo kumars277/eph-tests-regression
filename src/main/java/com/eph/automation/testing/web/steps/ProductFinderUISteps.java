@@ -30,7 +30,10 @@ import cucumber.api.java.en.*;
 import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.File;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -38,7 +41,10 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 import org.bouncycastle.crypto.engines.AESEngine;
@@ -67,7 +73,7 @@ public class ProductFinderUISteps {
     private static List<String> productTitleList;
     private static List<String> workIdList = new ArrayList<>();
     private static List<String> workStatusCode;
-   // private static List<String> workStatusCodesofLaunchedToList, workStatusCodesofPlannedToList, workStatusCodesofNoLongerPubList;
+    // private static List<String> workStatusCodesofLaunchedToList, workStatusCodesofPlannedToList, workStatusCodesofNoLongerPubList;
 
     private static List<Map<?, ?>> availableProduct;
     private static List<Map<?, ?>> tempDBResultMap;
@@ -117,8 +123,8 @@ public class ProductFinderUISteps {
         //updated by Nishant @ 15 May 2020
         DataQualityContext.uiUnderTest = "PF";
         productFinderTasks.openHomePage();
-      //  productFinderTasks.authentication_browser();
-     //   productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
+        //  productFinderTasks.authentication_browser();
+        //   productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
         tasks.waitUntilPageLoad();
     }
 
@@ -273,9 +279,9 @@ public class ProductFinderUISteps {
     }
 
     @Given("^Filter the Search Result by filter \"([^\"]*)\" and value \"(.*)\"$")
-    public void filter_Search_Result_Randomly(String FilterType, String filterValue ) throws InterruptedException {
+    public void filter_Search_Result_Randomly(String FilterType, String filterValue) throws InterruptedException {
         //created by Nishant @ 22 Apr 2021
-        productFinderTasks.filter_Search_Result_Randomly(FilterType,filterValue);
+        productFinderTasks.filter_Search_Result_Randomly(FilterType, filterValue);
         Thread.sleep(1000);
     }
 
@@ -287,9 +293,9 @@ public class ProductFinderUISteps {
     }
 
     @Given("^Filter the Search Result by filter \"([^\"]*)\" and value \"(.*)\" and click first id$")
-    public void filter_Search_Result_and_clickFirstId(String FilterType, String filterValue ) throws InterruptedException {
+    public void filter_Search_Result_and_clickFirstId(String FilterType, String filterValue) throws InterruptedException {
         //created by Nishant @ 22 Apr 2021
-        productFinderTasks.filter_Search_Result_Randomly(FilterType,filterValue);
+        productFinderTasks.filter_Search_Result_Randomly(FilterType, filterValue);
 
         getFirstIdOnPage();
         productFinderTasks.clickWork(ProductFinderTasks.searchResultWorkId);
@@ -339,7 +345,7 @@ public class ProductFinderUISteps {
 
         workStatusUIValidation(workStatus);
 
-        if (!TestContext.getValues().environment.equalsIgnoreCase("PROD")&
+        if (!TestContext.getValues().environment.equalsIgnoreCase("PROD") &
                 !TestContext.getValues().environment.equalsIgnoreCase("UAT2")) {
 
             sql = String.format(APIDataSQL.SELECT_GD_WWORK_TYPE_STATUS, ProductFinderTasks.searchResultWorkId);
@@ -347,10 +353,18 @@ public class ProductFinderUISteps {
             workStatusCode = workTypeStatusCode.stream().map(m -> (String) m.get("WORK_STATUS")).map(String::valueOf).collect(Collectors.toList());
 
             switch (workStatus) {
-                case "Approved":            if(Arrays.stream(workStatusCodesofApproved).anyMatch(workStatusCode::contains))flag = true; break;
-                case "Launched":            if(Arrays.stream(workStatusCodesofLaunched).anyMatch(workStatusCode::contains))flag = true; break;
-                case "Planned":             if(Arrays.stream(workStatusCodesofPlanned).anyMatch(workStatusCode::contains))flag = true; break;
-                case "No Longer Published": if(Arrays.stream(workStatusCodesofNoLongerPub).anyMatch(workStatusCode::contains))flag = true; break;
+                case "Approved":
+                    if (Arrays.stream(workStatusCodesofApproved).anyMatch(workStatusCode::contains)) flag = true;
+                    break;
+                case "Launched":
+                    if (Arrays.stream(workStatusCodesofLaunched).anyMatch(workStatusCode::contains)) flag = true;
+                    break;
+                case "Planned":
+                    if (Arrays.stream(workStatusCodesofPlanned).anyMatch(workStatusCode::contains)) flag = true;
+                    break;
+                case "No Longer Published":
+                    if (Arrays.stream(workStatusCodesofNoLongerPub).anyMatch(workStatusCode::contains)) flag = true;
+                    break;
             }
             assertTrue("The given work Id is successfully filtered by the Work Status and verified by DB: " + workStatus, flag);
         }
@@ -359,7 +373,7 @@ public class ProductFinderUISteps {
 
     @Then("^Verify the Product filter is \"([^\"]*)\"$")
     public void verify_the_Product_Status_is(String filterType) {
-    //created by Nishant @ 21 April 2021 EPHD-3053
+        //created by Nishant @ 21 April 2021 EPHD-3053
         productFinderTasks.verifyUserIsOnOverviewPage();
         productStatusUIValidation(filterType);
     }
@@ -372,8 +386,9 @@ public class ProductFinderUISteps {
         switch (workStatus) {
 
             case "Launched":
-                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Launched")|
-                        productFinderTasks.prop_info.getProperty("Work Status").contains("Published"))flag = true;   break;
+                if (productFinderTasks.prop_info.getProperty("Work Status").contains("Launched") |
+                        productFinderTasks.prop_info.getProperty("Work Status").contains("Published")) flag = true;
+                break;
 
             case "Planned":
                 if (productFinderTasks.prop_info.getProperty("Work Status").contains("Planned"))flag = true;          break;
@@ -602,12 +617,10 @@ public class ProductFinderUISteps {
             String searchSuggestion = tasks.getTextofElement("XPATH", ProductFinderConstants.searchSuggesion);
             Log.info("Expected searchSuggestion=> Did you mean: \n" + ExpSuggestion + "\n actual searchSuggestion=>" + searchSuggestion);
             Assert.assertEquals("Did you mean: \n" + ExpSuggestion, searchSuggestion);
+        } else {
+            Log.info("search result of " + keyword + " showing " + tasks.getTextofElement("XPATH", ProductFinderConstants.SearchResultPageCount));
+            Assert.assertTrue("search result not available for " + keyword, tasks.verifyElementisDisplayed("XPATH", ProductFinderConstants.SearchResultPageCount));
         }
-        else
-            {
-                Log.info("search result of "+keyword +" showing "+tasks.getTextofElement("XPATH",ProductFinderConstants.SearchResultPageCount));
-                Assert.assertTrue("search result not available for "+keyword,tasks.verifyElementisDisplayed("XPATH",ProductFinderConstants.SearchResultPageCount));
-            }
     }
 
 
@@ -679,7 +692,7 @@ public class ProductFinderUISteps {
         List<WebElement> itemInfo = tasks.findmultipleElements("XPATH", ProductFinderConstants.itemDetail);
         ArrayList<String> idFound = new ArrayList<>();
         for (int i = 0; i < itemInfo.size(); i++) {
-        //    List<WebElement> itemInfo_in = tasks.findmultipleElements("XPATH", ProductFinderConstants.itemDetail + "[" + (i + 1) + "]" + ProductFinderConstants.itemDetailInner);
+            //    List<WebElement> itemInfo_in = tasks.findmultipleElements("XPATH", ProductFinderConstants.itemDetail + "[" + (i + 1) + "]" + ProductFinderConstants.itemDetailInner);
             List<WebElement> itemInfo_in = tasks.findmultipleElements("XPATH", ProductFinderConstants.itemDetail + "[" + (i + 1) + "]" + ProductFinderConstants.itemidentifier);
             for (WebElement webElement : itemInfo_in) {
                 String text = webElement.getText();
@@ -709,7 +722,7 @@ public class ProductFinderUISteps {
         verifyPeople();
         if (uiUnderTest.equals("JF")) {
             verifyEditorialInfo();
-            verifyLink(); //defect EPHD-2254
+            verifyLinksOnLinkTab(); //defect EPHD-2254
         }
     }
 
@@ -726,7 +739,7 @@ public class ProductFinderUISteps {
             productFinderTasks.clickWork(workId);
             Log.info("clicked " + workId + " id from search result");
             assertTrue(productFinderTasks.isUserOnWorkPage(workId));
-            verifyLink();
+            verifyLinksOnLinkTab();
         }
     }
 
@@ -769,8 +782,9 @@ public class ProductFinderUISteps {
             printLog("UI:Editorial Support Level with JRBI: primarySiteSupportLevel");
 
             String dbProductionSite = "";
-            if(DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalProdSiteCode()!=null) dbProductionSite=DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalProdSiteCode();
-            Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Production Site"),dbProductionSite);
+            if (DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalProdSiteCode() != null)
+                dbProductionSite = DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalProdSiteCode();
+            Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Production Site"), dbProductionSite);
             printLog("UI:Production Site with JRBI: JournalProdSiteCode");
 
 
@@ -829,13 +843,13 @@ public class ProductFinderUISteps {
             //EPR-W-11560F
 
             //getJournalProdSiteCode moved from manifeationExtended to workExtended level
-          //  Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Production Site"),DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getJournalProdSiteCode());      printLog("UI:Production Site with JRBI: journalProdSiteCode");
+            //  Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Production Site"),DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getJournalProdSiteCode());      printLog("UI:Production Site with JRBI: journalProdSiteCode");
 
             //coming from manifestation Extended
             String DBWarReference = "";
-            if(DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getWarReference()!=null)
-                DBWarReference=DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getWarReference();
-            Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Despatch Location"),DBWarReference);
+            if (DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getWarReference() != null)
+                DBWarReference = DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getWarReference();
+            Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Despatch Location"), DBWarReference);
             printLog("UI:Despatch Location with JRBI: warReference");
 
             //coming from manifestation Extended
@@ -863,7 +877,7 @@ public class ProductFinderUISteps {
         }
     }
 
-    private void verifyLink() throws IOException {//created by Nishant @ 15 Jul 2020
+    private void verifyLinksOnLinkTab() throws IOException {//created by Nishant @ 15 Jul 2020
         Log.info("\nverifying Work Overview - Links tab");
         Log.info("...................................\n");
         productFinderTasks.getUI_Links();
@@ -945,6 +959,7 @@ public class ProductFinderUISteps {
         }
 
     }
+
 
     private void verifyDuplicatePeopleRoles() {//created by Nishant @ 10 Jul 2020
         Log.info("Test : verifying duplicate People Role...");
@@ -1046,7 +1061,7 @@ public class ProductFinderUISteps {
     }
 
     private void compareExtendedPersonWithDB() {//created by Nishant @ 14 Jul 2020
-        if(DataQualityContext.workExtendedTestClass.getWorkExtended().getWorkExtendedPersons() != null) {
+        if (DataQualityContext.workExtendedTestClass.getWorkExtended().getWorkExtendedPersons() != null) {
             WorkExtendedPersons[] workExtendedPersons = DataQualityContext.workExtendedTestClass.getWorkExtended().getWorkExtendedPersons().clone();
 
             for (WorkExtendedPersons workExtendedPerson : workExtendedPersons) {
@@ -1054,16 +1069,16 @@ public class ProductFinderUISteps {
                 String extPersonFullName = workExtendedPerson.getExtendedPerson().get("firstName") + " " +
                         workExtendedPerson.getExtendedPerson().get("lastName");
                 String extEmailId = "";
-                if(workExtendedPerson.getExtendedPerson().get("email")!=null)
-                    extEmailId=workExtendedPerson.getExtendedPerson().get("email").toString();
+                if (workExtendedPerson.getExtendedPerson().get("email") != null)
+                    extEmailId = workExtendedPerson.getExtendedPerson().get("email").toString();
 
                 boolean extPersonFound = false;
                 List<Integer> ignore = new ArrayList();
                 for (int uiperson = 0; uiperson < productFinderTasks.list_people.size(); uiperson++) {
                     if (ignore.contains(uiperson)) continue;
-                    if (productFinderTasks.list_people.get(uiperson).getProperty("Role").equalsIgnoreCase(extRoleName)&
+                    if (productFinderTasks.list_people.get(uiperson).getProperty("Role").equalsIgnoreCase(extRoleName) &
                             productFinderTasks.list_people.get(uiperson).getProperty("PersonName").trim().equalsIgnoreCase(extPersonFullName)) {
-                        Log.info("verifying work extended person..." + extRoleName +"-"+extPersonFullName);
+                        Log.info("verifying work extended person..." + extRoleName + "-" + extPersonFullName);
                         extPersonFound = true;
                         printLog("person role");
                         printLog("PersonName");
@@ -1097,7 +1112,7 @@ public class ProductFinderUISteps {
 
         getFinancialData(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
 
-        if (financialAttribs.financialDataFromGD != null & financialAttribs.financialDataFromGD.size()!=0) {
+        if (financialAttribs.financialDataFromGD != null & financialAttribs.financialDataFromGD.size() != 0) {
             sql = "select l_description FROM semarchy_eph_mdm.gd_x_lov_gl_company WHERE code='" + financialAttribs.financialDataFromGD.get(0).getGl_company() + "'";
             List<Map<String, String>> glCompnyName = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
@@ -1308,9 +1323,11 @@ public class ProductFinderUISteps {
         }
 
         if (productFinderTasks.prop_info.containsKey("Copyright Year")) {
-            String dbCopyrightYear="";
-            if(DataQualityContext.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR()!=null){dbCopyrightYear=DataQualityContext.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR();}
-            Assert.assertEquals(productFinderTasks.prop_info.getProperty("Copyright Year"),dbCopyrightYear );
+            String dbCopyrightYear = "";
+            if (DataQualityContext.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR() != null) {
+                dbCopyrightYear = DataQualityContext.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR();
+            }
+            Assert.assertEquals(productFinderTasks.prop_info.getProperty("Copyright Year"), dbCopyrightYear);
             Log.info("verified...Copyright Year");
         }
 
@@ -1352,7 +1369,7 @@ public class ProductFinderUISteps {
 
     private String getDBWorkStatus() {
         //updated by Nishant @ 05 apr 2021
-        sql = String.format("select l_description from semarchy_eph_mdm.gd_x_lov_work_status gxlws where code ='%s'",DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
+        sql = String.format("select l_description from semarchy_eph_mdm.gd_x_lov_work_status gxlws where code ='%s'", DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
         List<Map<String, Object>> workStatusDespription = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         return workStatusDespription.get(0).get("l_description").toString();
     }
@@ -1443,9 +1460,9 @@ public class ProductFinderUISteps {
     }
 
     private String getValue_volume() {//updated by Nishant @ 15 Oct 2020 for EPHD-2241
-        String valueVolume="";
+        String valueVolume = "";
         if (DataQualityContext.workDataObjectsFromEPHGD.get(0).getVOLUME() != null)
-           //!DataQualityContext.workDataObjectsFromEPHGD.get(0).getVOLUME().equalsIgnoreCase("0"))
+            //!DataQualityContext.workDataObjectsFromEPHGD.get(0).getVOLUME().equalsIgnoreCase("0"))
             valueVolume = DataQualityContext.workDataObjectsFromEPHGD.get(0).getVOLUME();
 
         return valueVolume;
@@ -1457,7 +1474,7 @@ public class ProductFinderUISteps {
             sql = String.format(ProductFinderSQL.SELECT_LANGUAGE_INFO, DataQualityContext.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE());
             List<Map<String, String>> languageInfo = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             value_language = languageInfo.get(0).get("l_description");
-}
+        }
         return value_language;
     }
 
@@ -1554,9 +1571,15 @@ public class ProductFinderUISteps {
 
 
     }
-@And("^closer the browser$")
-public void closeBrowser()
-{
-    tasks.closeBrowser();
-}
+
+    @And("^closer the browser$")
+    public void closeBrowser() {
+        tasks.closeBrowser();
+    }
+
+
+
+
+
+
 }
