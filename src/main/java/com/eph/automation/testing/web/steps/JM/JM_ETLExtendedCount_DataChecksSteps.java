@@ -73,7 +73,7 @@ public class JM_ETLExtendedCount_DataChecksSteps {
 
     @Given("^Get the (.*) of JM ETL Extended data from Inbound Tables (.*)$")
     public void getRandomIds(String numberOfRecords, String tableName) {
-       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+     //  numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for JM ETL Extended Tables....");
         List<Map<?, ?>> randomIds;
