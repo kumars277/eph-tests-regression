@@ -1,4 +1,4 @@
-Feature:Validate data count for BCS Extended tables
+Feature:Validate data count for JM Extended tables
 
 #  Created by Dinesh S on 20/04/2020
   #confluence link: https://confluence.cbsels.com/display/EPH/Product+Extended+Availability+Topic+Process.
@@ -26,4 +26,4 @@ Feature:Validate data count for BCS Extended tables
     Examples:
       | tableName                               |countOfRandomIds|
       |jnl_new_fulfilment_system                |2              |
-     |jnl_fulfilment_system                     |2               |
+      |jnl_fulfilment_system                     |2               |
