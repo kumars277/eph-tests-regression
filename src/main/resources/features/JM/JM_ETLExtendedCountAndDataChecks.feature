@@ -26,4 +26,4 @@ Feature:Validate data count for JM Extended tables
     Examples:
       | tableName                               |countOfRandomIds|
       |jnl_new_fulfilment_system                |2              |
-     |jnl_fulfilment_system                     |2               |
+      |jnl_fulfilment_system                     |2               |

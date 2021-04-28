@@ -130,11 +130,11 @@ public class PromisETLCountChecksSQL {
             ", xp.product_type as product_type \n" +
             ", ppp.inbound_ts \n" +
             "FROM "+GetPRMDLDBUser.getPRMDataBase()+".%s ppp \n" +
-            "INNER JOIN eph_sit_crossreference_database.eph_identifier_cross_reference_v xw \n" +
+            "INNER JOIN "+GetPRMDLDBUser.getEphCrossRefDataBase()+".eph_identifier_cross_reference_v xw \n" +
             "  ON xw.identifier_type = 'ELSEVIER JOURNAL NUMBER' \n" +
             "  AND xw.record_level = 'Work' \n" +
             "  AND xw.identifier = ppp.jnl_idt \n" +
-            "LEFT OUTER JOIN eph_sit_crossreference_database.eph_identifier_cross_reference_v xp \n" +
+            "LEFT OUTER JOIN "+GetPRMDLDBUser.getEphCrossRefDataBase()+".eph_identifier_cross_reference_v xp \n" +
             "  ON xp.identifier_type = 'ELSEVIER JOURNAL NUMBER' \n" +
             "  AND xp.record_level = 'Product' \n" +
             "  AND xp.product_type = 'SUB' \n" +
