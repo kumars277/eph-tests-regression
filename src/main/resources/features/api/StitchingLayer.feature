@@ -9,9 +9,9 @@ Feature:data check between stitching layer and PF API's
     Examples:
     |stcTable|
     |  stch_product_ext_json_byAvailability      |
-    |  stch_product_ext_json_byPricing           |
-    |  stch_product_core_json                    |
-    |  stch_manifestation_ext_json               |
-    |  stch_work_ext_json                        |
-    |  stch_work_core_json                       |
+#    |  stch_product_ext_json_byPricing           |
+#    |  stch_product_core_json                    |
+#    |  stch_manifestation_ext_json               |
+#    |  stch_work_ext_json                        |
+#    |  stch_work_core_json                       |
 

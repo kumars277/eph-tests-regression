@@ -12,6 +12,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import cucumber.api.java.en.When;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.html5.LocalStorage;
@@ -468,6 +469,55 @@ public class ProductFinderTasks {
         assertTrue(isUserOnProductPage(ProductFinderTasks.searchResultWorkId));
     }
 
+    public void verifyWorkTab() throws InterruptedException {
+        //created by Nishant @ 28 Apr 2021
+        Assert.assertTrue("Works tab displayed",tasks.verifyElementisDisplayed("XPATH", ProductFinderConstants.tab_Works));
+        Assert.assertTrue("Works tab clickable",tasks.verifyElementisClickable("XPATH", ProductFinderConstants.tab_Works));
+        System.out.println("'Works' tab displayed and clickable");
+    }
+    public void verifyProductTab() throws InterruptedException {
+        //created by Nishant @ 28 Apr 2021
+        Assert.assertTrue("Product & Packages tab displayed",tasks.verifyElementisDisplayed("XPATH", ProductFinderConstants.tab_product_andPackages));
+        Assert.assertTrue("Product & Packages tab clickable", tasks.verifyElementisClickable("XPATH", ProductFinderConstants.tab_product_andPackages));
+        System.out.println("'Product & Packages' tab displayed and clickable");
+    }
+    public void verifyManifestationTab() throws InterruptedException {
+        //created by Nishant @ 28 Apr 2021
+        Assert.assertTrue("Manifestation tab displayed",tasks.verifyElementisDisplayed("XPATH", ProductFinderConstants.tab_manifestation));
+        Assert.assertTrue("Manifestation tab clickable",tasks.verifyElementisClickable("XPATH", ProductFinderConstants.tab_manifestation));
+        System.out.println("'Manifestation' tab displayed and clickable");
+    }
 
+    public void verifyLeftCoreTab() throws InterruptedException {
+        //created by Nishant @ 28 Apr 2021
+        Assert.assertTrue("Core tab displayed",tasks.verifyElementisDisplayed("XPATH", ProductFinderConstants.coreTab));
+        Assert.assertTrue("Core tab clickable",tasks.verifyElementisClickable("XPATH", ProductFinderConstants.coreTab));
+        System.out.println("'Core' tab displayed and clickable");
+    }
+
+    public void verifyLeftPeopleTab() throws InterruptedException {
+        //created by Nishant @ 28 Apr 2021
+        Assert.assertTrue("People tab displayed",tasks.verifyElementisDisplayed("XPATH", ProductFinderConstants.peopleTab));
+        Assert.assertTrue("People tab clickable",tasks.verifyElementisClickable("XPATH", ProductFinderConstants.peopleTab));
+        System.out.println("'People' tab displayed and clickable");
+    }
+    public void verifyLeftFinancialTab() throws InterruptedException {
+        //created by Nishant @ 28 Apr 2021
+        Assert.assertTrue("Financial tab displayed",tasks.verifyElementisDisplayed("XPATH", ProductFinderConstants.financialTab));
+        Assert.assertTrue("Financial tab clickable",tasks.verifyElementisClickable("XPATH", ProductFinderConstants.financialTab));
+        System.out.println("'Financial' tab displayed and clickable");
+    }
+    public void verifyLeftEditorialTab() throws InterruptedException {
+        //created by Nishant @ 28 Apr 2021
+        Assert.assertTrue("Editorial tab displayed",tasks.verifyElementisDisplayed("XPATH", ProductFinderConstants.editorialTab));
+        Assert.assertTrue("Editorial tab clickable",tasks.verifyElementisClickable("XPATH", ProductFinderConstants.editorialTab));
+        System.out.println("'Editorial' tab displayed and clickable");
+    }
+    public void verifyLeftLinkTab() throws InterruptedException {
+        //created by Nishant @ 28 Apr 2021
+        Assert.assertTrue("Links tab displayed",tasks.verifyElementisDisplayed("XPATH", ProductFinderConstants.linkTab));
+        Assert.assertTrue("Links tab clickable",tasks.verifyElementisClickable("XPATH", ProductFinderConstants.linkTab));
+        System.out.println("'Links' tab displayed and clickable");
+    }
 
 }

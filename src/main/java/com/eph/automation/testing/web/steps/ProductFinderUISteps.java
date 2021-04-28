@@ -11,6 +11,7 @@ import com.eph.automation.testing.models.api.WorkManifestationApiObject;
 import com.eph.automation.testing.models.api.WorksMatchedApiObject;
 import com.eph.automation.testing.models.api.PersonsApiObject;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
+import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
 import com.eph.automation.testing.models.contexts.FinancialAttribsContext;
 import com.eph.automation.testing.models.dao.*;
 import com.eph.automation.testing.models.ui.ProductFinderConstants;
@@ -27,7 +28,7 @@ import com.google.inject.Inject;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.*;
 
-import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
+
 import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
@@ -143,7 +144,7 @@ public class ProductFinderUISteps {
         //created by Nishant @ 20 Apr 2021
         DataQualityContext.uiUnderTest = ui;
         productFinderTasks.openHomePage();
-        productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
+       // productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
         tasks.waitUntilPageLoad();
     }
 
@@ -268,6 +269,13 @@ public class ProductFinderUISteps {
     @Given("^Searches work by id$")
     public void searches_works_by_id() throws InterruptedException {
         productFinderTasks.searchFor(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+    }
+
+    @Then ("^verify Works, Products&Packages, Manifestation tab$")
+    public void verifyWorksProductsManifestationTab() throws InterruptedException {
+      productFinderTasks.verifyWorkTab();
+      productFinderTasks.verifyProductTab();
+      productFinderTasks.verifyManifestationTab();
     }
 
 
@@ -713,6 +721,17 @@ public class ProductFinderUISteps {
 
         // List<String> manifestationId= apiWorksSearchSteps.getManifestationIdsForWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
         //   workManifestationApiObject.getJsonToObject_extendedManifestation(manifestationId.get(0));
+    }
+
+    @Then("^Verify overview tabs$")
+    public void verifyOverviewTabs() throws InterruptedException {
+        productFinderTasks.verifyLeftCoreTab();
+        productFinderTasks.verifyLeftPeopleTab();
+        productFinderTasks.verifyLeftFinancialTab();
+        if(uiUnderTest.equalsIgnoreCase("JF")) {
+            productFinderTasks.verifyLeftEditorialTab();
+            productFinderTasks.verifyLeftLinkTab();
+        }
     }
 
     @Then("^Verify PF/JF UI work overview values$")

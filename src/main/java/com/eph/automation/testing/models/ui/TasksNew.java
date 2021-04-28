@@ -32,6 +32,7 @@ public class TasksNew {
         this.wait = new WebDriverWait(driver,10);
         this.pageLoadTimeout=30000;
         loginWithScience();
+
     }
 
 public void loginWithScience()
@@ -41,8 +42,12 @@ public void loginWithScience()
         sendKeys("NAME", ProductFinderConstants.loginByEmail,
                 System.getenv("username") + ProductFinderConstants.SCIENCE_ID);
         click("ID", ProductFinderConstants.nextButton);
+       Thread.sleep(1000);
+       waitUntilPageLoad();
+
     }
     catch(Exception e){Log.error(e.getMessage());}
+
 }
 
     public WebElement findElementByText(final String text) {

@@ -101,3 +101,25 @@ Feature: Product Finder production smoke tests
       |ui   |keyword    |filterType1       |filterValue1    |filterType2    |filterValue2        |
       |PF   |math        |Product Status    |Available       |Product Type   |Open Access         |
       |PF   |clinic      |Product Type      |Package         |Product Status |No Longer Published |
+
+
+  @PFProd @UI @PFRegressionSuit
+    Scenario Outline: Verify on search result page Works, Products&Packages, Manifestation tab
+      Given user is on Product/Journal Finder search page <ui>
+      And Searches for given <keyword>
+      Then verify Works, Products&Packages, Manifestation tab
+      Examples:
+        |ui   |keyword    |    |
+        |JF   |math        |    |
+        |PF   |clinic      |     |
+
+  Scenario Outline: Verify on work overview page Core, People, Financial, Editorial and Links tabs are available
+  Given user is on Product/Journal Finder search page <ui>
+  And Searches for given <keyword>
+    And Search items are listed and click an id from the result
+    And  Verify user is forwarded to the searched work page from Search Result
+    Then Verify overview tabs
+    Examples:
+    |ui   |keyword    |    |
+    |PF   |math        |    |
+    |JF   |clinic      |     |

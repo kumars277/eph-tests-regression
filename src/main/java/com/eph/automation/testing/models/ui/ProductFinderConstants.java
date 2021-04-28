@@ -11,6 +11,7 @@ public class ProductFinderConstants {
     public static String elsevierLogo = "//a/div[@class='elsevier-logo']";
     public static String searchBar = "//*[@id='mat-input-0'] | //div[@class='search-input']/div/input";
     public static String searchButton = "//i[@class='gm-ico-search']";
+    public static String tab_Works="//div[@class='mat-tab-links']/div[1]/a[1]";
     public static String tab_product_andPackages="//div[@class='mat-tab-links']/div[2]/a[1]";
     public static String tab_manifestation="//div[@class='mat-tab-links']/div[3]/a[1]";
     public static String resultPerPage_100="//span[@class='ng-star-inserted']/a[contains(text(),'100')]|//div[@class='pages']//a[contains(text(),'100')]";
@@ -31,6 +32,7 @@ public class ProductFinderConstants {
 
     public static String FilterLocator = "//div[@class='filter-panel']/form/child::section";
 
+    public static String coreTab = "//*[@id='mat-tab-label-0-0']/div";
     public static String peopleTab = "//*[@id='mat-tab-label-0-1']/div";
     public static String financialTab = "//*[@id='mat-tab-label-0-2']/div";
     public static String editorialTab = "//*[@id='mat-tab-label-0-3']/div";
