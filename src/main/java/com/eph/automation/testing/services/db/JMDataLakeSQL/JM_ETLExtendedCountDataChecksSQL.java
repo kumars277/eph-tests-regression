@@ -160,7 +160,20 @@ public class JM_ETLExtendedCountDataChecksSQL {
                     ",delete_flag as delete_flag" +
                     " from "+GetJMDLDBUser.getJMDB()+".jnl_new_fulfilment_system where epr_id in ('%s') order by epr_id desc";
 
-}
+    public static String GET_JM_EXT_FULFIL_SYSTEM_Single_REC =
+            "select " +
+                    "issn as issn" +
+                    ",application_code as application_code" +
+                    ",last_updated_date as last_updated_date" +
+                    ",epr_id as epr_id" +
+                    ",product_type as product_type" +
+                    // ",availability_start_date as availability_start_date" +
+                    //",availability_status as availability_status" +
+                    //",delete_flag as delete_flag" +
+                    " from "+GetJMDLDBUser.getJMDB()+".jnl_fulfilment_system where " +
+                    "epr_id in ('EPR-10GW8S')";
+
+ }
 
 
 

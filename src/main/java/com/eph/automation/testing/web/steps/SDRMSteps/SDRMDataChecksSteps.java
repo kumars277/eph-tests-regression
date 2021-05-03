@@ -34,6 +34,8 @@ public class SDRMDataChecksSteps {
     private SDBooksDataChecksSQL sdBookObj = new SDBooksDataChecksSQL();
 
 
+
+
     @Given("^We get the (.*) random SDRM ISBN ids (.*)$")
     public void getRandomISBNIds(String numberOfRecords, String tableName) {
         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins

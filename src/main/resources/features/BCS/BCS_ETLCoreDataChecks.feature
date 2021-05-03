@@ -126,15 +126,15 @@ Feature:Validate data checks for BCS ETL Core in Data Lake Access Layer
     Then Get the records from <targetTable> BCS core latest table
     And  Compare the records of Latest with sum of delta_current and Exclude_Delta tables <targetTable>
     Examples:
-      | targetTable                                               |  countOfRandomIds     |
-      | etl_transform_history_accountable_product_latest          |  50                |
+      | targetTable                                               |  countOfRandomIds |
+      | etl_transform_history_accountable_product_latest          |  50               |
       | etl_transform_history_manifestation_latest                |  50               |
-      |etl_transform_history_manifestation_identifier_latest      |  50                |
-      |   etl_transform_history_person_latest                     | 50                |
-      |   etl_transform_history_product_latest                    | 50               |
+      |etl_transform_history_manifestation_identifier_latest      |  50               |
+      | etl_transform_history_person_latest                     | 50                |
+      | etl_transform_history_product_latest                    | 50                |
       | etl_transform_history_work_person_role_latest             | 50                |
       | etl_transform_history_work_relationship_latest            | 50                |
-      |etl_transform_history_work_latest                          |50              |
-      | etl_transform_history_work_identifier_latest              |50                |
+      |etl_transform_history_work_latest                          |50                 |
+      | etl_transform_history_work_identifier_latest              |50                 |
 
 
