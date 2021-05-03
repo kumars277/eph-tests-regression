@@ -29,7 +29,7 @@ public class MarionetteDriver implements Provider<WebDriver>{
                 String directoryPath = null;
                 final String osName = System.getProperty("os.name").toLowerCase();
                 if (osName.contains("windows")) {directoryPath = System.getProperty("user.dir");}
-                System.setProperty("webdriver.chrome.driver",directoryPath+_driver);
+                System.setProperty("webdriver.chrome.driver",directoryPath+"\\test\\wbdrvr"+_driver);
                 break;
 
             case "latest":
@@ -74,7 +74,7 @@ public class MarionetteDriver implements Provider<WebDriver>{
         String directoryPath = null;
         final String osName = System.getProperty("os.name").toLowerCase();
         if (osName.contains("windows")) {directoryPath = System.getProperty("user.dir");}
-        System.setProperty("webdriver.gecko.driver",directoryPath+_driver);
+        System.setProperty("webdriver.gecko.driver",directoryPath+"\\test\\wbdrvr"+_driver);
 
         //setGeckoDriver();
         final WebDriver driver = new FirefoxDriver(firefoxOptions);

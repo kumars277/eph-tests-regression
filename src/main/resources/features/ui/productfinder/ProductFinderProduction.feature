@@ -102,7 +102,6 @@ Feature: Product Finder production smoke tests
       |PF   |math        |Product Status    |Available       |Product Type   |Open Access         |
       |PF   |clinic      |Product Type      |Package         |Product Status |No Longer Published |
 
-
   @PFProd @UI @PFRegressionSuit
     Scenario Outline: Verify on search result page Works, Products&Packages, Manifestation tab
       Given user is on Product/Journal Finder search page <ui>
@@ -113,6 +112,7 @@ Feature: Product Finder production smoke tests
         |JF   |math        |    |
         |PF   |clinic      |     |
 
+  @PFProd @UI @PFRegressionSuite
   Scenario Outline: Verify on work overview page Core, People, Financial, Editorial and Links tabs are available
   Given user is on Product/Journal Finder search page <ui>
   And Searches for given <keyword>
@@ -120,6 +120,79 @@ Feature: Product Finder production smoke tests
     And  Verify user is forwarded to the searched work page from Search Result
     Then Verify overview tabs
     Examples:
-    |ui   |keyword    |    |
-    |PF   |math        |    |
-    |JF   |clinic      |     |
+    |ui   |keyword    |
+    |PF   |math       |
+    |JF   |clinic     |
+
+  @PFProd @UI @PFRegressionSuite
+  Scenario Outline: Verify latest works,Help and previous search on landing page
+    Given user is on Product/Journal Finder search page <ui>
+    And verify latest work,previous search and help
+    Examples:
+      |ui   |keyword    |
+      |PF   |math       |
+      |JF   |clinic     |
+
+  @PFProd @UI @PFRegressionSuite
+  Scenario Outline: Verify any broken link on PF
+    Given user is on Product/Journal Finder search page <ui>
+    And verify links on home page
+    When Searches for given <keyword>
+    And verify links on Search Result page - works
+    Then Search items are listed and click an id from the result
+    And validate links on work overview page
+    Given user is on Product/Journal Finder search page <ui>
+    When Searches for given <keyword>
+    When switch to Manifestations tab
+    And verify links on Search Result page - manifestation
+    Then Search items are listed and click an id from the result
+    And validate links on manifestation overview page
+    Given user is on Product/Journal Finder search page <ui>
+    When Searches for given <keyword>
+    When switch to Products and Packages tab
+    And verify links on Search Result page - Product and Packages
+    Then Search items are listed and click an id from the result
+    And validate links on product overview page
+    Examples:
+      |ui   |keyword    |
+      |PF   |math       |
+      |JF   |clinic     |
+
+
+#below 3 scenario clubbed in 1 as above
+
+  Scenario Outline: Verify any broken link on PF - work
+      Given user is on Product/Journal Finder search page <ui>
+      And verify links on home page
+      When Searches for given <keyword>
+      And verify links on Search Result page - works
+      Then Search items are listed and click an id from the result
+      And validate links on work overview page
+      Examples:
+        |ui   |keyword    |
+        |PF   |math       |
+   #     |JF   |clinic     |
+
+  Scenario Outline: Verify any broken link on PF - manifestation
+    Given user is on Product/Journal Finder search page <ui>
+    When Searches for given <keyword>
+    When switch to Manifestations tab
+    And verify links on Search Result page - manifestation
+    Then Search items are listed and click an id from the result
+    And validate links on manifestation overview page
+    Examples:
+      |ui   |keyword    |
+      |PF   |math       |
+   #     |JF   |clinic     |
+
+  Scenario Outline: Verify any broken link on PF - Product
+    Given user is on Product/Journal Finder search page <ui>
+    When Searches for given <keyword>
+    When switch to Products and Packages tab
+    And verify links on Search Result page - Product and Packages
+    Then Search items are listed and click an id from the result
+    And validate links on product overview page
+    Examples:
+      |ui   |keyword    |
+      |PF   |math       |
+      |JF   |clinic     |

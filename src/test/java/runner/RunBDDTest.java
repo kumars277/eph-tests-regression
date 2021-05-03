@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         strict = false,
         features = "src/main/resources/features",
-        format= {"json:target/cucumber.json","html:target/site/cucumber-pretty" },
+        format= {"pretty","json:target/cucumber.json","html:/target/site/cucumber-pretty" },
         glue = {"com.eph.automation.testing.web.steps", "com.eph.automation.testing.common.hooks"})
 
 public class RunBDDTest {

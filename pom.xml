@@ -88,11 +88,11 @@
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
-            <plugin>
+    <!--        <plugin>
                 <groupId>net.masterthought</groupId>
                 <artifactId>cucumber-reporting</artifactId>
                 <version>5.5.3</version>
-              <!--  <executions>
+                <executions>
                     <execution>
                         <id>execution</id>
                         <phase>verify</phase>
@@ -106,9 +106,9 @@
                         </configuration>
                     </execution>
                 </executions>
-                -->
-            </plugin>
 
+            </plugin>
+-->
             <plugin>
                 <groupId>eu.evops.maven.plugins</groupId>
                 <artifactId>cucumber-runner-maven-plugin</artifactId>

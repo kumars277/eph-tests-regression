@@ -9,11 +9,22 @@ public class ProductFinderConstants {
     public static String loginByEmail = "loginfmt";
 
     public static String elsevierLogo = "//a/div[@class='elsevier-logo']";
+    public static String previousSearchParent = "//div[@class='previous-searches']";
+    public static String previousSearchChild = previousSearchParent+"/ul/li";
+    public static String latestWorkParent = "//div[@class='latest-works']";
+    public static String latestWorkChild = latestWorkParent+"//div[contains(@class,'search-result')]";
+    public static String latestWorkViewMore = latestWorkParent+"/div[contains(@class,'view-more')]/span";
+    public static String helpSupportParent = "//div[@class='help-support']";
+    public static String helpSupportChild = helpSupportParent+"/ul/li/a";
     public static String searchBar = "//*[@id='mat-input-0'] | //div[@class='search-input']/div/input";
     public static String searchButton = "//i[@class='gm-ico-search']";
-    public static String tab_Works="//div[@class='mat-tab-links']/div[1]/a[1]";
-    public static String tab_product_andPackages="//div[@class='mat-tab-links']/div[2]/a[1]";
-    public static String tab_manifestation="//div[@class='mat-tab-links']/div[3]/a[1]";
+    public static String tab_Works="//div[@class='mat-tab-links']//a[contains(text(),'Work')]";
+    public static String tab_product_andPackages="//div[@class='mat-tab-links']//a[contains(text(),'Products')]";
+    public static String tab_manifestation="//div[@class='mat-tab-links']//a[contains(text(),'Manifestations')]";
+    public static String tab_Overview = "//div[@class='mat-tab-links']//a[contains(text(),'Overview')]";
+    public static String tab_Packages = "//div[@class='mat-tab-links']//a[contains(text(),'Packages')]";
+    public static String tab_RelatedManifestations = "//div[@class='mat-tab-links']//a[contains(text(),'Related Manifestations')]";
+
     public static String resultPerPage_100="//span[@class='ng-star-inserted']/a[contains(text(),'100')]|//div[@class='pages']//a[contains(text(),'100')]";
     public static String resultPerPage_50="//span[@class='ng-star-inserted']/a[contains(text(),'50')]|//div[@class='pages']//a[contains(text(),'50')]";
     public static String SearchResultPageCount="//div[@class='page-label']";

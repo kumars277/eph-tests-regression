@@ -35,7 +35,14 @@ public class WebDriverFactory implements Provider<WebDriver> {
                 DesiredCapabilities capabilities = DesiredCapabilities.chrome();
                 capabilities.setPlatform(Platform.ANY);
                 URL hubUrl = new URL("http://10.153.95.253:4444/wd/hub");
+
+
                 return new RemoteWebDriver(hubUrl,capabilities);
+
+
+
+
+
 
             } catch (Exception e) {
                 e.printStackTrace();

@@ -30,19 +30,19 @@ public class SpecificScenariosSteps {
 
 
     @Given("^We have a valid file available (.*) (.*) to read$")
-    public void verifyFileExists(String filePath, String fileType) throws Exception {
+    public void verifyFileExists(String filePath, String fileName) throws Exception {
         //created by Nishant @ 26 Apr 2021
-
-        Assert.assertTrue("valid file exists - ",specificTasks.verifyFileExists(filePath,fileType));
+        String absoluteFilePath = filePath+fileName;
+        Assert.assertTrue("valid file exists - ",specificTasks.verifyFileExists(absoluteFilePath));
 
         //read file as whole
-        DataQualityContext.RowData = specificTasks.readCsv(filePath+fileType);
+        DataQualityContext.RowData = specificTasks.readCsv(absoluteFilePath);
         System.out.println("Total entries in input datafile - "+DataQualityContext.RowData.size()+"\n");
 
     }
 
     @Then("^verify links from file (.*) (.*)$")
-    public void verifyLinksFromFile(String FilePath, String fileType) throws Exception {
+    public void verifyLinksFromFile(String FilePath) throws Exception {
         //created by Nishant @ 26 Apr 2021
         int RowFrom = 0;        int RowTill = 10;
 

@@ -91,6 +91,7 @@ public String authenticateUri(String uri)
 
     }
 
+
     public WebElement findElement(String locatorType,String locatorValue){
         //created by Nishant @ 18 May 2020
         WebElement element = null;
@@ -125,6 +126,12 @@ public String authenticateUri(String uri)
         return elements;
     }
 
+    public List<WebElement> findAllLinks()
+    {//created by Nishant @ 30 Apr 2021
+        List<WebElement> links = null;
+        links = driver.findElements(By.xpath("//a"));
+        return links;
+    }
     public boolean isObjectpresent(String locatorType,String locatorValue){
         //created by Nishant @ 18 May 2020
         try {
