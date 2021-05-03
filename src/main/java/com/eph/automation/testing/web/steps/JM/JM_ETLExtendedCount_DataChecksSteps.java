@@ -236,11 +236,10 @@ public class JM_ETLExtendedCount_DataChecksSteps {
             Dbval.put("application_code", JMETL_ExtendedAccessDLContext.recordsFromJMFulFilment.get(j).getapplication_code());
             Dbval.put("epr_id", JMETL_ExtendedAccessDLContext.recordsFromJMFulFilment.get(j).getepr_id());
             Dbval.put("product_type", JMETL_ExtendedAccessDLContext.recordsFromJMFulFilment.get(j).getproduct_type());
-            System.out.println("excel map" + map);
-            System.out.println("Db map" + Dbval);
             ArrayList firstMapValues = new ArrayList(map.values());
             ArrayList secondMapValues = new ArrayList(Dbval.values());
-               System.out.println("firstMapValues.equals(secondMapValues): " + firstMapValues.equals(secondMapValues));
+            Log.info("Excel => "+firstMapValues +" DB => "+secondMapValues);
+          //  Log.info("firstMapValues.equals(secondMapValues): " + firstMapValues.equals(secondMapValues));
             Assert.assertEquals(firstMapValues, secondMapValues);
 
         }
@@ -276,7 +275,7 @@ public class JM_ETLExtendedCount_DataChecksSteps {
                         new Object[][]{{"issn", JMETL_ExtendedAccessDLContext.recordsFromJMFulFilment.get(i).getissn()}, {"application_code", JMETL_ExtendedAccessDLContext.recordsFromJMFulFilment.get(i).getapplication_code()},
                                 {"epr_id", JMETL_ExtendedAccessDLContext.recordsFromJMFulFilment.get(i).getepr_id()}, {"product_type", JMETL_ExtendedAccessDLContext.recordsFromJMFulFilment.get(i).getproduct_type()}};
                 for (int j = 0; j < loadedIdentifiersFields.length; j++) {
-                    System.out.println(loadedIdentifiersFields[j][0] + " = DB => " + loadedIdentifiersFields[j][1] + " CSV => " + expectedIdentifiersFields[j][1]);
+                    Log.info(loadedIdentifiersFields[j][0] + " = DB => " + loadedIdentifiersFields[j][1] + " CSV => " + expectedIdentifiersFields[j][1]);
 
                      String ExcelVal = String.valueOf(expectedIdentifiersFields[j][1]);
                      String DBVal = String.valueOf(loadedIdentifiersFields[j][1]);
