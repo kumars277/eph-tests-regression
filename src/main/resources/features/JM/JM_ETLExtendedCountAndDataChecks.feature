@@ -30,6 +30,7 @@ Feature:Validate data count for JM Extended tables
 
 
   Scenario: Verify Data driven
-    Given We have the expected data
-   #Then Verify data with file upoad
+   # Given We have the expected data
+  # Then Verify data with file upoad
+   And Check the Count from Excel
 

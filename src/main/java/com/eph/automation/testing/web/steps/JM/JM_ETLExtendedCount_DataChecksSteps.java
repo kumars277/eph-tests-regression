@@ -197,10 +197,11 @@ public class JM_ETLExtendedCount_DataChecksSteps {
             }
         }
     }
+//Data Check with Excel
 
+    //Method 1 using Hash Map
     @Given("^We have the expected data$")
     public void verifyData() throws Throwable {
-
         String splitBy = ",";
         String csvfile = "C:\\Users\\sureshkumard\\OneDrive - Reed Elsevier Group ICO Reed Elsevier Inc\\Desktop\\sample.csv";
             ArrayList<String> csvRows = new ArrayList<String>();
@@ -231,7 +232,6 @@ public class JM_ETLExtendedCount_DataChecksSteps {
             map.put("application_code", testData[1]);
             map.put("epr_id", testData[2]);
             map.put("product_type", testData[3]);
-
             Dbval.put("issn", JMETL_ExtendedAccessDLContext.recordsFromJMFulFilment.get(j).getissn());
             Dbval.put("application_code", JMETL_ExtendedAccessDLContext.recordsFromJMFulFilment.get(j).getapplication_code());
             Dbval.put("epr_id", JMETL_ExtendedAccessDLContext.recordsFromJMFulFilment.get(j).getepr_id());
@@ -239,15 +239,12 @@ public class JM_ETLExtendedCount_DataChecksSteps {
             ArrayList firstMapValues = new ArrayList(map.values());
             ArrayList secondMapValues = new ArrayList(Dbval.values());
             Log.info("Excel => "+firstMapValues +" DB => "+secondMapValues);
-          //  Log.info("firstMapValues.equals(secondMapValues): " + firstMapValues.equals(secondMapValues));
             Assert.assertEquals(firstMapValues, secondMapValues);
-
         }
     }
-/////////////////////////////
+//Method 2 using Objects 2d Array
         @Then("^Verify data with file upoad$")
         public void verifyDatassss() throws Throwable {
-
             String splitBy = ",";
             String csvfile = "C:\\Users\\sureshkumard\\OneDrive - Reed Elsevier Group ICO Reed Elsevier Inc\\Desktop\\sample.csv";
             ArrayList<String> csvRows = new ArrayList<String>();
@@ -276,7 +273,6 @@ public class JM_ETLExtendedCount_DataChecksSteps {
                                 {"epr_id", JMETL_ExtendedAccessDLContext.recordsFromJMFulFilment.get(i).getepr_id()}, {"product_type", JMETL_ExtendedAccessDLContext.recordsFromJMFulFilment.get(i).getproduct_type()}};
                 for (int j = 0; j < loadedIdentifiersFields.length; j++) {
                     Log.info(loadedIdentifiersFields[j][0] + " = DB => " + loadedIdentifiersFields[j][1] + " CSV => " + expectedIdentifiersFields[j][1]);
-
                      String ExcelVal = String.valueOf(expectedIdentifiersFields[j][1]);
                      String DBVal = String.valueOf(loadedIdentifiersFields[j][1]);
                     Assert.assertEquals("Expected all columns to be with correct values loaded but for epr_id = "
@@ -287,7 +283,39 @@ public class JM_ETLExtendedCount_DataChecksSteps {
             }
 
         }
+
+
+    //Count Check with Excel using Method 2
+    @And("^Check the Count from Excel$")
+    public void verifyCount()throws Throwable {
+        String splitBy = ",";
+        String csvfile = "C:\\Users\\sureshkumard\\OneDrive - Reed Elsevier Group ICO Reed Elsevier Inc\\Desktop\\sample.csv";
+        ArrayList<String> csvRows = new ArrayList<String>();
+        List<String> reqId = new ArrayList<String>();
+        BufferedReader br = new BufferedReader(new FileReader(csvfile));
+        String line = "";
+        while ((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
+                csvRows.add(line.toString());
+            }
+        }
+        for (int i = 0; i < csvRows.size(); i++) {
+            String[] testDataId = csvRows.get(i).split(splitBy);
+                           reqId.add(testDataId[2]);
+        }
+        int expecTedCount = reqId.size();
+        sql = String.format(JM_ETLExtendedCountDataChecksSQL.GET_JM_EXT_FULFIL_SYSTEM_Count_REC, Joiner.on("','").join(reqId));
+        JMETL_ExtendedAccessDLContext.recordsFromJMFulFilment = DBManager.getDBResultAsBeanList(sql, JM_ETLExtendedDLAccessObject.class, Constants.AWS_URL);
+        Log.info(sql);
+        int actualCount = JMETL_ExtendedAccessDLContext.recordsFromJMFulFilment.get(0).geteprIdCount();
+        Log.info("Expected Count: "+expecTedCount+" And Actual Count: "+actualCount);
+        Assert.assertEquals("The excpected Count not matching with Actual",expecTedCount,actualCount);
+    }
+
+
+
 }
+
 
 
        /////////////////////////////////////////
