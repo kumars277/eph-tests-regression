@@ -11,7 +11,9 @@ import com.google.inject.Inject;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import cucumber.api.java.en.When;
+import gherkin.lexer.Da;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.html5.LocalStorage;
@@ -33,13 +35,16 @@ import static org.junit.Assert.assertTrue;
 public class ProductFinderTasks {
 
     private TasksNew tasks;
+    private SpecificTasks specificTasks;
 
     @Inject
-    public ProductFinderTasks(final TasksNew tasks) {
+    public ProductFinderTasks(final TasksNew tasks, SpecificTasks specificTasks) {
         this.tasks = tasks;
+        this.specificTasks = new SpecificTasks();
+
     }
 
-    public static String searchResultWorkId;
+    public static String searchResultId;
     public Properties prop_info = new Properties();
     public Properties prop_subArea = new Properties();
     public Properties prop_identifier = new Properties();
@@ -80,6 +85,9 @@ public class ProductFinderTasks {
         Thread.sleep(1000);
         tasks.waitUntilPageLoad();
         Log.info("\nhome page loaded...");
+
+
+
     }
 
     public void loginByScienceAccount(String scienceEmailId) throws InterruptedException {
@@ -136,6 +144,8 @@ public class ProductFinderTasks {
         tasks.click("XPATH", ProductFinderConstants.tab_product_andPackages);
         Thread.sleep(3000);
     }
+
+
 
     public void clickWork(String workId) throws InterruptedException {
         //created by Nishant @ 22 May 2020
@@ -393,7 +403,7 @@ public class ProductFinderTasks {
     public void getUI_Links() {
         //created by Nishant @15 Jul 2020
 
-        //click on Editorial tab
+        //click on Links tab
         tasks.click("XPATH", ProductFinderConstants.linkTab);
 
         //capture links values
@@ -462,12 +472,160 @@ public class ProductFinderTasks {
         if (TestContext.getValues().environment.equalsIgnoreCase("UAT") |
                 TestContext.getValues().environment.equalsIgnoreCase("SIT")) {
             if (DataQualityContext.productDataObjectsFromEPHGD != null)
-                ProductFinderTasks.searchResultWorkId = DataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_ID();
+                ProductFinderTasks.searchResultId = DataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_ID();
         }
 
-        assertTrue(isUserOnProductPage(ProductFinderTasks.searchResultWorkId));
+        assertTrue(isUserOnProductPage(ProductFinderTasks.searchResultId));
     }
 
+    public void verifyWorkTab() throws InterruptedException {
+        //created by Nishant @ 28 Apr 2021
+        Assert.assertTrue("Works tab displayed",tasks.verifyElementisDisplayed("XPATH", ProductFinderConstants.tab_Works));
+        Assert.assertTrue("Works tab clickable",tasks.verifyElementisClickable("XPATH", ProductFinderConstants.tab_Works));
+        System.out.println("'Works' tab displayed and clickable");
+    }
+    public void verifyProductTab() throws InterruptedException {
+        //created by Nishant @ 28 Apr 2021
+        Assert.assertTrue("Product & Packages tab displayed",tasks.verifyElementisDisplayed("XPATH", ProductFinderConstants.tab_product_andPackages));
+        Assert.assertTrue("Product & Packages tab clickable", tasks.verifyElementisClickable("XPATH", ProductFinderConstants.tab_product_andPackages));
+        System.out.println("'Product & Packages' tab displayed and clickable");
+    }
+    public void verifyManifestationTab() throws InterruptedException {
+        //created by Nishant @ 28 Apr 2021
+        Assert.assertTrue("Manifestation tab displayed",tasks.verifyElementisDisplayed("XPATH", ProductFinderConstants.tab_manifestation));
+        Assert.assertTrue("Manifestation tab clickable",tasks.verifyElementisClickable("XPATH", ProductFinderConstants.tab_manifestation));
+        System.out.println("'Manifestation' tab displayed and clickable");
+    }
+
+    public void verifyLeftCoreTab() throws InterruptedException {
+        //created by Nishant @ 28 Apr 2021
+        Assert.assertTrue("Core tab displayed",tasks.verifyElementisDisplayed("XPATH", ProductFinderConstants.coreTab));
+        Assert.assertTrue("Core tab clickable",tasks.verifyElementisClickable("XPATH", ProductFinderConstants.coreTab));
+        System.out.println("'Core' tab displayed and clickable");
+    }
+
+    public void verifyLeftPeopleTab() throws InterruptedException {
+        //created by Nishant @ 28 Apr 2021
+        Assert.assertTrue("People tab displayed",tasks.verifyElementisDisplayed("XPATH", ProductFinderConstants.peopleTab));
+        Assert.assertTrue("People tab clickable",tasks.verifyElementisClickable("XPATH", ProductFinderConstants.peopleTab));
+        System.out.println("'People' tab displayed and clickable");
+    }
+    public void verifyLeftFinancialTab() throws InterruptedException {
+        //created by Nishant @ 28 Apr 2021
+        Assert.assertTrue("Financial tab displayed",tasks.verifyElementisDisplayed("XPATH", ProductFinderConstants.financialTab));
+        Assert.assertTrue("Financial tab clickable",tasks.verifyElementisClickable("XPATH", ProductFinderConstants.financialTab));
+        System.out.println("'Financial' tab displayed and clickable");
+    }
+    public void verifyLeftEditorialTab() throws InterruptedException {
+        //created by Nishant @ 28 Apr 2021
+        Assert.assertTrue("Editorial tab displayed",tasks.verifyElementisDisplayed("XPATH", ProductFinderConstants.editorialTab));
+        Assert.assertTrue("Editorial tab clickable",tasks.verifyElementisClickable("XPATH", ProductFinderConstants.editorialTab));
+        System.out.println("'Editorial' tab displayed and clickable");
+    }
+    public void verifyLeftLinkTab() throws InterruptedException {
+        //created by Nishant @ 28 Apr 2021
+        Assert.assertTrue("Links tab displayed",tasks.verifyElementisDisplayed("XPATH", ProductFinderConstants.linkTab));
+        Assert.assertTrue("Links tab clickable",tasks.verifyElementisClickable("XPATH", ProductFinderConstants.linkTab));
+        System.out.println("'Links' tab displayed and clickable");
+    }
+
+    public void verifyPreviousSearch(){//created by Nishant @ 30 Apr 2021
+        try {
+            Assert.assertTrue("Previous Search",tasks.verifyElementisDisplayed("XPATH",ProductFinderConstants.previousSearchParent));
+            List<WebElement> previousSearch = tasks.findmultipleElements("XPATH",ProductFinderConstants.previousSearchChild);
+            System.out.println(previousSearch.size()+" previous searches available");
+            sysoutln("verified previous search");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void verifyHelpAndSupport(){//created by Nishant @ 30 Apr 2021
+
+        try {
+            Assert.assertTrue("Help and Support displayed",tasks.verifyElementisDisplayed("XPATH",ProductFinderConstants.helpSupportParent));
+            Log.info("verifying 'Help and Support'");
+            List<WebElement> helpSupport = tasks.findmultipleElements("XPATH",ProductFinderConstants.helpSupportChild);
+
+            Assert.assertEquals(helpSupport.get(0).getText(),"About Product Finder");
+            sysoutln("Displayed - About Product Finder");
+
+            if(DataQualityContext.uiUnderTest.equalsIgnoreCase("JF")) {
+                Assert.assertEquals(helpSupport.get(1).getText(), "Journal Portfolio Dashboard");
+                sysoutln("Displayed - Journal Portfolio Dashboard");
+                Assert.assertEquals(helpSupport.get(2).getText(), "How to use Product Finder");
+                sysoutln("Displayed - How to use Product Finder");
+                Assert.assertEquals(helpSupport.get(3).getText(), "Contact us");
+                sysoutln("Displayed - Contact us");
+            }
+            else
+            if(DataQualityContext.uiUnderTest.equalsIgnoreCase("PF")) {
+                Assert.assertEquals(helpSupport.get(1).getText(), "How to use Product Finder");
+                sysoutln("Displayed - How to use Product Finder");
+                Assert.assertEquals(helpSupport.get(2).getText(), "Contact us");
+                sysoutln("Displayed - Contact us");
+            }
+            sysoutln("verified Help and Support");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void verifyLatestWork() {//created by Nishant @ 30 Apr 2021
+
+        try {
+            Assert.assertTrue("Latest work displayed",tasks.verifyElementisDisplayed("XPATH",ProductFinderConstants.latestWorkParent));
+            Log.info("verifying latest work");
+            List<WebElement> latestWorks = tasks.findmultipleElements("XPATH",ProductFinderConstants.latestWorkChild);
+            sysoutln("before ViewAllClick - Latest work displayed "+latestWorks.size());
+            Assert.assertTrue("Latest work View More displayed",tasks.verifyElementisDisplayed("XPATH",ProductFinderConstants.latestWorkViewMore));
+            Assert.assertTrue("Latest work View More clickable",tasks.verifyElementisClickable("XPATH",ProductFinderConstants.latestWorkViewMore));
+            // sysoutln("View More");
+            tasks.click("XPATH",ProductFinderConstants.latestWorkViewMore);
+            List<WebElement>worksDisplayed = tasks.findmultipleElements("XPATH", ProductFinderConstants.itemDetail);
+            sysoutln("after ViewAllClick - Latest work displayed "+worksDisplayed.size());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void captureLinksFromPageAndVerify(String page)
+    {//created by Nishant @ 30 Apr 2021
+
+        List<WebElement> availableLinks = tasks.findAllLinks();
+        System.out.println("\navailable links - "+availableLinks.size());
+
+        String resultFile = "C:/Users/Chitren/Office Work/Project doc/EPH sprint testing/Result files/LinksResult_"+DataQualityContext.uiUnderTest+" "+DataQualityContext.DateAndTime+".csv";
+
+        ArrayList<String> resultHeaders = new ArrayList<>(Arrays. asList("Page","Text", "Link", "Status code","comment"));
+        if(!new File(resultFile).exists())
+        {
+            specificTasks.writeCsv(resultFile,resultHeaders);
+        }
+
+        for(WebElement link:availableLinks)
+        {
+            try {
+                DataQualityContext.DataToWrite.add(page);
+                DataQualityContext.DataToWrite.add("\""+link.getText()+"\"");
+                DataQualityContext.DataToWrite.add("\""+link.getAttribute("href")+"\"");
+                sysoutln(link.getAttribute("href"));
+                specificTasks.verifySingleLink(link.getAttribute("href"));
+             //   if(DataQualityContext.DataToWrite.size()>2)
+             //   Assert.assertTrue(Integer.parseInt(DataQualityContext.DataToWrite.get(1))<400);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            finally {
+                specificTasks.writeCsv(resultFile,DataQualityContext.DataToWrite);
+                DataQualityContext.DataToWrite.clear();
+            }
+        }
 
 
+    }
+
+    public void sysoutln(String str)
+    {System.out.println(str);}
 }

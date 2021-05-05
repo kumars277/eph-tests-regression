@@ -11,6 +11,7 @@ import com.eph.automation.testing.models.api.WorkManifestationApiObject;
 import com.eph.automation.testing.models.api.WorksMatchedApiObject;
 import com.eph.automation.testing.models.api.PersonsApiObject;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
+import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
 import com.eph.automation.testing.models.contexts.FinancialAttribsContext;
 import com.eph.automation.testing.models.dao.*;
 import com.eph.automation.testing.models.ui.ProductFinderConstants;
@@ -27,7 +28,7 @@ import com.google.inject.Inject;
 import cucumber.api.PendingException;
 import cucumber.api.java.en.*;
 
-import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
+
 import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
@@ -143,8 +144,11 @@ public class ProductFinderUISteps {
         //created by Nishant @ 20 Apr 2021
         DataQualityContext.uiUnderTest = ui;
         productFinderTasks.openHomePage();
-        productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
+       // productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
         tasks.waitUntilPageLoad();
+
+
+
     }
 
     @Then("^Search works by (.*)$")
@@ -184,7 +188,7 @@ public class ProductFinderUISteps {
     //for specific workid
     @And("^Verify user is forwarded to the searched work page from Search Result$")
     public void verifyUserIsForwardedToSearchedWorkPageFromSearchResult() {
-        assertTrue(productFinderTasks.isUserOnWorkPage(ProductFinderTasks.searchResultWorkId));
+        assertTrue(productFinderTasks.isUserOnWorkPage(ProductFinderTasks.searchResultId));
     }
 
     @And("^Verify user is forwarded to the searched work page of (.*)$")
@@ -259,6 +263,140 @@ public class ProductFinderUISteps {
     }
 
 
+    @And("^verify latest work,previous search and help$")
+    public void verify_latest_work()
+    {//created by Nishant @ 30 Apr 2021
+        productFinderTasks.verifyPreviousSearch();
+        productFinderTasks.verifyHelpAndSupport();
+        productFinderTasks.verifyLatestWork();
+    }
+
+    @And("^verify links on (.*)$")
+    public void verifyLinksOnLandingPage(String landingPage)
+    {//created by Nishant @ 30 Apr 2021
+        Log.info("verifying links on "+landingPage);
+        productFinderTasks.captureLinksFromPageAndVerify(landingPage);
+    }
+
+    @And ("^validate links on work overview page$")
+    public void verifyLinksOnWorkOrverview()
+    { //created by Nishant @ 3 May 2021
+        Log.info("verifying overview links...");
+        //1.1 Core data validation
+        verifyLinksOnLandingPage("Core data");
+
+        //1.2 click on People tab
+        tasks.click("XPATH", ProductFinderConstants.peopleTab);
+        verifyLinksOnLandingPage("People data");
+
+        //1.3. click on Financial tab
+        tasks.click("XPATH", ProductFinderConstants.financialTab);
+        verifyLinksOnLandingPage("Financial data");
+
+        if(uiUnderTest.equalsIgnoreCase("JF"))
+        {
+            //1.4. click on Editorial tab
+            tasks.click("XPATH", ProductFinderConstants.editorialTab);
+            verifyLinksOnLandingPage("Editorial data");
+
+            //1.5. click on Links tab
+            tasks.click("XPATH", ProductFinderConstants.linkTab);
+            verifyLinksOnLandingPage("Links data");
+        }
+
+        //2. click on Manifestations tab
+        tasks.click("XPATH", ProductFinderConstants.tab_manifestation);
+        verifyLinksOnLandingPage("manifestation data");
+
+        //3. click on Products tab
+        tasks.click("XPATH", ProductFinderConstants.tab_product_andPackages);
+        verifyLinksOnLandingPage("Products data");
+
+        //4. click on Packages tab
+        tasks.click("XPATH", ProductFinderConstants.tab_Packages);
+        verifyLinksOnLandingPage("Packages data");
+
+    }
+
+    @And ("^validate links on manifestation overview page$")
+    public void verifyLinksOnManifestationOrverview()
+    { //created by Nishant @ 3 May 2021
+        Log.info("verifying overview links...");
+        //1.1 Core data validation
+        verifyLinksOnLandingPage("Core data");
+
+        //1.2 click on People tab
+        tasks.click("XPATH", ProductFinderConstants.peopleTab);
+        verifyLinksOnLandingPage("People data");
+
+        //1.3. click on Financial tab
+        tasks.click("XPATH", ProductFinderConstants.financialTab);
+        verifyLinksOnLandingPage("Financial data");
+
+        if(uiUnderTest.equalsIgnoreCase("JF"))
+        {
+            //1.4. click on Editorial tab
+            tasks.click("XPATH", ProductFinderConstants.editorialTab);
+            verifyLinksOnLandingPage("Editorial data");
+
+            //1.5. click on Links tab
+            tasks.click("XPATH", ProductFinderConstants.linkTab);
+            verifyLinksOnLandingPage("Links data");
+        }
+
+        //2. click on Work tab
+        tasks.click("XPATH", ProductFinderConstants.tab_Works);
+        verifyLinksOnLandingPage("work data");
+
+        //3. click on Products tab
+        tasks.click("XPATH", ProductFinderConstants.tab_product_andPackages);
+        verifyLinksOnLandingPage("Products data");
+
+        //4. click on Packages tab
+        tasks.click("XPATH", ProductFinderConstants.tab_Packages);
+        verifyLinksOnLandingPage("Packages data");
+
+        //5. click on Relataed manifestation tab
+        tasks.click("XPATH", ProductFinderConstants.tab_RelatedManifestations);
+        verifyLinksOnLandingPage("Related Manifestation data");
+    }
+
+    @And ("^validate links on product overview page$")
+    public void verifyLinksOnProductOrverview()
+    { //created by Nishant @ 3 May 2021
+        Log.info("verifying overview links...");
+        //1.1 Core data validation
+        verifyLinksOnLandingPage("Core data");
+
+        //1.2 click on People tab
+        tasks.click("XPATH", ProductFinderConstants.peopleTab);
+        verifyLinksOnLandingPage("People data");
+
+        //1.3. click on Financial tab
+        tasks.click("XPATH", ProductFinderConstants.financialTab);
+        verifyLinksOnLandingPage("Financial data");
+
+        if(uiUnderTest.equalsIgnoreCase("JF"))
+        {
+            //1.4. click on Editorial tab
+            tasks.click("XPATH", ProductFinderConstants.editorialTab);
+            verifyLinksOnLandingPage("Editorial data");
+
+            //1.5. click on Links tab
+            tasks.click("XPATH", ProductFinderConstants.linkTab);
+            verifyLinksOnLandingPage("Links data");
+        }
+
+        //2. click on Work tab
+        tasks.click("XPATH", ProductFinderConstants.tab_Works);
+        verifyLinksOnLandingPage("work data");
+
+        //3. click on Manifestation tab
+        tasks.click("XPATH", ProductFinderConstants.tab_manifestation);
+        verifyLinksOnLandingPage("Manifestation data");
+    }
+
+
     @Given("^Searches for given ([^\"]*)$")
     public void searches_for_works_by_given(String searchKeyword) throws InterruptedException {
         Log.info("searching keyword..." + searchKeyword);
@@ -268,6 +406,13 @@ public class ProductFinderUISteps {
     @Given("^Searches work by id$")
     public void searches_works_by_id() throws InterruptedException {
         productFinderTasks.searchFor(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+    }
+
+    @Then ("^verify Works, Products&Packages, Manifestation tab$")
+    public void verifyWorksProductsManifestationTab() throws InterruptedException {
+      productFinderTasks.verifyWorkTab();
+      productFinderTasks.verifyProductTab();
+      productFinderTasks.verifyManifestationTab();
     }
 
 
@@ -289,8 +434,10 @@ public class ProductFinderUISteps {
     public void search_items_are_listed_and_click_aWorkId() throws InterruptedException {
         //created by Nishant @ 22 May 2020
         getFirstIdOnPage();
-        productFinderTasks.clickWork(ProductFinderTasks.searchResultWorkId);
+        productFinderTasks.clickWork(ProductFinderTasks.searchResultId);
     }
+
+
 
     @Given("^Filter the Search Result by filter \"([^\"]*)\" and value \"(.*)\" and click first id$")
     public void filter_Search_Result_and_clickFirstId(String FilterType, String filterValue) throws InterruptedException {
@@ -298,7 +445,7 @@ public class ProductFinderUISteps {
         productFinderTasks.filter_Search_Result_Randomly(FilterType, filterValue);
 
         getFirstIdOnPage();
-        productFinderTasks.clickWork(ProductFinderTasks.searchResultWorkId);
+        productFinderTasks.clickWork(ProductFinderTasks.searchResultId);
         Thread.sleep(1000);
     }
 
@@ -326,7 +473,7 @@ public class ProductFinderUISteps {
     @Then("^Verify the Work id Type is \"([^\"]*)\"$")
     public boolean verifyWorkType(String chooseWorkType) {
         //created by Nishant @ 22 May 2020
-        String booksworkId = ProductFinderTasks.searchResultWorkId;
+        String booksworkId = ProductFinderTasks.searchResultId;
         boolean isWorkTypeCorrect = verifyWorkTypeForWorkId(booksworkId, chooseWorkType);
         assertTrue("The given work Id is successfully filtered by the Work Type: " + chooseWorkType, isWorkTypeCorrect);
         return isWorkTypeCorrect;
@@ -346,9 +493,10 @@ public class ProductFinderUISteps {
         workStatusUIValidation(workStatus);
 
         if (!TestContext.getValues().environment.equalsIgnoreCase("PROD") &
+                !TestContext.getValues().environment.equalsIgnoreCase("PRODUCTION")&
                 !TestContext.getValues().environment.equalsIgnoreCase("UAT2")) {
 
-            sql = String.format(APIDataSQL.SELECT_GD_WWORK_TYPE_STATUS, ProductFinderTasks.searchResultWorkId);
+            sql = String.format(APIDataSQL.SELECT_GD_WWORK_TYPE_STATUS, ProductFinderTasks.searchResultId);
             List<Map<?, ?>> workTypeStatusCode = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             workStatusCode = workTypeStatusCode.stream().map(m -> (String) m.get("WORK_STATUS")).map(String::valueOf).collect(Collectors.toList());
 
@@ -519,6 +667,18 @@ public class ProductFinderUISteps {
         Log.info("searching keyword..." + searchKeyword);
         productFinderTasks.searchFor(searchKeyword);
         productFinderTasks.clickProductAndPackages_tab();
+    }
+
+    @When("^switch to Products and Packages tab$")
+    public void switch_to_ProductsandPackages_tab() throws InterruptedException {
+        //created by Nishant @ 3 May 2021
+        productFinderTasks.clickProductAndPackages_tab();
+    }
+
+    @When("^switch to Manifestations tab$")
+    public void switch_to_Manifestations_tab() throws InterruptedException {
+        //created by Nishant @ 3 May 2021
+        productFinderTasks.clickManifestation_tab();
     }
 
     @Then("^The searched product is listed and clicked$")
@@ -701,8 +861,8 @@ public class ProductFinderUISteps {
         }
         Assert.assertTrue("at leaset one id present on page ",!idFound.isEmpty());
 
-        Log.info("first work id on search result page is : " + idFound.get(0));
-        ProductFinderTasks.searchResultWorkId = idFound.get(0).split(" ")[2];
+        Log.info("first id on search result page is : " + idFound.get(0));
+        ProductFinderTasks.searchResultId = idFound.get(0).split(" ")[2];
     }
 
 
@@ -713,6 +873,17 @@ public class ProductFinderUISteps {
 
         // List<String> manifestationId= apiWorksSearchSteps.getManifestationIdsForWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
         //   workManifestationApiObject.getJsonToObject_extendedManifestation(manifestationId.get(0));
+    }
+
+    @Then("^Verify overview tabs$")
+    public void verifyOverviewTabs() throws InterruptedException {
+        productFinderTasks.verifyLeftCoreTab();
+        productFinderTasks.verifyLeftPeopleTab();
+        productFinderTasks.verifyLeftFinancialTab();
+        if(uiUnderTest.equalsIgnoreCase("JF")) {
+            productFinderTasks.verifyLeftEditorialTab();
+            productFinderTasks.verifyLeftLinkTab();
+        }
     }
 
     @Then("^Verify PF/JF UI work overview values$")

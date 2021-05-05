@@ -2,6 +2,8 @@ package com.eph.automation.testing.common.hooks;
 
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.TestContext;
+import com.eph.automation.testing.models.contexts.DataQualityContext;
+import com.eph.automation.testing.models.ui.SpecificTasks;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import cucumber.api.java.After;
@@ -20,6 +22,8 @@ public class ApplicationHooks {
     public void setUp() {
         //Set up the test pre-requisite
         Log.info("Test is starting ...");
+        SpecificTasks specificTasks = new SpecificTasks();
+        DataQualityContext.DateAndTime = specificTasks.getDateNTime();
 
     }
     @After("@UI")

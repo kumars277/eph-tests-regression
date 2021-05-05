@@ -12,8 +12,8 @@ Feature: Specially requested Business scenarios
 
 
   Scenario Outline:verify links from file
-Given We have a valid file available <datafile> <fileType> to read
-Then verify links from file <datafile> <fileType>
+Given We have a valid file available <filePath> <datafile> to read
+Then verify links from file <filePath> <datafile>
 Examples:
-|datafile|fileType|
-|C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\EPHD-3127 link verification\Image URLs for parties      |.csv|
+|filePath|datafile|
+|C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\EPHD-3127 link verification\      |Image URLs for parties.csv|

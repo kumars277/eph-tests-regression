@@ -32,6 +32,7 @@ public class TasksNew {
         this.wait = new WebDriverWait(driver,10);
         this.pageLoadTimeout=30000;
         loginWithScience();
+
     }
 
 public void loginWithScience()
@@ -41,8 +42,12 @@ public void loginWithScience()
         sendKeys("NAME", ProductFinderConstants.loginByEmail,
                 System.getenv("username") + ProductFinderConstants.SCIENCE_ID);
         click("ID", ProductFinderConstants.nextButton);
+       Thread.sleep(1000);
+       waitUntilPageLoad();
+
     }
     catch(Exception e){Log.error(e.getMessage());}
+
 }
 
     public WebElement findElementByText(final String text) {
@@ -86,6 +91,7 @@ public String authenticateUri(String uri)
 
     }
 
+
     public WebElement findElement(String locatorType,String locatorValue){
         //created by Nishant @ 18 May 2020
         WebElement element = null;
@@ -120,6 +126,12 @@ public String authenticateUri(String uri)
         return elements;
     }
 
+    public List<WebElement> findAllLinks()
+    {//created by Nishant @ 30 Apr 2021
+        List<WebElement> links = null;
+        links = driver.findElements(By.xpath("//a"));
+        return links;
+    }
     public boolean isObjectpresent(String locatorType,String locatorValue){
         //created by Nishant @ 18 May 2020
         try {
