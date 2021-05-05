@@ -55,8 +55,11 @@ public class SpecificScenariosSteps {
           DataQualityContext.DataToWrite.add(String.valueOf(rowCnt)); //1st value in result file
 
           String[] testData = DataQualityContext.RowData.get(rowCnt).split(",");
-          System.out.println(testData[0]);            DataQualityContext.DataToWrite.add(testData[0]); //2nd value in result file
-         specificTasks.verifySingleLink(testData[0]);
+          System.out.println(testData[0]);
+
+          DataQualityContext.DataToWrite.add(testData[0]); //2nd value in result file
+
+            specificTasks.verifySingleLink(testData[0]);
 
             //write result file
             specificTasks.writeCsv(FilePath+resultFileName,DataQualityContext.DataToWrite);
