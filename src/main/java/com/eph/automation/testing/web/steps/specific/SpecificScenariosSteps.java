@@ -4,6 +4,8 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.ui.SpecificTasks;
 import com.google.inject.Inject;
+import com.mysql.cj.api.result.Row;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import org.junit.Assert;
@@ -29,19 +31,39 @@ public class SpecificScenariosSteps {
 
 
 
-    @Given("^We have a valid file available (.*) (.*) to read$")
+    @Given("^(.*) have a valid file available (.*) to read$")
     public void verifyFileExists(String filePath, String fileName) throws Exception {
         //created by Nishant @ 26 Apr 2021
+
         String absoluteFilePath = filePath+fileName;
         Assert.assertTrue("valid file exists - ",specificTasks.verifyFileExists(absoluteFilePath));
 
         //read file as whole
-        DataQualityContext.RowData = specificTasks.readCsv(absoluteFilePath);
-        System.out.println("Total entries in input datafile - "+DataQualityContext.RowData.size()+"\n");
+        DataQualityContext.dataFileRowColumn = specificTasks.readCsv(absoluteFilePath);
+
+        System.out.println("Total entries in input datafile - "+DataQualityContext.dataFileRowColumn.size()+"\n");
 
     }
 
-    @Then("^verify links from file (.*) (.*)$")
+    @And("^Read file from S3 bucket (.*) and key (.*)$")
+    public void readS3File(String bucket,String key) throws Exception {//created by Nishant @ 7 May 2021
+
+       DataQualityContext.dataFileRowColumn =  specificTasks.readS3fileAPI(bucket,key);
+       Log.info("headers count for s3 data file - " +DataQualityContext.dataFileRowColumn.get(0).size());
+
+    }
+
+    @And ("^print file data$")
+public void testtemp()
+    {//created by Nishant @ 7 May 2021
+        Log.info("other methods can read this data\n");
+        for(String colHeaders:DataQualityContext.dataFileRowColumn.get(0))
+        {
+            System.out.println(colHeaders);
+        }
+    }
+
+    @Then("^verify links from file (.*)$")
     public void verifyLinksFromFile(String FilePath) throws Exception {
         //created by Nishant @ 26 Apr 2021
         int RowFrom = 0;        int RowTill = 10;
@@ -54,12 +76,12 @@ public class SpecificScenariosSteps {
           Log.info("...Row count - " + rowCnt);
           DataQualityContext.DataToWrite.add(String.valueOf(rowCnt)); //1st value in result file
 
-          String[] testData = DataQualityContext.RowData.get(rowCnt).split(",");
-          System.out.println(testData[0]);
+          //String[] testData = DataQualityContext.RowData.get(rowCnt).split(",");
+          System.out.println(DataQualityContext.dataFileRowColumn.get(rowCnt).get(0));
 
-          DataQualityContext.DataToWrite.add(testData[0]); //2nd value in result file
+          DataQualityContext.DataToWrite.add(DataQualityContext.dataFileRowColumn.get(rowCnt).get(0)); //2nd value in result file
 
-            specificTasks.verifySingleLink(testData[0]);
+            specificTasks.verifySingleLink(DataQualityContext.dataFileRowColumn.get(rowCnt).get(0));
 
             //write result file
             specificTasks.writeCsv(FilePath+resultFileName,DataQualityContext.DataToWrite);
