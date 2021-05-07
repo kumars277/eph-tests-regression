@@ -13,10 +13,12 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -37,24 +39,46 @@ public class WebDriverFactory implements Provider<WebDriver> {
                 URL hubUrl = new URL("http://10.153.95.253:4444/wd/hub");
 
 
-                return new RemoteWebDriver(hubUrl,capabilities);
-
-
-
-
+                return new RemoteWebDriver(hubUrl, capabilities);
 
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
+        } else if (true) {
+            WebDriver driver;
+            String labdataHub = "https://n.chitre:SFsaM0JzcIrCPa2V29NgVzFsHPaLawZ8D0gKp287B7lwUqH7j0@hub.lambdatest.com/wd/hub";
+
+            DesiredCapabilities capability = new DesiredCapabilities();
+
+            capability.setCapability(CapabilityType.BROWSER_NAME, TestContext.getValues().browserType);
+               capability.setCapability(CapabilityType.VERSION, "88.0");
+               capability.setCapability(CapabilityType.PLATFORM, "win10");
+            capability.setCapability("build", "LambadaTest-SIT Test");
+            capability.setCapability("name", "lambada remote browser Test");
+       //     capability.setCapability("network", true);
+        //    capability.setCapability("video", true);
+         //   capability.setCapability("console", true);
+          //  capability.setCapability("visual", true);
+
+            //    String gridURL = "https://" + username + ":" + accesskey + "@hub.lambdatest.com/wd/hub";
+            try {
+                driver = new RemoteWebDriver(new URL(labdataHub), capability);
+                driver.get("https://lambdatest.github.io/sample-todo-app/");
+                return driver;
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            return null;
+
         } else {
             switch (TestContext.getValues().browserType.toLowerCase()) {
                 case "firefox":
                     return new MarionetteDriver().getFirefoxDriver();
 
                 case "chrome":
-                     return new MarionetteDriver().getChromeDriver();
+                    return new MarionetteDriver().getChromeDriver();
 
                 case "ie":
                     //   InternetExplorerDriverManager.getInstance().setup();
@@ -68,6 +92,6 @@ public class WebDriverFactory implements Provider<WebDriver> {
                     return new ChromeDriver();
             }
         }
-
     }
+
 }

@@ -161,7 +161,7 @@ Feature: Product Finder production smoke tests
 
 #below 3 scenario clubbed in 1 as above
 
-  Scenario Outline: Verify any broken link on PF - work
+    Scenario Outline: Verify any broken link on PF - work
       Given user is on Product/Journal Finder search page <ui>
       And verify links on home page
       When Searches for given <keyword>

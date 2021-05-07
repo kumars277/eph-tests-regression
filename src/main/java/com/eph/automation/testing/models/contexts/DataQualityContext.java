@@ -101,6 +101,7 @@ public class DataQualityContext {
     public static Properties prop_filters = new Properties();
     public static ArrayList<String> RowData;
     public static ArrayList<String> DataToWrite = new ArrayList<>();
+    public static ArrayList<ArrayList<String>> dataFileRowColumn = new ArrayList<>();
 
 
 
