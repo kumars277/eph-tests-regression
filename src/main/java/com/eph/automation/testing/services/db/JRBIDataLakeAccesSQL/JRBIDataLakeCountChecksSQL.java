@@ -409,6 +409,72 @@ public class JRBIDataLakeCountChecksSQL {
     public static  String GET_JRBI_DUPLICATE_PERSON_LATEST_COUNT =
             "select count(*) as Duplicate_Count from (SELECT u_key,count(*) FROM "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person group by u_key having count(*)>1)\n";
 
+    public static  String GET_JRBI_ISSN_COUNT_FULL_LOAD =
+            "select count(issn) as issnCount from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full where issn is not null";
+
+
+    public static String GET_JRBI_FULL_LOAD_DATA_REC =
+            "select title as title" +
+                    ",issn as issn" +
+                    ",journal_number as journal_number" +
+                    ",journal_acronym as journal_acronym" +
+                    ",journal_email as journal_email" +
+                    ",primary_site_system as primary_site_system" +
+                    ",primary_site_acronym as primary_site_acronym" +
+                    ",primary_site_support_level as primary_site_support_level" +
+                    ",pmg_code as pmg_code" +
+                    ",pmc_code as pmc_code" +
+                    ",business_unit_desc as business_unit_desc" +
+                    ",expiry_date as expiry_date" +
+                    ",copyright_owner_group as copyright_owner_group" +
+                    ",copyright_owner_name as copyright_owner_name" +
+                    ",journal_prod_site_code as journal_prod_site_code" +
+                    ",opco_code as opco_code" +
+                    ",fulfilment_system as fulfilment_system" +
+                    ",fulfilment_journal_acronym as fulfilment_journal_acronym" +
+                    ",typeset_model_code as typeset_model_code" +
+                    ",journal_issue_trim_size as journal_issue_trim_size" +
+                    ",issue_publ_type_code as issue_publ_type_code" +
+                    ",issue_prod_type_code as issue_prod_type_code" +
+                    ",catalogue_volumes_qty as catalogue_volumes_qty" +
+                    ",catalogue_issues_qty as catalogue_issues_qty" +
+                    ",catalogue_volume_from as catalogue_volume_from" +
+                    ",catalogue_volume_to as catalogue_volume_to" +
+                    ",rf_issues_qty as rf_issues_qty" +
+                    ",rf_total_pages_qty as rf_total_pages_qty" +
+                    ",rf_fvi as rf_fvi" +
+                    ",rf_lvi as rf_lvi" +
+                    ",svp_user_name as svp_user_name" +
+                    ",svp_user_email as svp_user_email " +
+                    ",pbd_email as pbd_email" +
+                    ",pbd_user_email as pbd_user_email" +
+                    ",jpu_user_name as jpu_user_name" +
+                    ",jpu_user_email as jpu_user_email " +
+                    ",pub_user_name as pub_user_name" +
+                    ",pub_user_email as pub_user_email" +
+                    ",ppc_user_name as ppc_user_name" +
+                    ",ppc_user_email as ppc_user_email" +
+                    ",jm_user_name as jm_user_name" +
+                    ",jm_user_email as jm_user_email" +
+                    ",imtuser_name as imtuser_name" +
+                    ",imt_user_email as imt_user_email" +
+                    ",mm_user_name as mm_user_name" +
+                    ",mm_user_email as mm_user_email" +
+                    ",csm_user_name as csm_user_name" +
+                    ",csm_user_email as csm_user_email" +
+                    ",eoc_user_name as eoc_user_name" +
+                    ",eoc_user_email as eoc_user_email" +
+                    ",epc_user_name as epc_user_name" +
+                    ",epc_user_email as epc_user_email" +
+                    ",cdm_user_name as cdm_user_name" +
+                    ",cdm_user_email as cdm_user_email" +
+                    ",adv_user_name as adv_user_name" +
+                    ",adv_user_email as adv_user_email" +
+                    ",psp_user_name as psp_user_name" +
+                    ",psp_user_email as psp_user_email" +
+                    ",war_reference as war_reference" +
+                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_journal_data_full where issn in ('%s') order by issn desc";
+
 }
 
 

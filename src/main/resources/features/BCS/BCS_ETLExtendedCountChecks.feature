@@ -2,7 +2,7 @@ Feature:Validate data count for BCS Extended tables
 
 #  Created by Dinesh S on 05/01/2020
   #confluence link: https://confluence.cbsels.com/display/EPH/Extended+Transformed+View+Mappings
-  #confluence version: v68
+  #confluence version: v78
 
 
 
@@ -12,16 +12,16 @@ Feature:Validate data count for BCS Extended tables
     When We know the total count of BCS Extended Inbound tables <tableName>
     Then Compare count of BCS Inbound and BCS Extended <tableName> tables are identical
     Examples:
-      | tableName                                |
-     | etl_availability_extended_current_v      |
-     | etl_manifestation_extended_current_v      |
-     | etl_page_count_extended_current_v      |
-     | etl_url_extended_current_v      |
-     | etl_work_extended_current_v      |
-     | etl_work_subject_area_extended_current_v      |
-      | etl_manifestation_restrictions_extended_current_v      |
-    | etl_product_prices_extended_current_v      |
-| etl_work_person_role_extended_current_v      |
+      | tableName                                         |
+      | etl_availability_extended_current_v               |
+      | etl_manifestation_extended_current_v              |
+      | etl_page_count_extended_current_v                 |
+      | etl_url_extended_current_v                        |
+      | etl_work_extended_current_v                       |
+      | etl_work_subject_area_extended_current_v          |
+      | etl_manifestation_restrictions_extended_current_v |
+      | etl_product_prices_extended_current_v             |
+      | etl_work_person_role_extended_current_v           |
 
   @BCSExtended
   Scenario Outline: Verify Data count for BCS Extended delta history tables are transferred from delta_current tables

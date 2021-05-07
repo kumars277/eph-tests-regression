@@ -4,8 +4,7 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.JRBIAccessDLContext;
-import com.eph.automation.testing.models.dao.JRBIDataLakeAccess.JRBIDLPersonAccessObject;
-import com.eph.automation.testing.models.dao.JRBIDataLakeAccess.JRBIDLWorkAccessObject;
+import com.eph.automation.testing.models.dao.JRBIDataLakeAccess.JRBIDLAccessObject;
 import com.eph.automation.testing.services.db.JRBIDataLakeAccesSQL.JRBIPersonDataChecksSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
@@ -83,7 +82,7 @@ public class JRBIPersonDataChecksSteps {
         Log.info("We get the FULL Load Person records...");
         sql = String.format(JRBIPersonDataChecksSQL.GET_PERSON_RECORDS_FULL_LOAD, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromDataFullLoadPerson = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromDataFullLoadPerson = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @Then("^Get the records from transform current person$")
@@ -91,7 +90,7 @@ public class JRBIPersonDataChecksSteps {
         Log.info("We get the records from Current Person table...");
         sql = String.format(JRBIPersonDataChecksSQL.GET_CURRENT_PERSON_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromCurrentPerson = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromCurrentPerson = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @And("^Compare the records of person full load and current person$")
@@ -102,18 +101,18 @@ public class JRBIPersonDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between Person Full Load and Current Person...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromDataFullLoadPerson.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromDataFullLoadPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR)); //sort primarykey data in the lists
-                dataQualityJRBIContext.recordsFromFromCurrentPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR));
-                dataQualityJRBIContext.recordsFromDataFullLoadPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromCurrentPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY));
+                dataQualityJRBIContext.recordsFromDataFullLoadPerson.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort primarykey data in the lists
+                dataQualityJRBIContext.recordsFromFromCurrentPerson.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromDataFullLoadPerson.sort(Comparator.comparing(JRBIDLAccessObject::getU_KEY)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromCurrentPerson.sort(Comparator.comparing(JRBIDLAccessObject::getU_KEY));
 
                 String[] etl_curr_persext = {"getEPR","getRECORD_TYPE","getROLE_CODE","getU_KEY","getROLE_DESCRIPTION","getGIVEN_NAME","getFAMILY_NAME","getEMAIL","getPEOPLEHUB_ID"};
 
                 for (String strTemp : etl_curr_persext) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLPersonAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromDataFullLoadPerson.get(i);
-                    JRBIDLPersonAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromCurrentPerson.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromDataFullLoadPerson.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromCurrentPerson.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
@@ -137,7 +136,7 @@ public class JRBIPersonDataChecksSteps {
         Log.info("We get the records from Current Person History...");
         sql = String.format(JRBIPersonDataChecksSQL.GET_CURRENT_PERSON_HISTORY_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromCurrentPersonHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromCurrentPersonHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @And("^Compare the records of current person and current person history$")
@@ -148,20 +147,20 @@ public class JRBIPersonDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between Current Person and Current Person history...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromFromCurrentPerson.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromFromCurrentPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromCurrentPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR));
-                dataQualityJRBIContext.recordsFromFromCurrentPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromCurrentPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY));
-                dataQualityJRBIContext.recordsFromFromCurrentPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromCurrentPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID));
+                dataQualityJRBIContext.recordsFromFromCurrentPerson.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromCurrentPersonHistory.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromFromCurrentPerson.sort(Comparator.comparing(JRBIDLAccessObject::getU_KEY)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromCurrentPersonHistory.sort(Comparator.comparing(JRBIDLAccessObject::getU_KEY));
+                dataQualityJRBIContext.recordsFromFromCurrentPerson.sort(Comparator.comparing(JRBIDLAccessObject::getPEOPLEHUB_ID)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromCurrentPersonHistory.sort(Comparator.comparing(JRBIDLAccessObject::getPEOPLEHUB_ID));
 
                 String[] etl_curr_persext = {"getEPR","getRECORD_TYPE","getROLE_CODE","getU_KEY","getROLE_DESCRIPTION","getGIVEN_NAME","getFAMILY_NAME","getEMAIL","getPEOPLEHUB_ID"};
 
                 for (String strTemp : etl_curr_persext) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLPersonAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromCurrentPerson.get(i);
-                    JRBIDLPersonAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromCurrentPersonHistory.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromCurrentPerson.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromCurrentPersonHistory.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
@@ -185,7 +184,7 @@ public class JRBIPersonDataChecksSteps {
         Log.info("We get the records from Previous Person...");
         sql = String.format(JRBIPersonDataChecksSQL.GET_PREVIOUS_PERSON_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromPreviousPerson = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromPreviousPerson = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @Then("^We Get the records from transform previous person History$")
@@ -193,7 +192,7 @@ public class JRBIPersonDataChecksSteps {
         Log.info("We get the records from Previous Person History...");
         sql = String.format(JRBIPersonDataChecksSQL.GET_PREVIOUS_PERSON_HISTORY_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromPreviousPersonHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromPreviousPersonHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
 
@@ -205,12 +204,12 @@ public class JRBIPersonDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between Previous Person and Previous Person history...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromFromPreviousPerson.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromFromPreviousPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromPreviousPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR));
-                dataQualityJRBIContext.recordsFromFromPreviousPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromPreviousPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY));
-                dataQualityJRBIContext.recordsFromFromPreviousPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromPreviousPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID));
+                dataQualityJRBIContext.recordsFromFromPreviousPerson.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromPreviousPersonHistory.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromFromPreviousPerson.sort(Comparator.comparing(JRBIDLAccessObject::getU_KEY)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromPreviousPersonHistory.sort(Comparator.comparing(JRBIDLAccessObject::getU_KEY));
+                dataQualityJRBIContext.recordsFromFromPreviousPerson.sort(Comparator.comparing(JRBIDLAccessObject::getPEOPLEHUB_ID)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromPreviousPersonHistory.sort(Comparator.comparing(JRBIDLAccessObject::getPEOPLEHUB_ID));
 
 
                 String[] etl_curr_persext = {"getEPR","getRECORD_TYPE","getROLE_CODE","getU_KEY","getROLE_DESCRIPTION","getGIVEN_NAME","getFAMILY_NAME","getEMAIL","getPEOPLEHUB_ID"};
@@ -218,8 +217,8 @@ public class JRBIPersonDataChecksSteps {
                 for (String strTemp : etl_curr_persext) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLPersonAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromPreviousPerson.get(i);
-                    JRBIDLPersonAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromPreviousPersonHistory.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromPreviousPerson.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromPreviousPersonHistory.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
@@ -245,7 +244,7 @@ public class JRBIPersonDataChecksSteps {
         Log.info("We get the Difference of Current and Previous Person records...");
         sql = String.format(JRBIPersonDataChecksSQL.GET_DIFF_REC_PREVIOUS_CURRENT_PREVIOUS_PERSON, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousPerson = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousPerson = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @When("^Get the records from transform Delta Current person$")
@@ -253,7 +252,7 @@ public class JRBIPersonDataChecksSteps {
         Log.info("We get the Delta Person current records...");
         sql = String.format(JRBIPersonDataChecksSQL.GET_DELTA_PERSON_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromDeltaPerson = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromDeltaPerson = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @And("^Compare the records of Delta Current person with difference of current and previous person$")
@@ -264,12 +263,12 @@ public class JRBIPersonDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between DElta Person and Current,Previous tables...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousPerson.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromDeltaPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR));
-                dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromDeltaPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY));
-                dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromDeltaPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID));
+                dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousPerson.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromDeltaPerson.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousPerson.sort(Comparator.comparing(JRBIDLAccessObject::getU_KEY)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromDeltaPerson.sort(Comparator.comparing(JRBIDLAccessObject::getU_KEY));
+                dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousPerson.sort(Comparator.comparing(JRBIDLAccessObject::getPEOPLEHUB_ID)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromDeltaPerson.sort(Comparator.comparing(JRBIDLAccessObject::getPEOPLEHUB_ID));
 
 
                 String[] etl_curr_persext = {"getEPR","getRECORD_TYPE","getROLE_CODE","getU_KEY","getROLE_DESCRIPTION","getGIVEN_NAME","getFAMILY_NAME","getEMAIL","getPEOPLEHUB_ID","getTYPE","getDELTA_MODE"};
@@ -277,8 +276,8 @@ public class JRBIPersonDataChecksSteps {
                 for (String strTemp : etl_curr_persext) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLPersonAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousPerson.get(i);
-                    JRBIDLPersonAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousPerson.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
@@ -304,7 +303,7 @@ public class JRBIPersonDataChecksSteps {
         Log.info("We get the Delta Person history records...");
         sql = String.format(JRBIPersonDataChecksSQL.GET_DELTA_PERSON_HISTORY_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromDeltaPersonHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromDeltaPersonHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
 
@@ -316,10 +315,10 @@ public class JRBIPersonDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between Delta Person and Delta Person history...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromFromDeltaPerson.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromFromDeltaPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR));
-                dataQualityJRBIContext.recordsFromFromDeltaPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY));
+                dataQualityJRBIContext.recordsFromFromDeltaPerson.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromFromDeltaPerson.sort(Comparator.comparing(JRBIDLAccessObject::getU_KEY)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.sort(Comparator.comparing(JRBIDLAccessObject::getU_KEY));
 
 
                 String[] etl_curr_persext = {"getEPR","getRECORD_TYPE","getROLE_CODE","getU_KEY","getROLE_DESCRIPTION","getGIVEN_NAME","getFAMILY_NAME","getEMAIL","getPEOPLEHUB_ID","getTYPE","getDELTA_MODE"};
@@ -327,8 +326,8 @@ public class JRBIPersonDataChecksSteps {
                 for (String strTemp : etl_curr_persext) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLPersonAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i);
-                    JRBIDLPersonAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromDeltaPerson.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromDeltaPersonHistory.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
@@ -352,14 +351,14 @@ public class JRBIPersonDataChecksSteps {
         Log.info("We get the difference of Delta Person and PErson History with current time records...");
         sql = String.format(JRBIPersonDataChecksSQL.GET_RECORDS_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_PERSON, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
     @And("^Get the records from person exclude jrbi ext table$")
     public void getExcludePersonRecords(){
         Log.info("We get the records fromPerson Exclude...");
         sql = String.format(JRBIPersonDataChecksSQL.GET_RECORDS_FROM_PERSON_EXCLUDE, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromExcludePerson = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromExcludePerson = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @And("^Compare the records of Person Exclude with difference of Delta_current_person and person_history$")
@@ -370,20 +369,20 @@ public class JRBIPersonDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between Delta Person & PersonHistory with Person Exclude...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromExcludePerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR));
-                dataQualityJRBIContext.recordsFromExcludePerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY));
-                dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY));
-                dataQualityJRBIContext.recordsFromExcludePerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID));
-                dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID));
+                dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromExcludePerson.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromExcludePerson.sort(Comparator.comparing(JRBIDLAccessObject::getU_KEY));
+                dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.sort(Comparator.comparing(JRBIDLAccessObject::getU_KEY));
+                dataQualityJRBIContext.recordsFromExcludePerson.sort(Comparator.comparing(JRBIDLAccessObject::getPEOPLEHUB_ID));
+                dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.sort(Comparator.comparing(JRBIDLAccessObject::getPEOPLEHUB_ID));
 
                 String[] etl_curr_persext = {"getEPR","getRECORD_TYPE","getROLE_CODE","getU_KEY","getROLE_DESCRIPTION","getGIVEN_NAME","getFAMILY_NAME","getEMAIL","getPEOPLEHUB_ID","getLAST_UPDATED_DATE","getDELETE_FLAG"};
 
                 for (String strTemp : etl_curr_persext) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLPersonAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i);
-                    JRBIDLPersonAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromExcludePerson.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromDiffDeltaAndPersonHistory.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromExcludePerson.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
@@ -408,7 +407,7 @@ public class JRBIPersonDataChecksSteps {
         Log.info("We get the Addition of Delta Person and Person Exclude records...");
         sql = String.format(JRBIPersonDataChecksSQL.GET_JRBI_REC_SUM_DELTA_PERSON_AND_PERSON_HISTORY, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromAddDeltaAndPersonExclude = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromAddDeltaAndPersonExclude = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @Then("^Get the records from Person latest table$")
@@ -416,7 +415,7 @@ public class JRBIPersonDataChecksSteps {
         Log.info("We Person Latest records...");
         sql = String.format(JRBIPersonDataChecksSQL.GET_JRBI_PERSON_LATEST_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromLAtestPerson = DBManager.getDBResultAsBeanList(sql, JRBIDLPersonAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromLAtestPerson = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
 
@@ -429,12 +428,12 @@ public class JRBIPersonDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records of Delta Person & Person_Latest with Person LAtest...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromAddDeltaAndPersonExclude.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromAddDeltaAndPersonExclude.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromLAtestPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getEPR));
-                dataQualityJRBIContext.recordsFromAddDeltaAndPersonExclude.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromLAtestPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getU_KEY));
-                dataQualityJRBIContext.recordsFromAddDeltaAndPersonExclude.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromLAtestPerson.sort(Comparator.comparing(JRBIDLPersonAccessObject::getPEOPLEHUB_ID));
+                dataQualityJRBIContext.recordsFromAddDeltaAndPersonExclude.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromLAtestPerson.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromAddDeltaAndPersonExclude.sort(Comparator.comparing(JRBIDLAccessObject::getU_KEY)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromLAtestPerson.sort(Comparator.comparing(JRBIDLAccessObject::getU_KEY));
+                dataQualityJRBIContext.recordsFromAddDeltaAndPersonExclude.sort(Comparator.comparing(JRBIDLAccessObject::getPEOPLEHUB_ID)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromLAtestPerson.sort(Comparator.comparing(JRBIDLAccessObject::getPEOPLEHUB_ID));
 
 
                 String[] etl_curr_persext = {"getEPR","getRECORD_TYPE","getROLE_CODE","getU_KEY","getROLE_DESCRIPTION","getGIVEN_NAME","getFAMILY_NAME","getEMAIL","getPEOPLEHUB_ID","getLAST_UPDATED_DATE","getDELETE_FLAG"};
@@ -442,8 +441,8 @@ public class JRBIPersonDataChecksSteps {
                 for (String strTemp : etl_curr_persext) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLPersonAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromAddDeltaAndPersonExclude.get(i);
-                    JRBIDLPersonAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromLAtestPerson.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromAddDeltaAndPersonExclude.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromLAtestPerson.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);

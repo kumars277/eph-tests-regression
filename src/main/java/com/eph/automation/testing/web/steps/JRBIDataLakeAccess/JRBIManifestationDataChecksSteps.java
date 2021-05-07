@@ -88,7 +88,7 @@ public class JRBIManifestationDataChecksSteps {
         Log.info("We get the FULL Load Manif records...");
         sql = String.format(JRBIManifestationDataChecksSQL.GET_MANIF_RECORDS_FULL_LOAD, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromDataFullLoadManif = DBManager.getDBResultAsBeanList(sql, JRBIDLManifestationAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromDataFullLoadManif = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @Then("^Get the records from transform current manifestation$")
@@ -96,7 +96,7 @@ public class JRBIManifestationDataChecksSteps {
         Log.info("We get the records from Current Manif...");
         sql = String.format(JRBIManifestationDataChecksSQL.GET_CURRENT_MANIF_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromCurrentManif = DBManager.getDBResultAsBeanList(sql, JRBIDLManifestationAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromCurrentManif = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @And("^Compare the records of manifestation full load and current manifestation$")
@@ -107,15 +107,15 @@ public class JRBIManifestationDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between Manif Full Load and Current Manif...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromDataFullLoadManif.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromDataFullLoadManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromCurrentManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromDataFullLoadManif.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromCurrentManif.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
 
                 String[] etl_curr_manifest = {"getEPR","getRECORD_TYPE","getMANIFESTATION_TYPE","getJOURNAL_ISSUE_TRIM_SIZE","getWAR_REFERENCE"};
                 for (String strTemp : etl_curr_manifest) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLManifestationAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i);
-                    JRBIDLManifestationAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromCurrentManif.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromDataFullLoadManif.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromCurrentManif.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
@@ -139,7 +139,7 @@ public class JRBIManifestationDataChecksSteps {
         Log.info("We get the records from Current Manif History...");
         sql = String.format(JRBIManifestationDataChecksSQL.GET_CURRENT_MANIF_HISTORY_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromCurrentManifHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLManifestationAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromCurrentManifHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @And("^Compare the records of current manifestation and current manifestation history$")
@@ -150,15 +150,15 @@ public class JRBIManifestationDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between Current Manif and Current Manif History...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromFromCurrentManif.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromFromCurrentManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromCurrentManifHistory.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromFromCurrentManif.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromCurrentManifHistory.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
 
                 String[] etl_curr_manifest = {"getEPR","getRECORD_TYPE","getMANIFESTATION_TYPE","getJOURNAL_ISSUE_TRIM_SIZE","getWAR_REFERENCE"};
                 for (String strTemp : etl_curr_manifest) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLManifestationAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromCurrentManif.get(i);
-                    JRBIDLManifestationAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromCurrentManif.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromCurrentManifHistory.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
@@ -182,7 +182,7 @@ public class JRBIManifestationDataChecksSteps {
         Log.info("We get the difference of Current Manif and Previous Manif records...");
         sql = String.format(JRBIManifestationDataChecksSQL.GET_DIFF_REC_PREVIOUS_CURRENT_PREVIOUS_MANIF, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif = DBManager.getDBResultAsBeanList(sql, JRBIDLManifestationAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @When("^We get the records from transform delta manifestation$")
@@ -190,7 +190,7 @@ public class JRBIManifestationDataChecksSteps {
         Log.info("We get the Delta current Manif records...");
         sql = String.format(JRBIManifestationDataChecksSQL.GET_DELTA_MANIF_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromDeltaManif = DBManager.getDBResultAsBeanList(sql, JRBIDLManifestationAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromDeltaManif = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @And("^Compare the records of Delta Current manifestation with difference of current and previous manifestation$")
@@ -201,15 +201,15 @@ public class JRBIManifestationDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between Delta Manif...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromFromDeltaManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromFromDeltaManif.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
 
                 String[] etl_curr_manifest = {"getEPR","getRECORD_TYPE","getMANIFESTATION_TYPE","getJOURNAL_ISSUE_TRIM_SIZE","getWAR_REFERENCE","getTYPE","getDELTA_MODE"};
                 for (String strTemp : etl_curr_manifest) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLManifestationAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromDeltaManif.get(i);
-                    JRBIDLManifestationAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromDeltaManif.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousManif.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
@@ -233,7 +233,7 @@ public class JRBIManifestationDataChecksSteps {
         Log.info("We get the Delta Manif History records...");
         sql = String.format(JRBIManifestationDataChecksSQL.GET_DELTA_MANIF_HISTORY_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromDeltaManifHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLManifestationAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromDeltaManifHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
 
@@ -245,15 +245,15 @@ public class JRBIManifestationDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between Delta Manif and Delta Manif History...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromFromDeltaManif.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromFromDeltaManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromDeltaManifHistory.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromFromDeltaManif.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromDeltaManifHistory.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
 
                 String[] etl_curr_manifest = {"getEPR","getRECORD_TYPE","getMANIFESTATION_TYPE","getJOURNAL_ISSUE_TRIM_SIZE","getWAR_REFERENCE","getTYPE","getDELTA_MODE"};
                 for (String strTemp : etl_curr_manifest) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLManifestationAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromDeltaManif.get(i);
-                    JRBIDLManifestationAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromDeltaManif.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromDeltaManifHistory.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
@@ -277,7 +277,7 @@ public class JRBIManifestationDataChecksSteps {
         Log.info("We get the Delta Manif and Manif Histroy difference records...");
         sql = String.format(JRBIManifestationDataChecksSQL.GET_RECORDS_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_MANIF, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLManifestationAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @And ("^Get the records from manifestation jrbi exclude extended tables$")
@@ -285,7 +285,7 @@ public class JRBIManifestationDataChecksSteps {
         Log.info("We get the Manif Exclude records...");
         sql = String.format(JRBIManifestationDataChecksSQL.GET_RECORDS_FROM_MANIF_EXCLUDE, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromExcludeManif = DBManager.getDBResultAsBeanList(sql, JRBIDLManifestationAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromExcludeManif = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @And("^Compare the records of Manif Exclude with difference of Delta_current_manif and manif_history$")
@@ -296,15 +296,15 @@ public class JRBIManifestationDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records Manif Exclude...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromExcludeManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromExcludeManif.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
 
                 String[] etl_curr_manifest = {"getEPR","getRECORD_TYPE","getMANIFESTATION_TYPE","getJOURNAL_ISSUE_TRIM_SIZE","getWAR_REFERENCE","getLAST_UPDATED_DATE","getDELETE_FLAG"};
                 for (String strTemp : etl_curr_manifest) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLManifestationAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i);
-                    JRBIDLManifestationAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromExcludeManif.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromDiffDeltaAndManifHistory.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromExcludeManif.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
@@ -328,7 +328,7 @@ public class JRBIManifestationDataChecksSteps {
         Log.info("We get the records from PRevious Manif...");
         sql = String.format(JRBIManifestationDataChecksSQL.GET_PREVIOUS_MANIF_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromPreviousManif = DBManager.getDBResultAsBeanList(sql, JRBIDLManifestationAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromPreviousManif = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @Then("^Get the records from transform previous manifestation history$")
@@ -336,7 +336,7 @@ public class JRBIManifestationDataChecksSteps {
         Log.info("We get the records from PRevious Manif History...");
         sql = String.format(JRBIManifestationDataChecksSQL.GET_PREVIOUS_MANIF_HISTORY_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromPreviousManifHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLManifestationAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromPreviousManifHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @And("^Compare the records of previous manifestation and previous manifestation history$")
@@ -347,15 +347,15 @@ public class JRBIManifestationDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between Previous Manif and Previous Manif History...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromFromPreviousManif.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromFromPreviousManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromPreviousManifHistory.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromFromPreviousManif.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromPreviousManifHistory.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
 
                 String[] etl_curr_manifest = {"getEPR","getRECORD_TYPE","getMANIFESTATION_TYPE","getJOURNAL_ISSUE_TRIM_SIZE","getWAR_REFERENCE"};
                 for (String strTemp : etl_curr_manifest) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLManifestationAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromPreviousManif.get(i);
-                    JRBIDLManifestationAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromPreviousManif.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromPreviousManifHistory.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
@@ -379,7 +379,7 @@ public class JRBIManifestationDataChecksSteps {
         Log.info("We get the Delta Manif and Manif Exclude records...");
         sql = String.format(JRBIManifestationDataChecksSQL.GET_JRBI_REC_SUM_DELTA_MANIF_AND_MANIF_EXCLUDE, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude = DBManager.getDBResultAsBeanList(sql, JRBIDLManifestationAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @Then("^Get the records from manifestation latest table$")
@@ -387,7 +387,7 @@ public class JRBIManifestationDataChecksSteps {
         Log.info("We get the Latest Manif records...");
         sql = String.format(JRBIManifestationDataChecksSQL.GET_JRBI_MANIF_LATEST_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromLAtestManif = DBManager.getDBResultAsBeanList(sql, JRBIDLManifestationAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromLAtestManif = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @And("^Compare the records of Manifestation Latest with addition of Delta_current_Manifestation and Manifestation_Exclude$")
@@ -398,15 +398,15 @@ public class JRBIManifestationDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records Manif Exclude...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromLAtestManif.sort(Comparator.comparing(JRBIDLManifestationAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromLAtestManif.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
 
                 String[] etl_curr_manifest = {"getEPR","getRECORD_TYPE","getMANIFESTATION_TYPE","getJOURNAL_ISSUE_TRIM_SIZE","getWAR_REFERENCE"};
                 for (String strTemp : etl_curr_manifest) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLManifestationAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i);
-                    JRBIDLManifestationAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromLAtestManif.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromAddDeltaAndManifExclude.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromLAtestManif.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);

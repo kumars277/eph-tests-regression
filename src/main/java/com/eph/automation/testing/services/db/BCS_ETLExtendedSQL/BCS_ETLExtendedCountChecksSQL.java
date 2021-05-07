@@ -100,16 +100,19 @@ public class BCS_ETLExtendedCountChecksSQL {
                     "   , CAST(NULL AS varchar) journalProdSiteCode \n" +
                     "   , CAST(NULL AS varchar) journalIssueTrimSize \n" +
                     "   , CAST(NULL AS varchar) warReference \n" +
+                    "   , CASE WHEN web.sourceref is not null then true else false end exporttowebind \n" +
                     "   FROM\n" +
-                    "     ((((((("+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product m\n" +
+                    "     (((((((("+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product m\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_production p ON (m.sourceref = p.sourceref))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ukt ON ((m.sourceref = ukt.sourceref) AND (ukt.classificationcode LIKE 'MAUKT%')))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ust ON ((m.sourceref = ust.sourceref) AND (ust.classificationcode LIKE 'MAUST%')))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification usd ON ((m.sourceref = usd.sourceref) AND (usd.classificationcode LIKE 'MADISC %')))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ukd ON ((m.sourceref = ukd.sourceref) AND (ukd.classificationcode LIKE 'MADISCEMEA%')))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON ((m.sourceref = c.sourceref) AND (c.classificationcode LIKE 'DCDFC1%')))\n" +
-                    ")\n" +
-                    ")A\n" +
+                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification web ON ((m.sourceref = web.sourceref)\n"  +
+                    "   AND (web.classificationcode LIKE 'MAWEB%')))\n" +
+                    " )\n" +
+                    " )A\n" +
                     "INNER JOIN " + GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
                     "A.sourceref = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
