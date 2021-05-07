@@ -53,10 +53,14 @@ public class WebDriverFactory implements Provider<WebDriver> {
             DesiredCapabilities capability = new DesiredCapabilities();
 
             capability.setCapability(CapabilityType.BROWSER_NAME, TestContext.getValues().browserType);
-               capability.setCapability(CapabilityType.VERSION, "88.0");
-               capability.setCapability(CapabilityType.PLATFORM, "win10");
-            capability.setCapability("build", "LambadaTest-SIT Test");
+            capability.setCapability(CapabilityType.VERSION, "latest");
+            capability.setCapability("platform", "Windows 10");
+            capability.setCapability("build", "1.1");
             capability.setCapability("name", "lambada remote browser Test");
+            capability.acceptInsecureCerts();
+         //   System.setProperty("javax.net.ssl.trustStore","clientTrustStore.key");
+        //    System.setProperty("javax.net.ssl.trustStorePassword","changeit");
+
        //     capability.setCapability("network", true);
         //    capability.setCapability("video", true);
          //   capability.setCapability("console", true);
