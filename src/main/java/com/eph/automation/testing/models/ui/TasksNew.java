@@ -37,14 +37,21 @@ public class TasksNew {
 
 public void loginWithScience()
 {
-    openPage("https://productfinder.elsevier.net");
+    String id="";
+    String pwd = "";
+    String url = "https://sit.productfinder.elsevier.net";
+
+   if(!pwd.equalsIgnoreCase("")) url = "https://"+id+":"+pwd+"@"+"productfinder.elsevier.net";
+
+
+     openPage(url);
+
     try {
         sendKeys("NAME", ProductFinderConstants.loginByEmail,
                 System.getenv("username") + ProductFinderConstants.SCIENCE_ID);
         click("ID", ProductFinderConstants.nextButton);
        Thread.sleep(1000);
        waitUntilPageLoad();
-
     }
     catch(Exception e){Log.error(e.getMessage());}
 

@@ -37,44 +37,34 @@ public class WebDriverFactory implements Provider<WebDriver> {
                 DesiredCapabilities capabilities = DesiredCapabilities.chrome();
                 capabilities.setPlatform(Platform.ANY);
                 URL hubUrl = new URL("http://10.153.95.253:4444/wd/hub");
-
-
                 return new RemoteWebDriver(hubUrl, capabilities);
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
-        } else if (true) {
+        }
+
+        else if (true) {
             WebDriver driver;
-            String labdataHub = "https://n.chitre:SFsaM0JzcIrCPa2V29NgVzFsHPaLawZ8D0gKp287B7lwUqH7j0@hub.lambdatest.com/wd/hub";
+            String username = "n.chitre";
+            String accesskey = "SFsaM0JzcIrCPa2V29NgVzFsHPaLawZ8D0gKp287B7lwUqH7j0";
 
             DesiredCapabilities capability = new DesiredCapabilities();
-
-            capability.setCapability(CapabilityType.BROWSER_NAME, TestContext.getValues().browserType);
+            capability.setCapability(CapabilityType.BROWSER_NAME, "chrome");
             capability.setCapability(CapabilityType.VERSION, "latest");
-            capability.setCapability("platform", "Windows 10");
-            capability.setCapability("build", "1.1");
+            capability.setCapability("platform", "win10");
+            capability.setCapability("build", "EPH-QA");
             capability.setCapability("name", "lambada remote browser Test");
             capability.acceptInsecureCerts();
          //   System.setProperty("javax.net.ssl.trustStore","clientTrustStore.key");
         //    System.setProperty("javax.net.ssl.trustStorePassword","changeit");
-
-       //     capability.setCapability("network", true);
-        //    capability.setCapability("video", true);
-         //   capability.setCapability("console", true);
-          //  capability.setCapability("visual", true);
-
-            //    String gridURL = "https://" + username + ":" + accesskey + "@hub.lambdatest.com/wd/hub";
+            String gridURL = "http://" + username + ":" + accesskey + "@hub.lambdatest.com/wd/hub";
             try {
-                driver = new RemoteWebDriver(new URL(labdataHub), capability);
-                driver.get("https://lambdatest.github.io/sample-todo-app/");
-                return driver;
+                return new RemoteWebDriver(new URL(gridURL), capability);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
+                return null;
             }
-            return null;
 
         } else {
             switch (TestContext.getValues().browserType.toLowerCase()) {
