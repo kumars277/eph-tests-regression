@@ -3,6 +3,7 @@ Feature:Validate data of DL Extended Views where data comes from All Extended Vi
 #  Created by Dinesh on 17/02/2021
 
   #Confluence Link: https://confluence.cbsels.com/display/EPH/Source+To+Extended+Topic+Table+Mappings
+  #version: 28
 
   @DLExtViews
   Scenario Outline: Verify Data Count for DL extended tables is transferred from All Extended views

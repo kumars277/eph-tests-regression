@@ -83,7 +83,7 @@ public class BCS_ETLExtendedCountChecksSQL {
 
     public static String GET_MANIFESTATION_INBOUND_CURRENT_COUNT=
             "select count(*) as Source_Count from (\n" +
-                    "SELECT distinct cr.epr eprId, A.sourceref u_key, cr.manifestation_type, A.* FROM ( \n" +
+                    "SELECT distinct cr.epr eprId, A.sourceref u_key, cr.manifestation_type, A.* FROM (( \n" +
                     "SELECT\n" +
                     "     NULLIF(m.sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(m.metamodifiedon,''),'%d-%b-%Y %H:%i:%s') modifiedon \n" +
@@ -94,30 +94,28 @@ public class BCS_ETLExtendedCountChecksSQL {
                     "   , split_part(NULLIF(usd.value,''), ' | ', 2) usdiscountname \n" +
                     "   , split_part(NULLIF(ukd.value,''), ' | ', 1) emeadiscountcode \n" +
                     "   , split_part(NULLIF(ukd.value,''), ' | ', 2) emeadiscountname \n" +
-                    "   , coalesce(split_part(NULLIF(p.trimsize,'') , ' | ', 1),NULLIF(p.trimother,'')) trimsize \n" +
+                    "   , COALESCE(split_part(NULLIF(p.trimsize,'') , ' | ', 1),NULLIF(p.trimother,'')) trimsize \n" +
                     "   , cast(NULLIF(p.weight,'') as double) weight \n" +
                     "   , split_part(NULLIF(c.value,'') , ' | ', 1) commcode\n" +
                     "   , CAST(NULL AS varchar) journalProdSiteCode \n" +
                     "   , CAST(NULL AS varchar) journalIssueTrimSize \n" +
                     "   , CAST(NULL AS varchar) warReference \n" +
-                    "   , CASE WHEN web.sourceref is not null then true else false end exporttowebind \n" +
+                    "   ,(CASE WHEN (web.sourceref IS NOT NULL) THEN true ELSE false END) exporttowebind \n" +
                     "   FROM\n" +
-                    "     (((((((("+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product m\n" +
+                    "     ((((((("+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product m\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_production p ON (m.sourceref = p.sourceref))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ukt ON ((m.sourceref = ukt.sourceref) AND (ukt.classificationcode LIKE 'MAUKT%')))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ust ON ((m.sourceref = ust.sourceref) AND (ust.classificationcode LIKE 'MAUST%')))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification usd ON ((m.sourceref = usd.sourceref) AND (usd.classificationcode LIKE 'MADISC %')))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ukd ON ((m.sourceref = ukd.sourceref) AND (ukd.classificationcode LIKE 'MADISCEMEA%')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON ((m.sourceref = c.sourceref) AND (c.classificationcode LIKE 'DCDFC1%')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification web ON ((m.sourceref = web.sourceref)\n"  +
-                    "   AND (web.classificationcode LIKE 'MAWEB%')))\n" +
-                    " )\n" +
+                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON   ((m.sourceref = c.sourceref) AND (c.classificationcode LIKE 'DCDFC1%')))\n" +
+                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification web ON ((m.sourceref = web.sourceref) AND (web.classificationcode LIKE 'MAWEB%')))\n" +
                     " )A\n" +
                     "INNER JOIN " + GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
-                    "A.sourceref = cr.identifier AND \n" +
-                    "cr.identifier_type = 'external_reference' AND \n" +
-                    "cr.record_level = 'Manifestation'\n" +
-                    "WHERE A.metadeleted = false)\n";
+                    "(((A.sourceref = cr.identifier) AND \n" +
+                    "(cr.identifier_type = 'external_reference')) AND \n" +
+                    "(cr.record_level = 'Manifestation')))\n" +
+                    "WHERE (A.metadeleted = false))\n";
 
     public static String GET_PAGE_COUNT_INBOUND_CURRENT_COUNT=
             "select count(*) as Source_Count from (\n" +
