@@ -29,8 +29,8 @@ public class BCSDataCheckSteps {
 
     @Given("^We get the (.*) random ids from initial ingest (.*)$")
     public void getRandomIdsFromInitialIngest(String countOfRandomIds, String targetTable) {
-        countOfRandomIds = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
-        Log.info("numberOfRecords = " + countOfRandomIds);
+      //  countOfRandomIds = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+      //  Log.info("numberOfRecords = " + countOfRandomIds);
         Log.info("getting random reference ids from initial ingest...");
         switch (targetTable) {
             case "stg_current_classification":
