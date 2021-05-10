@@ -33,7 +33,7 @@ Examples:
     And Data check of current table <SourceTableName> and history <TargetTableName> are identical
     Examples:
       | SourceTableName                       | TargetTableName                   |countOfRandomIds |
-      |stg_current_classification             |stg_history_classification_part    |     1           |
+  #    |stg_current_classification             |stg_history_classification_part    |     1           |
       |stg_current_content                    |stg_history_content_part           |     1           |
       |stg_current_extobject                  |stg_history_extobject_part         |     1           |
       |stg_current_fullversionfamily          |stg_history_fullversionfamily_part |     1           |
