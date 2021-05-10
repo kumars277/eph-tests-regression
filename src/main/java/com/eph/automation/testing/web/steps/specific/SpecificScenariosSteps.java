@@ -68,7 +68,9 @@ public void testtemp()
         //created by Nishant @ 26 Apr 2021
         int RowFrom = 0;        int RowTill = 10;
 
-        String resultFileName = "\\Result from "+RowFrom+" to "+RowTill+".csv";
+        String resultFileName = "Result from "+RowFrom+" to "+RowTill+" "+DataQualityContext.DateAndTime+".csv";
+
+
         //set set counter for specific rows and verify those links
         for(int rowCnt=RowFrom;rowCnt<RowTill;rowCnt++)
         {
@@ -86,11 +88,13 @@ public void testtemp()
             //write result file
             specificTasks.writeCsv(FilePath+resultFileName,DataQualityContext.DataToWrite);
 
+
+
             //reset variable
             specificTasks.resetValues(DataQualityContext.DataToWrite);
         }
 
-
+        specificTasks.uploadToS3("eph-test-data",FilePath+resultFileName,resultFileName);
 
 
 

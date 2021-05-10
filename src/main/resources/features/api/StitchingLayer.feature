@@ -1,4 +1,4 @@
-Feature:data check between stitching layer and PF API's
+Feature:stitching layer Vs PF API
 
 
 

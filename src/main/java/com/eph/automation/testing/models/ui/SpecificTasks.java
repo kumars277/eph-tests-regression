@@ -11,9 +11,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.ResponseHeaderOverrides;
-import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.*;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.mysql.cj.api.result.Row;
@@ -27,10 +25,12 @@ import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
 
 public class SpecificTasks {
 
@@ -170,6 +170,67 @@ public ArrayList<ArrayList<String>> readS3fileAPI(String bucketName,String key) 
         return RowColumnData;
 
 }
+
+
+public void creatS3Bucket(String bucketName)
+{//created by Nishant @ 10 May 2021
+/*
+    Region region = Region.US_WEST_2;
+    S3Client s3 = S3Client.builder().region(region).build();
+    String bucket = "new-bucket12345";
+
+    CreateBucketRequest createBucketRequest = CreateBucketRequest
+            .builder()
+            .bucket(bucket)
+            .createBucketConfiguration(CreateBucketConfiguration.builder()
+                    .locationConstraint(region.id())
+                    .build())
+            .build();
+
+    s3.createBucket(createBucketRequest);
+    */
+
+}
+
+public void uploadToS3(String bucketName, String filetoUpload, String fileObjKeyName) throws IOException {
+        //created by Nishant @ 10 May 2021
+  //  Region region = Region.valueOf("eu-west-1");
+
+    Regions clientRegion = Regions.fromName("eu-west-1");
+ //    bucketName = "eph-test-data";
+    String stringObjKeyName = "testobj";
+ //   String fileObjKeyName = "Result from 0 to 10.csv";
+ //   String fileName = "C:\\Users\\Chitren\\Office Work\\Project doc\\EPH sprint testing\\EPHD-3127 link verification\\Result from 0 to 10.csv";
+
+    try {
+        //This code expects that you have AWS credentials set up per:
+        // https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html
+        AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+                .withRegion(clientRegion)
+                .build();
+
+        // Upload a text string as a new object.
+        s3Client.putObject(bucketName, stringObjKeyName, "Uploaded String Object");
+
+        // Upload a file as a new object with ContentType and title specified.
+        PutObjectRequest request = new PutObjectRequest(bucketName, fileObjKeyName, new File(filetoUpload));
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentType("plain/text");
+        metadata.addUserMetadata("title", "someTitle");
+        request.setMetadata(metadata);
+        s3Client.putObject(request);
+    } catch (AmazonServiceException e) {
+        // The call was transmitted successfully, but Amazon S3 couldn't process
+        // it, so it returned an error response.
+        e.printStackTrace();
+    } catch (SdkClientException e) {
+        // Amazon S3 couldn't be contacted for a response, or the client
+        // couldn't parse the response from Amazon S3.
+        e.printStackTrace();
+    }
+
+}
+
 
     private static ArrayList<ArrayList<String>> displayTextInputStream(InputStream input) throws IOException {
         //created by Nishant @ 6 May 2021
