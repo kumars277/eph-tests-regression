@@ -635,13 +635,13 @@ public class BCS_ETLExtendedCountChecksSQL {
 
     public static String GET_MANIF_EXT_DIFF_TRANSFORM_FILE_COUNT =
             " with crr_dataset as(\n" +
-                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, uktextbookind, ustextbookind,usdiscountcode,usdiscountname,emeadiscountcode,emeadiscountname,trimsize,weight,commcode,journalprodsitecode,journalissuetrimsize,warreference\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, uktextbookind, ustextbookind,usdiscountcode,usdiscountname,emeadiscountcode,emeadiscountname,trimsize,weight,commcode,journalprodsitecode,journalissuetrimsize,warreference,exporttowebind\n" +
                     "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
                     "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
-                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, uktextbookind, ustextbookind,usdiscountcode,usdiscountname,emeadiscountcode,emeadiscountname,trimsize,weight,commcode,journalprodsitecode,journalissuetrimsize,warreference\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, uktextbookind, ustextbookind,usdiscountcode,usdiscountname,emeadiscountcode,emeadiscountname,trimsize,weight,commcode,journalprodsitecode,journalissuetrimsize,warreference,exporttowebind\n" +
                     "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
@@ -678,7 +678,8 @@ public class BCS_ETLExtendedCountChecksSQL {
                     "            coalesce (crr.commcode, 'na') <> coalesce (prev.commcode, 'na') or \n" +
                     "            coalesce (crr.journalprodsitecode, 'na') <> coalesce (prev.journalprodsitecode, 'na') or \n" +
                     "            coalesce (crr.journalissuetrimsize, 'na') <> coalesce (prev.journalissuetrimsize, 'na') or \n" +
-                    "            coalesce (crr.warreference, 'na') <> coalesce (prev.warreference, 'na')))";
+                    "            coalesce (crr.warreference, 'na') <> coalesce (prev.warreference, 'na') or \n" +
+                    "            coalesce (crr.exporttowebind, false) <> coalesce (prev.exporttowebind, false)))";
 
     public static String GET_PAGE_COUNT_DIFF_TRANSFORM_FILE_COUNT =
             " with crr_dataset as(\n" +

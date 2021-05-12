@@ -151,7 +151,7 @@ public class BCS_ETLExtendedDataChecksSQL {
 
     public static String GET_RANDOM_MANIF_EXT_KEY_INBOUND =
             "select eprid as EPRID from (\n" +
-                    "SELECT distinct cr.epr eprId, A.sourceref u_key, cr.manifestation_type, A.* FROM ( \n" +
+                    "SELECT distinct cr.epr eprId, A.sourceref u_key, cr.manifestation_type, A.* FROM (( \n" +
                     "SELECT\n" +
                     "     NULLIF(m.sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(m.metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
@@ -162,27 +162,28 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , split_part(NULLIF(usd.value,''), ' | ', 2) usdiscountname \n" +
                     "   , split_part(NULLIF(ukd.value,''), ' | ', 1) emeadiscountcode \n" +
                     "   , split_part(NULLIF(ukd.value,''), ' | ', 2) emeadiscountname \n" +
-                    "   , coalesce(split_part(NULLIF(p.trimsize,'') , ' | ', 1),NULLIF(p.trimother,'')) trimsize \n" +
+                    "   , COALESCE(split_part(NULLIF(p.trimsize,'') , ' | ', 1),NULLIF(p.trimother,'')) trimsize \n" +
                     "   , cast(NULLIF(p.weight,'') as double) weight \n" +
                     "   , split_part(NULLIF(c.value,'') , ' | ', 1) commcode\n" +
                     "   , CAST(NULL AS varchar) journalProdSiteCode \n" +
                     "   , CAST(NULL AS varchar) journalIssueTrimSize \n" +
                     "   , CAST(NULL AS varchar) warReference \n" +
+                    "   ,(CASE WHEN (web.sourceref IS NOT NULL) THEN true ELSE false END) exporttowebind \n" +
                     "   FROM\n" +
                     "     ((((((("+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product m\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_production p ON (m.sourceref = p.sourceref))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ukt ON ((m.sourceref = ukt.sourceref) AND (ukt.classificationcode LIKE 'MAUKT%%')))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ust ON ((m.sourceref = ust.sourceref) AND (ust.classificationcode LIKE 'MAUST%%')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification usd ON ((m.sourceref = usd.sourceref) AND (usd.classificationcode LIKE 'MADISC %%')))\n" +
+                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification usd ON ((m.sourceref = usd.sourceref) AND (usd.classificationcode LIKE 'MADISC%%')))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ukd ON ((m.sourceref = ukd.sourceref) AND (ukd.classificationcode LIKE 'MADISCEMEA%%')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON ((m.sourceref = c.sourceref) AND (c.classificationcode LIKE 'DCDFC1%%')))\n" +
-                    ")\n" +
-                    ")A\n" +
+                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c   ON ((m.sourceref = c.sourceref) AND (c.classificationcode LIKE 'DCDFC1%%')))\n" +
+                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification web ON ((m.sourceref = web.sourceref) AND (web.classificationcode LIKE 'MAWEB%%')))\n" +
+                    " )A\n" +
                     "INNER JOIN " + GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
-                    "A.sourceref = cr.identifier AND \n" +
-                    "cr.identifier_type = 'external_reference' AND \n" +
-                    "cr.record_level = 'Manifestation'\n" +
-                    "WHERE A.metadeleted = false)order by rand() limit %s \n";
+                    "(((A.sourceref = cr.identifier) AND \n" +
+                    "(cr.identifier_type = 'external_reference')) AND \n" +
+                    "(cr.record_level = 'Manifestation')))\n" +
+                    "WHERE (A.metadeleted = false)) order by rand() limit %s \n";
 
     public static String GET_MANIF_EXT_REC_INBOUND_DATA =
             "select eprid as EPRID " +
@@ -203,8 +204,9 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalprodsitecode as journalprodsitecode" +
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
+                    ",exporttowebind as exporttowebind\n" +
                     " from (\n" +
-                    "SELECT distinct cr.epr eprId, A.sourceref u_key, cr.manifestation_type, A.* FROM ( \n" +
+                    "SELECT distinct cr.epr eprId, A.sourceref u_key, cr.manifestation_type, A.* FROM (( \n" +
                     "SELECT\n" +
                     "     NULLIF(m.sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(m.metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
@@ -215,27 +217,28 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , split_part(NULLIF(usd.value,''), ' | ', 2) usdiscountname \n" +
                     "   , split_part(NULLIF(ukd.value,''), ' | ', 1) emeadiscountcode \n" +
                     "   , split_part(NULLIF(ukd.value,''), ' | ', 2) emeadiscountname \n" +
-                    "   , coalesce(split_part(NULLIF(p.trimsize,'') , ' | ', 1),NULLIF(p.trimother,'')) trimsize \n" +
+                    "   , COALESCE(split_part(NULLIF(p.trimsize,'') , ' | ', 1),NULLIF(p.trimother,'')) trimsize \n" +
                     "   , cast(NULLIF(p.weight,'') as double) weight \n" +
                     "   , split_part(NULLIF(c.value,'') , ' | ', 1) commcode\n" +
                     "   , CAST(NULL AS varchar) journalProdSiteCode \n" +
                     "   , CAST(NULL AS varchar) journalIssueTrimSize \n" +
                     "   , CAST(NULL AS varchar) warReference \n" +
+                    "   ,(CASE WHEN (web.sourceref IS NOT NULL) THEN true ELSE false END) exporttowebind \n" +
                     "   FROM\n" +
                     "     ((((((("+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product m\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_production p ON (m.sourceref = p.sourceref))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ukt ON ((m.sourceref = ukt.sourceref) AND (ukt.classificationcode LIKE 'MAUKT%%')))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ust ON ((m.sourceref = ust.sourceref) AND (ust.classificationcode LIKE 'MAUST%%')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification usd ON ((m.sourceref = usd.sourceref) AND (usd.classificationcode LIKE 'MADISC %%')))\n" +
+                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification usd ON ((m.sourceref = usd.sourceref) AND (usd.classificationcode LIKE 'MADISC%%')))\n" +
                     "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ukd ON ((m.sourceref = ukd.sourceref) AND (ukd.classificationcode LIKE 'MADISCEMEA%%')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON ((m.sourceref = c.sourceref) AND (c.classificationcode LIKE 'DCDFC1%%')))\n" +
-                    ")\n" +
-                    ")A\n" +
+                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON   ((m.sourceref = c.sourceref) AND (c.classificationcode LIKE 'DCDFC1%%')))\n" +
+                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification web ON ((m.sourceref = web.sourceref) AND (web.classificationcode LIKE 'MAWEB%%')))\n" +
+                    " )A\n" +
                     "INNER JOIN " + GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
-                    "A.sourceref = cr.identifier AND \n" +
-                    "cr.identifier_type = 'external_reference' AND \n" +
-                    "cr.record_level = 'Manifestation'\n" +
-                    "WHERE A.metadeleted = false) where eprid in ('%s') order by eprid,u_key desc\n";
+                    "(((A.sourceref = cr.identifier) AND \n" +
+                    "(cr.identifier_type = 'external_reference')) AND \n" +
+                    "(cr.record_level = 'Manifestation')))\n" +
+                    " WHERE (A.metadeleted = false)) where eprid in ('%s') order by eprid,u_key desc\n";
 
 
     public static String GET_MANIF_EXT_REC_CURR_DATA =
@@ -257,6 +260,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalprodsitecode as journalprodsitecode" +
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
+                    ",exporttowebind as exporttowebind" +
                     " from " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_current_v where eprid in ('%s') order by eprid,u_key desc \n";
 
     public static String GET_RANDOM_PAGE_COUNT_KEY_INBOUND=
@@ -1263,6 +1267,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalprodsitecode as journalprodsitecode" +
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
+                    ",exporttowebind as exporttowebind" +
                     " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_part where " +
                     "transform_ts = (select max(transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_part)" +
                     " and eprid in('%s') order by eprid,u_key desc";
@@ -1286,6 +1291,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalprodsitecode as journalprodsitecode" +
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
+                    ",exporttowebind as exporttowebind" +
                     " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part)" +
                     " and eprid in('%s') order by eprid,u_key desc";
@@ -1727,13 +1733,13 @@ public class BCS_ETLExtendedDataChecksSQL {
 
     public static String GET_RANDOM_MANIF_EXT_KEY_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
-                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, uktextbookind, ustextbookind,usdiscountcode,usdiscountname,emeadiscountcode,emeadiscountname,trimsize,weight,commcode,journalprodsitecode,journalissuetrimsize,warreference\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, uktextbookind, ustextbookind,usdiscountcode,usdiscountname,emeadiscountcode,emeadiscountname,trimsize,weight,commcode,journalprodsitecode,journalissuetrimsize,warreference,exporttowebind\n" +
                     "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
                     "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
-                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, uktextbookind, ustextbookind,usdiscountcode,usdiscountname,emeadiscountcode,emeadiscountname,trimsize,weight,commcode,journalprodsitecode,journalissuetrimsize,warreference\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, uktextbookind, ustextbookind,usdiscountcode,usdiscountname,emeadiscountcode,emeadiscountname,trimsize,weight,commcode,journalprodsitecode,journalissuetrimsize,warreference,exporttowebind\n" +
                     "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
@@ -1741,17 +1747,17 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part dhap)where rn = 2)) \n" +
                     " select u_key as UKEY " +
                     " from(" +
-                    "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted, crr.manifestation_type, crr.uktextbookind, crr.ustextbookind,crr.usdiscountcode,crr.usdiscountname,crr.emeadiscountcode,crr.emeadiscountname,crr.trimsize,crr.weight,crr.commcode,crr.journalprodsitecode,crr.journalissuetrimsize,crr.warreference,'I' as delta_mode\n" +
+                    "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted, crr.manifestation_type, crr.uktextbookind, crr.ustextbookind,crr.usdiscountcode,crr.usdiscountname,crr.emeadiscountcode,crr.emeadiscountname,crr.trimsize,crr.weight,crr.commcode,crr.journalprodsitecode,crr.journalissuetrimsize,crr.warreference,crr.exporttowebind,'I' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
                     "        left join prev_dataset prev on crr.u_key = prev.u_key\n" +
                     "    where prev.u_key is null\n" +
                     "    union\n" +
-                    "    select  prev.eprid, prev.u_key, prev.sourceref, prev.modifiedon, prev.metadeleted, prev.manifestation_type, prev.uktextbookind, prev.ustextbookind,prev.usdiscountcode,prev.usdiscountname,prev.emeadiscountcode,prev.emeadiscountname,prev.trimsize,prev.weight,prev.commcode,prev.journalprodsitecode,prev.journalissuetrimsize,prev.warreference,'D' as delta_mode\n" +
+                    "    select  prev.eprid, prev.u_key, prev.sourceref, prev.modifiedon, prev.metadeleted, prev.manifestation_type, prev.uktextbookind, prev.ustextbookind,prev.usdiscountcode,prev.usdiscountname,prev.emeadiscountcode,prev.emeadiscountname,prev.trimsize,prev.weight,prev.commcode,prev.journalprodsitecode,prev.journalissuetrimsize,prev.warreference,prev.exporttowebind,'D' as delta_mode\n" +
                     "    from prev_dataset prev\n" +
                     "        left join crr_dataset crr on crr.u_key = prev.u_key\n" +
                     "    where crr.u_key is null\n" +
                     "    union\n" +
-                    "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted, crr.manifestation_type, crr.uktextbookind, crr.ustextbookind,crr.usdiscountcode,crr.usdiscountname,crr.emeadiscountcode,crr.emeadiscountname,crr.trimsize,crr.weight,crr.commcode,crr.journalprodsitecode,crr.journalissuetrimsize,crr.warreference,'C' as delta_mode\n" +
+                    "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted, crr.manifestation_type, crr.uktextbookind, crr.ustextbookind,crr.usdiscountcode,crr.usdiscountname,crr.emeadiscountcode,crr.emeadiscountname,crr.trimsize,crr.weight,crr.commcode,crr.journalprodsitecode,crr.journalissuetrimsize,crr.warreference,crr.exporttowebind,'C' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
                     "        join prev_dataset prev on crr.u_key = prev.u_key\n" +
                     "    where (coalesce(crr.eprid,'na') <> coalesce(prev.eprid,'na') or\n" +
@@ -1771,17 +1777,18 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.commcode, 'na') <> coalesce (prev.commcode, 'na') or \n" +
                     "            coalesce (crr.journalprodsitecode, 'na') <> coalesce (prev.journalprodsitecode, 'na') or \n" +
                     "            coalesce (crr.journalissuetrimsize, 'na') <> coalesce (prev.journalissuetrimsize, 'na') or \n" +
-                    "            coalesce (crr.warreference, 'na') <> coalesce (prev.warreference, 'na')))order by rand() limit %s";
+                    "            coalesce (crr.warreference, 'na') <> coalesce (prev.warreference, 'na') or \n" +
+                    "            coalesce (crr.exporttowebind, false) <> coalesce (prev.exporttowebind, false)))order by rand() limit %s";
 
     public static String GET_MANIF_EXT_REC_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
-                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, uktextbookind, ustextbookind,usdiscountcode,usdiscountname,emeadiscountcode,emeadiscountname,trimsize,weight,commcode,journalprodsitecode,journalissuetrimsize,warreference\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, uktextbookind, ustextbookind,usdiscountcode,usdiscountname,emeadiscountcode,emeadiscountname,trimsize,weight,commcode,journalprodsitecode,journalissuetrimsize,warreference,exporttowebind\n" +
                     "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
                     "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
-                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, uktextbookind, ustextbookind,usdiscountcode,usdiscountname,emeadiscountcode,emeadiscountname,trimsize,weight,commcode,journalprodsitecode,journalissuetrimsize,warreference\n" +
+                    "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, uktextbookind, ustextbookind,usdiscountcode,usdiscountname,emeadiscountcode,emeadiscountname,trimsize,weight,commcode,journalprodsitecode,journalissuetrimsize,warreference,exporttowebind\n" +
                     "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
@@ -1805,18 +1812,19 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalprodsitecode as journalprodsitecode" +
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
+                    ",exporttowebind as exporttowebind" +
                     ",delta_mode as DELTA_MODE from(" +
-                    "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted, crr.manifestation_type, crr.uktextbookind, crr.ustextbookind,crr.usdiscountcode,crr.usdiscountname,crr.emeadiscountcode,crr.emeadiscountname,crr.trimsize,crr.weight,crr.commcode,crr.journalprodsitecode,crr.journalissuetrimsize,crr.warreference,'I' as delta_mode\n" +
+                    "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted, crr.manifestation_type, crr.uktextbookind, crr.ustextbookind,crr.usdiscountcode,crr.usdiscountname,crr.emeadiscountcode,crr.emeadiscountname,crr.trimsize,crr.weight,crr.commcode,crr.journalprodsitecode,crr.journalissuetrimsize,crr.warreference,crr.exporttowebind,'I' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
                     "        left join prev_dataset prev on crr.u_key = prev.u_key\n" +
                     "    where prev.u_key is null\n" +
                     "    union\n" +
-                    "    select  prev.eprid, prev.u_key, prev.sourceref, prev.modifiedon, prev.metadeleted, prev.manifestation_type, prev.uktextbookind, prev.ustextbookind,prev.usdiscountcode,prev.usdiscountname,prev.emeadiscountcode,prev.emeadiscountname,prev.trimsize,prev.weight,prev.commcode,prev.journalprodsitecode,prev.journalissuetrimsize,prev.warreference,'D' as delta_mode\n" +
+                    "    select  prev.eprid, prev.u_key, prev.sourceref, prev.modifiedon, prev.metadeleted, prev.manifestation_type, prev.uktextbookind, prev.ustextbookind,prev.usdiscountcode,prev.usdiscountname,prev.emeadiscountcode,prev.emeadiscountname,prev.trimsize,prev.weight,prev.commcode,prev.journalprodsitecode,prev.journalissuetrimsize,prev.warreference,,prev.exporttowebind,'D' as delta_mode\n" +
                     "    from prev_dataset prev\n" +
                     "        left join crr_dataset crr on crr.u_key = prev.u_key\n" +
                     "    where crr.u_key is null\n" +
                     "    union\n" +
-                    "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted, crr.manifestation_type, crr.uktextbookind, crr.ustextbookind,crr.usdiscountcode,crr.usdiscountname,crr.emeadiscountcode,crr.emeadiscountname,crr.trimsize,crr.weight,crr.commcode,crr.journalprodsitecode,crr.journalissuetrimsize,crr.warreference,'C' as delta_mode\n" +
+                    "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted, crr.manifestation_type, crr.uktextbookind, crr.ustextbookind,crr.usdiscountcode,crr.usdiscountname,crr.emeadiscountcode,crr.emeadiscountname,crr.trimsize,crr.weight,crr.commcode,crr.journalprodsitecode,crr.journalissuetrimsize,crr.warreference,crr.exporttowebind,'C' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
                     "        join prev_dataset prev on crr.u_key = prev.u_key\n" +
                     "    where (coalesce(crr.eprid,'na') <> coalesce(prev.eprid,'na') or\n" +
@@ -1836,7 +1844,8 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.commcode, 'na') <> coalesce (prev.commcode, 'na') or \n" +
                     "            coalesce (crr.journalprodsitecode, 'na') <> coalesce (prev.journalprodsitecode, 'na') or \n" +
                     "            coalesce (crr.journalissuetrimsize, 'na') <> coalesce (prev.journalissuetrimsize, 'na') or \n" +
-                    "            coalesce (crr.warreference, 'na') <> coalesce (prev.warreference, 'na')))where u_key in ('%s') order by u_key,eprid desc";
+                    "            coalesce (crr.warreference, 'na') <> coalesce (prev.warreference, 'na') or \n" +
+                    "            coalesce (crr.exporttowebind, false) <> coalesce (prev.exporttowebind, false)))where u_key in ('%s') order by u_key,eprid desc";
 
     public static String GET_RANDOM_KEY_MANIF_EXT_DELTA_CURRENT_HIST =
             "select u_key as UKEY from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_manifestation_part where " +
@@ -1861,6 +1870,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalprodsitecode as journalprodsitecode" +
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
+                    ",exporttowebind as exporttowebind" +
                     ",delta_mode as DELTA_MODE" +
                     " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_manifestation_part where " +
                     "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_manifestation_part) and u_key in ('%s') order by u_key,eprid desc";
@@ -1884,6 +1894,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalprodsitecode as journalprodsitecode" +
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
+                    ",exporttowebind as exporttowebind" +
                     ",delta_mode as DELTA_MODE from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_manifestation" +
                     " where u_key in ('%s') order by u_key,eprid desc";
 
@@ -3049,7 +3060,9 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",commcode as commcode" +
                     ",journalprodsitecode as journalprodsitecode" +
                     ",journalissuetrimsize as journalissuetrimsize" +
-                    ",warreference as warreference from " +
+                    ",warreference as warreference" +
+                    ",exporttowebind as exporttowebind" +
+                    " from " +
                     "(select c.eprid, c.u_key, c.sourceref, c.modifiedon, c.metadeleted, c.manifestation_type, c.uktextbookind, c.ustextbookind,c.usdiscountcode,c.usdiscountname,c.emeadiscountcode,c.emeadiscountname,c.trimsize,c.weight,c.commcode,c.journalprodsitecode,c.journalissuetrimsize,c.warreference " +
                     "from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_part c\n" +
                     "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_manifestation d on c.eprid  = d.eprid \n" +
@@ -3313,6 +3326,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalprodsitecode as journalprodsitecode" +
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
+                    ",exporttowebind as exporttowebind" +
                     " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_excl_delta where eprid in ('%s') order by eprid,u_key desc";
 
     public static String GET_PAGE_COUNT_REC_EXCL_DELTA =
@@ -3499,6 +3513,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalprodsitecode as journalprodsitecode" +
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
+                    ",exporttowebind as exporttowebind" +
                     " from \n" +
                     "(select c.eprid, c.u_key, c.sourceref, c.modifiedon, c.metadeleted, c.manifestation_type, c.uktextbookind, c.ustextbookind,c.usdiscountcode,c.usdiscountname,c.emeadiscountcode,c.emeadiscountname,c.trimsize,c.weight,c.commcode,c.journalprodsitecode,c.journalissuetrimsize,c.warreference" +
                     " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_excl_delta as c union all \n" +
@@ -3749,6 +3764,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalprodsitecode as journalprodsitecode" +
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
+                    ",exporttowebind as exporttowebind" +
                     " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_latest where eprid in ('%s') order by eprid,u_key desc";
 
     public static String GET_PAGE_COUNT_IDENT_REC_LATEST =

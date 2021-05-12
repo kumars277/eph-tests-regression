@@ -11,17 +11,17 @@ Feature:Validate data checks for BCS ETL Extended in Data Lake Access Layer
     And   Data from the BCS Extended Current Tables <tableName>
     Then  Compare data of BCS Inbound and BCS Extended <tableName> tables are identical
     Examples:
-      | tableName                                               |countOfRandomIds |
-      | etl_availability_extended_current_v                     |50            |
-      | etl_manifestation_extended_current_v                    |50             |
-      | etl_page_count_extended_current_v                       |50             |
-      | etl_url_extended_current_v                              |50             |
-      | etl_work_extended_current_v                             |50             |
-      | etl_work_subject_area_extended_current_v                |50             |
-      | etl_manifestation_restrictions_extended_current_v       |50             |
-      | etl_product_prices_extended_current_v                   |50             |
-      | etl_work_person_role_extended_current_v                 |50             |
-#
+    | tableName                                               |countOfRandomIds |
+    | etl_availability_extended_current_v                     |50            |
+    | etl_manifestation_extended_current_v                    |10             |
+    | etl_page_count_extended_current_v                       |50             |
+    | etl_url_extended_current_v                              |50             |
+    | etl_work_extended_current_v                             |50             |
+    | etl_work_subject_area_extended_current_v                |50             |
+    | etl_manifestation_restrictions_extended_current_v       |50             |
+    | etl_product_prices_extended_current_v                   |50             |
+    | etl_work_person_role_extended_current_v                 |50             |
+
   @BCSExtended
   Scenario Outline: Verify Data for BCS Extended Current_History tables are transferred from Current Tables
     Given Get the <countOfRandomIds> of BCS Extended data from Current Tables <sourceTable>
@@ -29,7 +29,7 @@ Feature:Validate data checks for BCS ETL Extended in Data Lake Access Layer
     Then We Get the records from transform BCS Ext Current History <targetTable>
     And Compare the records of BCS Extended current and BCS Current_History <targetTable>
     Examples:
-      | sourceTable                                           |  targetTable                                            |countOfRandomIds     |
+      | sourceTable                                      |  targetTable                                                 |countOfRandomIds     |
       |etl_availability_extended_current_v               |etl_transform_history_extended_availability_part              | 50                  |
       |etl_manifestation_extended_current_v              |etl_transform_history_extended_manifestation_part             |50                   |
       |etl_page_count_extended_current_v                 |etl_transform_history_extended_page_count_part                |50                   |

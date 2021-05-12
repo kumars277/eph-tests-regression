@@ -184,7 +184,11 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
 
                         Log.info("comparing inbound and etl_manifestation_extended_current_v records...");
-                        String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type", "getuktextbookind", "getustextbookind", "getusdiscountcode", "getusdiscountname", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getemeadiscountcode", "getemeadiscountname", "gettrimsize", "getweight", "getcommcode", "getjournalprodsitecode", "getjournalissuetrimsize", "getwarreference"};
+                        String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type",
+                                "getuktextbookind", "getustextbookind", "getusdiscountcode", "getusdiscountname", "getUKEY",
+                                "getSOURCEREF", "getMODIFIEDON", "getemeadiscountcode", "getemeadiscountname",
+                                "gettrimsize", "getweight", "getcommcode", "getjournalprodsitecode",
+                                "getjournalissuetrimsize", "getwarreference","getexporttowebind"};
                         for (String strTemp : all_manif_ext_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -200,7 +204,7 @@ public class BCS_ETLExtendedDataChecksSteps {
                                     " Manif_EXT__Curr = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_EXT__Curr for EPRID:"+dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Manif_EXT_Curr for EPRID:"+dataQualityBCSContext.recordsFromInboundData.get(i).getEPRID(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -545,7 +549,10 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recFromCurrentHist.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
 
                         Log.info("comparing etl_manifestation_extended_current_v and etl_transform_history_extended_manifestation_part records...");
-                        String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type", "getuktextbookind", "getustextbookind", "getusdiscountcode", "getusdiscountname", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getemeadiscountcode", "getemeadiscountname", "gettrimsize", "getweight", "getcommcode", "getjournalprodsitecode", "getjournalissuetrimsize", "getwarreference"};
+                        String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type",
+                                "getuktextbookind", "getustextbookind", "getusdiscountcode", "getusdiscountname", "getUKEY",
+                                "getSOURCEREF", "getMODIFIEDON", "getemeadiscountcode", "getemeadiscountname", "gettrimsize",
+                                "getweight", "getcommcode", "getjournalprodsitecode", "getjournalissuetrimsize", "getwarreference","getexporttowebind"};
                         for (String strTemp : all_manif_ext_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -865,7 +872,10 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
 
                         Log.info("comparing etl_manifestation_extended_current_v and etl_manifestation_extended_transform_file_history_part records...");
-                        String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type", "getuktextbookind", "getustextbookind", "getusdiscountcode", "getusdiscountname", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getemeadiscountcode", "getemeadiscountname", "gettrimsize", "getweight", "getcommcode", "getjournalprodsitecode", "getjournalissuetrimsize", "getwarreference"};
+                        String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type",
+                                "getuktextbookind", "getustextbookind", "getusdiscountcode", "getusdiscountname",
+                                "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getemeadiscountcode", "getemeadiscountname",
+                                "gettrimsize", "getweight", "getcommcode", "getjournalprodsitecode", "getjournalissuetrimsize", "getwarreference","getexporttowebind"};
                         for (String strTemp : all_manif_ext_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
