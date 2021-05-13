@@ -19,6 +19,14 @@ Feature: Specially requested Business scenarios
     |C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\EPHD-3127 link verification\      |Image URLs for parties.csv|
 
 
-    Scenario: Read file from S3 location
+  Scenario: Read file from S3 location
       Given Read file from S3 bucket com-elsevier-jrbi-nonprod/sit/staging and key ops-10001-journal-metadata-eph-sit
       And print file data
+
+
+  Scenario Outline:verify links from S3 file
+    Given Read file from S3 bucket eph-test-data and key Image URLs for parties.csv
+    Then verify links from file <ResultPath>
+    Examples:
+      |ResultPath|
+      |C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\EPHD-3127 link verification\      |

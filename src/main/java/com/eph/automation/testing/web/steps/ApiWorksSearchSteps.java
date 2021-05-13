@@ -46,8 +46,17 @@ public class ApiWorksSearchSteps {
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
         //added by Nishant @ 27 Dec for debugging failures
-        ids.clear();ids.add("EPR-W-102S7C");Log.info("hard coded work ids are : " + ids);
+        //ids.clear();ids.add("EPR-W-102S7C");Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
+    }
+
+    @Given("^We get id for work search (.*)$")
+    public void getProductById(String workID) {
+        sql = String.format(APIDataSQL.SELECT_WORK_BY_ID_FOR_SEARCH, workID);
+//        Log.info(sql);
+        List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        DataQualityContext.ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("work ids  : " + ids);
     }
 
     private void getRandomWorkIdWithProducts() {
@@ -87,7 +96,7 @@ public class ApiWorksSearchSteps {
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random Journal ids  : " + ids);
         //for debugging failure
-        ids.clear(); ids.add("EPR-W-102SN4");  Log.info("hard coded work ids are : " + ids); //EPR-W-108VK7, EPR-W-108RJG   , EPR-W-108V6K
+       // ids.clear(); ids.add("EPR-W-102SN4");  Log.info("hard coded work ids are : " + ids); //EPR-W-108VK7, EPR-W-108RJG   , EPR-W-108V6K
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
