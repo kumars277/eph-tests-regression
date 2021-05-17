@@ -1187,7 +1187,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
     }
 
     @Given("^Get the (.*) from sum of delta_current and exclude_delta for BCS Extended (.*)$")
-    public void getIdsFromDiffOfDeltaCurrAndExcl(String numberOfRecords, String tableName) {
+    public void  getIdsFromDiffOfDeltaCurrAndExcl(String numberOfRecords, String tableName) {
        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Extended Tables from Diff of Delta Current and Exclude....");
