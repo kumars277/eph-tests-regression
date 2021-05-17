@@ -2,8 +2,8 @@ package com.eph.automation.testing.models.contexts.PromisETL;
 
 import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.models.dao.PROMISDataLake.PRMTablesCurrentObject;
-import com.eph.automation.testing.models.dao.PROMISDataLake.PRMTablesDLObject;
 import com.eph.automation.testing.models.dao.PROMISDataLake.PRMTablesETLObject;
+import com.eph.automation.testing.models.dao.PROMISDataLake.PRMTablesInboundObject;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
 @StaticInjection
 
 public class PromisContext {
-    public static List<PRMTablesCurrentObject> tbPRMDataObjectsFromDL;
+    public static List<PRMTablesInboundObject> tbPRMDataObjectsFromInbound;
     public static List<PRMTablesCurrentObject> tbPRMDataObjectsFromCurrent;
     public static List<PRMTablesETLObject> tbPRMDataObjectsFromDeltaQuery;
     public static List<PRMTablesETLObject> tbPRMDataObjectsFromDelta;

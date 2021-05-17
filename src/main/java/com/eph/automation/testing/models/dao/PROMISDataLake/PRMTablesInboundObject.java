@@ -1,6 +1,6 @@
 package com.eph.automation.testing.models.dao.PROMISDataLake;
 
-public class PRMTablesCurrentObject {
+public class PRMTablesInboundObject {
 
     private int PUB_IDT;
     private int AUT_EDT_IDT;

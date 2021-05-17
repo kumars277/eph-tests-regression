@@ -14,9 +14,10 @@ Feature:Validate data checks for Promis between transform tables
       | 5               |promis_prmlondest_part  |promis_prmlondest_current  |
       | 5               |promis_prmpricest_part  |promis_prmpricest_current  |
       | 5               |promis_prmpubinft_part  |promis_prmpubinft_current  |
-      | 5               |promis_prmpubrelt_part  |promis_prmpubrelt_current  |
       | 5               |promis_prmincpmct_part  |promis_prmincpmct_current  |
       | 5               |promis_prmpmccodt_part  |promis_prmpmccodt_current  |
+
+#      | 5               |promis_prmpubrelt_part  |promis_prmpubrelt_current  |
 
   @PROMISETL
   Scenario Outline: Verify that all Promis Delta data is transferred
@@ -85,7 +86,7 @@ Feature:Validate data checks for Promis between transform tables
   @PROMISETL
   Scenario Outline: Verify that all Promis data is transferred between Latest and All_source tables
     Given We get the <numberOfRecords> random Promis Latest ids of <latesttablename>
-#    When We get Promis transform mapping records from <allsourcetablename>
+    When We get Promis allsource records from <allsourcetablename>
 #    Then We get the Promis Transform mapping current records from <latesttablename>
 #    And Compare Promis records for transform mapping and current of <allsourcetablename>
     Examples:
