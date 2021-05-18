@@ -221,7 +221,7 @@ public class DL_CoreViewsChecksSteps {
                 break;
         }
         List<Map<?, ?>> randomIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-        Ids = randomIds.stream().map(m -> (String) m.get("external_reference")).collect(Collectors.toList());
+        Ids = randomIds.stream().map(m -> (String) m.get("id")).collect(Collectors.toList());
         Log.info(sql);
         Log.info(Ids.toString());
     }
@@ -258,6 +258,7 @@ public class DL_CoreViewsChecksSteps {
                 sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_RELATION_REC, Joiner.on("','").join(Ids));
                 break;
             case "all_work_subject_areas_v":
+                Log.info(Ids.toString());
                 sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_SUBJ_AREA_REC, Joiner.on("','").join(Ids));
                 break;
             case "all_work_v":
@@ -278,7 +279,7 @@ public class DL_CoreViewsChecksSteps {
     }
 
     @And ("^Get the Records from the DL core views (.*)$")
-    public void     getRecFromAllViews(String tableName){
+    public void getRecFromAllViews(String tableName){
         Log.info("We get the records from JM and BCS Core table...");
         switch (tableName) {
             case "all_accountable_product_v":

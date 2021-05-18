@@ -11,7 +11,7 @@ public class TestContext {
 
     public static TestProperties getValues() {
         TestProperties testProperties = new TestProperties();
-       // System.setProperty("ENV","UAT");
+      //  System.setProperty("ENV","UAT");
         System.setProperty("browser","chrome");
 
         String browserName = System.getProperty("browser");
