@@ -2201,6 +2201,43 @@ public class DL_CoreViewChecksSQL {
                     " from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_work_business_model_v where external_reference in ('%s') order by external_reference desc\n";
 
 
+    public static String GET_BCS_JM_CORE_Acc_Prod_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_accountable_product_v where external_reference is null";
+
+    public static String GET_BCS_JM_CORE_manif_ident_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_manifestation_identifiers_v where external_reference is null";
+
+    public static String GET_BCS_JM_CORE_manif_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_manifestation_v where external_reference is null";
+
+    public static String GET_BCS_JM_CORE_Person_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_person_v where external_reference is null";
+
+    public static String GET_BCS_JM_CORE_Product_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_product_v where external_reference is null";
+
+    public static String GET_BCS_JM_CORE_Product_Rel_Pkg_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_product_rel_package_v where external_reference is null";
+
+    public static String GET_BCS_JM_CORE_Work_identf_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_work_identifier_v where external_reference is null";
+
+    public static String GET_BCS_JM_CORE_Work_PERS_role_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_work_person_role_v where external_reference is null";
+    public static String GET_BCS_JM_CORE_Work_RELAtion_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_work_relationship_v where external_reference is null";
+    public static String GET_BCS_JM_CORE_Work_sub_area_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_work_subject_areas_v where external_reference is null";
+    public static String GET_BCS_JM_CORE_Work_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_work_v where external_reference is null";
+    public static String GET_BCS_JM_CORE_Work_legal_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_work_legal_owner_v where external_reference is null";
+
+    public static String GET_BCS_JM_CORE_Work_access_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_work_access_model_v where external_reference is null";
+
+    public static String GET_BCS_JM_CORE_Work_business_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_work_business_model_v where external_reference is null";
 
 }
 
