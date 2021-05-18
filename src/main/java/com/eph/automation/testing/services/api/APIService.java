@@ -228,7 +228,7 @@ public class APIService {
         Assert.assertTrue("Verify that the searched work exists and is accessible trough the API",getWorkResponse.statusCode()==200);
 
         //Log.info("print response start#######################");
-       //  getWorkResponse.prettyPrint();
+      //   getWorkResponse.prettyPrint();
         // Log.info("print response end ########################");
 
         return getWorkResponse.thenReturn().as(WorkApiObject.class);

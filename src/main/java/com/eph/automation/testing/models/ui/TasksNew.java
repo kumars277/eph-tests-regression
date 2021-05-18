@@ -37,7 +37,7 @@ public class TasksNew {
 
 public void loginWithScience()
 {
-    String id="";
+    String id="svc-sciproductfinder";
     String pwd = "";
     String url = "https://sit.productfinder.elsevier.net";
 

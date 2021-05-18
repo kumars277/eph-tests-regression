@@ -1,5 +1,7 @@
 package com.eph.automation.testing.models.dao;
 
+import com.eph.automation.testing.models.api.WorkLegalOwners;
+
 import java.util.Objects;
 
 /**
@@ -38,6 +40,7 @@ public class WorkDataObject {
     private String OPEN_ACCESS_TYPE;
     private String IMPRINT;
     private String LEGAL_OWNERSHIP;
+
     private String SOCIETY_OWNERSHIP;
     private String SUBSCRIPTION_TYPE;
     private String LANGUAGE_CODE;
@@ -49,6 +52,8 @@ public class WorkDataObject {
     private String PARENT_ACC_PROD;
     private String PROJECT_NUM;
     private String IDENTIFIER;
+    private String IDENTIFIER_EFFECTIVE_START_DATE;
+    private String IDENTIFIER_EFFECTIVE_END_DATE;
     private String PRIMARY_ISBN;
     private String ISSN_L;
     private String DAC_KEY;
@@ -68,10 +73,27 @@ public class WorkDataObject {
     public String getIDENTIFIER() {return IDENTIFIER;}
     public void setIDENTIFIER(String IDENTIFIER) {this.IDENTIFIER = IDENTIFIER;}
 
+    public String getIDENTIFIER_EFFECTIVE_START_DATE() {return IDENTIFIER_EFFECTIVE_START_DATE;}
+    public void setIDENTIFIER_EFFECTIVE_START_DATE(String IDENTIFIER_EFFECTIVE_START_DATE) {this.IDENTIFIER_EFFECTIVE_START_DATE = IDENTIFIER_EFFECTIVE_START_DATE;}
+
+    public String getIDENTIFIER_EFFECTIVE_END_DATE() {return IDENTIFIER_EFFECTIVE_END_DATE;}
+    public void setIDENTIFIER_EFFECTIVE_END_DATE(String IDENTIFIER_EFFECTIVE_END_DATE) {this.IDENTIFIER_EFFECTIVE_END_DATE = IDENTIFIER_EFFECTIVE_END_DATE;}
 
     //for Data Model Changes: created by Nishant @ 11 Jun 2020 for
     public String getPLANNED_LAUNCH_DATE() {return PLANNED_LAUNCH_DATE;}
     public void setPLANNED_LAUNCH_DATE(String PLANNED_LAUNCH_DATE) {this.PLANNED_LAUNCH_DATE = PLANNED_LAUNCH_DATE;}
+
+    public String getACTUAL_LAUNCH_DATE() {return ACTUAL_LAUNCH_DATE;}
+    public void setACTUAL_LAUNCH_DATE(String ACTUAL_LAUNCH_DATE) {this.ACTUAL_LAUNCH_DATE = ACTUAL_LAUNCH_DATE;}
+
+    public String getPLANNED_DISCONTINUE_DATE() {return PLANNED_DISCONTINUE_DATE;}
+    public void setPLANNED_DISCONTINUE_DATE(String PLANNED_DISCONTINUE_DATE) {this.PLANNED_DISCONTINUE_DATE = PLANNED_DISCONTINUE_DATE;}
+
+    public String getACTUAL_DISCONTINUE_DATE() {return ACTUAL_DISCONTINUE_DATE;}
+    public void setACTUAL_DISCONTINUE_DATE(String ACTUAL_DISCONTINUE_DATE) {this.ACTUAL_DISCONTINUE_DATE = ACTUAL_DISCONTINUE_DATE;}
+
+    public String getSOCIETY_OWNERSHIP() {return SOCIETY_OWNERSHIP;}
+    public void setSOCIETY_OWNERSHIP(String SOCIETY_OWNERSHIP) {this.SOCIETY_OWNERSHIP = SOCIETY_OWNERSHIP;}
 
     public String getLEGAL_OWNERSHIP() {return LEGAL_OWNERSHIP;}
     public void setLEGAL_OWNERSHIP(String LEGAL_OWNERSHIP) {this.LEGAL_OWNERSHIP = LEGAL_OWNERSHIP;}

@@ -74,6 +74,22 @@ public class workCore {
     public HashMap<String, Object> getStatus() {return status;}
     public void setStatus(HashMap<String, Object> status) {this.status = status;}
 
+    private String plannedLaunchDate;
+    public String getPlannedLaunchDate() {return plannedLaunchDate;}
+    public void setPlannedLaunchDate(String plannedLaunchDate) {this.plannedLaunchDate = plannedLaunchDate;}
+
+    private String actualLaunchDate;
+    public String getActualLaunchDate() {return actualLaunchDate;}
+    public void setActualLaunchDate(String actualLaunchDate) {this.actualLaunchDate = actualLaunchDate;}
+
+    private String plannedDiscontinuationDate;
+    public String getPlannedDiscontinuationDate() {return plannedDiscontinuationDate;}
+    public void setPlannedDiscontinuationDate(String plannedDiscontinuationDate) {this.plannedDiscontinuationDate = plannedDiscontinuationDate;}
+
+    private String actualDiscontinuationDate;
+    public String getActualDiscontinuationDate() {return actualDiscontinuationDate;}
+    public void setActualDiscontinuationDate(String actualDiscontinuationDate) {this.actualDiscontinuationDate = actualDiscontinuationDate;}
+
     private HashMap<String, Object> imprint;
     public HashMap<String, Object> getImprint() {return imprint;}
     public void setImprint(HashMap<String, Object> imprint) {this.imprint = imprint;}
@@ -82,10 +98,13 @@ public class workCore {
     public HashMap<String, Object> getSocietyOwnership() {return societyOwnership;}
     public void setSocietyOwnership(HashMap<String, Object> societyOwnership) {this.societyOwnership = societyOwnership;}
 
-
     private HashMap<String, Object> legalOwnership;
     public HashMap<String, Object> getLegalOwnership() {return legalOwnership;}
     public void setLegalOwnership(HashMap<String, Object> legalOwnership) {this.legalOwnership = legalOwnership;}
+
+    private WorkLegalOwners[] workLegalOwners;
+    public WorkLegalOwners[] getWorkLegalOwners() {return workLegalOwners;}
+    public void setWorkLegalOwners(WorkLegalOwners[] workLegalOwners) {this.workLegalOwners = workLegalOwners;}
 
     private HashMap<String, Object> openAccessType;
     public HashMap<String, Object> getOpenAccessType() {return openAccessType;}
@@ -124,79 +143,151 @@ public class workCore {
 
         getWorkDataFromEPHGD(workId);
 
-        Assert.assertEquals(title, this.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+        Assert.assertEquals(workId + " - ", title, this.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
         printLog("title");
 
         if (!(subTitle == null && this.workDataObjectsFromEPHGD.get(0).getWORK_SUBTITLE() == null)) {
-            Assert.assertEquals(subTitle, this.workDataObjectsFromEPHGD.get(0).getWORK_SUBTITLE());
+            Assert.assertEquals(workId + " - ", subTitle, this.workDataObjectsFromEPHGD.get(0).getWORK_SUBTITLE());
             printLog("subTitle");
         }
 
-        if(electronicRightsInd!=null|this.workDataObjectsFromEPHGD.get(0).getELECTRONIC_RIGHTS_IND()!=null) {
-            Assert.assertEquals(Boolean.valueOf(electronicRightsInd), Boolean.valueOf(this.workDataObjectsFromEPHGD.get(0).getELECTRONIC_RIGHTS_IND()));
+        if (electronicRightsInd != null | this.workDataObjectsFromEPHGD.get(0).getELECTRONIC_RIGHTS_IND() != null) {
+            Assert.assertEquals(workId + " - ", Boolean.valueOf(electronicRightsInd), Boolean.valueOf(this.workDataObjectsFromEPHGD.get(0).getELECTRONIC_RIGHTS_IND()));
             printLog("electronicRightsInd");
         }
+
         if (!(this.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE() == null)) {
-            Assert.assertEquals(language.get("code"), this.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE());
+            Assert.assertEquals(workId + " - ", language.get("code"), this.workDataObjectsFromEPHGD.get(0).getLANGUAGE_CODE());
             printLog("language code");
+            Assert.assertEquals(workId + " - ", language.get("name"), getLanguageName(language.get("code").toString()));
+            printLog("language Name");
+
         }
 
-            //subscription type, if not null -EPR-W-101055
+        //subscription type, implemented by Nishant @ 18 May 2021, EPHD-3122
+        if (subscriptionType != null | this.workDataObjectsFromEPHGD.get(0).getSUBSCRIPTION_TYPE() != null) {
+            Assert.assertEquals(workId + " - ", subscriptionType.get("code"), this.workDataObjectsFromEPHGD.get(0).getSUBSCRIPTION_TYPE());
+            printLog("subscriptionType");
+            Assert.assertEquals(workId + " - ", subscriptionType.get("name"), getSubscriptionName(subscriptionType.get("code").toString()));
+            printLog("subscriptionName");
+
+        }
 
         if (!(editionNumber == null)) {
             int apiEditionNumber = Integer.valueOf(editionNumber);
-            Assert.assertEquals(editionNumber, this.workDataObjectsFromEPHGD.get(0).getEDITION_NUMBER());
+            Assert.assertEquals(workId + " - ", editionNumber, this.workDataObjectsFromEPHGD.get(0).getEDITION_NUMBER());
             printLog("EditionNumber");
         }
 
 
         //  int apiVolume =Integer.valueOf(volume);
-        //Assert.assertEquals(volume, this.workDataObjectsFromEPHGD.get(0).getVOLUME());        printLog("volume");
+        //Assert.assertEquals(workId+ " - ",volume, this.workDataObjectsFromEPHGD.get(0).getVOLUME());        printLog("volume");
         //if(Integer.parseInt(this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR())!=0) {
+
         if (this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR() != null) {
-            Assert.assertEquals(copyrightYear, this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR());
+            Assert.assertEquals(workId + " - ", copyrightYear, this.workDataObjectsFromEPHGD.get(0).getCOPYRIGHT_YEAR());
             printLog("copyrightYear");
         }
 
         if (!(identifiers == null && this.workDataObjectsFromEPHGD.get(0).getIDENTIFIER() == null)) {
-            Log.info("total identifiers found..."+identifiers.length);
+            Log.info("total identifiers found..." + identifiers.length);
             for (WorkIdentifiersApiObject workIdentifier : identifiers) {
                 workIdentifier.compareWithDB();
             }
             printLog("identifiers");
         }
 
-        Assert.assertEquals(type.get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
+        Assert.assertEquals(workId + " - ", type.get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
         printLog("workType code");
 
-        Assert.assertEquals(status.get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
+        Assert.assertEquals(workId + " - ", status.get("code"), this.workDataObjectsFromEPHGD.get(0).getWORK_STATUS());
         printLog("workStatus code");
 
 
         /*
+         implemented by Nishant @ 18 May 2021, EPHD-3122
          "plannedLaunchDate": "2020-04-10",
 		"actualLaunchDate": "2020-04-11",
 		"plannedDiscontinuationDate": "2022-04-24",
+		"actualDiscontinueDate"
         */
 
+        if (plannedLaunchDate != null | this.workDataObjectsFromEPHGD.get(0).getPLANNED_LAUNCH_DATE() != null) {
+            Assert.assertEquals(workId + " - ", plannedLaunchDate, this.workDataObjectsFromEPHGD.get(0).getPLANNED_LAUNCH_DATE());
+            printLog("plannedLanuchDate");
+        }
+
+        if (actualLaunchDate != null | this.workDataObjectsFromEPHGD.get(0).getACTUAL_LAUNCH_DATE() != null) {
+            Assert.assertEquals(workId + " - ", actualLaunchDate, this.workDataObjectsFromEPHGD.get(0).getACTUAL_LAUNCH_DATE());
+            printLog("actualLaunchDate");
+        }
+
+        if (plannedDiscontinuationDate != null | this.workDataObjectsFromEPHGD.get(0).getPLANNED_DISCONTINUE_DATE() != null) {
+            Assert.assertEquals(workId + " - ", plannedDiscontinuationDate, this.workDataObjectsFromEPHGD.get(0).getPLANNED_DISCONTINUE_DATE());
+            printLog("plannedDiscontinuationDate");
+        }
+
+        if (actualDiscontinuationDate != null | this.workDataObjectsFromEPHGD.get(0).getACTUAL_DISCONTINUE_DATE() != null) {
+            Assert.assertEquals(workId + " - ", actualDiscontinuationDate, this.workDataObjectsFromEPHGD.get(0).getACTUAL_DISCONTINUE_DATE());
+            printLog("actualDiscontinuationDate");
+        }
+
         if (!(imprint == null && this.workDataObjectsFromEPHGD.get(0).getIMPRINT() == null)) {
-            Assert.assertEquals(imprint.get("code"), this.workDataObjectsFromEPHGD.get(0).getIMPRINT());
+            Assert.assertEquals(workId + " - ", imprint.get("code"), this.workDataObjectsFromEPHGD.get(0).getIMPRINT());
             printLog("imprint code");
         }
 
+        /*
+        implemented by Nishant @ 18 May 2021, EPHD-3122
         //societyOwnership, if not null -EPR-W-101055
         //legalOwnership, if not null -EPR-W-101055
         //workLegalOwners, if not null -EPR-W-101055
         //workAccessModels, if not null -EPR-W-101055
         //workBusinessModels, if not null -EPR-W-101055
+        */
 
-        Assert.assertEquals(openAccessType.get("code"), this.workDataObjectsFromEPHGD.get(0).getOPEN_ACCESS_TYPE());
+        if (societyOwnership != null | this.workDataObjectsFromEPHGD.get(0).getSOCIETY_OWNERSHIP() != null){
+            Assert.assertEquals(workId + " societyOwnership- ", societyOwnership.get("code"), this.workDataObjectsFromEPHGD.get(0).getSOCIETY_OWNERSHIP());
+            printLog("societyOwnership code");
+
+            Assert.assertEquals(workId + " societyOwnership- ", societyOwnership.get("name"), getSocietyOwnershipName(societyOwnership.get("code").toString()));
+            printLog("societyOwnership Name");
+
+            Assert.assertEquals(workId + " societyOwnership- ", societyOwnership.get("ownershipRollUp"), getSocietyOwnershipRollUp(societyOwnership.get("code").toString()));
+            printLog("societyOwnership Rollup");
+        }
+
+        if (legalOwnership != null | this.workDataObjectsFromEPHGD.get(0).getLEGAL_OWNERSHIP() != null){
+            Assert.assertEquals(workId + " - ", legalOwnership.get("code"), this.workDataObjectsFromEPHGD.get(0).getLEGAL_OWNERSHIP());
+            printLog("legalOwnership code");
+
+            String[] lov = getLegalOwnershipValue(legalOwnership.get("code").toString());
+            Assert.assertEquals(workId + " - ", legalOwnership.get("name"),lov[0] );
+            printLog("legalOwnership Name");
+
+            Assert.assertEquals(workId + " - ", legalOwnership.get("ownershipRollUp"), lov[1]);
+            printLog("legalOwnership Rollup");
+        }
+
+        if(this.workLegalOwners!=null)
+        {
+            Log.info("total workLegalOwner - " + workLegalOwners.length);
+
+            for(WorkLegalOwners  workLegalOwner: workLegalOwners)
+            {
+                workLegalOwner.compareWithDB(workId);
+            }
+        }
+
+
+
+        Assert.assertEquals(workId+ " - ",openAccessType.get("code"), this.workDataObjectsFromEPHGD.get(0).getOPEN_ACCESS_TYPE());
         printLog("openAccessType code");
 
-        Assert.assertEquals(pmc.getCode(), this.workDataObjectsFromEPHGD.get(0).getPMC());
+        Assert.assertEquals(workId+ " - ",pmc.getCode(), this.workDataObjectsFromEPHGD.get(0).getPMC());
         printLog("pmc code");
 
-        Assert.assertEquals(pmc.getPmg().get("code"), getPMGcodeByPMC(this.workDataObjectsFromEPHGD.get(0).getPMC()));
+        Assert.assertEquals(workId+ " - ",pmc.getPmg().get("code"), getPMGcodeByPMC(this.workDataObjectsFromEPHGD.get(0).getPMC()));
         printLog("pmg code");
         if (this.workDataObjectsFromEPHGD.get(0).getF_accountable_product() != null) {
             //accountable products varification implemmented by Nishant on 22 Apr 2020
@@ -204,13 +295,13 @@ public class workCore {
             Log.info("verifying accountable product id..." + this.workDataObjectsFromEPHGD.get(0).getF_accountable_product());
             getAccountableProductFromEPHGD(this.workDataObjectsFromEPHGD.get(0).getF_accountable_product());
 
-            Assert.assertEquals(accountableProduct.getGlProductSegmentCode(), this.accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_CODE());
+            Assert.assertEquals(workId+ " - ",accountableProduct.getGlProductSegmentCode(), this.accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_CODE());
             printLog("getGlProductSegmentCode");
 
-            Assert.assertEquals(accountableProduct.getGlProductSegmentName(), this.accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_NAME());
+            Assert.assertEquals(workId+ " - ",accountableProduct.getGlProductSegmentName(), this.accountableProductDataObjectsFromEPHGD.get(0).getGL_PRODUCT_SEGMENT_NAME());
             printLog("getGlProductSegmentName");
 
-            Assert.assertEquals(accountableProduct.getGlProductParentValue().get("code"), this.accountableProductDataObjectsFromEPHGD.get(0).getF_GL_PRODUCT_SEGMENT_PARENT());
+            Assert.assertEquals(workId+ " - ",accountableProduct.getGlProductParentValue().get("code"), this.accountableProductDataObjectsFromEPHGD.get(0).getF_GL_PRODUCT_SEGMENT_PARENT());
             printLog("getGlProductParentValue");
         }
 
@@ -256,6 +347,45 @@ public class workCore {
         String sql = String.format(APIDataSQL.SELECT_ACCOUNTABLE_PRODUCT_BY_ACCOUNTABLEID, accountable_product_id);
         accountableProductDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, AccountableProductDataObject.class, Constants.EPH_URL);
     }
+
+private String getLanguageName(String code)
+{//created by Nishant @ 18 May 2021, EPHD-3122
+    String sql = String.format(APIDataSQL.SelectLovLanguageDescription,code);
+    List<Map<String,Object>> languageName = DBManager.getDBResultMap(sql,Constants.EPH_URL);
+    return (String) languageName.get(0).get("l_description");
+}
+
+    private String getSubscriptionName(String code)
+    {//created by Nishant @ 18 May 2021, EPHD-3122
+        String sql = String.format(APIDataSQL.SelectLovSubscriptionDescription,code);
+        List<Map<String,Object>> subscriptionName = DBManager.getDBResultMap(sql,Constants.EPH_URL);
+        return (String) subscriptionName.get(0).get("l_description");
+    }
+
+    private String getSocietyOwnershipName(String code)
+    {//created by Nishant @ 18 May 2021, EPHD-3122
+        String sql = String.format(APIDataSQL.SelectLovsocietyOwnershipValue,code);
+        List<Map<String,Object>> societyOwnershipValue = DBManager.getDBResultMap(sql,Constants.EPH_URL);
+        return (String)societyOwnershipValue.get(0).get("l_description");
+    }
+
+    private String getSocietyOwnershipRollUp(String code)
+    {//created by Nishant @ 18 May 2021, EPHD-3122
+        String sql = String.format(APIDataSQL.SelectLovsocietyOwnershipValue,code);
+        List<Map<String,Object>> societyOwnershipValue = DBManager.getDBResultMap(sql,Constants.EPH_URL);
+        return (String)societyOwnershipValue.get(0).get("roll_up_ownership");
+    }
+
+
+    private String[] getLegalOwnershipValue(String code)
+    {//created by Nishant @ 18 May 2021, EPHD-3122
+        String sql = String.format(APIDataSQL.SelectLovLegalOwnershipValue,code);
+        List<Map<String,Object>> legalOwnershipValue = DBManager.getDBResultMap(sql,Constants.EPH_URL);
+        String[] arr_lov = {(String)legalOwnershipValue.get(0).get("l_description"),(String)legalOwnershipValue.get(0).get("roll_up_ownership")};
+        return arr_lov;
+    }
+
+
 
     private void printLog(String verified) {
         Log.info("verified..." + verified);
