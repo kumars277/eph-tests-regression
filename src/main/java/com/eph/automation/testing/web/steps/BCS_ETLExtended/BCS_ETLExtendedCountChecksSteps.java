@@ -497,10 +497,10 @@ public class BCS_ETLExtendedCountChecksSteps {
         List<Map<String, Object>> BCSExclTableCount = DBManager.getDBResultMap(BCSExtExclSQLCurrentCount, Constants.AWS_URL);
         BCSExtExcludeCount = ((Long) BCSExclTableCount.get(0).get("Target_Count")).intValue();
     }
-    @And ("^Compare BCS Extended exclude count of (.*) and (.*) with (.*) are identical$")
-    public void compareBCSExtExclCounts(String srcTable1,String srcTable2, String trgtTable){
-        Log.info("The Diff of count for table "+srcTable1+" and "+srcTable2+" => " + BCSExtDiffDeltaAndHistCurrentCount + " and in "+trgtTable+" => " + BCSExtExcludeCount);
-        Assert.assertEquals("The counts are not equal when compared with Diff of "+srcTable1+" and "+srcTable2+"with "+trgtTable, BCSExtExcludeCount, BCSExtDiffDeltaAndHistCurrentCount);
+    @And ("^Compare BCS Extended exclude count are identical (.*)$")
+    public void compareBCSExtExclCounts(String trgtTable){
+        Log.info("The diff of count for table delta and currentHistory => " + BCSExtDiffDeltaAndHistCurrentCount + " and in "+trgtTable+" => " + BCSExtExcludeCount);
+        Assert.assertEquals("The diff of count for table delta and currentHistory with "+trgtTable, BCSExtExcludeCount, BCSExtDiffDeltaAndHistCurrentCount);
     }
 
     @Given ("^Get the sum of total count between BCS Extended delta current and Current_Exclude Table (.*)$")
@@ -593,10 +593,10 @@ public class BCS_ETLExtendedCountChecksSteps {
             BCSExtLatestCount = ((Long) BCSLatestTableCount.get(0).get("Target_Count")).intValue();
         }
 
-    @And ("^Compare BCS Extended latest counts of (.*) and (.*) with (.*) are identical$")
-    public void compareBCSExtLatestCounts(String srcTable1,String srcTable2, String trgtTable){
-        Log.info("The Diff of count for table "+srcTable1+" and "+srcTable2+" => " + BCSExtSumDeltaExclCount + " and in "+trgtTable+" => " + BCSExtLatestCount);
-        Assert.assertEquals("The counts are not equal when compared with Diff of "+srcTable1+" and "+srcTable2+"with "+trgtTable, BCSExtLatestCount, BCSExtSumDeltaExclCount);
+    @And ("^Compare BCS Extended latest counts of are identical (.*)$")
+    public void compareBCSExtLatestCounts( String trgtTable){
+        Log.info("The sum of count for table deltaCurrent and ExclCurrent => " + BCSExtSumDeltaExclCount + " and in "+trgtTable+" => " + BCSExtLatestCount);
+        Assert.assertEquals("The sum of count for table deltaCurrent and ExclCurrent with "+trgtTable, BCSExtLatestCount, BCSExtSumDeltaExclCount);
     }
 
     @Given("^Get the BCS Extended duplicate count in (.*) table$")

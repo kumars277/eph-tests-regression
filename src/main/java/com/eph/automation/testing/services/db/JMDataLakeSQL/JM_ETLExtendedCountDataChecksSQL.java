@@ -160,7 +160,15 @@ public class JM_ETLExtendedCountDataChecksSQL {
                     ",delete_flag as delete_flag" +
                     " from "+GetJMDLDBUser.getJMDB()+".jnl_new_fulfilment_system where epr_id in ('%s') order by epr_id desc";
 
-}
+    public static String GET_JM_EXT_FULFIL_SYSTEM_Count_REC =
+            "select count(*) as eprIdCount" +
+                    // ",availability_start_date as availability_start_date" +
+                    //",availability_status as availability_status" +
+                    //",delete_flag as delete_flag" +
+                    " from "+GetJMDLDBUser.getJMDB()+".jnl_fulfilment_system where " +
+                    "epr_id in ('%s')";
+
+ }
 
 
 

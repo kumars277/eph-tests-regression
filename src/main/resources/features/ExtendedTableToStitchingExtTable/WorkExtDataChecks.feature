@@ -1,6 +1,8 @@
 Feature:Validate data for  Work Ext Stitching tables in EPH
 
 #  Created by Dinesh on 18/03/2020
+   #Conf link: https://confluence.cbsels.com/display/EPH/Topic+Table+to+JSON+Mapping
+
 
   @WorkExtStitching
   Scenario Outline: Verify Data from the Work_extended tables transferred to Work Extended Stitching table

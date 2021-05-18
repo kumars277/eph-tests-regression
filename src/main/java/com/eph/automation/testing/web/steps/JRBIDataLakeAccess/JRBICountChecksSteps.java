@@ -4,13 +4,20 @@ package com.eph.automation.testing.web.steps.JRBIDataLakeAccess;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.dao.JRBIDataLakeAccess.JRBIDLAccessObject;
 import com.eph.automation.testing.services.db.JRBIDataLakeAccesSQL.JRBIDataLakeCountChecksSQL;
+import com.eph.automation.testing.models.contexts.JRBIAccessDLContext;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import org.junit.Assert;
+import com.google.common.base.Joiner;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 
@@ -34,6 +41,7 @@ public class JRBICountChecksSteps {
     private static int JRBILatestCount;
     private static String JRBIDiffCurrentPreviousSQLCount;
     private static int JRBIDiffCurrentPreviousCount;
+    private static String JRBIIssnRecSQLCount;
     private static String JRBIPreviousSQLCount;
     private static int JRBIPreviousCount;
     private static String JRBIPreviousHistorySQLCount;
@@ -44,16 +52,14 @@ public class JRBICountChecksSteps {
     private static int JRBIDeltaCurrentCount;
     private static int JRBIDeltaCurrentHistoryCount;
     private static int JRBIDuplicateLatestCount;
-    private static String JRBIworkExtendedSQLCount;
-    private static int JRBIWorkExtCount;
-    private static String JRBIManifExtendedSQLCount;
-    private static String JRBIPersonExtendedSQLCount;
-    private static String JRBIManifStitchingSQLCount;
-    private static String JRBIWorkStitchingSQLCount;
-    private static int JRBIManifExtCount;
-    private static int JRBIPersonExtCount;
-    private static int JRBIManifStchCount;
-    private static int JRBIWorkStchCount;
+    private static int JRBIIssntotalCount;
+    private static String sql;
+    private static int totalCountIssnIds;
+    static ArrayList<String> IssnIds = new ArrayList<String>();
+    static String[] issnIds;
+    static List<String>IssnIdList = new ArrayList<String>();
+    static Object[][] expectedIdentifiersFields;
+    static Object[][] loadedIdentifiersFields;
 
 
 
@@ -375,7 +381,6 @@ public class JRBICountChecksSteps {
 
             case "jrbi_transform_delta_person_history_part":
                 Log.info("Getting Delta Current person History Table Count...");
-
                 JRBIDeltaCurrentHistorySQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_DELTA_PERSON_HISTORY_COUNT;
                 break;
         }
@@ -421,4 +426,74 @@ public class JRBICountChecksSteps {
 
     }
 
+   /* @Given("^Get the total count of JRBI Data from source file (.*)(.*)$")
+    public void readSourceFile(String fileLocation, String fileName) throws Throwable{
+        String splitBy = ",";
+        String csvfile = fileLocation+fileName;
+        BufferedReader br = new BufferedReader(new FileReader(csvfile));
+        String line = "";
+        while ((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
+                IssnIds.add(line.toString());
+            }
+        }
+        for (int i = 0; i < IssnIds.size(); i++) {
+            issnIds = IssnIds.get(i).split(splitBy);
+            IssnIdList.add(issnIds[1]);
+        }
+        totalCountIssnIds = IssnIdList.size();
+    }*/
+
+    @Then ("^Get total count of JRBI Data from the table (.*)$")
+    public void readfromDb (String tablename){
+        Log.info("Getting total issn ids Count from..."+tablename);
+        JRBIIssnRecSQLCount = JRBIDataLakeCountChecksSQL.GET_JRBI_ISSN_COUNT_FULL_LOAD;
+        Log.info(JRBIIssnRecSQLCount);
+        List<Map<String, Object>> JRBIIssnTableFullloadCount = DBManager.getDBResultMap(JRBIIssnRecSQLCount, Constants.AWS_URL);
+        JRBIIssntotalCount = ((Long) JRBIIssnTableFullloadCount.get(0).get("issnCount")).intValue();
+    }
+
+    @And("^Compare count of JRBI data between (.*) and source file$")
+    public void compareCounts(String tableName){
+        Log.info("The count in excel file: " + totalCountIssnIds + " and in table " +tableName+":"+ JRBIIssntotalCount);
+        Assert.assertEquals("The counts are not equal when compared with excel"+totalCountIssnIds+" and DB "+JRBIIssntotalCount, totalCountIssnIds, JRBIIssntotalCount);
+    }
+
+    @Given ("^Get the data of JRBI Data from source file (.*)(.*)$")
+    public void readSourceFileData(String fileLocation, String fileName) throws Throwable {
+        String splitBy = ",";
+        String csvfile = fileLocation + fileName;
+        BufferedReader br = new BufferedReader(new FileReader(csvfile));
+        String line = "";
+        while ((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
+                IssnIds.add(line.toString());
+            }
+        }
+        for (int i = 0; i < 5; i++) {
+            issnIds = IssnIds.get(i).split(splitBy);
+            IssnIdList.add(issnIds[1]);
+        }
+        sql = String.format(JRBIDataLakeCountChecksSQL.GET_JRBI_FULL_LOAD_DATA_REC, Joiner.on("','").join(IssnIdList));
+        JRBIAccessDLContext.recordsFromExcel = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
+        Log.info(sql);
+        for (int i = 0; i < JRBIAccessDLContext.recordsFromExcel.size(); i++) {
+            String[] RowValues = IssnIds.get(i).split(splitBy);
+            expectedIdentifiersFields = new Object[][]{{"issn", RowValues[1]}, {"title", RowValues[0]}, {"journal_number", RowValues[2]},
+                    {"journal_acronym", RowValues[3]}};
+            loadedIdentifiersFields =
+                    new Object[][]{{"issn", JRBIAccessDLContext.recordsFromExcel.get(i).getissn()}, {"title", JRBIAccessDLContext.recordsFromExcel.get(i).gettitle()},
+                            {"journal_number", JRBIAccessDLContext.recordsFromExcel.get(i).getjournal_number()}, {"journal_acronym", JRBIAccessDLContext.recordsFromExcel.get(i).getjournal_acronym()}};
+
+            for (int j = 0; j < loadedIdentifiersFields.length; j++) {
+                Log.info(loadedIdentifiersFields[j][0] + " = DB => " + loadedIdentifiersFields[j][1] + " CSV => " + expectedIdentifiersFields[j][1]);
+                String ExcelVal = String.valueOf(expectedIdentifiersFields[j][1]);
+                String DBVal = String.valueOf(loadedIdentifiersFields[j][1]);
+                Assert.assertEquals("Expected all columns to be with correct values loaded but for issn = "
+                                + JRBIAccessDLContext.recordsFromExcel.get(i).getissn() + " there are not equal values for the field " + expectedIdentifiersFields[j][0],
+                        ExcelVal, DBVal);
+            }
+        }
+
+    }
 }

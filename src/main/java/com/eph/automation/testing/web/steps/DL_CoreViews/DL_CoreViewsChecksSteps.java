@@ -24,6 +24,8 @@ public class DL_CoreViewsChecksSteps {
     private static int DLCoreViewCount;
     private static String BCSJMCoreSQLCount;
     private static int BCSJMCoreCount;
+    private static int BCSJMCExtRefFieldNullCount;
+    private static String BCSJMExtRefNullVal;
 
     public DL_CoreViewsAccessContext dataQualityDLCoreViewContext;
     private static String sql;
@@ -170,6 +172,77 @@ public class DL_CoreViewsChecksSteps {
         Assert.assertEquals("The counts are not equal when compared with all core "+tableName+" and Source_Ingest core ", DLCoreViewCount, BCSJMCoreCount);
     }
 
+
+    @Then("^Check whether externalReference field not holding any null value (.*)$")
+    public void checkForNullVal(String tableName){
+        switch (tableName){
+            case "all_accountable_product_v":
+                Log.info("Checking External Reference Field holds null values for all_accountable_product_v...");
+                BCSJMExtRefNullVal = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_Acc_Prod_Ext_Ref_Null_count;
+                break;
+            case "all_manifestation_identifiers_v":
+                Log.info("Checking External Reference Field holds null values for all_manifestation_identifiers_v ...");
+                BCSJMExtRefNullVal = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_manif_ident_Ext_Ref_Null_count;
+                break;
+            case "all_manifestation_v":
+                Log.info("Checking External Reference Field holds null values for all_manifestation_v...");
+                BCSJMExtRefNullVal = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_manif_Ext_Ref_Null_count;
+                break;
+            case "all_person_v":
+                Log.info("Checking External Reference Field holds null values for all_person_v...");
+                BCSJMExtRefNullVal = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_Person_Ext_Ref_Null_count;
+                break;
+            case "all_product_v":
+                Log.info("Checking External Reference Field holds null values for all_product_v...");
+                BCSJMExtRefNullVal = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_Product_Ext_Ref_Null_count;
+                break;
+            case "all_product_rel_package_v":
+                Log.info("Checking External Reference Field holds null values for all_product_rel_package_v...");
+                BCSJMExtRefNullVal = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_Product_Rel_Pkg_Ext_Ref_Null_count;
+                break;
+            case "all_work_identifier_v":
+                Log.info("Checking External Reference Field holds null values for all_work_identifier_v...");
+                BCSJMExtRefNullVal = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_Work_identf_Ext_Ref_Null_count;
+                break;
+            case "all_work_person_role_v":
+                Log.info("Checking External Reference Field holds null values for all_work_person_role_v...");
+                BCSJMExtRefNullVal = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_Work_PERS_role_Ext_Ref_Null_count;
+                break;
+            case "all_work_relationship_v":
+                Log.info("Checking External Reference Field holds null values for all_work_relationship_v...");
+                BCSJMExtRefNullVal = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_Work_RELAtion_Ext_Ref_Null_count;
+                break;
+            case "all_work_subject_areas_v":
+                Log.info("Checking External Reference Field holds null values for all_work_subject_areas_v...");
+                BCSJMExtRefNullVal = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_Work_sub_area_Ext_Ref_Null_count;
+                break;
+            case "all_work_v":
+                Log.info("Checking External Reference Field holds null values for all_work_v...");
+                BCSJMExtRefNullVal = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_Work_Ext_Ref_Null_count;
+                break;
+            case "all_work_legal_owner_v":
+                Log.info("Checking External Reference Field holds null values for all_work_legal_owner_v...");
+                BCSJMExtRefNullVal = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_Work_legal_Ext_Ref_Null_count;
+                break;
+            case "all_work_access_model_v":
+                Log.info("Checking External Reference Field holds null values for all_work_legal_owner_v...");
+                BCSJMExtRefNullVal = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_Work_access_Ext_Ref_Null_count;
+                break;
+            case "all_work_business_model_v":
+                Log.info("Checking External Reference Field holds null values for all_work_business_model_v...");
+                BCSJMExtRefNullVal = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_Work_business_Ext_Ref_Null_count;
+                break;
+        }
+        Log.info(BCSJMExtRefNullVal);
+        List<Map<String, Object>> BCSJMCoreTableExtRefNullCount = DBManager.getDBResultMap(BCSJMExtRefNullVal, Constants.AWS_URL);
+        BCSJMCExtRefFieldNullCount = ((Long) BCSJMCoreTableExtRefNullCount.get(0).get("Null_COunt")).intValue();
+    }
+
+    @And ("^Compare count of externalReference field null value count is 0 (.*)$")
+    public void checkNullvalue(String tableName){
+        Assert.assertEquals("There are some Null value records in Ext_Reference field for "+tableName,0,BCSJMCExtRefFieldNullCount);
+    }
+
     @Given("^Get the (.*) from JM and BCS Core Tables (.*)$")
     public void getRandomIdsFromBCSJM(String numberOfRecords, String tableName) {
        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
@@ -221,7 +294,7 @@ public class DL_CoreViewsChecksSteps {
                 break;
         }
         List<Map<?, ?>> randomIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-        Ids = randomIds.stream().map(m -> (String) m.get("external_reference")).collect(Collectors.toList());
+        Ids = randomIds.stream().map(m -> (String) m.get("id")).collect(Collectors.toList());
         Log.info(sql);
         Log.info(Ids.toString());
     }
@@ -258,6 +331,7 @@ public class DL_CoreViewsChecksSteps {
                 sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_RELATION_REC, Joiner.on("','").join(Ids));
                 break;
             case "all_work_subject_areas_v":
+                Log.info(Ids.toString());
                 sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_SUBJ_AREA_REC, Joiner.on("','").join(Ids));
                 break;
             case "all_work_v":
@@ -278,7 +352,7 @@ public class DL_CoreViewsChecksSteps {
     }
 
     @And ("^Get the Records from the DL core views (.*)$")
-    public void     getRecFromAllViews(String tableName){
+    public void getRecFromAllViews(String tableName){
         Log.info("We get the records from JM and BCS Core table...");
         switch (tableName) {
             case "all_accountable_product_v":

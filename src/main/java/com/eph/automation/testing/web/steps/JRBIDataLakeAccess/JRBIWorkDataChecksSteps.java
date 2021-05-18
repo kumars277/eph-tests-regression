@@ -86,7 +86,7 @@ public class JRBIWorkDataChecksSteps {
         Log.info("We get the FULL Load records...");
         sql = String.format(JRBIWorkDataChecksSQL.GET_WORK_RECORDS_FULL_LOAD, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromDataFullLoad = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromDataFullLoad = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @Then("^We get the records from transform current work$")
@@ -94,7 +94,7 @@ public class JRBIWorkDataChecksSteps {
         Log.info("We get the records from Current Work..");
         sql = String.format(JRBIWorkDataChecksSQL.GET_CURRENT_WORK_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromCurrentWork = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromCurrentWork = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @And("^Compare the records of jrbi_journal_data_full and transform current work$")
@@ -106,8 +106,8 @@ public class JRBIWorkDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between Full Load and Current Work...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromDataFullLoad.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromDataFullLoad.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromCurrentWork.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromDataFullLoad.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromCurrentWork.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
 
                 String[] etl_curr_workext = {"getEPR","getRECORD_TYPE","getWORK_TYPE","getPRIMARY_SITE_SYSTEM","getPRIMARY_SITE_ACRONYM","getPRIMARY_SITE_SUPPORT_LEVEL","getFULFILMENT_SYSTEM",
                         "getFULFILMENT_JOURNAL_ACRONYM","getISSUE_PROD_TYPE_CODE","getCATALOGUE_ISSUES_QTY","getCATALOGUE_VOLUME_FROM","getCATALOGUE_VOLUME_TO",
@@ -115,8 +115,8 @@ public class JRBIWorkDataChecksSteps {
                 for (String strTemp : etl_curr_workext) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLWorkAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromDataFullLoad.get(i);
-                    JRBIDLWorkAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromCurrentWork.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromDataFullLoad.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromCurrentWork.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
@@ -140,7 +140,7 @@ public class JRBIWorkDataChecksSteps {
         Log.info("We get the records from Current history Work..");
         sql = String.format(JRBIWorkDataChecksSQL.GET_CURRENT_WORK_HISTORY_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromCurrentWorkHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromCurrentWorkHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @And("^Compare the records of current work and current work history$")
@@ -151,8 +151,8 @@ public class JRBIWorkDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between Full Load and Current Work...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromFromCurrentWork.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromFromCurrentWork.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromCurrentWorkHistory.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromFromCurrentWork.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromCurrentWorkHistory.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
 
                 String[] etl_curr_workext = {"getEPR","getRECORD_TYPE","getWORK_TYPE","getPRIMARY_SITE_SYSTEM","getPRIMARY_SITE_ACRONYM","getPRIMARY_SITE_SUPPORT_LEVEL","getFULFILMENT_SYSTEM",
                         "getFULFILMENT_JOURNAL_ACRONYM","getISSUE_PROD_TYPE_CODE","getCATALOGUE_ISSUES_QTY","getCATALOGUE_VOLUME_FROM","getCATALOGUE_VOLUME_TO",
@@ -160,8 +160,8 @@ public class JRBIWorkDataChecksSteps {
                 for (String strTemp : etl_curr_workext) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLWorkAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromCurrentWork.get(i);
-                    JRBIDLWorkAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromCurrentWorkHistory.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromCurrentWork.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromCurrentWorkHistory.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
@@ -185,7 +185,7 @@ public class JRBIWorkDataChecksSteps {
         Log.info("We get the records from Previous Work..");
         sql = String.format(JRBIWorkDataChecksSQL.GET_PREVIOUS_WORK_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromPreviousWork = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromPreviousWork = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
 
@@ -194,7 +194,7 @@ public class JRBIWorkDataChecksSteps {
         Log.info("We get the records from Previous history Work..");
         sql = String.format(JRBIWorkDataChecksSQL.GET_PREVIOUS_WORK_HISTORY_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromPreviousWorkHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromPreviousWorkHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @And("^Compare the records of previous work and previous work history$")
@@ -205,8 +205,8 @@ public class JRBIWorkDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between Previous Work and Previous Work History...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromFromPreviousWork.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromFromPreviousWork.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromFromPreviousWork.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
 
                 String[] etl_curr_workext = {"getEPR","getRECORD_TYPE","getWORK_TYPE","getPRIMARY_SITE_SYSTEM","getPRIMARY_SITE_ACRONYM","getPRIMARY_SITE_SUPPORT_LEVEL","getFULFILMENT_SYSTEM",
                         "getFULFILMENT_JOURNAL_ACRONYM","getISSUE_PROD_TYPE_CODE","getCATALOGUE_ISSUES_QTY","getCATALOGUE_VOLUME_FROM","getCATALOGUE_VOLUME_TO",
@@ -214,8 +214,8 @@ public class JRBIWorkDataChecksSteps {
                 for (String strTemp : etl_curr_workext) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLWorkAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromPreviousWork.get(i);
-                    JRBIDLWorkAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromPreviousWork.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromPreviousWorkHistory.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
@@ -239,7 +239,7 @@ public class JRBIWorkDataChecksSteps {
         Log.info("We get the Difference of Current work and Previous Work records...");
         sql = String.format(JRBIWorkDataChecksSQL.GET_DIFF_REC_PREVIOUS_CURRENT_WORK, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @When("^We get the records from transform delta current work$")
@@ -247,7 +247,7 @@ public class JRBIWorkDataChecksSteps {
         Log.info("We get the records from Delta Current Work..");
         sql = String.format(JRBIWorkDataChecksSQL.GET_DELTA_WORK_CURRENT_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromDeltaWork = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromDeltaWork = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
 
@@ -259,8 +259,8 @@ public class JRBIWorkDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between DElta Work and Current,Previous tables...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromDeltaWork.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromDeltaWork.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
 
                 String[] etl_curr_workext = {"getEPR","getRECORD_TYPE","getWORK_TYPE","getPRIMARY_SITE_SYSTEM","getPRIMARY_SITE_ACRONYM","getPRIMARY_SITE_SUPPORT_LEVEL","getFULFILMENT_SYSTEM",
                         "getFULFILMENT_JOURNAL_ACRONYM","getISSUE_PROD_TYPE_CODE","getCATALOGUE_ISSUES_QTY","getCATALOGUE_VOLUME_FROM","getCATALOGUE_VOLUME_TO",
@@ -269,8 +269,8 @@ public class JRBIWorkDataChecksSteps {
                 for (String strTemp : etl_curr_workext) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLWorkAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i);
-                    JRBIDLWorkAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromDeltaWork.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromDiffCurrentAndPreviousWork.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromDeltaWork.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
@@ -294,7 +294,7 @@ public class JRBIWorkDataChecksSteps {
         Log.info("We get the records from Delta Current Work History..");
         sql = String.format(JRBIWorkDataChecksSQL.GET_DELTA_WORK_HISTORY_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromFromDeltaWorkHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromFromDeltaWorkHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
 
@@ -306,8 +306,8 @@ public class JRBIWorkDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between DElta Work and Delta Work History...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromFromDeltaWork.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromFromDeltaWork.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromFromDeltaWorkHistory.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromFromDeltaWork.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromFromDeltaWorkHistory.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
 
                 String[] etl_curr_workext = {"getEPR", "getRECORD_TYPE", "getWORK_TYPE", "getPRIMARY_SITE_SYSTEM", "getPRIMARY_SITE_ACRONYM", "getPRIMARY_SITE_SUPPORT_LEVEL", "getFULFILMENT_SYSTEM",
                         "getFULFILMENT_JOURNAL_ACRONYM", "getISSUE_PROD_TYPE_CODE", "getCATALOGUE_ISSUES_QTY", "getCATALOGUE_VOLUME_FROM", "getCATALOGUE_VOLUME_TO",
@@ -316,8 +316,8 @@ public class JRBIWorkDataChecksSteps {
                 for (String strTemp : etl_curr_workext) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLWorkAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromDeltaWork.get(i);
-                    JRBIDLWorkAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromDeltaWorkHistory.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromFromDeltaWork.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromFromDeltaWorkHistory.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
@@ -341,7 +341,7 @@ public class JRBIWorkDataChecksSteps {
         Log.info("We get the difference of Delta Current work and Current History records...");
         sql = String.format(JRBIWorkDataChecksSQL.GET_RECORDS_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_WORK, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromDiffDeltaAndWorkHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromDiffDeltaAndWorkHistory = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @Then("^Get the records from work jrbi ext exclude table for data check$")
@@ -349,7 +349,7 @@ public class JRBIWorkDataChecksSteps {
         Log.info("We get the records from Excude Work...");
         sql = String.format(JRBIWorkDataChecksSQL.GET_RECORDS_FROM_WORK_EXCLUDE, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromExcludeWork = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromExcludeWork = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
     @And("^Compare the records of Work Exclude with difference of Delta_current_work and work_history$")
@@ -360,8 +360,8 @@ public class JRBIWorkDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between Exclude Work with Delta_current_work and work_history...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromDiffDeltaAndWorkHistory.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromDiffDeltaAndWorkHistory.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromExcludeWork.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromDiffDeltaAndWorkHistory.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromExcludeWork.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
 
                 String[] etl_curr_workext = {"getEPR", "getRECORD_TYPE", "getWORK_TYPE", "getPRIMARY_SITE_SYSTEM", "getPRIMARY_SITE_ACRONYM", "getPRIMARY_SITE_SUPPORT_LEVEL", "getFULFILMENT_SYSTEM",
                         "getFULFILMENT_JOURNAL_ACRONYM", "getISSUE_PROD_TYPE_CODE", "getCATALOGUE_ISSUES_QTY", "getCATALOGUE_VOLUME_FROM", "getCATALOGUE_VOLUME_TO",
@@ -370,8 +370,8 @@ public class JRBIWorkDataChecksSteps {
                 for (String strTemp : etl_curr_workext) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLWorkAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromDiffDeltaAndWorkHistory.get(i);
-                    JRBIDLWorkAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromExcludeWork.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromDiffDeltaAndWorkHistory.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromExcludeWork.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);
@@ -397,7 +397,7 @@ public class JRBIWorkDataChecksSteps {
         Log.info("We get the Addition of Delta Current work and Work Exclude records...");
         sql = String.format(JRBIWorkDataChecksSQL.GET_JRBI_REC_SUM_DELTA_WORK_AND_WORK_HISTORY, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromAddDeltaAndWorkExclude = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromAddDeltaAndWorkExclude = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
 
     }
 
@@ -406,7 +406,7 @@ public class JRBIWorkDataChecksSteps {
         Log.info("We get the Latest Work records...");
         sql = String.format(JRBIWorkDataChecksSQL.GET_JRBI_WORK_LATEST_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
-        dataQualityJRBIContext.recordsFromLAtestWork = DBManager.getDBResultAsBeanList(sql, JRBIDLWorkAccessObject.class, Constants.AWS_URL);
+        dataQualityJRBIContext.recordsFromLAtestWork = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
 
     }
 
@@ -418,8 +418,8 @@ public class JRBIWorkDataChecksSteps {
             Log.info("Sorting the EPR Ids to compare the records between Work Latest with addition of Delta_current_work and work_Exclude...");
             for (int i = 0; i < dataQualityJRBIContext.recordsFromAddDeltaAndWorkExclude.size(); i++) {
 
-                dataQualityJRBIContext.recordsFromAddDeltaAndWorkExclude.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR)); //sort data in the lists
-                dataQualityJRBIContext.recordsFromLAtestWork.sort(Comparator.comparing(JRBIDLWorkAccessObject::getEPR));
+                dataQualityJRBIContext.recordsFromAddDeltaAndWorkExclude.sort(Comparator.comparing(JRBIDLAccessObject::getEPR)); //sort data in the lists
+                dataQualityJRBIContext.recordsFromLAtestWork.sort(Comparator.comparing(JRBIDLAccessObject::getEPR));
 
                 String[] etl_curr_workext = {"getEPR", "getRECORD_TYPE", "getWORK_TYPE", "getPRIMARY_SITE_SYSTEM", "getPRIMARY_SITE_ACRONYM", "getPRIMARY_SITE_SUPPORT_LEVEL", "getFULFILMENT_SYSTEM",
                         "getFULFILMENT_JOURNAL_ACRONYM", "getISSUE_PROD_TYPE_CODE", "getCATALOGUE_ISSUES_QTY", "getCATALOGUE_VOLUME_FROM", "getCATALOGUE_VOLUME_TO",
@@ -428,8 +428,8 @@ public class JRBIWorkDataChecksSteps {
                 for (String strTemp : etl_curr_workext) {
                     java.lang.reflect.Method method;
                     java.lang.reflect.Method method2;
-                    JRBIDLWorkAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromAddDeltaAndWorkExclude.get(i);
-                    JRBIDLWorkAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromLAtestWork.get(i);
+                    JRBIDLAccessObject objectToCompare1 = dataQualityJRBIContext.recordsFromAddDeltaAndWorkExclude.get(i);
+                    JRBIDLAccessObject objectToCompare2 = dataQualityJRBIContext.recordsFromLAtestWork.get(i);
 
                     method = objectToCompare1.getClass().getMethod(strTemp);
                     method2 = objectToCompare2.getClass().getMethod(strTemp);

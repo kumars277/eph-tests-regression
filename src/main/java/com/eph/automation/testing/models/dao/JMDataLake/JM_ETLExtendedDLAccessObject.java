@@ -12,6 +12,12 @@ public class JM_ETLExtendedDLAccessObject {
     private String application_code;
     private String issn;
 
+    private int eprIdCount;
+
+    public int geteprIdCount() { return eprIdCount; }
+    public void seteprIdCount(int eprIdCount) {
+        this.eprIdCount = eprIdCount;
+    }
 
 
     public String getepr_id() { return epr_id; }

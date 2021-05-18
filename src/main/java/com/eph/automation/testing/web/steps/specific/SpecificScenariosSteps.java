@@ -40,7 +40,6 @@ public class SpecificScenariosSteps {
 
         //read file as whole
         DataQualityContext.dataFileRowColumn = specificTasks.readCsv(absoluteFilePath);
-
         System.out.println("Total entries in input datafile - "+DataQualityContext.dataFileRowColumn.size()+"\n");
 
     }

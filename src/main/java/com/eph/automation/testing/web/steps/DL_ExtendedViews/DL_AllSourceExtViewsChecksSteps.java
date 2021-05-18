@@ -340,7 +340,7 @@ public class DL_AllSourceExtViewsChecksSteps {
                         method = objectToCompare1.getClass().getMethod(strTemp);
                         method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("EPRID => " + dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getepr_id() +
+                        Log.info("EPRIDs => " + dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getepr_id() +
                                 " " + strTemp + " => SourceIngest = " + method.invoke(objectToCompare1) +
                                 " All_Views_EXT = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||
@@ -387,7 +387,9 @@ public class DL_AllSourceExtViewsChecksSteps {
  //                   dataQualityDLExtViewContext.recordsFromAllExtViews.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id));
 
                     String[] all_manif_ext_Col = {"getepr_id", "getsource","getlast_updated_date", "getmanifestation_type", "getuk_textbook_ind", "getus_textbook_ind", "getmanifestation_trim_text",
-                            "getcommodity_code","getdiscount_code_emea","getdiscount_code_us","getmanifestation_weight","getjournal_issue_trim_size","getwar_reference","getdelete_flag"};
+                            "getcommodity_code","getdiscount_code_emea","getdiscount_code_us"
+                            ,"getmanifestation_weight","getjournal_issue_trim_size","getwar_reference",
+                            "getexport_to_web_ind","getdelete_flag"};
                     for (String strTemp : all_manif_ext_Col) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
@@ -398,7 +400,7 @@ public class DL_AllSourceExtViewsChecksSteps {
                         method = objectToCompare1.getClass().getMethod(strTemp);
                         method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("EPRID => " + dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getepr_id() +
+                        Log.info("EPRIDs => " + dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getepr_id() +
                                 " " + strTemp + " => SourceIngest = " + method.invoke(objectToCompare1) +
                                 " All_Views_EXT = " + method2.invoke(objectToCompare2));
                         if (method.invoke(objectToCompare1) != null ||

@@ -71,6 +71,7 @@ Feature:Validate data count for SDRM in Data Lake Access Layer
       | tableName                        |    countOfRandomIds|
       |sdrm_transform_latest_product_availability              |50               |
 
+
   @SDRM
   Scenario Outline: Verify Data for SDRM Delta Current is transferred from difference between SDRM Current and Prev File History
     Given We get the <countOfRandomIds> random SDRM ISBN ids <tableName>

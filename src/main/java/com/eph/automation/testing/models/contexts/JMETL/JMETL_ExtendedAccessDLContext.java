@@ -11,6 +11,8 @@ import java.util.List;
 public class JMETL_ExtendedAccessDLContext {
     public static List<JM_ETLExtendedDLAccessObject>recordsFromSource;
     public static List<JM_ETLExtendedDLAccessObject>recordsFromJMFulFilment;
+    public static List<JM_ETLExtendedDLAccessObject>recordsFromSingleJMFulFilment;
+
 
 
 }

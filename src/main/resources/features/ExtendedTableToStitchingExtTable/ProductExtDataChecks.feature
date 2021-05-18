@@ -1,6 +1,7 @@
 Feature:Validate data for  Product Ext Stitching tables in EPH
 
 #  Created by Dinesh on 22/02/2020
+   #Conf link: https://confluence.cbsels.com/display/EPH/Topic+Table+to+JSON+Mapping
 
   @ProductExtStitching
   Scenario Outline: Verify Data from the Product extended availability tables transferred to Product Extended Stitching JSON

@@ -33,6 +33,7 @@ public class BCS_ETLExtendedDLAccessObject {
     private String pagecount;
     private String typecode;
 
+
     private String urltypecode;
     private String urltypename;
 private String typedesc;
@@ -108,7 +109,13 @@ private String typedesc;
     private String subjdesc;
     private String subjcode;
     private String priority;
+    private String exporttowebind;
 
+
+    public String getexporttowebind() { return exporttowebind; }
+    public void setexporttowebind(String exporttowebind) {
+        this.exporttowebind = exporttowebind;
+    }
 
     public String getfootnotetxt() { return footnotetxt; }
     public void setfootnotetxt(String footnotetxt) {
