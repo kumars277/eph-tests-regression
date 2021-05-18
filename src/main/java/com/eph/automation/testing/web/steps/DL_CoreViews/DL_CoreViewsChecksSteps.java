@@ -234,7 +234,7 @@ public class DL_CoreViewsChecksSteps {
                 break;
         }
         Log.info(BCSJMExtRefNullVal);
-        List<Map<String, Object>> BCSJMCoreTableExtRefNullCount = DBManager.getDBResultMap(BCSJMCoreSQLCount, Constants.AWS_URL);
+        List<Map<String, Object>> BCSJMCoreTableExtRefNullCount = DBManager.getDBResultMap(BCSJMExtRefNullVal, Constants.AWS_URL);
         BCSJMCExtRefFieldNullCount = ((Long) BCSJMCoreTableExtRefNullCount.get(0).get("Null_COunt")).intValue();
     }
 
