@@ -52,31 +52,28 @@ public class WorkIdentifiersApiObject {
         //updated by Nishant @ 18 May 2021, EPHD-3122
         Log.info("verifiying work identifiers... "+this.identifier);
         getWorkIdentifierByID(this.identifier);
-        Assert.assertEquals(this.identifier+" - ",this.identifierType.get("code"), this.DBworkIdentifier.get(0).getF_TYPE());
+        Assert.assertEquals(this.identifier+" - work identifier",this.identifierType.get("code"), this.DBworkIdentifier.get(0).getF_TYPE());
         printLog("work identifier code");
 
-        Assert.assertEquals(this.identifier+" - ",this.identifierType.get("name"), getWorkIdentifierName(identifierType.get("code").toString()));
+        Assert.assertEquals(this.identifier+" - work identifier",this.identifierType.get("name"), getWorkIdentifierName(identifierType.get("code").toString()));
         printLog("work identifier name");
 
-        Assert.assertEquals(this.identifier+" - ",effectiveStartDate, this.DBworkIdentifier.get(0).getIDENTIFIER_EFFECTIVE_START_DATE());
+        Assert.assertEquals(this.identifier+" - work identifier",effectiveStartDate, this.DBworkIdentifier.get(0).getIDENTIFIER_EFFECTIVE_START_DATE());
         printLog("work identifier effectiveStartDate");
 
         if(effectiveEndDate!=null|DBworkIdentifier.get(0).getIDENTIFIER_EFFECTIVE_END_DATE()!=null)
         {
-            Assert.assertEquals(this.identifier+" - ",effectiveEndDate, this.DBworkIdentifier.get(0).getIDENTIFIER_EFFECTIVE_END_DATE());
+            Assert.assertEquals(this.identifier+" - work identifier",effectiveEndDate, this.DBworkIdentifier.get(0).getIDENTIFIER_EFFECTIVE_END_DATE());
             printLog("work identifier effectiveEndtDate");
         }
     }
 
-    private String getWorkIdentifierName(String code)
-    {//created by Nishant @ 18 May 2021, EPHD-3122
+    private String getWorkIdentifierName(String code){//created by Nishant @ 18 May 2021, EPHD-3122
         String sql = String.format(APIDataSQL.SelectLovWorkIdentifierValue,code);
         List<Map<String,Object>> workIdentifierName = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         return (String) workIdentifierName.get(0).get("l_description");
     }
 
 
-    private void printLog(String verified) {
-        System.out.println("verified..." + verified);
-    }
+    private void printLog(String verified) {System.out.println("verified..." + verified);}
 }

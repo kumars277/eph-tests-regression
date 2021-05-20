@@ -28,6 +28,10 @@ public class WorkLegalOwners {
     public String getEffectiveStartDate() {return effectiveStartDate;}
     public void setEffectiveStartDate(String effectiveStartDate) {this.effectiveStartDate = effectiveStartDate;}
 
+    private String effectiveEndDate;
+    public String getEffectiveEndDate() {return effectiveEndDate;}
+    public void setEffectiveEndDate(String effectiveEndDate) {this.effectiveEndDate = effectiveEndDate;}
+
     public class LegalOwner{
         private String name;
         public String getName() {return name;}
@@ -50,26 +54,33 @@ public class WorkLegalOwners {
                 legalOwnerfound = true;
                 Log.info("ownershipDescription code - " + ownershipDescription.get("code"));
 
-                Assert.assertEquals(ownershipDescription.get("name"),getownershipDescriptionName(workLegalOwners.get(i).get("f_ownership_description").toString()));
+                Assert.assertEquals(workId + " - ownershipDescription",ownershipDescription.get("name"),getownershipDescriptionName(workLegalOwners.get(i).get("f_ownership_description").toString()));
                 printLog("ownershipDescription name");
 
-                Assert.assertEquals(effectiveStartDate,workLegalOwners.get(0).get("effective_start_date").toString());
+                Assert.assertEquals(workId + " - ownership effectiveStartDate",effectiveStartDate,workLegalOwners.get(0).get("effective_start_date").toString());
                 printLog("effectiveStartDate");
+
+                if(effectiveEndDate!=null)
+                {
+                    Log.info("workLegalOwners effectiveStartDate present");
+                    //need to write validation rule
+                    Assert.assertTrue(false);
+                }
 
                 String[] legalOwnerValue = getLegalOwnerValues(workLegalOwners.get(i).get("f_legal_owner").toString());
 
-                Assert.assertEquals(legalOwner.name,legalOwnerValue[0]);
+                Assert.assertEquals(workId + " - legalOwner",legalOwner.name,legalOwnerValue[0]);
                 printLog("legalOwner name");
 
-                Assert.assertEquals(legalOwner.legalOwnership.get("code"),legalOwnerValue[1]);
+                Assert.assertEquals(workId + " - legalOwnership",legalOwner.legalOwnership.get("code"),legalOwnerValue[1]);
                 printLog("legalOwnership code");
 
                 String[] legalOwnershipValue = getLegalOwnershipValues(legalOwner.legalOwnership.get("code").toString());
 
-                Assert.assertEquals(legalOwner.legalOwnership.get("name"),legalOwnershipValue[0]);
+                Assert.assertEquals(workId + " - legalOwnership",legalOwner.legalOwnership.get("name"),legalOwnershipValue[0]);
                 printLog("legalOwnership name");
 
-                Assert.assertEquals(legalOwner.legalOwnership.get("ownershipRollUp"),legalOwnershipValue[1]);
+                Assert.assertEquals(workId + " - ",legalOwner.legalOwnership.get("ownershipRollUp"),legalOwnershipValue[1]);
                 printLog("legalOwnership ownershiRollUp");
 
                 break;

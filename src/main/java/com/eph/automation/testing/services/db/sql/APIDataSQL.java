@@ -39,8 +39,8 @@ public class APIDataSQL {
 
     public static String SELECT_RANDOM_JOURNAL_IDS_FOR_SEARCH="select work_id from semarchy_eph_mdm.gd_wwork " +
             "where f_type in('ABS','JBB','JNL','NWL')and f_status in('WLA') order by random() limit %S";
-    public static String SELECT_RANDOM_EXTENDED_WORK_IDS_SIT="SELECT epr_id as WORK_ID FROM ephsit_extended_data_stitch.stch_work_ext_json order by random() limit %S";
-    public static String SELECT_RANDOM_EXTENDED_MANIFESTATION_IDS_SIT="SELECT epr_id as WORK_ID FROM ephsit_extended_data_stitch.stch_manifestation_ext_json order by random() limit %S";
+    public static String SELECT_RANDOM_EXTENDED_WORK_IDS="SELECT epr_id as WORK_ID FROM eph%s_extended_data_stitch.stch_work_ext_json order by random() limit %S";
+    public static String SELECT_RANDOM_EXTENDED_MANIFESTATION_IDS="SELECT epr_id as WORK_ID FROM eph%s_extended_data_stitch.stch_manifestation_ext_json order by random() limit %S";
     //CREATED by Nishant @ 22 Apr 2020
     public static String SELECT_RANDOM_WORK_IDS_WITH_PRODUCT = "select f_wwork as WORK_ID from semarchy_eph_mdm.gd_product where f_wwork is not null order by random() limit 1";
     public static String SELECT_RANDOM_PRODUCT_IDS_WITH_WORK = "select product_id as PRODUCT_ID from semarchy_eph_mdm.gd_product where f_wwork is not null order by random() limit 1";
@@ -301,7 +301,11 @@ public class APIDataSQL {
     public static String getWorkLegelOwnersByWorkId="select " +
             "f_legal_owner, f_ownership_description ,effective_start_date ,effective_end_date " +
             "from semarchy_eph_mdm.gd_work_legal_owner gwlo where f_wwork ='PARAM1'";
-
+    public static String getWorkAccessModelsById = "select f_access_model from semarchy_eph_mdm.gd_work_access_model gwam where f_wwork ='PARAM1'";
+    public static String getWorkBusinessModelById = "select f_business_model from semarchy_eph_mdm.gd_work_business_model gwam where f_wwork ='PARAM1'";
+    public static String getWorkSubjectAreaByWorkId = "select code,name,f_type,f_parent_subject_area " +
+            "from semarchy_eph_mdm.gd_subject_area gsa where subject_area_id in\n" +
+            "(select f_subject_area from semarchy_eph_mdm.gd_work_subject_area_link gwsal where f_wwork ='PARAM1');";
     //updated by Nishant @ 15 Apr 2020
     public static String getWorkIdentifiersDataFromGDByIdentifier="SELECT \n" +
             " effective_start_date as IDENTIFIER_EFFECTIVE_START_DATE\n" +

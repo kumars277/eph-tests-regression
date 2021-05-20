@@ -36,7 +36,7 @@ public class WorksMatchedApiObject {
             }
             i++;
         }
-        Assert.assertTrue(found);
+        Assert.assertTrue("work with person id found",found);
     }
 
 
