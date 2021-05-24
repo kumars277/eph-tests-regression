@@ -4,7 +4,7 @@ Feature: Customer Search API: Works
   So that I can use the details to validate business needs
 
    #new search fields included as part of Journal Finder #EPR-W-108TJK
-  @searchAPI @workSearchAPIiii @JFSearch
+  @searchAPI @workSearchAPI @JFSearch
   Scenario Outline: Search journal by search option
     Given We get 1 random journal ids for search
     And We get the work search data from EPH GD
@@ -109,16 +109,7 @@ Feature: Customer Search API: Works
     And We get the work search data from EPH GD
     Then the work details are retrieved by PMG Code and compared
 
-  @searchAPI @workSearchAPI
-  Scenario Outline: Search E2E
-    Given We get id for work search <id>
-    And We get the work search data from EPH GD
-    Then the work details are retrieved and compared
-    Examples:
-      | id                        |
-      | EPR-W-10C6N8              |
-
-  @searchAPI @workSearchAPI
+    @searchAPI @workSearchAPI
   Scenario: search work by accountableProduct
     Given We get 1 random search ids for works
     And We get the work search data from EPH GD
@@ -155,6 +146,15 @@ Feature: Customer Search API: Works
     Then the work details are retrieved by search with PMG code and compared
 
   #{'datafile':'C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\Elastic search,APIv3 and JRBI data/stch_work_ext_json_202006181758.csv'}
+
+  @searchAPI @workSearchAPI
+  Scenario Outline: Search E2E
+    Given We get id for work search <id>
+    And We get the work search data from EPH GD
+    Then the work details are retrieved and compared
+    Examples:
+      | id                        |
+      | EPR-W-102S7C              |
 
 # covered in above tests
   @APIv3

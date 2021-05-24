@@ -77,19 +77,6 @@ Feature: Search API: Products
     Then the product response returned when searched by personID is verified
 
   @searchAPI @productSearchAPI
-  Scenario Outline: Product search E2E
-    Given We get product by ID <id>
-    And We get the search data from EPH GD for products
-    Then the product details are retrieved and compared
-    Examples:
-      | id                                   |
-      | EPR-11BBFJ                           |
-      | EPR-11BBFK                           |
-      | EPR-11BBFM                           |
-      | EPR-11BBFN                           |
-      | EPR-11BBFR                           |
-
-  @searchAPI @productSearchAPI
   Scenario: search product by PMC
     Given We get 1 random search ids for products
     And We get the search data from EPH GD for products
@@ -138,7 +125,17 @@ Feature: Search API: Products
       | pmcCode          |
       | pmgCode          |
 
-
-
+  @searchAPI @productSearchAPI
+  Scenario Outline: Product search E2E
+    Given We get product by ID <id>
+    And We get the search data from EPH GD for products
+    Then the product details are retrieved and compared
+    Examples:
+      | id                                   |
+      | EPR-11BBFJ                           |
+      | EPR-11BBFK                           |
+      | EPR-11BBFM                           |
+      | EPR-11BBFN                           |
+      | EPR-11BBFR                           |
 
 

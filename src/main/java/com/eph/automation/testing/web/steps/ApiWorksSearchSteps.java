@@ -47,7 +47,7 @@ public class ApiWorksSearchSteps {
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
         //added by Nishant @ 27 Dec for debugging failures
-      //  ids.clear();ids.add("EPR-W-102S7C");Log.info("hard coded work ids are : " + ids);
+       // ids.clear();ids.add("EPR-W-102S7C");Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
@@ -442,7 +442,7 @@ public class ApiWorksSearchSteps {
                         */
                     boolean found = false;
                     int from = 0;
-                    int size = 5000;
+                    int size = 50;
                     getWorkPersonRoleByWorkId(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
                     getPersonDataByPersonId(dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
                     returnedWorks = apiService.searchForWorksBySearchOptionResult(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " +

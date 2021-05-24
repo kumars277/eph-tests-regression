@@ -349,16 +349,13 @@ public class workCore {
 
                         if(businessModel_api.get(cnt).getEffectiveStartDate()!=null)
                         {
-                            Log.info("workBusinessModel effectiveStartDate present");
-                            //need to write validation rule
-                            Assert.assertTrue(false);
-
+                            Assert.assertEquals(DataQualityContext.breadcrumbMessage+" - workBusinessModel ",businessModel_api.get(cnt).getEffectiveStartDate(),workBusinessModelsDB.get(i).get("effective_start_date").toString());
+                            printLog("workBusinessModel effectiveStartDate present");
                         }
                         if(businessModel_api.get(cnt).getEffectiveEndDate()!=null)
                         {
-                            Log.info("workBusinessModel EffectiveEndDate present");
-                            //need to write validation rule
-                            Assert.assertTrue(false);
+                            Assert.assertEquals(DataQualityContext.breadcrumbMessage+" - workBusinessModel ",businessModel_api.get(cnt).getEffectiveEndDate(),workBusinessModelsDB.get(i).get("effective_end_date").toString());
+                            printLog("workBusinessModel effectiveEndtDate present");
                         }
 
                         busModelFound = true;

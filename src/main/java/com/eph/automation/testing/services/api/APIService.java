@@ -271,7 +271,7 @@ public class APIService {
              .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
              .when()
               .get("/product-hub-works/works?queryType=search&queryValue="+searchFor);
-       // response.prettyPrint();
+        response.prettyPrint();
         return response.thenReturn().as(WorksMatchedApiObject.class);
     }
 

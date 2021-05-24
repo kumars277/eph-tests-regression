@@ -125,6 +125,8 @@ public class WorkExtended {
     public WorkExtendedMetrics[] getWorkExtendedMetrics() {return workExtendedMetrics;}
     public void setWorkExtendedMetrics(WorkExtendedMetrics[] workExtendedMetrics) {this.workExtendedMetrics = workExtendedMetrics;}
 
+
+
     public static class WorkExtendedEditorialBoard{//by Nishant @ 09 Feb 2021
 
     private HashMap<String, Object> extendedBoardRole;
@@ -157,6 +159,7 @@ public class WorkExtended {
         public void setExtendedUrl(ExtendedUrl extendedUrl) {this.extendedUrl = extendedUrl;}
     }
 
+
     public static class WorkExtendedMetrics{
         private ExtendedMetric extendedMetric;
         public ExtendedMetric getExtendedMetric() {return extendedMetric;}
@@ -166,76 +169,187 @@ public class WorkExtended {
     public void compareWithDB(String workId)
     {
         Log.info("----- verifiying workExtended data...");
-        //Assert.assertEquals(primarySiteSystem, DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSystem());    printLog("primarySiteSystem");
-     //  Assert.assertEquals(workId+ " - ",primarySiteAcronym, DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteAcronym());        printLog("primarySiteAcronym");
-    //   Assert.assertEquals(workId+ " - ",primarySiteSupportLevel, DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSupportLevel());        printLog("primarySiteSupportLevel");
-    //   Assert.assertEquals(workId+ " - ",issueProdTypeCode, DataQualityContext.workExtendedTestClass.getWorkExtended().getIssueProdTypeCode());        printLog("issueProdTypeCode");
-        //Assert.assertEquals(catalogueVolumesQty, DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumesQty());        printLog("catalogueVolumesQty");
 
+        /*
+        implemented by Nishant @ 24 May 2021, EPHD-3122
+        * getJournalElsComInd
+        * getJournalAimsScope
+        * journalProdSiteCode
+        * primarySiteSystem
+        * primarySiteAcronym
+        * primarySiteSupportLevel
+        * issueProdTypeCode
+        * catalogueVolumesQty
+        * */
 
-       Assert.assertEquals(workId+ " - ",imageFileRef, DataQualityContext.workExtendedTestClass.getWorkExtended().getImageFileRef());
+        if(journalElsComInd!=null | DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalElsComInd()!=null)
+        {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - getJournalElsComInd", journalElsComInd, DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalElsComInd());
+            printLog("getJournalElsComInd");
+        }
+
+        if(journalAimsScope!=null | DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalAimsScope()!=null)
+        {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - getJournalAimsScope", journalAimsScope, DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalAimsScope());
+            printLog("getJournalAimsScope");
+        }
+
+        if(journalProdSiteCode!=null | DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalProdSiteCode()!=null)
+        {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - journalProdSiteCode", journalProdSiteCode, DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalProdSiteCode());
+            printLog("journalProdSiteCode");
+        }
+
+      if(primarySiteSystem!=null | DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSystem()!=null)
+        {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - primarySiteSystem", primarySiteSystem, DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSystem());
+            printLog("primarySiteSystem");
+        }
+
+        if(primarySiteAcronym!=null | DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteAcronym()!=null) {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - primarySiteAcronym", primarySiteAcronym, DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteAcronym());
+            printLog("primarySiteAcronym");
+        }
+
+        if(primarySiteSupportLevel!=null| DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSupportLevel()!=null) {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - primarySiteSupportLevel", primarySiteSupportLevel, DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSupportLevel());
+            printLog("primarySiteSupportLevel");
+        }
+
+        if(issueProdTypeCode!=null| DataQualityContext.workExtendedTestClass.getWorkExtended().getIssueProdTypeCode()!=null) {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - issueProdTypeCode", issueProdTypeCode, DataQualityContext.workExtendedTestClass.getWorkExtended().getIssueProdTypeCode());
+            printLog("issueProdTypeCode");
+        }
+
+        if(catalogueVolumesQty!=null| DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumesQty()!=null)
+        {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - catalogueVolumesQty",catalogueVolumesQty, DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumesQty());
+            printLog("catalogueVolumesQty");
+        }
+
+      Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - imageFileRef", imageFileRef, DataQualityContext.workExtendedTestClass.getWorkExtended().getImageFileRef());
         printLog("imageFileRef");
 
-        Assert.assertEquals(masterISBN, DataQualityContext.workExtendedTestClass.getWorkExtended().getMasterISBN());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - masterISBN", masterISBN, DataQualityContext.workExtendedTestClass.getWorkExtended().getMasterISBN());
         printLog("masterISBN");
 
-        Assert.assertEquals(authorByLineText, DataQualityContext.workExtendedTestClass.getWorkExtended().getAuthorByLineText());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - authorByLineText", authorByLineText, DataQualityContext.workExtendedTestClass.getWorkExtended().getAuthorByLineText());
         printLog("authorByLineText");
 
-        Assert.assertEquals(internalElsDiv, DataQualityContext.workExtendedTestClass.getWorkExtended().getInternalElsDiv());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - internalElsDiv", internalElsDiv, DataQualityContext.workExtendedTestClass.getWorkExtended().getInternalElsDiv());
         printLog("internalElsDiv");
 
-        Assert.assertEquals(profitCentre, DataQualityContext.workExtendedTestClass.getWorkExtended().getProfitCentre());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - profitCentre", profitCentre, DataQualityContext.workExtendedTestClass.getWorkExtended().getProfitCentre());
         printLog("profitCentre");
 
-        Assert.assertEquals(textRefTrade, DataQualityContext.workExtendedTestClass.getWorkExtended().getTextRefTrade());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - textRefTrade", textRefTrade, DataQualityContext.workExtendedTestClass.getWorkExtended().getTextRefTrade());
         printLog("textRefTrade");
 
-        Assert.assertEquals(catalogueIssuesQty, DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueIssuesQty());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - catalogueIssuesQty", catalogueIssuesQty, DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueIssuesQty());
         printLog("catalogueIssuesQty");
 
-        Assert.assertEquals(catalogueVolumeFrom, DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumeFrom());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - catalogueVolumeFrom", catalogueVolumeFrom, DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumeFrom());
         printLog("catalogueVolumeFrom");
 
-        Assert.assertEquals(catalogueVolumeTo, DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumeTo());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - catalogueVolumeTo", catalogueVolumeTo, DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumeTo());
         printLog("catalogueVolumeTo");
 
-        Assert.assertEquals(rfIssuesQty, DataQualityContext.workExtendedTestClass.getWorkExtended().getRfIssuesQty());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - rfIssuesQty", rfIssuesQty, DataQualityContext.workExtendedTestClass.getWorkExtended().getRfIssuesQty());
         printLog("rfIssuesQty");
 
-        Assert.assertEquals(rfTotalPagesQty, DataQualityContext.workExtendedTestClass.getWorkExtended().getRfTotalPagesQty());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - rfTotalPagesQty", rfTotalPagesQty, DataQualityContext.workExtendedTestClass.getWorkExtended().getRfTotalPagesQty());
         printLog("rfTotalPagesQty");
 
-        Assert.assertEquals(rfFvi, DataQualityContext.workExtendedTestClass.getWorkExtended().getRfFvi());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - rfFvi", rfFvi, DataQualityContext.workExtendedTestClass.getWorkExtended().getRfFvi());
         printLog("rfFvi");
 
-        Assert.assertEquals(rfLvi, DataQualityContext.workExtendedTestClass.getWorkExtended().getRfLvi());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - rfLvi", rfLvi, DataQualityContext.workExtendedTestClass.getWorkExtended().getRfLvi());
         printLog("rfLvi");
 
-        Assert.assertEquals(ptsBusinessUnitDesc, DataQualityContext.workExtendedTestClass.getWorkExtended().getPtsBusinessUnitDesc());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - ptsBusinessUnitDesc", ptsBusinessUnitDesc, DataQualityContext.workExtendedTestClass.getWorkExtended().getPtsBusinessUnitDesc());
         printLog("ptsBusinessUnitDesc");
 
        if(workExtendedPersons!=null) {
            WorkExtendedPersons[] wep = workExtendedPersons.clone();
            WorkExtendedPersons[] wepDB = DataQualityContext.workExtendedTestClass.getWorkExtended().workExtendedPersons.clone();
 
+           Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedPersons-> count",wep.length, wepDB.length);
+           printLog("workExtendedPersons count "+wep.length);
+
            for (int i = 0; i < workExtendedPersons.length; i++) {
-               Log.info("verifying...workExtendedPerson..." + i);
-               Assert.assertEquals(wep[i].getExtendedRole().get("code"), wepDB[i].getExtendedRole().get("code"));
-               printLog("extendedRole code");
-               Assert.assertEquals(wep[i].getExtendedRole().get("name"), wepDB[i].getExtendedRole().get("name"));
+              Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - extendedRole code"+i, wep[i].getExtendedRole().get("code"), wepDB[i].getExtendedRole().get("code"));
+               printLog("extendedRole code"+i);
+              Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - extendedRole name", wep[i].getExtendedRole().get("name"), wepDB[i].getExtendedRole().get("name"));
                printLog("extendedRole name");
-               Assert.assertEquals(wep[i].getExtendedPerson().get("firstName"), wepDB[i].getExtendedPerson().get("firstName"));
+              Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - extendedPerson firstName", wep[i].getExtendedPerson().get("firstName"), wepDB[i].getExtendedPerson().get("firstName"));
                printLog("extendedPerson firstName");
-               Assert.assertEquals(wep[i].getExtendedPerson().get("lastName"), wepDB[i].getExtendedPerson().get("lastName"));
+              Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - extendedPerson lastName", wep[i].getExtendedPerson().get("lastName"), wepDB[i].getExtendedPerson().get("lastName"));
                printLog("extendedPerson lastName");
-               Assert.assertEquals(wep[i].getExtendedPerson().get("peoplehubId"), wepDB[i].getExtendedPerson().get("peoplehubId"));
+              Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - extendedPerson peoplehubId", wep[i].getExtendedPerson().get("peoplehubId"), wepDB[i].getExtendedPerson().get("peoplehubId"));
                printLog("extendedPerson peoplehubId");
-               Assert.assertEquals(wep[i].getExtendedPerson().get("email"), wepDB[i].getExtendedPerson().get("email"));
+              Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - extendedPerson email", wep[i].getExtendedPerson().get("email"), wepDB[i].getExtendedPerson().get("email"));
                printLog("extendedPerson email");
            }
        }
-        //workExtendedSubjectAreas - EPR-W-10B3N5
+
+       if(workExtendedEditorialBoard!=null |DataQualityContext.workExtendedTestClass.getWorkExtended().workExtendedEditorialBoard!=null){
+           //implemented by Nishant @ 24 May 2021, EPHD-3122
+           WorkExtendedEditorialBoard[] weeb = workExtendedEditorialBoard;
+           WorkExtendedEditorialBoard[] weebDB = DataQualityContext.workExtendedTestClass.getWorkExtended().workExtendedEditorialBoard;
+
+           Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedEditorialBoard-> count",weeb.length, weebDB.length);
+           printLog("workExtendedEditorialBoard count " +weeb.length);
+
+           for(int i=0;i<weeb.length;i++)
+           {
+               Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedEditorialBoard-> extendedBoardRole "+i,weeb[i].extendedBoardRole.get("code"), weebDB[i].extendedBoardRole.get("code"));
+               printLog("workExtendedEditorialBoard extendedBoardRole "+i);
+
+               Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedEditorialBoard-> extendedBoardMember-> firstName",weeb[i].extendedBoardMember.get("firstName"), weebDB[i].extendedBoardMember.get("firstName"));
+               printLog("workExtendedEditorialBoard extendedBoardMember firstName");
+
+               Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedEditorialBoard-> extendedBoardMember-> lastName",weeb[i].extendedBoardMember.get("lastName"), weebDB[i].extendedBoardMember.get("lastName"));
+               printLog("workExtendedEditorialBoard extendedBoardMember lastName");
+
+               Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedEditorialBoard-> extendedBoardMember-> affiliation",weeb[i].extendedBoardMember.get("affiliation"), weebDB[i].extendedBoardMember.get("affiliation"));
+               printLog("workExtendedEditorialBoard extendedBoardMember affiliation");
+
+               Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedEditorialBoard-> groupNumber",weeb[i].groupNumber, weebDB[i].groupNumber);
+               printLog("workExtendedEditorialBoard groupNumber");
+
+               Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedEditorialBoard-> sequenceNumber",weeb[i].sequenceNumber, weebDB[i].sequenceNumber);
+               printLog("workExtendedEditorialBoard sequenceNumber");
+           }
+       }
+
+       //workExtendedSubjectAreas - EPR-W-10B3N5
+        if(workExtendedSubjectAreas!=null |DataQualityContext.workExtendedTestClass.getWorkExtended().workExtendedSubjectAreas!=null){
+            //implemented by Nishant @ 24 May 2021, EPHD-3122
+            WorkExtendedSubjectAreas[] wesa = workExtendedSubjectAreas;
+            WorkExtendedSubjectAreas[] wesaDB = DataQualityContext.workExtendedTestClass.getWorkExtended().workExtendedSubjectAreas;
+
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedSubjectAreas-> count",wesa.length, wesaDB.length);
+            printLog("workExtendedSubjectAreas count " +wesa.length);
+
+            for(int i=0;i<wesa.length;i++)
+            {
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedSubjectAreas-> extendedSubjectArea-> code "+i,wesa[i].getExtendedSubjectArea().getCode(), wesaDB[i].getExtendedSubjectArea().getCode());
+                printLog("workExtendedSubjectAreas extendedSubjectArea code "+i);
+
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedSubjectAreas-> extendedSubjectArea-> name "+i,wesa[i].getExtendedSubjectArea().getName(), wesaDB[i].getExtendedSubjectArea().getName());
+                printLog("workExtendedSubjectAreas extendedSubjectArea name ");
+
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedSubjectAreas-> extendedSubjectArea-> Type-> code "+i,wesa[i].getExtendedSubjectArea().getType().get("code"), wesaDB[i].getExtendedSubjectArea().getType().get("code"));
+                printLog("workExtendedSubjectAreas extendedSubjectArea Type code ");
+
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedSubjectAreas-> extendedSubjectArea-> Type-> name "+i,wesa[i].getExtendedSubjectArea().getType().get("name"), wesaDB[i].getExtendedSubjectArea().getType().get("name"));
+                printLog("workExtendedSubjectAreas extendedSubjectArea Type name ");
+
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedSubjectAreas-> extendedSubjectArea-> priority "+i,wesa[i].getExtendedSubjectArea().getPriority(), wesaDB[i].getExtendedSubjectArea().getPriority());
+                printLog("workExtendedSubjectAreas extendedSubjectArea priority ");
+            }
+        }
+
     }
 
     private void printLog(String verified){Log.info("verified..."+verified);}
