@@ -15,8 +15,8 @@ public class GetSDRMDLDBUser {
             }
 
         }else{
-            dbSDRM = "sdrm_staging_sit";
-          //  dbSDDL = "sdbooks_staging_uat";
+           // dbSDRM = "sdrm_staging_sit";
+            dbSDRM = "sdrm_staging_uat";
         }
         return dbSDRM;
     }
@@ -54,19 +54,11 @@ public class GetSDRMDLDBUser {
                 dbProdstgDb = "product_ext_database_uat2";
             }
         }else{
-            dbProdstgDb = "product_ext_database_sit";
-            //  dbProdDb = "product_staging_database_uat";
+           // dbProdstgDb = "product_ext_database_sit";
+              dbProdstgDb = "product_staging_database_uat";
         }
         return dbProdstgDb;
     }
-
-
-
-
-
-
-
-
 
     public static String getProdDataBase(){
 
@@ -79,8 +71,8 @@ public class GetSDRMDLDBUser {
                 dbProdDb = "product_database_uat";
             }
         }else{
-            dbProdDb = "product_database_sit";
-            //  dbProdDb = "product_staging_database_uat";
+            //dbProdDb = "product_database_sit";
+             dbProdDb = "product_staging_database_uat";
         }
         return dbProdDb;
     }
