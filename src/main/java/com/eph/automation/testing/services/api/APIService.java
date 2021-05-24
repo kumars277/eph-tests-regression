@@ -228,7 +228,7 @@ public class APIService {
         Assert.assertTrue("Verify that the searched work exists and is accessible trough the API",getWorkResponse.statusCode()==200);
 
         //Log.info("print response start#######################");
-       //  getWorkResponse.prettyPrint();
+      //   getWorkResponse.prettyPrint();
         // Log.info("print response end ########################");
 
         return getWorkResponse.thenReturn().as(WorkApiObject.class);
@@ -282,7 +282,7 @@ public class APIService {
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
                 .when()
                 .get("/product-hub-works/works?queryType="+queryType+"&queryValue="+queryValue);
-         //response.prettyPrint();
+      //   response.prettyPrint();
 
         return response.thenReturn().as(WorksMatchedApiObject.class);
     }

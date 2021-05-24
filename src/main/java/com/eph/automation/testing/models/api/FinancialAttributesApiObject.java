@@ -46,15 +46,15 @@ public class FinancialAttributesApiObject {
     }
 
 
-    public void compareWithDB(String workID){
-        Log.info("verifying below financial attributes for work... "+workID);
+    public void compareWithDB(String workId){
+        Log.info("verifying below financial attributes for work... "+workId);
 
-        getFinancialData(workID);
-        Assert.assertEquals(financialAttribs.financialDataFromGD.get(0).getGl_company(), this.glCompany.get("code"));
+        getFinancialData(workId);
+     Assert.assertEquals(workId+ " - glCompany code",financialAttribs.financialDataFromGD.get(0).getGl_company(), this.glCompany.get("code"));
         printLog("glCompany code");
-        Assert.assertEquals(financialAttribs.financialDataFromGD.get(0).getCost_resp_centre(), this.costResponsibilityCentre.get("code"));
+     Assert.assertEquals(workId+ " - costResponsibilityCentre",financialAttribs.financialDataFromGD.get(0).getCost_resp_centre(), this.costResponsibilityCentre.get("code"));
         printLog("costResponsibilityCentre code");
-        Assert.assertEquals(financialAttribs.financialDataFromGD.get(0).getRevenue_resp_centre(), this.revenueResponsibilityCentre.get("code"));
+     Assert.assertEquals(workId+ " - revenueResponsibilityCentre",financialAttribs.financialDataFromGD.get(0).getRevenue_resp_centre(), this.revenueResponsibilityCentre.get("code"));
         printLog("revenueResponsibilityCentre code");
     }
     private void printLog(String verified){Log.info("verified..."+verified);}

@@ -65,7 +65,7 @@ public void testtemp()
     @Then("^verify links from file (.*)$")
     public void verifyLinksFromFile(String FilePath) throws Exception {
         //created by Nishant @ 26 Apr 2021
-        int RowFrom = 0;        int RowTill = 10;
+        int RowFrom = 30;        int RowTill = 40;
 
         String resultFileName = "Result from "+RowFrom+" to "+RowTill+" "+DataQualityContext.DateAndTime+".csv";
 

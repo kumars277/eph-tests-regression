@@ -30,6 +30,10 @@ public class ManifestationCore {
     public String getFirstPubDate() {return firstPubDate;}
     public void setFirstPubDate(String firstPubDate) {this.firstPubDate = firstPubDate;}
 
+    private String lastPubDate;
+    public String getLastPubDate() {return lastPubDate;}
+    public void setLastPubDate(String lastPubDate) {this.lastPubDate = lastPubDate;}
+
     private ManifestationIdentifiersApiObject[] identifiers;
     public ManifestationIdentifiersApiObject[] getIdentifiers() {return identifiers;}
     public void setIdentifiers(ManifestationIdentifiersApiObject[] identifiers) {this.identifiers = identifiers;}
@@ -53,6 +57,12 @@ public class ManifestationCore {
     }
 
     Assert.assertEquals(firstPubDate, DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getFIRST_PUB_DATE());    printLog("firstPubDate");
+
+    if(lastPubDate!=null)
+    {
+        printLog("lastPubDate present, need to write validation rule...");
+        Assert.assertTrue(false);
+    }
 
     if (identifiers != null) {
         for (ManifestationIdentifiersApiObject identif : identifiers) {

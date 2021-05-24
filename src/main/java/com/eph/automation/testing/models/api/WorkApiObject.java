@@ -78,7 +78,7 @@ public class WorkApiObject {
         if (workExtended != null) {
             Log.info("\nVerifying workExtended..." + this.id);
             getJsonToObject_extendedWork(this.id);
-            workExtended.compareWithDB();
+            workExtended.compareWithDB(this.id);
         }
 
         //3

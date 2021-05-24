@@ -100,7 +100,7 @@ public class ProductCore
         //validation for packages - EPR-11BBFJ, EPR-11BBFK
 
         if(!(productPersons==null)&&!(productPersons.length==0))  //for product person - EPR-11119M
-        {for (PersonsApiObject person : productPersons) {person.compareWithDB_product();}}
+        {for (PersonsApiObject person : productPersons) {person.compareWithDB_product(productId);}}
 
     }
 

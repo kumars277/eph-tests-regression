@@ -4,7 +4,7 @@ Feature: Customer Search API: Works
   So that I can use the details to validate business needs
 
    #new search fields included as part of Journal Finder #EPR-W-108TJK
-  @searchAPI @workSearchAPI @JFSearch
+  @searchAPI @workSearchAPIiii @JFSearch
   Scenario Outline: Search journal by search option
     Given We get 1 random journal ids for search
     And We get the work search data from EPH GD
@@ -154,6 +154,9 @@ Feature: Customer Search API: Works
     And We get the work search data from EPH GD
     Then the work details are retrieved by search with PMG code and compared
 
+  #{'datafile':'C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\Elastic search,APIv3 and JRBI data/stch_work_ext_json_202006181758.csv'}
+
+# covered in above tests
   @APIv3
   Scenario: verify Manifestation Extended specific ID
     Given We get 2 random search ids for Extended manifestation
@@ -161,9 +164,6 @@ Feature: Customer Search API: Works
     And We get the work search data from EPH GD
     Then the work details are retrieved and compared
 
-   #{'datafile':'C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\Elastic search,APIv3 and JRBI data/stch_work_ext_json_202006181758.csv'}
-
-# covered in above tests
   @APIv3
   Scenario: verify Work Extended by specific ID
     Given We get 1 random search ids for Extended works

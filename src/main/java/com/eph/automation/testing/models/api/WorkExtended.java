@@ -163,17 +163,17 @@ public class WorkExtended {
         public void setExtendedMetric(ExtendedMetric extendedMetric) {this.extendedMetric = extendedMetric;}
     }
 
-    public void compareWithDB()
+    public void compareWithDB(String workId)
     {
         Log.info("----- verifiying workExtended data...");
         //Assert.assertEquals(primarySiteSystem, DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSystem());    printLog("primarySiteSystem");
-     //   Assert.assertEquals(primarySiteAcronym, DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteAcronym());        printLog("primarySiteAcronym");
-    //    Assert.assertEquals(primarySiteSupportLevel, DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSupportLevel());        printLog("primarySiteSupportLevel");
-    //    Assert.assertEquals(issueProdTypeCode, DataQualityContext.workExtendedTestClass.getWorkExtended().getIssueProdTypeCode());        printLog("issueProdTypeCode");
+     //  Assert.assertEquals(workId+ " - ",primarySiteAcronym, DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteAcronym());        printLog("primarySiteAcronym");
+    //   Assert.assertEquals(workId+ " - ",primarySiteSupportLevel, DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSupportLevel());        printLog("primarySiteSupportLevel");
+    //   Assert.assertEquals(workId+ " - ",issueProdTypeCode, DataQualityContext.workExtendedTestClass.getWorkExtended().getIssueProdTypeCode());        printLog("issueProdTypeCode");
         //Assert.assertEquals(catalogueVolumesQty, DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumesQty());        printLog("catalogueVolumesQty");
 
 
-        Assert.assertEquals(imageFileRef, DataQualityContext.workExtendedTestClass.getWorkExtended().getImageFileRef());
+       Assert.assertEquals(workId+ " - ",imageFileRef, DataQualityContext.workExtendedTestClass.getWorkExtended().getImageFileRef());
         printLog("imageFileRef");
 
         Assert.assertEquals(masterISBN, DataQualityContext.workExtendedTestClass.getWorkExtended().getMasterISBN());

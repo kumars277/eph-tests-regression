@@ -4,6 +4,7 @@ import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.models.api.*;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.*;
@@ -46,7 +47,7 @@ public class ApiWorksSearchSteps {
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
         //added by Nishant @ 27 Dec for debugging failures
-        //ids.clear();ids.add("EPR-W-102S7C");Log.info("hard coded work ids are : " + ids);
+      //  ids.clear();ids.add("EPR-W-102S7C");Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
@@ -70,7 +71,9 @@ public class ApiWorksSearchSteps {
     @Given("^We get (.*) random search ids for Extended works")
     public void getRandomExtendedWorkIds(String numberOfRecords) {
         //created by Nishant @ 01 Jul 2020
-        sql = String.format(APIDataSQL.SELECT_RANDOM_EXTENDED_WORK_IDS_SIT, numberOfRecords);
+        String dbEnv;
+        if(TestContext.getValues().environment.equals("UAT")) dbEnv = "uat"; else dbEnv="sit";
+        sql = String.format(APIDataSQL.SELECT_RANDOM_EXTENDED_WORK_IDS,dbEnv, numberOfRecords);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
@@ -82,7 +85,9 @@ public class ApiWorksSearchSteps {
     @Given("^We get (.*) random search ids for Extended manifestation")
     public void getRandomExtendedManifestationIds(String numberOfRecords) {
         //created by Nishant @ 01 Jul 2020
-        sql = String.format(APIDataSQL.SELECT_RANDOM_EXTENDED_MANIFESTATION_IDS_SIT, numberOfRecords);
+        String dbEnv;
+        if(TestContext.getValues().environment.equals("UAT")) dbEnv = "uat"; else dbEnv="sit";
+        sql = String.format(APIDataSQL.SELECT_RANDOM_EXTENDED_MANIFESTATION_IDS,dbEnv, numberOfRecords);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         manifestaionids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random extended manifestation ids  : " + manifestaionids);
@@ -96,7 +101,7 @@ public class ApiWorksSearchSteps {
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random Journal ids  : " + ids);
         //for debugging failure
-       // ids.clear(); ids.add("EPR-W-102SN4");  Log.info("hard coded work ids are : " + ids); //EPR-W-108VK7, EPR-W-108RJG   , EPR-W-108V6K
+      //  ids.clear(); ids.add("EPR-W-102RY8");  Log.info("hard coded work ids are : " + ids); //EPR-W-108VK7, EPR-W-108RJG   , EPR-W-108V6K
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
@@ -126,7 +131,7 @@ public class ApiWorksSearchSteps {
 
     @And("^We get the work search data from EPH GD$")
     public void getWorksDataFromEPHGD() {
-        Log.info("We get the work data from EPH GD ...");
+        Log.info("We get the work data from EPH GD ..."+Joiner.on("','").join(DataQualityContext.ids));
         sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, Joiner.on("','").join(DataQualityContext.ids));
         dataQualityContext.workDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
         dataQualityContext.workDataObjectsFromEPHGD.sort(Comparator.comparing(WorkDataObject::getWORK_ID));
@@ -139,7 +144,6 @@ public class ApiWorksSearchSteps {
         DataQualityContext.workDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
         DataQualityContext.workDataObjectsFromEPHGD.sort(Comparator.comparing(WorkDataObject::getWORK_ID));
     }
-
 
     //Updated by Nishant for data model changes in Apr 2020
     @When("^the work details are retrieved and compared$")
@@ -579,7 +583,7 @@ public class ApiWorksSearchSteps {
             Log.info("personId to be tested..." + personDataObjectsFromEPHGD.get(0).getPERSON_ID());
 
             int from = 0;
-            int size = 5000;
+            int size = 1000;
             switch (personSearchOption) {
                 case "PERSON_NAME":
                         /*created by Nishant @24 Apr 2020
