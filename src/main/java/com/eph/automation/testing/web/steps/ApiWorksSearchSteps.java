@@ -826,7 +826,11 @@ public class ApiWorksSearchSteps {
 
     public void getJsonToObject(String workId) {
         //created by Nishant @ 19 Jun 2020 to verify extended json value with APIv3
-        sql = "SELECT \"json\" FROM ephsit_extended_data_stitch.stch_work_ext_json where epr_id='" + workId + "'";
+        String sql ="";
+        if(TestContext.getValues().environment.equalsIgnoreCase("UAT"))
+            sql = "SELECT \"json\" FROM ephuat_extended_data_stitch.stch_work_ext_json where epr_id='" + workId + "'";
+        else sql = "SELECT \"json\" FROM ephsit_extended_data_stitch.stch_work_ext_json where epr_id='" + workId + "'";
+
         List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         DataQualityContext.workExtendedTestClass = new Gson().fromJson(jsonValue.get(0).get("json"), WorkExtendedTestClass.class);
     }

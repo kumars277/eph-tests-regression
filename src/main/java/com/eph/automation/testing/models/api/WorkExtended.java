@@ -166,6 +166,10 @@ public class WorkExtended {
         public void setExtendedMetric(ExtendedMetric extendedMetric) {this.extendedMetric = extendedMetric;}
     }
 
+
+
+
+
     public void compareWithDB(String workId)
     {
         Log.info("----- verifiying workExtended data...");
@@ -357,6 +361,63 @@ public class WorkExtended {
 
                 Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedSubjectAreas-> extendedSubjectArea-> priority "+i,wesa[i].getExtendedSubjectArea().getPriority(), wesaDB[i].getExtendedSubjectArea().getPriority());
                 printLog("workExtendedSubjectAreas extendedSubjectArea priority ");
+            }
+        }
+
+        if(workExtendedUrls!=null|DataQualityContext.workExtendedTestClass.getWorkExtended().workExtendedUrls!=null)
+        {//implemented by Nishant @ 25 May 2021 EPHD-3122
+
+            WorkExtendedUrls[] weu = workExtendedUrls;
+            WorkExtendedUrls[] weuDB = DataQualityContext.workExtendedTestClass.getWorkExtended().workExtendedUrls;
+
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedUrls-> count",weu.length, weuDB.length);
+            printLog("workExtendedUrls count " +weu.length);
+
+            for(int i=0;i<weu.length;i++)
+            {
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedUrls-> code "+i,weu[i].extendedUrl.getType().get("code"), weuDB[i].extendedUrl.getType().get("code"));
+                printLog("workExtendedUrls code "+i);
+
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedUrls-> name "+i,weu[i].extendedUrl.getType().get("name"), weuDB[i].extendedUrl.getType().get("name"));
+                printLog("workExtendedUrls name ");
+
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedUrls-> url "+i,weu[i].extendedUrl.getUrl(), weuDB[i].extendedUrl.getUrl());
+                printLog("workExtendedUrls url ");
+
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedUrls-> urlTitle "+i,weu[i].extendedUrl.getUrlTitle(), weuDB[i].extendedUrl.getUrlTitle());
+                printLog("workExtendedUrls urlTitle ");
+
+            }
+        }
+
+        if(workExtendedMetrics!=null|DataQualityContext.workExtendedTestClass.getWorkExtended().getWorkExtendedMetrics()!=null) {
+            //implemented by Nishant @ 25 May 2021 EPHD-3122
+
+            WorkExtendedMetrics[] wem = workExtendedMetrics;
+            WorkExtendedMetrics[] wemDB = DataQualityContext.workExtendedTestClass.getWorkExtended().workExtendedMetrics;
+
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedMetrics-> count", wem.length, wemDB.length);
+            printLog("workExtendedMetrics count " + wem.length);
+
+            for (int i = 0; i < wem.length; i++) {
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedMetrics-> code " + i, wem[i].getExtendedMetric().getType().get("code"), wemDB[i].getExtendedMetric().getType().get("code"));
+                printLog("workExtendedMetrics code " + i);
+
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedMetrics-> name " + i, wem[i].getExtendedMetric().getType().get("name"), wemDB[i].getExtendedMetric().getType().get("name"));
+                printLog("workExtendedMetrics name ");
+
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedMetrics-> metric " + i, wem[i].getExtendedMetric().getMetric(), wemDB[i].getExtendedMetric().getMetric());
+                printLog("workExtendedMetrics metric ");
+
+                if(wem[i].getExtendedMetric().getMetricUrl()!=null|wemDB[i].getExtendedMetric().getMetricUrl()!=null) {
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedMetrics-> metric " + i, wem[i].getExtendedMetric().getMetricUrl(), wemDB[i].getExtendedMetric().getMetricUrl());
+                    printLog("workExtendedMetrics metricUrl ");
+                }
+
+                if(wem[i].getExtendedMetric().getMetricYear()!=null|wemDB[i].getExtendedMetric().getMetricYear()!=null) {
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedMetrics-> metricYear" + i, wem[i].getExtendedMetric().getMetricYear(), wemDB[i].getExtendedMetric().getMetricYear());
+                    printLog("workExtendedMetrics metricYear ");
+                }
             }
         }
 
