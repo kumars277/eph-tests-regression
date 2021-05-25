@@ -99,6 +99,7 @@ public class ApiWorksSearchSteps {
         sql = String.format(APIDataSQL.SELECT_RANDOM_JOURNAL_IDS_FOR_SEARCH, numberOfRecords);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("Environment used..."+System.getProperty("ENV"));
         Log.info("Selected random Journal ids  : " + ids);
         //for debugging failure
       //  ids.clear(); ids.add("EPR-W-102RY8");  Log.info("hard coded work ids are : " + ids); //EPR-W-108VK7, EPR-W-108RJG   , EPR-W-108V6K

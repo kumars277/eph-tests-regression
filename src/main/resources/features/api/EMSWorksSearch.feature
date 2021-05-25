@@ -109,7 +109,7 @@ Feature: Customer Search API: Works
     And We get the work search data from EPH GD
     Then the work details are retrieved by PMG Code and compared
 
-    @searchAPI @workSearchAPI
+  @searchAPI @workSearchAPI
   Scenario: search work by accountableProduct
     Given We get 1 random search ids for works
     And We get the work search data from EPH GD

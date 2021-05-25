@@ -13,9 +13,7 @@ public class WorkExtRelationshipsJson {
         public void setType(HashMap<String, Object> type) {this.type = type;}
 
         private String id;
-
-        public String getId() {
-            return id;}
+        public String getId() {return id;}
         public void setId(String id) {this.id = id;}
 
         private WorkExtendedSummary workExtendedSummary;
@@ -24,8 +22,7 @@ public class WorkExtRelationshipsJson {
 
         public static class WorkExtendedSummary{
             private String title;
-            public String getTitle() {
-                return title;}
+            public String getTitle() {return title;}
             public void setTitle(String title) {this.title = title;}
 
             private HashMap<String ,Object> type;

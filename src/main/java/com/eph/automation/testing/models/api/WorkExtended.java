@@ -2,6 +2,7 @@ package com.eph.automation.testing.models.api;
 
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
+import com.eph.automation.testing.models.dao.StitchingExtended.WorkExtRelationshipsJson;
 import com.eph.automation.testing.web.steps.ApiWorksSearchSteps;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.junit.Assert;
@@ -126,6 +127,9 @@ public class WorkExtended {
     public void setWorkExtendedMetrics(WorkExtendedMetrics[] workExtendedMetrics) {this.workExtendedMetrics = workExtendedMetrics;}
 
 
+    private WorkExtRelationshipsJson workExtRelationships;
+    public WorkExtRelationshipsJson getWorkExtRelationships() {return workExtRelationships;}
+    public void setWorkExtRelationships(WorkExtRelationshipsJson workExtRelationships) {this.workExtRelationships = workExtRelationships;}
 
     public static class WorkExtendedEditorialBoard{//by Nishant @ 09 Feb 2021
 
@@ -336,7 +340,6 @@ public class WorkExtended {
            }
        }
 
-       //workExtendedSubjectAreas - EPR-W-10B3N5
         if(workExtendedSubjectAreas!=null |DataQualityContext.workExtendedTestClass.getWorkExtended().workExtendedSubjectAreas!=null){
             //implemented by Nishant @ 24 May 2021, EPHD-3122
             WorkExtendedSubjectAreas[] wesa = workExtendedSubjectAreas;
@@ -364,8 +367,8 @@ public class WorkExtended {
             }
         }
 
-        if(workExtendedUrls!=null|DataQualityContext.workExtendedTestClass.getWorkExtended().workExtendedUrls!=null)
-        {//implemented by Nishant @ 25 May 2021 EPHD-3122
+        if(workExtendedUrls!=null|DataQualityContext.workExtendedTestClass.getWorkExtended().workExtendedUrls!=null){
+            //implemented by Nishant @ 25 May 2021 EPHD-3122
 
             WorkExtendedUrls[] weu = workExtendedUrls;
             WorkExtendedUrls[] weuDB = DataQualityContext.workExtendedTestClass.getWorkExtended().workExtendedUrls;

@@ -62,45 +62,38 @@ public class ApiProductsSearchSteps {
     private List<ManifestationDataObject> manifestationDataObjects;
 
 
-    @Given("^We get (.*) random search ids for products$")
-    public void getRandomProductIds(String numberOfRecords) {
+    @Given("^We get (.*) random search ids for products (.*)$")
+    public void getRandomProductIds(String numberOfRecords,String productProperty) {
+        //updated by Nishant @ 25 may 2021 for EPHD-3122
         //Get property when run with jenkins
         //numberOfRecords = System.getProperty("dbRandomRecordsNumber");
-         sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_FOR_SEARCH, numberOfRecords);
-        List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        switch(productProperty)
+        {
+            case "PRODUCT_WORK_IDENTIFIER":
+            case "PRODUCT_WORK_ID":
+            case "PRODUCT_WORK_ACCOUNTABLE_PRODUCT":
+            case "PRODUCT_WORK_TITLE":
+            case "PRODUCT_WORK_PERSONS_FULLNAME":
+                sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_WITH_WORK); break;
+
+            case"PRODUCT_PERSONS_FULLNAME":
+                sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_WITH_PERSON);break;
+
+            case"PRODUCT_IDENTIFIER":
+                sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_WITH_IDENTIFIER);break;
+
+            default:sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_FOR_SEARCH, numberOfRecords); break;
+        }
+
+         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("Environment used..."+System.getProperty("ENV"));
         Log.info("Selected random product ids are : " + ids);
         //added by Nishant @ 26 Dec for debugging failures
-      //    ids.clear(); ids.add("EPR-1163VK"); Log.info("hard coded product ids are : " + ids);//
+        //  ids.clear(); ids.add("EPR-10NF2H"); Log.info("hard coded product ids are : " + ids);//
+
+        DataQualityContext.breadcrumbMessage += "->" + ids;
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
-    }
-
-    @Given("We get (.*) random product id with work")
-    public void getRandomProductIdWithWork(){//created by Nishant @ 7 May 2020
-        sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_WITH_WORK);
-        List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        ids = randomProductSearchIds.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
-        Log.info("Selected random product id with work is : " + ids);
-        Assert.assertFalse("verify list with random id is not empty",ids.isEmpty());
-    }
-
-    private void getRandomProductIdWithPerson(){//created by Nishant @ 8 May 2020
-        sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_WITH_PERSON);
-        List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        ids = randomProductSearchIds.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
-        Log.info("Selected random product id with person is : " + ids);
-       // ids.clear(); ids.add("EPR-10W7JR"); Log.info("hard code value for debuggind failures ..."+ids.get(0));
-        Assert.assertFalse("verify list with random id is not empty",ids.isEmpty());
-    }
-
-    private void getRandomeProductIdWithIdentifier() //created by Nishant @ 8 Mar 2021
-    {
-        sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_WITH_IDENTIFIER);
-        List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        ids = randomProductSearchIds.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
-        Log.info("Selected random product id with identifier is : " + ids);
-        // ids.clear(); ids.add("EPR-10W7JR"); Log.info("hard code value for debuggind failures ..."+ids.get(0));
-        Assert.assertFalse("verify list with random id is not empty",ids.isEmpty());
     }
 
     @Given("^We get (.*) search ids from the db for person roles of products$")
@@ -113,6 +106,61 @@ public class ApiProductsSearchSteps {
         Log.info("Selected random work ids  : " + ids);
         Assert.assertFalse("Verify That list with random person ids is not empty.", ids.isEmpty());
     }
+
+    //created by Nishant @ 29 Nov 2019
+    @Given("^We get (.*) random package id")
+    public void getRandomPackagesIds(String numberOfRecords) {
+        sql = String.format(APIDataSQL.SELECT_RANDOM_PACKAGE_IDS_FOR_SEARCH, numberOfRecords);
+        Log.info(sql);
+        List<Map<?, ?>> randomPackageIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        packageIds = randomPackageIds.stream().map(m -> (String) m.get("product_id")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("Selected random package ids  : " + packageIds);
+        Assert.assertFalse("Verify That list with random ids is not empty.", packageIds.isEmpty());
+    }
+
+    @And("^We get 1 random search ids from package$")
+    public void getRandomProductIdFromPackage() {
+        sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_FROM_PACKAGE, Joiner.on("','").join(packageIds));
+        Log.info(sql);
+        List<Map<?, ?>> randomProductFromPackageIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        ids = randomProductFromPackageIds.stream().map(m -> (String) m.get("f_component")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("Selected random product is " + ids.toString() + " from package ids  : " + packageIds.toString());
+        Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
+    }
+
+
+/*
+    @Given("We get (.*) random product id with work")
+    public void getRandomProductIdWithWork(){//created by Nishant @ 7 May 2020
+        sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_WITH_WORK);
+        List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        ids = randomProductSearchIds.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("Selected random product id with work is : " + ids);
+        Assert.assertFalse("verify list with random id is not empty",ids.isEmpty());
+    }
+    */
+/*
+    private void getRandomProductIdWithPerson(){//created by Nishant @ 8 May 2020
+        sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_WITH_PERSON);
+        List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        ids = randomProductSearchIds.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("Selected random product id with person is : " + ids);
+       // ids.clear(); ids.add("EPR-10W7JR"); Log.info("hard code value for debuggind failures ..."+ids.get(0));
+        Assert.assertFalse("verify list with random id is not empty",ids.isEmpty());
+    }
+*/
+/*
+    private void getRandomeProductIdWithIdentifier() //created by Nishant @ 8 Mar 2021
+    {
+        sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_WITH_IDENTIFIER);
+        List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        ids = randomProductSearchIds.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("Selected random product id with identifier is : " + ids);
+        // ids.clear(); ids.add("EPR-10W7JR"); Log.info("hard code value for debuggind failures ..."+ids.get(0));
+        Assert.assertFalse("verify list with random id is not empty",ids.isEmpty());
+    }
+*/
+
 
     @And("^We get the search data from EPH GD for products$")
     public void getProductsDataFromEPHGD() {
@@ -137,32 +185,6 @@ public class ApiProductsSearchSteps {
         dataQualityContext.workDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
         dataQualityContext.workDataObjectsFromEPHGD.sort(Comparator.comparing(WorkDataObject::getWORK_ID));
         Assert.assertFalse("Verify that list with work objects from DB is not empty", dataQualityContext.workDataObjectsFromEPHGD.isEmpty());
-    }
-
-
-
-
-
-
-    //created by Nishant @ 29 Nov 2019
-    @Given("^We get (.*) random package id")
-    public void getRandomPackagesIds(String numberOfRecords) {
-        sql = String.format(APIDataSQL.SELECT_RANDOM_PACKAGE_IDS_FOR_SEARCH, numberOfRecords);
-        Log.info(sql);
-        List<Map<?, ?>> randomPackageIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        packageIds = randomPackageIds.stream().map(m -> (String) m.get("product_id")).map(String::valueOf).collect(Collectors.toList());
-        Log.info("Selected random package ids  : " + packageIds);
-        Assert.assertFalse("Verify That list with random ids is not empty.", packageIds.isEmpty());
-    }
-
-    @And("^We get 1 random search ids from package$")
-    public void getRandomProductIdFromPackage() {
-        sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_FROM_PACKAGE, Joiner.on("','").join(packageIds));
-        Log.info(sql);
-        List<Map<?, ?>> randomProductFromPackageIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        ids = randomProductFromPackageIds.stream().map(m -> (String) m.get("f_component")).map(String::valueOf).collect(Collectors.toList());
-        Log.info("Selected random product is " + ids.toString() + " from package ids  : " + packageIds.toString());
-        Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
     @When("^the product response returned when searched by packages is verified$")
@@ -218,8 +240,8 @@ public class ApiProductsSearchSteps {
                     //pending with Dev to clarify as of 13 May 2020
                     break;
                 case "PRODUCT_WORK_ACCOUNTABLE_PRODUCT":
-                    getRandomProductIdWithWork();
-                    getProductsDataFromEPHGD();
+                //    getRandomProductIdWithWork();
+                //    getProductsDataFromEPHGD();
                     getWorksDataFromEPHGD(productDataObject.getF_PRODUCT_WORK());
                     accountableProductSegmentCode = getSegmentCode(dataQualityContext.workDataObjectsFromEPHGD.get(0).getF_accountable_product());
                     returnedProducts = searchForProductsByaccountableProduct(accountableProductSegmentCode);
@@ -363,14 +385,15 @@ public class ApiProductsSearchSteps {
                     //hard coded by Nishant @ 7 may 2020 as there is only record in SIT gd_product_identifier table
                     //as per Mark reply on 7th May
                     //"This is kind of like a data issue we are having in SIT and UAT - all the identifiers are missing."
-                    getProductsDataFromEPHGD("EPR-10V1T5");
-                    returnedProducts = searchForProductsByIdentifierResult("1234-0707");
+                 //   getProductsDataFromEPHGD(productDataObjects.get(0).getPRODUCT_ID());
+                    returnedProducts = searchForProductsByIdentifierResult(productDataObjects.get(0).getIDENTIFIER());
                     break;
                 case "PRODUCT_WORK_IDENTIFIER":
-                    getRandomProductIdWithWork();
-                    getProductsDataFromEPHGD();
+                 //   getRandomProductIdWithWork();
+                 //   getProductsDataFromEPHGD();
                     getWorkIdentifiers(productDataObjects.get(0).getF_PRODUCT_WORK());
                     returnedProducts = searchForProductsByIdentifierResult(workIdentifiers.get(0).getIDENTIFIER());
+
                     break;
 
                 case "PRODUCT_MANIFESTATION_IDENTIFIER":
@@ -389,8 +412,8 @@ public class ApiProductsSearchSteps {
                     break;
 
                 case "PRODUCT_WORK_ID":
-                    getRandomProductIdWithWork();
-                    getProductsDataFromEPHGD();
+                //    getRandomProductIdWithWork();
+                //    getProductsDataFromEPHGD();
                     returnedProducts = searchForProductsByIdentifierResult(productDataObjects.get(0).getF_PRODUCT_WORK());
                     break;
 
@@ -405,6 +428,7 @@ public class ApiProductsSearchSteps {
             }
             returnedProducts.verifyProductsAreReturned();
             returnedProducts.verifyProductWithIdIsReturned(productDataObject.getPRODUCT_ID());
+
         }
     }
 
@@ -421,8 +445,8 @@ public class ApiProductsSearchSteps {
                     returnedProducts = searchForProductssByIdentifierAndTypeResult("1234-0707", "ISBN");
                     break;
                 case "PRODUCT_WORK_IDENTIFIER":
-                    getRandomProductIdWithWork();
-                    getProductsDataFromEPHGD();
+                  //  getRandomProductIdWithWork();
+                  //  getProductsDataFromEPHGD();
                     getWorkIdentifiers(productDataObjects.get(0).getF_PRODUCT_WORK());
                     returnedProducts = searchForProductssByIdentifierAndTypeResult(workIdentifiers.get(0).getIDENTIFIER(), workIdentifiers.get(0).getWORK_TYPE());
                     break;
@@ -457,21 +481,21 @@ public class ApiProductsSearchSteps {
                     break;
                 case "PRODUCT_IDENTIFIER":
                     //hard coded by Nishant @ 8 may 2020 as there is only few record in SIT gd_product_identifier table
-                    getRandomeProductIdWithIdentifier();
-                    getProductsDataFromEPHGD();
+               //     getRandomeProductIdWithIdentifier();
+               //     getProductsDataFromEPHGD();
                     getProductIdentifiers(productDataObjects.get(0).getPRODUCT_ID());
 
                     returnedProducts = searchForProductsBySearchResult(productIdentifiers.get(0).getIDENTIFIER());
                     break;
                 case "PRODUCT_WORK_IDENTIFIER":
-                    getRandomProductIdWithWork();
-                    getProductsDataFromEPHGD();
+                //    getRandomProductIdWithWork();
+                //    getProductsDataFromEPHGD();
                     getWorkIdentifiers(productDataObjects.get(0).getF_PRODUCT_WORK());
                     returnedProducts = searchForProductsBySearchResult(workIdentifiers.get(0).getIDENTIFIER());
                     break;
                 case "PRODUCT_WORK_ID":
-                    getRandomProductIdWithWork();
-                    getProductsDataFromEPHGD();
+                  //  getRandomProductIdWithWork();
+                  //  getProductsDataFromEPHGD();
                     returnedProducts = searchForProductsBySearchResult(productDataObjects.get(0).getF_PRODUCT_WORK());
                     break;
 
@@ -499,8 +523,8 @@ public class ApiProductsSearchSteps {
                     returnedProducts = searchForProductsBySearchResult(productDataObject.getPRODUCT_NAME());
                     break;
                 case "PRODUCT_WORK_TITLE":
-                    getRandomProductIdWithWork();
-                    getProductsDataFromEPHGD();
+                //    getRandomProductIdWithWork();
+                //    getProductsDataFromEPHGD();
                     returnedProducts = searchForProductsBySearchResult(productDataObjects.get(0).getWORK_TITLE());
                     break;
                 case "PRODUCT_MANIFESTATION_TITLE":
@@ -520,8 +544,8 @@ public class ApiProductsSearchSteps {
                         if not, send request again for next 5000 records until product id found
                         */
 
-                    getRandomProductIdWithPerson();
-                    getProductsDataFromEPHGD();
+                //    getRandomProductIdWithPerson();
+                //    getProductsDataFromEPHGD();
                     getProductPersonRoleByProductId(productDataObjects.get(0).getPRODUCT_ID());
                     getPersonDataByPersonId(personProductRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
                     from = 0;
@@ -536,8 +560,8 @@ public class ApiProductsSearchSteps {
 
                     break;
                 case "PRODUCT_WORK_PERSONS_FULLNAME":
-                    getRandomProductIdWithWork();
-                    getProductsDataFromEPHGD();
+                 //   getRandomProductIdWithWork();
+                 //   getProductsDataFromEPHGD();
                     getWorkPersonRoleByWorkId(productDataObjects.get(0).getF_PRODUCT_WORK());
                     getPersonDataByPersonId(personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
                     from = 0;

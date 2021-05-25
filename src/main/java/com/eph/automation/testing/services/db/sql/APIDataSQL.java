@@ -241,10 +241,9 @@ public class APIDataSQL {
             "               f_imprint AS IMPRINT,\n" +
             "               f_accountable_product AS f_accountable_product,\n"+
             "               edition_number AS EDITION_NUMBER,\n" +
-            "              -- volume AS VOLUME,\n" +
             "               copyright_year AS COPYRIGHT_YEAR\n" +
-            "              FROM ephsit.semarchy_eph_mdm.gd_wwork " +
-            "  WHERE work_id IN (select f_wwork from ephsit.semarchy_eph_mdm.gd_manifestation where manifestation_id in ('%s'))";
+            "              FROM semarchy_eph_mdm.gd_wwork " +
+            "  WHERE work_id IN (select f_wwork from semarchy_eph_mdm.gd_manifestation where manifestation_id in ('%s'))";
 
     public static final String SELECT_MANIFESTATIONS_DATA_IN_EPH_GD_BY_ID = "select F_EVENT  as F_EVENT,\n" +
             "B_CLASSNAME as B_CLASSNAME,\n" +

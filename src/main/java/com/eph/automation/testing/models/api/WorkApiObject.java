@@ -72,7 +72,7 @@ public class WorkApiObject {
 
     public void compareWithDB() {//implemented by Nishant @ 23 Apr 2020
         //1
-     //   workCore.compareWithDB(this.id);
+        workCore.compareWithDB(this.id);
 
         //2
         if (workExtended != null) {

@@ -3,6 +3,7 @@ package com.eph.automation.testing.models.api;
  * Created by GVLAYKOV
  */
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import net.minidev.json.parser.ParseException;
 import org.junit.Assert;
@@ -47,6 +48,7 @@ public class ProductsMatchedApiObject {
                 items[i].compareWithDB();
             }  i++;
         }
+        Assert.assertTrue( DataQualityContext.breadcrumbMessage+"id found in response",found);
         return found;
     }
 
