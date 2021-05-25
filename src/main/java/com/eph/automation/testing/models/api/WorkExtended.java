@@ -26,7 +26,7 @@ public class WorkExtended {
     public void setJournalAimsScope(String journalAimsScope) {this.journalAimsScope = journalAimsScope;}
 
     private String journalProdSiteCode;
-    public String getJournalProdSiteCode() {return journalProdSiteCode;}
+    public String getJournalProdSiteCode() {if(journalProdSiteCode==null) return ""; else return journalProdSiteCode;}
     public void setJournalProdSiteCode(String journalProdSiteCode) {this.journalProdSiteCode = journalProdSiteCode;}
 
     private String imageFileRef;
@@ -182,50 +182,60 @@ public class WorkExtended {
         * catalogueVolumesQty
         * */
 
-        if(journalElsComInd!=null | DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalElsComInd()!=null)
-        {
+        if(journalElsComInd==null)journalElsComInd="";
+        if(journalAimsScope==null)journalAimsScope="";
+        if(journalProdSiteCode==null)journalProdSiteCode="";
+        if(primarySiteSystem==null)primarySiteSystem="";
+        if(primarySiteAcronym==null)primarySiteAcronym="";
+        if(primarySiteSupportLevel==null)primarySiteSupportLevel="";
+        if(issueProdTypeCode==null)issueProdTypeCode="";
+        if(catalogueVolumesQty==null)catalogueVolumesQty="";
+
+
+ //       if(!journalElsComInd.equalsIgnoreCase("")| !DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalElsComInd().equalsIgnoreCase(""))
+ //       {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - getJournalElsComInd", journalElsComInd, DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalElsComInd());
             printLog("getJournalElsComInd");
-        }
+ //       }
 
-        if(journalAimsScope!=null | DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalAimsScope()!=null)
-        {
+ //       if(journalAimsScope!=null | DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalAimsScope()!=null)
+ //       {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - getJournalAimsScope", journalAimsScope, DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalAimsScope());
             printLog("getJournalAimsScope");
-        }
+ //       }
 
-        if(journalProdSiteCode!=null | DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalProdSiteCode()!=null)
-        {
+ //       if(journalProdSiteCode!=null | DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalProdSiteCode()!=null)
+ //       {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - journalProdSiteCode", journalProdSiteCode, DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalProdSiteCode());
             printLog("journalProdSiteCode");
-        }
+  //      }
 
-      if(primarySiteSystem!=null | DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSystem()!=null)
-        {
+ //     if(primarySiteSystem!=null | DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSystem()!=null)
+ //       {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - primarySiteSystem", primarySiteSystem, DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSystem());
             printLog("primarySiteSystem");
-        }
+//        }
 
-        if(primarySiteAcronym!=null | DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteAcronym()!=null) {
+//        if(primarySiteAcronym!=null | DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteAcronym()!=null) {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - primarySiteAcronym", primarySiteAcronym, DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteAcronym());
             printLog("primarySiteAcronym");
-        }
+ //       }
 
-        if(primarySiteSupportLevel!=null| DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSupportLevel()!=null) {
+ //       if(primarySiteSupportLevel!=null| DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSupportLevel()!=null) {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - primarySiteSupportLevel", primarySiteSupportLevel, DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSupportLevel());
             printLog("primarySiteSupportLevel");
-        }
+//        }
 
-        if(issueProdTypeCode!=null| DataQualityContext.workExtendedTestClass.getWorkExtended().getIssueProdTypeCode()!=null) {
+ //       if(issueProdTypeCode!=null| DataQualityContext.workExtendedTestClass.getWorkExtended().getIssueProdTypeCode()!=null) {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - issueProdTypeCode", issueProdTypeCode, DataQualityContext.workExtendedTestClass.getWorkExtended().getIssueProdTypeCode());
             printLog("issueProdTypeCode");
-        }
+ //       }
 
-        if(catalogueVolumesQty!=null| DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumesQty()!=null)
-        {
+ //       if(catalogueVolumesQty!=null| DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumesQty()!=null)
+ //       {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - catalogueVolumesQty",catalogueVolumesQty, DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumesQty());
             printLog("catalogueVolumesQty");
-        }
+ //       }
 
       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - imageFileRef", imageFileRef, DataQualityContext.workExtendedTestClass.getWorkExtended().getImageFileRef());
         printLog("imageFileRef");
@@ -349,6 +359,8 @@ public class WorkExtended {
                 printLog("workExtendedSubjectAreas extendedSubjectArea priority ");
             }
         }
+
+
 
     }
 

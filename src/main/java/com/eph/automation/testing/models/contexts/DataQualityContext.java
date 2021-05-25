@@ -102,7 +102,7 @@ public class DataQualityContext {
     public static ArrayList<String> RowData;
     public static ArrayList<String> DataToWrite = new ArrayList<>();
     public static ArrayList<ArrayList<String>> dataFileRowColumn = new ArrayList<>();
-    public static String breadcrumbMessage = "->";
+    public static String breadcrumbMessage = "";
 
 
 }

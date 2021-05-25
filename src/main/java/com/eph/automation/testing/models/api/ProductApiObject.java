@@ -9,6 +9,7 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.TestContext;
+import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ProductDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.eph.automation.testing.web.steps.ApiSearchDataCheckStitchingLayerSteps;
@@ -17,6 +18,8 @@ import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import net.minidev.json.parser.ParseException;
 import org.junit.Assert;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,11 +85,14 @@ public class ProductApiObject {
         */
 
     public void compareWithDB() {
+        DataQualityContext.breadcrumbMessage += "->"+ this.id;
         getProductDataFromEPHGD(this.id);
         createdDate=createdDate.replace("T"," ").replace("Z","");
         updatedDate=updatedDate.replace("T"," ").replace("Z","");
-        Assert.assertEquals(createdDate,this.productDataObjectsFromEPHGD.get(0).getCREATED());
-    //  Assert.assertEquals(updatedDate,this.productDataObjectsFromEPHGD.get(0).getUPDATED());
+
+
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - ", createdDate.substring(0,21),this.productDataObjectsFromEPHGD.get(0).getCREATED().substring(0,21));
+    // Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - ", updatedDate,this.productDataObjectsFromEPHGD.get(0).getUPDATED());
 
         //1. ProductCore comparison
         productCore.compareWithDB(this.id);
