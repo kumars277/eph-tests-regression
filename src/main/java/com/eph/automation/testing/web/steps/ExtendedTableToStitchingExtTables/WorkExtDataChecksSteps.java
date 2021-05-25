@@ -1212,7 +1212,7 @@ public class WorkExtDataChecksSteps {
                 getWorkType(workId);
                 if (dataQualityStitchContext.recordsFromWorkStitching.getWorkExtended().getWorkExtendedRelationships() != null) {
                     //ArrayList<WorkExtRelationshipsJson.ExtendedSiblings> extworkRelation_temp = new ArrayList(Arrays.asList(dataQualityStitchContext.recordsFromWorkStitching.getWorkExtended()));
-                    WorkExtRelationshipsJson.ExtendedSiblings[] extworkRelation_temp = dataQualityStitchContext.recordsFromWorkStitching.getWorkExtended().getWorkExtendedRelationships().getExtendedSiblings().clone();
+                    WorkExtRelationshipsJson.ExtendedSibling[] extworkRelation_temp = dataQualityStitchContext.recordsFromWorkStitching.getWorkExtended().getWorkExtendedRelationships().getExtendedSibling().clone();
                     for (int j = 0; j < extworkRelation_temp.length; j++) {
                         if(ignore.contains(j)) continue;
 

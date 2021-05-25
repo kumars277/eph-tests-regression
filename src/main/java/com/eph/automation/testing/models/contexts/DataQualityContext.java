@@ -6,6 +6,7 @@ import com.eph.automation.testing.models.api.ManifestationExtendedTestClass;
 import com.eph.automation.testing.models.api.WorkExtendedTestClass;
 import com.eph.automation.testing.models.dao.*;
 import com.eph.automation.testing.services.db.sql.WorkRelationshipDataObject;
+import com.jayway.restassured.response.Response;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +104,7 @@ public class DataQualityContext {
     public static ArrayList<String> DataToWrite = new ArrayList<>();
     public static ArrayList<ArrayList<String>> dataFileRowColumn = new ArrayList<>();
     public static String breadcrumbMessage = "";
+    public static Response api_response;
 
 
 }

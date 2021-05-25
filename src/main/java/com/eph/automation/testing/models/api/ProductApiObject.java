@@ -86,63 +86,74 @@ public class ProductApiObject {
 
     public void compareWithDB() {
         DataQualityContext.breadcrumbMessage += "->"+ this.id;
-        getProductDataFromEPHGD(this.id);
-        createdDate=createdDate.replace("T"," ").replace("Z","");
-        updatedDate=updatedDate.replace("T"," ").replace("Z","");
+       try {
+           getProductDataFromEPHGD(this.id);
+           createdDate = createdDate.replace("T", " ").replace("Z", "");
+           updatedDate = updatedDate.replace("T", " ").replace("Z", "");
 
 
-       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - ", createdDate.substring(0,21),this.productDataObjectsFromEPHGD.get(0).getCREATED().substring(0,21));
-    // Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - ", updatedDate,this.productDataObjectsFromEPHGD.get(0).getUPDATED());
+           Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - ", createdDate.substring(0, 21), this.productDataObjectsFromEPHGD.get(0).getCREATED().substring(0, 21));
+           // Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - ", updatedDate,this.productDataObjectsFromEPHGD.get(0).getUPDATED());
 
-        //1. ProductCore comparison
-        productCore.compareWithDB(this.id);
+           //1. ProductCore comparison
+           productCore.compareWithDB(this.id);
 
-        //2. availabilityExtended comparison
-        if(availabilityExtended!=null) {//created by Nishant @ 8 Mar 2021 EPHD-2898
-            Log.info("---- verifying product availabilityExtended data...");
-            ApiSearchDataCheckStitchingLayerSteps apiSearchDataCheckStitchingLayer = new ApiSearchDataCheckStitchingLayerSteps();
-            String sql;
-            if(TestContext.getValues().environment.equals("UAT"))
-                sql =   "select epr_id,  \"json\" from ephuat_extended_data_stitch.stch_product_ext_json where extension_type = 'Availability' and epr_id='"+id+"'";
-            else
-                sql =   "select epr_id,  \"json\" from ephsit_extended_data_stitch.stch_product_ext_json where extension_type = 'Availability' and epr_id='"+id+"'";
+           //2. availabilityExtended comparison
+           if (availabilityExtended != null) {//created by Nishant @ 8 Mar 2021 EPHD-2898
+               Log.info("---- verifying product availabilityExtended data...");
+               ApiSearchDataCheckStitchingLayerSteps apiSearchDataCheckStitchingLayer = new ApiSearchDataCheckStitchingLayerSteps();
+               String sql;
+               if (TestContext.getValues().environment.equalsIgnoreCase("UAT"))
+                   sql = "select epr_id,  \"json\" from ephuat_extended_data_stitch.stch_product_ext_json where extension_type = 'Availability' and epr_id='" + id + "'";
+               else
+                   sql = "select epr_id,  \"json\" from ephsit_extended_data_stitch.stch_product_ext_json where extension_type = 'Availability' and epr_id='" + id + "'";
 
-            randomIdsData = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            AvailabilityExtendedTestClass jsonValue = new Gson().fromJson(randomIdsData.get(0).get("json").toString(), AvailabilityExtendedTestClass.class);
-            apiSearchDataCheckStitchingLayer.compare_stch_product_ext_json_byAvailability(jsonValue,availabilityExtended);
-        }
+               randomIdsData = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+               AvailabilityExtendedTestClass jsonValue = new Gson().fromJson(randomIdsData.get(0).get("json").toString(), AvailabilityExtendedTestClass.class);
+               apiSearchDataCheckStitchingLayer.compare_stch_product_ext_json_byAvailability(jsonValue, availabilityExtended);
+           }
 
-        //3. pricingExtended comparison
-        if(pricingExtended!=null){//created by Nishant @ 8 Mar 2021 EPHD-2898
-            Log.info("---- verifying product pricingExtended data...");
-            ApiSearchDataCheckStitchingLayerSteps apiSearchDataCheckStitchingLayer = new ApiSearchDataCheckStitchingLayerSteps();
+           //3. pricingExtended comparison
+           if (pricingExtended != null) {//created by Nishant @ 8 Mar 2021 EPHD-2898
+               Log.info("---- verifying product pricingExtended data...");
+               ApiSearchDataCheckStitchingLayerSteps apiSearchDataCheckStitchingLayer = new ApiSearchDataCheckStitchingLayerSteps();
 
-            String sql;
-            if(TestContext.getValues().environment.equals("UAT"))
-                sql =   "select  epr_id ,json from ephuat_extended_data_stitch.stch_product_ext_json where extension_type = 'Prices' and epr_id='"+id+"'";
-            else
-                sql =   "select  epr_id ,json from ephsit_extended_data_stitch.stch_product_ext_json where extension_type = 'Prices' and epr_id='"+id+"'";
+               String sql;
+               if (TestContext.getValues().environment.equalsIgnoreCase("UAT"))
+                   sql = "select  epr_id ,json from ephuat_extended_data_stitch.stch_product_ext_json where extension_type = 'Prices' and epr_id='" + id + "'";
+               else
+                   sql = "select  epr_id ,json from ephsit_extended_data_stitch.stch_product_ext_json where extension_type = 'Prices' and epr_id='" + id + "'";
 
-            randomIdsData = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-            PricingExtendedTestClass jsonValue = new Gson().fromJson(randomIdsData.get(0).get("json").toString(), PricingExtendedTestClass.class);
-            apiSearchDataCheckStitchingLayer.compare_stch_product_ext_json_byPricing(jsonValue,pricingExtended);
-        }
+               randomIdsData = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+               PricingExtendedTestClass jsonValue = new Gson().fromJson(randomIdsData.get(0).get("json").toString(), PricingExtendedTestClass.class);
+               apiSearchDataCheckStitchingLayer.compare_stch_product_ext_json_byPricing(jsonValue, pricingExtended);
+           }
 
-        //4. pricingExtended comparison
-        if(manifestation!=null) {manifestation.compareWithDB();}
+           //4. pricingExtended comparison
+           if (manifestation != null) {
+               manifestation.compareWithDB();
+           }
 
-        //5. pricingExtended comparison
-        //implemented by Nishant @ 8 May 2020
-        if(work!=null){
-            work.getWorkCore().compareWithDB(work.getId());
-            if(work.getWorkExtended()!=null)
-            {
-                WorkApiObject workApiObject = new WorkApiObject();
-                workApiObject.getJsonToObject_extendedWork(work.getId());
-                work.getWorkExtended().compareWithDB(work.getId());
-            }
-        }
-
+           //5. pricingExtended comparison
+           //implemented by Nishant @ 8 May 2020
+           if (work != null) {
+               work.getWorkCore().compareWithDB(work.getId());
+               if (work.getWorkExtended() != null) {
+                   WorkApiObject workApiObject = new WorkApiObject();
+                   workApiObject.getJsonToObject_extendedWork(work.getId());
+                   work.getWorkExtended().compareWithDB(work.getId());
+               }
+           }
+       }
+       catch (NullPointerException e)
+       {
+           e.getMessage();
+           DataQualityContext.api_response.prettyPrint();
+       }
+       catch (Exception e)
+       {
+           e.getMessage();
+       }
     }
 
     private void getProductDataFromEPHGD(String workID) {

@@ -3,11 +3,11 @@ import java.util.HashMap;
 
 public class WorkExtRelationshipsJson {
 
-    private ExtendedSiblings[] extendedSibling;
-    public ExtendedSiblings[] getExtendedSiblings() {return extendedSibling;}
-    public void setExtendedSiblings(ExtendedSiblings[] extendedSibling) {this.extendedSibling = extendedSibling;}
+    private ExtendedSibling[] extendedSibling;
+    public ExtendedSibling[] getExtendedSibling() {return extendedSibling;}
+    public void setExtendedSibling(ExtendedSibling[] extendedSibling) {this.extendedSibling = extendedSibling;}
 
-    public static class ExtendedSiblings{
+    public static class ExtendedSibling{
         private HashMap<String ,Object> type;
         public HashMap<String, Object> getType() {return type;}
         public void setType(HashMap<String, Object> type) {this.type = type;}
