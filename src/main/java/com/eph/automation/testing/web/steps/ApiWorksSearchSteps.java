@@ -48,6 +48,10 @@ public class ApiWorksSearchSteps {
             case"WORK_PRODUCT_ID":
                 sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_IDS_WITH_PRODUCT);
                 break;
+
+            case "WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME":
+                //find a work with manifestion which also has at least one product under manifestation
+                break;
             default:sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_IDS_FOR_SEARCH, numberOfRecords); break;
         }
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);

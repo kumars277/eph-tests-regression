@@ -49,7 +49,7 @@ Feature: Customer Search API: Works
     |WORK_PRODUCT_SUMMARY_NAME|
     |WORK_TITLE |
     |WORK_MANIFESTATION_TITLE|
-    |WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME|
+ #   |WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME| need to implement relevent sql
 
   @searchAPI @workSearchAPI
   Scenario Outline: Search works by identifier
