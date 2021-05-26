@@ -182,7 +182,7 @@ public class SDBooksCountChecksSteps {
         SDExclCount = ((Long) SDExclTableCount.get(0).get("excl_count")).intValue();
     }
 
-    @And("^Compare SDBooks exclude count  and delta current with current history are identical$")
+    @And("^Compare SDBooks exclude count and delta current with current history are identical$")
     public void compareExcludeCounts(){
         Log.info("The diff of count for table delta current with current history => " + SDDeltaCurrHistCount + " and in exclude count => " + SDExclCount);
         Assert.assertEquals("The counts are not equal when compared with Diff of delta current with current history with exclude count", SDExclCount, SDDeltaCurrHistCount);

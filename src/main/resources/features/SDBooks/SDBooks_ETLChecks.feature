@@ -87,7 +87,7 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
   Scenario Outline: Verify Data count for SDBooks delta_current_exclude are transferred from delta_current and current_history tables
     Given Get the SDBooks total count difference between delta current and transform current history Table
     Then Get the SDBooks exclude data count
-    And Compare SDBooks exclude count of and with are identical
+    And Compare SDBooks exclude count and delta current with current history are identical
     Given We get the <countOfRandomIds> random ISBN ids <tableName>
     When Get the records from the difference of SD Delta_current_url and url_history
     Then We know the records from SDBooks URL Excl Table
