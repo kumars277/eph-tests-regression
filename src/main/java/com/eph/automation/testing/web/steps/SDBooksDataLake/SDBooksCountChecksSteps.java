@@ -174,7 +174,7 @@ public class SDBooksCountChecksSteps {
     }
 
     @Then("^Get the SDBooks exclude data count$")
-    public void getExclCurrentTables(String tableName){
+    public void getExclCurrentTables(){
                 Log.info("Getting Exclude Current URL Table Count...");
                 SDExclSQLCount = SDDataLakeCountChecksSQL.GET_SD_URL_EXCLUDE_CURRENT_COUNT;
         Log.info(SDExclSQLCount);
