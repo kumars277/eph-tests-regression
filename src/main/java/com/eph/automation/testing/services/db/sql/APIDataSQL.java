@@ -241,10 +241,9 @@ public class APIDataSQL {
             "               f_imprint AS IMPRINT,\n" +
             "               f_accountable_product AS f_accountable_product,\n"+
             "               edition_number AS EDITION_NUMBER,\n" +
-            "              -- volume AS VOLUME,\n" +
             "               copyright_year AS COPYRIGHT_YEAR\n" +
-            "              FROM ephsit.semarchy_eph_mdm.gd_wwork " +
-            "  WHERE work_id IN (select f_wwork from ephsit.semarchy_eph_mdm.gd_manifestation where manifestation_id in ('%s'))";
+            "              FROM semarchy_eph_mdm.gd_wwork " +
+            "  WHERE work_id IN (select f_wwork from semarchy_eph_mdm.gd_manifestation where manifestation_id in ('%s'))";
 
     public static final String SELECT_MANIFESTATIONS_DATA_IN_EPH_GD_BY_ID = "select F_EVENT  as F_EVENT,\n" +
             "B_CLASSNAME as B_CLASSNAME,\n" +
@@ -302,7 +301,7 @@ public class APIDataSQL {
             "f_legal_owner, f_ownership_description ,effective_start_date ,effective_end_date " +
             "from semarchy_eph_mdm.gd_work_legal_owner gwlo where f_wwork ='PARAM1'";
     public static String getWorkAccessModelsById = "select f_access_model from semarchy_eph_mdm.gd_work_access_model gwam where f_wwork ='PARAM1'";
-    public static String getWorkBusinessModelById = "select f_business_model from semarchy_eph_mdm.gd_work_business_model gwam where f_wwork ='PARAM1'";
+    public static String getWorkBusinessModelById = "select f_business_model, effective_start_date , effective_end_date from semarchy_eph_mdm.gd_work_business_model gwam where f_wwork ='PARAM1'";
     public static String getWorkSubjectAreaByWorkId = "select code,name,f_type,f_parent_subject_area " +
             "from semarchy_eph_mdm.gd_subject_area gsa where subject_area_id in\n" +
             "(select f_subject_area from semarchy_eph_mdm.gd_work_subject_area_link gwsal where f_wwork ='PARAM1');";

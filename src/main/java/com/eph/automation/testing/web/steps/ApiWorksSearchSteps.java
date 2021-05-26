@@ -40,26 +40,52 @@ public class ApiWorksSearchSteps {
     String EndPoint;
     public ApiWorksSearchSteps() {}
 
-    @Given("^We get (.*) random search ids for works")
-    public void getRandomWorkIds(String numberOfRecords) {
-        sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_IDS_FOR_SEARCH, numberOfRecords);
+    @Given("^We get (.*) random search ids for works (.*)$")
+    public void getRandomWorkIds(String numberOfRecords,String workProperty) {
+        switch(workProperty)
+        {
+            case"WORK_PRODUCT_SUMMARY_NAME":
+            case"WORK_PRODUCT_ID":
+                sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_IDS_WITH_PRODUCT);
+                break;
+
+            case "WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME":
+                //find a work with manifestion which also has at least one product under manifestation
+                break;
+            default:sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_IDS_FOR_SEARCH, numberOfRecords); break;
+        }
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("Environment used..."+System.getProperty("ENV"));
         Log.info("Selected random work ids  : " + ids);
         //added by Nishant @ 27 Dec for debugging failures
-      //  ids.clear();ids.add("EPR-W-102S7C");Log.info("hard coded work ids are : " + ids);
+       // ids.clear();ids.add("EPR-W-115WM8");Log.info("hard coded work ids are : " + ids);
+
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
+    @Given("^We get (.*) random journal ids for search")
+    public void getRandomJournalIds(String numberOfRecords) {//created by Nishant @ 25 Jun 2020
+        sql = String.format(APIDataSQL.SELECT_RANDOM_JOURNAL_IDS_FOR_SEARCH, numberOfRecords);
+        List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+        ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
+        Log.info("Environment used..."+System.getProperty("ENV"));
+        Log.info("Selected random Journal ids  : " + ids);
+        //for debugging failure
+        //  ids.clear(); ids.add("EPR-W-102RY8");  Log.info("hard coded work ids are : " + ids); //EPR-W-108VK7, EPR-W-108RJG   , EPR-W-108V6K
+        Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
+    }
+
+/*
     @Given("^We get id for work search (.*)$")
     public void getProductById(String workID) {
         sql = String.format(APIDataSQL.SELECT_WORK_BY_ID_FOR_SEARCH, workID);
-//        Log.info(sql);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         DataQualityContext.ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("work ids  : " + ids);
     }
-
+*/
+/*
     private void getRandomWorkIdWithProducts() {
         sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_IDS_WITH_PRODUCT);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -67,12 +93,13 @@ public class ApiWorksSearchSteps {
         Log.info("Selected random work ids with product is : " + ids);
         Assert.assertFalse("verify list with random id is not empty", ids.isEmpty());
     }
+    */
 
     @Given("^We get (.*) random search ids for Extended works")
     public void getRandomExtendedWorkIds(String numberOfRecords) {
         //created by Nishant @ 01 Jul 2020
         String dbEnv;
-        if(TestContext.getValues().environment.equals("UAT")) dbEnv = "uat"; else dbEnv="sit";
+        if(TestContext.getValues().environment.equalsIgnoreCase("UAT")) dbEnv = "uat"; else dbEnv="sit";
         sql = String.format(APIDataSQL.SELECT_RANDOM_EXTENDED_WORK_IDS,dbEnv, numberOfRecords);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
@@ -81,6 +108,7 @@ public class ApiWorksSearchSteps {
         // ids.clear(); ids.add("EPR-W-108TJK");  Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
+
 
     @Given("^We get (.*) random search ids for Extended manifestation")
     public void getRandomExtendedManifestationIds(String numberOfRecords) {
@@ -94,16 +122,8 @@ public class ApiWorksSearchSteps {
         Assert.assertFalse("Verify That list with random ids is not empty.", manifestaionids.isEmpty());
     }
 
-    @Given("^We get (.*) random journal ids for search")
-    public void getRandomJournalIds(String numberOfRecords) {//created by Nishant @ 25 Jun 2020
-        sql = String.format(APIDataSQL.SELECT_RANDOM_JOURNAL_IDS_FOR_SEARCH, numberOfRecords);
-        List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-        ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
-        Log.info("Selected random Journal ids  : " + ids);
-        //for debugging failure
-      //  ids.clear(); ids.add("EPR-W-102RY8");  Log.info("hard coded work ids are : " + ids); //EPR-W-108VK7, EPR-W-108RJG   , EPR-W-108V6K
-        Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
-    }
+
+
 
     @Given("^We set specific journal ids for search")
     public void setspecificJournalIds() {//created by Nishant @ 04 Aug 2020
@@ -114,9 +134,7 @@ public class ApiWorksSearchSteps {
         ids.add("EPR-W-102NHD");
         ids.add("EPR-W-102RRG");
         ids.add("EPR-W-102VF4");
-
         Log.info("hard coded work ids are : " + ids);
-
     }
 
     @Given("^We get (.*) random search ids for person roles")
@@ -277,8 +295,8 @@ public class ApiWorksSearchSteps {
                 //implemented by Nishant @ 22 Apr 2020
                 case "WORK_PRODUCT_SUMMARY_NAME":
                     //not all works has products hence need separate query
-                    getRandomWorkIdWithProducts();
-                    getWorksDataFromEPHGD();
+                //    getRandomWorkIdWithProducts();
+                //    getWorksDataFromEPHGD();
                     getProductDetailByWorkId(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
                     returnedWorks = apiService.searchForWorkByTitleResult(dataQualityContext.productDataObjectsFromEPHGD.get(i).getPRODUCT_NAME());
                     break;
@@ -410,8 +428,8 @@ public class ApiWorksSearchSteps {
                     break;
 
                 case "WORK_PRODUCT_ID":
-                    getRandomWorkIdWithProducts();
-                    getWorksDataFromEPHGD();
+               //     getRandomWorkIdWithProducts();
+               //     getWorksDataFromEPHGD();
                     getProductDetailByWorkId(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
                     returnedWorks = apiService.searchForWorksBySearchOptionResult(dataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_ID());
                     break;
@@ -442,7 +460,7 @@ public class ApiWorksSearchSteps {
                         */
                     boolean found = false;
                     int from = 0;
-                    int size = 5000;
+                    int size = 50;
                     getWorkPersonRoleByWorkId(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
                     getPersonDataByPersonId(dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
                     returnedWorks = apiService.searchForWorksBySearchOptionResult(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " +
@@ -458,8 +476,8 @@ public class ApiWorksSearchSteps {
                     }
                     break;
                 case "WORK_PRODUCT_SUMMARY_NAME":
-                    getRandomWorkIdWithProducts();
-                    getWorksDataFromEPHGD();
+                //    getRandomWorkIdWithProducts();
+                //    getWorksDataFromEPHGD();
                     getProductDetailByWorkId(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
                     returnedWorks = apiService.searchForWorksBySearchOptionResult(dataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME());
                     break;
@@ -483,7 +501,7 @@ public class ApiWorksSearchSteps {
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
         for (int i = 0; i < bound; i++) {
             String workId = dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID();
-            switch (searchType) {
+            DataQualityContext.breadcrumbMessage += "->" + ids;            switch (searchType) {
                 case "EPR_ID":
                     returnedWorks = apiService.searchForWorksBySearchOptionResult(workId);
                     break;
@@ -826,7 +844,11 @@ public class ApiWorksSearchSteps {
 
     public void getJsonToObject(String workId) {
         //created by Nishant @ 19 Jun 2020 to verify extended json value with APIv3
-        sql = "SELECT \"json\" FROM ephsit_extended_data_stitch.stch_work_ext_json where epr_id='" + workId + "'";
+        String sql ="";
+        if(TestContext.getValues().environment.equalsIgnoreCase("UAT"))
+            sql = "SELECT \"json\" FROM ephuat_extended_data_stitch.stch_work_ext_json where epr_id='" + workId + "'";
+        else sql = "SELECT \"json\" FROM ephsit_extended_data_stitch.stch_work_ext_json where epr_id='" + workId + "'";
+
         List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         DataQualityContext.workExtendedTestClass = new Gson().fromJson(jsonValue.get(0).get("json"), WorkExtendedTestClass.class);
     }

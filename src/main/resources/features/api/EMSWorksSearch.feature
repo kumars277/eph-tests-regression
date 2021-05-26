@@ -4,7 +4,7 @@ Feature: Customer Search API: Works
   So that I can use the details to validate business needs
 
    #new search fields included as part of Journal Finder #EPR-W-108TJK
-  @searchAPI @workSearchAPIiii @JFSearch
+  @searchAPI @workSearchAPI @JFSearch
   Scenario Outline: Search journal by search option
     Given We get 1 random journal ids for search
     And We get the work search data from EPH GD
@@ -35,13 +35,13 @@ Feature: Customer Search API: Works
 
   @searchAPI @workSearchAPI
   Scenario: search work by ID
-    Given We get 1 random search ids for works
+    Given We get 1 random search ids for works ""
     And We get the work search data from EPH GD
     Then the work details are retrieved and compared
 
   @searchAPI @workSearchAPI
   Scenario Outline: search work by title
-    Given We get 1 random search ids for works
+    Given We get 1 random search ids for works <tType>
     And We get the work search data from EPH GD
     Then the work details are retrieved by title <tType> and compared
     Examples:
@@ -49,11 +49,11 @@ Feature: Customer Search API: Works
     |WORK_PRODUCT_SUMMARY_NAME|
     |WORK_TITLE |
     |WORK_MANIFESTATION_TITLE|
-    |WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME|
+ #   |WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME| need to implement relevent sql
 
   @searchAPI @workSearchAPI
   Scenario Outline: Search works by identifier
-    Given We get 1 random search ids for works
+    Given We get 1 random search ids for works <idType>
     And We get the work search data from EPH GD
     Then the works search by identifier <idType> details are retrieved and compared
     Examples:
@@ -65,7 +65,7 @@ Feature: Customer Search API: Works
 
   @searchAPI @workSearchAPI
   Scenario Outline: Search works by identifier and Type
-    Given We get 1 random search ids for works
+    Given We get 1 random search ids for works <idType>
     And We get the work search data from EPH GD
     Then the work search by identifier <idType> and type details are retrieved and compared
     Examples:
@@ -75,7 +75,7 @@ Feature: Customer Search API: Works
 
   @searchAPI @workSearchAPI
   Scenario Outline: Search works by search option
-    Given We get 1 random search ids for works
+    Given We get 1 random search ids for works <idType>
     And We get the work search data from EPH GD
     Then the works retrieved by search <option> details are retrieved and compared
     Examples:
@@ -99,62 +99,61 @@ Feature: Customer Search API: Works
 
   @searchAPI @workSearchAPI
   Scenario: search work by PMC Code
-    Given We get 1 random search ids for works
+    Given We get 1 random search ids for works ""
     And We get the work search data from EPH GD
     Then the work details are retrieved by PMC Code and compared
 
   @searchAPI @workSearchAPI
   Scenario: search work by PMG Code
-    Given We get 1 random search ids for works
+    Given We get 1 random search ids for works ""
     And We get the work search data from EPH GD
     Then the work details are retrieved by PMG Code and compared
 
   @searchAPI @workSearchAPI
-  Scenario Outline: Search E2E
-    Given We get id for work search <id>
-    And We get the work search data from EPH GD
-    Then the work details are retrieved and compared
-    Examples:
-      | id                        |
-      | EPR-W-10C6N8              |
-
-  @searchAPI @workSearchAPI
   Scenario: search work by accountableProduct
-    Given We get 1 random search ids for works
+    Given We get 1 random search ids for works ""
     And We get the work search data from EPH GD
     Then the work details are retrieved by accountableProduct and compared
 
   @searchAPI @workSearchAPI
   Scenario: search work by workStatus
-    Given We get 1 random search ids for works
+    Given We get 1 random search ids for works ""
     And We get the work search data from EPH GD
     Then the work details are retrieved by workStatus and compared
 
   @searchAPI @workSearchAPI
   Scenario: search work by workType
-    Given We get 1 random search ids for works
+    Given We get 1 random search ids for works ""
     And We get the work search data from EPH GD
     Then the work details are retrieved by workType and compared
 
   @searchAPI @workSearchAPI
   Scenario: search work by manifestationType
-    Given We get 1 random search ids for works
+    Given We get 1 random search ids for works ""
     And We get the work search data from EPH GD
     Then the work details are retrieved by manifestationType and compared
 
   @searchAPI @workSearchAPI
   Scenario: search work by Search with PMCCode
-    Given We get 1 random search ids for works
+    Given We get 1 random search ids for works ""
     And We get the work search data from EPH GD
     Then the work details are retrieved by search with PMC code and compared
 
   @searchAPI @workSearchAPI
   Scenario: search work by Search with PMGCode
-    Given We get 1 random search ids for works
+    Given We get 1 random search ids for works ""
     And We get the work search data from EPH GD
     Then the work details are retrieved by search with PMG code and compared
 
   #{'datafile':'C:\Users\Chitren\Office Work\Project doc\EPH sprint testing\Elastic search,APIv3 and JRBI data/stch_work_ext_json_202006181758.csv'}
+
+  @searchAPI @workSearchAPI
+  Scenario Outline: Search E2E
+    Given We get the work data from EPH GD for <id>
+    Then the work details are retrieved and compared
+    Examples:
+      | id                        |
+      | EPR-W-102S7C              |
 
 # covered in above tests
   @APIv3
