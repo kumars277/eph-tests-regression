@@ -29,9 +29,14 @@ Feature:Validate data of DL All Core Views where data comes from BCS and JM Core
       |all_work_identifier_v                |50                 |
       |all_work_person_role_v               |50                 |
       |all_work_relationship_v              |50                 |
-      |all_work_subject_areas_v              |50                 |
+      |all_work_subject_areas_v              |50                |
       |all_work_v                           |50                 |
       |all_work_legal_owner_v               |10                 |
       |all_work_access_model_v              |50                 |
       |all_work_business_model_v            |50                 |
+
+
+
+
+
 
