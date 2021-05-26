@@ -42,11 +42,16 @@ public class APIDataSQL {
     public static String SELECT_RANDOM_EXTENDED_WORK_IDS="SELECT epr_id as WORK_ID FROM eph%s_extended_data_stitch.stch_work_ext_json order by random() limit %S";
     public static String SELECT_RANDOM_EXTENDED_MANIFESTATION_IDS="SELECT epr_id as WORK_ID FROM eph%s_extended_data_stitch.stch_manifestation_ext_json order by random() limit %S";
     //CREATED by Nishant @ 22 Apr 2020
-    public static String SELECT_RANDOM_WORK_IDS_WITH_PRODUCT = "select f_wwork as WORK_ID from semarchy_eph_mdm.gd_product where f_wwork is not null order by random() limit 1";
+    public static String SELECT_RANDOM_WORK_IDS_WITH_PRODUCT = "select f_wwork as WORK_ID from semarchy_eph_mdm.gd_product where f_wwork is not null order by random() limit %s";
+    public static String SELECT_RANDOM_WORK_WITH_MANIFESTATION_WITH_PRODUCT=
+            "select f_wwork as WORK_ID FROM semarchy_eph_mdm.gd_manifestation where manifestation_id in (\n" +
+            "SELECT f_manifestation from semarchy_eph_mdm.gd_product p where f_manifestation is not null) \n" +
+            " order by random() limit %s";
+
     public static String SELECT_RANDOM_PRODUCT_IDS_WITH_WORK = "select product_id as PRODUCT_ID from semarchy_eph_mdm.gd_product where f_wwork is not null order by random() limit 1";
     public static String SELECT_RANDOM_PRODUCT_IDS_WITH_PERSON = "select f_product as PRODUCT_ID from semarchy_eph_mdm.gd_product_person_role where f_product is not null order by random() limit 1";
     public static String SELECT_RANDOM_PRODUCT_IDS_WITH_IDENTIFIER = "select f_product as PRODUCT_ID from semarchy_eph_mdm.gd_product_identifier where f_product is not null order by random() limit 1";
-    public static String SELECT_ACCOUNTABLE_PRODUCT_BY_ACCOUNTABLEID="" +
+    public static String SELECT_ACCOUNTABLE_PRODUCT_BY_ACCOUNTABLEID=
         "select accountable_product_id as ACCOUNTABLE_PRODUCT_ID, \n" +
             "gl_product_segment_code as GL_PRODUCT_SEGMENT_CODE,\n" +
             "gl_product_segment_name as GL_PRODUCT_SEGMENT_NAME,\n" +

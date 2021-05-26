@@ -49,7 +49,7 @@ Feature: Customer Search API: Works
     |WORK_PRODUCT_SUMMARY_NAME|
     |WORK_TITLE |
     |WORK_MANIFESTATION_TITLE|
- #   |WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME| need to implement relevent sql
+    |WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME|
 
   @searchAPI @workSearchAPI
   Scenario Outline: Search works by identifier
@@ -75,7 +75,7 @@ Feature: Customer Search API: Works
 
   @searchAPI @workSearchAPI
   Scenario Outline: Search works by search option
-    Given We get 1 random search ids for works <idType>
+    Given We get 1 random search ids for works <option>
     And We get the work search data from EPH GD
     Then the works retrieved by search <option> details are retrieved and compared
     Examples:
