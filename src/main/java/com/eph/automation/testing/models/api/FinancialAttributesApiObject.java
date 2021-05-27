@@ -22,6 +22,7 @@ import java.util.HashMap;
 public class FinancialAttributesApiObject {
     @StaticInjection
     private FinancialAttribsContext financialAttribs;
+
     public FinancialAttributesApiObject() {}
 
     private HashMap<String, Object> glCompany;
@@ -40,22 +41,27 @@ public class FinancialAttributesApiObject {
     public String getEffectiveStartDate() {return effectiveStartDate;}
     public void setEffectiveStartDate(String effectiveStartDate) {this.effectiveStartDate = effectiveStartDate;}
 
+    private String effectiveEndDate;
+    public String getEffectiveEndDate() {return effectiveEndDate;}
+    public void setEffectiveEndDate(String effectiveEndDate) {this.effectiveEndDate = effectiveEndDate;}
+
     private void getFinancialData(String workid){
         String sql = String.format(APIDataSQL.GET_GD_FinnAttr_DATA, workid);
         financialAttribs.financialDataFromGD = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
     }
 
 
-    public void compareWithDB(String workId){
-        Log.info("verifying below financial attributes for work... "+workId);
-
-        getFinancialData(workId);
-     Assert.assertEquals(workId+ " - glCompany code",financialAttribs.financialDataFromGD.get(0).getGl_company(), this.glCompany.get("code"));
-        printLog("glCompany code");
-     Assert.assertEquals(workId+ " - costResponsibilityCentre",financialAttribs.financialDataFromGD.get(0).getCost_resp_centre(), this.costResponsibilityCentre.get("code"));
-        printLog("costResponsibilityCentre code");
-     Assert.assertEquals(workId+ " - revenueResponsibilityCentre",financialAttribs.financialDataFromGD.get(0).getRevenue_resp_centre(), this.revenueResponsibilityCentre.get("code"));
-        printLog("revenueResponsibilityCentre code");
+    public void compareWithDB(String workId) {
+        Log.info("verifying below financial attributes for work... " + workId);
+        if (effectiveEndDate == null) {
+            getFinancialData(workId);
+            Assert.assertEquals(workId + " - glCompany code", financialAttribs.financialDataFromGD.get(0).getGl_company(), this.glCompany.get("code"));
+            printLog("glCompany code");
+            Assert.assertEquals(workId + " - costResponsibilityCentre", financialAttribs.financialDataFromGD.get(0).getCost_resp_centre(), this.costResponsibilityCentre.get("code"));
+            printLog("costResponsibilityCentre code");
+            Assert.assertEquals(workId + " - revenueResponsibilityCentre", financialAttribs.financialDataFromGD.get(0).getRevenue_resp_centre(), this.revenueResponsibilityCentre.get("code"));
+            printLog("revenueResponsibilityCentre code");
+        }
     }
     private void printLog(String verified){Log.info("verified..."+verified);}
 

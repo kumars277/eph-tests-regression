@@ -35,7 +35,7 @@ public class ApiWorksSearchSteps {
     private static List<String> manifestaionids;
     private WorkApiObject workApi_response;
     private static List<WorkDataObject> workIdentifiers;
-    private ApiProductsSearchSteps apiProductsSearchSteps;
+    private ApiProductsSearchSteps apiProductsSearchSteps = new ApiProductsSearchSteps();
 
     String EndPoint;
     public ApiWorksSearchSteps() {}
@@ -60,7 +60,7 @@ public class ApiWorksSearchSteps {
 
         Log.info("Selected random work ids  : " + ids +"on environment "+System.getProperty("ENV"));
         //added by Nishant @ 27 Dec for debugging failures
-       // ids.clear();ids.add("EPR-W-116380");Log.info("hard coded work ids are : " + ids);
+        ids.clear();ids.add("EPR-W-1028VR");Log.info("hard coded work ids are : " + ids);
         DataQualityContext.breadcrumbMessage += "->" + ids;
         Assert.assertFalse(DataQualityContext.breadcrumbMessage + "- Verify That list with random ids is not empty.", ids.isEmpty());
     }
@@ -74,7 +74,7 @@ public class ApiWorksSearchSteps {
         Log.info("Environment used..."+System.getProperty("ENV"));
         Log.info("Selected random Journal ids  : " + ids);
         //for debugging failure
-        //  ids.clear(); ids.add("EPR-W-102RY8");  Log.info("hard coded work ids are : " + ids); //EPR-W-108VK7, EPR-W-108RJG   , EPR-W-108V6K
+        //  ids.clear(); ids.add("EPR-W-102T2W");  Log.info("hard coded work ids are : " + ids); //EPR-W-108VK7, EPR-W-108RJG   , EPR-W-108V6K
         DataQualityContext.breadcrumbMessage += "->" + ids;
         Assert.assertFalse(DataQualityContext.breadcrumbMessage + "-> Verify That list with random ids is not empty.", ids.isEmpty());
     }
@@ -466,7 +466,7 @@ public class ApiWorksSearchSteps {
                         */
                     boolean found = false;
                     int from = 0;
-                    int size = 50;
+                    int size = 500;
                     getWorkPersonRoleByWorkId(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
                     getPersonDataByPersonId(dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
                     returnedWorks = apiService.searchForWorksBySearchOptionResult(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " +
@@ -505,7 +505,8 @@ public class ApiWorksSearchSteps {
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
         for (int i = 0; i < bound; i++) {
             String workId = dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID();
-            DataQualityContext.breadcrumbMessage += "->" + ids;            switch (searchType) {
+         //   DataQualityContext.breadcrumbMessage += "->" + ids;
+            switch (searchType) {
                 case "EPR_ID":
                     returnedWorks = apiService.searchForWorksBySearchOptionResult(workId);
                     break;
