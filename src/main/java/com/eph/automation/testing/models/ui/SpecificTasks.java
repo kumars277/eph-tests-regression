@@ -12,6 +12,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
+import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.mysql.cj.api.result.Row;
@@ -116,8 +117,10 @@ public ArrayList<ArrayList<String>> readS3fileAPI(String bucketName,String key) 
         try {
             AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
                     .withRegion(clientRegion)
-                    .withCredentials(new ProfileCredentialsProvider())
+     //               .withCredentials(new ProfileCredentialsProvider())
                     .build();
+
+
 
             // Get an object and print its contents.
             System.out.println("Downloading s3 file");
@@ -194,13 +197,10 @@ public void creatS3Bucket(String bucketName)
 
 public void uploadToS3(String bucketName, String filetoUpload, String fileObjKeyName) throws IOException {
         //created by Nishant @ 10 May 2021
-  //  Region region = Region.valueOf("eu-west-1");
 
     Regions clientRegion = Regions.fromName("eu-west-1");
- //    bucketName = "eph-test-data";
+
     String stringObjKeyName = "testobj";
- //   String fileObjKeyName = "Result from 0 to 10.csv";
- //   String fileName = "C:\\Users\\Chitren\\Office Work\\Project doc\\EPH sprint testing\\EPHD-3127 link verification\\Result from 0 to 10.csv";
 
     try {
         //This code expects that you have AWS credentials set up per:
