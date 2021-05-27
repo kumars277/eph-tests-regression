@@ -13,12 +13,15 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
+import com.eph.automation.testing.configuration.SecretsManagerHandler;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.mysql.cj.api.result.Row;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import jdk.nashorn.internal.runtime.arrays.ArrayLikeIterator;
+import net.minidev.json.JSONObject;
+
 
 import javax.net.ssl.SSLHandshakeException;
 import java.io.*;
@@ -114,19 +117,23 @@ public ArrayList<ArrayList<String>> readS3fileAPI(String bucketName,String key) 
 
     ArrayList<ArrayList<String>> RowColumnData = new ArrayList<>();
     S3Object fullObject = null, objectPortion = null, headerOverrideObject = null;
-        try {
+
+    //get credential from secret manager to access s3 bucket
+    JSONObject object =  SecretsManagerHandler.getSecretKeyObj("eu-west-1","eph_s3bucket_access");
+
+    try {
+
+            BasicAWSCredentials creds = new BasicAWSCredentials(object.getAsString("aws_access_key_id"), object.getAsString("aws_secret_access_key"));
             AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
                     .withRegion(clientRegion)
+                    .withCredentials(new  AWSStaticCredentialsProvider(creds))
      //               .withCredentials(new ProfileCredentialsProvider())
                     .build();
-
-
 
             // Get an object and print its contents.
             System.out.println("Downloading s3 file");
             fullObject = s3Client.getObject(new GetObjectRequest(bucketName, key));
           //  System.out.println("Content-Type: " + fullObject.getObjectMetadata().getContentType());
-          //  System.out.println("Content: ");
 
             RowColumnData = displayTextInputStream(fullObject.getObjectContent());
 
