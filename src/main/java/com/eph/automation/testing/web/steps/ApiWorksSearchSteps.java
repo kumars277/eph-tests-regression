@@ -60,7 +60,7 @@ public class ApiWorksSearchSteps {
 
         Log.info("Selected random work ids  : " + ids +"on environment "+System.getProperty("ENV"));
         //added by Nishant @ 27 Dec for debugging failures
-        ids.clear();ids.add("EPR-W-1028VR");Log.info("hard coded work ids are : " + ids);
+       // ids.clear();ids.add("EPR-W-1028VR");Log.info("hard coded work ids are : " + ids);
         DataQualityContext.breadcrumbMessage += "->" + ids;
         Assert.assertFalse(DataQualityContext.breadcrumbMessage + "- Verify That list with random ids is not empty.", ids.isEmpty());
     }
