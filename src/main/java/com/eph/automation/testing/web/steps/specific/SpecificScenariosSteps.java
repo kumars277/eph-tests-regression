@@ -62,7 +62,13 @@ public class SpecificScenariosSteps {
        int RowFrom = 0; int RowTill = 0;
 
         if(false) {RowFrom = 1;             RowTill = 6;}//running on local
-        else{RowFrom = TestContext.getValues().rowFrom;          RowTill = TestContext.getValues().rowTill;}//running by Jenkins
+        else{
+            RowFrom = TestContext.getValues().rowFrom;
+            RowTill = TestContext.getValues().rowTill;
+        Log.info("RowFrom = "+RowFrom);
+        Log.info("RowTill = "+RowTill);
+
+        }//running by Jenkins
 
         if(RowTill==0) RowTill=DataQualityContext.dataFileRowColumn.size();
 
