@@ -22,23 +22,28 @@ public class ApplicationHooks {
     public void setUp() {
         //Set up the test pre-requisite
         Log.info("Test is starting ...");
+        Log.info("Environment used..."+System.getProperty("ENV"));
         SpecificTasks specificTasks = new SpecificTasks();
         DataQualityContext.DateAndTime = specificTasks.getDateNTime();
 
     }
+
+    @After()
+    public void clearAll()
+    {
+        Log.info("UI test ending...");
+        DataQualityContext.breadcrumbMessage = "";
+    }
+
     @After("@UI")
     public void closeDriver() {
-        Log.info("Test is ending hook ...");
+        Log.info("UI Test is ending ...");
         if (TestContext.getValues().gridRun && null != driverProvider) {
             driverProvider.get().quit();
         }
     }
 
 
-    @After("@UI")
-    public void closeBrowser()
-    {
-        Log.info("UI test ending...");
-    }
+
 
 }

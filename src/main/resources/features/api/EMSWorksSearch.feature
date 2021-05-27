@@ -3,6 +3,13 @@ Feature: Customer Search API: Works
   I would like to search works from Enterprise Customer Hub using EIP Search
   So that I can use the details to validate business needs
 
+
+  @searchAPI @workSearchAPI
+  Scenario: search work by ID
+    Given We get 1 random search ids for works ""
+    And We get the work search data from EPH GD
+    Then the work details are retrieved and compared
+
    #new search fields included as part of Journal Finder #EPR-W-108TJK
   @searchAPI @workSearchAPI @JFSearch
   Scenario Outline: Search journal by search option
@@ -31,14 +38,6 @@ Feature: Customer Search API: Works
       |personFullNameCurrent|
       |personIdCurrent|
 
-
-
-  @searchAPI @workSearchAPI
-  Scenario: search work by ID
-    Given We get 1 random search ids for works ""
-    And We get the work search data from EPH GD
-    Then the work details are retrieved and compared
-
   @searchAPI @workSearchAPI
   Scenario Outline: search work by title
     Given We get 1 random search ids for works <tType>
@@ -49,7 +48,7 @@ Feature: Customer Search API: Works
     |WORK_PRODUCT_SUMMARY_NAME|
     |WORK_TITLE |
     |WORK_MANIFESTATION_TITLE|
- #   |WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME| need to implement relevent sql
+    |WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME|
 
   @searchAPI @workSearchAPI
   Scenario Outline: Search works by identifier
@@ -75,7 +74,7 @@ Feature: Customer Search API: Works
 
   @searchAPI @workSearchAPI
   Scenario Outline: Search works by search option
-    Given We get 1 random search ids for works <idType>
+    Given We get 1 random search ids for works <option>
     And We get the work search data from EPH GD
     Then the works retrieved by search <option> details are retrieved and compared
     Examples:

@@ -85,7 +85,6 @@ public class ProductApiObject {
         */
 
     public void compareWithDB() {
-        DataQualityContext.breadcrumbMessage += "->"+ this.id;
        try {
            getProductDataFromEPHGD(this.id);
            createdDate = createdDate.replace("T", " ").replace("Z", "");

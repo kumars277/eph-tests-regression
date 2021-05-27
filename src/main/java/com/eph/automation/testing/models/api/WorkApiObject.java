@@ -71,11 +71,11 @@ public class WorkApiObject {
     public void setProducts(List<ManifestationProductAPIObject> products) {this.products = products;}
 
     public void compareWithDB() {//implemented by Nishant @ 23 Apr 2020
-        DataQualityContext.breadcrumbMessage += "->"+ this.id;
+
         boolean failed = false;
         try{
         //1
-     //   workCore.compareWithDB(this.id);
+        workCore.compareWithDB(this.id);
 
         //2
         if (workExtended != null) {
