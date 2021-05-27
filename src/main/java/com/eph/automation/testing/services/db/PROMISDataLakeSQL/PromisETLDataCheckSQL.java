@@ -1207,14 +1207,31 @@ public class PromisETLDataCheckSQL {
 
 //  Latest and AllSource IDs SQL
     public static String GET_LATEST_PRICING_IDs = "select epr_id as EPR_ID from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_pricing limit %s ";
-    public static String GET_LATEST_WORKS_IDs = "select pub_idt as PUB_IDT from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_works limit %s ";
-    public static String GET_LATEST_METRICS_IDs = "select pub_idt as PUB_IDT from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_metrics limit %s ";
-    public static String GET_LATEST_PERSON_ROLES_IDs = "select pub_idt as PUB_IDT from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_person_roles limit %s ";
-    public static String GET_LATEST_WORK_RELS_IDs = "select parent_pub_idt as PARENT_PUB_IDT from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_work_rels limit %s ";
-    public static String GET_LATEST_SUBJECT_AREAS_IDs = "select pub_idt as PUB_IDT from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_subject_areas limit %s ";
-    public static String GET_LATEST_URLS_IDs = "select pub_idt as PUB_IDT from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_subject_areas limit %s ";
+    public static String GET_LATEST_WORKS_IDs = "select epr_id as EPR_ID from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_works limit %s ";
+    public static String GET_LATEST_METRICS_IDs = "select epr_id as EPR_ID from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_metrics limit %s ";
+    public static String GET_LATEST_PERSON_ROLES_IDs = "select epr_id as EPR_ID from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_person_roles limit %s ";
+    public static String GET_LATEST_WORK_RELS_IDs = "select parent_epr_id as PARENT_EPR_ID from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_work_rels limit %s ";
+    public static String GET_LATEST_SUBJECT_AREAS_IDs = "select epr_id as EPR_ID from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_subject_areas limit %s ";
+    public static String GET_LATEST_URLS_IDs = "select epr_id as EPR_ID from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_urls limit %s ";
 
-    public static String GET_AllSource_Extended_Pricing = "select pub_idt as PUB_IDT from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_subject_areas limit %s ";
+//    All source Records
+    public static String GET_AllSource_Extended_Pricing = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".product_extended_pricing_allsource_v where epr_id in ('%s') and source in ('PROMIS') order by price_currency, price_amount";
+    public static String GET_AllSource_Extended_Work = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".work_extended_allsource_v where epr_id in ('%s') and source in ('PROMIS')";
+    public static String GET_AllSource_Extended_Work_Metric = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".work_extended_metric_allsource_v where epr_id in ('%s') and source in ('PROMIS') order by metric_code";
+    public static String GET_AllSource_Extended_Work_Editorial_Board = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".work_extended_editorial_board_allsource_v where epr_id in ('%s') and source in ('PROMIS') order by sequence_number, group_number, last_name";
+    public static String GET_AllSource_Extended_Work_Relationship_Sibling = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".work_extended_relationship_sibling_allsource_v where epr_id in ('%s') and source in ('PROMIS') order by related_title";
+    public static String GET_AllSource_Extended_Work_Subject_Area = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".work_extended_subject_area_allsource_v where epr_id in ('%s') and source in ('PROMIS') order by code";
+    public static String GET_AllSource_Extended_Work_Url = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".work_extended_url_allsource_v where epr_id in ('%s') and source in ('PROMIS') order by url_type_code, url";
+
+
+//  All Latest Records
+    public static String GET_LATEST_PRICING = "select * from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_pricing where epr_id in ('%s') order by currency, price";
+    public static String GET_LATEST_WORKS = "select * from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_works where epr_id in ('%s')";
+    public static String GET_LATEST_WORK_METRICS = "select * from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_metrics where epr_id in ('%s') order by metric_code";
+    public static String GET_LATEST_WORK_PERSON_ROLE = "select * from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_person_roles where epr_id in ('%s') order by sequence_number, group_number, last_name";
+    public static String GET_LATEST_WORK_RELS = "select * from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_work_rels where parent_epr_id in ('%s') order by child_title";
+    public static String GET_LATEST_SUBJECT_AREAS = "select * from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_subject_areas where epr_id in ('%s') order by subject_area_code";
+    public static String GET_LATEST_URLS = "select * from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_urls where epr_id in ('%s') order by url_code, url";
 
 }
 

@@ -110,6 +110,308 @@ public class PRMTablesInboundObject {
     private String MKT_SUB_IDT;
     private String DIV_IDT;
     private String Internal_Elsevier_Division;
+    private String EPR_ID;
+    private String WORK_TYPE;
+    private String LAST_UPDATED_DATE;
+    private String JOURNAL_ELS_COM_IND;
+    private String JOURNS_AIMS_SCOPE;
+    private String DELTA_BUSINESS_UNIT;
+    private String IMAGE_FILE_REF;
+    private String MASTER_ISBN;
+    private String AUTHOR_BY_LINE_TEXT;
+    private String KEY_FEATURES;
+    private String PRODUCT_AWARDS;
+    private String PRODUCT_LONG_DESC;
+    private String PRODUCT_SHORT_DESC;
+    private String REVIEW_QUOTES;
+    private String TOC_LONG;
+    private String TOC_SHORT;
+    private String AUDIENCE_TEXT;
+    private String BOOK_SUB_BUSINESS_UNIT;
+    private String INTERNAL_ELS_DIV;
+    private String PROFIT_CENTRE;
+    private String TEXT_REF_TRADE;
+    private String PRIMARY_SITE_SYSTEM;
+    private String PRIMARY_SITE_ACRONYM;
+    private String PRIMARY_SITE_SUPPORT_LEVEL;
+    private String ISSUE_PROD_TYPE_CODE;
+    private String CATALOGUE_VOLUMES_QTY;
+    private String CATALOGUE_ISSUES_QTY;
+    private String CATALOGUE_VOLUME_TO;
+    private String RF_ISSUES_QTY;
+    private String RF_TOTAL_PAGES_QTY;
+    private String RF_FVI;
+    private String RF_LVI;
+    private String BUSINESS_UNIT_DESC;
+    private String JOURNAL_PROD_SITE_CODE;
+    private String METRIC_CODE;
+    private String METRIC_NAME;
+    private String METRIC;
+    private String METRIC_YEAR;
+    private String METRIC_URL;
+    private String ROLE_CODE;
+    private String ROLE_NAME;
+    private String SEQUENCE_NUMBER;
+    private String GROUP_NUMBER;
+    private String FIRST_NAME;
+    private String LAST_NAME;
+    private String TITLE;
+    private String HONOURS;
+    private String AFFILIATION;
+    private String IMAGE_URL;
+    private String FOOTNOTE_TXT;
+    private String NOTES_TXT;
+    private String RELATED_TITLE;
+    private String RELATED_TYPE_CODE;
+    private String RELATED_TYPE_NAME;
+    private String RELATED_TYPE_ROLL_UP;
+    private String RELATED_STATUS_CODE;
+    private String RELATED_STATUS_NAME;
+    private String RELATED_STATUS_ROLL_UP;
+    private String RELATIONSHIP_CODE;
+    private String RELATIONSHIP_NAME;
+    private String PRIORITY;
+    private String CODE;
+    private String NAME;
+    private String TYPE_CODE;
+    private String TYPE_NAME;
+    private String URL_TYPE_CODE;
+    private String URL_TYPE_NAME;
+    private String URL;
+    private String URL_TITLE;
+
+    private String PRODUCT_TYPE;
+    private String CURRENCY;
+    private String PRICE;
+    private String REGION;
+    private String CUSTOMER_CATEGORY;
+
+
+    public String getPRODUCT_TYPE() { return PRODUCT_TYPE; }
+    public void setPRODUCT_TYPE(String PRODUCT_TYPE) { this.PRODUCT_TYPE = PRODUCT_TYPE; }
+
+    public String getCURRENCY() { return CURRENCY; }
+    public void setCURRENCY(String CURRENCY) { this.CURRENCY = CURRENCY; }
+
+    public String getPRICE() { return PRICE; }
+    public void setPRICE(String PRICE) { this.PRICE = PRICE; }
+
+    public String getREGION() { return REGION; }
+    public void setREGION(String REGION) { this.REGION = REGION; }
+
+    public String getCUSTOMER_CATEGORY() { return CUSTOMER_CATEGORY; }
+    public void setCUSTOMER_CATEGORY(String CUSTOMER_CATEGORY) { this.CUSTOMER_CATEGORY = CUSTOMER_CATEGORY; }
+
+    public String getURL_TITLE() { return URL_TITLE; }
+    public void setURL_TITLE(String URL_TITLE) { this.URL_TITLE = URL_TITLE; }
+//
+    public String getURL() { return URL; }
+    public void setURL(String URL) { this.URL = URL; }
+
+    public String getURL_TYPE_NAME() { return URL_TYPE_NAME; }
+    public void setURL_TYPE_NAME(String URL_TYPE_NAME) { this.URL_TYPE_NAME = URL_TYPE_NAME; }
+
+    public String getURL_TYPE_CODE() { return URL_TYPE_CODE; }
+    public void setURL_TYPE_CODE(String URL_TYPE_CODE) { this.URL_TYPE_CODE = URL_TYPE_CODE; }
+
+    public String getTYPE_NAME() { return TYPE_NAME; }
+    public void setTYPE_NAME(String TYPE_NAME) { this.TYPE_NAME = TYPE_NAME; }
+
+    public String getTYPE_CODE() { return TYPE_CODE; }
+    public void setTYPE_CODE(String TYPE_CODE) { this.TYPE_CODE = TYPE_CODE; }
+
+    public String getNAME() { return NAME; }
+    public void setNAME(String NAME) { this.NAME = NAME; }
+
+    public String getCODE() { return CODE; }
+    public void setCODE(String CODE) { this.CODE = CODE; }
+
+    public String getPRIORITY() { return PRIORITY; }
+    public void setPRIORITY(String PRIORITY) { this.PRIORITY = PRIORITY; }
+
+    public String getRELATIONSHIP_NAME() { return RELATIONSHIP_NAME; }
+    public void setRELATIONSHIP_NAME(String RELATIONSHIP_NAME) { this.RELATIONSHIP_NAME = RELATIONSHIP_NAME; }
+
+    public String getRELATIONSHIP_CODE() { return RELATIONSHIP_CODE; }
+    public void setRELATIONSHIP_CODE(String RELATIONSHIP_CODE) { this.RELATIONSHIP_CODE = RELATIONSHIP_CODE; }
+
+    public String getRELATED_STATUS_ROLL_UP() { return RELATED_STATUS_ROLL_UP; }
+    public void setRELATED_STATUS_ROLL_UP(String RELATED_STATUS_ROLL_UP) { this.RELATED_STATUS_ROLL_UP = RELATED_STATUS_ROLL_UP; }
+
+    public String getRELATED_STATUS_NAME() { return RELATED_STATUS_NAME; }
+    public void setRELATED_STATUS_NAME(String RELATED_STATUS_NAME) { this.RELATED_STATUS_NAME = RELATED_STATUS_NAME; }
+
+    public String getRELATED_STATUS_CODE() { return RELATED_STATUS_CODE; }
+    public void setRELATED_STATUS_CODE(String RELATED_STATUS_CODE) { this.RELATED_STATUS_CODE = RELATED_STATUS_CODE; }
+
+    public String getRELATED_TYPE_ROLL_UP() { return RELATED_TYPE_ROLL_UP; }
+    public void setRELATED_TYPE_ROLL_UP(String RELATED_TYPE_ROLL_UP) { this.RELATED_TYPE_ROLL_UP = RELATED_TYPE_ROLL_UP; }
+
+    public String getRELATED_TYPE_NAME() { return RELATED_TYPE_NAME; }
+    public void setRELATED_TYPE_NAME(String RELATED_TYPE_NAME) { this.RELATED_TYPE_NAME = RELATED_TYPE_NAME; }
+
+    public String getRELATED_TYPE_CODE() { return RELATED_TYPE_CODE; }
+    public void setRELATED_TYPE_CODE(String RELATED_TYPE_CODE) { this.RELATED_TYPE_CODE = RELATED_TYPE_CODE; }
+
+    public String getRELATED_TITLE() { return RELATED_TITLE; }
+    public void setRELATED_TITLE(String RELATED_TITLE) { this.RELATED_TITLE = RELATED_TITLE; }
+
+    public String getNOTES_TXT() { return NOTES_TXT; }
+    public void setNOTES_TXT(String NOTES_TXT) { this.NOTES_TXT = NOTES_TXT; }
+
+    public String getFOOTNOTE_TXT() { return FOOTNOTE_TXT; }
+    public void setFOOTNOTE_TXT(String FOOTNOTE_TXT) { this.FOOTNOTE_TXT = FOOTNOTE_TXT; }
+
+    public String getIMAGE_URL() { return IMAGE_URL; }
+    public void setIMAGE_URL(String IMAGE_URL) { this.IMAGE_URL = IMAGE_URL; }
+
+    public String getAFFILIATION() { return AFFILIATION; }
+    public void setAFFILIATION(String AFFILIATION) { this.AFFILIATION = AFFILIATION; }
+
+    public String getHONOURS() { return HONOURS; }
+    public void setHONOURS(String HONOURS) { this.HONOURS = HONOURS; }
+
+    public String getTITLE() { return TITLE; }
+    public void setTITLE(String TITLE) { this.TITLE = TITLE; }
+
+    public String getLAST_NAME() { return LAST_NAME; }
+    public void setLAST_NAME(String LAST_NAME) { this.LAST_NAME = LAST_NAME; }
+
+    public String getFIRST_NAME() { return FIRST_NAME; }
+    public void setFIRST_NAME(String FIRST_NAME) { this.FIRST_NAME = FIRST_NAME; }
+
+    public String getGROUP_NUMBER() { return GROUP_NUMBER; }
+    public void setGROUP_NUMBER(String GROUP_NUMBER) { this.GROUP_NUMBER = GROUP_NUMBER; }
+
+    public String getSEQUENCE_NUMBER() { return SEQUENCE_NUMBER; }
+    public void setSEQUENCE_NUMBER(String SEQUENCE_NUMBER) { this.SEQUENCE_NUMBER = SEQUENCE_NUMBER; }
+
+    public String getROLE_NAME() { return ROLE_NAME; }
+    public void setROLE_NAME(String ROLE_NAME) { this.ROLE_NAME = ROLE_NAME; }
+
+    public String getROLE_CODE() { return ROLE_CODE; }
+    public void setROLE_CODE(String ROLE_CODE) { this.ROLE_CODE = ROLE_CODE; }
+
+    public String getMETRIC_URL() { return METRIC_URL; }
+    public void setMETRIC_URL(String METRIC_URL) { this.METRIC_URL = METRIC_URL; }
+
+    public String getMETRIC_YEAR() { return METRIC_YEAR; }
+    public void setMETRIC_YEAR(String METRIC_YEAR) { this.METRIC_YEAR = METRIC_YEAR; }
+
+    public String getMETRIC() { return METRIC; }
+    public void setMETRIC(String METRIC) { this.METRIC = METRIC; }
+
+    public String getMETRIC_NAME() { return METRIC_NAME; }
+    public void setMETRIC_NAME(String METRIC_NAME) { this.METRIC_NAME = METRIC_NAME; }
+
+    public String getMETRIC_CODE() { return METRIC_CODE; }
+    public void setMETRIC_CODE(String METRIC_CODE) { this.METRIC_CODE = METRIC_CODE; }
+
+    public String getJOURNAL_PROD_SITE_CODE() { return JOURNAL_PROD_SITE_CODE; }
+    public void setJOURNAL_PROD_SITE_CODE(String JOURNAL_PROD_SITE_CODE) { this.JOURNAL_PROD_SITE_CODE = JOURNAL_PROD_SITE_CODE; }
+
+    public String getBUSINESS_UNIT_DESC() { return BUSINESS_UNIT_DESC; }
+    public void setBUSINESS_UNIT_DESC(String BUSINESS_UNIT_DESC) { this.BUSINESS_UNIT_DESC = BUSINESS_UNIT_DESC; }
+
+    public String getRF_LVI() { return RF_LVI; }
+    public void setRF_LVI(String RF_LVI) { this.RF_LVI = RF_LVI; }
+
+    public String getRF_FVI() { return RF_FVI; }
+    public void setRF_FVI(String RF_FVI) { this.RF_FVI = RF_FVI; }
+
+    public String getRF_TOTAL_PAGES_QTY() { return RF_TOTAL_PAGES_QTY; }
+    public void setRF_TOTAL_PAGES_QTY(String RF_TOTAL_PAGES_QTY) { this.RF_TOTAL_PAGES_QTY = RF_TOTAL_PAGES_QTY; }
+
+    public String getRF_ISSUES_QTY() { return RF_ISSUES_QTY; }
+    public void setRF_ISSUES_QTY(String RF_ISSUES_QTY) { this.RF_ISSUES_QTY = RF_ISSUES_QTY; }
+
+    public String getCATALOGUE_VOLUME_TO() { return CATALOGUE_VOLUME_TO; }
+    public void setCATALOGUE_VOLUME_TO(String CATALOGUE_VOLUME_TO) { this.CATALOGUE_VOLUME_TO = CATALOGUE_VOLUME_TO; }
+
+    public String getCATALOGUE_ISSUES_QTY() { return CATALOGUE_ISSUES_QTY; }
+    public void setCATALOGUE_ISSUES_QTY(String CATALOGUE_VOLUMES_QTY) { this.CATALOGUE_ISSUES_QTY = CATALOGUE_ISSUES_QTY; }
+
+    public String getCATALOGUE_VOLUMES_QTY() { return CATALOGUE_VOLUMES_QTY; }
+    public void setCATALOGUE_VOLUMES_QTY(String CATALOGUE_VOLUMES_QTY) { this.CATALOGUE_VOLUMES_QTY = CATALOGUE_VOLUMES_QTY; }
+
+    public String getISSUE_PROD_TYPE_CODE() { return ISSUE_PROD_TYPE_CODE; }
+    public void setISSUE_PROD_TYPE_CODE(String ISSUE_PROD_TYPE_CODE) { this.ISSUE_PROD_TYPE_CODE = ISSUE_PROD_TYPE_CODE; }
+
+    public String getPRIMARY_SITE_SUPPORT_LEVEL() { return PRIMARY_SITE_SUPPORT_LEVEL; }
+    public void setPRIMARY_SITE_SUPPORT_LEVEL(String PRIMARY_SITE_SUPPORT_LEVEL) { this.PRIMARY_SITE_SUPPORT_LEVEL = PRIMARY_SITE_SUPPORT_LEVEL; }
+
+    public String getPRIMARY_SITE_ACRONYM() { return PRIMARY_SITE_ACRONYM; }
+    public void setPRIMARY_SITE_ACRONYM(String PRIMARY_SITE_ACRONYM) { this.PRIMARY_SITE_ACRONYM = PRIMARY_SITE_ACRONYM; }
+
+    public String getPRIMARY_SITE_SYSTEM() { return PRIMARY_SITE_SYSTEM; }
+    public void setPRIMARY_SITE_SYSTEM(String PRIMARY_SITE_SYSTEM) { this.PRIMARY_SITE_SYSTEM = PRIMARY_SITE_SYSTEM; }
+
+    public String getTEXT_REF_TRADE() { return TEXT_REF_TRADE; }
+    public void setTEXT_REF_TRADE(String TEXT_REF_TRADE) { this.TEXT_REF_TRADE = TEXT_REF_TRADE; }
+
+    public String getPROFIT_CENTRE() { return PROFIT_CENTRE; }
+    public void setPROFIT_CENTRE(String PROFIT_CENTRE) { this.PROFIT_CENTRE = PROFIT_CENTRE; }
+
+    public String getINTERNAL_ELS_DIV() { return INTERNAL_ELS_DIV; }
+    public void setINTERNAL_ELS_DIV(String INTERNAL_ELS_DIV) { this.INTERNAL_ELS_DIV = INTERNAL_ELS_DIV; }
+
+    public String getBOOK_SUB_BUSINESS_UNIT() { return BOOK_SUB_BUSINESS_UNIT; }
+    public void setBOOK_SUB_BUSINESS_UNIT(String BOOK_SUB_BUSINESS_UNIT) { this.BOOK_SUB_BUSINESS_UNIT = BOOK_SUB_BUSINESS_UNIT; }
+
+    public String getAUDIENCE_TEXT() { return AUDIENCE_TEXT; }
+    public void setAUDIENCE_TEXT(String AUDIENCE_TEXT) { this.AUDIENCE_TEXT = AUDIENCE_TEXT; }
+
+    public String getTOC_SHORT() { return TOC_SHORT; }
+    public void setTOC_SHORT(String TOC_SHORT) { this.TOC_SHORT = TOC_SHORT; }
+
+    public String getTOC_LONG() { return TOC_LONG; }
+    public void setTOC_LONG(String TOC_LONG) { this.TOC_LONG = TOC_LONG; }
+
+    public String getREVIEW_QUOTES() { return REVIEW_QUOTES; }
+    public void setREVIEW_QUOTES(String REVIEW_QUOTES) { this.REVIEW_QUOTES = REVIEW_QUOTES; }
+
+    public String getPRODUCT_SHORT_DESC() { return PRODUCT_SHORT_DESC; }
+    public void setPRODUCT_SHORT_DESC(String PRODUCT_SHORT_DESC) { this.PRODUCT_SHORT_DESC = PRODUCT_SHORT_DESC; }
+
+    public String getPRODUCT_LONG_DESC() { return PRODUCT_LONG_DESC; }
+    public void setPRODUCT_LONG_DESC(String PRODUCT_LONG_DESC) { this.PRODUCT_LONG_DESC = PRODUCT_LONG_DESC; }
+
+    public String getPRODUCT_AWARDS() { return PRODUCT_AWARDS; }
+    public void setPRODUCT_AWARDS(String PRODUCT_AWARDS) { this.PRODUCT_AWARDS = PRODUCT_AWARDS; }
+
+    public String getKEY_FEATURES() { return KEY_FEATURES; }
+    public void setKEY_FEATURES(String KEY_FEATURES) { this.KEY_FEATURES = KEY_FEATURES; }
+
+    public String getAUTHOR_BY_LINE_TEXT() { return AUTHOR_BY_LINE_TEXT; }
+    public void setAUTHOR_BY_LINE_TEXT(String AUTHOR_BY_LINE_TEXT) { this.AUTHOR_BY_LINE_TEXT = AUTHOR_BY_LINE_TEXT; }
+
+    public String getMASTER_ISBN() { return MASTER_ISBN; }
+    public void setMASTER_ISBN(String MASTER_ISBN) { this.MASTER_ISBN = MASTER_ISBN; }
+
+    public String getIMAGE_FILE_REF() { return IMAGE_FILE_REF; }
+    public void setIMAGE_FILE_REF(String IMAGE_FILE_REF) { this.IMAGE_FILE_REF = IMAGE_FILE_REF; }
+
+    public String getDELTA_BUSINESS_UNIT() { return DELTA_BUSINESS_UNIT; }
+    public void setDELTA_BUSINESS_UNIT(String DELTA_BUSINESS_UNIT) { this.DELTA_BUSINESS_UNIT = DELTA_BUSINESS_UNIT; }
+
+    public String getJOURNS_AIMS_SCOPE() { return JOURNS_AIMS_SCOPE; }
+    public void setJOURNS_AIMS_SCOPE(String JOURNS_AIMS_SCOPE) { this.JOURNS_AIMS_SCOPE = JOURNS_AIMS_SCOPE; }
+
+    public String getJOURNAL_ELS_COM_IND() { return JOURNAL_ELS_COM_IND; }
+    public void setJOURNAL_ELS_COM_IND(String JOURNAL_ELS_COM_IND) { this.JOURNAL_ELS_COM_IND = JOURNAL_ELS_COM_IND; }
+
+    public String getLAST_UPDATED_DATE() { return LAST_UPDATED_DATE; }
+    public void setLAST_UPDATED_DATE(String LAST_UPDATED_DATE) { this.LAST_UPDATED_DATE = LAST_UPDATED_DATE; }
+
+    public String getWORK_TYPE() {
+        return WORK_TYPE;
+    }
+    public void setWORK_TYPE(String WORK_TYPE) { this.WORK_TYPE = WORK_TYPE; }
+
+    public String getEPR_ID() {
+        return EPR_ID;
+    }
+    public void setEPR_ID(String EPR_ID) { this.EPR_ID = EPR_ID; }
 
     public String getInternal_Elsevier_Division() {
         return Internal_Elsevier_Division;

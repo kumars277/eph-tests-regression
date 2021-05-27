@@ -3622,37 +3622,37 @@ public class PromisETLDataCheck {
             case "promis_transform_latest_pricing":
                 sql = String.format(PromisETLDataCheckSQL.GET_LATEST_PRICING_IDs, numberOfRecords);
                 List<Map<?, ?>> randomLatestPricingIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                Ids = randomLatestPricingIds.stream().map(m -> (Integer) m.get("EPR_ID")).map(String::valueOf).collect(Collectors.toList());
+                Ids = randomLatestPricingIds.stream().map(m -> (String) m.get("EPR_ID")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "promis_transform_latest_works":
                 sql = String.format(PromisETLDataCheckSQL.GET_LATEST_WORKS_IDs, numberOfRecords);
                 List<Map<?, ?>> randomLatestWorksIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                Ids = randomLatestWorksIds.stream().map(m -> (Integer) m.get("PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
+                Ids = randomLatestWorksIds.stream().map(m -> (String) m.get("EPR_ID")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "promis_transform_latest_metrics":
                 sql = String.format(PromisETLDataCheckSQL.GET_LATEST_METRICS_IDs, numberOfRecords);
                 List<Map<?, ?>> randomLatestMetricsIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                Ids = randomLatestMetricsIds.stream().map(m -> (Integer) m.get("PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
+                Ids = randomLatestMetricsIds.stream().map(m -> (String) m.get("EPR_ID")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "promis_transform_latest_person_roles":
                 sql = String.format(PromisETLDataCheckSQL.GET_LATEST_PERSON_ROLES_IDs, numberOfRecords);
                 List<Map<?, ?>> randomLatestPersonRolesIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                Ids = randomLatestPersonRolesIds.stream().map(m -> (Integer) m.get("PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
+                Ids = randomLatestPersonRolesIds.stream().map(m -> (String) m.get("EPR_ID")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "promis_transform_latest_work_rels":
                 sql = String.format(PromisETLDataCheckSQL.GET_LATEST_WORK_RELS_IDs, numberOfRecords);
                 List<Map<?, ?>> randomLatestWorkRelsIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                Ids = randomLatestWorkRelsIds.stream().map(m -> (Integer) m.get("PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
+                Ids = randomLatestWorkRelsIds.stream().map(m -> (String) m.get("PARENT_EPR_ID")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "promis_transform_latest_subject_areas":
                 sql = String.format(PromisETLDataCheckSQL.GET_LATEST_SUBJECT_AREAS_IDs, numberOfRecords);
                 List<Map<?, ?>> randomLatestSubjectAreasIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                Ids = randomLatestSubjectAreasIds.stream().map(m -> (Integer) m.get("PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
+                Ids = randomLatestSubjectAreasIds.stream().map(m -> (String) m.get("EPR_ID")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "promis_transform_latest_urls":
                 sql = String.format(PromisETLDataCheckSQL.GET_LATEST_URLS_IDs, numberOfRecords);
                 List<Map<?, ?>> randomLatestUrlsIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                Ids = randomLatestUrlsIds.stream().map(m -> (Integer) m.get("PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
+                Ids = randomLatestUrlsIds.stream().map(m -> (String) m.get("EPR_ID")).map(String::valueOf).collect(Collectors.toList());
                 break;
         }
         Log.info(sql);
@@ -3661,15 +3661,291 @@ public class PromisETLDataCheck {
 
     @When("^We get Promis allsource records from (.*)$")
     public void getAllSourceRecords(String allsourcetablename) throws ParseException {
-        Log.info("We get the records from Transform Mapping Query..");
+        Log.info("We get the records from AllSource..");
         switch (allsourcetablename) {
             case "product_extended_pricing_allsource_v":
                 sql = String.format(PromisETLDataCheckSQL.GET_AllSource_Extended_Pricing, Joiner.on("','").join(Ids));
                 break;
+            case "work_extended_allsource_v":
+                sql = String.format(PromisETLDataCheckSQL.GET_AllSource_Extended_Work, Joiner.on("','").join(Ids));
+                break;
+            case "work_extended_metric_allsource_v":
+                sql = String.format(PromisETLDataCheckSQL.GET_AllSource_Extended_Work_Metric, Joiner.on("','").join(Ids));
+                break;
+            case "work_extended_editorial_board_allsource_v":
+                sql = String.format(PromisETLDataCheckSQL.GET_AllSource_Extended_Work_Editorial_Board, Joiner.on("','").join(Ids));
+                break;
+            case "work_extended_relationship_sibling_allsource_v":
+                sql = String.format(PromisETLDataCheckSQL.GET_AllSource_Extended_Work_Relationship_Sibling, Joiner.on("','").join(Ids));
+                break;
+            case "work_extended_subject_area_allsource_v":
+                sql = String.format(PromisETLDataCheckSQL.GET_AllSource_Extended_Work_Subject_Area, Joiner.on("','").join(Ids));
+                break;
+            case "work_extended_url_allsource_v":
+                sql = String.format(PromisETLDataCheckSQL.GET_AllSource_Extended_Work_Url, Joiner.on("','").join(Ids));
+                break;
         }
         Log.info(sql);
-        PromisContext.tbPRMDataObjectsFromTransformMapping = DBManager.getDBResultAsBeanList(sql, PRMTablesETLObject.class, Constants.AWS_URL);
-        System.out.println(PromisETLDataContext.tbPRMDataObjectsFromTransformMapping.size());
+        PromisContext.tbPRMDataObjectsFromInbound = DBManager.getDBResultAsBeanList(sql, PRMTablesInboundObject.class, Constants.AWS_URL);
+    }
+
+    @Then("^We get the Latest records from (.*)$")
+    public void getPromLatestRecords(String latesttablename) throws ParseException {
+        Log.info("We get the Latest records..");
+        switch (latesttablename) {
+            case "promis_transform_latest_pricing":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_PRICING, Joiner.on("','").join(Ids));
+                break;
+            case "promis_transform_latest_works":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_WORKS, Joiner.on("','").join(Ids));
+                break;
+            case "promis_transform_latest_metrics":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_WORK_METRICS, Joiner.on("','").join(Ids));
+                break;
+            case "promis_transform_latest_person_roles":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_WORK_PERSON_ROLE, Joiner.on("','").join(Ids));
+                break;
+            case "promis_transform_latest_work_rels":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_WORK_RELS, Joiner.on("','").join(Ids));
+                break;
+            case "promis_transform_latest_subject_areas":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_SUBJECT_AREAS, Joiner.on("','").join(Ids));
+                break;
+            case "promis_transform_latest_urls":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_URLS, Joiner.on("','").join(Ids));
+                break;
+        }
+        Log.info(sql);
+        PromisETLDataContext.tbPRMDataObjectsFromCurrent = DBManager.getDBResultAsBeanList(sql, PRMTablesCurrentObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare Promis records for Latest and AllSource of (.*)$")
+    public void compareLatesttoAllsource(String allsourcetablename) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if (PromisETLDataContext.tbPRMDataObjectsFromInbound.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the data to compare the Promis records in Latest and Allsource ..");
+            for (int i = 0; i < PromisETLDataContext.tbPRMDataObjectsFromInbound.size(); i++) {
+                switch (allsourcetablename) {
+                    case "work_extended_allsource_v":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getEPR_ID)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getEPR_ID));
+
+                        String[] PromLatest_work_extendedColumnName = {"getEPR_ID","getWORK_TYPE","getLAST_UPDATED_DATE","getJOURNS_AIMS_SCOPE","getDELTA_BUSINESS_UNIT","getIMAGE_FILE_REF","getMASTER_ISBN","getAUTHOR_BY_LINE_TEXT","getKEY_FEATURES","getPRODUCT_AWARDS","getPRODUCT_LONG_DESC","getPRODUCT_SHORT_DESC","getREVIEW_QUOTES","getTOC_LONG","getTOC_SHORT","getAUDIENCE_TEXT","getBOOK_SUB_BUSINESS_UNIT","getINTERNAL_ELS_DIV"};
+                        String[] PromAllSource_work_extendedColumnName = {"getEPR_ID","getWORK_TYPE","getLAST_UPDATED_DATE","getJOURNAL_AIMS_SCOPE","getDELTA_BUSINESS_UNIT","getIMAGE_FILE_REF","getMASTER_ISBN","getAUTHOR_BY_LINE_TEXT","getKEY_FEATURES","getPRODUCT_AWARDS","getPRODUCT_LONG_DESC","getPRODUCT_SHORT_DESC","getREVIEW_QUOTES","getTOC_LONG","getTOC_SHORT","getAUDIENCE_TEXT","getBOOK_SUB_BUSINESS_UNIT","getINTERNAL_ELSEVIER_DIVISION"};
+                        int j =0;
+                        for (String strTemp : PromLatest_work_extendedColumnName) {
+
+
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(PromAllSource_work_extendedColumnName[j]);
+
+
+                            Log.info("EPR_ID => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getEPR_ID() +
+                                    " " + strTemp + " => All source=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Latest=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                            j++;
+                        }
+                        break;
+                    case "work_extended_metric_allsource_v":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getEPR_ID)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getEPR_ID));
+
+                        String[] PromLatest_work_extended_metricColumnName = {"getEPR_ID","getMETRIC_CODE","getMETRIC_NAME","getMETRIC","getMETRIC_YEAR","getMETRIC_URL","getWORK_TYPE"};
+                        for (String strTemp : PromLatest_work_extended_metricColumnName) {
+
+
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+
+                            Log.info("EPR_ID => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getEPR_ID() +
+                                    " " + strTemp + " => All source=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Latest=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                        }
+                        break;
+                    case "work_extended_editorial_board_allsource_v":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getEPR_ID)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getEPR_ID));
+
+                        String[] PromLatest_work_extended_editorial_boardColumnName = {"getEPR_ID","getWORK_TYPE","getLAST_UPDATED_DATE","getROLE_NAME","getSEQUENCE_NUMBER","getGROUP_NUMBER","getLAST_NAME","getTITLE","getHONOURS","getAFFILIATION","getIMAGE_URL","getFOOTNOTE_TXT","getNOTES_TXT"};
+                        String[] PromLatest_work_extended_PersonRoleColumnName = {"getEPR_ID","getWORK_TYPE","getLAST_UPDATED_DATE","getROLE_DESCRIPTION","getSEQUENCE_NUMBER","getGROUP_NUMBER","getLAST_NAME","getTITLE","getHONOURS","getAFFILIATION","getIMAGE_URL","getFOOTNOTE_TXT","getNOTES_TXT"};
+                        int a=0;
+                        for (String strTemp : PromLatest_work_extended_editorial_boardColumnName) {
+
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(PromLatest_work_extended_PersonRoleColumnName[a]);
+
+
+                            Log.info("EPR_ID => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getEPR_ID() +
+                                    " " + strTemp + " => All source=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Latest=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                            a++;
+                        }
+                        break;
+                    case "work_extended_relationship_sibling_allsource_v":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getEPR_ID)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPARENT_EPR_ID));
+
+                        String[] PromLatest_work_extended_relationship_sibling_ColumnName = {"getEPR_ID","getRELATED_TITLE","getRELATED_TYPE_CODE","getRELATED_TYPE_NAME","getRELATED_TYPE_ROLL_UP","getRELATED_STATUS_CODE","getRELATED_STATUS_NAME","getRELATED_STATUS_ROLL_UP","getRELATIONSHIP_CODE","getRELATIONSHIP_NAME"};
+                        String[] PromLatest_work_extended_relsColumnName = {"getPARENT_EPR_ID","getCHILD_TITLE","getCHILD_RELATED_TYPE_CODE","getCHILD_RELATED_TYPE_NAME","getCHILD_RELATED_TYPE_ROLL_UP","getCHILD_RELATED_STATUS_CODE","getCHILD_RELATED_STATUS_NAME","getCHILD_RELATED_STATUS_ROLL_UP","getRELATIONSHIP_TYPE_CODE","getRELATIONSHIP_TYPE_NAME"};
+                        int b=0;
+                        for (String strTemp : PromLatest_work_extended_relationship_sibling_ColumnName) {
+
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(PromLatest_work_extended_relsColumnName[b]);
+
+
+                            Log.info("EPR_ID => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getPARENT_EPR_ID() +
+                                    " " + strTemp + " => All source=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Latest=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                            b++;
+                        }
+                        break;
+                    case "work_extended_subject_area_allsource_v":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getEPR_ID)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getEPR_ID));
+
+                        String[] PromLatest_work_extended_subject_area_ColumnName = {"getEPR_ID","getPRIORITY","getCODE","getNAME","getTYPE_CODE","getTYPE_NAME","getWORK_TYPE"};
+                        String[] PromLatest_work_extended_subjectareaColumnName = {"getEPR_ID","getPRIORITY","getSUBJECT_AREA_CODE","getSUBJECT_AREA_NAME","getSUBJECT_TYPE_CODE","getSUBJECT_TYPE_NAME","getWORK_TYPE"};
+                        int c=0;
+                        for (String strTemp : PromLatest_work_extended_subject_area_ColumnName) {
+
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(PromLatest_work_extended_subjectareaColumnName[c]);
+
+
+                            Log.info("EPR_ID => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getEPR_ID() +
+                                    " " + strTemp + " => All source=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Latest=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                            c++;
+                        }
+                        break;
+                    case "work_extended_url_allsource_v":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getEPR_ID)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getEPR_ID));
+
+                        String[] PromLatest_work_extended_urls_ColumnName = {"getEPR_ID","getURL_TYPE_CODE","getURL_TYPE_NAME","getURL","getURL_TITLE"};
+                        String[] PromLatest_work_extended_urlsColumnName = {"getEPR_ID","getURL_CODE","getURL_NAME","getURL","getURL_TITLE"};
+                        int d=0;
+                        for (String strTemp : PromLatest_work_extended_urls_ColumnName) {
+
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(PromLatest_work_extended_urlsColumnName[d]);
+
+
+                            Log.info("EPR_ID => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getEPR_ID() +
+                                    " " + strTemp + " => All source=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Latest=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                            d++;
+                        }
+                        break;
+                    case "product_extended_pricing_allsource_v":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getEPR_ID)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getEPR_ID));
+
+                        String[] PromLatest_pricing_extended_ColumnName = {"getEPR_ID","getPRODUCT_TYPE","getCURRENCY","getPRICE","getREGION","getCUSTOMER_CATEGORY"};
+                        String[] PromLatest_pricing_extendedColumnName = {"getEPR_ID","getPRODUCT_TYPE","getPRICE_CURRENCY","getPRICE_AMOUNT","getPRICE_REGION","getPRICE_CUSTOMER_CATEGORY"};
+                        int e=0;
+                        for (String strTemp : PromLatest_pricing_extended_ColumnName) {
+
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(PromLatest_pricing_extendedColumnName[e]);
+
+
+                            Log.info("EPR_ID => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getEPR_ID() +
+                                    " " + strTemp + " => All source=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Latest=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                            e++;
+                        }
+                        break;
+                }
+            }
+        }
     }
 
 }
