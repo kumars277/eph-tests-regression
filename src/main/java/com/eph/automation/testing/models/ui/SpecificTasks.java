@@ -207,23 +207,29 @@ public void uploadToS3(String bucketName, String filetoUpload, String fileObjKey
 
     Regions clientRegion = Regions.fromName("eu-west-1");
 
-    String stringObjKeyName = "testobj";
+ //   String stringObjKeyName = "testobj";
 
     try {
         //This code expects that you have AWS credentials set up per:
         // https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html
+
+        //get credential from secret manager to access s3 bucket
+        JSONObject object =  SecretsManagerHandler.getSecretKeyObj("eu-west-1","eph_s3bucket_access");
+        BasicAWSCredentials creds = new BasicAWSCredentials(object.getAsString("aws_access_key_id"), object.getAsString("aws_secret_access_key"));
+
         AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
                 .withRegion(clientRegion)
+                .withCredentials(new  AWSStaticCredentialsProvider(creds))
                 .build();
 
         // Upload a text string as a new object.
-        s3Client.putObject(bucketName, stringObjKeyName, "Uploaded String Object");
+    //    s3Client.putObject(bucketName, stringObjKeyName, "Uploaded String Object");
 
         // Upload a file as a new object with ContentType and title specified.
         PutObjectRequest request = new PutObjectRequest(bucketName, fileObjKeyName, new File(filetoUpload));
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType("plain/text");
-        metadata.addUserMetadata("title", "someTitle");
+        metadata.addUserMetadata("QA Execution", "Result File");
         request.setMetadata(metadata);
         s3Client.putObject(request);
     } catch (AmazonServiceException e) {

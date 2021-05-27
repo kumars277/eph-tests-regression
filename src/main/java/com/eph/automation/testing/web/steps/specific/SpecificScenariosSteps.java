@@ -22,39 +22,16 @@ public class SpecificScenariosSteps {
 
 
     @Inject
-    public SpecificScenariosSteps(SpecificTasks specificTasks)
-    {
-        this.specificTasks = specificTasks;
-    }
+    public SpecificScenariosSteps(SpecificTasks specificTasks){this.specificTasks = specificTasks;}
 
 
-
-
-
-
-
-    @Given("^(.*) have a valid file available (.*) to read$")
-    public void verifyFileExists(String filePath, String fileName) throws Exception {
-        //created by Nishant @ 26 Apr 2021
-
-        String absoluteFilePath = filePath+fileName;
-        Assert.assertTrue("valid file exists - ",specificTasks.verifyFileExists(absoluteFilePath));
-
-        //read file as whole
-        DataQualityContext.dataFileRowColumn = specificTasks.readCsv(absoluteFilePath);
-        System.out.println("Total entries in input datafile - "+DataQualityContext.dataFileRowColumn.size()+"\n");
-
-    }
 
     @And("^Read file from S3 bucket (.*) and key (.*)$")
     public void readS3File(String bucket,String key) throws Exception {//created by Nishant @ 7 May 2021
        key = TestContext.getValues().s3Key;
        DataQualityContext.dataFileRowColumn =  specificTasks.readS3fileAPI(bucket,key);
        Log.info("headers count for s3 data file - " +DataQualityContext.dataFileRowColumn.get(0).size());
-
     }
-
-
 
     @Then("^verify links and write result to (.*)$")
     public void verifyLinksFromFile(String FilePath) throws Exception {
@@ -62,13 +39,9 @@ public class SpecificScenariosSteps {
        int RowFrom = 0; int RowTill = 0;
 
         if(false) {RowFrom = 1;             RowTill = 6;}//running on local
-        else{
-            RowFrom = TestContext.getValues().rowFrom;
-            RowTill = TestContext.getValues().rowTill;
-        Log.info("RowFrom = "+RowFrom);
-        Log.info("RowTill = "+RowTill);
+        else{RowFrom = TestContext.getValues().rowFrom;RowTill = TestContext.getValues().rowTill;}//running by Jenkins
 
-        }//running by Jenkins
+        Log.info("RowFrom = "+RowFrom);        Log.info("RowTill = "+RowTill);
 
         if(RowTill==0) RowTill=DataQualityContext.dataFileRowColumn.size();
 
@@ -104,6 +77,20 @@ public class SpecificScenariosSteps {
     @And ("^upload result (.*) to s3 (.*)$")
     public void uploadToS3(String sourceFilePath,String s3Bucket) throws IOException {
         specificTasks.uploadToS3(s3Bucket,sourceFilePath+DataQualityContext.resultFileName,DataQualityContext.resultFileName);
+    }
+
+
+    @Given("^(.*) have a valid file available (.*) to read$")
+    public void verifyFileExists(String filePath, String fileName) throws Exception {
+        //created by Nishant @ 26 Apr 2021
+
+        String absoluteFilePath = filePath+fileName;
+        Assert.assertTrue("valid file exists - ",specificTasks.verifyFileExists(absoluteFilePath));
+
+        //read file as whole
+        DataQualityContext.dataFileRowColumn = specificTasks.readCsv(absoluteFilePath);
+        System.out.println("Total entries in input datafile - "+DataQualityContext.dataFileRowColumn.size()+"\n");
+
     }
 
 
