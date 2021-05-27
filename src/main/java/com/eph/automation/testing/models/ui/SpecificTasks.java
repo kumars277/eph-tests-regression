@@ -293,9 +293,9 @@ public void uploadToS3(String bucketName, String filetoUpload, String fileObjKey
     }
 
 
-    public void writecsvHeader(int size, String fileName) throws Exception
+    public void writecsvHeader(String fileName) throws Exception
     {
-        String[] Header = new String[size];
+        String[] Header = new String[4];
         Header[0]="RowNumber";
         Header[1]="link";
         Header[2]="status";
