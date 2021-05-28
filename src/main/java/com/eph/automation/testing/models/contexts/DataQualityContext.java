@@ -105,6 +105,7 @@ public class DataQualityContext {
     public static ArrayList<ArrayList<String>> dataFileRowColumn = new ArrayList<>();
     public static String breadcrumbMessage = "";
     public static Response api_response;
+    public static String resultFileName;
 
 
 }

@@ -12,12 +12,16 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
+import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
+import com.eph.automation.testing.configuration.SecretsManagerHandler;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.mysql.cj.api.result.Row;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 import jdk.nashorn.internal.runtime.arrays.ArrayLikeIterator;
+import net.minidev.json.JSONObject;
+
 
 import javax.net.ssl.SSLHandshakeException;
 import java.io.*;
@@ -113,17 +117,23 @@ public ArrayList<ArrayList<String>> readS3fileAPI(String bucketName,String key) 
 
     ArrayList<ArrayList<String>> RowColumnData = new ArrayList<>();
     S3Object fullObject = null, objectPortion = null, headerOverrideObject = null;
-        try {
+
+    //get credential from secret manager to access s3 bucket
+    JSONObject object =  SecretsManagerHandler.getSecretKeyObj("eu-west-1","eph_s3bucket_access");
+
+    try {
+
+            BasicAWSCredentials creds = new BasicAWSCredentials(object.getAsString("aws_access_key_id"), object.getAsString("aws_secret_access_key"));
             AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
                     .withRegion(clientRegion)
-                    .withCredentials(new ProfileCredentialsProvider())
+                    .withCredentials(new  AWSStaticCredentialsProvider(creds))
+     //               .withCredentials(new ProfileCredentialsProvider())
                     .build();
 
             // Get an object and print its contents.
             System.out.println("Downloading s3 file");
             fullObject = s3Client.getObject(new GetObjectRequest(bucketName, key));
           //  System.out.println("Content-Type: " + fullObject.getObjectMetadata().getContentType());
-          //  System.out.println("Content: ");
 
             RowColumnData = displayTextInputStream(fullObject.getObjectContent());
 
@@ -194,29 +204,32 @@ public void creatS3Bucket(String bucketName)
 
 public void uploadToS3(String bucketName, String filetoUpload, String fileObjKeyName) throws IOException {
         //created by Nishant @ 10 May 2021
-  //  Region region = Region.valueOf("eu-west-1");
 
     Regions clientRegion = Regions.fromName("eu-west-1");
- //    bucketName = "eph-test-data";
-    String stringObjKeyName = "testobj";
- //   String fileObjKeyName = "Result from 0 to 10.csv";
- //   String fileName = "C:\\Users\\Chitren\\Office Work\\Project doc\\EPH sprint testing\\EPHD-3127 link verification\\Result from 0 to 10.csv";
+
+ //   String stringObjKeyName = "testobj";
 
     try {
         //This code expects that you have AWS credentials set up per:
         // https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/setup-credentials.html
+
+        //get credential from secret manager to access s3 bucket
+        JSONObject object =  SecretsManagerHandler.getSecretKeyObj("eu-west-1","eph_s3bucket_access");
+        BasicAWSCredentials creds = new BasicAWSCredentials(object.getAsString("aws_access_key_id"), object.getAsString("aws_secret_access_key"));
+
         AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
                 .withRegion(clientRegion)
+                .withCredentials(new  AWSStaticCredentialsProvider(creds))
                 .build();
 
         // Upload a text string as a new object.
-        s3Client.putObject(bucketName, stringObjKeyName, "Uploaded String Object");
+    //    s3Client.putObject(bucketName, stringObjKeyName, "Uploaded String Object");
 
         // Upload a file as a new object with ContentType and title specified.
         PutObjectRequest request = new PutObjectRequest(bucketName, fileObjKeyName, new File(filetoUpload));
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType("plain/text");
-        metadata.addUserMetadata("title", "someTitle");
+        metadata.addUserMetadata("QA Execution", "Result File");
         request.setMetadata(metadata);
         s3Client.putObject(request);
     } catch (AmazonServiceException e) {
@@ -293,9 +306,9 @@ public void uploadToS3(String bucketName, String filetoUpload, String fileObjKey
     }
 
 
-    public void writecsvHeader(int size, String fileName) throws Exception
+    public void writecsvHeader(String fileName) throws Exception
     {
-        String[] Header = new String[size];
+        String[] Header = new String[4];
         Header[0]="RowNumber";
         Header[1]="link";
         Header[2]="status";

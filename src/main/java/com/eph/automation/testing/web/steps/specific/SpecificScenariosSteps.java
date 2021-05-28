@@ -1,6 +1,7 @@
 package com.eph.automation.testing.web.steps.specific;
 
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.ui.SpecificTasks;
 import com.google.inject.Inject;
@@ -10,6 +11,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import org.junit.Assert;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,55 +22,33 @@ public class SpecificScenariosSteps {
 
 
     @Inject
-    public SpecificScenariosSteps(SpecificTasks specificTasks)
-    {
-        this.specificTasks = specificTasks;
-    }
+    public SpecificScenariosSteps(SpecificTasks specificTasks){this.specificTasks = specificTasks;}
 
 
-
-
-
-
-
-    @Given("^(.*) have a valid file available (.*) to read$")
-    public void verifyFileExists(String filePath, String fileName) throws Exception {
-        //created by Nishant @ 26 Apr 2021
-
-        String absoluteFilePath = filePath+fileName;
-        Assert.assertTrue("valid file exists - ",specificTasks.verifyFileExists(absoluteFilePath));
-
-        //read file as whole
-        DataQualityContext.dataFileRowColumn = specificTasks.readCsv(absoluteFilePath);
-        System.out.println("Total entries in input datafile - "+DataQualityContext.dataFileRowColumn.size()+"\n");
-
-    }
 
     @And("^Read file from S3 bucket (.*) and key (.*)$")
     public void readS3File(String bucket,String key) throws Exception {//created by Nishant @ 7 May 2021
-
+       key = TestContext.getValues().s3Key;
        DataQualityContext.dataFileRowColumn =  specificTasks.readS3fileAPI(bucket,key);
        Log.info("headers count for s3 data file - " +DataQualityContext.dataFileRowColumn.get(0).size());
-
     }
 
-    @And ("^print file data$")
-public void testtemp()
-    {//created by Nishant @ 7 May 2021
-        Log.info("other methods can read this data\n");
-        for(String colHeaders:DataQualityContext.dataFileRowColumn.get(0))
-        {
-            System.out.println(colHeaders);
-        }
-    }
-
-    @Then("^verify links from file (.*)$")
+    @Then("^verify links and write result to (.*)$")
     public void verifyLinksFromFile(String FilePath) throws Exception {
         //created by Nishant @ 26 Apr 2021
-        int RowFrom = 30;        int RowTill = 40;
+       int RowFrom = 0; int RowTill = 0;
 
-        String resultFileName = "Result from "+RowFrom+" to "+RowTill+" "+DataQualityContext.DateAndTime+".csv";
+        if(false) {RowFrom = 1;             RowTill = 6;}//running on local
+        else{RowFrom = TestContext.getValues().rowFrom;RowTill = TestContext.getValues().rowTill;}//running by Jenkins
 
+        Log.info("RowFrom = "+RowFrom);        Log.info("RowTill = "+RowTill);
+
+        if(RowTill==0) RowTill=DataQualityContext.dataFileRowColumn.size();
+
+        DataQualityContext.resultFileName = DataQualityContext.DateAndTime+" Link Testing Result from "+RowFrom+" to "+RowTill+".csv";
+
+       //write headers
+        specificTasks.writecsvHeader(FilePath+DataQualityContext.resultFileName);
 
         //set set counter for specific rows and verify those links
         for(int rowCnt=RowFrom;rowCnt<RowTill;rowCnt++)
@@ -85,40 +65,43 @@ public void testtemp()
             specificTasks.verifySingleLink(DataQualityContext.dataFileRowColumn.get(rowCnt).get(0));
 
             //write result file
-            specificTasks.writeCsv(FilePath+resultFileName,DataQualityContext.DataToWrite);
-
-
+            specificTasks.writeCsv(FilePath+DataQualityContext.resultFileName,DataQualityContext.DataToWrite);
 
             //reset variable
             specificTasks.resetValues(DataQualityContext.DataToWrite);
         }
 
-        specificTasks.uploadToS3("eph-test-data",FilePath+resultFileName,resultFileName);
+      //  specificTasks.uploadToS3("eph-test-data/QA",FilePath+DataQualityContext. resultFileName,DataQualityContext.resultFileName);
+    }
+
+    @And ("^upload result (.*) to s3 (.*)$")
+    public void uploadToS3(String sourceFilePath,String s3Bucket) throws IOException {
+        specificTasks.uploadToS3(s3Bucket,sourceFilePath+DataQualityContext.resultFileName,DataQualityContext.resultFileName);
+    }
 
 
+    @Given("^(.*) have a valid file available (.*) to read$")
+    public void verifyFileExists(String filePath, String fileName) throws Exception {
+        //created by Nishant @ 26 Apr 2021
 
+        String absoluteFilePath = filePath+fileName;
+        Assert.assertTrue("valid file exists - ",specificTasks.verifyFileExists(absoluteFilePath));
 
-
-
-        //  specificTasks.verifyLinksFromCsv(FilePath+fileType,FilePath);
-/*
-        //create a callable for each method
-        Callable<Void> callable1 = new Callable<Void>(){@Override public Void call() throws Exception{productFinderTasks.verifyLinksFromCsv(FilePath+fileType,FilePath);return null;}};
-        Callable<Void> callable2 = new Callable<Void>(){ @Override public Void call() throws Exception{productFinderTasks.verifyLinksFromCsv(FilePath+fileType,FilePath);return null;}};
-
-        //add to a list
-        List<Callable<Void>> taskList = new ArrayList<Callable<Void>>();
-        taskList.add(callable1);
-        taskList.add(callable2);
-
-        //create a pool executor with 3 threads
-        ExecutorService executor = Executors.newFixedThreadPool(2);
-
-        try{//start the threads and wait for them to finish
-            executor.invokeAll(taskList);}
-        catch (InterruptedException ie){        }
-*/
-
+        //read file as whole
+        DataQualityContext.dataFileRowColumn = specificTasks.readCsv(absoluteFilePath);
+        System.out.println("Total entries in input datafile - "+DataQualityContext.dataFileRowColumn.size()+"\n");
 
     }
+
+
+    @And ("^print file data$")
+    public void testtemp()
+    {//created by Nishant @ 7 May 2021
+        Log.info("other methods can read this data\n");
+        for(String colHeaders:DataQualityContext.dataFileRowColumn.get(0))
+        {
+            System.out.println(colHeaders);
+        }
+    }
+
 }

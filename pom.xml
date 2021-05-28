@@ -85,6 +85,9 @@
                         <encryptionPasswordEOAS>EOAS Secret Password</encryptionPasswordEOAS>
                         <dbRandomRecordsNumber>${dbRandomRecordsNumber}</dbRandomRecordsNumber>
                         <encryptionPassword>${encryptionPassword}</encryptionPassword>
+                        <S3file>${S3file}</S3file>
+                        <rowFrom>${rowFrom}</rowFrom>
+                        <rowTill>${rowTill}</rowTill>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
