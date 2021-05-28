@@ -31,7 +31,7 @@ public class ApplicationHooks {
     @After()
     public void clearAll()
     {
-        Log.info("UI test ending...");
+        Log.info("Test is ending...");
         DataQualityContext.breadcrumbMessage = "";
     }
 
