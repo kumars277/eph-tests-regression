@@ -71,7 +71,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
 
   @BCSCore
   Scenario Outline: Verify Data count for BCS core transform_file tables are transferred from current tables
-    Given Get the total count of BCS Core from Current Tables <targetTable>
+    Given Get the total count of BCS Core from Current Tables <sourceTable>
     Then Get the count of BCS core transform_file <targetTable>
     And Compare count of current <sourceTable> and tranform_file <targetTable> are identical
     Given Get the <countOfRandomIds> of BCS Core data from Current Tables <sourceTable>
