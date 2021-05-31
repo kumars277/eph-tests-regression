@@ -6,7 +6,7 @@ Feature: Customer Search API: Works
 
   @searchAPI @workSearchAPI
   Scenario: search work by ID
-    Given We get 1 random search ids for works ""
+    Given We get 1 random search ids for works default
     And We get the work search data from EPH GD
     Then the work details are retrieved and compared
 
@@ -98,49 +98,49 @@ Feature: Customer Search API: Works
 
   @searchAPI @workSearchAPI
   Scenario: search work by PMC Code
-    Given We get 1 random search ids for works ""
+    Given We get 1 random search ids for works default
     And We get the work search data from EPH GD
     Then the work details are retrieved by PMC Code and compared
 
   @searchAPI @workSearchAPI
   Scenario: search work by PMG Code
-    Given We get 1 random search ids for works ""
+    Given We get 1 random search ids for works default
     And We get the work search data from EPH GD
     Then the work details are retrieved by PMG Code and compared
 
   @searchAPI @workSearchAPI
   Scenario: search work by accountableProduct
-    Given We get 1 random search ids for works ""
+    Given We get 1 random search ids for works default
     And We get the work search data from EPH GD
     Then the work details are retrieved by accountableProduct and compared
 
   @searchAPI @workSearchAPI
   Scenario: search work by workStatus
-    Given We get 1 random search ids for works ""
+    Given We get 1 random search ids for works default
     And We get the work search data from EPH GD
     Then the work details are retrieved by workStatus and compared
 
   @searchAPI @workSearchAPI
   Scenario: search work by workType
-    Given We get 1 random search ids for works ""
+    Given We get 1 random search ids for works default
     And We get the work search data from EPH GD
     Then the work details are retrieved by workType and compared
 
   @searchAPI @workSearchAPI
   Scenario: search work by manifestationType
-    Given We get 1 random search ids for works ""
+    Given We get 1 random search ids for works default
     And We get the work search data from EPH GD
     Then the work details are retrieved by manifestationType and compared
 
   @searchAPI @workSearchAPI
   Scenario: search work by Search with PMCCode
-    Given We get 1 random search ids for works ""
+    Given We get 1 random search ids for works default
     And We get the work search data from EPH GD
     Then the work details are retrieved by search with PMC code and compared
 
   @searchAPI @workSearchAPI
   Scenario: search work by Search with PMGCode
-    Given We get 1 random search ids for works ""
+    Given We get 1 random search ids for works default
     And We get the work search data from EPH GD
     Then the work details are retrieved by search with PMG code and compared
 
