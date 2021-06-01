@@ -396,8 +396,6 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
-                   //     dataQualityBCSContext.recordsFromInboundData.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::gethonours)); //sort primarykey data in the lists
-                    //    dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::gethonours));
 
 
                         Log.info("comparing inbound and etl_work_person_role_extended_current_v records...");
@@ -432,7 +430,7 @@ public class BCS_ETLExtendedDataChecksSteps {
 
     @Given("^Get the (.*) of BCS Extended data from Current Tables (.*)$")
     public void getRandomIdsFromCurrent(String numberOfRecords, String tableName) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+      numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Extended Current Tables....");
 
@@ -1055,9 +1053,6 @@ public class BCS_ETLExtendedDataChecksSteps {
                         dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
                         dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY)); //sort primarykey data in the lists
                         dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
-                        dataQualityBCSContext.recordsFromCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::gethonours));
-                        dataQualityBCSContext.recFromTransformFile.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::gethonours));
-
 
                         Log.info("comparing etl_product_prices_extended_transform_file_history_part and etl_product_prices_extended_current_v records...");
                         String[] all_prod_price_Col = {"getEPRID", "getUKEY", "getPRODUCTTYPE", "getSOURCEREF", "getMODIFIEDON", "getmetadeleted", "getpricecurrency", "getpriceamount", "getpricestartdate", "getpriceenddate", "getpriceregion", "getpricecategory", "getpricecustomercategory", "getpricepurchasequantity"};
