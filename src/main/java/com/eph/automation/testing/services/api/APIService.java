@@ -96,11 +96,9 @@ public class APIService {
                 given()
                 .baseUri(SearchAPI_EndPoint)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
-                .param("queryType","name")
-                .param("queryValue", title)
                 .when()
-                .get("/product-hub-products/products");
-
+               .get("/product-hub-products/products?queryType=name&queryValue="+title);
+        //    response.prettyPrint();
           DataQualityContext.api_response = response;
          return response.thenReturn().as(ProductsMatchedApiObject.class);
     }

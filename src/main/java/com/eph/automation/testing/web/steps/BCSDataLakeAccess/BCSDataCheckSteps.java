@@ -88,7 +88,7 @@ public class BCSDataCheckSteps {
         else
             Ids = randomEPRIds.stream().map(m -> (String) m.get("sourceref")).collect(Collectors.toList());
         Log.info("Randomly picked ids..." + Ids);
-        // Ids.clear();Ids.add("559522");         //added by Nishant to debug failures
+       //  Ids.clear();Ids.add("506567");  Log.info("hard coded Id to debug is..." + Ids);       //added by Nishant to debug failures
         DataQualityContext.breadcrumbMessage += "->" + Ids;
     }
 
@@ -1518,7 +1518,7 @@ public class BCSDataCheckSteps {
                 printLog("name");
 
                 Assert.assertEquals(DataQualityContext.breadcrumbMessage+" text mismatch ", Jsoup.parse(bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getText()).text(),
-                        (bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getText()));
+                        Jsoup.parse(bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getText()).text());
                 printLog("text");
 
                 Assert.assertEquals(DataQualityContext.breadcrumbMessage+" status mismatch ", bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getStatus(),
