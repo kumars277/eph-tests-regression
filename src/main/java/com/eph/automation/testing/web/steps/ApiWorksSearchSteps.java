@@ -74,7 +74,7 @@ public class ApiWorksSearchSteps {
         Log.info("Environment used..."+System.getProperty("ENV"));
         Log.info("Selected random Journal ids  : " + ids);
         //for debugging failure
-        //  ids.clear(); ids.add("EPR-W-102T2W");  Log.info("hard coded work ids are : " + ids); //EPR-W-108VK7, EPR-W-108RJG   , EPR-W-108V6K
+          ids.clear(); ids.add("EPR-W-102VH6");  Log.info("hard coded work ids are : " + ids); //EPR-W-108VK7, EPR-W-108RJG   , EPR-W-108V6K
         DataQualityContext.breadcrumbMessage += "->" + ids;
         Assert.assertFalse(DataQualityContext.breadcrumbMessage + "-> Verify That list with random ids is not empty.", ids.isEmpty());
     }
