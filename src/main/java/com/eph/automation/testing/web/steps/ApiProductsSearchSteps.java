@@ -90,7 +90,7 @@ public class ApiProductsSearchSteps {
         Log.info("Environment used..."+System.getProperty("ENV"));
         Log.info("Selected random product ids are : " + ids);
         //added by Nishant @ 26 Dec for debugging failures
-        //  ids.clear(); ids.add("EPR-10N3X6"); Log.info("hard coded product ids are : " + ids);//
+         // ids.clear(); ids.add("EPR-112J1X"); Log.info("hard coded product ids are : " + ids);//
 
         DataQualityContext.breadcrumbMessage += "->" + ids;
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
