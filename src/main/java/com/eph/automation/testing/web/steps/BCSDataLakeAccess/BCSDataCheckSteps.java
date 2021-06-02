@@ -5,6 +5,7 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.BCSDataQualityContext;
+import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.BCS.BCSCurrentTableDataObject;
 import com.eph.automation.testing.models.dao.BCS.BCSHistoryTableDataObject;
 import com.eph.automation.testing.models.dao.BCS.BCSInitialIngestDataObject;
@@ -21,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static com.eph.automation.testing.models.contexts.DataQualityContext.ids;
+
 public class BCSDataCheckSteps {
 
     private static String sql;
@@ -29,7 +32,7 @@ public class BCSDataCheckSteps {
 
     @Given("^We get the (.*) random ids from initial ingest (.*)$")
     public void getRandomIdsFromInitialIngest(String countOfRandomIds, String targetTable) {
-        countOfRandomIds = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+     //   countOfRandomIds = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + countOfRandomIds);
         Log.info("getting random reference ids from initial ingest...");
         switch (targetTable) {
@@ -84,8 +87,8 @@ public class BCSDataCheckSteps {
         else
             Ids = randomEPRIds.stream().map(m -> (String) m.get("sourceref")).collect(Collectors.toList());
         Log.info("Randomly picked ids..." + Ids);
-        //added by Nishant to debug failures
-        // Ids.clear();Ids.add("559522");
+        // Ids.clear();Ids.add("559522");         //added by Nishant to debug failures
+        DataQualityContext.breadcrumbMessage += "->" + Ids;
     }
 
     @When("Get the data records from initial ingest for (.*)")
@@ -1585,7 +1588,7 @@ public class BCSDataCheckSteps {
 
     @Given("We get (.*) randomIds for BCS Current table (.*)")
     public void getRandomIdsFromCurrentTable(String countOfRandomIds,String sourceTable) {//created by Nishant @ 26 Nov 2020
-      countOfRandomIds = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+    //  countOfRandomIds = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + countOfRandomIds);
         Log.info("getting random reference ids from BCS table " + sourceTable);
         switch (sourceTable) {
@@ -1625,8 +1628,11 @@ public class BCSDataCheckSteps {
         else
             Ids = randomEPRIds.stream().map(m -> (String) m.get("sourceref")).collect(Collectors.toList());
         Log.info("Randomly picked ids..." + Ids);
-        //added by Nishant to debug failures
-         Ids.clear();Ids.add("550805");
+
+       //  Ids.clear();Ids.add("550805"); //added by Nishant to debug failures
+
+        DataQualityContext.breadcrumbMessage += "->" + Ids;
+
     }
 
     @When("Get data from BCS stg_current (.*)")
@@ -2103,7 +2109,7 @@ public class BCSDataCheckSteps {
                 }
 
                 Assert.assertTrue("source missing in current table"
-                    + bcsDataQualityContext.bcsInitialIngestDataObjectList.get(i).getClassificationcode(), Found);
+                    + bcsDataQualityContext.bcsCurrentTableDataObjectList.get(i).getSource(), Found);
         }
 
         Log.info("total " + bcsDataQualityContext.bcsCurrentTableDataObjectList.size() + " modified entries verified for sourceref "

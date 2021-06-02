@@ -1,4 +1,4 @@
-#Created by Nishant @ 04 Aug 2020
+#Created by Nishant @ 04 Aug 2020, updated by Nishant @ 02 Jun 2021
 #confluence page link
 #https://confluence.cbsels.com/pages/viewpage.action?spaceKey=EPH&title=BCS+Inbound
 
@@ -31,34 +31,11 @@ Feature:Validate data count for BCS tables in Data Lake
       |stg_current_versionfamily    |       1         |
 
 
-  @BCSInbound
-  Scenario Outline: Verify Data Count for BCS stg_history tables are transferred from stg_Current_tables
-    Given Get total count of BCS Current table <SourceTableName>
-    Then Get the count of BCS stg_history <TargettableName> for current comparision
-    And Check count of current table <SourceTableName> and history <TargettableName> are identical
-    Examples:
-      | SourceTableName                      | TargettableName                   |
-      |stg_current_classification	         |stg_history_classification_part    |
-      |stg_current_content                   |stg_history_content_part           |
-      |stg_current_extobject	             |stg_history_extobject_part         |
-      |stg_current_fullversionfamily	     |stg_history_fullversionfamily_part |
-      |stg_current_originators      	     |stg_history_originators_part       |
-      |stg_current_pricing          	     |stg_history_pricing_part           |
-      |stg_current_product	                 |stg_history_product_part           |
-      |stg_current_production	             |stg_history_production_part        |
-      |stg_current_relations	             |stg_history_relations_part         |
-      |stg_current_responsibilities	         |stg_history_responsibilities_part  |
-      |stg_current_sublocation	             |stg_history_sublocation_part       |
-      |stg_current_text                      |stg_history_text_part              |
-      |stg_current_versionfamily	         |stg_history_versionfamily_part     |
-
-
-      #below scenario not applicable any more as previous tables are no longer valid
  @BCSInbound
-  Scenario Outline: Verify Data count for BCS stg_history tables are transferred from stg_previous tables
-    Given We know the total count of stg_previous BCS data from <SourceTableName>
-    Then Get the count of BCS stg_history <TargetTableName> for previous comparision
-    And Check count of previous table <SourceTableName> and history <TargetTableName> are identical
+ Scenario Outline: Verify Count & Data for BCS stg_history tables are transferred from stg_Current_tables
+   Given Get total count of BCS Current table <SourceTableName>
+   Then Get the count of BCS stg_history <TargetTableName> for current comparision
+   And Check count of current table <SourceTableName> and history <TargetTableName> are identical
     Given We get <countOfRandomIds> randomIds for BCS Current table <SourceTableName>
     When Get data from BCS stg_current <SourceTableName>
     Then Get data from BCS stg_history <TargetTableName>
@@ -79,3 +56,33 @@ Feature:Validate data count for BCS tables in Data Lake
       |stg_current_text                       |stg_history_text_part              |     1           |
       |stg_current_versionfamily              |stg_history_versionfamily_part     |     1           |
 
+
+# merged in above scenario
+  #@BCSInbound
+ # Scenario Outline: Verify Data Count for BCS stg_history tables are transferred from stg_Current_tables
+ #   Given Get total count of BCS Current table <SourceTableName>
+ #   Then Get the count of BCS stg_history <TargettableName> for current comparision
+ #   And Check count of current table <SourceTableName> and history <TargettableName> are identical
+ #   Examples:
+ #     | SourceTableName                      | TargettableName                   |
+ #     |stg_current_classification	         |stg_history_classification_part    |
+ #     |stg_current_content                   |stg_history_content_part           |
+ #     |stg_current_extobject	             |stg_history_extobject_part         |
+ #     |stg_current_fullversionfamily	     |stg_history_fullversionfamily_part |
+ #     |stg_current_originators      	     |stg_history_originators_part       |
+ #     |stg_current_pricing          	     |stg_history_pricing_part           |
+ #     |stg_current_product	                 |stg_history_product_part           |
+ #     |stg_current_production	             |stg_history_production_part        |
+ #     |stg_current_relations	             |stg_history_relations_part         |
+ #     |stg_current_responsibilities	         |stg_history_responsibilities_part  |
+ #     |stg_current_sublocation	             |stg_history_sublocation_part       |
+ #     |stg_current_text                      |stg_history_text_part              |
+ #     |stg_current_versionfamily	         |stg_history_versionfamily_part     |
+
+# not applicable anymore as previouse table no longer applicable
+ # Scenario Outline: Verify Data count for BCS stg_history tables are transferred from stg_previous tables
+ #   Given We know the total count of stg_previous BCS data from <SourceTableName>
+ #   Then Get the count of BCS stg_history <TargetTableName> for previous comparision
+ #   And Check count of previous table <SourceTableName> and history <TargetTableName> are identical
+ #   Examples:
+ #     | SourceTableName                      | TargettableName                   |
