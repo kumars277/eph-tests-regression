@@ -43,7 +43,6 @@ public class ApiWorksSearchSteps {
     @Given("^We get (.*) random search ids for works (.*)$")
     public void getRandomWorkIds(String numberOfRecords,String workProperty) {
         //updated by Nishant @ 25 May 2021
-     //   DataQualityContext.breadcrumbMessage = "";
         switch(workProperty)
         {
             case"WORK_PRODUCT_SUMMARY_NAME":
@@ -379,6 +378,7 @@ public class ApiWorksSearchSteps {
         WorksMatchedApiObject returnedWorks = null;
         Log.info("searching by..." + searchType);
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
+    try {
         for (int i = 0; i < bound; i++) {
             String workId = dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID();
             switch (searchType) {
@@ -495,6 +495,12 @@ public class ApiWorksSearchSteps {
             returnedWorks.verifyWorksAreReturned();
             returnedWorks.verifyWorkWithIdIsReturned(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
         }
+    }
+    catch(Exception e)
+    {
+        Assert.assertFalse(DataQualityContext.breadcrumbMessage +" "+e.getMessage(),true);
+    }
+
     }
 
     @When("^the journal by search (.*) details are retrieved and compared$")

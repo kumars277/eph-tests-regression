@@ -3,6 +3,7 @@ package com.eph.automation.testing.models.api;
  * Created by GVLAYKOV
  */
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Verify;
 import org.junit.Assert;
@@ -36,7 +37,7 @@ public class WorksMatchedApiObject {
             }
             i++;
         }
-        Assert.assertTrue("work with person id found",found);
+         Assert.assertTrue(DataQualityContext.breadcrumbMessage+" work id found",found);
     }
 
 
