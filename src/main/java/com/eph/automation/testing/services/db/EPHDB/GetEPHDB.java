@@ -12,7 +12,7 @@ public class GetEPHDB {
             }
 
         }else{
-            dbStitch = "ephsit_extended_data_stitch";
+            dbStitch = "ephuat_extended_data_stitch";
         }
         return dbStitch;
     }
