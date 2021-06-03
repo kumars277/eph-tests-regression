@@ -15,7 +15,7 @@ Feature:Validate data count for BCS tables in Data Lake
     And Compare the records of initial ingest and current table <targetTable>
     Examples:
       | targetTable                  | countOfRandomIds|
-      |stg_current_classification   |       1         |
+      |stg_current_classification_bs   |       1         |
       |stg_current_content          |       2         |
       |stg_current_extobject        |       1         |
       |stg_current_fullversionfamily|       1         |

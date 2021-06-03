@@ -127,13 +127,18 @@ public class APIDataSQL {
                     "where a.f_pmg='%s';                           ";
 
     public static String SELECT_PRODUCTCOUNT_BY_SEGMENT_CODE =
-            "select count(p.product_id) from semarchy_eph_mdm.gd_product p "+
-                    "where p.f_status<>'NVP' and p.f_manifestation in "+
-                    "(select m.manifestation_id from semarchy_eph_mdm.gd_manifestation m,semarchy_eph_mdm.gd_wwork w,semarchy_eph_mdm.gd_accountable_product ap "+
-                    "where m.f_wwork = w.work_id and w.f_accountable_product = ap.accountable_product_id and ap.gl_product_segment_code='%s') "+
-                    "or p.f_wwork in "+
-                    "(select work_id from semarchy_eph_mdm.gd_wwork w, semarchy_eph_mdm.gd_accountable_product ap "+
-                    "where w.f_accountable_product = ap.accountable_product_id and ap.gl_product_segment_code='%s') ";
+            "select count(product_id) from semarchy_eph_mdm.gd_product where --f_status <>'NVP' and \n" +
+                    "f_manifestation in \n" +
+                    "(select manifestation_id from semarchy_eph_mdm.gd_manifestation gm \n" +
+                    "inner join semarchy_eph_mdm.gd_wwork gw on gm.f_wwork =gw.work_id \n" +
+                    "inner join semarchy_eph_mdm.gd_accountable_product gap on gw.f_accountable_product =gap.accountable_product_id \n" +
+                    "where gap.gl_product_segment_code ='%s')\n" +
+                    "or\n" +
+                    "f_wwork in\n" +
+                    "(select work_id from semarchy_eph_mdm.gd_wwork gw \n" +
+                    "inner join semarchy_eph_mdm.gd_accountable_product gap \n" +
+                    "on gw.f_accountable_product =gap.accountable_product_id \n" +
+                    "where gap.gl_product_segment_code ='%s')";
 
     //by Nishant @ 29 Nov 2019
     public static String EPH_GD_PRODUCT_EXTRACT_FOR_SEARCH = "SELECT \n" +

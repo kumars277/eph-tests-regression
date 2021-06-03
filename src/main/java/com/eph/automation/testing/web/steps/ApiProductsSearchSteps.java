@@ -90,7 +90,7 @@ public class ApiProductsSearchSteps {
         Log.info("Environment used..."+System.getProperty("ENV"));
         Log.info("Selected random product ids are : " + ids);
         //added by Nishant @ 26 Dec for debugging failures
-         // ids.clear(); ids.add("EPR-112J1X"); Log.info("hard coded product ids are : " + ids);//
+         // ids.clear(); ids.add("EPR-11CW7Y"); Log.info("hard coded product ids are : " + ids);//
 
         DataQualityContext.breadcrumbMessage += "->" + ids;
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
@@ -489,67 +489,53 @@ public class ApiProductsSearchSteps {
             boolean found = false;
             int from;
             int size;
+            from = 0;
+            size = 50;
             ProductsMatchedApiObject returnedProducts;
             switch (searchOption) {
-                case "PRODUCT_ID":
-                    returnedProducts = searchForProductsBySearchResult(productDataObject.getPRODUCT_ID());
-                    break;
+                case "PRODUCT_ID":returnedProducts = searchForProductsBySearchResult(productDataObject.getPRODUCT_ID());break;
+                case "PRODUCT_TITLE":returnedProducts = searchForProductsBySearchResult(productDataObject.getPRODUCT_NAME());break;
                 case "PRODUCT_IDENTIFIER":
                     //hard coded by Nishant @ 8 may 2020 as there is only few record in SIT gd_product_identifier table
                //     getRandomeProductIdWithIdentifier();
                //     getProductsDataFromEPHGD();
                     getProductIdentifiers(productDataObjects.get(0).getPRODUCT_ID());
+                    returnedProducts = searchForProductsBySearchResult(productIdentifiers.get(0).getIDENTIFIER());break;
 
-                    returnedProducts = searchForProductsBySearchResult(productIdentifiers.get(0).getIDENTIFIER());
-                    break;
-                case "PRODUCT_WORK_IDENTIFIER":
-                //    getRandomProductIdWithWork();
-                //    getProductsDataFromEPHGD();
-                    getWorkIdentifiers(productDataObjects.get(0).getF_PRODUCT_WORK());
-                    returnedProducts = searchForProductsBySearchResult(workIdentifiers.get(0).getIDENTIFIER());
-                    break;
-                case "PRODUCT_WORK_ID":
-                  //  getRandomProductIdWithWork();
-                  //  getProductsDataFromEPHGD();
-                    returnedProducts = searchForProductsBySearchResult(productDataObjects.get(0).getF_PRODUCT_WORK());
-                    break;
-
-                case "PRODUCT_MANIFESTATION_IDENTIFIER":
-                    List<Map<String, Object>> manifestationIdentifiers = getManifestationIdentifierByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-                    returnedProducts = searchForProductsBySearchResult(manifestationIdentifiers.get(0).get("identifier").toString());
-                    break;
+                case "PRODUCT_WORK_ID":returnedProducts = searchForProductsBySearchResult(productDataObjects.get(0).getF_PRODUCT_WORK());break;
+                case "PRODUCT_WORK_TITLE":getWorksDataFromEPHGD(productDataObjects.get(0).getF_PRODUCT_WORK());
+                    returnedProducts = searchForProductsBySearchResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE() + "&from=" + from + "&size=" + size);
+                    Log.info("Total product found for workTitle search... - " + returnedProducts.getTotalMatchCount());
+                    while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID()) && from + size < returnedProducts.getTotalMatchCount()) {
+                        from += size;
+                        Log.info("scanned productID from " + (from - size) + " to " + from + " records...");
+                        returnedProducts = searchForProductsBySearchResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE() + "&from=" + from + "&size=" + size);
+                    } break;
+                case "PRODUCT_WORK_IDENTIFIER":getWorkIdentifiers(productDataObjects.get(0).getF_PRODUCT_WORK());
+                    returnedProducts = searchForProductsBySearchResult(workIdentifiers.get(0).getIDENTIFIER());break;
 
                 case "PRODUCT_MANIFESTATION_ID":
-                    returnedProducts = searchForProductsBySearchResult(String.valueOf(productDataObject.getF_PRODUCT_MANIFESTATION_TYP()));
-                    break;
+                    returnedProducts = searchForProductsBySearchResult(String.valueOf(productDataObject.getF_PRODUCT_MANIFESTATION_TYP()));break;
+                case "PRODUCT_MANIFESTATION_TITLE":getManifestationByID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
+                    returnedProducts = searchForProductsBySearchResult(manifestationDataObjects.get(0).getMANIFESTATION_KEY_TITLE() + "&from=" + from + "&size=" + size);
+                    Log.info("Total product found for manifestationTitle search... - " + returnedProducts.getTotalMatchCount());
+                    while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID()) && from + size < returnedProducts.getTotalMatchCount()) {
+                        from += size;
+                        Log.info("scanned productID from " + (from - size) + " to " + from + " records...");
+                        returnedProducts = searchForProductsBySearchResult(manifestationDataObjects.get(0).getMANIFESTATION_KEY_TITLE() + "&from=" + from + "&size=" + size);
+                    }break;
+                case "PRODUCT_MANIFESTATION_IDENTIFIER":
+                    List<Map<String, Object>> manifestationIdentifiers = getManifestationIdentifierByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
+                    returnedProducts = searchForProductsBySearchResult(manifestationIdentifiers.get(0).get("identifier").toString());break;
 
+                case "PRODUCT_MANIFESTATION_WORK_ID":getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
+                    returnedProducts = searchForProductsBySearchResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());break;
+                case "PRODUCT_MANIFESTATION_WORK_TITLE":getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
+                    returnedProducts = searchForProductsBySearchResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());break;
                 case "PRODUCT_MANIFESTATION_WORK_IDENTIFIER":
                     getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
                     getWorkIdentifiers(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
-                    returnedProducts = searchForProductsBySearchResult(workIdentifiers.get(0).getIDENTIFIER());
-                    break;
-
-                case "PRODUCT_MANIFESTATION_WORK_ID":
-                    getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-                    returnedProducts = searchForProductsBySearchResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
-                    break;
-
-                case "PRODUCT_TITLE":
-                    returnedProducts = searchForProductsBySearchResult(productDataObject.getPRODUCT_NAME());
-                    break;
-                case "PRODUCT_WORK_TITLE":
-                //    getRandomProductIdWithWork();
-                //    getProductsDataFromEPHGD();
-                    returnedProducts = searchForProductsBySearchResult(productDataObjects.get(0).getWORK_TITLE());
-                    break;
-                case "PRODUCT_MANIFESTATION_TITLE":
-                    getManifestationByID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-                    returnedProducts = searchForProductsBySearchResult(manifestationDataObjects.get(0).getMANIFESTATION_KEY_TITLE());
-                    break;
-                case "PRODUCT_MANIFESTATION_WORK_TITLE":
-                    getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-                    returnedProducts = searchForProductsBySearchResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
-                    break;
+                    returnedProducts = searchForProductsBySearchResult(workIdentifiers.get(0).getIDENTIFIER());break;
 
                 case "PRODUCT_PERSONS_FULLNAME":
                      /*
@@ -558,52 +544,39 @@ public class ApiProductsSearchSteps {
                         hence we need to send API request with size 5000 and check if intended workID is returned
                         if not, send request again for next 5000 records until product id found
                         */
-
-                //    getRandomProductIdWithPerson();
-                //    getProductsDataFromEPHGD();
                     getProductPersonRoleByProductId(productDataObjects.get(0).getPRODUCT_ID());
                     getPersonDataByPersonId(personProductRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
-                    from = 0;
-                    size = 50;
+            //        from = 0;       size = 50;
                     returnedProducts = searchForProductsBySearchResult(personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
                     Log.info("Total product found for product person full name... - " + returnedProducts.getTotalMatchCount());
                     while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID()) && from + size < returnedProducts.getTotalMatchCount()) {
                         from += size;
                         Log.info("scanned productID from " + (from - size) + " to " + from + " records...");
                         returnedProducts = searchForProductsBySearchResult(personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
-                    }
-
-                    break;
+                    } break;
                 case "PRODUCT_WORK_PERSONS_FULLNAME":
-                 //   getRandomProductIdWithWork();
-                 //   getProductsDataFromEPHGD();
                     getWorkPersonRoleByWorkId(productDataObjects.get(0).getF_PRODUCT_WORK());
                     getPersonDataByPersonId(personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
-                    from = 0;
-                    size = 50;
+            //        from = 0;        size = 50;
                     returnedProducts = searchForProductsBySearchResult(personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
                     Log.info("Total product found for product work person full name... - " + returnedProducts.getTotalMatchCount());
                     while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID()) && from + size < returnedProducts.getTotalMatchCount()) {
                         from += size;
                         Log.info("scanned productID from " + (from - size) + " to " + from + " records...");
                         returnedProducts = searchForProductsBySearchResult(personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
-                    }
-
-                    break;
+                    } break;
                 case "PRODUCT_MANIFESTATION_WORK_PERSONS_FULLNAME":
                     getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
                     getWorkPersonRoleByWorkId(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
                     getPersonDataByPersonId(personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
-                    from = 0;
-                    size = 50;
+                //    from = 0; size = 50;
                     returnedProducts = searchForProductsBySearchResult(personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
                     Log.info("Total product found for product manifestation work person full name... - " + returnedProducts.getTotalMatchCount());
                     while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID()) && from + size < returnedProducts.getTotalMatchCount()) {
                         from += size;
                         Log.info("scanned productID from " + (from - size) + " to " + from + " records...");
                         returnedProducts = searchForProductsBySearchResult(personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
-                    }
-                    break;
+                    } break;
                 default:
                     throw new IllegalStateException("Unexpected value: " + searchOption);
             }
