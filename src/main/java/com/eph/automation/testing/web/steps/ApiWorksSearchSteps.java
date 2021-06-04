@@ -12,6 +12,8 @@ import com.eph.automation.testing.services.api.APIService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
+import static com.eph.automation.testing.services.api.APIService.searchForProductsBySearchResult;
+
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import cucumber.api.PendingException;
@@ -59,7 +61,7 @@ public class ApiWorksSearchSteps {
 
         Log.info("Selected random work ids  : " + ids +"on environment "+System.getProperty("ENV"));
         //added by Nishant @ 27 Dec for debugging failures
-       // ids.clear();ids.add("EPR-W-1028VR");Log.info("hard coded work ids are : " + ids);
+        //ids.clear();ids.add("EPR-W-104RFW");Log.info("hard coded work ids are : " + ids);
         DataQualityContext.breadcrumbMessage += "->" + ids;
         Assert.assertFalse(DataQualityContext.breadcrumbMessage + "- Verify That list with random ids is not empty.", ids.isEmpty());
     }
@@ -374,8 +376,7 @@ public class ApiWorksSearchSteps {
             int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
             for (int i = 0; i < bound; i++) {
 
-                Log.info("###########-----getWorkByIdentifier - " + identifierType);
-                Log.info("#######################################################");
+               int from=0;int size=50;
 
                 switch (identifierType) {
                     case "WORK_IDENTIFIER":
@@ -384,8 +385,18 @@ public class ApiWorksSearchSteps {
                         break;
                     case "WORK_MANIFESTATION_IDENTIFIER":
                         List<Map<String, Object>> manifIdentifiers = getEPHGDManifestationIdentifiersByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
-                        returnedWorks = apiService.searchForWorksByIdentifierResult(manifIdentifiers.get(i).get("identifier").toString());
+                        returnedWorks = apiService.searchForWorksByIdentifierResult(manifIdentifiers.get(i).get("identifier").toString() + "&from=" + from + "&size=" + size);
+
+                        Log.info("Total work found for WORK_MANIFESTATION_IDENTIFIER... - " + returnedWorks.getTotalMatchCount());
+                        while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID()) && from + size < returnedWorks.getTotalMatchCount()) {
+                            from += size;
+                            Log.info("scanned workId from " + (from - size) + " to " + from + " records...");
+                            returnedWorks = apiService.searchForWorksByIdentifierResult(manifIdentifiers.get(i).get("identifier").toString() + "&from=" + from + "&size=" + size);
+                        }
+
                         break;
+
+
                     case "WORK_ID":
                         returnedWorks = apiService.searchForWorksByIdentifierResult(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
                         break;
@@ -394,8 +405,8 @@ public class ApiWorksSearchSteps {
                         returnedWorks = apiService.searchForWorksByIdentifierResult(dataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getMANIFESTATION_ID());
                         break;
                 }
-                assert returnedWorks != null;
-                Log.info(returnedWorks.toString());
+               // assert returnedWorks != null;
+               // Log.info(returnedWorks.toString());
                 returnedWorks.verifyWorksAreReturned();
                 returnedWorks.verifyWorkWithIdIsReturned(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
 
@@ -903,11 +914,7 @@ public class ApiWorksSearchSteps {
     }
 
     List<String> getManifestationIdsForWorkID(String workID) {
-        //  Log.info("Get manifestationApiObject ids ..");
-
         sql = String.format(APIDataSQL.SELECT_MANIFESTATION_IDS_BY_WORKID, workID);
-        //   Log.info(sql);
-
         List<Map<?, ?>> manifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         List<String> ids = manifestationIds.stream().map(m -> (String) m.get("manifestation_id")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Manifestation ids for the work: " + ids);

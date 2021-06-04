@@ -87,7 +87,7 @@ public class ApiProductsSearchSteps {
         Log.info("Environment used..."+System.getProperty("ENV"));
         Log.info("Selected random product ids are : " + ids);
         //added by Nishant @ 26 Dec for debugging failures
-          ids.clear(); ids.add("EPR-10TN5S"); Log.info("hard coded product ids are : " + ids);//
+        //  ids.clear(); ids.add("EPR-10J09G"); Log.info("hard coded product ids are : " + ids);//
 
         DataQualityContext.breadcrumbMessage += "->" + ids;
         Assert.assertFalse(DataQualityContext.breadcrumbMessage +" Verify That list with random ids is not empty.", ids.isEmpty());
@@ -279,32 +279,32 @@ public class ApiProductsSearchSteps {
         return count;
     }
 
-    private int getProductCountByProductStatus(String productStatus){//created by Nishant @ 5th Dec 2019
-        sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_PRODUCTSTATUS,productStatus);
+    private int getProductCountByProductStatus(String searchTerm, String productStatus){//created by Nishant @ 5th Dec 2019
+        sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_PRODUCTSTATUS,searchTerm, productStatus);
         List<Map<String,Object>> countByProductStatus = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         int count=((Long)countByProductStatus.get(0).get("count")).intValue();
         Log.info("products count by productStatus in DB is: "+count);
         return count;
     }
 
-    private int getProductCountByProductType(String productType)    {//created by Nishant @ 9th Dec 2019
-        sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_PRODUCTTYPE,productType);
+    private int getProductCountByProductType(String searchTerm,String productType)    {//created by Nishant @ 9th Dec 2019
+        sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_PRODUCTTYPE,searchTerm,productType);
         List<Map<String,Object>> countByProductType = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         int count=((Long)countByProductType.get(0).get("count")).intValue();
         Log.info("products count by productType in DB is: "+count);
         return count;
     }
 
-    private int getProductCountByWorkType(String workType){//created by Nishant @ 9th Dec 2019
-        sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_WORKTYPE,workType);
+    private int getProductCountByWorkType(String searchTerm,String workType){//created by Nishant @ 9th Dec 2019
+        sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_WORKTYPE,searchTerm,workType);
         List<Map<String,Object>> countByWorkType = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         int count=((Long)countByWorkType.get(0).get("count")).intValue();
         Log.info("products count by workType in DB is: "+count);
         return count;
     }
 
-    private int getProductCountByManifestationType(String manifestationType){//created by Nishant @ 9th Dec 2019
-        sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_MANIFESTATIONTYPE,manifestationType);
+    private int getProductCountByManifestationType(String searchTerm, String manifestationType){//created by Nishant @ 9th Dec 2019
+        sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_MANIFESTATIONTYPE,searchTerm,manifestationType);
         List<Map<String,Object>> countByManifestationType = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         int count=((Long)countByManifestationType.get(0).get("count")).intValue();
         Log.info("products count by manifestationType in DB is: "+count);
@@ -821,30 +821,31 @@ public class ApiProductsSearchSteps {
         Log.info("Automation is in progress");
         ProductsMatchedApiObject returnedProducts;
         String searchTerm = (productDataObjects.get(0).getPRODUCT_NAME().split(" ")[0]).toUpperCase();
+        String defaultSearch = "CELL";
         int productCount_DB = 0;
         switch (paramKey)
         {
             case "productStatus":
-                returnedProducts =   searchForProductByParam("cell",paramKey,productDataObjects.get(0).getF_STATUS());
+                returnedProducts =   searchForProductByParam(defaultSearch,paramKey,productDataObjects.get(0).getF_STATUS());
                 DataQualityContext.breadcrumbMessage += "->" + productDataObjects.get(0).getF_STATUS();
-                productCount_DB = getProductCountByProductStatus(productDataObjects.get(0).getF_STATUS());
+                productCount_DB = getProductCountByProductStatus(defaultSearch,productDataObjects.get(0).getF_STATUS());
                 break;
             case "productType":
-                returnedProducts =   searchForProductByParam("cell",paramKey,productDataObjects.get(0).getF_TYPE());
+                returnedProducts =   searchForProductByParam(defaultSearch,paramKey,productDataObjects.get(0).getF_TYPE());
                 DataQualityContext.breadcrumbMessage += "->" +productDataObjects.get(0).getF_TYPE();
-                productCount_DB = getProductCountByProductType(productDataObjects.get(0).getF_TYPE());
+                productCount_DB = getProductCountByProductType(defaultSearch,productDataObjects.get(0).getF_TYPE());
                 break;
             case "workType":
                 getWorkByManifestationID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
-                returnedProducts =   searchForProductByParam("cell",paramKey,dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
+                returnedProducts =   searchForProductByParam(defaultSearch,paramKey,dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
                 DataQualityContext.breadcrumbMessage += "->" +dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE();
-                productCount_DB = getProductCountByWorkType(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
+                productCount_DB = getProductCountByWorkType(defaultSearch,dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
                 break;
             case "manifestationType":
                 getManifestationByID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
-                returnedProducts =   searchForProductByParam("cell",paramKey,manifestationDataObjects.get(0).getF_TYPE());
+                returnedProducts =   searchForProductByParam(defaultSearch,paramKey,manifestationDataObjects.get(0).getF_TYPE());
                 DataQualityContext.breadcrumbMessage += "->" +manifestationDataObjects.get(0).getF_TYPE();
-                productCount_DB = getProductCountByManifestationType(manifestationDataObjects.get(0).getF_TYPE());
+                productCount_DB = getProductCountByManifestationType(defaultSearch,manifestationDataObjects.get(0).getF_TYPE());
                 break;
             case "pmcCode":
                 getWorkByManifestationID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
