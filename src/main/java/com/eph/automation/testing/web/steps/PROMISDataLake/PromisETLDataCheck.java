@@ -1,21 +1,27 @@
 package com.eph.automation.testing.web.steps.PROMISDataLake;
 
-import com.eph.automation.testing.configuration.*;
-import com.eph.automation.testing.helper.*;
+import com.eph.automation.testing.configuration.Constants;
+import com.eph.automation.testing.configuration.DBManager;
+import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.dao.PROMISDataLake.PRMTablesInboundObject;
 import com.eph.automation.testing.models.contexts.PromisETL.PromisContext;
 import com.eph.automation.testing.models.dao.PROMISDataLake.PRMTablesCurrentObject;
 import com.eph.automation.testing.models.dao.PROMISDataLake.PRMTablesDLObject;
 import com.eph.automation.testing.models.dao.PROMISDataLake.PRMTablesETLObject;
 import com.eph.automation.testing.services.db.PROMISDataLakeSQL.PromisETLDataCheckSQL;
 import com.google.common.base.Joiner;
-import cucumber.api.java.en.*;
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import net.minidev.json.parser.ParseException;
-import org.apache.poi.ss.formula.functions.IDStarAlgorithm;
 import org.junit.Assert;
 
-
-import java.util.*;
-import java.util.stream.*;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PromisETLDataCheck {
     public PromisContext PromisDataContext;
@@ -24,8 +30,8 @@ public class PromisETLDataCheck {
     private static List<String> Ids;
 
     @Given("^We get the (.*) random Promis ids of (.*)$")
-    public void getRandomPromisIds(String numberOfRecords, String Currenttablename) {
-       // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+    public void getRandomPromisId(String numberOfRecords, String Currenttablename) {
+        // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random records...");
         switch (Currenttablename) {
@@ -87,9 +93,9 @@ public class PromisETLDataCheck {
                 break;
         }
         Log.info(sql);
-        PromisContext.tbPRMDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, PRMTablesDLObject.class, Constants.AWS_URL);
-        System.out.println(PromisDataContext.tbPRMDataObjectsFromDL.size());
+        PromisETLDataContext.tbPRMDataObjectsFromInbound = DBManager.getDBResultAsBeanList(sql, PRMTablesInboundObject.class, Constants.AWS_URL);
     }
+
 
     @Then("^We get the Promis Current records from (.*)$")
     public void getRecordsAutPubtDL(String Currenttablename) throws ParseException {
@@ -126,1193 +132,281 @@ public class PromisETLDataCheck {
         Log.info(sql);
         PromisDataContext.tbPRMDataObjectsFromCurrent = DBManager.getDBResultAsBeanList(sql, PRMTablesCurrentObject.class, Constants.AWS_URL);
     }
-/*
+
     @And("^Compare Promis records in Inbound and Current of (.*)$")
-    public void comparePromDataInboundtoCurrent(String Inboundtablename) {
-        if (PromisDataContext.tbPRMDataObjectsFromDL.isEmpty()) {
+    public void comparePromDataInboundtoCurrent(String Inboundtablename) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if (PromisETLDataContext.tbPRMDataObjectsFromInbound.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
-            switch (Inboundtablename) {
-                case "promis_prmautpubt_part":
-                    Log.info("Sorting the data to compare the PRMAUTPUBT records in Inbound and Current ..");
-                    for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDL.size(); i++) {
-
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getPUB_IDT)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getAUT_EDT_IDT)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getAUT_EDT_IDT));
-
-
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " PUB_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT() != null)) {
-                            Assert.assertEquals("The PUB_IDT is =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT());
+            Log.info("Sorting the data to compare the Promis records in Inbound and Inbound ..");
+            for (int i = 0; i < PromisETLDataContext.tbPRMDataObjectsFromInbound.size(); i++) {
+                switch (Inboundtablename) {
+                    case "promis_prmautpubt_part":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getPUB_IDT)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
 
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " AUT_EDT_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_IDT());
-
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_IDT() != null)) {
-                            Assert.assertEquals("The AUT_EDT_IDT is incorrect for PUB_IDT=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_IDT());
-                        }
-
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " AUT_EDT_TYP => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_TYP() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_TYP());
-
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_TYP() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_TYP() != null)) {
-                            Assert.assertEquals("The AUT_EDT_TYP is incorrect for PUB_IDT=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_TYP(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_TYP());
-                        }
-
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " TYP_DES => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getTYP_DES() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getTYP_DES());
-
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getTYP_DES() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getTYP_DES() != null)) {
-                            Assert.assertEquals("The TYP_DES is incorrect for PUB_IDT=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getTYP_DES(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getTYP_DES());
-                        }
-
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " SEQ_NUM => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSEQ_NUM() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSEQ_NUM());
-
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSEQ_NUM() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSEQ_NUM() != null)) {
-                            Assert.assertEquals("The SEQ_NUM is incorrect for PUB_IDT=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSEQ_NUM(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSEQ_NUM());
-                        }
-
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " AUT_EDT_PRE => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_PRE() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_PRE());
-
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_PRE() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_PRE() != null)) {
-                            Assert.assertEquals("The AUT_EDT_PRE is incorrect for PUB_IDT=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_PRE(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_PRE());
-                        }
-
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " AUT_EDT_INI => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_INI() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_INI());
-
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_INI() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_INI() != null)) {
-                            Assert.assertEquals("The AUT_EDT_INI is incorrect for PUB_IDT=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_INI(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_INI());
-                        }
-
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " AUT_EDT_NAM => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_NAM() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_NAM());
-
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_NAM() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_NAM() != null)) {
-                            Assert.assertEquals("The AUT_EDT_NAM is incorrect for PUB_IDT=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_NAM(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_NAM());
-                        }
-
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " AUT_EDT_SORT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_SORT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_SORT());
-
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_SORT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_SORT() != null)) {
-                            Assert.assertEquals("The AUT_EDT_SORT is incorrect for PUB_IDT=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_SORT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_SORT());
-                        }
-
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " AUT_EDT_SUF => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_SUF() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_SUF());
-
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_SUF() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_SUF() != null)) {
-                            Assert.assertEquals("The AUT_EDT_SUF is incorrect for PUB_IDT=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_SUF(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_SUF());
-                        }
-
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " AFF_TXT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAFF_TXT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAFF_TXT());
-
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAFF_TXT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAFF_TXT() != null)) {
-                            Assert.assertEquals("The AFF_TXT is incorrect for PUB_IDT=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAFF_TXT().replace("\n", " ").replace("\r", " ").replace("\0", ""),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAFF_TXT());
-                        }
-
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " FTN => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFTN() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFTN());
-
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFTN() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFTN() != null)) {
-                            Assert.assertEquals("The FTN is incorrect for PUB_IDT=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFTN().replace("\n", " ").replace("\r", " ").replace("\0", ""),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFTN());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " AUT_EDT_JCI => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_JCI() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_JCI());
-
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_JCI() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_JCI() != null)) {
-                            Assert.assertEquals("The AUT_EDT_JCI is incorrect for PUB_IDT=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_JCI(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_JCI());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " BIO_IMAGE => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getBIO_IMAGE() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getBIO_IMAGE());
-
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getBIO_IMAGE() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getBIO_IMAGE() != null)) {
-                            Assert.assertEquals("The BIO_IMAGE is incorrect for PUB_IDT=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() + " and AUT_EDT_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getBIO_IMAGE(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getBIO_IMAGE());
-                        }
-                    }
-                    break;
-                case "promis_prmclscodt_part":
-                    Log.info("Sorting the data to compare the PRMCLSCODT records between inbound and current ..");
-                    for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDL.size(); i++) {
-
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getCLS_COD)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getCLS_COD));
-
-                        Log.info("CLS_COD => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD() +
-                                " CLS_COD => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getCLS_COD());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getCLS_COD() != null)) {
-                            Assert.assertEquals("The CLS_COD =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD() + " is missing/not found in Data Lake",
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getCLS_COD());
-                        }
-
-                        Log.info("CLS_COD => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD() +
-                                " CLS_DES => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCLS_DES() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getCLS_DES());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCLS_DES() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getCLS_DES() != null)) {
-                            Assert.assertEquals("The CLS_DES is incorrect for CLS_COD=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCLS_DES(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getCLS_DES());
-                        }
-                    }
-                    break;
-                case "promis_prmclst_part":
-                    Log.info("Sorting the data to compare the PRMCLST records in Inbound and DATA LAKE ..");
-                    for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDL.size(); i++) {
-
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getPUB_IDT)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
-
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getCLS_COD)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getCLS_COD));
-
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " PUB_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT() != null)) {
-                            Assert.assertEquals("The PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT());
-
-                        }
+                        String[] PromInbound_prmautpubtColumnName = {"getPUB_IDT", "getAUT_EDT_IDT", "getAUT_EDT_TYP", "getTYP_DES", "getSEQ_NUM", "getAUT_EDT_PRE", "getAUT_EDT_INI", "getAUT_EDT_NAM", "getAUT_EDT_SORT", "getAUT_EDT_SUF", "getAFF_TXT", "getFTN", "getBIO", "getAUT_EDT_JCI", "getBIO_IMAGE"};
+                        for (String strTemp : PromInbound_prmautpubtColumnName) {
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " CLS_COD => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getCLS_COD());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getCLS_COD() != null)) {
-                            Assert.assertEquals("The CLS_COD is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getCLS_COD());
 
-                        }
-                    }
-                    break;
-                case "promis_prmlondest_part":
-                    Log.info("Sorting the data to compare the PRMLONDEST records in Inbound and DATA LAKE ..");
-                    for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDL.size(); i++) {
-
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getPUB_IDT)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
-
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getPUB_VOL_IDT)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_VOL_IDT));
-
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getVOL_PRT_IDT)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getVOL_PRT_IDT));
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " PUB_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT() != null)) {
-                            Assert.assertEquals("The PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT());
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
 
-                        }
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " PUB_VOL_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_VOL_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_VOL_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_VOL_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_VOL_IDT() != null)) {
-                            Assert.assertEquals("The PUB_VOL_IDT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_VOL_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_VOL_IDT());
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        }
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " VOL_PRT_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getVOL_PRT_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getVOL_PRT_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getVOL_PRT_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getVOL_PRT_IDT() != null)) {
-                            Assert.assertEquals("The VOL_PRT_IDT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getVOL_PRT_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getVOL_PRT_IDT());
+                            Log.info("PUB_IDT => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT() +
+                                    " " + strTemp + " => Inbound=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Current=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
                         }
-                    }
-                    break;
-                case "promis_prmpricest_part":
-                    Log.info("Sorting the data to compare the PRMPRICEST records in Inbound and DATA LAKE ..");
-                    for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDL.size(); i++) {
-
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getPUB_IDT)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
-
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getPUB_VOL_IDT)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_VOL_IDT));
-
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getVOL_PRT_IDT)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getVOL_PRT_IDT));
-
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getEDN_IDT)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getEDN_IDT));
-
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getEDN_IDT)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getEDN_IDT));
+                        break;
+                    case "promis_prmclscodt_part":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getCLS_COD)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getCLS_COD));
 
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getPRC_TYP)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPRC_TYP));
+                        String[] PromInbound_prmclscodtColumnName = {"getCLS_COD", "getCLS_DES", "getCLS_GRP_COD"};
+                        for (String strTemp : PromInbound_prmclscodtColumnName) {
 
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getPRC_GEO)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPRC_GEO));
 
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getIPT_COD)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getIPT_COD));
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
 
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " PUB_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT() != null)) {
-                            Assert.assertEquals("The PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT());
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        }
-
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " PUB_VOL_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_VOL_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_VOL_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_VOL_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_VOL_IDT() != null)) {
-                            Assert.assertEquals("The PUB_VOL_IDT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_VOL_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_VOL_IDT());
 
+                            Log.info("CLS_COD => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getCLS_COD() +
+                                    " " + strTemp + " => Inbound=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Current=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
                         }
+                        break;
+                    case "promis_prmclst_part":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getPUB_IDT)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " VOL_PRT_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getVOL_PRT_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getVOL_PRT_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getVOL_PRT_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getVOL_PRT_IDT() != null)) {
-                            Assert.assertEquals("The VOL_PRT_IDT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getVOL_PRT_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getVOL_PRT_IDT());
-
-                        }
+                        String[] PromInbound_prmprmclstColumnName = {"getPUB_IDT", "getCLS_COD"};
+                        for (String strTemp : PromInbound_prmprmclstColumnName) {
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " EDN_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getEDN_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getEDN_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getEDN_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getEDN_IDT() != null)) {
-                            Assert.assertEquals("The EDN_IDT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getEDN_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getEDN_IDT());
 
-                        }
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " PRC_TYP => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPRC_TYP() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPRC_TYP());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPRC_TYP() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPRC_TYP() != null)) {
-                            Assert.assertEquals("The PRC_TYP is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPRC_TYP(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPRC_TYP());
-                        }
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " PRC_GEO => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPRC_GEO() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPRC_GEO());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPRC_GEO() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPRC_GEO() != null)) {
-                            Assert.assertEquals("The PRC_GEO is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPRC_GEO(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPRC_GEO());
-                        }
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " IPT_COD => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIPT_COD() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIPT_COD());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIPT_COD() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIPT_COD() != null)) {
-                            Assert.assertEquals("The IPT_COD is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIPT_COD(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIPT_COD());
-                        }
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " PRC_DAT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPRC_DAT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPRC_DAT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPRC_DAT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPRC_DAT() != null)) {
-                            Assert.assertEquals("The PRC_DAT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPRC_DAT().substring(0, 10),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPRC_DAT().substring(0, 10));
+                            Log.info("PUB_IDT => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT() +
+                                    " " + strTemp + " => Inbound=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Current=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
                         }
+                        break;
+                    case "promis_prmlondest_part":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getPUB_IDT)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " STD_CUR_COD => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSTD_CUR_COD() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSTD_CUR_COD());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSTD_CUR_COD() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSTD_CUR_COD() != null)) {
-                            Assert.assertEquals("The STD_CUR_COD is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSTD_CUR_COD(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSTD_CUR_COD());
-                        }
+                        String[] PromInbound_prmlondestColumnName = {"getPUB_IDT", "getPUB_VOL_IDT", "getVOL_PRT_IDT", "getLON_DES"};
+                        for (String strTemp : PromInbound_prmlondestColumnName) {
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " STD_PRC => Inbound=" + String.valueOf(Math.round(Double.parseDouble(PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSTD_PRC()))) +
-                                " Current=" + String.valueOf(Math.round(Double.parseDouble(PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSTD_PRC()))));
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSTD_CUR_COD() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSTD_CUR_COD() != null)) {
-                            Assert.assertEquals("The STD_PRC is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    String.valueOf(Math.round(Double.parseDouble(PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSTD_PRC()))),
-                                    String.valueOf(Math.round(Double.parseDouble(PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSTD_PRC()))));
-                        }
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " PRC_PRE => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPRC_PRE() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPRC_PRE());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPRC_PRE() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPRC_PRE() != null)) {
-                            Assert.assertEquals("The PRC_PRE is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPRC_PRE().replace("\n", " ").replace("\r", " ").replace("\0", ""),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPRC_PRE());
-                        }
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " ADD_PRC => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getADD_PRC() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getADD_PRC());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getADD_PRC() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getADD_PRC() != null)) {
-                            Assert.assertEquals("The ADD_PRC is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getADD_PRC().replace("\n", " ").replace("\r", " ").replace("\0", ""),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getADD_PRC());
-                        }
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " EXP_DAT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getEXP_DAT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getEXP_DAT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getEXP_DAT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getEXP_DAT() != null)) {
-                            Assert.assertEquals("The EXP_DAT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getEXP_DAT().substring(0, 10),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getEXP_DAT().substring(0, 10));
-                        }
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                    }
-                    break;
-                case "promis_prmpubinft_part":
-                    Log.info("Sorting the data to compare the PRMPUBINFT records in Inbound and DATA LAKE ..");
-                    for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDL.size(); i++) {
-
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getPUB_IDT)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
-
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " PUB_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT() != null)) {
-                            Assert.assertEquals("The PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT());
 
+                            Log.info("PUB_IDT => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT() +
+                                    " " + strTemp + " => Inbound=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Current=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
                         }
+                        break;
+                    case "promis_prmpricest_part":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getPUB_VOL_IDT)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_VOL_IDT));
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " STA_DAA => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSTA_DAA() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSTA_DAA());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSTA_DAA() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSTA_DAA() != null)) {
-                            Assert.assertEquals("The STA_DAA is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSTA_DAA(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSTA_DAA());
-                        }
+                        String[] PromInbound_prmpricestColumnName = {"getPUB_VOL_IDT", "getVOL_PRT_IDT", "getEDN_IDT", "getPRC_TYP", "getPRC_GEO", "getIPT_COD", "getPRC_DAT", "getSTD_CUR_COD", "getSTD_PRC", "getPRC_PRE", "getADD_PRC", "getFLAG", "getEXP_DAT"};
+                        for (String strTemp : PromInbound_prmpricestColumnName) {
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " FUL_TIT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFUL_TIT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFUL_TIT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFUL_TIT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFUL_TIT() != null)) {
-                            Assert.assertEquals("The FUL_TIT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFUL_TIT().replace("\n", " ").replace("\r", " ").replace("\0", ""),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFUL_TIT());
-                        }
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " PUB_TYP => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_TYP() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_TYP());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_TYP() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_TYP() != null)) {
-                            Assert.assertEquals("The PUB_TYP is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_TYP(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_TYP());
-                        }
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " OWN_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getOWN_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getOWN_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getOWN_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getOWN_IDT() != null)) {
-                            Assert.assertEquals("The OWN_IDT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getOWN_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getOWN_IDT());
-                        }
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " PBL_ABR_NAM => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPBL_ABR_NAM() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPBL_ABR_NAM());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPBL_ABR_NAM() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPBL_ABR_NAM() != null)) {
-                            Assert.assertEquals("The PBL_ABR_NAM is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPBL_ABR_NAM(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPBL_ABR_NAM());
-                        }
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " LOC => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getLOC() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getLOC());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getLOC() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getLOC() != null)) {
-                            Assert.assertEquals("The LOC is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getLOC(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getLOC());
-                        }
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " STA_PRM => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSTA_PRM() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSTA_PRM());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSTA_PRM() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSTA_PRM() != null)) {
-                            Assert.assertEquals("The STA_PRM is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSTA_PRM(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSTA_PRM());
+                            Log.info("PUB_VOL_IDT => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_VOL_IDT() +
+                                    " " + strTemp + " => Inbound=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Current=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
                         }
+                        break;
+                    case "promis_prmpubinft_part":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getPUB_IDT)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " LNG_COD => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getLNG_COD() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getLNG_COD());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getLNG_COD() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getLNG_COD() != null)) {
-                            Assert.assertEquals("The LNG_COD is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getLNG_COD(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getLNG_COD());
-                        }
+                        String[] PromInbound_prmpubinftColumnName = {"getPUB_IDT", "getSTA_DAA", "getFUL_TIT", "getPUB_TYP", "getOWN_IDT", "getPBL_ABR_NAM", "getLOC", "getSTA_PRM", "getLNG_COD", "getPUB_IMP_IDT", "getPUB_BGN_YEA", "getLCO_NUM", "getIMP_DAT", "getCDA", "getCRE_IDT", "getDEP_IDT", "getLST_USR_IDT", "getLST_UPD_DAT", "getABR_TIT", "getFUL_TIT_SRT", "getSUB_TIT_1", "getSUB_TIT_2", "getSUB_TIT_3", "getPRG_SUB_TIT", "getAUT_EDT_NAM", "getSLO_TXT", "getNTB", "getFTN", "getFOR_TIT", "getRPN_INF", "getADV_COD", "getRVW_COD", "getSUP_APP", "getPHY_SZE", "getFS_IDT", "getWTK_NUM", "getWTK_CLS", "getBWK", "getAEI", "getREV_EDN_TI", "getJNL_IDT", "getLST_UPD_DATE", "getCDA_DATE", "getAQS_COD", "getMKT_COD", "getAUD", "getSHT_DES", "getSHT_CTT_DES", "getSLO_EXP_DAT", "getIF_NO", "getIF_YEAR", "getIF_COMMENT", "getAUT_BENEFITS", "getSOURCE", "getARG_COD", "getIF_5", "getIF_RANKING", "getIF_CAT", "getOA_TYPE"};
+                        for (String strTemp : PromInbound_prmpubinftColumnName) {
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " PUB_IMP_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IMP_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IMP_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IMP_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IMP_IDT() != null)) {
-                            Assert.assertEquals("The PUB_IMP_IDT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IMP_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IMP_IDT());
-                        }
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " PUB_BGN_YEA => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_BGN_YEA() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_BGN_YEA());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_BGN_YEA() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_BGN_YEA() != null)) {
-                            Assert.assertEquals("The PUB_BGN_YEA is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_BGN_YEA(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_BGN_YEA());
-                        }
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " LCO_NUM => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getLCO_NUM() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getLCO_NUM());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getLCO_NUM() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getLCO_NUM() != null)) {
-                            Assert.assertEquals("The LCO_NUM is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getLCO_NUM(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getLCO_NUM());
-                        }
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " IMP_DAT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIMP_DAT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIMP_DAT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIMP_DAT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIMP_DAT() != null)) {
-                            Assert.assertEquals("The IMP_DAT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIMP_DAT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIMP_DAT());
-                        }
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " CDA => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCDA() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getCDA());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCDA() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getCDA() != null)) {
-                            Assert.assertEquals("The CDA is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCDA(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getCDA());
-                        }
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " CRE_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCRE_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getCRE_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCRE_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getCRE_IDT() != null)) {
-                            Assert.assertEquals("The CRE_IDT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCRE_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getCRE_IDT());
+                            Log.info("PUB_IDT => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT() +
+                                    " " + strTemp + " => Inbound=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Current=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
                         }
+                        break;
+                    case "promis_prmincpmct_part":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getPUB_IDT)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " DEP_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getDEP_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getDEP_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getDEP_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getDEP_IDT() != null)) {
-                            Assert.assertEquals("The DEP_IDT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getDEP_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getDEP_IDT());
-                        }
+                        String[] PromInbound_prmincpmctColumnName = {"getPUB_IDT", "getMKT_IDT", "getMKT_SUB_IDT"};
+                        for (String strTemp : PromInbound_prmincpmctColumnName) {
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " LST_USR_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getLST_USR_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getLST_USR_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getLST_USR_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getLST_USR_IDT() != null)) {
-                            Assert.assertEquals("The LST_USR_IDT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getLST_USR_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getLST_USR_IDT());
-                        }
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " LST_UPD_DAT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getLST_UPD_DAT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getLST_UPD_DAT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getLST_UPD_DAT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getLST_UPD_DAT() != null)) {
-                            Assert.assertEquals("The LST_UPD_DAT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getLST_UPD_DAT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getLST_UPD_DAT());
-                        }
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " ABR_TIT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getABR_TIT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getABR_TIT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getABR_TIT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getABR_TIT() != null)) {
-                            Assert.assertEquals("The ABR_TIT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getABR_TIT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getABR_TIT());
-                        }
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " FUL_TIT_SRT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFUL_TIT_SRT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFUL_TIT_SRT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFUL_TIT_SRT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFUL_TIT_SRT() != null)) {
-                            Assert.assertEquals("The FUL_TIT_SRT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFUL_TIT_SRT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFUL_TIT_SRT());
-                        }
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
 
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " SUB_TIT_1 => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSUB_TIT_1() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSUB_TIT_1());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSUB_TIT_1() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSUB_TIT_1() != null)) {
-                            Assert.assertEquals("The SUB_TIT_1 is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSUB_TIT_1().replace("\n", " ").replace("\r", " ").replace("\0", ""),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSUB_TIT_1());
+                            Log.info("PUB_IDT => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT() +
+                                    " " + strTemp + " => Inbound=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Current=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
                         }
+                        break;
+                    case "promis_prmpmccodt_part":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getMKT_IDT)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getMKT_IDT));
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " SUB_TIT_2 => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSUB_TIT_2() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSUB_TIT_2());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSUB_TIT_2() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSUB_TIT_2() != null)) {
-                            Assert.assertEquals("The SUB_TIT_2 is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSUB_TIT_2().replace("\n", " ").replace("\r", " ").replace("\0", ""),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSUB_TIT_2());
-                        }
+                        String[] PromInbound_prmpmccodtColumnName = {"getMKT_IDT", "getMKT_DES", "getDIV_IDT"};
+                        for (String strTemp : PromInbound_prmpmccodtColumnName) {
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " SUB_TIT_3 => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSUB_TIT_3() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSUB_TIT_3());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSUB_TIT_3() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSUB_TIT_3() != null)) {
-                            Assert.assertEquals("The SUB_TIT_3 is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSUB_TIT_3().replace("\n", " ").replace("\r", " ").replace("\0", ""),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSUB_TIT_3());
-                        }
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " PRG_SUB_TIT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPRG_SUB_TIT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPRG_SUB_TIT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPRG_SUB_TIT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPRG_SUB_TIT() != null)) {
-                            Assert.assertEquals("The PRG_SUB_TIT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPRG_SUB_TIT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPRG_SUB_TIT());
-                        }
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " AUT_EDT_NAM => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_NAM() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_NAM());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_NAM() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_NAM() != null)) {
-                            Assert.assertEquals("The AUT_EDT_NAM is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_EDT_NAM(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_EDT_NAM());
-                        }
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " SLO_TXT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSLO_TXT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSLO_TXT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSLO_TXT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSLO_TXT() != null)) {
-                            Assert.assertEquals("The SLO_TXT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSLO_TXT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSLO_TXT());
-                        }
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " NTB => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getNTB() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getNTB());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getNTB() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getNTB() != null)) {
-                            Assert.assertEquals("The NTB is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getNTB(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getNTB());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " FTN => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFTN() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFTN());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFTN() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFTN() != null)) {
-                            Assert.assertEquals("The FTN is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFTN().replace("\n", " ").replace("\r", " ").replace("\0", ""),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFTN());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " FOR_TIT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFOR_TIT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFOR_TIT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFOR_TIT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFOR_TIT() != null)) {
-                            Assert.assertEquals("The FOR_TIT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFOR_TIT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFOR_TIT());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " RPN_INF => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getRPN_INF() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getRPN_INF());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getRPN_INF() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getRPN_INF() != null)) {
-                            Assert.assertEquals("The RPN_INF is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getRPN_INF(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getRPN_INF());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " ADV_COD => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getADV_COD() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getADV_COD());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getADV_COD() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getADV_COD() != null)) {
-                            Assert.assertEquals("The ADV_COD is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getADV_COD(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getADV_COD());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " RVW_COD => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getRVW_COD() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getRVW_COD());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getRVW_COD() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getRVW_COD() != null)) {
-                            Assert.assertEquals("The RVW_COD is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getRVW_COD(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getRVW_COD());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " SUP_APP => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSUP_APP() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getRVW_COD());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSUP_APP() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSUP_APP() != null)) {
-                            Assert.assertEquals("The SUP_APP is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSUP_APP(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSUP_APP());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " PHY_SZE => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPHY_SZE() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPHY_SZE());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPHY_SZE() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPHY_SZE() != null)) {
-                            Assert.assertEquals("The PHY_SZE is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPHY_SZE(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPHY_SZE());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " FS_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFS_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFS_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFS_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFS_IDT() != null)) {
-                            Assert.assertEquals("The FS_IDT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFS_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFS_IDT());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " WTK_NUM => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getWTK_NUM() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getWTK_NUM());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getWTK_NUM() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getWTK_NUM() != null)) {
-                            Assert.assertEquals("The WTK_NUM is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getWTK_NUM(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getWTK_NUM());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " WTK_CLS => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getWTK_CLS() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getWTK_CLS());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getWTK_CLS() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getWTK_CLS() != null)) {
-                            Assert.assertEquals("The WTK_CLS is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getWTK_CLS(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getWTK_CLS());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " BWK => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getBWK() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getBWK());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getBWK() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getBWK() != null)) {
-                            Assert.assertEquals("The BWK is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getBWK(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getBWK());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " AEI => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAEI() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAEI());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAEI() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAEI() != null)) {
-                            Assert.assertEquals("The AEI is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAEI(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAEI());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " REV_EDN_TI => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREV_EDN_TI() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREV_EDN_TI());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREV_EDN_TI() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREV_EDN_TI() != null)) {
-                            Assert.assertEquals("The REV_EDN_TI is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREV_EDN_TI(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREV_EDN_TI());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " JNL_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getJNL_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getJNL_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getJNL_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getJNL_IDT() != null)) {
-                            Assert.assertEquals("The JNL_IDT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getJNL_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getJNL_IDT());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " LST_UPD_DATE => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getLST_UPD_DATE() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getLST_UPD_DATE());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getLST_UPD_DATE() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getLST_UPD_DATE() != null)) {
-                            Assert.assertEquals("The LST_UPD_DATE is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getLST_UPD_DATE().substring(0, 10),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getLST_UPD_DATE().substring(0, 10));
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " CDA_DATE => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCDA_DATE() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getCDA_DATE());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCDA_DATE() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getCDA_DATE() != null)) {
-                            Assert.assertEquals("The CDA_DATE is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCDA_DATE().substring(0, 10),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getCDA_DATE().substring(0, 10));
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " AQS_COD => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAQS_COD() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAQS_COD());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAQS_COD() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAQS_COD() != null)) {
-                            Assert.assertEquals("The AQS_COD is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAQS_COD(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAQS_COD());
-                        }
 
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " MKT_COD => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_COD() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getMKT_COD());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_COD() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getMKT_COD() != null)) {
-                            Assert.assertEquals("The MKT_COD is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_COD(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getMKT_COD());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " AUD => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUD() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUD());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUD() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUD() != null)) {
-                            Assert.assertEquals("The AUD is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUD().replace("\n", " ").replace("\r", " ").replace("\0", ""),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUD());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " SHT_DES => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSHT_DES() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSHT_DES());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSHT_DES() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSHT_DES() != null)) {
-                            Assert.assertEquals("The SHT_DES is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSHT_DES().replace("\n", " ").replace("\r", " ").replace("\0", ""),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSHT_DES());
+                            Log.info("MKT_IDT => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getMKT_IDT() +
+                                    " " + strTemp + " => Inbound=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Current=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
                         }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " SHT_CTT_DES => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSHT_CTT_DES() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSHT_CTT_DES());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSHT_CTT_DES() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSHT_CTT_DES() != null)) {
-                            Assert.assertEquals("The SHT_CTT_DES is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSHT_CTT_DES().replace("\n", " ").replace("\r", " ").replace("\0", ""),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSHT_CTT_DES());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " SLO_EXP_DAT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSLO_EXP_DAT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSLO_EXP_DAT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSLO_EXP_DAT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSLO_EXP_DAT() != null)) {
-                            Assert.assertEquals("The SLO_EXP_DAT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSLO_EXP_DAT().substring(0, 10),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSLO_EXP_DAT().substring(0, 10));
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " IF_NO => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIF_NO() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIF_NO());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIF_NO() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIF_NO() != null)) {
-                            Assert.assertEquals("The IF_NO is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIF_NO(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIF_NO());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " IF_YEAR => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIF_YEAR() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIF_YEAR());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIF_YEAR() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIF_YEAR() != null)) {
-                            Assert.assertEquals("The IF_YEAR is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIF_YEAR(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIF_YEAR());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " IF_COMMENT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIF_COMMENT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIF_COMMENT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIF_COMMENT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIF_COMMENT() != null)) {
-                            Assert.assertEquals("The IF_COMMENT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIF_COMMENT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIF_COMMENT());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " AUT_BENEFITS => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_BENEFITS() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_BENEFITS());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_BENEFITS() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_BENEFITS() != null)) {
-                            Assert.assertEquals("The AUT_BENEFITS is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getAUT_BENEFITS().replace("\n", " ").replace("\r", " ").replace("\0", ""),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getAUT_BENEFITS());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " SOURCE => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSOURCE() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSOURCE());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSOURCE() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSOURCE() != null)) {
-                            Assert.assertEquals("The SOURCE is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getSOURCE(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getSOURCE());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " ARG_COD => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getARG_COD() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getARG_COD());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getARG_COD() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getARG_COD() != null)) {
-                            Assert.assertEquals("The ARG_COD is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getARG_COD(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getARG_COD());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " IF_5 => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIF_5() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIF_5());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIF_5() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIF_5() != null)) {
-                            Assert.assertEquals("The IF_5 is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIF_5(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIF_5());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " IF_RANKING => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIF_RANKING() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIF_RANKING());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIF_RANKING() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIF_RANKING() != null)) {
-                            Assert.assertEquals("The IF_RANKING is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIF_RANKING(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIF_RANKING());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " IF_CAT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIF_CAT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIF_CAT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIF_CAT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIF_CAT() != null)) {
-                            Assert.assertEquals("The IF_CAT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getIF_CAT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getIF_CAT());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " OA_TYPE => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getOA_TYPE() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getOA_TYPE());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getOA_TYPE() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getOA_TYPE() != null)) {
-                            Assert.assertEquals("The OA_TYPE is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getOA_TYPE(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getOA_TYPE());
-                        }
-
-                    }
-                    break;
-                case "promis_prmpubrelt_part":
-                    Log.info("Sorting the data to compare the PRMPUBRELT records in Inbound and DATA LAKE ..");
-                    for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDL.size(); i++) {
-
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getPUB_PUB_IDT)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_PUB_IDT));
-
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getREL_NO)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getREL_NO));
+                        break;
+                    case "promis_prmpubrelt_part":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getPUB_IDT)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
 
+                        String[] PromInbound_prmpubreltColumnName = {"getPUB_IDT", "getSTA_DAA", "getFUL_TIT", "getPUB_TYP", "getOWN_IDT", "getPBL_ABR_NAM", "getLOC", "getSTA_PRM", "getLNG_COD", "getPUB_IMP_IDT", "getPUB_BGN_YEA", "getLCO_NUM", "getIMP_DAT", "getCDA", "getCRE_IDT", "getDEP_IDT", "getLST_USR_IDT", "getLST_UPD_DAT", "getABR_TIT", "getFUL_TIT_SRT", "getSUB_TIT_1", "getSUB_TIT_2", "getSUB_TIT_3", "getPRG_SUB_TIT", "getAUT_EDT_NAM", "getSLO_TXT", "getNTB", "getFTN", "getFOR_TIT", "getRPN_INF", "getADV_COD", "getRVW_COD", "getSUP_APP", "getPHY_SZE", "getFS_IDT", "getWTK_NUM", "getWTK_CLS", "getBWK", "getAEI", "getREV_EDN_TI", "getJNL_IDT", "getLST_UPD_DATE", "getCDA_DATE", "getAQS_COD", "getMKT_COD", "getAUD", "getSHT_DES", "getSHT_CTT_DES", "getSLO_EXP_DAT", "getIF_NO", "getIF_YEAR", "getIF_COMMENT", "getAUT_BENEFITS", "getSOURCE", "getARG_COD", "getIF_5", "getIF_RANKING", "getIF_CAT", "getOA_TYPE"};
+                        for (String strTemp : PromInbound_prmpubreltColumnName) {
 
-                        Log.info("PUB_PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT() +
-                                " PUB_PUB_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_PUB_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_PUB_IDT() != null)) {
-                            Assert.assertEquals("The PUB_PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT() + " is missing/not found in Data Lake",
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_PUB_IDT());
 
-                        }
-
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT() +
-                                " REL_NO => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREL_NO() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREL_NO());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREL_NO() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREL_NO() != null)) {
-                            Assert.assertEquals("The REL_NO is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREL_NO(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREL_NO());
-                        }
-
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT() +
-                                " REL_SRT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREL_NO() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREL_SRT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREL_SRT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREL_SRT() != null)) {
-                            Assert.assertEquals("The REL_SRT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREL_SRT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREL_SRT());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT() +
-                                " REL_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREL_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREL_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREL_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREL_IDT() != null)) {
-                            Assert.assertEquals("The REL_IDT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREL_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREL_IDT());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT() +
-                                " REL_TITLE => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREL_TITLE() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREL_TITLE());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREL_TITLE() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREL_TITLE() != null)) {
-                            Assert.assertEquals("The REL_TITLE is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREL_TITLE(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREL_TITLE());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT() +
-                                " FOOTNOTE => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFOOTNOTE() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFOOTNOTE());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFOOTNOTE() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFOOTNOTE() != null)) {
-                            Assert.assertEquals("The FOOTNOTE is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFOOTNOTE(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFOOTNOTE());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT() +
-                                " FRONT_TEXT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFRONT_TEXT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFRONT_TEXT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFRONT_TEXT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFRONT_TEXT() != null)) {
-                            Assert.assertEquals("The FRONT_TEXT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getFRONT_TEXT().replace("\n", " ").replace("\r", " ").replace("\0", ""),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getFRONT_TEXT());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT() +
-                                " END_TEXT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getEND_TEXT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getEND_TEXT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getEND_TEXT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getEND_TEXT() != null)) {
-                            Assert.assertEquals("The END_TEXT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getEND_TEXT().replace("\n", " ").replace("\r", " ").replace("\0", ""),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getEND_TEXT());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT() +
-                                " RTP_RTP_COD => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getRTP_RTP_COD() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getRTP_RTP_COD());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getRTP_RTP_COD() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getRTP_RTP_COD() != null)) {
-                            Assert.assertEquals("The RTP_RTP_COD is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getRTP_RTP_COD(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getRTP_RTP_COD());
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT() +
-                                " REL_END_DATE => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREL_END_DATE() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREL_END_DATE());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREL_END_DATE() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREL_END_DATE() != null)) {
-                            Assert.assertEquals("The REL_END_DATE is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREL_END_DATE().substring(0, 10),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREL_END_DATE().substring(0, 10));
-                        }
-                        Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT() +
-                                " REL_START_DATE => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREL_START_DATE() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREL_START_DATE());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREL_START_DATE() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREL_START_DATE() != null)) {
-                            Assert.assertEquals("The REL_START_DATE is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_PUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getREL_START_DATE().substring(0, 10),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getREL_START_DATE().substring(0, 10));
-                        }
-                    }
-                    break;
-                case "promis_prmincpmct_part":
-                    Log.info("Sorting the data to compare the PRMINCPMCT records in Inbound and Current ..");
-                    for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDL.size(); i++) {
-
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getPUB_IDT)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
-
-                        Log.info("getPUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " getMKT_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getMKT_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getMKT_IDT() != null)) {
-                            Assert.assertEquals("The MKT_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_IDT() + " is missing/not found in Data Lake",
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getMKT_IDT());
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
 
-                        }
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
 
-                        Log.info("getPUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
-                                " MKT_SUB_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_SUB_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getMKT_SUB_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_SUB_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getMKT_SUB_IDT() != null)) {
-                            Assert.assertEquals("The MKT_SUB_IDT is incorrect for PUB_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_SUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_SUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getMKT_SUB_IDT());
-                        }
-                    }
-                    break;
-                case "promis_prmpmccodt_part":
-                    Log.info("Sorting the data to compare the PRMPMCCODT records in Inbound and Current ..");
-                    for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDL.size(); i++) {
-
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesDLObject::getMKT_IDT)); //sort data in the lists
-                        PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getMKT_IDT));
-
-                        Log.info("getMKT_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_IDT() +
-                                " getMKT_DES => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_DES() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getMKT_DES());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_DES() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getMKT_DES() != null)) {
-                            Assert.assertEquals("The MKT_DES =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_DES() + " is missing/not found in Data Lake",
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_DES(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getMKT_DES());
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        }
 
-                        Log.info("getMKT_IDT=> " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_IDT() +
-                                " DIV_IDT => Inbound=" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getDIV_IDT() +
-                                " Current=" + PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getDIV_IDT());
-                        if (PromisDataContext.tbPRMDataObjectsFromDL.get(i).getDIV_IDT() != null ||
-                                (PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getDIV_IDT() != null)) {
-                            Assert.assertEquals("The DIV_IDT is incorrect for MKT_IDT =" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_SUB_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromDL.get(i).getDIV_IDT(),
-                                    PromisDataContext.tbPRMDataObjectsFromCurrent.get(i).getDIV_IDT());
+                            Log.info("PUB_IDT => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getPUB_IDT() +
+                                    " " + strTemp + " => Inbound=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Current=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
                         }
-                    }
-                    break;
+                        break;
+                }
             }
         }
     }
-*/
+
     @Given("^We get the (.*) random Promis DeltaQuery ids of (.*)$")
     public void getRandomPromisDeltaIds(String numberOfRecords, String Deltatablename) {
 //        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
@@ -1456,648 +550,648 @@ public class PromisETLDataCheck {
                     }
                     break;
                 case "promis_delta_current_pricing":
-                            Log.info("Sorting the data to compare the Pricing records between Delta and Delta_Query ..");
-                            for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDeltaQuery.size(); i++) {
-
-                                PromisDataContext.tbPRMDataObjectsFromDeltaQuery.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
-                                PromisDataContext.tbPRMDataObjectsFromDelta.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " PUB_IDT => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT() != null)) {
-                                    Assert.assertEquals("The PUB_IDT is =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
-
-                                }
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " EPR_ID => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
-
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID() != null)) {
-                                    Assert.assertEquals("The EPR_ID is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " Product_type => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPRODUCT_TYPE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPRODUCT_TYPE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPRODUCT_TYPE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPRODUCT_TYPE() != null)) {
-                                    Assert.assertEquals("The Product_Type for U_KEY =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() + " is missing/not found in Data Lake",
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPRODUCT_TYPE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPRODUCT_TYPE());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " CURRENCY => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCURRENCY() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCURRENCY());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCURRENCY() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCURRENCY() != null)) {
-                                    Assert.assertEquals("The CURRENCY is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCURRENCY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCURRENCY());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " PRICE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPRICE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPRICE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPRICE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPRICE() != null)) {
-                                    Assert.assertEquals("The PRICE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPRICE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPRICE());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " START_DATE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getSTART_DATE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getSTART_DATE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getSTART_DATE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getSTART_DATE() != null)) {
-                                    Assert.assertEquals("The START_DATE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getSTART_DATE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getSTART_DATE());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " END_DATE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEND_DATE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEND_DATE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEND_DATE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEND_DATE() != null)) {
-                                    Assert.assertEquals("The END_DATE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEND_DATE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEND_DATE());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " REGION => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getREGION() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getREGION());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getREGION() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getREGION() != null)) {
-                                    Assert.assertEquals("The REGION is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getREGION(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getREGION());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " QUANTITY => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getQUANTITY() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getQUANTITY());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getQUANTITY() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getQUANTITY() != null)) {
-                                    Assert.assertEquals("The QUANTITY is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getQUANTITY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getQUANTITY());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " CUSTOMER_CATEGORY => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCUSTOMER_CATEGORY() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCUSTOMER_CATEGORY());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCUSTOMER_CATEGORY() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCUSTOMER_CATEGORY() != null)) {
-                                    Assert.assertEquals("The CUSTOMER_CATEGORY is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCUSTOMER_CATEGORY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCUSTOMER_CATEGORY());
-                                }
-                            }
-                            break;
-                        case "promis_delta_current_person_roles":
-                            Log.info("Sorting the data to compare the Person Roles records between Delta and Delta_Query ..");
-                            for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDeltaQuery.size(); i++) {
-
-                                PromisDataContext.tbPRMDataObjectsFromDeltaQuery.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
-                                PromisDataContext.tbPRMDataObjectsFromDelta.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " PUB_IDT => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT() != null)) {
-                                    Assert.assertEquals("The PUB_IDT is =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
-
-                                }
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " EPR_ID => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
-
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID() != null)) {
-                                    Assert.assertEquals("The EPR_ID is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " ROLE_DESCRIPTION => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getROLE_DESCRIPTION() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getROLE_DESCRIPTION());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getROLE_DESCRIPTION() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getROLE_DESCRIPTION() != null)) {
-                                    Assert.assertEquals("The ROLE_DESCRIPTION for U_KEY =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() + " is missing/not found in Data Lake",
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getROLE_DESCRIPTION(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getROLE_DESCRIPTION());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " SEQUENCE_NUMBER => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getSEQUENCE_NUMBER() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getSEQUENCE_NUMBER());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getSEQUENCE_NUMBER() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getSEQUENCE_NUMBER() != null)) {
-                                    Assert.assertEquals("The SEQUENCE_NUMBER is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getSEQUENCE_NUMBER(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getSEQUENCE_NUMBER());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " GROUP_NUMBER => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getGROUP_NUMBER() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getGROUP_NUMBER());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getGROUP_NUMBER() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getGROUP_NUMBER() != null)) {
-                                    Assert.assertEquals("The GROUP_NUMBER is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getGROUP_NUMBER(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getGROUP_NUMBER());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " INITIALS => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getINITIALS() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getINITIALS());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getINITIALS() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getINITIALS() != null)) {
-                                    Assert.assertEquals("The INITIALS is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getINITIALS(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getINITIALS());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " LAST_NAME => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getLAST_NAME() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getLAST_NAME());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getLAST_NAME() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getLAST_NAME() != null)) {
-                                    Assert.assertEquals("The LAST_NAME is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getLAST_NAME(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getLAST_NAME());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " TITLE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getTITLE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getTITLE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getTITLE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getTITLE() != null)) {
-                                    Assert.assertEquals("The TITLE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getTITLE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getTITLE());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " HONOURS => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getHONOURS() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getHONOURS());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getHONOURS() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getHONOURS() != null)) {
-                                    Assert.assertEquals("The HONOURS is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getHONOURS(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getHONOURS());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " AFFILIATION => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getAFFILIATION() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getAFFILIATION());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getAFFILIATION() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getAFFILIATION() != null)) {
-                                    Assert.assertEquals("The AFFILIATION is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getAFFILIATION(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getAFFILIATION());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " IMAGE_URL => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getIMAGE_URL() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getIMAGE_URL());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getIMAGE_URL() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getIMAGE_URL() != null)) {
-                                    Assert.assertEquals("The IMAGE_URL is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getIMAGE_URL(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getIMAGE_URL());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " FOOTNOTE_TXT => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getFOOTNOTE_TXT() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getFOOTNOTE_TXT());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getFOOTNOTE_TXT() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getFOOTNOTE_TXT() != null)) {
-                                    Assert.assertEquals("The FOOTNOTE_TXT is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getFOOTNOTE_TXT(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getFOOTNOTE_TXT());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " NOTES_TXT => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getNOTES_TXT() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getNOTES_TXT());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getNOTES_TXT() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getNOTES_TXT() != null)) {
-                                    Assert.assertEquals("The NOTES_TXT is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getNOTES_TXT(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getNOTES_TXT());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " WORK_TYPE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE() != null)) {
-                                    Assert.assertEquals("The WORK_TYPE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
-                                }
-                            }
-                            break;
-                        case "promis_delta_current_works":
-                            Log.info("Sorting the data to compare the Works records between History Excluding and Delta_Query ..");
-                            for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDeltaQuery.size(); i++) {
-
-                                PromisDataContext.tbPRMDataObjectsFromDeltaQuery.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
-                                PromisDataContext.tbPRMDataObjectsFromDelta.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " PUB_IDT => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT() != null)) {
-                                    Assert.assertEquals("The PUB_IDT is =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
-
-                                }
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " EPR_ID => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
-
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID() != null)) {
-                                    Assert.assertEquals("The EPR_ID is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " JOURNAL_AIMS_SCOPE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getJOURNAL_AIMS_SCOPE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getJOURNAL_AIMS_SCOPE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getJOURNAL_AIMS_SCOPE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getJOURNAL_AIMS_SCOPE() != null)) {
-                                    Assert.assertEquals("The JOURNAL_AIMS_SCOPE for U_KEY =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() + " is missing/not found in Data Lake",
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getJOURNAL_AIMS_SCOPE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getJOURNAL_AIMS_SCOPE());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " ELSEVIER_COM_IND => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getELSEVIER_COM_IND() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getELSEVIER_COM_IND());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getELSEVIER_COM_IND() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getELSEVIER_COM_IND() != null)) {
-                                    Assert.assertEquals("The ELSEVIER_COM_IND is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getELSEVIER_COM_IND(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getELSEVIER_COM_IND());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " PRIMARY_AUTHOR => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPRIMARY_AUTHOR() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPRIMARY_AUTHOR());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPRIMARY_AUTHOR() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPRIMARY_AUTHOR() != null)) {
-                                    Assert.assertEquals("The PRIMARY_AUTHOR is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPRIMARY_AUTHOR(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPRIMARY_AUTHOR());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " PREVIOUS_TITLE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPREVIOUS_TITLE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPREVIOUS_TITLE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPREVIOUS_TITLE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPREVIOUS_TITLE() != null)) {
-                                    Assert.assertEquals("The PREVIOUS_TITLE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPREVIOUS_TITLE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPREVIOUS_TITLE());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " WORK_TYPE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE() != null)) {
-                                    Assert.assertEquals("The WORK_TYPE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " WORK_TYPE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE() != null)) {
-                                    Assert.assertEquals("The WORK_TYPE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
-                                }
-                            }
-                            break;
-                        case "promis_delta_current_metrics":
-                            Log.info("Sorting the data to compare the Metrics records between Delta and DeltaQuery ..");
-                            for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDeltaQuery.size(); i++) {
-
-                                PromisDataContext.tbPRMDataObjectsFromDeltaQuery.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
-                                PromisDataContext.tbPRMDataObjectsFromDelta.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " PUB_IDT => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT() != null)) {
-                                    Assert.assertEquals("The PUB_IDT is =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
-
-                                }
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " EPR_ID => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
-
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID() != null)) {
-                                    Assert.assertEquals("The EPR_ID is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " METRIC_CODE => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_CODE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_CODE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_CODE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_CODE() != null)) {
-                                    Assert.assertEquals("The METRIC_CODE for U_KEY =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() + " is missing/not found in Data Lake",
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_CODE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_CODE());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " METRIC_NAME => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_NAME() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_NAME());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_NAME() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_NAME() != null)) {
-                                    Assert.assertEquals("The METRIC_NAME is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_NAME(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_NAME());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " METRIC => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC() != null)) {
-                                    Assert.assertEquals("The METRIC is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " METRIC_YEAR => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_YEAR() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_YEAR());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_YEAR() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_YEAR() != null)) {
-                                    Assert.assertEquals("The METRIC_YEAR is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_YEAR(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_YEAR());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " METRIC_URL => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_URL() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_URL());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_URL() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_URL() != null)) {
-                                    Assert.assertEquals("The METRIC_URL is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_URL(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_URL());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " WORK_TYPE => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE() != null)) {
-                                    Assert.assertEquals("The WORK_TYPE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
-                                }
-                            }
-                            break;
-                        case "promis_delta_current_urls":
-                            Log.info("Sorting the data to compare the Urls records between Delta and DeltaQuery ..");
-                            for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDeltaQuery.size(); i++) {
-
-                                PromisDataContext.tbPRMDataObjectsFromDeltaQuery.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
-                                PromisDataContext.tbPRMDataObjectsFromDelta.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " PUB_IDT => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT() != null)) {
-                                    Assert.assertEquals("The PUB_IDT is =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
-
-                                }
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " EPR_ID => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
-
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID() != null)) {
-                                    Assert.assertEquals("The EPR_ID is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " URL_CODE => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL_CODE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL_CODE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL_CODE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL_CODE() != null)) {
-                                    Assert.assertEquals("The URL_CODE for U_KEY =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() + " is missing/not found in Data Lake",
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL_CODE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL_CODE());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " URL_NAME => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL_NAME() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL_NAME());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL_NAME() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL_NAME() != null)) {
-                                    Assert.assertEquals("The URL_NAME is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL_NAME(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL_NAME());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " URL => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL() != null)) {
-                                    Assert.assertEquals("The URL is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " URL_TITLE => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL_TITLE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL_TITLE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL_TITLE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL_TITLE() != null)) {
-                                    Assert.assertEquals("The URL_TITLE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL_TITLE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL_TITLE());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " WORK_TYPE => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE() != null)) {
-                                    Assert.assertEquals("The WORK_TYPE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
-                                }
-                            }
-                            break;
-                        case "promis_delta_current_work_rels":
-                            Log.info("Sorting the data to compare the Work_Rels records between Delta and Delta_Query ..");
-                            for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDeltaQuery.size(); i++) {
-
-                                PromisDataContext.tbPRMDataObjectsFromDeltaQuery.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
-                                PromisDataContext.tbPRMDataObjectsFromDelta.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " CHILD_PUB_IDT => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_PUB_IDT() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_PUB_IDT());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_PUB_IDT() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_PUB_IDT() != null)) {
-                                    Assert.assertEquals("The CHILD_PUB_IDT is =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_PUB_IDT() + " is missing/not found in Data Lake",
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_PUB_IDT(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_PUB_IDT());
-
-                                }
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " PARENT_EPR_ID => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPARENT_EPR_ID() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPARENT_EPR_ID());
-
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPARENT_EPR_ID() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPARENT_EPR_ID() != null)) {
-                                    Assert.assertEquals("The PARENT_EPR_ID is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPARENT_EPR_ID(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPARENT_EPR_ID());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " CHILD_EPR_ID => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_EPR_ID() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_EPR_ID());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_EPR_ID() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_EPR_ID() != null)) {
-                                    Assert.assertEquals("The CHILD_EPR_ID for U_KEY =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() + " is missing/not found in Data Lake",
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_EPR_ID(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_EPR_ID());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " CHILD_TITLE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_TITLE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_TITLE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_TITLE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_TITLE() != null)) {
-                                    Assert.assertEquals("The CHILD_TITLE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_TITLE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_TITLE());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " CHILD_RELATED_TYPE_CODE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_TYPE_CODE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_TYPE_CODE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_TYPE_CODE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_TYPE_CODE() != null)) {
-                                    Assert.assertEquals("The CHILD_RELATED_TYPE_CODE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_TYPE_CODE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_TYPE_CODE());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " CHILD_RELATED => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED() != null)) {
-                                    Assert.assertEquals("The CHILD_RELATED is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " CHILD_RELATED_STATUS_CODE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_STATUS_CODE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_STATUS_CODE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_STATUS_CODE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_STATUS_CODE() != null)) {
-                                    Assert.assertEquals("The CHILD_RELATED_STATUS_CODE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_STATUS_CODE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_STATUS_CODE());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " CHILD_RELATED_TYPE_ROLL_UP => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_TYPE_ROLL_UP() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_TYPE_ROLL_UP());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_TYPE_ROLL_UP() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_TYPE_ROLL_UP() != null)) {
-                                    Assert.assertEquals("The CHILD_RELATED_TYPE_ROLL_UP is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_TYPE_ROLL_UP(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_TYPE_ROLL_UP());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " CHILD_RELATED_STATUS_NAME => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_STATUS_NAME() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_STATUS_NAME());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_STATUS_NAME() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_STATUS_NAME() != null)) {
-                                    Assert.assertEquals("The CHILD_RELATED_STATUS_NAME is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_STATUS_NAME(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_STATUS_NAME());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " CHILD_RELATED_STATUS_ROLL_UP => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_STATUS_ROLL_UP() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_STATUS_ROLL_UP());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_STATUS_ROLL_UP() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_STATUS_ROLL_UP() != null)) {
-                                    Assert.assertEquals("The CHILD_RELATED_STATUS_ROLL_UP is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_STATUS_ROLL_UP(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_STATUS_ROLL_UP());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " RELATIONSHIP_TYPE_CODE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getRELATIONSHIP_TYPE_CODE() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getRELATIONSHIP_TYPE_CODE());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getRELATIONSHIP_TYPE_CODE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getRELATIONSHIP_TYPE_CODE() != null)) {
-                                    Assert.assertEquals("The RELATIONSHIP_TYPE_CODE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getRELATIONSHIP_TYPE_CODE(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getRELATIONSHIP_TYPE_CODE());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
-                                        " RELATIONSHIP_TYPE_NAME => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getRELATIONSHIP_TYPE_NAME() +
-                                        " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getRELATIONSHIP_TYPE_NAME());
-                                if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getRELATIONSHIP_TYPE_NAME() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getRELATIONSHIP_TYPE_NAME() != null)) {
-                                    Assert.assertEquals("The RELATIONSHIP_TYPE_NAME is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getRELATIONSHIP_TYPE_NAME(),
-                                            PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getRELATIONSHIP_TYPE_NAME());
-                                }
-                                break;
+                    Log.info("Sorting the data to compare the Pricing records between Delta and Delta_Query ..");
+                    for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDeltaQuery.size(); i++) {
+
+                        PromisDataContext.tbPRMDataObjectsFromDeltaQuery.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromDelta.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " PUB_IDT => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT() != null)) {
+                            Assert.assertEquals("The PUB_IDT is =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
+
+                        }
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " EPR_ID => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
+
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID() != null)) {
+                            Assert.assertEquals("The EPR_ID is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " Product_type => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPRODUCT_TYPE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPRODUCT_TYPE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPRODUCT_TYPE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPRODUCT_TYPE() != null)) {
+                            Assert.assertEquals("The Product_Type for U_KEY =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() + " is missing/not found in Data Lake",
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPRODUCT_TYPE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPRODUCT_TYPE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " CURRENCY => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCURRENCY() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCURRENCY());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCURRENCY() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCURRENCY() != null)) {
+                            Assert.assertEquals("The CURRENCY is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCURRENCY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCURRENCY());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " PRICE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPRICE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPRICE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPRICE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPRICE() != null)) {
+                            Assert.assertEquals("The PRICE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPRICE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPRICE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " START_DATE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getSTART_DATE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getSTART_DATE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getSTART_DATE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getSTART_DATE() != null)) {
+                            Assert.assertEquals("The START_DATE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getSTART_DATE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getSTART_DATE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " END_DATE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEND_DATE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEND_DATE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEND_DATE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEND_DATE() != null)) {
+                            Assert.assertEquals("The END_DATE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEND_DATE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEND_DATE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " REGION => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getREGION() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getREGION());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getREGION() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getREGION() != null)) {
+                            Assert.assertEquals("The REGION is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getREGION(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getREGION());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " QUANTITY => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getQUANTITY() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getQUANTITY());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getQUANTITY() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getQUANTITY() != null)) {
+                            Assert.assertEquals("The QUANTITY is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getQUANTITY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getQUANTITY());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " CUSTOMER_CATEGORY => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCUSTOMER_CATEGORY() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCUSTOMER_CATEGORY());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCUSTOMER_CATEGORY() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCUSTOMER_CATEGORY() != null)) {
+                            Assert.assertEquals("The CUSTOMER_CATEGORY is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCUSTOMER_CATEGORY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCUSTOMER_CATEGORY());
+                        }
+                    }
+                    break;
+                case "promis_delta_current_person_roles":
+                    Log.info("Sorting the data to compare the Person Roles records between Delta and Delta_Query ..");
+                    for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDeltaQuery.size(); i++) {
+
+                        PromisDataContext.tbPRMDataObjectsFromDeltaQuery.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromDelta.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " PUB_IDT => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT() != null)) {
+                            Assert.assertEquals("The PUB_IDT is =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
+
+                        }
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " EPR_ID => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
+
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID() != null)) {
+                            Assert.assertEquals("The EPR_ID is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " ROLE_DESCRIPTION => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getROLE_DESCRIPTION() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getROLE_DESCRIPTION());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getROLE_DESCRIPTION() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getROLE_DESCRIPTION() != null)) {
+                            Assert.assertEquals("The ROLE_DESCRIPTION for U_KEY =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() + " is missing/not found in Data Lake",
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getROLE_DESCRIPTION(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getROLE_DESCRIPTION());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " SEQUENCE_NUMBER => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getSEQUENCE_NUMBER() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getSEQUENCE_NUMBER());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getSEQUENCE_NUMBER() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getSEQUENCE_NUMBER() != null)) {
+                            Assert.assertEquals("The SEQUENCE_NUMBER is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getSEQUENCE_NUMBER(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getSEQUENCE_NUMBER());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " GROUP_NUMBER => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getGROUP_NUMBER() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getGROUP_NUMBER());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getGROUP_NUMBER() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getGROUP_NUMBER() != null)) {
+                            Assert.assertEquals("The GROUP_NUMBER is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getGROUP_NUMBER(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getGROUP_NUMBER());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " INITIALS => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getINITIALS() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getINITIALS());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getINITIALS() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getINITIALS() != null)) {
+                            Assert.assertEquals("The INITIALS is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getINITIALS(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getINITIALS());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " LAST_NAME => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getLAST_NAME() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getLAST_NAME());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getLAST_NAME() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getLAST_NAME() != null)) {
+                            Assert.assertEquals("The LAST_NAME is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getLAST_NAME(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getLAST_NAME());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " TITLE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getTITLE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getTITLE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getTITLE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getTITLE() != null)) {
+                            Assert.assertEquals("The TITLE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getTITLE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getTITLE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " HONOURS => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getHONOURS() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getHONOURS());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getHONOURS() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getHONOURS() != null)) {
+                            Assert.assertEquals("The HONOURS is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getHONOURS(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getHONOURS());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " AFFILIATION => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getAFFILIATION() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getAFFILIATION());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getAFFILIATION() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getAFFILIATION() != null)) {
+                            Assert.assertEquals("The AFFILIATION is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getAFFILIATION(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getAFFILIATION());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " IMAGE_URL => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getIMAGE_URL() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getIMAGE_URL());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getIMAGE_URL() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getIMAGE_URL() != null)) {
+                            Assert.assertEquals("The IMAGE_URL is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getIMAGE_URL(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getIMAGE_URL());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " FOOTNOTE_TXT => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getFOOTNOTE_TXT() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getFOOTNOTE_TXT());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getFOOTNOTE_TXT() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getFOOTNOTE_TXT() != null)) {
+                            Assert.assertEquals("The FOOTNOTE_TXT is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getFOOTNOTE_TXT(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getFOOTNOTE_TXT());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " NOTES_TXT => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getNOTES_TXT() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getNOTES_TXT());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getNOTES_TXT() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getNOTES_TXT() != null)) {
+                            Assert.assertEquals("The NOTES_TXT is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getNOTES_TXT(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getNOTES_TXT());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " WORK_TYPE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE() != null)) {
+                            Assert.assertEquals("The WORK_TYPE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
+                        }
+                    }
+                    break;
+                case "promis_delta_current_works":
+                    Log.info("Sorting the data to compare the Works records between History Excluding and Delta_Query ..");
+                    for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDeltaQuery.size(); i++) {
+
+                        PromisDataContext.tbPRMDataObjectsFromDeltaQuery.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromDelta.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " PUB_IDT => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT() != null)) {
+                            Assert.assertEquals("The PUB_IDT is =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
+
+                        }
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " EPR_ID => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
+
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID() != null)) {
+                            Assert.assertEquals("The EPR_ID is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " JOURNAL_AIMS_SCOPE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getJOURNAL_AIMS_SCOPE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getJOURNAL_AIMS_SCOPE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getJOURNAL_AIMS_SCOPE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getJOURNAL_AIMS_SCOPE() != null)) {
+                            Assert.assertEquals("The JOURNAL_AIMS_SCOPE for U_KEY =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() + " is missing/not found in Data Lake",
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getJOURNAL_AIMS_SCOPE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getJOURNAL_AIMS_SCOPE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " ELSEVIER_COM_IND => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getELSEVIER_COM_IND() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getELSEVIER_COM_IND());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getELSEVIER_COM_IND() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getELSEVIER_COM_IND() != null)) {
+                            Assert.assertEquals("The ELSEVIER_COM_IND is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getELSEVIER_COM_IND(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getELSEVIER_COM_IND());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " PRIMARY_AUTHOR => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPRIMARY_AUTHOR() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPRIMARY_AUTHOR());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPRIMARY_AUTHOR() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPRIMARY_AUTHOR() != null)) {
+                            Assert.assertEquals("The PRIMARY_AUTHOR is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPRIMARY_AUTHOR(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPRIMARY_AUTHOR());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " PREVIOUS_TITLE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPREVIOUS_TITLE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPREVIOUS_TITLE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPREVIOUS_TITLE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPREVIOUS_TITLE() != null)) {
+                            Assert.assertEquals("The PREVIOUS_TITLE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPREVIOUS_TITLE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPREVIOUS_TITLE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " WORK_TYPE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE() != null)) {
+                            Assert.assertEquals("The WORK_TYPE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " WORK_TYPE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE() != null)) {
+                            Assert.assertEquals("The WORK_TYPE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
+                        }
+                    }
+                    break;
+                case "promis_delta_current_metrics":
+                    Log.info("Sorting the data to compare the Metrics records between Delta and DeltaQuery ..");
+                    for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDeltaQuery.size(); i++) {
+
+                        PromisDataContext.tbPRMDataObjectsFromDeltaQuery.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromDelta.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " PUB_IDT => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT() != null)) {
+                            Assert.assertEquals("The PUB_IDT is =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
+
+                        }
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " EPR_ID => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
+
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID() != null)) {
+                            Assert.assertEquals("The EPR_ID is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " METRIC_CODE => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_CODE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_CODE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_CODE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_CODE() != null)) {
+                            Assert.assertEquals("The METRIC_CODE for U_KEY =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() + " is missing/not found in Data Lake",
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_CODE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_CODE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " METRIC_NAME => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_NAME() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_NAME());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_NAME() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_NAME() != null)) {
+                            Assert.assertEquals("The METRIC_NAME is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_NAME(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_NAME());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " METRIC => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC() != null)) {
+                            Assert.assertEquals("The METRIC is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " METRIC_YEAR => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_YEAR() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_YEAR());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_YEAR() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_YEAR() != null)) {
+                            Assert.assertEquals("The METRIC_YEAR is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_YEAR(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_YEAR());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " METRIC_URL => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_URL() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_URL());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_URL() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_URL() != null)) {
+                            Assert.assertEquals("The METRIC_URL is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getMETRIC_URL(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getMETRIC_URL());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " WORK_TYPE => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE() != null)) {
+                            Assert.assertEquals("The WORK_TYPE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
+                        }
+                    }
+                    break;
+                case "promis_delta_current_urls":
+                    Log.info("Sorting the data to compare the Urls records between Delta and DeltaQuery ..");
+                    for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDeltaQuery.size(); i++) {
+
+                        PromisDataContext.tbPRMDataObjectsFromDeltaQuery.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromDelta.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " PUB_IDT => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT() != null)) {
+                            Assert.assertEquals("The PUB_IDT is =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPUB_IDT(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPUB_IDT());
+
+                        }
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " EPR_ID => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
+
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID() != null)) {
+                            Assert.assertEquals("The EPR_ID is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getEPR_ID(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getEPR_ID());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " URL_CODE => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL_CODE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL_CODE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL_CODE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL_CODE() != null)) {
+                            Assert.assertEquals("The URL_CODE for U_KEY =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() + " is missing/not found in Data Lake",
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL_CODE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL_CODE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " URL_NAME => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL_NAME() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL_NAME());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL_NAME() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL_NAME() != null)) {
+                            Assert.assertEquals("The URL_NAME is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL_NAME(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL_NAME());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " URL => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL() != null)) {
+                            Assert.assertEquals("The URL is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " URL_TITLE => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL_TITLE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL_TITLE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL_TITLE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL_TITLE() != null)) {
+                            Assert.assertEquals("The URL_TITLE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getURL_TITLE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getURL_TITLE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " WORK_TYPE => DeltaQuery=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE() != null)) {
+                            Assert.assertEquals("The WORK_TYPE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getWORK_TYPE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getWORK_TYPE());
+                        }
+                    }
+                    break;
+                case "promis_delta_current_work_rels":
+                    Log.info("Sorting the data to compare the Work_Rels records between Delta and Delta_Query ..");
+                    for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDeltaQuery.size(); i++) {
+
+                        PromisDataContext.tbPRMDataObjectsFromDeltaQuery.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromDelta.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " CHILD_PUB_IDT => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_PUB_IDT() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_PUB_IDT());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_PUB_IDT() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_PUB_IDT() != null)) {
+                            Assert.assertEquals("The CHILD_PUB_IDT is =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_PUB_IDT() + " is missing/not found in Data Lake",
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_PUB_IDT(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_PUB_IDT());
+
+                        }
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " PARENT_EPR_ID => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPARENT_EPR_ID() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPARENT_EPR_ID());
+
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPARENT_EPR_ID() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPARENT_EPR_ID() != null)) {
+                            Assert.assertEquals("The PARENT_EPR_ID is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getPARENT_EPR_ID(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getPARENT_EPR_ID());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " CHILD_EPR_ID => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_EPR_ID() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_EPR_ID());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_EPR_ID() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_EPR_ID() != null)) {
+                            Assert.assertEquals("The CHILD_EPR_ID for U_KEY =" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() + " is missing/not found in Data Lake",
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_EPR_ID(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_EPR_ID());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " CHILD_TITLE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_TITLE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_TITLE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_TITLE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_TITLE() != null)) {
+                            Assert.assertEquals("The CHILD_TITLE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_TITLE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_TITLE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " CHILD_RELATED_TYPE_CODE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_TYPE_CODE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_TYPE_CODE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_TYPE_CODE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_TYPE_CODE() != null)) {
+                            Assert.assertEquals("The CHILD_RELATED_TYPE_CODE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_TYPE_CODE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_TYPE_CODE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " CHILD_RELATED => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED() != null)) {
+                            Assert.assertEquals("The CHILD_RELATED is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " CHILD_RELATED_STATUS_CODE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_STATUS_CODE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_STATUS_CODE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_STATUS_CODE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_STATUS_CODE() != null)) {
+                            Assert.assertEquals("The CHILD_RELATED_STATUS_CODE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_STATUS_CODE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_STATUS_CODE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " CHILD_RELATED_TYPE_ROLL_UP => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_TYPE_ROLL_UP() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_TYPE_ROLL_UP());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_TYPE_ROLL_UP() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_TYPE_ROLL_UP() != null)) {
+                            Assert.assertEquals("The CHILD_RELATED_TYPE_ROLL_UP is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_TYPE_ROLL_UP(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_TYPE_ROLL_UP());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " CHILD_RELATED_STATUS_NAME => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_STATUS_NAME() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_STATUS_NAME());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_STATUS_NAME() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_STATUS_NAME() != null)) {
+                            Assert.assertEquals("The CHILD_RELATED_STATUS_NAME is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_STATUS_NAME(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_STATUS_NAME());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " CHILD_RELATED_STATUS_ROLL_UP => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_STATUS_ROLL_UP() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_STATUS_ROLL_UP());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_STATUS_ROLL_UP() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_STATUS_ROLL_UP() != null)) {
+                            Assert.assertEquals("The CHILD_RELATED_STATUS_ROLL_UP is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getCHILD_RELATED_STATUS_ROLL_UP(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getCHILD_RELATED_STATUS_ROLL_UP());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " RELATIONSHIP_TYPE_CODE => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getRELATIONSHIP_TYPE_CODE() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getRELATIONSHIP_TYPE_CODE());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getRELATIONSHIP_TYPE_CODE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getRELATIONSHIP_TYPE_CODE() != null)) {
+                            Assert.assertEquals("The RELATIONSHIP_TYPE_CODE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getRELATIONSHIP_TYPE_CODE(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getRELATIONSHIP_TYPE_CODE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY() +
+                                " RELATIONSHIP_TYPE_NAME => Delta_Query=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getRELATIONSHIP_TYPE_NAME() +
+                                " Delta=" + PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getRELATIONSHIP_TYPE_NAME());
+                        if (PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getRELATIONSHIP_TYPE_NAME() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getRELATIONSHIP_TYPE_NAME() != null)) {
+                            Assert.assertEquals("The RELATIONSHIP_TYPE_NAME is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromDeltaQuery.get(i).getRELATIONSHIP_TYPE_NAME(),
+                                    PromisDataContext.tbPRMDataObjectsFromDelta.get(i).getRELATIONSHIP_TYPE_NAME());
+                        }
+                        break;
                     }
             }
         }
@@ -2603,7 +1697,7 @@ public class PromisETLDataCheck {
                                     PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getWORK_TYPE());
                         }
 
-                       Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
                                 " WORK_TYPE => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getWORK_TYPE() +
                                 " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getWORK_TYPE());
                         if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getWORK_TYPE() != null ||
@@ -2702,218 +1796,218 @@ public class PromisETLDataCheck {
                                     PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getWORK_TYPE());
                         }
                     }
+                    break;
+                case "urls":
+                    Log.info("Sorting the data to compare the Urls records between History Excluding and HistoryExcluding_Query ..");
+                    for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.size(); i++) {
+
+                        PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " PUB_IDT => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getPUB_IDT() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getPUB_IDT());
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getPUB_IDT() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getPUB_IDT() != null)) {
+                            Assert.assertEquals("The PUB_IDT is =" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getPUB_IDT(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getPUB_IDT());
+
+                        }
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " EPR_ID => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getEPR_ID() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getEPR_ID());
+
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getEPR_ID() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getEPR_ID() != null)) {
+                            Assert.assertEquals("The EPR_ID is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getEPR_ID(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getEPR_ID());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " URL_CODE => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL_CODE() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL_CODE());
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL_CODE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL_CODE() != null)) {
+                            Assert.assertEquals("The URL_CODE for U_KEY =" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() + " is missing/not found in Data Lake",
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL_CODE(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL_CODE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " URL_NAME => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL_NAME() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL_NAME());
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL_NAME() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL_NAME() != null)) {
+                            Assert.assertEquals("The URL_NAME is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL_NAME(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL_NAME());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " URL => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL());
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL() != null)) {
+                            Assert.assertEquals("The URL is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " URL_TITLE => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL_TITLE() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL_TITLE());
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL_TITLE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL_TITLE() != null)) {
+                            Assert.assertEquals("The URL_TITLE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL_TITLE(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL_TITLE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " WORK_TYPE => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getWORK_TYPE() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getWORK_TYPE());
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getWORK_TYPE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getWORK_TYPE() != null)) {
+                            Assert.assertEquals("The WORK_TYPE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getWORK_TYPE(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getWORK_TYPE());
+                        }
+                    }
+                    break;
+                case "work_rels":
+                    Log.info("Sorting the data to compare the Work_Rels records between History Excluding and HistoryExcluding_Query ..");
+                    for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.size(); i++) {
+
+                        PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " CHILD_PUB_IDT => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_PUB_IDT() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_PUB_IDT());
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_PUB_IDT() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_PUB_IDT() != null)) {
+                            Assert.assertEquals("The CHILD_PUB_IDT is =" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_PUB_IDT() + " is missing/not found in Data Lake",
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_PUB_IDT(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_PUB_IDT());
+
+                        }
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " PARENT_EPR_ID => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getPARENT_EPR_ID() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getPARENT_EPR_ID());
+
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getPARENT_EPR_ID() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getPARENT_EPR_ID() != null)) {
+                            Assert.assertEquals("The PARENT_EPR_ID is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getPARENT_EPR_ID(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getPARENT_EPR_ID());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " CHILD_EPR_ID => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_EPR_ID() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_EPR_ID());
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_EPR_ID() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_EPR_ID() != null)) {
+                            Assert.assertEquals("The CHILD_EPR_ID for U_KEY =" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() + " is missing/not found in Data Lake",
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_EPR_ID(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_EPR_ID());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " CHILD_TITLE => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_TITLE() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_TITLE());
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_TITLE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_TITLE() != null)) {
+                            Assert.assertEquals("The CHILD_TITLE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_TITLE(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_TITLE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " CHILD_RELATED_TYPE_CODE => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_TYPE_CODE() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_TYPE_CODE());
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_TYPE_CODE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_TYPE_CODE() != null)) {
+                            Assert.assertEquals("The CHILD_RELATED_TYPE_CODE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_TYPE_CODE(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_TYPE_CODE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " CHILD_RELATED => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED());
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED() != null)) {
+                            Assert.assertEquals("The CHILD_RELATED is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " CHILD_RELATED_STATUS_CODE => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_STATUS_CODE() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_STATUS_CODE());
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_STATUS_CODE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_STATUS_CODE() != null)) {
+                            Assert.assertEquals("The CHILD_RELATED_STATUS_CODE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_STATUS_CODE(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_STATUS_CODE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " CHILD_RELATED_TYPE_ROLL_UP => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_TYPE_ROLL_UP() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_TYPE_ROLL_UP());
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_TYPE_ROLL_UP() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_TYPE_ROLL_UP() != null)) {
+                            Assert.assertEquals("The CHILD_RELATED_TYPE_ROLL_UP is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_TYPE_ROLL_UP(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_TYPE_ROLL_UP());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " CHILD_RELATED_STATUS_NAME => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_STATUS_NAME() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_STATUS_NAME());
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_STATUS_NAME() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_STATUS_NAME() != null)) {
+                            Assert.assertEquals("The CHILD_RELATED_STATUS_NAME is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_STATUS_NAME(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_STATUS_NAME());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " CHILD_RELATED_STATUS_ROLL_UP => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_STATUS_ROLL_UP() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_STATUS_ROLL_UP());
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_STATUS_ROLL_UP() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_STATUS_ROLL_UP() != null)) {
+                            Assert.assertEquals("The CHILD_RELATED_STATUS_ROLL_UP is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_STATUS_ROLL_UP(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_STATUS_ROLL_UP());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " RELATIONSHIP_TYPE_CODE => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getRELATIONSHIP_TYPE_CODE() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getRELATIONSHIP_TYPE_CODE());
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getRELATIONSHIP_TYPE_CODE() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getRELATIONSHIP_TYPE_CODE() != null)) {
+                            Assert.assertEquals("The RELATIONSHIP_TYPE_CODE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getRELATIONSHIP_TYPE_CODE(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getRELATIONSHIP_TYPE_CODE());
+                        }
+
+                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
+                                " RELATIONSHIP_TYPE_NAME => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getRELATIONSHIP_TYPE_NAME() +
+                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getRELATIONSHIP_TYPE_NAME());
+                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getRELATIONSHIP_TYPE_NAME() != null ||
+                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getRELATIONSHIP_TYPE_NAME() != null)) {
+                            Assert.assertEquals("The RELATIONSHIP_TYPE_NAME is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getRELATIONSHIP_TYPE_NAME(),
+                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getRELATIONSHIP_TYPE_NAME());
+                        }
                         break;
-                        case "urls":
-                            Log.info("Sorting the data to compare the Urls records between History Excluding and HistoryExcluding_Query ..");
-                            for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.size(); i++) {
-
-                                PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
-                                PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                        " PUB_IDT => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getPUB_IDT() +
-                                        " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getPUB_IDT());
-                                if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getPUB_IDT() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getPUB_IDT() != null)) {
-                                    Assert.assertEquals("The PUB_IDT is =" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getPUB_IDT() + " is missing/not found in Data Lake",
-                                            PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getPUB_IDT(),
-                                            PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getPUB_IDT());
-
-                                }
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                        " EPR_ID => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getEPR_ID() +
-                                        " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getEPR_ID());
-
-                                if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getEPR_ID() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getEPR_ID() != null)) {
-                                    Assert.assertEquals("The EPR_ID is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getEPR_ID(),
-                                            PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getEPR_ID());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                        " URL_CODE => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL_CODE() +
-                                        " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL_CODE());
-                                if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL_CODE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL_CODE() != null)) {
-                                    Assert.assertEquals("The URL_CODE for U_KEY =" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() + " is missing/not found in Data Lake",
-                                            PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL_CODE(),
-                                            PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL_CODE());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                        " URL_NAME => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL_NAME() +
-                                        " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL_NAME());
-                                if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL_NAME() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL_NAME() != null)) {
-                                    Assert.assertEquals("The URL_NAME is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL_NAME(),
-                                            PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL_NAME());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                        " URL => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL() +
-                                        " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL());
-                                if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL() != null)) {
-                                    Assert.assertEquals("The URL is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL(),
-                                            PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                        " URL_TITLE => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL_TITLE() +
-                                        " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL_TITLE());
-                                if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL_TITLE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL_TITLE() != null)) {
-                                    Assert.assertEquals("The URL_TITLE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getURL_TITLE(),
-                                            PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getURL_TITLE());
-                                }
-
-                                Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                        " WORK_TYPE => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getWORK_TYPE() +
-                                        " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getWORK_TYPE());
-                                if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getWORK_TYPE() != null ||
-                                        (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getWORK_TYPE() != null)) {
-                                    Assert.assertEquals("The WORK_TYPE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
-                                            PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getWORK_TYPE(),
-                                            PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getWORK_TYPE());
-                                }
-                            }
-                                break;
-                                case "work_rels":
-                                    Log.info("Sorting the data to compare the Work_Rels records between History Excluding and HistoryExcluding_Query ..");
-                                    for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.size(); i++) {
-
-                                        PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
-                                        PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
-
-                                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                                " CHILD_PUB_IDT => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_PUB_IDT() +
-                                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_PUB_IDT());
-                                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_PUB_IDT() != null ||
-                                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_PUB_IDT() != null)) {
-                                            Assert.assertEquals("The CHILD_PUB_IDT is =" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_PUB_IDT() + " is missing/not found in Data Lake",
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_PUB_IDT(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_PUB_IDT());
-
-                                        }
-                                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                                " PARENT_EPR_ID => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getPARENT_EPR_ID() +
-                                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getPARENT_EPR_ID());
-
-                                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getPARENT_EPR_ID() != null ||
-                                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getPARENT_EPR_ID() != null)) {
-                                            Assert.assertEquals("The PARENT_EPR_ID is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getPARENT_EPR_ID(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getPARENT_EPR_ID());
-                                        }
-
-                                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                                " CHILD_EPR_ID => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_EPR_ID() +
-                                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_EPR_ID());
-                                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_EPR_ID() != null ||
-                                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_EPR_ID() != null)) {
-                                            Assert.assertEquals("The CHILD_EPR_ID for U_KEY =" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() + " is missing/not found in Data Lake",
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_EPR_ID(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_EPR_ID());
-                                        }
-
-                                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                                " CHILD_TITLE => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_TITLE() +
-                                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_TITLE());
-                                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_TITLE() != null ||
-                                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_TITLE() != null)) {
-                                            Assert.assertEquals("The CHILD_TITLE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_TITLE(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_TITLE());
-                                        }
-
-                                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                                " CHILD_RELATED_TYPE_CODE => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_TYPE_CODE() +
-                                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_TYPE_CODE());
-                                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_TYPE_CODE() != null ||
-                                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_TYPE_CODE() != null)) {
-                                            Assert.assertEquals("The CHILD_RELATED_TYPE_CODE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_TYPE_CODE(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_TYPE_CODE());
-                                        }
-
-                                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                                " CHILD_RELATED => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED() +
-                                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED());
-                                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED() != null ||
-                                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED() != null)) {
-                                            Assert.assertEquals("The CHILD_RELATED is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED());
-                                        }
-
-                                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                                " CHILD_RELATED_STATUS_CODE => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_STATUS_CODE() +
-                                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_STATUS_CODE());
-                                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_STATUS_CODE() != null ||
-                                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_STATUS_CODE() != null)) {
-                                            Assert.assertEquals("The CHILD_RELATED_STATUS_CODE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_STATUS_CODE(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_STATUS_CODE());
-                                        }
-
-                                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                                " CHILD_RELATED_TYPE_ROLL_UP => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_TYPE_ROLL_UP() +
-                                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_TYPE_ROLL_UP());
-                                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_TYPE_ROLL_UP() != null ||
-                                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_TYPE_ROLL_UP() != null)) {
-                                            Assert.assertEquals("The CHILD_RELATED_TYPE_ROLL_UP is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_TYPE_ROLL_UP(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_TYPE_ROLL_UP());
-                                        }
-
-                                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                                " CHILD_RELATED_STATUS_NAME => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_STATUS_NAME() +
-                                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_STATUS_NAME());
-                                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_STATUS_NAME() != null ||
-                                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_STATUS_NAME() != null)) {
-                                            Assert.assertEquals("The CHILD_RELATED_STATUS_NAME is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_STATUS_NAME(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_STATUS_NAME());
-                                        }
-
-                                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                                " CHILD_RELATED_STATUS_ROLL_UP => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_STATUS_ROLL_UP() +
-                                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_STATUS_ROLL_UP());
-                                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_STATUS_ROLL_UP() != null ||
-                                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_STATUS_ROLL_UP() != null)) {
-                                            Assert.assertEquals("The CHILD_RELATED_STATUS_ROLL_UP is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getCHILD_RELATED_STATUS_ROLL_UP(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getCHILD_RELATED_STATUS_ROLL_UP());
-                                        }
-
-                                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                                " RELATIONSHIP_TYPE_CODE => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getRELATIONSHIP_TYPE_CODE() +
-                                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getRELATIONSHIP_TYPE_CODE());
-                                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getRELATIONSHIP_TYPE_CODE() != null ||
-                                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getRELATIONSHIP_TYPE_CODE() != null)) {
-                                            Assert.assertEquals("The RELATIONSHIP_TYPE_CODE is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getRELATIONSHIP_TYPE_CODE(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getRELATIONSHIP_TYPE_CODE());
-                                        }
-
-                                        Log.info("U_KEY => " + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY() +
-                                                " RELATIONSHIP_TYPE_NAME => HistoryExcluding_Query=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getRELATIONSHIP_TYPE_NAME() +
-                                                " HistoryExcluding=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getRELATIONSHIP_TYPE_NAME());
-                                        if (PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getRELATIONSHIP_TYPE_NAME() != null ||
-                                                (PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getRELATIONSHIP_TYPE_NAME() != null)) {
-                                            Assert.assertEquals("The RELATIONSHIP_TYPE_NAME is incorrect for U_KEY=" + PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getU_KEY(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcludingQuery.get(i).getRELATIONSHIP_TYPE_NAME(),
-                                                    PromisDataContext.tbPRMDataObjectsFromHistoryExcluding.get(i).getRELATIONSHIP_TYPE_NAME());
-                                        }
-                                        break;
-                            }
                     }
             }
         }
+    }
 
     @Given("^We get the (.*) random Promis Latest Query ids of (.*)$")
     public void getRandomPromisLatestIds(String numberOfRecords, String Latesttablename) {
@@ -3722,9 +2816,9 @@ public class PromisETLDataCheck {
 //        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random records...");
-                sql = String.format(PromisETLDataCheckSQL.GET_UKEY_IDS, Currenttablename, numberOfRecords);
-                List<Map<?, ?>> randomTransformMappingIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                Ids = randomTransformMappingIds.stream().map(m -> (String) m.get("U_KEY")).map(String::valueOf).collect(Collectors.toList());
+        sql = String.format(PromisETLDataCheckSQL.GET_UKEY_IDS, Currenttablename, numberOfRecords);
+        List<Map<?, ?>> randomTransformMappingIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+        Ids = randomTransformMappingIds.stream().map(m -> (String) m.get("U_KEY")).map(String::valueOf).collect(Collectors.toList());
         Log.info(sql);
         Log.info(Ids.toString());
     }
@@ -4528,15 +3622,330 @@ public class PromisETLDataCheck {
             case "promis_transform_latest_pricing":
                 sql = String.format(PromisETLDataCheckSQL.GET_LATEST_PRICING_IDs, numberOfRecords);
                 List<Map<?, ?>> randomLatestPricingIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                Ids = randomLatestPricingIds.stream().map(m -> (Integer) m.get("PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
+                Ids = randomLatestPricingIds.stream().map(m -> (String) m.get("EPR_ID")).map(String::valueOf).collect(Collectors.toList());
                 break;
             case "promis_transform_latest_works":
                 sql = String.format(PromisETLDataCheckSQL.GET_LATEST_WORKS_IDs, numberOfRecords);
                 List<Map<?, ?>> randomLatestWorksIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                Ids = randomLatestWorksIds.stream().map(m -> (Integer) m.get("PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
+                Ids = randomLatestWorksIds.stream().map(m -> (String) m.get("EPR_ID")).map(String::valueOf).collect(Collectors.toList());
+                break;
+            case "promis_transform_latest_metrics":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_METRICS_IDs, numberOfRecords);
+                List<Map<?, ?>> randomLatestMetricsIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomLatestMetricsIds.stream().map(m -> (String) m.get("EPR_ID")).map(String::valueOf).collect(Collectors.toList());
+                break;
+            case "promis_transform_latest_person_roles":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_PERSON_ROLES_IDs, numberOfRecords);
+                List<Map<?, ?>> randomLatestPersonRolesIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomLatestPersonRolesIds.stream().map(m -> (String) m.get("EPR_ID")).map(String::valueOf).collect(Collectors.toList());
+                break;
+            case "promis_transform_latest_work_rels":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_WORK_RELS_IDs, numberOfRecords);
+                List<Map<?, ?>> randomLatestWorkRelsIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomLatestWorkRelsIds.stream().map(m -> (String) m.get("PARENT_EPR_ID")).map(String::valueOf).collect(Collectors.toList());
+                break;
+            case "promis_transform_latest_subject_areas":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_SUBJECT_AREAS_IDs, numberOfRecords);
+                List<Map<?, ?>> randomLatestSubjectAreasIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomLatestSubjectAreasIds.stream().map(m -> (String) m.get("EPR_ID")).map(String::valueOf).collect(Collectors.toList());
+                break;
+            case "promis_transform_latest_urls":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_URLS_IDs, numberOfRecords);
+                List<Map<?, ?>> randomLatestUrlsIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomLatestUrlsIds.stream().map(m -> (String) m.get("EPR_ID")).map(String::valueOf).collect(Collectors.toList());
                 break;
         }
         Log.info(sql);
         Log.info(Ids.toString());
     }
+
+    @When("^We get Promis allsource records from (.*)$")
+    public void getAllSourceRecords(String allsourcetablename) throws ParseException {
+        Log.info("We get the records from AllSource..");
+        switch (allsourcetablename) {
+            case "product_extended_pricing_allsource_v":
+                sql = String.format(PromisETLDataCheckSQL.GET_AllSource_Extended_Pricing, Joiner.on("','").join(Ids));
+                break;
+            case "work_extended_allsource_v":
+                sql = String.format(PromisETLDataCheckSQL.GET_AllSource_Extended_Work, Joiner.on("','").join(Ids));
+                break;
+            case "work_extended_metric_allsource_v":
+                sql = String.format(PromisETLDataCheckSQL.GET_AllSource_Extended_Work_Metric, Joiner.on("','").join(Ids));
+                break;
+            case "work_extended_editorial_board_allsource_v":
+                sql = String.format(PromisETLDataCheckSQL.GET_AllSource_Extended_Work_Editorial_Board, Joiner.on("','").join(Ids));
+                break;
+            case "work_extended_relationship_sibling_allsource_v":
+                sql = String.format(PromisETLDataCheckSQL.GET_AllSource_Extended_Work_Relationship_Sibling, Joiner.on("','").join(Ids));
+                break;
+            case "work_extended_subject_area_allsource_v":
+                sql = String.format(PromisETLDataCheckSQL.GET_AllSource_Extended_Work_Subject_Area, Joiner.on("','").join(Ids));
+                break;
+            case "work_extended_url_allsource_v":
+                sql = String.format(PromisETLDataCheckSQL.GET_AllSource_Extended_Work_Url, Joiner.on("','").join(Ids));
+                break;
+        }
+        Log.info(sql);
+        PromisContext.tbPRMDataObjectsFromInbound = DBManager.getDBResultAsBeanList(sql, PRMTablesInboundObject.class, Constants.AWS_URL);
     }
+
+    @Then("^We get the Latest records from (.*)$")
+    public void getPromLatestRecords(String latesttablename) throws ParseException {
+        Log.info("We get the Latest records..");
+        switch (latesttablename) {
+            case "promis_transform_latest_pricing":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_PRICING, Joiner.on("','").join(Ids));
+                break;
+            case "promis_transform_latest_works":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_WORKS, Joiner.on("','").join(Ids));
+                break;
+            case "promis_transform_latest_metrics":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_WORK_METRICS, Joiner.on("','").join(Ids));
+                break;
+            case "promis_transform_latest_person_roles":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_WORK_PERSON_ROLE, Joiner.on("','").join(Ids));
+                break;
+            case "promis_transform_latest_work_rels":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_WORK_RELS, Joiner.on("','").join(Ids));
+                break;
+            case "promis_transform_latest_subject_areas":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_SUBJECT_AREAS, Joiner.on("','").join(Ids));
+                break;
+            case "promis_transform_latest_urls":
+                sql = String.format(PromisETLDataCheckSQL.GET_LATEST_URLS, Joiner.on("','").join(Ids));
+                break;
+        }
+        Log.info(sql);
+        PromisETLDataContext.tbPRMDataObjectsFromCurrent = DBManager.getDBResultAsBeanList(sql, PRMTablesCurrentObject.class, Constants.AWS_URL);
+    }
+
+    @And("^Compare Promis records for Latest and AllSource of (.*)$")
+    public void compareLatesttoAllsource(String allsourcetablename) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if (PromisETLDataContext.tbPRMDataObjectsFromInbound.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            Log.info("Sorting the data to compare the Promis records in Latest and Allsource ..");
+            for (int i = 0; i < PromisETLDataContext.tbPRMDataObjectsFromInbound.size(); i++) {
+                switch (allsourcetablename) {
+                    case "work_extended_allsource_v":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getEPR_ID)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getEPR_ID));
+
+                        String[] PromLatest_work_extendedColumnName = {"getEPR_ID","getWORK_TYPE","getLAST_UPDATED_DATE","getJOURNS_AIMS_SCOPE","getDELTA_BUSINESS_UNIT","getIMAGE_FILE_REF","getMASTER_ISBN","getAUTHOR_BY_LINE_TEXT","getKEY_FEATURES","getPRODUCT_AWARDS","getPRODUCT_LONG_DESC","getPRODUCT_SHORT_DESC","getREVIEW_QUOTES","getTOC_LONG","getTOC_SHORT","getAUDIENCE_TEXT","getBOOK_SUB_BUSINESS_UNIT","getINTERNAL_ELS_DIV"};
+                        String[] PromAllSource_work_extendedColumnName = {"getEPR_ID","getWORK_TYPE","getLAST_UPDATED_DATE","getJOURNAL_AIMS_SCOPE","getDELTA_BUSINESS_UNIT","getIMAGE_FILE_REF","getMASTER_ISBN","getAUTHOR_BY_LINE_TEXT","getKEY_FEATURES","getPRODUCT_AWARDS","getPRODUCT_LONG_DESC","getPRODUCT_SHORT_DESC","getREVIEW_QUOTES","getTOC_LONG","getTOC_SHORT","getAUDIENCE_TEXT","getBOOK_SUB_BUSINESS_UNIT","getINTERNAL_ELSEVIER_DIVISION"};
+                        int j =0;
+                        for (String strTemp : PromLatest_work_extendedColumnName) {
+
+
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(PromAllSource_work_extendedColumnName[j]);
+
+
+                            Log.info("EPR_ID => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getEPR_ID() +
+                                    " " + strTemp + " => All source=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Latest=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                            j++;
+                        }
+                        break;
+                    case "work_extended_metric_allsource_v":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getEPR_ID)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getEPR_ID));
+
+                        String[] PromLatest_work_extended_metricColumnName = {"getEPR_ID","getMETRIC_CODE","getMETRIC_NAME","getMETRIC","getMETRIC_YEAR","getMETRIC_URL","getWORK_TYPE"};
+                        for (String strTemp : PromLatest_work_extended_metricColumnName) {
+
+
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+
+                            Log.info("EPR_ID => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getEPR_ID() +
+                                    " " + strTemp + " => All source=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Latest=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                        }
+                        break;
+                    case "work_extended_editorial_board_allsource_v":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getEPR_ID)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getEPR_ID));
+
+                        String[] PromLatest_work_extended_editorial_boardColumnName = {"getEPR_ID","getWORK_TYPE","getLAST_UPDATED_DATE","getROLE_NAME","getSEQUENCE_NUMBER","getGROUP_NUMBER","getLAST_NAME","getTITLE","getHONOURS","getAFFILIATION","getIMAGE_URL","getFOOTNOTE_TXT","getNOTES_TXT"};
+                        String[] PromLatest_work_extended_PersonRoleColumnName = {"getEPR_ID","getWORK_TYPE","getLAST_UPDATED_DATE","getROLE_DESCRIPTION","getSEQUENCE_NUMBER","getGROUP_NUMBER","getLAST_NAME","getTITLE","getHONOURS","getAFFILIATION","getIMAGE_URL","getFOOTNOTE_TXT","getNOTES_TXT"};
+                        int a=0;
+                        for (String strTemp : PromLatest_work_extended_editorial_boardColumnName) {
+
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(PromLatest_work_extended_PersonRoleColumnName[a]);
+
+
+                            Log.info("EPR_ID => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getEPR_ID() +
+                                    " " + strTemp + " => All source=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Latest=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                            a++;
+                        }
+                        break;
+                    case "work_extended_relationship_sibling_allsource_v":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getEPR_ID)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPARENT_EPR_ID));
+
+                        String[] PromLatest_work_extended_relationship_sibling_ColumnName = {"getEPR_ID","getRELATED_TITLE","getRELATED_TYPE_CODE","getRELATED_TYPE_NAME","getRELATED_TYPE_ROLL_UP","getRELATED_STATUS_CODE","getRELATED_STATUS_NAME","getRELATED_STATUS_ROLL_UP","getRELATIONSHIP_CODE","getRELATIONSHIP_NAME"};
+                        String[] PromLatest_work_extended_relsColumnName = {"getPARENT_EPR_ID","getCHILD_TITLE","getCHILD_RELATED_TYPE_CODE","getCHILD_RELATED_TYPE_NAME","getCHILD_RELATED_TYPE_ROLL_UP","getCHILD_RELATED_STATUS_CODE","getCHILD_RELATED_STATUS_NAME","getCHILD_RELATED_STATUS_ROLL_UP","getRELATIONSHIP_TYPE_CODE","getRELATIONSHIP_TYPE_NAME"};
+                        int b=0;
+                        for (String strTemp : PromLatest_work_extended_relationship_sibling_ColumnName) {
+
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(PromLatest_work_extended_relsColumnName[b]);
+
+
+                            Log.info("EPR_ID => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getPARENT_EPR_ID() +
+                                    " " + strTemp + " => All source=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Latest=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                            b++;
+                        }
+                        break;
+                    case "work_extended_subject_area_allsource_v":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getEPR_ID)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getEPR_ID));
+
+                        String[] PromLatest_work_extended_subject_area_ColumnName = {"getEPR_ID","getPRIORITY","getCODE","getNAME","getTYPE_CODE","getTYPE_NAME","getWORK_TYPE"};
+                        String[] PromLatest_work_extended_subjectareaColumnName = {"getEPR_ID","getPRIORITY","getSUBJECT_AREA_CODE","getSUBJECT_AREA_NAME","getSUBJECT_TYPE_CODE","getSUBJECT_TYPE_NAME","getWORK_TYPE"};
+                        int c=0;
+                        for (String strTemp : PromLatest_work_extended_subject_area_ColumnName) {
+
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(PromLatest_work_extended_subjectareaColumnName[c]);
+
+
+                            Log.info("EPR_ID => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getEPR_ID() +
+                                    " " + strTemp + " => All source=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Latest=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                            c++;
+                        }
+                        break;
+                    case "work_extended_url_allsource_v":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getEPR_ID)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getEPR_ID));
+
+                        String[] PromLatest_work_extended_urls_ColumnName = {"getEPR_ID","getURL_TYPE_CODE","getURL_TYPE_NAME","getURL","getURL_TITLE"};
+                        String[] PromLatest_work_extended_urlsColumnName = {"getEPR_ID","getURL_CODE","getURL_NAME","getURL","getURL_TITLE"};
+                        int d=0;
+                        for (String strTemp : PromLatest_work_extended_urls_ColumnName) {
+
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(PromLatest_work_extended_urlsColumnName[d]);
+
+
+                            Log.info("EPR_ID => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getEPR_ID() +
+                                    " " + strTemp + " => All source=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Latest=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                            d++;
+                        }
+                        break;
+                    case "product_extended_pricing_allsource_v":
+                        PromisETLDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getEPR_ID)); //sort data in the lists
+                        PromisETLDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getEPR_ID));
+
+                        String[] PromLatest_pricing_extended_ColumnName = {"getEPR_ID","getPRODUCT_TYPE","getCURRENCY","getPRICE","getREGION","getCUSTOMER_CATEGORY"};
+                        String[] PromLatest_pricing_extendedColumnName = {"getEPR_ID","getPRODUCT_TYPE","getPRICE_CURRENCY","getPRICE_AMOUNT","getPRICE_REGION","getPRICE_CUSTOMER_CATEGORY"};
+                        int e=0;
+                        for (String strTemp : PromLatest_pricing_extended_ColumnName) {
+
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesInboundObject objectToCompare1 = PromisETLDataContext.tbPRMDataObjectsFromInbound.get(i);
+                            PRMTablesCurrentObject objectToCompare2 = PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(PromLatest_pricing_extendedColumnName[e]);
+
+
+                            Log.info("EPR_ID => " + PromisETLDataContext.tbPRMDataObjectsFromCurrent.get(i).getEPR_ID() +
+                                    " " + strTemp + " => All source=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " Latest=" + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                            e++;
+                        }
+                        break;
+                }
+            }
+        }
+    }
+
+}

@@ -14,9 +14,10 @@ Feature:Validate data checks for Promis between transform tables
       | 5               |promis_prmlondest_part  |promis_prmlondest_current  |
       | 5               |promis_prmpricest_part  |promis_prmpricest_current  |
       | 5               |promis_prmpubinft_part  |promis_prmpubinft_current  |
-      | 5               |promis_prmpubrelt_part  |promis_prmpubrelt_current  |
       | 5               |promis_prmincpmct_part  |promis_prmincpmct_current  |
       | 5               |promis_prmpmccodt_part  |promis_prmpmccodt_current  |
+
+#      | 5               |promis_prmpubrelt_part  |promis_prmpubrelt_current  |
 
   @PROMISETL
   Scenario Outline: Verify that all Promis Delta data is transferred
@@ -85,17 +86,18 @@ Feature:Validate data checks for Promis between transform tables
   @PROMISETL
   Scenario Outline: Verify that all Promis data is transferred between Latest and All_source tables
     Given We get the <numberOfRecords> random Promis Latest ids of <latesttablename>
-#    When We get Promis transform mapping records from <allsourcetablename>
-#    Then We get the Promis Transform mapping current records from <latesttablename>
-#    And Compare Promis records for transform mapping and current of <allsourcetablename>
+    When We get Promis allsource records from <allsourcetablename>
+    Then We get the Latest records from <latesttablename>
+    And Compare Promis records for Latest and AllSource of <allsourcetablename>
     Examples:
       |numberOfRecords  |latesttablename                       |allsourcetablename                                  |
-      | 5               |promis_transform_latest_pricing       |product_extended_pricing_allsource_v                |
-      | 5               |promis_transform_latest_works         |work_extended_allsource_v                           |
-      | 5               |promis_transform_latest_metrics       |work_extended_metric_allsource_v                    |
-      | 5               |promis_transform_latest_person_roles  |work_extended_editorial_board_allsource_v           |
-      | 5               |promis_transform_latest_work_rels     |work_extended_relationship_sibling_allsource_v      |
-      | 5               |promis_transform_latest_subject_areas |work_extended_subject_area_allsource_v              |
-      | 5               |promis_transform_latest_urls          |work_extended_url_allsource_v                       |
+#      | 5               |promis_transform_latest_pricing       |product_extended_pricing_allsource_v                |
+#
+#      | 5               |promis_transform_latest_works         |work_extended_allsource_v                           |
+#      | 5               |promis_transform_latest_metrics       |work_extended_metric_allsource_v                    |
+#      | 5               |promis_transform_latest_person_roles  |work_extended_editorial_board_allsource_v           |
+#      | 5               |promis_transform_latest_work_rels     |work_extended_relationship_sibling_allsource_v      |
+#      | 5               |promis_transform_latest_subject_areas |work_extended_subject_area_allsource_v              |
+#      | 5               |promis_transform_latest_urls          |work_extended_url_allsource_v                       |
 
 

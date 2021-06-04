@@ -501,6 +501,34 @@ public class JMETLObject {
     private String PRODUCT_GROUP_DESCRIPTION;
     private String f_pricing_option;
     private String F_PRICING_OPTION;
+    private String EPR_ID;
+    private String PRODUCT_TYPE;
+    private String APPLICATION_NAME;
+    private String DELTA_ANSWER_CODE_UK;
+    private String DELTA_ANSWER_CODE_US;
+    private String PUBLICATION_STATUS_ANZ;
+    private String AVAILABILITY_FORMAT;
+
+    public String getAVAILABILITY_FORMAT() { return AVAILABILITY_FORMAT; }
+    public void setAVAILABILITY_FORMAT(String AVAILABILITY_FORMAT) { this.AVAILABILITY_FORMAT = AVAILABILITY_FORMAT; }
+
+    public String getPUBLICATION_STATUS_ANZ() { return PUBLICATION_STATUS_ANZ; }
+    public void setPUBLICATION_STATUS_ANZ(String PUBLICATION_STATUS_ANZ) { this.PUBLICATION_STATUS_ANZ = PUBLICATION_STATUS_ANZ; }
+
+    public String getDELTA_ANSWER_CODE_US() { return DELTA_ANSWER_CODE_US; }
+    public void setDELTA_ANSWER_CODE_US(String DELTA_ANSWER_CODE_US) { this.DELTA_ANSWER_CODE_US = DELTA_ANSWER_CODE_US; }
+
+    public String getDELTA_ANSWER_CODE_UK() { return DELTA_ANSWER_CODE_UK; }
+    public void setDELTA_ANSWER_CODE_UK(String DELTA_ANSWER_CODE_UK) { this.DELTA_ANSWER_CODE_UK = DELTA_ANSWER_CODE_UK; }
+
+    public String getAPPLICATION_NAME() { return APPLICATION_NAME; }
+    public void setAPPLICATION_NAME(String APPLICATION_NAME) { this.APPLICATION_NAME = APPLICATION_NAME; }
+
+    public String getPRODUCT_TYPE() { return PRODUCT_TYPE; }
+    public void setPRODUCT_TYPE(String PRODUCT_TYPE) { this.PRODUCT_TYPE = PRODUCT_TYPE; }
+
+    public String getEPR_ID() { return EPR_ID; }
+    public void setEPR_ID(String EPR_ID) { this.EPR_ID = EPR_ID; }
 
     public String getF_PRICING_OPTION() { return F_PRICING_OPTION; }
     public void setF_PRICING_OPTION(String F_PRICING_OPTION) { this.F_PRICING_OPTION = F_PRICING_OPTION; }
