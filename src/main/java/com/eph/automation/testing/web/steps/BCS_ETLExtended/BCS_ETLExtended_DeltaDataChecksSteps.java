@@ -187,7 +187,9 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getUKEY));
 
                         Log.info("comparing etl_delta_current_extended_manifestation and etl_manifestation_extended_transform_file_history_part records...");
-                        String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type", "getuktextbookind", "getustextbookind", "getusdiscountcode", "getusdiscountname", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getemeadiscountcode", "getemeadiscountname", "gettrimsize", "getweight", "getcommcode", "getjournalprodsitecode", "getjournalissuetrimsize", "getwarreference", "getDELTA_MODE"};
+                        String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type", "getuktextbookind", "getustextbookind", "getusdiscountcode", "getusdiscountname",
+                                "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getemeadiscountcode", "getemeadiscountname", "gettrimsize", "getweight",
+                                "getcommcode", "getjournalprodsitecode", "getjournalissuetrimsize", "getwarreference","getexporttowebind", "getDELTA_MODE"};
                         for (String strTemp : all_manif_ext_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -548,7 +550,10 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                         dataQualityBCSContext.recFromDeltaCurrent.sort(Comparator.comparing(BCS_ETLExtendedDLAccessObject::getEPRID));
 
                         Log.info("comparing etl_delta_current_extended_manifestation and etl_manifestation_extended_delta_history_part records...");
-                        String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type", "getuktextbookind", "getustextbookind", "getusdiscountcode", "getusdiscountname", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getemeadiscountcode", "getemeadiscountname", "gettrimsize", "getweight", "getcommcode", "getjournalprodsitecode", "getjournalissuetrimsize", "getwarreference", "getDELTA_MODE"};
+                        String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type", "getuktextbookind",
+                                "getustextbookind", "getusdiscountcode", "getusdiscountname", "getUKEY", "getSOURCEREF",
+                                "getMODIFIEDON", "getemeadiscountcode", "getemeadiscountname", "gettrimsize", "getweight", "getcommcode",
+                                "getjournalprodsitecode", "getjournalissuetrimsize", "getwarreference","getexporttowebind", "getDELTA_MODE"};
                         for (String strTemp : all_manif_ext_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -947,7 +952,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                         String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type", "getuktextbookind", "getustextbookind",
                                 "getusdiscountcode", "getusdiscountname", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getemeadiscountcode",
                                 "getemeadiscountname", "gettrimsize", "getweight", "getcommcode", "getjournalprodsitecode", "getjournalissuetrimsize",
-                                "getwarreference"};
+                                "getwarreference","getexporttowebind"};
                         for (String strTemp : all_manif_ext_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -1182,8 +1187,8 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
     }
 
     @Given("^Get the (.*) from sum of delta_current and exclude_delta for BCS Extended (.*)$")
-    public void getIdsFromDiffOfDeltaCurrAndExcl(String numberOfRecords, String tableName) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+    public void  getIdsFromDiffOfDeltaCurrAndExcl(String numberOfRecords, String tableName) {
+       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for BCS Extended Tables from Diff of Delta Current and Exclude....");
 
@@ -1340,7 +1345,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
                         String[] all_manif_ext_Col = {"getEPRID", "getmetadeleted", "getmanifestation_type", "getuktextbookind", "getustextbookind",
                                 "getusdiscountcode", "getusdiscountname", "getUKEY", "getSOURCEREF", "getMODIFIEDON", "getemeadiscountcode",
                                 "getemeadiscountname", "gettrimsize", "getweight", "getcommcode", "getjournalprodsitecode", "getjournalissuetrimsize",
-                                "getwarreference"};
+                                "getwarreference","getexporttowebind"};
                         for (String strTemp : all_manif_ext_Col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;

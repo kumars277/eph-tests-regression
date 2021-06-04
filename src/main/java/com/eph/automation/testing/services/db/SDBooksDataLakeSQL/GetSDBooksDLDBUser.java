@@ -15,8 +15,8 @@ public class GetSDBooksDLDBUser {
             }
 
         }else{
-            dbSDDL = "sdbooks_staging_sit";
-          //  dbSDDL = "sdbooks_staging_uat";
+          //  dbSDDL = "sdbooks_staging_sit";
+            dbSDDL = "sdbooks_staging_uat";
         }
         return dbSDDL;
     }
@@ -33,8 +33,8 @@ public class GetSDBooksDLDBUser {
                 dbProdDb = "product_staging_database_uat2";
             }
         }else{
-            dbProdDb = "product_staging_database_sit";
-          //  dbProdDb = "product_staging_database_uat";
+          //  dbProdDb = "product_staging_database_sit";
+            dbProdDb = "product_staging_database_uat";
         }
         return dbProdDb;
     }

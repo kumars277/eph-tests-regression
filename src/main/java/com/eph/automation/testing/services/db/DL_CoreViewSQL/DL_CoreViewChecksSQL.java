@@ -78,7 +78,7 @@ public class DL_CoreViewChecksSQL {
                     " FROM "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_accountable_product_dq)\n";
 
     public static String GET_BCS_JM_CORE_ACC_PROD_RAND_ID =
-            "select external_reference from(\n" +
+            "select work_reference as id from(\n" +
                     "SELECT\n" +
                     "  concat(accountableproduct, accountableparent) external_reference\n" +
                     ", sourceref work_reference\n" +
@@ -139,7 +139,7 @@ public class DL_CoreViewChecksSQL {
                     ", acc_prod_id work_source_reference\n" +
                     ", false delete_flag\n" +
                     ", 'JM' source_system\n" +
-                    " FROM "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_accountable_product_dq) where external_reference in ('%s')\n" +
+                    " FROM "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_accountable_product_dq) where work_reference in ('%s')\n" +
                     "order by external_reference,work_reference,last_updated_date,work_source_reference,delete_flag desc \n";
 
     public static String GET_DL_CORE_ALL_ACC_PROD_VIEW_REC =
@@ -154,7 +154,7 @@ public class DL_CoreViewChecksSQL {
                     ",delete_flag as DELETEFLAG" +
                     ",source_system as SOURCESYSTEM" +
                     " from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_accountable_product_v" +
-                    " where external_reference in ('%s') \n" +
+                    " where work_reference in ('%s') \n" +
                     "order by external_reference,work_reference,last_updated_date,work_source_reference,delete_flag desc \n";
 
     public static String GET_BCS_JM_CORE_MANIF_COUNT =
@@ -209,7 +209,7 @@ public class DL_CoreViewChecksSQL {
                   ")  maxm ON (((maxm.max_notified_date = m.notified_date) AND (maxm.scenario_code = m.scenario_code)) AND (maxm.jm_source_reference = m.jm_source_reference))))\n";
 
     public static String GET_BCS_JM_CORE_MANIF_RAND_ID =
-            "select external_reference from(\n" +
+            "select external_reference as id from(\n" +
                     "SELECT\n" +
                     "  sourceref external_reference\n" +
                     ", CAST(null AS varchar) eph_manifestation_id\n" +
@@ -417,7 +417,7 @@ public class DL_CoreViewChecksSQL {
                     "FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_manifestation_identifier_latest_v m)\n";
 
     public static String GET_BCS_JM_CORE_MANIF_IDENT_RAND_ID =
-            "select external_reference from(\n" +
+            "select external_reference as id from(\n" +
                     "SELECT\n" +
                     "  concat(mi.jm_source_ref_new, '-', mi.identifier_new) external_reference\n" +
                     ", mi.identifier_new identifier\n" +
@@ -608,7 +608,7 @@ public class DL_CoreViewChecksSQL {
 
 
     public static String GET_BCS_JM_CORE_PERSON_RAND_ID =
-            "select external_reference from(\n" +
+            "select external_reference as id from(\n" +
                     "SELECT\n" +
                     "  CAST(null AS integer) person_id\n" +
                     ", CAST(u_key AS varchar) external_reference\n" +
@@ -775,7 +775,7 @@ public class DL_CoreViewChecksSQL {
                     "FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_product_latest_v)\n";
 
     public static String GET_BCS_JM_CORE_PRODUCT_RAND_ID =
-            "select external_reference from(\n" +
+            "select external_reference as id from(\n" +
                     "SELECT\n" +
                     "  p.eph_product_id product_id\n" +
                     ", p.jm_source_reference external_reference\n" +
@@ -1000,7 +1000,7 @@ public class DL_CoreViewChecksSQL {
                     " FROM "+GetBCS_ETLCoreDLDBUser.getdppDataBase()+".etl_dpp_product_rel_package)\n";
 
     public static String GET_BCS_JM_CORE_PROD_REL_PKG_RAND_ID =
-            "select external_reference from(\n" +
+            "select external_reference as id from(\n" +
                     "SELECT\n" +
                     "  external_reference external_reference\n" +
                     ", allocation allocation\n" +
@@ -1117,7 +1117,7 @@ public class DL_CoreViewChecksSQL {
                     "FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_identifier_latest)\n";
 
     public static String GET_BCS_JM_CORE_WORK_IDENT_RAND_ID =
-            "select external_reference from (\n" +
+            "select external_reference as id from (\n" +
                     "SELECT\n" +
                     "  wi.jm_source_ref_new external_reference\n" +
                     ", wi.identifier_new identifier\n" +
@@ -1437,7 +1437,7 @@ public class DL_CoreViewChecksSQL {
              "   )  maxw ON ((((maxw.max_notified_date = wpr.notified_date) AND (maxw.scenario_code = wpr.scenario_code)) AND (maxw.work_source_reference = wpr.work_source_reference)) AND (maxw.f_role = wpr.f_role)))\n" +
              "   WHERE (wpr.employee_number_old IS NOT NULL)\n" +
              ") \n" +
-             "select external_reference from(\n" +
+             "select external_reference as id from(\n" +
              "SELECT s.*\n" +
              "FROM\n" +
              "  (source s\n" +
@@ -1592,7 +1592,7 @@ public class DL_CoreViewChecksSQL {
                     "FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_relationship_latest_v)\n";
 
     public static String GET_BCS_JM_CORE_WORK_RELATION_RAND_ID =
-            "select external_reference from(\n" +
+            "select external_reference as id from(\n" +
                     "SELECT\n" +
                     "  u_key external_reference\n" +
                     ", parentref parent_work_source_ref\n" +
@@ -1667,8 +1667,7 @@ public class DL_CoreViewChecksSQL {
 
 
     public static String GET_BCS_JM_CORE_WORK_SUBJ_AREA_RAND_ID=
-
-            "select external_reference" +
+            "select external_reference as id" +
                     " from(\n" +
                     " SELECT\n" +
                     "  jm_source_reference external_reference\n" +
@@ -1683,7 +1682,7 @@ public class DL_CoreViewChecksSQL {
                     ", false delete_flag \n" +
                     ", 'JM' source_system \n" +
                     " FROM "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_subject_area_dq\n" +
-                    " WHERE subject_area_type = 'SD')order by rand() limit %s \n";
+                    " WHERE subject_area_type = 'SD') order by rand() limit %s \n";
 
     public static String GET_BCS_JM_CORE_WORK_SUBJ_AREA_REC=
             "select external_reference as EXTERNALREFERENCE" +
@@ -1805,7 +1804,7 @@ public class DL_CoreViewChecksSQL {
 
     public static String GET_BCS_JM_CORE_WORK_RAND_ID =
 
-            "select external_reference from(\n" +
+            "select external_reference as id from(\n" +
                     "SELECT\n" +
                     "  w.eph_work_id epr\n" +
                     ", w.jm_source_reference external_reference\n" +
@@ -2041,7 +2040,7 @@ public class DL_CoreViewChecksSQL {
                     " FROM "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_legal_owner_dq)\n";
 
     public static String GET_BCS_JM_CORE_WORK_LEGAL_OWNER_RAND_ID =
-            "select external_reference from(\n" +
+            "select external_reference as id from(\n" +
                     "SELECT\n" +
                     "  work_external_ref work_source_reference\n" +
                     ", legalowner_external_ref legal_owner_reference\n" +
@@ -2099,7 +2098,7 @@ public class DL_CoreViewChecksSQL {
                     " from "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_access_model_dq_v)";
 
     public static String GET_BCS_JM_CORE_WORK_ACCESS_MODEL_RAND_ID =
-            "select external_reference from(\n" +
+            "select external_reference as id from(\n" +
                     "SELECT\n" +
                     "external_work_ref work_source_reference\n" +
                     ", external_reference\n" +
@@ -2157,7 +2156,7 @@ public class DL_CoreViewChecksSQL {
                     " from "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_business_model_dq_v)";
 
     public static String GET_BCS_JM_CORE_WORK_BUSINESS_MODEL_RAND_ID =
-            "select external_reference from(\n" +
+            "select external_reference as id from(\n" +
                     "SELECT\n" +
                     "external_work_ref work_source_reference\n" +
                     ", external_reference\n" +
@@ -2202,6 +2201,43 @@ public class DL_CoreViewChecksSQL {
                     " from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_work_business_model_v where external_reference in ('%s') order by external_reference desc\n";
 
 
+    public static String GET_BCS_JM_CORE_Acc_Prod_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_accountable_product_v where external_reference is null";
+
+    public static String GET_BCS_JM_CORE_manif_ident_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_manifestation_identifiers_v where external_reference is null";
+
+    public static String GET_BCS_JM_CORE_manif_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_manifestation_v where external_reference is null";
+
+    public static String GET_BCS_JM_CORE_Person_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_person_v where external_reference is null";
+
+    public static String GET_BCS_JM_CORE_Product_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_product_v where external_reference is null";
+
+    public static String GET_BCS_JM_CORE_Product_Rel_Pkg_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_product_rel_package_v where external_reference is null";
+
+    public static String GET_BCS_JM_CORE_Work_identf_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_work_identifier_v where external_reference is null";
+
+    public static String GET_BCS_JM_CORE_Work_PERS_role_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_work_person_role_v where external_reference is null";
+    public static String GET_BCS_JM_CORE_Work_RELAtion_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_work_relationship_v where external_reference is null";
+    public static String GET_BCS_JM_CORE_Work_sub_area_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_work_subject_areas_v where external_reference is null";
+    public static String GET_BCS_JM_CORE_Work_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_work_v where external_reference is null";
+    public static String GET_BCS_JM_CORE_Work_legal_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_work_legal_owner_v where external_reference is null";
+
+    public static String GET_BCS_JM_CORE_Work_access_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_work_access_model_v where external_reference is null";
+
+    public static String GET_BCS_JM_CORE_Work_business_Ext_Ref_Null_count =
+            "select count(*) as Null_COunt from "+GetBCS_ETLCoreDLDBUser.getDL_CoreViewDataBase()+".all_work_business_model_v where external_reference is null";
 
 }
 

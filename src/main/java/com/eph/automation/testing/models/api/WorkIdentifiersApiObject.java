@@ -6,6 +6,7 @@ package com.eph.automation.testing.models.api;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -13,6 +14,7 @@ import org.junit.Assert;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WorkIdentifiersApiObject {
@@ -38,6 +40,9 @@ public class WorkIdentifiersApiObject {
     public String getEffectiveStartDate(){return effectiveStartDate;}
     public void setEffectiveStartDate(String effectiveStartDate){this.effectiveStartDate=effectiveStartDate;}
 
+    private String effectiveEndDate;
+    public String getEffectiveEndDate() {return effectiveEndDate;}
+    public void setEffectiveEndDate(String effectiveEndDate) {this.effectiveEndDate = effectiveEndDate;}
 
     private void getWorkIdentifierByID(String workidentifierID){
         String sql = APIDataSQL.getWorkIdentifiersDataFromGDByIdentifier.replace("PARAM1", workidentifierID);
@@ -45,9 +50,31 @@ public class WorkIdentifiersApiObject {
     }
 
     public void compareWithDB(){
+        //updated by Nishant @ 18 May 2021, EPHD-3122
         Log.info("verifiying work identifiers... "+this.identifier);
         getWorkIdentifierByID(this.identifier);
-        Assert.assertEquals(this.identifierType.get("code"), this.DBworkIdentifier.get(0).getF_TYPE());
-        Log.info("verified...work identifier type");
+        Assert.assertEquals(DataQualityContext.breadcrumbMessage +"-> "+ this.identifier+" - work identifier",this.identifierType.get("code"), this.DBworkIdentifier.get(0).getF_TYPE());
+        printLog("work identifier code");
+
+        Assert.assertEquals(DataQualityContext.breadcrumbMessage +"-> "+ this.identifier+" - work identifier",this.identifierType.get("name"), getWorkIdentifierName(identifierType.get("code").toString()));
+        printLog("work identifier name");
+
+        Assert.assertEquals(DataQualityContext.breadcrumbMessage +"-> "+ this.identifier+" - work identifier",effectiveStartDate, this.DBworkIdentifier.get(0).getIDENTIFIER_EFFECTIVE_START_DATE());
+        printLog("work identifier effectiveStartDate");
+
+        if(effectiveEndDate!=null|DBworkIdentifier.get(0).getIDENTIFIER_EFFECTIVE_END_DATE()!=null)
+        {
+            Assert.assertEquals(DataQualityContext.breadcrumbMessage +"-> "+ this.identifier+" - work identifier",effectiveEndDate, this.DBworkIdentifier.get(0).getIDENTIFIER_EFFECTIVE_END_DATE());
+            printLog("work identifier effectiveEndtDate");
+        }
     }
+
+    private String getWorkIdentifierName(String code){//created by Nishant @ 18 May 2021, EPHD-3122
+        String sql = String.format(APIDataSQL.SelectLovWorkIdentifierValue,code);
+        List<Map<String,Object>> workIdentifierName = DBManager.getDBResultMap(sql,Constants.EPH_URL);
+        return (String) workIdentifierName.get(0).get("l_description");
+    }
+
+
+    private void printLog(String verified) {System.out.println("verified..." + verified);}
 }

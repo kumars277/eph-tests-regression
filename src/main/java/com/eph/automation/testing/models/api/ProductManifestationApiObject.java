@@ -72,7 +72,7 @@ public class ProductManifestationApiObject {
         if(work.getWorkExtended()!=null){
         WorkApiObject workApiObject = new WorkApiObject();
         workApiObject.getJsonToObject_extendedWork(work.getId());
-        work.getWorkExtended().compareWithDB();
+        work.getWorkExtended().compareWithDB(work.getId());
         }
     }
 }

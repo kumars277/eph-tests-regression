@@ -27,3 +27,10 @@ Feature:Validate data count for JM Extended tables
       | tableName                               |countOfRandomIds|
       |jnl_new_fulfilment_system                |2              |
       |jnl_fulfilment_system                     |2               |
+
+
+  Scenario: Verify Data driven
+   # Given We have the expected data
+  # Then Verify data with file upoad
+   And Check the Count from Excel
+

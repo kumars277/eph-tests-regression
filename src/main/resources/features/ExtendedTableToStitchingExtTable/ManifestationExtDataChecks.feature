@@ -1,6 +1,7 @@
 Feature:Validate data for  Manifestation Ext Stitching tables in EPH
 
 #  Created by Dinesh on 22/02/2020
+  #Conf link: https://confluence.cbsels.com/display/EPH/Topic+Table+to+JSON+Mapping
 
   @ManifExtStitching
   Scenario Outline: Verify Data from the Manif_extended tables transferred to Manif Extended Stitching table

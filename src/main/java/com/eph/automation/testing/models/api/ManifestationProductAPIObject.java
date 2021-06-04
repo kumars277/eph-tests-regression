@@ -36,20 +36,6 @@ public class ManifestationProductAPIObject {
     private ManifestationWorkApiObject work;
     public ManifestationWorkApiObject getWork() {return work;}
     public void setWork(ManifestationWorkApiObject work) {this.work = work;}
-/*
-    static class ProductSummary {
-        String name;
-        public String getName() {return name;}
-        public void setName(String name) {this.name = name;}
-
-        HashMap<String, Object> type;
-        public HashMap<String, Object> getType() {return type;}
-        public void setType(HashMap<String, Object> type) {this.type = type;}
-
-        HashMap<String, Object> status;
-        public HashMap<String, Object> getStatus() {return status;}
-        public void setStatus(HashMap status) {this.status = status;}
-    }*/
 
     private void getProductDataFromEPHGD(String productID) {
         List<String> ids = new ArrayList<>();

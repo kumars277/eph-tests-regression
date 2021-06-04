@@ -63,7 +63,7 @@ public class PersonsApiObject {
         dataQualityContext.personDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
     }
 
-    void compareWithDB_product() {
+    void compareWithDB_product(String id) {
         //created by Nishant @ 22 Nov 2019
         //Updated by Nishant @ 30 Apr 2020
         Log.info("verifying product person... "+this.id);
@@ -91,7 +91,7 @@ public class PersonsApiObject {
         printLog("email");
     }
 
-    void compareWithDB_work() {
+    void compareWithDB_work(String id) {
         //Updated by Nishant @ 22 Nov 2019
         Log.info("verifiying work person... "+this.id);
         if(dataQualityContext.personDataObjectsFromEPHGD!=null){dataQualityContext.personDataObjectsFromEPHGD.clear();}
@@ -99,24 +99,24 @@ public class PersonsApiObject {
 
         getPersonWorkRoleRecordsEPHGD(this.id);
 
-        Assert.assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_ROLE(), this.role.get("code"));
+     Assert.assertEquals(id+ " - person role",dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_ROLE(), this.role.get("code"));
         printLog("person role");
 
-        Assert.assertEquals(dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON(), String.valueOf(this.person.get("id")));
+     Assert.assertEquals(id+ " - person id",dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON(), String.valueOf(this.person.get("id")));
         printLog("person id");
 
         getPersonDataFromEPHGD(this.person.get("id"));
-        Assert.assertEquals(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME(), this.person.get("firstName"));
+     Assert.assertEquals(id+ " - ",dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME(), this.person.get("firstName"));
         printLog("firstName");
 
-        Assert.assertEquals(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME(), this.person.get("lastName"));
+     Assert.assertEquals(id+ " - firstName",dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME(), this.person.get("lastName"));
         printLog("lastName");
 
         if(!(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_EMAIL_ID()==null&&this.person.get("email")==null)){
-        Assert.assertEquals(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_EMAIL_ID(),this.person.get("email"));
+     Assert.assertEquals(id+ " - email",dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_EMAIL_ID(),this.person.get("email"));
             printLog("email");}
        if(!(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPEOPLEHUB_ID()==null&& this.person.get("peoplehubId")==null)){
-        Assert.assertEquals(dataQualityContext.personDataObjectsFromEPHGD.get(0).getPEOPLEHUB_ID(),this.person.get("peoplehubId"));
+     Assert.assertEquals(id+ " - peoplehubId",dataQualityContext.personDataObjectsFromEPHGD.get(0).getPEOPLEHUB_ID(),this.person.get("peoplehubId"));
            printLog("peoplehubId");}
     }
     private void printLog(String verified){Log.info("verified..."+verified);}

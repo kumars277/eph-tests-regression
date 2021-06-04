@@ -206,13 +206,14 @@ public class DL_ExtendedViewChecksSQL {
             ",discount_code_us as discount_code_us\n" +
             ",manifestation_weight as manifestation_weight\n" +
             ",journal_issue_trim_size as journal_issue_trim_size\n" +
-            ",war_reference as war_reference\n" +
+            ",war_reference as war_reference" +
+            ",export_to_web_ind as export_to_web_ind\n" +
             ",delete_flag as delete_flag\n" +
             "from(" +
             "SELECT DISTINCT epr_id, manifestation_type, last_updated_date\n" +
             ", uk_textbook_ind, us_textbook_ind, manifestation_trim_text\n" +
             ", commodity_code, discount_code_emea, discount_code_us, manifestation_weight\n" +
-            ", journal_issue_trim_size, war_reference, delete_flag\n" +
+            ", journal_issue_trim_size, war_reference,export_to_web_ind, delete_flag\n" +
             " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_allsource_v where epr_id in ('%s'))" +
             " order by epr_id,manifestation_trim_text,discount_code_emea,discount_code_us,manifestation_weight,journal_issue_trim_size,commodity_code,war_reference," +
             "uk_textbook_ind,us_textbook_ind,delete_flag desc";
@@ -230,7 +231,8 @@ public class DL_ExtendedViewChecksSQL {
                     ",discount_code_us as discount_code_us\n" +
                     ",manifestation_weight as manifestation_weight\n" +
                     ",journal_issue_trim_size as journal_issue_trim_size\n" +
-                    ",war_reference as war_reference\n" +
+                    ",war_reference as war_reference" +
+                    ",export_to_web_ind as export_to_web_ind\n" +
                     ",delete_flag as delete_flag\n" +
                     " from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".manifestation_extended where epr_id in ('%s')" +
                     " order by epr_id,manifestation_trim_text,discount_code_emea,discount_code_us,manifestation_weight,journal_issue_trim_size,commodity_code,war_reference," +
@@ -1244,6 +1246,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS Double) manifestation_weight\n" +
                     ", jrbi.journal_issue_trim_size\n" +
                     ", jrbi.war_reference\n" +
+                    " ,CAST(null AS boolean) export_to_web_ind" +
                     ", jrbi.delete_flag\n" +
                     " FROM "+GetBCS_ETLExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_manifestation jrbi\n" +
                     "UNION ALL\n" +
@@ -1260,7 +1263,8 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.usdiscountcode as discount_code_us\n" +
                     ", CAST(null AS double) as manifestation_weight\n" +
                     ", bcs.journalissuetrimsize as journal_issue_trim_size\n" +
-                    ", bcs.warreference as war_reference\n" +
+                    ", bcs.warreference as war_reference" +
+                    ", bcs.exporttowebind as export_to_web_ind\n" +
                     ", bcs.delete_flag\n" +
                     " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_latest bcs)";
 
@@ -1279,7 +1283,8 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) discount_code_us\n" +
                     ", CAST(null AS Double) manifestation_weight\n" +
                     ", jrbi.journal_issue_trim_size\n" +
-                    ", jrbi.war_reference\n" +
+                    ", jrbi.war_reference" +
+                    ", CAST(null AS boolean) export_to_web_ind\n" +
                     ", jrbi.delete_flag\n" +
                     " FROM "+GetBCS_ETLExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_manifestation jrbi\n" +
                     "UNION ALL\n" +
@@ -1295,13 +1300,14 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.emeadiscountcode as discount_code_emea\n" +
                     ", bcs.usdiscountcode as discount_code_us\n" +
                     ", CAST(null AS double) as manifestation_weight\n" +
-                    ", bcs.journalissuetrimsize as journal_issue_trim_size\n" +
+                    ", bcs.journalissuetrimsize as journal_issue_trim_size" +
                     ", bcs.warreference as war_reference\n" +
+                    ", bcs.exporttowebind as export_to_web_ind\n" +
                     ", bcs.delete_flag\n" +
                     " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_latest bcs)order by rand() limit %s";
 
     public static String GET_SOURCE_MANIF_EXT_REC =
-            "select epr_id as epri_id" +
+            "select epr_id as epr_id" +
                     ",source as source\n" +
                     ",manifestation_type as manifestation_type\n" +
                     ",last_updated_date as last_updated_date\n" +
@@ -1313,7 +1319,8 @@ public class DL_ExtendedViewChecksSQL {
                     ",discount_code_us as discount_code_us\n" +
                     ",manifestation_weight as manifestation_weight\n" +
                     ",journal_issue_trim_size as journal_issue_trim_size\n" +
-                    ",war_reference as war_reference\n" +
+                    ",war_reference as war_reference" +
+                    ",export_to_web_ind as export_to_web_ind\n" +
                     ",delete_flag as delete_flag\n" +
                     " from (\n" +
                     "SELECT \n" +
@@ -1330,6 +1337,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS Double) manifestation_weight\n" +
                     ", jrbi.journal_issue_trim_size\n" +
                     ", jrbi.war_reference\n" +
+                    ", CAST(null AS boolean) export_to_web_ind\n" +
                     ", jrbi.delete_flag\n" +
                     " FROM "+GetBCS_ETLExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_manifestation jrbi\n" +
                     "UNION ALL\n" +
@@ -1346,14 +1354,15 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.usdiscountcode as discount_code_us\n" +
                     ", CAST(null AS double) as manifestation_weight\n" +
                     ", bcs.journalissuetrimsize as journal_issue_trim_size\n" +
-                    ", bcs.warreference as war_reference\n" +
+                    ", bcs.warreference as war_reference" +
+                    ", bcs.exporttowebind as export_to_web_ind\n" +
                     ", bcs.delete_flag\n" +
                     " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_latest bcs) where epr_id in ('%s')" +
                     " order by epr_id,manifestation_trim_text,discount_code_emea,discount_code_us,manifestation_weight,journal_issue_trim_size,commodity_code,war_reference," +
                     "uk_textbook_ind,us_textbook_ind,delete_flag desc";
 
     public static String GET_ALL_VIEW_MANIF_EXT_REC =
-            "select epr_id as epri_id" +
+            "select epr_id as epr_id" +
                     ",source as source\n" +
                     ",manifestation_type as manifestation_type\n" +
                     ",last_updated_date as last_updated_date\n" +
@@ -1365,7 +1374,8 @@ public class DL_ExtendedViewChecksSQL {
                     ",discount_code_us as discount_code_us\n" +
                     ",manifestation_weight as manifestation_weight\n" +
                     ",journal_issue_trim_size as journal_issue_trim_size\n" +
-                    ",war_reference as war_reference\n" +
+                    ",war_reference as war_reference" +
+                    ",export_to_web_ind as export_to_web_ind\n" +
                     ",delete_flag as delete_flag\n" +
                     "from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_allsource_v where epr_id in ('%s')" +
                     " order by epr_id,manifestation_trim_text,discount_code_emea,discount_code_us,manifestation_weight,journal_issue_trim_size,commodity_code,war_reference," +

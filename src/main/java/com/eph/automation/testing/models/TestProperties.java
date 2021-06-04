@@ -12,4 +12,7 @@ public class TestProperties {
     public Boolean gridRun;
     public String environment;
     public Boolean targetDB;
+    public String s3Key;
+    public String rowFrom;
+    public String rowTill;
 }

@@ -369,7 +369,8 @@ public class DL_ExtendedViewsChecksSteps {
                     //                   dataQualityDLExtViewContext.recordsFromAllExtViews.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id));
 
                     String[] all_manif_ext_Col = {"getepr_id","getlast_updated_date", "getmanifestation_type", "getuk_textbook_ind", "getus_textbook_ind", "getmanifestation_trim_text",
-                            "getcommodity_code","getdiscount_code_emea","getdiscount_code_us","getmanifestation_weight","getjournal_issue_trim_size","getwar_reference","getdelete_flag"};
+                            "getcommodity_code","getdiscount_code_emea","getdiscount_code_us",
+                            "getmanifestation_weight","getjournal_issue_trim_size","getwar_reference","getexport_to_web_ind","getdelete_flag"};
                     for (String strTemp : all_manif_ext_Col) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;

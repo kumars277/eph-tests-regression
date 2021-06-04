@@ -39,31 +39,39 @@ public class SubjectAreasApiObject {
 
 
     public void compareWithDB(String workID){
-        getSubjectAreaDataEPHGDbyCodeAndWorkid(this.subjectArea.getCode(), workID);
+        System.out.println("subjectArea Code - "+this.subjectArea.getCode());
+        getSubjectAreaDataEPHGDbyCode(this.subjectArea.getCode());
         Assert.assertEquals(this.subjectArea.getName(), subjectAreaDataObjectsFromGD_child.get(0).getSUBJECT_AREA_NAME());
-        Assert.assertEquals(this.subjectArea.getType().get("code"), subjectAreaDataObjectsFromGD_child.get(0).getSUBJECT_AREA_TYPE());
-        getParentSubjectAreaDataEPHGDbyCode(this.subjectArea.getParentSubjectArea().get("code").toString());
-        Assert.assertEquals(this.subjectArea.getParentSubjectArea().get("name"), subjectAreaDataObjectsFromGD_parent.get(0).getSUBJECT_AREA_NAME());
+        printLog("subject Area Name");
 
+        Assert.assertEquals(this.subjectArea.getType().get("code"), subjectAreaDataObjectsFromGD_child.get(0).getSUBJECT_AREA_TYPE());
+        printLog("subject Area Type code");
+
+        getParentSubjectAreaDataEPHGDbyCode(this.subjectArea.getParentSubjectArea().get("code").toString());
+
+        Assert.assertEquals(this.subjectArea.getParentSubjectArea().get("name"), subjectAreaDataObjectsFromGD_parent.get(0).getSUBJECT_AREA_NAME());
+        printLog("parent subject Area Name");
     }
 
 
-    private void getSubjectAreaDataEPHGDbyCodeAndWorkid(String code, String workID) {
-        Log.info("Get the subject area data from EPH GD  ..");
+    private void getSubjectAreaDataEPHGDbyCode(String code) {
+       // Log.info("Get the subject area data from EPH GD  ..");
         String sql = String.format(APIDataSQL.EXTRACT_DATA_SUBJECT_AREA_GD_BY_CODE, code);
-        Log.info(sql);
+     //   Log.info(sql);
 
         subjectAreaDataObjectsFromGD_child = DBManager
                 .getDBResultAsBeanList(sql, SubjectAreaDataObject.class, Constants.EPH_URL);
     }
 
     private void getParentSubjectAreaDataEPHGDbyCode(String code) {
-        Log.info("Get the subject area data from EPH GD  ..");
+       // Log.info("Get the subject area data from EPH GD  ..");
         String sql = String.format(APIDataSQL.EXTRACT_DATA_SUBJECT_AREA_GD_BY_CODE, code);
-        Log.info(sql);
+     //   Log.info(sql);
 
         subjectAreaDataObjectsFromGD_parent = DBManager
                 .getDBResultAsBeanList(sql, SubjectAreaDataObject.class, Constants.EPH_URL);
     }
+
+    private void printLog(String verified) {Log.info("verified..." + verified);}
 
 }

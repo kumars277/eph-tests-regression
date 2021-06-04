@@ -109,7 +109,13 @@ public class DL_ExtendedViewsAccessObject {
     private String image_url;
     private String footnote_txt;
     private String notes_txt;
+    private String export_to_web_ind;
 
+
+    public String getexport_to_web_ind() { return export_to_web_ind; }
+    public void setexport_to_web_ind(String export_to_web_ind) {
+        this.export_to_web_ind = export_to_web_ind;
+    }
     public String gettype_name() { return type_name; }
     public void settype_name(String type_name) {
         this.type_name = type_name;

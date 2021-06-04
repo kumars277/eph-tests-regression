@@ -41,90 +41,6 @@ public class ManifestationWorkApiObject {
     public List<AccountableProductDataObject> getAccountableProductDataObjectsFromEPHGD() {return accountableProductDataObjectsFromEPHGD;}
     public void setAccountableProductDataObjectsFromEPHGD(List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD) {this.accountableProductDataObjectsFromEPHGD = accountableProductDataObjectsFromEPHGD;}
 
-/*
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    public class workCore{
-
-        private String title;
-        public String getTitle() {return title;}
-        public void setTitle(String title) {this.title = title;}
-
-        private String subTitle;
-        public String getSubTitle() {return subTitle;}
-        public void setSubTitle(String subTitle) {this.subTitle = subTitle;}
-
-        private Boolean electronicRightsInd;
-        public Boolean getElectronicRightsInd() {return electronicRightsInd;}
-        public void setElectronicRightsInd(Boolean electronicRightsInd) {this.electronicRightsInd = electronicRightsInd;}
-
-        private HashMap<String, Object> language;
-        public HashMap<String, Object> getLanguage() {return language;}
-        public void setLanguage(HashMap<String, Object> language) {this.language = language;}
-
-        private String editionNumber;
-        public String getEditionNumber() {return editionNumber;}
-        public void setEditionNumber(String editionNumber) {this.editionNumber = editionNumber;}
-
-        private HashMap<String, Object> subscriptionType;
-        public HashMap<String, Object> getSubscriptionType() {return subscriptionType;}
-        public void setsubscriptionType(HashMap<String, Object> subscriptionType) {this.subscriptionType = subscriptionType;}
-
-        private String volume;
-        public String getVolume() {return volume;}
-        public void setVolume(String volume) {this.volume = volume;}
-
-        private String copyrightYear;
-        public String getCopyrightYear() {return copyrightYear;}
-        public void setCopyrightYear(String copyrightYear) {this.copyrightYear = copyrightYear;}
-
-        private WorkIdentifiersApiObject[] identifiers;
-        public WorkIdentifiersApiObject[] getIdentifiers() {return identifiers;}
-        public void setIdentifiers(WorkIdentifiersApiObject[] identifiers) {this.identifiers = identifiers;}
-
-        private HashMap<String, Object> type;
-        public HashMap<String, Object> getType() {return type;}
-        public void setType(HashMap<String, Object> type) {this.type = type;}
-
-        private HashMap<String, Object> status;
-        public HashMap<String, Object> getStatus() {return status;}
-        public void setStatus(HashMap<String, Object> status) {this.status = status;}
-
-        private HashMap<String, Object> imprint;
-        public HashMap<String, Object> getImprint() {return imprint;}
-        public void setImprint(HashMap<String, Object> imprint) {this.imprint = imprint;}
-
-        private HashMap<String, Object> societyOwnership;
-        public HashMap<String, Object> getSocietyOwnership() {return societyOwnership;}
-        public void setSocietyOwnership(HashMap<String, Object> societyOwnership) {this.societyOwnership = societyOwnership;}
-
-        private HashMap<String, Object> openAccessType;
-        public HashMap<String, Object> getOpenAccessType() {return openAccessType;}
-        public void setOpenAccessType(HashMap<String, Object> openAccessType) {this.openAccessType = openAccessType;}
-
-        private PMCApiObject pmc;
-        public PMCApiObject getPmc() {return pmc;}
-        public void setPmc(PMCApiObject pmc) {this.pmc = pmc;}
-
-        private  AccountableProductAPIObject accountableProduct;
-        public AccountableProductAPIObject getAccountableProduct() {return accountableProduct;}
-        public void setAccountableProduct(AccountableProductAPIObject accountableProduct) {this.accountableProduct = accountableProduct;}
-
-        private FinancialAttributesApiObject[] workFinancialAttributes;
-        public FinancialAttributesApiObject[] getWorkFinancialAttributes() {return workFinancialAttributes;}
-        public void setWorkFinancialAttributes(FinancialAttributesApiObject[] workFinancialAttributes) {this.workFinancialAttributes = workFinancialAttributes;}
-
-        private PersonsApiObject[] workPersons;
-        public PersonsApiObject[] getWorkPersons() {return workPersons;}
-        public void setWorkPersons(PersonsApiObject[] workPersons) {this.workPersons = workPersons;}
-
-        private WorkRelationshipsAPIObject workRelationships;
-        public WorkRelationshipsAPIObject getWorkRelationships() {return workRelationships;}
-        public void setWorkRelationships(WorkRelationshipsAPIObject workRelationships) {this.workRelationships = workRelationships;}
-
-        //subjectAreas//EPR-103R9H
-    }
-
-*/
 
     public void compareWithDB(){
         getWorkDataFromEPHGD(this.id);
@@ -182,7 +98,7 @@ public class ManifestationWorkApiObject {
         }
 
         if(!(workCore.getWorkPersons()==null)&&!(workCore.getWorkPersons().length==0)){
-            for (PersonsApiObject person : workCore.getWorkPersons()) {person.compareWithDB_work();}
+            for (PersonsApiObject person : workCore.getWorkPersons()) {person.compareWithDB_work(id);}
         }
 
         //workRelationships - EPR-11119M

@@ -3,6 +3,7 @@ package com.eph.automation.testing.models.api;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ProductDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -67,40 +68,38 @@ public class ProductCore
         Log.info("verifying productCode data ..."+productId);
     //    Log.info("\n-name\n-shortName\n-separatelySaleableInd\n-trialAllowedInd\n-launchDate\n-product type code\n-product status code\n" +
     //            "-revenueModel code\n-etaxProductCode code\n");
-        Assert.assertEquals(name, this.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - name", name, this.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME());
       printLog("name");
-        Assert.assertEquals(shortName, this.productDataObjectsFromEPHGD.get(0).getPRODUCT_SHORT_NAME());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - shortName", shortName, this.productDataObjectsFromEPHGD.get(0).getPRODUCT_SHORT_NAME());
         printLog("shortName");
         if(separatelySaleableInd!=null){
-        Assert.assertEquals(separatelySaleableInd,this.productDataObjectsFromEPHGD.get(0).getBoolSEPARATELY_SALEABLE_IND());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - separatelySaleableInd", separatelySaleableInd,this.productDataObjectsFromEPHGD.get(0).getBoolSEPARATELY_SALEABLE_IND());
         printLog("separatelySaleableInd");}
         if(trialAllowedInd!=null) {
-        Assert.assertEquals(trialAllowedInd, this.productDataObjectsFromEPHGD.get(0).getBoolTRIAL_ALLOWED_IND());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - trialAllowedInd", trialAllowedInd, this.productDataObjectsFromEPHGD.get(0).getBoolTRIAL_ALLOWED_IND());
         printLog("trialAllowedInd");
         }
-        Assert.assertEquals(launchDate, this.productDataObjectsFromEPHGD.get(0).getFIRST_PUB_DATE());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - launchDate", launchDate, this.productDataObjectsFromEPHGD.get(0).getFIRST_PUB_DATE());
         printLog("launchDate");
 
-        Assert.assertEquals(type.get("code"), this.productDataObjectsFromEPHGD.get(0).getF_TYPE());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - product type", type.get("code"), this.productDataObjectsFromEPHGD.get(0).getF_TYPE());
         printLog("product type");
 
-        Assert.assertEquals(status.get("code"), this.productDataObjectsFromEPHGD.get(0).getF_STATUS());
+       Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - product status", status.get("code"), this.productDataObjectsFromEPHGD.get(0).getF_STATUS());
         printLog("product status");
 
         if(!(revenueModel==null && this.productDataObjectsFromEPHGD.get(0).getF_REVENUE_MODEL()==null)) {
-            Assert.assertEquals(revenueModel.get("code"), this.productDataObjectsFromEPHGD.get(0).getF_REVENUE_MODEL());
+           Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - revenueModel code", revenueModel.get("code"), this.productDataObjectsFromEPHGD.get(0).getF_REVENUE_MODEL());
         printLog("revenueModel");}
-        else Log.info("revenueModel is null for the product");
+
         if(!(etaxProductCode==null)&&!(this.productDataObjectsFromEPHGD.get(0).getTAX_CODE()==null)) {
-            Assert.assertEquals(etaxProductCode.get("code"), this.productDataObjectsFromEPHGD.get(0).getTAX_CODE());
+           Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - etaxProductCode", etaxProductCode.get("code"), this.productDataObjectsFromEPHGD.get(0).getTAX_CODE());
             printLog("etaxProductCode");
         }
-        else Log.info("etaxProductCode is null for the product");
-
         //validation for packages - EPR-11BBFJ, EPR-11BBFK
 
         if(!(productPersons==null)&&!(productPersons.length==0))  //for product person - EPR-11119M
-        {for (PersonsApiObject person : productPersons) {person.compareWithDB_product();}}
+        {for (PersonsApiObject person : productPersons) {person.compareWithDB_product(productId);}}
 
     }
 

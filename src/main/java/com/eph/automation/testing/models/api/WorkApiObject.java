@@ -71,6 +71,9 @@ public class WorkApiObject {
     public void setProducts(List<ManifestationProductAPIObject> products) {this.products = products;}
 
     public void compareWithDB() {//implemented by Nishant @ 23 Apr 2020
+
+        boolean failed = false;
+        try{
         //1
         workCore.compareWithDB(this.id);
 
@@ -78,7 +81,7 @@ public class WorkApiObject {
         if (workExtended != null) {
             Log.info("\nVerifying workExtended..." + this.id);
             getJsonToObject_extendedWork(this.id);
-            workExtended.compareWithDB();
+            workExtended.compareWithDB(this.id);
         }
 
         //3
@@ -96,13 +99,28 @@ public class WorkApiObject {
                 Workproducts.compareWithDB();
             }
         }
+        }
+        catch (NullPointerException e)
+        {
+            e.getMessage();
+            DataQualityContext.api_response.prettyPrint();
+            failed = true;
+        }
+        catch (Exception e)
+        {
+            e.getMessage();
+            failed = true;
+        }
+        finally {
+            Assert.assertFalse("scenario Failed ",failed);
+        }
     }
 
     public void getJsonToObject_extendedWork(String workId) {
         //created by Nishant @ 19 Jun 2020 to verify extended json value with APIv3
         //updated by Nishant @ 08 Jul 2020 for JRBI data validation on UAT JF UI
         String sql ="";
-        if(TestContext.getValues().environment=="UAT")
+        if(TestContext.getValues().environment.equalsIgnoreCase("UAT"))
              sql = "SELECT \"json\" FROM ephuat_extended_data_stitch.stch_work_ext_json where epr_id='" + workId + "'";
             else sql = "SELECT \"json\" FROM ephsit_extended_data_stitch.stch_work_ext_json where epr_id='" + workId + "'";
 
