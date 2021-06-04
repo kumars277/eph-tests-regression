@@ -25,19 +25,39 @@ public class WorksMatchedApiObject {
 
     public void verifyWorksReturnedCount(int worksInDB){
         //API count could be higher than DB count as it comes from Elastic search
-        Verify.verify(totalMatchCount>= worksInDB,"API count less than DB count");}
+        Verify.verify(totalMatchCount>= worksInDB,DataQualityContext.breadcrumbMessage + " API count less than DB count");}
 
     public void verifyWorkWithIdIsReturned(String workID){
         int i=0;
         boolean found=false;
-        while(i<items.length&&!found){
-            if(items[i].getId().equals(workID)){
-                found=true;
-                items[i].compareWithDB();
+        boolean failed = false;
+
+        try {
+            while (i < items.length && !found) {
+                if (items[i].getId().equals(workID)) {
+                    found = true;
+                    items[i].compareWithDB();
+                }
+                i++;
             }
-            i++;
+            Assert.assertTrue(DataQualityContext.breadcrumbMessage + " work id found", found);
+
         }
-         Assert.assertTrue(DataQualityContext.breadcrumbMessage+" work id found",found);
+        catch (NullPointerException e)
+        {
+            e.getMessage();
+            DataQualityContext.api_response.prettyPrint();
+            failed = true;
+        }
+        catch (Exception e)
+        {
+            e.getMessage();
+            failed = true;
+        }
+        finally {
+            Assert.assertFalse(DataQualityContext.breadcrumbMessage + " scenario Failed ",failed);
+        }
+
     }
 
 
@@ -66,7 +86,7 @@ public class WorksMatchedApiObject {
             i++;
         }
         //activePerson+=extendedPerson.length;
-        Assert.assertFalse(found);
+            Assert.assertFalse(DataQualityContext.breadcrumbMessage + " scenario Failed ",found);
     }
     }
 

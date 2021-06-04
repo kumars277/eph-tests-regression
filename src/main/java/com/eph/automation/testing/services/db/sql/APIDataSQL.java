@@ -78,7 +78,7 @@ public class APIDataSQL {
                     "select p.product_id,p.name,w.f_pmc from semarchy_eph_mdm.gd_product p "+
                     "inner join semarchy_eph_mdm.gd_wwork w on "+
                     "p.f_wwork=w.work_id)a "+
-                    "where upper(a.name) like '%%%s%%' and a.f_pmc='%s';";
+                    "where upper(a.name) like '%%%s%%' and a.f_pmc='%s'";
 
     //created by Nishant @ 20 Dec 2019
     public static String SELECT_PRODUCTCOUNT_BY_PMG_WITHSEARCH =
