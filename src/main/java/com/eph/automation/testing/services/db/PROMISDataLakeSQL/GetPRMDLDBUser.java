@@ -15,8 +15,8 @@ public class GetPRMDLDBUser {
             }
 
         }else{
-          //  dbPRMDL = "promis_staging_sit";
-            dbPRMDL = "promis_staging_uat2";
+          // dbPRMDL = "promis_staging_sit";
+            dbPRMDL = "promis_staging_uat";
         }
         return dbPRMDL;
     }
@@ -35,7 +35,7 @@ public class GetPRMDLDBUser {
 
         }else{
            // dbProdDL = "product_database_sit";
-            dbProdDL = "product_database_uat2";
+            dbProdDL = "product_database_uat";
         }
         return dbProdDL;
     }
@@ -54,7 +54,7 @@ public class GetPRMDLDBUser {
 
         }else{
          //   dbStageProdDL = "product_staging_database_sit";
-            dbStageProdDL = "product_staging_database_uat2";
+            dbStageProdDL = "product_staging_database_uat";
         }
         return dbStageProdDL;
     }
@@ -67,13 +67,10 @@ public class GetPRMDLDBUser {
             }
             else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbEphCrossRef = "eph_uat_crossreference_database";
-            }else{
-                dbEphCrossRef = "eph_uat2_crossreference_database";
             }
-
         }else{
             //   dbEphCrossRef = "eph_sit_crossreference_database";
-            dbEphCrossRef = "eph_uat2_crossreference_database";
+            dbEphCrossRef = "eph_uat_crossreference_database";
         }
         return dbEphCrossRef;
     }

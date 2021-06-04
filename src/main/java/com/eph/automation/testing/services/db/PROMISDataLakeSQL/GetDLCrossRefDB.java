@@ -12,7 +12,8 @@ public class GetDLCrossRefDB {
             }
 
         }else{
-            CrossrefDB = "eph_sit_crossreference_database.eph_identifier_cross_reference_v";
+          //  CrossrefDB = "eph_sit_crossreference_database.eph_identifier_cross_reference_v";
+            CrossrefDB = "eph_uat_crossreference_database.eph_identifier_cross_reference_v";
         }
         return CrossrefDB;
     }

@@ -1,25 +1,33 @@
-Feature:Validate data checks for Promis between transform tables
+Feature:Validate data for Promis between transform tables
 
   @PROMISETL
-  Scenario Outline: Verify that all Promis Inbound data is transferred to Current tables
+  Scenario Outline: Verify that all Promis data is transferred between inbound and current tables
+    Given We know the number of Promis <Inboundtablename> data in inbound
+    Then Get the count for Promis <Currenttablename> current
+    And Compare the Promis count for <Inboundtablename> table between inbound and current
     Given We get the <numberOfRecords> random Promis ids of <Currenttablename>
     When We get the Promis Inbound records from <Inboundtablename>
     Then We get the Promis Current records from <Currenttablename>
     And Compare Promis records in Inbound and Current of <Inboundtablename>
+
     Examples:
       |numberOfRecords |Inboundtablename       |Currenttablename             |
-      | 5               |promis_prmautpubt_part  |promis_prmautpubt_current  |
-      | 5               |promis_prmclscodt_part  |promis_prmclscodt_current  |
-      | 5               |promis_prmclst_part     |promis_prmclst_current     |
-      | 5               |promis_prmlondest_part  |promis_prmlondest_current  |
-      | 5               |promis_prmpricest_part  |promis_prmpricest_current  |
+     | 5               |promis_prmautpubt_part  |promis_prmautpubt_current  |
+     | 5               |promis_prmclscodt_part  |promis_prmclscodt_current  |
+     | 5               |promis_prmclst_part     |promis_prmclst_current     |
+     | 5               |promis_prmlondest_part  |promis_prmlondest_current  |
+    | 5               |promis_prmpricest_part  |promis_prmpricest_current  |
       | 5               |promis_prmpubinft_part  |promis_prmpubinft_current  |
-      | 5               |promis_prmpubrelt_part  |promis_prmpubrelt_current  |
+       | 5               |promis_prmpubrelt_part  |promis_prmpubrelt_current  |
       | 5               |promis_prmincpmct_part  |promis_prmincpmct_current  |
       | 5               |promis_prmpmccodt_part  |promis_prmpmccodt_current  |
 
+
   @PROMISETL
-  Scenario Outline: Verify that all Promis Delta data is transferred
+  Scenario Outline: Verify that Promis is correct between Delta Query and Delta tables
+    Given We know the number of Promis <DeltaQueryTable> data for the Delta Query
+    Then Get the count for Promis <Deltatablename> Delta
+    And Compare the Promis count for <Deltatablename> table between Current minus Previous and Delta
     Given We get the <numberOfRecords> random Promis DeltaQuery ids of <Deltatablename>
     When We get Promis Delta Query records from <DeltaQueryTable>
     Then We get the Promis Delta records from <Deltatablename>
@@ -34,12 +42,16 @@ Feature:Validate data checks for Promis between transform tables
       | 5               |promis_transform_file_history_urls_part           |promis_delta_current_urls          |
       | 5               |promis_transform_file_history_work_rels_part      |promis_delta_current_work_rels     |
 
+
   @PROMISETL
-  Scenario Outline: Verify that all Promis History Excluding data is transferred
+  Scenario Outline: Verify that all Promis data is transferred between History excluding query and History exl tables
+    Given We know the number of Promis <tablename> data for History excluding query
+    Then Get the count for Promis <HistExcltablename> History excluding
+   And Compare the Promis count for <HistExcltablename> table between History excluding query and History excluding
     Given We get the <numberOfRecords> random Promis History Excluding Query ids of <HistExcltablename>
     When We get Promis History Excluding Query records from <tablename>
     Then We get the Promis History Excluding records from <HistExcltablename>
-   And Compare Promis records for History Excluding query and History Excluding tables of <tablename>
+    And Compare Promis records for History Excluding query and History Excluding tables of <tablename>
     Examples:
       |numberOfRecords  |tablename      |HistExcltablename                                 |
       | 5               |subject_areas  |promis_transform_history_subject_areas_excl_delta |
@@ -51,7 +63,10 @@ Feature:Validate data checks for Promis between transform tables
       | 5               |work_rels      |promis_transform_history_work_rels_excl_delta     |
 
   @PROMISETL
-  Scenario Outline: Verify that all Promis Latest data is transferred
+  Scenario Outline: Verify that all Promis data is transferred between Latest query and Latest tables
+    Given We know the number of Promis <tablename> data for latest query
+    Then Get the count for Promis <Latesttablename> latest
+    And Compare the Promis count for <Latesttablename> table between Latest query and Latest
     Given We get the <numberOfRecords> random Promis Latest Query ids of <Latesttablename>
     When We get Promis Latest Query records from <tablename>
     Then We get the Promis Latest records from <Latesttablename>
@@ -66,8 +81,12 @@ Feature:Validate data checks for Promis between transform tables
       | 5               |urls           |promis_transform_latest_urls          |
       | 5               |work_rels      |promis_transform_latest_work_rels     |
 
+
   @PROMISETL
-  Scenario Outline: Verify that all Promis transform mapping data is transferred to current tables
+  Scenario Outline: Verify that all Promis data is transferred between Transform mapping and Current tables
+    Given We know the number of Promis <tablename> data for Transform mapping
+   Then Get the count for Promis <Currenttablename> Current
+    And Compare the Promis count for <tablename> table between Transform Mapping and Current
     Given We get the <numberOfRecords> random Promis transform mapping ids of <Currenttablename>
     When We get Promis transform mapping records from <tablename>
     Then We get the Promis Transform mapping current records from <Currenttablename>
@@ -82,20 +101,19 @@ Feature:Validate data checks for Promis between transform tables
       | 5               |urls           |promis_transform_current_urls          |
       | 5               |work_rels      |promis_transform_current_work_rels     |
 
-  @PROMISETL
-  Scenario Outline: Verify that all Promis data is transferred between Latest and All_source tables
-    Given We get the <numberOfRecords> random Promis Latest ids of <latesttablename>
-#    When We get Promis transform mapping records from <allsourcetablename>
-#    Then We get the Promis Transform mapping current records from <latesttablename>
-#    And Compare Promis records for transform mapping and current of <allsourcetablename>
-    Examples:
-      |numberOfRecords  |latesttablename                       |allsourcetablename                                  |
-      | 5               |promis_transform_latest_pricing       |product_extended_pricing_allsource_v                |
-      | 5               |promis_transform_latest_works         |work_extended_allsource_v                           |
-      | 5               |promis_transform_latest_metrics       |work_extended_metric_allsource_v                    |
-      | 5               |promis_transform_latest_person_roles  |work_extended_editorial_board_allsource_v           |
-      | 5               |promis_transform_latest_work_rels     |work_extended_relationship_sibling_allsource_v      |
-      | 5               |promis_transform_latest_subject_areas |work_extended_subject_area_allsource_v              |
-      | 5               |promis_transform_latest_urls          |work_extended_url_allsource_v                       |
+
+        ##############################
+
+
+
+
+
+
+
+
+
+
+
+
 
 

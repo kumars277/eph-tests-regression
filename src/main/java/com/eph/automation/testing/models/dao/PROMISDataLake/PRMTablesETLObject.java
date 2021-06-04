@@ -43,7 +43,7 @@ public class PRMTablesETLObject {
     private String CHILD_EPR_ID;
     private String CHILD_TITLE;
     private String CHILD_RELATED_TYPE_CODE;
-    private String CHILD_RELATED;
+    private String CHILD_RELATED_TYPE_NAME;
     private String CHILD_RELATED_TYPE_ROLL_UP;
     private String CHILD_RELATED_STATUS_CODE;
     private String CHILD_RELATED_STATUS_NAME;
@@ -391,11 +391,11 @@ public class PRMTablesETLObject {
         this.CHILD_RELATED_TYPE_CODE = CHILD_RELATED_TYPE_CODE;
     }
 
-    public String getCHILD_RELATED() {
-        return CHILD_RELATED;
+    public String getCHILD_RELATED_TYPE_NAME() {
+        return CHILD_RELATED_TYPE_NAME;
     }
-    public void setCHILD_RELATED(String CHILD_RELATED) {
-        this.CHILD_RELATED = CHILD_RELATED;
+    public void setCHILD_RELATED_TYPE_NAME(String CHILD_RELATED_TYPE_NAME) {
+        this.CHILD_RELATED_TYPE_NAME = CHILD_RELATED_TYPE_NAME;
     }
 
     public String getCHILD_RELATED_TYPE_ROLL_UP() {

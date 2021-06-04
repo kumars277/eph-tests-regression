@@ -20,8 +20,8 @@ public class PromisETLDataCheckSQL {
     public static String GET_PUB_IDT_IDS = "select pub_idt as PUB_IDT from "+GetPRMDLDBUser.getPRMDataBase()+ ".%s order by rand() limit %s";
 
     public static String GET_Promis_prmautpubt_part = "select "
-            + "ppa.pub_idt"
-            +  ", ppa.aut_edt_idt"
+            + "cast(ppa.pub_idt as integer) as pub_idt"
+            +  ",cast(ppa.aut_edt_idt as integer) as aut_edt_idt"
             + ", cast(ppa.aut_edt_typ as integer) as aut_edt_typ"
             + ", ppa.typ_des"
             + ", cast(ppa.seq_num as integer) as seq_num"
@@ -418,7 +418,7 @@ public class PromisETLDataCheckSQL {
             "child_epr_id as CHILD_EPR_ID,\n" +
             "child_title as CHILD_TITLE,\n" +
             "child_related_type_code as CHILD_RELATED_TYPE_CODE,\n" +
-            "child_related_type_name as CHILD_RELATED,\n" +
+            "child_related_type_name as CHILD_RELATED_TYPE_NAME,\n" +
             "child_related_type_roll_up as CHILD_RELATED_TYPE_ROLL_UP,\n" +
             "child_related_status_code as CHILD_RELATED_STATUS_CODE,\n" +
             "child_related_status_name as CHILD_RELATED_STATUS_NAME,\n" +
