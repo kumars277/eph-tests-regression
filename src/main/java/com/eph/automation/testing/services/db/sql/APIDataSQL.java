@@ -60,14 +60,14 @@ public class APIDataSQL {
 
     public static String SELECT_PRODUCTCOUNT_BY_WORKTYPE =
             "select count(p.product_id) from semarchy_eph_mdm.gd_product p,semarchy_eph_mdm.gd_manifestation m,semarchy_eph_mdm.gd_wwork w"+
-            " where p.s_name like \'%%CELL%%\' and "+
+            " where p.s_name like \'%%%s%%\' and "+
             " p.f_manifestation = m.manifestation_id and "+
             " w.work_id = m.f_wwork and "+
             " w.f_type='%s'; ";
 
     public static String SELECT_PRODUCTCOUNT_BY_MANIFESTATIONTYPE =
             "select count(p.product_id) from semarchy_eph_mdm.gd_product p,semarchy_eph_mdm.gd_manifestation m "+
-            "where p.s_name like '%%CELL%%' and m.f_type='%S' and m.manifestation_id = p.f_manifestation;";
+            "where p.s_name like '%%%s%%' and m.f_type='%S' and m.manifestation_id = p.f_manifestation";
 
     //created by Nishant @ 9 Dec 2019
     public static String SELECT_PRODUCTCOUNT_BY_PMC_WITHSEARCH =
@@ -190,18 +190,18 @@ public class APIDataSQL {
     public static String SELECT_PRODUCT_BY_ID= "SELECT \"product_id\" as PRODUCT_ID FROM semarchy_eph_mdm.gd_product WHERE product_id='%s'";
     public static String SELECT_WORKS_BY_PMC_CODE="SELECT \"work_id\" as WORK_ID FROM semarchy_eph_mdm.gd_wwork WHERE f_pmc in ('%s')";
     public static String SELECT_WORK_BY_ID_FOR_SEARCH = "SELECT \"work_id\" as WORK_ID FROM semarchy_eph_mdm.gd_wwork WHERE work_id='%s'";
-    public static String SELECT_MANIFESTATIONS_IDS_BY_WORKS = "select \"manifestation_id\" as MANIFESTATION_ID from semarchy_eph_mdm.gd_manifestation where f_wwork in ('%s');";
+    public static String SELECT_MANIFESTATIONS_IDS_BY_WORKS = "select \"manifestation_id\" as MANIFESTATION_ID from semarchy_eph_mdm.gd_manifestation where f_wwork in ('%s')";
     public static String SELECT_MANIFESTATION_IDS_BY_WORKID = "select \"manifestation_id\" as manifestation_id from semarchy_eph_mdm.gd_manifestation where \"f_wwork\" in ('%s')";
     public static String SELECT_COUNT_PRODUCTS_BY_MANIFESTATIONS = "select count (*) from semarchy_eph_mdm.gd_product where f_manifestation in ('%s')";
     public static String SELECT_COUNT_PRODUCTS_BY_WORK = "select count (*) from semarchy_eph_mdm.gd_product where f_wwork in ('%s')";
-    public static String SELECT_PRODUCT_SEGMENT_CODE_FROM_WORK = "select gl_product_segment_code from semarchy_eph_mdm.gd_accountable_product where accountable_product_id in('%s');";
-    public static String SELECT_PRODUCTCOUNT_BY_PRODUCTSTATUS = "select count(*) from semarchy_eph_mdm.gd_product where s_name like \'%%CELL%%\' and f_status='%s'";
-    public static String SELECT_PRODUCTCOUNT_BY_PRODUCTTYPE = "select count(*) from semarchy_eph_mdm.gd_product where s_name like \'%%CELL%%\' and f_type='%s'";
-    public static String SELECT_RANDOM_PACKAGE_IDS_FOR_SEARCH = "select product_id from semarchy_eph_mdm.gd_product where f_type ='PKG' and f_status='PAS' group by product_id order by random() limit '%s';";
-    public static String SELECT_RANDOM_PRODUCT_FROM_PACKAGE = "select f_component from semarchy_eph_mdm.gd_product_rel_package where f_package_owner in ('%s') group by f_component order by random() limit '1';";
-    public static String EPH_GD_PACKAGE_COUNT_BY_PRODUCT_EXTRACT = "select COUNT(*) from semarchy_eph_mdm.gd_product_rel_package where f_component in('%s');";
-    public static String EPH_GD_PRODUCT_COUNT_BY_PACKAGE_EXTRACT = "select count (*) from semarchy_eph_mdm.gd_product_rel_package where f_package_owner in ('%s');";
-    public static String SELECT_RANDOM_PRODUCT_PERSON_ROLES_FOR_SEARCH = "select f_person from semarchy_eph_mdm.gd_product_person_role group by f_person order by random() limit '%s';";
+    public static String SELECT_PRODUCT_SEGMENT_CODE_FROM_WORK = "select gl_product_segment_code from semarchy_eph_mdm.gd_accountable_product where accountable_product_id in('%s')";
+    public static String SELECT_PRODUCTCOUNT_BY_PRODUCTSTATUS = "select count(*) from semarchy_eph_mdm.gd_product where s_name like \'%%%s%%\' and f_status='%s'";
+    public static String SELECT_PRODUCTCOUNT_BY_PRODUCTTYPE = "select count(*) from semarchy_eph_mdm.gd_product where s_name like \'%%%s%%\' and f_type='%s'";
+    public static String SELECT_RANDOM_PACKAGE_IDS_FOR_SEARCH = "select product_id from semarchy_eph_mdm.gd_product where f_type ='PKG' and f_status='PAS' group by product_id order by random() limit '%s'";
+    public static String SELECT_RANDOM_PRODUCT_FROM_PACKAGE = "select f_component from semarchy_eph_mdm.gd_product_rel_package where f_package_owner in ('%s') group by f_component order by random() limit '1'";
+    public static String EPH_GD_PACKAGE_COUNT_BY_PRODUCT_EXTRACT = "select COUNT(*) from semarchy_eph_mdm.gd_product_rel_package where f_component in('%s')";
+    public static String EPH_GD_PRODUCT_COUNT_BY_PACKAGE_EXTRACT = "select count (*) from semarchy_eph_mdm.gd_product_rel_package where f_package_owner in ('%s')";
+    public static String SELECT_RANDOM_PRODUCT_PERSON_ROLES_FOR_SEARCH = "select f_person from semarchy_eph_mdm.gd_product_person_role group by f_person order by random() limit '%s'";
     public static String SELECT_RANDOM_WORK_PERSON_ROLES_FOR_SEARCH = "select f_person from semarchy_eph_mdm.gd_work_person_role group by f_person order by random() limit '%s'";
     public static String SELECT_COUNT_PERSONID_FOR_WORKS = "select count (*) from semarchy_eph_mdm.gd_work_person_role where f_person='%s'";
     public static String SELECT_COUNT_PERSONID_FOR_PRODUCTS =
@@ -216,23 +216,23 @@ public class APIDataSQL {
                     +"w.work_id=wpr.f_wwork and wpr.f_person='%s'"
                     +"))s";
 
-    public static String EPH_GD_WORK_EXTRACT_AMOUNT_BYPMC ="SELECT COUNT (f_pmc) FROM semarchy_eph_mdm.gd_wwork where f_pmc='%s';";
+    public static String EPH_GD_WORK_EXTRACT_AMOUNT_BYPMC ="SELECT COUNT (f_pmc) FROM semarchy_eph_mdm.gd_wwork where f_pmc='%s'";
     public static String EPH_GD_PMG_CODE_EXTRACT_BYPMC ="select f_pmg from semarchy_eph_mdm.gd_x_lov_pmc where code='%s'";
     public static String EPH_GD_PMG_CODE_WORKS_EXTRACT_BY_PMC ="SELECT \"work_id\" as WORK_ID FROM semarchy_eph_mdm.gd_wwork \n" +
                     "WHERE f_pmc in (select code from semarchy_eph_mdm.gd_x_lov_pmc where f_pmg in (\n" +
-                    "select f_pmg from semarchy_eph_mdm.gd_x_lov_pmc where code='%s'));";
+                    "select f_pmg from semarchy_eph_mdm.gd_x_lov_pmc where code='%s'))";
     public static String EPH_GD_PACKAGEID_EXTRACT_BY_PRODUCTID ="select f_package_owner from semarchy_eph_mdm.gd_product_rel_package where f_component='%s' limit 1";
-    public static String EPH_GD_WORK_EXTRACT_AMOUNT_BYPMG ="select count (*) from semarchy_eph_mdm.gd_wwork where f_pmc in ( select code from semarchy_eph_mdm.gd_x_lov_pmc where f_pmg in (select code from semarchy_eph_mdm.gd_x_lov_pmg where code='%s'));";
-    public static String EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_WORKSTATUS  ="select count(work_id) from semarchy_eph_mdm.gd_wwork where upper(work_title) like '%%%s%%' and f_status = '%s';";
+    public static String EPH_GD_WORK_EXTRACT_AMOUNT_BYPMG ="select count (*) from semarchy_eph_mdm.gd_wwork where f_pmc in ( select code from semarchy_eph_mdm.gd_x_lov_pmc where f_pmg in (select code from semarchy_eph_mdm.gd_x_lov_pmg where code='%s'))";
+    public static String EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_WORKSTATUS  ="select count(work_id) from semarchy_eph_mdm.gd_wwork where upper(work_title) like '%%%s%%' and f_status = '%s'";
     public static String SELECT_GD_WWORK_TYPE_STATUS="select f_type as WORK_TYPE,f_status as WORK_STATUS from semarchy_eph_mdm.gd_wwork where work_id='%s'";
-    public static String EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_WORKTYPE  ="select count(work_id) from semarchy_eph_mdm.gd_wwork where upper(work_title) like '%%%s%%' and f_type='%s';";
+    public static String EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_WORKTYPE  ="select count(work_id) from semarchy_eph_mdm.gd_wwork where upper(work_title) like '%%%s%%' and f_type='%s'";
     public static String EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_MANIFESTATIONTYPE  ="select count(*) from (select distinct w.work_id "+
                     "from semarchy_eph_mdm.gd_wwork w inner join semarchy_eph_mdm.gd_manifestation m "+
-                    "on w.work_id=m.f_wwork where upper(w.work_title) like '%%%s%%' and m.f_type='%s') s;";
+                    "on w.work_id=m.f_wwork where upper(w.work_title) like '%%%s%%' and m.f_type='%s') s";
 
-    public static String EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_PMCCODE="select COUNT(*) from semarchy_eph_mdm.gd_wwork where UPPER(work_title) like '%%%S%%' AND f_pmc='%s';";
+    public static String EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_PMCCODE="select COUNT(*) from semarchy_eph_mdm.gd_wwork where UPPER(work_title) like '%%%S%%' AND f_pmc='%s'";
     public static String EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_PMGCODE="select count(w.work_id) from semarchy_eph_mdm.gd_wwork w, semarchy_eph_mdm.gd_x_lov_pmc pmc " +
-            "where upper(w.work_title) like '%%%s%%' and pmc.f_pmg='%s' and pmc.code = w.f_pmc;";
+            "where upper(w.work_title) like '%%%s%%' and pmc.f_pmg='%s' and pmc.code = w.f_pmc";
 
     public static String EPH_GD_WORK_EXTRACT_BY_ACCOUNTABLE_PRODUCT  ="select COUNT(work_id) "+
             "from semarchy_eph_mdm.gd_wwork w, semarchy_eph_mdm.gd_accountable_product ap \n" +
@@ -284,10 +284,10 @@ public class APIDataSQL {
     public static final String SELECT_GD_MANIFESTATION_IDENTIFIER_BY_MANIFESTATION_ID = "select identifier as identifier, \n" +
             "f_type as f_type " +
             "from semarchy_eph_mdm.gd_manifestation_identifier \n" +
-            "where identifier in (select identifier from semarchy_eph_mdm.gd_manifestation_identifier where f_manifestation in ('%s'));";
+            "where identifier in (select identifier from semarchy_eph_mdm.gd_manifestation_identifier where f_manifestation in ('%s'))";
 
     public static final String SELECT_GD_MANIFESTATION_IDENTIFIER_BY_ID = "select identifier as identifier, f_type as f_type, effective_start_date as effective_start_date " +
-            "from semarchy_eph_mdm.gd_manifestation_identifier where identifier in ('%s');";
+            "from semarchy_eph_mdm.gd_manifestation_identifier where identifier in ('%s')";
 
     public static String getWorkIdentifiersDataFromGD="SELECT \n" +
             " F_EVENT as F_EVENT\n" +
@@ -314,7 +314,7 @@ public class APIDataSQL {
     public static String getWorkBusinessModelById = "select f_business_model, effective_start_date , effective_end_date from semarchy_eph_mdm.gd_work_business_model gwam where f_wwork ='PARAM1'";
     public static String getWorkSubjectAreaByWorkId = "select code,name,f_type,f_parent_subject_area " +
             "from semarchy_eph_mdm.gd_subject_area gsa where subject_area_id in\n" +
-            "(select f_subject_area from semarchy_eph_mdm.gd_work_subject_area_link gwsal where f_wwork ='PARAM1');";
+            "(select f_subject_area from semarchy_eph_mdm.gd_work_subject_area_link gwsal where f_wwork ='PARAM1')";
     //updated by Nishant @ 15 Apr 2020
     public static String getWorkIdentifiersDataFromGDByIdentifier="SELECT \n" +
             " effective_start_date as IDENTIFIER_EFFECTIVE_START_DATE\n" +
