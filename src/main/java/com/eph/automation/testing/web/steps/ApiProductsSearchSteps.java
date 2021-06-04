@@ -280,7 +280,7 @@ public class ApiProductsSearchSteps {
     }
 
     private int getProductCountByProductStatus(String searchTerm, String productStatus){//created by Nishant @ 5th Dec 2019
-        sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_PRODUCTSTATUS,searchTerm, productStatus);
+        sql=APIDataSQL.SELECT_PRODUCTCOUNT_BY_PRODUCTSTATUS.replace("param1",searchTerm).replace("param2", productStatus);
         List<Map<String,Object>> countByProductStatus = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         int count=((Long)countByProductStatus.get(0).get("count")).intValue();
         Log.info("products count by productStatus in DB is: "+count);
@@ -818,7 +818,9 @@ public class ApiProductsSearchSteps {
 
     @Then("^the product count are retrieved by (.*) compared$")
     public void theProductDetailsAreRetrievedByParamKeyAndCompared(String paramKey) throws Throwable {
-        Log.info("Automation is in progress");
+        /*//logic updated by Nishant @ 04 Jun 2021
+        //as per Ron, API product search result returns products even though product name does not contains searchKey but its manifestaion or work title does.
+        */
         ProductsMatchedApiObject returnedProducts;
         String searchTerm = (productDataObjects.get(0).getPRODUCT_NAME().split(" ")[0]).toUpperCase();
         String defaultSearch = "CELL";
@@ -826,9 +828,9 @@ public class ApiProductsSearchSteps {
         switch (paramKey)
         {
             case "productStatus":
-                returnedProducts =   searchForProductByParam(defaultSearch,paramKey,productDataObjects.get(0).getF_STATUS());
                 DataQualityContext.breadcrumbMessage += "->" + productDataObjects.get(0).getF_STATUS();
                 productCount_DB = getProductCountByProductStatus(defaultSearch,productDataObjects.get(0).getF_STATUS());
+                returnedProducts =   searchForProductByParam(defaultSearch,paramKey,productDataObjects.get(0).getF_STATUS());
                 break;
             case "productType":
                 returnedProducts =   searchForProductByParam(defaultSearch,paramKey,productDataObjects.get(0).getF_TYPE());
@@ -864,12 +866,46 @@ public class ApiProductsSearchSteps {
                 throw new IllegalStateException("Unexpected value: " + paramKey);
 
         }
+
+
         returnedProducts.verifyProductsAreReturned();
         returnedProducts.verifyAPIReturnedProductsCount(productCount_DB);
-
-
-
-
-
     }
+
+    @Then("^the product title are retrieved by (.*) compared$")
+    public void theProductTitleAreRetrievedAndCotainsSearchKey(String paramKey) throws Throwable {
+        //created by Nishant @ 04 Jun 2021 to debug issue while API and DB count mismatch for search result
+        Log.info("Automation is in progress");
+        ProductsMatchedApiObject returnedProducts;
+        String searchTerm = (productDataObjects.get(0).getPRODUCT_NAME().split(" ")[0]).toUpperCase();
+        String defaultSearch = "CELL";
+        int productCount_DB = 0;
+        int from=0;int size=500;
+
+        switch (paramKey)
+        {
+            case "productStatus":
+                DataQualityContext.breadcrumbMessage += "->" + productDataObjects.get(0).getF_STATUS();
+                productCount_DB = getProductCountByProductStatus(defaultSearch,productDataObjects.get(0).getF_STATUS());
+
+                returnedProducts =searchForProductByParam(defaultSearch+ "&from=" + from + "&size=" + size,paramKey,productDataObjects.get(0).getF_STATUS() );
+                Log.info("Total product found for product status with search... - " + returnedProducts.getTotalMatchCount());
+                while (!returnedProducts.verifyAllTitleContainsSearchKey(defaultSearch) && from + size < returnedProducts.getTotalMatchCount()) {
+                    from += size;
+                    Log.info("scanned productID from " + (from - size) + " to " + from + " records...");
+                    returnedProducts =searchForProductByParam(defaultSearch+ "&from=" + from + "&size=" + size,paramKey,productDataObjects.get(0).getF_STATUS());
+                }
+
+                break;
+
+            default:
+                throw new IllegalStateException("Unexpected value: " + paramKey);
+
+        }
+
+        returnedProducts.verifyProductsAreReturned();
+        returnedProducts.verifyAPIReturnedProductsCount(productCount_DB);
+    }
+
+
 }

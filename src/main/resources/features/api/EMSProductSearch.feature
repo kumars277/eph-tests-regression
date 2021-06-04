@@ -125,6 +125,9 @@ Feature: Search API: Products
       | pmcCode          |
       | pmgCode          |
 
+
+
+
   @searchAPI @productSearchAPI
   Scenario Outline: Product search E2E
     Given We get product by ID <id>
@@ -139,3 +142,11 @@ Feature: Search API: Products
       | EPR-11BBFR                           |
 
 
+  @searchAPIdebug @productSearchAPIdebug
+  Scenario Outline: search product and verify title contains searchKey
+    Given We get 1 random search ids for products <paramKey>
+    And We get the search data from EPH GD for products
+    Then the product title are retrieved by <paramKey> compared
+    Examples:
+      | paramKey         |
+      | productStatus    |

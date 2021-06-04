@@ -8,6 +8,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import net.minidev.json.parser.ParseException;
 import org.junit.Assert;
 
+import java.util.regex.Pattern;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductsMatchedApiObject {
 
@@ -50,6 +52,22 @@ public class ProductsMatchedApiObject {
         }
         Assert.assertTrue( DataQualityContext.breadcrumbMessage+"id found in response",found);
         return found;
+    }
+
+    public boolean verifyAllTitleContainsSearchKey(String searchKey)
+    {
+        //created by Nishant @ 04 June 2021
+        int i=0;    boolean found=false;
+        int bound = items.length;
+        while(i<bound&&!found){
+            if(!Pattern.compile(Pattern.quote(searchKey), Pattern.CASE_INSENSITIVE).matcher(items[i].getProductCore().getName()).find()){
+                found=true;
+                Log.info(items[i].getId()+" at counter "+i+" - title does not include search string -"+searchKey);
+            }  i++;
+        }
+        Assert.assertFalse( DataQualityContext.breadcrumbMessage+"title contains searchKey",found);
+        return found;
+
     }
 
 

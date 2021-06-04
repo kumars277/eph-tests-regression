@@ -195,7 +195,18 @@ public class APIDataSQL {
     public static String SELECT_COUNT_PRODUCTS_BY_MANIFESTATIONS = "select count (*) from semarchy_eph_mdm.gd_product where f_manifestation in ('%s')";
     public static String SELECT_COUNT_PRODUCTS_BY_WORK = "select count (*) from semarchy_eph_mdm.gd_product where f_wwork in ('%s')";
     public static String SELECT_PRODUCT_SEGMENT_CODE_FROM_WORK = "select gl_product_segment_code from semarchy_eph_mdm.gd_accountable_product where accountable_product_id in('%s')";
-    public static String SELECT_PRODUCTCOUNT_BY_PRODUCTSTATUS = "select count(*) from semarchy_eph_mdm.gd_product where s_name like \'%%%s%%\' and f_status='%s'";
+    public static String SELECT_PRODUCTCOUNT_BY_PRODUCTSTATUS =
+            "select count(*) from semarchy_eph_mdm.gd_product \n" +
+                    "where product_id in\n" +
+                    "(select product_id from semarchy_eph_mdm.gd_product \n" +
+                    "where s_name like '%param1%' and f_status='param2')\n" +
+                    "or \n" +
+                    "product_id in(\n" +
+                    "select product_id from semarchy_eph_mdm.gd_product gp \n" +
+                    "inner join semarchy_eph_mdm.gd_manifestation gm on gp.f_manifestation =gm.manifestation_id \n" +
+                    "where gm.s_manifestation_key_title like '%param1%'\n" +
+                    "and gp.f_status ='param2');";
+
     public static String SELECT_PRODUCTCOUNT_BY_PRODUCTTYPE = "select count(*) from semarchy_eph_mdm.gd_product where s_name like \'%%%s%%\' and f_type='%s'";
     public static String SELECT_RANDOM_PACKAGE_IDS_FOR_SEARCH = "select product_id from semarchy_eph_mdm.gd_product where f_type ='PKG' and f_status='PAS' group by product_id order by random() limit '%s'";
     public static String SELECT_RANDOM_PRODUCT_FROM_PACKAGE = "select f_component from semarchy_eph_mdm.gd_product_rel_package where f_package_owner in ('%s') group by f_component order by random() limit '1'";

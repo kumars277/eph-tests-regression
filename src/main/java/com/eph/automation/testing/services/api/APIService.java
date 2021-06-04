@@ -223,11 +223,11 @@ public class APIService {
         Response response =given()
                 .baseUri(SearchAPI_EndPoint)
                 .header(Constants.AUTHORIZATION_HEADER,  AuthorizationService.getAuthToken().getToken())
-                .param("queryType","name")
-                .param("queryValue",searchTerm)
+                //.param("queryType","name")
+                //.param("queryValue",searchTerm)
                 .param(ParamKey,ParamValue)
                 .when()
-                .get("/product-hub-products/products");
+                .get("/product-hub-products/products?queryType=name&queryValue="+searchTerm);
 
         DataQualityContext.api_response = response;
         return response.thenReturn().as(ProductsMatchedApiObject.class);
