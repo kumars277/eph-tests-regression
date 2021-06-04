@@ -13,6 +13,6 @@ public class TestProperties {
     public String environment;
     public Boolean targetDB;
     public String s3Key;
-    public int rowFrom;
-    public int rowTill;
+    public String rowFrom;
+    public String rowTill;
 }

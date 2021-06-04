@@ -38,9 +38,6 @@ import com.eph.automation.testing.web.steps.ApiWorksSearchSteps;
 import static com.eph.automation.testing.models.contexts.DataQualityContext.personDataObjectsFromEPHGD;
 import static com.eph.automation.testing.models.contexts.DataQualityContext.personProductRoleDataObjectsFromEPHGD;
 
-
-
-
 /**
  * Created by Georgi Vlaykov on 11/02/2019
  */
@@ -90,10 +87,10 @@ public class ApiProductsSearchSteps {
         Log.info("Environment used..."+System.getProperty("ENV"));
         Log.info("Selected random product ids are : " + ids);
         //added by Nishant @ 26 Dec for debugging failures
-        //  ids.clear(); ids.add("EPR-10NF2H"); Log.info("hard coded product ids are : " + ids);//
+        //  ids.clear(); ids.add("EPR-10J09G"); Log.info("hard coded product ids are : " + ids);//
 
         DataQualityContext.breadcrumbMessage += "->" + ids;
-        Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
+        Assert.assertFalse(DataQualityContext.breadcrumbMessage +" Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
     @Given("^We get (.*) search ids from the db for person roles of products$")
@@ -104,7 +101,8 @@ public class ApiProductsSearchSteps {
 
         ids = randomPersonSearchIds.stream().map(m -> (BigDecimal) m.get("f_person")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
-        Assert.assertFalse("Verify That list with random person ids is not empty.", ids.isEmpty());
+        DataQualityContext.breadcrumbMessage += "->" + ids;
+        Assert.assertFalse(DataQualityContext.breadcrumbMessage+" Verify That list with random person ids is not empty.", ids.isEmpty());
     }
 
     //created by Nishant @ 29 Nov 2019
@@ -115,7 +113,8 @@ public class ApiProductsSearchSteps {
         List<Map<?, ?>> randomPackageIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         packageIds = randomPackageIds.stream().map(m -> (String) m.get("product_id")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random package ids  : " + packageIds);
-        Assert.assertFalse("Verify That list with random ids is not empty.", packageIds.isEmpty());
+        DataQualityContext.breadcrumbMessage += "->" + ids;
+        Assert.assertFalse(DataQualityContext.breadcrumbMessage+" Verify That list with random ids is not empty.", packageIds.isEmpty());
     }
 
     @And("^We get 1 random search ids from package$")
@@ -125,7 +124,8 @@ public class ApiProductsSearchSteps {
         List<Map<?, ?>> randomProductFromPackageIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductFromPackageIds.stream().map(m -> (String) m.get("f_component")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random product is " + ids.toString() + " from package ids  : " + packageIds.toString());
-        Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
+        DataQualityContext.breadcrumbMessage += "->" + ids;
+        Assert.assertFalse(DataQualityContext.breadcrumbMessage+" Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
 
@@ -136,7 +136,7 @@ public class ApiProductsSearchSteps {
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random product id with work is : " + ids);
-        Assert.assertFalse("verify list with random id is not empty",ids.isEmpty());
+        Assert.assertFalse(DataQualityContext.breadcrumbMessage+" verify list with random id is not empty",ids.isEmpty());
     }
     */
 /*
@@ -146,7 +146,7 @@ public class ApiProductsSearchSteps {
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random product id with person is : " + ids);
        // ids.clear(); ids.add("EPR-10W7JR"); Log.info("hard code value for debuggind failures ..."+ids.get(0));
-        Assert.assertFalse("verify list with random id is not empty",ids.isEmpty());
+        Assert.assertFalse(DataQualityContext.breadcrumbMessage+" verify list with random id is not empty",ids.isEmpty());
     }
 */
 /*
@@ -157,7 +157,7 @@ public class ApiProductsSearchSteps {
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random product id with identifier is : " + ids);
         // ids.clear(); ids.add("EPR-10W7JR"); Log.info("hard code value for debuggind failures ..."+ids.get(0));
-        Assert.assertFalse("verify list with random id is not empty",ids.isEmpty());
+        Assert.assertFalse(DataQualityContext.breadcrumbMessage+" verify list with random id is not empty",ids.isEmpty());
     }
 */
 
@@ -168,7 +168,7 @@ public class ApiProductsSearchSteps {
         sql = String.format(APIDataSQL.EPH_GD_PRODUCT_EXTRACT_FOR_SEARCH, Joiner.on("','").join(ids));
         productDataObjects = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
         productDataObjects.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
-        Assert.assertFalse("Verify That product objects list from DB is not empty.", productDataObjects.isEmpty());
+        Assert.assertFalse(DataQualityContext.breadcrumbMessage+" Verify That product objects list from DB is not empty.", productDataObjects.isEmpty());
     }
 
     private void getProductsDataFromEPHGD(String ProductId) {
@@ -176,7 +176,7 @@ public class ApiProductsSearchSteps {
         sql = String.format(APIDataSQL.EPH_GD_PRODUCT_EXTRACT_FOR_SEARCH, ProductId);
         productDataObjects = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
         productDataObjects.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
-        Assert.assertFalse("Verify That product objects list from DB is not empty.", productDataObjects.isEmpty());
+        Assert.assertFalse(DataQualityContext.breadcrumbMessage+" Verify That product objects list from DB is not empty.", productDataObjects.isEmpty());
     }
 
     private void getWorksDataFromEPHGD(String workId) {
@@ -184,7 +184,7 @@ public class ApiProductsSearchSteps {
         sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, workId);
         dataQualityContext.workDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
         dataQualityContext.workDataObjectsFromEPHGD.sort(Comparator.comparing(WorkDataObject::getWORK_ID));
-        Assert.assertFalse("Verify that list with work objects from DB is not empty", dataQualityContext.workDataObjectsFromEPHGD.isEmpty());
+        Assert.assertFalse(DataQualityContext.breadcrumbMessage+" Verify that list with work objects from DB is not empty", dataQualityContext.workDataObjectsFromEPHGD.isEmpty());
     }
 
     @When("^the product response returned when searched by packages is verified$")
@@ -194,7 +194,7 @@ public class ApiProductsSearchSteps {
             returnedProducts = searchForProductsByPackageResult(packageId);
             Log.info("\n number of package component in API is : " + returnedProducts.getTotalMatchCount());
             returnedProducts.verifyProductsAreReturned();
-            returnedProducts.verifyProductsReturned(getNumberOfPackageComponents());
+            returnedProducts.verifyAPIReturnedProductsCount(getNumberOfPackageComponents());
         }
     }
 
@@ -214,7 +214,7 @@ public class ApiProductsSearchSteps {
             returnedProducts = searchForProductsByComponentsResult(id);
             Log.info("\n number of packages in API : " + returnedProducts.getTotalMatchCount() + " - for products " + id);
             returnedProducts.verifyProductsAreReturned();
-            returnedProducts.verifyProductsReturned(getNumberOfHasComponents());
+            returnedProducts.verifyAPIReturnedProductsCount(getNumberOfHasComponents());
         }
     }
 
@@ -256,7 +256,7 @@ public class ApiProductsSearchSteps {
             assert returnedProducts != null;
             Log.info("\n product count in API by accountableProduct is : " + returnedProducts.getTotalMatchCount());
             returnedProducts.verifyProductsAreReturned();
-            returnedProducts.verifyProductsReturned(getNumberOfProductByAccountableProducts(accountableProductSegmentCode));
+            returnedProducts.verifyAPIReturnedProductsCount(getNumberOfProductByAccountableProducts(accountableProductSegmentCode));
         }
 
     }
@@ -279,32 +279,32 @@ public class ApiProductsSearchSteps {
         return count;
     }
 
-    private int getProductCountByProductStatus(String productStatus){//created by Nishant @ 5th Dec 2019
-        sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_PRODUCTSTATUS,productStatus);
+    private int getProductCountByProductStatus(String searchTerm, String productStatus){//created by Nishant @ 5th Dec 2019
+        sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_PRODUCTSTATUS,searchTerm, productStatus);
         List<Map<String,Object>> countByProductStatus = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         int count=((Long)countByProductStatus.get(0).get("count")).intValue();
         Log.info("products count by productStatus in DB is: "+count);
         return count;
     }
 
-    private int getProductCountByProductType(String productType)    {//created by Nishant @ 9th Dec 2019
-        sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_PRODUCTTYPE,productType);
+    private int getProductCountByProductType(String searchTerm,String productType)    {//created by Nishant @ 9th Dec 2019
+        sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_PRODUCTTYPE,searchTerm,productType);
         List<Map<String,Object>> countByProductType = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         int count=((Long)countByProductType.get(0).get("count")).intValue();
         Log.info("products count by productType in DB is: "+count);
         return count;
     }
 
-    private int getProductCountByWorkType(String workType){//created by Nishant @ 9th Dec 2019
-        sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_WORKTYPE,workType);
+    private int getProductCountByWorkType(String searchTerm,String workType){//created by Nishant @ 9th Dec 2019
+        sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_WORKTYPE,searchTerm,workType);
         List<Map<String,Object>> countByWorkType = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         int count=((Long)countByWorkType.get(0).get("count")).intValue();
         Log.info("products count by workType in DB is: "+count);
         return count;
     }
 
-    private int getProductCountByManifestationType(String manifestationType){//created by Nishant @ 9th Dec 2019
-        sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_MANIFESTATIONTYPE,manifestationType);
+    private int getProductCountByManifestationType(String searchTerm, String manifestationType){//created by Nishant @ 9th Dec 2019
+        sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_MANIFESTATIONTYPE,searchTerm,manifestationType);
         List<Map<String,Object>> countByManifestationType = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         int count=((Long)countByManifestationType.get(0).get("count")).intValue();
         Log.info("products count by manifestationType in DB is: "+count);
@@ -354,19 +354,34 @@ public class ApiProductsSearchSteps {
         ProductsMatchedApiObject returnedProducts = null;
         int bound = productDataObjects.size();
         for (ProductDataObject productDataObject : productDataObjects) {
+            boolean found = false;
+            int from;
+            int size;
+
             switch (title) {
                 case "PRODUCT_PRODUCT_TITLE":
-                    returnedProducts = searchForProductsByTitleResult(productDataObject.getPRODUCT_NAME());
+                    from = 0;
+                    size = 50;
+                    returnedProducts = searchForProductsByTitleResult(productDataObject.getPRODUCT_NAME()+ "&from=" + from + "&size=" + size);
+
+                    Log.info("Total product found for product title... - " + returnedProducts.getTotalMatchCount());
+                    while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID()) && from + size < returnedProducts.getTotalMatchCount()) {
+                        from += size;
+                        Log.info("scanned productID from " + (from - size) + " to " + from + " records...");
+                        returnedProducts = searchForProductsByTitleResult(productDataObject.getPRODUCT_NAME()+ "&from=" + from + "&size=" + size);
+                    }
+
+
                     break;
 
                 case "WORK_MANIFESTATION_TITLE":
                     getManifestationByID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-                    returnedProducts = searchForProductsByTitleResult(manifestationDataObjects.get(0).getMANIFESTATION_KEY_TITLE());
+                    returnedProducts = searchForProductsByTitleResult(manifestationDataObjects.get(0).getMANIFESTATION_KEY_TITLE()+ "&from=0&size=100");
                     break;
 
                 case "PRODUCT_MANIFESTATION_WORK_TITLE":
                     getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-                    returnedProducts = searchForProductsByTitleResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+                    returnedProducts = searchForProductsByTitleResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE()+ "&from=0&size=100");
                     break;
             }
             returnedProducts.verifyProductsAreReturned();
@@ -389,11 +404,8 @@ public class ApiProductsSearchSteps {
                     returnedProducts = searchForProductsByIdentifierResult(productDataObjects.get(0).getIDENTIFIER());
                     break;
                 case "PRODUCT_WORK_IDENTIFIER":
-                 //   getRandomProductIdWithWork();
-                 //   getProductsDataFromEPHGD();
                     getWorkIdentifiers(productDataObjects.get(0).getF_PRODUCT_WORK());
                     returnedProducts = searchForProductsByIdentifierResult(workIdentifiers.get(0).getIDENTIFIER());
-
                     break;
 
                 case "PRODUCT_MANIFESTATION_IDENTIFIER":
@@ -412,8 +424,6 @@ public class ApiProductsSearchSteps {
                     break;
 
                 case "PRODUCT_WORK_ID":
-                //    getRandomProductIdWithWork();
-                //    getProductsDataFromEPHGD();
                     returnedProducts = searchForProductsByIdentifierResult(productDataObjects.get(0).getF_PRODUCT_WORK());
                     break;
 
@@ -445,8 +455,6 @@ public class ApiProductsSearchSteps {
                     returnedProducts = searchForProductssByIdentifierAndTypeResult("1234-0707", "ISBN");
                     break;
                 case "PRODUCT_WORK_IDENTIFIER":
-                  //  getRandomProductIdWithWork();
-                  //  getProductsDataFromEPHGD();
                     getWorkIdentifiers(productDataObjects.get(0).getF_PRODUCT_WORK());
                     returnedProducts = searchForProductssByIdentifierAndTypeResult(workIdentifiers.get(0).getIDENTIFIER(), workIdentifiers.get(0).getWORK_TYPE());
                     break;
@@ -470,132 +478,132 @@ public class ApiProductsSearchSteps {
     @When("^the product details are retrieved and compared when search option is used with (.*)$")
     public void productSearchBySearchOptionAndCompare(String searchOption) throws AzureOauthTokenFetchingException {
         int bound = productDataObjects.size();
-        for (ProductDataObject productDataObject : productDataObjects) {
-            boolean found = false;
-            int from;
-            int size;
-            ProductsMatchedApiObject returnedProducts;
-            switch (searchOption) {
-                case "PRODUCT_ID":
-                    returnedProducts = searchForProductsBySearchResult(productDataObject.getPRODUCT_ID());
-                    break;
-                case "PRODUCT_IDENTIFIER":
-                    //hard coded by Nishant @ 8 may 2020 as there is only few record in SIT gd_product_identifier table
-               //     getRandomeProductIdWithIdentifier();
-               //     getProductsDataFromEPHGD();
-                    getProductIdentifiers(productDataObjects.get(0).getPRODUCT_ID());
+   try {
+       for (ProductDataObject productDataObject : productDataObjects) {
+           boolean found = false;
+           int from;
+           int size;
+           from = 0;
+           size = 50;
+           ProductsMatchedApiObject returnedProducts;
+           switch (searchOption) {
+               case "PRODUCT_ID":
+                   returnedProducts = searchForProductsBySearchResult(productDataObject.getPRODUCT_ID());
+                   break;
+               case "PRODUCT_TITLE":
+                   returnedProducts = searchForProductsBySearchResult(productDataObject.getPRODUCT_NAME());
+                   break;
+               case "PRODUCT_IDENTIFIER":
+                   //hard coded by Nishant @ 8 may 2020 as there is only few record in SIT gd_product_identifier table
+                   getProductIdentifiers(productDataObjects.get(0).getPRODUCT_ID());
+                   returnedProducts = searchForProductsBySearchResult(productIdentifiers.get(0).getIDENTIFIER());
+                   break;
 
-                    returnedProducts = searchForProductsBySearchResult(productIdentifiers.get(0).getIDENTIFIER());
-                    break;
-                case "PRODUCT_WORK_IDENTIFIER":
-                //    getRandomProductIdWithWork();
-                //    getProductsDataFromEPHGD();
-                    getWorkIdentifiers(productDataObjects.get(0).getF_PRODUCT_WORK());
-                    returnedProducts = searchForProductsBySearchResult(workIdentifiers.get(0).getIDENTIFIER());
-                    break;
-                case "PRODUCT_WORK_ID":
-                  //  getRandomProductIdWithWork();
-                  //  getProductsDataFromEPHGD();
-                    returnedProducts = searchForProductsBySearchResult(productDataObjects.get(0).getF_PRODUCT_WORK());
-                    break;
+               case "PRODUCT_WORK_ID":
+                   returnedProducts = searchForProductsBySearchResult(productDataObjects.get(0).getF_PRODUCT_WORK());
+                   break;
+               case "PRODUCT_WORK_TITLE":
+                   getWorksDataFromEPHGD(productDataObjects.get(0).getF_PRODUCT_WORK());
+                   returnedProducts = searchForProductsBySearchResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE() + "&from=" + from + "&size=" + size);
+                   Log.info("Total product found for workTitle search... - " + returnedProducts.getTotalMatchCount());
+                   while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID()) && from + size < returnedProducts.getTotalMatchCount()) {
+                       from += size;
+                       Log.info("scanned productID from " + (from - size) + " to " + from + " records...");
+                       returnedProducts = searchForProductsBySearchResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE() + "&from=" + from + "&size=" + size);
+                   }
+                   break;
+               case "PRODUCT_WORK_IDENTIFIER":
+                   getWorkIdentifiers(productDataObjects.get(0).getF_PRODUCT_WORK());
+                   returnedProducts = searchForProductsBySearchResult(workIdentifiers.get(0).getIDENTIFIER());
+                   break;
 
-                case "PRODUCT_MANIFESTATION_IDENTIFIER":
-                    List<Map<String, Object>> manifestationIdentifiers = getManifestationIdentifierByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-                    returnedProducts = searchForProductsBySearchResult(manifestationIdentifiers.get(0).get("identifier").toString());
-                    break;
+               case "PRODUCT_MANIFESTATION_ID":
+                   returnedProducts = searchForProductsBySearchResult(String.valueOf(productDataObject.getF_PRODUCT_MANIFESTATION_TYP()));
+                   break;
+               case "PRODUCT_MANIFESTATION_TITLE":
+                   getManifestationByID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
+                   returnedProducts = searchForProductsBySearchResult(manifestationDataObjects.get(0).getMANIFESTATION_KEY_TITLE() + "&from=" + from + "&size=" + size);
+                   Log.info("Total product found for manifestationTitle search... - " + returnedProducts.getTotalMatchCount());
+                   while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID()) && from + size < returnedProducts.getTotalMatchCount()) {
+                       from += size;
+                       Log.info("scanned productID from " + (from - size) + " to " + from + " records...");
+                       returnedProducts = searchForProductsBySearchResult(manifestationDataObjects.get(0).getMANIFESTATION_KEY_TITLE() + "&from=" + from + "&size=" + size);
+                   }
+                   break;
+               case "PRODUCT_MANIFESTATION_IDENTIFIER":
+                   List<Map<String, Object>> manifestationIdentifiers = getManifestationIdentifierByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
+                   returnedProducts = searchForProductsBySearchResult(manifestationIdentifiers.get(0).get("identifier").toString());
+                   break;
 
-                case "PRODUCT_MANIFESTATION_ID":
-                    returnedProducts = searchForProductsBySearchResult(String.valueOf(productDataObject.getF_PRODUCT_MANIFESTATION_TYP()));
-                    break;
+               case "PRODUCT_MANIFESTATION_WORK_ID":
+                   getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
+                   returnedProducts = searchForProductsBySearchResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+                   break;
+               case "PRODUCT_MANIFESTATION_WORK_TITLE":
+                   getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
+                   returnedProducts = searchForProductsBySearchResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+                   break;
+               case "PRODUCT_MANIFESTATION_WORK_IDENTIFIER":
+                   getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
+                   getWorkIdentifiers(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+                   returnedProducts = searchForProductsBySearchResult(workIdentifiers.get(0).getIDENTIFIER());
+                   break;
 
-                case "PRODUCT_MANIFESTATION_WORK_IDENTIFIER":
-                    getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-                    getWorkIdentifiers(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
-                    returnedProducts = searchForProductsBySearchResult(workIdentifiers.get(0).getIDENTIFIER());
-                    break;
-
-                case "PRODUCT_MANIFESTATION_WORK_ID":
-                    getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-                    returnedProducts = searchForProductsBySearchResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
-                    break;
-
-                case "PRODUCT_TITLE":
-                    returnedProducts = searchForProductsBySearchResult(productDataObject.getPRODUCT_NAME());
-                    break;
-                case "PRODUCT_WORK_TITLE":
-                //    getRandomProductIdWithWork();
-                //    getProductsDataFromEPHGD();
-                    returnedProducts = searchForProductsBySearchResult(productDataObjects.get(0).getWORK_TITLE());
-                    break;
-                case "PRODUCT_MANIFESTATION_TITLE":
-                    getManifestationByID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-                    returnedProducts = searchForProductsBySearchResult(manifestationDataObjects.get(0).getMANIFESTATION_KEY_TITLE());
-                    break;
-                case "PRODUCT_MANIFESTATION_WORK_TITLE":
-                    getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-                    returnedProducts = searchForProductsBySearchResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
-                    break;
-
-                case "PRODUCT_PERSONS_FULLNAME":
+               case "PRODUCT_PERSONS_FULLNAME":
                      /*
                         created by Nishant @8 May 2020
                         getProuctByPerson returns sometimes 70000+ records and most probable intended product id does not appear in first 20 records
                         hence we need to send API request with size 5000 and check if intended workID is returned
                         if not, send request again for next 5000 records until product id found
                         */
+                   getProductPersonRoleByProductId(productDataObjects.get(0).getPRODUCT_ID());
+                   getPersonDataByPersonId(personProductRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
+                   //        from = 0;       size = 50;
+                   returnedProducts = searchForProductsBySearchResult(personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
+                   Log.info("Total product found for product person full name... - " + returnedProducts.getTotalMatchCount());
+                   while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID()) && from + size < returnedProducts.getTotalMatchCount()) {
+                       from += size;
+                       Log.info("scanned productID from " + (from - size) + " to " + from + " records...");
+                       returnedProducts = searchForProductsBySearchResult(personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
+                   }
+                   break;
+               case "PRODUCT_WORK_PERSONS_FULLNAME":
+                   getWorkPersonRoleByWorkId(productDataObjects.get(0).getF_PRODUCT_WORK());
+                   getPersonDataByPersonId(personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
+                   //        from = 0;        size = 50;
+                   returnedProducts = searchForProductsBySearchResult(personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
+                   Log.info("Total product found for product work person full name... - " + returnedProducts.getTotalMatchCount());
+                   while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID()) && from + size < returnedProducts.getTotalMatchCount()) {
+                       from += size;
+                       Log.info("scanned productID from " + (from - size) + " to " + from + " records...");
+                       returnedProducts = searchForProductsBySearchResult(personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
+                   }
+                   break;
+               case "PRODUCT_MANIFESTATION_WORK_PERSONS_FULLNAME":
+                   getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
+                   getWorkPersonRoleByWorkId(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+                   getPersonDataByPersonId(personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
+                   //    from = 0; size = 50;
+                   returnedProducts = searchForProductsBySearchResult(personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
+                   Log.info("Total product found for product manifestation work person full name... - " + returnedProducts.getTotalMatchCount());
+                   while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID()) && from + size < returnedProducts.getTotalMatchCount()) {
+                       from += size;
+                       Log.info("scanned productID from " + (from - size) + " to " + from + " records...");
+                       returnedProducts = searchForProductsBySearchResult(personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
+                   }
+                   break;
+               default:
+                   throw new IllegalStateException("Unexpected value: " + searchOption);
+           }
 
-                //    getRandomProductIdWithPerson();
-                //    getProductsDataFromEPHGD();
-                    getProductPersonRoleByProductId(productDataObjects.get(0).getPRODUCT_ID());
-                    getPersonDataByPersonId(personProductRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
-                    from = 0;
-                    size = 50;
-                    returnedProducts = searchForProductsBySearchResult(personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
-                    Log.info("Total product found for product person full name... - " + returnedProducts.getTotalMatchCount());
-                    while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID()) && from + size < returnedProducts.getTotalMatchCount()) {
-                        from += size;
-                        Log.info("scanned productID from " + (from - size) + " to " + from + " records...");
-                        returnedProducts = searchForProductsBySearchResult(personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
-                    }
-
-                    break;
-                case "PRODUCT_WORK_PERSONS_FULLNAME":
-                 //   getRandomProductIdWithWork();
-                 //   getProductsDataFromEPHGD();
-                    getWorkPersonRoleByWorkId(productDataObjects.get(0).getF_PRODUCT_WORK());
-                    getPersonDataByPersonId(personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
-                    from = 0;
-                    size = 50;
-                    returnedProducts = searchForProductsBySearchResult(personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
-                    Log.info("Total product found for product work person full name... - " + returnedProducts.getTotalMatchCount());
-                    while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID()) && from + size < returnedProducts.getTotalMatchCount()) {
-                        from += size;
-                        Log.info("scanned productID from " + (from - size) + " to " + from + " records...");
-                        returnedProducts = searchForProductsBySearchResult(personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
-                    }
-
-                    break;
-                case "PRODUCT_MANIFESTATION_WORK_PERSONS_FULLNAME":
-                    getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-                    getWorkPersonRoleByWorkId(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
-                    getPersonDataByPersonId(personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
-                    from = 0;
-                    size = 50;
-                    returnedProducts = searchForProductsBySearchResult(personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
-                    Log.info("Total product found for product manifestation work person full name... - " + returnedProducts.getTotalMatchCount());
-                    while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID()) && from + size < returnedProducts.getTotalMatchCount()) {
-                        from += size;
-                        Log.info("scanned productID from " + (from - size) + " to " + from + " records...");
-                        returnedProducts = searchForProductsBySearchResult(personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME() + " " + personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME() + "&from=" + from + "&size=" + size);
-                    }
-                    break;
-                default:
-                    throw new IllegalStateException("Unexpected value: " + searchOption);
-            }
-
-            returnedProducts.verifyProductsAreReturned();
-            returnedProducts.verifyProductWithIdIsReturned(productDataObject.getPRODUCT_ID());
-        }
+           returnedProducts.verifyProductsAreReturned();
+           returnedProducts.verifyProductWithIdIsReturned(productDataObject.getPRODUCT_ID());
+       }
+   }
+   catch(Exception e)
+   {
+       Assert.assertFalse(DataQualityContext.breadcrumbMessage+" "+e.getMessage(),true);
+   }
     }
 
     @When("^the product response returned when searched by personID is verified$")
@@ -607,7 +615,7 @@ public class ApiProductsSearchSteps {
             Log.info("PersonID chosen : " + id);
             Log.info("Product count in API : " + returnedProducts.getTotalMatchCount());
             returnedProducts.verifyProductsAreReturned();
-            returnedProducts.verifyProductsReturned(getNumberOfProductsByPersonIDs(id));
+            returnedProducts.verifyAPIReturnedProductsCount(getNumberOfProductsByPersonIDs(id));
         }
     }
 
@@ -622,7 +630,7 @@ public class ApiProductsSearchSteps {
             returnedProducts = searchForProductsByPMCResult(pmcCode);
 
             returnedProducts.verifyProductsAreReturned();
-            returnedProducts.verifyProductsReturned(getNumberOfProductsByPMC(pmcCode));
+            returnedProducts.verifyAPIReturnedProductsCount(getNumberOfProductsByPMC(pmcCode));
         }
     }
 
@@ -639,7 +647,7 @@ public class ApiProductsSearchSteps {
             returnedProducts = searchForProductsByPMGResult(pmgCode);
             Log.info("Total count by API..." + returnedProducts.getTotalMatchCount());
             returnedProducts.verifyProductsAreReturned(); //non zero products
-            returnedProducts.verifyProductsReturned(getProductsCountByPMG(pmgCode));
+            returnedProducts.verifyAPIReturnedProductsCount(getProductsCountByPMG(pmgCode));
         }
     }
 
@@ -734,14 +742,14 @@ public class ApiProductsSearchSteps {
         //   Log.info(sql);
         List<Map<?, ?>> workIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = workIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
-        Assert.assertFalse("Verify That list with work ids by pmc is not empty.", ids.isEmpty());
+        Assert.assertFalse(DataQualityContext.breadcrumbMessage+" Verify That list with work ids by pmc is not empty.", ids.isEmpty());
     }
 
     public void getPMGWorksByPMC(String pmcCode) {
         sql = String.format(APIDataSQL.EPH_GD_PMG_CODE_WORKS_EXTRACT_BY_PMC, pmcCode);
         List<Map<?, ?>> workIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = workIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
-        Assert.assertFalse("Verify That list with work ids by pmc is not empty.", ids.isEmpty());
+        Assert.assertFalse(DataQualityContext.breadcrumbMessage+" Verify That list with work ids by pmc is not empty.", ids.isEmpty());
     }
 
     private void getManifestationsByWorks() {
@@ -750,7 +758,7 @@ public class ApiProductsSearchSteps {
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         manifestationIds = randomProductSearchIds.stream().map(m -> (String) m.get("MANIFESTATION_ID")).map(String::valueOf).collect(Collectors.toList());
-        Assert.assertFalse("Verify That list with manifestation ids by work ids is not empty.", ids.isEmpty());
+        Assert.assertFalse(DataQualityContext.breadcrumbMessage+" Verify That list with manifestation ids by work ids is not empty.", ids.isEmpty());
     }
 
     private int getProductsCountByManifestations() {
@@ -789,7 +797,7 @@ public class ApiProductsSearchSteps {
         Log.info("get person role by Work id..."+workId);
         sql = String.format(APIDataSQL.selectWorkPersonByworkId,workId);
         personWorkRoleDataObjectsFromEPHGD=DBManager.getDBResultAsBeanList(sql,PersonWorkRoleDataObject.class,Constants.EPH_URL);
-        Assert.assertFalse("Verify person role by work id successfully extracted from EPH DB", personWorkRoleDataObjectsFromEPHGD.isEmpty());
+        Assert.assertFalse(DataQualityContext.breadcrumbMessage+" Verify person role by work id successfully extracted from EPH DB", personWorkRoleDataObjectsFromEPHGD.isEmpty());
     }
 
     //created by Nishant @ 8 May 2020
@@ -797,14 +805,14 @@ public class ApiProductsSearchSteps {
         Log.info("get person role by product id..."+productId);
         sql = String.format(PersonProductRoleDataSQL.selectProductPersonByproductId,productId);
         personProductRoleDataObjectsFromEPHGD=DBManager.getDBResultAsBeanList(sql,PersonProductRoleDataObject.class,Constants.EPH_URL);
-        Assert.assertFalse("Verify person role by product id successfully extracted from EPH DB", personProductRoleDataObjectsFromEPHGD.isEmpty());
+        Assert.assertFalse(DataQualityContext.breadcrumbMessage+" Verify person role by product id successfully extracted from EPH DB", personProductRoleDataObjectsFromEPHGD.isEmpty());
     }
 
     private void getPersonDataByPersonId(String personId){
         Log.info("get person data by person id..."+personId);
         sql =String.format(APIDataSQL.SelectPersonDataByPersonId,personId);
         personDataObjectsFromEPHGD=DBManager.getDBResultAsBeanList(sql,PersonDataObject.class,Constants.EPH_URL);
-        Assert.assertFalse("verify person Data by person id extracted from EPH DB",personDataObjectsFromEPHGD.isEmpty());
+        Assert.assertFalse(DataQualityContext.breadcrumbMessage+" verify person Data by person id extracted from EPH DB",personDataObjectsFromEPHGD.isEmpty());
     }
 
 
@@ -813,53 +821,51 @@ public class ApiProductsSearchSteps {
         Log.info("Automation is in progress");
         ProductsMatchedApiObject returnedProducts;
         String searchTerm = (productDataObjects.get(0).getPRODUCT_NAME().split(" ")[0]).toUpperCase();
+        String defaultSearch = "CELL";
+        int productCount_DB = 0;
         switch (paramKey)
         {
             case "productStatus":
-                returnedProducts =   searchForProductByParam("cell",paramKey,productDataObjects.get(0).getF_STATUS());
-                Log.info("products count by productStatus in API is: "+returnedProducts.getTotalMatchCount());
-                returnedProducts.verifyProductsAreReturned();
-                returnedProducts.verifyProductsReturned(getProductCountByProductStatus(productDataObjects.get(0).getF_STATUS()));
+                returnedProducts =   searchForProductByParam(defaultSearch,paramKey,productDataObjects.get(0).getF_STATUS());
+                DataQualityContext.breadcrumbMessage += "->" + productDataObjects.get(0).getF_STATUS();
+                productCount_DB = getProductCountByProductStatus(defaultSearch,productDataObjects.get(0).getF_STATUS());
                 break;
             case "productType":
-                returnedProducts =   searchForProductByParam("cell",paramKey,productDataObjects.get(0).getF_TYPE());
-                Log.info("products count by productType in API is: "+returnedProducts.getTotalMatchCount());
-                returnedProducts.verifyProductsAreReturned();
-                returnedProducts.verifyProductsReturned(getProductCountByProductType(productDataObjects.get(0).getF_TYPE()));
+                returnedProducts =   searchForProductByParam(defaultSearch,paramKey,productDataObjects.get(0).getF_TYPE());
+                DataQualityContext.breadcrumbMessage += "->" +productDataObjects.get(0).getF_TYPE();
+                productCount_DB = getProductCountByProductType(defaultSearch,productDataObjects.get(0).getF_TYPE());
                 break;
             case "workType":
                 getWorkByManifestationID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
-                returnedProducts =   searchForProductByParam("cell",paramKey,dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
-                Log.info("products count by workType in API is: "+returnedProducts.getTotalMatchCount());
-                returnedProducts.verifyProductsAreReturned();
-                returnedProducts.verifyProductsReturned(getProductCountByWorkType(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE()));
+                returnedProducts =   searchForProductByParam(defaultSearch,paramKey,dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
+                DataQualityContext.breadcrumbMessage += "->" +dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE();
+                productCount_DB = getProductCountByWorkType(defaultSearch,dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
                 break;
             case "manifestationType":
                 getManifestationByID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
-                returnedProducts =   searchForProductByParam("cell",paramKey,manifestationDataObjects.get(0).getF_TYPE());
-                Log.info("products count by manifestationType in API is: "+returnedProducts.getTotalMatchCount());
-                returnedProducts.verifyProductsAreReturned();
-                returnedProducts.verifyProductsReturned(getProductCountByManifestationType(manifestationDataObjects.get(0).getF_TYPE()));
-
+                returnedProducts =   searchForProductByParam(defaultSearch,paramKey,manifestationDataObjects.get(0).getF_TYPE());
+                DataQualityContext.breadcrumbMessage += "->" +manifestationDataObjects.get(0).getF_TYPE();
+                productCount_DB = getProductCountByManifestationType(defaultSearch,manifestationDataObjects.get(0).getF_TYPE());
                 break;
             case "pmcCode":
                 getWorkByManifestationID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
                 returnedProducts =   searchForProductByParam(searchTerm,paramKey,dataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
-                Log.info("products count by pmc in API is: "+returnedProducts.getTotalMatchCount());
-                returnedProducts.verifyProductsAreReturned();
-                returnedProducts.verifyProductsReturned(getProductCountByPMCCode(searchTerm,dataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC()));
+                DataQualityContext.breadcrumbMessage += "->" +dataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC();
+                productCount_DB = getProductCountByPMCCode(searchTerm,dataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
                 break;
             case "pmgCode":
                 getWorkByManifestationID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
                 String pmgCode = getPMGcodeByPMC(dataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
                 returnedProducts =   searchForProductByParam(searchTerm,paramKey,pmgCode);
-                Log.info("products count by pmgCode "+pmgCode+" in API is: "+returnedProducts.getTotalMatchCount());
-                returnedProducts.verifyProductsAreReturned();
-                returnedProducts.verifyProductsReturned(getProductCountByPMGCode(searchTerm,pmgCode));
-
+                DataQualityContext.breadcrumbMessage += "->" +pmgCode;
+                productCount_DB = getProductCountByPMGCode(searchTerm,pmgCode);
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + paramKey);
 
         }
+        returnedProducts.verifyProductsAreReturned();
+        returnedProducts.verifyAPIReturnedProductsCount(productCount_DB);
 
 
 

@@ -131,9 +131,7 @@ public class PRMTablesDLObject {
     }
     public void setDIV_IDT(String DIV_IDT) { this.DIV_IDT = DIV_IDT; }
 
-    public String getPUB_IDT() {
-        return PUB_IDT;
-    }
+    public String getPUB_IDT() { return PUB_IDT;}
     public void setPUB_IDT(String PUB_IDT) {
         this.PUB_IDT = PUB_IDT;
     }

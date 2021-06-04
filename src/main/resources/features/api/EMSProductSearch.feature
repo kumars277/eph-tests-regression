@@ -11,7 +11,7 @@ Feature: Search API: Products
 
   @searchAPI @productSearchAPI
   Scenario Outline: search product by title
-    Given We get 1 random search ids for products default
+    Given We get 1 random search ids for products <title>
     And We get the search data from EPH GD for products
     Then the product details are retrieved when searched by <title> and compared
     Examples:
@@ -38,25 +38,25 @@ Feature: Search API: Products
 
   @searchAPI @productSearchAPI
   Scenario Outline: search product by type and identifier
-    Given We get 1 random search ids for products default
+    Given We get 1 random search ids for products <identifier>
     And We get the search data from EPH GD for products
     Then the products detail are retrieved and compared when searched by type and <identifier>
     Examples:
       | identifier                       |
-      |PRODUCT_IDENTIFIER                |
+  #    |PRODUCT_IDENTIFIER                |
       |PRODUCT_WORK_IDENTIFIER          |
       |PRODUCT_MANIFESTATION_IDENTIFIER |
       |PRODUCT_MANIFESTATION_WORK_IDENTIFIER|
 
   @searchAPI @productSearchAPI
   Scenario Outline: search product with search option
-    Given We get 1 random search ids for products default
+    Given We get 1 random search ids for products <idType>
     And We get the search data from EPH GD for products
     Then the product details are retrieved and compared when search option is used with <idType>
     Examples:
       | idType                                     |
       | PRODUCT_ID                                 |
-      | PRODUCT_IDENTIFIER                         |
+  #    | PRODUCT_IDENTIFIER                         |
       | PRODUCT_WORK_IDENTIFIER                    |
       | PRODUCT_WORK_ID                            |
       | PRODUCT_MANIFESTATION_IDENTIFIER           |
@@ -102,7 +102,7 @@ Feature: Search API: Products
 
   @searchAPI @productSearchAPI
   Scenario Outline: search product by accountableProduct
-    Given We get 1 random search ids for products default
+    Given We get 1 random search ids for products <type>
     And We get the search data from EPH GD for products
     Then the product details are retrieved and compared by <type>
     Examples:
@@ -113,7 +113,7 @@ Feature: Search API: Products
 
   @searchAPI @productSearchAPI
   Scenario Outline: search product by parameters
-    Given We get 1 random search ids for products default
+    Given We get 1 random search ids for products <paramKey>
     And We get the search data from EPH GD for products
     Then the product count are retrieved by <paramKey> compared
     Examples:

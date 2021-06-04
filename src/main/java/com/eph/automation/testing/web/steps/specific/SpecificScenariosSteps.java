@@ -39,11 +39,19 @@ public class SpecificScenariosSteps {
        int RowFrom = 0; int RowTill = 0;
 
         if(false) {RowFrom = 1;             RowTill = 6;}//running on local
-        else{RowFrom = TestContext.getValues().rowFrom;RowTill = TestContext.getValues().rowTill;}//running by Jenkins
+        else{
+            RowFrom = Integer.valueOf(TestContext.getValues().rowFrom);
+
+            if(TestContext.getValues().rowTill.equalsIgnoreCase(""))
+            {
+                RowTill=DataQualityContext.dataFileRowColumn.size();
+            }
+          else  RowTill = Integer.valueOf(TestContext.getValues().rowTill) ;
+        }//running by Jenkins
 
         Log.info("RowFrom = "+RowFrom);        Log.info("RowTill = "+RowTill);
 
-        if(RowTill==0) RowTill=DataQualityContext.dataFileRowColumn.size();
+        //if(RowTill==0) RowTill=DataQualityContext.dataFileRowColumn.size();
 
         DataQualityContext.resultFileName = DataQualityContext.DateAndTime+" Link Testing Result from "+RowFrom+" to "+RowTill+".csv";
 
