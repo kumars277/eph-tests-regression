@@ -41,14 +41,12 @@ public class SpecificScenariosSteps {
         if(false) {RowFrom = 1;             RowTill = 6;}//running on local
         else{
 
-            RowFrom = Integer.valueOf(TestContext.getValues().rowFrom);
+            if(TestContext.getValues().rowFrom.equalsIgnoreCase(""))RowFrom=1;
+            else  RowFrom = Integer.valueOf(TestContext.getValues().rowFrom);
 
-            if(TestContext.getValues().rowTill.equalsIgnoreCase("")
-            |Integer.valueOf(TestContext.getValues().rowTill)==0)
-            {
-                RowTill=DataQualityContext.dataFileRowColumn.size();
-            }
-          else  RowTill = Integer.valueOf(TestContext.getValues().rowTill) ;
+            if(TestContext.getValues().rowTill.equalsIgnoreCase("")) RowTill=DataQualityContext.dataFileRowColumn.size();
+            else  RowTill = Integer.valueOf(TestContext.getValues().rowTill) ;
+
         }//running by Jenkins
 
         Log.info("RowFrom = "+RowFrom);        Log.info("RowTill = "+RowTill);

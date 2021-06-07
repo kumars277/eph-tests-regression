@@ -25,16 +25,16 @@ public class TestContext {
         String s3Key  = System.getProperty("S3file");
         String rowFrom = System.getProperty("rowFrom");
         String rowTill = System.getProperty("rowTill");
-       if (rowFrom.equalsIgnoreCase("")) rowFrom ="1";
-        if (rowTill.equalsIgnoreCase("")) rowTill ="0";
+        //if (rowFrom.equalsIgnoreCase("")) rowFrom ="1";
+        //if (rowTill.equalsIgnoreCase("")) rowTill ="0";
 
         testProperties.browserType = browserName != null ? browserName : "chrome";
         testProperties.gridRun = gridRun != null ? Boolean.TRUE : Boolean.FALSE;
         testProperties.environment = environment !=null ? environment : EnumConstants.ENVIRONMENTS.UAT.name();
         testProperties.targetDB = targetDB != null ? Boolean.TRUE : Boolean.FALSE;
         testProperties.s3Key = s3Key !=null ? s3Key: "Image URLs for parties.csv";
-        testProperties.rowFrom =rowFrom !=null ?rowFrom:"1";//Integer.valueOf(rowFrom);
-        testProperties.rowTill =rowTill !=null ?rowTill:"0";//= Integer.valueOf(rowTill);
+        testProperties.rowFrom =rowFrom !=null ?rowFrom:"";//Integer.valueOf(rowFrom);
+        testProperties.rowTill =rowTill !=null ?rowTill:"";//= Integer.valueOf(rowTill);
 
 
         return testProperties;
