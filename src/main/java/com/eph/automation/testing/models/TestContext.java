@@ -25,8 +25,8 @@ public class TestContext {
         String s3Key  = System.getProperty("S3file");
         String rowFrom = System.getProperty("rowFrom");
         String rowTill = System.getProperty("rowTill");
-        //if (rowFrom.equalsIgnoreCase("")) rowFrom ="1";
-        //if (rowTill.equalsIgnoreCase("")) rowTill ="0";
+//       if (rowFrom.equalsIgnoreCase("")) rowFrom ="1";
+//        if (rowTill.equalsIgnoreCase("")) rowTill ="0";
 
         testProperties.browserType = browserName != null ? browserName : "chrome";
         testProperties.gridRun = gridRun != null ? Boolean.TRUE : Boolean.FALSE;

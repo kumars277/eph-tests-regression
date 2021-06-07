@@ -1,6 +1,9 @@
 package com.eph.automation.testing.services.db.PROMISDataLakeSQL;
 
 public class PromisETLDataCheckSQL {
+    public static String GET_PRMLONDEST_IDS = "select pub_idt as PUB_IDT from "+GetPRMDLDBUser.getPRMDataBase()+".%s\n"+
+            "where inbound_ts = (select inbound_ts from "+GetPRMDLDBUser.getPRMDataBase()+".%s order by inbound_ts limit 1) order by rand() limit %s";
+
     public static String GET_PRMAUTPUBT_IDS = "select pub_idt as PUB_IDT from "+GetPRMDLDBUser.getPRMDataBase()+".%s\n"+
         "where inbound_ts = (select inbound_ts from "+GetPRMDLDBUser.getPRMDataBase()+".%s order by inbound_ts limit 1) order by rand() limit %s";
 
@@ -186,7 +189,7 @@ public class PromisETLDataCheckSQL {
             "      GROUP BY cast(pp1.pub_pub_idt as varchar)||pp1.rtp_rtp_cod||pp1.rel_title)\n" +
             "    )\n" +
             "    or (rtp_rtp_cod <> 'BOXST')\n" +
-            "  ))where PUB_PUB_IDT in (%s)";
+            "  ))where PUB_PUB_IDT in (%s) and inbound_ts in (select inbound_ts from " + GetPRMDLDBUser.getPRMDataBase() + ".%s order by inbound_ts desc limit 1)order by REL_TITLE desc, REL_SRT desc, REL_IDT desc";
 
     public static String GET_promis_prmincpmct = "select\n" +
             "  pub_idt as PUB_IDT,\n" +
@@ -342,7 +345,7 @@ public class PromisETLDataCheckSQL {
             ",REL_START_DATE as REL_START_DATE\n" +
             "from " + GetPRMDLDBUser.getPRMDataBase() + ".%s\n" +
             " where inbound_ts = (select inbound_ts from " + GetPRMDLDBUser.getPRMDataBase() + ".%s order by inbound_ts desc limit 1)\n" +
-            " AND PUB_PUB_IDT in (%s)";
+            " AND PUB_PUB_IDT in (%s) order by REL_TITLE desc, REL_SRT desc, REL_IDT desc";
 
     public static String GET_SUBJECT_AREAS = "select pub_idt as PUB_IDT,\n"
     + "epr_id as EPR_ID,\n"
@@ -390,7 +393,7 @@ public class PromisETLDataCheckSQL {
             "primary_author as PRIMARY_AUTHOR,\n" +
             "previous_title as PREVIOUS_TITLE,\n" +
             "internal_elsevier_division,\n" +
-            "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s') order by u_key desc";
+            "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s') order by u_key desc, journal_aims_scope desc";
 
     public static String GET_METRICS = "select pub_idt as PUB_IDT,\n" +
             "epr_id as EPR_ID,\n" +
@@ -400,7 +403,7 @@ public class PromisETLDataCheckSQL {
             "metric as METRIC,\n" +
             "metric_year as METRIC_YEAR,\n" +
             "metric_url as METRIC_URL,\n" +
-            "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s')";
+            "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s') order by metric desc";
 
     public static String GET_URLS = "select pub_idt as PUB_IDT," +
             "epr_id as EPR_ID,\n" +
@@ -775,7 +778,7 @@ public class PromisETLDataCheckSQL {
             ",internal_elsevier_division\n" +
             ", delete_flag\n" +
             "from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_history_works_part tdh\n" +
-            "where u_key not in (select u_key from "+GetPRMDLDBUser.getPRMDataBase()+".promis_delta_current_works) and U_key in ('%s') order by u_key desc";
+            "where u_key not in (select u_key from "+GetPRMDLDBUser.getPRMDataBase()+".promis_delta_current_works) and U_key in ('%s') order by u_key desc, journal_aims_scope desc";
 
     public static String GET_METRICS_HistExclQUERY = "select\n" +
             "  pub_idt\n" +
@@ -792,7 +795,7 @@ public class PromisETLDataCheckSQL {
             ", last_updated_date\n" +
             ", delete_flag\n" +
             "from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_history_metrics_part tdh\n" +
-            "where u_key not in (select u_key from "+GetPRMDLDBUser.getPRMDataBase()+".promis_delta_current_metrics) and U_key in ('%s')";
+            "where u_key not in (select u_key from "+GetPRMDLDBUser.getPRMDataBase()+".promis_delta_current_metrics) and U_key in ('%s') order by metric desc";
 
     public static String GET_URLS_HistExclQUERY = "select\n" +
             "  pub_idt\n" +

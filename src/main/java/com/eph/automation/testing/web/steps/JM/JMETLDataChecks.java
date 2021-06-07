@@ -1134,7 +1134,7 @@ public class JMETLDataChecks {
                 sql = String.format(JMETLDataChecksSQL.GET_ACCOUNTABLE_PRODUCT_DQ_QUERY, Joiner.on("','").join(Ids));
                 break;
             case "etl_wwork_dq_v":
-                sql = String.format(JMETLDataChecksSQL.GET_WWORK_DQ_QUERY, ETLtable, Joiner.on("','").join(Ids));
+                sql = String.format(JMETLDataChecksSQL.GET_WWORK_DQ_QUERY, Joiner.on("','").join(Ids));
                 break;
             case "etl_work_identifier_dq_v":
                 sql = String.format(JMETLDataChecksSQL.GET_WORK_IDENTIFIER_DQ_QUERY, Joiner.on("','").join(Ids));
@@ -1289,7 +1289,7 @@ public class JMETLDataChecks {
                         JMContext.JMObjectsFromDL.sort(Comparator.comparing(JMETLObject::getjm_source_reference)); //sort data in the lists
                         JMContext.JMTransformObjectsFromDL.sort(Comparator.comparing(JMETLObject::getjm_source_reference));
 
-                        String[] JMF_WworkDQColumnName = {"getscenario", "getupsert", "getjm_source_reference", "geteph_work_id", "getwork_title", "getwork_subtitle", "getelectro_rights_indicator", "getvolume", "getcopyright_year", "getedition_number", "getplanned_launch_date", "getplanned_termination_date", "getf_type", "getf_status", "getf_accountable_product", "getf_pmc", "getf_oa_type", "getf_imprint", "getopco", "getf_society_ownership", "getsubscription_type", "getresp_centre", "getlanguage_code", "getdq_err"};
+                        String[] JMF_WworkDQColumnName = {"getscenario_name","getscenario_code","getupsert","getjm_source_reference","geteph_work_id","getwork_title","getwork_subtitle","getplanned_launch_date","getplanned_termination_date","getf_type","getf_status","getf_accountable_product","getpmc_old","getpmc_new","getf_oa_type","getf_imprint","getopco","getsubscription_type","getresp_centre"};
 
                         for (String strTemp : JMF_WworkDQColumnName) {
 

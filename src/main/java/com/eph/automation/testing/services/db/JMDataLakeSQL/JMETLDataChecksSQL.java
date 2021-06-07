@@ -379,7 +379,292 @@ public class JMETLDataChecksSQL {
         ")where jm_source_reference in ('%s') \n" +
         "order by jm_source_reference desc";
 
-    public static String GET_WWORK_DQ_QUERY ="select * from "+ GetJMDLDBUser.getJMDB()+".%s where jm_source_reference in ('%s') order by jm_source_reference desc,scenario_name desc, work_title desc";
+    public static String GET_WWORK_DQ_QUERY ="select * from \n" +
+            "(WITH\n" +
+            "-- this is to assist with the legal ownership case statement without having a separate view\n" +
+            "   coowned_journals AS (\n" +
+            "   SELECT DISTINCT co.f_work, co.legal_owner_type\n" +
+            "   FROM   journalmaestro_uat2.jmf_work_ownership co\n" +
+            "   WHERE (((co.notified_date IS NOT NULL)\n" +
+            "       AND (co.journal_ownership_type = 'CO'))\n" +
+            "       AND (co.legal_owner_type IN ('SOC', 'COM', 'UNI')))\n" +
+            ")\n" +
+            "-- New Journals\n" +
+            "SELECT  cs.chronicle_scenario_name as   scenario_name,\n" +
+            "        wc.chronicle_scenario_code as   scenario_code,\n" +
+            "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
+            "            when 'N' then 'Insert'\n" +
+            "            when 'Y' then 'Update'\n" +
+            "            else 'Update'\n" +
+            "        END) as                         upsert,\n" +
+            "       'J0'||w.elsevier_journal_number  jm_source_reference,\n" +
+            "        w.eph_work_id as                eph_work_id,\n" +
+            "        w.work_title as                 work_title,\n" +
+            "        w.work_subtitle as              work_subtitle,\n" +
+            "        CAST (null as boolean)          electro_rights_indicator,\n" +
+            "        0    as                         volume,\n" +
+            "        CAST (null as integer)          copyright_year,\n" +
+            "        CAST (null as integer)          edition_number,\n" +
+            "        w.launch_date as                planned_launch_date,\n" +
+            "        CAST (null as date)             planned_termination_date,\n" +
+            "        'JNL' as                        f_type,\n" +
+            "        'WAP' as                        f_status,\n" +
+            "        CAST (null as integer)          f_accountable_product,\n" +
+            "        CAST (null as varchar)          pmc_old,                    -- for inserts set null\n" +
+            "        w.pmc_code as                   pmc_new,                    -- for inserts just take w.pmc_code\n" +
+            "       (CASE\n" +
+            "            when (w.open_accesstype_code = 'SM5')                                                                                         then 'F'\n" +
+            "            when (w.open_accesstype_code = 'SM6')                                                                                         then 'S'\n" +
+            "            when (w.open_accesstype_code is null and w.manifestation_types_code = 'SM4')                                                  then 'H'\n" +
+            "            when (w.open_accesstype_code is null and w.manifestation_types_code = 'SM4SO')                                                then 'N'\n" +
+            "--            when (w.open_accesstype_code is null and w.manifestation_types_code = 'SM4' and w.manifestation_personal_model_type = 'SM2P') then 'H'\n" +
+            "--            when (w.open_accesstype_code is null and w.manifestation_types_code is null and w.manifestation_personal_model_type = 'SM2P') then '?'\n" +
+            "            ELSE null\n" +
+            "        END) as                         f_oa_type,\n" +
+            "        w.imprint_code as               f_imprint,\n" +
+            "        w.opco_r12_id as                opco,\n" +
+            "       (CASE\n" +
+            "            when (w.joint_venture_indicator = 'Y')     then 'JVE'\n" +
+            "            when (fo.legal_owner_type is not null)     then  fo.legal_owner_type\n" +
+            "            when (co_soc.legal_owner_type is not null) then  co_soc.legal_owner_type\n" +
+            "            when (co_com.legal_owner_type is not null) then  co_com.legal_owner_type\n" +
+            "            when (co_uni.legal_owner_type is not null) then  co_uni.legal_owner_type\n" +
+            "        ELSE                                                'ELS'\n" +
+            "        END) as                         f_legal_ownership,\n" +
+            "       (CASE\n" +
+            "            when (m.subscription_type = 'Calendar Year') then 'FY'\n" +
+            "            when (m.subscription_type = 'Rolling Year')  then 'RY'\n" +
+            "            when (m.subscription_type = 'Both')          then 'RY'\n" +
+            "            ELSE null\n" +
+            "        END) as                         subscription_type,\n" +
+            "        w.responsibility_centre_code as resp_centre,\n" +
+            "        COALESCE\n" +
+            "           ((CASE WHEN (w.main_language_code = 'English')    then 'EN'\n" +
+            "                  WHEN (w.main_language_code is null)        then 'EN'\n" +
+            "                  WHEN (w.main_language_code = 'French')     then 'FR'\n" +
+            "                  WHEN (w.main_language_code = 'German')     then 'DE'\n" +
+            "                  WHEN (w.main_language_code = 'Spanish')    then 'ES'\n" +
+            "                  WHEN (w.main_language_code = 'Catalan')    then 'CA'\n" +
+            "                  WHEN (w.main_language_code = 'Italian')    then 'IT'\n" +
+            "                  WHEN (w.main_language_code = 'Polish')     then 'PL'\n" +
+            "                  WHEN (w.main_language_code = 'Portuguese') then 'PT'\n" +
+            "             END),w.main_language_code) language_code,\n" +
+            "       'N'  as                          dq_err,\n" +
+            "        w.notified_date as              notified_date\n" +
+            "from    journalmaestro_uat2.jmf_work                 w\n" +
+            "join      journalmaestro_uat2.jmf_work_chronicle     wc  on wc.work_chronicle_id = w.work_chronicle_id\n" +
+            "join      journalmaestro_uat2.jmf_chronicle_scenario cs  on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "left join journalmaestro_uat2.jmf_work_ownership     fo  on fo.f_work = w.work_id\n" +
+            "                                    and fo.journal_ownership_type = 'FO'\n" +
+            "--        manifestation (below) becomes a left join because there are a few single-manifestation exceptions where ISSN <> ISSN-L\n" +
+            "left join journalmaestro_uat2.jmf_manifestation      m   on m.f_work = w.work_id and m.issn = w.issn_l\n" +
+            "left join journalmaestro_uat2.jmf_work_ownership     wo1 on ((wo1.f_work = w.work_id)\n" +
+            "                                     and (wo1.journal_ownership_type = 'FO'))\n" +
+            "--        Co-Owned journals view selects a maximum of three CO-Owned records per journal: one SOCiety, one UNIversity and one COMpany.\n" +
+            "--        business rules declare there to be only one legal owner type per journal\n" +
+            "left join coowned_journals co_soc on co_soc.f_work = w.work_id\n" +
+            "                                 and co_soc.legal_owner_type = 'SOC'\n" +
+            "left join coowned_journals co_com on co_com.f_work = w.work_id\n" +
+            "                                 and co_com.legal_owner_type = 'COM'\n" +
+            "left join coowned_journals co_uni on co_uni.f_work = w.work_id\n" +
+            "                                 and co_uni.legal_owner_type = 'UNI'\n" +
+            "where w.work_journey_identifier = 'A1'\n" +
+            "and   wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
+            "and   w.notified_date is not null\n" +
+            "UNION\n" +
+            "SELECT  cs.chronicle_scenario_name as   scenario_name,\n" +
+            "        wc.chronicle_scenario_code as   scenario_code,\n" +
+            "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
+            "            when 'N' then 'Insert'\n" +
+            "            when 'Y' then 'Update'\n" +
+            "            else 'Update'\n" +
+            "        END) as                         upsert,\n" +
+            "       'J0'||COALESCE(w1.elsevier_journal_number,w0.elsevier_journal_number) as jm_source_reference,\n" +
+            "        COALESCE(w1.eph_work_id, w0.eph_work_id) as eph_work_id,\n" +
+            "        w1.work_title as                work_title,                 -- the TITLE UPDATE\n" +
+            "        CAST (null as varchar) as       work_subtitle,              -- JM does not master subtitle.\n" +
+            "        CAST (null as boolean) as       electro_rights_indicator,\n" +
+            "        CAST (null as integer) as       volume,                     -- for inserts was set 0\n" +
+            "        CAST (null as integer) as       copyright_year,\n" +
+            "        CAST (null as integer) as       edition_number,\n" +
+            "        CAST (null as date) as          planned_launch_date,        -- for inserts was w.launch_date   as planned_launch_date,\n" +
+            "        CAST (null as date) as          planned_termination_date,   -- for inserts will be null\n" +
+            "       'JNL' as                         f_type,\n" +
+            "        CAST (null as varchar) as       f_status,                   -- For renames set status to null, then the value in EPH golden will persist.\n" +
+            "        CAST (null as integer) as       f_accountable_product,\n" +
+            "        CAST (null as varchar) as       pmc_old,                    -- for renames set pmc_old to null.\n" +
+            "        CAST (null as varchar) as       pmc_new,                    -- for renames set pmc_new to null.\n" +
+            "        CAST (null as varchar) as       f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
+            "        CAST (null as varchar) as       f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
+            "        CAST (null as varchar) as       opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
+            "--      CAST (null as varchar) as       f_society_ownership,        -- deprecated field. JM populated this for new journals only.\n" +
+            "        CAST (null as varchar) as       f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
+            "        CAST (null as varchar) as       subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
+            "        CAST (null as varchar) as       resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
+            "        CAST (null as varchar) as       language_code,              -- for inserts, was a translation of w.main_language_code to EN etc.\n" +
+            "       (CASE\n" +
+            "            when (w0.eph_work_id             is null and w1.eph_work_id             is null) then 'Y'\n" +
+            "            when (w0.elsevier_journal_number is null and w1.elsevier_journal_number is null) then 'Y'\n" +
+            "            else 'N'\n" +
+            "        END) as                         dq_err,\n" +
+            "        COALESCE(w1.notified_date, w0.notified_date) as notified_date  -- they should both be set the same\n" +
+            "from  (((journalmaestro_uat2.jmf_work                       w0\n" +
+            "         join  journalmaestro_uat2.jmf_work_chronicle       wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
+            "         join  journalmaestro_uat2.jmf_chronicle_scenario   cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
+            "         left join journalmaestro_uat2.jmf_work             w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
+            "                                          and  (w1.work_journey_identifier = 'A1')))\n" +
+            "where  wc.chronicle_scenario_code = 'RN'\n" +
+            "and    w0.work_journey_identifier = 'A0'\n" +
+            "and    w1.notified_date is not null\n" +
+            "and    w0.work_title is not null\n" +
+            "and    w1.work_title is not null\n" +
+            "and    w1.work_title <> w0.work_title\n" +
+            "UNION\n" +
+            "SELECT  cs.chronicle_scenario_name as   scenario_name,\n" +
+            "        wc.chronicle_scenario_code as   scenario_code,\n" +
+            "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
+            "            when 'N' then 'Insert'\n" +
+            "            when 'Y' then 'Update'\n" +
+            "            else 'Update'\n" +
+            "        END) as                         upsert,\n" +
+            "       'J0'||COALESCE(w1.elsevier_journal_number, w0.elsevier_journal_number) as jm_source_reference,\n" +
+            "        COALESCE(w1.eph_work_id, w0.eph_work_id) as eph_work_id,\n" +
+            "        CAST (null as varchar)          work_title,                 -- for inserts was w.work_title    as work_title,\n" +
+            "        CAST (null as varchar)          work_subtitle,              -- for inserts was w.work_subtitle as work_subtitle,\n" +
+            "        CAST (null as boolean)          electro_rights_indicator,\n" +
+            "        CAST (null as integer)          volume,                     -- for inserts was set 0\n" +
+            "        CAST (null as integer)          copyright_year,\n" +
+            "        CAST (null as integer)          edition_number,\n" +
+            "        CAST (null as date)             planned_launch_date,        -- for inserts was w.launch_date   as planned_launch_date,\n" +
+            "        CAST (null as date) as          planned_termination_date,   -- the same field is used for both discontinues and transfers (a journal is never both)\n" +
+            "        'JNL' as                        f_type,\n" +
+            "        CAST (null as varchar)          f_status,                   -- For PMC changes, CAR (Change Allocated Resource), set status to null, then the current value in EPH gd_wwork will persist (normally 'WLA' or 'WPL')\n" +
+            "        CAST (null as integer)          f_accountable_product,\n" +
+            "        w1.pmc_old as                   pmc_old,                    -- pmc_old/new are found on CAR updates on the A1 record.\n" +
+            "        w1.pmc_new as                   pmc_new,                    -- pmc_old/new are found on CAR updates on the A1 record.\n" +
+            "        CAST (null as varchar)          f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
+            "        CAST (null as varchar)          f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
+            "        CAST (null as varchar)          opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
+            "--      CAST (null as varchar)          f_society_ownership,        -- deprecated field. JM populated this for new journals only.\n" +
+            "        CAST (null as varchar)          f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
+            "        CAST (null as varchar)          subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
+            "        CAST (null as varchar)          resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
+            "        CAST (null as varchar)          language_code,               -- for inserts, was a translation of w.main_language_code to EN etc.\n" +
+            "       (CASE\n" +
+            "            when (w0.eph_work_id             is null and w1.eph_work_id             is null) then 'Y'\n" +
+            "            when (w0.elsevier_journal_number is null and w1.elsevier_journal_number is null) then 'Y'\n" +
+            "            else 'N'\n" +
+            "        END) as                         dq_err,\n" +
+            "        w1.notified_date as             notified_date\n" +
+            "from journalmaestro_uat2.jmf_work                     w0\n" +
+            "join  journalmaestro_uat2.jmf_work_chronicle     wc on wc.work_chronicle_id       = w0.work_chronicle_id\n" +
+            "join  journalmaestro_uat2.jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "left join journalmaestro_uat2.jmf_work           w1 on w1.work_chronicle_id       = w0.work_chronicle_id\n" +
+            "                               and w1.elsevier_journal_number = w0.elsevier_journal_number\n" +
+            "                               and w1.work_journey_identifier = 'A1'\n" +
+            "where   w0.work_journey_identifier = 'A0'\n" +
+            "and     wc.chronicle_scenario_code = 'CA'\n" +
+            "and     w1.pmc_family_resource_details_id is not null\n" +
+            "and     w1.pmc_old is not null\n" +
+            "and     w1.pmc_new is not null\n" +
+            "and     w1.pmc_new <> w1.pmc_old\n" +
+            "and     w1.notified_date is not null\n" +
+            "UNION\n" +
+            "SELECT  cs.chronicle_scenario_name as   scenario_name,\n" +
+            "        wc.chronicle_scenario_code as   scenario_code,\n" +
+            "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
+            "            when 'N' then 'Insert'\n" +
+            "            when 'Y' then 'Update'\n" +
+            "            else 'Update'\n" +
+            "        END) as                         upsert,\n" +
+            "       'J0'||COALESCE(w1.elsevier_journal_number,w0.elsevier_journal_number) as jm_source_reference,\n" +
+            "        COALESCE(w1.eph_work_id, w0.eph_work_id) as eph_work_id,\n" +
+            "        CAST (null as varchar)          work_title,                 -- for inserts was w.work_title    as work_title,\n" +
+            "        CAST (null as varchar)          work_subtitle,              -- for inserts was w.work_subtitle as work_subtitle,\n" +
+            "        CAST (null as boolean)          electro_rights_indicator,\n" +
+            "        CAST (null as integer)          volume,                     -- for inserts was set 0\n" +
+            "        CAST (null as integer)          copyright_year,\n" +
+            "        CAST (null as integer)          edition_number,\n" +
+            "        CAST (null as date)             planned_launch_date,        -- for inserts was w.launch_date   as planned_launch_date,\n" +
+            "        w1.discontinue_date as          planned_termination_date,   -- populated on A1 Discontinue records\n" +
+            "        'JNL' as                        f_type,\n" +
+            "        'WDA' as                        f_status,                   -- set status to 'WDA' (DISCONTINUE APPROVED).\n" +
+            "        CAST (null as integer)          f_accountable_product,\n" +
+            "        CAST (null as varchar)          pmc_old,                    -- don't change PMC code with discontinues\n" +
+            "        CAST (null as varchar)          pmc_new,                    -- don't change PMC code with discontinues\n" +
+            "        CAST (null as varchar)          f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
+            "        CAST (null as varchar)          f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
+            "        CAST (null as varchar)          opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
+            "--      CAST (null as varchar)          f_society_ownership,        -- deprecated field. JM populated this for new journals only.\n" +
+            "        CAST (null as varchar)          f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
+            "        CAST (null as varchar)          subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
+            "        CAST (null as varchar)          resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
+            "        CAST (null as varchar)          language_code,              -- for inserts, was a translation of w.main_language_code to EN etc.\n" +
+            "       (CASE\n" +
+            "            when (w0.eph_work_id             is null and w1.eph_work_id             is null) then 'Y'\n" +
+            "            when (w0.elsevier_journal_number is null and w1.elsevier_journal_number is null) then 'Y'\n" +
+            "            else 'N'\n" +
+            "        END) as                         dq_err,\n" +
+            "        COALESCE(w1.notified_date, w0.notified_date) as notified_date  -- they should both be set the same\n" +
+            "from  (((journalmaestro_uat2.jmf_work                     w0\n" +
+            "         join  journalmaestro_uat2.jmf_work_chronicle     wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
+            "         join  journalmaestro_uat2.jmf_chronicle_scenario cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
+            "         left join journalmaestro_uat2.jmf_work           w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
+            "                                        and  (w1.work_journey_identifier = 'A1')))\n" +
+            "where  w0.work_journey_identifier = 'A0'\n" +
+            "and    wc.chronicle_scenario_code = 'DC'\n" +
+            "and    w0.notified_date is not null\n" +
+            "UNION\n" +
+            "SELECT  cs.chronicle_scenario_name as   scenario_name,\n" +
+            "        wc.chronicle_scenario_code as   scenario_code,\n" +
+            "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
+            "            when 'N' then 'Insert'\n" +
+            "            when 'Y' then 'Update'\n" +
+            "            else 'Update'\n" +
+            "        END) as                         upsert,\n" +
+            "       'J0'||COALESCE(w1.elsevier_journal_number, w0.elsevier_journal_number) as jm_source_reference,\n" +
+            "        COALESCE(w1.eph_work_id, w0.eph_work_id) as eph_work_id,\n" +
+            "        CAST (null as varchar)          work_title,                 -- for inserts was w.work_title    as work_title,\n" +
+            "        CAST (null as varchar)          work_subtitle,              -- for inserts was w.work_subtitle as work_subtitle,\n" +
+            "        CAST (null as boolean)          electro_rights_indicator,\n" +
+            "        CAST (null as integer)          volume,                     -- for inserts was set 0\n" +
+            "        CAST (null as integer)          copyright_year,\n" +
+            "        CAST (null as integer)          edition_number,\n" +
+            "        CAST (null as date)             planned_launch_date,        -- for inserts was w.launch_date   as planned_launch_date,\n" +
+            "        w1.transfer_date as             planned_termination_date,   -- transfer_date populated on A1 Transfer records.\n" +
+            "        'JNL' as                        f_type,\n" +
+            "       (CASE\n" +
+            "            when lower(w1.ownership_brand_type) = 'elsevier'    then 'WVA' -- for 'Elsevier'      set work status to 'WVA' (DiVestment Approved) EPHD-2915\n" +
+            "            when lower(w1.ownership_brand_type) = 'third party' then 'WTA' -- for 'Third Parties' set work status to 'WTA' (Transfer Approved)   EPHD-2915\n" +
+            "            when lower(w1.ownership_brand_type) = 'society'     then 'WTA' -- for 'Society'       set work status to 'WTA' (Transfer Approved)   EPHD-2915\n" +
+            "            else                                                     'WVA' -- else set work status to 'WVA' (Divestment Approved)\n" +
+            "        END) as                         f_status,\n" +
+            "        CAST (null as integer)          f_accountable_product,\n" +
+            "        CAST (null as varchar)          pmc_old,                    -- don't change PMC code with transfers\n" +
+            "        CAST (null as varchar)          pmc_new,                    -- don't change PMC code with transfers\n" +
+            "        CAST (null as varchar)          f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
+            "        CAST (null as varchar)          f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
+            "        CAST (null as varchar)          opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
+            "--      CAST (null as varchar)          f_society_ownership,        -- deprecated field. JM populated this for new journals only.\n" +
+            "        CAST (null as varchar)          f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
+            "        CAST (null as varchar)          subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
+            "        CAST (null as varchar)          resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
+            "        CAST (null as varchar)          language_code,              -- for inserts, was a translation of w.main_language_code to EN etc.\n" +
+            "       (CASE\n" +
+            "            when (w0.eph_work_id             is null and w1.eph_work_id             is null) then 'Y'\n" +
+            "            when (w0.elsevier_journal_number is null and w1.elsevier_journal_number is null) then 'Y'\n" +
+            "            else 'N'\n" +
+            "        END) as                         dq_err,\n" +
+            "        COALESCE(w1.notified_date, w0.notified_date) as notified_date  -- they should both be set the same\n" +
+            "from  (((journalmaestro_uat2.jmf_work                     w0\n" +
+            "         join  journalmaestro_uat2.jmf_work_chronicle     wc on  (wc.work_chronicle_id       = w0.work_chronicle_id))\n" +
+            "         join  journalmaestro_uat2.jmf_chronicle_scenario cs on  (cs.chronicle_scenario_code = wc.chronicle_scenario_code))\n" +
+            "         left join journalmaestro_uat2.jmf_work           w1 on ((w1.work_chronicle_id       = w0.work_chronicle_id)\n" +
+            "                                        and  (w1.work_journey_identifier = 'A1')))\n" +
+            "where  w0.work_journey_identifier = 'A0'\n" +
+            "and    wc.chronicle_scenario_code = 'TR'\n" +
+            "and    w0.notified_date is not null) where jm_source_reference in ('%s')\n" +
+            "order by notified_date desc, jm_source_reference desc, upsert desc, scenario_name desc";
 
     public static String GET_WORK_IDENTIFIER_DQ_QUERY ="select * from (select cs.chronicle_scenario_name as                                      scenario_name,\n" +
             "       wc.chronicle_scenario_code as                                      scenario_code,\n" +

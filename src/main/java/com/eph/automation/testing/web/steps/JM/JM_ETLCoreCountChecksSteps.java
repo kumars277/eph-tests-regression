@@ -89,22 +89,18 @@ public class JM_ETLCoreCountChecksSteps {
             case "etl_accountable_product_dq_v":
                 sqlDL = JM_ETLCoreCountChecksSQL.GET_JMF_STAGING_ACCOUNTABLE_PRODUCT;
                 break;
-
             case "etl_wwork_dq_v":
                 sqlDL = JM_ETLCoreCountChecksSQL.GET_JMF_STAGING_WORK;
                 break;
-
             case "etl_work_identifier_dq_v":
                 sqlDL = JM_ETLCoreCountChecksSQL.GET_JMF_STAGING_WORK_IDENTIFIER;
                 break;
-
             case "etl_work_subject_area_dq_v":
                 sqlDL = JM_ETLCoreCountChecksSQL.GET_JMF_STAGING_WORK_SUBJECT_AREA;
                 break;
             case "etl_work_person_role_dq_v":
                 sqlDL = JM_ETLCoreCountChecksSQL.GET_JMF_STAGING_WORK_PERSON_ROLE;
                 break;
-
             case "etl_manifestation_updates1_v":
                 sqlDL = JM_ETLCoreCountChecksSQL.GET_JMF_STAGING_MANIFESTATION_UPDATES;
                 break;
