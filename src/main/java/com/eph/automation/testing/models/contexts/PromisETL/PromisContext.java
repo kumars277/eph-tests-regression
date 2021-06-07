@@ -21,4 +21,5 @@ public class PromisContext {
     public static List<PRMTablesETLObject> tbPRMDataObjectsFromLatestQuery;
     public static List<PRMTablesETLObject> tbPRMDataObjectsFromTransformMapping;
     public static List<PRMTablesETLObject> tbPRMDataObjectsFromTransformMappingCurrent;
+    public static List<PRMTablesETLObject> tbPRMDataObjectsFromDL;
     }
