@@ -40,9 +40,11 @@ public class SpecificScenariosSteps {
 
         if(false) {RowFrom = 1;             RowTill = 6;}//running on local
         else{
+
             RowFrom = Integer.valueOf(TestContext.getValues().rowFrom);
 
-            if(TestContext.getValues().rowTill.equalsIgnoreCase(""))
+            if(TestContext.getValues().rowTill.equalsIgnoreCase("")
+            |Integer.valueOf(TestContext.getValues().rowTill)==0)
             {
                 RowTill=DataQualityContext.dataFileRowColumn.size();
             }
