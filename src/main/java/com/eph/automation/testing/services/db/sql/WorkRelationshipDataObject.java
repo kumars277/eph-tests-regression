@@ -16,6 +16,10 @@ public class WorkRelationshipDataObject {
     public String getEFFECTIVE_START_DATE() {return EFFECTIVE_START_DATE;}
     public void setEFFECTIVE_START_DATE(String EFFECTIVE_START_DATE) {this.EFFECTIVE_START_DATE = EFFECTIVE_START_DATE;}
 
+    public String EFFECTIVE_END_DATE;
+    public String getEFFECTIVE_END_DATE() {return EFFECTIVE_END_DATE;}
+    public void setEFFECTIVE_END_DATE(String EFFECTIVE_END_DATE) {this.EFFECTIVE_END_DATE = EFFECTIVE_END_DATE;}
+
     public String getF_PARENT() {return F_PARENT;}
     public void setF_PARENT(String f_PARENT) {F_PARENT = f_PARENT;}
 

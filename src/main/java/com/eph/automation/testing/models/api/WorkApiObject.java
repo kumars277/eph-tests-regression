@@ -102,13 +102,13 @@ public class WorkApiObject {
         }
         catch (NullPointerException e)
         {
-            e.getMessage();
+            Log.info(e.getMessage());
             DataQualityContext.api_response.prettyPrint();
             failed = true;
         }
         catch (Exception e)
         {
-            e.getMessage();
+            Log.info(e.getMessage());
             failed = true;
         }
         finally {
