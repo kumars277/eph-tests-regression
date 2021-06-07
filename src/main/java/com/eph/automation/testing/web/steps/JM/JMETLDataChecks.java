@@ -1259,7 +1259,7 @@ public class JMETLDataChecks {
                         JMContext.JMObjectsFromDL.sort(Comparator.comparing(JMETLObject::getjm_source_reference)); //sort data in the lists
                         JMContext.JMTransformObjectsFromDL.sort(Comparator.comparing(JMETLObject::getjm_source_reference));
                         int j=0;
-                        String[] JMF_AccProdDQColumnName = {"getscenario", "getupsert", "getjm_source_reference", "getacc_prod_id", "gethfm_hierarchy_position_code", "getwork_title", "getdq_err"};
+                        String[] JMF_AccProdDQColumnName = {"getscenario_name", "getupsert", "getjm_source_reference", "getacc_prod_id", "gethfm_hierarchy_position_code", "getwork_title", "getdq_err"};
                         String[] JMF_AccProdColumn = {"getscenario_name", "getupsert", "getjm_source_reference", "getacc_prod_id", "gethfm_hierarchy_position_code", "getwork_title", "getdq_err"};
                         for (String strTemp : JMF_AccProdDQColumnName) {
 
