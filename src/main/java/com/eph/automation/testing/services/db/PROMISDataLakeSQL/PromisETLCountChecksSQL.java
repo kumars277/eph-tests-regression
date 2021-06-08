@@ -38,13 +38,13 @@ public class PromisETLCountChecksSQL {
             " where inbound_ts = (select inbound_ts from "+GetPRMDLDBUser.getPRMDataBase()+".%s order by inbound_ts desc limit 1)";
 
     public static String GET_Promis_prmlondest_part = "select count(*) as Total_Count from (SELECT\n" +
-            " ppp.pub_idt \n" +
-            ", ppp.pub_vol_idt \n" +
-            ", ppp.vol_prt_idt \n" +
+            " cast(ppp.pub_idt as integer) as pub_idt \n" +
+            ", cast(ppp.pub_vol_idt as integer) as pub_vol_idt \n" +
+            ", cast(ppp.vol_prt_idt as integer) as vol_prt_idt \n" +
             ", ppp.lon_des \n" +
             ", ppp.inbound_ts \n" +
             "FROM "+GetPRMDLDBUser.getPRMDataBase()+".%s ppp\n" +
-            "  where pub_vol_idt = '0')" +
+            "  where pub_vol_idt = 0)" +
             " where inbound_ts = (select inbound_ts from "+GetPRMDLDBUser.getPRMDataBase()+".%s order by inbound_ts desc limit 1)";
 
     public static String GET_Promis_prmpricest_part = "select count(*) as Total_Count from (SELECT\n" +
@@ -159,11 +159,11 @@ public class PromisETLCountChecksSQL {
             "FROM "+GetPRMDLDBUser.getPRMDataBase()+".%s ppp \n" +
             "  WHERE ( \n" +
             "    (rtp_rtp_cod = 'BOXST' \n" +
-            "    and ppp.pub_pub_idt||ppp.rtp_rtp_cod||ppp.rel_title||ppp.rel_no IN \n" +
-            "     (SELECT pp1.pub_pub_idt||pp1.rtp_rtp_cod||pp1.rel_title||max(pp1.rel_no) \n" +
+            "    and cast(ppp.pub_pub_idt as varchar)||ppp.rtp_rtp_cod||ppp.rel_title||cast(ppp.rel_no as varchar) IN \n" +
+            "     (SELECT cast(pp1.pub_pub_idt as varchar)||pp1.rtp_rtp_cod||pp1.rel_title||cast(max(pp1.rel_no) as varchar) \n" +
             "      FROM "+GetPRMDLDBUser.getPRMDataBase()+".%s pp1 \n" +
             "      WHERE rtp_rtp_cod = 'BOXST' \n" +
-            "      GROUP BY pp1.pub_pub_idt||pp1.rtp_rtp_cod||pp1.rel_title) \n" +
+            "      GROUP BY cast(pp1.pub_pub_idt as varchar)||pp1.rtp_rtp_cod||pp1.rel_title) \n" +
             "    ) \n" +
             "    or (rtp_rtp_cod <> 'BOXST')))" +
             " where inbound_ts = (select inbound_ts from "+GetPRMDLDBUser.getPRMDataBase()+".%s order by inbound_ts desc limit 1)";
@@ -383,15 +383,15 @@ public class PromisETLCountChecksSQL {
             "coalesce(crr.work_type, 'null') <> coalesce(prev.work_type, 'null')))";
 
     public static String GET_Promis_Urls_DeltaQuery = "select count(*) as Total_Count from (with crr_dataset as( \n" +
-            "  select pub_idt,epr_id,u_key,url_code,url_name,url,url_title,work_type,transform_file_ts from promis_staging_sit.promis_transform_file_history_urls_part \n" +
-            "  where transform_file_ts = (select max(transform_file_ts ) from promis_staging_sit.promis_transform_file_history_urls_part)\n" +
+            "  select pub_idt,epr_id,u_key,url_code,url_name,url,url_title,work_type,transform_file_ts from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_file_history_urls_part \n" +
+            "  where transform_file_ts = (select max(transform_file_ts ) from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_file_history_urls_part)\n" +
             "  ),\n" +
             "  prev_dataset as (\n" +
             "  select pub_idt,epr_id,u_key,url_code,url_name,url,url_title,work_type,transform_file_ts\n" +
-            "  from promis_staging_sit.promis_transform_file_history_urls_part\n" +
+            "  from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_file_history_urls_part\n" +
             "  where transform_file_ts = (select distinct transform_file_ts\n" +
             "from (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn \n" +
-            "from promis_staging_sit.promis_transform_file_history_urls_part dhap\n" +
+            "from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_file_history_urls_part dhap\n" +
             ")\n" +
             "where rn = 2\n" +
             ")\n" +
@@ -419,15 +419,15 @@ public class PromisETLCountChecksSQL {
             "coalesce(crr.work_type, 'null') <> coalesce(prev.work_type, 'null')))";
 
     public static String GET_Promis_Work_Rels_DeltaQuery = "select count(*) as Total_Count from (with crr_dataset as( \n" +
-            "  select parent_pub_idt,parent_epr_id,u_key,child_pub_idt,child_epr_id,child_title,child_related_type_code,child_related_type_name,child_related_type_roll_up,child_related_status_code,child_related_status_name,child_related_status_roll_up,relationship_type_code,relationship_type_name,work_type,transform_file_ts from promis_staging_sit.promis_transform_file_history_work_rels_part \n" +
-            "  where transform_file_ts = (select max(transform_file_ts ) from promis_staging_sit.promis_transform_file_history_work_rels_part)\n" +
+            "  select parent_pub_idt,parent_epr_id,u_key,child_pub_idt,child_epr_id,child_title,child_related_type_code,child_related_type_name,child_related_type_roll_up,child_related_status_code,child_related_status_name,child_related_status_roll_up,relationship_type_code,relationship_type_name,work_type,transform_file_ts from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_file_history_work_rels_part \n" +
+            "  where transform_file_ts = (select max(transform_file_ts ) from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_file_history_work_rels_part)\n" +
             "  ),\n" +
             "  prev_dataset as (\n" +
             "  select parent_pub_idt,parent_epr_id,u_key,child_pub_idt,child_epr_id,child_title,child_related_type_code,child_related_type_name,child_related_type_roll_up,child_related_status_code,child_related_status_name,child_related_status_roll_up,relationship_type_code,relationship_type_name,work_type,transform_file_ts\n" +
-            "  from promis_staging_sit.promis_transform_file_history_work_rels_part\n" +
+            "  from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_file_history_work_rels_part\n" +
             "  where transform_file_ts = (select distinct transform_file_ts\n" +
             "from (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn \n" +
-            "from promis_staging_sit.promis_transform_file_history_work_rels_part dhap\n" +
+            "from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_file_history_work_rels_part dhap\n" +
             ")\n" +
             "where rn = 2\n" +
             ")\n" +
@@ -463,7 +463,7 @@ public class PromisETLCountChecksSQL {
 
     public static String GET_Promis_CurrentCounts = "select count(*) as Total_Count from "+GetPRMDLDBUser.getPRMDataBase()+".%s";
 
-    public static String GET_Promis_TransformHistory_Count = "select count(*) as Total_Count from "+GetPRMDLDBUser.getPRMDataBase()+".%s where inbound_ts in (select inbound_ts from "+GetPRMDLDBUser.getPRMDataBase()+".%s order by inbound_ts desc limit 1)";
+    public static String GET_Promis_TransformHistory_Count = "select count(*) as Total_Count from "+GetPRMDLDBUser.getPRMDataBase()+".%s where transform_file_ts in (select transform_file_ts from "+GetPRMDLDBUser.getPRMDataBase()+".%s order by transform_file_ts desc limit 1)";
 
     public static String GET_Promis_Delta = "select count(*) as Total_Count from "+GetPRMDLDBUser.getPRMDataBase()+".%s";
 
@@ -708,46 +708,35 @@ public class PromisETLCountChecksSQL {
             ", delete_flag\n" +
             "from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_history_person_roles_excl_delta)";
 
-    public static String GET_Promis_Works_LatestQuery="select count(*) as Total_Count from(\n" +
-            "select pub_idt\n" +
-            ", epr_id\n" +
-            ", u_key\n" +
-            ", role_description\n" +
-            ", sequence_number\n" +
-            ", group_number\n" +
-            ", initials\n" +
-            ", last_name\n" +
-            ", title\n" +
-            ", honours\n" +
-            ", affiliation\n" +
-            ", image_url\n" +
-            ", footnote_txt\n" +
-            ", notes_txt\n" +
-            ", work_type\n" +
-            ", inbound_ts\n" +
-            ", try(date_parse(insert_timestamp,'%%Y-%%m-%%dT%%H:%%i:%%s.%%fZ'))  as last_updated_date\n" +
-            ", case when delta_mode = 'D' then true else false end as delete_flag \n" +
-            "from "+GetPRMDLDBUser.getPRMDataBase()+".promis_delta_current_person_roles\n" +
-            "union all\n" +
-            "select pub_idt\n" +
-            ", epr_id\n" +
-            ", u_key\n" +
-            ", role_description\n" +
-            ", sequence_number\n" +
-            ", group_number\n" +
-            ", initials\n" +
-            ", last_name\n" +
-            ", title\n" +
-            ", honours\n" +
-            ", affiliation\n" +
-            ", image_url\n" +
-            ", footnote_txt\n" +
-            ", notes_txt\n" +
-            ", work_type\n" +
-            ", inbound_ts\n" +
-            ", last_updated_date\n" +
-            ", delete_flag\n" +
-            "from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_history_person_roles_excl_delta)";
+    public static String GET_Promis_Works_LatestQuery=
+
+            "select count(*) as Total_Count from (select pub_idt\n" +
+                    ", epr_id\n" +
+                    ", u_key\n" +
+                    ", journal_aims_scope\n" +
+                    ", elsevier_com_ind\n" +
+                    ", primary_author\n" +
+                    ", previous_title\n" +
+                    ", work_type\n" +
+                    ", internal_elsevier_division\n" +
+                    ", inbound_ts\n" +
+                    ", try(date_parse(insert_timestamp,'%%Y-%%m-%%dT%%H:%%i:%%s.%%fZ'))  as last_updated_date\n" +
+                    ", case when delta_mode = 'D' then true else false end as delete_flag \n" +
+                    "from "+GetPRMDLDBUser.getPRMDataBase()+".promis_delta_current_works\n" +
+                    "union all\n" +
+                    "select pub_idt\n" +
+                    ", epr_id\n" +
+                    ", u_key\n" +
+                    ", journal_aims_scope\n" +
+                    ", elsevier_com_ind\n" +
+                    ", primary_author\n" +
+                    ", previous_title\n" +
+                    ", work_type\n" +
+                    ", internal_elsevier_division\n" +
+                    ", inbound_ts\n" +
+                    ", last_updated_date\n" +
+                    ", delete_flag\n" +
+                    "from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_history_works_excl_delta)";
 
     public static String GET_Promis_Metrics_LatestQuery="select count(*) as Total_Count from(\n" +
             "select pub_idt\n" +
@@ -916,7 +905,7 @@ public class PromisETLCountChecksSQL {
             ", pmc.div_idt as internal_elsevier_division\n" +
             ", inf.inbound_ts\n" +
             "from "+GetPRMDLDBUser.getPRMDataBase()+".promis_prmpubinft_current inf\n" +
-            "left outer join "+GetPRMDLDBUser.getPRMDataBase()+".promis_prmlondest_current lon on inf.pub_idt = lon.pub_idt\n" +
+            "left outer join "+GetPRMDLDBUser.getPRMDataBase()+".promis_prm_londes_2_html_current lon on inf.pub_idt = lon.pub_idt\n" +
             "left outer join "+GetPRMDLDBUser.getPRMDataBase()+".promis_prmpubrelt_current rel on (inf.pub_idt = rel.pub_pub_idt and rel.rtp_rtp_cod = 'RDRCT')\n" +
             "left outer join "+GetPRMDLDBUser.getPRMDataBase()+".promis_prmincpmct_current inc on inc.pub_idt = inf.pub_idt\n" +
             "left outer join "+GetPRMDLDBUser.getPRMDataBase()+".promis_prmpmccodt_current pmc on pmc.mkt_idt = inc.mkt_idt)";

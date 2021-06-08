@@ -39,7 +39,7 @@ public class PromisETLCountChecks {
             case "promis_prmclst_part" :
                 PromisSQL = String.format(PromisETLCountChecksSQL.GET_Promis_prmclst_part, InboundtableName, InboundtableName);
                 break;
-            case "promis_prmlondest_part" :
+            case "promis_prm_londes_2_html_part" :
                 PromisSQL = String.format(PromisETLCountChecksSQL.GET_Promis_prmlondest_part, InboundtableName, InboundtableName);
                 break;
             case "promis_prmpricest_part" :

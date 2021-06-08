@@ -14,6 +14,7 @@ public class PromisContext {
     public static List<PRMTablesInboundObject> tbPRMDataObjectsFromInbound;
     public static List<PRMTablesCurrentObject> tbPRMDataObjectsFromCurrent;
     public static List<PRMTablesETLObject> tbPRMDataObjectsFromDeltaQuery;
+    public static List<PRMTablesETLObject> tbPRMDataObjectsFromtransformFile;
     public static List<PRMTablesETLObject> tbPRMDataObjectsFromDelta;
     public static List<PRMTablesETLObject> tbPRMDataObjectsFromHistoryExcludingQuery;
     public static List<PRMTablesETLObject> tbPRMDataObjectsFromHistoryExcluding;
