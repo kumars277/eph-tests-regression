@@ -17,17 +17,29 @@ Feature:Validate data for Promis between transform tables
       | 5               |subject_areas  |promis_transform_current_subject_areas |
       | 5               |pricing        |promis_transform_current_pricing       |
       | 5               |person_roles   |promis_transform_current_person_roles  |
-     # | 5               |works          |promis_transform_current_works         |
+      | 5               |works          |promis_transform_current_works         |
       | 5               |metrics        |promis_transform_current_metrics       |
       | 5               |urls           |promis_transform_current_urls          |
       | 5               |work_rels      |promis_transform_current_work_rels     |
 
-
-    # Add count and comparison check for the current.
-#      |numberOfRecords  |CurrentTable                                      |transform_file_history                     |
- #     |5                |   promis_transform_current_subject_areas         |promis_transform_file_history_subject_areas_part
-
-
+  @PROMISETL
+  Scenario Outline: Verify that Promis is correct between Current and transform History tables
+    Given We know the number of Promis <PromisCurrentTable> data for the current
+    Then Get the count for Promis <TransformHistoryTable> Transform Hisory with the latest timestamp
+    And Compare the Promis count for <TransformHistoryTable> table between Current and Transform Hisory with the latest timestamp
+#    Given We get the <numberOfRecords> random Promis DeltaQuery ids of <Deltatablename>
+#    When We get Promis Delta Query records from <DeltaQueryTable>
+#    Then We get the Promis Delta records from <Deltatablename>
+#    And Compare Promis records for delta query and delta tables of <Deltatablename>
+    Examples:
+      |numberOfRecords  |PromisCurrentTable                    |TransformHistoryTable                             |
+      | 5               |promis_transform_current_subject_areas|promis_transform_file_history_subject_areas_part  |
+      | 5               |promis_transform_current_pricing      |promis_transform_file_history_pricing_part        |
+      | 5               |promis_transform_current_person_roles |promis_transform_file_history_person_roles_part   |
+      | 5               |promis_transform_current_works        |promis_transform_file_history_works_part          |
+      | 5               |promis_transform_current_metrics      |promis_transform_file_history_metrics_part        |
+      | 5               |promis_transform_current_urls         |promis_transform_file_history_urls_part           |
+      | 5               |promis_transform_current_work_rels    |promis_transform_file_history_work_rels_part      |
 
   @PROMISETL
   Scenario Outline: Verify that Promis is correct between Delta Query and Delta tables
@@ -45,8 +57,8 @@ Feature:Validate data for Promis between transform tables
       | 5               |promis_transform_file_history_person_roles_part   |promis_delta_current_person_roles  |
       | 5               |promis_transform_file_history_works_part          |promis_delta_current_works         |
       | 5               |promis_transform_file_history_metrics_part        |promis_delta_current_metrics       |
-   #   | 5               |promis_transform_file_history_urls_part           |promis_delta_current_urls          |
-   #   | 5               |promis_transform_file_history_work_rels_part      |promis_delta_current_work_rels     |
+      | 5               |promis_transform_file_history_urls_part           |promis_delta_current_urls          |
+      | 5               |promis_transform_file_history_work_rels_part      |promis_delta_current_work_rels     |
 
 
   @PROMISETL
@@ -59,14 +71,14 @@ Feature:Validate data for Promis between transform tables
     Then We get the Promis History Excluding records from <HistExcltablename>
     And Compare Promis records for History Excluding query and History Excluding tables of <tablename>
     Examples:
-      |numberOfRecords  |tablename      |HistExcltablename                                 |
-      | 5               |subject_areas  |promis_transform_history_subject_areas_excl_delta |
-      | 5               |pricing        |promis_transform_history_pricing_excl_delta       |
-      | 5               |person_roles   |promis_transform_history_person_roles_excl_delta  |
-      | 5               |works          |promis_transform_history_works_excl_delta         |
-      | 5               |metrics        |promis_transform_history_metrics_excl_delta       |
-      | 5               |urls           |promis_transform_history_urls_excl_delta          |
-      | 5               |work_rels      |promis_transform_history_work_rels_excl_delta     |
+      |numberOfRecords  |tablename      |HistExcltablename                                   |
+      | 5               |subject_areas  |promis_transform_history_subject_areas_excl_delta_v |
+      | 5               |pricing        |promis_transform_history_pricing_excl_delta_v       |
+      | 5               |person_roles   |promis_transform_history_person_roles_excl_delta_v  |
+      | 5               |works          |promis_transform_history_works_excl_delta_v         |
+      | 5               |metrics        |promis_transform_history_metrics_excl_delta_v       |
+      | 5               |urls           |promis_transform_history_urls_excl_delta_v          |
+      | 5               |work_rels      |promis_transform_history_work_rels_excl_delta_v     |
 
   @PROMISETL
   Scenario Outline: Verify that all Promis data is transferred between Latest query and Latest tables
@@ -82,16 +94,12 @@ Feature:Validate data for Promis between transform tables
       | 5               |subject_areas  |promis_transform_latest_subject_areas |
       | 5               |pricing        |promis_transform_latest_pricing       |
       | 5               |person_roles   |promis_transform_latest_person_roles  |
-    #  | 5               |works          |promis_transform_latest_works         |
+      | 5               |works          |promis_transform_latest_works         |
       | 5               |metrics        |promis_transform_latest_metrics       |
       | 5               |urls           |promis_transform_latest_urls          |
       | 5               |work_rels      |promis_transform_latest_work_rels     |
 
 
-
-
-
-        ##############################
 
 
 

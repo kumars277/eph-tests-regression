@@ -1,6 +1,6 @@
 Feature: JM ETL Core tests
 
-  @JMETL
+  @JMETLCore
   Scenario Outline: Verify that all JM Transformed ETL data is transferred to ETL tables
     Given We get the <numberOfRecords> random JM ETL ids of <ETLtable>
     When We get the JM Transformed ETL Query records from <ETLtable>

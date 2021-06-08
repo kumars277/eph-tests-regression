@@ -461,6 +461,9 @@ public class PromisETLCountChecksSQL {
             "coalesce(crr.work_type, 'null') <> coalesce(prev.work_type, 'null') or\n" +
             "coalesce(crr.child_related_type_name, 'null') <> coalesce(prev.child_related_type_name, 'null')))";
 
+    public static String GET_Promis_CurrentCounts = "select count(*) as Total_Count from "+GetPRMDLDBUser.getPRMDataBase()+".%s";
+
+    public static String GET_Promis_TransformHistory_Count = "select count(*) as Total_Count from "+GetPRMDLDBUser.getPRMDataBase()+".%s where inbound_ts in (select inbound_ts from "+GetPRMDLDBUser.getPRMDataBase()+".%s order by inbound_ts desc limit 1)";
 
     public static String GET_Promis_Delta = "select count(*) as Total_Count from "+GetPRMDLDBUser.getPRMDataBase()+".%s";
 

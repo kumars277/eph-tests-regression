@@ -1,21 +1,26 @@
 package com.eph.automation.testing.web.steps.PROMISDataLake;
 
-import com.eph.automation.testing.configuration.*;
-import com.eph.automation.testing.helper.*;
+import com.eph.automation.testing.configuration.Constants;
+import com.eph.automation.testing.configuration.DBManager;
+import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.PromisETL.PromisContext;
 import com.eph.automation.testing.models.dao.PROMISDataLake.PRMTablesCurrentObject;
 import com.eph.automation.testing.models.dao.PROMISDataLake.PRMTablesETLObject;
+import com.eph.automation.testing.models.dao.PROMISDataLake.PRMTablesInboundObject;
 import com.eph.automation.testing.services.db.PROMISDataLakeSQL.PromisETLDataCheckSQL;
 import com.google.common.base.Joiner;
-import cucumber.api.java.en.*;
+import cucumber.api.java.en.And;
+import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import net.minidev.json.parser.ParseException;
-import org.apache.poi.ss.formula.functions.IDStarAlgorithm;
 import org.junit.Assert;
 
-
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-import java.util.stream.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PromisETLDataCheck {
     public PromisContext PromisDataContext;
@@ -28,6 +33,11 @@ public class PromisETLDataCheck {
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random records...");
         switch (Currenttablename) {
+            case "promis_prmlondest_current":
+                sql = String.format(PromisETLDataCheckSQL.GET_PRMLONDEST_IDS, Currenttablename, Currenttablename, numberOfRecords);
+                List<Map<?, ?>> randomLondestIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+                Ids = randomLondestIds.stream().map(m -> (Integer) m.get("PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
+                break;
             case "promis_prmclscodt_current":
                 sql = String.format(PromisETLDataCheckSQL.GET_PRMCLSCODT_IDS, Currenttablename, Currenttablename, numberOfRecords);
                 List<Map<?, ?>> randomClscodtIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
@@ -76,7 +86,7 @@ public class PromisETLDataCheck {
                 sql = String.format(PromisETLDataCheckSQL.GET_Promis_prmpubinft_part, Inboundtablename, Inboundtablename, Joiner.on(",").join(Ids));
                 break;
             case "promis_prmpubrelt_part":
-                sql = String.format(PromisETLDataCheckSQL.GET_Promis_prmpubrelt_part, Inboundtablename, Inboundtablename, Joiner.on(",").join(Ids));
+                sql = String.format(PromisETLDataCheckSQL.GET_Promis_prmpubrelt_part, Inboundtablename, Inboundtablename, Joiner.on(",").join(Ids), Inboundtablename);
                 break;
             case "promis_prmpmccodt_part":
                 sql = String.format(PromisETLDataCheckSQL.GET_Promis_prmpmccodt, Inboundtablename, Inboundtablename, Joiner.on("','").join(Ids));
@@ -86,7 +96,7 @@ public class PromisETLDataCheck {
                 break;
         }
         Log.info(sql);
-        PromisContext.tbPRMDataObjectsFromDL = DBManager.getDBResultAsBeanList(sql, PRMTablesCurrentObject.class, Constants.AWS_URL);
+        PromisDataContext.tbPRMDataObjectsFromInbound = DBManager.getDBResultAsBeanList(sql, PRMTablesInboundObject.class, Constants.AWS_URL);
         //System.out.println(PromisDataContext.tbPRMDataObjectsFromDL.size());
     }
 
@@ -128,18 +138,17 @@ public class PromisETLDataCheck {
 
     @And("^Compare Promis records in Inbound and Current of (.*)$")
     public void comparePromDataInboundtoCurrent(String Inboundtablename) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        /* //commented by Nishant @ 7 June 2021 as all jobs failed due to below code. need to be fixed
-        if (PromisDataContext.tbPRMDataObjectsFromDL.isEmpty()) {
+        if (PromisDataContext.tbPRMDataObjectsFromInbound.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
-            for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromDL.size(); i++) {
+            for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromInbound.size(); i++) {
                 switch (Inboundtablename) {
                     case "promis_prmautpubt_part":
                         Log.info("comparing current and promis_prmautpubt_part Records:");
                      //   String pubIdt = (PRMTablesCurrentObject::getPUB_IDT.Substring(0, input.IndexOf("/") + 1);
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT)); //sort primarykey data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getPUB_IDT)); //sort primarykey data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getAUT_EDT_IDT)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getAUT_EDT_IDT)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getAUT_EDT_IDT));
 
                         String[] etl_promis_prmautpubt_part = {"getPUB_IDT", "getAUT_EDT_IDT", "getAUT_EDT_TYP", "getTYP_DES", "getSEQ_NUM", "getAUT_EDT_PRE", "getAUT_EDT_INI", "getAUT_EDT_NAM", "getAUT_EDT_SORT", "getAUT_EDT_SUF", "getAFF_TXT", "getFTN", "getAUT_EDT_JCI", "getBIO_IMAGE"};
@@ -147,18 +156,18 @@ public class PromisETLDataCheck {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
 
-                            PRMTablesCurrentObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromDL.get(i);
+                            PRMTablesInboundObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromInbound.get(i);
                             PRMTablesCurrentObject objectToCompare2 = PromisDataContext.tbPRMDataObjectsFromCurrent.get(i);
 
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
+                            Log.info("PUB_IDT => " + PromisDataContext.tbPRMDataObjectsFromInbound.get(i).getPUB_IDT() +
                                     " " + strTemp + " => promis_prmautpubt_part = " + method.invoke(objectToCompare1) +
                                     " promis_prmautpubt_current = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_prmautpubt_current for PUB_IDT:" + PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_prmautpubt_current for PUB_IDT:" + PromisDataContext.tbPRMDataObjectsFromInbound.get(i).getPUB_IDT(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -167,7 +176,7 @@ public class PromisETLDataCheck {
 
                     case "promis_prmclscodt_part":
                         Log.info("Sorting the data to compare the PRMCLSCODT records between inbound and current ..");
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getCLS_COD)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getCLS_COD)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getCLS_COD));
 
                         String[] etl_promis_prmclscodt_part = {"getCLS_COD","getCLS_DES"};
@@ -175,18 +184,18 @@ public class PromisETLDataCheck {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
 
-                            PRMTablesCurrentObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromDL.get(i);
+                            PRMTablesInboundObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromInbound.get(i);
                             PRMTablesCurrentObject objectToCompare2 = PromisDataContext.tbPRMDataObjectsFromCurrent.get(i);
 
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("CLS_COD => " +  PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD() +
+                            Log.info("CLS_COD => " +  PromisDataContext.tbPRMDataObjectsFromInbound.get(i).getCLS_COD() +
                                     " " + strTemp + " => promis_prmclscodt_part = " + method.invoke(objectToCompare1) +
                                     " promis_prmclscodt_current = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_prmclscodt_current for CLS_COD:"+PromisDataContext.tbPRMDataObjectsFromDL.get(i).getCLS_COD(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_prmclscodt_current for CLS_COD:"+PromisDataContext.tbPRMDataObjectsFromInbound.get(i).getCLS_COD(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -195,9 +204,9 @@ public class PromisETLDataCheck {
 
                     case "promis_prmclst_part":
                         Log.info("Sorting the data to compare the PRMCLST records between inbound and current ..");
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getPUB_IDT)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getCLS_COD)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getCLS_COD)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getCLS_COD));
 
                         String[] etl_promis_prmclst_part = {"getPUB_IDT","getCLS_COD"};
@@ -205,18 +214,18 @@ public class PromisETLDataCheck {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
 
-                            PRMTablesCurrentObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromDL.get(i);
+                            PRMTablesInboundObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromInbound.get(i);
                             PRMTablesCurrentObject objectToCompare2 = PromisDataContext.tbPRMDataObjectsFromCurrent.get(i);
 
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("PUB_IDT => " +  PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
+                            Log.info("PUB_IDT => " +  PromisDataContext.tbPRMDataObjectsFromInbound.get(i).getPUB_IDT() +
                                     " " + strTemp + " => promis_prmclst_part = " + method.invoke(objectToCompare1) +
                                     " promis_prmclst_current = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_prmclst_current for PUB_IDT:"+PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_prmclst_current for PUB_IDT:"+PromisDataContext.tbPRMDataObjectsFromInbound.get(i).getPUB_IDT(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -224,11 +233,11 @@ public class PromisETLDataCheck {
                         break;
                     case "promis_prmlondest_part":
                         Log.info("Sorting the data to compare the PRMCLST records between inbound and current ..");
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getPUB_IDT)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_VOL_IDT)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getPUB_VOL_IDT)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_VOL_IDT));
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getVOL_PRT_IDT)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getVOL_PRT_IDT)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getVOL_PRT_IDT));
 
                         String[] etl_promis_prmlondest_part = {"getPUB_IDT","getVOL_PRT_IDT","getPUB_VOL_IDT"};
@@ -236,18 +245,18 @@ public class PromisETLDataCheck {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
 
-                            PRMTablesCurrentObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromDL.get(i);
+                            PRMTablesInboundObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromInbound.get(i);
                             PRMTablesCurrentObject objectToCompare2 = PromisDataContext.tbPRMDataObjectsFromCurrent.get(i);
 
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("PUB_IDT => " +  PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
+                            Log.info("PUB_IDT => " +  PromisDataContext.tbPRMDataObjectsFromInbound.get(i).getPUB_IDT() +
                                     " " + strTemp + " => promis_prmlondest_part = " + method.invoke(objectToCompare1) +
                                     " promis_prmlondest_current = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_prmlondest_part for PUB_IDT:"+PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_prmlondest_part for PUB_IDT:"+PromisDataContext.tbPRMDataObjectsFromInbound.get(i).getPUB_IDT(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -257,28 +266,28 @@ public class PromisETLDataCheck {
 
                     case "promis_prmpricest_part":
                         Log.info("Sorting the data to compare the PRMPRICEST records in Inbound and DATA LAKE ..");
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getPUB_IDT)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
 
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_VOL_IDT)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getPUB_VOL_IDT)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_VOL_IDT));
 
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getVOL_PRT_IDT)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getVOL_PRT_IDT)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getVOL_PRT_IDT));
 
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getEDN_IDT)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getEDN_IDT)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getEDN_IDT));
 
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getEDN_IDT)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getEDN_IDT)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getEDN_IDT));
 
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getPRC_TYP)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getPRC_TYP)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPRC_TYP));
 
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getPRC_GEO)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getPRC_GEO)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPRC_GEO));
 
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getIPT_COD)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getIPT_COD)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getIPT_COD));
 
                         String[] etl_promis_prmpricest_part = {"getPUB_IDT","getPUB_VOL_IDT","getVOL_PRT_IDT","getEDN_IDT","getPRC_TYP","getPRC_GEO","getIPT_COD","getPRC_DAT","getSTD_CUR_COD","getSTD_PRC","getPRC_PRE","getADD_PRC","getEXP_DAT"};
@@ -286,18 +295,18 @@ public class PromisETLDataCheck {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
 
-                            PRMTablesCurrentObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromDL.get(i);
+                            PRMTablesInboundObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromInbound.get(i);
                             PRMTablesCurrentObject objectToCompare2 = PromisDataContext.tbPRMDataObjectsFromCurrent.get(i);
 
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("PUB_IDT => " +  PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
+                            Log.info("PUB_IDT => " +  PromisDataContext.tbPRMDataObjectsFromInbound.get(i).getPUB_IDT() +
                                     " " + strTemp + " => promis_prmpricest_part = " + method.invoke(objectToCompare1) +
                                     " promis_prmpricest_current = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_prmpricest_part for PUB_IDT:"+PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_prmpricest_part for PUB_IDT:"+PromisDataContext.tbPRMDataObjectsFromInbound.get(i).getPUB_IDT(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -306,7 +315,7 @@ public class PromisETLDataCheck {
 
                     case "promis_prmpubinft_part":
                         Log.info("Sorting the data to compare the PRMPUBINFT records between inbound and current ..");
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getPUB_IDT)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
 
                         String[] etl_promis_prmpubinft_part = {"getPUB_IDT","getSTA_DAA","getFUL_TIT","getPUB_TYP","getOWN_IDT","getPBL_ABR_NAM","getLOC","getSTA_PRM","getLNG_COD","getPUB_IMP_IDT","getPUB_BGN_YEA","getLCO_NUM","getIMP_DAT","getCDA","getCRE_IDT","getDEP_IDT","getLST_USR_IDT","getLST_UPD_DAT","getABR_TIT","getFUL_TIT_SRT","getSUB_TIT_1","getSUB_TIT_2","getSUB_TIT_3","getPRG_SUB_TIT","getAUT_EDT_NAM","getSLO_TXT","getNTB",
@@ -316,18 +325,18 @@ public class PromisETLDataCheck {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
 
-                            PRMTablesCurrentObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromDL.get(i);
+                            PRMTablesInboundObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromInbound.get(i);
                             PRMTablesCurrentObject objectToCompare2 = PromisDataContext.tbPRMDataObjectsFromCurrent.get(i);
 
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("PUB_IDT => " +  PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
+                            Log.info("PUB_IDT => " +  PromisDataContext.tbPRMDataObjectsFromInbound.get(i).getPUB_IDT() +
                                     " " + strTemp + " => promis_prmpubinft_part = " + method.invoke(objectToCompare1) +
                                     " promis_prmpubinft_current = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_prmpubinft_part for PUB_IDT:"+PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_prmpubinft_part for PUB_IDT:"+PromisDataContext.tbPRMDataObjectsFromInbound.get(i).getPUB_IDT(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -337,9 +346,9 @@ public class PromisETLDataCheck {
 
                     case "promis_prmpubrelt_part":
                         Log.info("Sorting the data to compare the PRMPUBRELT records between inbound and current ..");
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getPUB_IDT)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getREL_NO)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getREL_NO)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getREL_NO));
 
                         String[] etl_promis_prmpubrelt_part = {"getPUB_IDT","getREL_NO","getREL_SRT","getREL_IDT","getREL_TITLE","getFOOTNOTE","getFRONT_TEXT","getEND_TEXT","getRTP_RTP_COD","getREL_END_DATE","getREL_START_DATE"};
@@ -348,18 +357,18 @@ public class PromisETLDataCheck {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
 
-                            PRMTablesCurrentObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromDL.get(i);
+                            PRMTablesInboundObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromInbound.get(i);
                             PRMTablesCurrentObject objectToCompare2 = PromisDataContext.tbPRMDataObjectsFromCurrent.get(i);
 
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("PUB_IDT => " +  PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
+                            Log.info("PUB_IDT => " +  PromisDataContext.tbPRMDataObjectsFromInbound.get(i).getPUB_IDT() +
                                     " " + strTemp + " => promis_prmpubrelt_part = " + method.invoke(objectToCompare1) +
                                     " promis_prmpubrelt_current = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_prmpubrelt_part for PUB_IDT:"+PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_prmpubrelt_part for PUB_IDT:"+PromisDataContext.tbPRMDataObjectsFromInbound.get(i).getPUB_IDT(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -368,7 +377,7 @@ public class PromisETLDataCheck {
                         break;
                     case "promis_prmincpmct_part":
                         Log.info("Sorting the data to compare the PRMINCPMCT records between inbound and current ..");
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getPUB_IDT)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getPUB_IDT));
 
                         String[] etl_promis_prmincpmct_part = {"getPUB_IDT","getMKT_SUB_IDT"};
@@ -377,18 +386,18 @@ public class PromisETLDataCheck {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
 
-                            PRMTablesCurrentObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromDL.get(i);
+                            PRMTablesInboundObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromInbound.get(i);
                             PRMTablesCurrentObject objectToCompare2 = PromisDataContext.tbPRMDataObjectsFromCurrent.get(i);
 
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("PUB_IDT => " +  PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT() +
+                            Log.info("PUB_IDT => " +  PromisDataContext.tbPRMDataObjectsFromInbound.get(i).getPUB_IDT() +
                                     " " + strTemp + " => promis_prmincpmct_part = " + method.invoke(objectToCompare1) +
                                     " promis_prmincpmct_current = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_prmincpmct_part for PUB_IDT:"+PromisDataContext.tbPRMDataObjectsFromDL.get(i).getPUB_IDT(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_prmincpmct_part for PUB_IDT:"+PromisDataContext.tbPRMDataObjectsFromInbound.get(i).getPUB_IDT(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -398,7 +407,7 @@ public class PromisETLDataCheck {
 
                     case "promis_prmpmccodt_part":
                         Log.info("Sorting the data to compare the PRMPMCCODT records between inbound and current ..");
-                        PromisDataContext.tbPRMDataObjectsFromDL.sort(Comparator.comparing(PRMTablesCurrentObject::getMKT_IDT)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromInbound.sort(Comparator.comparing(PRMTablesInboundObject::getMKT_IDT)); //sort data in the lists
                         PromisDataContext.tbPRMDataObjectsFromCurrent.sort(Comparator.comparing(PRMTablesCurrentObject::getMKT_IDT));
 
                         String[] etl_promis_prmpmccodt_part = {"getMKT_IDT","getMKT_DES","getDIV_IDT"};
@@ -407,18 +416,18 @@ public class PromisETLDataCheck {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
 
-                            PRMTablesCurrentObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromDL.get(i);
+                            PRMTablesInboundObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromInbound.get(i);
                             PRMTablesCurrentObject objectToCompare2 = PromisDataContext.tbPRMDataObjectsFromCurrent.get(i);
 
                             method = objectToCompare1.getClass().getMethod(strTemp);
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                            Log.info("MKT_IDT => " +  PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_IDT() +
+                            Log.info("MKT_IDT => " +  PromisDataContext.tbPRMDataObjectsFromInbound.get(i).getMKT_IDT() +
                                     " " + strTemp + " => promis_prmpmccodt_part = " + method.invoke(objectToCompare1) +
                                     " promis_prmpmccodt_current = " + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_prmpmccodt_part for PUB_IDT:"+PromisDataContext.tbPRMDataObjectsFromDL.get(i).getMKT_IDT(),
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_prmpmccodt_part for PUB_IDT:"+PromisDataContext.tbPRMDataObjectsFromInbound.get(i).getMKT_IDT(),
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }
@@ -427,7 +436,6 @@ public class PromisETLDataCheck {
                 }
             }
         }
-        */
     }
 
     @Given("^We get the (.*) random Promis DeltaQuery ids of (.*)$")
@@ -739,25 +747,25 @@ public class PromisETLDataCheck {
     public void getRecordsInHistExcltablename(String HistExcltablename) throws ParseException {
         Log.info("We get the History Excluding records..");
         switch (HistExcltablename) {
-            case "promis_transform_history_subject_areas_part":
+            case "promis_transform_history_subject_areas_delta_v":
                 sql = String.format(PromisETLDataCheckSQL.GET_SUBJECT_AREAS, HistExcltablename, Joiner.on("','").join(Ids));
                 break;
-            case "promis_transform_history_pricing_part":
+            case "promis_transform_history_pricing_delta_v":
                 sql = String.format(PromisETLDataCheckSQL.GET_PRICING, HistExcltablename, Joiner.on("','").join(Ids));
                 break;
-            case "promis_transform_history_person_roles_part":
+            case "promis_transform_history_person_roles_delta_v":
                 sql = String.format(PromisETLDataCheckSQL.GET_PERSON_ROLES, HistExcltablename, Joiner.on("','").join(Ids));
                 break;
-            case "promis_transform_history_works_part":
+            case "promis_transform_history_works_delta_v":
                 sql = String.format(PromisETLDataCheckSQL.GET_WORKS, HistExcltablename, Joiner.on("','").join(Ids));
                 break;
-            case "promis_transform_history_metrics_part":
+            case "promis_transform_history_metrics_delta_v":
                 sql = String.format(PromisETLDataCheckSQL.GET_METRICS, HistExcltablename, Joiner.on("','").join(Ids));
                 break;
-            case "promis_transform_history_urls_part":
+            case "promis_transform_history_urls_delta_v":
                 sql = String.format(PromisETLDataCheckSQL.GET_URLS, HistExcltablename, Joiner.on("','").join(Ids));
                 break;
-            case "promis_transform_history_work_rels_part":
+            case "promis_transform_history_work_rels_delta_v":
                 sql = String.format(PromisETLDataCheckSQL.GET_WORK_RELS, HistExcltablename, Joiner.on("','").join(Ids));
                 break;
         }

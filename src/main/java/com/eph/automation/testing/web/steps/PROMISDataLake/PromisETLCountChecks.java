@@ -21,6 +21,8 @@ public class PromisETLCountChecks {
     private static int Promis_LatestCount;
     private static int Promis_All_sourceCount;
     private static int Promis_TransformMappingCount;
+    private static int Promis_TransformHistoryCount;
+
 
 
 
@@ -75,6 +77,31 @@ public class PromisETLCountChecks {
     public void PromiscomparetoInbound(String InboundtableName) {
         Log.info("The count for table" + InboundtableName + " in Promis Inbound: " + Promis_InboundCount + " and Current: " + Promis_CurrentCount);
         Assert.assertEquals("The counts for table " + InboundtableName + " is not equal", Promis_InboundCount, Promis_CurrentCount);
+    }
+
+//Current to Transform History Counts
+    @Given("^We know the number of Promis (.*) data for the current$")
+    public void getCurrentCount(String PromisCurrentTable) {
+        PromisSQL= String.format(PromisETLCountChecksSQL.GET_Promis_CurrentCounts, PromisCurrentTable);
+        Log.info(PromisSQL);
+        List<Map<String,Object>> Promis_DeltaQueryTableCount = DBManager.getDLResultMap(PromisSQL,Constants.AWS_URL);
+        Promis_CurrentCount = ((Long) Promis_DeltaQueryTableCount.get(0).get("Total_Count")).intValue();
+        Log.info(PromisCurrentTable + " table in Promis Transform History has the Count: " + Promis_CurrentCount);
+    }
+
+    @Then("^Get the count for Promis (.*) Transform Hisory with the latest timestamp$")
+    public void getPromisTransformHistoryCount(String Deltatablename) {
+        PromisSQL= String.format(PromisETLCountChecksSQL.GET_Promis_TransformHistory_Count, Deltatablename, Deltatablename);
+        Log.info(PromisSQL);
+        List<Map<String,Object>> PromisDeltaTableCount = DBManager.getDLResultMap(PromisSQL,Constants.AWS_URL);
+        Promis_TransformHistoryCount = ((Long) PromisDeltaTableCount.get(0).get("Total_Count")).intValue();
+        Log.info(Deltatablename + " table in Promis Transform History with latest timestamp has the Count: " + Promis_TransformHistoryCount);
+    }
+
+    @And("^Compare the Promis count for (.*) table between Current and Transform Hisory with the latest timestamp$")
+    public void PromiscompareCurrenttoHistory(String TransformHistoryTable) {
+        Log.info("The count for table" + TransformHistoryTable + " in Promis Current: " + Promis_CurrentCount + " and Transform History with latest timestamp: " + Promis_TransformHistoryCount);
+        Assert.assertEquals("The counts for Current and Transform history with latest timestamp is not equal", Promis_CurrentCount, Promis_TransformHistoryCount);
     }
 
 //    Delta Count checks
