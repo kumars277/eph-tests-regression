@@ -30,7 +30,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
     private ApiWorksSearchSteps apiWorksSearchSteps=new ApiWorksSearchSteps();
     private ProductApiObject response;
     private WorkApiObject workResponse;
-
+    List<Integer> ignore = new ArrayList<>();
 
     @Given("^we get (.*) random ids from (.*)")
     public void getRandomIds_FromStitching_Table(String noOfRandomRecords,String stc_table){
@@ -124,29 +124,40 @@ public class ApiSearchDataCheckStitchingLayerSteps {
 
     public void compare_stch_product_ext_json_byAvailability(AvailabilityExtendedTestClass jsonValue,AvailabilityExtendedAPIObj apiResponseAvailabilityExtended) {
         //created by Nishant @ 01 Feb 2021, EPHD-2747
-
-        //if (jsonValue.getAvailabilityExtended().getApplications() != null | response.getAvailabilityExtended().getApplications() != null) {
+        //updated by Nishant @ 8 Jun 2021
         ArrayList<AvailabilityExtApplicationsAPIObj> jsonValue_arr = new ArrayList<>(Arrays.asList((jsonValue.getAvailabilityExtended().getApplications())));
         ArrayList<AvailabilityExtApplicationsAPIObj> apiResponse_arr = new ArrayList<>(Arrays.asList(apiResponseAvailabilityExtended.getApplications()));
 
+        ignore.clear();
         for (int i = 0; i < apiResponse_arr.size(); i++) {
             Log.info("----->verification for application - " + i);
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByAvailability -> ApplicationName", jsonValue_arr.get(i).getApplicationName(), apiResponse_arr.get(i).getApplicationName());
-            printLog("ApplicationName");
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByAvailability -> AvailabilityFormat", jsonValue_arr.get(i).getAvailabilityFormat(), apiResponse_arr.get(i).getAvailabilityFormat());
-            printLog("AvailabilityFormat");
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByAvailability -> AvailabilityStartDate", jsonValue_arr.get(i).getAvailabilityStartDate(), apiResponse_arr.get(i).getAvailabilityStartDate());
-            printLog("AvailabilityStartDate");
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByAvailability -> AvailabilityStatus", jsonValue_arr.get(i).getAvailabilityStatus(), apiResponse_arr.get(i).getAvailabilityStatus());
-            printLog("AvailabilityStatus");
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByAvailability -> DeltaAnswerCodeUK", jsonValue_arr.get(i).getDeltaAnswerCodeUK(), apiResponse_arr.get(i).getDeltaAnswerCodeUK());
-            printLog("DeltaAnswerCodeUK");
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByAvailability -> DeltaAnswerCodeUS", jsonValue_arr.get(i).getDeltaAnswerCodeUS(), apiResponse_arr.get(i).getDeltaAnswerCodeUS());
-            printLog("DeltaAnswerCodeUS");
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByAvailability -> PublicationStatusANZ", jsonValue_arr.get(i).getPublicationStatusANZ(), apiResponse_arr.get(i).getPublicationStatusANZ());
-            printLog("PublicationStatusANZ");
+            boolean appFound = false;
+            for(int cnt =0;cnt<jsonValue_arr.size();cnt++)
+            {
+                if(ignore.contains(cnt))continue;
+                if(apiResponse_arr.get(i).getApplicationName().equalsIgnoreCase(jsonValue_arr.get(cnt).getApplicationName()))
+                {
+                    appFound=true;
+                    printLog("ApplicationName");
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByAvailability -> AvailabilityFormat", jsonValue_arr.get(cnt).getAvailabilityFormat(), apiResponse_arr.get(i).getAvailabilityFormat());
+                    printLog("AvailabilityFormat");
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByAvailability -> AvailabilityStartDate", jsonValue_arr.get(cnt).getAvailabilityStartDate(), apiResponse_arr.get(i).getAvailabilityStartDate());
+                    printLog("AvailabilityStartDate");
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByAvailability -> AvailabilityStatus", jsonValue_arr.get(cnt).getAvailabilityStatus(), apiResponse_arr.get(i).getAvailabilityStatus());
+                    printLog("AvailabilityStatus");
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByAvailability -> DeltaAnswerCodeUK", jsonValue_arr.get(cnt).getDeltaAnswerCodeUK(), apiResponse_arr.get(i).getDeltaAnswerCodeUK());
+                    printLog("DeltaAnswerCodeUK");
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByAvailability -> DeltaAnswerCodeUS", jsonValue_arr.get(cnt).getDeltaAnswerCodeUS(), apiResponse_arr.get(i).getDeltaAnswerCodeUS());
+                    printLog("DeltaAnswerCodeUS");
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByAvailability -> PublicationStatusANZ", jsonValue_arr.get(cnt).getPublicationStatusANZ(), apiResponse_arr.get(i).getPublicationStatusANZ());
+                    printLog("PublicationStatusANZ");
+
+                    ignore.add(cnt); break;
+                }
+            }
+            Assert.assertTrue(DataQualityContext.breadcrumbMessage + "productExtByAvailability "+i+" found in extjson",appFound);
         }
-       // }
+
     }
 
     public void compare_stch_product_ext_json_byPricing(PricingExtendedTestClass jsonValue,PricingExtendedAPIObj pricingExtendedAPIObj){
@@ -154,15 +165,29 @@ public class ApiSearchDataCheckStitchingLayerSteps {
 
         ArrayList<PricingExtendedPricesAPIObj> jsonValue_arr= new ArrayList<>(Arrays.asList((jsonValue.getPricingExtended().getExtendedPrices())));
         ArrayList<PricingExtendedPricesAPIObj> apiResponse_arr=new ArrayList<>(Arrays.asList(pricingExtendedAPIObj.getExtendedPrices()));
-
+        ignore.clear();
         for(int i=0;i<apiResponse_arr.size();i++)
         {
             Log.info("----->verification for extendedPrices - "+i);
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByPricing -> Currency", jsonValue_arr.get(i).getCurrency(),apiResponse_arr.get(i).getCurrency());printLog("Currency");
-          //  Log.info("extendedPrices:\n stitching table json value=> "+ jsonValue_arr.get(i).getAmount() +"\n API response value=> "+apiResponse_arr.get(i).getAmount());
-           Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByPricing -> Amount", Float.valueOf(jsonValue_arr.get(i).getAmount()),Float.valueOf(apiResponse_arr.get(i).getAmount())); printLog("Amount");
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByPricing -> StartDate", jsonValue_arr.get(i).getStartDate(),apiResponse_arr.get(i).getStartDate());printLog("StartDate");
-            Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByPricing -> EndDate", jsonValue_arr.get(i).getEndDate(),apiResponse_arr.get(i).getEndDate());printLog("EndDate");
+            boolean priceFound = false;
+            for(int cnt =0;cnt<jsonValue_arr.size();cnt++) {
+                if (ignore.contains(cnt)) continue;
+                if (jsonValue_arr.get(i).getCurrency().equalsIgnoreCase(apiResponse_arr.get(i).getCurrency())) {
+                    priceFound = true;
+
+                    printLog("Currency");
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByPricing -> Amount", Float.valueOf(jsonValue_arr.get(i).getAmount()), Float.valueOf(apiResponse_arr.get(i).getAmount()));
+                    printLog("Amount");
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByPricing -> StartDate", jsonValue_arr.get(i).getStartDate(), apiResponse_arr.get(i).getStartDate());
+                    printLog("StartDate");
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage + "productExtByPricing -> EndDate", jsonValue_arr.get(i).getEndDate(), apiResponse_arr.get(i).getEndDate());
+                    printLog("EndDate");
+
+                    ignore.add(cnt); break;
+                }
+            }
+
+            Assert.assertTrue(DataQualityContext.breadcrumbMessage + "productExtByPricing "+i+" found in extjson",priceFound);
         }
     }
 

@@ -323,9 +323,11 @@ public class APIDataSQL {
             "from semarchy_eph_mdm.gd_work_legal_owner gwlo where f_wwork ='PARAM1'";
     public static String getWorkAccessModelsById = "select f_access_model from semarchy_eph_mdm.gd_work_access_model gwam where f_wwork ='PARAM1'";
     public static String getWorkBusinessModelById = "select f_business_model, effective_start_date , effective_end_date from semarchy_eph_mdm.gd_work_business_model gwam where f_wwork ='PARAM1'";
-    public static String getWorkSubjectAreaByWorkId = "select code,name,f_type,f_parent_subject_area " +
-            "from semarchy_eph_mdm.gd_subject_area gsa where subject_area_id in\n" +
-            "(select f_subject_area from semarchy_eph_mdm.gd_work_subject_area_link gwsal where f_wwork ='PARAM1')";
+    public static String getWorkSubjectAreaByWorkId =
+            "select code,name,f_type,f_parent_subject_area\n" +
+            "from semarchy_eph_mdm.gd_subject_area gsa \n" +
+            "inner join semarchy_eph_mdm.gd_work_subject_area_link gwsal on gsa.subject_area_id =gwsal.f_subject_area \n" +
+            "where gwsal.f_wwork ='PARAM1'";
     //updated by Nishant @ 15 Apr 2020
     public static String getWorkIdentifiersDataFromGDByIdentifier="SELECT \n" +
             " effective_start_date as IDENTIFIER_EFFECTIVE_START_DATE\n" +
