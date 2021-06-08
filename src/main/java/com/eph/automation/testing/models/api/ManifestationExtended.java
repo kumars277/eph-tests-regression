@@ -13,6 +13,7 @@ import org.junit.Assert;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ManifestationExtended {
@@ -99,18 +100,30 @@ public class ManifestationExtended {
             ArrayList<ManifestationExtendedPageCountsAPIObj> api_manifestationExtendedPageCounts = new ArrayList<>(Arrays.asList(manifestationExtendedPageCounts));
             ArrayList<ManifestationExtendedPageCountsAPIObj> db_manifestationExtendedPageCounts = new ArrayList<>(Arrays.asList(DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().manifestationExtendedPageCounts));
 
+            List<Integer> ignore = new ArrayList<>();
             for(int mpc=0;mpc<api_manifestationExtendedPageCounts.size();mpc++)
             {
                 Log.info("----->verification for manifestationExtendedPageCounts "+mpc);
 
-                Assert.assertEquals(api_manifestationExtendedPageCounts.get(mpc).getExtendedPageCount().getType().get("code"),db_manifestationExtendedPageCounts.get(mpc).getExtendedPageCount().getType().get("code"));
-                printLog("ExtendedPageCount code");
+                boolean extPageFound = false;
+                for(int cnt =0;cnt<db_manifestationExtendedPageCounts.size();cnt++) {
+                    if (ignore.contains(cnt)) continue;
+                    if( api_manifestationExtendedPageCounts.get(mpc).getExtendedPageCount().getType().get("code").toString().equalsIgnoreCase(db_manifestationExtendedPageCounts.get(cnt).getExtendedPageCount().getType().get("code").toString()))
+                    {
+                        extPageFound = true;
+                        printLog("ExtendedPageCount code");
 
-                Assert.assertEquals(api_manifestationExtendedPageCounts.get(mpc).getExtendedPageCount().getType().get("name"),db_manifestationExtendedPageCounts.get(mpc).getExtendedPageCount().getType().get("name"));
-                printLog("ExtendedPageCount name");
+                        Assert.assertEquals(api_manifestationExtendedPageCounts.get(mpc).getExtendedPageCount().getType().get("name"),db_manifestationExtendedPageCounts.get(cnt).getExtendedPageCount().getType().get("name"));
+                        printLog("ExtendedPageCount name");
 
-                Assert.assertEquals(api_manifestationExtendedPageCounts.get(mpc).getExtendedPageCount().getCount(),db_manifestationExtendedPageCounts.get(mpc).getExtendedPageCount().getCount());
-                printLog("ExtendedPageCount count");
+                        Assert.assertEquals(api_manifestationExtendedPageCounts.get(mpc).getExtendedPageCount().getCount(),db_manifestationExtendedPageCounts.get(cnt).getExtendedPageCount().getCount());
+                        printLog("ExtendedPageCount count");
+
+                        ignore.add(cnt);break;
+                    }
+                }
+                Assert.assertTrue(DataQualityContext.breadcrumbMessage + " - manifestationExtendedPageCounts-> "+mpc+" not found in DB",extPageFound);
+
             }
         }
 

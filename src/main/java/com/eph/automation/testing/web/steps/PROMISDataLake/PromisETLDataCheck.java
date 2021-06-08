@@ -128,7 +128,7 @@ public class PromisETLDataCheck {
 
     @And("^Compare Promis records in Inbound and Current of (.*)$")
     public void comparePromDataInboundtoCurrent(String Inboundtablename) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
-        /* commented by Nishant @ 7 June 2021 as all jobs failed due to below code. need to be fixed
+        /* //commented by Nishant @ 7 June 2021 as all jobs failed due to below code. need to be fixed
         if (PromisDataContext.tbPRMDataObjectsFromDL.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
