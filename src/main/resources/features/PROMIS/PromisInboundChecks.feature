@@ -17,7 +17,7 @@ Feature:Validate data for Promis Inbound tables
       | 5               |promis_prmautpubt_part  |promis_prmautpubt_current  |
       | 5               |promis_prmclscodt_part  |promis_prmclscodt_current  |
       | 5               |promis_prmclst_part     |promis_prmclst_current     |
-      | 5               |promis_prmlondest_part  |promis_prmlondest_current  |
+      | 5               |promis_prm_londes_2_html_part  |promis_prm_londes_2_html_current  |
       | 5               |promis_prmpricest_part  |promis_prmpricest_current  |
       | 5               |promis_prmpubinft_part  |promis_prmpubinft_current  |
       | 5               |promis_prmpubrelt_part  |promis_prmpubrelt_current  |

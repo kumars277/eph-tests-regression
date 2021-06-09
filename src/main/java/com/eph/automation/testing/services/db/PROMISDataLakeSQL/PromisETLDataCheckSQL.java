@@ -60,9 +60,9 @@ public class PromisETLDataCheckSQL {
             " AND PUB_IDT in (%s) order by CLS_COD";
 
     public static String GET_Promis_prmlondest_part = "SELECT\n" +
-            " ppp.pub_idt \n" +
-            ", ppp.pub_vol_idt \n" +
-            ", ppp.vol_prt_idt \n" +
+            " cast(ppp.pub_idt as integer) as pub_idt \n" +
+            ", cast(ppp.pub_vol_idt as integer) as pub_vol_idt \n" +
+            ", cast(ppp.vol_prt_idt as integer) as vol_prt_idt \n" +
             ", ppp.lon_des \n" +
             ", ppp.inbound_ts \n" +
             "FROM "+GetPRMDLDBUser.getPRMDataBase()+".%s ppp\n" +
@@ -347,7 +347,7 @@ public class PromisETLDataCheckSQL {
             " where inbound_ts = (select inbound_ts from " + GetPRMDLDBUser.getPRMDataBase() + ".%s order by inbound_ts desc limit 1)\n" +
             " AND PUB_PUB_IDT in (%s) order by REL_TITLE desc, REL_SRT desc, REL_IDT desc";
 
-    public static String GET_SUBJECT_AREAS = "select pub_idt as PUB_IDT,\n"
+    public static String GET_SUBJECT_AREAS_TRANSFORM_FILE = "select pub_idt as PUB_IDT,\n"
     + "epr_id as EPR_ID,\n"
     + "u_key as U_KEY,\n"
     + "priority as PRIORITY,\n"
@@ -355,7 +355,22 @@ public class PromisETLDataCheckSQL {
     + "subject_area_name as SUBJECT_AREA_NAME,\n"
     + "subject_type_code as SUBJECT_TYPE_CODE,\n"
     + "subject_type_name as SUBJECT_TYPE_NAME,\n"
-    + "work_type as WORK_TYPE from " + GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s') order by pub_idt";
+    + "work_type as WORK_TYPE from " + GetPRMDLDBUser.getPRMDataBase() + ".promis_transform_file_history_subject_areas_part where " +
+            "transform_file_ts = (select max(transform_file_ts) from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_file_history_subject_areas_part)" +
+            " and U_KEY in('%s') order by pub_idt desc";
+
+
+    public static String GET_SUBJECT_AREAS = "select pub_idt as PUB_IDT,\n"
+            + "epr_id as EPR_ID,\n"
+            + "u_key as U_KEY,\n"
+            + "priority as PRIORITY,\n"
+            + "subject_area_code as SUBJECT_AREA_CODE,\n"
+            + "subject_area_name as SUBJECT_AREA_NAME,\n"
+            + "subject_type_code as SUBJECT_TYPE_CODE,\n"
+            + "subject_type_name as SUBJECT_TYPE_NAME,\n"
+            + "work_type as WORK_TYPE from " + GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s') order by pub_idt";
+
+
 
     public static String GET_PRICING = "select pub_idt as PUB_IDT,\n" +
             "epr_id as EPR_ID,\n" +
@@ -368,6 +383,21 @@ public class PromisETLDataCheckSQL {
             "region as REGION,\n" +
             "quantity as QUANTITY,\n" +
             "customer_category as CUSTOMER_CATEGORY from "+ GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s')";
+
+    public static String GET_PRICING_TRANSFORM_FILE = "select pub_idt as PUB_IDT,\n" +
+            "epr_id as EPR_ID,\n" +
+            "product_type as PRODUCT_TYPE,\n" +
+            "u_key as U_KEY,\n" +
+            "currency as CURRENCY,\n" +
+            "price as PRICE,\n" +
+            "start_date as START_DATE,\n" +
+            "end_date as END_DATE,\n" +
+            "region as REGION,\n" +
+            "quantity as QUANTITY,\n" +
+            "customer_category as CUSTOMER_CATEGORY from "+ GetPRMDLDBUser.getPRMDataBase() + ".promis_transform_file_history_pricing_part where " +
+            "transform_file_ts = (select max(transform_file_ts) from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_file_history_pricing_part)" +
+            " and U_KEY in('%s')";
+
 
     public static String GET_PERSON_ROLES = "select * from (select pub_idt as PUB_IDT,\n" +
             "epr_id as EPR_ID,\n" +
@@ -383,7 +413,25 @@ public class PromisETLDataCheckSQL {
             "image_url as IMAGE_URL,\n" +
             "footnote_txt as FOOTNOTE_TXT,\n" +
             "notes_txt as NOTES_TXT,\n" +
-            "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s')) order by pub_idt desc, sequence_number desc, initials desc, affiliation desc";
+            "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s')) order by pub_idt, sequence_number, initials, affiliation desc";
+
+    public static String GET_PERSON_ROLES_TRANSFORM_FILE = "select * from (select pub_idt as PUB_IDT,\n" +
+            "epr_id as EPR_ID,\n" +
+            "u_key as U_KEY,\n" +
+            "role_description as ROLE_DESCRIPTION,\n" +
+            "sequence_number as SEQUENCE_NUMBER,\n" +
+            "group_number as GROUP_NUMBER,\n" +
+            "initials as INITIALS,\n" +
+            "last_name as LAST_NAME,\n" +
+            "title as TITLE,\n" +
+            "honours as HONOURS,\n" +
+            "affiliation as AFFILIATION,\n" +
+            "image_url as IMAGE_URL,\n" +
+            "footnote_txt as FOOTNOTE_TXT,\n" +
+            "notes_txt as NOTES_TXT,\n" +
+            "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".promis_transform_file_history_person_roles_part where " +
+            "transform_file_ts = (select max(transform_file_ts) from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_file_history_person_roles_part)" +
+            " and U_KEY in('%s')) order by pub_idt, sequence_number, initials, affiliation desc";
 
     public static String GET_WORKS = "select pub_idt as PUB_IDT,\n" +
             "epr_id as EPR_ID,\n" +
@@ -395,6 +443,18 @@ public class PromisETLDataCheckSQL {
             "internal_elsevier_division,\n" +
             "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s') order by u_key desc, journal_aims_scope desc";
 
+    public static String GET_WORKS_TRANSFORM_FILE = "select pub_idt as PUB_IDT,\n" +
+            "epr_id as EPR_ID,\n" +
+            "u_key as U_KEY,\n" +
+            "journal_aims_scope as JOURNAL_AIMS_SCOPE,\n" +
+            "elsevier_com_ind as ELSEVIER_COM_IND,\n" +
+            "primary_author as PRIMARY_AUTHOR,\n" +
+            "previous_title as PREVIOUS_TITLE,\n" +
+            "internal_elsevier_division,\n" +
+            "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".promis_transform_file_history_works_part where " +
+            "transform_file_ts = (select max(transform_file_ts) from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_file_history_works_part)" +
+            " and U_KEY in('%s') order by u_key desc, journal_aims_scope desc";
+
     public static String GET_METRICS = "select pub_idt as PUB_IDT,\n" +
             "epr_id as EPR_ID,\n" +
             "u_key as U_KEY,\n" +
@@ -405,6 +465,18 @@ public class PromisETLDataCheckSQL {
             "metric_url as METRIC_URL,\n" +
             "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s') order by metric desc";
 
+    public static String GET_METRICS_TRANSFORM_FILE = "select pub_idt as PUB_IDT,\n" +
+            "epr_id as EPR_ID,\n" +
+            "u_key as U_KEY,\n" +
+            "metric_code as METRIC_CODE,\n" +
+            "metric_name as METRIC_NAME,\n" +
+            "metric as METRIC,\n" +
+            "metric_year as METRIC_YEAR,\n" +
+            "metric_url as METRIC_URL,\n" +
+            "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".promis_transform_file_history_metrics_part where " +
+            "transform_file_ts = (select max(transform_file_ts) from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_file_history_metrics_part)" +
+            " and U_KEY in('%s') order by metric desc";
+
     public static String GET_URLS = "select pub_idt as PUB_IDT," +
             "epr_id as EPR_ID,\n" +
             "u_key as U_KEY,\n" +
@@ -413,6 +485,17 @@ public class PromisETLDataCheckSQL {
             "url as URL,\n" +
             "url_title as URL_TITLE,\n" +
             "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s')";
+
+    public static String GET_URLS_TRANSFORM_FILE = "select pub_idt as PUB_IDT," +
+            "epr_id as EPR_ID,\n" +
+            "u_key as U_KEY,\n" +
+            "url_code as URL_CODE,\n" +
+            "url_name as URL_NAME,\n" +
+            "url as URL,\n" +
+            "url_title as URL_TITLE,\n" +
+            "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".promis_transform_file_history_urls_part where " +
+            "transform_file_ts = (select max(transform_file_ts) from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_file_history_urls_part)" +
+            " and U_KEY in('%s')";
 
     public static String GET_WORK_RELS = "select parent_pub_idt as PARENT_PUB_IDT," +
             "parent_epr_id as PARENT_EPR_ID,\n" +
@@ -429,6 +512,25 @@ public class PromisETLDataCheckSQL {
             "relationship_type_code as RELATIONSHIP_TYPE_CODE,\n" +
             "relationship_type_name as RELATIONSHIP_TYPE_NAME,\n" +
             "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".%s where U_KEY in ('%s')";
+
+
+    public static String GET_WORK_RELS_TRANSFORM_FILE = "select parent_pub_idt as PARENT_PUB_IDT," +
+            "parent_epr_id as PARENT_EPR_ID,\n" +
+            "u_key as U_KEY,\n" +
+            "child_pub_idt as CHILD_PUB_IDT,\n" +
+            "child_epr_id as CHILD_EPR_ID,\n" +
+            "child_title as CHILD_TITLE,\n" +
+            "child_related_type_code as CHILD_RELATED_TYPE_CODE,\n" +
+            "child_related_type_name as CHILD_RELATED_TYPE_NAME,\n" +
+            "child_related_type_roll_up as CHILD_RELATED_TYPE_ROLL_UP,\n" +
+            "child_related_status_code as CHILD_RELATED_STATUS_CODE,\n" +
+            "child_related_status_name as CHILD_RELATED_STATUS_NAME,\n" +
+            "child_related_status_roll_up as CHILD_RELATED_STATUS_ROLL_UP,\n" +
+            "relationship_type_code as RELATIONSHIP_TYPE_CODE,\n" +
+            "relationship_type_name as RELATIONSHIP_TYPE_NAME,\n" +
+            "work_type as WORK_TYPE from "+ GetPRMDLDBUser.getPRMDataBase() + ".promis_transform_file_history_work_rels_part where " +
+            "transform_file_ts = (select max(transform_file_ts) from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_file_history_work_rels_part)" +
+            " and U_KEY in('%s')";
 
     public static String GET_SUBJECT_AREAS_DeltaQUERY = "select * from (with crr_dataset as( \n" +
             "  select pub_idt,epr_id,u_key,priority,subject_area_code,subject_area_name,subject_type_code,subject_type_name,work_type,transform_file_ts from "+GetPRMDLDBUser.getPRMDataBase()+".%s \n" +
@@ -1120,7 +1222,7 @@ public class PromisETLDataCheckSQL {
             ", pmc.div_idt as internal_elsevier_division\n" +
             ", inf.inbound_ts\n" +
             "from "+GetPRMDLDBUser.getPRMDataBase()+".promis_prmpubinft_current inf\n" +
-            "left outer join "+GetPRMDLDBUser.getPRMDataBase()+".promis_prmlondest_current lon on inf.pub_idt = lon.pub_idt\n" +
+            "left outer join "+GetPRMDLDBUser.getPRMDataBase()+".promis_prm_londes_2_html_current lon on inf.pub_idt = lon.pub_idt\n" +
             "left outer join "+GetPRMDLDBUser.getPRMDataBase()+".promis_prmpubrelt_current rel on (inf.pub_idt = rel.pub_pub_idt and rel.rtp_rtp_cod = 'RDRCT')\n" +
             "left outer join "+GetPRMDLDBUser.getPRMDataBase()+".promis_prmincpmct_current inc on inc.pub_idt = inf.pub_idt\n" +
             "left outer join "+GetPRMDLDBUser.getPRMDataBase()+".promis_prmpmccodt_current pmc on pmc.mkt_idt = inc.mkt_idt) where U_KEY in ('%s')";

@@ -29,11 +29,11 @@ public class PromisETLDataCheck {
 
     @Given("^We get the (.*) random Promis ids of (.*)$")
     public void getRandomPromisIds(String numberOfRecords, String Currenttablename) {
-       // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random records...");
         switch (Currenttablename) {
-            case "promis_prmlondest_current":
+            case "promis_prm_londes_2_html_current":
                 sql = String.format(PromisETLDataCheckSQL.GET_PRMLONDEST_IDS, Currenttablename, Currenttablename, numberOfRecords);
                 List<Map<?, ?>> randomLondestIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 Ids = randomLondestIds.stream().map(m -> (Integer) m.get("PUB_IDT")).map(String::valueOf).collect(Collectors.toList());
@@ -76,7 +76,7 @@ public class PromisETLDataCheck {
             case "promis_prmclst_part":
                 sql = String.format(PromisETLDataCheckSQL.GET_Promis_prmclst_part, Inboundtablename, Inboundtablename, Joiner.on(",").join(Ids));
                 break;
-            case "promis_prmlondest_part":
+            case "promis_prm_londes_2_html_part":
                 sql = String.format(PromisETLDataCheckSQL.GET_Promis_prmlondest_part, Inboundtablename, Inboundtablename, Joiner.on(",").join(Ids));
                 break;
             case "promis_prmpricest_part":
@@ -113,7 +113,7 @@ public class PromisETLDataCheck {
             case "promis_prmclst_current":
                 sql = String.format(PromisETLDataCheckSQL.GETPRMCLST, Currenttablename, Currenttablename, Joiner.on(",").join(Ids));
                 break;
-            case "promis_prmlondest_current":
+            case "promis_prm_londes_2_html_current":
                 sql = String.format(PromisETLDataCheckSQL.GETPRMLONDEST, Currenttablename, Currenttablename, Joiner.on(",").join(Ids));
                 break;
             case "promis_prmpricest_current":
@@ -440,7 +440,7 @@ public class PromisETLDataCheck {
 
     @Given("^We get the (.*) random Promis DeltaQuery ids of (.*)$")
     public void getRandomPromisDeltaIds(String numberOfRecords, String Deltatablename) {
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random records...");
         sql = String.format(PromisETLDataCheckSQL.GET_UKEY_IDS, Deltatablename, numberOfRecords);
@@ -702,7 +702,7 @@ public class PromisETLDataCheck {
 
     @Given("^We get the (.*) random Promis History Excluding Query ids of (.*)$")
     public void getRandomPromisHistExclIds(String numberOfRecords, String HistExcltablename) {
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random records...");
         sql = String.format(PromisETLDataCheckSQL.GET_UKEY_IDS, HistExcltablename, numberOfRecords);
@@ -980,7 +980,7 @@ public class PromisETLDataCheck {
 
     @Given("^We get the (.*) random Promis Latest Query ids of (.*)$")
     public void getRandomPromisLatestIds(String numberOfRecords, String Latesttablename) {
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random records...");
         sql = String.format(PromisETLDataCheckSQL.GET_UKEY_IDS, Latesttablename, numberOfRecords);
@@ -1262,7 +1262,7 @@ public class PromisETLDataCheck {
 
     @Given("^We get the (.*) random Promis transform mapping ids of (.*)$")
     public void getRandomPromisTransformMappingIds(String numberOfRecords, String Currenttablename) {
-//        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random records...");
                 sql = String.format(PromisETLDataCheckSQL.GET_UKEY_IDS, Currenttablename, numberOfRecords);
@@ -1300,32 +1300,32 @@ public class PromisETLDataCheck {
         }
         Log.info(sql);
         PromisContext.tbPRMDataObjectsFromTransformMapping = DBManager.getDBResultAsBeanList(sql, PRMTablesETLObject.class, Constants.AWS_URL);
-        System.out.println(PromisDataContext.tbPRMDataObjectsFromTransformMapping.size());
+//        System.out.println(PromisDataContext.tbPRMDataObjectsFromTransformMapping.size());
     }
 
     @Then("^We get the Promis Transform mapping current records from (.*)$")
     public void getRecordsInCurrenttablename(String Currenttablename) throws ParseException {
-        Log.info("We get the History Excluding records..");
+        Log.info("We get the Current records..");
         switch (Currenttablename) {
-            case "promis_transform_Current_subject_areas":
+            case "promis_transform_current_subject_areas":
                 sql = String.format(PromisETLDataCheckSQL.GET_SUBJECT_AREAS, Currenttablename, Joiner.on("','").join(Ids));
                 break;
-            case "promis_transform_Current_pricing":
+            case "promis_transform_current_pricing":
                 sql = String.format(PromisETLDataCheckSQL.GET_PRICING, Currenttablename, Joiner.on("','").join(Ids));
                 break;
-            case "promis_transform_Current_person_roles":
+            case "promis_transform_current_person_roles":
                 sql = String.format(PromisETLDataCheckSQL.GET_PERSON_ROLES, Currenttablename, Joiner.on("','").join(Ids));
                 break;
-            case "promis_transform_Current_works":
+            case "promis_transform_current_works":
                 sql = String.format(PromisETLDataCheckSQL.GET_WORKS, Currenttablename, Joiner.on("','").join(Ids));
                 break;
-            case "promis_transform_Current_metrics":
+            case "promis_transform_current_metrics":
                 sql = String.format(PromisETLDataCheckSQL.GET_METRICS, Currenttablename, Joiner.on("','").join(Ids));
                 break;
-            case "promis_transform_Current_urls":
+            case "promis_transform_current_urls":
                 sql = String.format(PromisETLDataCheckSQL.GET_URLS, Currenttablename, Joiner.on("','").join(Ids));
                 break;
-            case "promis_transform_Current_work_rels":
+            case "promis_transform_current_work_rels":
                 sql = String.format(PromisETLDataCheckSQL.GET_WORK_RELS, Currenttablename, Joiner.on("','").join(Ids));
                 break;
         }
@@ -1561,4 +1561,265 @@ public class PromisETLDataCheck {
         Log.info(sql);
         Log.info(Ids.toString());
     }
+
+
+
+
+    @Given("^We get the (.*) random Promis current ids of (.*)$")
+    public void getRandomPromisCurrId(String numberOfRecords, String promisCurrent) {
+       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        Log.info("numberOfRecords = " + numberOfRecords);
+        Log.info("Getting random records...");
+        sql = String.format(PromisETLDataCheckSQL.GET_UKEY_IDS, promisCurrent, numberOfRecords);
+        List<Map<?, ?>> randomCurrIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+        Ids = randomCurrIds.stream().map(m -> (String) m.get("U_KEY")).map(String::valueOf).collect(Collectors.toList());
+        Log.info(sql);
+        Log.info(Ids.toString());
     }
+
+    @When("^We get the Promis transform file history records from (.*)$")
+    public void gettransformFileRecords(String transformFileTable) throws ParseException {
+        Log.info("We get the records from transform_file..");
+        switch (transformFileTable) {
+            case "promis_transform_file_history_subject_areas_part":
+                sql = String.format(PromisETLDataCheckSQL.GET_SUBJECT_AREAS_TRANSFORM_FILE, Joiner.on("','").join(Ids));
+                break;
+            case "promis_transform_file_history_pricing_part":
+                sql = String.format(PromisETLDataCheckSQL.GET_PRICING_TRANSFORM_FILE, Joiner.on("','").join(Ids));
+                break;
+            case "promis_transform_file_history_person_roles_part":
+                sql = String.format(PromisETLDataCheckSQL.GET_PERSON_ROLES_TRANSFORM_FILE, Joiner.on("','").join(Ids));
+                break;
+            case "promis_transform_file_history_works_part":
+                    sql = String.format(PromisETLDataCheckSQL.GET_WORKS_TRANSFORM_FILE, Joiner.on("','").join(Ids));
+                break;
+            case "promis_transform_file_history_metrics_part":
+                sql = String.format(PromisETLDataCheckSQL.GET_METRICS_TRANSFORM_FILE, Joiner.on("','").join(Ids));
+                break;
+            case "promis_transform_file_history_urls_part":
+                sql = String.format(PromisETLDataCheckSQL.GET_URLS_TRANSFORM_FILE, Joiner.on("','").join(Ids));
+                break;
+            case "promis_transform_file_history_work_rels_part":
+                sql = String.format(PromisETLDataCheckSQL.GET_WORK_RELS_TRANSFORM_FILE, Joiner.on("','").join(Ids));
+                break;
+        }
+        Log.info(sql);
+        PromisContext.tbPRMDataObjectsFromtransformFile = DBManager.getDBResultAsBeanList(sql, PRMTablesETLObject.class, Constants.AWS_URL);
+        //System.out.println(PromisDataContext.tbPRMDataObjectsFromtransformFile.size());
+    }
+
+    @And("^Compare Promis records for current and transform file of (.*)$")
+    public void comparePromDataCurrtoTransformFile(String transformFileHist) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if (PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.isEmpty()) {
+            Log.info("No Data Found ....");
+        } else {
+            for (int i = 0; i < PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.size(); i++) {
+                switch (transformFileHist) {
+                    case "promis_transform_file_history_subject_areas_part":
+                        Log.info("Sorting the data to compare the Subject Area records for transform File..");
+                        PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromtransformFile.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
+
+                        String[] etl_promis_transform_file_subject_areas = {"getU_KEY","getPUB_IDT","getEPR_ID","getPRIORITY","getSUBJECT_AREA_CODE","getSUBJECT_AREA_NAME","getSUBJECT_TYPE_CODE","getSUBJECT_TYPE_NAME"};
+
+                        for (String strTemp : etl_promis_transform_file_subject_areas) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+                            PRMTablesETLObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i);
+                            PRMTablesETLObject objectToCompare2 = PromisDataContext.tbPRMDataObjectsFromtransformFile.get(i);
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+                            Log.info("U_KEY => " +  PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i).getU_KEY() +
+                                    " " + strTemp + " => promis_subject_areas = " + method.invoke(objectToCompare1) +
+                                    " promis_transform_file_subject_areas = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_transform_file_subject_areas for U_KEY:"+PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i).getU_KEY(),
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                        }
+                        break;
+                    case "promis_transform_file_history_pricing_part":
+                        Log.info("Sorting the data to compare the Pricing records between current and transform_file ..");
+                        PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromtransformFile.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
+
+                        String[] etl_promis_pricing_transform_file = {"getU_KEY","getPUB_IDT","getEPR_ID","getPRODUCT_TYPE","getCURRENCY","getPRICE","getSTART_DATE","getEND_DATE","getREGION","getQUANTITY","getCUSTOMER_CATEGORY"};
+
+                        for (String strTemp : etl_promis_pricing_transform_file) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesETLObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i);
+                            PRMTablesETLObject objectToCompare2 = PromisDataContext.tbPRMDataObjectsFromtransformFile.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                            Log.info("U_KEY => " +  PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i).getU_KEY() +
+                                    " " + strTemp + " => promis_pricing = " + method.invoke(objectToCompare1) +
+                                    " promis_pricing_transform_file = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_pricing_transform_file for U_KEY:"+PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i).getU_KEY(),
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                        }
+                        break;
+
+                    case "promis_transform_file_history_person_roles_part":
+                        Log.info("Sorting the data to compare the Person Roles records between current and transform_file ..");
+                        PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromtransformFile.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
+
+                        String[] etl_promis_person_roles_transform_file = {"getU_KEY","getPUB_IDT","getEPR_ID","getSEQUENCE_NUMBER","getROLE_DESCRIPTION","getGROUP_NUMBER","getINITIALS","getLAST_NAME","getTITLE","getHONOURS","getAFFILIATION","getIMAGE_URL","getFOOTNOTE_TXT","getNOTES_TXT","getWORK_TYPE"};
+
+                        for (String strTemp : etl_promis_person_roles_transform_file) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesETLObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i);
+                            PRMTablesETLObject objectToCompare2 = PromisDataContext.tbPRMDataObjectsFromtransformFile.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                            Log.info("U_KEY => " +  PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i).getU_KEY() +
+                                    " " + strTemp + " => promis_person_roles = " + method.invoke(objectToCompare1) +
+                                    " promis_person_roles_transform_file = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_person_roles_transform_file for U_KEY:"+PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i).getU_KEY(),
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                        }
+
+                        break;
+                    case "promis_transform_file_history_works_part":
+                        Log.info("Sorting the data to compare the Works records between current and transform file ..");
+                        PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromtransformFile.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
+
+                        String[] etl_promis_works_transform_file = {"getU_KEY","getPUB_IDT","getEPR_ID","getJOURNAL_AIMS_SCOPE","getELSEVIER_COM_IND","getPRIMARY_AUTHOR","getPREVIOUS_TITLE","getWORK_TYPE"};
+
+                        for (String strTemp : etl_promis_works_transform_file) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesETLObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i);
+                            PRMTablesETLObject objectToCompare2 = PromisDataContext.tbPRMDataObjectsFromtransformFile.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                            Log.info("U_KEY => " +  PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i).getU_KEY() +
+                                    " " + strTemp + " => promis_works = " + method.invoke(objectToCompare1) +
+                                    " promis_works_transform_file = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_works_transform_file for U_KEY:"+PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i).getU_KEY(),
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                        }
+
+                        break;
+                    case "promis_transform_file_history_metrics_part":
+                        Log.info("Sorting the data to compare the Metrics records between current and transform file ..");
+                        PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromtransformFile.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
+
+                        String[] etl_promis_metrics_transform_file = {"getU_KEY","getPUB_IDT","getEPR_ID","getMETRIC_CODE","getMETRIC_NAME","getMETRIC","getMETRIC_YEAR","getMETRIC_URL","getWORK_TYPE"};
+
+                        for (String strTemp : etl_promis_metrics_transform_file) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesETLObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i);
+                            PRMTablesETLObject objectToCompare2 = PromisDataContext.tbPRMDataObjectsFromtransformFile.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                            Log.info("U_KEY => " +  PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i).getU_KEY() +
+                                    " " + strTemp + " => promis_metrics = " + method.invoke(objectToCompare1) +
+                                    " promis_metrics_transform_file = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_metrics_transform_file for U_KEY:"+PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i).getU_KEY(),
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                        }
+                        break;
+                    case "promis_transform_file_history_urls_part":
+                        Log.info("Sorting the data to compare the Urls records between current and transfom_file ..");
+                        PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromtransformFile.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
+
+                        String[] etl_promis_urls_transform_file = {"getU_KEY","getPUB_IDT","getEPR_ID","getURL_CODE","getURL_NAME","getURL","getURL_TITLE","getWORK_TYPE"};
+
+                        for (String strTemp : etl_promis_urls_transform_file) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesETLObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i);
+                            PRMTablesETLObject objectToCompare2 = PromisDataContext.tbPRMDataObjectsFromtransformFile.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                            Log.info("U_KEY => " +  PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i).getU_KEY() +
+                                    " " + strTemp + " => promis_urls = " + method.invoke(objectToCompare1) +
+                                    " promis_urls_transform_file = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_urls_transform_file for U_KEY:"+PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i).getU_KEY(),
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                        }
+                        break;
+                    case "promis_transform_file_history_work_rels_part":
+                        Log.info("Sorting the data to compare the Work_Rels records between current and transform_file ..");
+                        PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY)); //sort data in the lists
+                        PromisDataContext.tbPRMDataObjectsFromtransformFile.sort(Comparator.comparing(PRMTablesETLObject::getU_KEY));
+
+                        String[] etl_promis_work_rels_transform_file = {"getU_KEY","getCHILD_PUB_IDT","getPARENT_EPR_ID","getCHILD_EPR_ID","getCHILD_TITLE","getCHILD_RELATED_TYPE_CODE","getCHILD_RELATED_TYPE_NAME","getCHILD_RELATED_STATUS_CODE","getCHILD_RELATED_TYPE_ROLL_UP","getCHILD_RELATED_STATUS_NAME","getCHILD_RELATED_STATUS_ROLL_UP","getRELATIONSHIP_TYPE_CODE","getRELATIONSHIP_TYPE_NAME"};
+
+                        for (String strTemp : etl_promis_work_rels_transform_file) {
+                            java.lang.reflect.Method method;
+                            java.lang.reflect.Method method2;
+
+                            PRMTablesETLObject objectToCompare1 = PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i);
+                            PRMTablesETLObject objectToCompare2 = PromisDataContext.tbPRMDataObjectsFromtransformFile.get(i);
+
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+
+                            Log.info("U_KEY => " +  PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i).getU_KEY() +
+                                    " " + strTemp + " => promis_work_rels = " + method.invoke(objectToCompare1) +
+                                    " promis_work_rels_transform_file = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in promis_work_rels_transform_file for U_KEY:"+PromisDataContext.tbPRMDataObjectsFromTransformMappingCurrent.get(i).getU_KEY(),
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                        }
+                        break;
+                }
+
+
+
+
+            }
+        }
+    }
+
+
+
+}
