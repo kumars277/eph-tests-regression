@@ -521,7 +521,7 @@ public class JM_ETLCoreCountChecksSQL {
             "and   wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
             "order by wsa.notified_date, jm_source_reference)";
 
-    public static String GET_JMF_STAGING_WORK_PERSON_ROLE="select count(*) as COUNT from \n" +
+    public static String GET_JMF_STAGING_WORK_PERSON_ROLE="select * from \n" +
             "(with base_data as\n" +
             "(\n" +
             "select\n" +
@@ -761,6 +761,237 @@ public class JM_ETLCoreCountChecksSQL {
             ")\n" +
             "select * from result_data)";
 
+    public static String GET_JMF_STAGING_WORK_PERSON_ROLE_Count="select count(*) as COUNT from \n" +
+            "(select distinct\n" +
+            "       scenario_name,\n" +
+            "       scenario_code,\n" +
+            "       upsert,\n" +
+            "       concat(work_source_reference,f_role,lower(to_hex(md5(to_utf8(employee_number_new))))) jm_source_ref_new,\n" +
+            "       concat(work_source_reference,f_role,lower(to_hex(md5(to_utf8(employee_number_old))))) jm_source_ref_old,\n" +
+            "       eph_work_id,\n" +
+            "       work_source_reference,\n" +
+            "       f_person,\n" +
+            "       lower(to_hex(md5(to_utf8(employee_number_new)))) employee_number_new,\n" +
+            "       lower(to_hex(md5(to_utf8(employee_number_old)))) employee_number_old,\n" +
+            "       elsevier_journal_number,\n" +
+            "       f_role,\n" +
+            "       internal_email_old,\n" +
+            "       internal_email_new,\n" +
+            "       start_date,\n" +
+            "       end_date,\n" +
+            "       dq_err,\n" +
+            "       notified_date\n" +
+            "from (\n" +
+            "-- PUBLISHERS\n" +
+            "SELECT DISTINCT\n" +
+            "       cs.chronicle_scenario_name as    scenario_name,\n" +
+            "       wc.chronicle_scenario_code as    scenario_code,\n" +
+            "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
+            "            when 'N' then 'Insert'\n" +
+            "            when 'Y' then 'Update'\n" +
+            "            else 'Update'\n" +
+            "        END) as                         upsert,\n" +
+            "        CAST (null as varchar) as                                     jm_source_ref_old, -- for new journals there is no 'old'\n" +
+            "       'J0'||w.elsevier_journal_number||'-'||wpr.peoplehub_id||'-PU'  jm_source_ref_new,\n" +
+            "        w.eph_work_id as                eph_work_id,\n" +
+            "       'J0'||w.elsevier_journal_number  work_source_reference,\n" +
+            "        wpr.eph_person_id as            f_person,\n" +
+            "        w.elsevier_journal_number as    elsevier_journal_number,\n" +
+            "        CAST (null as varchar) as       employee_number_old, -- for new journals there is no 'old'\n" +
+            "        wpr.peoplehub_id as             employee_number_new,\n" +
+            "       'PU' as                          f_role,\n" +
+            "        CAST (null as varchar) as       internal_email_old,  -- for new journals there is no 'old'\n" +
+            "        lower(wpr.email_address) as     internal_email_new,\n" +
+            "        wpr.notified_date as            start_date,\n" +
+            "        CAST (null as date)             end_date,\n" +
+            "       'N'  as                          dq_err,\n" +
+            "        wpr.notified_date as            notified_date\n" +
+            "from  "+ GetJMDLDBUser.getJMDB()+".jmf_work_person_role   wpr\n" +
+            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_work               w  on w.work_id = wpr.f_work\n" +
+            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle     wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
+            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "where wpr.party_role_type in ('PPC', 'PU')\n" +
+            "and   wpr.notified_date is not null\n" +
+            "and   w.work_journey_identifier = 'A1'\n" +
+            "and   wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
+            "UNION\n" +
+            "-- PUBLISHING DIRECTORS\n" +
+            "SELECT DISTINCT\n" +
+            "       cs.chronicle_scenario_name as    scenario_name,\n" +
+            "       wc.chronicle_scenario_code as    scenario_code,\n" +
+            "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
+            "            when 'N' then 'Insert'\n" +
+            "            when 'Y' then 'Update'\n" +
+            "            else 'Update'\n" +
+            "        END) as                         upsert,\n" +
+            "        CAST (null as varchar) as                                         jm_source_ref_old, -- for new journals there is no 'old'\n" +
+            "       'J0'||w.elsevier_journal_number||'-'||warp.pd_peoplehub_id||'-PD'  jm_source_ref_new,\n" +
+            "        w.eph_work_id as                eph_work_id,\n" +
+            "       'J0'||w.elsevier_journal_number  work_source_reference,\n" +
+            "        wpr.eph_person_id as            f_person,\n" +
+            "        w.elsevier_journal_number as    elsevier_journal_number,\n" +
+            "        CAST (null as varchar) as       employee_number_old, -- for new journals there is no 'old'\n" +
+            "        warp.pd_peoplehub_id as         employee_number_new,\n" +
+            "        'PD' as                         f_role,\n" +
+            "        CAST (null as varchar) as       internal_email_old,  -- for new journals there is no 'old'\n" +
+            "        lower(warp.pd_email) as         internal_email_new,\n" +
+            "        wpr.notified_date as            start_date,\n" +
+            "        CAST (null as date)             end_date,\n" +
+            "       'N'  as                          dq_err,\n" +
+            "        wpr.notified_date as            notified_date\n" +
+            "from  "+ GetJMDLDBUser.getJMDB()+".jmf_work_person_role   wpr\n" +
+            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_work               w  on w.work_id = wpr.f_work\n" +
+            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle     wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
+            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "join "+ GetJMDLDBUser.getJMDB()+".works_attrs_roles_people_v warp on\n" +
+            "         (warp.pmgcode = w.pmg_code\n" +
+            "      and warp.pmccode = w.pmc_code\n" +
+            "      and warp.pd_email is not null\n" +
+            "      and warp.pd_email <> 'Not Found')\n" +
+            "--    this last join is to pick up PD email and peoplehub_id from works_attrs_roles_people_v (returns active journals)\n" +
+            "--    for the given pmgcode and pmccode whilst filtering out missing PDs\n" +
+            "where wpr.party_role_type in ('PUBDIR','PD')\n" +
+            "and   wpr.notified_date is not null\n" +
+            "and   w.work_journey_identifier = 'A1'\n" +
+            "and   wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
+            "UNION\n" +
+            "-- BUSINESS CONTROLLERS\n" +
+            "SELECT DISTINCT\n" +
+            "       cs.chronicle_scenario_name as    scenario_name,\n" +
+            "       wc.chronicle_scenario_code as    scenario_code,\n" +
+            "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
+            "            when 'N' then 'Insert'\n" +
+            "            when 'Y' then 'Update'\n" +
+            "            else 'Update'\n" +
+            "        END) as                         upsert,\n" +
+            "        CAST (null as varchar) as                                         jm_source_ref_old,\n" +
+            "       'J0'||w.elsevier_journal_number||'-'||warp.bc_peoplehub_id||'-BC'  jm_source_ref_new,\n" +
+            "        w.eph_work_id as                eph_work_id,\n" +
+            "       'J0'||w.elsevier_journal_number  work_source_reference,\n" +
+            "        CAST (null as varchar)          f_person, -- eph_person_id\n" +
+            "        w.elsevier_journal_number as    elsevier_journal_number,\n" +
+            "        CAST (null as varchar) as       employee_number_old, -- for new journals there is no 'old'\n" +
+            "        warp.bc_peoplehub_id as         employee_number_new,\n" +
+            "        'BC' as                         f_role,\n" +
+            "        CAST (null as varchar) as       internal_email_old,  -- for new journals there is no 'old'\n" +
+            "        lower(warp.bc_email)            internal_email_new,\n" +
+            "        w.notified_date as              start_date,\n" +
+            "        CAST (null as date)             end_date,\n" +
+            "       'N'  as                          dq_err,\n" +
+            "        w.notified_date as              notified_date\n" +
+            "from  "+ GetJMDLDBUser.getJMDB()+".jmf_work               w\n" +
+            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle     wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
+            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "join  "+ GetJMDLDBUser.getJMDB()+".works_attrs_roles_people_v warp on\n" +
+            "         (warp.resp_cen = w.responsibility_centre_code\n" +
+            "      and warp.bc_email is not null\n" +
+            "      and warp.bc_email <> 'Not Found')\n" +
+            "--    this last join is to pick up BC email and peoplehub_id from works_attrs_roles_people_v\n" +
+            "--    for the given responsibility_centre_code. JM only holds BC's names.\n" +
+            "where w.notified_date is not null\n" +
+            "and   w.work_journey_identifier = 'A1'\n" +
+            "and   wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
+            "UNION\n" +
+            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            "-- UPDATE PUBLISHER\n" +
+            "-- there are two possible sources - (1) jmf_family_resource_details has been drawn up into jmf_work.\n" +
+            "--                                  (2) jmf_work_person_role for scenario 'CA'\n" +
+            "-- 'CA' CHANGE ALLOCATED RESOURCE for PUBLISHERS\n" +
+            "-- both have the same PPC/PU data (checked yesterday) so for future-proofing and alignment with EPH\n" +
+            "-- I've taken jmf_work_person_role\n" +
+            "-- Notes\n" +
+            "--     a) for PMC changes we do still need to access via jmf_work dq.\n" +
+            "--     b) warning - the PUBDIR entries on jmf_work_person_role are insert scenarios not updates.\n" +
+            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            "--\n" +
+            "-- 27-Jan-2021 we now need to send the old and new peoplehub_IDs. For updates, peoplehubid_old/new are on jmf_work table\n" +
+            "-- so we have to go to the merged jmf_work, A1 record, to look for pu_peoplehubid_old and pu_peoplehubid_new\n" +
+            "-- ditto for pu_email_old and new\n" +
+            "--\n" +
+            "SELECT DISTINCT\n" +
+            "       cs.chronicle_scenario_name as                                       scenario_name,\n" +
+            "       wc.chronicle_scenario_code as                                       scenario_code,\n" +
+            "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
+            "            when 'N' then 'Insert'\n" +
+            "            when 'Y' then 'Update'\n" +
+            "            else 'Update'\n" +
+            "        END) as                                                             upsert,\n" +
+            "       'J0'||w1.elsevier_journal_number||'-'||w1.pu_peoplehubid_old||'-PU' as jm_source_ref_old,\n" +
+            "       'J0'||w1.elsevier_journal_number||'-'||w1.pu_peoplehubid_new||'-PU' as jm_source_ref_new,\n" +
+            "        COALESCE(w1.eph_work_id, w0.eph_work_id) as                         eph_work_id,\n" +
+            "       'J0'||COALESCE(w1.elsevier_journal_number, w0.elsevier_journal_number) as work_source_reference,\n" +
+            "        wpr.eph_person_id as                                                f_person,\n" +
+            "        COALESCE(w1.elsevier_journal_number, w0.elsevier_journal_number) as elsevier_journal_number,\n" +
+            "        w1.pu_peoplehubid_old as                                            employee_number_old,\n" +
+            "        w1.pu_peoplehubid_new as                                            employee_number_new,\n" +
+            "       'PU' as                                                              f_role,\n" +
+            "        lower(w1.pu_email_old) as                                           internal_email_old,\n" +
+            "        lower(w1.pu_email_new) as                                           internal_email_new,\n" +
+            "        wpr.notified_date as                                                start_date,\n" +
+            "        CAST (null as date)                                                 end_date,\n" +
+            "       (CASE\n" +
+            "            when (w0.eph_work_id             is null and w1.eph_work_id             is null) then 'Y'\n" +
+            "            when (w0.elsevier_journal_number is null and w1.elsevier_journal_number is null) then 'Y'\n" +
+            "            else 'N'\n" +
+            "        END) as                                                             dq_err,\n" +
+            "        wpr.notified_date as                                                notified_date\n" +
+            "from  "+ GetJMDLDBUser.getJMDB()+".jmf_work_person_role  wpr\n" +
+            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_work               w0 on w0.work_id = wpr.f_work\n" +
+            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle     wc on wc.work_chronicle_id = w0.work_chronicle_id\n" +
+            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
+            "left join "+ GetJMDLDBUser.getJMDB()+".jmf_work           w1 on w1.work_chronicle_id       = w0.work_chronicle_id\n" +
+            "                               and w1.elsevier_journal_number = w0.elsevier_journal_number\n" +
+            "                               and w1.work_journey_identifier = 'A1'\n" +
+            "where wpr.party_role_type in ('PPC', 'PU')\n" +
+            "and   w0.work_journey_identifier = 'A0'\n" +
+            "and   wc.chronicle_scenario_code = 'CA'\n" +
+            "and   w1.pu_peoplehubid_new is not null  \n" +
+            "and   w1.pu_email_new       is not null  \n" +
+            "and   wpr.notified_date is not null\n" +
+            "UNION\n" +
+            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            "-- UPDATE PUBLISHING DIRECTOR\n" +
+            "-- JM updates ALL journals for the new PD assigned to a given PMG. Note: ALL journals, not just active journals.\n" +
+            "-- This is why we need to use pmg_pmc_journals_v not works_attrs_roles_people_v.\n" +
+            "-- Updates are passed to EPH by WORK PERSON ROLE as if they had come through from jmf_work_person_role\n" +
+            "-- (In JMF this is the current model for PU changes, but not yet for PD changes.)\n" +
+            "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            "-- UPDATE EPH  WORK_PERSON_ROLE\n" +
+            "--\n" +
+            "-- PMGCODE IS NOT IN THE OUTPUT, TO ALLOW THE UNION ALL TO WORK WITH PUBLISHER UPDATES.\n" +
+            "-- THE ALTERNATIVE WOULD BE TO ADD PMGCODE TO ALL THE QUERIES.\n" +
+            "--\n" +
+            "SELECT DISTINCT\n" +
+            "       cs.chronicle_scenario_name as       scenario_name,\n" +
+            "       cs.chronicle_scenario_code as       scenario_code,\n" +
+            "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
+            "             when 'N' then 'Insert'\n" +
+            "             when 'Y' then 'Update'\n" +
+            "             else 'Update'\n" +
+            "        END) as                            upsert,\n" +
+            "       'J0'||ppj.jnl_no||'-'||ppa.pmg_pubdir_peoplehub_id_old||'-PD'  jm_source_ref_old,\n" +
+            "       'J0'||ppj.jnl_no||'-'||ppa.pmg_pubdir_peoplehub_id_new||'-PD'  jm_source_ref_new,\n" +
+            "        ppj.work_id as                     eph_work_id,\n" +
+            "       'J0'||ppj.jnl_no                    work_source_reference,\n" +
+            "        CAST (null as varchar)             f_person,\n" +
+            "        ppj.jnl_no as                      elsevier_journal_number,\n" +
+            "        ppa.pmg_pubdir_peoplehub_id_old as employee_number_old,\n" +
+            "        ppa.pmg_pubdir_peoplehub_id_new as employee_number_new,\n" +
+            "       'PD' as                             f_role,\n" +
+            "        lower(ppa.pmg_pubdir_email_old) as internal_email_old,\n" +
+            "        lower(ppa.pmg_pubdir_email_new) as internal_email_new,\n" +
+            "        CAST(ppa.notified_date as date)    start_date,\n" +
+            "        CAST (null as date)                end_date,\n" +
+            "       'N'  as                             dq_err,\n" +
+            "        ppa.notified_date as               notified_date\n" +
+            "from  (("+ GetJMDLDBUser.getJMDB()+".jmf_pmg_pubdir_allocation   ppa\n" +
+            "join    "+ GetJMDLDBUser.getJMDB()+".pmg_pmc_journals_v          ppj on (ppj.pmgcode = ppa.pmx_pmgcode))\n" +
+            "join    "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario       cs on (cs.chronicle_scenario_code = ppa.allocation_type))\n" +
+            "where    ppa.allocation_type = 'PD'\n" +
+            "and      ppa.notified_date is not null\n" +
+            "  )\n" +
+            "order by notified_date, jm_source_ref_new)";
+
     public static String GET_JMF_STAGING_MANIFESTATION_UPDATES="select count(*) as count from (\n" +
             "select cs.chronicle_scenario_name as              scenario,\n" +
             "      (CASE cs.chronicle_scenario_evolutionary_ind\n" +
@@ -893,10 +1124,10 @@ public class JM_ETLCoreCountChecksSQL {
             "       m.notified_date as             effective_start_date,\n" +
             "      'N' as                          dq_err,\n" +
             "       m.notified_date as             notified_date\n" +
-            "from  journalmaestro_sit2.jmf_manifestation      m\n" +
-            "join  journalmaestro_sit2.jmf_work               w  on m.f_work = w.work_id\n" +
-            "join  journalmaestro_sit2.jmf_work_chronicle     wc on w.work_chronicle_id        = wc.work_chronicle_id\n" +
-            "join  journalmaestro_sit2.jmf_chronicle_scenario cs on wc.chronicle_scenario_code = cs.chronicle_scenario_code\n" +
+            "from  "+ GetJMDLDBUser.getJMDB()+".jmf_manifestation      m\n" +
+            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_work               w  on m.f_work = w.work_id\n" +
+            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle     wc on w.work_chronicle_id        = wc.work_chronicle_id\n" +
+            "join  "+ GetJMDLDBUser.getJMDB()+".jmf_chronicle_scenario cs on wc.chronicle_scenario_code = cs.chronicle_scenario_code\n" +
             "where w.work_journey_identifier = 'A1'\n" +
             "and   wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
             "and   m.notified_date is not null\n" +
@@ -945,14 +1176,14 @@ public class JM_ETLCoreCountChecksSQL {
             "           else 'N'\n" +
             "       END) as                                                            dq_err,\n" +
             "       m2.notified_date as                                                notified_date\n" +
-            "from (((journalmaestro_sit2.etl_manifestation_updates1_v mu1\n" +
-            "        join journalmaestro_sit2.jmf_work                w1 on ((w1.work_chronicle_id       = mu1.w0_chronicle_id)\n" +
+            "from ((("+ GetJMDLDBUser.getJMDB()+".etl_manifestation_updates1_v mu1\n" +
+            "        join "+ GetJMDLDBUser.getJMDB()+".jmf_work                w1 on ((w1.work_chronicle_id       = mu1.w0_chronicle_id)\n" +
             "                                        and (w1.elsevier_journal_number = mu1.w0_journal_number)\n" +
             "                                        and (w1.work_journey_identifier = 'A1')))                   -- we've definitely got one work, the A1.\n" +
-            "        join journalmaestro_sit2.jmf_work_chronicle      wc on ((w1.work_chronicle_id       = wc.work_chronicle_id)\n" +
+            "        join "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle      wc on ((w1.work_chronicle_id       = wc.work_chronicle_id)\n" +
             "                                        and (w1.work_journey_identifier = 'A1')\n" +
             "                                        and (wc.chronicle_scenario_code = 'RN')))\n" +
-            "        join journalmaestro_sit2.jmf_manifestation       m2 on ((m2.f_work = w1.work_id)\n" +
+            "        join "+ GetJMDLDBUser.getJMDB()+".jmf_manifestation       m2 on ((m2.f_work = w1.work_id)\n" +
             "                                        and (m2.elsevier_journal_number = mu1.m0_journal_number)\n" +
             "                                        and (m2.manifestation_type      = mu1.m0_manifestation_type)))\n" +
             "where m2.notified_date is not null\n" +
@@ -1231,7 +1462,7 @@ public class JM_ETLCoreCountChecksSQL {
                             "employee_number_new,             -- will be used by etl_product_person_role_dq_v\n" +
                             "dq_err,                          -- default 'N', but set 'Y' (yes error) when PU email or PU peoplehub_id are missing.\n" +
                             "notified_date\n" +
-                            "from  journalmaestro_sit2.etl_product_part1_v\n" +
+                            "from  "+ GetJMDLDBUser.getJMDB()+".etl_product_part1_v\n" +
                             "where notified_date is not null\n" +
                             ")\n" +
                             "-- select * from base_data\n" +
@@ -1515,7 +1746,7 @@ public class JM_ETLCoreCountChecksSQL {
                             "    dq_err,\n" +
                             "    notified_date\n" +
                             "from\n" +
-                            "crosstab_data) select * from result_data))";
+                            "crosstab_data) select * from result_data)";
 
 
     public static String GET_JMF_STAGING_PRODUCT_UPDATES="select count(*) as count from (\n" +
@@ -1555,7 +1786,7 @@ public class JM_ETLCoreCountChecksSQL {
             "-- pu_employee_number,        -- to be used by etl_product_person_role_dq_v\n" +
             "dq_err,\n" +
             "notified_date\n" +
-            "from  etl_product_part1_v\n" +
+            "from  "+ GetJMDLDBUser.getJMDB()+".etl_product_part1_v\n" +
             "where notified_date is not null\n" +
             ")\n" +
             "--                                   -- = select * from base_data\n" +
@@ -1607,13 +1838,13 @@ public class JM_ETLCoreCountChecksSQL {
             "        END) as                                                           dq_err,\n" +
             "        m1.notified_date as                                               notified_date\n" +
             "from (((base_data               bd\n" +
-            "        join journalmaestro_sit2.jmf_work           w1 on ((w1.work_chronicle_id       = bd.w0_chronicle_id)\n" +
+            "        join "+ GetJMDLDBUser.getJMDB()+".jmf_work           w1 on ((w1.work_chronicle_id       = bd.w0_chronicle_id)\n" +
             "                                   and (w1.elsevier_journal_number = bd.w0_journal_number)\n" +
             "                                   and (w1.work_journey_identifier = 'A1')))                   -- we've definitely got one work, the A1.\n" +
-            "        join journalmaestro_sit2.jmf_work_chronicle wc on ((w1.work_chronicle_id       = wc.work_chronicle_id)\n" +
+            "        join "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle wc on ((w1.work_chronicle_id       = wc.work_chronicle_id)\n" +
             "                                   and (w1.work_journey_identifier = 'A1')\n" +
             "                                   and (wc.chronicle_scenario_code = 'RN')))\n" +
-            "        join journalmaestro_sit2.jmf_manifestation  m1 on ((m1.f_work = w1.work_id)\n" +
+            "        join "+ GetJMDLDBUser.getJMDB()+".jmf_manifestation  m1 on ((m1.f_work = w1.work_id)\n" +
             "                                   and (m1.elsevier_journal_number = bd.m0_journal_number)\n" +
             "                                   and (m1.manifestation_type      = bd.m0_manifestation_type)))\n" +
             "where m1.notified_date is not null\n" +
@@ -1857,7 +2088,7 @@ public class JM_ETLCoreCountChecksSQL {
             "from\n" +
             "crosstab_data\n" +
             ")\n" +
-            "select * from result_data))";
+            "select * from result_data)";
 
 
     public static String GET_JMF_STAGING_PRODUCT="select count(*) as count from (\n" +
@@ -1868,234 +2099,246 @@ public class JM_ETLCoreCountChecksSQL {
             "\n" +
             "select * from "+ GetJMDLDBUser.getJMDB()+".etl_product_updates_v)";
 
-    public static String GET_JMF_STAGING_PRODUCT_PERSON_ROLE="select count(*) as COUNT from (select distinct\n" +
-            "       scenario_name,\n" +
-                    "       scenario_code,\n" +
-                    "       upsert,\n" +
-                    "       concat(work_source_reference,f_role,lower(to_hex(md5(to_utf8(employee_number_new))))) jm_source_ref_new,\n" +
-                    "       concat(work_source_reference,f_role,lower(to_hex(md5(to_utf8(employee_number_old))))) jm_source_ref_old,\n" +
-                    "       eph_work_id,\n" +
-                    "       work_source_reference,\n" +
-                    "       f_person,\n" +
-                    "       lower(to_hex(md5(to_utf8(employee_number_new)))) employee_number_new,\n" +
-                    "       lower(to_hex(md5(to_utf8(employee_number_old)))) employee_number_old,\n" +
-                    "       elsevier_journal_number,\n" +
-                    "       f_role,\n" +
-                    "       internal_email_old,\n" +
-                    "       internal_email_new,\n" +
-                    "       start_date,\n" +
-                    "       end_date,\n" +
-                    "       dq_err,\n" +
-                    "       notified_date\n" +
-                    "from (\n" +
-                    "-- PUBLISHERS\n" +
-                    "SELECT DISTINCT\n" +
-                    "       cs.chronicle_scenario_name as    scenario_name,\n" +
-                    "       wc.chronicle_scenario_code as    scenario_code,\n" +
-                    "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
-                    "            when 'N' then 'Insert'\n" +
-                    "            when 'Y' then 'Update'\n" +
-                    "            else 'Update'\n" +
-                    "        END) as                         upsert,\n" +
-                    "        CAST (null as varchar) as                                     jm_source_ref_old, -- for new journals there is no 'old'\n" +
-                    "       'J0'||w.elsevier_journal_number||'-'||wpr.peoplehub_id||'-PU'  jm_source_ref_new,\n" +
-                    "        w.eph_work_id as                eph_work_id,\n" +
-                    "       'J0'||w.elsevier_journal_number  work_source_reference,\n" +
-                    "        wpr.eph_person_id as            f_person,\n" +
-                    "        w.elsevier_journal_number as    elsevier_journal_number,\n" +
-                    "        CAST (null as varchar) as       employee_number_old, -- for new journals there is no 'old'\n" +
-                    "        wpr.peoplehub_id as             employee_number_new,\n" +
-                    "       'PU' as                          f_role,\n" +
-                    "        CAST (null as varchar) as       internal_email_old,  -- for new journals there is no 'old'\n" +
-                    "        lower(wpr.email_address) as     internal_email_new,\n" +
-                    "        wpr.notified_date as            start_date,\n" +
-                    "        CAST (null as date)             end_date,\n" +
-                    "       'N'  as                          dq_err,\n" +
-                    "        wpr.notified_date as            notified_date\n" +
-                    "from  " + GetJMDLDBUser.getJMDB() + ".jmf_work_person_role   wpr\n" +
-                    "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work               w  on w.work_id = wpr.f_work\n" +
-                    "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
-                    "join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
-                    "where wpr.party_role_type in ('PPC', 'PU')\n" +
-                    "and   wpr.notified_date is not null\n" +
-                    "and   w.work_journey_identifier = 'A1'\n" +
-                    "and   wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
-                    "UNION\n" +
-                    "-- PUBLISHING DIRECTORS\n" +
-                    "SELECT DISTINCT\n" +
-                    "       cs.chronicle_scenario_name as    scenario_name,\n" +
-                    "       wc.chronicle_scenario_code as    scenario_code,\n" +
-                    "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
-                    "            when 'N' then 'Insert'\n" +
-                    "            when 'Y' then 'Update'\n" +
-                    "            else 'Update'\n" +
-                    "        END) as                         upsert,\n" +
-                    "        CAST (null as varchar) as                                         jm_source_ref_old, -- for new journals there is no 'old'\n" +
-                    "       'J0'||w.elsevier_journal_number||'-'||warp.pd_peoplehub_id||'-PD'  jm_source_ref_new,\n" +
-                    "        w.eph_work_id as                eph_work_id,\n" +
-                    "       'J0'||w.elsevier_journal_number  work_source_reference,\n" +
-                    "        wpr.eph_person_id as            f_person,\n" +
-                    "        w.elsevier_journal_number as    elsevier_journal_number,\n" +
-                    "        CAST (null as varchar) as       employee_number_old, -- for new journals there is no 'old'\n" +
-                    "        warp.pd_peoplehub_id as         employee_number_new,\n" +
-                    "        'PD' as                         f_role,\n" +
-                    "        CAST (null as varchar) as       internal_email_old,  -- for new journals there is no 'old'\n" +
-                    "        lower(warp.pd_email) as         internal_email_new,\n" +
-                    "        wpr.notified_date as            start_date,\n" +
-                    "        CAST (null as date)             end_date,\n" +
-                    "       'N'  as                          dq_err,\n" +
-                    "        wpr.notified_date as            notified_date\n" +
-                    "from  " + GetJMDLDBUser.getJMDB() + ".jmf_work_person_role   wpr\n" +
-                    "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work               w  on w.work_id = wpr.f_work\n" +
-                    "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
-                    "join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
-                    "join " + GetJMDLDBUser.getJMDB() + ".works_attrs_roles_people_v warp on\n" +
-                    "         (warp.pmgcode = w.pmg_code\n" +
-                    "      and warp.pmccode = w.pmc_code\n" +
-                    "      and warp.pd_email is not null\n" +
-                    "      and warp.pd_email <> 'Not Found')\n" +
-                    "--    this last join is to pick up PD email and peoplehub_id from works_attrs_roles_people_v (returns active journals)\n" +
-                    "--    for the given pmgcode and pmccode whilst filtering out missing PDs\n" +
-                    "where wpr.party_role_type in ('PUBDIR','PD')\n" +
-                    "and   wpr.notified_date is not null\n" +
-                    "and   w.work_journey_identifier = 'A1'\n" +
-                    "and   wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
-                    "UNION\n" +
-                    "-- BUSINESS CONTROLLERS\n" +
-                    "SELECT DISTINCT\n" +
-                    "       cs.chronicle_scenario_name as    scenario_name,\n" +
-                    "       wc.chronicle_scenario_code as    scenario_code,\n" +
-                    "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
-                    "            when 'N' then 'Insert'\n" +
-                    "            when 'Y' then 'Update'\n" +
-                    "            else 'Update'\n" +
-                    "        END) as                         upsert,\n" +
-                    "        CAST (null as varchar) as                                         jm_source_ref_old,\n" +
-                    "       'J0'||w.elsevier_journal_number||'-'||warp.bc_peoplehub_id||'-BC'  jm_source_ref_new,\n" +
-                    "        w.eph_work_id as                eph_work_id,\n" +
-                    "       'J0'||w.elsevier_journal_number  work_source_reference,\n" +
-                    "        CAST (null as varchar)          f_person, -- eph_person_id\n" +
-                    "        w.elsevier_journal_number as    elsevier_journal_number,\n" +
-                    "        CAST (null as varchar) as       employee_number_old, -- for new journals there is no 'old'\n" +
-                    "        warp.bc_peoplehub_id as         employee_number_new,\n" +
-                    "        'BC' as                         f_role,\n" +
-                    "        CAST (null as varchar) as       internal_email_old,  -- for new journals there is no 'old'\n" +
-                    "        lower(warp.bc_email)            internal_email_new,\n" +
-                    "        w.notified_date as              start_date,\n" +
-                    "        CAST (null as date)             end_date,\n" +
-                    "       'N'  as                          dq_err,\n" +
-                    "        w.notified_date as              notified_date\n" +
-                    "from  " + GetJMDLDBUser.getJMDB() + ".jmf_work               w\n" +
-                    "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on wc.work_chronicle_id = w.work_chronicle_id\n" +
-                    "join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
-                    "join  " + GetJMDLDBUser.getJMDB() + ".works_attrs_roles_people_v warp on\n" +
-                    "         (warp.resp_cen = w.responsibility_centre_code\n" +
-                    "      and warp.bc_email is not null\n" +
-                    "      and warp.bc_email <> 'Not Found')\n" +
-                    "--    this last join is to pick up BC email and peoplehub_id from works_attrs_roles_people_v\n" +
-                    "--    for the given responsibility_centre_code. JM only holds BC's names.\n" +
-                    "where w.notified_date is not null\n" +
-                    "and   w.work_journey_identifier = 'A1'\n" +
-                    "and   wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
-                    "UNION\n" +
-                    "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-                    "-- UPDATE PUBLISHER\n" +
-                    "-- there are two possible sources - (1) jmf_family_resource_details has been drawn up into jmf_work.\n" +
-                    "--                                  (2) jmf_work_person_role for scenario 'CA'\n" +
-                    "-- 'CA' CHANGE ALLOCATED RESOURCE for PUBLISHERS\n" +
-                    "-- both have the same PPC/PU data (checked yesterday) so for future-proofing and alignment with EPH\n" +
-                    "-- I've taken jmf_work_person_role\n" +
-                    "-- Notes\n" +
-                    "--     a) for PMC changes we do still need to access via jmf_work dq.\n" +
-                    "--     b) warning - the PUBDIR entries on jmf_work_person_role are insert scenarios not updates.\n" +
-                    "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-                    "--\n" +
-                    "-- 27-Jan-2021 we now need to send the old and new peoplehub_IDs. For updates, peoplehubid_old/new are on jmf_work table\n" +
-                    "-- so we have to go to the merged jmf_work, A1 record, to look for pu_peoplehubid_old and pu_peoplehubid_new\n" +
-                    "-- ditto for pu_email_old and new\n" +
-                    "--\n" +
-                    "SELECT DISTINCT\n" +
-                    "       cs.chronicle_scenario_name as                                       scenario_name,\n" +
-                    "       wc.chronicle_scenario_code as                                       scenario_code,\n" +
-                    "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
-                    "            when 'N' then 'Insert'\n" +
-                    "            when 'Y' then 'Update'\n" +
-                    "            else 'Update'\n" +
-                    "        END) as                                                             upsert,\n" +
-                    "       'J0'||w1.elsevier_journal_number||'-'||w1.pu_peoplehubid_old||'-PU' as jm_source_ref_old,\n" +
-                    "       'J0'||w1.elsevier_journal_number||'-'||w1.pu_peoplehubid_new||'-PU' as jm_source_ref_new,\n" +
-                    "        COALESCE(w1.eph_work_id, w0.eph_work_id) as                         eph_work_id,\n" +
-                    "       'J0'||COALESCE(w1.elsevier_journal_number, w0.elsevier_journal_number) as work_source_reference,\n" +
-                    "        wpr.eph_person_id as                                                f_person,\n" +
-                    "        COALESCE(w1.elsevier_journal_number, w0.elsevier_journal_number) as elsevier_journal_number,\n" +
-                    "        w1.pu_peoplehubid_old as                                            employee_number_old,\n" +
-                    "        w1.pu_peoplehubid_new as                                            employee_number_new,\n" +
-                    "       'PU' as                                                              f_role,\n" +
-                    "        lower(w1.pu_email_old) as                                           internal_email_old,\n" +
-                    "        lower(w1.pu_email_new) as                                           internal_email_new,\n" +
-                    "        wpr.notified_date as                                                start_date,\n" +
-                    "        CAST (null as date)                                                 end_date,\n" +
-                    "       (CASE\n" +
-                    "            when (w0.eph_work_id             is null and w1.eph_work_id             is null) then 'Y'\n" +
-                    "            when (w0.elsevier_journal_number is null and w1.elsevier_journal_number is null) then 'Y'\n" +
-                    "            else 'N'\n" +
-                    "        END) as                                                             dq_err,\n" +
-                    "        wpr.notified_date as                                                notified_date\n" +
-                    "from  " + GetJMDLDBUser.getJMDB() + ".jmf_work_person_role  wpr\n" +
-                    "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work               w0 on w0.work_id = wpr.f_work\n" +
-                    "join  " + GetJMDLDBUser.getJMDB() + ".jmf_work_chronicle     wc on wc.work_chronicle_id = w0.work_chronicle_id\n" +
-                    "join  " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario cs on cs.chronicle_scenario_code = wc.chronicle_scenario_code\n" +
-                    "left join " + GetJMDLDBUser.getJMDB() + ".jmf_work           w1 on w1.work_chronicle_id       = w0.work_chronicle_id\n" +
-                    "                               and w1.elsevier_journal_number = w0.elsevier_journal_number\n" +
-                    "                               and w1.work_journey_identifier = 'A1'\n" +
-                    "where wpr.party_role_type in ('PPC', 'PU')\n" +
-                    "and   w0.work_journey_identifier = 'A0'\n" +
-                    "and   wc.chronicle_scenario_code = 'CA'\n" +
-                    "and   wpr.notified_date is not null\n" +
-                    "UNION\n" +
-                    "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-                    "-- UPDATE PUBLISHING DIRECTOR\n" +
-                    "-- JM updates ALL journals for the new PD assigned to a given PMG. Note: ALL journals, not just active journals.\n" +
-                    "-- This is why we need to use pmg_pmc_journals_v not works_attrs_roles_people_v.\n" +
-                    "-- Updates are passed to EPH by WORK PERSON ROLE as if they had come through from jmf_work_person_role\n" +
-                    "-- (In JMF this is the current model for PU changes, but not yet for PD changes.)\n" +
-                    "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-                    "-- UPDATE EPH  WORK_PERSON_ROLE\n" +
-                    "--\n" +
-                    "-- PMGCODE IS NOT IN THE OUTPUT, TO ALLOW THE UNION ALL TO WORK WITH PUBLISHER UPDATES.\n" +
-                    "-- THE ALTERNATIVE WOULD BE TO ADD PMGCODE TO ALL THE QUERIES.\n" +
-                    "--\n" +
-                    "SELECT DISTINCT\n" +
-                    "       cs.chronicle_scenario_name as       scenario_name,\n" +
-                    "       cs.chronicle_scenario_code as       scenario_code,\n" +
-                    "       (CASE cs.chronicle_scenario_evolutionary_ind\n" +
-                    "             when 'N' then 'Insert'\n" +
-                    "             when 'Y' then 'Update'\n" +
-                    "             else 'Update'\n" +
-                    "        END) as                            upsert,\n" +
-                    "       'J0'||ppj.jnl_no||'-'||ppa.pmg_pubdir_peoplehub_id_old||'-PD'  jm_source_ref_old,\n" +
-                    "       'J0'||ppj.jnl_no||'-'||ppa.pmg_pubdir_peoplehub_id_new||'-PD'  jm_source_ref_new,\n" +
-                    "        ppj.work_id as                     eph_work_id,\n" +
-                    "       'J0'||ppj.jnl_no                    work_source_reference,\n" +
-                    "        CAST (null as varchar)             f_person,\n" +
-                    "        ppj.jnl_no as                      elsevier_journal_number,\n" +
-                    "        ppa.pmg_pubdir_peoplehub_id_old as employee_number_old,\n" +
-                    "        ppa.pmg_pubdir_peoplehub_id_new as employee_number_new,\n" +
-                    "       'PD' as                             f_role,\n" +
-                    "        lower(ppa.pmg_pubdir_email_old) as internal_email_old,\n" +
-                    "        lower(ppa.pmg_pubdir_email_new) as internal_email_new,\n" +
-                    "        CAST(ppa.notified_date as date)    start_date,\n" +
-                    "        CAST (null as date)                end_date,\n" +
-                    "       'N'  as                             dq_err,\n" +
-                    "        ppa.notified_date as               notified_date\n" +
-                    "from  ((" + GetJMDLDBUser.getJMDB() + ".jmf_pmg_pubdir_allocation   ppa\n" +
-                    "join    " + GetJMDLDBUser.getJMDB() + ".pmg_pmc_journals_v          ppj on (ppj.pmgcode = ppa.pmx_pmgcode))\n" +
-                    "join    " + GetJMDLDBUser.getJMDB() + ".jmf_chronicle_scenario       cs on (cs.chronicle_scenario_code = ppa.allocation_type))\n" +
-                    "where    ppa.allocation_type = 'PD'\n" +
-                    "and      ppa.notified_date is not null\n" +
-                    "  )\n" +
-                    "order by notified_date, jm_source_ref_new\n" +
-                    ")";
+    public static String GET_JMF_STAGING_PRODUCT_PERSON_ROLE="select count (*) as COUNT from (\n" +
+            "with base_data as\n" +
+            "(\n" +
+            "select\n" +
+            "scenario_name,                   -- scenario NAME 'New Proprietary' etc\n" +
+            "scenario_code,                   -- scenario CODE NP, NS, AC, MI, RN, CA\n" +
+            "upsert,                          -- 'Insert', or 'Update'\n" +
+            "jm_source_reference,             -- format E-J012345 or P-J012345\n" +
+            "eph_work_id,                     -- format EPR-W-xxxxxx\n" +
+            "eph_manifestation_id,            -- format EPR-M-xxxxxx\n" +
+            "eph_product_id,                  -- format EPR-xxxxxx new journals: set null\n" +
+            "base_title,                      -- JM-manifestation-title a suffix of (Print) or (Online)\n" +
+            "w0_journal_number,\n" +
+            "m0_journal_number,\n" +
+            "w0_chronicle_id,\n" +
+            "w0_journey_identifier,\n" +
+            "m0_manifestation_type,           -- (P)rint or (E)lectronic\n" +
+            "separately_saleable_ind,         -- set TRUE for all new journal products.\n" +
+            "trial_allowed_ind,               -- set FALSE for all new journal products.\n" +
+            "launch_date,                     -- w.launch_date\n" +
+            "tax_code,                        -- yes, hard-code based on manifestation_type\n" +
+            "open_access_journal_type,        -- build as (F)ull-10, (H)ybrid-11, (S)ubsidised-12, (N)one-2, null.\n" +
+            "subscription,                    -- CASE oa jnl type not in (F,S).\n" +
+            "bulk_sales,                      -- CASE oa jnl type not in (F,S) and manifestation type\n" +
+            "back_files,                      -- CASE oa jnl type not in (F,S) and manifestation type\n" +
+            "open_access,                     -- CASE oa jnl type, set Y when (F,H,S) else N.\n" +
+            "reprints,                        -- yes, CASE based on manifestation type\n" +
+            "author_charges,                  -- set 'Y' for new journals, 'N' for updates.\n" +
+            "one_off_access,                  -- 'N' for new journals\n" +
+            "packages,                        -- 'N' for new journals\n" +
+            "availability_status,             -- for new journals set to planned available 'PPL'\n" +
+            "work_status,                     -- for new journals set to planned available 'PPL'\n" +
+            "work_title,                      -- w.product_work_title\n" +
+            "work_type,                       -- set 'JOURNAL'\n" +
+            "internal_email_old,              -- for use by etl_product_person_role_dq_v\n" +
+            "internal_email_new,              -- ditto\n" +
+            "employee_number_old,             -- ditto\n" +
+            "employee_number_new,             -- ditto\n" +
+            "dq_err,                          -- default is 'N', but is set 'Y' by part1 if PU email or PU peoplehub_id is missing.\n" +
+            "notified_date\n" +
+            "from  "+ GetJMDLDBUser.getJMDB()+".etl_product_part1_v\n" +
+            "where  (notified_date is not null\n" +
+            "and   ((upsert = 'Insert')\n" +
+            "    or (upsert = 'Update' and scenario_name = 'Change Allocated Resources')))\n" +
+            ")\n" +
+            "-- we are now processing FOR ALL INSERTS (NP, NS, AC, MI) then for CA UPDATES. Filter out RN Title Updates (not processed here)\n" +
+            "-- select * from base_data\n" +
+            ", crosstab_data as\n" +
+            "(\n" +
+            "select\n" +
+            "    scenario_name,\n" +
+            "    scenario_code,\n" +
+            "    upsert,\n" +
+            "    jm_source_reference||'-SUB-'||employee_number_new||'-PO' as jm_source_ref,\n" +
+            "    eph_work_id,\n" +
+            "    eph_manifestation_id,\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "   'SUB' as                          f_type,\n" +
+            "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
+            "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
+            "    employee_number_old as           employee_number_old,              -- old publisher peoplehub_id\n" +
+            "    employee_number_new as           employee_number_new,              -- new publisher peoplehub_id\n" +
+            "   'PO' as                           PO_role,                          -- hard-code as 'PO'. Leg2 will translate to the role id\n" +
+            "    notified_date as                 start_date,\n" +
+            "    CAST (null as date)              end_date,\n" +
+            "    dq_err,\n" +
+            "    notified_date\n" +
+            "from base_data\n" +
+            "where subscription = 'Y'\n" +
+            "UNION\n" +
+            "select\n" +
+            "    scenario_name,\n" +
+            "    scenario_code,\n" +
+            "    upsert,\n" +
+            "    jm_source_reference||'-JBS-'||employee_number_new||'-PO' as jm_source_ref,\n" +
+            "    eph_work_id,\n" +
+            "    eph_manifestation_id,\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "   'JBS' as                          f_type,\n" +
+            "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
+            "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
+            "    employee_number_old as           employee_number_old,              -- old publisher peoplehub_id\n" +
+            "    employee_number_new as           employee_number_new,              -- new publisher peoplehub_id\n" +
+            "   'PO' as                           PO_role,                          -- hard-code as 'PO'. Leg2 will translate to the role id\n" +
+            "    notified_date as                 start_date,\n" +
+            "    CAST (null as date)              end_date,\n" +
+            "    dq_err,\n" +
+            "    notified_date\n" +
+            "from base_data\n" +
+            "where bulk_sales = 'Y'\n" +
+            "UNION\n" +
+            "select\n" +
+            "    scenario_name,\n" +
+            "    scenario_code,\n" +
+            "    upsert,\n" +
+            "    jm_source_reference||'-BKF-'||employee_number_new||'-PO' as jm_source_ref,\n" +
+            "    eph_work_id,\n" +
+            "    eph_manifestation_id,\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "   'BKF' as                          f_type,\n" +
+            "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
+            "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
+            "    employee_number_old as           employee_number_old,              -- old publisher peoplehub_id\n" +
+            "    employee_number_new as           employee_number_new,              -- new publisher peoplehub_id\n" +
+            "   'PO' as                           PO_role,                          -- hard-code as 'PO'. Leg2 will translate to the role id\n" +
+            "    notified_date as                 start_date,\n" +
+            "    CAST (null as date)              end_date,\n" +
+            "    dq_err,\n" +
+            "    notified_date\n" +
+            "from base_data\n" +
+            "where back_files = 'Y'\n" +
+            "UNION\n" +
+            "select\n" +
+            "    scenario_name,\n" +
+            "    scenario_code,\n" +
+            "    upsert,\n" +
+            "    jm_source_reference||'-RPR-'||employee_number_new||'-PO' as jm_source_ref,\n" +
+            "    eph_work_id,\n" +
+            "    eph_manifestation_id,\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "   'RPR' as                          f_type,\n" +
+            "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
+            "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
+            "    employee_number_old as           employee_number_old,              -- old publisher peoplehub_id\n" +
+            "    employee_number_new as           employee_number_new,              -- new publisher peoplehub_id\n" +
+            "   'PO' as                           PO_role,                          -- hard-code as 'PO'. Leg2 will translate to the role id\n" +
+            "    notified_date as                 start_date,\n" +
+            "    CAST (null as date)              end_date,\n" +
+            "    dq_err,\n" +
+            "    notified_date\n" +
+            "from base_data\n" +
+            "where reprints = 'Y'\n" +
+            "UNION\n" +
+            "select\n" +
+            "    scenario_name,\n" +
+            "    scenario_code,\n" +
+            "    upsert,\n" +
+            "    jm_source_reference||'-OOA-'||employee_number_new||'-PO' as jm_source_ref,\n" +
+            "    eph_work_id,\n" +
+            "    eph_manifestation_id,\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "   'OOA' as                          f_type,\n" +
+            "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
+            "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
+            "    employee_number_old as           employee_number_old,              -- old publisher peoplehub_id\n" +
+            "    employee_number_new as           employee_number_new,              -- new publisher peoplehub_id\n" +
+            "   'PO' as                           PO_role,                          -- hard-code as 'PO'. Leg2 will translate to the role id\n" +
+            "    notified_date as                 start_date,\n" +
+            "    CAST (null as date)              end_date,\n" +
+            "    dq_err,\n" +
+            "    notified_date\n" +
+            "from base_data\n" +
+            "where one_off_access = 'Y'\n" +
+            "UNION\n" +
+            "select\n" +
+            "    scenario_name,\n" +
+            "    scenario_code,\n" +
+            "    upsert,\n" +
+            "    jm_source_reference||'-OAA-'||employee_number_new||'-PO' as jm_source_ref,\n" +
+            "    eph_work_id,\n" +
+            "    eph_manifestation_id,\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "   'OAA' as                          f_type,\n" +
+            "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
+            "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
+            "    employee_number_old as           employee_number_old,              -- old publisher peoplehub_id\n" +
+            "    employee_number_new as           employee_number_new,              -- new publisher peoplehub_id\n" +
+            "   'PO' as                           PO_role,                          -- hard-code as 'PO'. Leg2 will translate to the role id\n" +
+            "    notified_date as                 start_date,\n" +
+            "    CAST (null as date)              end_date,\n" +
+            "    dq_err,\n" +
+            "    notified_date\n" +
+            "from base_data\n" +
+            "where open_access = 'Y'\n" +
+            "UNION\n" +
+            "select\n" +
+            "    scenario_name,\n" +
+            "    scenario_code,\n" +
+            "    upsert,\n" +
+            "    jm_source_reference||'-JAS-'||employee_number_new||'-PO' as jm_source_ref,\n" +
+            "    eph_work_id,\n" +
+            "    eph_manifestation_id,\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "   'JAS' as                          f_type,\n" +
+            "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
+            "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
+            "    employee_number_old as           employee_number_old,              -- old publisher peoplehub_id\n" +
+            "    employee_number_new as           employee_number_new,              -- new publisher peoplehub_id\n" +
+            "   'PO' as                           PO_role,                          -- hard-code as 'PO'. Leg2 will translate to the role id\n" +
+            "    notified_date as                 start_date,\n" +
+            "    CAST (null as date)              end_date,\n" +
+            "    dq_err,\n" +
+            "    notified_date\n" +
+            "from base_data\n" +
+            "where author_charges = 'Y'\n" +
+            "UNION\n" +
+            "select\n" +
+            "    scenario_name,\n" +
+            "    scenario_code,\n" +
+            "    upsert,\n" +
+            "    jm_source_reference||'-PKG-'||employee_number_new||'-PO' as jm_source_ref,\n" +
+            "    eph_work_id,\n" +
+            "    eph_manifestation_id,\n" +
+            "    CAST (null as varchar) as        eph_product_id,                    -- not known by JM for new products.\n" +
+            "   'PKG' as                          f_type,\n" +
+            "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
+            "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
+            "    employee_number_old as           employee_number_old,              -- old publisher peoplehub_id\n" +
+            "    employee_number_new as           employee_number_new,              -- new publisher peoplehub_id\n" +
+            "   'PO' as                           PO_role,                          -- hard-code as 'PO'. Leg2 will translate to the role id\n" +
+            "    notified_date as                 start_date,\n" +
+            "    CAST (null as date)              end_date,\n" +
+            "    dq_err,\n" +
+            "    notified_date\n" +
+            "from base_data\n" +
+            "where packages = 'Y')\n" +
+            ",result_data as\n" +
+            "(\n" +
+            "select\n" +
+            "    scenario_name,\n" +
+            "    scenario_code,\n" +
+            "    upsert,\n" +
+            "    jm_source_ref as jm_source_reference,\n" +
+            "    eph_work_id,\n" +
+            "    eph_manifestation_id,\n" +
+            "    eph_product_id,\n" +
+            "    f_type,\n" +
+            "    internal_email_old,\n" +
+            "    internal_email_new,\n" +
+            "    employee_number_old,\n" +
+            "    employee_number_new,\n" +
+            "    po_role,\n" +
+            "    start_date,\n" +
+            "    end_date,\n" +
+            "    dq_err,\n" +
+            "    notified_date\n" +
+            "from\n" +
+            "crosstab_data\n" +
+            ")\n" +
+            "select * from result_data)\n";
 
 
     public static String GET_JMF_STAGING_IMPRINT_DATA="select count(*)as count from (\n" +
@@ -2160,8 +2403,8 @@ public class JM_ETLCoreCountChecksSQL {
             ")\n" +
             "\n";
 
-    public static String GET_JMF_STAGING_WORKS_ATTRS_ROLES_PEOPLE="select count(*) as count from (\n" +
-            "SELECT\n" +
+    public static String GET_JMF_STAGING_WORKS_ATTRS_ROLES_PEOPLE="select count(*) as COUNT from (\n" +
+            "   SELECT\n" +
             "     \"w\".\"work_id\"\n" +
             "   , \"w\".\"work_title\" \"WorkTitle\"\n" +
             "   , \"ws\".\"roll_up_status\"\n" +
@@ -2190,7 +2433,7 @@ public class JM_ETLCoreCountChecksSQL {
             "   , \"p3\".\"family_name\" \"BC_family_name\"\n" +
             "   , COALESCE(\"p3\".\"email\", 'Not Found') \"BC_email\"\n" +
             "   , \"p3\".\"peoplehub_id\" \"BC_peoplehub_id\"\n" +
-            "   FROM "+ GetPRMDLDBUser.getProdDataBase()+".gd_wwork w\n" +
+            "   FROM "+GetPRMDLDBUser.getProdDataBase()+".gd_wwork w\n" +
             "   LEFT JOIN "+GetPRMDLDBUser.getProdDataBase()+".gd_x_lov_work_status ws ON \"ws\".\"code\" = \"w\".\"f_status\" AND \"ws\".\"l_end_date\" IS NULL\n" +
             "   LEFT JOIN "+GetPRMDLDBUser.getProdDataBase()+".gd_work_identifier wi1 ON \"wi1\".\"f_wwork\" = \"w\".\"work_id\" AND \"wi1\".\"f_type\" = 'ELSEVIER JOURNAL NUMBER' AND \"wi1\".\"effective_end_date\" IS NULL\n" +
             "   LEFT JOIN "+GetPRMDLDBUser.getProdDataBase()+".gd_work_identifier wi2 ON \"wi2\".\"f_wwork\" = \"w\".\"work_id\" AND \"wi2\".\"f_type\" = 'ISSN-L' AND \"wi2\".\"effective_end_date\" IS NULL\n" +
@@ -2208,5 +2451,5 @@ public class JM_ETLCoreCountChecksSQL {
             "   WHERE \"w\".\"f_type\" = 'JNL'\n" +
             "   AND   \"ws\".\"valid_for_journals\" = true\n" +
             "   AND   \"ws\".\"roll_up_status\" IN ('Planned', 'Launched')\n" +
-            "   )";
+            ")";
 }
