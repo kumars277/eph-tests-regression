@@ -280,15 +280,23 @@ public class WorkExtended {
                 boolean extPersonFound = false;
                 for (int cnt = 0; cnt < wep.length; cnt++) {
                     if (ignore.contains(cnt)) continue;
-                    if (wep[cnt].getCoreWorkPersonRoleId().equalsIgnoreCase(wepDB[i].getCoreWorkPersonRoleId())) {
 
+                    if (wep[cnt].getCoreWorkPersonRoleId() != null | wepDB[cnt].getCoreWorkPersonRoleId() != null) {
+                        if (wep[cnt].getCoreWorkPersonRoleId().equalsIgnoreCase(wepDB[cnt].getCoreWorkPersonRoleId()))
+                            extPersonFound = true;
+                    } else if (wep[cnt].getExtendedRole().get("code").toString().equalsIgnoreCase(wepDB[i].getExtendedRole().get("code").toString()) &
+                            wep[cnt].getExtendedPerson().get("firstName").toString().equalsIgnoreCase(wepDB[i].getExtendedPerson().get("firstName").toString())
+                    ) {
                         extPersonFound = true;
-                        Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - extendedRole name", wep[cnt].getExtendedRole().get("code"), wepDB[i].getExtendedRole().get("code"));
+                    }
+
+                    if(extPersonFound){
+                     //   Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - extendedRole name", wep[cnt].getExtendedRole().get("code"), wepDB[i].getExtendedRole().get("code"));
                         printLog("extendedRole code" + i);
                         Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - extendedRole name", wep[cnt].getExtendedRole().get("name"), wepDB[i].getExtendedRole().get("name"));
                         printLog("extendedRole name");
 
-                        Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - extendedPerson firstName", wep[cnt].getExtendedPerson().get("firstName"), wepDB[i].getExtendedPerson().get("firstName"));
+                    //    Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - extendedPerson firstName", wep[cnt].getExtendedPerson().get("firstName"), wepDB[i].getExtendedPerson().get("firstName"));
                         printLog("extendedPerson firstName");
                         Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - extendedPerson lastName", wep[cnt].getExtendedPerson().get("lastName"), wepDB[i].getExtendedPerson().get("lastName"));
                         printLog("extendedPerson lastName");
@@ -419,10 +427,10 @@ public class WorkExtended {
             boolean exUrlFound = false;
             for(int cnt=0;cnt<weuDB.length;cnt++) {
                 if(ignore.contains(cnt))continue;
-                if (weu[i].extendedUrl.getUrlTitle().equalsIgnoreCase(weuDB[cnt].extendedUrl.getUrlTitle())) {
+                if (weu[i].extendedUrl.getUrl().equalsIgnoreCase(weuDB[cnt].extendedUrl.getUrl())) {
                     exUrlFound=true;
 
-                    printLog("workExtendedUrls urlTitle ");
+                    printLog("workExtendedUrls url ");
 
                     Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedUrls-> code " + i, weu[i].extendedUrl.getType().get("code"), weuDB[cnt].extendedUrl.getType().get("code"));
                     printLog("workExtendedUrls code " + i);
@@ -430,9 +438,10 @@ public class WorkExtended {
                     Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedUrls-> name " + i, weu[i].extendedUrl.getType().get("name"), weuDB[cnt].extendedUrl.getType().get("name"));
                     printLog("workExtendedUrls name ");
 
-                    Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedUrls-> url " + i, weu[i].extendedUrl.getUrl(), weuDB[cnt].extendedUrl.getUrl());
-                    printLog("workExtendedUrls url ");
-
+                    if(weu[i].extendedUrl.getUrlTitle()!=null|weuDB[cnt].extendedUrl.getUrlTitle()!=null) {
+                        Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - workExtendedUrls-> urlTitle " + i, weu[i].extendedUrl.getUrlTitle(), weuDB[cnt].extendedUrl.getUrlTitle());
+                        printLog("workExtendedUrls urlTitle ");
+                    }
                     ignore.add(cnt);break;
                 }
             }

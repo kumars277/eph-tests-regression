@@ -75,7 +75,7 @@ public class WorkApiObject {
         boolean failed = false;
         try{
         //1
-        workCore.compareWithDB(this.id);
+     //   workCore.compareWithDB(this.id);
 
         //2
         if (workExtended != null) {
@@ -87,33 +87,27 @@ public class WorkApiObject {
         //3
         Log.info("\nVerifying work manifestations...");
         Log.info("total Manifestations found..."+manifestations.length);
-        for (WorkManifestationApiObject manifestation : manifestations) {
-            manifestation.compareWithDB();
-        }
+        for (WorkManifestationApiObject manifestation : manifestations) {manifestation.compareWithDB();}
 
         //4
         if (products != null) {
             Log.info("\nVerifying work products...");
             Log.info("total work products found..."+products.size());
-            for (ManifestationProductAPIObject Workproducts : products) {
-                Workproducts.compareWithDB();
-            }
-        }
+            for (ManifestationProductAPIObject Workproducts : products) {Workproducts.compareWithDB();}}
         }
         catch (NullPointerException e)
         {
             Log.info(e.getMessage());
-            DataQualityContext.api_response.prettyPrint();
-            failed = true;
+          //  DataQualityContext.api_response.prettyPrint();
+            Assert.assertFalse(DataQualityContext.breadcrumbMessage +e.getMessage()+ " scenario Failed ", true);
+
         }
         catch (Exception e)
         {
             Log.info(e.getMessage());
-            failed = true;
+            Assert.assertFalse(DataQualityContext.breadcrumbMessage +e.getMessage()+ " scenario Failed ", true);
         }
-        finally {
-            Assert.assertFalse(DataQualityContext.breadcrumbMessage + " scenario Failed ", failed);
-        }
+
     }
 
     public void getJsonToObject_extendedWork(String workId) {
