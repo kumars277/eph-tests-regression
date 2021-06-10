@@ -21,8 +21,8 @@ public class JM_ETLCoreCountChecksSteps {
 
 
     @Given("^We know the total count of JM ETL Core (.*) data")
-    public void getJMMYSQLCount(String tableName) {
-        switch (tableName){
+    public void getJMMYSQLCount(String ETLtable) {
+        switch (ETLtable){
             case "etl_accountable_product_dq_v":
                 sqlJM = JM_ETLCoreCountChecksSQL.GET_JMF_ACCOUNTABLE_PRODUCT;
                 break;
@@ -80,12 +80,12 @@ public class JM_ETLCoreCountChecksSteps {
         Log.info(sqlJM);
         List<Map<String, Object>> JMTableCount = DBManager.getDBResultMap(sqlJM, Constants.AWS_URL);
         JMCount = ((Long) JMTableCount.get(0).get("count")).intValue();
-        Log.info(tableName + " in JM Count: " + JMCount);
+        Log.info(ETLtable + " in JM Count: " + JMCount);
     }
 
     @When("^Get the total count of JM (.*) data is in the JM Staging$")
-    public void getJMDLLCount(String tableName) {
-        switch (tableName){
+    public void getJMDLLCount(String ETLtable) {
+        switch (ETLtable){
             case "etl_accountable_product_dq_v":
                 sqlDL = JM_ETLCoreCountChecksSQL.GET_JMF_STAGING_ACCOUNTABLE_PRODUCT;
                 break;
@@ -99,7 +99,7 @@ public class JM_ETLCoreCountChecksSteps {
                 sqlDL = JM_ETLCoreCountChecksSQL.GET_JMF_STAGING_WORK_SUBJECT_AREA;
                 break;
             case "etl_work_person_role_dq_v":
-                sqlDL = JM_ETLCoreCountChecksSQL.GET_JMF_STAGING_WORK_PERSON_ROLE;
+                sqlDL = JM_ETLCoreCountChecksSQL.GET_JMF_STAGING_WORK_PERSON_ROLE_Count;
                 break;
             case "etl_manifestation_updates1_v":
                 sqlDL = JM_ETLCoreCountChecksSQL.GET_JMF_STAGING_MANIFESTATION_UPDATES;
@@ -139,13 +139,13 @@ public class JM_ETLCoreCountChecksSteps {
         List<Map<String, Object>> DPPCountDL = DBManager.getDLResultMap(sqlDL,
                 Constants.AWS_URL);
         DLJMCount = ((Long) DPPCountDL.get(0).get("count")).intValue();
-        Log.info(tableName + " data in DL: " + DLJMCount);
+        Log.info(ETLtable + " data in DL: " + DLJMCount);
     }
 
     @Then("^Compare count of the JM count for (.*) table between JM ETL Core and DL are identical$")
-    public void JMcompareMYSQLtoDL(String tableName) {
-        Assert.assertEquals("The counts between " + tableName + " is not equal", JMCount, DLJMCount);
-        Log.info("The count for " + tableName + " table between MYSQL: " + JMCount + " and DL: " + DLJMCount + " is equal");
+    public void JMcompareMYSQLtoDL(String ETLtable) {
+        Assert.assertEquals("The counts between " + ETLtable + " is not equal", JMCount, DLJMCount);
+        Log.info("The count for " + ETLtable + " table between MYSQL: " + JMCount + " and DL: " + DLJMCount + " is equal");
     }
 
 }
