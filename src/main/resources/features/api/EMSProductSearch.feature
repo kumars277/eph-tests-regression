@@ -55,11 +55,12 @@ Feature: Search API: Products
     Then the product details are retrieved and compared when search option is used with <idType>
     Examples:
       | idType                                     |
+      | PRODUCT_MANIFESTATION_IDENTIFIER           |
       | PRODUCT_ID                                 |
   #    | PRODUCT_IDENTIFIER                         |
       | PRODUCT_WORK_IDENTIFIER                    |
       | PRODUCT_WORK_ID                            |
-      | PRODUCT_MANIFESTATION_IDENTIFIER           |
+
       | PRODUCT_MANIFESTATION_ID                   |
       | PRODUCT_MANIFESTATION_WORK_IDENTIFIER      |
       | PRODUCT_MANIFESTATION_WORK_ID              |

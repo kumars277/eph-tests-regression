@@ -136,6 +136,7 @@ public class ProductApiObject {
            //5. pricingExtended comparison
            //implemented by Nishant @ 8 May 2020
            if (work != null) {
+               DataQualityContext.breadcrumbMessage += "->" + work.getId();
                work.getWorkCore().compareWithDB(work.getId());
                if (work.getWorkExtended() != null) {
                    WorkApiObject workApiObject = new WorkApiObject();
