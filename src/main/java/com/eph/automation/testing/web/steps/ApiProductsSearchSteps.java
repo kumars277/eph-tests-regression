@@ -87,7 +87,7 @@ public class ApiProductsSearchSteps {
         Log.info("Environment used..."+System.getProperty("ENV"));
         Log.info("Selected random product ids are : " + ids);
         //added by Nishant @ 26 Dec for debugging failures
-        //  ids.clear(); ids.add("EPR-10KVH0"); Log.info("hard coded product ids are : " + ids);//
+        //  ids.clear(); ids.add("EPR-11CTJW"); Log.info("hard coded product ids are : " + ids);//
 
         DataQualityContext.breadcrumbMessage += "->" + ids;
         Assert.assertFalse(DataQualityContext.breadcrumbMessage +" Verify That list with random ids is not empty.", ids.isEmpty());
@@ -102,6 +102,8 @@ public class ApiProductsSearchSteps {
         ids = randomPersonSearchIds.stream().map(m -> (BigDecimal) m.get("f_person")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
         DataQualityContext.breadcrumbMessage += "->" + ids;
+
+
         Assert.assertFalse(DataQualityContext.breadcrumbMessage+" Verify That list with random person ids is not empty.", ids.isEmpty());
     }
 

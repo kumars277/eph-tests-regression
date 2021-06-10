@@ -67,12 +67,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
                 break;
 
         }
-
-        //for debugging failure overwrite sql value
-        // sql="select  epr_id , \"json\" from ephuat_extended_data_stitch.stch_product_core_json where epr_id='EPR-10Y6GT'";
-
-
-        randomIdsData = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+         randomIdsData = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomIdsData.stream().map(m -> (String) m.get("epr_id")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random ids  : " + ids);
         //ids.clear();ids.add("");
@@ -114,69 +109,66 @@ public class ApiSearchDataCheckStitchingLayerSteps {
 
         }
 
-        //for debugging failure overwrite sql value
-        // sql="select  epr_id , \"json\" from ephuat_extended_data_stitch.stch_product_core_json where epr_id='EPR-10Y6GT'";
-
-
         randomIdsData = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-      //  ids = randomIdsData.stream().map(m -> (String) m.get("epr_id")).map(String::valueOf).collect(Collectors.toList());
-      //  Log.info("Selected random ids  : " + ids);
-      //  DataQualityContext.breadcrumbMessage += "->" + ids;
-      //  Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
+
     }
 
 
     @And("call PF search API for ids and compare with json for (.*)")
     public void callApiForIds(String stich_table) throws AzureOauthTokenFetchingException {
         int bound = randomIdsData.size();
+        try {
+            for (int i = 0; i < bound; i++) {
+                Log.info(randomIdsData.get(i).get("epr_id").toString());
+                //   Log.info(randomIdsData.get(i).get("json").toString());
 
-        for (int i = 0; i < bound; i++) {
-            Log.info(randomIdsData.get(i).get("epr_id").toString());
-            //   Log.info(randomIdsData.get(i).get("json").toString());
+                switch (stich_table) {
+                    case "stch_product_ext_json_byAvailability":
+                        response = apiService.searchForProductResult(randomIdsData.get(i).get("epr_id").toString());
 
-            switch (stich_table) {
-                case "stch_product_ext_json_byAvailability":
-                    response = apiService.searchForProductResult(randomIdsData.get(i).get("epr_id").toString());
+                        AvailabilityExtendedTestClass jsonValue = new Gson().fromJson(randomIdsData.get(i).get("json").toString(), AvailabilityExtendedTestClass.class);
+                        if (jsonValue.getAvailabilityExtended().getApplications() != null | response.getAvailabilityExtended().getApplications() != null) {
+                            compare_stch_product_ext_json_byAvailability(jsonValue, response.getAvailabilityExtended());
+                        }
+                        break;
 
-                    AvailabilityExtendedTestClass jsonValue = new Gson().fromJson(randomIdsData.get(i).get("json").toString(), AvailabilityExtendedTestClass.class);
-                    if (jsonValue.getAvailabilityExtended().getApplications() != null | response.getAvailabilityExtended().getApplications() != null) {
-                        compare_stch_product_ext_json_byAvailability(jsonValue, response.getAvailabilityExtended());
-                    }
-                    break;
+                    case "stch_product_ext_json_byPricing":
+                        response = apiService.searchForProductResult(randomIdsData.get(i).get("epr_id").toString());
+                        PricingExtendedTestClass pricingJsonValue = new Gson().fromJson(randomIdsData.get(i).get("json").toString(), PricingExtendedTestClass.class);
+                        if (pricingJsonValue.getPricingExtended().getExtendedPrices() != null | response.getPricingExtended().getExtendedPrices() != null) {
+                            compare_stch_product_ext_json_byPricing(pricingJsonValue, response.getPricingExtended());
+                        }
+                        break;
 
-                case "stch_product_ext_json_byPricing":
-                    response = apiService.searchForProductResult(randomIdsData.get(i).get("epr_id").toString());
-                    PricingExtendedTestClass pricingJsonValue = new Gson().fromJson(randomIdsData.get(i).get("json").toString(), PricingExtendedTestClass.class);
-                    if (pricingJsonValue.getPricingExtended().getExtendedPrices() != null | response.getPricingExtended().getExtendedPrices() != null) {
-                        compare_stch_product_ext_json_byPricing(pricingJsonValue, response.getPricingExtended());
-                    }
-                    break;
+                    case "stch_product_core_json":
+                        response = apiService.searchForProductResult(randomIdsData.get(i).get("epr_id").toString());
+                        compare_stch_product_core_json(i);
+                        break;
 
-                case "stch_product_core_json":
-                    response = apiService.searchForProductResult(randomIdsData.get(i).get("epr_id").toString());
-                    compare_stch_product_core_json(i);
-                    break;
+                    case "stch_manifestation_ext_json":
+                        apiWorksSearchSteps.getProductDetailByManifestationId(randomIdsData.get(i).get("epr_id").toString());
+                        response = apiService.searchForProductResult(productDataObjectsFromEPHGD.get(0).getPRODUCT_ID());
+                        compare_stch_manifestation_ext_json(i);
+                        break;
 
-                case "stch_manifestation_ext_json":
-                    apiWorksSearchSteps.getProductDetailByManifestationId(randomIdsData.get(i).get("epr_id").toString());
-                    response = apiService.searchForProductResult(productDataObjectsFromEPHGD.get(0).getPRODUCT_ID());
-                    compare_stch_manifestation_ext_json(i);
-                    break;
+                    case "stch_work_ext_json":
+                        apiWorksSearchSteps.getProductDetailByWorkId(randomIdsData.get(i).get("epr_id").toString());
+                        response = apiService.searchForProductResult(productDataObjectsFromEPHGD.get(0).getPRODUCT_ID());
+                        compare_stch_work_ext_json(i);
+                        break;
 
-                case "stch_work_ext_json":
-                    apiWorksSearchSteps.getProductDetailByWorkId(randomIdsData.get(i).get("epr_id").toString());
-                    response = apiService.searchForProductResult(productDataObjectsFromEPHGD.get(0).getPRODUCT_ID());
-                    compare_stch_work_ext_json(i);
-                    break;
+                    case "stch_work_core_json":
+                        workResponse = apiService.searchForWorkByIDResult(randomIdsData.get(i).get("epr_id").toString());
+                        compare_stch_work_core_json(i);
+                        break;
 
-                case "stch_work_core_json":
-                    workResponse = apiService.searchForWorkByIDResult(randomIdsData.get(i).get("epr_id").toString());
-                    compare_stch_work_core_json(i);
-                    break;
 
+                }
 
             }
 
+        } catch (Exception e) {
+            Assert.assertFalse(DataQualityContext.breadcrumbMessage + " " + e.getMessage(), true);
         }
     }
 
