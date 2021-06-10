@@ -25,7 +25,7 @@ Feature:Validate data of DL All Core Views where data comes from BCS and JM Core
       |all_manifestation_v                  |50                 |
       |all_person_v                         |50                 |
       |all_product_v                        |50                 |
-      |all_product_rel_package_v            |50                 |
+    #  |all_product_rel_package_v            |50                 | not required, this is for analysis purpose created in SIT
       |all_work_identifier_v                |50                 |
       |all_work_person_role_v               |50                 |
       |all_work_relationship_v              |50                 |
