@@ -53,7 +53,7 @@ public class JM_ExtendedCountAndDataCheckSteps {
 
     @Given("^We get the (.*) random JM Extended ids$")
     public void getRandomJMExtendedIds(String numberOfRecords) {
-//  numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random IDs...");
         sql = String.format(JMExtendedCountCheckSQL.GET_JM_EXTENDED_IDs, numberOfRecords);
