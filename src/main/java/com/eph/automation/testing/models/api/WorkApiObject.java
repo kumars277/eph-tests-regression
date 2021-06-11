@@ -75,7 +75,7 @@ public class WorkApiObject {
         boolean failed = false;
         try{
         //1
-     //   workCore.compareWithDB(this.id);
+        workCore.compareWithDB(this.id);
 
         //2
         if (workExtended != null) {

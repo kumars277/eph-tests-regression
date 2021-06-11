@@ -61,7 +61,7 @@ public class ApiWorksSearchSteps {
 
         Log.info("Selected random work ids  : " + ids +"on environment "+System.getProperty("ENV"));
         //added by Nishant @ 27 Dec for debugging failures
-       // ids.clear();ids.add("EPR-W-102YGR");Log.info("hard coded work ids are : " + ids);
+      // ids.clear();ids.add("EPR-W-10Y7KC");Log.info("hard coded work ids are : " + ids);
         DataQualityContext.breadcrumbMessage += "->" + ids;
         Assert.assertFalse(DataQualityContext.breadcrumbMessage + "- Verify That list with random ids is not empty.", ids.isEmpty());
     }
@@ -459,7 +459,7 @@ public class ApiWorksSearchSteps {
         boolean failed = false;
         Log.info("searching by..." + searchType);
         int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
-        try {
+
             for (int i = 0; i < bound; i++) {
                 String workId = dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID();
                 switch (searchType) {
@@ -578,16 +578,7 @@ public class ApiWorksSearchSteps {
             }
 
 
-        } catch (NullPointerException e) {
-            e.getMessage();
-            DataQualityContext.api_response.prettyPrint();
-            failed = true;
-        } catch (Exception e) {
-            e.getMessage();
-            failed = true;
-        } finally {
-            Assert.assertFalse(DataQualityContext.breadcrumbMessage + " scenario Failed ", failed);
-        }
+
 
     }
 
@@ -596,7 +587,7 @@ public class ApiWorksSearchSteps {
         //created by Nishant @ 24-25 Apr 2020
         WorksMatchedApiObject returnedWorks = null;
         boolean failed = false;
-        try {
+
             Log.info("searching by..." + searchType);
             int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
             for (int i = 0; i < bound; i++) {
@@ -652,16 +643,7 @@ public class ApiWorksSearchSteps {
                 returnedWorks.verifyWorkWithIdIsReturned(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
             }
 
-        } catch (NullPointerException e) {
-            e.getMessage();
-            DataQualityContext.api_response.prettyPrint();
-            failed = true;
-        } catch (Exception e) {
-            e.getMessage();
-            failed = true;
-        } finally {
-            Assert.assertFalse(DataQualityContext.breadcrumbMessage + " scenario Failed ", failed);
-        }
+
     }
 
     @When("^the work details are retrieved by PMC Code and compared$")
