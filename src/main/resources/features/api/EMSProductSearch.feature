@@ -60,7 +60,6 @@ Feature: Search API: Products
   #    | PRODUCT_IDENTIFIER                         |
       | PRODUCT_WORK_IDENTIFIER                    |
       | PRODUCT_WORK_ID                            |
-
       | PRODUCT_MANIFESTATION_ID                   |
       | PRODUCT_MANIFESTATION_WORK_IDENTIFIER      |
       | PRODUCT_MANIFESTATION_WORK_ID              |

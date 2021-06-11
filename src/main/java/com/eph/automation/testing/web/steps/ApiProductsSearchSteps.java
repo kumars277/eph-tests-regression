@@ -114,8 +114,10 @@ public class ApiProductsSearchSteps {
         Log.info(sql);
         List<Map<?, ?>> randomPackageIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         packageIds = randomPackageIds.stream().map(m -> (String) m.get("product_id")).map(String::valueOf).collect(Collectors.toList());
+
         Log.info("Selected random package ids  : " + packageIds);
-        DataQualityContext.breadcrumbMessage += "->" + ids;
+
+        DataQualityContext.breadcrumbMessage += "->" + packageIds;
         Assert.assertFalse(DataQualityContext.breadcrumbMessage+" Verify That list with random ids is not empty.", packageIds.isEmpty());
     }
 
@@ -483,10 +485,9 @@ public class ApiProductsSearchSteps {
    try {
        for (ProductDataObject productDataObject : productDataObjects) {
            boolean found = false;
-           int from;
-           int size;
+           int from;           int size;
            from = 0;
-           size = 50;
+           size = 500;
            ProductsMatchedApiObject returnedProducts;
            switch (searchOption) {
                case "PRODUCT_ID":
@@ -543,7 +544,14 @@ public class ApiProductsSearchSteps {
                    break;
                case "PRODUCT_MANIFESTATION_WORK_TITLE":
                    getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
-                   returnedProducts = searchForProductsBySearchResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
+                   returnedProducts = searchForProductsBySearchResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE() + "&from=" + from + "&size=" + size);
+                   Log.info("Total product found for manifestationWorkTitle search... - " + returnedProducts.getTotalMatchCount());
+                   while (!returnedProducts.verifyProductWithIdIsReturnedOnly(productDataObjects.get(0).getPRODUCT_ID()) && from + size < returnedProducts.getTotalMatchCount()) {
+                       from += size;
+                       Log.info("scanned productID from " + (from - size) + " to " + from + " records...");
+                       returnedProducts = searchForProductsBySearchResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE() + "&from=" + from + "&size=" + size);
+                   }
+
                    break;
                case "PRODUCT_MANIFESTATION_WORK_IDENTIFIER":
                    getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());

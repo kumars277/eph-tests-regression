@@ -31,6 +31,7 @@ Feature: Customer Search API: Works
     Then work response is compared with the DB for <options>
     Examples:
       |options            |
+
       |PERSON_NAME        |
       |PEOPLE_HUB_ID      |
       |PERSON_ID      |
