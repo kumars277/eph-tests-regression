@@ -337,17 +337,27 @@ public class WorkExtended {
        printLog("workExtendedEditorialBoard count " +weeb.length);
 
        ignore.clear();
+       boolean codeMatched = false;
+       boolean firstNameMatched = false;
+       boolean lastNameMatched =false;
+
        for(int i=0;i<weeb.length;i++)
        {
         boolean exEditorialBoardFound = false;
-
+           codeMatched = false;firstNameMatched = false; lastNameMatched =false;
         for(int cnt=0;cnt<=weebDB.length;cnt++){
             if (ignore.contains(cnt)) continue;
 
-            if(weeb[i].extendedBoardRole.get("code").toString().equalsIgnoreCase(weebDB[cnt].extendedBoardRole.get("code").toString())&
-                    weeb[i].extendedBoardMember.get("firstName").toString().equalsIgnoreCase(weebDB[cnt].extendedBoardMember.get("firstName").toString())&
-                    weeb[i].extendedBoardMember.get("lastName").toString().equalsIgnoreCase(weebDB[cnt].extendedBoardMember.get("lastName").toString())
-            ) {
+          if(weeb[i].extendedBoardRole.get("code").toString().equalsIgnoreCase(weebDB[cnt].extendedBoardRole.get("code").toString()))codeMatched=true;
+          if(weeb[i].extendedBoardMember!=null|weebDB[cnt].extendedBoardMember!=null) {
+              if (weeb[i].extendedBoardMember.get("firstName") != null | weebDB[cnt].extendedBoardMember.get("firstName") != null)
+                  if (weeb[i].extendedBoardMember.get("firstName").toString().equalsIgnoreCase(weebDB[cnt].extendedBoardMember.get("firstName").toString()))
+                      firstNameMatched = true;
+              if (weeb[i].extendedBoardMember.get("lastName") != null | weebDB[cnt].extendedBoardMember.get("lastName") != null)
+                  if (weeb[i].extendedBoardMember.get("lastName").toString().equalsIgnoreCase(weebDB[cnt].extendedBoardMember.get("lastName").toString()))
+                      lastNameMatched = true;
+          }
+            if((codeMatched&firstNameMatched)|(codeMatched&lastNameMatched)) {
                 exEditorialBoardFound = true;
 
                 printLog("workExtendedEditorialBoard extendedBoardRole " + i);

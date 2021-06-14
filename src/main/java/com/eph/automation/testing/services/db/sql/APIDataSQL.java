@@ -214,12 +214,24 @@ public class APIDataSQL {
     public static String EPH_GD_PRODUCT_COUNT_BY_PACKAGE_EXTRACT = "select count (*) from semarchy_eph_mdm.gd_product_rel_package where f_package_owner in ('%s')";
     public static String SELECT_RANDOM_PRODUCT_PERSON_ROLES_FOR_SEARCH = "select f_person from semarchy_eph_mdm.gd_product_person_role group by f_person order by random() limit '%s'";
     public static String SELECT_RANDOM_WORK_PERSON_ROLES_FOR_SEARCH = "select f_person from semarchy_eph_mdm.gd_work_person_role group by f_person order by random() limit '%s'";
-    public static String SELECT_COUNT_PERSONID_FOR_WORKS =
+    public static String SELECT_WORK_COUNT_BY_PERSONID_VALID_ONLY =
             "select count(work_id ) from semarchy_eph_mdm.gd_wwork gw\n" +
                     "inner join semarchy_eph_mdm.gd_work_person_role gwpr \n" +
                     "on gw.work_id =gwpr.f_wwork \n" +
                     "where gw.f_type in('ABS','JBB','JNL','NWL')and gw.f_status in('WLA')\n" +
                     "and gwpr.f_person='%s'";
+    public static String SELECT_WORK_COUNT_BY_PERSONID_ACTIVE_ONLY =
+            "select count(work_id ) from semarchy_eph_mdm.gd_wwork gw\n" +
+                    "inner join semarchy_eph_mdm.gd_work_person_role gwpr \n" +
+                    "on gw.work_id =gwpr.f_wwork \n" +
+                    "where gw.f_type in('ABS','JBB','JNL','NWL')and gw.f_status in('WLA')\n" +
+                    "and effective_end_date is null "+
+                    "and gwpr.f_person='%s'";
+    public static String SELECT_WORK_COUNT_BY_PERSONID_ALL =
+            "select count(work_id ) from semarchy_eph_mdm.gd_wwork gw\n" +
+                    "inner join semarchy_eph_mdm.gd_work_person_role gwpr \n" +
+                    "on gw.work_id =gwpr.f_wwork \n" +
+                    "where gwpr.f_person='%s'";
 
     public static String SELECT_COUNT_PERSONID_FOR_PRODUCTS =
             "select count(*) from (select distinct product_id from semarchy_eph_mdm.gd_product where f_manifestation in"

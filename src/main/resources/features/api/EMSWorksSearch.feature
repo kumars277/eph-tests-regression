@@ -18,7 +18,7 @@ Feature: Customer Search API: Works
     Then the journal by search <option> details are retrieved and compared
     Examples:
       | option            |
-      |TITLE              |
+ #     |TITLE              |
       |EPR_ID             |
       |JOURNAL_ACRONYM    |
       |JOURNAL_NUMBER     |
@@ -31,13 +31,13 @@ Feature: Customer Search API: Works
     Then work response is compared with the DB for <options>
     Examples:
       |options            |
-
       |PERSON_NAME        |
       |PEOPLE_HUB_ID      |
       |PERSON_ID      |
       #updated below as per EPHD-1414 by Nishant @ 08 Jul 2020
-      |personFullNameCurrent|
       |personIdCurrent|
+      |personFullNameCurrent|
+
 
   @searchAPI @workSearchAPI
   Scenario Outline: search work by title

@@ -361,6 +361,18 @@ public class APIService {
               return response .thenReturn().as(WorksMatchedApiObject.class);
     }
 
+    public static WorksMatchedApiObject searchForWorksByPersonFullNameResult(String queryValue) throws AzureOauthTokenFetchingException {
+        Response response=
+                given()
+                        .baseUri(SearchAPI_EndPoint)
+                        .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
+                        .when()
+                        .get("/product-hub-works/works?queryType=personFullNameCurrent&queryValue="+queryValue);
+
+        DataQualityContext.api_response = response;
+        return response .thenReturn().as(WorksMatchedApiObject.class);
+    }
+
     public static WorksMatchedApiObject searchForWorksByaccountableProduct(String accountableProduct) throws AzureOauthTokenFetchingException {
         //created by Nishant as per search API v2 changes
         Response response=

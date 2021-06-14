@@ -97,15 +97,15 @@ public class WorkApiObject {
         }
         catch (NullPointerException e)
         {
-            Log.info(e.getMessage());
+            Log.info(e.toString());
           //  DataQualityContext.api_response.prettyPrint();
-            Assert.assertFalse(DataQualityContext.breadcrumbMessage +e.getMessage()+ " scenario Failed ", true);
+            Assert.assertFalse(DataQualityContext.breadcrumbMessage +" e.message>"+e.getMessage()+ " scenario Failed ", true);
 
         }
         catch (Exception e)
         {
             Log.info(e.getMessage());
-            Assert.assertFalse(DataQualityContext.breadcrumbMessage +e.getMessage()+ " scenario Failed ", true);
+            Assert.assertFalse(DataQualityContext.breadcrumbMessage +" e.message>"+e.getMessage()+ " scenario Failed ", true);
         }
 
     }
