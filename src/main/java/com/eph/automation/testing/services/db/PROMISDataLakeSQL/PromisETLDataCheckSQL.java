@@ -189,7 +189,7 @@ public class PromisETLDataCheckSQL {
             "      GROUP BY cast(pp1.pub_pub_idt as varchar)||pp1.rtp_rtp_cod||pp1.rel_title)\n" +
             "    )\n" +
             "    or (rtp_rtp_cod <> 'BOXST')\n" +
-            "  ))where PUB_PUB_IDT in (%s) and inbound_ts in (select inbound_ts from " + GetPRMDLDBUser.getPRMDataBase() + ".%s order by inbound_ts desc limit 1)order by REL_TITLE desc, REL_SRT desc, REL_IDT desc";
+            "  ))where PUB_PUB_IDT in (%s) and inbound_ts in (select inbound_ts from " + GetPRMDLDBUser.getPRMDataBase() + ".%s order by inbound_ts desc limit 1)order by REL_TITLE desc, REL_SRT desc, REL_IDT desc, RTP_RTP_COD desc";
 
     public static String GET_promis_prmincpmct = "select\n" +
             "  pub_idt as PUB_IDT,\n" +
@@ -345,7 +345,7 @@ public class PromisETLDataCheckSQL {
             ",REL_START_DATE as REL_START_DATE\n" +
             "from " + GetPRMDLDBUser.getPRMDataBase() + ".%s\n" +
             " where inbound_ts = (select inbound_ts from " + GetPRMDLDBUser.getPRMDataBase() + ".%s order by inbound_ts desc limit 1)\n" +
-            " AND PUB_PUB_IDT in (%s) order by REL_TITLE desc, REL_SRT desc, REL_IDT desc";
+            " AND PUB_PUB_IDT in (%s) order by REL_TITLE desc, REL_SRT desc, REL_IDT desc, RTP_RTP_COD desc";
 
     public static String GET_SUBJECT_AREAS_TRANSFORM_FILE = "select pub_idt as PUB_IDT,\n"
     + "epr_id as EPR_ID,\n"
