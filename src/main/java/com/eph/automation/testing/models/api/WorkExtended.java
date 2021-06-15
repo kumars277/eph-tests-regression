@@ -3,7 +3,6 @@ package com.eph.automation.testing.models.api;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.StitchingExtended.WorkExtRelationshipsJson;
-import com.eph.automation.testing.web.steps.ApiWorksSearchSteps;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.junit.Assert;
 
@@ -347,16 +346,18 @@ public class WorkExtended {
            codeMatched = false;firstNameMatched = false; lastNameMatched =false;
         for(int cnt=0;cnt<=weebDB.length;cnt++){
             if (ignore.contains(cnt)) continue;
+            if(weeb[i].extendedBoardMember==null&weebDB[cnt].extendedBoardMember==null)continue;
+            else
+            {
+                if (weeb[i].extendedBoardMember.get("firstName") != null | weebDB[cnt].extendedBoardMember.get("firstName") != null)
+                    if (weeb[i].extendedBoardMember.get("firstName").toString().equalsIgnoreCase(weebDB[cnt].extendedBoardMember.get("firstName").toString()))
+                        firstNameMatched = true;
+                if (weeb[i].extendedBoardMember.get("lastName") != null | weebDB[cnt].extendedBoardMember.get("lastName") != null)
+                    if (weeb[i].extendedBoardMember.get("lastName").toString().equalsIgnoreCase(weebDB[cnt].extendedBoardMember.get("lastName").toString()))
+                        lastNameMatched = true;
+            }
+                if(weeb[i].extendedBoardRole.get("code").toString().equalsIgnoreCase(weebDB[cnt].extendedBoardRole.get("code").toString()))codeMatched=true;
 
-          if(weeb[i].extendedBoardRole.get("code").toString().equalsIgnoreCase(weebDB[cnt].extendedBoardRole.get("code").toString()))codeMatched=true;
-          if(weeb[i].extendedBoardMember!=null|weebDB[cnt].extendedBoardMember!=null) {
-              if (weeb[i].extendedBoardMember.get("firstName") != null | weebDB[cnt].extendedBoardMember.get("firstName") != null)
-                  if (weeb[i].extendedBoardMember.get("firstName").toString().equalsIgnoreCase(weebDB[cnt].extendedBoardMember.get("firstName").toString()))
-                      firstNameMatched = true;
-              if (weeb[i].extendedBoardMember.get("lastName") != null | weebDB[cnt].extendedBoardMember.get("lastName") != null)
-                  if (weeb[i].extendedBoardMember.get("lastName").toString().equalsIgnoreCase(weebDB[cnt].extendedBoardMember.get("lastName").toString()))
-                      lastNameMatched = true;
-          }
             if((codeMatched&firstNameMatched)|(codeMatched&lastNameMatched)) {
                 exEditorialBoardFound = true;
 
