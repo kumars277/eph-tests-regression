@@ -146,7 +146,7 @@ public class ProductApiObject {
        catch (NullPointerException e)
        {
            e.getMessage();
-           DataQualityContext.api_response.prettyPrint();
+        //   DataQualityContext.api_response.prettyPrint();
        }
        catch (Exception e)
        {

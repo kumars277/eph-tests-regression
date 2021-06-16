@@ -305,16 +305,22 @@ public class ApiWorksSearchSteps {
     @Then("^the work details are retrieved by search with PMG code and compared$")
     public void compareWorkBySearchWithPMGCodeWithDB() throws Throwable {
         WorksMatchedApiObject returnedWorks;
-        int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
-        String searchKeyword = dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().split(" ")[0].toUpperCase();
-        for (int i = 0; i < bound; i++) {
-            String PMGCode = getPMGcodeByPMC(dataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
-            Log.info("search keyword '" + searchKeyword + "' and pmgCode '" + PMGCode + "'");
+        try {
+            int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
+            String searchKeyword = dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().split(" ")[0].toUpperCase();
+            for (int i = 0; i < bound; i++) {
+                String PMGCode = getPMGcodeByPMC(dataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
+                Log.info("search keyword '" + searchKeyword + "' and pmgCode '" + PMGCode + "'");
 
-            returnedWorks = apiService.searchForWorksBySearchWithPMGCode(searchKeyword, PMGCode);
-            Log.info("API total matched count..." + returnedWorks.getTotalMatchCount());
-            returnedWorks.verifyWorksAreReturned();
-            returnedWorks.verifyWorksReturnedCount(getNumberOfWorksBySearchWithPMGCode(searchKeyword, PMGCode));
+                returnedWorks = apiService.searchForWorksBySearchWithPMGCode(searchKeyword, PMGCode);
+                Log.info("API total matched count..." + returnedWorks.getTotalMatchCount());
+                returnedWorks.verifyWorksAreReturned();
+                returnedWorks.verifyWorksReturnedCount(getNumberOfWorksBySearchWithPMGCode(searchKeyword, PMGCode));
+            }
+
+        } catch (Exception e) {
+            Log.info(e.getMessage()); //  DataQualityContext.api_response.prettyPrint();
+            Assert.assertFalse(DataQualityContext.breadcrumbMessage + " e.message>" + e.getMessage() + " scenario Failed ", true);
         }
     }
 
