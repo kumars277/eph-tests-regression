@@ -101,7 +101,6 @@ public class ApiProductsSearchSteps {
         Log.info("Selected random work ids  : " + ids);
         DataQualityContext.breadcrumbMessage += "->" + ids;
 
-
         Assert.assertFalse(DataQualityContext.breadcrumbMessage+" Verify That list with random person ids is not empty.", ids.isEmpty());
     }
 

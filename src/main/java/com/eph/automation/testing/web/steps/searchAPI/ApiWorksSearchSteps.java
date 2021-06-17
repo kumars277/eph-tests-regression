@@ -214,20 +214,12 @@ public class ApiWorksSearchSteps {
             returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByWorkStatus(searchKeyword, workStatus));
         }
     }
-         catch (NullPointerException e)
-        {
-            e.getMessage();
-            DataQualityContext.api_response.prettyPrint();
-            failed = true;
-        }
         catch (Exception e)
         {
-            e.getMessage();
-            failed = true;
+           Log.info("e.message "+ e.toString());
+            Assert.assertFalse(DataQualityContext.breadcrumbMessage +" scenario Failed ",true);
         }
-        finally {
-            Assert.assertFalse(DataQualityContext.breadcrumbMessage +" scenario Failed ",failed);
-        }
+
     }
 
     @Then("^the work details are retrieved by workType and compared$")
