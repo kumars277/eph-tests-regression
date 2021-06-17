@@ -120,10 +120,9 @@ Feature: Search API: Products
       | paramKey         |
       | productStatus    |
       | productType      |
-      | workType         |
-      | manifestationType|
       | pmcCode          |
       | pmgCode          |
+      | workType         |
 
 
 

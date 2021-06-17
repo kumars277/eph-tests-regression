@@ -59,11 +59,16 @@ public class APIDataSQL {
             "from semarchy_eph_mdm.gd_accountable_product where accountable_product_id='%s'";
 
     public static String SELECT_PRODUCTCOUNT_BY_WORKTYPE =
-            "select count(p.product_id) from semarchy_eph_mdm.gd_product p,semarchy_eph_mdm.gd_manifestation m,semarchy_eph_mdm.gd_wwork w"+
-            " where p.s_name like \'%%%s%%\' and "+
-            " p.f_manifestation = m.manifestation_id and "+
-            " w.work_id = m.f_wwork and "+
-            " w.f_type='%s'; ";
+            "select count(*) from \n" +
+                    "(select p.s_name,w.f_type,w.s_work_title from semarchy_eph_mdm.gd_product p\n" +
+                    "inner join semarchy_eph_mdm.gd_manifestation m on p.f_manifestation =m.manifestation_id \n" +
+                    "inner join semarchy_eph_mdm.gd_wwork w on m.f_wwork =w.work_id \n" +
+                    "where w.f_type like 'param2' and (p.s_name like '%param1%' or w.s_work_title like '%param1%'or m.s_manifestation_key_title like '%param1%')\n" +
+                    "union \n" +
+                    "select p.s_name,w.f_type,w.s_work_title from semarchy_eph_mdm.gd_product p\n" +
+                    "inner join semarchy_eph_mdm.gd_wwork w on p.f_wwork =w.work_id\n" +
+                    "where w.f_type like 'param2' and (p.s_name like '%param1%' or w.s_work_title like '%param1%')) a";
+
 
     public static String SELECT_PRODUCTCOUNT_BY_MANIFESTATIONTYPE =
             "select count(p.product_id) from semarchy_eph_mdm.gd_product p,semarchy_eph_mdm.gd_manifestation m "+
@@ -101,7 +106,7 @@ public class APIDataSQL {
                     "				inner join semarchy_eph_mdm.gd_wwork w on p.f_wwork=w.work_id      "+
                     "				inner join semarchy_eph_mdm.gd_x_lov_pmc pmc on pmc.code=w.f_pmc   "+
                     ")a                                                                                "+
-                    "where upper(a.name) like '%%%s%%' and a.f_pmg='%s';                           ";
+                    "where upper(a.name) like '%%%s%%' and a.f_pmg='%s'                           ";
 
 
     public static String SELECT_PRODUCTCOUNT_BY_PMG =
@@ -205,7 +210,7 @@ public class APIDataSQL {
                     "select product_id from semarchy_eph_mdm.gd_product gp \n" +
                     "inner join semarchy_eph_mdm.gd_manifestation gm on gp.f_manifestation =gm.manifestation_id \n" +
                     "where gm.s_manifestation_key_title like '%param1%'\n" +
-                    "and gp.f_status ='param2');";
+                    "and gp.f_status ='param2')";
 
     public static String SELECT_PRODUCTCOUNT_BY_PRODUCTTYPE = "select count(*) from semarchy_eph_mdm.gd_product where s_name like \'%%%s%%\' and f_type='%s'";
     public static String SELECT_RANDOM_PACKAGE_IDS_FOR_SEARCH = "select product_id from semarchy_eph_mdm.gd_product where f_type ='PKG' and f_status='PAS' group by product_id order by random() limit '%s'";

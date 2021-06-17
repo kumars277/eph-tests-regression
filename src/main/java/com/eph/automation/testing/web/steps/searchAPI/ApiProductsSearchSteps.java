@@ -85,7 +85,7 @@ public class ApiProductsSearchSteps {
         Log.info("Environment used..."+System.getProperty("ENV"));
         Log.info("Selected random product ids are : " + ids);
         //added by Nishant @ 26 Dec for debugging failures
-        //  ids.clear(); ids.add("EPR-11CTJW"); Log.info("hard coded product ids are : " + ids);//
+        //  ids.clear(); ids.add("EPR-10HF2X"); Log.info("hard coded product ids are : " + ids);//
 
         DataQualityContext.breadcrumbMessage += "->" + ids;
         Assert.assertFalse(DataQualityContext.breadcrumbMessage +" Verify That list with random ids is not empty.", ids.isEmpty());
@@ -298,7 +298,7 @@ public class ApiProductsSearchSteps {
     }
 
     private int getProductCountByWorkType(String searchTerm,String workType){//created by Nishant @ 9th Dec 2019
-        sql=String.format(APIDataSQL.SELECT_PRODUCTCOUNT_BY_WORKTYPE,searchTerm,workType);
+        sql=APIDataSQL.SELECT_PRODUCTCOUNT_BY_WORKTYPE.replaceAll("param1",searchTerm).replace("param2",workType);
         List<Map<String,Object>> countByWorkType = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         int count=((Long)countByWorkType.get(0).get("count")).intValue();
         Log.info("products count by workType in DB is: "+count);
@@ -838,37 +838,40 @@ public class ApiProductsSearchSteps {
             switch (paramKey) {
                 case "productStatus":
                     DataQualityContext.breadcrumbMessage += "->" + productDataObjects.get(0).getF_STATUS();
+
                     productCount_DB = getProductCountByProductStatus(defaultSearch, productDataObjects.get(0).getF_STATUS());
                     returnedProducts = searchForProductByParam(defaultSearch, paramKey, productDataObjects.get(0).getF_STATUS());
                     break;
                 case "productType":
-                    returnedProducts = searchForProductByParam(defaultSearch, paramKey, productDataObjects.get(0).getF_TYPE());
                     DataQualityContext.breadcrumbMessage += "->" + productDataObjects.get(0).getF_TYPE();
+
+                    returnedProducts = searchForProductByParam(defaultSearch, paramKey, productDataObjects.get(0).getF_TYPE());
                     productCount_DB = getProductCountByProductType(defaultSearch, productDataObjects.get(0).getF_TYPE());
                     break;
                 case "workType":
                     getWorkByManifestationID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
-                    returnedProducts = searchForProductByParam(defaultSearch, paramKey, dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
                     DataQualityContext.breadcrumbMessage += "->" + dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE();
+
+                    returnedProducts = searchForProductByParam(defaultSearch, paramKey, dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
                     productCount_DB = getProductCountByWorkType(defaultSearch, dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE());
                     break;
                 case "manifestationType":
                     getManifestationByID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
-                    returnedProducts = searchForProductByParam(defaultSearch, paramKey, manifestationDataObjects.get(0).getF_TYPE());
                     DataQualityContext.breadcrumbMessage += "->" + manifestationDataObjects.get(0).getF_TYPE();
+                    returnedProducts = searchForProductByParam(defaultSearch, paramKey, manifestationDataObjects.get(0).getF_TYPE());
                     productCount_DB = getProductCountByManifestationType(defaultSearch, manifestationDataObjects.get(0).getF_TYPE());
                     break;
                 case "pmcCode":
                     getWorkByManifestationID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
-                    returnedProducts = searchForProductByParam(searchTerm, paramKey, dataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
                     DataQualityContext.breadcrumbMessage += "->" + dataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC();
+                    returnedProducts = searchForProductByParam(searchTerm, paramKey, dataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
                     productCount_DB = getProductCountByPMCCode(searchTerm, dataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
                     break;
                 case "pmgCode":
                     getWorkByManifestationID(productDataObjects.get(0).getF_PRODUCT_MANIFESTATION_TYP());
                     String pmgCode = getPMGcodeByPMC(dataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
-                    returnedProducts = searchForProductByParam(searchTerm, paramKey, pmgCode);
                     DataQualityContext.breadcrumbMessage += "->" + pmgCode;
+                    returnedProducts = searchForProductByParam(searchTerm, paramKey, pmgCode);
                     productCount_DB = getProductCountByPMGCode(searchTerm, pmgCode);
                     break;
                 default:
