@@ -27,7 +27,7 @@ Feature: Search API: Products
     Then the product details are retrieved and compared when searched by <idType>
     Examples:
       | idType                           |
-   #   |PRODUCT_IDENTIFIER                |
+      |PRODUCT_IDENTIFIER                |
       |PRODUCT_WORK_IDENTIFIER           |
       |PRODUCT_MANIFESTATION_IDENTIFIER  |
       |PRODUCT_MANIFESTATION_WORK_IDENTIFIER|

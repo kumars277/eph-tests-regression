@@ -437,9 +437,10 @@ public class ApiProductsSearchSteps {
                     returnedProducts = searchForProductsByIdentifierResult(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
                     break;
             }
-            returnedProducts.verifyProductsAreReturned();
-            returnedProducts.verifyProductWithIdIsReturned(productDataObject.getPRODUCT_ID());
-
+           if(!identifierType.equalsIgnoreCase("PRODUCT_IDENTIFIER")) {
+               returnedProducts.verifyProductsAreReturned();
+               returnedProducts.verifyProductWithIdIsReturned(productDataObject.getPRODUCT_ID());
+           }
         }
     }
 
