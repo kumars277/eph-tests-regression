@@ -12,7 +12,7 @@ import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.ProductDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
-import com.eph.automation.testing.web.steps.z_other.ApiSearchDataCheckStitchingLayerSteps;
+import com.eph.automation.testing.steps.z_other.ApiSearchDataCheckStitchingLayerSteps;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;

@@ -3,21 +3,13 @@ package com.eph.automation.testing.configuration;
 
 import com.eph.automation.testing.models.TestContext;
 import com.google.inject.Provider;
-import io.github.bonigarcia.wdm.ChromeDriverManager;
-import io.github.bonigarcia.wdm.InternetExplorerDriverManager;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxBinary;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -47,7 +39,7 @@ public class WebDriverFactory implements Provider<WebDriver> {
         else if (true) {
             WebDriver driver;
             String username = "n.chitre";
-            String accesskey = "SFsaM0JzcIrCPa2V29NgVzFsHPaLawZ8D0gKp287B7lwUqH7j0";
+            String accesskey = "";
 
             DesiredCapabilities capability = new DesiredCapabilities();
             capability.setCapability(CapabilityType.BROWSER_NAME, "chrome");
