@@ -13,7 +13,7 @@ import org.junit.runner.RunWith;
         features = "src/main/resources/features",
         format= {"pretty","json:target/cucumber.json" },
         tags = {"@searchAPI"},
-        glue = {"com.eph.automation.testing.web.steps", "com.eph.automation.testing.common.hooks"})
+        glue = {"com.eph.automation.testing.steps", "com.eph.automation.testing.common.hooks"})
 
 public class RunBDDTest {
     public RunBDDTest() {
