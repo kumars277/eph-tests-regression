@@ -17,7 +17,6 @@ Feature:Validate data of DL All Core Views where data comes from BCS and JM Core
     Then  Get the Records from the JM and BCS Core Tables <tableName>
     And   Get the Records from the DL core views <tableName>
     Then  Compare data of BCS and JM Core with DL Core views <tableName> are identical
-
     Examples:
       | tableName                           |countOfRandomIds   |
       |all_accountable_product_v            |50                 |
