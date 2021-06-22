@@ -51,6 +51,8 @@ public class apiWorksSearchSteps {
 
             case "WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME":
                 sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_WITH_MANIFESTATION_WITH_PRODUCT,numberOfRecords);break;
+            case"WORK_MANIFESTATION_IDENTIFIER":
+                sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_WITH_MANIFESTATION_IDENTIFIER,numberOfRecords);break;
 
             default:sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_IDS_FOR_SEARCH, numberOfRecords); break;
         }

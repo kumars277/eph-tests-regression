@@ -4,6 +4,7 @@ package com.eph.automation.testing.models.api;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
+import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import org.junit.Assert;
 
@@ -60,38 +61,39 @@ public class WorkLegalOwners {
                 Log.info("ownershipDescription code - " + ownershipDescription.get("code"));
                 printLog("legalOwner name - "+legalOwner.name);
 
-                Assert.assertEquals(workId + " - ownershipDescription",ownershipDescription.get("name"),getownershipDescriptionName(workLegalOwners.get(i).get("f_ownership_description").toString()));
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - ownershipDescription",ownershipDescription.get("name"),getownershipDescriptionName(workLegalOwners.get(i).get("f_ownership_description").toString()));
                 printLog("ownershipDescription name");
 
-                Assert.assertEquals(workId + " - ownership effectiveStartDate",effectiveStartDate,workLegalOwners.get(i).get("effective_start_date").toString());
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - ownership effectiveStartDate",effectiveStartDate,workLegalOwners.get(i).get("effective_start_date").toString());
                 printLog("effectiveStartDate");
 
                 if(effectiveEndDate!=null)
                 {
                     Log.info("workLegalOwners effectiveStartDate present");
-                    //need to write validation rule
-                    Assert.assertTrue(false);
+                    Assert.assertEquals(DataQualityContext.breadcrumbMessage+" - ownership effectiveStartDate",effectiveEndDate,workLegalOwners.get(i).get("effective_end_date").toString());
+                    printLog("effectiveEndDate");
+
                 }
 
              //   String[] legalOwnerValue = getLegalOwnerValues(workLegalOwners.get(i).get("f_legal_owner").toString());
             //    Assert.assertEquals(workId + " - legalOwner",legalOwner.name,legalOwnerValue[0]);
 
 
-                Assert.assertEquals(workId + " - legalOwnership",legalOwner.legalOwnership.get("code"),legalOwnerValue[1]);
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage+" - legalOwnership",legalOwner.legalOwnership.get("code"),legalOwnerValue[1]);
                 printLog("legalOwnership code");
 
                 String[] legalOwnershipValue = getLegalOwnershipValues(legalOwner.legalOwnership.get("code").toString());
 
-                Assert.assertEquals(workId + " - legalOwnership",legalOwner.legalOwnership.get("name"),legalOwnershipValue[0]);
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - legalOwnership",legalOwner.legalOwnership.get("name"),legalOwnershipValue[0]);
                 printLog("legalOwnership name");
 
-                Assert.assertEquals(workId + " - ",legalOwner.legalOwnership.get("ownershipRollUp"),legalOwnershipValue[1]);
+                Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - ",legalOwner.legalOwnership.get("ownershipRollUp"),legalOwnershipValue[1]);
                 printLog("legalOwnership ownershiRollUp");
 
                 break;
             }
         }
-        Assert.assertTrue("LegalOwnerFound - "+ownershipDescription.get("code"),legalOwnerfound);
+        Assert.assertTrue(DataQualityContext.breadcrumbMessage+ " LegalOwnerFound - "+ownershipDescription.get("code"),legalOwnerfound);
 
     }
 
