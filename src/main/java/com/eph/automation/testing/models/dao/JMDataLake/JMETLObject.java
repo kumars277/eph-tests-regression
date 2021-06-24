@@ -342,6 +342,7 @@ public class JMETLObject {
     private String chronicle_scenario_evolutionary_ind;
     private String work_ownership_id;
     private String f_legal_owner;
+    private String f_legal_ownership;
     private String legal_owner_name;
     private String legal_owner_type;
     private String journal_ownership_type;
@@ -511,6 +512,9 @@ public class JMETLObject {
 
     public String getAVAILABILITY_FORMAT() { return AVAILABILITY_FORMAT; }
     public void setAVAILABILITY_FORMAT(String AVAILABILITY_FORMAT) { this.AVAILABILITY_FORMAT = AVAILABILITY_FORMAT; }
+
+    public String getf_legal_ownership() { return f_legal_ownership; }
+    public void setf_legal_ownership(String f_legal_ownership) { this.f_legal_ownership = f_legal_ownership; }
 
     public String getPUBLICATION_STATUS_ANZ() { return PUBLICATION_STATUS_ANZ; }
     public void setPUBLICATION_STATUS_ANZ(String PUBLICATION_STATUS_ANZ) { this.PUBLICATION_STATUS_ANZ = PUBLICATION_STATUS_ANZ; }

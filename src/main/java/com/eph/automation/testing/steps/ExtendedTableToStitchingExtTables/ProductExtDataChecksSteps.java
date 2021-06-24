@@ -85,7 +85,7 @@ public class ProductExtDataChecksSteps {
         if (dataQualityStitchContext.recordsFromProdExtAvail.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
-            List <Integer> ignore = new ArrayList();
+            List <Integer> ignore = new ArrayList<>();
             for (int i = 0; i < dataQualityStitchContext.recordsFromProdExtAvail.size(); i++) {
                 String prodAvailId = dataQualityStitchContext.recordsFromProdExtAvail.get(i).getepr_id();
               //  getIndividualRecFromProdExtAvailTable(prodAvailId);
@@ -307,7 +307,7 @@ public class ProductExtDataChecksSteps {
                 getProdTypeForPrice(prodAvailId);
 
                 if (dataQualityStitchContext.recordsFromProdStitching.getPricingExtended().getExtendedPrices() != null) {
-                    ArrayList<ExtendedPrices> extprodPricing_temp = new ArrayList(Arrays.asList(dataQualityStitchContext.recordsFromProdStitching.getPricingExtended().getExtendedPrices()));
+                    ArrayList<ExtendedPrices> extprodPricing_temp = new ArrayList<>(Arrays.asList(dataQualityStitchContext.recordsFromProdStitching.getPricingExtended().getExtendedPrices()));
                     for (int j = 0; j < extprodPricing_temp.size(); j++) {
                         if(ignore.contains(j)) continue;
                         String sourceCurrency = dataQualityStitchContext.recordsFromProdExtPrice.get(i).getprice_currency();

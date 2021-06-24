@@ -1803,7 +1803,6 @@ public class DL_CoreViewChecksSQL {
                     " FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_work_latest_v)\n";
 
     public static String GET_BCS_JM_CORE_WORK_RAND_ID =
-
             "select external_reference as id from(\n" +
                     "SELECT\n" +
                     "  w.eph_work_id epr\n" +
@@ -1996,7 +1995,7 @@ public class DL_CoreViewChecksSQL {
                     ",copyright_year as COPYRIGHTYEAR" +
                     ",edition_number as EDITIONNO" +
                     ",f_pmc as F_PMC" +
-                    ",f_oa_journal_type as F_OA_JOURNAL_TYPE" +
+                    ",f_legal_ownership as f_legal_ownership" +
                     ",f_type as F_TYPE" +
                     ",f_status as F_STATUS" +
                     ",f_imprint as F_IMPRINT" +

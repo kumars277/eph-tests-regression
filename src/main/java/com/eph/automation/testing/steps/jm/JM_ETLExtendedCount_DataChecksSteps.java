@@ -232,8 +232,8 @@ public class JM_ETLExtendedCount_DataChecksSteps {
             Dbval.put("application_code", JMETL_ExtendedAccessDLContext.recordsFromJMFulFilment.get(j).getapplication_code());
             Dbval.put("epr_id", JMETL_ExtendedAccessDLContext.recordsFromJMFulFilment.get(j).getepr_id());
             Dbval.put("product_type", JMETL_ExtendedAccessDLContext.recordsFromJMFulFilment.get(j).getproduct_type());
-            ArrayList firstMapValues = new ArrayList(map.values());
-            ArrayList secondMapValues = new ArrayList(Dbval.values());
+            ArrayList<String> firstMapValues = new ArrayList<>(map.values());
+            ArrayList secondMapValues = new ArrayList<>(Dbval.values());
             Log.info("Excel => "+firstMapValues +" DB => "+secondMapValues);
             Assert.assertEquals(firstMapValues, secondMapValues);
         }

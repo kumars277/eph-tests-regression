@@ -2811,8 +2811,8 @@ public class JMETLDataChecks {
                         JMContext.JMObjectsFromDL.sort(Comparator.comparing(JMETLObject::getexternal_reference)); //sort data in the lists
                         JMContext.JMTransformObjectsFromDL.sort(Comparator.comparing(JMETLObject::getexternal_reference));
 
-                        String[] WorkColumnName = {"getexternal_reference","getwork_title","getwork_sub_title","getelectro_rights_indicator"};
-                        String[] WorkSemarchySourceColumnName = {"getexternal_reference","getwork_title","getwork_subtitle","getelectro_rights_indicator"};
+                        String[] WorkColumnName = {"getexternal_reference","getwork_title","getwork_sub_title","getelectro_rights_indicator","getf_legal_ownership"};
+                        String[] WorkSemarchySourceColumnName = {"getexternal_reference","getwork_title","getwork_subtitle","getelectro_rights_indicator","getf_legal_ownership"};
                         int j =0;
                         for (String strTemp : WorkColumnName) {
 

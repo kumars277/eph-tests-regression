@@ -52,7 +52,7 @@ public class ProductFinderTasks {
     public Properties prop_AccProducts = new Properties();
     public Properties prop_editorial1 = new Properties();
     public Properties prop_editorial2 = new Properties();
-    public List<Properties> list_people = new ArrayList();
+    public List<Properties> list_people = new ArrayList<>();
     public Properties prop_links = new Properties();
 
 

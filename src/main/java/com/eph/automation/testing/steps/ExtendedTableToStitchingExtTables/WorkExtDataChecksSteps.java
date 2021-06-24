@@ -1203,7 +1203,7 @@ public class WorkExtDataChecksSteps {
         if (dataQualityStitchContext.recordsFromWorkExtRelationSiblings.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
-              List <Integer> ignore = new ArrayList();
+              List <Integer> ignore = new ArrayList<>();
             for (int i = 0; i < dataQualityStitchContext.recordsFromWorkExtRelationSiblings.size(); i++) {
                 String workId = dataQualityStitchContext.recordsFromWorkExtRelationSiblings.get(i).getepr_id();
                 getWorkExtendedJSONRec(workId);
@@ -1331,7 +1331,7 @@ public class WorkExtDataChecksSteps {
         if (dataQualityStitchContext.recordsFromWorkExtEditorial.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
-            List <Integer> ignore = new ArrayList();
+            List <Integer> ignore = new ArrayList<>();
             for (int i = 0; i < dataQualityStitchContext.recordsFromWorkExtEditorial.size(); i++) {
                 String workId = dataQualityStitchContext.recordsFromWorkExtEditorial.get(i).getepr_id();
                 getWorkExtendedJSONRec(workId);

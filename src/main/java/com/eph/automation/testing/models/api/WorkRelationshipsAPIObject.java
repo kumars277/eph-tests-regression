@@ -108,7 +108,7 @@ public class WorkRelationshipsAPIObject {
       }
     }
     if (workChild != null) {
-      ArrayList<workChild> list_workChild = new ArrayList(Arrays.asList(workChild));
+      ArrayList<workChild> list_workChild = new ArrayList<>(Arrays.asList(workChild));
       getWorkRelationshipChildRecordsEPHGD(workId);
       for (int wc = 0; wc < workChild.length; wc++) {
         for (int wc2 = 0; wc2 < workChild.length; wc2++) {

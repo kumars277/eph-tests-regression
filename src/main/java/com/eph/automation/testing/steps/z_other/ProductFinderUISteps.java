@@ -1123,7 +1123,7 @@ public class ProductFinderUISteps {
 
     private void verifyDuplicatePeopleRoles() {//created by Nishant @ 10 Jul 2020
         Log.info("Test : verifying duplicate People Role...");
-        Set uniqueRole = new HashSet();
+        Set<String> uniqueRole = new HashSet();
         List<String> duplicate = new ArrayList();
 
         for (int c = 0; c < productFinderTasks.list_people.size(); c++) {
@@ -1181,7 +1181,7 @@ public class ProductFinderUISteps {
     private void compareCorePersonWithDB() {//created by Nishant @ 15 Jul 2020
         Log.info("verifying workCorePerson...");
         List<Map<String, String>> workPerson = getPersonsByWorkId(DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
-        List<Integer> ignore = new ArrayList();
+        List<Integer> ignore = new ArrayList<>();
         for (Map<String, String> person : workPerson) {
             if (dataQualityContext.personDataObjectsFromEPHGD != null) {
                 dataQualityContext.personDataObjectsFromEPHGD.clear();
@@ -1233,7 +1233,7 @@ public class ProductFinderUISteps {
                     extEmailId = workExtendedPerson.getExtendedPerson().get("email").toString();
 
                 boolean extPersonFound = false;
-                List<Integer> ignore = new ArrayList();
+                List<Integer> ignore = new ArrayList<>();
                 for (int uiperson = 0; uiperson < productFinderTasks.list_people.size(); uiperson++) {
                     if (ignore.contains(uiperson)) continue;
                     if (productFinderTasks.list_people.get(uiperson).getProperty("Role").equalsIgnoreCase(extRoleName) &

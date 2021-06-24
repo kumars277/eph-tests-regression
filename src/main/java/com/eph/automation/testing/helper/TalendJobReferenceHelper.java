@@ -37,10 +37,10 @@ public class TalendJobReferenceHelper {
         return contextMap;
     }
 
-    public static void performUpdate(String projectName, Map contextMap, String dbEndPoint) {
+    public static void performUpdate(String projectName, Map<String, String> contextMap, String dbEndPoint) {
         Iterator it = contextMap.entrySet().iterator();
         while (it.hasNext()) {
-            Map.Entry contextKeyAndValue = (Map.Entry) it.next();
+            Map.Entry<String, String> contextKeyAndValue = (Map.Entry) it.next();
             int queryOutPut = DBManager.mysqlConnection(BatchJobChecksSQL.UPDATE_TALEND_CONTEXT_VALUE
                     .replace("PARAM1", String.valueOf(contextKeyAndValue.getValue()))
                     .replace("PARAM2", projectName)

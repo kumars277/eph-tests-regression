@@ -11,7 +11,7 @@ Feature:Validate data of DL All Core Views where data comes from BCS and JM Core
     Given Get the total count of DL Core views <tableName>
     Then  We know the total count of BCS And JM Core tables <tableName>
     And Compare count of BCS and JM Core with <tableName> views are identical
-    Then Check whether externalReference field not holding any null value <tableName>
+   Then Check whether externalReference field not holding any null value <tableName>
     And Compare count of externalReference field null value count is 0 <tableName>
     Given Get the <countOfRandomIds> from JM and BCS Core Tables <tableName>
     Then  Get the Records from the JM and BCS Core Tables <tableName>
