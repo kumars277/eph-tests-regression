@@ -19,7 +19,7 @@ Feature:Validate data for GD Tables
       | 5               |all_work_subject_areas_v           |gd_subject_area             |
       | 5               |all_work_access_model_v            |gd_work_access_model        |
       | 5               |all_work_business_model_v          |gd_work_business_model      |
-     | 5               |all_accountable_product_v          |gd_accountable_product      |
+      | 5               |all_accountable_product_v          |gd_accountable_product      |
 
 
 

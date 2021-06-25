@@ -2441,7 +2441,7 @@ public class JMETLDataChecks {
 
     @Given("^We get the (.*) random JM Staging ids of (.*)$")
     public void getRandomSemarchySourceIds(String numberOfRecords, String SourceTable) {
-//  numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+  numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random records...");
         switch (SourceTable) {
