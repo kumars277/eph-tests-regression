@@ -2,6 +2,8 @@ package com.eph.automation.testing.configuration;
 /*
 * implemented by Nishant @ 15 Mar 2021
 * */
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
 import com.amazonaws.services.secretsmanager.model.*;
@@ -117,7 +119,12 @@ public class SecretsManagerHandler {
         //created by Nishant @  29 Mar 2021
         JSONObject object = null;
 
-        AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard().withRegion(region).build();
+
+        AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard()
+                .withRegion(region)
+                .build();
+
+
 
         String secret = "";
         String decodedBinarySecret = "";

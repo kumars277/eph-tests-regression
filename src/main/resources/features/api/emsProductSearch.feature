@@ -43,7 +43,7 @@ Feature: Search API: Products
     Then   the products detail are retrieved and compared when searched by type and <identifier>
     Examples:
       | identifier                            |
-      | PRODUCT_IDENTIFIER                     |
+      | PRODUCT_IDENTIFIER                    |
       | PRODUCT_WORK_IDENTIFIER               |
       | PRODUCT_MANIFESTATION_IDENTIFIER      |
       | PRODUCT_MANIFESTATION_WORK_IDENTIFIER |

@@ -58,7 +58,7 @@ public class WorkExtDataChecksSteps {
 
     @Given("^We get the (.*) random work EPR ids (.*)$")
     public void getRandomWorkExtEPRIds(String numberOfRecords, String tableName) {
-       // numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Work Ext EPR Ids...");
         switch (tableName) {
@@ -813,8 +813,10 @@ public class WorkExtDataChecksSteps {
                         //    if(ignore.contains(j)) continue;
                         String sourceCode = dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getcode();
                         String trgetCode = extworkSubj_temp[j].getExtendedSubArea().getCode();
+                        String sourceNAme= dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getname();
+                        String targetName = extworkSubj_temp[j].getExtendedSubArea().getName();
                         //  if(sourceMetricURL!=null && sourceMetricYr==null){
-                        if (sourceCode.equals(trgetCode)) {
+                        if (sourceCode.equals(trgetCode) && sourceNAme.equals(targetName)) {
                             Log.info("Work_Ext_Sub_Area -> EPR => " + dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id() +
                                     " Work_JSON -> EPR => " + dataQualityStitchContext.recordsFromWorkStitching.getId());
                             if (dataQualityStitchContext.recordsFromWorkExtSubjArea.get(i).getepr_id() != null ||
@@ -871,7 +873,11 @@ public class WorkExtDataChecksSteps {
                             j = 0;
                             //  ignore.add(j);
                             break;
-                        } else {
+                        }else if(sourceCode.equals(trgetCode)){
+
+
+                        }
+                        else {
                             j = j++;
                         }
                     }

@@ -67,7 +67,12 @@ public class apiProductsSearchSteps {
       case "PRODUCT_IDENTIFIER":
         sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_WITH_IDENTIFIER);
         break;
-
+      case "PRODUCT_MANIFESTATION_IDENTIFIER":
+        sql =
+            String.format(
+                APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_WITH_MANIFESTATION_IDENTIFIER,
+                numberOfRecords);
+        break;
       default:
         sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_FOR_SEARCH, numberOfRecords);
         break;
@@ -1042,7 +1047,7 @@ public class apiProductsSearchSteps {
   }
 
   private void getManifestationsByWorks() {
-    sql = String.format(APIDataSQL.SELECT_MANIFESTATIONS_IDS_BY_WORKS, Joiner.on("','").join(ids));
+    sql = String.format(APIDataSQL.SELECT_MANIFESTATION_IDS_BY_WORKID, Joiner.on("','").join(ids));
     // Log.info(sql);
     List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
