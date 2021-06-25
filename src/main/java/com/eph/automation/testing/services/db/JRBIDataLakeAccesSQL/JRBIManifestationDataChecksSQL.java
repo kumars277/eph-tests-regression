@@ -29,7 +29,7 @@ public class JRBIManifestationDataChecksSQL {
             "select epr as EPR from (\n" +
                     "SELECT DISTINCT\n" +
                     "  cr2.epr epr\n" +
-                    ", 'JRBI Manifestation Extended' record_type\n" +
+                    ", 'jrbi Manifestation Extended' record_type\n" +
                     ", cr2.manifestation_type manifestation_type\n" +
                     ", NULLIF(j.journal_issue_trim_size, '') journal_issue_trim_size\n" +
                     ", NULLIF(j.war_reference, '') war_reference\n" +
@@ -48,7 +48,7 @@ public class JRBIManifestationDataChecksSQL {
                     " from(\n" +
                     "SELECT DISTINCT\n" +
                     "  cr2.epr epr\n" +
-                    ", 'JRBI Manifestation Extended' record_type\n" +
+                    ", 'jrbi Manifestation Extended' record_type\n" +
                     ", cr2.manifestation_type manifestation_type\n" +
                     ", NULLIF(j.journal_issue_trim_size, '') journal_issue_trim_size\n" +
                     ", NULLIF(j.war_reference, '') war_reference\n" +

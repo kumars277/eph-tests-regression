@@ -119,9 +119,9 @@ public class SDRMDataLakeCountCheckSQL {
 
 
 
-    public static String GET_PRODUCT_EXTENDED_AVAILABILITY_ALL_SOURCE_COUNT="select count(*) as target_count from "+ GetSDRMDLDBUser.getProdStagingDataBase()+".product_availability_extended_allsource_v where \"source\" = 'SDRM'\n";
+    public static String GET_PRODUCT_EXTENDED_AVAILABILITY_ALL_SOURCE_COUNT="select count(*) as target_count from "+ GetSDRMDLDBUser.getProdStagingDataBase()+".product_availability_extended_allsource_v where \"source\" = 'sdrm'\n";
 
-    public static String GET_PRODUCT_EXTENDED_AVAILABILITY_COUNT="select count(*) as target_count from "+ GetSDRMDLDBUser.getProdExtDataBase()+".product_extended_availability where application_name = 'SDRM'";
+    public static String GET_PRODUCT_EXTENDED_AVAILABILITY_COUNT="select count(*) as target_count from "+ GetSDRMDLDBUser.getProdExtDataBase()+".product_extended_availability where application_name = 'sdrm'";
 
 
 }

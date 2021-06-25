@@ -37,11 +37,11 @@ public class JM_ETLExtendedCount_DataChecksSteps {
     public void getJMExtendedCount(String tableName) {
         switch (tableName) {
             case "jnl_new_fulfilment_system":
-                Log.info("Getting JM Extended new Fullfilment system Table Count...");
+                Log.info("Getting jm Extended new Fullfilment system Table Count...");
                 JMExtendedSQLCurrentCount = JM_ETLExtendedCountDataChecksSQL.GET_JM_EXT_NEW_FULFIL_SYSTEM_COUNT;
                 break;
             case "jnl_fulfilment_system":
-                Log.info("Getting JM Extended Fullfilment system Table Count...");
+                Log.info("Getting jm Extended Fullfilment system Table Count...");
                 JMExtendedSQLCurrentCount = JM_ETLExtendedCountDataChecksSQL.GET_JM_EXT_FULFIL_SYSTEM_COUNT;
                 break;
 
@@ -78,7 +78,7 @@ public class JM_ETLExtendedCount_DataChecksSteps {
     public void getRandomIds(String numberOfRecords, String tableName) {
         //  numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
-        Log.info("Get random Ids for JM ETL Extended Tables....");
+        Log.info("Get random Ids for jm ETL Extended Tables....");
         List<Map<?, ?>> randomIds;
         switch (tableName) {
             case "jnl_new_fulfilment_system":
@@ -96,7 +96,7 @@ public class JM_ETLExtendedCount_DataChecksSteps {
 
     @Then("^Get the Data from the Source Tables (.*)$")
     public void getsourceRecords(String tableName) {
-        Log.info("We get the JM source records...");
+        Log.info("We get the jm source records...");
         switch (tableName) {
             case "jnl_new_fulfilment_system":
                 sql = String.format(JM_ETLExtendedCountDataChecksSQL.GET_SOURCE_JM_EXT_NEW_FULFIL_SYSTEM_REC, Joiner.on("','").join(Ids));
@@ -111,7 +111,7 @@ public class JM_ETLExtendedCount_DataChecksSteps {
 
     @Then("^Data from the JM ETL Extended Tables to compare source Check (.*)$")
     public void getTargetRecords(String tableName) {
-        Log.info("We get the JM target records...");
+        Log.info("We get the jm target records...");
         switch (tableName) {
             case "jnl_new_fulfilment_system":
                 sql = String.format(JM_ETLExtendedCountDataChecksSQL.GET_JM_EXT_NEW_FULFIL_SYSTEM_REC, Joiner.on("','").join(Ids));

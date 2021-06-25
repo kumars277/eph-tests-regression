@@ -102,59 +102,59 @@ public class DL_CoreViewsChecksSteps {
     public void getCountBCSAndJMTables(String tableName){
         switch (tableName){
             case "all_accountable_product_v":
-                Log.info("Getting BCS And JM Core Accountable Product Count...");
+                Log.info("Getting BCS And jm Core Accountable Product Count...");
                 BCSJMCoreSQLCount = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_ACC_PROD_COUNT;
                 break;
             case "all_manifestation_identifiers_v":
-                Log.info("Getting BCS And JM Core Manifestation Identifier Count...");
+                Log.info("Getting BCS And jm Core Manifestation Identifier Count...");
                 BCSJMCoreSQLCount = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_MANIF_IDENT_COUNT;
                 break;
             case "all_manifestation_v":
-                Log.info("Getting BCS And JM Core Manifestation Count...");
+                Log.info("Getting BCS And jm Core Manifestation Count...");
                 BCSJMCoreSQLCount = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_MANIF_COUNT;
                 break;
             case "all_person_v":
-                Log.info("Getting BCS And JM Core Person Count...");
+                Log.info("Getting BCS And jm Core Person Count...");
                 BCSJMCoreSQLCount = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_PERSON_COUNT;
                 break;
             case "all_product_v":
-                Log.info("Getting BCS And JM Core product Count...");
+                Log.info("Getting BCS And jm Core product Count...");
                 BCSJMCoreSQLCount = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_PRODUCT_COUNT;
                 break;
             case "all_product_rel_package_v":
-                Log.info("Getting BCS And JM Core product Relation PAckage view Count...");
+                Log.info("Getting BCS And jm Core product Relation PAckage view Count...");
                 BCSJMCoreSQLCount = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_PRODUCT_REL_PKG_VIEW_COUNT;
                 break;
             case "all_work_identifier_v":
-                Log.info("Getting BCS And JM Core work Identifier Count...");
+                Log.info("Getting BCS And jm Core work Identifier Count...");
                 BCSJMCoreSQLCount = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_IDENT_COUNT;
                 break;
             case "all_work_person_role_v":
-                Log.info("Getting BCS And JM Core work Person Role Count...");
+                Log.info("Getting BCS And jm Core work Person Role Count...");
                 BCSJMCoreSQLCount = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_PERS_ROLE_COUNT;
                 break;
             case "all_work_relationship_v":
-                Log.info("Getting BCS And JM Core work relationship Count...");
+                Log.info("Getting BCS And jm Core work relationship Count...");
                 BCSJMCoreSQLCount = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_RELATION_COUNT;
                 break;
             case "all_work_subject_areas_v":
-                Log.info("Getting BCS And JM Core work subject areas Count...");
+                Log.info("Getting BCS And jm Core work subject areas Count...");
                 BCSJMCoreSQLCount = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_SUBJ_AREA_COUNT;
                 break;
             case "all_work_v":
-                Log.info("Getting BCS And JM work Count...");
+                Log.info("Getting BCS And jm work Count...");
                 BCSJMCoreSQLCount = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_COUNT;
                 break;
             case "all_work_legal_owner_v":
-                Log.info("Getting BCS And JM work legal owner Count...");
+                Log.info("Getting BCS And jm work legal owner Count...");
                 BCSJMCoreSQLCount = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_LEGAL_OWNER_COUNT;
                 break;
             case "all_work_access_model_v":
-                Log.info("Getting BCS And JM work_access_model_v Count...");
+                Log.info("Getting BCS And jm work_access_model_v Count...");
                 BCSJMCoreSQLCount = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_ACCESS_MODEL_COUNT;
                 break;
             case "all_work_business_model_v":
-                Log.info("Getting BCS And JM work_business_model_v Count...");
+                Log.info("Getting BCS And jm work_business_model_v Count...");
                 BCSJMCoreSQLCount = DL_CoreViewChecksSQL.GET_BCS_JM_CORE_WORK_BUSINESS_MODEL_COUNT;
                 break;
 
@@ -247,7 +247,7 @@ public class DL_CoreViewsChecksSteps {
     public void getRandomIdsFromBCSJM(String numberOfRecords, String tableName) {
        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
-        Log.info("Get random Ids from JM and BCS Core Tables....");
+        Log.info("Get random Ids from jm and BCS Core Tables....");
 
         switch (tableName) {
             case "all_accountable_product_v":
@@ -301,7 +301,7 @@ public class DL_CoreViewsChecksSteps {
 
     @Then("^Get the Records from the JM and BCS Core Tables (.*)$")
     public void getRecFromJMAndBCS(String tableName){
-        Log.info("We get the records from JM and BCS Core table...");
+        Log.info("We get the records from jm and BCS Core table...");
         switch (tableName) {
             case "all_accountable_product_v":
                 sql = String.format(DL_CoreViewChecksSQL.GET_BCS_JM_CORE_ACC_PROD_REC, Joiner.on("','").join(Ids));
@@ -353,7 +353,7 @@ public class DL_CoreViewsChecksSteps {
 
     @And ("^Get the Records from the DL core views (.*)$")
     public void getRecFromAllViews(String tableName){
-        Log.info("We get the records from JM and BCS Core table...");
+        Log.info("We get the records from jm and BCS Core table...");
         switch (tableName) {
             case "all_accountable_product_v":
                 sql = String.format(DL_CoreViewChecksSQL.GET_DL_CORE_ALL_ACC_PROD_VIEW_REC, Joiner.on("','").join(Ids));
@@ -406,7 +406,7 @@ public class DL_CoreViewsChecksSteps {
     @And("^Compare data of BCS and JM Core with DL Core views (.*) are identical$")
     public void compareCurrentandCurrHist(String targetTableName) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (dataQualityDLCoreViewContext.recordsFromBCSJMData.isEmpty()) {
-            Log.info("No Data Found in the BCS/JM Core Tables ....");
+            Log.info("No Data Found in the BCS/jm Core Tables ....");
         } else {
             Log.info("Sorting the Ids to compare the records between DL core All views...");
         }

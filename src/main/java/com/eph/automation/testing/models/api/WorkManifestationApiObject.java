@@ -76,7 +76,7 @@ public class WorkManifestationApiObject {
 
     public void getJsonToObject_extendedManifestation(String manifestationId) {
         //created by Nishant @ 01 Jul 2020 to verify extended json value with APIv3
-        //updated by Nishant @ 09 Jul 2020 for JRBI data validation on UAT JF UI
+        //updated by Nishant @ 09 Jul 2020 for jrbi data validation on UAT JF UI
         String sql ="";
         if(TestContext.getValues().environment.equalsIgnoreCase("UAT"))
              sql = "SELECT \"json\" FROM ephuat_extended_data_stitch.stch_manifestation_ext_json where epr_id='" + manifestationId + "'";

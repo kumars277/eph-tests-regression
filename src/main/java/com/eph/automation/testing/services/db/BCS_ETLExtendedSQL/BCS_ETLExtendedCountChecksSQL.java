@@ -279,7 +279,7 @@ public class BCS_ETLExtendedCountChecksSQL {
                     "SELECT DISTINCT\n" +
                     "     NULLIF(w.sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(w.metamodifiedon,''),'%d-%b-%Y %H:%i:%s') modifiedon \n" +
-                    "   , 'PROMIS' typecode \n" +
+                    "   , 'promis' typecode \n" +
                     "   , 'Promis' typedesc \n" +
                     "   , substr(split_part(NULLIF(c.classificationcode,''), ' | ', 1), (length(split_part(NULLIF(c.classificationcode,''), ' | ', 1)) - 4)) subjcode \n" +
                     "   , split_part (NULLIF(c.classificationcode,''), ' | ', 2) subjdesc \n" +
@@ -288,7 +288,7 @@ public class BCS_ETLExtendedCountChecksSQL {
                     "   FROM\n" +
                     "     ((" +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content w\n" +
                     "   INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
-                    "   INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'PROMIS%')))\n" +
+                    "   INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'promis%')))\n" +
                     "UNION    SELECT DISTINCT\n" +
                     "     NULLIF(sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(modifiedon,''),'%d-%b-%Y %H:%i:%s') modifiedon \n" +

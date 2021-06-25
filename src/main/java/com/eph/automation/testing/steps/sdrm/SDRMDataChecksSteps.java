@@ -38,7 +38,7 @@ public class SDRMDataChecksSteps {
     public void getRandomISBNIds(String numberOfRecords, String tableName) {
         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
-        Log.info("Get random SDRM ISBN Ids...");
+        Log.info("Get random sdrm ISBN Ids...");
 
         switch (tableName) {
             case "sdrm_inbound_part":
@@ -74,7 +74,7 @@ public class SDRMDataChecksSteps {
 
     @When("^Get the data from sdrm inbound table$")
     public void getSourceInboundRecords() {
-        Log.info("We get the SDRM Source Inbound records...");
+        Log.info("We get the sdrm Source Inbound records...");
          sql = String.format(SDRMDataChecksSQL.GET_SDRM_SOURCE_INBOUND_DATA, Joiner.on("','").join(Ids));
         dataQualitySDRMContext.recordsFromInboundData = DBManager.getDBResultAsBeanList(sql, SDRMDLAccessObject.class, Constants.AWS_URL);
         Log.info(sql);
@@ -106,7 +106,7 @@ public class SDRMDataChecksSteps {
 
     @When("^Get the data from sdrm delta current product table$")
     public void getDeltaCurrentProductRecords() {
-        Log.info("We get the SDRM Delta current product records...");
+        Log.info("We get the sdrm Delta current product records...");
        Log.info(sql);
         sql = String.format(SDRMDataChecksSQL.GET_SDRM_DELTA_CURRENT_PRODUCT_DATA, Joiner.on("','").join(Ids));
         dataQualitySDRMContext.recordsFromDeltaCurrentProductData = DBManager.getDBResultAsBeanList(sql, SDRMDLAccessObject.class, Constants.AWS_URL);
@@ -122,7 +122,7 @@ public class SDRMDataChecksSteps {
 
     @When("^Get the data from sdrm delta current product and Delta Product History table$")
     public void getDeltaCurrentAndDeltaHistoryRecords() {
-        Log.info("We get the Difference between SDRM Delta Current and SDRM Delta history table records...");
+        Log.info("We get the Difference between sdrm Delta Current and sdrm Delta history table records...");
         sql = String.format(SDRMDataChecksSQL.GET_DIFF_BETWEEN_SDRM_CURRENT_DELTA_AND_DELTA_HISTORY_DATA, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualitySDRMContext.recordsFromDeltaCurrentAndDeltaHistoryData = DBManager.getDBResultAsBeanList(sql, SDRMDLAccessObject.class, Constants.AWS_URL);
@@ -131,7 +131,7 @@ public class SDRMDataChecksSteps {
 
     @Then("^Get the data from sdrm history excl delta table$")
     public void getRecordsFromHistoryExclDelta() {
-        Log.info("We get the records from SDRM History Excl Delta table...");
+        Log.info("We get the records from sdrm History Excl Delta table...");
          sql = String.format(SDRMDataChecksSQL.GET_SDRM_HISTORY_EXCL_DELTA_DATA, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualitySDRMContext.recordsFromHistoryExclDeltaData = DBManager.getDBResultAsBeanList(sql, SDRMDLAccessObject.class, Constants.AWS_URL);
@@ -139,7 +139,7 @@ public class SDRMDataChecksSteps {
 
     @When("^Get the data from sdrm delta current product and History Excl Delta table$")
     public void getDeltaCurrentAndHistoryExclDeltaRecords() {
-        Log.info("We get the SDRM Delta Current Product And History Excl Delta table records...");
+        Log.info("We get the sdrm Delta Current Product And History Excl Delta table records...");
        sql = String.format(SDRMDataChecksSQL.GET_COMBINEOF_DELTACURRENT_AND_DELTAEXCL_DATA, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualitySDRMContext.recordsFromDeltaCurrentAndHistoryExclDeltaData = DBManager.getDBResultAsBeanList(sql, SDRMDLAccessObject.class, Constants.AWS_URL);
@@ -156,7 +156,7 @@ public class SDRMDataChecksSteps {
 
     @When("^Get the data from difference between sdrm current and prev file history table$")
     public void getSDRMCurrentAndPrevFileHistory() {
-        Log.info("We get the difference between SDRM Current And Prev File History...");
+        Log.info("We get the difference between sdrm Current And Prev File History...");
         sql = String.format(SDRMDataChecksSQL.GET_SDRM_CURRENT_AND_PREV_FILE_HISTORY_DATA, Joiner.on("','").join(Ids));
         Log.info(sql);
         dataQualitySDRMContext.recordsFromSDRMCurrentAndPrevFileHistoryData = DBManager.getDBResultAsBeanList(sql, SDRMDLAccessObject.class, Constants.AWS_URL);
@@ -668,7 +668,7 @@ public class SDRMDataChecksSteps {
 
             System.out.println("inbound size "+ dataQualitySDRMContext.recordsFromSDRMCurrentAndPrevFileHistoryData.size());
 
-            Log.info("Sorting the ISBN Ids to compare the records between SDRM Current and Prev file history with SDRM Delta current Product...");
+            Log.info("Sorting the ISBN Ids to compare the records between sdrm Current and Prev file history with sdrm Delta current Product...");
             for (int i = 0; i < dataQualitySDRMContext.recordsFromSDRMCurrentAndPrevFileHistoryData.size(); i++) {
 
                 dataQualitySDRMContext.recordsFromSDRMCurrentAndPrevFileHistoryData.sort(Comparator.comparing(SDRMDLAccessObject::getISBN)); //sort primarykey data in the lists

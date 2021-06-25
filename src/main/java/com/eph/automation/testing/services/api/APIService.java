@@ -9,9 +9,6 @@ import com.eph.automation.testing.models.api.ProductsMatchedApiObject;
 import com.eph.automation.testing.models.api.WorkApiObject;
 import com.eph.automation.testing.models.api.WorksMatchedApiObject;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.RequestSpecification;
 import org.json.JSONArray;
@@ -220,8 +217,11 @@ public class APIService {
             .when()
             .get("/product-hub-products/products?queryType=search&queryValue=" + searchOption);
 
+    response.prettyPrint();
+
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+
+    Assert.assertEquals("API response code ",response.statusCode(), 200);
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
@@ -256,17 +256,20 @@ public class APIService {
     pmcCode          : 300,303 or 746
     pmgCode          : 030,090 or 077
     */
+
     Response response =
         given()
             .baseUri(SearchAPI_EndPoint)
             .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
-            // .param("queryType","name")
-            // .param("queryValue",searchTerm)
-            .param(ParamKey, ParamValue)
+                .param(ParamKey, ParamValue)
+             .param("queryType","name")
+             .param("queryValue",searchTerm)
+
             .when()
-            .get("/product-hub-products/products?queryType=name&queryValue=" + searchTerm);
+            .get("/product-hub-products/products");
 
     DataQualityContext.api_response = response;
+   // response.prettyPrint();
     Assert.assertEquals(response.statusCode(), 200);
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }

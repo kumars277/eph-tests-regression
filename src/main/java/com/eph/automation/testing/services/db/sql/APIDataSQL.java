@@ -93,7 +93,7 @@ public class APIDataSQL {
           + "inner join semarchy_eph_mdm.gd_manifestation m on p.f_manifestation =m.manifestation_id \n"
           + "inner join semarchy_eph_mdm.gd_wwork w on m.f_wwork =w.work_id \n"
           + "where w.f_type like 'param2' and (p.s_name like '%param1%' or w.s_work_title like '%param1%'or m.s_manifestation_key_title like '%param1%')\n"
-          + "union \n"
+          + "union all\n"
           + "select p.s_name,w.f_type,w.s_work_title from semarchy_eph_mdm.gd_product p\n"
           + "inner join semarchy_eph_mdm.gd_wwork w on p.f_wwork =w.work_id\n"
           + "where w.f_type like 'param2' and (p.s_name like '%param1%' or w.s_work_title like '%param1%')) a";
@@ -276,8 +276,10 @@ public class APIDataSQL {
       "select COUNT(*) from semarchy_eph_mdm.gd_product_rel_package "
           + "where f_component in('%s')";
 
+  //there are duplicate component available in package but API returns only unique record count
+  //hence distinct count would be required to compare
   public static String EPH_GD_PRODUCT_COUNT_BY_PACKAGE_EXTRACT =
-      "select count (*) from semarchy_eph_mdm.gd_product_rel_package "
+      "select  count(distinct(f_component)) from semarchy_eph_mdm.gd_product_rel_package "
           + "where f_package_owner in ('%s')";
 
   public static String SELECT_RANDOM_PRODUCT_PERSON_ROLES_FOR_SEARCH =
@@ -461,16 +463,18 @@ public class APIDataSQL {
 
   // updated by Nishant @ 15 Apr 2020
   public static String getWorkIdentifiersDataFromGDByIdentifier =
-      "SELECT \n"
-          + " effective_start_date as IDENTIFIER_EFFECTIVE_START_DATE\n"
-          + " ,effective_end_date as IDENTIFIER_EFFECTIVE_END_DATE\n"
-          + " ,B_CLASSNAME as B_CLASSNAME\n"
-          + " ,WORK_IDENTIFIER_ID AS WORK_IDENTIFIER_ID -- WORK IDENTIFIER\n"
-          + " ,IDENTIFIER AS IDENTIFIER --  IDENTIFIER\n"
-          + " ,F_TYPE AS F_TYPE -- WORK IDENTIFIER\n"
-          + " ,F_WWORK AS WORK_ID -- WORK IDENTIFIER\n"
-          + "  FROM semarchy_eph_mdm.gd_work_identifier\n"
-          + "  WHERE identifier='PARAM1'";
+      " SELECT \n"
+          + " gwi.effective_start_date as IDENTIFIER_EFFECTIVE_START_DATE\n"
+          + " ,gwi.effective_end_date as IDENTIFIER_EFFECTIVE_END_DATE\n"
+          + " ,gwi.B_CLASSNAME as B_CLASSNAME\n"
+          + " ,gwi.WORK_IDENTIFIER_ID AS WORK_IDENTIFIER_ID -- WORK IDENTIFIER\n"
+          + " ,gwi.IDENTIFIER AS IDENTIFIER --  IDENTIFIER\n"
+          + " ,gwi.F_TYPE AS F_TYPE -- WORK IDENTIFIER\n"
+          + " ,gwi.F_WWORK AS WORK_ID -- WORK IDENTIFIER\n"
+          + "  FROM semarchy_eph_mdm.gd_work_identifier gwi\n"
+          + " inner join semarchy_eph_mdm.gd_wwork gw on gwi.f_wwork =gw.work_id \n"
+          + "  WHERE gw.f_status not in ('NVW')\n"
+          + "  and gwi.identifier='PARAM1'";
 
   // created by Nishant @ 22 Apr 2020
   public static String SelectProductByManifestationId =

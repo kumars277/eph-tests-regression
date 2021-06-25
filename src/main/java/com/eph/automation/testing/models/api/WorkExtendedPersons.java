@@ -9,7 +9,7 @@ import java.util.HashMap;
 public class WorkExtendedPersons {
     /**
      * created by Nishant @ 19 Jun 2020
-     * for JRBI data reflect in APIv3 work extended, person extended and manifestation extended
+     * for jrbi data reflect in APIv3 work extended, person extended and manifestation extended
      */
 
 

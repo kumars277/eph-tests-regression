@@ -66,7 +66,7 @@ public class JMETLDataChecks {
 
     @When("^We get the JM DB records from (.*)$")
     public void getJMDBRecords(String JMDBtable) {
-        Log.info("We get the records from JM DB..");
+        Log.info("We get the records from jm DB..");
         switch (JMDBtable) {
             case "work_business_model":
                 sql = String.format(JMETLDataChecksSQL.GET_JMDB_WORK_BUSINESS_MODEL, Joiner.on(",").join(Ids));
@@ -124,7 +124,7 @@ public class JMETLDataChecks {
         if (JMContext.JMObjectsFromDL.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
-            Log.info("Sorting the data to compare the JM records in DB and Inbound ..");
+            Log.info("Sorting the data to compare the jm records in DB and Inbound ..");
             for (int i = 0; i < JMContext.JMObjectsFromDL.size(); i++) {
                 switch (JMDBtable) {
                     case "work_business_model":
@@ -421,7 +421,7 @@ public class JMETLDataChecks {
 
     @When("^We get the JM Transformed Inbound records from (.*)$")
     public void getRecordsJMInbound(String Currenttable) {
-        Log.info("We get the records from JM Access..");
+        Log.info("We get the records from jm Access..");
         switch (Currenttable) {
             case "jmf_work":
                 sql = String.format(JMETLDataChecksSQL.GET_JMF_WORK, Joiner.on(",").join(Ids));
@@ -551,7 +551,7 @@ public class JMETLDataChecks {
         if (JMContext.JMObjectsFromDL.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
-            Log.info("Sorting the data to compare the JM records in Transformed Inbound and Current ..");
+            Log.info("Sorting the data to compare the jm records in Transformed Inbound and Current ..");
             for (int i = 0; i < JMContext.JMObjectsFromDL.size(); i++) {
                 switch (Currenttable) {
                     case "jmf_work":
@@ -1128,7 +1128,7 @@ public class JMETLDataChecks {
 
     @When("^We get the JM Transformed ETL Query records from (.*)$")
     public void getRecordsJMTransformedETL(String ETLtable) {
-        Log.info("We get the records from JM ETL..");
+        Log.info("We get the records from jm ETL..");
         switch (ETLtable) {
             case "etl_accountable_product_dq_v":
                 sql = String.format(JMETLDataChecksSQL.GET_ACCOUNTABLE_PRODUCT_DQ_QUERY, Joiner.on("','").join(Ids));
@@ -1252,7 +1252,7 @@ public class JMETLDataChecks {
         if (JMContext.JMObjectsFromDL.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
-            Log.info("Sorting the data to compare the JM records in Transformed Inbound and Current ..");
+            Log.info("Sorting the data to compare the jm records in Transformed Inbound and Current ..");
             for (int i = 0; i < JMContext.JMObjectsFromDL.size(); i++) {
                 switch (ETLtable) {
                     case "etl_accountable_product_dq_v":
@@ -1680,7 +1680,7 @@ public class JMETLDataChecks {
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
 
-                            Log.info("JM Source Ref New => " + JMContext.JMObjectsFromDL.get(i).getjm_source_ref_new() +
+                            Log.info("jm Source Ref New => " + JMContext.JMObjectsFromDL.get(i).getjm_source_ref_new() +
                                     " " + strTemp + " => ETL=" + method.invoke(objectToCompare1) +
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -1709,7 +1709,7 @@ public class JMETLDataChecks {
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
 
-                            Log.info("JM Source Ref New => " + JMContext.JMObjectsFromDL.get(i).getexternal_reference() +
+                            Log.info("jm Source Ref New => " + JMContext.JMObjectsFromDL.get(i).getexternal_reference() +
                                     " " + strTemp + " => ETL=" + method.invoke(objectToCompare1) +
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -1738,7 +1738,7 @@ public class JMETLDataChecks {
                             method2 = objectToCompare2.getClass().getMethod(strTemp);
 
 
-                            Log.info("JM Source Ref New => " + JMContext.JMObjectsFromDL.get(i).getexternal_reference() +
+                            Log.info("jm Source Ref New => " + JMContext.JMObjectsFromDL.get(i).getexternal_reference() +
                                     " " + strTemp + " => ETL=" + method.invoke(objectToCompare1) +
                                     " " + strTemp + " TransformedETL=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
@@ -2482,7 +2482,7 @@ public class JMETLDataChecks {
 
     @When("^We get the JM Staging records from (.*)$")
     public void getRecordsSemarchySource(String SourceTable) {
-        Log.info("We get the records from JM Access..");
+        Log.info("We get the records from jm Access..");
         switch (SourceTable) {
             case "all_manifestation_identifiers_v":
                 sql = String.format(JMETLDataChecksSQL.GET_ALL_MANIFESTATION_IDENTIFIER, Joiner.on("','").join(Ids));

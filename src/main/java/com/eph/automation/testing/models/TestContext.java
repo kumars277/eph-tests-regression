@@ -5,7 +5,7 @@ import com.eph.automation.testing.helper.Log;
 
 /**
  * Created by RAVIVARMANS on 11/24/2018.
- * updated by Nishant @ 18 Mar 2021 for JM UI automation
+ * updated by Nishant @ 18 Mar 2021 for jm UI automation
  */
 @StaticInjection
 public class TestContext {
@@ -13,7 +13,7 @@ public class TestContext {
     public static TestProperties getValues() {
         TestProperties testProperties = new TestProperties();
 
-           System.setProperty("ENV","UAT");
+         //   System.setProperty("ENV","SIT");
             System.setProperty("browser","chrome");
 
 

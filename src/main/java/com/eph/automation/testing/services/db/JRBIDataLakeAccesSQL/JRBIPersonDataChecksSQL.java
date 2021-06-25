@@ -28,7 +28,7 @@ public class JRBIPersonDataChecksSQL {
        "SELECT epr as EPR from(\n" +
                "SELECT DISTINCT\n" +
                "  cr2.epr epr\n" +
-               ", 'JRBI Person Extended' record_type\n" +
+               ", 'jrbi Person Extended' record_type\n" +
                ", cr2.work_type work_type\n" +
                ", NULLIF(j.role_code, '') role_code\n" +
                ", concat(cr2.epr, j.role_code) u_key\n" +
@@ -58,7 +58,7 @@ public class JRBIPersonDataChecksSQL {
                     " from(\n" +
                     " SELECT DISTINCT\n" +
                     "  cr2.epr epr\n" +
-                    ", 'JRBI Person Extended' record_type\n" +
+                    ", 'jrbi Person Extended' record_type\n" +
                     ", cr2.work_type work_type\n" +
                     ", NULLIF(j.role_code, '') role_code\n" +
                     ", concat(cr2.epr, j.role_code) u_key\n" +

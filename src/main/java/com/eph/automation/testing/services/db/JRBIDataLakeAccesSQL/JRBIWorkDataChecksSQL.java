@@ -46,7 +46,7 @@ public class JRBIWorkDataChecksSQL {
                     ", jrbi_joined AS (\n" +
                     "   SELECT DISTINCT\n" +
                     "     cr2.epr epr\n" +
-                    "   , 'JRBI Work Extended' record_type\n" +
+                    "   , 'jrbi Work Extended' record_type\n" +
                     "   , cr2.work_type work_type\n" +
                     "   , NULLIF(j.primary_site_system, '') primary_site_system\n" +
                     "   , NULLIF(j.primary_site_acronym, '') primary_site_acronym\n" +
@@ -116,7 +116,7 @@ public class JRBIWorkDataChecksSQL {
                     ", jrbi_joined AS (\n" +
                     "   SELECT DISTINCT\n" +
                     "     cr2.epr epr\n" +
-                    "   , 'JRBI Work Extended' record_type\n" +
+                    "   , 'jrbi Work Extended' record_type\n" +
                     "   , cr2.work_type work_type\n" +
                     "   , NULLIF(j.primary_site_system, '') primary_site_system\n" +
                     "   , NULLIF(j.primary_site_acronym, '') primary_site_acronym\n" +

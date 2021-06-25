@@ -838,7 +838,7 @@ public class PromisETLCountChecksSQL {
 
     public static String GET_Promis_Latest= "select count(*) as Total_Count from "+GetPRMDLDBUser.getPRMDataBase()+".%s";
 
-    public static String GET_Promis_AllSource= "select count(*) as Total_Count from "+GetPRMDLDBUser.getProdStagingDataBase()+".%s where \"source\"='PROMIS'";
+    public static String GET_Promis_AllSource= "select count(*) as Total_Count from "+GetPRMDLDBUser.getProdStagingDataBase()+".%s where \"source\"='promis'";
 
     public static String GET_Promis_pricing_Latest= "select count(*) as Total_Count from "+GetPRMDLDBUser.getPRMDataBase()+".%s where \"end_date\" is null or \"end_date\" >= current_date";
 
@@ -848,7 +848,7 @@ public class PromisETLCountChecksSQL {
             ", cls.priority\n" +
             ", cod.cls_cod subject_area_code\n" +
             ", cod.cls_des subject_area_name\n" +
-            ", 'PROMIS' as subject_type_code\n" +
+            ", 'promis' as subject_type_code\n" +
             ", 'Promis' as subject_type_name\n" +
             ", inf.work_type\n" +
             ", greatest(cls.inbound_ts, cod.inbound_ts) as inbound_ts\n" +

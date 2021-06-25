@@ -74,7 +74,7 @@ public class DL_CoreViewChecksSQL {
                     ", notified_date last_updated_date\n" +
                     ", acc_prod_id work_source_reference\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     " FROM "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_accountable_product_dq)\n";
 
     public static String GET_BCS_JM_CORE_ACC_PROD_RAND_ID =
@@ -101,7 +101,7 @@ public class DL_CoreViewChecksSQL {
                     ", notified_date last_updated_date\n" +
                     ", acc_prod_id work_source_reference\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     " FROM "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_accountable_product_dq) order by rand() limit %s \n";
 
     public static String GET_BCS_JM_CORE_ACC_PROD_REC =
@@ -138,7 +138,7 @@ public class DL_CoreViewChecksSQL {
                     ", notified_date last_updated_date\n" +
                     ", acc_prod_id work_source_reference\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     " FROM "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_accountable_product_dq) where work_reference in ('%s')\n" +
                     "order by external_reference,work_reference,last_updated_date,work_source_reference,delete_flag desc \n";
 
@@ -195,7 +195,7 @@ public class DL_CoreViewChecksSQL {
                   ", m.notified_date last_updated_date\n" +
                   ", m.upsert update_type\n" +
                   ", false delete_flag\n" +
-                  ", 'JM' source_system\n" +
+                  ", 'jm' source_system\n" +
                   ", m.scenario_code scenario_code\n" +
                   ", m.scenario_name scenario_name\n" +
                   " FROM ("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_manifestation_dq m\n" +
@@ -246,7 +246,7 @@ public class DL_CoreViewChecksSQL {
                     ", m.notified_date last_updated_date\n" +
                     ", m.upsert update_type\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", m.scenario_code scenario_code\n" +
                     ", m.scenario_name scenario_name\n" +
                     " FROM ("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_manifestation_dq m\n" +
@@ -315,7 +315,7 @@ public class DL_CoreViewChecksSQL {
                     ", m.notified_date last_updated_date\n" +
                     ", m.upsert update_type\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", m.scenario_code scenario_code\n" +
                     ", m.scenario_name scenario_name\n" +
                     " FROM ("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_manifestation_dq m\n" +
@@ -365,7 +365,7 @@ public class DL_CoreViewChecksSQL {
                     ", mi.manifestation_source_reference manifestation_source_reference\n" +
                     ", mi.notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", mi.scenario_code scenario_code\n" +
                     ", mi.scenario_name scenario_name\n" +
                     " FROM ("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
@@ -387,7 +387,7 @@ public class DL_CoreViewChecksSQL {
                     ", mi.manifestation_source_reference manifestation_source_reference\n" +
                     ", mi.notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", mi.scenario_code scenario_code\n" +
                     ", mi.scenario_name scenario_name\n" +
                     " FROM("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
@@ -428,7 +428,7 @@ public class DL_CoreViewChecksSQL {
                     ", mi.manifestation_source_reference manifestation_source_reference\n" +
                     ", mi.notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", mi.scenario_code scenario_code\n" +
                     ", mi.scenario_name scenario_name\n" +
                     " FROM ("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
@@ -450,7 +450,7 @@ public class DL_CoreViewChecksSQL {
                     ", mi.manifestation_source_reference manifestation_source_reference\n" +
                     ", mi.notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", mi.scenario_code scenario_code\n" +
                     ", mi.scenario_name scenario_name\n" +
                     " FROM("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
@@ -503,7 +503,7 @@ public class DL_CoreViewChecksSQL {
                     ", mi.manifestation_source_reference manifestation_source_reference\n" +
                     ", mi.notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", mi.scenario_code scenario_code\n" +
                     ", mi.scenario_name scenario_name\n" +
                     " FROM ("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
@@ -525,7 +525,7 @@ public class DL_CoreViewChecksSQL {
                     ", mi.manifestation_source_reference manifestation_source_reference\n" +
                     ", mi.notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", mi.scenario_code scenario_code\n" +
                     ", mi.scenario_name scenario_name\n" +
                     " FROM("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
@@ -730,7 +730,7 @@ public class DL_CoreViewChecksSQL {
                     ", p.upsert update_type\n" +
                     ", 'JOURNAL' work_roll_up_type\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", p.scenario_code scenario_code\n" +
                     ", p.scenario_name scenario_name\n" +
                     "FROM ("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_product_dq p\n" +
@@ -803,7 +803,7 @@ public class DL_CoreViewChecksSQL {
                     ", p.upsert update_type\n" +
                     ", 'JOURNAL' work_roll_up_type\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", p.scenario_code scenario_code\n" +
                     ", p.scenario_name scenario_name\n" +
                     "FROM ("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_product_dq p\n" +
@@ -905,7 +905,7 @@ public class DL_CoreViewChecksSQL {
                     ", p.upsert update_type\n" +
                     ", 'JOURNAL' work_roll_up_type\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", p.scenario_code scenario_code\n" +
                     ", p.scenario_name scenario_name\n" +
                     "FROM ("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_product_dq p\n" +
@@ -1066,7 +1066,7 @@ public class DL_CoreViewChecksSQL {
                     ", CAST(null AS date) effective_end_date\n" +
                     ", wi.notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", CAST(null AS varchar) scenario_code\n" +
                     ", wi.scenario_name scenario_name\n" +
                     "FROM ("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_identifier_dq wi\n" +
@@ -1088,7 +1088,7 @@ public class DL_CoreViewChecksSQL {
                     ", (wi.effective_start_date - INTERVAL  '1' DAY) effective_end_date\n" +
                     ", wi.notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", wi.scenario_code scenario_code\n" +
                     ", wi.scenario_name scenario_name\n" +
                     "FROM ("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_identifier_dq wi\n" +
@@ -1128,7 +1128,7 @@ public class DL_CoreViewChecksSQL {
                     ", CAST(null AS date) effective_end_date\n" +
                     ", wi.notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", CAST(null AS varchar) scenario_code\n" +
                     ", wi.scenario_name scenario_name\n" +
                     " FROM ("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_identifier_dq wi\n" +
@@ -1150,7 +1150,7 @@ public class DL_CoreViewChecksSQL {
                     ", (wi.effective_start_date - INTERVAL  '1' DAY) effective_end_date\n" +
                     ", wi.notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", wi.scenario_code scenario_code\n" +
                     ", wi.scenario_name scenario_name\n" +
                     " FROM ("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_identifier_dq wi\n" +
@@ -1203,7 +1203,7 @@ public class DL_CoreViewChecksSQL {
                     ", CAST(null AS date) effective_end_date\n" +
                     ", wi.notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", CAST(null AS varchar) scenario_code\n" +
                     ", wi.scenario_name scenario_name\n" +
                     " FROM ("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_identifier_dq wi\n" +
@@ -1225,7 +1225,7 @@ public class DL_CoreViewChecksSQL {
                     ", (wi.effective_start_date - INTERVAL  '1' DAY) effective_end_date\n" +
                     ", wi.notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", wi.scenario_code scenario_code\n" +
                     ", wi.scenario_name scenario_name\n" +
                     " FROM ("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_identifier_dq wi\n" +
@@ -1303,7 +1303,7 @@ public class DL_CoreViewChecksSQL {
                    "   , wpr.dq_err dq_err\n" +
                    "   , wpr.notified_date last_updated_date\n" +
                    "   , false delete_flag\n" +
-                   "   , 'JM' source_system\n" +
+                   "   , 'jm' source_system\n" +
                    "   , wpr.scenario_code scenario_code\n" +
                    "   , wpr.scenario_name scenario_name\n" +
                    "   FROM\n" +
@@ -1330,7 +1330,7 @@ public class DL_CoreViewChecksSQL {
                    "   , CAST(null AS varchar) dq_err\n" +
                    "   , wpr.notified_date last_updated_date\n" +
                    "   , false delete_flag\n" +
-                   "   , 'JM' source_system\n" +
+                   "   , 'jm' source_system\n" +
                    "   , wpr.scenario_code scenario_code\n" +
                    "   , wpr.scenario_name scenario_name\n" +
                    "   FROM\n" +
@@ -1393,7 +1393,7 @@ public class DL_CoreViewChecksSQL {
              "   , wpr.dq_err dq_err\n" +
              "   , wpr.notified_date last_updated_date\n" +
              "   , false delete_flag\n" +
-             "   , 'JM' source_system\n" +
+             "   , 'jm' source_system\n" +
              "   , wpr.scenario_code scenario_code\n" +
              "   , wpr.scenario_name scenario_name\n" +
              "   FROM\n" +
@@ -1420,7 +1420,7 @@ public class DL_CoreViewChecksSQL {
              "   , CAST(null AS varchar) dq_err\n" +
              "   , wpr.notified_date last_updated_date\n" +
              "   , false delete_flag\n" +
-             "   , 'JM' source_system\n" +
+             "   , 'jm' source_system\n" +
              "   , wpr.scenario_code scenario_code\n" +
              "   , wpr.scenario_name scenario_name\n" +
              "   FROM\n" +
@@ -1484,7 +1484,7 @@ public class DL_CoreViewChecksSQL {
                     "   , wpr.dq_err dq_err\n" +
                     "   , wpr.notified_date last_updated_date\n" +
                     "   , false delete_flag\n" +
-                    "   , 'JM' source_system\n" +
+                    "   , 'jm' source_system\n" +
                     "   , wpr.scenario_code scenario_code\n" +
                     "   , wpr.scenario_name scenario_name\n" +
                     "   FROM\n" +
@@ -1511,7 +1511,7 @@ public class DL_CoreViewChecksSQL {
                     "   , CAST(null AS varchar) dq_err\n" +
                     "   , wpr.notified_date last_updated_date\n" +
                     "   , false delete_flag\n" +
-                    "   , 'JM' source_system\n" +
+                    "   , 'jm' source_system\n" +
                     "   , wpr.scenario_code scenario_code\n" +
                     "   , wpr.scenario_name scenario_name\n" +
                     "   FROM\n" +
@@ -1661,7 +1661,7 @@ public class DL_CoreViewChecksSQL {
                    ", dq_err dq_err\n" +
                    ", notified_date last_updated_date\n" +
                    ", false delete_flag \n" +
-                   ", 'JM' source_system \n" +
+                   ", 'jm' source_system \n" +
                    " FROM "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_subject_area_dq\n" +
                    " WHERE subject_area_type = 'SD')\n";
 
@@ -1680,7 +1680,7 @@ public class DL_CoreViewChecksSQL {
                     ", dq_err dq_err\n" +
                     ", notified_date last_updated_date\n" +
                     ", false delete_flag \n" +
-                    ", 'JM' source_system \n" +
+                    ", 'jm' source_system \n" +
                     " FROM "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_subject_area_dq\n" +
                     " WHERE subject_area_type = 'SD') order by rand() limit %s \n";
 
@@ -1708,7 +1708,7 @@ public class DL_CoreViewChecksSQL {
                     ", dq_err dq_err\n" +
                     ", notified_date last_updated_date\n" +
                     ", false delete_flag \n" +
-                    ", 'JM' source_system \n" +
+                    ", 'jm' source_system \n" +
                     " FROM "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_subject_area_dq\n" +
                     " WHERE subject_area_type = 'SD')where external_reference in ('%s') order by external_reference desc \n";
 
@@ -1758,7 +1758,7 @@ public class DL_CoreViewChecksSQL {
                     ", w.notified_date last_updated_date\n" +
                     ", w.upsert update_type\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", w.scenario_code scenario_code\n" +
                     ", w.scenario_name scenario_name\n" +
                     " FROM("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_wwork_dq w\n" +
@@ -1831,7 +1831,7 @@ public class DL_CoreViewChecksSQL {
                     ", w.notified_date last_updated_date\n" +
                     ", w.upsert update_type\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", w.scenario_code scenario_code\n" +
                     ", w.scenario_name scenario_name\n" +
                     " FROM("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_wwork_dq w\n" +
@@ -1939,7 +1939,7 @@ public class DL_CoreViewChecksSQL {
                     ", w.notified_date last_updated_date\n" +
                     ", w.upsert update_type\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     ", w.scenario_code scenario_code\n" +
                     ", w.scenario_name scenario_name\n" +
                     " FROM("+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_wwork_dq w\n" +
@@ -2035,7 +2035,7 @@ public class DL_CoreViewChecksSQL {
                     ", 'N' dq_err\n" +
                     ", notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     " FROM "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_legal_owner_dq)\n";
 
     public static String GET_BCS_JM_CORE_WORK_LEGAL_OWNER_RAND_ID =
@@ -2048,7 +2048,7 @@ public class DL_CoreViewChecksSQL {
                     ", 'N' dq_err\n" +
                     ", notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     " FROM "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_legal_owner_dq) order by rand() limit %s\n";
 
     public static String GET_BCS_JM_CORE_WORK_LEGAL_OWNER_REC =
@@ -2069,7 +2069,7 @@ public class DL_CoreViewChecksSQL {
                     ", 'N' dq_err\n" +
                     ", notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'JM' source_system\n" +
+                    ", 'jm' source_system\n" +
                     " FROM "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_legal_owner_dq) where external_reference in ('%s') order by external_reference desc\n";
 
     public static String GET_DL_CORE_ALL_WORK_LEGAL_OWNER_REC =
@@ -2093,7 +2093,7 @@ public class DL_CoreViewChecksSQL {
                     ", 'N' dq_err \n" +
                     ", false delete_flag\n" +
                     ", notified_date last_updated_date \n" +
-                    ", 'JM' source_system \n" +
+                    ", 'jm' source_system \n" +
                     " from "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_access_model_dq_v)";
 
     public static String GET_BCS_JM_CORE_WORK_ACCESS_MODEL_RAND_ID =
@@ -2106,7 +2106,7 @@ public class DL_CoreViewChecksSQL {
                     ", 'N' dq_err \n" +
                     ", false delete_flag\n" +
                     ", notified_date last_updated_date \n" +
-                    ", 'JM' source_system \n" +
+                    ", 'jm' source_system \n" +
                     " from "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_access_model_dq_v)order by rand() limit %s";
 
     public static String GET_BCS_JM_CORE_WORK_ACCESS_MODEL_REC =
@@ -2127,7 +2127,7 @@ public class DL_CoreViewChecksSQL {
                     ", 'N' dq_err \n" +
                     ", false delete_flag\n" +
                     ", notified_date last_updated_date \n" +
-                    ", 'JM' source_system \n" +
+                    ", 'jm' source_system \n" +
                     " from "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_access_model_dq_v)where external_reference in ('%s') order by external_reference desc ";
 
     public static String GET_DL_CORE_ALL_WORK_ACCESS_MODEL_REC =
@@ -2151,7 +2151,7 @@ public class DL_CoreViewChecksSQL {
                     ", 'N' dq_err \n" +
                     ", false delete_flag\n" +
                     ", notified_date last_updated_date \n" +
-                    ", 'JM' source_system \n" +
+                    ", 'jm' source_system \n" +
                     " from "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_business_model_dq_v)";
 
     public static String GET_BCS_JM_CORE_WORK_BUSINESS_MODEL_RAND_ID =
@@ -2164,7 +2164,7 @@ public class DL_CoreViewChecksSQL {
                     ", 'N' dq_err \n" +
                     ", false delete_flag\n" +
                     ", notified_date last_updated_date \n" +
-                    ", 'JM' source_system \n" +
+                    ", 'jm' source_system \n" +
                     " from "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_business_model_dq_v)order by rand() limit %s";
 
     public static String GET_BCS_JM_CORE_WORK_BUSINESS_MODEL_REC =
@@ -2185,7 +2185,7 @@ public class DL_CoreViewChecksSQL {
                     ", 'N' dq_err \n" +
                     ", false delete_flag\n" +
                     ", notified_date last_updated_date \n" +
-                    ", 'JM' source_system \n" +
+                    ", 'jm' source_system \n" +
                     " from "+GetBCS_ETLCoreDLDBUser.getJM_CoreDataBase()+".etl_work_business_model_dq_v)where external_reference in ('%s') order by external_reference desc\n";
 
     public static String GET_DL_CORE_ALL_WORK_BUSINESS_MODEL_REC =

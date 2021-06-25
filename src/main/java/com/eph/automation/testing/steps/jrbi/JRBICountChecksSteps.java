@@ -426,7 +426,7 @@ public class JRBICountChecksSteps {
 
     }
 
-   /* @Given("^Get the total count of JRBI Data from source file (.*)(.*)$")
+   /* @Given("^Get the total count of jrbi Data from source file (.*)(.*)$")
     public void readSourceFile(String fileLocation, String fileName) throws Throwable{
         String splitBy = ",";
         String csvfile = fileLocation+fileName;

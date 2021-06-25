@@ -48,7 +48,7 @@ public class JRBIDataLakeCountChecksSQL {
                  ", jrbi_joined AS (\n" +
                  "   SELECT DISTINCT\n" +
                  "     cr2.epr epr\n" +
-                 "   , 'JRBI Work Extended' record_type\n" +
+                 "   , 'jrbi Work Extended' record_type\n" +
                  "   , cr2.work_type work_type\n" +
                  "   , NULLIF(j.primary_site_system, '') primary_site_system\n" +
                  "   , NULLIF(j.primary_site_acronym, '') primary_site_acronym\n" +
@@ -98,7 +98,7 @@ public class JRBIDataLakeCountChecksSQL {
                 "select Count(*) as Source_Count from(\n" +
                         "SELECT DISTINCT\n" +
                         "  cr2.epr epr\n" +
-                        ", 'JRBI Manifestation Extended' record_type\n" +
+                        ", 'jrbi Manifestation Extended' record_type\n" +
                         ", cr2.manifestation_type manifestation_type\n" +
                         ", NULLIF(j.journal_issue_trim_size, '') journal_issue_trim_size\n" +
                         ", NULLIF(j.war_reference, '') war_reference\n" +
@@ -112,7 +112,7 @@ public class JRBIDataLakeCountChecksSQL {
                "select Count(*) as Source_Count from(\n" +
                        "SELECT DISTINCT\n" +
                        "  cr2.epr epr\n" +
-                       ", 'JRBI Person Extended' record_type\n" +
+                       ", 'jrbi Person Extended' record_type\n" +
                        ", cr2.work_type work_type\n" +
                        ", NULLIF(j.role_code, '') role_code\n" +
                        ", concat(cr2.epr, j.role_code) u_key\n" +

@@ -87,7 +87,9 @@ public class apiProductsSearchSteps {
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random product ids are : " + ids);
     // added by Nishant @ 26 Dec for debugging failures
-    //  ids.clear(); ids.add("EPR-10HF2X"); Log.info("hard coded product ids are : " + ids);//
+      // ids.clear(); ids.add("EPR-10J0XC"); Log.info("hard coded product ids are : " + ids);//
+
+
     if (productProperty.equalsIgnoreCase("PRODUCT_IDENTIFIER")) {
       ids.clear();
       ids.add("EPR-10V1T5");
@@ -132,6 +134,9 @@ public class apiProductsSearchSteps {
             .collect(Collectors.toList());
 
     Log.info("Selected random package ids  : " + packageIds);
+
+  //  packageIds.clear();    packageIds.add("EPR-10TV01"); Log.info("hard coded id is " + packageIds);
+
 
     DataQualityContext.breadcrumbMessage += "->" + packageIds;
     Assert.assertFalse(
@@ -624,9 +629,11 @@ public class apiProductsSearchSteps {
           case "PRODUCT_ID":
             returnedProducts = searchForProductsBySearchResult(productDataObject.getPRODUCT_ID());
             break;
+
           case "PRODUCT_TITLE":
             returnedProducts = searchForProductsBySearchResult(productDataObject.getPRODUCT_NAME());
             break;
+
           case "PRODUCT_IDENTIFIER":
             getProductIdentifiers(productDataObjects.get(0).getPRODUCT_ID());
             // hard coded by Nishant @ 7 may 2020
@@ -644,6 +651,7 @@ public class apiProductsSearchSteps {
             returnedProducts =
                 searchForProductsBySearchResult(productDataObjects.get(0).getF_PRODUCT_WORK());
             break;
+
           case "PRODUCT_WORK_TITLE":
             getWorksDataFromEPHGD(productDataObjects.get(0).getF_PRODUCT_WORK());
             returnedProducts =
@@ -670,6 +678,7 @@ public class apiProductsSearchSteps {
                           + size);
             }
             break;
+
           case "PRODUCT_WORK_IDENTIFIER":
             getWorkIdentifiers(productDataObjects.get(0).getF_PRODUCT_WORK());
             returnedProducts =
@@ -681,6 +690,7 @@ public class apiProductsSearchSteps {
                 searchForProductsBySearchResult(
                     String.valueOf(productDataObject.getF_PRODUCT_MANIFESTATION_TYP()));
             break;
+
           case "PRODUCT_MANIFESTATION_TITLE":
             getManifestationByID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
             returnedProducts =
@@ -707,6 +717,7 @@ public class apiProductsSearchSteps {
                           + size);
             }
             break;
+
           case "PRODUCT_MANIFESTATION_IDENTIFIER":
             List<Map<String, Object>> manifestationIdentifiers =
                 getManifestationIdentifierByManifestationID(
@@ -722,6 +733,7 @@ public class apiProductsSearchSteps {
                 searchForProductsBySearchResult(
                     dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
             break;
+
           case "PRODUCT_MANIFESTATION_WORK_TITLE":
             getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
             returnedProducts =
@@ -747,8 +759,8 @@ public class apiProductsSearchSteps {
                           + "&size="
                           + size);
             }
-
             break;
+
           case "PRODUCT_MANIFESTATION_WORK_IDENTIFIER":
             getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
             getWorkIdentifiers(dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
@@ -793,6 +805,7 @@ public class apiProductsSearchSteps {
                           + size);
             }
             break;
+
           case "PRODUCT_WORK_PERSONS_FULLNAME":
             getWorkPersonRoleByWorkId(productDataObjects.get(0).getF_PRODUCT_WORK());
             getPersonDataByPersonId(personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
@@ -825,6 +838,7 @@ public class apiProductsSearchSteps {
                           + size);
             }
             break;
+
           case "PRODUCT_MANIFESTATION_WORK_PERSONS_FULLNAME":
             getWorkByManifestationID(productDataObject.getF_PRODUCT_MANIFESTATION_TYP());
             getWorkPersonRoleByWorkId(
@@ -859,6 +873,7 @@ public class apiProductsSearchSteps {
                           + size);
             }
             break;
+
           default:
             throw new IllegalStateException("Unexpected value: " + searchOption);
         }

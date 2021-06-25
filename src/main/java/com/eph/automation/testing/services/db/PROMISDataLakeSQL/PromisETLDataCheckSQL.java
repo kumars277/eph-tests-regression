@@ -1165,7 +1165,7 @@ public class PromisETLDataCheckSQL {
             ", cls.priority\n" +
             ", cod.cls_cod subject_area_code\n" +
             ", cod.cls_des subject_area_name\n" +
-            ", 'PROMIS' as subject_type_code\n" +
+            ", 'promis' as subject_type_code\n" +
             ", 'Promis' as subject_type_name\n" +
             ", inf.work_type\n" +
             ", greatest(cls.inbound_ts, cod.inbound_ts) as inbound_ts\n" +
@@ -1320,13 +1320,13 @@ public class PromisETLDataCheckSQL {
     public static String GET_LATEST_URLS_IDs = "select epr_id as EPR_ID from "+GetPRMDLDBUser.getPRMDataBase()+".promis_transform_latest_urls limit %s ";
 
 //    All source Records
-    public static String GET_AllSource_Extended_Pricing = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".product_extended_pricing_allsource_v where epr_id in ('%s') and source in ('PROMIS') order by price_currency, price_amount";
-    public static String GET_AllSource_Extended_Work = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".work_extended_allsource_v where epr_id in ('%s') and source in ('PROMIS')";
-    public static String GET_AllSource_Extended_Work_Metric = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".work_extended_metric_allsource_v where epr_id in ('%s') and source in ('PROMIS') order by metric_code";
-    public static String GET_AllSource_Extended_Work_Editorial_Board = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".work_extended_editorial_board_allsource_v where epr_id in ('%s') and source in ('PROMIS') order by sequence_number, group_number, last_name";
-    public static String GET_AllSource_Extended_Work_Relationship_Sibling = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".work_extended_relationship_sibling_allsource_v where epr_id in ('%s') and source in ('PROMIS') order by related_title";
-    public static String GET_AllSource_Extended_Work_Subject_Area = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".work_extended_subject_area_allsource_v where epr_id in ('%s') and source in ('PROMIS') order by code";
-    public static String GET_AllSource_Extended_Work_Url = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".work_extended_url_allsource_v where epr_id in ('%s') and source in ('PROMIS') order by url_type_code, url";
+    public static String GET_AllSource_Extended_Pricing = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".product_extended_pricing_allsource_v where epr_id in ('%s') and source in ('promis') order by price_currency, price_amount";
+    public static String GET_AllSource_Extended_Work = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".work_extended_allsource_v where epr_id in ('%s') and source in ('promis')";
+    public static String GET_AllSource_Extended_Work_Metric = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".work_extended_metric_allsource_v where epr_id in ('%s') and source in ('promis') order by metric_code";
+    public static String GET_AllSource_Extended_Work_Editorial_Board = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".work_extended_editorial_board_allsource_v where epr_id in ('%s') and source in ('promis') order by sequence_number, group_number, last_name";
+    public static String GET_AllSource_Extended_Work_Relationship_Sibling = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".work_extended_relationship_sibling_allsource_v where epr_id in ('%s') and source in ('promis') order by related_title";
+    public static String GET_AllSource_Extended_Work_Subject_Area = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".work_extended_subject_area_allsource_v where epr_id in ('%s') and source in ('promis') order by code";
+    public static String GET_AllSource_Extended_Work_Url = "select * from "+GetPRMDLDBUser.getProdStagingDataBase()+".work_extended_url_allsource_v where epr_id in ('%s') and source in ('promis') order by url_type_code, url";
 
 
 //  All Latest Records

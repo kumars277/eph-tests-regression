@@ -922,7 +922,7 @@ public class ProductFinderUISteps {
     }
 
     private void verifyEditorialInfo() {
-        //created by Nishant @ 07 Jul 2020 for JRBI data validation on JF UI
+        //created by Nishant @ 07 Jul 2020 for jrbi data validation on JF UI
         Log.info("\nverifying Work Overview - Editorial tab");
         Log.info("...................................\n");
 
@@ -931,58 +931,58 @@ public class ProductFinderUISteps {
 
             Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Editorial Submission Site"),
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSystem());
-            printLog("UI:Editorial Submission Site with JRBI:primarySiteSystem");
+            printLog("UI:Editorial Submission Site with jrbi:primarySiteSystem");
 
             Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Editorial Submission Site Acronym"),
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteAcronym());
-            printLog("UI:Editorial Submission Site Acronym with JRBI: primarySiteAcronym");
+            printLog("UI:Editorial Submission Site Acronym with jrbi: primarySiteAcronym");
 
             Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Editorial Support Level"),
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getPrimarySiteSupportLevel());
-            printLog("UI:Editorial Support Level with JRBI: primarySiteSupportLevel");
+            printLog("UI:Editorial Support Level with jrbi: primarySiteSupportLevel");
 
             String dbProductionSite = "";
             if (DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalProdSiteCode() != null)
                 dbProductionSite = DataQualityContext.workExtendedTestClass.getWorkExtended().getJournalProdSiteCode();
             Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Production Site"), dbProductionSite);
-            printLog("UI:Production Site with JRBI: JournalProdSiteCode");
+            printLog("UI:Production Site with jrbi: JournalProdSiteCode");
 
 
             Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Production Type"),
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getIssueProdTypeCode());
-            printLog("UI:Production Type with JRBI: issueProdTypeCode");
+            printLog("UI:Production Type with jrbi: issueProdTypeCode");
 
             Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("First Volume"),
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumeFrom());
-            printLog("UI:First Volume with JRBI: catalogueVolumeFrom");
+            printLog("UI:First Volume with jrbi: catalogueVolumeFrom");
 
             Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Last Volume"),
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumeTo());
-            printLog("UI:Last Volume with JRBI: catalogueVolumeTo");
+            printLog("UI:Last Volume with jrbi: catalogueVolumeTo");
 
             Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Volumes in Catalogue"),
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueVolumesQty());
-            printLog("UI:Volumes in Catalogue with JRBI: catalogueVolumesQty");
+            printLog("UI:Volumes in Catalogue with jrbi: catalogueVolumesQty");
 
             Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Total issues"),
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getCatalogueIssuesQty());
-            printLog("UI:Total issues with JRBI: catalogueIssuesQty");
+            printLog("UI:Total issues with jrbi: catalogueIssuesQty");
 
             Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("No Issues (Budget)"),
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getRfIssuesQty());
-            printLog("UI:No Issues (Budget) with JRBI: rfIssuesQty");
+            printLog("UI:No Issues (Budget) with jrbi: rfIssuesQty");
 
             Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("First Volume/Issue (Budget)"),
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getRfFvi());
-            printLog("UI:First Volume/Issue (Budget) with JRBI: rfFvi");
+            printLog("UI:First Volume/Issue (Budget) with jrbi: rfFvi");
 
             Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Last Volume/Issue (Budget)"),
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getRfLvi());
-            printLog("UI:Last Volume/Issue (Budget) with JRBI: rfLvi");
+            printLog("UI:Last Volume/Issue (Budget) with jrbi: rfLvi");
 
             Assert.assertEquals(productFinderTasks.prop_editorial2.getProperty("Total pages (Budget)"),
                     DataQualityContext.workExtendedTestClass.getWorkExtended().getRfTotalPagesQty());
-            printLog("UI:Total pages (Budget) with JRBI: rfTotalPagesQty");
+            printLog("UI:Total pages (Budget) with jrbi: rfTotalPagesQty");
 
         }
 
@@ -1003,19 +1003,19 @@ public class ProductFinderUISteps {
             //EPR-W-11560F
 
             //getJournalProdSiteCode moved from manifeationExtended to workExtended level
-            //  Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Production Site"),DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getJournalProdSiteCode());      printLog("UI:Production Site with JRBI: journalProdSiteCode");
+            //  Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Production Site"),DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getJournalProdSiteCode());      printLog("UI:Production Site with jrbi: journalProdSiteCode");
 
             //coming from manifestation Extended
             String DBWarReference = "";
             if (DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getWarReference() != null)
                 DBWarReference = DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getWarReference();
             Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Despatch Location"), DBWarReference);
-            printLog("UI:Despatch Location with JRBI: warReference");
+            printLog("UI:Despatch Location with jrbi: warReference");
 
             //coming from manifestation Extended
             Assert.assertEquals(productFinderTasks.prop_editorial1.getProperty("Trim Size"),
                     DataQualityContext.manifestationExtendedTestClass.getManifestationExtended().getJournalIssueTrimSize());
-            printLog("UI:Trim Size with JRBI: journalIssueTrimSize");
+            printLog("UI:Trim Size with jrbi: journalIssueTrimSize");
 
         }
 
@@ -1025,7 +1025,7 @@ public class ProductFinderUISteps {
 
     }
 
-    private void verifyPeople() { //created by Nishant @ 10 Jul 2020 for JRBI data validation on JF UI
+    private void verifyPeople() { //created by Nishant @ 10 Jul 2020 for jrbi data validation on JF UI
         Log.info("\nverifying Work Overview - People tab");
         Log.info("...................................\n");
         productFinderTasks.getUI_People();
@@ -1408,7 +1408,7 @@ public class ProductFinderUISteps {
                     !DataQualityContext.workExtendedTestClass.getWorkExtended().getPtsBusinessUnitDesc().equalsIgnoreCase("")) {
                 Assert.assertEquals(productFinderTasks.prop_info.getProperty("Business Unit"),
                         DataQualityContext.workExtendedTestClass.getWorkExtended().getPtsBusinessUnitDesc());
-                printLog("Business Unit with JRBI ptsBusinessUnitDesc");
+                printLog("Business Unit with jrbi ptsBusinessUnitDesc");
             }
         }
     }

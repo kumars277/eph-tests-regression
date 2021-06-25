@@ -47,8 +47,8 @@ public class JM_ExtendedCountAndDataCheckSteps {
 
     @And("^Compare the count for JM Extended Data between JM and Product Extended$")
     public void JMcomparetoPRODExtDB() {
-        Log.info("The JM Table Count: "+JM_ExtendedCount + " and ProdExtended Count: "+ProdCount);
-        Assert.assertEquals("The counts for JM and PROD_Extended is not equal", JM_ExtendedCount, ProdCount);
+        Log.info("The jm Table Count: "+JM_ExtendedCount + " and ProdExtended Count: "+ProdCount);
+        Assert.assertEquals("The counts for jm and PROD_Extended is not equal", JM_ExtendedCount, ProdCount);
     }
 
     @Given("^We get the (.*) random JM Extended ids$")
@@ -65,7 +65,7 @@ public class JM_ExtendedCountAndDataCheckSteps {
 
     @When("^We get the JM Extended DB records$")
     public void getJMExtendedDBRecords() {
-        Log.info("We get the records from JM Extended DB..");
+        Log.info("We get the records from jm Extended DB..");
         sql = String.format(JMExtendedCountCheckSQL.GET_JM_EXTENDED_RECORDS, Joiner.on("','").join(Ids));
         Log.info(sql);
         JMContext.JMObjectsFromDL = DBManager.getDBResultAsBeanList(sql, JMETLObject.class, Constants.AWS_URL);
@@ -85,7 +85,7 @@ public class JM_ExtendedCountAndDataCheckSteps {
         if (JMContext.JMObjectsFromDL.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
-            Log.info("Sorting the data to compare the JM Extended and Product Extended ..");
+            Log.info("Sorting the data to compare the jm Extended and Product Extended ..");
             for (int i = 0; i < JMContext.JMObjectsFromDL.size(); i++) {
                         JMContext.JMObjectsFromDL.sort(Comparator.comparing(JMETLObject::getEPR_ID)); //sort data in the lists
                         JMContext.JMTransformObjectsFromDL.sort(Comparator.comparing(JMETLObject::getEPR_ID));
@@ -105,7 +105,7 @@ public class JM_ExtendedCountAndDataCheckSteps {
 
 
                             Log.info("EPR_ID => " + JMContext.JMObjectsFromDL.get(i).getEPR_ID() +
-                                    " " + strTemp + " => JM Extended=" + method.invoke(objectToCompare1) +
+                                    " " + strTemp + " => jm Extended=" + method.invoke(objectToCompare1) +
                                     " " + strTemp + " Product Extended=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {

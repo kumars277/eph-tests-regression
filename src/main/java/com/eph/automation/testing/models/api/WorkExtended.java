@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * created by Nishant @ 19 Jun 2020
- * for JRBI data reflect in APIv3 work extended, person extended and manifestation extended
+ * for jrbi data reflect in APIv3 work extended, person extended and manifestation extended
  * updated by Nishant @ 08 Feb 2021, EPHD-2747
  * updated by Nishant @ 01 Mar 2021 EPHD-2898
  */

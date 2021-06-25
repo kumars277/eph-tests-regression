@@ -112,7 +112,7 @@ public class WorkApiObject {
 
     public void getJsonToObject_extendedWork(String workId) {
         //created by Nishant @ 19 Jun 2020 to verify extended json value with APIv3
-        //updated by Nishant @ 08 Jul 2020 for JRBI data validation on UAT JF UI
+        //updated by Nishant @ 08 Jul 2020 for jrbi data validation on UAT JF UI
         String sql ="";
         if(TestContext.getValues().environment.equalsIgnoreCase("UAT"))
              sql = "SELECT \"json\" FROM ephuat_extended_data_stitch.stch_work_ext_json where epr_id='" + workId + "'";

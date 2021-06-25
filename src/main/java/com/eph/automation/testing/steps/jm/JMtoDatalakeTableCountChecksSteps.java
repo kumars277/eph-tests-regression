@@ -105,7 +105,7 @@ public class JMtoDatalakeTableCountChecksSteps {
         Log.info(sqlJM);
         List<Map<String, Object>> JMTableCount = DBManager.getDBResultMap(sqlJM, Constants.MYSQL_JM_URL);
         JMCount = ((Long) JMTableCount.get(0).get("count")).intValue();
-        Log.info(tableName + " in JM Count: " + JMCount);
+        Log.info(tableName + " in jm Count: " + JMCount);
     }
 
     @When("^The JM (.*) data is in the DL$")
@@ -228,7 +228,7 @@ public class JMtoDatalakeTableCountChecksSteps {
             Log.info(sqlJM);
             List<Map<String, Object>> JMTableCount = DBManager.getDBResultMap(sqlJM, Constants.AWS_URL);
             JMCount = ((Long) JMTableCount.get(0).get("count")).intValue();
-            Log.info(tableName + " in JM Count: " + JMCount);
+            Log.info(tableName + " in jm Count: " + JMCount);
         }
 
     @When("^The JM (.*) data is in the Access Table$")

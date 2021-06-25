@@ -167,7 +167,7 @@ public class JM_ETLCoreCountChecksSQL {
             "       'J0'||COALESCE(w1.elsevier_journal_number,w0.elsevier_journal_number) as jm_source_reference,\n" +
             "        COALESCE(w1.eph_work_id, w0.eph_work_id) as eph_work_id,\n" +
             "        w1.work_title as                work_title,                 -- the TITLE UPDATE\n" +
-            "        CAST (null as varchar) as       work_subtitle,              -- JM does not master subtitle.\n" +
+            "        CAST (null as varchar) as       work_subtitle,              -- jm does not master subtitle.\n" +
             "        CAST (null as boolean) as       electro_rights_indicator,\n" +
             "        CAST (null as integer) as       volume,                     -- for inserts was set 0\n" +
             "        CAST (null as integer) as       copyright_year,\n" +
@@ -182,7 +182,7 @@ public class JM_ETLCoreCountChecksSQL {
             "        CAST (null as varchar) as       f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
             "        CAST (null as varchar) as       f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
             "        CAST (null as varchar) as       opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
-            "--      CAST (null as varchar) as       f_society_ownership,        -- deprecated field. JM populated this for new journals only.\n" +
+            "--      CAST (null as varchar) as       f_society_ownership,        -- deprecated field. jm populated this for new journals only.\n" +
             "        CAST (null as varchar) as       f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
             "        CAST (null as varchar) as       subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
             "        CAST (null as varchar) as       resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
@@ -230,7 +230,7 @@ public class JM_ETLCoreCountChecksSQL {
             "        CAST (null as varchar)          f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
             "        CAST (null as varchar)          f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
             "        CAST (null as varchar)          opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
-            "--      CAST (null as varchar)          f_society_ownership,        -- deprecated field. JM populated this for new journals only.\n" +
+            "--      CAST (null as varchar)          f_society_ownership,        -- deprecated field. jm populated this for new journals only.\n" +
             "        CAST (null as varchar)          f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
             "        CAST (null as varchar)          subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
             "        CAST (null as varchar)          resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
@@ -280,7 +280,7 @@ public class JM_ETLCoreCountChecksSQL {
             "        CAST (null as varchar)          f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
             "        CAST (null as varchar)          f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
             "        CAST (null as varchar)          opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
-            "--      CAST (null as varchar)          f_society_ownership,        -- deprecated field. JM populated this for new journals only.\n" +
+            "--      CAST (null as varchar)          f_society_ownership,        -- deprecated field. jm populated this for new journals only.\n" +
             "        CAST (null as varchar)          f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
             "        CAST (null as varchar)          subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
             "        CAST (null as varchar)          resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
@@ -330,7 +330,7 @@ public class JM_ETLCoreCountChecksSQL {
             "        CAST (null as varchar)          f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
             "        CAST (null as varchar)          f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
             "        CAST (null as varchar)          opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
-            "--      CAST (null as varchar)          f_society_ownership,        -- deprecated field. JM populated this for new journals only.\n" +
+            "--      CAST (null as varchar)          f_society_ownership,        -- deprecated field. jm populated this for new journals only.\n" +
             "        CAST (null as varchar)          f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
             "        CAST (null as varchar)          subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
             "        CAST (null as varchar)          resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
@@ -532,7 +532,7 @@ public class JM_ETLCoreCountChecksSQL {
             "eph_work_id,                     -- format EPR-W-xxxxxx\n" +
             "eph_manifestation_id,            -- format EPR-M-xxxxxx\n" +
             "eph_product_id,                  -- format EPR-xxxxxx new journals: set null\n" +
-            "base_title,                      -- JM-manifestation-title a suffix of (Print) or (Online)\n" +
+            "base_title,                      -- jm-manifestation-title a suffix of (Print) or (Online)\n" +
             "w0_journal_number,\n" +
             "m0_journal_number,\n" +
             "w0_chronicle_id,\n" +
@@ -575,7 +575,7 @@ public class JM_ETLCoreCountChecksSQL {
             "    jm_source_reference||'-SUB-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
             "   'SUB' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -596,7 +596,7 @@ public class JM_ETLCoreCountChecksSQL {
             "    jm_source_reference||'-JBS-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
             "   'JBS' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -617,7 +617,7 @@ public class JM_ETLCoreCountChecksSQL {
             "    jm_source_reference||'-BKF-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
             "   'BKF' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -638,7 +638,7 @@ public class JM_ETLCoreCountChecksSQL {
             "    jm_source_reference||'-RPR-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
             "   'RPR' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -659,7 +659,7 @@ public class JM_ETLCoreCountChecksSQL {
             "    jm_source_reference||'-OOA-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
             "   'OOA' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -680,7 +680,7 @@ public class JM_ETLCoreCountChecksSQL {
             "    jm_source_reference||'-OAA-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
             "   'OAA' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -701,7 +701,7 @@ public class JM_ETLCoreCountChecksSQL {
             "    jm_source_reference||'-JAS-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
             "   'JAS' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -722,7 +722,7 @@ public class JM_ETLCoreCountChecksSQL {
             "    jm_source_reference||'-PKG-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                    -- not known by JM for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                    -- not known by jm for new products.\n" +
             "   'PKG' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -887,7 +887,7 @@ public class JM_ETLCoreCountChecksSQL {
             "      and warp.bc_email is not null\n" +
             "      and warp.bc_email <> 'Not Found')\n" +
             "--    this last join is to pick up BC email and peoplehub_id from works_attrs_roles_people_v\n" +
-            "--    for the given responsibility_centre_code. JM only holds BC's names.\n" +
+            "--    for the given responsibility_centre_code. jm only holds BC's names.\n" +
             "where w.notified_date is not null\n" +
             "and   w.work_journey_identifier = 'A1'\n" +
             "and   wc.chronicle_scenario_code in ('NP','NS','AC','MI')\n" +
@@ -951,7 +951,7 @@ public class JM_ETLCoreCountChecksSQL {
             "UNION\n" +
             "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
             "-- UPDATE PUBLISHING DIRECTOR\n" +
-            "-- JM updates ALL journals for the new PD assigned to a given PMG. Note: ALL journals, not just active journals.\n" +
+            "-- jm updates ALL journals for the new PD assigned to a given PMG. Note: ALL journals, not just active journals.\n" +
             "-- This is why we need to use pmg_pmc_journals_v not works_attrs_roles_people_v.\n" +
             "-- Updates are passed to EPH by WORK PERSON ROLE as if they had come through from jmf_work_person_role\n" +
             "-- (In JMF this is the current model for PU changes, but not yet for PD changes.)\n" +
@@ -1211,7 +1211,7 @@ public class JM_ETLCoreCountChecksSQL {
             "       (CASE m.manifestation_type\n" +
             "             when 'E' then m.manifestation_title||' (Online)'\n" +
             "             else          m.manifestation_title||' (Print)'\n" +
-            "        END) as                                                   base_title,                      -- (JM-manifestation-title with a suffix of (Online) or (Print))\n" +
+            "        END) as                                                   base_title,                      -- (jm-manifestation-title with a suffix of (Online) or (Print))\n" +
             "        w.elsevier_journal_number                                 w0_journal_number,\n" +
             "        m.elsevier_journal_number                                 m0_journal_number,\n" +
             "        w.work_chronicle_id as                                    w0_chronicle_id,\n" +
@@ -1260,7 +1260,7 @@ public class JM_ETLCoreCountChecksSQL {
             "             when (m.elsevier_journal_number is null) then 'Y'\n" +
             "             when (m.manifestation_type      is null) then 'Y'\n" +
             "             when (wpr.email_address         is null) then 'Y'\n" +
-            "             when (wpr.peoplehub_id          is null) then 'Y'                                     -- set 'Y' when any of the essential fields to build JM references are missing\n" +
+            "             when (wpr.peoplehub_id          is null) then 'Y'                                     -- set 'Y' when any of the essential fields to build jm references are missing\n" +
             "             else                                          'N'                                     -- or when email or peoplehub_id are missing.\n" +
             "        END) as                                                   dq_err,\n" +
             "        m.notified_date as                                        notified_date\n" +
@@ -1296,11 +1296,11 @@ public class JM_ETLCoreCountChecksSQL {
             "        m0.manifestation_type||'-J0'||m0.elsevier_journal_number as jm_source_reference,           -- format E-J012345 or P-J012345\n" +
             "        w0.eph_work_id                                            eph_work_id,                     -- from A0 work\n" +
             "        m0.eph_manifestation_id                                   eph_manifestation_id,            -- from A0 manifestation\n" +
-            "        CAST(null as varchar)                                     eph_product_id,                  -- format EPR-xxxxxx the finest grain. JM does not have this detail. set null.\n" +
+            "        CAST(null as varchar)                                     eph_product_id,                  -- format EPR-xxxxxx the finest grain. jm does not have this detail. set null.\n" +
             "       (CASE m0.manifestation_type\n" +
             "             when 'E' then m0.manifestation_title||' (Online)'\n" +
             "             else          m0.manifestation_title||' (Print)'\n" +
-            "        END) as                                                   base_title,                      -- (JM-manifestation-title with a suffix of (Online) or (Print))\n" +
+            "        END) as                                                   base_title,                      -- (jm-manifestation-title with a suffix of (Online) or (Print))\n" +
             "        w0.elsevier_journal_number                                w0_journal_number,\n" +
             "        m0.elsevier_journal_number                                m0_journal_number,\n" +
             "        w0.work_chronicle_id as                                   w0_chronicle_id,\n" +
@@ -1366,7 +1366,7 @@ public class JM_ETLCoreCountChecksSQL {
             "-- UPDATE PRODUCT OWNER - begin with all CA Updates\n" +
             "-- ADD a CA select for a change in PPC/PU, which translates at product-level to a change in PO.\n" +
             "--\n" +
-            "-- **************** for PU changes JM DOES NOT HAVE MANIFESTATION  **********************\n" +
+            "-- **************** for PU changes jm DOES NOT HAVE MANIFESTATION  **********************\n" +
             "-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
             "\n" +
             "select  cs.chronicle_scenario_name as                             scenario,\n" +
@@ -1378,8 +1378,8 @@ public class JM_ETLCoreCountChecksSQL {
             "        'J0'||w.elsevier_journal_number as                        jm_source_reference,             -- manifestation-level not available for PU changes\n" +
             "        w.eph_work_id as                                          eph_work_id,                     -- format EPR-W-xxxxxx\n" +
             "        CAST(null as varchar)                                     eph_manifestation_id,            -- manifestation-level not available for PU changes\n" +
-            "        CAST(null as varchar)                                     eph_product_id,                  -- product-level not available in JM\n" +
-            "        w.work_title as                                           base_title,                      -- should be (JM-manifestation-title with a suffix of (Online) or (Print))\n" +
+            "        CAST(null as varchar)                                     eph_product_id,                  -- product-level not available in jm\n" +
+            "        w.work_title as                                           base_title,                      -- should be (jm-manifestation-title with a suffix of (Online) or (Print))\n" +
             "        w.elsevier_journal_number                                 w0_journal_number,\n" +
             "        CAST(null as varchar)                                     m0_journal_number,\n" +
             "        w.work_chronicle_id as                                    w0_chronicle_id,\n" +
@@ -1410,7 +1410,7 @@ public class JM_ETLCoreCountChecksSQL {
             "        w.pu_peoplehubid_new as                                   pu_employee_number,              -- to be used by etl_product_person_role_dq_v\n" +
             "       (CASE when (w.elsevier_journal_number is null) then 'Y'\n" +
             "             when (w.pu_email_new            is null) then 'Y'\n" +
-            "             when (w.pu_peoplehubid_new      is null) then 'Y'                                     -- set 'Y' when any of the essential fields to build JM references are missing\n" +
+            "             when (w.pu_peoplehubid_new      is null) then 'Y'                                     -- set 'Y' when any of the essential fields to build jm references are missing\n" +
             "             else                                          'N'                                     -- or when email or peoplehub_id are missing.\n" +
             "        END) as                                                   dq_err,\n" +
             "        w.notified_date as                                        notified_date\n" +
@@ -1433,7 +1433,7 @@ public class JM_ETLCoreCountChecksSQL {
                             "eph_work_id,                     -- format EPR-W-xxxxxx\n" +
                             "eph_manifestation_id,            -- format EPR-M-xxxxxx\n" +
                             "eph_product_id,                  -- format EPR-xxxxxx new journals: set null\n" +
-                            "base_title,                      -- manifestation name with a suffix of (Print) or (Online). JM does not support short title.\n" +
+                            "base_title,                      -- manifestation name with a suffix of (Print) or (Online). jm does not support short title.\n" +
                             "w0_journal_number,\n" +
                             "m0_journal_number,\n" +
                             "w0_chronicle_id,\n" +
@@ -1809,11 +1809,11 @@ public class JM_ETLCoreCountChecksSQL {
             "        bd.w0_chronicle_id                                                w0_chronicle_id,\n" +
             "        bd.w0_journey_identifier                                          w0_journey_identifier,\n" +
             "        bd.m0_manifestation_type                                          m0_manifestation_type,\n" +
-            "        bd.base_title as                                                  m0_base_title,                 -- (JM-manifestation-title with a suffix of (Online) or (Print))\n" +
+            "        bd.base_title as                                                  m0_base_title,                 -- (jm-manifestation-title with a suffix of (Online) or (Print))\n" +
             "       (CASE m1.manifestation_type\n" +
             "             when 'E' then m1.manifestation_title||' (Online)'\n" +
             "             else          m1.manifestation_title||' (Print)'\n" +
-            "        END) as                                                           m1_base_title,                 -- (JM-manifestation-title with a suffix of (Online) or (Print))\n" +
+            "        END) as                                                           m1_base_title,                 -- (jm-manifestation-title with a suffix of (Online) or (Print))\n" +
             "        bd.separately_saleable_ind                                        separately_saleable_ind,\n" +
             "        bd.trial_allowed_ind                                              trial_allowed_ind,\n" +
             "        bd.launch_date                                                    launch_date,\n" +
@@ -2110,7 +2110,7 @@ public class JM_ETLCoreCountChecksSQL {
             "eph_work_id,                     -- format EPR-W-xxxxxx\n" +
             "eph_manifestation_id,            -- format EPR-M-xxxxxx\n" +
             "eph_product_id,                  -- format EPR-xxxxxx new journals: set null\n" +
-            "base_title,                      -- JM-manifestation-title a suffix of (Print) or (Online)\n" +
+            "base_title,                      -- jm-manifestation-title a suffix of (Print) or (Online)\n" +
             "w0_journal_number,\n" +
             "m0_journal_number,\n" +
             "w0_chronicle_id,\n" +
@@ -2155,7 +2155,7 @@ public class JM_ETLCoreCountChecksSQL {
             "    jm_source_reference||'-SUB-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
             "   'SUB' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -2176,7 +2176,7 @@ public class JM_ETLCoreCountChecksSQL {
             "    jm_source_reference||'-JBS-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
             "   'JBS' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -2197,7 +2197,7 @@ public class JM_ETLCoreCountChecksSQL {
             "    jm_source_reference||'-BKF-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
             "   'BKF' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -2218,7 +2218,7 @@ public class JM_ETLCoreCountChecksSQL {
             "    jm_source_reference||'-RPR-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
             "   'RPR' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -2239,7 +2239,7 @@ public class JM_ETLCoreCountChecksSQL {
             "    jm_source_reference||'-OOA-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
             "   'OOA' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -2260,7 +2260,7 @@ public class JM_ETLCoreCountChecksSQL {
             "    jm_source_reference||'-OAA-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
             "   'OAA' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -2281,7 +2281,7 @@ public class JM_ETLCoreCountChecksSQL {
             "    jm_source_reference||'-JAS-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                   -- not known by JM for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                   -- not known by jm for new products.\n" +
             "   'JAS' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +
@@ -2302,7 +2302,7 @@ public class JM_ETLCoreCountChecksSQL {
             "    jm_source_reference||'-PKG-'||employee_number_new||'-PO' as jm_source_ref,\n" +
             "    eph_work_id,\n" +
             "    eph_manifestation_id,\n" +
-            "    CAST (null as varchar) as        eph_product_id,                    -- not known by JM for new products.\n" +
+            "    CAST (null as varchar) as        eph_product_id,                    -- not known by jm for new products.\n" +
             "   'PKG' as                          f_type,\n" +
             "    lower(internal_email_old) as     internal_email_old,               -- old publisher email@elsevier.com etc.\n" +
             "    lower(internal_email_new) as     internal_email_new,               -- new publisher email@elsevier.com etc.\n" +

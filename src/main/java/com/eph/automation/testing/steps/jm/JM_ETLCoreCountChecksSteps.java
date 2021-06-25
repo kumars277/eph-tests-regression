@@ -80,7 +80,7 @@ public class JM_ETLCoreCountChecksSteps {
         Log.info(sqlJM);
         List<Map<String, Object>> JMTableCount = DBManager.getDBResultMap(sqlJM, Constants.AWS_URL);
         JMCount = ((Long) JMTableCount.get(0).get("count")).intValue();
-        Log.info(ETLtable + " in JM Count: " + JMCount);
+        Log.info(ETLtable + " in jm Count: " + JMCount);
     }
 
     @When("^Get the total count of JM (.*) data is in the JM Staging$")
