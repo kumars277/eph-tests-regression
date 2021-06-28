@@ -480,7 +480,7 @@ public class JMETLDataChecks {
         }
         Log.info(sql);
         JMContext.JMObjectsFromDL = DBManager.getDBResultAsBeanList(sql, JMETLObject.class, Constants.AWS_URL);
-        System.out.println(JMContext.JMObjectsFromDL.size());
+
     }
 
     @Then("^We get the JM Staging Query records from (.*)$")
@@ -903,10 +903,10 @@ public class JMETLDataChecks {
                         }
                         break;
                     case "jmf_work_business_model":
-                        JMContext.JMObjectsFromDL.sort(Comparator.comparing(JMETLObject::getwork_business_model_id)); //sort data in the lists
-                        JMContext.JMTransformObjectsFromDL.sort(Comparator.comparing(JMETLObject::getwork_business_model_id));
+                        JMContext.JMObjectsFromDL.sort(Comparator.comparing(JMETLObject::getWORK_BUSINESS_MODEL_ID)); //sort data in the lists
+                        JMContext.JMTransformObjectsFromDL.sort(Comparator.comparing(JMETLObject::getWORK_BUSINESS_MODEL_ID));
 
-                        String[] JMF_WorkBusinessModelColumnName = {"getwork_business_model_id","getf_work","getbusiness_model_code","getbusiness_model_description"};
+                        String[] JMF_WorkBusinessModelColumnName = {"getWORK_BUSINESS_MODEL_ID","getf_work","getBUSINESS_MODEL_CODE","getBUSINESS_MODEL_DESCRIPTION"};
 
                         for (String strTemp : JMF_WorkBusinessModelColumnName) {
 
@@ -932,10 +932,10 @@ public class JMETLDataChecks {
                         }
                         break;
                     case "jmf_work_access_model":
-                        JMContext.JMObjectsFromDL.sort(Comparator.comparing(JMETLObject::getwork_access_model_id)); //sort data in the lists
-                        JMContext.JMTransformObjectsFromDL.sort(Comparator.comparing(JMETLObject::getwork_access_model_id));
+                        JMContext.JMObjectsFromDL.sort(Comparator.comparing(JMETLObject::getWORK_ACCESS_MODEL_ID)); //sort data in the lists
+                        JMContext.JMTransformObjectsFromDL.sort(Comparator.comparing(JMETLObject::getWORK_ACCESS_MODEL_ID));
 
-                        String[] JMF_WorkAccessModelColumnName = {"getwork_access_model_id","getf_work","getaccess_model_code","getaccess_model_description"};
+                        String[] JMF_WorkAccessModelColumnName = {"getWORK_ACCESS_MODEL_ID","getf_work","getACCESS_MODEL_CODE","getACCESS_MODEL_DESCRIPTION"};
 
                         for (String strTemp : JMF_WorkAccessModelColumnName) {
 
