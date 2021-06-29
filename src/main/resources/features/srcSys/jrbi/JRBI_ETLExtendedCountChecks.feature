@@ -1,7 +1,5 @@
 Feature:Validate data count for JRBI Work,Manifestation and Person tables in Data Lake
 
-#  Created by Dinesh on 26/05/2020
-  #updated Dinesh on 07/04/2021
   #confluence Version: v.3
   #Confluence LinK: https://confluence.cbsels.com/pages/viewpage.action?pageId=168466078
 

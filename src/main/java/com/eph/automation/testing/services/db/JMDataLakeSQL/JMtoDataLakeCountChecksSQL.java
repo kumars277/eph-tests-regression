@@ -33,10 +33,6 @@ public class JMtoDataLakeCountChecksSQL {
     public static String jmf_DB_pricing_option_Count = "select count(*) as count from "+databaseEnv[0]+".JMF_PRICING_OPTION";
     public static String jmf_DB_bm_pg_options_Count = "select count(*) as count from "+databaseEnv[0]+".JMF_BM_PG_OPTIONS";
 
-
-
-
-
     public static String DL_jmf_allocation_change_Count = "select count(*) as count from "+databaseEnv[1]+".jmf_allocation_change where inbound_ts = (select inbound_ts from "+databaseEnv[1]+".jmf_allocation_change order by inbound_ts desc limit 1)";
     public static String DL_jmf_application_properties_Count = "select count(*) as count from "+databaseEnv[1]+".jmf_application_properties where inbound_ts = (select inbound_ts from "+databaseEnv[1]+".jmf_application_properties order by inbound_ts desc limit 1)";
     public static String DL_jmf_approval_attachment_Count = "select count(*) as count from "+databaseEnv[1]+".jmf_approval_attachment where inbound_ts = (select inbound_ts from "+databaseEnv[1]+".jmf_approval_attachment order by inbound_ts desc limit 1)";
