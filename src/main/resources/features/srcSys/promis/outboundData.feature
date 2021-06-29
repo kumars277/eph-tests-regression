@@ -1,6 +1,5 @@
 Feature:Validate data for PRM between Oracle and Data Lake - Inbound
 
-Feature:Validate data count for PRM between Oracle and Data Lake - Inbound
 
   @PRMDL
   Scenario Outline: Verify that all PRM data is transferred from PRM Oracle to DL Inbound
