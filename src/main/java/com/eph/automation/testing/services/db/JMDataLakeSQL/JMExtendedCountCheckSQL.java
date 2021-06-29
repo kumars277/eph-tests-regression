@@ -37,7 +37,7 @@ public class JMExtendedCountCheckSQL {
             "from "+ GetJMDLDBUser.getJMDB()+ ".jnl_fulfilment_system_v jfs)";
 
 //  Product Extended Count
-    public static String GET_Product_Extended = "select count(*) as TOTAL_COUNT from "+GetJMDLDBUser.getProdStagingDataBase2()+".product_availability_extended_allsource_v where \"source\" in ('jm','JM_FIXED')";
+    public static String GET_Product_Extended = "select count(*) as TOTAL_COUNT from "+GetJMDLDBUser.getProdStagingDataBase()+".product_availability_extended_allsource_v where \"source\" in ('jm','JM_FIXED')";
 
 //    jm Extended data checks
     public static String GET_JM_EXTENDED_IDs = "select epr_id as EPR_ID from (\n" +

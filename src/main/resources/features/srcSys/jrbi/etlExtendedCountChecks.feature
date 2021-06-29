@@ -1,7 +1,5 @@
 Feature:Validate data count for JRBI Work,Manifestation and Person tables in Data Lake
 
-#  Created by Dinesh on 26/05/2020
-  #updated Dinesh on 07/04/2021
   #confluence Version: v.3
   #Confluence LinK: https://confluence.cbsels.com/pages/viewpage.action?pageId=168466078
 
@@ -11,11 +9,15 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
     Given Get the total count of JRBI Data from Full Load <tableName>
     Then  We know the total count of Current JRBI data from <tableName>
     And Compare count of Full load with current <tableName> table are identical
+    Given We get the <countOfRandomIds> random EPR ids from source table <tableName>
+    When We get the records from data jrbi_journal_data_full
+    Then We get the records from transform current work
+    And Compare the records of jrbi_journal_data_full and transform current work
     Examples:
-      | tableName                                |
-      |jrbi_transform_current_work                 |
-      |jrbi_transform_current_manifestation       |
-      |jrbi_transform_current_person              |
+      | tableName                                |    countOfRandomIds  |
+      |jrbi_transform_current_work               | 10                   |
+      |jrbi_transform_current_manifestation      | 10                   |
+      |jrbi_transform_current_person             | 10                   |
 
 
   @JRBIETLExtended

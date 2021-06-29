@@ -1,6 +1,6 @@
 Feature:Validate data for GD Tables
 
-  @JMETL
+  @coreToGd
   Scenario Outline: Verify that  all JM Staging data is transferred to Semarchy tables
     Given We get the <numberOfRecords> random JM Staging ids of <SourceTable>
     When We get the JM Staging records from <SourceTable>

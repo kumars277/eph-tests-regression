@@ -55,7 +55,7 @@ public class JMETLDataChecksSQL {
 
 //    jm Access tables SQL
     public static String GET_JMF_WORK = "select * from "+ GetJMDLDBUser.getJMDB()+".jmf_work where work_id in (%s)";
-    public static String GET_JMF_MANIFESTATION = "select * from "+ GetJMDLDBUser.getJMDB()+".jmf_manifestation where manifestation_id in (%s)";
+    public static String GET_JMF_MANIFESTATION = "select * from "+ GetJMDLDBUser.getJMDB()+".jmf_manifestation where manifestation_id in (%s) order by manifestation_id desc";
     public static String GET_JMF_WORK_PERSON_ROLE = "select * from "+ GetJMDLDBUser.getJMDB()+".jmf_work_person_role where work_person_role_id in (%s)";
     public static String GET_JMF_WORK_SUBJECT_AREA = "select * from "+ GetJMDLDBUser.getJMDB()+".jmf_work_subject_area where work_subject_area_id in (%s)";
     public static String GET_JMF_WORK_CHRONICLE = "select * from "+ GetJMDLDBUser.getJMDB()+".jmf_work_chronicle where work_chronicle_id in (%s)";
@@ -68,7 +68,7 @@ public class JMETLDataChecksSQL {
     public static String GET_JMF_WORK_OWNERSHIP = "select * from "+ GetJMDLDBUser.getJMDB()+".jmf_work_ownership where work_ownership_id in (%s)";
     public static String GET_JMF_WORK_BUSINESS_MODEL = "select * from "+ GetJMDLDBUser.getJMDB()+".jmf_work_business_model where work_business_model_id in (%s)";
     public static String GET_JMF_WORK_ACCESS_MODEL = "select * from "+ GetJMDLDBUser.getJMDB()+".jmf_work_access_model where work_access_model_id in (%s)";
-    public static String GET_JMF_WORK_PRODUCTGROUP = "select * from \"+ GetJMDLDBUser.getJMDB()+\".jmf_work_productgroup where work_productgroup_id in (%s)";
+    public static String GET_JMF_WORK_PRODUCTGROUP = "select * from "+ GetJMDLDBUser.getJMDB()+".jmf_work_productgroup where work_productgroup_id in (%s)";
     public static String GET_JMF_PRODUCTGROUP = "select * from "+ GetJMDLDBUser.getJMDB()+".jmf_productgroup where productgroup_id in (%s)";
     public static String GET_JMF_PRICING_OPTION = "select * from "+ GetJMDLDBUser.getJMDB()+".jmf_pricing_option where pricing_option_id in (%s)";
     public static String GET_JMF_BM_PG_OPTIONS = "select * from "+ GetJMDLDBUser.getJMDB()+".jmf_bm_pg_options where bm_pg_options_id in (%s)";
@@ -153,7 +153,7 @@ public class JMETLDataChecksSQL {
             "LEFT OUTER JOIN "+ GetJMDLDBUser.getJMDB2()+".jmf_manifestation_electronic_details_2 e ON e.manifestation_id = m.manifestation_id\n" +
             "LEFT OUTER JOIN "+ GetJMDLDBUser.getJMDB2()+".jmf_manifestation_print_details_2 p ON p.manifestation_id = m.manifestation_id\n" +
             "LEFT OUTER JOIN (SELECT DISTINCT f_product_manifestation, application_code\n" +
-            "                 FROM "+ GetJMDLDBUser.getJMDB2()+".jmf_product_availability_2) a ON a.f_product_manifestation = m.manifestation_id AND a.application_code NOT IN ('SD','CRM')) where manifestation_id in (%s)";
+            "                 FROM "+ GetJMDLDBUser.getJMDB2()+".jmf_product_availability_2) a ON a.f_product_manifestation = m.manifestation_id AND a.application_code NOT IN ('SD','CRM')) where manifestation_id in (%s) order by manifestation_id desc ";
 
     public static String GET_WORK_PERSON_ROLE_QUERY = "select * from (SELECT cast(party_in_product_id as integer) work_person_role_id,\n" +
             "       cast(f_product_work as integer) f_work,\n" +
@@ -304,10 +304,10 @@ public class JMETLDataChecksSQL {
             "       legal_owner_type,\n" +
             "       journal_ownership_type,\n" +
             "       inbound_ts\n" +
-            "FROM journalmaestro_staging_sit.jmf_product_ownership\n" +
-            "WHERE notified_date is not null)\n"+
-            "where inbound_ts = (select inbound_ts from "+ databaseEnv[1]+".jmf_product_ownership order by inbound_ts desc limit 1)\n" +
-            "and work_ownership_id in (%s)\n";
+            " FROM "+GetJMDLDBUser.getJMDB2()+".jmf_product_ownership\n" +
+            " WHERE notified_date is not null)\n"+
+            " where inbound_ts = (select inbound_ts from "+ databaseEnv[1]+".jmf_product_ownership order by inbound_ts desc limit 1)\n" +
+            " and work_ownership_id in (%s)\n";
 
     public static String GET_WORK_BUSINESS_MODEL_QUERY = "select * from (\n" +
             "SELECT cast(work_business_model_id as integer) work_business_model_id,\n" +
@@ -2560,30 +2560,30 @@ public class JMETLDataChecksSQL {
     public static String GET_SEMARCHY_GD_ACCOUNTABLE_PRODUCT = "select * from semarchy_eph_mdm.gd_accountable_product where gl_product_segment_code like ('%s')";
 
 //    SemarchySource Table IDs
-    public static String GET_ALL_MANIFESTATION_IDENTIFIERS_IDs = "select identifier as IDENTIFIER from "+GetJMDLDBUser.getProdStagingDataBase2()+".%s where delete_flag not in (TRUE) order by rand() limit %s";
-    public static String GET_ALL_External_Reference_IDs = "select external_reference as EXTERNAL_REFERENCE from "+GetJMDLDBUser.getProdStagingDataBase2()+".%s where delete_flag not in (TRUE) order by rand() limit %s";
-    public static String GET_ALL_WORK_IDENTIFIER_IDs = "select identifier as IDENTIFIER from "+GetJMDLDBUser.getProdStagingDataBase2()+".all_work_identifier_v where delete_flag not in (true) and effective_end_date is null order by rand() limit %s";
-    public static String GET_ALL_WORK_SOURCE_REFERENCE_IDs = "select external_reference as EXTERNAL_REFERENCE from "+GetJMDLDBUser.getProdStagingDataBase2()+".%s where delete_flag not in (TRUE) order by rand() limit %s";
-    public static String GET_ALL_PRODUCT_IDs = "select external_reference as EXTERNAL_REFERENCE from "+GetJMDLDBUser.getProdStagingDataBase2()+".%s where delete_flag not in (TRUE) order by rand() limit %s";
-    public static String GET_ALL_SUBJECT_AREA_IDs = "select external_reference as EXTERNAL_REFERENCE from "+GetJMDLDBUser.getProdStagingDataBase2()+".all_work_subject_areas_v where delete_flag not in (TRUE) order by rand() limit %s";
+    public static String GET_ALL_MANIFESTATION_IDENTIFIERS_IDs = "select identifier as IDENTIFIER from "+GetJMDLDBUser.getProdStagingDataBase()+".%s where delete_flag not in (TRUE) order by rand() limit %s";
+    public static String GET_ALL_External_Reference_IDs = "select external_reference as EXTERNAL_REFERENCE from "+GetJMDLDBUser.getProdStagingDataBase()+".%s where delete_flag not in (TRUE) order by rand() limit %s";
+    public static String GET_ALL_WORK_IDENTIFIER_IDs = "select identifier as IDENTIFIER from "+GetJMDLDBUser.getProdStagingDataBase()+".all_work_identifier_v where delete_flag not in (true) and effective_end_date is null order by rand() limit %s";
+    public static String GET_ALL_WORK_SOURCE_REFERENCE_IDs = "select external_reference as EXTERNAL_REFERENCE from "+GetJMDLDBUser.getProdStagingDataBase()+".%s where delete_flag not in (TRUE) order by rand() limit %s";
+    public static String GET_ALL_PRODUCT_IDs = "select external_reference as EXTERNAL_REFERENCE from "+GetJMDLDBUser.getProdStagingDataBase()+".%s where delete_flag not in (TRUE) order by rand() limit %s";
+    public static String GET_ALL_SUBJECT_AREA_IDs = "select external_reference as EXTERNAL_REFERENCE from "+GetJMDLDBUser.getProdStagingDataBase()+".all_work_subject_areas_v where delete_flag not in (TRUE) order by rand() limit %s";
 
     public static String GET_ALL_WORK_RELATIONSHIP_IDs = "select s_identifier as S_IDENTIFIER from semarchy_eph_mdm.gd_manifestation_identifier limit %s";
     public static String GET_ALL_WORK_SUBJECT_AREAS_IDs = "select s_identifier as S_IDENTIFIER from semarchy_eph_mdm.gd_manifestation_identifier limit %s";
     public static String GET_ALL_WORK_IDs = "select s_identifier as S_IDENTIFIER from semarchy_eph_mdm.gd_manifestation_identifier limit %s";
 
 //  Get SemarchySource Records
-    public static String GET_ALL_MANIFESTATION_IDENTIFIER = "select * from "+ GetJMDLDBUser.getProdStagingDataBase2() +".all_manifestation_identifiers_v where identifier in ('%s') order by identifier desc";
-    public static String GET_ALL_MANIFESTATION = "select * from "+ GetJMDLDBUser.getProdStagingDataBase2() +".all_manifestation_v where external_reference in ('%s') order by external_reference desc";
-    public static String GET_ALL_PERSON = "select * from "+ GetJMDLDBUser.getProdStagingDataBase2() +".all_person_v where external_reference in ('%s') order by external_reference desc";
-    public static String GET_ALL_PRODUCT = "select * from "+ GetJMDLDBUser.getProdStagingDataBase2() +".all_product_v where external_reference in ('%s') order by external_reference desc, f_status desc";
-    public static String GET_ALL_WORK_IDENTIFIER = "select * from "+ GetJMDLDBUser.getProdStagingDataBase2() +".all_work_identifier_v where identifier in ('%s') order by identifier";
-    public static String GET_ALL_WORK_PERSON_ROLE = "select * from "+ GetJMDLDBUser.getProdStagingDataBase2() +".all_work_person_role_v where external_reference in ('%s') and effective_start_date >(select effective_start_date from "+ GetJMDLDBUser.getProdStagingDataBase2()+".all_work_person_role_v order by effective_start_date limit 1) order by external_reference desc";
-    public static String GET_ALL_WORK_RELATIONSHIP = "select * from "+ GetJMDLDBUser.getProdStagingDataBase2() +".all_work_relationship_v where external_reference in ('%s')";
-    public static String GET_ALL_WORK_SUBJECT_AREAS = "select * from "+ GetJMDLDBUser.getProdStagingDataBase2() +".all_work_subject_areas_v where external_reference in ('%s')";
-    public static String GET_ALL_WORK = "select * from "+ GetJMDLDBUser.getProdStagingDataBase2() +".all_work_v where external_reference in ('%s') order by external_reference desc";
-    public static String GET_ALL_ACCOUNTABLE_PRODUCT = "select * from "+ GetJMDLDBUser.getProdStagingDataBase2() +".all_accountable_product_v where external_reference in ('%s') order by external_reference desc";
-    public static String GET_ALL_WORK_ACCESS_MODEL = "select * from "+ GetJMDLDBUser.getProdStagingDataBase2() +".all_work_access_model_v where external_reference in ('%s') order by external_reference desc";
-    public static String GET_ALL_WORK_BUSINESS_MODEL = "select * from "+ GetJMDLDBUser.getProdStagingDataBase2() +".all_work_business_model_v where external_reference in ('%s') order by external_reference";
+    public static String GET_ALL_MANIFESTATION_IDENTIFIER = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_manifestation_identifiers_v where identifier in ('%s') order by identifier desc";
+    public static String GET_ALL_MANIFESTATION = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_manifestation_v where external_reference in ('%s') order by external_reference desc";
+    public static String GET_ALL_PERSON = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_person_v where external_reference in ('%s') order by external_reference desc";
+    public static String GET_ALL_PRODUCT = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_product_v where external_reference in ('%s') order by external_reference desc, f_status desc";
+    public static String GET_ALL_WORK_IDENTIFIER = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_identifier_v where identifier in ('%s') order by identifier";
+    public static String GET_ALL_WORK_PERSON_ROLE = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_person_role_v where external_reference in ('%s') and effective_start_date >(select effective_start_date from "+ GetJMDLDBUser.getProdStagingDataBase()+".all_work_person_role_v order by effective_start_date limit 1) order by external_reference desc";
+    public static String GET_ALL_WORK_RELATIONSHIP = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_relationship_v where external_reference in ('%s')";
+    public static String GET_ALL_WORK_SUBJECT_AREAS = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_subject_areas_v where external_reference in ('%s')";
+    public static String GET_ALL_WORK = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_v where external_reference in ('%s') order by external_reference desc";
+    public static String GET_ALL_ACCOUNTABLE_PRODUCT = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_accountable_product_v where external_reference in ('%s') order by external_reference desc";
+    public static String GET_ALL_WORK_ACCESS_MODEL = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_access_model_v where external_reference in ('%s') order by external_reference desc";
+    public static String GET_ALL_WORK_BUSINESS_MODEL = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_business_model_v where external_reference in ('%s') order by external_reference";
 
 
 //Get Semarchy Records

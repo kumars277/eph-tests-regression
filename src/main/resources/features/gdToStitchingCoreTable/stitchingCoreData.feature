@@ -1,6 +1,6 @@
 Feature:Validate data for Stitching Core Tables
 
-  @JMETL
+  @GdToStitching
   Scenario Outline: Verify that all core data is transferred between Semarchy and Stitching DB
     Given We get the <numberOfRecords> random Stitching ids of <SemarchyTable>
     And Compare Core records from <SemarchyTable> with Work or Product stitching db
