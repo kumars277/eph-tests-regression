@@ -2,6 +2,7 @@ Feature:Validate data for JM between Transform Tables
   #git hub: https://github.com/elsevier-bts/eph-datalabs-dag/tree/master_v1/src/dag/resources/common/journalmaestro_inbound
 
   @JMETLJM
+    #talend job missing 20 tables
   Scenario Outline: Verify that all JM DB data is transferred to Inbound Table
     Given We get the <numberOfRecords> random JMDB ids of <JMDBtable>
     When We get the JM DB records from <JMDBtable>
@@ -18,16 +19,17 @@ Feature:Validate data for JM between Transform Tables
 
   @JMETLJM
     #need to add count checks as well.
+    #inbound DAAg
   Scenario Outline: Verify that all transformed Inbound data is transferred to Access tables
-    Given We know the number of JM <Currenttable> data in inbound
-    When The JM <Currenttable> data is in the current
-    Then The JM count for <Currenttable> table between inbound and current are identical
-    Given We get the <numberOfRecords> random JM ids of <Currenttable>
-    When We get the JM Transformed Inbound records from <Currenttable>
+    Given We know the number of JM <jmBatabase> data in inbound
+    When The JM <jmBatabase> data is in the current
+    Then The JM count for <jmBatabase> table between inbound and current are identical
+    Given We get the <numberOfRecords> random JM ids of <jmBatabase>
+    When We get the JM Transformed Inbound records from <jmBatabase>
     Then We get the JM Staging Query records from <CurrenttableQuery>
-    And Compare JM records in Transformed Inbound and Current of <Currenttable>
+    And Compare JM records in Transformed Inbound and Current of <jmBatabase>
     Examples:
-      |numberOfRecords  |CurrenttableQuery           |Currenttable               |
+      |numberOfRecords  |CurrenttableQuery           |jmBatabase               |
       | 5               |work                        |jmf_work                   |
       | 5               |manifestation               |jmf_manifestation          |
       | 5               |work_person_role            |jmf_work_person_role       |

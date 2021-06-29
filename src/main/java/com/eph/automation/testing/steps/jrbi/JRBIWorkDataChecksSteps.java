@@ -6,6 +6,8 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.JRBIAccessDLContext;
 import com.eph.automation.testing.models.dao.JRBIDataLakeAccess.*;
 
+import com.eph.automation.testing.services.db.JRBIDataLakeAccesSQL.JRBIManifestationDataChecksSQL;
+import com.eph.automation.testing.services.db.JRBIDataLakeAccesSQL.JRBIPersonDataChecksSQL;
 import com.eph.automation.testing.services.db.JRBIDataLakeAccesSQL.JRBIWorkDataChecksSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
@@ -30,6 +32,33 @@ public class JRBIWorkDataChecksSteps {
 
     // private SimpleDateFormat formatter1=new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
     // private SimpleDateFormat formatter2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+    @Given("^We get the (.*) random EPR ids from source table (.*)$")
+    public void getRandomSourceEPRIds(String numberOfRecords, String tableName) {
+        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+        Log.info("numberOfRecords = " + numberOfRecords);
+        Log.info("Get random Source EPR Ids...");
+        switch (tableName) {
+            case "jrbi_transform_current_work":
+                sql = String.format(JRBIWorkDataChecksSQL.GET_EPR_IDS_FULLLOAD, numberOfRecords);
+                break;
+            case "jrbi_transform_current_manifestation":
+                sql = String.format(JRBIManifestationDataChecksSQL.GET_EPR_IDS_MANIF_FULLLOAD, numberOfRecords);
+                break;
+            case "jrbi_transform_current_person":
+                sql = String.format(JRBIPersonDataChecksSQL.GET_EPR_IDS_PERSON_FULLLOAD, numberOfRecords);
+                break;
+
+        }
+        Log.info(sql);
+        List<Map<?, ?>> randomEPRIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+        Ids = randomEPRIds.stream().map(m -> (String) m.get("EPR")).collect(Collectors.toList());
+    }
+
+
+
+
+
 
     @Given("^We get the (.*) random EPR ids (.*)$")
     public void getRandomEPRIds(String numberOfRecords, String tableName) {

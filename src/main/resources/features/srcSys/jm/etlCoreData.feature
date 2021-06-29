@@ -1,7 +1,5 @@
 Feature:Validate data for JM tables between JM ETL Core tables and JM Staging
 
-#    Created by Thomas Kruck on 21/04/2021
-
     @JMETLCore
     Scenario Outline: Verify that all JM data is transferred from Staging to JM ETL Core tables
         Given We know the total count of JM ETL Core <ETLtable> data

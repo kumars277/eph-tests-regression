@@ -6,6 +6,15 @@ Feature:Validate data for JRBI Work tables in Data Lake
   #Confluence LinK: https://confluence.cbsels.com/pages/viewpage.action?pageId=168466078
 
 
+  @JRBIETLExtended
+  Scenario Outline: Verify Data for JRBI transform_Current_work is transferred from journal_data_full
+    Given We get the <countOfRandomIds> random EPR ids <sourceTable>
+    When We get the records from data jrbi_journal_data_full
+    Then We get the records from transform current work
+    And Compare the records of jrbi_journal_data_full and transform current work
+    Examples:
+      | sourceTable         | countOfRandomIds|
+      |jrbi_journal_data_full|      10         |
 
   @JRBIETLExtended
   Scenario Outline: Verify Data for JRBI transform_Current_work_history is transferred from Current Work
