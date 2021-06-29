@@ -31,3 +31,10 @@ Feature: Specially requested Business scenarios
     Examples:
       |s3Bucket           |s3file                       |ResultPath|
       |eph-test-data/QA   |Image URLs for parties.csv   |target\   |
+
+
+  Scenario Outline: get relationship hirarchy
+    Given get create relationship hirarchy <maniIsbn>
+    Examples:
+    |maniIsbn|
+    |  9788480868426      |
