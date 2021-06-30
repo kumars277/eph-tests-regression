@@ -168,7 +168,103 @@ public class JM_ETLExtendedCountDataChecksSQL {
                     " from "+GetJMDLDBUser.getJMDB()+".jnl_fulfilment_system where " +
                     "epr_id in ('%s')";
 
- }
+    public static String GET_JM_EXT_TableCount = "select count(*) as COUNT from (\n" +
+            "select\n" +
+            "jnf.epr_id\n" +
+            ", 'JM' as source\n" +
+            ", jnf.product_type\n" +
+            ", jnf.last_updated_date\n" +
+            ", jnf.application_name\n" +
+            ", CAST(null AS varchar) as delta_answer_code_uk\n" +
+            ", CAST(null AS varchar) as delta_answer_code_us\n" +
+            ", CAST(null AS varchar) as publication_status_anz\n" +
+            ", CAST(null AS varchar) as availability_format\n" +
+            ", jnf.availability_start_date\n" +
+            ", jnf.availability_status\n" +
+            ", jnf.delete_flag\n" +
+            "from "+GetJMDLDBUser.getJMDB()+".jnl_new_fulfilment_system jnf\n" +
+            "UNION ALL\n" +
+            "SELECT\n" +
+            "jfs.epr_id as epr_id\n" +
+            ", 'JM_FIXED' as source\n" +
+            ", jfs.product_type\n" +
+            ", jfs.last_updated_date\n" +
+            ", jfs.application_code        as application_name\n" +
+            ", CAST(null AS varchar)       as delta_answer_code_uk\n" +
+            ", CAST(null AS varchar)       as delta_answer_code_us\n" +
+            ", CAST(null AS varchar)       as publication_status_anz\n" +
+            ", CAST(null AS varchar)       as availability_format\n" +
+            ", jfs.availability_start_date\n" +
+            ", jfs.availability_status\n" +
+            ", jfs.delete_flag\n" +
+            "from "+GetJMDLDBUser.getJMDB()+".jnl_fulfilment_system_v jfs) where last_updated_date in (select last_updated_date from "+GetJMDLDBUser.getJMDB()+".jnl_new_fulfilment_system order by last_updated_date desc limit 1)";
+
+    public static String GET_JMStitched_Count = "select count(*) as COUNT from "+GetJMDLDBUser.getProdStagingDataBase2()+".product_availability_extended_allsource_v where source in ('JM')";
+
+    public static String GET_SOURCE_JM_ETLExtended_IDs = "select epr_id as EPR_ID from (\n" +
+            "select\n" +
+            "jnf.epr_id\n" +
+            ", 'JM' as source\n" +
+            ", jnf.product_type\n" +
+            ", jnf.last_updated_date\n" +
+            ", jnf.application_name\n" +
+            ", CAST(null AS varchar) as delta_answer_code_uk\n" +
+            ", CAST(null AS varchar) as delta_answer_code_us\n" +
+            ", CAST(null AS varchar) as publication_status_anz\n" +
+            ", CAST(null AS varchar) as availability_format\n" +
+            ", jnf.availability_start_date\n" +
+            ", jnf.availability_status\n" +
+            ", jnf.delete_flag\n" +
+            "from "+GetJMDLDBUser.getJMDB()+".jnl_new_fulfilment_system jnf\n" +
+            "UNION ALL\n" +
+            "SELECT\n" +
+            "jfs.epr_id as epr_id\n" +
+            ", 'JM_FIXED' as source\n" +
+            ", jfs.product_type\n" +
+            ", jfs.last_updated_date\n" +
+            ", jfs.application_code        as application_name\n" +
+            ", CAST(null AS varchar)       as delta_answer_code_uk\n" +
+            ", CAST(null AS varchar)       as delta_answer_code_us\n" +
+            ", CAST(null AS varchar)       as publication_status_anz\n" +
+            ", CAST(null AS varchar)       as availability_format\n" +
+            ", jfs.availability_start_date\n" +
+            ", jfs.availability_status\n" +
+            ", jfs.delete_flag\n" +
+            "from "+GetJMDLDBUser.getJMDB()+".jnl_fulfilment_system_v jfs) where last_updated_date in (select last_updated_date from "+GetJMDLDBUser.getJMDB()+".jnl_new_fulfilment_system order by last_updated_date desc limit 1)";
+
+    public static String GET_SOURCE_JMETL_EXT_Records = "select * from (\n" +
+            "select\n" +
+            "jnf.epr_id\n" +
+            ", 'JM' as source\n" +
+            ", jnf.product_type\n" +
+            ", jnf.last_updated_date\n" +
+            ", jnf.application_name\n" +
+            ", CAST(null AS varchar) as delta_answer_code_uk\n" +
+            ", CAST(null AS varchar) as delta_answer_code_us\n" +
+            ", CAST(null AS varchar) as publication_status_anz\n" +
+            ", CAST(null AS varchar) as availability_format\n" +
+            ", jnf.availability_start_date\n" +
+            ", jnf.availability_status\n" +
+            ", jnf.delete_flag\n" +
+            "from "+GetJMDLDBUser.getJMDB()+".jnl_new_fulfilment_system jnf\n" +
+            "UNION ALL\n" +
+            "SELECT\n" +
+            "jfs.epr_id as epr_id\n" +
+            ", 'JM_FIXED' as source\n" +
+            ", jfs.product_type\n" +
+            ", jfs.last_updated_date\n" +
+            ", jfs.application_code        as application_name\n" +
+            ", CAST(null AS varchar)       as delta_answer_code_uk\n" +
+            ", CAST(null AS varchar)       as delta_answer_code_us\n" +
+            ", CAST(null AS varchar)       as publication_status_anz\n" +
+            ", CAST(null AS varchar)       as availability_format\n" +
+            ", jfs.availability_start_date\n" +
+            ", jfs.availability_status\n" +
+            ", jfs.delete_flag\n" +
+            "from "+GetJMDLDBUser.getJMDB()+".jnl_fulfilment_system_v jfs) where last_updated_date in (select last_updated_date from "+GetJMDLDBUser.getJMDB()+".jnl_new_fulfilment_system order by last_updated_date desc limit 1) and epr_id in ('%s')";
+
+    public static String GET_JM_ETLEXT_Stitched_Records = "select * from "+GetJMDLDBUser.getProdStagingDataBase2()+".product_availability_extended_allsource_v where source in ('JM') and epr_id in ('%s')";
+}
 
 
 

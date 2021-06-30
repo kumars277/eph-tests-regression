@@ -7,16 +7,17 @@ import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.JMETL.JMETL_ExtendedAccessDLContext;
 import com.eph.automation.testing.models.dao.JMDataLake.JM_ETLExtendedDLAccessObject;
 import com.eph.automation.testing.services.db.JMDataLakeSQL.JM_ETLExtendedCountDataChecksSQL;
+import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import org.junit.Assert;
-import com.google.common.base.Joiner;
 
-import java.util.*;
-import java.io.FileReader;
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class JM_ETLExtendedCount_DataChecksSteps {
@@ -193,6 +194,7 @@ public class JM_ETLExtendedCount_DataChecksSteps {
             }
         }
     }
+
 //Data Check with Excel
 
     //Method 1 using Hash Map
@@ -307,28 +309,8 @@ public class JM_ETLExtendedCount_DataChecksSteps {
         Log.info("Expected Count: "+expecTedCount+" And Actual Count: "+actualCount);
         Assert.assertEquals("The excpected Count not matching with Actual",expecTedCount,actualCount);
     }
-
-
-
 }
 
-
-
-       /////////////////////////////////////////
-        /*expectedIdentifiersFields = new Object[][]{{"issn", "03765040"}, {"application_code", "Delta"}, {"epr_id", "EPR-10GW8S"},
-                {"product_type", "SUB"}};
-        sql = JM_ETLExtendedCountDataChecksSQL.GET_JM_EXT_FULFIL_SYSTEM_Single_REC;
-        JMETL_ExtendedAccessDLContext.recordsFromSingleJMFulFilment = DBManager.getDBResultAsBeanList(sql, JM_ETLExtendedDLAccessObject.class, Constants.AWS_URL);
-
-        loadedIdentifiersFields = new Object[][]{{"issn", JMETL_ExtendedAccessDLContext.recordsFromSingleJMFulFilment.get(0).getissn()}, {"application_code", JMETL_ExtendedAccessDLContext.recordsFromSingleJMFulFilment.get(0).getapplication_code()},
-                {"epr_id", JMETL_ExtendedAccessDLContext.recordsFromSingleJMFulFilment.get(0).getepr_id()},
-                {"product_type", JMETL_ExtendedAccessDLContext.recordsFromSingleJMFulFilment.get(0).getproduct_type()}};
-
-        for (int i = 0; i < expectedIdentifiersFields.length; i++) {
-            Assert.assertEquals("Expected all columns to be with correct values loaded but for identifier with id = "
-                            + JMETL_ExtendedAccessDLContext.recordsFromSingleJMFulFilment.get(0).getissn() + " there are not equal values for the field " + expectedIdentifiersFields[i][0],
-                    expectedIdentifiersFields[i][1], loadedIdentifiersFields[i][1]);
-        }*/
 
 
 
