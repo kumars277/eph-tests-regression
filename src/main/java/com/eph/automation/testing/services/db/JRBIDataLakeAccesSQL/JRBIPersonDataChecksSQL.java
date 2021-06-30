@@ -233,7 +233,7 @@ public class JRBIPersonDataChecksSQL {
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person as b)\n "+
                     "order by rand() limit %s\n";
 
-    public  static String GET_JRBI_REC_SUM_DELTA_PERSON_AND_PERSON_HISTORY =
+    public  static String GET_JRBI_REC_SUM_DELTA_PERSON_AND_PERSON_EXCL =
             "select epr as EPR, record_type as RECORDS_TYPE,\n" +
                     "role_code as ROLE_CODE, u_key as U_KEY,\n" +
                     "role_description as ROLE_DESCRIPTION,\n" +

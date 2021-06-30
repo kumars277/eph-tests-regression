@@ -10,13 +10,10 @@ public class GetJRBIDLDBUser {
             }
             else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbJRBIDL = "jrbi_staging_uat";
-            }else{
-                dbJRBIDL = "jrbi_staging_uat2";
             }
-
         }else{
-           dbJRBIDL = "jrbi_staging_sit";
-           // dbJRBIDL = "jrbi_staging_uat";
+           //dbJRBIDL = "jrbi_staging_sit";
+            dbJRBIDL = "jrbi_staging_uat";
         }
         return dbJRBIDL;
     }
@@ -33,8 +30,8 @@ public class GetJRBIDLDBUser {
                 dbProdDb = "product_staging_database_uat2";
             }
         }else{
-          dbProdDb = "product_staging_database_sit";
-          //  dbProdDb = "product_staging_database_uat";
+          //dbProdDb = "product_staging_database_sit";
+          dbProdDb = "product_staging_database_uat";
         }
         return dbProdDb;
     }
@@ -48,12 +45,9 @@ public class GetJRBIDLDBUser {
             else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbProdGDdb = "product_database_uat";
             }
-            else {
-                dbProdGDdb = "product_database_uat2";
-            }
         }else{
-            dbProdGDdb = "product_database_sit";
-           // dbProdGDdb = "product_database_uat";
+           // dbProdGDdb = "product_database_sit";
+            dbProdGDdb = "product_database_uat";
         }
         return dbProdGDdb;
     }
@@ -67,12 +61,9 @@ public class GetJRBIDLDBUser {
             else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbProdExtdb = "product_ext_database_uat";
             }
-            else{
-                dbProdExtdb = "product_ext_database_uat2";
-            }
-        }else{
-          dbProdExtdb = "product_ext_database_sit";
-          // dbProdExtdb = "product_ext_database_uat";
+         }else{
+          //dbProdExtdb = "product_ext_database_sit";
+           dbProdExtdb = "product_ext_database_uat";
         }
         return dbProdExtdb;
     }
@@ -87,8 +78,8 @@ public class GetJRBIDLDBUser {
                 dbStitching = "ephuat_extended_data_stitch";
             }
         }else{
-            dbStitching = "ephsit_extended_data_stitch";
-          // dbStitching = "ephuat_extended_data_stitch";
+          //  dbStitching = "ephsit_extended_data_stitch";
+           dbStitching = "ephuat_extended_data_stitch";
         }
         return dbStitching;
     }

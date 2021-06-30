@@ -421,7 +421,7 @@ public class JRBIWorkDataChecksSQL {
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work as b)\n" +
                     " order by rand() limit %s\n";
 
-    public static String GET_JRBI_REC_SUM_DELTA_WORK_AND_WORK_HISTORY =
+    public static String GET_JRBI_REC_SUM_DELTA_WORK_AND_EXCLUDE =
             "select epr as EPR \n" +
                     ",record_type as RECORD_TYPE\n" +
                     ",work_type as WORK_TYPE\n" +
@@ -454,7 +454,7 @@ public class JRBIWorkDataChecksSQL {
                     "b.catalogue_volume_to, b.rf_issues_qty,b.rf_total_pages_qty, b.rf_fvi,\n" +
                     "b.rf_lvi, b.business_unit_desc, null as col11, null as col12 \n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work as b)\n" +
-                    " where EPR in ('%s')\n";
+                    " where EPR in ('%s') order by epr desc\n";
 
     public static String GET_JRBI_WORK_LATEST_RECORDS =
             "select epr as EPR \n" +
@@ -478,7 +478,7 @@ public class JRBIWorkDataChecksSQL {
                     ",delete_flag as DELETE_FLAG\n" +
                     ",last_updated_date as LAST_UPDATED_DATE\n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_work\n" +
-                    "where EPR in ('%s')\n";
+                    "where EPR in ('%s') order by epr desc\n";
 
     public static String GET_RANDOM_DELTA_EPR_WORK =
             "select epr as EPR from (\n" +
