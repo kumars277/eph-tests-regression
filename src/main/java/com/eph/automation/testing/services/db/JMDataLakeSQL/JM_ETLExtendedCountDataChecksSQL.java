@@ -2,7 +2,7 @@ package com.eph.automation.testing.services.db.JMDataLakeSQL;
 
 public class JM_ETLExtendedCountDataChecksSQL {
 
-    public static String GET_JM_EXT_NEW_FULFIL_SYSTEM_COUNT= "select count(*) as Target_Count from "+GetJMDLDBUser.getJMDB()+".jnl_new_fulfilment_system";
+    public static String GET_JM_EXT_NEW_FULFIL_SYSTEM_COUNT= "select count(*) as Target_Count from "+GetJMDLDBUser.getJMDB()+".jnl_new_fulfilment_system_v";
 
     public static String GET_JM_EXT_FULFIL_SYSTEM_COUNT= "select count(*) as Target_Count from "+GetJMDLDBUser.getJMDB()+".jnl_fulfilment_system";
 

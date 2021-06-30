@@ -13,9 +13,9 @@ Feature:Validate data count for JM Extended tables
      And   Data from the JM ETL Extended Tables to compare source Check <tableName>
      Then  Compare data of JM ETL Extended Tables and source <tableName> tables are identical
     Examples:
-      | tableName                               |countOfRandomIds|
-      |jnl_new_fulfilment_system                |2              |
-      |jnl_fulfilment_system                     |2               |
+      | tableName                                 |countOfRandomIds|
+      |jnl_new_fulfilment_system_v                |2               |
+      |jnl_fulfilment_system                      |2               |
 
 
  #Feature: Validating JM_Extended data (Count and Data Checks) between JM and product Extended DB

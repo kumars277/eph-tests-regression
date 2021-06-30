@@ -37,7 +37,7 @@ public class JM_ETLExtendedCount_DataChecksSteps {
     @Given("^Get the total count of JM ETL Extended Tables (.*)$")
     public void getJMExtendedCount(String tableName) {
         switch (tableName) {
-            case "jnl_new_fulfilment_system":
+            case "jnl_new_fulfilment_system_v":
                 Log.info("Getting jm Extended new Fullfilment system Table Count...");
                 JMExtendedSQLCurrentCount = JM_ETLExtendedCountDataChecksSQL.GET_JM_EXT_NEW_FULFIL_SYSTEM_COUNT;
                 break;
@@ -55,7 +55,7 @@ public class JM_ETLExtendedCount_DataChecksSteps {
     @Given("^We know the total count of JM source tables (.*)$")
     public void getJMExtSourceCount(String tableName) {
         switch (tableName) {
-            case "jnl_new_fulfilment_system":
+            case "jnl_new_fulfilment_system_v":
                 Log.info("Getting source Count...");
                 JMsourceSQLCount = JM_ETLExtendedCountDataChecksSQL.GET_SOURCE_JM_EXT_NEW_FULFIL_SYSTEM_COUNT;
                 break;
@@ -82,7 +82,7 @@ public class JM_ETLExtendedCount_DataChecksSteps {
         Log.info("Get random Ids for jm ETL Extended Tables....");
         List<Map<?, ?>> randomIds;
         switch (tableName) {
-            case "jnl_new_fulfilment_system":
+            case "jnl_new_fulfilment_system_v":
                 sql = String.format(JM_ETLExtendedCountDataChecksSQL.GET_SOURCE_JM_EXT_NEW_FULFIL_SYSTEM_COUNT_RAND_ID, numberOfRecords);
                 break;
             case "jnl_fulfilment_system":
@@ -99,7 +99,7 @@ public class JM_ETLExtendedCount_DataChecksSteps {
     public void getsourceRecords(String tableName) {
         Log.info("We get the jm source records...");
         switch (tableName) {
-            case "jnl_new_fulfilment_system":
+            case "jnl_new_fulfilment_system_v":
                 sql = String.format(JM_ETLExtendedCountDataChecksSQL.GET_SOURCE_JM_EXT_NEW_FULFIL_SYSTEM_REC, Joiner.on("','").join(Ids));
                 break;
             case "jnl_fulfilment_system":
@@ -114,7 +114,7 @@ public class JM_ETLExtendedCount_DataChecksSteps {
     public void getTargetRecords(String tableName) {
         Log.info("We get the jm target records...");
         switch (tableName) {
-            case "jnl_new_fulfilment_system":
+            case "jnl_new_fulfilment_system_v":
                 sql = String.format(JM_ETLExtendedCountDataChecksSQL.GET_JM_EXT_NEW_FULFIL_SYSTEM_REC, Joiner.on("','").join(Ids));
                 break;
             case "jnl_fulfilment_system":
@@ -133,7 +133,7 @@ public class JM_ETLExtendedCount_DataChecksSteps {
             Log.info("Sorting the Ids to compare the records...");
             for (int i = 0; i < JMETL_ExtendedAccessDLContext.recordsFromSource.size(); i++) {
                 switch (tableName) {
-                    case "jnl_new_fulfilment_system":
+                    case "jnl_new_fulfilment_system_v":
                         JMETL_ExtendedAccessDLContext.recordsFromSource.sort(Comparator.comparing(JM_ETLExtendedDLAccessObject::getepr_id)); //sort primarykey data in the lists
                         JMETL_ExtendedAccessDLContext.recordsFromJMFulFilment.sort(Comparator.comparing(JM_ETLExtendedDLAccessObject::getepr_id));
                         String[] recordsComp = {"getepr_id", "getproduct_type", /*"getlast_updated_date",*/ "getapplication_name", "getavailability_start_date", "getavailability_status", "getdelete_flag"};
