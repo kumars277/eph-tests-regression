@@ -71,7 +71,7 @@ public class JMETLDataChecks {
     }
 
     @When("^We get the JM DB records from (.*)$")
-    public void getJMDBRecords(String JMDBtable) {
+    public void getJMMDBRecords(String JMDBtable) {
         Log.info("We get the records from jm DB..");
         switch (JMDBtable) {
             case "work_business_model":

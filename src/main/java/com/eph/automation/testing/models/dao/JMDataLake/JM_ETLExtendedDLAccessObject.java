@@ -11,9 +11,52 @@ public class JM_ETLExtendedDLAccessObject {
     private String delete_flag;
     private String application_code;
     private String issn;
-
     private int eprIdCount;
 
+    private String source;
+    private String getlast_updated_date;
+    private String getapplication_name;
+    private String getdelta_answer_code_uk;
+    private String getdelta_answer_code_us;
+    private String getpublication_status_anz;
+    private String getavailability_format;
+    
+    
+    public String getsource() { return source; }
+    public void setsource(String source) {
+        this.source = source;
+    }
+
+    public String getgetlast_updated_date() { return getlast_updated_date; }
+    public void setgetlast_updated_date(String getlast_updated_date) {
+        this.getlast_updated_date = getlast_updated_date;
+    }
+
+    public String getgetapplication_name() { return getapplication_name; }
+    public void setgetapplication_name(String getapplication_name) {
+        this.getapplication_name = getapplication_name;
+    }
+
+    public String getdelta_answer_code_uk() { return getdelta_answer_code_uk; }
+    public void setgetdelta_answer_code_uk(String getdelta_answer_code_uk) {
+        this.getdelta_answer_code_uk = getdelta_answer_code_uk;
+    }
+
+    public String getdelta_answer_code_us() { return getdelta_answer_code_us; }
+    public void setgetdelta_answer_code_us(String getdelta_answer_code_us) {
+        this.getdelta_answer_code_us = getdelta_answer_code_us;
+    }
+
+    public String getpublication_status_anz() { return getpublication_status_anz; }
+    public void setgetpublication_status_anz(String getpublication_status_anz) {
+        this.getpublication_status_anz = getpublication_status_anz;
+    }
+
+    public String getavailability_format() { return getavailability_format; }
+    public void setgetavailability_format(String getavailability_format) {
+        this.getavailability_format = getavailability_format;
+    }
+    
     public int geteprIdCount() { return eprIdCount; }
     public void seteprIdCount(int eprIdCount) {
         this.eprIdCount = eprIdCount;
