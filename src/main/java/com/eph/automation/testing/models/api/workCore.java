@@ -147,6 +147,7 @@ public class workCore {
 
     public void compareWithDB(String workId) {
         Log.info("----- Verifying workCore data... " + workId);
+        try{
         getWorkDataFromEPHGD(workId);
 
         Assert.assertEquals(DataQualityContext.breadcrumbMessage + " - title", title, this.workDataObjectsFromEPHGD.get(0).getWORK_TITLE());
@@ -431,7 +432,15 @@ public class workCore {
             workRelationships.compareWithDB(this.workDataObjectsFromEPHGD.get(0).getWORK_ID());
             printLog("workRelationships");
         }
-    }
+        }
+
+        catch (Exception e)
+        {
+            Log.info(e.getCause().getMessage());
+            Assert.assertFalse(DataQualityContext.breadcrumbMessage +" e.message>"+e.getMessage()+ " scenario Failed ", true);
+        }
+
+        }
 
     private void getWorkDataFromEPHGD(String workID) {
         List<String> ids = new ArrayList<>();

@@ -73,7 +73,7 @@ public class WorkApiObject {
     public void compareWithDB() {//implemented by Nishant @ 23 Apr 2020
 
         boolean failed = false;
-        try{
+
         //1
         workCore.compareWithDB(this.id);
 
@@ -94,19 +94,6 @@ public class WorkApiObject {
             Log.info("\nVerifying work products...");
             Log.info("total work products found..."+products.size());
             for (ManifestationProductAPIObject Workproducts : products) {Workproducts.compareWithDB();}}
-        }
-        catch (NullPointerException e)
-        {
-            Log.info(e.toString());
-          //  DataQualityContext.api_response.prettyPrint();
-            Assert.assertFalse(DataQualityContext.breadcrumbMessage +" e.message>"+e.getMessage()+ " scenario Failed ", true);
-
-        }
-        catch (Exception e)
-        {
-            Log.info(e.getMessage());
-            Assert.assertFalse(DataQualityContext.breadcrumbMessage +" e.message>"+e.getMessage()+ " scenario Failed ", true);
-        }
 
     }
 

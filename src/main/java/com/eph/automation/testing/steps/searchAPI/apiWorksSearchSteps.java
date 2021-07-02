@@ -95,8 +95,8 @@ public class apiWorksSearchSteps {
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random Journal ids  : " + ids);
     // for debugging failure
-    //   ids.clear(); ids.add("EPR-W-102T1H");  Log.info("hard coded work ids are : " + ids);
-    // //EPR-W-108VK7, EPR-W-108RJG   , EPR-W-108V6K
+     //  ids.clear(); ids.add("EPR-W-102V6T");  Log.info("hard coded work ids are : " + ids);
+
     DataQualityContext.breadcrumbMessage += "->" + ids;
     Assert.assertFalse(
         DataQualityContext.breadcrumbMessage + "-> Verify That list with random ids is not empty.",
@@ -345,21 +345,17 @@ public class apiWorksSearchSteps {
             getNumberOfWorksByManifestationType(searchKeyword, ManifestationType));
       }
 
-    } catch (NullPointerException e) {
-      e.getMessage();
-      DataQualityContext.api_response.prettyPrint();
-      failed = true;
     } catch (Exception e) {
       e.getMessage();
-      failed = true;
-    } finally {
-      Assert.assertFalse(DataQualityContext.breadcrumbMessage + " scenario Failed ", failed);
+     // DataQualityContext.api_response.prettyPrint();
+      Assert.assertFalse(DataQualityContext.breadcrumbMessage + " scenario Failed ", true);
     }
   }
 
   @Then("^the work details are retrieved by search with PMC code and compared$")
   public void compareWorkBySearchWithPMCCodeWithDB() throws Throwable {
     WorksMatchedApiObject returnedWorks;
+    try{
     int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
     String searchKeyword =
         dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().split(" ")[0];
@@ -379,6 +375,11 @@ public class apiWorksSearchSteps {
       returnedWorks.verifyWorksReturnedCount(
           getNumberOfWorksBySearchWithPMCCode(
               searchKeyword, dataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC()));
+    }
+    } catch (Exception e) {
+      e.getMessage();
+      // DataQualityContext.api_response.prettyPrint();
+      Assert.assertFalse(DataQualityContext.breadcrumbMessage + " scenario Failed ", true);
     }
   }
 
@@ -1039,7 +1040,8 @@ public class apiWorksSearchSteps {
                       + from
                       + "&size="
                       + size
-                      + "&workType=ABS,JBB,JNL,NWL&workStatus=WLA,WDA,WTA,WVA");
+                      + "&workType=ABS,JBB,JNL,NWL&workStatus=WLA");
+          //+ "&workType=ABS,JBB,JNL,NWL&workStatus=WLA,WDA,WTA,WVA");
           while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(
                   dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
               && from + size < returnedWorks.getTotalMatchCount()) {

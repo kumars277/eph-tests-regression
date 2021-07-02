@@ -290,7 +290,7 @@ public class APIDataSQL {
       "select f_person from semarchy_eph_mdm.gd_work_person_role group by f_person order by random() limit '%s'";
 
   public static String SELECT_WORK_COUNT_BY_PERSONID_VALID_ONLY =
-      "select count(work_id ) from semarchy_eph_mdm.gd_wwork gw\n"
+      "select count(distinct(work_id)) from semarchy_eph_mdm.gd_wwork gw\n"
           + "inner join semarchy_eph_mdm.gd_work_person_role gwpr \n"
           + "on gw.work_id =gwpr.f_wwork \n"
           + "where gw.f_type in('ABS','JBB','JNL','NWL')and gw.f_status in('WLA')\n"

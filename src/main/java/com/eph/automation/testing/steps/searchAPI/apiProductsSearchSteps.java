@@ -87,7 +87,7 @@ public class apiProductsSearchSteps {
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random product ids are : " + ids);
     // added by Nishant @ 26 Dec for debugging failures
-      // ids.clear(); ids.add("EPR-10J0XC"); Log.info("hard coded product ids are : " + ids);//
+     //  ids.clear(); ids.add("EPR-11DXD3"); Log.info("hard coded product ids are : " + ids);//
 
 
     if (productProperty.equalsIgnoreCase("PRODUCT_IDENTIFIER")) {
@@ -844,7 +844,7 @@ public class apiProductsSearchSteps {
             getWorkPersonRoleByWorkId(
                 dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
             getPersonDataByPersonId(personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
-            //    from = 0; size = 50;
+
             returnedProducts =
                 searchForProductsBySearchResult(
                     personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()

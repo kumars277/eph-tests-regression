@@ -47,10 +47,17 @@ public class SubjectAreasApiObject {
         Assert.assertEquals(this.subjectArea.getType().get("code"), subjectAreaDataObjectsFromGD_child.get(0).getSUBJECT_AREA_TYPE());
         printLog("subject Area Type code");
 
-        getParentSubjectAreaDataEPHGDbyCode(this.subjectArea.getParentSubjectArea().get("code").toString());
+    if (this.subjectArea.getParentSubjectArea() != null) {
+      getParentSubjectAreaDataEPHGDbyCode(
+          this.subjectArea.getParentSubjectArea().get("code").toString());
 
-        Assert.assertEquals(this.subjectArea.getParentSubjectArea().get("name"), subjectAreaDataObjectsFromGD_parent.get(0).getSUBJECT_AREA_NAME());
-        printLog("parent subject Area Name");
+      Assert.assertEquals(
+          this.subjectArea.getParentSubjectArea().get("name"),
+          subjectAreaDataObjectsFromGD_parent.get(0).getSUBJECT_AREA_NAME());
+      printLog("parent subject Area Name");
+        }
+    // validate effective start date
+        // validate effective end date
     }
 
 

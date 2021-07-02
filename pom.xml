@@ -24,7 +24,8 @@
         <commondb.version>1.6</commondb.version>
         <soapui.version>5.1.2</soapui.version>
         <rest-assured.version>2.9.0</rest-assured.version>
-        <jackson.version>2.9.8</jackson.version>
+        <!--jackson.version>2.9.8</jackson.version-->
+        <jackson.version>2.10.1</jackson.version>
         <javaassist.version>3.12.1.GA</javaassist.version>
         <javaxmail.version>1.4.7</javaxmail.version>
         <json.schema.validator.version>2.2.10</json.schema.validator.version>

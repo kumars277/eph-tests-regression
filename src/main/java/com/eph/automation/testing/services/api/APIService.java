@@ -2,22 +2,23 @@ package com.eph.automation.testing.services.api;
 /** Created by GVLAYKOV updated by Nishant in Apr-May 2020 for data model changes */
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.RESTEndPoints;
-import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.models.api.ProductApiObject;
 import com.eph.automation.testing.models.api.ProductsMatchedApiObject;
 import com.eph.automation.testing.models.api.WorkApiObject;
 import com.eph.automation.testing.models.api.WorksMatchedApiObject;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.json.JsonReadFeature;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.jayway.restassured.internal.mapper.ObjectMapperType;
 import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.RequestSpecification;
+import org.apache.commons.text.StringEscapeUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.Assert;
-
 import java.util.concurrent.ThreadLocalRandom;
-
-import static com.eph.automation.testing.configuration.Constants.*;
 import static com.jayway.restassured.RestAssured.get;
 import static com.jayway.restassured.RestAssured.given;
 
@@ -217,12 +218,13 @@ public class APIService {
             .when()
             .get("/product-hub-products/products?queryType=search&queryValue=" + searchOption);
 
-    response.prettyPrint();
+   // response.prettyPrint();
 
     DataQualityContext.api_response = response;
 
     Assert.assertEquals("API response code ",200,response.statusCode());
-    return response.thenReturn().as(ProductsMatchedApiObject.class);
+    //updates by Nishant to fix escaped char in json response issue
+    return response.thenReturn().as(ProductsMatchedApiObject.class,ObjectMapperType.JACKSON_2);
   }
 
   public static ProductsMatchedApiObject searchForProductsByaccountableProduct(
