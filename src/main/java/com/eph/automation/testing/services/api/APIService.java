@@ -91,7 +91,7 @@ public class APIService {
             .get("/product-hub-products/products/" + productID);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(ProductApiObject.class);
   }
 
@@ -106,7 +106,7 @@ public class APIService {
             .get("/product-hub-products/products?queryType=name&queryValue=" + title);
     //    response.prettyPrint();
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
@@ -119,7 +119,7 @@ public class APIService {
             .when()
             .get("/product-hub-products/products?queryType=identifier&queryValue=" + identifier);
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
@@ -133,7 +133,7 @@ public class APIService {
             .when()
             .get("/product-hub-products/products?queryType=identifier&queryValue=" + identifier);
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
@@ -147,7 +147,7 @@ public class APIService {
             .get("/product-hub-products/products?queryType=isInPackages&queryValue=" + packageID);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
@@ -161,7 +161,7 @@ public class APIService {
             .get("/product-hub-products/products?queryType=personId&queryValue=" + personId);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
@@ -175,7 +175,7 @@ public class APIService {
             .get("/product-hub-products/products?queryType=pmcCode&queryValue=" + pmcCode);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
@@ -189,7 +189,7 @@ public class APIService {
             .get("/product-hub-products/products?queryType=pmgCode&queryValue=" + pmgCode);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
@@ -204,7 +204,7 @@ public class APIService {
                 "/product-hub-products/products?queryType=HasComponents&queryValue=" + componentID);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
@@ -221,7 +221,7 @@ public class APIService {
 
     DataQualityContext.api_response = response;
 
-    Assert.assertEquals("API response code ",response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
@@ -238,7 +238,7 @@ public class APIService {
                     + accountableProduct);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
@@ -270,7 +270,7 @@ public class APIService {
 
     DataQualityContext.api_response = response;
    // response.prettyPrint();
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(ProductsMatchedApiObject.class);
   }
 
@@ -301,13 +301,7 @@ public class APIService {
             .when()
             .get("/product-hub-works/works/" + workID);
 
-    Assert.assertTrue(
-        "Verify that the searched work exists and is accessible trough the API",
-        response.statusCode() == 200);
-
-    // Log.info("print response start#######################");
-    //   getWorkResponse.prettyPrint();
-    // Log.info("print response end ########################");
+    Assert.assertEquals("API response code ",200,response.statusCode());
 
     DataQualityContext.api_response = response;
     return response.thenReturn().as(WorkApiObject.class);
@@ -323,7 +317,7 @@ public class APIService {
             .get("/product-hub-works/works?queryType=title&queryValue=" + title);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
@@ -336,7 +330,7 @@ public class APIService {
             .when()
             .get("/product-hub-works/works?queryType=identifier&queryValue=" + identifier);
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
@@ -355,7 +349,7 @@ public class APIService {
                     + identifierType);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
@@ -370,7 +364,7 @@ public class APIService {
             .get("/product-hub-works/works?queryType=search&queryValue=" + searchFor);
     //  response.prettyPrint();
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
@@ -385,7 +379,7 @@ public class APIService {
             .get("/product-hub-works/works?queryType=" + queryType + "&queryValue=" + queryValue);
     //   response.prettyPrint();
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
@@ -399,7 +393,7 @@ public class APIService {
             .get("/product-hub-works/works?queryType=pmcCode&queryValue=" + pmcCode);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
@@ -413,7 +407,7 @@ public class APIService {
             .get("/product-hub-works/works?queryType=pmgCode&queryValue=" + pmgCode);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
@@ -427,7 +421,7 @@ public class APIService {
             .get("/product-hub-works/works?queryType=personId&queryValue=" + identifier);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
@@ -443,7 +437,7 @@ public class APIService {
                     + queryValue);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
@@ -460,7 +454,7 @@ public class APIService {
                     + accountableProduct);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
@@ -479,7 +473,7 @@ public class APIService {
                     + workStatus);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
@@ -498,7 +492,7 @@ public class APIService {
                     + workType);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
@@ -517,7 +511,7 @@ public class APIService {
                     + manifestationType);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
@@ -536,7 +530,7 @@ public class APIService {
                     + pmcCode);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
@@ -555,7 +549,7 @@ public class APIService {
                     + pmgCode);
 
     DataQualityContext.api_response = response;
-    Assert.assertEquals(response.statusCode(), 200);
+    Assert.assertEquals("API response code ",200,response.statusCode());
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 }
