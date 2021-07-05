@@ -1,9 +1,6 @@
 Feature:Validate data count for SDBooks in Data Lake Access Layer
 
-#  Created by Dinesh on 08/09/2020
   #confluence link:https://confluence.cbsels.com/display/EPH/SDBooks
-
-
 
   @SD
   Scenario Outline: Verify Data for SDBooks transform_Current_tables is transferred from Source Table
@@ -18,7 +15,7 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
       | tableName                        |    countOfRandomIds|
       |sdbooks_inbound_part              |50                |
 
-@notUsed
+  @notUsed
   Scenario Outline: Verify Data for SD transform_current_history tables are transferred from transformed_current tables
     Given We know the total count of Current SD data
     Then Get the count of SD transform_current_history
@@ -44,7 +41,7 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
       | sourceTable                             | countOfRandomIds      |
       |sdbooks_transform_file_history_urls_part |   50                 |
 
-@notUsed
+   @notUsed
      Scenario Outline: Verify Data for SDBooks delta_current tables are transferred from Current and Previous tables
       Given Get the difference of total count between current and previous time stamps of transform_file of SDbooks data
       Then We know the delta current count for Sdbooks tables
@@ -57,7 +54,7 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
          | sourceTable              | countOfRandomIds|
          |sdbooks_delta_current_urls| 50               |
 
-@notUsed
+    @notUsed
       Scenario Outline: Verify Data count for SDBooks delta_current_history tables are transferred from delta_current_work tables
         Given We know the delta current count for Sdbooks tables
         Then Get the count of SDBook delta current history table
@@ -83,7 +80,7 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
         |tableName                                | countOfRandomIds|
         |sdbooks_transform_latest_urls               |50                 |
 
-  @SD
+  @notUsed
   Scenario Outline: Verify Data count for SDBooks delta_current_exclude are transferred from delta_current and current_history tables
     Given Get the SDBooks total count difference between delta current and transform current history Table
     Then Get the SDBooks exclude data count

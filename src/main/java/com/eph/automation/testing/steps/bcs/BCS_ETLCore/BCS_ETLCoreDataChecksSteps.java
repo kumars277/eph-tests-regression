@@ -601,7 +601,7 @@ public class BCS_ETLCoreDataChecksSteps {
 
    }
 
-    @And("^Compare the records of BCS Core current and BCS Current_History (.*)$")
+    @And("^compare the records of BCS Core current and BCS Current_History (.*)$")
     public void compareCurrentandCurrHist(String targetTableName)throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (dataQualityBCSContext.recordsFromCurrent.isEmpty()) {
             Log.info("No Data Found in the Current Tables ....");
@@ -907,7 +907,7 @@ public class BCS_ETLCoreDataChecksSteps {
 
     }
 
-    @And("^Compare the records of BCS Core current and BCS Transform_File (.*)$")
+    @And("^compare the records of BCS Core current and BCS Transform_File (.*)$")
     public void compareCurrandTransFile(String targetTableName)throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (dataQualityBCSContext.recordsFromCurrent.isEmpty()) {
             Log.info("No Data Found in the Current Tables ....");

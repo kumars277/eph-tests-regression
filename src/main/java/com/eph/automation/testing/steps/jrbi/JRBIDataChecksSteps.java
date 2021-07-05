@@ -304,7 +304,7 @@ public class JRBIDataChecksSteps {
         dataQualityJRBIContext.recordsFromTarget = DBManager.getDBResultAsBeanList(sql, JRBIDLAccessObject.class, Constants.AWS_URL);
     }
 
-    @And("^Compare the records of (.*) and (.*)$")
+    @And("^compare the records of (.*) and (.*)$")
     public void compareCurrentandHistory(String sourcetable, String targetTable)throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (dataQualityJRBIContext.recordsFromSource.isEmpty()) {
             Log.info("No Data Found ....");

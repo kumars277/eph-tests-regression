@@ -14,14 +14,14 @@ Feature:Validate data for Promis between transform tables
     Then We get the Promis Transform mapping current records from <Currenttablename>
     And Compare Promis records for transform mapping and current of <tablename>
     Examples:
-      |numberOfRecords  |tablename      |Currenttablename                       |
-     | 5               |subject_areas  |promis_transform_current_subject_areas |
-      | 5               |pricing        |promis_transform_current_pricing       |
-      | 5               |person_roles   |promis_transform_current_person_roles  |
-      | 5               |works          |promis_transform_current_works         |
-      | 5               |metrics        |promis_transform_current_metrics       |
-      | 5               |urls           |promis_transform_current_urls          |
-      | 5               |work_rels      |promis_transform_current_work_rels     |
+      |numberOfRecords  |tablename      |Currenttablename                        |
+      | 5                |subject_areas  |promis_transform_current_subject_areas |
+      | 5               |pricing        |promis_transform_current_pricing        |
+      | 5               |person_roles   |promis_transform_current_person_roles   |
+      | 5               |works          |promis_transform_current_works          |
+      | 5               |metrics        |promis_transform_current_metrics        |
+      | 5               |urls           |promis_transform_current_urls           |
+      | 5               |work_rels      |promis_transform_current_work_rels      |
 
   @PROMISETL
   Scenario Outline: Verify that Promis is correct between Current and transform History tables
@@ -42,7 +42,7 @@ Feature:Validate data for Promis between transform tables
       | 5               |promis_transform_current_urls         |promis_transform_file_history_urls_part           |
       | 5               |promis_transform_current_work_rels    |promis_transform_file_history_work_rels_part      |
 
-
+@notUsed
   Scenario Outline: Verify that Promis is correct between Delta Query and Delta tables
     Given We know the number of Promis <DeltaQueryTable> data for the Delta Query
     Then Get the count for Promis <Deltatablename> Delta
@@ -62,7 +62,7 @@ Feature:Validate data for Promis between transform tables
       | 5               |promis_transform_file_history_work_rels_part      |promis_delta_current_work_rels     |
 
 
-
+@notUsed
   Scenario Outline: Verify that all Promis data is transferred between History excluding query and History exl tables
     Given We know the number of Promis <tablename> data for History excluding query
     Then Get the count for Promis <HistExcltablename> History excluding

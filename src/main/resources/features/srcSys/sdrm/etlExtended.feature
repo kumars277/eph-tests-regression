@@ -1,9 +1,7 @@
 Feature:SDRM ETL DAG - Count Check - Validate data count between ETL Tables
 
-#Created by Ranjithkumar S on 23/10/2020
   #Confluence:https://confluence.cbsels.com/display/EPH/SDRM
   #Git for Query: https://github.com/elsevier-bts/eph-datalabs-dag/blob/master_v1/src/dag/resources/property_substituted/sdrm_inbound/eph_sdrm_transform_product_availability_v.txt
-#updated on 24/05/2021
 
   @SDRM
   Scenario Outline: Check between SDRM Inbound and SDRM Current Product Availability
@@ -19,7 +17,7 @@ Feature:SDRM ETL DAG - Count Check - Validate data count between ETL Tables
       |sdrm_inbound_part                                        |50               |
 
 
-@notUsed
+  @notUsed
   Scenario Outline: Verify Data for SDRM transform product history tables are transferred from transform current product table
     Given We know the total count of SDRM Current product availability data
     Then Get the count of SDRM transform product availability history
@@ -32,7 +30,6 @@ Feature:SDRM ETL DAG - Count Check - Validate data count between ETL Tables
       | tableName                                               |    countOfRandomIds|
       |sdrm_transform_current_product_availability              |50               |
 
-
   @SDRM
   Scenario Outline: Verify Data for SDRM transform product file history tables are transferred from transform current product table
    Given We know the total count of SDRM Current product availability data
@@ -42,7 +39,6 @@ Feature:SDRM ETL DAG - Count Check - Validate data count between ETL Tables
     When  Get the data from sdrm transform current product
     Then Get the data from sdrm transform product file history
     And compare the records of SDRM current product and SDRM transform product file history
-
     Examples:
       | tableName                                               |    countOfRandomIds|
       |sdrm_transform_current_product_availability              |50               |
@@ -94,7 +90,7 @@ Feature:SDRM ETL DAG - Count Check - Validate data count between ETL Tables
       |SourceTableName                      |
       |sdrm_transform_latest_product_availability           |
 
-@notUsed
+  @notUsed
   Scenario Outline: Verify Data for SDRM delta current product tables are transferred from difference between current and previous timestamps of the SDRM transform file history product table
     Given We know the total count of difference between Current and Previous timestamps of the SDRM transform product availability file history
     Then Get the count of SDRM delta current product availability

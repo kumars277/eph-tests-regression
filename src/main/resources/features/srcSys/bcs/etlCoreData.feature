@@ -1,10 +1,6 @@
 Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
 
-#  Created by Dinesh on 30/09/2020
-  #confluence latest vesrion used:v.70 updated the script on 17/03/2020
-  #confluence Link: https://confluence.cbsels.com/display/EPH/Core+Transformed+View+Mappings
-
-
+ #confluence Link: https://confluence.cbsels.com/display/EPH/Core+Transformed+View+Mappings
 
   @BCSCore
   Scenario Outline: Verify Data Count for BCS_ETL Core tables is transferred from Inbound Tables
@@ -29,7 +25,8 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
       |all_manifestation_statuses_v                 |50              |
       |all_manifestation_pubdates_v                 |50              |
 
-  Scenario Outline: Verify Data count for BCS core delta history tables are transferred from delta_current tables
+  @notUsed
+    Scenario Outline: Verify Data count for BCS core delta history tables are transferred from delta_current tables
     Given We know the total count of delta current <SourceTableName>
     Then Get the count of delta history of current timestamp from <TargettableName>
     And Check count of delta current table <SourceTableName> and delta history <TargettableName> are identical
@@ -54,8 +51,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
     Given Get the <countOfRandomIds> of BCS Core data from Current Tables <sourceTable>
     When Get the Data from the BCS Core Current Tables <sourceTable>
     Then We Get the records from transform BCS Current History <targetTable>
-    And Compare the records of BCS Core current and BCS Current_History <targetTable>
-
+    And compare the records of BCS Core current and BCS Current_History <targetTable>
     Examples:
       | sourceTable                           |  targetTable                                        |countOfRandomIds     |
       | etl_accountable_product_current_v     |  etl_transform_history_accountable_product_part     |   50                |
@@ -76,7 +72,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
     Given Get the <countOfRandomIds> of BCS Core data from Current Tables <sourceTable>
     When Get the Data from the BCS Core Current Tables <sourceTable>
     Then We Get the records from transform BCS Transform_File <targetTable>
-    And Compare the records of BCS Core current and BCS Transform_File <targetTable>
+    And compare the records of BCS Core current and BCS Transform_File <targetTable>
     Examples:
       | sourceTable                            |  targetTable                                                   |countOfRandomIds     |
       | etl_accountable_product_current_v      |  etl_accountable_product_transform_file_history_part           |   50                |
@@ -89,8 +85,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
       |etl_work_current_v                      |etl_work_transform_file_history_part                          |   50                |
       | etl_work_identifier_current_v          | etl_work_identifier_transform_file_history_part              |   50                |
 
-
-
+  @notUsed
   Scenario Outline: Verify Data count for BCS core delta_current tables are transferred from transform_file tables
     Given Get the total count of BCS Core transform_file by diff of current and previous timestamp <sourceTable>
     Then We know the total count of delta current <targetTable>
@@ -98,8 +93,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
     Given Get the <countOfRandomIds> of BCS Core data from transform_file Tables <sourceTable>
     When Get the Data from the Difference of Current and Previous transform_file Tables <sourceTable>
     Then We Get the records from delta current table BCS core <targetTable>
-    And Compare the records of BCS Core delta current and BCS diff of Transform_File <targetTable>
-
+    And compare the records of BCS Core delta current and BCS diff of Transform_File <targetTable>
     Examples:
       | targetTable                               |  sourceTable                                                 |countOfRandomIds     |
       | etl_delta_current_accountable_product     |  etl_accountable_product_transform_file_history_part         |   50                |
@@ -112,6 +106,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
       |etl_delta_current_work                     |etl_work_transform_file_history_part                          |   50                |
       | etl_delta_current_work_identifier         | etl_work_identifier_transform_file_history_part              |   50                |
 
+  @notUsed
   Scenario Outline: Verify Data count for BCS Core delta_current_exclude are transferred from delta_current and current_history tables
     Given Get the BCSCore total count difference between delta current and transform current history Table <TargetTable>
     Then Get the BCSCore <TargetTable> exclude data count
@@ -122,7 +117,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
     And  Compare the records of Exclude with diff of delta_current and current_hist tables <TargetTable>
     Examples:
       |FirstSourceTable                           |SecondSourceTable                                            |TargetTable                                          |countOfRandomIds |
-     |etl_delta_current_accountable_product       |etl_transform_history_accountable_product_part               |etl_transform_history_accountable_product_excl_delta |50              |
+      |etl_delta_current_accountable_product       |etl_transform_history_accountable_product_part               |etl_transform_history_accountable_product_excl_delta |50              |
       |etl_delta_current_manifestation            |etl_transform_history_manifestation_part                     |etl_transform_history_manifestation_excl_delta       |50              |
       |etl_delta_current_person                   |etl_transform_history_person_part                            |etl_transform_history_person_excl_delta              |50              |
       |etl_delta_current_product                  |etl_transform_history_product_part                           |etl_transform_history_product_excl_delta             |50              |
@@ -131,8 +126,6 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
       |etl_delta_current_work                     |etl_transform_history_work_part                              |etl_transform_history_work_excl_delta                |50              |
       |etl_delta_current_work_identifier          |etl_transform_history_work_identifier_part                   |etl_transform_history_work_identifier_excl_delta     |50              |
       |etl_delta_current_manifestation_identifier |etl_transform_history_manifestation_identifier_part          |etl_transform_history_manifestation_identifier_excl_delta |50              |
-
-
 
     @BCSCore
     Scenario Outline: Verify Data count for BCSCore delta_latest tables are transferred from delta_current and Current_Exclude tables
