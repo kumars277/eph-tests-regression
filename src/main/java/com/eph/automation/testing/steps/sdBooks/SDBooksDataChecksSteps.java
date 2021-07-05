@@ -646,7 +646,7 @@ public class SDBooksDataChecksSteps {
         }
     }
 
-    @When("^Get the records from the difference of SD Delta_current_url and url_history$")
+    @When("^we get the records from the difference of SD Delta_current_url and url_history$")
     public void getDiffDeltaAndCurrentHist() {
         Log.info("We get the Difference of Delta and Current Hist URL records...");
         sql = String.format(SDBooksDataChecksSQL.GET_REC_DIFF_DELTA_CURR_HIST_URL, Joiner.on("','").join(Ids));
