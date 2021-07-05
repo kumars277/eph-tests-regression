@@ -13,12 +13,12 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
     Given We get the <countOfRandomIds> random ISBN ids <tableName>
     When  Get the records from data inbound for URL
     Then  Get the records from transform SD current URL
-    And   Compare the records of Inbound and current URL
+    And   compare the records of Inbound and current URL
     Examples:
       | tableName                        |    countOfRandomIds|
       |sdbooks_inbound_part              |50                |
 
-
+@notUsed
   Scenario Outline: Verify Data for SD transform_current_history tables are transferred from transformed_current tables
     Given We know the total count of Current SD data
     Then Get the count of SD transform_current_history
@@ -26,7 +26,7 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
     Given We get the <countOfRandomIds> random ISBN ids <sourceTable>
     When Get the records from transform SD current URL
     Then We Get the records from transform SD url History <sourceTable>
-    And Compare the records of SD current url and SD current url history
+    And compare the records of SD current url and SD current url history
     Examples:
       | sourceTable                   | countOfRandomIds      |
       |sdbooks_transform_current_urls |   50                 |
@@ -39,12 +39,12 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
     Given We get the <countOfRandomIds> random ISBN ids <sourceTable>
     When Get the records from transform SD current URL
     Then We Get the records from transform File SD url <sourceTable>
-    And Compare the records of SD current url and SD transform file url history
+    And compare the records of SD current url and SD transform file url history
     Examples:
       | sourceTable                             | countOfRandomIds      |
       |sdbooks_transform_file_history_urls_part |   50                 |
 
-
+@notUsed
      Scenario Outline: Verify Data for SDBooks delta_current tables are transferred from Current and Previous tables
       Given Get the difference of total count between current and previous time stamps of transform_file of SDbooks data
       Then We know the delta current count for Sdbooks tables
@@ -52,12 +52,12 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
        Given We get the <countOfRandomIds> random ISBN ids <sourceTable>
        When Get the records from SDBooks for Delta Current Url
        Then We Get the data from the difference of SD Current and Previous transform_file table
-       And Compare the records of SD delta url with difference of current and previous transform_file
+       And compare the records of SD delta url with difference of current and previous transform_file
        Examples:
          | sourceTable              | countOfRandomIds|
          |sdbooks_delta_current_urls| 50               |
 
-
+@notUsed
       Scenario Outline: Verify Data count for SDBooks delta_current_history tables are transferred from delta_current_work tables
         Given We know the delta current count for Sdbooks tables
         Then Get the count of SDBook delta current history table
@@ -65,7 +65,7 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
         Given We get the <countOfRandomIds> random ISBN ids <sourceTable>
         When Get the records from SDBooks for Delta Current Url
         Then We Get the records from SD transform Delta Current History
-        And Compare the records of SDBooks delta Current and delta Current history
+        And compare the records of SDBooks delta Current and delta Current history
         Examples:
           | sourceTable                   | countOfRandomIds|
           |sdbooks_delta_history_urls_part| 50                 |
@@ -78,7 +78,7 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
       Given We get the <countOfRandomIds> random ISBN ids <tableName>
       When Get the records from the addition of SDbooks Delta_URL and URL_Exclude
       Then Get the records from SDbooks URL latest table
-      And  Compare the records of SDbooks URL Latest with addition of Delta_current_Person and Person_Exclude
+      And  compare the records of SDbooks URL Latest with addition of Delta_current_Person and Person_Exclude
       Examples:
         |tableName                                | countOfRandomIds|
         |sdbooks_transform_latest_urls               |50                 |
@@ -91,7 +91,7 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
     Given We get the <countOfRandomIds> random ISBN ids <tableName>
     When Get the records from the difference of SD Delta_current_url and url_history
     Then We know the records from SDBooks URL Excl Table
-    And  Compare the records of SD url Exclude with difference of Delta_current_url and url_history
+    And  compare the records of SD url Exclude with difference of Delta_current_url and url_history
     Examples:
       |tableName                                | countOfRandomIds|
       |sdbooks_transform_history_excl_delta     |50                |

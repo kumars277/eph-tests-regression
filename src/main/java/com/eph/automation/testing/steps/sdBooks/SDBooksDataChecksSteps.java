@@ -81,7 +81,7 @@ public class SDBooksDataChecksSteps {
         dataQualitySDContext.recordsFromCurrentUrl = DBManager.getDBResultAsBeanList(sql, SDBooksDLAccessObject.class, Constants.AWS_URL);
     }
 
-    @And("^Compare the records of Inbound and current URL$")
+    @And("^compare the records of Inbound and current URL$")
     public void compareDataFullandCurrentUrl() {
         if (dataQualitySDContext.recordsFromInboundData.isEmpty()) {
             Log.info("No Data Found ....");
@@ -210,7 +210,7 @@ public class SDBooksDataChecksSteps {
         Log.info(sql);
     }
 
-    @And("^Compare the records of SD current url and SD current url history$")
+    @And("^compare the records of SD current url and SD current url history$")
     public void compareDataCurrentAndHistUrl() {
         if (dataQualitySDContext.recordsFromCurrentUrl.isEmpty()) {
             Log.info("No Data Found ....");
@@ -310,7 +310,7 @@ public class SDBooksDataChecksSteps {
         }
     }
 
-    @And("^Compare the records of SD current url and SD transform file url history$")
+    @And("^compare the records of SD current url and SD transform file url history$")
     public void compareDataCurrentAndTransformFile() {
         if (dataQualitySDContext.recordsFromCurrentUrl.isEmpty()) {
             Log.info("No Data Found ....");
@@ -535,7 +535,7 @@ public class SDBooksDataChecksSteps {
         dataQualitySDContext.recordsFromDiffCurrentAndPreviousUrl = DBManager.getDBResultAsBeanList(sql, SDBooksDLAccessObject.class, Constants.AWS_URL);
     }
 
-    @And("^Compare the records of SD delta url with difference of current and previous transform_file$")
+    @And("^compare the records of SD delta url with difference of current and previous transform_file$")
     public void compareDataDeltaCurrentUrl() {
         if (dataQualitySDContext.recordsFromDiffCurrentAndPreviousUrl.isEmpty()) {
             Log.info("No Data Found ....");
@@ -662,7 +662,7 @@ public class SDBooksDataChecksSteps {
         dataQualitySDContext.recordsFromExcludeUrl = DBManager.getDBResultAsBeanList(sql, SDBooksDLAccessObject.class, Constants.AWS_URL);
     }
 
-    @And("^Compare the records of SD url Exclude with difference of Delta_current_url and url_history$")
+    @And("^compare the records of SD url Exclude with difference of Delta_current_url and url_history$")
     public void compareExcludeDataUrl() {
         if (dataQualitySDContext.recordsFromDiffDeltaAndCurrentHistoryUrl.isEmpty()) {
             Log.info("No Data Found ....");
@@ -779,7 +779,7 @@ public class SDBooksDataChecksSteps {
         dataQualitySDContext.recordsFromLAtestUrl = DBManager.getDBResultAsBeanList(sql, SDBooksDLAccessObject.class, Constants.AWS_URL);
     }
 
-    @And("^Compare the records of SDbooks URL Latest with addition of Delta_current_Person and Person_Exclude$")
+    @And("^compare the records of SDbooks URL Latest with addition of Delta_current_Person and Person_Exclude$")
     public void compareLatestDataUrl() {
         if (dataQualitySDContext.recordsFromAddDeltaAndExcludeUrl.isEmpty()) {
             Log.info("No Data Found ....");
@@ -889,7 +889,7 @@ public class SDBooksDataChecksSteps {
         dataQualitySDContext.recordsFromDeltaCurrUrlHistory = DBManager.getDBResultAsBeanList(sql, SDBooksDLAccessObject.class, Constants.AWS_URL);
     }
 
-    @And("^Compare the records of SDBooks delta Current and delta Current history$")
+    @And("^compare the records of SDBooks delta Current and delta Current history$")
     public void compareDeltaCurrHist() {
         if (dataQualitySDContext.recordsFromDeltaCurrentUrl.isEmpty()) {
             Log.info("No Data Found ....");
