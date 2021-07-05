@@ -717,7 +717,7 @@ public class JRBIDataChecksSteps {
 
 */
 
-    @And("^compare the records of Exclude with difference of Delta_current and current_history(.*)$")
+    @And("^Compare the records of Exclude with difference of Delta_current and current_history(.*)$")
     public void compareExcludeWork(String table) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (dataQualityJRBIContext.recordsFromDiffDeltaAndHistory.isEmpty()) {
             Log.info("No Data Found ....");

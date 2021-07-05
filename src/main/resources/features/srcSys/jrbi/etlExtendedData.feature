@@ -3,7 +3,6 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
   #confluence Version: v.3
   #Confluence LinK: https://confluence.cbsels.com/pages/viewpage.action?pageId=168466078
 
-
   @JRBIETLExtended
   Scenario Outline: Verify Data Count for JRBI transform_Current_tables is transferred from Source Table
     Given Get the total count of JRBI Data from Full Load <tableName>
@@ -12,7 +11,7 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
     Given We get the<countOfRandomIds> random EPR ids from full load<tableName>
     When We get the records from data jrbi_journal_data_full <tableName>
     Then We get the records from transform <tableName>
-    And Compare the records of jrbi_journal_data_full and transform current <tableName>
+    And compare the records of jrbi_journal_data_full and transform current <tableName>
     Examples:
       | tableName                                |    countOfRandomIds  |
       |jrbi_transform_current_work               | 10                   |
@@ -28,7 +27,7 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
     Given We get the <countOfRandomIds> random EPR ids from <SourceTableName>
     When  We get the records from transform <SourceTableName>
     Then Get the records from transform history <TargettableName>
-    And Compare the records of <SourceTableName> and <TargettableName>
+    And compare the records of <SourceTableName> and <TargettableName>
     Examples:
       |SourceTableName                      |TargettableName                                  | countOfRandomIds   |
       |jrbi_transform_current_work          |jrbi_transform_current_work_history_part         |   10                |
@@ -43,7 +42,7 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
     Given We get the <countOfRandomIds> random EPR ids from <SourceTableName>
     When  We get the records from transform <SourceTableName>
     Then Get the records from transform history <TargettableName>
-    And Compare the records of <SourceTableName> and <TargettableName>
+    And compare the records of <SourceTableName> and <TargettableName>
     Examples:
       |SourceTableName                      |TargettableName                                    |  countOfRandomIds         |
       |jrbi_transform_previous_work         |jrbi_transform_previous_work_history_part          |     10                    |
@@ -75,7 +74,7 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
     Given We get the <countOfRandomIds> random EPR ids from <TargetTable>
     When Get the records from the difference of <FirstSourceTable> and <SecondSourceTable>
     And We get the records from transform <TargetTable>
-    And  compare the records of Exclude with difference of Delta_current and current_history<TargetTable>
+    And  Compare the records of Exclude with difference of Delta_current and current_history<TargetTable>
     Examples:
       |FirstSourceTable                 |SecondSourceTable                                 |TargetTable                               |countOfRandomIds  |
       |jrbi_delta_current_work          |jrbi_transform_current_work_history_part          |jrbi_transform_history_work_excl_delta    |10                |
