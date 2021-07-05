@@ -51,7 +51,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
     Given Get the <countOfRandomIds> of BCS Core data from Current Tables <sourceTable>
     When Get the Data from the BCS Core Current Tables <sourceTable>
     Then We Get the records from transform BCS Current History <targetTable>
-    And compare the records of BCS Core current and BCS Current_History <targetTable>
+    And we compare the records of BCS Core current and BCS Current_History <targetTable>
     Examples:
       | sourceTable                           |  targetTable                                        |countOfRandomIds     |
       | etl_accountable_product_current_v     |  etl_transform_history_accountable_product_part     |   50                |
@@ -72,7 +72,7 @@ Feature:Validate data count for BCS ETL Core in Data Lake Access Layer
     Given Get the <countOfRandomIds> of BCS Core data from Current Tables <sourceTable>
     When Get the Data from the BCS Core Current Tables <sourceTable>
     Then We Get the records from transform BCS Transform_File <targetTable>
-    And compare the records of BCS Core current and BCS Transform_File <targetTable>
+    And we compare the records of BCS Core current and BCS Transform_File <targetTable>
     Examples:
       | sourceTable                            |  targetTable                                                   |countOfRandomIds     |
       | etl_accountable_product_current_v      |  etl_accountable_product_transform_file_history_part           |   50                |
