@@ -8,9 +8,9 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
     Then  We know the total count of Current SD data
     And Compare count of SD Full load with current table are identical
     Given We get the <countOfRandomIds> random ISBN ids <tableName>
-    When  Get the records from data inbound for URL
-    Then  Get the records from transform SD current URL
-    And   compare the records of Inbound and current URL
+    When Get the records from data inbound for URL
+    Then Get the records from transform SD current URL
+    And  we compare records of Inbound and current URL
     Examples:
       | tableName                        |    countOfRandomIds|
       |sdbooks_inbound_part              |50                |
@@ -23,7 +23,7 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
     Given We get the <countOfRandomIds> random ISBN ids <sourceTable>
     When Get the records from transform SD current URL
     Then We Get the records from transform SD url History <sourceTable>
-    And compare the records of SD current url and SD current url history
+    And we compare records of SD current url and SD current url history
     Examples:
       | sourceTable                   | countOfRandomIds      |
       |sdbooks_transform_current_urls |   50                 |
@@ -36,7 +36,7 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
     Given We get the <countOfRandomIds> random ISBN ids <sourceTable>
     When Get the records from transform SD current URL
     Then We Get the records from transform File SD url <sourceTable>
-    And compare the records of SD current url and SD transform file url history
+    And we compare records of SD current url and SD transform file url history
     Examples:
       | sourceTable                             | countOfRandomIds      |
       |sdbooks_transform_file_history_urls_part |   50                 |
@@ -62,7 +62,7 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
         Given We get the <countOfRandomIds> random ISBN ids <sourceTable>
         When Get the records from SDBooks for Delta Current Url
         Then We Get the records from SD transform Delta Current History
-        And compare the records of SDBooks delta Current and delta Current history
+        And we compare the records of SDBooks delta Current and delta Current history
         Examples:
           | sourceTable                   | countOfRandomIds|
           |sdbooks_delta_history_urls_part| 50                 |
@@ -75,7 +75,7 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
       Given We get the <countOfRandomIds> random ISBN ids <tableName>
       When Get the records from the addition of SDbooks Delta_URL and URL_Exclude
       Then Get the records from SDbooks URL latest table
-      And  compare the records of SDbooks URL Latest with addition of Delta_current_Person and Person_Exclude
+      And we compare records of SDbooks URL Latest with addition of Delta_current_Person and Person_Exclude
       Examples:
         |tableName                                | countOfRandomIds|
         |sdbooks_transform_latest_urls               |50                 |
@@ -88,7 +88,7 @@ Feature:Validate data count for SDBooks in Data Lake Access Layer
     Given We get the <countOfRandomIds> random ISBN ids <tableName>
     When we get the records from the difference of SD Delta_current_url and url_history
     Then We know the records from SDBooks URL Excl Table
-    And  compare the records of SD url Exclude with difference of Delta_current_url and url_history
+    And we compare the records of SD url Exclude with difference of Delta_current_url and url_history
     Examples:
       |tableName                                | countOfRandomIds|
       |sdbooks_transform_history_excl_delta     |50                |
