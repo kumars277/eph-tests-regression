@@ -2560,43 +2560,71 @@ public class JMETLDataChecksSQL {
     public static String GET_SEMARCHY_GD_ACCOUNTABLE_PRODUCT = "select * from semarchy_eph_mdm.gd_accountable_product where gl_product_segment_code like ('%s')";
 
 //    SemarchySource Table IDs
-    public static String GET_ALL_MANIFESTATION_IDENTIFIERS_IDs = "select identifier as IDENTIFIER from "+GetJMDLDBUser.getProdStagingDataBase()+".%s where delete_flag not in (TRUE) order by rand() limit %s";
+    public static String GET_ALL_MANIFESTATION_IDENTIFIERS_IDs = "select identifier as IDENTIFIER from "+GetJMDLDBUser.getProdStagingDataBase()+".all_manifestation_identifiers_v where delete_flag not in (TRUE) order by rand() limit %s";
+    public static String GET_ALL_MANIFESTATION_IDENTIFIERS_COUNT = "select COUNT(*) AS Source_Count from "+GetJMDLDBUser.getProdStagingDataBase()+".all_manifestation_identifiers_v where delete_flag not in (TRUE)";
     public static String GET_ALL_External_Reference_IDs = "select external_reference as EXTERNAL_REFERENCE from "+GetJMDLDBUser.getProdStagingDataBase()+".%s where delete_flag not in (TRUE) order by rand() limit %s";
     public static String GET_ALL_WORK_IDENTIFIER_IDs = "select identifier as IDENTIFIER from "+GetJMDLDBUser.getProdStagingDataBase()+".all_work_identifier_v where delete_flag not in (true) and effective_end_date is null order by rand() limit %s";
+    public static String GET_ALL_WORK_IDENTIFIER_COUNT = "select COUNT(*) AS Source_Count from "+GetJMDLDBUser.getProdStagingDataBase()+".all_work_identifier_v where delete_flag not in (true) and effective_end_date is null";
     public static String GET_ALL_WORK_SOURCE_REFERENCE_IDs = "select external_reference as EXTERNAL_REFERENCE from "+GetJMDLDBUser.getProdStagingDataBase()+".%s where delete_flag not in (TRUE) order by rand() limit %s";
     public static String GET_ALL_PRODUCT_IDs = "select external_reference as EXTERNAL_REFERENCE from "+GetJMDLDBUser.getProdStagingDataBase()+".%s where delete_flag not in (TRUE) order by rand() limit %s";
+    public static String GET_ALL_PRODUCT_COUNT = "select COUNT(*) AS Source_Count from "+GetJMDLDBUser.getProdStagingDataBase()+".all_product_v where delete_flag not in (TRUE)";
     public static String GET_ALL_SUBJECT_AREA_IDs = "select external_reference as EXTERNAL_REFERENCE from "+GetJMDLDBUser.getProdStagingDataBase()+".all_work_subject_areas_v where delete_flag not in (TRUE) order by rand() limit %s";
+    public static String GET_ALL_SUBJECT_AREA_COUNT = "select COUNT(*) AS Source_Count from "+GetJMDLDBUser.getProdStagingDataBase()+".all_work_subject_areas_v where delete_flag not in (TRUE)";
 
     public static String GET_ALL_WORK_RELATIONSHIP_IDs = "select s_identifier as S_IDENTIFIER from semarchy_eph_mdm.gd_manifestation_identifier limit %s";
     public static String GET_ALL_WORK_SUBJECT_AREAS_IDs = "select s_identifier as S_IDENTIFIER from semarchy_eph_mdm.gd_manifestation_identifier limit %s";
     public static String GET_ALL_WORK_IDs = "select s_identifier as S_IDENTIFIER from semarchy_eph_mdm.gd_manifestation_identifier limit %s";
 
 //  Get SemarchySource Records
-    public static String GET_ALL_MANIFESTATION_IDENTIFIER = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_manifestation_identifiers_v where identifier in ('%s') order by identifier desc";
+    public static String  GET_ALL_MANIFESTATION_IDENTIFIER = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_manifestation_identifiers_v where identifier in ('%s') order by identifier desc";
     public static String GET_ALL_MANIFESTATION = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_manifestation_v where external_reference in ('%s') order by external_reference desc";
+    public static String GET_ALL_MANIFESTATION_COUNT = "select count(*) as Source_Count from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_manifestation_v";
+
     public static String GET_ALL_PERSON = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_person_v where external_reference in ('%s') order by external_reference desc";
+    public static String GET_ALL_PERSON_COUNT = "select count(*) as Source_Count from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_person_v";
     public static String GET_ALL_PRODUCT = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_product_v where external_reference in ('%s') order by external_reference desc, f_status desc";
     public static String GET_ALL_WORK_IDENTIFIER = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_identifier_v where identifier in ('%s') order by identifier";
     public static String GET_ALL_WORK_PERSON_ROLE = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_person_role_v where external_reference in ('%s') and effective_start_date >(select effective_start_date from "+ GetJMDLDBUser.getProdStagingDataBase()+".all_work_person_role_v order by effective_start_date limit 1) order by external_reference desc";
+    public static String GET_ALL_WORK_PERSON_ROLE_COUNT = "select count(*) as Source_Count from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_person_role_v where effective_start_date >(select effective_start_date from "+ GetJMDLDBUser.getProdStagingDataBase()+".all_work_person_role_v order by effective_start_date limit 1)";
     public static String GET_ALL_WORK_RELATIONSHIP = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_relationship_v where external_reference in ('%s')";
+    public static String GET_ALL_WORK_RELATIONSHIP_COUNT = "select count(*) as Source_Count from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_relationship_v";
     public static String GET_ALL_WORK_SUBJECT_AREAS = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_subject_areas_v where external_reference in ('%s')";
     public static String GET_ALL_WORK = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_v where external_reference in ('%s') order by external_reference desc";
+    public static String GET_ALL_WORK_COUNT = "select count(*) as Source_Count from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_v";
     public static String GET_ALL_ACCOUNTABLE_PRODUCT = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_accountable_product_v where external_reference in ('%s') order by external_reference desc";
     public static String GET_ALL_WORK_ACCESS_MODEL = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_access_model_v where external_reference in ('%s') order by external_reference desc";
+    public static String GET_ALL_WORK_ACCESS_MODEL_COUNT = "select count(*) as Source_Count from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_access_model_v";
+
     public static String GET_ALL_WORK_BUSINESS_MODEL = "select * from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_business_model_v where external_reference in ('%s') order by external_reference";
+    public static String GET_ALL_WORK_BUSINESS_MODEL_COUNT = "select count(*) as Source_Count from "+ GetJMDLDBUser.getProdStagingDataBase() +".all_work_business_model_v";
 
 
 //Get Semarchy Records
     public static String GET_GD_MANIFESTATION_IDENTIFIER = "select * from semarchy_eph_mdm.gd_manifestation_identifier where identifier in ('%s') order by identifier desc";
+    public static String GET_GD_MANIFESTATION_IDENTIFIER_COUNT = "select count(*) as Target_Count from semarchy_eph_mdm.gd_manifestation_identifier";
+
     public static String GET_GD_MANIFESTATION = "select * from semarchy_eph_mdm.gd_manifestation where external_reference in ('%s') order by external_reference desc";
+    public static String GET_GD_MANIFESTATION_COUNT = "select count(*) as Target_Count from semarchy_eph_mdm.gd_manifestation";
+
     public static String GET_GD_PERSON = "select * from semarchy_eph_mdm.gd_person where external_reference in ('%s') order by external_reference desc";
-    public static String GET_GD_PRODUCT = "select * from semarchy_eph_mdm.gd_product where external_reference in ('%s') order by external_reference_core desc, f_status desc";
+    public static String GET_GD_PERSON_COUNT = "select count(*) as Target_Count from semarchy_eph_mdm.gd_person";
+    public static String GET_GD_PRODUCT = "select * from semarchy_eph_mdm.gd_product where external_reference in ('%s') order by external_reference desc, f_status desc";
+    public static String GET_GD_PRODUCT_COUNT = "select count(*) as Target_Count from semarchy_eph_mdm.gd_product";
     public static String GET_GD_WORK_IDENTIFIER = "select * from semarchy_eph_mdm.gd_work_identifier where identifier in ('%s') order by identifier";
+    public static String GET_GD_WORK_IDENTIFIER_COUNT = "select count(*) as Target_Count from semarchy_eph_mdm.gd_work_identifier";
     public static String GET_GD_WORK_PERSON_ROLE = "select * from semarchy_eph_mdm.gd_work_person_role where external_reference in ('%s') order by external_reference desc";
+    public static String GET_GD_WORK_PERSON_ROLE_COUNT = "select count(*) as Target_Count from semarchy_eph_mdm.gd_work_person_role";
     public static String GET_GD_WORK_RELATIONSHIP = "select * from semarchy_eph_mdm.gd_work_relationship where external_reference in ('%s')";
+    public static String GET_GD_WORK_RELATIONSHIP_COUNT = "select count(*) as Target_Count from semarchy_eph_mdm.gd_work_relationship";
     public static String GET_GD_SUBJECT_AREA = "select * from semarchy_eph_mdm.gd_subject_area where external_reference in ('%s') order by external_reference desc";
+    public static String GET_GD_SUBJECT_AREA_COUNT = "select count(*) as Target_Count from semarchy_eph_mdm.gd_subject_area";
+
     public static String GET_GD_WWORK = "select * from semarchy_eph_mdm.gd_wwork where external_reference in ('%s') order by external_reference desc";
+    public static String GET_GD_WWORK_COUNT = "select count(*) as Target_Count from semarchy_eph_mdm.gd_wwork";
     public static String GET_GD_ACCOUNTABLE_PRODUCT = "select * from semarchy_eph_mdm.gd_accountable_product where external_reference in ('%s') order by external_reference desc";
+    public static String GET_GD_ACCOUNTABLE_PRODUCT_COUNT = "select count(*) as Target_Count from semarchy_eph_mdm.gd_accountable_product";
     public static String GET_GD_WORK_ACCESS_MODEL = "select * from semarchy_eph_mdm.gd_work_access_model where external_reference in ('%s') order by external_reference desc";
+    public static String GET_GD_WORK_ACCESS_MODEL_COUNT = "select count(*) as Target_Count from semarchy_eph_mdm.gd_work_access_model";
     public static String GET_GD_WORK_BUSINESS_MODEL = "select * from semarchy_eph_mdm.gd_work_business_model where external_reference in ('%s') order by external_reference";
+    public static String GET_GD_WORK_BUSINESS_MODEL_COUNT = "select count(*) as Target_Count from semarchy_eph_mdm.gd_work_business_model";
 }

@@ -1,7 +1,11 @@
 Feature:Validate data for GD Tables
 
   @coreToGd
-  Scenario Outline: Verify that  all JM Staging data is transferred to Semarchy tables
+  Scenario Outline: Verify that  all core view is transferred to Semarchy/GD tables
+
+    Given We get the count of all core views <SourceTable>
+    Then Get the count of Gd tables <SemarchyTable>
+    And we compare count of All core Views <SourceTable> and gd tables <SemarchyTable> are identical
     Given We get the <numberOfRecords> random JM Staging ids of <SourceTable>
     When We get the JM Staging records from <SourceTable>
     Then We get the JM Semarchy records from <SemarchyTable>

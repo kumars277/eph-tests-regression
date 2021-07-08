@@ -1262,7 +1262,7 @@ public class PromisETLDataCheck {
 
     @Given("^We get the (.*) random Promis transform mapping ids of (.*)$")
     public void getRandomPromisTransformMappingIds(String numberOfRecords, String Currenttablename) {
-       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+      numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random records...");
                 sql = String.format(PromisETLDataCheckSQL.GET_UKEY_IDS, Currenttablename, numberOfRecords);
