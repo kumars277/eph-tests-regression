@@ -79,7 +79,7 @@ Feature:SDRM ETL DAG - Count Check - Validate data count between ETL Tables
     Then Get the data from sdrm transform latest product table
     And we compare the records of SDRM Delta current and History Excl delta table with SDRM transform latest product table
     Examples:
-      | tableName                        |    countOfRandomIds|
+      | tableName                                              |    countOfRandomIds|
       |sdrm_transform_latest_product_availability              |50               |
 
   @SDRM
@@ -87,7 +87,7 @@ Feature:SDRM ETL DAG - Count Check - Validate data count between ETL Tables
     Given Get the SDRM Duplicate count in <SourceTableName> table
     Then Check the SDRM count should be equal to Zero <SourceTableName>
     Examples:
-      |SourceTableName                      |
+      |SourceTableName                                      |
       |sdrm_transform_latest_product_availability           |
 
   @notUsed
@@ -100,6 +100,6 @@ Feature:SDRM ETL DAG - Count Check - Validate data count between ETL Tables
     Then Get the data from sdrm delta current product table
     And we compare the records of difference between SDRM Current and Prev file history with SDRM Delta current Product
     Examples:
-      | tableName                        |    countOfRandomIds|
+      | tableName                                                         |    countOfRandomIds|
       |sdrm_transform_file_history_product_availability_part              |50               |
 
