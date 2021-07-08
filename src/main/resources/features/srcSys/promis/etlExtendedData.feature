@@ -16,12 +16,12 @@ Feature:Validate data for Promis between transform tables
     Examples:
       |numberOfRecords  |tablename      |Currenttablename                        |
       | 5                |subject_areas  |promis_transform_current_subject_areas |
-      | 5               |pricing        |promis_transform_current_pricing        |
-      | 5               |person_roles   |promis_transform_current_person_roles   |
-      | 5               |works          |promis_transform_current_works          |
-      | 5               |metrics        |promis_transform_current_metrics        |
-      | 5               |urls           |promis_transform_current_urls           |
-      | 5               |work_rels      |promis_transform_current_work_rels      |
+     # | 5               |pricing        |promis_transform_current_pricing        |
+     # | 5               |person_roles   |promis_transform_current_person_roles   |
+     # | 5               |works          |promis_transform_current_works          |
+     # | 5               |metrics        |promis_transform_current_metrics        |
+     # | 5               |urls           |promis_transform_current_urls           |
+     # | 5               |work_rels      |promis_transform_current_work_rels      |
 
   @PROMISETL
   Scenario Outline: Verify that Promis is correct between Current and transform History tables

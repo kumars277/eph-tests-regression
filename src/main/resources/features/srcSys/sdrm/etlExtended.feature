@@ -11,7 +11,7 @@ Feature:SDRM ETL DAG - Count Check - Validate data count between ETL Tables
     Given We get the <countOfRandomIds> random SDRM ISBN ids <tableName>
     When  Get the data from sdrm inbound table
     Then  Get the data from sdrm transform current product
-    And  compare the records of SDRM Inbound and SDRM current product
+    And we compare the records of SDRM Inbound and SDRM current product
     Examples:
       | tableName                                               |countOfRandomIds |
       |sdrm_inbound_part                                        |50               |
@@ -25,7 +25,7 @@ Feature:SDRM ETL DAG - Count Check - Validate data count between ETL Tables
     Given We get the <countOfRandomIds> random SDRM ISBN ids <tableName>
     When Get the data from sdrm transform current product
     Then Get the data from sdrm transform product history
-    And compare the records of SDRM current product and SDRM transform product history
+    And we compare the records of SDRM current product and SDRM transform product history
     Examples:
       | tableName                                               |    countOfRandomIds|
       |sdrm_transform_current_product_availability              |50               |
@@ -38,7 +38,7 @@ Feature:SDRM ETL DAG - Count Check - Validate data count between ETL Tables
    Given We get the <countOfRandomIds> random SDRM ISBN ids <tableName>
     When  Get the data from sdrm transform current product
     Then Get the data from sdrm transform product file history
-    And compare the records of SDRM current product and SDRM transform product file history
+    And we compare the records of SDRM current product and SDRM transform product file history
     Examples:
       | tableName                                               |    countOfRandomIds|
       |sdrm_transform_current_product_availability              |50               |
@@ -64,7 +64,7 @@ Feature:SDRM ETL DAG - Count Check - Validate data count between ETL Tables
     Given We get the <countOfRandomIds> random SDRM ISBN ids <tableName>
     When Get the data from sdrm delta current product and Delta Product History table
     Then Get the data from sdrm history excl delta table
-    And compare the records of SDRM Delta current and Delta History table with SDRM History Excl Delta table
+    And we compare the records of SDRM Delta current and Delta History table with SDRM History Excl Delta table
     Examples:
       | tableName                                                     |    countOfRandomIds|
       |sdrm_transform_history_product_availability_part               |50                  |
@@ -77,7 +77,7 @@ Feature:SDRM ETL DAG - Count Check - Validate data count between ETL Tables
     Given We get the <countOfRandomIds> random SDRM ISBN ids <tableName>
     When Get the data from sdrm delta current product and History Excl Delta table
     Then Get the data from sdrm transform latest product table
-    And compare the records of SDRM Delta current and History Excl delta table with SDRM transform latest product table
+    And we compare the records of SDRM Delta current and History Excl delta table with SDRM transform latest product table
     Examples:
       | tableName                        |    countOfRandomIds|
       |sdrm_transform_latest_product_availability              |50               |
@@ -96,9 +96,9 @@ Feature:SDRM ETL DAG - Count Check - Validate data count between ETL Tables
     Then Get the count of SDRM delta current product availability
     And Check count of difference between current and previous timestamps of the SDRM transform file history product availability and SDRM delta current product availability are identical
     Given We get the <countOfRandomIds> random SDRM ISBN ids <tableName>
-    When  Get the data from difference between sdrm current and prev file history table
-    Then  Get the data from sdrm delta current product table
-    And  compare the records of difference between SDRM Current and Prev file history with SDRM Delta current Product
+    When Get the data from difference between sdrm current and prev file history table
+    Then Get the data from sdrm delta current product table
+    And we compare the records of difference between SDRM Current and Prev file history with SDRM Delta current Product
     Examples:
       | tableName                        |    countOfRandomIds|
       |sdrm_transform_file_history_product_availability_part              |50               |
