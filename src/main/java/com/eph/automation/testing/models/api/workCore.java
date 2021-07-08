@@ -310,14 +310,14 @@ public class workCore {
                          {
                              Log.info("workAccessModel effectiveStartDate present");
                              //need to write validation rule
-                             Assert.assertTrue(false);
+                             Assert.assertTrue(DataQualityContext.breadcrumbMessage + " workAccessModel effectiveStartDate present",false);
 
                          }
                         if(accessModel_api.get(cnt).getEffectiveEndDate()!=null)
                         {
                             Log.info("workAccessModel EffectiveEndDate present");
                             //need to write validation rule
-                            Assert.assertTrue(false);
+                            Assert.assertTrue(DataQualityContext.breadcrumbMessage + " workAccessModel effectiveEndDate present",false);
                         }
 
                         accModelFound = true;
