@@ -1165,7 +1165,7 @@ public class PromisETLDataCheckSQL {
             ", cls.priority\n" +
             ", cod.cls_cod subject_area_code\n" +
             ", cod.cls_des subject_area_name\n" +
-            ", 'promis' as subject_type_code\n" +
+            ", 'PROMIS' as subject_type_code\n" +
             ", 'Promis' as subject_type_name\n" +
             ", inf.work_type\n" +
             ", greatest(cls.inbound_ts, cod.inbound_ts) as inbound_ts\n" +

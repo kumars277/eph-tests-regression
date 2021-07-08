@@ -38,7 +38,7 @@ Feature:Validate data for  Work Ext Stitching tables in EPH
     Then Compare work Extended subj area and work Extended Stitching Table
     Examples:
       |tableName                                       |countOfRandomIds|
-      |work_extended_subject_area                           |10            |
+      |work_extended_subject_area                           |1            |
 
   @WorkExtStitching
   Scenario Outline: Verify Data from the work_extended_person_role tables transferred to Work Extended Stitching table

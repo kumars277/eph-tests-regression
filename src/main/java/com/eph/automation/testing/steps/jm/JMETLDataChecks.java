@@ -24,6 +24,12 @@ public class JMETLDataChecks {
     private static List<String> Ids;
     private static String ExternalRef;
 
+    private static String dlAllCoreSQLViewCount;
+    private static int DLAllCoreViewCount;
+    private static String gdSQLViewCount;
+    private static int gdCount;
+
+
     private static String sqlDL;
     private static String sqlJM;
     private static int JMCount;
@@ -31,7 +37,7 @@ public class JMETLDataChecks {
 
     @Given("^We get the (.*) random JMDB ids of (.*)$")
     public void getRandomJMDBIds(String numberOfRecords, String JMDBtable) {
-//  numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random IDs...");
         switch (JMDBtable) {
@@ -2445,9 +2451,120 @@ public class JMETLDataChecks {
                 }
         }
 
+
+    @Given ("^We get the count of all core views (.*)$")
+    public void getCountfromAllCore(String table){
+        switch (table) {
+            case "all_manifestation_identifiers_v":
+                Log.info("Getting Dl all_manifestation_identifiers_v Count...");
+                dlAllCoreSQLViewCount = JMETLDataChecksSQL.GET_ALL_MANIFESTATION_IDENTIFIERS_COUNT;
+                break;
+            case "all_work_identifier_v":
+                Log.info("Getting Dl all_work_identifier_v Count...");
+                dlAllCoreSQLViewCount = JMETLDataChecksSQL.GET_ALL_WORK_IDENTIFIER_COUNT;
+                break;
+            case "all_product_v":
+                Log.info("Getting Dl all_product_v Count...");
+                dlAllCoreSQLViewCount = JMETLDataChecksSQL.GET_ALL_PRODUCT_COUNT;
+                break;
+            case "all_work_subject_areas_v":
+                Log.info("Getting Dl all_work_subject_areas_v Count...");
+                dlAllCoreSQLViewCount = JMETLDataChecksSQL.GET_ALL_SUBJECT_AREA_COUNT;
+                break;
+            case "all_accountable_product_v":
+                Log.info("Getting Dl all_accountable_product_v Count...");
+                dlAllCoreSQLViewCount = JMETLDataChecksSQL.GET_ALL_SUBJECT_AREA_COUNT;
+                break;
+            case "all_manifestation_v":
+                Log.info("Getting Dl all_manifestation_v Count...");
+                dlAllCoreSQLViewCount = JMETLDataChecksSQL.GET_ALL_MANIFESTATION_COUNT;
+                break;
+            case "all_person_v":
+                Log.info("Getting Dl all_person_v Count...");
+                dlAllCoreSQLViewCount = JMETLDataChecksSQL.GET_ALL_PERSON_COUNT;
+                break;
+            case "all_work_person_role_v":
+                Log.info("Getting Dl all_work_person_role_v Count...");
+                dlAllCoreSQLViewCount = JMETLDataChecksSQL.GET_ALL_WORK_PERSON_ROLE_COUNT;
+                break;
+            case "all_work_relationship_v":
+                Log.info("Getting Dl all_work_relationship_v Count...");
+                dlAllCoreSQLViewCount = JMETLDataChecksSQL.GET_ALL_WORK_RELATIONSHIP_COUNT;
+                break;
+            case "all_work_v":
+                Log.info("Getting Dl all_work_v Count...");
+                dlAllCoreSQLViewCount = JMETLDataChecksSQL.GET_ALL_WORK_COUNT;
+                break;
+            case "all_work_access_model_v":
+                Log.info("Getting Dl all_work_access_model_v Count...");
+                dlAllCoreSQLViewCount = JMETLDataChecksSQL.GET_ALL_WORK_ACCESS_MODEL_COUNT;
+                break;
+            case "all_work_business_model_v":
+                Log.info("Getting Dl all_work_business_model_v Count...");
+                dlAllCoreSQLViewCount = JMETLDataChecksSQL.GET_ALL_WORK_BUSINESS_MODEL_COUNT;
+                break;
+
+        }
+        Log.info(dlAllCoreSQLViewCount);
+        List<Map<String, Object>> dlAllCoreViewTableCount = DBManager.getDBResultMap(dlAllCoreSQLViewCount, Constants.AWS_URL);
+        DLAllCoreViewCount = ((Long) dlAllCoreViewTableCount.get(0).get("Source_Count")).intValue();
+    }
+
+    @Then("^Get the count of Gd tables (.*)$")
+    public void getCountGdTables(String SemarchyTable) {
+        switch (SemarchyTable) {
+            case "gd_manifestation_identifier":
+                gdSQLViewCount = JMETLDataChecksSQL.GET_GD_MANIFESTATION_IDENTIFIER_COUNT;
+                break;
+            case "gd_manifestation":
+                gdSQLViewCount = JMETLDataChecksSQL.GET_GD_MANIFESTATION_COUNT;
+                break;
+            case "gd_person":
+                gdSQLViewCount = JMETLDataChecksSQL.GET_GD_PERSON_COUNT;
+                break;
+            case "gd_product":
+                gdSQLViewCount = JMETLDataChecksSQL.GET_GD_PRODUCT_COUNT;
+                break;
+            case "gd_work_identifier":
+                gdSQLViewCount = JMETLDataChecksSQL.GET_GD_WORK_IDENTIFIER_COUNT;
+                break;
+            case "gd_work_person_role":
+                gdSQLViewCount = JMETLDataChecksSQL.GET_GD_WORK_PERSON_ROLE_COUNT;
+                break;
+            case "gd_work_relationship":
+                gdSQLViewCount = JMETLDataChecksSQL.GET_GD_WORK_RELATIONSHIP_COUNT;
+                break;
+            case "gd_subject_area":
+                gdSQLViewCount = JMETLDataChecksSQL.GET_GD_SUBJECT_AREA_COUNT;
+                break;
+            case "gd_wwork":
+                gdSQLViewCount = JMETLDataChecksSQL.GET_GD_WWORK_COUNT;
+                break;
+            case "gd_accountable_product":
+                gdSQLViewCount = JMETLDataChecksSQL.GET_GD_ACCOUNTABLE_PRODUCT_COUNT;
+                break;
+            case "gd_work_access_model":
+                gdSQLViewCount = JMETLDataChecksSQL.GET_GD_WORK_ACCESS_MODEL_COUNT;
+                break;
+            case "gd_work_business_model":
+                gdSQLViewCount =JMETLDataChecksSQL.GET_GD_WORK_BUSINESS_MODEL_COUNT;
+                break;
+        }
+        Log.info(gdSQLViewCount);
+        List<Map<String, Object>> gdTableCount = DBManager.getDBResultMap(gdSQLViewCount, Constants.EPH_URL);
+        gdCount = ((Long) gdTableCount.get(0).get("Target_Count")).intValue();
+    }
+
+    @And("^we compare count of All core Views (.*) and gd tables (.*) are identical$")
+    public void compareGdandCoreCounts(String srctable, String trgtTable){
+        Log.info("The count for All core view "+srctable+" => " + DLAllCoreViewCount + " and in "+trgtTable+"  => " + gdCount);
+        Assert.assertEquals("The counts are not equal when compared with "+srctable+" and "+trgtTable,DLAllCoreViewCount, gdCount);
+    }
+
+
     @Given("^We get the (.*) random JM Staging ids of (.*)$")
     public void getRandomSemarchySourceIds(String numberOfRecords, String SourceTable) {
-  numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+     numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random records...");
         switch (SourceTable) {
@@ -2529,7 +2646,6 @@ public class JMETLDataChecks {
         }
         Log.info(sql);
         JMContext.JMObjectsFromDL = DBManager.getDBResultAsBeanList(sql, JMETLObject.class, Constants.AWS_URL);
-        System.out.println(JMContext.JMObjectsFromDL.size());
     }
 
     @Then("^We get the JM Semarchy records from (.*)$")
@@ -2608,7 +2724,7 @@ public class JMETLDataChecks {
                                     " " + strTemp + " Semarchy=" + method2.invoke(objectToCompare2));
                             if (method.invoke(objectToCompare1) != null ||
                                     (method2.invoke(objectToCompare2) != null)) {
-                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in Data Lake",
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " is missing/not found in GD Tables",
                                         method.invoke(objectToCompare1),
                                         method2.invoke(objectToCompare2));
                             }

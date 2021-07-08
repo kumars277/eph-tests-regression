@@ -3,17 +3,13 @@ package com.eph.automation.testing.models;
 import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.helper.Log;
 
-/**
- * Created by RAVIVARMANS on 11/24/2018.
- * updated by Nishant @ 18 Mar 2021 for jm UI automation
- */
 @StaticInjection
 public class TestContext {
 
     public static TestProperties getValues() {
         TestProperties testProperties = new TestProperties();
 
-          // System.setProperty("ENV","UAT");
+//          System.setProperty("ENV","UAT");
             System.setProperty("browser","chrome");
 
 

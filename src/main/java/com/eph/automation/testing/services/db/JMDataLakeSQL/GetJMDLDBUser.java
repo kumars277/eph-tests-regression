@@ -37,7 +37,7 @@ public class GetJMDLDBUser {
             }
         }else{
            //dbJMDataLake = "journalmaestro_sit";
-            dbJMDataLake = "journalmaestro_uat2";
+            dbJMDataLake = "journalmaestro_uat";
         }
         return dbJMDataLake;
     }
@@ -101,7 +101,7 @@ public class GetJMDLDBUser {
             }
         }else{
             //  dbStageProdDL = "product_staging_database_sit";
-            dbStageProdDL = "product_staging_database_uat2";
+            dbStageProdDL = "product_staging_database_uat";
         }
         return dbStageProdDL;
     }

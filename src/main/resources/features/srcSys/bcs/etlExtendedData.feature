@@ -1,10 +1,7 @@
 Feature:Validate data for BCS ETL Extended tables
 
-#  Created by Dinesh S on 17/05/2020
   #confluence link: https://confluence.cbsels.com/display/EPH/Extended+Transformed+View+Mappings
   #confluence version: v78
-
-
 
   @BCSExtended
   Scenario Outline: Verify Data for BCS Extended tables is transferred from Inbound Tables
@@ -27,7 +24,7 @@ Feature:Validate data for BCS ETL Extended tables
       | etl_product_prices_extended_current_v                   |50             |
       | etl_work_person_role_extended_current_v                 |50             |
 
-
+@notUsed
   Scenario Outline: Verify Data for BCS Extended history tables are transferred from current tables
     Given Get the total count of BCS Extended from Current Tables <sourceTable>
     Then Get the count of BCS Extended history <targetTable>
@@ -69,6 +66,7 @@ Feature:Validate data for BCS ETL Extended tables
       |etl_product_prices_extended_current_v             |etl_product_prices_extended_transform_file_history_part             |50                   |
       |etl_work_person_role_extended_current_v           |etl_work_person_role_extended_transform_file_history_part           |50                   |
 
+    @notUsed
   Scenario Outline: Verify Data for BCS Extended delta_current tables are transferred from transform_file tables
     Given Get the total count of BCS Extended transform_file by diff of current and previous timestamp <sourceTable>
     Then We know the total count of BCS Extended delta current <targetTable>
@@ -91,7 +89,7 @@ Feature:Validate data for BCS ETL Extended tables
       |etl_delta_current_extended_work_person_role            |etl_work_person_role_extended_transform_file_history_part          |50                   |
 
 
-
+@notUsed
   Scenario Outline: Verify Data from the difference of BCS Extended Delta_Current and Current_history is transferred to BCS Extended exclude table
     Given Get the BCS Extended Ext total count difference between delta current and transform current history Table <targetTable>
     Then Get the BCS Extended <targetTable> exclude data count

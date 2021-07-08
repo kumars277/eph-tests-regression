@@ -162,7 +162,7 @@ public class SDRMDataChecksSteps {
         dataQualitySDRMContext.recordsFromSDRMCurrentAndPrevFileHistoryData = DBManager.getDBResultAsBeanList(sql, SDRMDLAccessObject.class, Constants.AWS_URL);
     }
 
-    @And("^compare the records of SDRM Inbound and SDRM current product$")
+    @And("^we compare the records of SDRM Inbound and SDRM current product$")
     public void compareDataFullandCurrentProduct() {
         if (dataQualitySDRMContext.recordsFromInboundData.isEmpty()) {
             Log.info("No Data Found ....");
@@ -262,7 +262,7 @@ public class SDRMDataChecksSteps {
         }
     }
 
-    @And("^compare the records of SDRM current product and SDRM transform product history$")
+    @And("^we compare the records of SDRM current product and SDRM transform product history$")
     public void compareDataCurrentProductandProductHistory() {
         if (dataQualitySDRMContext.recordsFromCurrentProductData.isEmpty()) {
             Log.info("No Data Found ....");
@@ -353,7 +353,7 @@ public class SDRMDataChecksSteps {
         }
     }
 
-    @And("^compare the records of SDRM current product and SDRM transform product file history$")
+    @And("^we compare the records of SDRM current product and SDRM transform product file history$")
     public void compareDataCurrentProductandProductFileHistory() {
         if (dataQualitySDRMContext.recordsFromCurrentProductData.isEmpty()) {
             Log.info("No Data Found ....");
@@ -454,7 +454,7 @@ public class SDRMDataChecksSteps {
     }
 
 
-    @And("^compare the records of SDRM Delta current and Delta History table with SDRM History Excl Delta table$")
+    @And("^we compare the records of SDRM Delta current and Delta History table with SDRM History Excl Delta table$")
     public void compareExclDelta() {
         if (dataQualitySDRMContext.recordsFromDeltaCurrentAndDeltaHistoryData.isEmpty()) {
             Log.info("No Data Found ....");
@@ -557,7 +557,7 @@ public class SDRMDataChecksSteps {
         }
     }
 
-    @And("^compare the records of SDRM Delta current and History Excl delta table with SDRM transform latest product table$")
+    @And("^we compare the records of SDRM Delta current and History Excl delta table with SDRM transform latest product table$")
     public void compareLatestRecords() {
         if (dataQualitySDRMContext.recordsFromDeltaCurrentAndHistoryExclDeltaData.isEmpty()) {
             Log.info("No Data Found ....");
@@ -660,7 +660,7 @@ public class SDRMDataChecksSteps {
         }
     }
 
-    @And("^compare the records of difference between SDRM Current and Prev file history with SDRM Delta current Product$")
+    @And("^we compare the records of difference between SDRM Current and Prev file history with SDRM Delta current Product$")
     public void compareDifferencebetweenSDRMCurrentAndPrevFileHistory() {
         if (dataQualitySDRMContext.recordsFromSDRMCurrentAndPrevFileHistoryData.isEmpty()) {
             Log.info("No Data Found ....");
