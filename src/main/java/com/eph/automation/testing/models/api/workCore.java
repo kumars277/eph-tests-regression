@@ -252,7 +252,13 @@ public class workCore {
 
         */
 
-        if (societyOwnership != null | this.workDataObjectsFromEPHGD.get(0).getSOCIETY_OWNERSHIP() != null) {
+        /*by Nishant @ 08 Jul 2021
+            //https://elsevier.atlassian.net/wiki/spaces/EPH/pages/89739620223/2021-06-08+-+OA+Type+Decommission+Part+2+DAG+Talend
+        as per above story, openAccessType and societyOwnership should have null value at work level.
+        changing script accordingly.
+        */
+        /*
+            if (societyOwnership != null | this.workDataObjectsFromEPHGD.get(0).getSOCIETY_OWNERSHIP() != null) {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - societyOwnership", societyOwnership.get("code"), this.workDataObjectsFromEPHGD.get(0).getSOCIETY_OWNERSHIP());
             printLog("societyOwnership code");
 
@@ -262,7 +268,10 @@ public class workCore {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - societyOwnership", societyOwnership.get("ownershipRollUp"), getSocietyOwnershipRollUp(societyOwnership.get("code").toString()));
             printLog("societyOwnership Rollup");
         }
+            */
 
+        Assert.assertEquals(DataQualityContext.breadcrumbMessage+" - societyOwnership ","null",societyOwnership);
+            printLog("societyOwnership");
         if (legalOwnership != null | this.workDataObjectsFromEPHGD.get(0).getLEGAL_OWNERSHIP() != null) {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - legalOwnership", legalOwnership.get("code"), this.workDataObjectsFromEPHGD.get(0).getLEGAL_OWNERSHIP());
             printLog("legalOwnership code");
@@ -366,7 +375,7 @@ public class workCore {
             }
         }
 
-        Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - openAccessType",openAccessType.get("code"), this.workDataObjectsFromEPHGD.get(0).getOPEN_ACCESS_TYPE());
+        Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - openAccessType","null",openAccessType.get("code"));
         printLog("openAccessType code");
 
         Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - pmc",pmc.getCode(), this.workDataObjectsFromEPHGD.get(0).getPMC());

@@ -165,12 +165,12 @@ Feature: Product Finder production smoke tests
       Given user is on Product/Journal Finder search page <ui>
       And verify links on home page
       When Searches for given <keyword>
-      And verify links on Search Result page - works
-      Then Search items are listed and click an id from the result
-      And validate links on work overview page
-      Examples:
-        |ui   |keyword    |
-        |PF   |math       |
+    And verify links on Search Result page - works
+    Then Search items are listed and click an id from the result
+    And validate links on work overview page
+    Examples:
+      |ui   |keyword    |
+      |PF   |math       |
    #     |JF   |clinic     |
 
   Scenario Outline: Verify any broken link on PF - manifestation

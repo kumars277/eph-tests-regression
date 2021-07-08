@@ -43,16 +43,16 @@ public class WorksMatchedApiObject {
     }
 
 
-    public String getWorkEdition() {
+    public String getWorkEdition() {return items[0].getId(); }
 
+    public void printWorkEdition() {
+
+        Log.info("************************");
         System.out.println(
-          "   work ID : "+items[0].getId()
-        +"\nMaster ISBN : "+items[0].getWorkExtended().getMasterISBN()
-        +"\nEdition no. : "+items[0].getWorkCore().getEditionNumber()
-);
-
-
-return items[0].getId();
+                "   work ID : "+items[0].getId()
+                        +"\nMaster ISBN : "+items[0].getWorkExtended().getMasterISBN()
+                        +"\nEdition no. : "+items[0].getWorkCore().getEditionNumber()
+        );
 
     }
 

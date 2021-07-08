@@ -130,20 +130,31 @@ public class specificScenariosSteps {
 
   @Given("^get create relationship hirarchy (.*)$")
   public void createRelationshipHirarchy(String maniIsbn) {
-    WorksMatchedApiObject returnedWorks = null;
-    List<String> workId = new ArrayList<>();
     try {
-      returnedWorks = apiService.searchForWorksBySearchOptionResult(maniIsbn);
+      List<Map<?, ?>> randomWorkId = getRandomWorkWithEdi(10);
 
-      workId.add(returnedWorks.getWorkEdition());
-      while (!workId.isEmpty()) {
-        workId = getParentRelationship(workId);
-      }
+      WorksMatchedApiObject returnedWorks = null;
+      List<String> workId = new ArrayList<>();
+
+      for (int i = 0; i < randomWorkId.size(); i++) {
+
+        returnedWorks =
+            apiService.searchForWorksBySearchOptionResult(
+                randomWorkId.get(i).get("f_parent").toString());
+
+        returnedWorks.printWorkEdition();
 
         workId.add(returnedWorks.getWorkEdition());
-      while (!workId.isEmpty()) {
-        workId = getChildRelationship(workId);
-}
+        while (!workId.isEmpty()) {
+          workId = getParentRelationship(workId);
+        }
+
+        workId.add(returnedWorks.getWorkEdition());
+        while (!workId.isEmpty()) {
+          workId = getChildRelationship(workId);
+        }
+      }
+
     } catch (AzureOauthTokenFetchingException e) {
       e.printStackTrace();
     }
@@ -157,10 +168,19 @@ public class specificScenariosSteps {
     }
   }
 
-  public List<String> getParentRelationship(List<String> workId) {
-      List<String> parents = new ArrayList<>();
+  public List<Map<?, ?>> getRandomWorkWithEdi(int noOfId) {
+    String sql =
+        "select f_parent from semarchy_eph_mdm.gd_work_relationship where f_relationship_type ='EDI' order by random() limit "
+            + noOfId;
 
-    for(int itr=0;itr<workId.size();itr++){
+    List<Map<?, ?>> workId = DBManager.getDBResultMap(sql, Constants.EPH_URL);
+    return workId;
+  }
+
+  public List<String> getParentRelationship(List<String> workId) {
+    List<String> parents = new ArrayList<>();
+
+    for (int itr = 0; itr < workId.size(); itr++) {
       try {
         WorkApiObject workApi_response;
         String sql =
@@ -176,30 +196,38 @@ public class specificScenariosSteps {
         List<Map<?, ?>> relationship = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         for (int i = 0; i < relationship.size(); i++) {
-          String parentWork = relationship.get(i).get("f_parent").toString();
-          workApi_response = apiService.searchForWorkByIDResult(parentWork);
+          if (relationship.get(i).get("code").toString().equalsIgnoreCase("EDI")) {
+            String parentWork = relationship.get(i).get("f_parent").toString();
+            workApi_response = apiService.searchForWorkByIDResult(parentWork);
 
-          System.out.println(
-              "\nparent relationship"
-                  + "\nRelationship Type : " + relationship.get(i).get("f_relationship_type").toString()
-                  + "\n          work ID : " + workApi_response.getId()
-                  + "\n      Master ISBN : " + workApi_response.getWorkExtended().getMasterISBN()
-                  + "\n      Edition no. : " + workApi_response.getWorkCore().getEditionNumber()
-                  + "\n         Child Id : " + workId.get(itr)
-                  + "\n");
+            System.out.println(
+                "\nparent relationship"
+                    + "\nRelationship Type : "
+                    + relationship.get(i).get("f_relationship_type").toString()
+                    + "\n          work ID : "
+                    + workApi_response.getId()
+                    + "\n      Master ISBN : "
+                    + workApi_response.getWorkExtended().getMasterISBN()
+                    + "\n      Edition no. : "
+                    + workApi_response.getWorkCore().getEditionNumber()
+                    + "\n         Child Id : "
+                    + workId.get(itr)
+                    + "\n");
 
-          parents.add(workApi_response.getId());
+            parents.add(workApi_response.getId());
+          }
         }
 
       } catch (AzureOauthTokenFetchingException e) {
         e.printStackTrace();
       }
     }
-      return parents;
+    return parents;
   }
 
   public List<String> getChildRelationship(List<String> workId) {
-      List<String> children = new ArrayList<>();
+    List<String> children = new ArrayList<>();
+
     for (int itr = 0; itr < workId.size(); itr++) {
       try {
         WorkApiObject workApi_response;
@@ -216,22 +244,25 @@ public class specificScenariosSteps {
         List<Map<?, ?>> relationship = DBManager.getDBResultMap(sql, Constants.EPH_URL);
 
         for (int i = 0; i < relationship.size(); i++) {
-          String childWork = relationship.get(i).get("f_child").toString();
-          workApi_response = apiService.searchForWorkByIDResult(childWork);
+          if (relationship.get(i).get("code").toString().equalsIgnoreCase("EDI")) {
+            String childWork = relationship.get(i).get("f_child").toString();
+            workApi_response = apiService.searchForWorkByIDResult(childWork);
 
-          System.out.println(
-              "\nchild relationship"
-                  + "\nRelationship Type : "
-                  + relationship.get(i).get("f_relationship_type").toString()
-                  + "\n          work ID : "
-                  + workApi_response.getId()
-                  + "\n      Master ISBN : "
-                  + workApi_response.getWorkExtended().getMasterISBN()
-                  + "\n      Edition no. : "
-                  + workApi_response.getWorkCore().getEditionNumber()
-                      + "\n         Parent Id : " + workId.get(itr)
-                  + "\n");
+            System.out.println(
+                "\nchild relationship"
+                    + "\nRelationship Type : "
+                    + relationship.get(i).get("f_relationship_type").toString()
+                    + "\n          work ID : "
+                    + workApi_response.getId()
+                    + "\n      Master ISBN : "
+                    + workApi_response.getWorkExtended().getMasterISBN()
+                    + "\n      Edition no. : "
+                    + workApi_response.getWorkCore().getEditionNumber()
+                    + "\n         Parent Id : "
+                    + workId.get(itr)
+                    + "\n");
             children.add(workApi_response.getId());
+          }
         }
 
       } catch (AzureOauthTokenFetchingException e) {
@@ -239,5 +270,5 @@ public class specificScenariosSteps {
       }
     }
     return children;
-      }
+  }
 }

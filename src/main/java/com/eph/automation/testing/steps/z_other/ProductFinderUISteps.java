@@ -114,7 +114,7 @@ public class ProductFinderUISteps {
         DataQualityContext.uiUnderTest = "PF";
         productFinderTasks.openHomePage();
         //  productFinderTasks.authentication_browser();
-        //   productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
+           productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
         tasks.waitUntilPageLoad();
     }
 
