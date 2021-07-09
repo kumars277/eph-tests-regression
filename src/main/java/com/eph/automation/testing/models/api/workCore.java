@@ -270,7 +270,7 @@ public class workCore {
         }
             */
 
-        Assert.assertEquals(DataQualityContext.breadcrumbMessage+" - societyOwnership ","null",societyOwnership);
+        Assert.assertEquals(DataQualityContext.breadcrumbMessage+" - societyOwnership ",null,societyOwnership);
             printLog("societyOwnership");
         if (legalOwnership != null | this.workDataObjectsFromEPHGD.get(0).getLEGAL_OWNERSHIP() != null) {
             Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - legalOwnership", legalOwnership.get("code"), this.workDataObjectsFromEPHGD.get(0).getLEGAL_OWNERSHIP());
@@ -375,7 +375,7 @@ public class workCore {
             }
         }
 
-        Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - openAccessType","null",openAccessType.get("code"));
+        Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - openAccessType",null,openAccessType.get("code"));
         printLog("openAccessType code");
 
         Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - pmc",pmc.getCode(), this.workDataObjectsFromEPHGD.get(0).getPMC());
