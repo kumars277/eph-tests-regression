@@ -375,8 +375,8 @@ public class workCore {
             }
         }
 
-        Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - openAccessType",null,openAccessType.get("code"));
-        printLog("openAccessType code");
+      //  Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - openAccessType",null,openAccessType.get("code"));
+        //printLog("openAccessType code"); //NA from 9 Jul 2021 after decision made to nullify Open access
 
         Assert.assertEquals(DataQualityContext.breadcrumbMessage+ " - pmc",pmc.getCode(), this.workDataObjectsFromEPHGD.get(0).getPMC());
         printLog("pmc code");
