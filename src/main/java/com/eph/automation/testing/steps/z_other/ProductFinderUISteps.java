@@ -69,9 +69,10 @@ public class ProductFinderUISteps {
     private static List<Map<?, ?>> tempDBResultMap;
     private static List<String> workTypeCode;
 
-    private static String[] Book_Types = {"Books Series", "Major Ref Work", "Other Book", "Reference Book", "Serial", "Text Book"};
-    private static String[] Journal_Types = {"Abstracts Journal", "B2B Journal", "Journal", "Newsletter"};
+    private static String[] Book_Types = {"Book Set","Books Series","Major Ref work", "Non-Elsevier Book", "Other Book", "Reference Book", "Serial", "Text Book"};
+    private static String[] Journal_Types = {"Abstracts Journal", "B2B Journal", "Journal", "Newsletter","Non-Elsevier Journal"};
     private static String[] Other_Types = {"Drug Monograph", "Medical Procedure"};
+    private static String[] ck_Types = {"Flex Package", "Flex AG Package","Specialty Package"};
     String[] allWorkTypesCode = {"BKS", "MRW", "OTH", "SER", "TBK", "RBK", "ABS", "JNL", "JBB", "NWL", "DMG", "MPR"};
     private static List<ManifestationIdentifierObject> manifestationIdentifiers;
     private List<AccountableProductDataObject> accountableProductDataObjectsFromEPHGD;
@@ -97,7 +98,7 @@ public class ProductFinderUISteps {
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
-        ids.clear(); ids.add("EPR-W-10WN1D");      Log.info("hard coded work ids are : " + ids);
+        ids.clear(); ids.add("EPR-W-11R1CW");      Log.info("hard coded work ids are : " + ids);
         Assert.assertFalse("Verify That list with random ids is not empty.", ids.isEmpty());
     }
 
@@ -114,7 +115,7 @@ public class ProductFinderUISteps {
         DataQualityContext.uiUnderTest = "PF";
         productFinderTasks.openHomePage();
         //  productFinderTasks.authentication_browser();
-           productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
+         //  productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
         tasks.waitUntilPageLoad();
     }
 
@@ -123,7 +124,7 @@ public class ProductFinderUISteps {
         //Created by Nishant @ 03 Jul 2020
         DataQualityContext.uiUnderTest = "JF";
         productFinderTasks.openHomePage();
-        productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
+       // productFinderTasks.loginByScienceAccount(ProductFinderConstants.SCIENCE_ID);
         tasks.waitUntilPageLoad();
 
     }
@@ -176,7 +177,8 @@ public class ProductFinderUISteps {
 
     //for specific workid
     @And("^Verify user is forwarded to the searched work page from Search Result$")
-    public void verifyUserIsForwardedToSearchedWorkPageFromSearchResult() {
+    public void verifyUserIsForwardedToSearchedWorkPageFromSearchResult() throws InterruptedException {
+        tasks.waitUntilPageLoad();
         assertTrue(productFinderTasks.isUserOnWorkPage(ProductFinderTasks.searchResultId));
     }
 
@@ -230,6 +232,7 @@ public class ProductFinderUISteps {
     @Given("^Search for the Work by Work Ids Filter workType and verify the work Type is \"([^\"]*)\"$")
     public void verify_the_result(String chooseWorkType) {
         try {
+            int i=0;
             for (String workId : workIdList) {
                 productFinderTasks.searchFor(workId);
                 filter_Search_Result_by_workType(chooseWorkType);
@@ -241,9 +244,10 @@ public class ProductFinderUISteps {
                 assertTrue(productFinderTasks.isUserOnWorkPage(workId));
 
                 boolean isWorkTypeCorrect = verifyWorkTypeForWorkId(workId, chooseWorkType);
-                assertTrue("Work Id " + workId + " Successfully filtered by Work Type: " + chooseWorkType, isWorkTypeCorrect);
+                assertTrue(i+ "out of "+workIdList.size()+" Work Id " + workId + " Successfully filtered by Work Type: " + chooseWorkType, isWorkTypeCorrect);
 
                 productFinderTasks.openHomePage();
+                i++;
             }
             workIdList.clear();
         } catch (Exception e) {
@@ -835,9 +839,10 @@ public class ProductFinderUISteps {
         }
     }
 
-    private void getFirstIdOnPage() {//by Nishant @ 2 Jun 2020
+    private void getFirstIdOnPage() throws InterruptedException {//by Nishant @ 2 Jun 2020
 
         Log.info("looking for products on ");
+        tasks.waitUntilPageLoad();
         List<WebElement> itemInfo = tasks.findmultipleElements("XPATH", ProductFinderConstants.itemDetail);
         ArrayList<String> idFound = new ArrayList<>();
         for (int i = 0; i < itemInfo.size(); i++) {
@@ -1226,8 +1231,10 @@ public class ProductFinderUISteps {
 
             for (WorkExtendedPersons workExtendedPerson : workExtendedPersons) {
                 String extRoleName = workExtendedPerson.getExtendedRole().get("name").toString();
-                String extPersonFullName = workExtendedPerson.getExtendedPerson().get("firstName") + " " +
+               String  extPersonFullName = workExtendedPerson.getExtendedPerson().get("firstName") + " " +
                         workExtendedPerson.getExtendedPerson().get("lastName");
+
+                extPersonFullName = extPersonFullName.replace("null","");
                 String extEmailId = "";
                 if (workExtendedPerson.getExtendedPerson().get("email") != null)
                     extEmailId = workExtendedPerson.getExtendedPerson().get("email").toString();
@@ -1237,7 +1244,7 @@ public class ProductFinderUISteps {
                 for (int uiperson = 0; uiperson < productFinderTasks.list_people.size(); uiperson++) {
                     if (ignore.contains(uiperson)) continue;
                     if (productFinderTasks.list_people.get(uiperson).getProperty("Role").equalsIgnoreCase(extRoleName) &
-                            productFinderTasks.list_people.get(uiperson).getProperty("PersonName").trim().equalsIgnoreCase(extPersonFullName)) {
+                            productFinderTasks.list_people.get(uiperson).getProperty("PersonName").trim().equalsIgnoreCase(extPersonFullName.trim())) {
                         Log.info("verifying work extended person..." + extRoleName + "-" + extPersonFullName);
                         extPersonFound = true;
                         printLog("person role");
@@ -1513,16 +1520,27 @@ public class ProductFinderUISteps {
     private String getDBWorkType() {
         String DBWorkType = "";
         switch (DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TYPE()) {
-            case "BKS":DBWorkType = "Books Series";break;
-            case "MRW":DBWorkType = "Major Ref work";break;
-            case "OTH":DBWorkType = "Other Book";break;
-            case "RBK":DBWorkType = "Reference Book";break;
-            case "SER":DBWorkType = "Serial";break;
-            case "TBK":DBWorkType = "Text Book";break;
-            case "ABS":DBWorkType = "Abstracts Journal";break;
-            case "JBB":DBWorkType = "B2B Journal";break;
-            case "JNL":DBWorkType = "Journal";break;
-            case "NWL":DBWorkType = "Newsletter";break;
+            case "ABS": DBWorkType = "Abstracts Journal";break;
+            case "BKS": DBWorkType = "Books Series";break;
+            case "BST": DBWorkType = "Book Set";break;
+            case "CKFLEX": DBWorkType = "Flex Package";break;
+            case "CKFLEXAG": DBWorkType = "Flex AG Package";break;
+            case "CKSPECPKG": DBWorkType = "Specialty Package";break;
+            case "DMG": DBWorkType = "Drug Monograph";break;
+            case "FSPKG": DBWorkType = "Full Set Package";break;
+            case "JBB": DBWorkType = "B2B Journal";break;
+            case "JNL": DBWorkType = "Journal";break;
+            case "MPR": DBWorkType = "Medical Procedure";break;
+            case "MRW": DBWorkType = "Major Ref work";break;
+            case "NEB": DBWorkType = "Non-Elsevier Book";break;
+            case "NEJ": DBWorkType = "Non-Elsevier Journal";break;
+            case "NWL": DBWorkType = "Newsletter";break;
+            case "OTH": DBWorkType = "Other Book";break;
+            case "RBK": DBWorkType = "Reference Book";break;
+            case "SER": DBWorkType = "Serial";break;
+            case "TBK": DBWorkType = "Text Book";break;
+            case "UNK": DBWorkType = "Unknown";break;
+
         }
         return DBWorkType;
     }

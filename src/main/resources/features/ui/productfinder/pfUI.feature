@@ -119,9 +119,6 @@ Examples:
 
   #below scenarios can be ignored, already covered in one of the above
 
-
-
-
   @PFDMC
   Scenario Outline: Search the work and verify data model changes
     Given user is on Product Finder search page
