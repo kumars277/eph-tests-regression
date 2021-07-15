@@ -9,7 +9,7 @@ public class TestContext {
     public static TestProperties getValues() {
         TestProperties testProperties = new TestProperties();
 
-          System.setProperty("ENV","SIT");
+        //  System.setProperty("ENV","SIT");
             System.setProperty("browser","chrome");
 
 
@@ -26,8 +26,8 @@ public class TestContext {
         testProperties.environment = environment !=null ? environment : EnumConstants.ENVIRONMENTS.UAT.name();
         testProperties.targetDB = targetDB != null ? Boolean.TRUE : Boolean.FALSE;
         testProperties.s3Key = s3Key !=null ? s3Key: "Image URLs for parties.csv";
-        testProperties.rowFrom =rowFrom !=null ?rowFrom:"";//Integer.valueOf(rowFrom);
-        testProperties.rowTill =rowTill !=null ?rowTill:"";//= Integer.valueOf(rowTill);
+        testProperties.rowFrom =rowFrom !=null ?rowFrom:"";
+        testProperties.rowTill =rowTill !=null ?rowTill:"";
 
 
         return testProperties;

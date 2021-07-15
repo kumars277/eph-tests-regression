@@ -43,7 +43,7 @@ Feature: Product Finder Selenium tests
    # |Keyword|  EPH-1909 created for issue – “Product finder is not searching ‘Manifestation by keyword’.”
 
 
-  @UI @PFRegressionSuite
+  @UI @PFRegressionSuite @apiDebug
   Scenario Outline: Search the work and filter them with one Work Type
     Given Get the available Work Types from the DB "<workType>"
     Then  Get a Work Id for each Work Types available in the DB
@@ -54,8 +54,7 @@ Feature: Product Finder Selenium tests
       |Book     |
       |Journal  |
 
-
-  @UI @PFRegressionSuite @PFDMC
+  @UI @PFRegressionSuite @PFDMC @apiDebug
   Scenario Outline: Search the Product Finder and verify all 3 tabs
     Given get 1 random work id from DB
     And We get the work search data from EPH GD
@@ -73,7 +72,7 @@ Feature: Product Finder Selenium tests
     |4|
     |5|
 
-  @UI @PFRegressionSuite @PFDMC @JFUI
+  @UI @PFRegressionSuite @PFDMC @JFUI @apiDebug
   Scenario Outline: Search the Journal Finder and verify all 5 tabs
     Given We get 1 random journal ids for search
     And   We get the work search data from EPH GD
@@ -91,8 +90,7 @@ Examples:
     |4|
     |5|
 
-
-  @UI @PFRegressionSuite @JFUI
+  @UI @PFRegressionSuite @JFUI @apiDebug
   Scenario Outline: Search the Journal by person
     Given We get 5 random search ids for person roles
     And get person data from EPH DB
@@ -105,7 +103,7 @@ Examples:
    #   |personName           |
    #   |personId             |
 
-  @UI @PFRegressionSuite @JFUI
+  @UI @PFRegressionSuite @JFUI @apiDebug
   Scenario Outline: Search the Journal by PMC
     Given We get 5 random journal ids for search
     And   We get the work search data from EPH GD

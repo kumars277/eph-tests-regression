@@ -95,7 +95,7 @@ public class apiWorksSearchSteps {
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random Journal ids  : " + ids);
     // for debugging failure
-     //  ids.clear(); ids.add("EPR-W-102V6T");  Log.info("hard coded work ids are : " + ids);
+       //ids.clear();    ids.add("EPR-W-102V8J");  Log.info("hard coded work ids are : " + ids);
 
     DataQualityContext.breadcrumbMessage += "->" + ids;
     Assert.assertFalse(
@@ -239,7 +239,7 @@ public class apiWorksSearchSteps {
   }
 
   @Then("^the work details are retrieved by accountableProduct and compared$")
-  public void compareWorkByAccountableProductWithDB() throws Throwable {
+  public void compareWorkByAccountableProductWithDB() throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks;
     int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
     for (int i = 0; i < bound; i++) {
@@ -256,7 +256,7 @@ public class apiWorksSearchSteps {
   }
 
   @Then("^the work details are retrieved by workStatus and compared$")
-  public void compareWorksByWorkStatusWithDB() throws Throwable {
+  public void compareWorksByWorkStatusWithDB() {
     WorksMatchedApiObject returnedWorks;
     boolean failed = false;
     try {
@@ -285,7 +285,7 @@ public class apiWorksSearchSteps {
   }
 
   @Then("^the work details are retrieved by workType and compared$")
-  public void compareWorksByWorkTypeWithDB() throws Throwable {
+  public void compareWorksByWorkTypeWithDB() {
     WorksMatchedApiObject returnedWorks;
     boolean failed = false;
     try {
@@ -353,7 +353,7 @@ public class apiWorksSearchSteps {
   }
 
   @Then("^the work details are retrieved by search with PMC code and compared$")
-  public void compareWorkBySearchWithPMCCodeWithDB() throws Throwable {
+  public void compareWorkBySearchWithPMCCodeWithDB() {
     WorksMatchedApiObject returnedWorks;
     try{
     int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
@@ -384,7 +384,7 @@ public class apiWorksSearchSteps {
   }
 
   @Then("^the work details are retrieved by search with PMG code and compared$")
-  public void compareWorkBySearchWithPMGCodeWithDB() throws Throwable {
+  public void compareWorkBySearchWithPMGCodeWithDB() {
     WorksMatchedApiObject returnedWorks;
     try {
       int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
@@ -452,9 +452,6 @@ public class apiWorksSearchSteps {
             break;
             // implemented by Nishant @ 22 Apr 2020
           case "WORK_PRODUCT_SUMMARY_NAME":
-            // not all works has products hence need separate query
-            //    getRandomWorkIdWithProducts();
-            //    getWorksDataFromEPHGD();
             getProductDetailByWorkId(
                 dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
             returnedWorks =
@@ -1082,7 +1079,6 @@ public class apiWorksSearchSteps {
           break;
       }
 
-      // assert returnedWorks != null;
       returnedWorks.verifyWorksAreReturned();
       Log.info("Total API count matched..." + returnedWorks.getTotalMatchCount());
 
@@ -1284,7 +1280,7 @@ public class apiWorksSearchSteps {
         String.format(
             APIDataSQL.SELECT_GD_MANIFESTATION_IDENTIFIER_BY_MANIFESTATION_ID,
             Joiner.on("','").join(getManifestationIdsForWorkID(workID)));
-    //   Log.info(sql);
+
     return DBManager.getDBResultMap(sql, Constants.EPH_URL);
   }
 
