@@ -4,7 +4,7 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.BCSETL_ExtendedAccessDLContext;
-import com.eph.automation.testing.models.dao.BCS.BCS_ETLExtendedDLAccessObject;
+import com.eph.automation.testing.models.dao.bcs.BCS_ETLExtendedDLAccessObject;
 import com.eph.automation.testing.services.db.BCS_ETLExtendedSQL.BCS_ETLExtendedDataChecksSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
@@ -30,7 +30,7 @@ public class BCS_ETLExtendedDataChecksSteps {
     public void getRandomIdsFromInound(String numberOfRecords, String tableName) {
         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
-        Log.info("Get random Ids for BCS Extended Inbound Tables....");
+        Log.info("Get random Ids for bcs Extended Inbound Tables....");
         List<Map<?, ?>> randomIds;
         switch (tableName) {
             case "etl_availability_extended_current_v":
@@ -70,7 +70,7 @@ public class BCS_ETLExtendedDataChecksSteps {
 
     @When("^Get the Data from the BCS Extended Inbound Tables (.*)$")
     public void getIngestRecords(String tableName) {
-        Log.info("We get the BCS Ingest records...");
+        Log.info("We get the bcs Ingest records...");
         switch (tableName) {
             case "etl_availability_extended_current_v":
                 sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_AVAILABILITY_REC_INBOUND_DATA, Joiner.on("','").join(Ids));
@@ -106,7 +106,7 @@ public class BCS_ETLExtendedDataChecksSteps {
 
     @Then("^Data from the BCS Extended Current Tables (.*)$")
     public void getDataforInboundCheck(String tableName) {
-        Log.info("We get the records from Current BCS Extended table ...");
+        Log.info("We get the records from Current bcs Extended table ...");
         switch (tableName) {
             case "etl_availability_extended_current_v":
                 sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_AVAILABILITY_REC_CURR_DATA, Joiner.on("','").join(Ids));
@@ -145,7 +145,7 @@ public class BCS_ETLExtendedDataChecksSteps {
         if (dataQualityBCSContext.recordsFromInboundData.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
-            Log.info("Sorting the Ids to compare the records between Ingest and BCS Ext current...");
+            Log.info("Sorting the Ids to compare the records between Ingest and bcs Ext current...");
             for (int i = 0; i < dataQualityBCSContext.recordsFromInboundData.size(); i++) {
                 switch (tableName) {
                     case "etl_availability_extended_current_v":
@@ -432,7 +432,7 @@ public class BCS_ETLExtendedDataChecksSteps {
     public void getRandomIdsFromCurrent(String numberOfRecords, String tableName) {
       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
-        Log.info("Get random Ids for BCS Extended Current Tables....");
+        Log.info("Get random Ids for bcs Extended Current Tables....");
 
         switch (tableName) {
             case "etl_availability_extended_current_v":
@@ -472,7 +472,7 @@ public class BCS_ETLExtendedDataChecksSteps {
 
     @Then("^We Get the records from transform BCS Ext Current History (.*)$")
     public void getRecFromCurrentHistory(String tableName) {
-        Log.info("We get the records from Current_History BCS Extended table...");
+        Log.info("We get the records from Current_History bcs Extended table...");
         switch (tableName) {
             case "etl_transform_history_extended_availability_part":
                 sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_AVAILABILTYI_REC_CURR_HIST_DATA, Joiner.on("','").join(Ids));
@@ -794,7 +794,7 @@ public class BCS_ETLExtendedDataChecksSteps {
 
     @Then("^We Get the records from transform BCS Ext Transform_File (.*)$")
     public void getRecFromTransformFile(String tableName) {
-        Log.info("We get the records from Transform_File BCS Ext table...");
+        Log.info("We get the records from Transform_File bcs Ext table...");
         switch (tableName) {
             case "etl_availability_extended_transform_file_history_part":
                 sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_AVAILABILTYI_REC_TRANS_FILE, Joiner.on("','").join(Ids));

@@ -4,7 +4,7 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.BCSETL_ExtendedAccessDLContext;
-import com.eph.automation.testing.models.dao.BCS.BCS_ETLExtendedDLAccessObject;
+import com.eph.automation.testing.models.dao.bcs.BCS_ETLExtendedDLAccessObject;
 import com.eph.automation.testing.services.db.BCS_ETLExtendedSQL.BCS_ETLExtendedDataChecksSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
@@ -33,7 +33,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
     public void getIdsFromTransformFile(String numberOfRecords, String tableName) {
         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
-        Log.info("Get random Ids for BCS Extended Transform_File Tables....");
+        Log.info("Get random Ids for bcs Extended Transform_File Tables....");
 
         switch (tableName) {
             case "etl_availability_extended_transform_file_history_part":
@@ -72,7 +72,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
 
     @When("^Get the Data from the Difference of Current and Previous timestamp from transform_file Tables (.*)$")
     public void getRecFromDiffTransformFile(String tableName) {
-        Log.info("We get the records from Diff of Transform File BCS Extended table...");
+        Log.info("We get the records from Diff of Transform File bcs Extended table...");
         switch (tableName) {
             case "etl_availability_extended_transform_file_history_part":
                 sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_AVAILABILTIY_REC_DIFF_TRANS_FILE, Joiner.on("','").join(Ids));
@@ -109,7 +109,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
 
     @When("^Get the Data from the BCS Extended delta current (.*)$")
     public void getRecFromDeltaCurrentBCSExt(String tableName) {
-        Log.info("We get the records from Delta Current BCS Extended table...");
+        Log.info("We get the records from Delta Current bcs Extended table...");
         switch (tableName) {
             case "etl_delta_current_extended_availability":
                 sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_AVAILABILTIY_REC_DELTA_CURRENT, Joiner.on("','").join(Ids));
@@ -433,7 +433,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
     public void getIdsFromDeltaHistBCSExt(String numberOfRecords, String tableName) {
         numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
-        Log.info("Get random Ids for BCS Extended Delta History Tables....");
+        Log.info("Get random Ids for bcs Extended Delta History Tables....");
         switch (tableName) {
             case "etl_delta_history_extended_availability_part":
                 sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_RANDOM_KEY_AVAILABILITY_DELTA_CURRENT_HIST, numberOfRecords);
@@ -471,7 +471,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
 
     @When("^Get the Data for the BCS Extended Delta_Current_History Tables (.*)$")
     public void getRecFromDeltaHistBCSExt(String tableName) {
-        Log.info("We get the records from Delta Hist of BCS extended table...");
+        Log.info("We get the records from Delta Hist of bcs extended table...");
         switch (tableName) {
             case "etl_delta_history_extended_availability_part":
                 sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_AVAILABILITY_REC_DELTA_CURRENT_HIST, Joiner.on("','").join(Ids));
@@ -796,7 +796,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
     public void getIdsFromDiffOfDeltaCurrAndHistBCSExt (String numberOfRecords, String tableName){
     numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
     Log.info("numberOfRecords = " + numberOfRecords);
-    Log.info("Get random Ids for BCS Ext Tables from Diff of Delta Current and Current Hist....");
+    Log.info("Get random Ids for bcs Ext Tables from Diff of Delta Current and Current Hist....");
 
     switch (tableName) {
         case "etl_transform_history_extended_availability_excl_delta":
@@ -835,7 +835,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
 
     @When ("^Get the BCS Ext records from the diff of delta_current and current_hist tables (.*)$")
     public void getRecFromDiffDeltaCurrAndCurrHist(String tableName){
-        Log.info("We get the records from Diff of Delta Current and Current Hist of BCS Ext table...");
+        Log.info("We get the records from Diff of Delta Current and Current Hist of bcs Ext table...");
         switch (tableName) {
             case "etl_transform_history_extended_availability_excl_delta":
                 sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_AVAILABILITY_REC_DIFF_DELTACURR_CURRHIST, Joiner.on("','").join(Ids));
@@ -871,7 +871,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
 
     @When ("^Get the BCS Ext records from (.*) exclude table$")
     public void getRecFromBCSExtDeltaCurrent(String tableName){
-        Log.info("We get the records from BCS Exclude delta BCS Extended table...");
+        Log.info("We get the records from bcs Exclude delta bcs Extended table...");
         switch (tableName) {
             case "etl_transform_history_extended_availability_excl_delta":
                 sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_AVAILABILITY_REC_EXCL_DELTA, Joiner.on("','").join(Ids));
@@ -912,7 +912,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
         if (dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
-            Log.info("Sorting the Ids to compare the records for BCS Exclude tables...");
+            Log.info("Sorting the Ids to compare the records for bcs Exclude tables...");
             for (int i = 0; i < dataQualityBCSContext.recFromDiffOfDeltaAndCurrHist.size(); i++) {
                 switch (targetTableName) {
                     case "etl_transform_history_extended_availability_excl_delta":
@@ -1190,7 +1190,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
     public void  getIdsFromDiffOfDeltaCurrAndExcl(String numberOfRecords, String tableName) {
        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
-        Log.info("Get random Ids for BCS Extended Tables from Diff of Delta Current and Exclude....");
+        Log.info("Get random Ids for bcs Extended Tables from Diff of Delta Current and Exclude....");
 
         switch (tableName) {
             case "etl_transform_history_extended_availability_latest":
@@ -1230,7 +1230,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
 
     @When ("^Get the records from the sum of delta_current and exclude_delta for BCS Extended (.*)$")
     public void getRecFromDiffDeltaCurrAndExcl(String tableName){
-        Log.info("We get the records from Diff of Delta Current and Excl of BCS Extended table...");
+        Log.info("We get the records from Diff of Delta Current and Excl of bcs Extended table...");
         switch (tableName) {
             case "etl_transform_history_extended_availability_latest":
                 sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_AVAILABILITY_REC_SUM_DELTACURR_EXCL, Joiner.on("','").join(Ids));
@@ -1266,7 +1266,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
 
     @When ("^Get the records from (.*) BCS Extended latest table$")
     public void getRecFromLatest(String tableName){
-        Log.info("We get the records from Latest BCS Extended table...");
+        Log.info("We get the records from Latest bcs Extended table...");
         switch (tableName) {
             case "etl_transform_history_extended_availability_latest":
                 sql = String.format(BCS_ETLExtendedDataChecksSQL.GET_AVAILABILITY_REC_LATEST, Joiner.on("','").join(Ids));
@@ -1304,7 +1304,7 @@ public class BCS_ETLExtended_DeltaDataChecksSteps {
         if (dataQualityBCSContext.recFromSumOfDeltaAndExcl.isEmpty()) {
             Log.info("No Data Found ....");
         } else {
-            Log.info("Sorting the Ids to compare the records for BCS Latest tables...");
+            Log.info("Sorting the Ids to compare the records for bcs Latest tables...");
             for (int i = 0; i < dataQualityBCSContext.recFromSumOfDeltaAndExcl.size(); i++) {
                 switch (targetTableName) {
                     case "etl_transform_history_extended_availability_latest":

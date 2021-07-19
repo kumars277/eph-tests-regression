@@ -885,7 +885,7 @@ public class DL_ExtendedViewChecksSQL {
                     "\n" +
                     "SELECT\n" +
                     "bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    ", 'bcs' as source\n" +
                     ", bcs.producttype as product_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.application as application_name\n" +
@@ -951,7 +951,7 @@ public class DL_ExtendedViewChecksSQL {
                     "\n" +
                     "SELECT\n" +
                     "bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    ", 'bcs' as source\n" +
                     ", bcs.producttype as product_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.application as application_name\n" +
@@ -1027,7 +1027,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    ", 'bcs' as source\n" +
                     ", bcs.producttype as product_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.application as application_name\n" +
@@ -1110,7 +1110,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                 as epr_id\n" +
-                    ", 'BCS'                     as source\n" +
+                    ", 'bcs'                     as source\n" +
                     ", bcs.product_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.pricecurrency         as price_currency\n" +
@@ -1146,7 +1146,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                 as epr_id\n" +
-                    ", 'BCS'                     as source\n" +
+                    ", 'bcs'                     as source\n" +
                     ", bcs.product_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.pricecurrency         as price_currency\n" +
@@ -1195,7 +1195,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                 as epr_id\n" +
-                    ", 'BCS'                     as source\n" +
+                    ", 'bcs'                     as source\n" +
                     ", bcs.product_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.pricecurrency         as price_currency\n" +
@@ -1252,7 +1252,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    ", 'bcs' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.uktextbookind as uk_textbook_ind\n" +
@@ -1290,7 +1290,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    ", 'bcs' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.uktextbookind as uk_textbook_ind\n" +
@@ -1343,7 +1343,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    ", 'bcs' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.uktextbookind as uk_textbook_ind\n" +
@@ -1385,7 +1385,7 @@ public class DL_ExtendedViewChecksSQL {
             "select count(*) as Source_Count from (\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    ", 'bcs' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.pagecounttypecode as count_type_code\n" +
@@ -1399,7 +1399,7 @@ public class DL_ExtendedViewChecksSQL {
             "select epr_id as EPRID from (\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    ", 'bcs' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.pagecounttypecode as count_type_code\n" +
@@ -1421,7 +1421,7 @@ public class DL_ExtendedViewChecksSQL {
                     " from (\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    ", 'bcs' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.pagecounttypecode as count_type_code\n" +
@@ -1447,7 +1447,7 @@ public class DL_ExtendedViewChecksSQL {
             "select count(*) as Source_Count from (\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    ", 'bcs' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.restrictioncode as restriction_code\n" +
@@ -1459,7 +1459,7 @@ public class DL_ExtendedViewChecksSQL {
             "select epr_id as EPRID from (\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    ", 'bcs' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.restrictioncode as restriction_code\n" +
@@ -1491,7 +1491,7 @@ public class DL_ExtendedViewChecksSQL {
                     " from (\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    ", 'bcs' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.restrictioncode as restriction_code\n" +
@@ -1585,7 +1585,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    ", 'bcs' as source\n" +
                     ", bcs.work_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", CAST(null AS Boolean) journal_els_com_ind\n" +
@@ -1750,7 +1750,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    ", 'bcs' as source\n" +
                     ", bcs.work_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", CAST(null AS Boolean) journal_els_com_ind\n" +
@@ -1952,7 +1952,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    ", 'bcs' as source\n" +
                     ", bcs.work_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", CAST(null AS Boolean) journal_els_com_ind\n" +
@@ -2181,7 +2181,7 @@ public class DL_ExtendedViewChecksSQL {
                     "union all\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    ", 'bcs' as source\n" +
                     ", bcs.work_type as work_type\n" +
                     ", CAST(bcs.core_reference AS integer) as core_work_person_role_id\n" +
                     ", bcs.last_updated_date\n" +
@@ -2229,7 +2229,7 @@ public class DL_ExtendedViewChecksSQL {
                     "union all\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    ", 'bcs' as source\n" +
                     ", bcs.work_type as work_type\n" +
                     ", CAST(bcs.core_reference AS integer) as core_work_person_role_id\n" +
                     ", bcs.last_updated_date\n" +
@@ -2298,7 +2298,7 @@ public class DL_ExtendedViewChecksSQL {
                     "union all\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'BCS' as source\n" +
+                    ", 'bcs' as source\n" +
                     ", bcs.work_type as work_type\n" +
                     ", CAST(bcs.core_reference AS integer) as core_work_person_role_id\n" +
                     ", bcs.last_updated_date\n" +
@@ -2464,7 +2464,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                        as epr_id\n" +
-                    ", 'BCS'                            as source\n" +
+                    ", 'bcs'                            as source\n" +
                     ", bcs.work_type                    as work_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.subjcode                     as code\n" +
@@ -2492,7 +2492,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                        as epr_id\n" +
-                    ", 'BCS'                            as source\n" +
+                    ", 'bcs'                            as source\n" +
                     ", bcs.work_type                    as work_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.subjcode                     as code\n" +
@@ -2530,7 +2530,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                        as epr_id\n" +
-                    ", 'BCS'                            as source\n" +
+                    ", 'bcs'                            as source\n" +
                     ", bcs.work_type                    as work_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.subjcode                     as code\n" +
@@ -2573,7 +2573,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                as epr_id\n" +
-                    ", 'BCS'                    as source\n" +
+                    ", 'bcs'                    as source\n" +
                     ", bcs.work_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.urltypecode          as url_type_code\n" +
@@ -2611,7 +2611,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                as epr_id\n" +
-                    ", 'BCS'                    as source\n" +
+                    ", 'bcs'                    as source\n" +
                     ", bcs.work_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.urltypecode          as url_type_code\n" +
@@ -2658,7 +2658,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                as epr_id\n" +
-                    ", 'BCS'                    as source\n" +
+                    ", 'bcs'                    as source\n" +
                     ", bcs.work_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.urltypecode          as url_type_code\n" +

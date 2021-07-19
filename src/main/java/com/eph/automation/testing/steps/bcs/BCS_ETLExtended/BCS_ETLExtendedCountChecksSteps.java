@@ -57,39 +57,39 @@ public class BCS_ETLExtendedCountChecksSteps {
     public void getBCSExtendedCount(String tableName) {
         switch (tableName) {
             case "etl_availability_extended_current_v":
-                Log.info("Getting BCS Extended Availability Extended Current Table Count...");
+                Log.info("Getting bcs Extended Availability Extended Current Table Count...");
                 BCSExtendedSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_BCS_EXTENDED_AVAILABILITY_EXTENDED_CURR_COUNT;
                 break;
             case "etl_manifestation_extended_current_v":
-                Log.info("Getting BCS Extended Manifestation Extended Current Table Count...");
+                Log.info("Getting bcs Extended Manifestation Extended Current Table Count...");
                 BCSExtendedSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_BCS_EXTENDED_MANIFESTATION_EXTENDED_CURR_COUNT;
                 break;
             case "etl_page_count_extended_current_v":
-                Log.info("Getting BCS Extended Page Extended Current Table Count...");
+                Log.info("Getting bcs Extended Page Extended Current Table Count...");
                 BCSExtendedSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_BCS_EXTENDED_PAGE_COUNT_EXTENDED_CURR_COUNT;
                 break;
             case "etl_url_extended_current_v":
-                Log.info("Getting BCS Extended URL Extended Current Table Count...");
+                Log.info("Getting bcs Extended URL Extended Current Table Count...");
                 BCSExtendedSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_BCS_EXTENDED_URL_EXTENDED_CURR_COUNT;
                 break;
             case "etl_work_extended_current_v":
-                Log.info("Getting BCS Extended Work Extended Current Table Count...");
+                Log.info("Getting bcs Extended Work Extended Current Table Count...");
                 BCSExtendedSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_BCS_EXTENDED_WORK_EXTENDED_CURR_COUNT;
                 break;
             case "etl_work_subject_area_extended_current_v":
-                Log.info("Getting BCS Extended Work Subject Area Extended Current Table Count...");
+                Log.info("Getting bcs Extended Work Subject Area Extended Current Table Count...");
                 BCSExtendedSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_BCS_EXTENDED_WORK_SUBJECT_AREA_EXTENDED_CURR_COUNT;
                 break;
             case "etl_manifestation_restrictions_extended_current_v":
-                Log.info("Getting BCS Extended Manifestation Restrictions Extended Current Table Count...");
+                Log.info("Getting bcs Extended Manifestation Restrictions Extended Current Table Count...");
                 BCSExtendedSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_BCS_EXTENDED_MANIFESTATION_RESTRICTIONS_EXTENDED_CURR_COUNT;
                 break;
             case "etl_product_prices_extended_current_v":
-                Log.info("Getting BCS Extended Product Prices Extended Current Table Count...");
+                Log.info("Getting bcs Extended Product Prices Extended Current Table Count...");
                 BCSExtendedSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_BCS_EXTENDED_PRODUCT_PRICES_EXTENDED_CURR_COUNT;
                 break;
             case "etl_work_person_role_extended_current_v":
-                Log.info("Getting BCS Extended Work Person Role Current Table Count...");
+                Log.info("Getting bcs Extended Work Person Role Current Table Count...");
                 BCSExtendedSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_BCS_EXTENDED_WORK_PERSON_ROLE_EXTENDED_CURR_COUNT;
                 break;
         }
@@ -156,39 +156,39 @@ public class BCS_ETLExtendedCountChecksSteps {
     public void getBCSExtDeltaCurrentCount (String tableName) {
         switch (tableName){
             case "etl_delta_current_extended_availability":
-                Log.info("Getting BCS etl_delta_current_extended_availability Table Count...");
+                Log.info("Getting bcs etl_delta_current_extended_availability Table Count...");
                 BCSExtendedSQLDeltaCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_AVAILABILITY_DELTA_CURR_COUNT;
                 break;
             case "etl_delta_current_extended_manifestation":
-                Log.info("Getting BCS etl_delta_current_extended_manifestation Table Count...");
+                Log.info("Getting bcs etl_delta_current_extended_manifestation Table Count...");
                 BCSExtendedSQLDeltaCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_EXT_DELTA_CURR_COUNT;
                 break;
             case "etl_delta_current_extended_page_count":
-                Log.info("Getting BCS etl_delta_current_extended_page_count Table Count...");
+                Log.info("Getting bcs etl_delta_current_extended_page_count Table Count...");
                 BCSExtendedSQLDeltaCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_PAGE_COUNT_DELTA_CURR_COUNT;
                 break;
             case "etl_delta_current_extended_url":
-                Log.info("Getting BCS etl_delta_current_extended_url Table Count...");
+                Log.info("Getting bcs etl_delta_current_extended_url Table Count...");
                 BCSExtendedSQLDeltaCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_URL_DELTA_CURR_COUNT;
                 break;
             case "etl_delta_current_extended_work":
-                Log.info("Getting BCS etl_delta_current_extended_work Table Count...");
+                Log.info("Getting bcs etl_delta_current_extended_work Table Count...");
                 BCSExtendedSQLDeltaCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_EXT_DELTA_CURR_COUNT;
                 break;
             case "etl_delta_current_extended_work_subject_area":
-                Log.info("Getting BCS etl_delta_current_extended_work_subject_area Table Count...");
+                Log.info("Getting bcs etl_delta_current_extended_work_subject_area Table Count...");
                 BCSExtendedSQLDeltaCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_SUBJ_AREA_DELTA_CURR_COUNT;
                 break;
             case "etl_delta_current_extended_manifestation_restrictions":
-                Log.info("Getting BCS etl_delta_current_extended_manifestation_restrictions Table Count...");
+                Log.info("Getting bcs etl_delta_current_extended_manifestation_restrictions Table Count...");
                 BCSExtendedSQLDeltaCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_REST_DELTA_CURR_COUNT;
                 break;
             case "etl_delta_current_extended_product_prices":
-                Log.info("Getting BCS etl_delta_current_extended_product_prices Table Count...");
+                Log.info("Getting bcs etl_delta_current_extended_product_prices Table Count...");
                 BCSExtendedSQLDeltaCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_PROD_PRICE_DELTA_CURR_COUNT;
                 break;
             case "etl_delta_current_extended_work_person_role":
-                Log.info("Getting BCS etl_delta_current_extended_work_person_role Table Count...");
+                Log.info("Getting bcs etl_delta_current_extended_work_person_role Table Count...");
                 BCSExtendedSQLDeltaCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_PERS_ROLE_DELTA_CURR_COUNT;
                 break;
 
@@ -202,7 +202,7 @@ public class BCS_ETLExtendedCountChecksSteps {
     public void getBCSExtDeltaCurrentHistCount (String tableName) {
         switch (tableName){
             case "etl_delta_history_extended_availability_part":
-                Log.info("Getting BCS etl_delta_history_extended_availability_part Table Count...");
+                Log.info("Getting bcs etl_delta_history_extended_availability_part Table Count...");
                 BCSExtSQLDeltaCurrentHistCount = BCS_ETLExtendedCountChecksSQL.GET_AVAILABILITY_DELTA_HIST_CURR_COUNT;
                 break;
             case "etl_delta_history_extended_manifestation_part":
@@ -417,31 +417,31 @@ public class BCS_ETLExtendedCountChecksSteps {
                 BCSExtDiffDeltaAndHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_EXT_DIFF_DELTA_AND_HIST_COUNT;
                 break;
             case "etl_transform_history_extended_page_count_excl_delta":
-                Log.info("Getting BCS Diff of Delta Current and Hist for Page Count Ext Table Count...");
+                Log.info("Getting bcs Diff of Delta Current and Hist for Page Count Ext Table Count...");
                 BCSExtDiffDeltaAndHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_PAGE_COUNT_DIFF_DELTA_AND_HIST_COUNT;
                 break;
             case "etl_transform_history_extended_url_excl_delta":
-                Log.info("Getting BCS Diff of Delta Current and Hist for URL Table Count...");
+                Log.info("Getting bcs Diff of Delta Current and Hist for URL Table Count...");
                 BCSExtDiffDeltaAndHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_URL_DIFF_DELTA_AND_HIST_COUNT;
                 break;
             case "etl_transform_history_extended_work_excl_delta":
-                Log.info("Getting BCS Diff of Delta Current and Hist for work extended Table Count...");
+                Log.info("Getting bcs Diff of Delta Current and Hist for work extended Table Count...");
                 BCSExtDiffDeltaAndHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_EXT_DIFF_DELTA_AND_HIST_COUNT;
                 break;
             case "etl_transform_history_extended_work_subject_area_excl_delta":
-                Log.info("Getting BCS Diff of Delta Current and Hist for work Subject area Table Count...");
+                Log.info("Getting bcs Diff of Delta Current and Hist for work Subject area Table Count...");
                 BCSExtDiffDeltaAndHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WRK_SUBJ_AREA_DIFF_DELTA_AND_HIST_COUNT;
                 break;
             case "etl_transform_history_extended_manifestation_restrictions_excl_delta":
-                Log.info("Getting BCS Diff of Delta Current and Hist for Manif Restrition Table Count...");
+                Log.info("Getting bcs Diff of Delta Current and Hist for Manif Restrition Table Count...");
                 BCSExtDiffDeltaAndHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_MANIF_RESTRICT_DIFF_DELTA_AND_HIST_COUNT;
                 break;
             case "etl_transform_history_extended_product_prices_excl_delta":
-                Log.info("Getting BCS Diff of Delta Current and Hist for Product Price Ext Table Count...");
+                Log.info("Getting bcs Diff of Delta Current and Hist for Product Price Ext Table Count...");
                 BCSExtDiffDeltaAndHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_PROD_PRICE_DIFF_DELTA_AND_HIST_COUNT;
                 break;
             case "etl_transform_history_extended_work_person_role_excl_delta":
-                Log.info("Getting BCS Diff of Delta Current and Hist for Work person role Table Count...");
+                Log.info("Getting bcs Diff of Delta Current and Hist for Work person role Table Count...");
                 BCSExtDiffDeltaAndHistSQLCurrentCount = BCS_ETLExtendedCountChecksSQL.GET_WORK_PERS_ROLE_DIFF_DELTA_AND_HIST_COUNT;
                 break;
 

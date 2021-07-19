@@ -223,7 +223,7 @@ public class JRBIWorkDataChecksSQL {
                     ",rf_lvi as RF_LVI" +
                     ",business_unit_desc as BUSINESS_UNIT_DESC" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part where EPR in ('%s') AND " +
-                    //"transform_ts like \'%%"+BCS_ETLCoreCountChecksSQL.currentDate()+"%%\' " +
+                    //"transform_ts like \'%%"+bcsEtlCoreCountChecksSql.currentDate()+"%%\' " +
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part)\n " +
                     "AND delete_flag=false order by catalogue_issues_qty desc";
 
@@ -283,7 +283,7 @@ public class JRBIWorkDataChecksSQL {
                     ",delta_mode as DELTA_MODE" +
                     ",type as TYPE" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_work_history_part where EPR in ('%s') AND \n" +
-                    //"delta_ts like \'%%"+BCS_ETLCoreCountChecksSQL.currentDate()+"%%\'";
+                    //"delta_ts like \'%%"+bcsEtlCoreCountChecksSql.currentDate()+"%%\'";
                     "delta_ts=(select max(delta_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_work_history_part)\n " ;
 
     public static String GET_PREVIOUS_WORK_RECORDS =
@@ -327,7 +327,7 @@ public class JRBIWorkDataChecksSQL {
                     ",rf_lvi as RF_LVI" +
                     ",business_unit_desc as BUSINESS_UNIT_DESC" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part where EPR in ('%s') AND " +
-                   // "transform_ts like \'%%"+BCS_ETLCoreCountChecksSQL.previousDate()+"%%\'";
+                   // "transform_ts like \'%%"+bcsEtlCoreCountChecksSql.previousDate()+"%%\'";
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part\n " +
                     " where transform_ts < (select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part))\n" +
                     " order by catalogue_issues_qty desc\n";
@@ -343,7 +343,7 @@ public class JRBIWorkDataChecksSQL {
                     ", A.delete_flag, A.transform_ts from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work B on A.epr  = B.epr \n" +
                     "where B.epr is null and " +
-                    //"A.transform_ts like \'%%"+BCS_ETLCoreCountChecksSQL.currentDate()+"%%\')\n" +
+                    //"A.transform_ts like \'%%"+bcsEtlCoreCountChecksSql.currentDate()+"%%\')\n" +
                     "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A))\n " +
                     " order by rand() limit %s\n";
 
@@ -377,7 +377,7 @@ public class JRBIWorkDataChecksSQL {
                     ", A.delete_flag, A.transform_ts from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work B on A.epr  = B.epr \n" +
                     "where B.epr is null and " +
-                   // "A.transform_ts like \'%%"+BCS_ETLCoreCountChecksSQL.currentDate()+"%%\' " +
+                   // "A.transform_ts like \'%%"+bcsEtlCoreCountChecksSql.currentDate()+"%%\' " +
                     "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A)\n " +
                     "AND A.epr in ('%s'))\n";
 

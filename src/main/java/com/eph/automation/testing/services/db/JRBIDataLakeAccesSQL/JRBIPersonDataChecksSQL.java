@@ -117,7 +117,7 @@ public class JRBIPersonDataChecksSQL {
                     ",type as TYPE" +
                     ",delta_mode as DELTA_MODE" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_person_history_part where EPR in ('%s') AND " +
-                    //"delta_ts like \'%%"+BCS_ETLCoreCountChecksSQL.previousDate()+"%%\'";
+                    //"delta_ts like \'%%"+bcsEtlCoreCountChecksSql.previousDate()+"%%\'";
                     "delta_ts=(select max(delta_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_person_history_part)\n ";
 
 
@@ -153,7 +153,7 @@ public class JRBIPersonDataChecksSQL {
                     ",peoplehub_id as PEOPLEHUB_ID" +
                     ",email as EMAIL" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part where EPR in ('%s') AND " +
-                    //"transform_ts like \'%%"+BCS_ETLCoreCountChecksSQL.currentDate()+"%%\' " +
+                    //"transform_ts like \'%%"+bcsEtlCoreCountChecksSql.currentDate()+"%%\' " +
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part)\n " +
                     "and delete_flag=false";
 
@@ -168,7 +168,7 @@ public class JRBIPersonDataChecksSQL {
                     ",peoplehub_id as PEOPLEHUB_ID" +
                     ",email as EMAIL" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part where EPR in ('%s') AND " +
-                    //"transform_ts like \'%%"+BCS_ETLCoreCountChecksSQL.previousDate()+"%%\'";
+                    //"transform_ts like \'%%"+bcsEtlCoreCountChecksSql.previousDate()+"%%\'";
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part\n " +
                     "where transform_ts < (select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part))\n";
 
@@ -180,7 +180,7 @@ public class JRBIPersonDataChecksSQL {
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person B on A.u_key  = B.u_key\n" +
                     "where B.u_key is null and " +
-                   // "A.transform_ts like \'%%"+BCS_ETLCoreCountChecksSQL.currentDate()+"%%\')\n" +
+                   // "A.transform_ts like \'%%"+bcsEtlCoreCountChecksSql.currentDate()+"%%\')\n" +
                     "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A))\n " +
                     " order by rand() limit %s\n";
 
@@ -201,7 +201,7 @@ public class JRBIPersonDataChecksSQL {
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person B on A.u_key  = B.u_key\n" +
                     "where B.u_key is null and " +
-                   // "A.transform_ts like \'%%"+BCS_ETLCoreCountChecksSQL.currentDate()+"%%\' " +
+                   // "A.transform_ts like \'%%"+bcsEtlCoreCountChecksSql.currentDate()+"%%\' " +
                     "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A)\n " +
                     "AND A.epr in ('%s'))\n";
 

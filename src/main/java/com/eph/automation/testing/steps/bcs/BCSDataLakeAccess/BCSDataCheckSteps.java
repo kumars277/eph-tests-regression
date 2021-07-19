@@ -1,4 +1,3 @@
-//created by Nishant @ 29 Sep 2020
 package com.eph.automation.testing.steps.bcs.BCSDataLakeAccess;
 
 import com.eph.automation.testing.configuration.Constants;
@@ -6,9 +5,9 @@ import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
 import com.eph.automation.testing.models.contexts.BCSDataQualityContext;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
-import com.eph.automation.testing.models.dao.BCS.BCSCurrentTableDataObject;
-import com.eph.automation.testing.models.dao.BCS.BCSHistoryTableDataObject;
-import com.eph.automation.testing.models.dao.BCS.BCSInitialIngestDataObject;
+import com.eph.automation.testing.models.dao.bcs.BCSCurrentTableDataObject;
+import com.eph.automation.testing.models.dao.bcs.BCSHistoryTableDataObject;
+import com.eph.automation.testing.models.dao.bcs.BCSInitialIngestDataObject;
 import com.eph.automation.testing.services.db.BCSDataLakeSQL.BCSDataLakeDataCheckSQL;
 import com.google.common.base.Joiner;
 import cucumber.api.java.en.And;
@@ -1589,7 +1588,7 @@ public class BCSDataCheckSteps {
     public void getRandomIdsFromCurrentTable(String countOfRandomIds,String sourceTable) {//created by Nishant @ 26 Nov 2020
     //  countOfRandomIds = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + countOfRandomIds);
-        Log.info("getting random reference ids from BCS table " + sourceTable);
+        Log.info("getting random reference ids from bcs table " + sourceTable);
         switch (sourceTable) {
         case "stg_current_classification":
             sql = String.format(BCSDataLakeDataCheckSQL.randomId_stg_current_classification,countOfRandomIds);break;
@@ -1637,7 +1636,7 @@ public class BCSDataCheckSteps {
     @When("Get data from BCS stg_current (.*)")
     public void getDatafromBCSstgCurrentTables(String sourceTable) {//created by Nishant @ 26 Nov 2020
 
-        Log.info("We get BCS current table records...");
+        Log.info("We get bcs current table records...");
 
         switch (sourceTable) {
             case "stg_current_classification":
@@ -1735,7 +1734,7 @@ public class BCSDataCheckSteps {
     @When("Get data from BCS stg_history (.*)")
     public void getDatafromBCSstgHistoryTables(String targetTable){//created by Nishant @ 26 Nov 2020
 
-        Log.info("We get BCS history table records...");
+        Log.info("We get bcs history table records...");
 
         switch(targetTable) {
             case "stg_history_classification_part":

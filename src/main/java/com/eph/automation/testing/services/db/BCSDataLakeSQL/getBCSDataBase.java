@@ -27,7 +27,7 @@ public class getBCSDataBase {
         //  dbJRBIDL = "jrbi_staging_uat";
     }
     */
-       // Log.info("BCS DL environment : "+dbBCSDL);
+       // Log.info("bcs DL environment : "+dbBCSDL);
         return dbBCSDL;
     }
 

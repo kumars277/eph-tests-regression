@@ -621,33 +621,33 @@ public class BCSDataLakeDataCheckSQL {
                     "NULLIF(firstplanned,'')),'%%d-%%b-%%Y')) as date ) firstpublisheddate, product.binding, \n" +
                     " manifestationtypecode.ephcode manifestation_type, manifestationstatus.ephmanifestationcode status \n" +
                     "   , workprod.workmasterprojectno work_id, CAST(NULL AS timestamp) last_pub_date, 'N' dq_err \n" +
-                    "   from ((((((("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
-                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content ON (product.sourceref = content.sourceref))\n" +
-                    "   INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily workprod ON ((product.sourceref = workprod.sourceref) AND (workprod.workmasterprojectno IS NOT NULL)))\n" +
+                    "   from ((((((("+GetBcsEtlCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
+                    "   INNER JOIN "+GetBcsEtlCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content ON (product.sourceref = content.sourceref))\n" +
+                    "   INNER JOIN "+GetBcsEtlCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily workprod ON ((product.sourceref = workprod.sourceref) AND (workprod.workmasterprojectno IS NOT NULL)))\n" +
                     "   LEFT JOIN (\n" +
                     "      SELECT sourceref, classificationcode \n" +
-                    "      FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification classification\n" +
+                    "      FROM "+GetBcsEtlCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification classification\n" +
                     "      WHERE (classificationcode LIKE 'PARELIE%')\n" +
                     "   ) intedition ON (product.sourceref = intedition.sourceref))\n" +
                     "   LEFT JOIN (\n" +
                     "      SELECT sourceref, min(plannedpubdate) firstplanned \n" +
-                    "      FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation\n" +
+                    "      FROM "+GetBcsEtlCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation\n" +
                     "      WHERE (plannedpubdate <> '') GROUP BY sourceref \n" +
                     "   ) planneddates ON (product.sourceref = planneddates.sourceref))\n" +
                     "   LEFT JOIN (\n" +
                     "      select sourceref, min(pubdateactual) firstactual \n" +
-                    "      FROM "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation\n" +
+                    "      FROM "+GetBcsEtlCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation\n" +
                     "      WHERE (pubdateactual <> '') GROUP BY sourceref \n" +
                     "   )  actualdates ON (product.sourceref = actualdates.sourceref))\n" +
                     "   LEFT JOIN (\n" +
                     "      SELECT distinct sourceref, ephmanifestationcode \n" +
                     "      FROM ((SELECT sourceref, min(priority) statuspriority \n" +
-                    "         FROM ("+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation\n" +
-                    "         INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode ON (split_part(status, ' | ', 1) = ppmcode))\n" +
+                    "         FROM ("+GetBcsEtlCoreDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation\n" +
+                    "         INNER JOIN "+GetBcsEtlCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode ON (split_part(status, ' | ', 1) = ppmcode))\n" +
                     "         GROUP BY sourceref)  masterstatus\n" +
-                    "      INNER JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode ON (statuspriority = priority))\n" +
+                    "      INNER JOIN "+GetBcsEtlCoreDLDBUser.getBCS_ETLCoreDataBase()+".statuscode ON (statuspriority = priority))\n" +
                     "   )  manifestationstatus ON (product.sourceref = manifestationstatus.sourceref))\n" +
-                    "   LEFT JOIN "+GetBCS_ETLCoreDLDBUser.getBCS_ETLCoreDataBase()+".manifestationtypecode ON (split_part(product.versiontype, ' | ', 1) = manifestationtypecode.ppmcode))\n" +
+                    "   LEFT JOIN "+GetBcsEtlCoreDLDBUser.getBCS_ETLCoreDataBase()+".manifestationtypecode ON (split_part(product.versiontype, ' | ', 1) = manifestationtypecode.ppmcode))\n" +
                     ") where sourceref in ('%s') order by sourceref desc";
                     */
 

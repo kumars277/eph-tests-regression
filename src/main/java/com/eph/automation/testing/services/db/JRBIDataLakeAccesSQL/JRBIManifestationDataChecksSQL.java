@@ -77,7 +77,7 @@ public class JRBIManifestationDataChecksSQL {
                     ",journal_issue_trim_size as JOURNAL_ISSUE_TRIM_SIZE" +
                     ",war_reference as WAR_REFERENCE" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part where EPR in ('%s') AND " +
-                    //  "transform_ts like \'%%"+BCS_ETLCoreCountChecksSQL.currentDate()+"%%\' and delete_flag=false";
+                    //  "transform_ts like \'%%"+BcsEtlCoreCountChecksSql.currentDate()+"%%\' and delete_flag=false";
                     "transform_ts = (select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part)\n";
 
     public static String GET_PREVIOUS_MANIF_EPR_ID =
@@ -106,7 +106,7 @@ public class JRBIManifestationDataChecksSQL {
                     ",type as TYPE" +
                     ",delta_mode as DELTA_MODE" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_manifestation_history_part where EPR in ('%s') AND " +
-                    // "delta_ts like \'%%"+BCS_ETLCoreCountChecksSQL.currentDate()+"%%\'";
+                    // "delta_ts like \'%%"+BcsEtlCoreCountChecksSql.currentDate()+"%%\'";
                     "delta_ts = (select max(delta_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_manifestation_history_part)\n";
 
     public static String GET_PREVIOUS_MANIF_RECORDS =
@@ -127,7 +127,7 @@ public class JRBIManifestationDataChecksSQL {
                     ",journal_issue_trim_size as JOURNAL_ISSUE_TRIM_SIZE" +
                     ",war_reference as WAR_REFERENCE" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part where EPR in ('%s') AND " +
-                    //"transform_ts like \'%%"+BCS_ETLCoreCountChecksSQL.previousDate()+"%%\'";
+                    //"transform_ts like \'%%"+BcsEtlCoreCountChecksSql.previousDate()+"%%\'";
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part\n " +
                     " where transform_ts < (select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part))\n";
 
@@ -141,7 +141,7 @@ public class JRBIManifestationDataChecksSQL {
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation B on A.epr  = B.epr \n" +
                     "where B.epr is null and " +
-                    //"A.transform_ts like \'%%"+BCS_ETLCoreCountChecksSQL.currentDate()+"%%\') " +
+                    //"A.transform_ts like \'%%"+BcsEtlCoreCountChecksSql.currentDate()+"%%\') " +
                     "A.transform_ts = (select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part A))"+
                     "order by rand() limit %s\n";
 
@@ -162,7 +162,7 @@ public class JRBIManifestationDataChecksSQL {
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_manifestation B on A.epr  = B.epr \n" +
                     "where B.epr is null and " +
-                    // "A.transform_ts like \'%%"+BCS_ETLCoreCountChecksSQL.currentDate()+"%%\' " +
+                    // "A.transform_ts like \'%%"+BcsEtlCoreCountChecksSql.currentDate()+"%%\' " +
                     "A.transform_ts = (select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_manifestation_history_part A)" +
                     "AND A.epr in ('%s'))\n";
 

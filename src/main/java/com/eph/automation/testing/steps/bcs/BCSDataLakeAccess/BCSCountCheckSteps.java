@@ -49,7 +49,7 @@ public class BCSCountCheckSteps {
 
     @Then("^Get total count of BCS Current table (.*)$")
     public void getTotalCountOfBCSCurrentTable(String tableName) {
-        Log.info("getting BCS current table count...");
+        Log.info("getting bcs current table count...");
         switch (tableName){
             case "stg_current_classification":    BCSCurrentCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_CLASSIFICATION_CURRENT_COUNT;     break;
             case "stg_current_content":           BCSCurrentCount_SQL = BCSIngestVsCurrentCountCheckSQL.GET_BCS_CONTENT_CURRENT_COUNT;break;
@@ -73,7 +73,7 @@ public class BCSCountCheckSteps {
 
     @And("^Compare count of initial ingest with current table (.*)$")
     public void compareCountOfInitialIngestWithCurrentTable(String tableName) {
-        Log.info(tableName+ " : initial_ingest count = " + BCSFullSourceCount + " Vs BCS current table count = " + BCSCurrentCount);
+        Log.info(tableName+ " : initial_ingest count = " + BCSFullSourceCount + " Vs bcs current table count = " + BCSCurrentCount);
         Assert.assertEquals("counts are not equal for initial_ingest and "+tableName+"\n", BCSFullSourceCount, BCSCurrentCount);
     }
 

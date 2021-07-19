@@ -1,12 +1,13 @@
-//created by Nishant @ 30 Sep 2020
+//created by Nishant @ 21 Oct 2020
 /*there are 14 current tables where data need to be verified.
 for each table respective column variables are aligned.
 any variable already used is commented and kept as is for reference.
 */
 
-package com.eph.automation.testing.models.dao.BCS;
-public class BCSInitialIngestDataObject {
+package com.eph.automation.testing.models.dao.bcs;
 
+
+public class BCSCurrentTableDataObject {
 
     private String metadeleted;
     private String metamodifiedon;
@@ -18,7 +19,6 @@ public class BCSInitialIngestDataObject {
     private String classificationtype;
     private String priority;
     private String businessunit;
-
     //for stg_current_content
     private String originimpid;
     private String subgroup;
@@ -119,9 +119,9 @@ public class BCSInitialIngestDataObject {
     private String validto;
 
     //for stg_current_product
+    //private String isbn;
     //private String metadeleted;
     //private String metamodifiedon;
-    //private String isbn;
     //private String projectno;
     //private String sourceref;
     //private String versiontype;
@@ -255,6 +255,7 @@ public class BCSInitialIngestDataObject {
     private String status;
     private String plannedpubdate;
 
+
     //for stg_current_text
     //private String metadeleted;
     //private String metamodifiedon;
@@ -265,8 +266,7 @@ public class BCSInitialIngestDataObject {
     private String texttype;
     private String text;
 
-
-    // for stg_current_versionfamily
+    //for current versionfamily
     //private String metadeleted;
     //private String metamodifiedon;
     //private String sourceref;
@@ -274,6 +274,7 @@ public class BCSInitialIngestDataObject {
     private String workmasterprojectno;
     private String childisbn;
     private String childprojectno;
+
 
 
     public String getClassificationcode() {return classificationcode;}
@@ -299,6 +300,7 @@ public class BCSInitialIngestDataObject {
 
     public String getValue() {return value;}
     public void setValue(String value) {this.value = value;}
+
 
     public String getOriginimpid() {return originimpid;}
     public void setOriginimpid(String originimpid) {this.originimpid = originimpid;}
@@ -375,8 +377,8 @@ public class BCSInitialIngestDataObject {
     public String getVolumename() {return volumename;}
     public void setVolumename(String volumename) {this.volumename = volumename;}
 
-    public void setEditionid(String editionid) {this.editionid = editionid;}
     public String getEditionid() {return editionid;}
+    public void setEditionid(String editionid) {this.editionid = editionid;}
 
     public String getEditionno() {return editionno;}
     public void setEditionno(String editionno) {this.editionno = editionno;}
@@ -402,8 +404,8 @@ public class BCSInitialIngestDataObject {
     public String getPublisher() {return publisher;}
     public void setPublisher(String publisher) {this.publisher = publisher;}
 
-    public void setObjecttype(String objecttype) {this.objecttype = objecttype;}
     public String getObjecttype() {return objecttype;}
+    public void setObjecttype(String objecttype) {this.objecttype = objecttype;}
 
     public String getComments() {return comments;}
     public void setComments(String comments) {this.comments = comments;}
@@ -420,6 +422,7 @@ public class BCSInitialIngestDataObject {
     public String getSource() {return source;}
     public void setSource(String source) {this.source = source;}
 
+
     public String getVersiontype() {return versiontype;}
     public void setVersiontype(String versiontype) {this.versiontype = versiontype;}
 
@@ -431,6 +434,7 @@ public class BCSInitialIngestDataObject {
 
     public String getWorkmaster() {return workmaster;}
     public void setWorkmaster(String workmaster) {this.workmaster = workmaster;}
+
 
     public String getAdditionaladdress() {return additionaladdress;}
     public void setAdditionaladdress(String additionaladdress) {this.additionaladdress = additionaladdress;}
@@ -489,6 +493,7 @@ public class BCSInitialIngestDataObject {
     public String getTelephoneother() {return telephoneother;}
     public void setTelephoneother(String telephoneother) {this.telephoneother = telephoneother;}
 
+
     public String getPrefix() {return prefix;}
     public void setPrefix(String prefix) {this.prefix = prefix;}
 
@@ -536,6 +541,7 @@ public class BCSInitialIngestDataObject {
 
     public String getValidto() {return validto;}
     public void setValidto(String validto) {this.validto = validto;}
+
 
     public String getAusavailablestock() {return ausavailablestock;}
     public void setAusavailablestock(String ausavailablestock) {this.ausavailablestock = ausavailablestock;}
@@ -638,7 +644,6 @@ public class BCSInitialIngestDataObject {
 
     public String getUstotalstock() {return ustotalstock;}
     public void setUstotalstock(String ustotalstock) {this.ustotalstock = ustotalstock;}
-
 
     public String getAddillustration() {return addillustration;}
     public void setAddillustration(String addillustration) {this.addillustration = addillustration;}
@@ -855,6 +860,7 @@ public class BCSInitialIngestDataObject {
 
     public String getTexttype() {return texttype;}
     public void setTexttype(String texttype) {this.texttype = texttype;}
+
 
     public String getChildisbn() {return childisbn;}
     public void setChildisbn(String childisbn) {this.childisbn = childisbn;}

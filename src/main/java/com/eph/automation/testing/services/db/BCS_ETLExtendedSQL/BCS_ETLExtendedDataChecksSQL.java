@@ -1010,7 +1010,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                            "  concat(concat(r.sourceref, 'MARMAN'), lower(to_hex(md5(to_utf8(wd.peoplehub_id)))), '-', substr(r.responsibility, -2, 1)) u_key\n" +
                            ", NULLIF(r.sourceref, '') worksourceref\n" +
                            ", lower(to_hex(md5(to_utf8(wd.peoplehub_id)))) personsourceref\n" +
-                           ", 'BCS' source\n" +
+                           ", 'bcs' source\n" +
                            ", cr.epr eprId\n" +
                            ", cr.work_type work_type\n" +
                            ", CAST(null AS integer) core_reference\n" +
@@ -1038,7 +1038,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                            "  concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))), '-', CAST(o.sequence AS varchar)) u_key\n" +
                            ", NULLIF(o.sourceref, '') worksourceref\n" +
                            ", lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))) personsourceref\n" +
-                           ", 'BCS' source\n" +
+                           ", 'bcs' source\n" +
                            ", cr.epr eprId\n" +
                            ", cr.work_type work_type\n" +
                            ", gwp.work_person_role_id core_reference\n" +
@@ -1096,7 +1096,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                             "  concat(concat(r.sourceref, 'MARMAN'), lower(to_hex(md5(to_utf8(wd.peoplehub_id)))), '-', substr(r.responsibility, -2, 1)) u_key\n" +
                             ", NULLIF(r.sourceref, '') worksourceref\n" +
                             ", lower(to_hex(md5(to_utf8(wd.peoplehub_id)))) personsourceref\n" +
-                            ", 'BCS' source\n" +
+                            ", 'bcs' source\n" +
                             ", cr.epr eprId\n" +
                             ", cr.work_type work_type\n" +
                             ", CAST(null AS integer) core_reference\n" +
@@ -1124,7 +1124,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                             "  concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))), '-', CAST(o.sequence AS varchar)) u_key\n" +
                             ", NULLIF(o.sourceref, '') worksourceref\n" +
                             ", lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))) personsourceref\n" +
-                            ", 'BCS' source\n" +
+                            ", 'bcs' source\n" +
                             ", cr.epr eprId\n" +
                             ", cr.work_type work_type\n" +
                             ", gwp.work_person_role_id core_reference\n" +

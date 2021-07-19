@@ -1,7 +1,7 @@
 package com.eph.automation.testing.models.contexts;
 
 import com.eph.automation.testing.annotations.StaticInjection;
-import com.eph.automation.testing.models.dao.BCS.BCS_ETLExtendedDLAccessObject;
+import com.eph.automation.testing.models.dao.bcs.BCS_ETLExtendedDLAccessObject;
 
 import java.util.List;
 
