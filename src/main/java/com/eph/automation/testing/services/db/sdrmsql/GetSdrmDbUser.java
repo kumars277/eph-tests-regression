@@ -1,6 +1,10 @@
-package com.eph.automation.testing.services.db.SDRMDataLakeSQL;
+package com.eph.automation.testing.services.db.sdrmsql;
+import com.eph.automation.testing.helper.Log;
 
-public class GetSDRMDLDBUser {
+public class GetSdrmDbUser {
+
+    private GetSdrmDbUser(){
+        Log.info("sdrmdb User");}
 
     public static String getSDRMDataBase(){
         String dbSDRM = null;
@@ -10,12 +14,8 @@ public class GetSDRMDLDBUser {
             }
             else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbSDRM = "sdrm_staging_uat";
-            }else{
-                dbSDRM = "sdrm_staging_uat2";
             }
-
         }else{
-           // dbSDRM = "sdrm_staging_sit";
             dbSDRM = "sdrm_staging_uat";
         }
         return dbSDRM;
@@ -30,12 +30,9 @@ public class GetSDRMDLDBUser {
             }
             else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbProdstgDb = "product_staging_database_uat";
-            }else{
-                dbProdstgDb = "product_staging_database_uat2";
             }
         }else{
-            dbProdstgDb = "product_staging_database_sit";
-            //  dbProdDb = "product_staging_database_uat";
+            dbProdstgDb = "product_staging_database_uat";
         }
         return dbProdstgDb;
     }
@@ -50,11 +47,8 @@ public class GetSDRMDLDBUser {
             }
             else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbProdstgDb = "product_ext_database_uat";
-            }else{
-                dbProdstgDb = "product_ext_database_uat2";
             }
         }else{
-           // dbProdstgDb = "product_ext_database_sit";
               dbProdstgDb = "product_staging_database_uat";
         }
         return dbProdstgDb;
@@ -71,8 +65,7 @@ public class GetSDRMDLDBUser {
                 dbProdDb = "product_database_uat";
             }
         }else{
-            //dbProdDb = "product_database_sit";
-             dbProdDb = "product_staging_database_uat";
+             dbProdDb = "product_database_uat";
         }
         return dbProdDb;
     }

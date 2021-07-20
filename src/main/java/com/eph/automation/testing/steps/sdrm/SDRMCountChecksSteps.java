@@ -4,7 +4,7 @@ package com.eph.automation.testing.steps.sdrm;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
-import com.eph.automation.testing.services.db.SDRMDataLakeSQL.SDRMDataLakeCountCheckSQL;
+import com.eph.automation.testing.services.db.sdrmsql.SDRMDataChecksSQL;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -14,202 +14,210 @@ import java.util.Map;
 
 public class SDRMCountChecksSteps {
 
-    private static String SDRMSourceCountSQL, SDRMCurrentCountSQL, SDRMProductHistory_SQLCount, SDRMProductFileHistory_SQLCount;
-    private static int SDRMSourceCount, SDRMCurrentCount, SDRMProductHistoryCount, SDRMProductFileHistoryCount;
-    private static String SDRMDeltaCurrentCountSQL, SDRMDeltaHistoryCountSQL, SDRMDeltaCurrent_ProductHistoryCountSQL, SDRMHistoryExclDeltaCountSQL;
-    private static int SDRMDeltaCurrentCount, SDRMDeltaHistoryCount, SDRMDeltaCurrent_ProductHistoryCount, SDRMHistoryExclDeltaCount;
-    public static String SDRMDeltaCurrent_SDRMHistoryExclDeltaCountSQL, SDRMLatestProductCountSQL;
-    public static int SDRMDeltaCurrent_SDRMHistoryExclDeltaCount, SDRMLatestProductCount;
-    private static String SDRMDuplicatesLatestProductCountSQL;
-    private static int SDRMDuplicatesLatestProductCount;
-    private static String SDRMFileHistoryDifferenceSQLCount, SDRMDeltaCurrentProductSQLCount;
-    private static int SDRMFileHistoryDifferenceCount, SDRMDeltaCurrentProductCount;
+    private static String sdrmCurrCountSql;
+    private static int sdrmSourceCount;
+    private static int sdrmCurrCount;
+    private static int sdrmProductHistCount;
+    private static int sdrmProdFileHistCount;
+    private static int sdrmDeltaCurrCount;
+    private static int sdrmDeltaHistCount;
+    private static int sdrmDeltaCurrProdHistCount;
+    private static int sdrmHistExclDeltaCount;
+    private static int sdrmDeltaHistExclDeltaCount;
+    private static int sdrmLatestProCount;
+    private static int sdrmDupLatestProdCount;
+    private static int sdrmFileHistDiffCount;
+    private static int sdrmDeltaCurrProdCount;
 
 
     @Given("^Get the total count of SDRM Data from Inbound Load$")
-    public void getSDRMInboundount () {
+    public static void getSDRMInboundount () {
         Log.info("Getting sdrm inbound table count...");
-        SDRMSourceCountSQL= SDRMDataLakeCountCheckSQL.GET_SDRM_INBOUND_SOURCE_COUNT;
-        List<Map<String, Object>> SDRMInboundSourceTableCount = DBManager.getDLResultMap(SDRMSourceCountSQL, Constants.AWS_URL);
-        SDRMSourceCount = ((Long) SDRMInboundSourceTableCount.get(0).get("source_Count")).intValue();
-        Log.info(SDRMSourceCountSQL);
+        String sdrmSourceCountSQL;
+        sdrmSourceCountSQL= SDRMDataChecksSQL.GET_SDRM_INBOUND_SOURCE_COUNT;
+        List<Map<String, Object>> sdrmInboundSrcTableCount = DBManager.getDLResultMap(sdrmSourceCountSQL, Constants.AWS_URL);
+        sdrmSourceCount = ((Long) sdrmInboundSrcTableCount.get(0).get("source_count")).intValue();
+        Log.info(sdrmSourceCountSQL);
     }
 
     @Given("^We know the total count of Current SDRM data from Current Product Availability$")
-    public void getCountfromCurrentTables(){
+    public static void getCountfromCurrentTables(){
         Log.info("Getting sdrm current product availability table count...");
-        SDRMCurrentCountSQL=SDRMDataLakeCountCheckSQL.GET_SDRM_CURRENT_COUNT;
-        List<Map<String, Object>> SDRMCurrentTableCount = DBManager.getDLResultMap(SDRMCurrentCountSQL, Constants.AWS_URL);
-        SDRMCurrentCount = ((Long) SDRMCurrentTableCount.get(0).get("source_Count")).intValue();
-        Log.info(SDRMCurrentCountSQL);
+        sdrmCurrCountSql=SDRMDataChecksSQL.GET_SDRM_CURRENT_COUNT;
+        List<Map<String, Object>> sdrmCurrentTableCount = DBManager.getDLResultMap(sdrmCurrCountSql, Constants.AWS_URL);
+        sdrmCurrCount = ((Long) sdrmCurrentTableCount.get(0).get("source_count")).intValue();
+        Log.info(sdrmCurrCountSql);
     }
 
     @And("^Compare count of SDRM Inbound load with current Product Availability table are identical$")
     public void compareFullAndCurrentCounts(){
-        Log.info("The count for table sdrm Source_inbound_part => " + SDRMSourceCount + " and in current Product Availability => " + SDRMCurrentCount);
-        Assert.assertEquals("The counts are not equal when compared with sdrm_inbound_part and in current Product Availability", SDRMCurrentCount, SDRMSourceCount);
+        Log.info("The count for table sdrm Source_inbound_part => " + sdrmSourceCount + " and in current Product Availability => " + sdrmCurrCount);
+        Assert.assertEquals("The counts are not equal when compared with sdrm_inbound_part and in current Product Availability", sdrmCurrCount, sdrmSourceCount);
     }
 
     @Given("^We know the total count of SDRM Current product availability data$")
-    public void getCountfromCurrentHistoryTables(){
+    public static void getCountfromCurrentHistoryTables(){
         Log.info("Getting sdrm Current Product Table Count...");
-        SDRMCurrentCountSQL=SDRMDataLakeCountCheckSQL.GET_SDRM_CURRENT_COUNT;
-        List<Map<String, Object>> SDRMCurrentTableCount = DBManager.getDLResultMap(SDRMCurrentCountSQL, Constants.AWS_URL);
-        SDRMCurrentCount = ((Long) SDRMCurrentTableCount.get(0).get("source_Count")).intValue();
-        Log.info(SDRMCurrentCountSQL);
+        sdrmCurrCountSql=SDRMDataChecksSQL.GET_SDRM_CURRENT_COUNT;
+        List<Map<String, Object>> sdrmCurrentTableCount = DBManager.getDLResultMap(sdrmCurrCountSql, Constants.AWS_URL);
+        sdrmCurrCount = ((Long) sdrmCurrentTableCount.get(0).get("source_count")).intValue();
+        Log.info(sdrmCurrCountSql);
     }
 
     @Then("^Get the count of SDRM transform product availability history$")
-    public void getCountfromtransform_fileTables(String tableName){
+    public static void getCountfromtransformfile(String tableName){
          Log.info("Getting sdrm Product history Table Count...");
-         SDRMProductHistory_SQLCount = SDRMDataLakeCountCheckSQL.GET_SDRM_PRODUCT_HISTORY_COUNT;
-         Log.info(SDRMProductHistory_SQLCount);
-        List<Map<String, Object>> SDTransformFileTableCount = DBManager.getDBResultMap(SDRMProductHistory_SQLCount, Constants.AWS_URL);
-        SDRMProductHistoryCount = ((Long) SDTransformFileTableCount.get(0).get("target_count")).intValue();
+         String sdrmProdHistSqlCount;
+         sdrmProdHistSqlCount = SDRMDataChecksSQL.GET_SDRM_PRODUCT_HISTORY_COUNT;
+         Log.info(sdrmProdHistSqlCount);
+        List<Map<String, Object>> sdrmTransformFileTableCount = DBManager.getDBResultMap(sdrmProdHistSqlCount, Constants.AWS_URL);
+        sdrmProductHistCount = ((Long) sdrmTransformFileTableCount.get(0).get("target_count")).intValue();
     }
 
     @And("^Check count of current product availability and product history availability are identical$")
     public void compareCurrentAndHistCounts(){
-        Log.info("The count for table current product availability => " + SDRMCurrentCount + " and in product history availability => " + SDRMProductHistoryCount);
-        Assert.assertEquals("The counts are not equal when compared with current product availability and in product history availability", SDRMCurrentCount, SDRMProductHistoryCount);
+        Log.info("The count for table current product availability => " + sdrmCurrCount + " and in product history availability => " + sdrmProductHistCount);
+        Assert.assertEquals("The counts are not equal when compared with current product availability and in product history availability", sdrmCurrCount, sdrmProductHistCount);
     }
 
     @Then("^Get the count of SDRM transform product file history$")
-    public void getCountfromtransform_fileHistoryTables(){
+    public static void getCountfrmTransformFileHistTables(){
          Log.info("Getting sdrm Product file history Table Count...");
-       SDRMProductFileHistory_SQLCount = SDRMDataLakeCountCheckSQL.GET_SDRM_PRODUCT_FILE_HISTORY_COUNT;
-       Log.info(SDRMProductFileHistory_SQLCount);
-        List<Map<String, Object>> SDTransformFileTableCount = DBManager.getDBResultMap(SDRMProductFileHistory_SQLCount, Constants.AWS_URL);
-        SDRMProductFileHistoryCount = ((Long) SDTransformFileTableCount.get(0).get("target_count")).intValue();
+         String sdrmProdFileHistSqlCount;
+       sdrmProdFileHistSqlCount = SDRMDataChecksSQL.GET_SDRM_PRODUCT_FILE_HISTORY_COUNT;
+       Log.info(sdrmProdFileHistSqlCount);
+        List<Map<String, Object>> sdrmTransformFileTableCount = DBManager.getDBResultMap(sdrmProdFileHistSqlCount, Constants.AWS_URL);
+        sdrmProdFileHistCount = ((Long) sdrmTransformFileTableCount.get(0).get("target_count")).intValue();
     }
 
     @And("^Check count of SDRM current product availability table and SDRM product availability file history are identical$")
     public void compareCurrentAndFileHistCounts(){
-        Log.info("The count for table current product availability table => " + SDRMCurrentCount + " and in product availability file history => " + SDRMProductFileHistoryCount);
-        Assert.assertEquals("The counts are not equal when compared with current product availability and in product availability file history", SDRMCurrentCount, SDRMProductFileHistoryCount);
+        Log.info("The count for table current product availability table => " + sdrmCurrCount + " and in product availability file history => " + sdrmProdFileHistCount);
+        Assert.assertEquals("The counts are not equal when compared with current product availability and in product availability file history", sdrmCurrCount, sdrmProdFileHistCount);
 
 
     }
     @Given("^We know the total count of difference between Current and Previous timestamps of the SDRM transform product availability file history$")
-    public void getCountfromDifferencebetweenCurrentAndPreviousFileHistory(){
+    public static void getCountfromDifferencebetweenCurrentAndPreviousFileHistory(){
         Log.info("Getting Difference between current and previous timestamps of the sdrm File history...");
-        SDRMFileHistoryDifferenceSQLCount=SDRMDataLakeCountCheckSQL.GET_SDRM_FILEHISTORY_COUNT;
-        List<Map<String, Object>> SDRMDeltaProductCount = DBManager.getDLResultMap(SDRMFileHistoryDifferenceSQLCount, Constants.AWS_URL);
-        SDRMFileHistoryDifferenceCount = ((Long) SDRMDeltaProductCount.get(0).get("source_Count")).intValue();
-        Log.info(SDRMFileHistoryDifferenceSQLCount);
+        String sdrmFileHistDiffSqlCount;
+        sdrmFileHistDiffSqlCount=SDRMDataChecksSQL.GET_SDRM_FILEHISTORY_COUNT;
+        List<Map<String, Object>> sdrmDeltaProdCount = DBManager.getDLResultMap(sdrmFileHistDiffSqlCount, Constants.AWS_URL);
+        sdrmFileHistDiffCount = ((Long) sdrmDeltaProdCount.get(0).get("source_count")).intValue();
+        Log.info(sdrmFileHistDiffSqlCount);
     }
 
     @Then("^Get the count of SDRM delta current product availability$")
-    public void getCountfromSDRMDeltaCurrentTables(){
+    public static void getCountfromSDRMDeltaCurrentTables(){
         Log.info("Getting sdrm Delta Current product Table Count...");
-        SDRMDeltaCurrentProductSQLCount = SDRMDataLakeCountCheckSQL.GET_SDRM_DELTA_CURRENT_PRODUCT_COUNT;
-        List<Map<String, Object>> SDRMDeltaProductHistoryCount = DBManager.getDBResultMap(SDRMDeltaCurrentProductSQLCount, Constants.AWS_URL);
-        SDRMDeltaCurrentProductCount = ((Long) SDRMDeltaProductHistoryCount.get(0).get("source_count")).intValue();
-        Log.info(SDRMDeltaCurrentProductSQLCount);
+        String sdrmDeltaCurrProdSqlCount;
+        sdrmDeltaCurrProdSqlCount = SDRMDataChecksSQL.GET_SDRM_DELTA_CURRENT_PRODUCT_COUNT;
+        List<Map<String, Object>> sdrmDeltaProdHistCount = DBManager.getDBResultMap(sdrmDeltaCurrProdSqlCount, Constants.AWS_URL);
+        sdrmDeltaCurrProdCount = ((Long) sdrmDeltaProdHistCount.get(0).get("source_count")).intValue();
+        Log.info(sdrmDeltaCurrProdSqlCount);
     }
 
     @And("^Check count of difference between current and previous timestamps of the SDRM transform file history product availability and SDRM delta current product availability are identical$")
     public void compareFileHistoryAndDeltaCurrentProductCounts(){
-        Log.info("The count for table srcTable => " + SDRMFileHistoryDifferenceCount + " and in delta current product availability => " + SDRMDeltaCurrentProductCount);
-        Assert.assertEquals("The counts are not equal when compared with srcTable and delta current product availability", SDRMFileHistoryDifferenceCount, SDRMDeltaCurrentProductCount);
+        Log.info("The count for table srcTable => " + sdrmFileHistDiffCount + " and in delta current product availability => " + sdrmDeltaCurrProdCount);
+        Assert.assertEquals("The counts are not equal when compared with srcTable and delta current product availability", sdrmFileHistDiffCount, sdrmDeltaCurrProdCount);
     }
 
 
 
     @Given("^We know the total count of SDRM Delta Current product availability data$")
-    public void getCountfromDeltaCurrentProductTables(){
-               Log.info("Getting sdrm Delta Current Product Table Count...");
-                SDRMDeltaCurrentCountSQL=SDRMDataLakeCountCheckSQL.GET_SDRM_DELTA_CURRENT_PRODUCT_COUNT;
-
-        List<Map<String, Object>> SDRMDeltaProductCount = DBManager.getDLResultMap(SDRMDeltaCurrentCountSQL, Constants.AWS_URL);
-        SDRMDeltaCurrentCount = ((Long) SDRMDeltaProductCount.get(0).get("source_Count")).intValue();
-        Log.info(SDRMDeltaCurrentCountSQL);
+    public static void getCountfromDeltaCurrentProductTables(){
+        Log.info("Getting sdrm Delta Current Product Table Count...");
+        String sdrmDeltaCurrCountSQL;
+        sdrmDeltaCurrCountSQL=SDRMDataChecksSQL.GET_SDRM_DELTA_CURRENT_PRODUCT_COUNT;
+        List<Map<String, Object>> sdrmDeltaProdCount = DBManager.getDLResultMap(sdrmDeltaCurrCountSQL, Constants.AWS_URL);
+        sdrmDeltaCurrCount = ((Long) sdrmDeltaProdCount.get(0).get("source_count")).intValue();
+        Log.info(sdrmDeltaCurrCountSQL);
     }
 
     @Then("^Get the count of SDRM delta product availability history$")
-    public void getCountfromDeltaHistoryTables(){
-                Log.info("Getting sdrm Delta Product history Table Count...");
-                SDRMDeltaHistoryCountSQL = SDRMDataLakeCountCheckSQL.GET_SDRM_DELTA_PRODUCT_HISTORY_COUNT;
-        Log.info(SDRMDeltaHistoryCountSQL);
-        List<Map<String, Object>> SDRMDeltaProductHistoryCount = DBManager.getDBResultMap(SDRMDeltaHistoryCountSQL, Constants.AWS_URL);
-        SDRMDeltaHistoryCount = ((Long) SDRMDeltaProductHistoryCount.get(0).get("target_count")).intValue();
+    public static void getCountfromDeltaHistoryTables(){
+        Log.info("Getting sdrm Delta Product history Table Count...");
+        String sdrmDeltaHistCountSql;
+        sdrmDeltaHistCountSql = SDRMDataChecksSQL.GET_SDRM_DELTA_PRODUCT_HISTORY_COUNT;
+        Log.info(sdrmDeltaHistCountSql);
+        List<Map<String, Object>> sdrmDeltaProdHistCount = DBManager.getDBResultMap(sdrmDeltaHistCountSql, Constants.AWS_URL);
+        sdrmDeltaHistCount = ((Long) sdrmDeltaProdHistCount.get(0).get("target_count")).intValue();
     }
 
     @And("^Check count of SDRM Delta current product availability table and SDRM delta product availability history are identical$")
     public void compareCurrentDeltaAndDeltaHistCounts(){
-            Log.info("The count for table Delta current product availability table => " + SDRMDeltaCurrentCount + " and in delta product availability history => " + SDRMDeltaHistoryCount);
-            Assert.assertEquals("The counts are not equal when compared with current product availability table and delta product availability history", SDRMDeltaCurrentCount, SDRMDeltaHistoryCount);
+            Log.info("The count for table Delta current product availability table => " + sdrmDeltaCurrCount + " and in delta product availability history => " + sdrmDeltaHistCount);
+            Assert.assertEquals("The counts are not equal when compared with current product availability table and delta product availability history", sdrmDeltaCurrCount, sdrmDeltaHistCount);
     }
 
     @Given("^We know the total count of difference between SDRM Delta Current product availability data and SDRM Product availability History$")
-    public void getCountfromDeltaCurrentProductAndProductHistoryTables(String tableName){
-                Log.info("Getting difference between sdrm Delta Current Product Table Count and sdrm Product History table...");
-                SDRMDeltaCurrent_ProductHistoryCountSQL=SDRMDataLakeCountCheckSQL.GET_SDRM_CURRENT_PRODUCT_AND_PRODUCT_HISTORY_COUNT;
-        List<Map<String, Object>> SDRMDeltaProductCount = DBManager.getDLResultMap(SDRMDeltaCurrent_ProductHistoryCountSQL, Constants.AWS_URL);
-        SDRMDeltaCurrent_ProductHistoryCount = ((Long) SDRMDeltaProductCount.get(0).get("source_Count")).intValue();
-        Log.info(SDRMDeltaCurrent_ProductHistoryCountSQL);
+    public static void getCountfromDeltaCurrentProductAndProductHistoryTables(String tableName){
+        Log.info("Getting difference between sdrm Delta Current Product Table Count and sdrm Product History table...");
+        String sdrmDeltaProdCountSql;
+        sdrmDeltaProdCountSql=SDRMDataChecksSQL.GET_SDRM_CURRENT_PRODUCT_AND_PRODUCT_HISTORY_COUNT;
+        List<Map<String, Object>> sdrmDeltaProdCount = DBManager.getDLResultMap(sdrmDeltaProdCountSql, Constants.AWS_URL);
+        sdrmDeltaCurrProdHistCount = ((Long) sdrmDeltaProdCount.get(0).get("source_count")).intValue();
+        Log.info(sdrmDeltaProdCountSql);
     }
 
     @Then("^Get the count of SDRM transform product availability history excl delta$")
-    public void getCountfromHistoryExclDeltaTables(String tableName){
-                Log.info("Getting sdrm Transform history excl delta Table Count...");
-                SDRMHistoryExclDeltaCountSQL = SDRMDataLakeCountCheckSQL.GET_SDRM_HISTORY_EXCL_DELTA_COUNT;
-                List<Map<String, Object>> SDRMDeltaProductHistoryCount = DBManager.getDBResultMap(SDRMHistoryExclDeltaCountSQL, Constants.AWS_URL);
-        SDRMHistoryExclDeltaCount = ((Long) SDRMDeltaProductHistoryCount.get(0).get("target_count")).intValue();
-        Log.info(SDRMHistoryExclDeltaCountSQL);
+    public static void getCountfromHistoryExclDeltaTables(String tableName){
+        Log.info("Getting sdrm Transform history excl delta Table Count...");
+        String sdrmHistExclDeltaCountSQL;
+        sdrmHistExclDeltaCountSQL = SDRMDataChecksSQL.GET_SDRM_HISTORY_EXCL_DELTA_COUNT;
+        List<Map<String, Object>> sdrmDeltaProdHistCount = DBManager.getDBResultMap(sdrmHistExclDeltaCountSQL, Constants.AWS_URL);
+        sdrmHistExclDeltaCount = ((Long) sdrmDeltaProdHistCount.get(0).get("target_count")).intValue();
+        Log.info(sdrmHistExclDeltaCountSQL);
     }
 
     @And("^Check count of between SDRM Delta Current product availability data and SDRM Product availability History and SDRM transform availability history excl delta are identical$")
-    public void compareCurrentDelta_ProductHistoryAndHistExclDeltaCounts(String srcTable, String trgtTable){
-        Log.info("The count for table sourceTable => " + SDRMDeltaCurrent_ProductHistoryCount + " and in product availability excl => " + SDRMHistoryExclDeltaCount);
-        Assert.assertEquals("The counts are not equal when compared with srcTable and in product availability excl", SDRMDeltaCurrent_ProductHistoryCount, SDRMHistoryExclDeltaCount);
+    public void compareCurrDelProdHistAndHistExclDeltaCounts(String srcTable, String trgtTable){
+        Log.info("The count for table sourceTable => " + sdrmDeltaCurrProdHistCount + " and in product availability excl => " + sdrmHistExclDeltaCount);
+        Assert.assertEquals("The counts are not equal when compared with srcTable and in product availability excl", sdrmDeltaCurrProdHistCount, sdrmHistExclDeltaCount);
     }
 
     @Given("^We know the total count of SDRM Delta Current product availability data and SDRM prod availability History Excl Delta$")
-    public void getCountfromDeltaCurrentProductAndSDRMHistoryExclDeltaTables(){
-               Log.info("Getting combine of sdrm Delta Current Product Table Count and sdrm History Excl Delta table...");
-                SDRMDeltaCurrent_SDRMHistoryExclDeltaCountSQL=SDRMDataLakeCountCheckSQL.GET_SDRM_DELTA_CURRENT_AND_SDRM_HISTORY_EXCL_DELTA_COUNT;
-        List<Map<String, Object>> SDRMDeltaProductCount = DBManager.getDLResultMap(SDRMDeltaCurrent_SDRMHistoryExclDeltaCountSQL, Constants.AWS_URL);
-        SDRMDeltaCurrent_SDRMHistoryExclDeltaCount = ((Long) SDRMDeltaProductCount.get(0).get("source_Count")).intValue();
-        Log.info(SDRMDeltaCurrent_SDRMHistoryExclDeltaCountSQL);
+    public static void getCountfromDeltaCurrentProductAndSDRMHistoryExclDeltaTables(){
+        Log.info("Getting combine of sdrm Delta Current Product Table Count and sdrm History Excl Delta table...");
+        String sdrmExclCountSql;
+        sdrmExclCountSql=SDRMDataChecksSQL.GET_SDRM_DELTA_CURRENT_AND_SDRM_HISTORY_EXCL_DELTA_COUNT;
+        List<Map<String, Object>> sdrmDeltaProdCount = DBManager.getDLResultMap(sdrmExclCountSql, Constants.AWS_URL);
+        sdrmDeltaHistExclDeltaCount = ((Long) sdrmDeltaProdCount.get(0).get("source_count")).intValue();
+        Log.info(sdrmExclCountSql);
     }
 
     @Then("^Get the count of SDRM transform prod availability latest table$")
-    public void getCountfromSDRMTransformLatestProductTables(){
-               Log.info("Getting sdrm Transform latest product Table Count...");
-                SDRMLatestProductCountSQL = SDRMDataLakeCountCheckSQL.GET_SDRM_LATEST_PRODUCT_COUNT;
-
-        List<Map<String, Object>> SDRMDeltaProductHistoryCount = DBManager.getDBResultMap(SDRMLatestProductCountSQL, Constants.AWS_URL);
-        SDRMLatestProductCount = ((Long) SDRMDeltaProductHistoryCount.get(0).get("target_count")).intValue();
-        Log.info(SDRMLatestProductCountSQL);
+    public static void getCountfromSDRMTransformLatestProductTables(){
+        Log.info("Getting sdrm Transform latest product Table Count...");
+        String sdrmLatestProCountSQL;
+        sdrmLatestProCountSQL = SDRMDataChecksSQL.GET_SDRM_LATEST_PRODUCT_COUNT;
+        List<Map<String, Object>> sdrmDeltaProdHistCount = DBManager.getDBResultMap(sdrmLatestProCountSQL, Constants.AWS_URL);
+        sdrmLatestProCount = ((Long) sdrmDeltaProdHistCount.get(0).get("target_count")).intValue();
+        Log.info(sdrmLatestProCountSQL);
     }
 
     @And("^Check count of between SDRM Delta Current product availability data and SDRM Product availability History and SDRM transform latest product availability are identical$")
-    public void compareCurrentDeltaAndSDRMHistoryExclDeltaCounts(){
-        Log.info("The count for table srcTable => " + SDRMDeltaCurrent_SDRMHistoryExclDeltaCount + " and in latest product availability => " + SDRMLatestProductCount);
-        Assert.assertEquals("The counts are not equal when compared with srcTable and latest product availability", SDRMDeltaCurrent_SDRMHistoryExclDeltaCount, SDRMLatestProductCount);
+    public void compareCurrentDeltaAndsdrmHistExclDeltaCounts(){
+        Log.info("The count for table srcTable => " + sdrmDeltaHistExclDeltaCount + " and in latest product availability => " + sdrmLatestProCount);
+        Assert.assertEquals("The counts are not equal when compared with srcTable and latest product availability", sdrmDeltaHistExclDeltaCount, sdrmLatestProCount);
 
     }
 
     @Given("^Get the SDRM Duplicate count in (.*) table$")
-    public void getDuplicateCount(String tableName){
-        switch (tableName){
-            case "sdrm_transform_latest_product_availability":
-                Log.info("Getting Duplicate sdrm Latest Table Count...");
-                SDRMDuplicatesLatestProductCountSQL = SDRMDataLakeCountCheckSQL.GET_SDRM_DUPLICATES_LATEST_PRODUCUT_COUNT;
-                break;
-        }
-
-        List<Map<String, Object>> SDRMDupLatestTableCount = DBManager.getDBResultMap(SDRMDuplicatesLatestProductCountSQL, Constants.AWS_URL);
-        SDRMDuplicatesLatestProductCount = ((Long) SDRMDupLatestTableCount.get(0).get("Duplicate_Count")).intValue();
-        Log.info(SDRMDuplicatesLatestProductCountSQL);
-
+    public static void getDuplicateCount(String tableName){
+        Log.info("Getting Duplicate sdrm Latest Table Count...");
+        String sdrmDupLatestProdCountSQL;
+        sdrmDupLatestProdCountSQL = SDRMDataChecksSQL.GET_SDRM_DUPLICATES_LATEST_PRODUCUT_COUNT;
+        List<Map<String, Object>> sdrmDupLatestTableCount = DBManager.getDBResultMap(sdrmDupLatestProdCountSQL, Constants.AWS_URL);
+        sdrmDupLatestProdCount = ((Long) sdrmDupLatestTableCount.get(0).get("Duplicate_Count")).intValue();
+        Log.info(sdrmDupLatestProdCountSQL);
     }
 
     @Then("^Check the SDRM count should be equal to Zero (.*)$")
     public void checkDupCountZero(String tableName){
-        Log.info("The Duplicate count for "+tableName+" => " + SDRMDuplicatesLatestProductCount);
-        Assert.assertEquals("There are Duplicate Count of sdrm in "+tableName,0,SDRMDuplicatesLatestProductCount);
+        Log.info("The Duplicate count for "+tableName+" => " + sdrmDupLatestProdCount);
+        Assert.assertEquals("There are Duplicate Count of sdrm in "+tableName,0,sdrmDupLatestProdCount);
 
     }
 

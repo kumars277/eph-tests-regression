@@ -210,7 +210,7 @@ public class SDBooksDataChecksSQL {
                     " from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_current_urls where isbn in ('%s') order by isbn desc";
 
 
-    public static String GET_RANDOM_ISBN_DIFF_DELTA_CURR_HIST_URL =
+    public static final String GET_RANDOM_ISBN_DIFF_DELTA_CURR_HIST_URL =
             "select isbn as ISBN " +
                     "from \n" +
                     "(select c.isbn from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_urls_part c\n" +
@@ -218,7 +218,7 @@ public class SDBooksDataChecksSQL {
                     "where d.isbn is null and c.transform_ts = (\n" +
                     "select max(c.transform_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_urls_part c ))order by rand () limit %s";
 
-    public static String GET_REC_DIFF_DELTA_CURR_HIST_URL =
+    public static final String GET_REC_DIFF_DELTA_CURR_HIST_URL =
             "select isbn as ISBN " +
                     ",book_title as BOOK_TITLE" +
                     ",url as URL" +

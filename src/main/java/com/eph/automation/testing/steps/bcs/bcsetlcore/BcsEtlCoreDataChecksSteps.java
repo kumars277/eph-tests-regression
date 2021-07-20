@@ -159,7 +159,6 @@ public class BcsEtlCoreDataChecksSteps {
                 break;
             default:
                 Log.info(noTablemsg);
-
         }
         BcsEtlCoreAccessDLContext.recordsFromCurrent = DBManager.getDBResultAsBeanList(sql, BcsEtlCoreDLAccessObject.class, Constants.AWS_URL);
         Log.info(sql);

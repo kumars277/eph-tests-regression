@@ -2,78 +2,78 @@ package com.eph.automation.testing.models.dao.SDRMDataLake;
 
 public class SDRMDLAccessObject {
 
-    private String ISBN;
-    private String TITLE;
-    private String RENDITION_FORMAT;
-    private String INBOUND_TS;
-    private String PRODUCTION_DATE;
-    private String EPR_ID;
-    private String PRODUCT_TYPE;
-    private String U_KEY;
-    private String DELTA_MODE;
+    private String isbn;
+    private String title;
+    private String rednitionFormat;
+    private String inboundTs;
+    private String productionDate;
+    private String eprId;
+    private String productType;
+    private String uKey;
+    private String deltaMode;
 
-    public String getU_KEY() {
-        return U_KEY;
+    public String getuKey() {
+        return uKey;
     }
-    public void setU_KEY(String U_KEY) {
-        this.U_KEY = U_KEY;
-    }
-
-    public String getDELTA_MODE() {
-        return DELTA_MODE;
-    }
-    public void setDELTA_MODE(String DELTA_MODE) {
-        this.DELTA_MODE = DELTA_MODE;
+    public void setuKey(String uKey) {
+        this.uKey = uKey;
     }
 
-
-    public String getISBN() {
-        return ISBN;
+    public String getdeltaMode() {
+        return deltaMode;
     }
-    public void setISBN(String ISBN) {
-        this.ISBN = ISBN;
-    }
-
-    public String getTITLE() {
-        return TITLE;
-    }
-    public void setTITLE(String TITLE) {
-        this.TITLE = TITLE;
+    public void setdeltaMode(String deltaMode) {
+        this.deltaMode = deltaMode;
     }
 
-    public String getRENDITION_FORMAT() {
-        return RENDITION_FORMAT;
+
+    public String getisbn() {
+        return isbn;
     }
-    public void setRENDITION_FORMAT(String RENDITION_FORMAT) {
-        this.RENDITION_FORMAT = RENDITION_FORMAT;
+    public void setisbn(String isbn) {
+        this.isbn = isbn;
     }
 
-    public String getINBOUND_TS() {
-        return INBOUND_TS;
+    public String gettitle() {
+        return title;
     }
-    public void setINBOUND_TS(String INBOUND_TS) {
-        this.INBOUND_TS = INBOUND_TS;
-    }
-
-    public String getPRODUCTION_DATE() {
-        return PRODUCTION_DATE;
-    }
-    public void setPRODUCTION_DATE(String PRODUCTION_DATE) {
-        this.PRODUCTION_DATE = PRODUCTION_DATE;
+    public void settitle(String title) {
+        this.title = title;
     }
 
-    public String getEPR_ID() {
-        return EPR_ID;
+    public String getrednitionFormat() {
+        return rednitionFormat;
     }
-    public void setEPR_ID(String EPR_ID) {
-        this.EPR_ID = EPR_ID;
+    public void setrednitionFormat(String rednitionFormat) {
+        this.rednitionFormat = rednitionFormat;
     }
 
-    public String getPRODUCT_TYPE() {
-        return PRODUCT_TYPE;
+    public String getinboundTs() {
+        return inboundTs;
     }
-    public void setPRODUCT_TYPE(String PRODUCT_TYPE) {
-        this.PRODUCT_TYPE = PRODUCT_TYPE;
+    public void setinboundTs(String inboundTs) {
+        this.inboundTs = inboundTs;
+    }
+
+    public String getproductionDate() {
+        return productionDate;
+    }
+    public void setproductionDate(String productionDate) {
+        this.productionDate = productionDate;
+    }
+
+    public String geteprId() {
+        return eprId;
+    }
+    public void seteprId(String eprId) {
+        this.eprId = eprId;
+    }
+
+    public String getproductType() {
+        return productType;
+    }
+    public void setproductType(String productType) {
+        this.productType = productType;
     }
 
 

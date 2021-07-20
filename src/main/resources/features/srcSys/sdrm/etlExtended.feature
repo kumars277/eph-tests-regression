@@ -1,6 +1,6 @@
-Feature:SDRM ETL DAG - Count Check - Validate data count between ETL Tables
+Feature:Validate data between SDRM ETL Tables
 
-  #Confluence:https://confluence.cbsels.com/display/EPH/SDRM
+  #Confluence:https://elsevier.atlassian.net/wiki/spaces/EPH/pages/45487293809/SDRM+Inbound
   #Git for Query: https://github.com/elsevier-bts/eph-datalabs-dag/blob/master_v1/src/dag/resources/property_substituted/sdrm_inbound/eph_sdrm_transform_product_availability_v.txt
 
   @SDRM
@@ -16,8 +16,7 @@ Feature:SDRM ETL DAG - Count Check - Validate data count between ETL Tables
       | tableName                                               |countOfRandomIds |
       |sdrm_inbound_part                                        |50               |
 
-
-  @notUsed
+ @notUsed
   Scenario Outline: Verify Data for SDRM transform product history tables are transferred from transform current product table
     Given We know the total count of SDRM Current product availability data
     Then Get the count of SDRM transform product availability history
@@ -35,7 +34,7 @@ Feature:SDRM ETL DAG - Count Check - Validate data count between ETL Tables
    Given We know the total count of SDRM Current product availability data
     Then Get the count of SDRM transform product file history
     And Check count of SDRM current product availability table and SDRM product availability file history are identical
-   Given We get the <countOfRandomIds> random SDRM ISBN ids <tableName>
+    Given We get the <countOfRandomIds> random SDRM ISBN ids <tableName>
     When  Get the data from sdrm transform current product
     Then Get the data from sdrm transform product file history
     And we compare the records of SDRM current product and SDRM transform product file history
@@ -45,9 +44,9 @@ Feature:SDRM ETL DAG - Count Check - Validate data count between ETL Tables
 
   @notUsed
    Scenario Outline: Verify Data count for SDRM delta product history tables are transferred from SDRM delta current product table
-    Given We know the total count of SDRM Delta Current product availability data
-    Then Get the count of SDRM delta product availability history
-    And Check count of SDRM Delta current product availability table and SDRM delta product availability history are identical
+     Given We know the total count of SDRM Delta Current product availability data
+     Then Get the count of SDRM delta product availability history
+     And Check count of SDRM Delta current product availability table and SDRM delta product availability history are identical
      Given We get the <countOfRandomIds> random SDRM ISBN ids <tableName>
      When Get the data from sdrm delta current product table
      Then Get the data from sdrm delta product history product
