@@ -26,23 +26,6 @@ Feature:Validate data for BCS ETL Core in Data Lake Access Layer
       |all_manifestation_statuses_v                 |10              |
       |all_manifestation_pubdates_v                 |10              |
 
-  @notUsed
-    Scenario Outline: Verify Data count for BCS core delta history tables are transferred from delta_current tables
-    Given We know the total count of delta current <SourceTableName>
-    Then Get the count of delta history of current timestamp from <TargettableName>
-    And Check count of delta current table <SourceTableName> and delta history <TargettableName> are identical
-    Examples:
-      |SourceTableName                                |TargettableName                                  |
-      |etl_delta_current_accountable_product          |etl_delta_history_accountable_product_part       |
-      |etl_delta_current_manifestation                |etl_delta_history_manifestation_part             |
-      |etl_delta_current_person                       |etl_delta_history_person_part                    |
-      |etl_delta_current_product                      |etl_delta_history_product_part                   |
-      |etl_delta_current_work_person_role             |etl_delta_history_work_person_role_part          |
-      |etl_delta_current_work_relationship            |etl_delta_history_work_relationship_part         |
-      |etl_delta_current_work                         |etl_delta_history_work_part                      |
-      |etl_delta_current_work_identifier              |etl_delta_history_work_identifier_part           |
-      |etl_delta_current_manifestation_identifier     |etl_delta_history_manifestation_identifier_part  |
-
   @BCSCore
   Scenario Outline: Verify Data for BCS core history tables are transferred from current tables
     Given Get the total count of BCS Core from Current Tables <sourceTable>
@@ -85,48 +68,6 @@ Feature:Validate data for BCS ETL Core in Data Lake Access Layer
       | etl_work_current_v                      | etl_work_transform_file_history_part                          |   50                |
       | etl_work_identifier_current_v           | etl_work_identifier_transform_file_history_part               |   50                |
 
-  @notUsed
-  Scenario Outline: Verify Data count for BCS core delta_current tables are transferred from transform_file tables
-    Given Get the total count of BCS Core transform_file by diff of current and previous timestamp <sourceTable>
-    Then We know the total count of delta current <targetTable>
-    And Compare count of tranform_file <sourceTable> and delta current <targetTable> are identical
-    Given Get the <countOfRandomIds> of BCS Core data from transform_file Tables <sourceTable>
-    When Get the Data from the Difference of Current and Previous transform_file Tables <sourceTable>
-    Then We Get the records from delta current table BCS core <targetTable>
-    And compare the records of BCS Core delta current and BCS diff of Transform_File <targetTable>
-    Examples:
-      | targetTable                                |  sourceTable                                                 |countOfRandomIds     |
-      | etl_delta_current_accountable_product      |  etl_accountable_product_transform_file_history_part         |   50                |
-      | etl_delta_current_manifestation            |  etl_manifestation_transform_file_history_part               |   50                |
-      | etl_delta_current_manifestation_identifier |  etl_manifestation_identifier_transform_file_history_part    |   50                |
-      | etl_delta_current_person                   | etl_person_transform_file_history_part                       |   50                |
-      | etl_delta_current_product                  | etl_product_transform_file_history_part                      |   50                |
-      | etl_delta_current_work_person_role         | etl_work_person_role_transform_file_history_part             |   50                |
-      | etl_delta_current_work_relationship        | etl_work_relationship_transform_file_history_part            |   50                |
-      | etl_delta_current_work                     |etl_work_transform_file_history_part                          |   50                |
-      | etl_delta_current_work_identifier          | etl_work_identifier_transform_file_history_part              |   50                |
-
-  @notUsed
-  Scenario Outline: Verify Data for BCS Core delta_current_exclude are transferred from delta_current and current_history tables
-    Given Get the BCSCore total count difference between delta current and transform current history Table <TargetTable>
-    Then Get the BCSCore <TargetTable> exclude data count
-    And Compare BCScore exclude count of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
-    Given Get the <countOfRandomIds> from diff of delta_current and current_hist tables <TargetTable>
-    When Get the records from the diff of delta_current and current_hist tables <TargetTable>
-    Then Get the records from <TargetTable> exclude table
-    And  Compare the records of Exclude with diff of delta_current and current_hist tables <TargetTable>
-    Examples:
-      |FirstSourceTable                           |SecondSourceTable                                            |TargetTable                                               |countOfRandomIds |
-      |etl_delta_current_accountable_product      |etl_transform_history_accountable_product_part               |etl_transform_history_accountable_product_excl_delta      |50              |
-      |etl_delta_current_manifestation            |etl_transform_history_manifestation_part                     |etl_transform_history_manifestation_excl_delta            |50              |
-      |etl_delta_current_person                   |etl_transform_history_person_part                            |etl_transform_history_person_excl_delta                   |50              |
-      |etl_delta_current_product                  |etl_transform_history_product_part                           |etl_transform_history_product_excl_delta                  |50              |
-      |etl_delta_current_work_person_role         | etl_transform_history_work_person_role_part                 |etl_transform_history_work_person_role_excl_delta         |50               |
-      |etl_delta_current_work_relationship        |etl_transform_history_work_relationship_part                 |etl_transform_history_work_relationship_excl_delta        |50              |
-      |etl_delta_current_work                     |etl_transform_history_work_part                              |etl_transform_history_work_excl_delta                     |50              |
-      |etl_delta_current_work_identifier          |etl_transform_history_work_identifier_part                   |etl_transform_history_work_identifier_excl_delta          |50              |
-      |etl_delta_current_manifestation_identifier |etl_transform_history_manifestation_identifier_part          |etl_transform_history_manifestation_identifier_excl_delta |50              |
-
     @BCSCore
     Scenario Outline: Verify Data count for BCSCore delta_latest tables are transferred from delta_current and Current_Exclude tables
       Given Get the sum of total count between BCSCore delta current and and Current_Exclude Table <TargetTable>
@@ -164,3 +105,61 @@ Feature:Validate data for BCS ETL Core in Data Lake Access Layer
     |etl_transform_history_work_identifier_latest               |
     |etl_transform_history_manifestation_identifier_latest      |
 
+##########################
+  @notUsed
+  Scenario Outline: Verify Data for BCS Core delta_current_exclude are transferred from delta_current and current_history tables
+    Given Get the BCSCore total count difference between delta current and transform current history Table <TargetTable>
+    Then Get the BCSCore <TargetTable> exclude data count
+    And Compare BCScore exclude count of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
+    Given Get the <countOfRandomIds> from diff of delta_current and current_hist tables <TargetTable>
+    When Get the records from the diff of delta_current and current_hist tables <TargetTable>
+    Then Get the records from <TargetTable> exclude table
+    And  Compare the records of Exclude with diff of delta_current and current_hist tables <TargetTable>
+    Examples:
+      |FirstSourceTable                           |SecondSourceTable                                            |TargetTable                                               |countOfRandomIds |
+      |etl_delta_current_accountable_product      |etl_transform_history_accountable_product_part               |etl_transform_history_accountable_product_excl_delta      |50              |
+      |etl_delta_current_manifestation            |etl_transform_history_manifestation_part                     |etl_transform_history_manifestation_excl_delta            |50              |
+      |etl_delta_current_person                   |etl_transform_history_person_part                            |etl_transform_history_person_excl_delta                   |50              |
+      |etl_delta_current_product                  |etl_transform_history_product_part                           |etl_transform_history_product_excl_delta                  |50              |
+      |etl_delta_current_work_person_role         | etl_transform_history_work_person_role_part                 |etl_transform_history_work_person_role_excl_delta         |50               |
+      |etl_delta_current_work_relationship        |etl_transform_history_work_relationship_part                 |etl_transform_history_work_relationship_excl_delta        |50              |
+      |etl_delta_current_work                     |etl_transform_history_work_part                              |etl_transform_history_work_excl_delta                     |50              |
+      |etl_delta_current_work_identifier          |etl_transform_history_work_identifier_part                   |etl_transform_history_work_identifier_excl_delta          |50              |
+      |etl_delta_current_manifestation_identifier |etl_transform_history_manifestation_identifier_part          |etl_transform_history_manifestation_identifier_excl_delta |50              |
+  @notUsed
+  Scenario Outline: Verify Data count for BCS core delta_current tables are transferred from transform_file tables
+    Given Get the total count of BCS Core transform_file by diff of current and previous timestamp <sourceTable>
+    Then We know the total count of delta current <targetTable>
+    And Compare count of tranform_file <sourceTable> and delta current <targetTable> are identical
+    Given Get the <countOfRandomIds> of BCS Core data from transform_file Tables <sourceTable>
+    When Get the Data from the Difference of Current and Previous transform_file Tables <sourceTable>
+    Then We Get the records from delta current table BCS core <targetTable>
+    And compare the records of BCS Core delta current and BCS diff of Transform_File <targetTable>
+    Examples:
+      | targetTable                                |  sourceTable                                                 |countOfRandomIds     |
+      | etl_delta_current_accountable_product      |  etl_accountable_product_transform_file_history_part         |   50                |
+      | etl_delta_current_manifestation            |  etl_manifestation_transform_file_history_part               |   50                |
+      | etl_delta_current_manifestation_identifier |  etl_manifestation_identifier_transform_file_history_part    |   50                |
+      | etl_delta_current_person                   | etl_person_transform_file_history_part                       |   50                |
+      | etl_delta_current_product                  | etl_product_transform_file_history_part                      |   50                |
+      | etl_delta_current_work_person_role         | etl_work_person_role_transform_file_history_part             |   50                |
+      | etl_delta_current_work_relationship        | etl_work_relationship_transform_file_history_part            |   50                |
+      | etl_delta_current_work                     |etl_work_transform_file_history_part                          |   50                |
+      | etl_delta_current_work_identifier          | etl_work_identifier_transform_file_history_part              |   50                |
+
+  @notUsed
+  Scenario Outline: Verify Data count for BCS core delta history tables are transferred from delta_current tables
+    Given We know the total count of delta current <SourceTableName>
+    Then Get the count of delta history of current timestamp from <TargettableName>
+    And Check count of delta current table <SourceTableName> and delta history <TargettableName> are identical
+    Examples:
+      |SourceTableName                                |TargettableName                                  |
+      |etl_delta_current_accountable_product          |etl_delta_history_accountable_product_part       |
+      |etl_delta_current_manifestation                |etl_delta_history_manifestation_part             |
+      |etl_delta_current_person                       |etl_delta_history_person_part                    |
+      |etl_delta_current_product                      |etl_delta_history_product_part                   |
+      |etl_delta_current_work_person_role             |etl_delta_history_work_person_role_part          |
+      |etl_delta_current_work_relationship            |etl_delta_history_work_relationship_part         |
+      |etl_delta_current_work                         |etl_delta_history_work_part                      |
+      |etl_delta_current_work_identifier              |etl_delta_history_work_identifier_part           |
+      |etl_delta_current_manifestation_identifier     |etl_delta_history_manifestation_identifier_part  |

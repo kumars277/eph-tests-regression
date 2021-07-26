@@ -3,7 +3,7 @@ package com.eph.automation.testing.services.db.bcsetlcoresql;
 
 public class BcsEtlCoreCountChecksSql {
     private BcsEtlCoreCountChecksSql(){
-
+        throw new IllegalStateException("Utility class");
     }
 
     public static final String GET_BCS_ETL_CORE_ACC_PROD_CURR_COUNT =

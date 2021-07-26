@@ -60,7 +60,7 @@ public class SDRMDataChecksSQL {
             "where mi.f_type='ISBN' AND mi.effective_end_date is null) ma on ma.identifier = src.isbn\n" +
             "WHERE crf.epr is not null and src.ispdf = '1') where inbound_ts = (select max(inbound_ts) from "+ GetSdrmDbUser.getSDRMDataBase()+".sdrm_inbound_part) order by rand() limit %s";
 
-    public static final String GET_SDRM_SOURCE_INBOUND_DATA="select isbn as isbn,sku as sku,title as title,rendition_format as rednitionFormat,inbound_ts as inboundTs,production_date as productionDate,epr_id as eprId,product_type as productType, u_key as uKey " +
+    public static final String GET_SDRM_SOURCE_INBOUND_DATA="select isbn,sku,title,rendition_format as rednitionFormat,inbound_ts as inboundTs,production_date as productionDate,epr_id as eprId,product_type as productType, u_key as uKey " +
             " from (SELECT\n" +
             "  \"isbn\" as ISBN\n" +
             ", \"sku\" as SKU\n" +

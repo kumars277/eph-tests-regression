@@ -1,7 +1,7 @@
 package com.eph.automation.testing.services.db.DL_ExtViewSQL;
 
 
-import com.eph.automation.testing.services.db.BCS_ETLExtendedSQL.GetBCS_ETLExtendedDLDBUser;
+import com.eph.automation.testing.services.db.bcsetlextendedsql.GetBcsEtlExtendedDLDBUser;
 
 public class DL_ExtendedViewChecksSQL {
 
@@ -9,40 +9,40 @@ public class DL_ExtendedViewChecksSQL {
 
 
     public static String GET_DL_PROD_EXT_AVAILABILITY_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".product_extended_availability";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".product_extended_availability";
 
     public static String GET_DL_PROD_EXT_PRICING_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".product_extended_pricing";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".product_extended_pricing";
 
     public static String GET_DL_MANIF_EXT_RESTRICT_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".manifestation_extended_restriction";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".manifestation_extended_restriction";
 
     public static String GET_DL_MANIF_EXT_PAGE_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".manifestation_extended_page_count";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".manifestation_extended_page_count";
 
     public static String GET_DL_MANIF_EXT_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".manifestation_extended";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".manifestation_extended";
 
     public static String GET_DL_WORK_EXT_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended";
 
     public static String GET_DL_WORK_EDIT_BOARD_EXT_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_editorial_board";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_editorial_board";
 
     public static String GET_DL_WORK_EXT_METRIC_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_metric";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_metric";
 
     public static String GET_DL_WORK_EXT_PERS_ROLE_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_person_role";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_person_role";
 
     public static String GET_DL_WORK_EXT_RELATION_SIBLING_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_relationship_sibling";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_relationship_sibling";
 
     public static String GET_DL_WORK_EXT_SUBJ_AREA_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_subject_area";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_subject_area";
 
     public static String GET_DL_WORK_EXT_URL_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_url";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_url";
 
 
     public static String GET_DL_ALL_PROD_EXT_AVAILABILITY_COUNT =
@@ -59,7 +59,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", availability_start_date availability_start_date\n"+
                     ", availability_status availability_status\n"+
                     ", delete_flag delete_flag\n"+
-                    " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".product_availability_extended_allsource_v\n"+
+                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".product_availability_extended_allsource_v\n"+
                     "where product_type in ('OOA','SUB'))";
 
     public static String GET_DL_ALL_PROD_EXT_AVAILABILITY_RAND_ID =
@@ -76,7 +76,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", availability_start_date availability_start_date\n"+
                     ", availability_status availability_status\n"+
                     ", delete_flag delete_flag\n"+
-                    " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".product_availability_extended_allsource_v\n"+
+                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".product_availability_extended_allsource_v\n"+
                     "where product_type in ('OOA','SUB')) order by rand() limit %s";
 
     public static String GET_ALL_PROD_EXT_AVAILABILITY_REC =
@@ -104,7 +104,7 @@ public class DL_ExtendedViewChecksSQL {
             ", availability_start_date availability_start_date\n"+
             ", availability_status availability_status\n"+
             ", delete_flag delete_flag\n"+
-            " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".product_availability_extended_allsource_v where product_type in ('OOA','SUB') and epr_id in ('%s')) " +
+            " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".product_availability_extended_allsource_v where product_type in ('OOA','SUB') and epr_id in ('%s')) " +
             " order by epr_id,last_updated_date,application_name,availability_start_date,delta_answer_code_uk,availability_status,publication_status_anz," +
             " availability_format,delta_answer_code_us,delete_flag desc";
 
@@ -120,7 +120,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",availability_start_date as availability_start_date" +
                     ",availability_status as availability_status" +
                     ",delete_flag as delete_flag" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".product_extended_availability where epr_id in ('%s')" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".product_extended_availability where epr_id in ('%s')" +
                     " order by epr_id,last_updated_date,application_name,availability_start_date,delta_answer_code_uk,availability_status,publication_status_anz," +
                     " availability_format,delta_answer_code_us,delete_flag desc";
 
@@ -130,14 +130,14 @@ public class DL_ExtendedViewChecksSQL {
                     "SELECT DISTINCT epr_id, product_type, last_updated_date, price_currency, \n" +
                     "price_amount, price_start_date, price_end_date, price_region, price_category, \n" +
                     "price_customer_category, price_purchase_quantity, delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".product_extended_pricing_allsource_v)\n";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".product_extended_pricing_allsource_v)\n";
 
     public static String GET_DL_ALL_PROD_EXT_PRICING_RAND_ID =
             "select  epr_id as EPRID from(\n"+
                     "SELECT DISTINCT epr_id, product_type, last_updated_date, price_currency, \n" +
                     "price_amount, price_start_date, price_end_date, price_region, price_category, \n" +
                     "price_customer_category, price_purchase_quantity, delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".product_extended_pricing_allsource_v)order by rand() limit %s\n";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".product_extended_pricing_allsource_v)order by rand() limit %s\n";
 
     public static String GET_ALL_PROD_PRICING_EXT_REC =
      "select epr_id as epr_id" +
@@ -156,7 +156,7 @@ public class DL_ExtendedViewChecksSQL {
              "SELECT DISTINCT epr_id, product_type, last_updated_date, price_currency, \n" +
              "price_amount, price_start_date, price_end_date, price_region, price_category, \n" +
              "price_customer_category, price_purchase_quantity, delete_flag\n" +
-             " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".product_extended_pricing_allsource_v where epr_id in ('%s'))" +
+             " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".product_extended_pricing_allsource_v where epr_id in ('%s'))" +
              " order by epr_id,last_updated_date,price_currency,price_start_date,price_amount,price_category,price_region," +
              " price_customer_category,price_purchase_quantity desc";
 
@@ -174,7 +174,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",price_customer_category as price_customer_category\n" +
                     ",price_purchase_quantity as price_purchase_quantity\n" +
                     ",delete_flag as delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".product_extended_pricing where epr_id in ('%s')" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".product_extended_pricing where epr_id in ('%s')" +
                     " order by epr_id,last_updated_date,price_currency,price_start_date,price_amount,price_category,price_region," +
                     " price_customer_category,price_purchase_quantity desc";
 
@@ -184,7 +184,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", uk_textbook_ind, us_textbook_ind, manifestation_trim_text\n" +
                     ", commodity_code, discount_code_emea, discount_code_us, manifestation_weight\n" +
                     ", journal_issue_trim_size, war_reference, delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_allsource_v)\n";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_allsource_v)\n";
 
     public static String GET_DL_ALL_MANIF_EXT_RAND_ID =
             "select epr_id as EPRID from(\n" +
@@ -192,7 +192,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", uk_textbook_ind, us_textbook_ind, manifestation_trim_text\n" +
                     ", commodity_code, discount_code_emea, discount_code_us, manifestation_weight\n" +
                     ", journal_issue_trim_size, war_reference, delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_allsource_v)order by rand() limit %s\n";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_allsource_v)order by rand() limit %s\n";
 
     public static String GET_ALL_MANIF_EXT_REC =
     "select epr_id as epr_id" +
@@ -214,7 +214,7 @@ public class DL_ExtendedViewChecksSQL {
             ", uk_textbook_ind, us_textbook_ind, manifestation_trim_text\n" +
             ", commodity_code, discount_code_emea, discount_code_us, manifestation_weight\n" +
             ", journal_issue_trim_size, war_reference,export_to_web_ind, delete_flag\n" +
-            " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_allsource_v where epr_id in ('%s'))" +
+            " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_allsource_v where epr_id in ('%s'))" +
             " order by epr_id,manifestation_trim_text,discount_code_emea,discount_code_us,manifestation_weight,journal_issue_trim_size,commodity_code,war_reference," +
             "uk_textbook_ind,us_textbook_ind,delete_flag desc";
 
@@ -234,7 +234,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",war_reference as war_reference" +
                     ",export_to_web_ind as export_to_web_ind\n" +
                     ",delete_flag as delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".manifestation_extended where epr_id in ('%s')" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".manifestation_extended where epr_id in ('%s')" +
                     " order by epr_id,manifestation_trim_text,discount_code_emea,discount_code_us,manifestation_weight,journal_issue_trim_size,commodity_code,war_reference," +
                     " uk_textbook_ind,us_textbook_ind,delete_flag desc";
 
@@ -242,13 +242,13 @@ public class DL_ExtendedViewChecksSQL {
             "select count(*) as Source_Count from(\n" +
                     "SELECT DISTINCT epr_id, manifestation_type, last_updated_date, \n" +
                     "count_type_code, count_type_name, count, delete_flag\n" +
-                    "FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_page_count_allsource_v)";
+                    "FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_page_count_allsource_v)";
 
     public static String GET_DL_ALL_MANIF_EXT_PAGE_COUNT_RAND_ID =
             "select  epr_id as EPRID from(\n"+
                     "SELECT DISTINCT epr_id, manifestation_type, last_updated_date, \n" +
                     "count_type_code, count_type_name, count, delete_flag\n" +
-                    "FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_page_count_allsource_v)order by rand() limit %s\n";
+                    "FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_page_count_allsource_v)order by rand() limit %s\n";
 
     public static String GET_ALL_MANIF_PAGE_COUNT_EXT_REC =
     "select epr_id as epr_id" +
@@ -261,7 +261,7 @@ public class DL_ExtendedViewChecksSQL {
             " from(" +
             "SELECT DISTINCT epr_id, manifestation_type, last_updated_date, \n" +
             "count_type_code, count_type_name, count, delete_flag\n" +
-            " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_page_count_allsource_v" +
+            " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_page_count_allsource_v" +
             " where epr_id in ('%s')) order by epr_id,count_type_code,count,delete_flag desc";
 
     public static String GET_MANIF_PAGE_COUNT_EXT_REC =
@@ -272,7 +272,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",count_type_name as count_type_name\n" +
                     ",count as count\n" +
                     ",delete_flag as delete_flag" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".manifestation_extended_page_count where epr_id in ('%s')" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".manifestation_extended_page_count where epr_id in ('%s')" +
                     "order by epr_id,count_type_code,count,delete_flag desc";
 
     public static String GET_DL_ALL_MANIF_EXT_RESTRICT_COUNT =
@@ -280,14 +280,14 @@ public class DL_ExtendedViewChecksSQL {
                     "SELECT DISTINCT epr_id, manifestation_type," +
                     " last_updated_date, restriction_code, " +
                     "restriction_name, delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_restriction_allsource_v)";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_restriction_allsource_v)";
 
     public static String GET_DL_ALL_MANIF_EXT_RESTRICT_RAND_ID =
             "select  epr_id as EPRID from(\n"+
                     "SELECT DISTINCT epr_id, manifestation_type," +
                     " last_updated_date, restriction_code, " +
                     "restriction_name, delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_restriction_allsource_v)order by rand() limit %s\n";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_restriction_allsource_v)order by rand() limit %s\n";
 
     public static String GET_ALL_MANIF_RESTRICT_EXT_REC =
             "select epr_id as epr_id" +
@@ -300,7 +300,7 @@ public class DL_ExtendedViewChecksSQL {
                     "SELECT DISTINCT epr_id, manifestation_type," +
                     " last_updated_date, restriction_code, " +
                     "restriction_name, delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_restriction_allsource_v" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_restriction_allsource_v" +
                     " where epr_id in ('%s')) order by epr_id,restriction_code,delete_flag desc";
 
     public static String GET_MANIF_RESTRICT_EXT_REC =
@@ -310,7 +310,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",restriction_code as restriction_code\n" +
                     ",restriction_name as restriction_name\n" +
                     ",delete_flag as delete_flag" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".manifestation_extended_restriction where epr_id in ('%s')" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".manifestation_extended_restriction where epr_id in ('%s')" +
                     "order by epr_id,restriction_code,delete_flag desc";
 
     public static String GET_DL_ALL_WORK_EXT_COUNT =
@@ -351,7 +351,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", max(rf_lvi) rf_lvi\n" +
                     ", max(business_unit_desc) business_unit_desc\n" +
                     ", case when sum(cast(delete_flag as integer)) = count(cast(delete_flag as integer)) then true else false end as delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_allsource_v\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_allsource_v\n" +
                     "group by epr_id)";
 
     public static String GET_DL_ALL_WORK_EXT_RAND_ID =
@@ -392,7 +392,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", max(rf_lvi) rf_lvi\n" +
                     ", max(business_unit_desc) business_unit_desc\n" +
                     ", case when sum(cast(delete_flag as integer)) = count(cast(delete_flag as integer)) then true else false end as delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_allsource_v\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_allsource_v\n" +
                     "group by epr_id) order by rand() limit %s";
 
     public static String  GET_ALL_WORK_EXT_REC =
@@ -468,7 +468,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", max(rf_lvi) rf_lvi\n" +
                     ", max(business_unit_desc) business_unit_desc\n" +
                     ", case when sum(cast(delete_flag as integer)) = count(cast(delete_flag as integer)) then true else false end as delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_allsource_v" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_allsource_v" +
                     " where epr_id in ('%s')group by epr_id) order by epr_id,image_file_ref,key_features,author_by_line_text" +
                     ",profit_centre,last_updated_date,primary_site_system,primary_site_acronym,primary_site_support_level,issue_prod_type_code," +
                     "catalogue_volumes_qty,catalogue_issues_qty,catalogue_volume_from,catalogue_volume_to,rf_issues_qty,rf_total_pages_qty," +
@@ -510,7 +510,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",rf_lvi as rf_lvi\n" +
                     ",business_unit_desc as business_unit_desc\n" +
                     ",delete_flag as delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended where epr_id in ('%s')" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended where epr_id in ('%s')" +
                     "order by epr_id,image_file_ref,key_features,author_by_line_text" +
                     ",profit_centre,last_updated_date,primary_site_system,primary_site_acronym,primary_site_support_level,issue_prod_type_code," +
                     "catalogue_volumes_qty,catalogue_issues_qty,catalogue_volume_from,catalogue_volume_to,rf_issues_qty,rf_total_pages_qty," +
@@ -521,14 +521,14 @@ public class DL_ExtendedViewChecksSQL {
              "select DISTINCT" +
              " epr_id,source,work_type,last_updated_date,role_code,role_name,sequence_number,group_number,first_name\n" +
              ",last_name,title,honours,affiliation,image_url,footnote_txt,notes_txt,delete_flag\n" +
-             " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_editorial_board_allsource_v)";
+             " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_editorial_board_allsource_v)";
 
     public static String GET_DL_ALL_WORK_EXT_EDITORIAL_RAND_ID =
             "select epr_id as EPRID from (\n" +
                     "select DISTINCT" +
                     " epr_id,source,work_type,last_updated_date,role_code,role_name,sequence_number,group_number,first_name\n" +
                     ",last_name,title,honours,affiliation,image_url,footnote_txt,notes_txt,delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_editorial_board_allsource_v) order by rand() limit %s";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_editorial_board_allsource_v) order by rand() limit %s";
 
     public static String GET_ALL_WORK_EDITORIAL_EXT_REC =
      "select epr_id as epr_id\n" +
@@ -551,7 +551,7 @@ public class DL_ExtendedViewChecksSQL {
              "select DISTINCT" +
              " epr_id,source,work_type,last_updated_date,role_code,role_name,sequence_number,group_number,first_name\n" +
              ",last_name,title,honours,affiliation,image_url,footnote_txt,notes_txt,delete_flag\n" +
-             " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_editorial_board_allsource_v where epr_id in ('%s'))" +
+             " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_editorial_board_allsource_v where epr_id in ('%s'))" +
              " order by epr_id,last_updated_date,role_code,role_name,group_number,sequence_number,first_name,last_name,honours,notes_txt,image_url,delete_flag desc";
 
 
@@ -572,20 +572,20 @@ public class DL_ExtendedViewChecksSQL {
                     ",footnote_txt as footnote_txt\n" +
                     ",notes_txt as notes_txt\n" +
                     ",delete_flag as delete_flag" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_editorial_board where epr_id in ('%s')" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_editorial_board where epr_id in ('%s')" +
                     " order by epr_id,last_updated_date,role_code,role_name,group_number,sequence_number,first_name,last_name,honours,notes_txt,image_url,delete_flag desc";
 
     public static String GET_DL_ALL_WORK_EXT_METRIC_COUNT =
             "select count(*) as Source_Count from(\n" +
                     "SELECT DISTINCT\n" +
                     "epr_id, work_type, last_updated_date, metric_code, metric_name, metric, metric_year, metric_url, delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_metric_allsource_v)";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_metric_allsource_v)";
 
     public static String GET_DL_ALL_WORK_EXT_METRIC_RAND_ID =
             "select epr_id as EPRID from (\n" +
                     "SELECT DISTINCT\n" +
                     "epr_id, work_type, last_updated_date, metric_code, metric_name, metric, metric_year, metric_url, delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_metric_allsource_v) order by rand() limit %s";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_metric_allsource_v) order by rand() limit %s";
 
     public static String GET_ALL_WORK_METRIC_EXT_REC =
      "select epr_id as epr_id" +
@@ -600,7 +600,7 @@ public class DL_ExtendedViewChecksSQL {
              " from(" +
              "SELECT DISTINCT\n" +
              "epr_id, work_type, last_updated_date, metric_code, metric_name, metric, metric_year, metric_url, delete_flag\n" +
-             " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_metric_allsource_v" +
+             " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_metric_allsource_v" +
              " where epr_id in ('%s')) order by epr_id,metric_name,metric_code,metric,metric_year,metric_url,delete_flag desc";
 
     public static String GET_WORK_METRIC_EXT_REC =
@@ -613,7 +613,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",metric_year as metric_year\n" +
                     ",metric_url as metric_url\n" +
                     ",delete_flag as delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_metric where epr_id in ('%s')" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_metric where epr_id in ('%s')" +
                     " order by epr_id,metric_name,metric_code,metric,metric_year,metric_url,delete_flag desc";
 
     public static String GET_DL_ALL_WORK_EXT_PERS_ROLE_COUNT =
@@ -622,7 +622,7 @@ public class DL_ExtendedViewChecksSQL {
                     "epr_id, work_type, last_updated_date, role_code, " +
                     "role_name, sequence_number, group_number, first_name, last_name, " +
                     "peoplehub_id, email, title, honours, affiliation, image_url, footnote_txt, notes_txt, delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_person_role_allsource_v)";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_person_role_allsource_v)";
 
     public static String GET_DL_ALL_WORK_EXT_PERS_ROLE_RAND_ID =
             "select epr_id as EPRID from (\n" +
@@ -630,7 +630,7 @@ public class DL_ExtendedViewChecksSQL {
                     "epr_id, work_type, last_updated_date, role_code, " +
                     "role_name, sequence_number, group_number, first_name, last_name, " +
                     "peoplehub_id, email, title, honours, affiliation, image_url, footnote_txt, notes_txt, delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_person_role_allsource_v)order by rand() limit %s";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_person_role_allsource_v)order by rand() limit %s";
 
     public static String GET_ALL_WORK_PERSON_ROLE_EXT_REC =
      "select " +
@@ -657,7 +657,7 @@ public class DL_ExtendedViewChecksSQL {
              "epr_id, work_type, last_updated_date, role_code, " +
              "role_name, sequence_number, group_number, first_name, last_name, " +
              "peoplehub_id, email, title, honours, affiliation, image_url, footnote_txt, notes_txt, delete_flag\n" +
-             " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_person_role_allsource_v where epr_id in ('%s'))" +
+             " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_person_role_allsource_v where epr_id in ('%s'))" +
              " order by epr_id,role_code,work_type,last_updated_date,role_code,role_name,first_name," +
              " last_name,peoplehub_id,email,sequence_number,delete_flag,affiliation,image_url desc";
 
@@ -681,7 +681,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",footnote_txt as footnote_txt\n" +
                     ",notes_txt as notes_txt\n" +
                     ",delete_flag as delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_person_role where epr_id in ('%s')" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_person_role where epr_id in ('%s')" +
                     " order by epr_id,role_code,work_type,last_updated_date,role_code,role_name,first_name," +
                     " last_name,peoplehub_id,email,sequence_number,delete_flag,affiliation,image_url desc";
 
@@ -691,7 +691,7 @@ public class DL_ExtendedViewChecksSQL {
                     "epr_id, work_type, last_updated_date, related_epr_id, related_title, " +
                     "related_type_code, related_type_name, related_type_roll_up, related_status_code, related_status_name, " +
                     "related_status_roll_up, relationship_code, relationship_name, delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_relationship_sibling_allsource_v)";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_relationship_sibling_allsource_v)";
 
     public static String GET_DL_ALL_WORK_EXT_RELT_SIBLING_RAND_ID =
             "select epr_id as EPRID from (\n" +
@@ -699,7 +699,7 @@ public class DL_ExtendedViewChecksSQL {
                     "epr_id, work_type, last_updated_date, related_epr_id, related_title, " +
                     "related_type_code, related_type_name, related_type_roll_up, related_status_code, related_status_name, " +
                     "related_status_roll_up, relationship_code, relationship_name, delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_relationship_sibling_allsource_v)order by rand() limit %s";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_relationship_sibling_allsource_v)order by rand() limit %s";
 
     public static String GET_ALL_WORK_RELATIONSHIP_SIBLING_EXT_REC =
      "select epr_id as epr_id" +
@@ -721,7 +721,7 @@ public class DL_ExtendedViewChecksSQL {
              "epr_id, work_type, last_updated_date, related_epr_id, related_title, " +
              "related_type_code, related_type_name, related_type_roll_up, related_status_code, related_status_name, " +
              "related_status_roll_up, relationship_code, relationship_name, delete_flag\n" +
-             " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_relationship_sibling_allsource_v" +
+             " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_relationship_sibling_allsource_v" +
              " where epr_id in ('%s')) order by epr_id,last_updated_date,related_epr_id,related_title,related_type_code,related_type_name" +
              ",related_type_roll_up,related_status_code,related_status_name,related_status_roll_up,relationship_code,delete_flag desc";
 
@@ -740,7 +740,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",relationship_code as relationship_code\n" +
                     ",relationship_name as relationship_name\n" +
                     ",delete_flag as delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_relationship_sibling where epr_id in ('%s')" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_relationship_sibling where epr_id in ('%s')" +
                     " order by epr_id,last_updated_date,related_epr_id,related_title,related_type_code,related_type_name" +
                     ",related_type_roll_up,related_status_code,related_status_name,related_status_roll_up,relationship_code,delete_flag desc";
 
@@ -748,13 +748,13 @@ public class DL_ExtendedViewChecksSQL {
             "select count(*) as Source_Count from(\n" +
                     "SELECT DISTINCT\n" +
                     "epr_id, work_type, last_updated_date, code, name, priority, type_code, type_name, delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_subject_area_allsource_v)";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_subject_area_allsource_v)";
 
     public static String GET_DL_ALL_WORK_EXT_SUBJ_AREA_RAND_ID =
             "select epr_id as EPRID from (\n" +
                     "SELECT DISTINCT\n" +
                     "epr_id, work_type, last_updated_date, code, name, priority, type_code, type_name, delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_subject_area_allsource_v)order by rand() limit %s";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_subject_area_allsource_v)order by rand() limit %s";
 
     public static String GET_ALL_WORK_SUB_AREA_EXT_REC =
      "select epr_id as epr_id" +
@@ -769,7 +769,7 @@ public class DL_ExtendedViewChecksSQL {
              " from(" +
              "SELECT DISTINCT\n" +
              "epr_id, work_type, last_updated_date, code, name, priority, type_code, type_name, delete_flag\n" +
-             " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_subject_area_allsource_v" +
+             " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_subject_area_allsource_v" +
              " where epr_id in ('%s')) order by epr_id,last_updated_date,name,code,priority,type_code,delete_flag desc";
 
     public static String GET_WORK_SUB_AREA_EXT_REC =
@@ -782,20 +782,20 @@ public class DL_ExtendedViewChecksSQL {
                     ",type_code as type_code\n" +
                     ",type_name as type_name\n" +
                     ",delete_flag as delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_subject_area where epr_id in ('%s')" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_subject_area where epr_id in ('%s')" +
                     " order by epr_id,last_updated_date,name,code,priority,type_code,delete_flag desc";
 
     public static String GET_DL_ALL_WORK_EXT_URL_COUNT =
             "select count(*) as Source_Count from(\n" +
                     "SELECT DISTINCT\n" +
                     "epr_id, work_type, last_updated_date, url_type_code, url_type_name, url, url_title, delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_url_allsource_v)";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_url_allsource_v)";
 
     public static String GET_DL_ALL_WORK_EXT_URL_RAND_ID =
             "select epr_id as EPRID from (\n" +
                     "SELECT DISTINCT\n" +
                     "epr_id, work_type, last_updated_date, url_type_code, url_type_name, url, url_title, delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_url_allsource_v)order by rand() limit %s";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_url_allsource_v)order by rand() limit %s";
 
     public static String GET_ALL_WORK_URL_EXT_REC =
      "select epr_id as epr_id\n" +
@@ -809,7 +809,7 @@ public class DL_ExtendedViewChecksSQL {
              " from(" +
              "SELECT DISTINCT\n" +
              "epr_id, work_type, last_updated_date, url_type_code, url_type_name, url, url_title, delete_flag\n" +
-             " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_url_allsource_v where epr_id in ('%s'))" +
+             " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_url_allsource_v where epr_id in ('%s'))" +
              " order by epr_id,last_updated_date,url_type_code,url_type_name,url,url_title,delete_flag desc";
 
     public static String GET_WORK_URL_EXT_REC =
@@ -821,7 +821,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",url as url\n" +
                     ",url_title as url_title\n" +
                     ",delete_flag as delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_url where epr_id in ('%s')" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".work_extended_url where epr_id in ('%s')" +
                     " order by epr_id,last_updated_date,url_type_code,url_type_name,url,url_title,delete_flag desc";
 
 
@@ -829,40 +829,40 @@ public class DL_ExtendedViewChecksSQL {
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public static String GET_DL_ALL_PROD_EXT_AVAILABILITY_VIEW_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".product_availability_extended_allsource_v";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".product_availability_extended_allsource_v";
 
     public static String GET_DL_ALL_PROD_EXT_PRICING_VIEW_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".product_extended_pricing_allsource_v";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".product_extended_pricing_allsource_v";
 
     public static String GET_DL_ALL_MANIF_EXT_VIEW_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_allsource_v";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_allsource_v";
 
     public static String    GET_DL_ALL_MANIF_EXT_PAGE_VIEW_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_page_count_allsource_v";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_page_count_allsource_v";
 
     public static String GET_DL_ALL_MANIF_EXT_RESTRICT_VIEW_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_restriction_allsource_v";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_restriction_allsource_v";
 
     public static String GET_DL_ALL_WORK_EXT_VIEW_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_allsource_v";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_allsource_v";
 
     public static String GET_DL_ALL_WORK_EXT_EDIT_VIEW_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_editorial_board_allsource_v";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_editorial_board_allsource_v";
 
     public static String GET_DL_ALL_WORK_EXT_METRIC_VIEW_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_metric_allsource_v";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_metric_allsource_v";
 
     public static String GET_DL_ALL_WORK_EXT_PERS_ROLE_VIEW_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_person_role_allsource_v";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_person_role_allsource_v";
 
     public static String GET_DL_ALL_WORK_EXT_RELATION_SIBLING_VIEW_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_relationship_sibling_allsource_v";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_relationship_sibling_allsource_v";
 
     public static String GET_DL_ALL_WORK_EXT_SUBJ_AREA_VIEW_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_subject_area_allsource_v";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_subject_area_allsource_v";
 
     public static String GET_DL_ALL_WORK_EXT_URL_VIEW_COUNT =
-            "select count(*) as Target_Count from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_url_allsource_v";
+            "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_url_allsource_v";
 
 
     public static String GET_SOURCE_PROD_EXT_AVAILABILITY_COUNT =
@@ -880,7 +880,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", sdrm.production_date as availability_start_date\n" +
                     ", CAST('Available' AS varchar) as availability_status\n" +
                     ", sdrm.delete_flag \n" +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getSDRMDataBase()+".sdrm_transform_latest_product_availability sdrm\n" +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getSDRMDataBase()+".sdrm_transform_latest_product_availability sdrm\n" +
                     "UNION ALL\n" +
                     "\n" +
                     "SELECT\n" +
@@ -896,7 +896,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.pubdateactual as availability_start_date\n" +
                     ", bcs.status as availability_status\n" +
                     ", bcs.delete_flag\n" +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_latest bcs\n" +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_availability_latest bcs\n" +
                     "UNION ALL\n" +
                     "\n" +
                     "select\n" +
@@ -912,7 +912,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", jnf.availability_start_date\n" +
                     ", jnf.availability_status\n" +
                     ", jnf.delete_flag\n" +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getJM_CoreDataBase()+".jnl_new_fulfilment_system jnf\n" +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getJM_CoreDataBase()+".jnl_new_fulfilment_system jnf\n" +
                     "UNION ALL\n" +
                     "\n" +
                     "SELECT\n" +
@@ -928,7 +928,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", jfs.availability_start_date\n" +
                     ", jfs.availability_status\n" +
                     ", jfs.delete_flag\n" +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getJM_CoreDataBase()+".jnl_fulfilment_system_v jfs)";
+                    "from "+ GetBcsEtlExtendedDLDBUser.getJM_CoreDataBase()+".jnl_fulfilment_system_v jfs)";
 
 
     public static String GET_SOURCE_PROD_EXT_AVAILABILITY_RAND_ID =
@@ -946,7 +946,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", sdrm.production_date as availability_start_date\n" +
                     ", CAST('Available' AS varchar) as availability_status\n" +
                     ", sdrm.delete_flag \n" +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getSDRMDataBase()+".sdrm_transform_latest_product_availability sdrm\n" +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getSDRMDataBase()+".sdrm_transform_latest_product_availability sdrm\n" +
                     "UNION ALL\n" +
                     "\n" +
                     "SELECT\n" +
@@ -962,7 +962,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.pubdateactual as availability_start_date\n" +
                     ", bcs.status as availability_status\n" +
                     ", bcs.delete_flag\n" +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_latest bcs\n" +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_availability_latest bcs\n" +
                     "UNION ALL\n" +
                     "\n" +
                     "select\n" +
@@ -978,7 +978,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", jnf.availability_start_date\n" +
                     ", jnf.availability_status\n" +
                     ", jnf.delete_flag\n" +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getJM_CoreDataBase()+".jnl_new_fulfilment_system jnf\n" +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getJM_CoreDataBase()+".jnl_new_fulfilment_system jnf\n" +
                     "UNION ALL\n" +
                     "\n" +
                     "SELECT\n" +
@@ -994,7 +994,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", jfs.availability_start_date\n" +
                     ", jfs.availability_status\n" +
                     ", jfs.delete_flag\n" +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getJM_CoreDataBase()+".jnl_fulfilment_system_v jfs) order by rand() limit %s";
+                    "from "+ GetBcsEtlExtendedDLDBUser.getJM_CoreDataBase()+".jnl_fulfilment_system_v jfs) order by rand() limit %s";
 
     public static String GET_SOURCE_PROD_EXT_AVAILABILITY_REC =
             "select epr_id as epr_id" +
@@ -1023,7 +1023,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", sdrm.production_date as availability_start_date\n" +
                     ", CAST('Available' AS varchar) as availability_status\n" +
                     ", sdrm.delete_flag \n" +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getSDRMDataBase()+".sdrm_transform_latest_product_availability sdrm\n" +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getSDRMDataBase()+".sdrm_transform_latest_product_availability sdrm\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "bcs.eprid as epr_id\n" +
@@ -1038,7 +1038,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.pubdateactual as availability_start_date\n" +
                     ", bcs.status as availability_status\n" +
                     ", bcs.delete_flag\n" +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_latest bcs\n" +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_availability_latest bcs\n" +
                     "UNION ALL\n" +
                     "select\n" +
                     "jnf.epr_id\n" +
@@ -1053,7 +1053,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", jnf.availability_start_date\n" +
                     ", jnf.availability_status\n" +
                     ", jnf.delete_flag\n" +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getJM_CoreDataBase()+".jnl_new_fulfilment_system jnf\n" +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getJM_CoreDataBase()+".jnl_new_fulfilment_system jnf\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "jfs.epr_id as epr_id\n" +
@@ -1068,7 +1068,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", jfs.availability_start_date\n" +
                     ", jfs.availability_status\n" +
                     ", jfs.delete_flag\n" +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getJM_CoreDataBase()+".jnl_fulfilment_system_v jfs) where epr_id in ('%s')" +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getJM_CoreDataBase()+".jnl_fulfilment_system_v jfs) where epr_id in ('%s')" +
                     " order by epr_id,application_name,availability_start_date,delta_answer_code_uk,availability_status,publication_status_anz," +
                     "availability_format,delta_answer_code_us,delete_flag desc";
 
@@ -1085,7 +1085,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",availability_start_date as availability_start_date" +
                     ",availability_status as availability_status" +
                     ",delete_flag as delete_flag" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".product_availability_extended_allsource_v where epr_id in ('%s') " +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".product_availability_extended_allsource_v where epr_id in ('%s') " +
                     " order by epr_id,application_name,availability_start_date,delta_answer_code_uk,availability_status,publication_status_anz," +
                     "availability_format,delta_answer_code_us,delete_flag desc";
 
@@ -1105,7 +1105,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", promis.customer_category as price_customer_category\n" +
                     ", promis.quantity          as price_purchase_quantity\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_pricing promis\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_pricing promis\n" +
                     "  where (promis.end_date is null or promis.end_date >= current_date)\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
@@ -1122,7 +1122,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.pricecustomercategory as price_customer_category\n" +
                     ", bcs.pricepurchasequantity as price_purchase_quantity\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_latest bcs\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_latest bcs\n" +
                     "  where (bcs.priceenddate is null or bcs.priceenddate >= current_date))";
 
     public static String GET_SOURCE_PROD_PRICING_EXT_RAND_ID =
@@ -1141,7 +1141,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", promis.customer_category as price_customer_category\n" +
                     ", promis.quantity          as price_purchase_quantity\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_pricing promis\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_pricing promis\n" +
                     "  where (promis.end_date is null or promis.end_date >= current_date)\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
@@ -1158,7 +1158,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.pricecustomercategory as price_customer_category\n" +
                     ", bcs.pricepurchasequantity as price_purchase_quantity\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_latest bcs\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_latest bcs\n" +
                     "  where (bcs.priceenddate is null or bcs.priceenddate >= current_date))order by rand() limit %s";
 
     public static String GET_SOURCE_PROD_PRICING_EXT_REC =
@@ -1190,7 +1190,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", promis.customer_category as price_customer_category\n" +
                     ", promis.quantity          as price_purchase_quantity\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_pricing promis\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_pricing promis\n" +
                     "  where (promis.end_date is null or promis.end_date >= current_date)\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
@@ -1207,7 +1207,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.pricecustomercategory as price_customer_category\n" +
                     ", bcs.pricepurchasequantity as price_purchase_quantity\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_latest bcs\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_latest bcs\n" +
                     "  where (bcs.priceenddate is null or bcs.priceenddate >= current_date))where epr_id in ('%s')" +
                     " order by epr_id,last_updated_date,price_currency,price_start_date,price_amount," +
                     "price_category,price_region,price_customer_category,price_purchase_quantity desc";
@@ -1226,7 +1226,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",price_customer_category as price_customer_category\n" +
                     ",price_purchase_quantity as price_purchase_quantity\n" +
                     ",delete_flag as delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".product_extended_pricing_allsource_v where epr_id in ('%s')" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".product_extended_pricing_allsource_v where epr_id in ('%s')" +
                     " order by epr_id,last_updated_date," +
                     "price_currency,price_start_date,price_amount,price_category,price_region,price_customer_category,price_purchase_quantity desc";
 
@@ -1248,7 +1248,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", jrbi.war_reference\n" +
                     " ,CAST(null AS boolean) export_to_web_ind" +
                     ", jrbi.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_manifestation jrbi\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_manifestation jrbi\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
@@ -1266,7 +1266,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.warreference as war_reference" +
                     ", bcs.exporttowebind as export_to_web_ind\n" +
                     ", bcs.delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_latest bcs)";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_latest bcs)";
 
     public static String GET_SOURCE_MANIF_EXT_RAND_ID =
             "select epr_id as EPRID from (\n" +
@@ -1286,7 +1286,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", jrbi.war_reference" +
                     ", CAST(null AS boolean) export_to_web_ind\n" +
                     ", jrbi.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_manifestation jrbi\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_manifestation jrbi\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
@@ -1304,7 +1304,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.warreference as war_reference\n" +
                     ", bcs.exporttowebind as export_to_web_ind\n" +
                     ", bcs.delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_latest bcs)order by rand() limit %s";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_latest bcs)order by rand() limit %s";
 
     public static String GET_SOURCE_MANIF_EXT_REC =
             "select epr_id as epr_id" +
@@ -1339,7 +1339,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", jrbi.war_reference\n" +
                     ", CAST(null AS boolean) export_to_web_ind\n" +
                     ", jrbi.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_manifestation jrbi\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_manifestation jrbi\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
@@ -1357,7 +1357,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.warreference as war_reference" +
                     ", bcs.exporttowebind as export_to_web_ind\n" +
                     ", bcs.delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_latest bcs) where epr_id in ('%s')" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_latest bcs) where epr_id in ('%s')" +
                     " order by epr_id,manifestation_trim_text,discount_code_emea,discount_code_us,manifestation_weight,journal_issue_trim_size,commodity_code,war_reference," +
                     "uk_textbook_ind,us_textbook_ind,delete_flag desc";
 
@@ -1377,7 +1377,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",war_reference as war_reference" +
                     ",export_to_web_ind as export_to_web_ind\n" +
                     ",delete_flag as delete_flag\n" +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_allsource_v where epr_id in ('%s')" +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_allsource_v where epr_id in ('%s')" +
                     " order by epr_id,manifestation_trim_text,discount_code_emea,discount_code_us,manifestation_weight,journal_issue_trim_size,commodity_code,war_reference," +
                     "uk_textbook_ind,us_textbook_ind,delete_flag desc";
 
@@ -1392,7 +1392,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.pagecounttypename as count_type_name\n" +
                     ", bcs.pagecount as count\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_latest bcs\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_page_count_latest bcs\n" +
                     "  WHERE bcs.pagecount <> 0)";
 
     public static String GET_SOURCE_MANIF_PAGE_EXT_RAND_ID =
@@ -1406,7 +1406,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.pagecounttypename as count_type_name\n" +
                     ", bcs.pagecount as count\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_latest bcs\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_page_count_latest bcs\n" +
                     "  WHERE bcs.pagecount <> 0)order by rand() limit %s";
 
     public static String GET_SOURCE_MANIF_PAGE_EXT_REC =
@@ -1428,7 +1428,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.pagecounttypename as count_type_name\n" +
                     ", bcs.pagecount as count\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_latest bcs\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_page_count_latest bcs\n" +
                     "  WHERE bcs.pagecount <> 0)where epr_id in ('%s') order by epr_id,count_type_code,count,delete_flag desc";
 
     public static String  GET_ALL_VIEW_MANIF_PAGE_EXT_REC =
@@ -1440,7 +1440,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",count_type_name as count_type_name\n" +
                     ",count as count\n" +
                     ",delete_flag as delete_flag" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_page_count_allsource_v" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_page_count_allsource_v" +
                     " where epr_id in ('%s') order by epr_id,count_type_code,count,delete_flag  desc";
 
     public static String GET_SOURCE_MANIF_RESTRICT_EXT_COUNT =
@@ -1453,7 +1453,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.restrictioncode as restriction_code\n" +
                     ", bcs.restrictionname as restriction_name\n" +
                     ", bcs.delete_flag\n" +
-                    "FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_latest bcs)";
+                    "FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_latest bcs)";
 
     public static String GET_SOURCE_MANIF_RESTRICT_EXT_RAND_ID =
             "select epr_id as EPRID from (\n" +
@@ -1465,7 +1465,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.restrictioncode as restriction_code\n" +
                     ", bcs.restrictionname as restriction_name\n" +
                     ", bcs.delete_flag\n" +
-                    "FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_latest bcs)" +
+                    "FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_latest bcs)" +
                     "order by rand() limit %s";
 
     public static String  GET_ALL_VIEW_MANIF_RESTRICT_EXT_REC =
@@ -1476,7 +1476,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",restriction_code as restriction_code\n" +
                     ",restriction_name as restriction_name\n" +
                     ",delete_flag as delete_flag" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_restriction_allsource_v" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".manifestation_extended_restriction_allsource_v" +
                     " where epr_id in ('%s') order by epr_id,restriction_code,delete_flag desc";
 
 
@@ -1497,7 +1497,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.restrictioncode as restriction_code\n" +
                     ", bcs.restrictionname as restriction_name\n" +
                     ", bcs.delete_flag\n" +
-                    "FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_latest bcs)" +
+                    "FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_latest bcs)" +
                     "where epr_id in ('%s') order by epr_id,restriction_code,delete_flag desc";
 
 
@@ -1541,7 +1541,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", case when delete_flag=false then jrbi.business_unit_desc else null end as business_unit_desc\n" +
                     ", case when delete_flag=false then jrbi.journal_prod_site_code else null end as journal_prod_site_code\n" +
                     ", jrbi.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_work jrbi\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_work jrbi\n" +
                     "UNION ALL\n" +
                     "SELECT \n" +
                     "  promis.epr_id as epr_id\n" +
@@ -1581,7 +1581,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) business_unit_desc\n" +
                     ", CAST(null AS varchar) journal_prod_site_code\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_works promis\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_works promis\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
@@ -1621,7 +1621,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) business_unit_desc\n" +
                     ", CAST(null AS varchar) journal_prod_site_code\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_latest bcs\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_latest bcs\n" +
                     "  UNION ALL\n" +
                     "SELECT\n" +
                     "f_wwork work_epr_id\n" +
@@ -1661,9 +1661,9 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) business_unit_desc\n" +
                     ", CAST(null AS varchar) journal_prod_site_code\n" +
                     ", false delete_flag\n" +
-                    " FROM (("+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_work_identifier gwi\n" +
-                    "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
-                    "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
+                    " FROM (("+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_identifier gwi\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
                     "WHERE (((gwi.f_type = 'ISSN-L') AND (glw.roll_up_type = 'Journal')) AND (effective_end_date IS NULL)))";
 
     public static String GET_SOURCE_WORK_EXT_RAND_ID =
@@ -1706,7 +1706,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", case when delete_flag=false then jrbi.business_unit_desc else null end as business_unit_desc\n" +
                     ", case when delete_flag=false then jrbi.journal_prod_site_code else null end as journal_prod_site_code\n" +
                     ", jrbi.delete_flag\n" +
-                    "FROM "+GetBCS_ETLExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_work jrbi\n" +
+                    "FROM "+ GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_work jrbi\n" +
                     "UNION ALL\n" +
                     "SELECT \n" +
                     "  promis.epr_id as epr_id\n" +
@@ -1746,7 +1746,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) business_unit_desc\n" +
                     ", CAST(null AS varchar) journal_prod_site_code\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_works promis\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_works promis\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
@@ -1786,7 +1786,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) business_unit_desc\n" +
                     ", CAST(null AS varchar) journal_prod_site_code\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_latest bcs\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_latest bcs\n" +
                     "  UNION ALL\n" +
                     "SELECT\n" +
                     "f_wwork work_epr_id\n" +
@@ -1826,9 +1826,9 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) business_unit_desc\n" +
                     ", CAST(null AS varchar) journal_prod_site_code\n" +
                     ", false delete_flag\n" +
-                    " FROM (("+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_work_identifier gwi\n" +
-                    "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
-                    "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
+                    " FROM (("+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_identifier gwi\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
                     "WHERE (((gwi.f_type = 'ISSN-L') AND (glw.roll_up_type = 'Journal')) AND (effective_end_date IS NULL)))order by rand() limit %s";
 
     public static String GET_SOURCE_WORK_EXT_REC =
@@ -1908,7 +1908,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", case when delete_flag=false then jrbi.business_unit_desc else null end as business_unit_desc\n" +
                     ", case when delete_flag=false then jrbi.journal_prod_site_code else null end as journal_prod_site_code\n" +
                     ", jrbi.delete_flag\n" +
-                    "FROM "+GetBCS_ETLExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_work jrbi\n" +
+                    "FROM "+ GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_work jrbi\n" +
                     "UNION ALL\n" +
                     "SELECT \n" +
                     "  promis.epr_id as epr_id\n" +
@@ -1948,7 +1948,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) business_unit_desc\n" +
                     ", CAST(null AS varchar) journal_prod_site_code\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_works promis\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_works promis\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
@@ -1988,7 +1988,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) business_unit_desc\n" +
                     ", CAST(null AS varchar) journal_prod_site_code\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_latest bcs\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_latest bcs\n" +
                     "  UNION ALL\n" +
                     "SELECT\n" +
                     "f_wwork work_epr_id\n" +
@@ -2028,9 +2028,9 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) business_unit_desc\n" +
                     ", CAST(null AS varchar) journal_prod_site_code\n" +
                     ", false delete_flag\n" +
-                    " FROM (("+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_work_identifier gwi\n" +
-                    "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
-                    "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
+                    " FROM (("+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_identifier gwi\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_wwork gww ON (gwi.f_wwork = gww.work_id))\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_x_lov_work_type glw ON (gww.f_type = glw.code))\n" +
                     "WHERE (((gwi.f_type = 'ISSN-L') AND (glw.roll_up_type = 'Journal')) AND (effective_end_date IS NULL)))" +
                     "where epr_id in ('%s') order by epr_id,image_file_ref,source,key_features,author_by_line_text\n" +
                     ",profit_centre,last_updated_date,primary_site_system,primary_site_acronym,primary_site_support_level,issue_prod_type_code,\n" +
@@ -2075,7 +2075,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",business_unit_desc as business_unit_desc\n" +
                     ",journal_prod_site_code as journal_prod_site_code\n" +
                     ",delete_flag as delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_allsource_v" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_allsource_v" +
                     " where epr_id in ('%s') order by epr_id,image_file_ref,source,key_features,author_by_line_text" +
                     ",profit_centre,last_updated_date,primary_site_system,primary_site_acronym,primary_site_support_level,issue_prod_type_code," +
                     "catalogue_volumes_qty,catalogue_issues_qty,catalogue_volume_from,catalogue_volume_to,rf_issues_qty,rf_total_pages_qty," +
@@ -2095,7 +2095,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", TRY(CAST (promis.metric_year as integer)) as metric_year\n" +
                     ", promis.metric_url\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_metrics promis)";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_metrics promis)";
 
     public static String GET_SOURCE_WORK_METRIC_EXT_RAND_ID =
             "select epr_id as EPRID from (\n" +
@@ -2110,7 +2110,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", TRY(CAST (promis.metric_year as integer)) as metric_year\n" +
                     ", promis.metric_url\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_metrics promis) order by rand() limit %s";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_metrics promis) order by rand() limit %s";
 
     public static String  GET_ALL_VIEW_WORK_METRIC_EXT_REC =
             "select epr_id as epr_id" +
@@ -2123,7 +2123,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",metric_year as metric_year\n" +
                     ",metric_url as metric_url\n" +
                     ",delete_flag as delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_metric_allsource_v" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_metric_allsource_v" +
                     " where epr_id in ('%s') order by epr_id,source,metric_name,metric_code,metric,metric_year,metric_url,delete_flag desc";
 
 
@@ -2150,7 +2150,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", TRY(CAST (promis.metric_year as integer)) as metric_year\n" +
                     ", promis.metric_url\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_metrics promis)" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_metrics promis)" +
                     " where epr_id in ('%s') order by epr_id,source,metric_name,metric_code,metric,metric_year,metric_url,delete_flag desc";
 
 
@@ -2177,7 +2177,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) footnote_txt\n" +
                     ", CAST(null AS varchar) notes_txt\n" +
                     ", jrbi.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person jrbi\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person jrbi\n" +
                     "union all\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
@@ -2200,7 +2200,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.footnotetxt as footnote_txt\n" +
                     ", bcs.notestxt as notes_txt\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_latest bcs)";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_latest bcs)";
 
     public static String GET_SOURCE_WORK_PERSON_ROLE_EXT_RAND_ID =
             "select epr_id as EPRID from (\n" +
@@ -2225,7 +2225,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) footnote_txt\n" +
                     ", CAST(null AS varchar) notes_txt\n" +
                     ", jrbi.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person jrbi\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person jrbi\n" +
                     "union all\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
@@ -2248,7 +2248,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.footnotetxt as footnote_txt\n" +
                     ", bcs.notestxt as notes_txt\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_latest bcs)order by rand() limit %s";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_latest bcs)order by rand() limit %s";
 
     public static String GET_SOURCE_WORK_PERSON_ROLE_EXT_REC =
             "select " +
@@ -2294,7 +2294,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", CAST(null AS varchar) footnote_txt\n" +
                     ", CAST(null AS varchar) notes_txt\n" +
                     ", jrbi.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person jrbi\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person jrbi\n" +
                     "union all\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
@@ -2317,7 +2317,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.footnotetxt as footnote_txt\n" +
                     ", bcs.notestxt as notes_txt\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_latest bcs)" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_latest bcs)" +
                     "where epr_id in ('%s') order by epr_id,role_code,source,work_type,core_work_person_role_id,last_updated_date,role_code,role_name,first_name," +
                     "last_name,peoplehub_id,email,sequence_number,delete_flag,affiliation,image_url desc";
 
@@ -2343,7 +2343,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",footnote_txt as footnote_txt\n" +
                     ",notes_txt as notes_txt\n" +
                     ",delete_flag as delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_person_role_allsource_v where epr_id in ('%s')" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_person_role_allsource_v where epr_id in ('%s')" +
                     " order by epr_id,role_code,source,work_type,core_work_person_role_id,last_updated_date,role_code,role_name,first_name," +
                     " last_name,peoplehub_id,email,sequence_number,delete_flag,affiliation,image_url desc";
 
@@ -2366,7 +2366,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", promis.relationship_type_code       as relationship_code\n" +
                     ", promis.relationship_type_name       as relationship_name\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_work_rels promis)";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_work_rels promis)";
 
     public static String GET_SOURCE_WORK_RELATIONSHIP_SIBLING_EXT_RAND_ID =
             "select epr_id as EPRID from (\n" +
@@ -2386,7 +2386,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", promis.relationship_type_code       as relationship_code\n" +
                     ", promis.relationship_type_name       as relationship_name\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_work_rels promis)order by rand() limit %s";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_work_rels promis)order by rand() limit %s";
 
     public static String GET_SOURCE_WORK_RELATIONSHIP_SIBLING_EXT_REC =
             "select epr_id as epr_id" +
@@ -2421,7 +2421,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", promis.relationship_type_code       as relationship_code\n" +
                     ", promis.relationship_type_name       as relationship_name\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_work_rels promis)" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_work_rels promis)" +
                     "where epr_id in ('%s') order by epr_id,last_updated_date,related_epr_id,related_title,related_type_code,related_type_name" +
                     ",related_type_roll_up,related_status_code,related_status_name,related_status_roll_up,relationship_code,delete_flag desc";
 
@@ -2442,7 +2442,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",relationship_code as relationship_code\n" +
                     ",relationship_name as relationship_name\n" +
                     ",delete_flag as delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_relationship_sibling_allsource_v" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_relationship_sibling_allsource_v" +
                     " where epr_id in ('%s') order by epr_id,last_updated_date,related_epr_id,related_title,related_type_code,related_type_name" +
                     ",related_type_roll_up,related_status_code,related_status_name,related_status_roll_up,relationship_code,delete_flag desc";
 
@@ -2460,7 +2460,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", promis.subject_type_code         as type_code\n" +
                     ", promis.subject_type_name         as type_name\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_subject_areas promis\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_subject_areas promis\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                        as epr_id\n" +
@@ -2473,7 +2473,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.typecode                     as type_code\n" +
                     ", bcs.typedesc                     as type_name\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_latest bcs)";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_subject_area_latest bcs)";
 
     public static String GET_SOURCE_WORK_SUBJ_AREA_EXT_RAND_ID =
             "select epr_id as EPRID from (\n" +
@@ -2488,7 +2488,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", promis.subject_type_code         as type_code\n" +
                     ", promis.subject_type_name         as type_name\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_subject_areas promis\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_subject_areas promis\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                        as epr_id\n" +
@@ -2501,7 +2501,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.typecode                     as type_code\n" +
                     ", bcs.typedesc                     as type_name\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_latest bcs)order by rand() limit %s";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_subject_area_latest bcs)order by rand() limit %s";
 
     public static String GET_SOURCE_WORK_SUBJ_AREA_EXT_REC =
             "select epr_id as epr_id" +
@@ -2526,7 +2526,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", promis.subject_type_code         as type_code\n" +
                     ", promis.subject_type_name         as type_name\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_subject_areas promis\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_subject_areas promis\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                        as epr_id\n" +
@@ -2539,7 +2539,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.typecode                     as type_code\n" +
                     ", bcs.typedesc                     as type_name\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_latest bcs)" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_subject_area_latest bcs)" +
                     "where epr_id in ('%s') order by epr_id,last_updated_date,name,code,priority,type_code,delete_flag desc";
 
     public static String  GET_ALL_VIEW_WORK_SUB_AREA_EXT_REC =
@@ -2553,7 +2553,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",type_code as type_code\n" +
                     ",type_name as type_name\n" +
                     ",delete_flag as delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_subject_area_allsource_v" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_subject_area_allsource_v" +
                     " where epr_id in ('%s') order by epr_id,last_updated_date,name,code,priority,type_code,delete_flag desc";
 
 
@@ -2569,7 +2569,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", promis.url\n" +
                     ", promis.url_title\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_urls promis\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_urls promis\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                as epr_id\n" +
@@ -2581,7 +2581,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.source               as url\n" +
                     ", bcs.name                 as url_title\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_latest bcs\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_url_latest bcs\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  sdbooks.epr_id             as epr_id\n" +
@@ -2593,7 +2593,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", sdbooks.url\n" +
                     ", sdbooks.url_title\n" +
                     ", sdbooks.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getSDBooksDataBase()+".sdbooks_transform_latest_urls sdbooks)";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getSDBooksDataBase()+".sdbooks_transform_latest_urls sdbooks)";
 
     public static String GET_SOURCE_WORK_URL_EXT_RAND_ID =
             "select epr_id as EPRID from (\n" +
@@ -2607,7 +2607,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", promis.url\n" +
                     ", promis.url_title\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_urls promis\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_urls promis\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                as epr_id\n" +
@@ -2619,7 +2619,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.source               as url\n" +
                     ", bcs.name                 as url_title\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_latest bcs\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_url_latest bcs\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  sdbooks.epr_id             as epr_id\n" +
@@ -2631,7 +2631,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", sdbooks.url\n" +
                     ", sdbooks.url_title\n" +
                     ", sdbooks.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getSDBooksDataBase()+".sdbooks_transform_latest_urls sdbooks)order by rand() limit %s";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getSDBooksDataBase()+".sdbooks_transform_latest_urls sdbooks)order by rand() limit %s";
 
     public static String GET_SOURCE_WORK_URL_EXT_REC =
             "select epr_id as epr_id\n" +
@@ -2654,7 +2654,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", promis.url\n" +
                     ", promis.url_title\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_urls promis\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_urls promis\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                as epr_id\n" +
@@ -2666,7 +2666,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", bcs.source               as url\n" +
                     ", bcs.name                 as url_title\n" +
                     ", bcs.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_latest bcs\n" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_url_latest bcs\n" +
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  sdbooks.epr_id             as epr_id\n" +
@@ -2678,7 +2678,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", sdbooks.url\n" +
                     ", sdbooks.url_title\n" +
                     ", sdbooks.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getSDBooksDataBase()+".sdbooks_transform_latest_urls sdbooks)where epr_id in ('%s')" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getSDBooksDataBase()+".sdbooks_transform_latest_urls sdbooks)where epr_id in ('%s')" +
                     " order by epr_id,last_updated_date,url_type_code,url_type_name,url,url_title,delete_flag desc";
 
     public static String  GET_ALL_VIEW_WORK_URL_EXT_REC =
@@ -2691,7 +2691,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",url as url\n" +
                     ",url_title as url_title\n" +
                     ",delete_flag as delete_flag\n" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_url_allsource_v where epr_id in ('%s')" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_url_allsource_v where epr_id in ('%s')" +
                     " order by epr_id,last_updated_date,url_type_code,url_type_name,url,url_title,delete_flag desc";
 
     public static String GET_SOURCE_WORK_EDITORIAL_EXT_COUNT =
@@ -2714,7 +2714,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", promis.footnote_txt\n" +
                     ", promis.notes_txt\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_person_roles promis)";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_person_roles promis)";
 
     public static String GET_SOURCE_WORK_EDITORIAL_EXT_RAND_ID =
             "select epr_id as EPRID from (\n" +
@@ -2736,7 +2736,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", promis.footnote_txt\n" +
                     ", promis.notes_txt\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_person_roles promis)order by rand() limit %s\n";
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_person_roles promis)order by rand() limit %s\n";
 
     public static String GET_SOURCE_WORK_EDITORIAL_EXT_REC =
             "select epr_id as epr_id\n" +
@@ -2775,7 +2775,7 @@ public class DL_ExtendedViewChecksSQL {
                     ", promis.footnote_txt\n" +
                     ", promis.notes_txt\n" +
                     ", promis.delete_flag\n" +
-                    " FROM "+GetBCS_ETLExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_person_roles promis)where epr_id in ('%s')" +
+                    " FROM "+ GetBcsEtlExtendedDLDBUser.getPromisDataBase()+".promis_transform_latest_person_roles promis)where epr_id in ('%s')" +
                     " order by epr_id,last_updated_date,role_code,role_name,group_number,sequence_number,first_name,last_name,honours,notes_txt,image_url,delete_flag desc";
 
 
@@ -2797,7 +2797,7 @@ public class DL_ExtendedViewChecksSQL {
                     ",footnote_txt as footnote_txt\n" +
                     ",notes_txt as notes_txt\n" +
                     ",delete_flag as delete_flag" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".work_extended_editorial_board_allsource_v where epr_id in ('%s')" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".work_extended_editorial_board_allsource_v where epr_id in ('%s')" +
                     " order by epr_id,last_updated_date,role_code,role_name,group_number,sequence_number,first_name,last_name,honours,notes_txt,image_url,delete_flag desc";
 
 

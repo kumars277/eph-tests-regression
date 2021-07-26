@@ -1769,7 +1769,7 @@ public class JMETLDataChecks {
     //Comparing Core records between Semarchy and Stiching
     @Given("^We get the (.*) random Stitching ids of (.*)$")
     public void getRandomStitchingIds(String numberOfRecords, String SemarchyTable) {
-  numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random records...");
         switch (SemarchyTable) {
@@ -1872,7 +1872,6 @@ public class JMETLDataChecks {
         }
         Log.info(sql);
         JMContext.JMObjectsFromDL = DBManager.getDBResultAsBeanList(sql, JMETLObject.class, Constants.EPH_URL);
-        System.out.println(JMContext.JMObjectsFromDL.size());
     }
 
     @And("^Compare Core records from (.*) with Work or Product stitching db$")

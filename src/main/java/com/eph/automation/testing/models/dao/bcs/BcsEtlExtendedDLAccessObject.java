@@ -1,21 +1,21 @@
 package com.eph.automation.testing.models.dao.bcs;
 
-public class BCS_ETLExtendedDLAccessObject {
+public class BcsEtlExtendedDLAccessObject {
 
-    private String SOURCEREF;
-    private String UKEY;
-    private String DQ_ERR;
-    private String EPRID;
-    private String PRODUCTTYPE;
-    private String MODIFIEDON;
-    private String APPLICATION;
+    private String sourceref;
+    private String ukey;
+    private String dqerr;
+    private String eprid;
+    private String producttype;
+    private String modifiedon;
+    private String application;
     private String deltaanswercodeuk;
     private String deltaanswercodeus;
     private String anzpubstatus;
     private String pubdateactual;
     private String status;
     private String metadeleted;
-    private String manifestation_type;
+    private String manifestationtype;
     private String uktextbookind;
     private String ustextbookind;
     private String usdiscountcode;
@@ -32,21 +32,18 @@ public class BCS_ETLExtendedDLAccessObject {
     private String pagecounttypename;
     private String pagecount;
     private String typecode;
-
-
     private String urltypecode;
     private String urltypename;
-private String typedesc;
+    private String typedesc;
     private String name;
-
     private String companygroup;
     private String imagefileref;
     private String workmasterisbn;
     private String textreftrade;
     private String features;
     private String awards;
-    private String toc_long;
-    private String toc_short;
+    private String toclong;
+    private String tocshort;
     private String audience;
     private String authorbyline;
     private String description;
@@ -89,14 +86,14 @@ private String typedesc;
     private String worksourceref;
     private String personsourceref;
     private String source;
-    private String work_type;
-    private String core_reference;
+    private String worktype;
+    private String corereference;
     private String roletype;
     private String rolename;
     private String title;
-    private String person_first_name;
-    private String person_family_name;
-    private String email_address;
+    private String personfirstname;
+    private String personfamilyname;
+    private String emailaddress;
     private String honours;
     private String affiliation;
     private String imageurl;
@@ -105,12 +102,11 @@ private String typedesc;
     private String sequence;
     private String groupnumber;
     private String metamodifiedon;
-    private String DELTA_MODE;
+    private String deltamode;
     private String subjdesc;
     private String subjcode;
     private String priority;
     private String exporttowebind;
-
 
     public String getexporttowebind() { return exporttowebind; }
     public void setexporttowebind(String exporttowebind) {
@@ -148,9 +144,9 @@ private String typedesc;
         this.typedesc = typedesc;
     }
 
-    public String getDELTA_MODE() { return DELTA_MODE; }
-    public void setDELTA_MODE(String DELTA_MODE) {
-        this.DELTA_MODE = DELTA_MODE;
+    public String getdeltamode() { return deltamode; }
+    public void setdeltamode(String deltamode) {
+        this.deltamode = deltamode;
     }
 
     public String getmetamodifiedon() { return metamodifiedon; }
@@ -193,14 +189,14 @@ private String typedesc;
         this.affiliation = affiliation;
     }
 
-    public String getemail_address() { return email_address; }
-    public void setemail_address(String email_address) {
-        this.email_address = email_address;
+    public String getemailaddress() { return emailaddress; }
+    public void setemailaddress(String emailaddress) {
+        this.emailaddress = emailaddress;
     }
 
-    public String getperson_family_name() { return person_family_name; }
-    public void setperson_family_name(String person_family_name) {
-        this.person_family_name = person_family_name;
+    public String getpersonfamilyname() { return personfamilyname; }
+    public void setpersonfamilyname(String personfamilyname) {
+        this.personfamilyname = personfamilyname;
     }
 
     public String gettitle() { return title; }
@@ -208,9 +204,9 @@ private String typedesc;
         this.title = title;
     }
 
-    public String getperson_first_name() { return person_first_name; }
-    public void setperson_first_name(String person_first_name) {
-        this.person_first_name = person_first_name;
+    public String getpersonfirstname() { return personfirstname; }
+    public void setpersonfirstname(String personfirstname) {
+        this.personfirstname = personfirstname;
     }
 
     public String getpersonsourceref() { return personsourceref; }
@@ -223,9 +219,9 @@ private String typedesc;
         this.roletype = roletype;
     }
 
-    public String getcore_reference() { return core_reference; }
-    public void setcore_reference(String core_reference) {
-        this.core_reference = core_reference;
+    public String getcorereference() { return corereference; }
+    public void setcorereference(String corereference) {
+        this.corereference = corereference;
     }
 
     public String getworksourceref() { return worksourceref; }
@@ -408,9 +404,9 @@ private String typedesc;
         this.review = review;
     }
 
-    public String gettoc_short() { return toc_short; }
-    public void settoc_short(String toc_short) {
-        this.toc_short = toc_short;
+    public String gettocshort() { return tocshort; }
+    public void settocshort(String tocshort) {
+        this.tocshort = tocshort;
     }
 
     public String getaudience() { return audience; }
@@ -443,9 +439,9 @@ private String typedesc;
         this.awards = awards;
     }
 
-    public String gettoc_long() { return toc_long; }
-    public void settoc_long(String toc_long) {
-        this.toc_long = toc_long;
+    public String gettoclong() { return toclong; }
+    public void settoclong(String toclong) {
+        this.toclong = toclong;
     }
 
     public String gettextreftrade() { return textreftrade; }
@@ -478,9 +474,9 @@ private String typedesc;
         this.name = name;
     }
 
-    public String getwork_type() { return work_type; }
-    public void setwork_type(String work_type) {
-        this.work_type = work_type;
+    public String getworktype() { return worktype; }
+    public void setworktype(String worktype) {
+        this.worktype = worktype;
     }
 
     public String geturltypecode() { return urltypecode; }
@@ -569,14 +565,14 @@ private String typedesc;
         this.usdiscountcode = usdiscountcode;
     }
 
-    public String getmanifestation_type() { return manifestation_type; }
-    public void setmanifestation_type(String manifestation_type) {
-        this.manifestation_type = manifestation_type;
+    public String getmanifestationtype() { return manifestationtype; }
+    public void setmanifestationtype(String manifestationtype) {
+        this.manifestationtype = manifestationtype;
     }
 
-    public String getEPRID() { return EPRID; }
-    public void setEPRID(String EPRID) {
-        this.EPRID = EPRID;
+    public String geteprid() { return eprid; }
+    public void seteprid(String eprid) {
+        this.eprid = eprid;
     }
 
     public String getmetadeleted() { return metadeleted; }
@@ -609,34 +605,34 @@ private String typedesc;
         this.deltaanswercodeus = deltaanswercodeus;
     }
 
-    public String getDQ_ERR() { return DQ_ERR; }
-    public void setDQ_ERR(String DQ_ERR) {
-        this.DQ_ERR = DQ_ERR;
+    public String getdqerr() { return dqerr; }
+    public void setdqerr(String dqerr) {
+        this.dqerr = dqerr;
     }
 
-    public String getUKEY() { return UKEY; }
-    public void setUKEY(String UKEY) {
-        this.UKEY = UKEY;
+    public String getukey() { return ukey; }
+    public void setukey(String ukey) {
+        this.ukey = ukey;
     }
 
-    public String getSOURCEREF() { return SOURCEREF; }
-    public void setSOURCEREF(String SOURCEREF) {
-        this.SOURCEREF = SOURCEREF;
+    public String getsourceref() { return sourceref; }
+    public void setsourceref(String sourceref) {
+        this.sourceref = sourceref;
     }
 
-    public String getPRODUCTTYPE() { return PRODUCTTYPE; }
-    public void setPRODUCTTYPE(String PRODUCTTYPE) {
-        this.PRODUCTTYPE = PRODUCTTYPE;
+    public String getproducttype() { return producttype; }
+    public void setproducttype(String producttype) {
+        this.producttype = producttype;
     }
 
-    public String getMODIFIEDON() { return MODIFIEDON; }
-    public void setMODIFIEDON(String MODIFIEDON) {
-        this.MODIFIEDON = MODIFIEDON;
+    public String getmodifiedon() { return modifiedon; }
+    public void setmodifiedon(String modifiedon) {
+        this.modifiedon = modifiedon;
     }
 
-    public String getAPPLICATION() { return APPLICATION; }
-    public void setAPPLICATION(String APPLICATION) {
-        this.APPLICATION = APPLICATION;
+    public String getapplication() { return application; }
+    public void setapplication(String application) {
+        this.application = application;
     }
 
 }

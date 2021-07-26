@@ -66,7 +66,7 @@ Feature:Validate data for Promis between transform tables
   Scenario Outline: Verify that all Promis data is transferred between History excluding query and History exl tables
     Given We know the number of Promis <tablename> data for History excluding query
     Then Get the count for Promis <HistExcltablename> History excluding
-   And Compare the Promis count for <HistExcltablename> table between History excluding query and History excluding
+    And Compare the Promis count for <HistExcltablename> table between History excluding query and History excluding
     Given We get the <numberOfRecords> random Promis History Excluding Query ids of <HistExcltablename>
     When We get Promis History Excluding Query records from <tablename>
     Then We get the Promis History Excluding records from <HistExcltablename>

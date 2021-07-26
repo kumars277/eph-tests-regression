@@ -1265,9 +1265,9 @@ public class PromisETLDataCheck {
       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random records...");
-                sql = String.format(PromisETLDataCheckSQL.GET_UKEY_IDS, Currenttablename, numberOfRecords);
-                List<Map<?, ?>> randomTransformMappingIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
-                Ids = randomTransformMappingIds.stream().map(m -> (String) m.get("U_KEY")).map(String::valueOf).collect(Collectors.toList());
+        sql = String.format(PromisETLDataCheckSQL.GET_UKEY_IDS, Currenttablename, numberOfRecords);
+        List<Map<?, ?>> randomTransformMappingIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
+        Ids = randomTransformMappingIds.stream().map(m -> (String) m.get("U_KEY")).map(String::valueOf).collect(Collectors.toList());
         Log.info(sql);
         Log.info(Ids.toString());
     }

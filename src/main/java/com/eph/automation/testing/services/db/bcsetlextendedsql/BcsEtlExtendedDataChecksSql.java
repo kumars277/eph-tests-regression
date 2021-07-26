@@ -1,16 +1,16 @@
-package com.eph.automation.testing.services.db.BCS_ETLExtendedSQL;
+package com.eph.automation.testing.services.db.bcsetlextendedsql;
 
 
-import com.eph.automation.testing.services.db.BCS_ETLExtendedSQL.GetBCS_ETLExtendedDLDBUser;
-
-public class BCS_ETLExtendedDataChecksSQL {
-
-    public static String GET_RANDOM_AVAILABILITY_KEY_INBOUND =
-            "select eprid as EPRID from (\n" +
+public class BcsEtlExtendedDataChecksSql {
+    private BcsEtlExtendedDataChecksSql() {
+        throw new IllegalStateException("Utility class");
+    }
+    public static final String GET_RANDOM_AVAILABILITY_KEY_INBOUND =
+            "select eprid as eprid from (\n" +
                     "SELECT DISTINCT\n" +
-                    "  cr.epr eprId\n" +
+                    "  cr.epr eprid\n" +
                     ", concat(A.sourceref, A.application) u_key\n" +
-                    ", cr.product_type productType\n" +
+                    ", cr.product_type producttype\n" +
                     ", a.*\n" +
                     "FROM\n" +
                     "  ((\n" +
@@ -25,10 +25,10 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , CAST(null AS varchar) status\n" +
                     "   , (CASE WHEN (p.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                     "   FROM\n" +
-                    "     ((("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product p\n" +
-                    "   LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification duk ON ((p.sourceref = duk.sourceref) AND (split_part(duk.classificationcode, ' | ', 1) = 'DCADA')))\n" +
-                    "   LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification dus ON ((p.sourceref = dus.sourceref) AND (split_part(dus.classificationcode, ' | ', 1) = 'DCAADAUS')))\n" +
-                    "   LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification dan ON ((p.sourceref = dan.sourceref) AND (split_part(dan.classificationcode, ' | ', 1) = 'DCAANZ')))\n" +
+                    "     ((("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_product p\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification duk ON ((p.sourceref = duk.sourceref) AND (split_part(duk.classificationcode, ' | ', 1) = 'DCADA')))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification dus ON ((p.sourceref = dus.sourceref) AND (split_part(dus.classificationcode, ' | ', 1) = 'DCAADAUS')))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification dan ON ((p.sourceref = dan.sourceref) AND (split_part(dan.classificationcode, ' | ', 1) = 'DCAANZ')))\n" +
                     "UNION    SELECT\n" +
                     "     NULLIF(sourceref, '') sourceref\n" +
                     "   , date_parse(NULLIF(metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
@@ -40,8 +40,8 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , split_part(NULLIF(status, ''), ' | ', 1) status\n" +
                     "   , (CASE WHEN (metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                     "   FROM\n" +
-                    "     ("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation\n" +
-                    "   INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".locationcode ON (split_part(sublocation.warehouse, ' | ', 1) = locationcode.ppmcode))\n" +
+                    "     ("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_sublocation sublocation\n" +
+                    "   INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".locationcode ON (split_part(sublocation.warehouse, ' | ', 1) = locationcode.ppmcode))\n" +
                     "   WHERE (NULLIF(trim(sublocation.refkey, ' '), '') IS NOT NULL)\n" +
                     "UNION    SELECT\n" +
                     "     NULLIF(product.sourceref, '') sourceref\n" +
@@ -54,22 +54,22 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , split_part(NULLIF(product.deliverystatus, ''), ' | ', 1) status\n" +
                     "   , (CASE WHEN (product.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                     "   FROM\n" +
-                    "     (("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
-                    "   INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content ON (product.sourceref = content.sourceref))\n" +
-                    "   INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".locationcode ON (content.ownership = locationcode.ppmcode))\n" +
+                    "     (("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_product product\n" +
+                    "   INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content content ON (product.sourceref = content.sourceref))\n" +
+                    "   INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".locationcode ON (content.ownership = locationcode.ppmcode))\n" +
                     "   WHERE (NULLIF(trim(product.refkey, ' '), '') IS NOT NULL)\n" +
                     ")  A\n" +
-                    "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((concat(A.sourceref, '-OOA') = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Product')))\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((concat(A.sourceref, '-OOA') = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Product')))\n" +
                     "WHERE (A.metadeleted = false)\n" +
                     ")order by rand() limit %s \n";
 
-    public static String GET_AVAILABILITY_REC_INBOUND_DATA =
-            "select u_key as UKEY " +
-                    ",sourceref as SOURCEREF" +
-                    ",eprid as EPRID" +
-                    ",producttype as PRODUCTTYPE" +
-                    ",modifiedon as MODIFIEDON" +
-                    ",application as APPLICATION" +
+    public static final String GET_AVAILABILITY_REC_INBOUND_DATA =
+            "select u_key as ukey " +
+                    ",sourceref as sourceref" +
+                    ",eprid as eprid" +
+                    ",producttype as producttype" +
+                    ",modifiedon as modifiedon" +
+                    ",application as application" +
                     ",deltaanswercodeuk as deltaanswercodeuk" +
                     ",deltaanswercodeus as deltaanswercodeus" +
                     ",anzpubstatus as anzpubstatus" +
@@ -78,9 +78,9 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",metadeleted as metadeleted" +
                     " from (\n" +
                     "SELECT DISTINCT\n" +
-                    "  cr.epr eprId\n" +
+                    "  cr.epr eprid\n" +
                     ", concat(A.sourceref, A.application) u_key\n" +
-                    ", cr.product_type productType\n" +
+                    ", cr.product_type producttype\n" +
                     ", a.*\n" +
                     "FROM\n" +
                     "  ((\n" +
@@ -95,10 +95,10 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , CAST(null AS varchar) status\n" +
                     "   , (CASE WHEN (p.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                     "   FROM\n" +
-                    "     ((("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product p\n" +
-                    "   LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification duk ON ((p.sourceref = duk.sourceref) AND (split_part(duk.classificationcode, ' | ', 1) = 'DCADA')))\n" +
-                    "   LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification dus ON ((p.sourceref = dus.sourceref) AND (split_part(dus.classificationcode, ' | ', 1) = 'DCAADAUS')))\n" +
-                    "   LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification dan ON ((p.sourceref = dan.sourceref) AND (split_part(dan.classificationcode, ' | ', 1) = 'DCAANZ')))\n" +
+                    "     ((("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_product p\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification duk ON ((p.sourceref = duk.sourceref) AND (split_part(duk.classificationcode, ' | ', 1) = 'DCADA')))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification dus ON ((p.sourceref = dus.sourceref) AND (split_part(dus.classificationcode, ' | ', 1) = 'DCAADAUS')))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification dan ON ((p.sourceref = dan.sourceref) AND (split_part(dan.classificationcode, ' | ', 1) = 'DCAANZ')))\n" +
                     "UNION    SELECT\n" +
                     "     NULLIF(sourceref, '') sourceref\n" +
                     "   , date_parse(NULLIF(metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
@@ -110,8 +110,8 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , split_part(NULLIF(status, ''), ' | ', 1) status\n" +
                     "   , (CASE WHEN (metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                     "   FROM\n" +
-                    "     ("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_sublocation sublocation\n" +
-                    "   INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".locationcode ON (split_part(sublocation.warehouse, ' | ', 1) = locationcode.ppmcode))\n" +
+                    "     ("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_sublocation sublocation\n" +
+                    "   INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".locationcode ON (split_part(sublocation.warehouse, ' | ', 1) = locationcode.ppmcode))\n" +
                     "   WHERE (NULLIF(trim(sublocation.refkey, ' '), '') IS NOT NULL)\n" +
                     "UNION    SELECT\n" +
                     "     NULLIF(product.sourceref, '') sourceref\n" +
@@ -124,34 +124,34 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , split_part(NULLIF(product.deliverystatus, ''), ' | ', 1) status\n" +
                     "   , (CASE WHEN (product.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                     "   FROM\n" +
-                    "     (("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product product\n" +
-                    "   INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content ON (product.sourceref = content.sourceref))\n" +
-                    "   INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".locationcode ON (content.ownership = locationcode.ppmcode))\n" +
+                    "     (("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_product product\n" +
+                    "   INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content content ON (product.sourceref = content.sourceref))\n" +
+                    "   INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".locationcode ON (content.ownership = locationcode.ppmcode))\n" +
                     "   WHERE (NULLIF(trim(product.refkey, ' '), '') IS NOT NULL)\n" +
                     ")  A\n" +
-                    "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((concat(A.sourceref, '-OOA') = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Product')))\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((concat(A.sourceref, '-OOA') = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Product')))\n" +
                     "WHERE (A.metadeleted = false)\n" +
                     ")where eprid in ('%s') order by eprid,u_key desc\n";
 
-    public static String GET_AVAILABILITY_REC_CURR_DATA=
-            "select u_key as UKEY " +
-                    ",sourceref as SOURCEREF" +
-                    ",eprid as EPRID" +
-                    ",producttype as PRODUCTTYPE" +
-                    ",modifiedon as MODIFIEDON" +
-                    ",application as APPLICATION" +
+    public static final String GET_AVAILABILITY_REC_CURR_DATA=
+            "select u_key as ukey " +
+                    ",sourceref as sourceref" +
+                    ",eprid as eprid" +
+                    ",producttype as producttype" +
+                    ",modifiedon as modifiedon" +
+                    ",application as application" +
                     ",deltaanswercodeuk as deltaanswercodeuk" +
                     ",deltaanswercodeus as deltaanswercodeus" +
                     ",anzpubstatus as anzpubstatus" +
                     ",pubdateactual as pubdateactual" +
                     ",status as status" +
                     ",metadeleted as metadeleted" +
-                    " from "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_current_v " +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_availability_extended_current_v " +
                     "where eprid in ('%s') order by eprid,u_key desc\n";
 
-    public static String GET_RANDOM_MANIF_EXT_KEY_INBOUND =
-            "select eprid as EPRID from (\n" +
-                    "SELECT distinct cr.epr eprId, A.sourceref u_key, cr.manifestation_type, A.* FROM (( \n" +
+    public static final String GET_RANDOM_MANIF_EXT_KEY_INBOUND =
+            "select eprid as eprid from (\n" +
+                    "SELECT distinct cr.epr eprid, A.sourceref u_key, cr.manifestation_type, A.* FROM (( \n" +
                     "SELECT\n" +
                     "     NULLIF(m.sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(m.metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
@@ -170,27 +170,27 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , CAST(NULL AS varchar) warReference \n" +
                     "   ,(CASE WHEN (web.sourceref IS NOT NULL) THEN true ELSE false END) exporttowebind \n" +
                     "   FROM\n" +
-                    "     ((((((("+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product m\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_production p ON (m.sourceref = p.sourceref))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ukt ON ((m.sourceref = ukt.sourceref) AND (ukt.classificationcode LIKE 'MAUKT%%')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ust ON ((m.sourceref = ust.sourceref) AND (ust.classificationcode LIKE 'MAUST%%')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification usd ON ((m.sourceref = usd.sourceref) AND (usd.classificationcode LIKE 'MADISC %%')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ukd ON ((m.sourceref = ukd.sourceref) AND (ukd.classificationcode LIKE 'MADISCEMEA%%')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c   ON ((m.sourceref = c.sourceref) AND (c.classificationcode LIKE 'DCDFC1%%')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification web ON ((m.sourceref = web.sourceref) AND (web.classificationcode LIKE 'MAWEB%%')))\n" +
+                    "     ((((((("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_product m\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_production p ON (m.sourceref = p.sourceref))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification ukt ON ((m.sourceref = ukt.sourceref) AND (ukt.classificationcode LIKE 'MAUKT%%')))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification ust ON ((m.sourceref = ust.sourceref) AND (ust.classificationcode LIKE 'MAUST%%')))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification usd ON ((m.sourceref = usd.sourceref) AND (usd.classificationcode LIKE 'MADISC %%')))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification ukd ON ((m.sourceref = ukd.sourceref) AND (ukd.classificationcode LIKE 'MADISCEMEA%%')))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c   ON ((m.sourceref = c.sourceref) AND (c.classificationcode LIKE 'DCDFC1%%')))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification web ON ((m.sourceref = web.sourceref) AND (web.classificationcode LIKE 'MAWEB%%')))\n" +
                     " )A\n" +
-                    "INNER JOIN " + GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
+                    "INNER JOIN " + GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
                     "(((A.sourceref = cr.identifier) AND \n" +
                     "(cr.identifier_type = 'external_reference')) AND \n" +
                     "(cr.record_level = 'Manifestation')))\n" +
                     "WHERE (A.metadeleted = false)) order by rand() limit %s \n";
 
-    public static String GET_MANIF_EXT_REC_INBOUND_DATA =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_EXT_REC_INBOUND_DATA =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",uktextbookind as uktextbookind" +
                     ",ustextbookind as ustextbookind" +
@@ -206,7 +206,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",warreference as warreference" +
                     ",exporttowebind as exporttowebind\n" +
                     " from (\n" +
-                    "SELECT distinct cr.epr eprId, A.sourceref u_key, cr.manifestation_type, A.* FROM (( \n" +
+                    "SELECT distinct cr.epr eprid, A.sourceref u_key, cr.manifestation_type, A.* FROM (( \n" +
                     "SELECT\n" +
                     "     NULLIF(m.sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(m.metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
@@ -225,28 +225,28 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , CAST(NULL AS varchar) warReference \n" +
                     "   ,(CASE WHEN (web.sourceref IS NOT NULL) THEN true ELSE false END) exporttowebind \n" +
                     "   FROM\n" +
-                    "     ((((((("+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_product m\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_production p ON (m.sourceref = p.sourceref))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ukt ON ((m.sourceref = ukt.sourceref) AND (ukt.classificationcode LIKE 'MAUKT%%')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ust ON ((m.sourceref = ust.sourceref) AND (ust.classificationcode LIKE 'MAUST%%')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification usd ON ((m.sourceref = usd.sourceref) AND (usd.classificationcode LIKE 'MADISC %%')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification ukd ON ((m.sourceref = ukd.sourceref) AND (ukd.classificationcode LIKE 'MADISCEMEA%%')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON   ((m.sourceref = c.sourceref) AND (c.classificationcode LIKE 'DCDFC1%%')))\n" +
-                    "   LEFT JOIN "+ GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification web ON ((m.sourceref = web.sourceref) AND (web.classificationcode LIKE 'MAWEB%%')))\n" +
+                    "     ((((((("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_product m\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_production p ON (m.sourceref = p.sourceref))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification ukt ON ((m.sourceref = ukt.sourceref) AND (ukt.classificationcode LIKE 'MAUKT%%')))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification ust ON ((m.sourceref = ust.sourceref) AND (ust.classificationcode LIKE 'MAUST%%')))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification usd ON ((m.sourceref = usd.sourceref) AND (usd.classificationcode LIKE 'MADISC %%')))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification ukd ON ((m.sourceref = ukd.sourceref) AND (ukd.classificationcode LIKE 'MADISCEMEA%%')))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c ON   ((m.sourceref = c.sourceref) AND (c.classificationcode LIKE 'DCDFC1%%')))\n" +
+                    "   LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification web ON ((m.sourceref = web.sourceref) AND (web.classificationcode LIKE 'MAWEB%%')))\n" +
                     " )A\n" +
-                    "INNER JOIN " + GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
+                    "INNER JOIN " + GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
                     "(((A.sourceref = cr.identifier) AND \n" +
                     "(cr.identifier_type = 'external_reference')) AND \n" +
                     "(cr.record_level = 'Manifestation')))\n" +
                     " WHERE (A.metadeleted = false)) where eprid in ('%s') order by eprid,u_key desc\n";
 
 
-    public static String GET_MANIF_EXT_REC_CURR_DATA =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_EXT_REC_CURR_DATA =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",uktextbookind as uktextbookind" +
                     ",ustextbookind as ustextbookind" +
@@ -261,11 +261,11 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
                     ",exporttowebind as exporttowebind" +
-                    " from " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_current_v where eprid in ('%s') order by eprid,u_key desc \n";
+                    " from " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_extended_current_v where eprid in ('%s') order by eprid,u_key desc \n";
 
-    public static String GET_RANDOM_PAGE_COUNT_KEY_INBOUND=
-            "select eprid as EPRID from (\n" +
-                    "   SELECT distinct cr.epr eprId, concat(A.sourceref,A.pagecounttypecode) u_key, cr.manifestation_type, A.* FROM (\n" +
+    public static final String GET_RANDOM_PAGE_COUNT_KEY_INBOUND=
+            "select eprid as eprid from (\n" +
+                    "   SELECT distinct cr.epr eprid, concat(A.sourceref,A.pagecounttypecode) u_key, cr.manifestation_type, A.* FROM (\n" +
                     "SELECT DISTINCT\n" +
                     "     NULLIF(sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
@@ -274,7 +274,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , 'Roman' pagecounttypename \n" +
                     "   , CAST((CASE WHEN (pagesroman = '') THEN '0' ELSE pagesroman END) AS integer) pagecount \n" +
                     "   FROM\n" +
-                    "     " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_production\n" +
+                    "     " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_production\n" +
                     "UNION  SELECT\n" +
                     "     NULLIF(sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
@@ -283,7 +283,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , 'Arabic' pagecounttypename \n" +
                     "   , CAST((CASE WHEN (pagesarabic = '') THEN '0' ELSE pagesarabic END) AS integer) pagecount \n" +
                     "   FROM \n" +
-                    "     "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_production\n" +
+                    "     "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_production\n" +
                     "UNION  SELECT\n" +
                     "     NULLIF(sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
@@ -292,26 +292,26 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , 'Total' pagecounttypename \n" +
                     "   , (CAST((CASE WHEN (pagesroman = '') THEN '0' ELSE pagesroman END) AS integer) + CAST((CASE WHEN (pagesarabic = '') THEN '0' ELSE pagesarabic END) AS integer)) pagecount \n" +
                     "   FROM\n" +
-                    "     " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_production\n" +
+                    "     " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_production\n" +
                     ")A\n" +
-                    "INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON \n" +
+                    "INNER JOIN " + GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON \n" +
                     "A.sourceref = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
                     "cr.record_level = 'Manifestation'\n" +
                     "WHERE A.metadeleted = FALSE ) order by rand() limit %s \n";
 
-    public static String GET_PAGE_COUNT_EXT_REC_INBOUND_DATA=
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PAGE_COUNT_EXT_REC_INBOUND_DATA=
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pagecounttypecode as pagecounttypecode" +
                     ",pagecounttypename as pagecounttypename" +
                     ",pagecount as pagecount" +
                     " from (\n" +
-                    "   SELECT distinct cr.epr eprId, concat(A.sourceref,A.pagecounttypecode) u_key, cr.manifestation_type, A.* FROM (\n" +
+                    "   SELECT distinct cr.epr eprid, concat(A.sourceref,A.pagecounttypecode) u_key, cr.manifestation_type, A.* FROM (\n" +
                     "SELECT DISTINCT\n" +
                     "     NULLIF(sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
@@ -320,7 +320,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , 'Roman' pagecounttypename \n" +
                     "   , CAST((CASE WHEN (pagesroman = '') THEN '0' ELSE pagesroman END) AS integer) pagecount \n" +
                     "   FROM\n" +
-                    "     " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_production\n" +
+                    "     " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_production\n" +
                     "UNION  SELECT\n" +
                     "     NULLIF(sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
@@ -329,7 +329,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , 'Arabic' pagecounttypename \n" +
                     "   , CAST((CASE WHEN (pagesarabic = '') THEN '0' ELSE pagesarabic END) AS integer) pagecount \n" +
                     "   FROM \n" +
-                    "     "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_production\n" +
+                    "     "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_production\n" +
                     "UNION  SELECT\n" +
                     "     NULLIF(sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
@@ -338,29 +338,29 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , 'Total' pagecounttypename \n" +
                     "   , (CAST((CASE WHEN (pagesroman = '') THEN '0' ELSE pagesroman END) AS integer) + CAST((CASE WHEN (pagesarabic = '') THEN '0' ELSE pagesarabic END) AS integer)) pagecount \n" +
                     "   FROM\n" +
-                    "     " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_production\n" +
+                    "     " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_production\n" +
                     ")A\n" +
-                    "INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON \n" +
+                    "INNER JOIN " + GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON \n" +
                     "A.sourceref = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
                     "cr.record_level = 'Manifestation'\n" +
                     "WHERE A.metadeleted = FALSE ) where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_PAGE_COUNT_REC_CURR_DATA =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PAGE_COUNT_REC_CURR_DATA =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pagecounttypecode as pagecounttypecode" +
                     ",pagecounttypename as pagecounttypename" +
                     ",pagecount as pagecount" +
-                    " from " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
+                    " from " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_page_count_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_URL_KEY_INBOUND=
-            "select eprid as EPRID from (\n" +
-                    "SELECT distinct cr.epr eprId, concat(A.sourceref,A.source) u_key, cr.work_type, A.* FROM (\n" +
+    public static final String GET_RANDOM_URL_KEY_INBOUND=
+            "select eprid as eprid from (\n" +
+                    "SELECT distinct cr.epr eprid, concat(A.sourceref,A.source) u_key, cr.work_type, A.* FROM (\n" +
                     "SELECT DISTINCT\n" +
                     "     NULLIF(sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
@@ -370,29 +370,29 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , NULLIF(name,'') name \n" +
                     "   , CASE WHEN metadeleted = 'Y' then true else false END metadeleted \n" +
                     "   FROM\n" +
-                    "     (" +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_extobject\n" +
-                    "   INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".urltypecode ON (split_part(object, ' | ', 1) = ppmcode))\n" +
+                    "     (" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_extobject\n" +
+                    "   INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".urltypecode ON (split_part(object, ' | ', 1) = ppmcode))\n" +
                     ")A\n" +
-                    "INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily f ON A.sourceref = f.sourceref and A.sourceref = f.workmasterprojectno \n" +
-                    "INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
+                    "INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily f ON A.sourceref = f.sourceref and A.sourceref = f.workmasterprojectno \n" +
+                    "INNER JOIN " + GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
                     "f.workmasterprojectno = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
                     "cr.record_level = 'Work'\n" +
                     "WHERE A.metadeleted = FALSE) order by rand() limit %s";
 
-    public static String GET_URL_REC_INBOUND_DATA=
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_URL_REC_INBOUND_DATA=
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",urltypecode as urltypecode" +
                     ",urltypecode as urltypecode" +
                     ",source as source" +
                     ",name as name" +
                     " from (\n" +
-                    "SELECT distinct cr.epr eprId, concat(A.sourceref,A.source) u_key, cr.work_type, A.* FROM (\n" +
+                    "SELECT distinct cr.epr eprid, concat(A.sourceref,A.source) u_key, cr.work_type, A.* FROM (\n" +
                     "SELECT DISTINCT\n" +
                     "     NULLIF(sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
@@ -402,35 +402,35 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , NULLIF(name,'') name \n" +
                     "   , CASE WHEN metadeleted = 'Y' then true else false END metadeleted \n" +
                     "   FROM\n" +
-                    "     (" +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_extobject\n" +
-                    "   INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".urltypecode ON (split_part(object, ' | ', 1) = ppmcode))\n" +
+                    "     (" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_extobject\n" +
+                    "   INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".urltypecode ON (split_part(object, ' | ', 1) = ppmcode))\n" +
                     ")A\n" +
-                    "INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily f ON A.sourceref = f.sourceref and A.sourceref = f.workmasterprojectno \n" +
-                    "INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
+                    "INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily f ON A.sourceref = f.sourceref and A.sourceref = f.workmasterprojectno \n" +
+                    "INNER JOIN " + GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
                     "f.workmasterprojectno = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
                     "cr.record_level = 'Work'\n" +
                     "WHERE A.metadeleted = FALSE) where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_URL_REC_CURR_DATA =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_URL_REC_CURR_DATA =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",urltypecode as urltypecode" +
                     ",urltypecode as urltypecode" +
                     ",source as source" +
                     ",name as name" +
-                    " from " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
+                    " from " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_url_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_WORK_EXT_REC_CURR_DATA =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_EXT_REC_CURR_DATA =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",companygroup as companygroup" +
                     ",imagefileref as imagefileref" +
@@ -438,8 +438,8 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",textreftrade as textreftrade" +
                     ",features as features" +
                     ",awards as awards" +
-                    ",toc_long as toc_long" +
-                    ",toc_short as toc_short" +
+                    ",toc_long as toclong" +
+                    ",toc_short as tocshort" +
                     ",audience as audience" +
                     ",authorbyline as authorbyline" +
                     ",description as description" +
@@ -469,11 +469,11 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",rflvi as rflvi" +
                     ",journalprevioustitle as journalprevioustitle" +
                     ",journalprimaryauthor as journalprimaryauthor" +
-                    " from " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
+                    " from " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_WORK_EXT_KEY_INBOUND=
-            "select eprid as EPRID from (\n" +
-                    "SELECT distinct cr.epr eprId, A.sourceref u_key, cr.work_type, A.* FROM ( \n" +
+    public static final String GET_RANDOM_WORK_EXT_KEY_INBOUND=
+            "select eprid as eprid from (\n" +
+                    "SELECT distinct cr.epr eprid, A.sourceref u_key, cr.work_type, A.* FROM ( \n" +
                     "SELECT DISTINCT\n" +
                     "     NULLIF(c.sourceref,'') sourceref \n" +
                     "   , NULLIF(c.companygroup,'') companygroup \n" +
@@ -515,14 +515,14 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , CAST(NULL as varchar) rfLvi\n" +
                     "   , CAST(NULL as varchar) journalPreviousTitle\n" +
                     "   , CAST(NULL as varchar) journalPrimaryAuthor\n" +
-                    "   FROM " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content c\n" +
-                    "   INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily v ON ((c.sourceref = v.sourceref) AND (v.workmasterprojectno = v.sourceref))\n" +
+                    "   FROM " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content c\n" +
+                    "   INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((c.sourceref = v.sourceref) AND (v.workmasterprojectno = v.sourceref))\n" +
                     "   LEFT JOIN (select sourceref \n" +
                     "   , max(case when split_part(classificationcode, ' | ',1) = 'PTTR' then split_part(value, ' | ', 1) end) as textreftrade\n" +
                     "   , max(case when substr(classificationcode,1,3) like 'SBU%%' then substr(classificationcode, 4, 3) end) as sbu\n" +
                     "   , max(case when substr(classificationcode,1,3) like 'SBU%%' then substr(classificationcode, (strpos(classificationcode, 'PC') + 2), 2) end) as pc\n" +
                     "   , max(case when substr(classificationcode,1,2) like 'PC%%'  then replace(split_part(classificationcode, ' | ', 1), 'PC') end) as pc2\n" +
-                    "   from " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification\n" +
+                    "   from " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification\n" +
                     "   where (case when split_part(classificationcode, ' | ',1) in ('PTTR','DCDFAC') then true\n" +
                     "           when substr(classificationcode,1,3) like 'SBU%%' then true\n" +
                     "           when substr(classificationcode,1,2) like 'PC%%' then true\n" +
@@ -534,7 +534,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , max(case when substr(name,1,strpos(name,'|')-2)='BETOCSHT' then text end) as betocsht\n" +
                     "   , max(case when substr(name,1,strpos(name,'|')-2)='SEMKTAUD' then text end) as semktaud\n" +
                     "   , max(case when substr(name,1,strpos(name,'|')-2)='BEAUABYL' then text end) as beaubyl\n" +
-                    "   from " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_text\n" +
+                    "   from " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_text\n" +
                     "   where substr(name,1,strpos(name,'|')-2) in ('BEBULLCPY','SEMSBKA','BETOCLNG','BETOCSHT','SEMKTAUD','BEAUABYL')\n" +
                     "   group by sourceref\n" +
                     "   )  f ON (c.sourceref = f.sourceref)\n" +
@@ -542,32 +542,32 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "       , max(case when texttype.purpose = 'Review' then text.text end) as review\n" +
                     "       , max(case when texttype.purpose = 'Description' then text.text end) as description\n" +
                     "      FROM\n" +
-                    "        " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_text text\n" +
+                    "        " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_text text\n" +
                     "      INNER JOIN (\n" +
                     "         SELECT\n" +
                     "           content.sourceref \n" +
                     "         , texttypecode.texttype \n" +
                     "         , texttypecode.purpose \n" +
                     "         FROM\n" +
-                    "           " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content\n" +
-                    "         INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".texttypecode ON ((content.objecttype = texttypecode.objecttype) AND (content.companygroup = texttypecode.companygroup))\n" +
+                    "           " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content content\n" +
+                    "         INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".texttypecode ON ((content.objecttype = texttypecode.objecttype) AND (content.companygroup = texttypecode.companygroup))\n" +
                     "         WHERE (texttypecode.purpose in ('Review','Description'))\n" +
                     "      )  texttype ON ((text.sourceref = texttype.sourceref) AND (split_part(text.name, ' | ', 1) = texttype.texttype))\n" +
                     "      group by text.sourceref \n" +
                     "   )  d ON (c.sourceref = d.sourceref)\n" +
                     ")A\n" +
-                    "INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
+                    "INNER JOIN " + GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
                     "A.sourceref = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
                     "cr.record_level = 'Work'\n" +
                     "WHERE A.metadeleted = FALSE) order by rand() limit %s";
 
-    public static String GET_WORK_EXT_INBOUND_DATA=
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_EXT_INBOUND_DATA=
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",companygroup as companygroup" +
                     ",imagefileref as imagefileref" +
@@ -575,8 +575,8 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",textreftrade as textreftrade" +
                     ",features as features" +
                     ",awards as awards" +
-                    ",toc_long as toc_long" +
-                    ",toc_short as toc_short" +
+                    ",toc_long as toclong" +
+                    ",toc_short as tocshort" +
                     ",audience as audience" +
                     ",authorbyline as authorbyline" +
                     ",description as description" +
@@ -607,7 +607,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalprevioustitle as journalprevioustitle" +
                     ",journalprimaryauthor as journalprimaryauthor" +
                     " from (\n" +
-                    "SELECT distinct cr.epr eprId, A.sourceref u_key, cr.work_type, A.* FROM ( \n" +
+                    "SELECT distinct cr.epr eprid, A.sourceref u_key, cr.work_type, A.* FROM ( \n" +
                     "SELECT DISTINCT\n" +
                     "     NULLIF(c.sourceref,'') sourceref \n" +
                     "   , NULLIF(c.companygroup,'') companygroup \n" +
@@ -650,14 +650,14 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , CAST(NULL as varchar) journalPreviousTitle\n" +
                     "   , CAST(NULL as varchar) journalPrimaryAuthor\n" +
                     "   FROM\n" +
-                    "     " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content c\n" +
-                    "   INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily v ON ((c.sourceref = v.sourceref) AND (v.workmasterprojectno = v.sourceref))\n" +
+                    "     " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content c\n" +
+                    "   INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((c.sourceref = v.sourceref) AND (v.workmasterprojectno = v.sourceref))\n" +
                     "   LEFT JOIN (select sourceref \n" +
                     "   , max(case when split_part(classificationcode, ' | ',1) = 'PTTR' then split_part(value, ' | ', 1) end) as textreftrade\n" +
                     "   , max(case when substr(classificationcode,1,3) like 'SBU%%' then substr(classificationcode, 4, 3) end) as sbu\n" +
                     "   , max(case when substr(classificationcode,1,3) like 'SBU%%' then substr(classificationcode, (strpos(classificationcode, 'PC') + 2), 2) end) as pc\n" +
                     "   , max(case when substr(classificationcode,1,2) like 'PC%%'  then replace(split_part(classificationcode, ' | ', 1), 'PC') end) as pc2\n" +
-                    "   from " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification\n" +
+                    "   from " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification\n" +
                     "   where (case when split_part(classificationcode, ' | ',1) in ('PTTR','DCDFAC') then true\n" +
                     "           when substr(classificationcode,1,3) like 'SBU%%' then true\n" +
                     "           when substr(classificationcode,1,2) like 'PC%%' then true\n" +
@@ -669,7 +669,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , max(case when substr(name,1,strpos(name,'|')-2)='BETOCSHT' then text end) as betocsht\n" +
                     "   , max(case when substr(name,1,strpos(name,'|')-2)='SEMKTAUD' then text end) as semktaud\n" +
                     "   , max(case when substr(name,1,strpos(name,'|')-2)='BEAUABYL' then text end) as beaubyl\n" +
-                    "   from " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_text\n" +
+                    "   from " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_text\n" +
                     "   where substr(name,1,strpos(name,'|')-2) in ('BEBULLCPY','SEMSBKA','BETOCLNG','BETOCSHT','SEMKTAUD','BEAUABYL')\n" +
                     "   group by sourceref\n" +
                     "   )  f ON (c.sourceref = f.sourceref)\n" +
@@ -677,30 +677,30 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "       , max(case when texttype.purpose = 'Review' then text.text end) as review\n" +
                     "       , max(case when texttype.purpose = 'Description' then text.text end) as description\n" +
                     "      FROM\n" +
-                    "        " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_text text\n" +
+                    "        " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_text text\n" +
                     "      INNER JOIN (\n" +
                     "         SELECT\n" +
                     "           content.sourceref \n" +
                     "         , texttypecode.texttype \n" +
                     "         , texttypecode.purpose \n" +
                     "         FROM\n" +
-                    "           " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content content\n" +
-                    "         INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".texttypecode ON ((content.objecttype = texttypecode.objecttype) AND (content.companygroup = texttypecode.companygroup))\n" +
+                    "           " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content content\n" +
+                    "         INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".texttypecode ON ((content.objecttype = texttypecode.objecttype) AND (content.companygroup = texttypecode.companygroup))\n" +
                     "         WHERE (texttypecode.purpose in ('Review','Description'))\n" +
                     "      )  texttype ON ((text.sourceref = texttype.sourceref) AND (split_part(text.name, ' | ', 1) = texttype.texttype))\n" +
                     "      group by text.sourceref \n" +
                     "   )  d ON (c.sourceref = d.sourceref)\n" +
                     ")A\n" +
-                    "INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
+                    "INNER JOIN " + GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
                     "A.sourceref = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
                     "cr.record_level = 'Work'\n" +
                     "WHERE A.metadeleted = FALSE) where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_WORK_SUBJ_AREA_KEY_INBOUND =
-            "select eprid as EPRID " +
+    public static final String GET_RANDOM_WORK_SUBJ_AREA_KEY_INBOUND =
+            "select eprid as eprid " +
                     " from (\n" +
-                    "SELECT distinct cr.epr eprId, concat(A.sourceref,A.typecode,A.subjcode,A.subjdesc,coalesce(A.priority,'')) u_key, cr.work_type, A.* FROM ( \n" +
+                    "SELECT distinct cr.epr eprid, concat(A.sourceref,A.typecode,A.subjcode,A.subjdesc,coalesce(A.priority,'')) u_key, cr.work_type, A.* FROM ( \n" +
                     "SELECT DISTINCT\n" +
                     "     NULLIF(w.sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(w.metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
@@ -711,9 +711,9 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , NULLIF(c.priority,'') priority \n" +
                     "   , CASE WHEN w.metadeleted = 'Y' THEN true ELSE false END metadeleted \n" +
                     "   FROM\n" +
-                    "     ((" +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content w\n" +
-                    "   INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
-                    "   INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'promis%%')))\n" +
+                    "     ((" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content w\n" +
+                    "   INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
+                    "   INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'promis%%')))\n" +
                     "UNION    SELECT DISTINCT\n" +
                     "     NULLIF(sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(modifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
@@ -735,9 +735,9 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "      , c.priority \n" +
                     "      , CASE WHEN w.metadeleted = 'Y' THEN true ELSE false END metadeleted \n" +
                     "      FROM\n" +
-                    "        ((" +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content w\n" +
-                    "      INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
-                    "      INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'MSC%%')))\n" +
+                    "        ((" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content w\n" +
+                    "      INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
+                    "      INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'MSC%%')))\n" +
                     "UNION       SELECT DISTINCT\n" +
                     "        w.sourceref \n" +
                     "      , w.metamodifiedon modifiedon \n" +
@@ -748,9 +748,9 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "      , c.priority \n" +
                     "      , CASE WHEN w.metadeleted = 'Y' THEN true ELSE false END metadeleted\n" +
                     "      FROM\n" +
-                    "        ((" +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content w\n" +
-                    "      INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
-                    "      INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'SBU%%MSC%%')))\n" +
+                    "        ((" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content w\n" +
+                    "      INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
+                    "      INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'SBU%%MSC%%')))\n" +
                     "   )\n" +
                     "UNION    SELECT DISTINCT\n" +
                     "     NULLIF(w.sourceref,'') sourceref \n" +
@@ -762,22 +762,22 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , NULLIF(c.priority,'') priority \n" +
                     "   , CASE WHEN w.metadeleted = 'Y' THEN true ELSE false END metadeleted \n" +
                     "   FROM\n" +
-                    "     ((" +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content w\n" +
-                    "   INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
-                    "   INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'BRASESUBDI%%')))\n" +
+                    "     ((" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content w\n" +
+                    "   INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
+                    "   INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'BRASESUBDI%%')))\n" +
                     ")A\n" +
-                    "INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON \n" +
+                    "INNER JOIN " + GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON \n" +
                     "A.sourceref = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
                     "cr.record_level = 'Work'\n" +
                     "WHERE A.metadeleted = FALSE) order by rand() limit %s";
 
-    public static String GET_WORK_SUBJ_AREA_INBOUND_DATA =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_SUBJ_AREA_INBOUND_DATA =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",typecode as typecode" +
                     ",typedesc as typedesc" +
@@ -785,7 +785,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",subjdesc as subjdesc" +
                     ",priority as priority" +
                     " from (\n" +
-                    "SELECT distinct cr.epr eprId, concat(A.sourceref,A.typecode,A.subjcode,A.subjdesc,coalesce(A.priority,'')) u_key, cr.work_type, A.* FROM ( \n" +
+                    "SELECT distinct cr.epr eprid, concat(A.sourceref,A.typecode,A.subjcode,A.subjdesc,coalesce(A.priority,'')) u_key, cr.work_type, A.* FROM ( \n" +
                     "SELECT DISTINCT\n" +
                     "     NULLIF(w.sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(w.metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
@@ -796,9 +796,9 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , NULLIF(c.priority,'') priority \n" +
                     "   , CASE WHEN w.metadeleted = 'Y' THEN true ELSE false END metadeleted \n" +
                     "   FROM\n" +
-                    "     ((" +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content w\n" +
-                    "   INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
-                    "   INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'promis%%')))\n" +
+                    "     ((" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content w\n" +
+                    "   INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
+                    "   INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'promis%%')))\n" +
                     "UNION    SELECT DISTINCT\n" +
                     "     NULLIF(sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(modifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon \n" +
@@ -820,9 +820,9 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "      , c.priority \n" +
                     "      , CASE WHEN w.metadeleted = 'Y' THEN true ELSE false END metadeleted \n" +
                     "      FROM\n" +
-                    "        ((" +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content w\n" +
-                    "      INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
-                    "      INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'MSC%%')))\n" +
+                    "        ((" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content w\n" +
+                    "      INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
+                    "      INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'MSC%%')))\n" +
                     "UNION       SELECT DISTINCT\n" +
                     "        w.sourceref \n" +
                     "      , w.metamodifiedon modifiedon \n" +
@@ -833,9 +833,9 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "      , c.priority \n" +
                     "      , CASE WHEN w.metadeleted = 'Y' THEN true ELSE false END metadeleted\n" +
                     "      FROM\n" +
-                    "        ((" +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content w\n" +
-                    "      INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
-                    "      INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'SBU%%MSC%%')))\n" +
+                    "        ((" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content w\n" +
+                    "      INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
+                    "      INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'SBU%%MSC%%')))\n" +
                     "   )\n" +
                     "UNION    SELECT DISTINCT\n" +
                     "     NULLIF(w.sourceref,'') sourceref \n" +
@@ -847,33 +847,33 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , NULLIF(c.priority,'') priority \n" +
                     "   , CASE WHEN w.metadeleted = 'Y' THEN true ELSE false END metadeleted \n" +
                     "   FROM\n" +
-                    "     ((" +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_content w\n" +
-                    "   INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
-                    "   INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'BRASESUBDI%%')))\n" +
+                    "     ((" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_content w\n" +
+                    "   INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_versionfamily v ON ((w.sourceref = v.sourceref) AND (v.sourceref = v.workmasterprojectno)))\n" +
+                    "   INNER JOIN " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c ON ((w.sourceref = c.sourceref) AND (c.classificationcode LIKE 'BRASESUBDI%%')))\n" +
                     ")A\n" +
-                    "INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON \n" +
+                    "INNER JOIN " + GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON \n" +
                     "A.sourceref = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
                     "cr.record_level = 'Work'\n" +
                     "WHERE A.metadeleted = FALSE) where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_WORK_SUBJ_AREA_REC_CURR_DATA=
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_SUBJ_AREA_REC_CURR_DATA=
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",typecode as typecode" +
                     ",typedesc as typedesc" +
                     ",subjcode as subjcode" +
                     ",subjdesc as subjdesc" +
                     ",priority as priority" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_subject_area_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_MANIF_RESTRICT_KEY_INBOUND =
-            "select eprid as EPRID from (\n" +
-                    "SELECT distinct cr.epr eprId, concat(A.sourceref, A.restrictioncode) u_key, cr.manifestation_type, A.* FROM (\n" +
+    public static final String GET_RANDOM_MANIF_RESTRICT_KEY_INBOUND =
+            "select eprid as eprid from (\n" +
+                    "SELECT distinct cr.epr eprid, concat(A.sourceref, A.restrictioncode) u_key, cr.manifestation_type, A.* FROM (\n" +
                     "SELECT DISTINCT\n" +
                     "     NULLIF(c.sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(c.metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
@@ -881,26 +881,26 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , split_part(NULLIF(c.value,''), ' | ', 2) restrictionname\n" +
                     "   , CASE WHEN c.metadeleted = 'Y' THEN true ELSE false END metadeleted\n" +
                     "   FROM\n" +
-                    "     (" +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c)\n" +
+                    "     (" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c)\n" +
                     "   WHERE (classificationcode LIKE 'MARESTR%%') AND (trim(value) != '')\n" +
                     ")A\n" +
-                    "INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
+                    "INNER JOIN " + GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
                     "A.sourceref = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
                     "cr.record_level = 'Manifestation'\n" +
                     "WHERE A.metadeleted = FALSE) order by rand() limit %s";
 
-    public static String GET_MANIF_RESTRICT_INBOUND_DATA =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_RESTRICT_INBOUND_DATA =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",restrictioncode as restrictioncode" +
                     ",restrictionname as restrictionname" +
                     " from (\n" +
-                    "SELECT distinct cr.epr eprId, concat(A.sourceref, A.restrictioncode) u_key, cr.manifestation_type, A.* FROM (\n" +
+                    "SELECT distinct cr.epr eprid, concat(A.sourceref, A.restrictioncode) u_key, cr.manifestation_type, A.* FROM (\n" +
                     "SELECT DISTINCT\n" +
                     "     NULLIF(c.sourceref,'') sourceref \n" +
                     "   , date_parse(NULLIF(c.metamodifiedon,''),'%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
@@ -908,31 +908,31 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "   , split_part(NULLIF(c.value,''), ' | ', 2) restrictionname\n" +
                     "   , CASE WHEN c.metadeleted = 'Y' THEN true ELSE false END metadeleted\n" +
                     "   FROM\n" +
-                    "     (" +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_classification c)\n" +
+                    "     (" + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_classification c)\n" +
                     "   WHERE (classificationcode LIKE 'MARESTR%%') AND (trim(value) != '')\n" +
                     ")A\n" +
-                    "INNER JOIN " +GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
+                    "INNER JOIN " + GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON\n" +
                     "A.sourceref = cr.identifier AND \n" +
                     "cr.identifier_type = 'external_reference' AND \n" +
                     "cr.record_level = 'Manifestation'\n" +
                     "WHERE A.metadeleted = FALSE) where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_MANIF_RESTRICT_REC_CURR_DATA=
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_RESTRICT_REC_CURR_DATA=
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",restrictioncode as restrictioncode" +
                     ",restrictionname as restrictionname" +
-                    " from " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
+                    " from " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_restrictions_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_PROD_PRICE_KEY_INBOUND=
-            "select eprid as EPRID" +
+    public static final String GET_RANDOM_PROD_PRICE_KEY_INBOUND=
+            "select eprid as eprid" +
                     " from (\n" +
                     "SELECT DISTINCT\n" +
-                    "  cr.epr eprId\n" +
+                    "  cr.epr eprid\n" +
                     ", cr.product_type\n" +
                     ", concat(COALESCE(A.sourceref, ''), COALESCE(split_part(NULLIF(type, ''), ' | ', 1), ''), COALESCE(currency, ''), COALESCE(validfrom, ''), COALESCE(validto, ''), COALESCE(CAST(price AS varchar), '')) u_key\n" +
                     ", A.sourceref sourceref\n" +
@@ -947,16 +947,16 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ", CAST(null AS integer) pricePurchaseQuantity\n" +
                     ", (CASE WHEN (metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                     "FROM\n" +
-                    "  ("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_pricing A\n" +
-                    "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((concat(A.sourceref, '-OOA') = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Product')))\n" +
+                    "  ("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_pricing A\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((concat(A.sourceref, '-OOA') = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Product')))\n" +
                     "WHERE (A.metadeleted = 'N'))order by rand() limit %s";
 
-    public static String GET_PROD_PRICE_INBOUND_DATA =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",product_type as product_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PROD_PRICE_INBOUND_DATA =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",product_type as producttype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pricecurrency as pricecurrency" +
                     ",priceamount as priceamount" +
@@ -968,7 +968,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",pricepurchasequantity as pricepurchasequantity" +
                     " from (\n" +
                     "SELECT DISTINCT\n" +
-                    "  cr.epr eprId\n" +
+                    "  cr.epr eprid\n" +
                     ", cr.product_type\n" +
                     ", concat(COALESCE(A.sourceref, ''), COALESCE(split_part(NULLIF(type, ''), ' | ', 1), ''), COALESCE(currency, ''), COALESCE(validfrom, ''), COALESCE(validto, ''), COALESCE(CAST(price AS varchar), '')) u_key\n" +
                     ", A.sourceref sourceref\n" +
@@ -983,16 +983,16 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ", CAST(null AS integer) pricePurchaseQuantity\n" +
                     ", (CASE WHEN (metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                     "FROM\n" +
-                    "  ("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_pricing A\n" +
-                    "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((concat(A.sourceref, '-OOA') = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Product')))\n" +
+                    "  ("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_pricing A\n" +
+                    "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((concat(A.sourceref, '-OOA') = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Product')))\n" +
                     "WHERE (A.metadeleted = 'N'))where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_PROD_PRICE_REC_CURR_DATA=
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",product_type as product_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PROD_PRICE_REC_CURR_DATA=
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",product_type as producttype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pricecurrency as pricecurrency" +
                     ",priceamount as priceamount" +
@@ -1002,16 +1002,16 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",pricecategory as pricecategory" +
                     ",pricecustomercategory as pricecustomercategory" +
                     ",pricepurchasequantity as pricepurchasequantity" +
-                    " from " +GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
+                    " from " + GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_product_prices_extended_current_v where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_WORK_PERS_ROLE_KEY_INBOUND=
-                   "select eprid as EPRID from (\n" +
+    public static final String GET_RANDOM_WORK_PERS_ROLE_KEY_INBOUND=
+                   "select eprid as eprid from (\n" +
                            "SELECT\n" +
                            "  concat(concat(r.sourceref, 'MARMAN'), lower(to_hex(md5(to_utf8(wd.peoplehub_id)))), '-', substr(r.responsibility, -2, 1)) u_key\n" +
                            ", NULLIF(r.sourceref, '') worksourceref\n" +
                            ", lower(to_hex(md5(to_utf8(wd.peoplehub_id)))) personsourceref\n" +
                            ", 'bcs' source\n" +
-                           ", cr.epr eprId\n" +
+                           ", cr.epr eprid\n" +
                            ", cr.work_type work_type\n" +
                            ", CAST(null AS integer) core_reference\n" +
                            ", 'MARMAN' roletype\n" +
@@ -1030,16 +1030,16 @@ public class BCS_ETLExtendedDataChecksSQL {
                            ", date_parse(NULLIF(r.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') metamodifiedon\n" +
                            ", (CASE WHEN (r.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                            "FROM\n" +
-                           "  (("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_responsibilities r\n" +
-                           "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((r.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
-                           "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".workday_reference_v wd ON (trim(lower(r.email)) = trim(lower(wd.email))))\n" +
+                           "  (("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_responsibilities r\n" +
+                           "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((r.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
+                           "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".workday_reference_v wd ON (trim(lower(r.email)) = trim(lower(wd.email))))\n" +
                            "WHERE (split_part(r.responsibility, ' | ', 1) = 'MARMAN')\n" +
                            "UNION ALL SELECT\n" +
                            "  concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))), '-', CAST(o.sequence AS varchar)) u_key\n" +
                            ", NULLIF(o.sourceref, '') worksourceref\n" +
                            ", lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))) personsourceref\n" +
                            ", 'bcs' source\n" +
-                           ", cr.epr eprId\n" +
+                           ", cr.epr eprid\n" +
                            ", cr.work_type work_type\n" +
                            ", gwp.work_person_role_id core_reference\n" +
                            ", NULLIF(rolecode.ephcode, '') roletype\n" +
@@ -1058,30 +1058,30 @@ public class BCS_ETLExtendedDataChecksSQL {
                            ", date_parse(NULLIF(o.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
                            ", (CASE WHEN (o.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                            "FROM\n" +
-                           "  (((((("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originators o\n" +
-                           "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".rolecode ON (split_part(copyrightholdertype, ' | ', 1) = rolecode.ppmcode))\n" +
-                           "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((o.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
-                           "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes h ON (((o.businesspartnerid = h.businesspartnerid) AND (split_part(h.notestype, ' | ', 1) = 'DEG')) AND (o.sourceref = h.sourceref)))\n" +
-                           "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes a ON (((o.businesspartnerid = a.businesspartnerid) AND (split_part(a.notestype, ' | ', 1) = 'AFIL')) AND (o.sourceref = a.sourceref)))\n" +
-                           "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes n ON (((o.businesspartnerid = n.businesspartnerid) AND (split_part(n.notestype, ' | ', 1) = 'BIO')) AND (o.sourceref = n.sourceref)))\n" +
-                           "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))))))))) = gwp.external_reference) AND (gwp.effective_end_date IS NULL)))\n" +
+                           "  (((((("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originators o\n" +
+                           "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".rolecode ON (split_part(copyrightholdertype, ' | ', 1) = rolecode.ppmcode))\n" +
+                           "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((o.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
+                           "LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes h ON (((o.businesspartnerid = h.businesspartnerid) AND (split_part(h.notestype, ' | ', 1) = 'DEG')) AND (o.sourceref = h.sourceref)))\n" +
+                           "LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes a ON (((o.businesspartnerid = a.businesspartnerid) AND (split_part(a.notestype, ' | ', 1) = 'AFIL')) AND (o.sourceref = a.sourceref)))\n" +
+                           "LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes n ON (((o.businesspartnerid = n.businesspartnerid) AND (split_part(n.notestype, ' | ', 1) = 'BIO')) AND (o.sourceref = n.sourceref)))\n" +
+                           "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))))))))) = gwp.external_reference) AND (gwp.effective_end_date IS NULL)))\n" +
                            "WHERE (o.metadeleted = 'N')) order by rand() limit %s";
 
 
-    public static String GET_WORK_PERS_ROLE_INBOUND_DATA=
-                    "select eprid as EPRID" +
-                    ",u_key as UKEY " +
+    public static final String GET_WORK_PERS_ROLE_INBOUND_DATA=
+                    "select eprid as eprid" +
+                    ",u_key as ukey " +
                     ",worksourceref as worksourceref" +
                     ",personsourceref as personsourceref" +
                     ",source as source" +
-                    ",work_type as work_type" +
-                    ",core_reference as core_reference" +
+                    ",work_type as worktype" +
+                    ",core_reference as corereference" +
                     ",roletype as roletype" +
                     ",rolename as rolename" +
                     ",title as title" +
-                    ",person_first_name as person_first_name" +
-                    ",person_family_name as person_family_name" +
-                    ",email_address as email_address" +
+                    ",person_first_name as personfirstname" +
+                    ",person_family_name as personfamilyname" +
+                    ",email_address as emailaddress" +
                     ",honours as honours" +
                     ",affiliation as affiliation" +
                     ",imageurl as imageurl" +
@@ -1096,8 +1096,8 @@ public class BCS_ETLExtendedDataChecksSQL {
                             "  concat(concat(r.sourceref, 'MARMAN'), lower(to_hex(md5(to_utf8(wd.peoplehub_id)))), '-', substr(r.responsibility, -2, 1)) u_key\n" +
                             ", NULLIF(r.sourceref, '') worksourceref\n" +
                             ", lower(to_hex(md5(to_utf8(wd.peoplehub_id)))) personsourceref\n" +
-                            ", 'bcs' source\n" +
-                            ", cr.epr eprId\n" +
+                            ", 'BCS' source\n" +
+                            ", cr.epr eprid\n" +
                             ", cr.work_type work_type\n" +
                             ", CAST(null AS integer) core_reference\n" +
                             ", 'MARMAN' roletype\n" +
@@ -1116,16 +1116,16 @@ public class BCS_ETLExtendedDataChecksSQL {
                             ", date_parse(NULLIF(r.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') metamodifiedon\n" +
                             ", (CASE WHEN (r.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                             "FROM\n" +
-                            "  (("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_responsibilities r\n" +
-                            "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((r.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
-                            "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".workday_reference_v wd ON (trim(lower(r.email)) = trim(lower(wd.email))))\n" +
+                            "  (("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_responsibilities r\n" +
+                            "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((r.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
+                            "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".workday_reference_v wd ON (trim(lower(r.email)) = trim(lower(wd.email))))\n" +
                             "WHERE (split_part(r.responsibility, ' | ', 1) = 'MARMAN')\n" +
                             "UNION ALL SELECT\n" +
                             "  concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))), '-', CAST(o.sequence AS varchar)) u_key\n" +
                             ", NULLIF(o.sourceref, '') worksourceref\n" +
                             ", lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END)))))))) personsourceref\n" +
-                            ", 'bcs' source\n" +
-                            ", cr.epr eprId\n" +
+                            ", 'BCS' source\n" +
+                            ", cr.epr eprid\n" +
                             ", cr.work_type work_type\n" +
                             ", gwp.work_person_role_id core_reference\n" +
                             ", NULLIF(rolecode.ephcode, '') roletype\n" +
@@ -1144,29 +1144,29 @@ public class BCS_ETLExtendedDataChecksSQL {
                             ", date_parse(NULLIF(o.metamodifiedon, ''), '%%d-%%b-%%Y %%H:%%i:%%s') modifiedon\n" +
                             ", (CASE WHEN (o.metadeleted = 'Y') THEN true ELSE false END) metadeleted\n" +
                             "FROM\n" +
-                            "  (((((("+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originators o\n" +
-                            "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".rolecode ON (split_part(copyrightholdertype, ' | ', 1) = rolecode.ppmcode))\n" +
-                            "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((o.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
-                            "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes h ON (((o.businesspartnerid = h.businesspartnerid) AND (split_part(h.notestype, ' | ', 1) = 'DEG')) AND (o.sourceref = h.sourceref)))\n" +
-                            "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes a ON (((o.businesspartnerid = a.businesspartnerid) AND (split_part(a.notestype, ' | ', 1) = 'AFIL')) AND (o.sourceref = a.sourceref)))\n" +
-                            "LEFT JOIN "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".stg_current_originatornotes n ON (((o.businesspartnerid = n.businesspartnerid) AND (split_part(n.notestype, ' | ', 1) = 'BIO')) AND (o.sourceref = n.sourceref)))\n" +
-                            "INNER JOIN "+GetBCS_ETLExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))))))))) = gwp.external_reference) AND (gwp.effective_end_date IS NULL)))\n" +
+                            "  (((((("+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originators o\n" +
+                            "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".rolecode ON (split_part(copyrightholdertype, ' | ', 1) = rolecode.ppmcode))\n" +
+                            "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".eph_identifier_cross_reference_v cr ON (((o.sourceref = cr.identifier) AND (cr.identifier_type = 'external_reference')) AND (cr.record_level = 'Work')))\n" +
+                            "LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes h ON (((o.businesspartnerid = h.businesspartnerid) AND (split_part(h.notestype, ' | ', 1) = 'DEG')) AND (o.sourceref = h.sourceref)))\n" +
+                            "LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes a ON (((o.businesspartnerid = a.businesspartnerid) AND (split_part(a.notestype, ' | ', 1) = 'AFIL')) AND (o.sourceref = a.sourceref)))\n" +
+                            "LEFT JOIN "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".stg_current_originatornotes n ON (((o.businesspartnerid = n.businesspartnerid) AND (split_part(n.notestype, ' | ', 1) = 'BIO')) AND (o.sourceref = n.sourceref)))\n" +
+                            "INNER JOIN "+ GetBcsEtlExtendedDLDBUser.getProdDataBase()+".gd_work_person_role gwp ON ((concat(o.sourceref, rolecode.ephcode, lower(to_hex(md5(to_utf8(concat(CAST(o.businesspartnerid AS varchar), trim(upper((CASE WHEN (isperson = 'N') THEN department ELSE firstname END))), trim(upper((CASE WHEN (isperson = 'N') THEN institution ELSE lastname END))))))))) = gwp.external_reference) AND (gwp.effective_end_date IS NULL)))\n" +
                             "WHERE (o.metadeleted = 'N')) where eprid in ('%s') order by eprid,u_key,honours desc";
 
-    public static String GET_WORK_PERS_ROLE_REC_CURR_DATA =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
+    public static final String GET_WORK_PERS_ROLE_REC_CURR_DATA =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
                     ",worksourceref as worksourceref" +
                     ",personsourceref as personsourceref" +
                     ",source as source" +
-                    ",work_type as work_type" +
-                    ",core_reference as core_reference" +
+                    ",work_type as worktype" +
+                    ",core_reference as corereference" +
                     ",roletype as roletype" +
                     ",rolename as rolename" +
                     ",title as title" +
-                    ",person_first_name as person_first_name" +
-                    ",person_family_name as person_family_name" +
-                    ",email_address as email_address" +
+                    ",person_first_name as personfirstname" +
+                    ",person_family_name as personfamilyname" +
+                    ",email_address as emailaddress" +
                     ",honours as honours" +
                     ",affiliation as affiliation" +
                     ",imageurl as imageurl" +
@@ -1176,84 +1176,84 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",groupnumber as groupnumber" +
                     ",metamodifiedon as metamodifiedon" +
                     ",metadeleted as metadeleted" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_current_v where eprid in ('%s') order by eprid,u_key,honours desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_person_role_extended_current_v where eprid in ('%s') order by eprid,u_key,honours desc";
 
-    public static String GET_RANDOM_AVAILABILITY_KEY_CURRENT =
-            "select eprid as EPRID " +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_current_v order by rand() limit %s";
+    public static final String GET_RANDOM_AVAILABILITY_KEY_CURRENT =
+            "select eprid as eprid " +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_availability_extended_current_v order by rand() limit %s";
 
-    public static String GET_RANDOM_MANIF_EXT_KEY_CURRENT =
-            "select eprid as EPRID " +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_current_v order by rand() limit %s";
+    public static final String GET_RANDOM_MANIF_EXT_KEY_CURRENT =
+            "select eprid as eprid " +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_extended_current_v order by rand() limit %s";
 
-    public static String GET_RANDOM_PAGE_COUNT_KEY_CURRENT =
-            "select eprid as EPRID " +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_current_v order by rand() limit %s";
+    public static final String GET_RANDOM_PAGE_COUNT_KEY_CURRENT =
+            "select eprid as eprid " +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_page_count_extended_current_v order by rand() limit %s";
 
-    public static String GET_RANDOM_URL_EXT_KEY_CURRENT =
-            "select eprid as EPRID " +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_current_v order by rand() limit %s";
+    public static final String GET_RANDOM_URL_EXT_KEY_CURRENT =
+            "select eprid as eprid " +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_url_extended_current_v order by rand() limit %s";
 
-    public static String GET_RANDOM_WORK_EXT_KEY_CURRENT =
-            "select eprid as EPRID " +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_current_v order by rand() limit %s";
+    public static final String GET_RANDOM_WORK_EXT_KEY_CURRENT =
+            "select eprid as eprid " +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_extended_current_v order by rand() limit %s";
 
-    public static String GET_RANDOM_WORK_SUBJ_AREA_KEY_CURRENT =
-            "select eprid as EPRID " +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_current_v order by rand() limit %s";
+    public static final String GET_RANDOM_WORK_SUBJ_AREA_KEY_CURRENT =
+            "select eprid as eprid " +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_subject_area_extended_current_v order by rand() limit %s";
 
-    public static String GET_RANDOM_MANIF_RESTRICT_KEY_CURRENT =
-            "select eprid as EPRID " +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_current_v order by rand() limit %s";
+    public static final String GET_RANDOM_MANIF_RESTRICT_KEY_CURRENT =
+            "select eprid as eprid " +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_restrictions_extended_current_v order by rand() limit %s";
 
-    public static String GET_RANDOM_PROD_PRICE_KEY_CURRENT =
-            "select eprid as EPRID " +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_current_v order by rand() limit %s";
+    public static final String GET_RANDOM_PROD_PRICE_KEY_CURRENT =
+            "select eprid as eprid " +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_product_prices_extended_current_v order by rand() limit %s";
 
-    public static String GET_RANDOM_WORK_PERSON_ROLE_KEY_CURRENT =
-            "select eprid as EPRID " +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_current_v order by rand() limit %s";
+    public static final String GET_RANDOM_WORK_PERSON_ROLE_KEY_CURRENT =
+            "select eprid as eprid " +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_person_role_extended_current_v order by rand() limit %s";
 
-    public static String GET_AVAILABILTYI_REC_CURR_HIST_DATA =
-            "select u_key as UKEY " +
-                    ",sourceref as SOURCEREF" +
-                    ",eprid as EPRID" +
-                    ",producttype as PRODUCTTYPE" +
-                    ",modifiedon as MODIFIEDON" +
-                    ",application as APPLICATION" +
+    public static final String GET_AVAILABILTYI_REC_CURR_HIST_DATA =
+            "select u_key as ukey " +
+                    ",sourceref as sourceref" +
+                    ",eprid as eprid" +
+                    ",producttype as producttype" +
+                    ",modifiedon as modifiedon" +
+                    ",application as application" +
                     ",deltaanswercodeuk as deltaanswercodeuk" +
                     ",deltaanswercodeus as deltaanswercodeus" +
                     ",anzpubstatus as anzpubstatus" +
                     ",pubdateactual as pubdateactual" +
                     ",status as status" +
                     ",metadeleted as metadeleted" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_part where " +
-                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_part)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_availability_part where " +
+                    "transform_ts = (select max(transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_availability_part)" +
                     " and eprid in('%s') order by eprid,u_key desc";
 
-    public static String GET_AVAILABILTYI_REC_TRANS_FILE =
-            "select u_key as UKEY " +
-                    ",sourceref as SOURCEREF" +
-                    ",eprid as EPRID" +
-                    ",producttype as PRODUCTTYPE" +
-                    ",modifiedon as MODIFIEDON" +
-                    ",application as APPLICATION" +
+    public static final String GET_AVAILABILTYI_REC_TRANS_FILE =
+            "select u_key as ukey " +
+                    ",sourceref as sourceref" +
+                    ",eprid as eprid" +
+                    ",producttype as producttype" +
+                    ",modifiedon as modifiedon" +
+                    ",application as application" +
                     ",deltaanswercodeuk as deltaanswercodeuk" +
                     ",deltaanswercodeus as deltaanswercodeus" +
                     ",anzpubstatus as anzpubstatus" +
                     ",pubdateactual as pubdateactual" +
                     ",status as status" +
                     ",metadeleted as metadeleted" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part where " +
-                    "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_availability_extended_transform_file_history_part where " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_availability_extended_transform_file_history_part)" +
                     " and eprid in('%s') order by eprid,u_key desc";
 
-    public static String GET_MANIF_EXT_REC_CURR_HIST_DATA =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_EXT_REC_CURR_HIST_DATA =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",uktextbookind as uktextbookind" +
                     ",ustextbookind as ustextbookind" +
@@ -1268,16 +1268,16 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
                     ",exporttowebind as exporttowebind" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_part where " +
-                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_part)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_part where " +
+                    "transform_ts = (select max(transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_part)" +
                     " and eprid in('%s') order by eprid,u_key desc";
 
-    public static String GET_MANIF_EXT_REC_TRANS_FILE =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_EXT_REC_TRANS_FILE =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",uktextbookind as uktextbookind" +
                     ",ustextbookind as ustextbookind" +
@@ -1292,74 +1292,74 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
                     ",exporttowebind as exporttowebind" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part where " +
-                    "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_extended_transform_file_history_part where " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_extended_transform_file_history_part)" +
                     " and eprid in('%s') order by eprid,u_key desc";
 
-    public static String GET_PAGE_COUNT_REC_CURR_HIST_DATA =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PAGE_COUNT_REC_CURR_HIST_DATA =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pagecounttypecode as pagecounttypecode" +
                     ",pagecounttypename as pagecounttypename" +
                     ",pagecount as pagecount" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_part where " +
-                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_part)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_page_count_part where " +
+                    "transform_ts = (select max(transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_page_count_part)" +
                     " and eprid in('%s') order by eprid,u_key desc";
 
-    public static String GET_PAGE_COUNT_REC_TRANS_FILE =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PAGE_COUNT_REC_TRANS_FILE =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pagecounttypecode as pagecounttypecode" +
                     ",pagecounttypename as pagecounttypename" +
                     ",pagecount as pagecount" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_transform_file_history_part where " +
-                    "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_transform_file_history_part)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_page_count_extended_transform_file_history_part where " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_page_count_extended_transform_file_history_part)" +
                     " and eprid in('%s') order by eprid,u_key desc";
 
-    public static String GET_URL_REC_CURR_HIST_DATA =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_URL_REC_CURR_HIST_DATA =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",urltypecode as urltypecode" +
                     ",urltypecode as urltypecode" +
                     ",source as source" +
                     ",name as name" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_part where " +
-                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_part)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_url_part where " +
+                    "transform_ts = (select max(transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_url_part)" +
                     " and eprid in('%s') order by eprid,u_key desc";
 
-    public static String GET_URL_REC_TRANS_FILE =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_URL_REC_TRANS_FILE =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",urltypecode as urltypecode" +
                     ",urltypecode as urltypecode" +
                     ",source as source" +
                     ",name as name" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_transform_file_history_part where " +
-                    "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_transform_file_history_part)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_url_extended_transform_file_history_part where " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_url_extended_transform_file_history_part)" +
                     " and eprid in('%s') order by eprid,u_key desc";
 
-    public static String GET_WORK_EXT_REC_CURR_HIST_DATA =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_EXT_REC_CURR_HIST_DATA =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",companygroup as companygroup" +
                     ",imagefileref as imagefileref" +
@@ -1367,8 +1367,8 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",textreftrade as textreftrade" +
                     ",features as features" +
                     ",awards as awards" +
-                    ",toc_long as toc_long" +
-                    ",toc_short as toc_short" +
+                    ",toc_long as toclong" +
+                    ",toc_short as tocshort" +
                     ",audience as audience" +
                     ",authorbyline as authorbyline" +
                     ",description as description" +
@@ -1398,16 +1398,16 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",rflvi as rflvi" +
                     ",journalprevioustitle as journalprevioustitle" +
                     ",journalprimaryauthor as journalprimaryauthor" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_part where " +
-                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_part)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_part where " +
+                    "transform_ts = (select max(transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_part)" +
                     " and eprid in('%s') order by eprid,u_key desc";
 
-    public static String GET_WORK_EXT_REC_TRANS_FILE =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_EXT_REC_TRANS_FILE =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",companygroup as companygroup" +
                     ",imagefileref as imagefileref" +
@@ -1415,8 +1415,8 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",textreftrade as textreftrade" +
                     ",features as features" +
                     ",awards as awards" +
-                    ",toc_long as toc_long" +
-                    ",toc_short as toc_short" +
+                    ",toc_long as toclong" +
+                    ",toc_short as tocshort" +
                     ",audience as audience" +
                     ",authorbyline as authorbyline" +
                     ",description as description" +
@@ -1446,74 +1446,74 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",rflvi as rflvi" +
                     ",journalprevioustitle as journalprevioustitle" +
                     ",journalprimaryauthor as journalprimaryauthor" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_transform_file_history_part where " +
-                    "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_transform_file_history_part)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_extended_transform_file_history_part where " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_extended_transform_file_history_part)" +
                     " and eprid in('%s') order by eprid,u_key desc";
 
-    public static String GET_WORK_SUB_AREA_REC_CURR_HIST_DATA =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_SUB_AREA_REC_CURR_HIST_DATA =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",typecode as typecode" +
                     ",typedesc as typedesc" +
                     ",subjcode as subjcode" +
                     ",subjdesc as subjdesc" +
                     ",priority as priority" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_part where " +
-                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_part)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_subject_area_part where " +
+                    "transform_ts = (select max(transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_subject_area_part)" +
                     " and eprid in('%s') order by eprid,u_key desc";
 
-    public static String GET_WORK_SUB_AREA_REC_TRANS_FILE =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_SUB_AREA_REC_TRANS_FILE =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",typecode as typecode" +
                     ",typedesc as typedesc" +
                     ",subjcode as subjcode" +
                     ",subjdesc as subjdesc" +
                     ",priority as priority" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part where " +
-                    "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part where " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part)" +
                     " and eprid in('%s') order by eprid,u_key desc";
 
-    public static String GET_MANIF_RESTRICT_CURR_HIST_DATA =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_RESTRICT_CURR_HIST_DATA =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",restrictioncode as restrictioncode" +
                     ",restrictionname as restrictionname" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part where " +
-                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part where " +
+                    "transform_ts = (select max(transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part)" +
                     " and eprid in('%s') order by eprid,u_key desc";
 
-    public static String GET_MANIF_RESTRICT_REC_TRANS_FILE =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_RESTRICT_REC_TRANS_FILE =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",restrictioncode as restrictioncode" +
                     ",restrictionname as restrictionname" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part where " +
-                    "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part where " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part)" +
                     " and eprid in('%s') order by eprid,u_key desc";
 
-    public static String GET_PROD_PRICE_REC_CURR_HIST_DATA =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",product_type as product_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PROD_PRICE_REC_CURR_HIST_DATA =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",product_type as producttype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pricecurrency as pricecurrency" +
                     ",priceamount as priceamount" +
@@ -1523,16 +1523,16 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",pricecategory as pricecategory" +
                     ",pricecustomercategory as pricecustomercategory" +
                     ",pricepurchasequantity as pricepurchasequantity" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_part where " +
-                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_part)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_part where " +
+                    "transform_ts = (select max(transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_part)" +
                     " and eprid in('%s') order by eprid,u_key desc";
 
-    public static String GET_PROD_PRICE_REC_TRANS_FILE =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",product_type as product_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PROD_PRICE_REC_TRANS_FILE =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",product_type as producttype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pricecurrency as pricecurrency" +
                     ",priceamount as priceamount" +
@@ -1542,23 +1542,23 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",pricecategory as pricecategory" +
                     ",pricecustomercategory as pricecustomercategory" +
                     ",pricepurchasequantity as pricepurchasequantity" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_transform_file_history_part where " +
-                    "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_transform_file_history_part)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_product_prices_extended_transform_file_history_part where " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_product_prices_extended_transform_file_history_part)" +
                     " and eprid in('%s') order by eprid,u_key desc";
 
-    public static String GET_WORK_PERS_ROLE_REC_CURR_HIST_DATA =
-            "select eprid as EPRID " +
+    public static final String GET_WORK_PERS_ROLE_REC_CURR_HIST_DATA =
+            "select eprid as eprid " +
                     ",worksourceref as worksourceref" +
                     ",personsourceref as personsourceref" +
                     ",source as source" +
-                    ",work_type as work_type" +
-                    ",core_reference as core_reference" +
+                    ",work_type as worktype" +
+                    ",core_reference as corereference" +
                     ",roletype as roletype" +
                     ",rolename as rolename" +
                     ",title as title" +
-                    ",person_first_name as person_first_name" +
-                    ",person_family_name as person_family_name" +
-                    ",email_address as email_address" +
+                    ",person_first_name as personfirstname" +
+                    ",person_family_name as personfamilyname" +
+                    ",email_address as emailaddress" +
                     ",honours as honours" +
                     ",affiliation as affiliation" +
                     ",imageurl as imageurl" +
@@ -1568,24 +1568,24 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",groupnumber as groupnumber" +
                     ",metamodifiedon as metamodifiedon" +
                     ",metadeleted as metadeleted" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_part where " +
-                    "transform_ts = (select max(transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_part)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_part where " +
+                    "transform_ts = (select max(transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_part)" +
                     " and eprid in('%s') order by eprid,u_key,honours desc";
 
-    public static String GET_WORK_PERS_ROLE_REC_TRANS_FILE =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
+    public static final String GET_WORK_PERS_ROLE_REC_TRANS_FILE =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
                     ",worksourceref as worksourceref" +
                     ",personsourceref as personsourceref" +
                     ",source as source" +
-                    ",work_type as work_type" +
-                    ",core_reference as core_reference" +
+                    ",work_type as worktype" +
+                    ",core_reference as corereference" +
                     ",roletype as roletype" +
                     ",rolename as rolename" +
                     ",title as title" +
-                    ",person_first_name as person_first_name" +
-                    ",person_family_name as person_family_name" +
-                    ",email_address as email_address" +
+                    ",person_first_name as personfirstname" +
+                    ",person_family_name as personfamilyname" +
+                    ",email_address as emailaddress" +
                     ",honours as honours" +
                     ",affiliation as affiliation" +
                     ",imageurl as imageurl" +
@@ -1595,25 +1595,25 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",groupnumber as groupnumber" +
                     //       ",metamodifiedon as metamodifiedon" +
                     ",metadeleted as metadeleted" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part where " +
-                    "transform_file_ts = (select max(transform_file_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part where " +
+                    "transform_file_ts = (select max(transform_file_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part)" +
                     " and eprid in('%s') order by eprid,u_key,honours desc";
 
-    public static String GET_RANDOM_AVAILABILITY_KEY_DIFF_TRANS_FILE =
+    public static final String GET_RANDOM_AVAILABILITY_KEY_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
                     "  select eprid, u_key, sourceref, modifiedon, application, deltaanswercodeuk, deltaanswercodeus, anzpubstatus,pubdateactual,status,metadeleted,producttype\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_availability_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part)\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_availability_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
                     "  select eprid,u_key, sourceref, modifiedon, application, deltaanswercodeuk, deltaanswercodeus, anzpubstatus,pubdateactual,status,metadeleted,producttype\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_availability_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
                     "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part dhap)where rn = 2))\n" +
-                    " select u_key as UKEY " +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_availability_extended_transform_file_history_part dhap)where rn = 2))\n" +
+                    " select u_key as ukey " +
                     " from(\n" +
                     "    select crr.u_key,crr.eprid,crr.sourceref,crr.modifiedon,crr.application,crr.deltaanswercodeuk,crr.deltaanswercodeus,crr.anzpubstatus,crr.pubdateactual,crr.status,crr.metadeleted,crr.producttype,'I' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
@@ -1641,33 +1641,33 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.metadeleted, false) <> coalesce (prev.metadeleted, false) or \n" +
                     "            coalesce (crr.producttype, 'na') <> coalesce (prev.producttype, 'na'))) order by rand() limit %s";
 
-    public static String GET_AVAILABILTIY_REC_DIFF_TRANS_FILE =
+    public static final String GET_AVAILABILTIY_REC_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
                     "  select eprid, u_key, sourceref, modifiedon, application, deltaanswercodeuk, deltaanswercodeus, anzpubstatus,pubdateactual,status,metadeleted,producttype\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_availability_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part)\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_availability_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
                     "  select eprid,u_key, sourceref, modifiedon, application, deltaanswercodeuk, deltaanswercodeus, anzpubstatus,pubdateactual,status,metadeleted,producttype\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_availability_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
                     "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_availability_extended_transform_file_history_part dhap)where rn = 2))\n" +
-                    " select u_key as UKEY " +
-                    ",sourceref as SOURCEREF" +
-                    ",eprid as EPRID" +
-                    ",producttype as PRODUCTTYPE" +
-                    ",modifiedon as MODIFIEDON" +
-                    ",application as APPLICATION" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_availability_extended_transform_file_history_part dhap)where rn = 2))\n" +
+                    " select u_key as ukey " +
+                    ",sourceref as sourceref" +
+                    ",eprid as eprid" +
+                    ",producttype as producttype" +
+                    ",modifiedon as modifiedon" +
+                    ",application as application" +
                     ",deltaanswercodeuk as deltaanswercodeuk" +
                     ",deltaanswercodeus as deltaanswercodeus" +
                     ",anzpubstatus as anzpubstatus" +
                     ",pubdateactual as pubdateactual" +
                     ",status as status" +
                     ",metadeleted as metadeleted" +
-                    ",delta_mode as DELTA_MODE from(" +
+                    ",delta_mode as deltamode from(" +
                     "    select crr.u_key,crr.eprid,crr.sourceref,crr.modifiedon,crr.application,crr.deltaanswercodeuk,crr.deltaanswercodeus,crr.anzpubstatus,crr.pubdateactual,crr.status,crr.metadeleted,crr.producttype,'I' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
                     "        left join prev_dataset prev on crr.u_key = prev.u_key\n" +
@@ -1694,58 +1694,58 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.metadeleted, false) <> coalesce (prev.metadeleted, false) or \n" +
                     "            coalesce (crr.producttype, 'na') <> coalesce (prev.producttype, 'na'))) where u_key in ('%s') order by u_key,eprid desc";
 
-    public static String GET_AVAILABILTIY_REC_DELTA_CURRENT =
-            " select u_key as UKEY " +
-                    ",sourceref as SOURCEREF" +
-                    ",eprid as EPRID" +
-                    ",producttype as PRODUCTTYPE" +
-                    ",modifiedon as MODIFIEDON" +
-                    ",application as APPLICATION" +
+    public static final String GET_AVAILABILTIY_REC_DELTA_CURRENT =
+            " select u_key as ukey " +
+                    ",sourceref as sourceref" +
+                    ",eprid as eprid" +
+                    ",producttype as producttype" +
+                    ",modifiedon as modifiedon" +
+                    ",application as application" +
                     ",deltaanswercodeuk as deltaanswercodeuk" +
                     ",deltaanswercodeus as deltaanswercodeus" +
                     ",anzpubstatus as anzpubstatus" +
                     ",pubdateactual as pubdateactual" +
                     ",status as status" +
                     ",metadeleted as metadeleted" +
-                    ",delta_mode as DELTA_MODE from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_availability " +
+                    ",delta_mode as deltamode from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_availability " +
                     "where u_key in ('%s')order by u_key,eprid desc";
 
-    public static String GET_RANDOM_KEY_AVAILABILITY_DELTA_CURRENT_HIST =
-            "select u_key as UKEY from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_availability_part where " +
-                    "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_availability_part) order by rand() limit %s";
+    public static final String GET_RANDOM_KEY_AVAILABILITY_DELTA_CURRENT_HIST =
+            "select u_key as ukey from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_availability_part where " +
+                    "delta_ts = (select max(delta_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_availability_part) order by rand() limit %s";
 
-    public static String GET_AVAILABILITY_REC_DELTA_CURRENT_HIST =
-            " select u_key as UKEY " +
-                    ",sourceref as SOURCEREF" +
-                    ",eprid as EPRID" +
-                    ",producttype as PRODUCTTYPE" +
-                    ",modifiedon as MODIFIEDON" +
-                    ",application as APPLICATION" +
+    public static final String GET_AVAILABILITY_REC_DELTA_CURRENT_HIST =
+            " select u_key as ukey " +
+                    ",sourceref as sourceref" +
+                    ",eprid as eprid" +
+                    ",producttype as producttype" +
+                    ",modifiedon as modifiedon" +
+                    ",application as application" +
                     ",deltaanswercodeuk as deltaanswercodeuk" +
                     ",deltaanswercodeus as deltaanswercodeus" +
                     ",anzpubstatus as anzpubstatus" +
                     ",pubdateactual as pubdateactual" +
                     ",status as status" +
                     ",metadeleted as metadeleted" +
-                    ",delta_mode as DELTA_MODE" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_availability_part where " +
-                    "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_availability_part) and u_key in ('%s') order by u_key,eprid desc";
+                    ",delta_mode as deltamode" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_availability_part where " +
+                    "delta_ts = (select max(delta_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_availability_part) and u_key in ('%s') order by u_key,eprid desc";
 
-    public static String GET_RANDOM_MANIF_EXT_KEY_DIFF_TRANS_FILE =
+    public static final String GET_RANDOM_MANIF_EXT_KEY_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, uktextbookind, ustextbookind,usdiscountcode,usdiscountname,emeadiscountcode,emeadiscountname,trimsize,weight,commcode,journalprodsitecode,journalissuetrimsize,warreference,exporttowebind\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part)\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, uktextbookind, ustextbookind,usdiscountcode,usdiscountname,emeadiscountcode,emeadiscountname,trimsize,weight,commcode,journalprodsitecode,journalissuetrimsize,warreference,exporttowebind\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
                     "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part dhap)where rn = 2)) \n" +
-                    " select u_key as UKEY " +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_extended_transform_file_history_part dhap)where rn = 2)) \n" +
+                    " select u_key as ukey " +
                     " from(" +
                     "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted, crr.manifestation_type, crr.uktextbookind, crr.ustextbookind,crr.usdiscountcode,crr.usdiscountname,crr.emeadiscountcode,crr.emeadiscountname,crr.trimsize,crr.weight,crr.commcode,crr.journalprodsitecode,crr.journalissuetrimsize,crr.warreference,crr.exporttowebind,'I' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
@@ -1780,25 +1780,25 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.warreference, 'na') <> coalesce (prev.warreference, 'na') or \n" +
                     "            coalesce (crr.exporttowebind, false) <> coalesce (prev.exporttowebind, false)))order by rand() limit %s";
 
-    public static String GET_MANIF_EXT_REC_DIFF_TRANS_FILE =
+    public static final String GET_MANIF_EXT_REC_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, uktextbookind, ustextbookind,usdiscountcode,usdiscountname,emeadiscountcode,emeadiscountname,trimsize,weight,commcode,journalprodsitecode,journalissuetrimsize,warreference,exporttowebind\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part)\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, uktextbookind, ustextbookind,usdiscountcode,usdiscountname,emeadiscountcode,emeadiscountname,trimsize,weight,commcode,journalprodsitecode,journalissuetrimsize,warreference,exporttowebind\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
                     "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_extended_transform_file_history_part dhap)where rn = 2)) \n" +
-                    " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_extended_transform_file_history_part dhap)where rn = 2)) \n" +
+                    " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",uktextbookind as uktextbookind" +
                     ",ustextbookind as ustextbookind" +
@@ -1813,7 +1813,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
                     ",exporttowebind as exporttowebind" +
-                    ",delta_mode as DELTA_MODE from(" +
+                    ",delta_mode as deltamode from(" +
                     "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted, crr.manifestation_type, crr.uktextbookind, crr.ustextbookind,crr.usdiscountcode,crr.usdiscountname,crr.emeadiscountcode,crr.emeadiscountname,crr.trimsize,crr.weight,crr.commcode,crr.journalprodsitecode,crr.journalissuetrimsize,crr.warreference,crr.exporttowebind,'I' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
                     "        left join prev_dataset prev on crr.u_key = prev.u_key\n" +
@@ -1847,16 +1847,16 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.warreference, 'na') <> coalesce (prev.warreference, 'na') or \n" +
                     "            coalesce (crr.exporttowebind, false) <> coalesce (prev.exporttowebind, false)))where u_key in ('%s') order by u_key,eprid desc";
 
-    public static String GET_RANDOM_KEY_MANIF_EXT_DELTA_CURRENT_HIST =
-            "select u_key as UKEY from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_manifestation_part where " +
-                    "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_manifestation_part) order by rand() limit %s";
+    public static final String GET_RANDOM_KEY_MANIF_EXT_DELTA_CURRENT_HIST =
+            "select u_key as ukey from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_manifestation_part where " +
+                    "delta_ts = (select max(delta_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_manifestation_part) order by rand() limit %s";
 
-    public static String GET_MANIF_EXT_REC_DELTA_CURRENT_HIST =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_EXT_REC_DELTA_CURRENT_HIST =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",uktextbookind as uktextbookind" +
                     ",ustextbookind as ustextbookind" +
@@ -1871,16 +1871,16 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
                     ",exporttowebind as exporttowebind" +
-                    ",delta_mode as DELTA_MODE" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_manifestation_part where " +
-                    "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_manifestation_part) and u_key in ('%s') order by u_key,eprid desc";
+                    ",delta_mode as deltamode" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_manifestation_part where " +
+                    "delta_ts = (select max(delta_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_manifestation_part) and u_key in ('%s') order by u_key,eprid desc";
 
-    public static String GET_MANIF_EXT_REC_DELTA_CURRENT =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_EXT_REC_DELTA_CURRENT =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",uktextbookind as uktextbookind" +
                     ",ustextbookind as ustextbookind" +
@@ -1895,24 +1895,24 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
                     ",exporttowebind as exporttowebind" +
-                    ",delta_mode as DELTA_MODE from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_manifestation" +
+                    ",delta_mode as deltamode from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_manifestation" +
                     " where u_key in ('%s') order by u_key,eprid desc";
 
-    public static String GET_RANDOM_URL_KEY_DIFF_TRANS_FILE =
+    public static final String GET_RANDOM_URL_KEY_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, work_type, urltypecode, urltypename, source, name\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_url_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_transform_file_history_part)\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_url_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, work_type, urltypecode, urltypename, source, name\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_url_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
                     "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_transform_file_history_part dhap)where rn = 2))\n" +
-                    " select u_key as UKEY " +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_url_extended_transform_file_history_part dhap)where rn = 2))\n" +
+                    " select u_key as ukey " +
                     " from(" +
                     "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted, crr.work_type, crr.urltypecode, crr.urltypename, crr.source, crr.name,'I' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
@@ -1938,31 +1938,31 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.source, 'na') <> coalesce (prev.source, 'na') or \n" +
                     "            coalesce (crr.name, 'na') <> coalesce (prev.name, 'na')))order by rand() limit %s";
 
-    public static String GET_URL_DIFF_TRANS_FILE =
+    public static final String GET_URL_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, work_type, urltypecode, urltypename, source, name\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_url_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_transform_file_history_part)\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_url_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, work_type, urltypecode, urltypename, source, name\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_url_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
                     "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_url_extended_transform_file_history_part dhap)where rn = 2))\n" +
-                    " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_url_extended_transform_file_history_part dhap)where rn = 2))\n" +
+                    " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",urltypecode as urltypecode" +
                     ",urltypecode as urltypecode" +
                     ",source as source" +
                     ",name as name" +
-                    ",delta_mode as DELTA_MODE from(" +
+                    ",delta_mode as deltamode from(" +
                     "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted, crr.work_type, crr.urltypecode, crr.urltypename, crr.source, crr.name,'I' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
                     "        left join prev_dataset prev on crr.u_key = prev.u_key\n" +
@@ -1988,85 +1988,85 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.name, 'na') <> coalesce (prev.name, 'na')))where u_key in ('%s') order by u_key,eprid desc";
 
 
-    public static String GET_RANDOM_KEY_PAGE_COUNT_DELTA_CURRENT_HIST =
-            "select u_key as UKEY from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_page_count_part where " +
-                    "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_page_count_part) order by rand() limit %s";
+    public static final String GET_RANDOM_KEY_PAGE_COUNT_DELTA_CURRENT_HIST =
+            "select u_key as ukey from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_page_count_part where " +
+                    "delta_ts = (select max(delta_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_page_count_part) order by rand() limit %s";
 
-    public static String GET_PAGE_COUNT_REC_DELTA_CURR_HIST =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PAGE_COUNT_REC_DELTA_CURR_HIST =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pagecounttypecode as pagecounttypecode" +
                     ",pagecounttypename as pagecounttypename" +
                     ",pagecount as pagecount" +
-                    ",delta_mode as DELTA_MODE" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_page_count_part where " +
-                    "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_page_count_part) and u_key in ('%s') order by u_key,eprid desc";
+                    ",delta_mode as deltamode" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_page_count_part where " +
+                    "delta_ts = (select max(delta_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_page_count_part) and u_key in ('%s') order by u_key,eprid desc";
 
-    public static String GET_RANDOM_KEY_URL_DELTA_CURRENT_HIST =
-            "select u_key as UKEY from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_url_part where " +
-                    "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_url_part) order by rand() limit %s";
+    public static final String GET_RANDOM_KEY_URL_DELTA_CURRENT_HIST =
+            "select u_key as ukey from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_url_part where " +
+                    "delta_ts = (select max(delta_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_url_part) order by rand() limit %s";
 
-    public static String GET_URL_REC_DELTA_CURRENT_HIST =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_URL_REC_DELTA_CURRENT_HIST =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",urltypecode as urltypecode" +
                     ",urltypecode as urltypecode" +
                     ",source as source" +
                     ",name as name" +
-                    ",delta_mode as DELTA_MODE"+
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_url_part where " +
-                    "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_url_part) and u_key in ('%s') order by u_key,eprid desc";
+                    ",delta_mode as deltamode"+
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_url_part where " +
+                    "delta_ts = (select max(delta_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_url_part) and u_key in ('%s') order by u_key,eprid desc";
 
-    public static String GET_URL_REC_DELTA_CURRENT =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_URL_REC_DELTA_CURRENT =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",urltypecode as urltypecode" +
                     ",urltypecode as urltypecode" +
                     ",source as source" +
                     ",name as name" +
-                    ",delta_mode as DELTA_MODE from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_url where" +
+                    ",delta_mode as deltamode from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_url where" +
                     " u_key in ('%s') order by u_key,eprid desc";
 
-    public static String GET_PAGE_COUNT_REC_DELTA_CURRENT =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PAGE_COUNT_REC_DELTA_CURRENT =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pagecounttypecode as pagecounttypecode" +
                     ",pagecounttypename as pagecounttypename" +
                     ",pagecount as pagecount" +
-                    ",delta_mode as DELTA_MODE from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_page_count" +
+                    ",delta_mode as deltamode from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_page_count" +
                     " where u_key in ('%s') order by u_key,eprid desc";
 
-    public static String GET_RANDOM_PAGE_COUNT_KEY_DIFF_TRANS_FILE =
+    public static final String GET_RANDOM_PAGE_COUNT_KEY_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, pagecounttypecode, pagecounttypename,pagecount\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_page_count_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_transform_file_history_part)\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_page_count_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, pagecounttypecode, pagecounttypename,pagecount\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_page_count_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
                     "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_transform_file_history_part dhap)where rn = 2)) \n" +
-                    "select u_key as UKEY " +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_page_count_extended_transform_file_history_part dhap)where rn = 2)) \n" +
+                    "select u_key as ukey " +
                     " from(" +
                     "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted, crr.manifestation_type, crr.pagecounttypecode, crr.pagecounttypename,crr.pagecount,'I' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
@@ -2091,30 +2091,30 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.pagecounttypename, 'na') <> coalesce (prev.pagecounttypename, 'na') or \n" +
                     "            coalesce (crr.pagecount, 0) <> coalesce (prev.pagecount, 0))) order by rand() limit %s";
 
-    public static String GET_PAGE_COUNT_REC_DIFF_TRANS_FILE =
+    public static final String GET_PAGE_COUNT_REC_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, pagecounttypecode, pagecounttypename,pagecount\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_page_count_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_transform_file_history_part)\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_page_count_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, pagecounttypecode, pagecounttypename,pagecount\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_page_count_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
                     "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_page_count_extended_transform_file_history_part dhap)where rn = 2)) \n" +
-                    "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_page_count_extended_transform_file_history_part dhap)where rn = 2)) \n" +
+                    "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pagecounttypecode as pagecounttypecode" +
                     ",pagecounttypename as pagecounttypename" +
                     ",pagecount as pagecount" +
-                    ",delta_mode as DELTA_MODE from(" +
+                    ",delta_mode as deltamode from(" +
                     "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted, crr.manifestation_type, crr.pagecounttypecode, crr.pagecounttypename,crr.pagecount,'I' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
                     "        left join prev_dataset prev on crr.u_key = prev.u_key\n" +
@@ -2139,21 +2139,21 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.pagecount, 0) <> coalesce (prev.pagecount, 0)))where u_key in ('%s') order by u_key,eprid desc";
 
 
-    public static String GET_RANDOM_WORK_EXT_KEY_DIFF_TRANS_FILE =
+    public static final String GET_RANDOM_WORK_EXT_KEY_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, work_type, companygroup, imagefileref, workmasterisbn, textreftrade, features,awards,toc_long,toc_short,audience,authorbyline,description,sbu,profitcentre,review,journalelscomind,journalaimsscope,ddpeligibind,ptsjournalind,authorfeedbackind,deltabusinessunit,printername,primarysitesystem,primarysiteacronym,primarysitesupportlevel,fulfilmentsystem,fulfilmentjournalacronym,issueprodtypecode,cataloguevolumesqty,catalogueissuesqty,cataloguevolumefrom,cataloguevolumeto,rfissuesqty,rftotalpagesqty,rffvi,rflvi,journalprevioustitle,journalprimaryauthor\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_transform_file_history_part)\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, work_type, companygroup, imagefileref, workmasterisbn, textreftrade, features,awards,toc_long,toc_short,audience,authorbyline,description,sbu,profitcentre,review,journalelscomind,journalaimsscope,ddpeligibind,ptsjournalind,authorfeedbackind,deltabusinessunit,printername,primarysitesystem,primarysiteacronym,primarysitesupportlevel,fulfilmentsystem,fulfilmentjournalacronym,issueprodtypecode,cataloguevolumesqty,catalogueissuesqty,cataloguevolumefrom,cataloguevolumeto,rfissuesqty,rftotalpagesqty,rffvi,rflvi,journalprevioustitle,journalprimaryauthor\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
                     "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_transform_file_history_part dhap)where rn = 2))  \n" +
-                    " select u_key as UKEY " +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_extended_transform_file_history_part dhap)where rn = 2))  \n" +
+                    " select u_key as ukey " +
                     " from( \n" +
                     "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted,crr.work_type,crr.companygroup,crr.imagefileref, crr.workmasterisbn,crr.textreftrade, crr.features,crr.awards,crr.toc_long,crr.toc_short,crr.audience,crr.authorbyline,crr.description,crr.sbu,crr.profitcentre,crr.review,crr.journalelscomind,crr.journalaimsscope,crr.ddpeligibind,crr.ptsjournalind,crr.authorfeedbackind,crr.deltabusinessunit,crr.printername,crr.primarysitesystem,crr.primarysiteacronym,crr.primarysitesupportlevel,crr.fulfilmentsystem,crr.fulfilmentjournalacronym,crr.issueprodtypecode,crr.cataloguevolumesqty,crr.catalogueissuesqty,crr.cataloguevolumefrom,crr.cataloguevolumeto,crr.rfissuesqty,crr.rftotalpagesqty,crr.rffvi,crr.rflvi,crr.journalprevioustitle,crr.journalprimaryauthor,'I' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
@@ -2216,25 +2216,25 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.journalprimaryauthor, 'na') <> coalesce (prev.journalprimaryauthor, 'na'))) order by rand() limit %s";
 
 
-    public static String GET_WORK_EXT_REC_DIFF_TRANS_FILE =
+    public static final String GET_WORK_EXT_REC_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, work_type, companygroup, imagefileref, workmasterisbn, textreftrade, features,awards,toc_long,toc_short,audience,authorbyline,description,sbu,profitcentre,review,journalelscomind,journalaimsscope,ddpeligibind,ptsjournalind,authorfeedbackind,deltabusinessunit,printername,primarysitesystem,primarysiteacronym,primarysitesupportlevel,fulfilmentsystem,fulfilmentjournalacronym,issueprodtypecode,cataloguevolumesqty,catalogueissuesqty,cataloguevolumefrom,cataloguevolumeto,rfissuesqty,rftotalpagesqty,rffvi,rflvi,journalprevioustitle,journalprimaryauthor\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_transform_file_history_part)\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, work_type, companygroup, imagefileref, workmasterisbn, textreftrade, features,awards,toc_long,toc_short,audience,authorbyline,description,sbu,profitcentre,review,journalelscomind,journalaimsscope,ddpeligibind,ptsjournalind,authorfeedbackind,deltabusinessunit,printername,primarysitesystem,primarysiteacronym,primarysitesupportlevel,fulfilmentsystem,fulfilmentjournalacronym,issueprodtypecode,cataloguevolumesqty,catalogueissuesqty,cataloguevolumefrom,cataloguevolumeto,rfissuesqty,rftotalpagesqty,rffvi,rflvi,journalprevioustitle,journalprimaryauthor\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
                     "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_extended_transform_file_history_part dhap)where rn = 2))  \n" +
-                    " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_extended_transform_file_history_part dhap)where rn = 2))  \n" +
+                    " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",companygroup as companygroup" +
                     ",imagefileref as imagefileref" +
@@ -2242,8 +2242,8 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",textreftrade as textreftrade" +
                     ",features as features" +
                     ",awards as awards" +
-                    ",toc_long as toc_long" +
-                    ",toc_short as toc_short" +
+                    ",toc_long as toclong" +
+                    ",toc_short as tocshort" +
                     ",audience as audience" +
                     ",authorbyline as authorbyline" +
                     ",description as description" +
@@ -2273,7 +2273,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",rflvi as rflvi" +
                     ",journalprevioustitle as journalprevioustitle" +
                     ",journalprimaryauthor as journalprimaryauthor" +
-                    ",delta_mode as DELTA_MODE" +
+                    ",delta_mode as deltamode" +
                     " from( \n" +
                     "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted,crr.work_type,crr.companygroup,crr.imagefileref, crr.workmasterisbn,crr.textreftrade, crr.features,crr.awards,crr.toc_long,crr.toc_short,crr.audience,crr.authorbyline,crr.description,crr.sbu,crr.profitcentre,crr.review,crr.journalelscomind,crr.journalaimsscope,crr.ddpeligibind,crr.ptsjournalind,crr.authorfeedbackind,crr.deltabusinessunit,crr.printername,crr.primarysitesystem,crr.primarysiteacronym,crr.primarysitesupportlevel,crr.fulfilmentsystem,crr.fulfilmentjournalacronym,crr.issueprodtypecode,crr.cataloguevolumesqty,crr.catalogueissuesqty,crr.cataloguevolumefrom,crr.cataloguevolumeto,crr.rfissuesqty,crr.rftotalpagesqty,crr.rffvi,crr.rflvi,crr.journalprevioustitle,crr.journalprimaryauthor,'I' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
@@ -2335,16 +2335,16 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.journalprevioustitle, 'na') <> coalesce (prev.journalprevioustitle, 'na') or \n" +
                     "            coalesce (crr.journalprimaryauthor, 'na') <> coalesce (prev.journalprimaryauthor, 'na'))) where u_key in ('%s') order by u_key,eprid desc";
 
-    public static String GET_RANDOM_KEY_WORK_EXT_DELTA_CURRENT_HIST =
-            "select u_key as UKEY from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_work_part where " +
-                    "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_work_part) order by rand() limit %s";
+    public static final String GET_RANDOM_KEY_WORK_EXT_DELTA_CURRENT_HIST =
+            "select u_key as ukey from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_work_part where " +
+                    "delta_ts = (select max(delta_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_work_part) order by rand() limit %s";
 
-    public static String GET_WORK_EXT_REC_DELTA_CURRENT_HIST =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_EXT_REC_DELTA_CURRENT_HIST =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",companygroup as companygroup" +
                     ",imagefileref as imagefileref" +
@@ -2352,8 +2352,8 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",textreftrade as textreftrade" +
                     ",features as features" +
                     ",awards as awards" +
-                    ",toc_long as toc_long" +
-                    ",toc_short as toc_short" +
+                    ",toc_long as toclong" +
+                    ",toc_short as tocshort" +
                     ",audience as audience" +
                     ",authorbyline as authorbyline" +
                     ",description as description" +
@@ -2383,16 +2383,16 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",rflvi as rflvi" +
                     ",journalprevioustitle as journalprevioustitle" +
                     ",journalprimaryauthor as journalprimaryauthor" +
-                    ",delta_mode as DELTA_MODE" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_work_part where " +
-                    "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_work_part) and u_key in ('%s') order by u_key,eprid desc";
+                    ",delta_mode as deltamode" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_work_part where " +
+                    "delta_ts = (select max(delta_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_work_part) and u_key in ('%s') order by u_key,eprid desc";
 
-    public static String GET_WORK_EXT_REC_DELTA_CURRENT =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_EXT_REC_DELTA_CURRENT =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",companygroup as companygroup" +
                     ",imagefileref as imagefileref" +
@@ -2400,8 +2400,8 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",textreftrade as textreftrade" +
                     ",features as features" +
                     ",awards as awards" +
-                    ",toc_long as toc_long" +
-                    ",toc_short as toc_short" +
+                    ",toc_long as toclong" +
+                    ",toc_short as tocshort" +
                     ",audience as audience" +
                     ",authorbyline as authorbyline" +
                     ",description as description" +
@@ -2431,25 +2431,25 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",rflvi as rflvi" +
                     ",journalprevioustitle as journalprevioustitle" +
                     ",journalprimaryauthor as journalprimaryauthor" +
-                    ",delta_mode as DELTA_MODE" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work where u_key in ('%s') order by u_key,eprid desc";
+                    ",delta_mode as deltamode" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_work where u_key in ('%s') order by u_key,eprid desc";
 
 
-    public static String GET_RANDOM_WORK_SUB_AREA_KEY_DIFF_TRANS_FILE =
+    public static final String GET_RANDOM_WORK_SUB_AREA_KEY_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, work_type, typecode, typedesc, subjcode, subjdesc, priority\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part)\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, work_type, typecode, typedesc, subjcode, subjdesc, priority\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
                     "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part dhap)where rn = 2))  \n" +
-                    "select u_key as UKEY from( \n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part dhap)where rn = 2))  \n" +
+                    "select u_key as ukey from( \n" +
                     "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted, crr.work_type, crr.typecode, crr.typedesc, crr.subjcode, crr.subjdesc, crr.priority,'I' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
                     "        left join prev_dataset prev on crr.u_key = prev.u_key\n" +
@@ -2475,32 +2475,32 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.subjdesc, 'na') <> coalesce (prev.subjdesc, 'na') or \n" +
                     "            coalesce (crr.priority, 'na') <> coalesce (prev.priority, 'na'))) order by rand() limit %s";
 
-    public static String GET_WORK_SUBJ_AREA_REC_DIFF_TRANS_FILE =
+    public static final String GET_WORK_SUBJ_AREA_REC_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, work_type, typecode, typedesc, subjcode, subjdesc, priority\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part)\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, work_type, typecode, typedesc, subjcode, subjdesc, priority\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
                     "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part dhap)where rn = 2))  \n" +
-                    "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_subject_area_extended_transform_file_history_part dhap)where rn = 2))  \n" +
+                    "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",typecode as typecode" +
                     ",typedesc as typedesc" +
                     ",subjcode as subjcode" +
                     ",subjdesc as subjdesc" +
                     ",priority as priority" +
-                    ",delta_mode as DELTA_MODE" +
+                    ",delta_mode as deltamode" +
                     " from( \n" +
                     "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted, crr.work_type, crr.typecode, crr.typedesc, crr.subjcode, crr.subjdesc, crr.priority,'I' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
@@ -2527,56 +2527,56 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.subjdesc, 'na') <> coalesce (prev.subjdesc, 'na') or \n" +
                     "            coalesce (crr.priority, 'na') <> coalesce (prev.priority, 'na'))) where u_key in ('%s') order by u_key,eprid desc";
 
-    public static String GET_RANDOM_KEY_WORK_SUB_AREA_DELTA_CURRENT_HIST =
-            "select u_key as UKEY from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_work_subject_area_part where " +
-                    "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_work_subject_area_part) order by rand() limit %s";
+    public static final String GET_RANDOM_KEY_WORK_SUB_AREA_DELTA_CURRENT_HIST =
+            "select u_key as ukey from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_work_subject_area_part where " +
+                    "delta_ts = (select max(delta_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_work_subject_area_part) order by rand() limit %s";
 
-    public static String GET_WORK_SUBJ_AREA_REC_DELTA_CURRENT_HIST =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_SUBJ_AREA_REC_DELTA_CURRENT_HIST =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",typecode as typecode" +
                     ",typedesc as typedesc" +
                     ",subjcode as subjcode" +
                     ",subjdesc as subjdesc" +
                     ",priority as priority" +
-                    ",delta_mode as DELTA_MODE" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_work_subject_area_part where " +
-                    "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_work_subject_area_part) and u_key in ('%s') order by u_key,eprid desc";
+                    ",delta_mode as deltamode" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_work_subject_area_part where " +
+                    "delta_ts = (select max(delta_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_work_subject_area_part) and u_key in ('%s') order by u_key,eprid desc";
 
-    public static String GET_WORK_SUB_AREA_REC_DELTA_CURRENT =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_SUB_AREA_REC_DELTA_CURRENT =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",typecode as typecode" +
                     ",typedesc as typedesc" +
                     ",subjcode as subjcode" +
                     ",subjdesc as subjdesc" +
                     ",priority as priority" +
-                    ",delta_mode as DELTA_MODE" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work_subject_area where u_key in ('%s') order by u_key,eprid desc";
+                    ",delta_mode as deltamode" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_work_subject_area where u_key in ('%s') order by u_key,eprid desc";
 
-    public static String GET_RANDOM_MANIF_RESTRICT_KEY_DIFF_TRANS_FILE =
+    public static final String GET_RANDOM_MANIF_RESTRICT_KEY_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, restrictioncode, restrictionname\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part)\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, restrictioncode, restrictionname\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
                     "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part dhap)where rn = 2))  \n" +
-                    "select u_key as UKEY \n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part dhap)where rn = 2))  \n" +
+                    "select u_key as ukey \n" +
                     "from( \n" +
                     "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted, crr.manifestation_type, crr.restrictioncode, crr.restrictionname,'I' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
@@ -2600,29 +2600,29 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.restrictioncode, 'na') <> coalesce (prev.restrictioncode, 'na') or \n" +
                     "            coalesce (crr.restrictionname, 'na') <> coalesce (prev.restrictionname , 'na'))) order by rand() limit %s";
 
-    public static String GET_MANIF_RESTRICT_REC_DIFF_TRANS_FILE =
+    public static final String GET_MANIF_RESTRICT_REC_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, restrictioncode, restrictionname\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part)\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, manifestation_type, restrictioncode, restrictionname\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
                     "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part dhap)where rn = 2))  \n" +
-                    " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_manifestation_restrictions_extended_transform_file_history_part dhap)where rn = 2))  \n" +
+                    " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",restrictioncode as restrictioncode" +
                     ",restrictionname as restrictionname" +
-                    ",delta_mode as DELTA_MODE" +
+                    ",delta_mode as deltamode" +
                     " from( \n" +
                     "    select crr.eprid, crr.u_key, crr.sourceref, crr.modifiedon, crr.metadeleted, crr.manifestation_type, crr.restrictioncode, crr.restrictionname,'I' as delta_mode\n" +
                     "    from crr_dataset crr\n" +
@@ -2646,52 +2646,52 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.restrictioncode, 'na') <> coalesce (prev.restrictioncode, 'na') or \n" +
                     "            coalesce (crr.restrictionname, 'na') <> coalesce (prev.restrictionname , 'na'))) where u_key in ('%s') order by eprid,eprid desc";
 
-    public static String GET_MANIF_RESTRICT_REC_DIFF_DELTA_CURRENT =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_RESTRICT_REC_DIFF_DELTA_CURRENT =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",restrictioncode as restrictioncode" +
                     ",restrictionname as restrictionname" +
-                    ",delta_mode as DELTA_MODE" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_manifestation_restrictions where u_key in ('%s') order by u_key,eprid desc";
+                    ",delta_mode as deltamode" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_manifestation_restrictions where u_key in ('%s') order by u_key,eprid desc";
 
-    public static String GET_RANDOM_KEY_MANIF_RESTRICT_DELTA_CURRENT_HIST =
-            "select u_key as UKEY" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_manifestation_restrictions_part where " +
-                    "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_manifestation_restrictions_part) order by rand() limit %s";
+    public static final String GET_RANDOM_KEY_MANIF_RESTRICT_DELTA_CURRENT_HIST =
+            "select u_key as ukey" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_manifestation_restrictions_part where " +
+                    "delta_ts = (select max(delta_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_manifestation_restrictions_part) order by rand() limit %s";
 
-    public static String GET_MANIF_RESTRICT_REC_DELTA_CURRENT_HIST =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_RESTRICT_REC_DELTA_CURRENT_HIST =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",restrictioncode as restrictioncode" +
                     ",restrictionname as restrictionname" +
-                    ",delta_mode as DELTA_MODE" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_manifestation_restrictions_part where " +
-                    "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_manifestation_restrictions_part) and u_key in ('%s') order by u_key,eprid desc";
+                    ",delta_mode as deltamode" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_manifestation_restrictions_part where " +
+                    "delta_ts = (select max(delta_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_manifestation_restrictions_part) and u_key in ('%s') order by u_key,eprid desc";
 
 
-    public static String GET_RANDOM_PROD_PRICE_KEY_DIFF_TRANS_FILE =
+    public static final String GET_RANDOM_PROD_PRICE_KEY_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, product_type, pricecurrency, priceamount, pricestartdate, priceenddate, priceregion,pricecategory,pricecustomercategory,pricepurchasequantity\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_product_prices_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_transform_file_history_part)\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_product_prices_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, product_type, pricecurrency, priceamount, pricestartdate, priceenddate, priceregion,pricecategory,pricecustomercategory,pricepurchasequantity\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_product_prices_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
                     "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_transform_file_history_part dhap)where rn = 2))  \n" +
-                    "select u_key as UKEY from( \n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_product_prices_extended_transform_file_history_part dhap)where rn = 2))  \n" +
+                    "select u_key as ukey from( \n" +
                     "    select crr.eprid,crr.u_key,crr.sourceref,crr.modifiedon,crr.metadeleted,crr.product_type,crr.pricecurrency,crr.priceamount,crr.pricestartdate,crr.priceenddate,crr.priceregion,crr.pricecategory,crr.pricecustomercategory,crr.pricepurchasequantity,'I'as delta_mode\n" +
                     "    from crr_dataset crr\n" +
                     "        left join prev_dataset prev on crr.u_key = prev.u_key\n" +
@@ -2720,25 +2720,25 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.pricecustomercategory, 'na') <> coalesce (prev.pricecustomercategory, 'na') or \n" +
                     "            coalesce (crr.pricepurchasequantity, 0) <> coalesce (prev.pricepurchasequantity, 0))) order by rand() limit %s";
 
-    public static String GET_PROD_PRICE_REC_DIFF_TRANS_FILE =
+    public static final String GET_PROD_PRICE_REC_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, product_type, pricecurrency, priceamount, pricestartdate, priceenddate, priceregion,pricecategory,pricecustomercategory,pricepurchasequantity\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_product_prices_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_transform_file_history_part)\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_product_prices_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
                     "  select eprid, u_key, sourceref, modifiedon, metadeleted, product_type, pricecurrency, priceamount, pricestartdate, priceenddate, priceregion,pricecategory,pricecustomercategory,pricepurchasequantity\n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_product_prices_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
                     "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_product_prices_extended_transform_file_history_part dhap)where rn = 2))  \n" +
-                    " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",product_type as product_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_product_prices_extended_transform_file_history_part dhap)where rn = 2))  \n" +
+                    " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",product_type as producttype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pricecurrency as pricecurrency" +
                     ",priceamount as priceamount" +
@@ -2748,7 +2748,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",pricecategory as pricecategory" +
                     ",pricecustomercategory as pricecustomercategory" +
                     ",pricepurchasequantity as pricepurchasequantity" +
-                    ",delta_mode as DELTA_MODE" +
+                    ",delta_mode as deltamode" +
                     " from( \n" +
                     "    select crr.eprid,crr.u_key,crr.sourceref,crr.modifiedon,crr.metadeleted,crr.product_type,crr.pricecurrency,crr.priceamount,crr.pricestartdate,crr.priceenddate,crr.priceregion,crr.pricecategory,crr.pricecustomercategory,crr.pricepurchasequantity,'I'as delta_mode\n" +
                     "    from crr_dataset crr\n" +
@@ -2779,17 +2779,17 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.pricepurchasequantity, 0) <> coalesce (prev.pricepurchasequantity, 0))) where u_key in ('%s') order by u_key,eprid desc";
 
 
-    public static String GET_RANDOM_KEY_PROD_PRICE_DELTA_CURRENT_HIST =
-            "select u_key as UKEY" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_product_prices_part where " +
-                    "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_product_prices_part) order by rand() limit %s";
+    public static final String GET_RANDOM_KEY_PROD_PRICE_DELTA_CURRENT_HIST =
+            "select u_key as ukey" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_product_prices_part where " +
+                    "delta_ts = (select max(delta_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_product_prices_part) order by rand() limit %s";
 
-    public static String GET_PROD_PRICE_DIFF_DELTA_CURRENT_HIST =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",product_type as product_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PROD_PRICE_DIFF_DELTA_CURRENT_HIST =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",product_type as producttype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pricecurrency as pricecurrency" +
                     ",priceamount as priceamount" +
@@ -2799,16 +2799,16 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",pricecategory as pricecategory" +
                     ",pricecustomercategory as pricecustomercategory" +
                     ",pricepurchasequantity as pricepurchasequantity" +
-                    ",delta_mode as DELTA_MODE" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_product_prices_part where " +
-                    "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_product_prices_part) and u_key in ('%s') order by u_key,eprid desc";
+                    ",delta_mode as deltamode" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_product_prices_part where " +
+                    "delta_ts = (select max(delta_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_product_prices_part) and u_key in ('%s') order by u_key,eprid desc";
 
-    public static String GET_PROD_PRICE_REC_DELTA_CURRENT =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",product_type as product_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PROD_PRICE_REC_DELTA_CURRENT =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",product_type as producttype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pricecurrency as pricecurrency" +
                     ",priceamount as priceamount" +
@@ -2818,24 +2818,24 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",pricecategory as pricecategory" +
                     ",pricecustomercategory as pricecustomercategory" +
                     ",pricepurchasequantity as pricepurchasequantity" +
-                    ",delta_mode as DELTA_MODE" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_product_prices where u_key in ('%s') order by u_key,eprid desc";
+                    ",delta_mode as deltamode" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_product_prices where u_key in ('%s') order by u_key,eprid desc";
 
-    public static String GET_RANDOM_WORK_PERS_ROLE_KEY_DIFF_TRANS_FILE =
+    public static final String GET_RANDOM_WORK_PERS_ROLE_KEY_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
                     "  select u_key, worksourceref, personsourceref, source, eprid, work_type, core_reference, roletype,rolename,title,person_first_name,person_family_name,email_address,honours,affiliation,imageurl,footnotetxt,notestxt,sequence,groupnumber,modifiedon,metadeleted \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part)\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
                     "  select u_key, worksourceref, personsourceref, source, eprid, work_type, core_reference, roletype,rolename,title,person_first_name,person_family_name,email_address,honours,affiliation,imageurl,footnotetxt,notestxt,sequence,groupnumber,modifiedon,metadeleted \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
                     "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part dhap)where rn = 2))  \n" +
-                    " select u_key as UKEY " +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part dhap)where rn = 2))  \n" +
+                    " select u_key as ukey " +
                     " from( \n" +
                     "    select crr.u_key, crr.worksourceref, crr.personsourceref, crr.source, crr.eprid, crr.work_type, crr.core_reference, crr.roletype,crr.rolename,crr.title,crr.person_first_name,crr.person_family_name,crr.email_address,crr.honours,crr.affiliation,crr.imageurl,crr.footnotetxt,crr.notestxt,crr.sequence,crr.groupnumber,crr.modifiedon,crr.metadeleted,'I' as delta_mode \n" +
                     "    from crr_dataset crr\n" +
@@ -2873,33 +2873,33 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.modifiedon, current_date) <> coalesce (prev.modifiedon, current_date) or \n" +
                     "            coalesce (crr.metadeleted, false) <> coalesce (prev.metadeleted, false)))order by rand() limit %s";
 
-    public static String GET_PERSON_ROLE_REC_DIFF_TRANS_FILE =
+    public static final String GET_PERSON_ROLE_REC_DIFF_TRANS_FILE =
             " with crr_dataset as(\n" +
                     "  select u_key, worksourceref, personsourceref, source, eprid, work_type, core_reference, roletype,rolename,title,person_first_name,person_family_name,email_address,honours,affiliation,imageurl,footnotetxt,notestxt,sequence,groupnumber,modifiedon,metadeleted \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part\n" +
                     "  where transform_file_ts = (select max(transform_file_ts ) \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part)\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part)\n" +
                     "  ),\n" +
                     "  prev_dataset as (\n" +
                     "  select u_key, worksourceref, personsourceref, source, eprid, work_type, core_reference, roletype,rolename,title,person_first_name,person_family_name,email_address,honours,affiliation,imageurl,footnotetxt,notestxt,sequence,groupnumber,modifiedon,metadeleted \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part\n" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part\n" +
                     "  where transform_file_ts \n" +
                     "  = (select distinct transform_file_ts from \n" +
                     "  (select dhap.*, dense_rank() over (order by transform_file_ts desc) as rn  \n" +
-                    "  from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part dhap)where rn = 2))  \n" +
-                    " select eprid as EPRID " +
-                    ",u_key as UKEY" +
+                    "  from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_work_person_role_extended_transform_file_history_part dhap)where rn = 2))  \n" +
+                    " select eprid as eprid " +
+                    ",u_key as ukey" +
                     ",worksourceref as worksourceref" +
                     ",personsourceref as personsourceref" +
                     ",source as source" +
-                    ",work_type as work_type" +
-                    ",core_reference as core_reference" +
+                    ",work_type as worktype" +
+                    ",core_reference as corereference" +
                     ",roletype as roletype" +
                     ",rolename as rolename" +
                     ",title as title" +
-                    ",person_first_name as person_first_name" +
-                    ",person_family_name as person_family_name" +
-                    ",email_address as email_address" +
+                    ",person_first_name as personfirstname" +
+                    ",person_family_name as personfamilyname" +
+                    ",email_address as emailaddress" +
                     ",honours as honours" +
                     ",affiliation as affiliation" +
                     ",imageurl as imageurl" +
@@ -2909,7 +2909,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",groupnumber as groupnumber" +
                     //  ",metamodifiedon as metamodifiedon" +
                     ",metadeleted as metadeleted" +
-                    ",delta_mode as DELTA_MODE" +
+                    ",delta_mode as deltamode" +
                     " from( \n" +
                     "    select crr.u_key, crr.worksourceref, crr.personsourceref, crr.source, crr.eprid, crr.work_type, crr.core_reference, crr.roletype,crr.rolename,crr.title,crr.person_first_name,crr.person_family_name,crr.email_address,crr.honours,crr.affiliation,crr.imageurl,crr.footnotetxt,crr.notestxt,crr.sequence,crr.groupnumber,crr.modifiedon,crr.metadeleted,'I' as delta_mode \n" +
                     "    from crr_dataset crr\n" +
@@ -2948,25 +2948,25 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "            coalesce (crr.metadeleted, false) <> coalesce (prev.metadeleted, false))) where u_key in ('%s') order by u_key,eprid desc";
 
 
-    public static String GET_RANDOM_KEY_WORK_PERS_ROLE_DELTA_CURRENT_HIST =
-            "select u_key as UKEY" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_work_person_role_part where " +
-                    "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_work_person_role_part) order by rand() limit %s";
+    public static final String GET_RANDOM_KEY_WORK_PERS_ROLE_DELTA_CURRENT_HIST =
+            "select u_key as ukey" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_work_person_role_part where " +
+                    "delta_ts = (select max(delta_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_work_person_role_part) order by rand() limit %s";
 
-    public static String GET_WORK_PERS_ROLE_REC_DIFF_DELTA_CURRENT_HIST =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY "+
+    public static final String GET_WORK_PERS_ROLE_REC_DIFF_DELTA_CURRENT_HIST =
+            " select eprid as eprid " +
+                    ",u_key as ukey "+
                     ",worksourceref as worksourceref" +
                     ",personsourceref as personsourceref" +
                     ",source as source" +
-                    ",work_type as work_type" +
-                    ",core_reference as core_reference" +
+                    ",work_type as worktype" +
+                    ",core_reference as corereference" +
                     ",roletype as roletype" +
                     ",rolename as rolename" +
                     ",title as title" +
-                    ",person_first_name as person_first_name" +
-                    ",person_family_name as person_family_name" +
-                    ",email_address as email_address" +
+                    ",person_first_name as personfirstname" +
+                    ",person_family_name as personfamilyname" +
+                    ",email_address as emailaddress" +
                     ",honours as honours" +
                     ",affiliation as affiliation" +
                     ",imageurl as imageurl" +
@@ -2976,24 +2976,24 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",groupnumber as groupnumber" +
                     //  ",metamodifiedon as metamodifiedon" +
                     ",metadeleted as metadeleted" +
-                    ",delta_mode as DELTA_MODE" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_work_person_role_part where " +
-                    "delta_ts = (select max(delta_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_history_extended_work_person_role_part) and u_key in ('%s') order by u_key,eprid desc";
+                    ",delta_mode as deltamode" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_work_person_role_part where " +
+                    "delta_ts = (select max(delta_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_history_extended_work_person_role_part) and u_key in ('%s') order by u_key,eprid desc";
 
-    public static String GET_WORK_PERS_ROLE_REC_DELTA_CURR =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
+    public static final String GET_WORK_PERS_ROLE_REC_DELTA_CURR =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
                     ",worksourceref as worksourceref" +
                     ",personsourceref as personsourceref" +
                     ",source as source" +
-                    ",work_type as work_type" +
-                    ",core_reference as core_reference" +
+                    ",work_type as worktype" +
+                    ",core_reference as corereference" +
                     ",roletype as roletype" +
                     ",rolename as rolename" +
                     ",title as title" +
-                    ",person_first_name as person_first_name" +
-                    ",person_family_name as person_family_name" +
-                    ",email_address as email_address" +
+                    ",person_first_name as personfirstname" +
+                    ",person_family_name as personfamilyname" +
+                    ",email_address as emailaddress" +
                     ",honours as honours" +
                     ",affiliation as affiliation" +
                     ",imageurl as imageurl" +
@@ -3003,24 +3003,24 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",groupnumber as groupnumber" +
                     //  ",metamodifiedon as metamodifiedon" +
                     ",metadeleted as metadeleted" +
-                    ",delta_mode as DELTA_MODE" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work_person_role where u_key in ('%s') order by u_key,eprid desc";
+                    ",delta_mode as deltamode" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_work_person_role where u_key in ('%s') order by u_key,eprid desc";
 
 
-    public static String GET_RANDOM_AVAILABILITY_KEY_DIFF_DELTACURR_CURRHIST =
-            "select eprid as EPRID from \n" +
-                    "(select c.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_part c\n" +
-                    "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_availability d on c.eprid  = d.eprid \n" +
+    public static final String GET_RANDOM_AVAILABILITY_KEY_DIFF_DELTACURR_CURRHIST =
+            "select eprid as eprid from \n" +
+                    "(select c.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_availability_part c\n" +
+                    "left join "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_availability d on c.eprid  = d.eprid \n" +
                     "where d.eprid is null and c.transform_ts = (\n" +
-                    "select max(c.transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_part c )) order by rand() limit %s";
+                    "select max(c.transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_availability_part c )) order by rand() limit %s";
 
-    public static String GET_AVAILABILITY_REC_DIFF_DELTACURR_CURRHIST =
-            " select u_key as UKEY " +
-                    ",sourceref as SOURCEREF" +
-                    ",eprid as EPRID" +
-                    ",producttype as PRODUCTTYPE" +
-                    ",modifiedon as MODIFIEDON" +
-                    ",application as APPLICATION" +
+    public static final String GET_AVAILABILITY_REC_DIFF_DELTACURR_CURRHIST =
+            " select u_key as ukey " +
+                    ",sourceref as sourceref" +
+                    ",eprid as eprid" +
+                    ",producttype as producttype" +
+                    ",modifiedon as modifiedon" +
+                    ",application as application" +
                     ",deltaanswercodeuk as deltaanswercodeuk" +
                     ",deltaanswercodeus as deltaanswercodeus" +
                     ",anzpubstatus as anzpubstatus" +
@@ -3029,25 +3029,25 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",metadeleted as metadeleted from " +
                     "(select c.eprid,c.u_key,c.sourceref,c.modifiedon,c.application,c.deltaanswercodeuk,c.deltaanswercodeus," +
                     "c.anzpubstatus,c.pubdateactual,c.status,c.metadeleted,c.producttype " +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_part c\n" +
-                    "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_availability d on c.eprid  = d.eprid \n" +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_availability_part c\n" +
+                    "left join "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_availability d on c.eprid  = d.eprid \n" +
                     "where d.eprid is null and c.transform_ts = (\n" +
-                    "select max(c.transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_part c )) where eprid in ('%s') order by eprid,u_key desc";
+                    "select max(c.transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_availability_part c )) where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_MANIF_EXT_KEY_DIFF_DELTACURR_CURRHIST =
-            "select eprid as EPRID from \n" +
+    public static final String GET_RANDOM_MANIF_EXT_KEY_DIFF_DELTACURR_CURRHIST =
+            "select eprid as eprid from \n" +
                     "(select c.eprid " +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_part c\n" +
-                    "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_manifestation d on c.eprid  = d.eprid \n" +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_part c\n" +
+                    "left join "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_manifestation d on c.eprid  = d.eprid \n" +
                     "where d.eprid is null and c.transform_ts = (\n" +
-                    "select max(c.transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_part c )) order by rand() limit %s";
+                    "select max(c.transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_part c )) order by rand() limit %s";
 
-    public static String GET_MANIF_EXT_REC_DIFF_DELTACURR_CURRHIST =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_EXT_REC_DIFF_DELTACURR_CURRHIST =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",uktextbookind as uktextbookind" +
                     ",ustextbookind as ustextbookind" +
@@ -3064,72 +3064,72 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",exporttowebind as exporttowebind" +
                     " from " +
                     "(select c.eprid, c.u_key, c.sourceref, c.modifiedon, c.metadeleted, c.manifestation_type, c.uktextbookind, c.ustextbookind,c.usdiscountcode,c.usdiscountname,c.emeadiscountcode,c.emeadiscountname,c.trimsize,c.weight,c.commcode,c.journalprodsitecode,c.journalissuetrimsize,c.warreference " +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_part c\n" +
-                    "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_manifestation d on c.eprid  = d.eprid \n" +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_part c\n" +
+                    "left join "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_manifestation d on c.eprid  = d.eprid \n" +
                     "where d.eprid is null and c.transform_ts = (\n" +
-                    "select max(c.transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_part c )) where eprid in ('%s') order by eprid,u_key desc";
+                    "select max(c.transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_part c )) where eprid in ('%s') order by eprid,u_key desc";
 
 
-    public static String GET_RANDOM_PAGE_COUNT_KEY_DIFF_DELTACURR_CURRHIST =
-            "select eprid as EPRID from \n" +
-                    "(select c.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_part c\n" +
-                    "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_page_count d on c.eprid  = d.eprid \n" +
+    public static final String GET_RANDOM_PAGE_COUNT_KEY_DIFF_DELTACURR_CURRHIST =
+            "select eprid as eprid from \n" +
+                    "(select c.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_page_count_part c\n" +
+                    "left join "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_page_count d on c.eprid  = d.eprid \n" +
                     "where d.eprid is null and c.transform_ts = (\n" +
-                    "select max(c.transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_part c ))order by rand() limit %s";
+                    "select max(c.transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_page_count_part c ))order by rand() limit %s";
 
-    public static String GET_PAGE_COUNT_REC_DIFF_DELTACURR_CURRHIST =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PAGE_COUNT_REC_DIFF_DELTACURR_CURRHIST =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pagecounttypecode as pagecounttypecode" +
                     ",pagecounttypename as pagecounttypename" +
                     ",pagecount as pagecount" +
                     " from (select c.eprid, c.u_key, c.sourceref, c.modifiedon, c.metadeleted, c.manifestation_type, c.pagecounttypecode, c.pagecounttypename,c.pagecount " +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_part c\n" +
-                    "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_page_count d on c.eprid  = d.eprid \n" +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_page_count_part c\n" +
+                    "left join "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_page_count d on c.eprid  = d.eprid \n" +
                     "where d.eprid is null and c.transform_ts = (\n" +
-                    "select max(c.transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_part c )) where eprid in ('%s') order by eprid,u_key desc";
+                    "select max(c.transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_page_count_part c )) where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_URL_KEY_DIFF_DELTACURR_CURRHIST =
-            "select eprid as EPRID from \n" +
-                    "(select c.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_part c\n" +
-                    "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_url d on c.eprid  = d.eprid \n" +
+    public static final String GET_RANDOM_URL_KEY_DIFF_DELTACURR_CURRHIST =
+            "select eprid as eprid from \n" +
+                    "(select c.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_url_part c\n" +
+                    "left join "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_url d on c.eprid  = d.eprid \n" +
                     "where d.eprid is null and c.transform_ts = (\n" +
-                    "select max(c.transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_part c ))order by rand() limit %s";
+                    "select max(c.transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_url_part c ))order by rand() limit %s";
 
-    public static String GET_URL_DIFF_DELTACURR_CURRHIST =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_URL_DIFF_DELTACURR_CURRHIST =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",urltypecode as urltypecode" +
                     ",urltypecode as urltypecode" +
                     ",source as source" +
                     ",name as name from " +
                     "(select c.eprid, c.u_key, c.sourceref, c.modifiedon, c.metadeleted, c.work_type, c.urltypecode, c.urltypename, c.source, c.name " +
-                    "from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_part c\n" +
-                    "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_url d on c.eprid  = d.eprid \n" +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_url_part c\n" +
+                    "left join "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_url d on c.eprid  = d.eprid \n" +
                     "where d.eprid is null and c.transform_ts = (\n" +
-                    "select max(c.transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_part c ))where eprid in ('%s') order by eprid,u_key desc";
+                    "select max(c.transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_url_part c ))where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_WORK_EXT_KEY_DIFF_DELTACURR_CURRHIST =
-            "select eprid as EPRID from \n" +
-                    "(select c.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_part c\n" +
-                    "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work d on c.eprid  = d.eprid \n" +
+    public static final String GET_RANDOM_WORK_EXT_KEY_DIFF_DELTACURR_CURRHIST =
+            "select eprid as eprid from \n" +
+                    "(select c.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_part c\n" +
+                    "left join "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_work d on c.eprid  = d.eprid \n" +
                     "where d.eprid is null and c.transform_ts = (\n" +
-                    "select max(c.transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_part c ))order by rand() limit %s";
+                    "select max(c.transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_part c ))order by rand() limit %s";
 
-    public static String GET_WORK_EXT_REC_DIFF_DELTACURR_CURRHIST =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_EXT_REC_DIFF_DELTACURR_CURRHIST =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",companygroup as companygroup" +
                     ",imagefileref as imagefileref" +
@@ -3137,8 +3137,8 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",textreftrade as textreftrade" +
                     ",features as features" +
                     ",awards as awards" +
-                    ",toc_long as toc_long" +
-                    ",toc_short as toc_short" +
+                    ",toc_long as toclong" +
+                    ",toc_short as tocshort" +
                     ",audience as audience" +
                     ",authorbyline as authorbyline" +
                     ",description as description" +
@@ -3172,24 +3172,24 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",c.primarysitesystem,c.primarysiteacronym,c.primarysitesupportlevel,c.fulfilmentsystem,c.fulfilmentjournalacronym,c.issueprodtypecode," +
                     "c.cataloguevolumesqty,c.catalogueissuesqty,c.cataloguevolumefrom,c.cataloguevolumeto,c.rfissuesqty," +
                     "c.rftotalpagesqty,c.rffvi,c.rflvi,c.journalprevioustitle,c.journalprimaryauthor" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_part c\n" +
-                    "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work d on c.eprid  = d.eprid \n" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_part c\n" +
+                    "left join "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_work d on c.eprid  = d.eprid \n" +
                     "where d.eprid is null and c.transform_ts = (\n" +
-                    "select max(c.transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_part c ))where eprid in ('%s') order by eprid,u_key desc";
+                    "select max(c.transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_part c ))where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_WORK_SUB_AREA_KEY_DIFF_DELTACURR_CURRHIST =
-            "select eprid as EPRID from \n" +
-                    "(select c.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_part c\n" +
-                    "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work_subject_area d on c.eprid  = d.eprid \n" +
+    public static final String GET_RANDOM_WORK_SUB_AREA_KEY_DIFF_DELTACURR_CURRHIST =
+            "select eprid as eprid from \n" +
+                    "(select c.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_subject_area_part c\n" +
+                    "left join "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_work_subject_area d on c.eprid  = d.eprid \n" +
                     "where d.eprid is null and c.transform_ts = (\n" +
-                    "select max(c.transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_part c ))order by rand() limit %s";
+                    "select max(c.transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_subject_area_part c ))order by rand() limit %s";
 
-    public static String GET_WORK_SUBJ_AREA_REC_DIFF_DELTACURR_CURRHIST =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_SUBJ_AREA_REC_DIFF_DELTACURR_CURRHIST =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",typecode as typecode" +
                     ",typedesc as typedesc" +
@@ -3197,46 +3197,46 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",subjdesc as subjdesc" +
                     ",priority as priority from " +
                     "(select c.eprid, c.u_key, c.sourceref, c.modifiedon, c.metadeleted, c.work_type, c.typecode, c.typedesc, c.subjcode, c.subjdesc, c.priority " +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_part c\n" +
-                    "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work_subject_area d on c.eprid  = d.eprid \n" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_subject_area_part c\n" +
+                    "left join "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_work_subject_area d on c.eprid  = d.eprid \n" +
                     "where d.eprid is null and c.transform_ts = (\n" +
-                    "select max(c.transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_part c ))where eprid in ('%s') order by eprid,u_key desc";
+                    "select max(c.transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_subject_area_part c ))where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_MANIF_RESTRICT_KEY_DIFF_DELTACURR_CURRHIST =
-            "select eprid as EPRID from \n" +
-                    "(select c.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part c\n" +
-                    "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_manifestation_restrictions d on c.eprid  = d.eprid \n" +
+    public static final String GET_RANDOM_MANIF_RESTRICT_KEY_DIFF_DELTACURR_CURRHIST =
+            "select eprid as eprid from \n" +
+                    "(select c.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part c\n" +
+                    "left join "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_manifestation_restrictions d on c.eprid  = d.eprid \n" +
                     "where d.eprid is null and c.transform_ts = (\n" +
-                    "select max(c.transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part c ))order by rand() limit %s";
+                    "select max(c.transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part c ))order by rand() limit %s";
 
-    public static String GET_MANIF_RESTRICT_REC_DIFF_DELTACURR_CURRHIST =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_RESTRICT_REC_DIFF_DELTACURR_CURRHIST =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",restrictioncode as restrictioncode" +
                     ",restrictionname as restrictionname from " +
                     "(select c.eprid, c.u_key, c.sourceref, c.modifiedon, c.metadeleted, c.manifestation_type, c.restrictioncode, c.restrictionname" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part c\n" +
-                    "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_manifestation_restrictions d on c.eprid  = d.eprid \n" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part c\n" +
+                    "left join "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_manifestation_restrictions d on c.eprid  = d.eprid \n" +
                     "where d.eprid is null and c.transform_ts = (\n" +
-                    "select max(c.transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part c ))where eprid in ('%s') order by eprid,u_key desc";
+                    "select max(c.transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_part c ))where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_PROD_PRICE_KEY_DIFF_DELTACURR_CURRHIST =
-            "select eprid as EPRID from \n" +
-                    "(select c.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_part c\n" +
-                    "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_product_prices d on c.eprid  = d.eprid \n" +
+    public static final String GET_RANDOM_PROD_PRICE_KEY_DIFF_DELTACURR_CURRHIST =
+            "select eprid as eprid from \n" +
+                    "(select c.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_part c\n" +
+                    "left join "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_product_prices d on c.eprid  = d.eprid \n" +
                     "where d.eprid is null and c.transform_ts = (\n" +
-                    "select max(c.transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_part c ))order by rand() limit %s";
+                    "select max(c.transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_part c ))order by rand() limit %s";
 
-    public static String GET_PROD_PRICE_REC_DIFF_DELTACURR_CURRHIST =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",product_type as product_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PROD_PRICE_REC_DIFF_DELTACURR_CURRHIST =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",product_type as producttype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pricecurrency as pricecurrency" +
                     ",priceamount as priceamount" +
@@ -3247,33 +3247,33 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",pricecustomercategory as pricecustomercategory" +
                     ",pricepurchasequantity as pricepurchasequantity from " +
                     "(select c.eprid,c.u_key,c.sourceref,c.modifiedon,c.metadeleted,c.product_type,c.pricecurrency,c.priceamount,c.pricestartdate,c.priceenddate,c.priceregion,c.pricecategory,c.pricecustomercategory,c.pricepurchasequantity" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_part c\n" +
-                    "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_product_prices d on c.eprid  = d.eprid \n" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_part c\n" +
+                    "left join "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_product_prices d on c.eprid  = d.eprid \n" +
                     "where d.eprid is null and c.transform_ts = (\n" +
-                    "select max(c.transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_part c ))where eprid in ('%s') order by eprid,u_key desc";
+                    "select max(c.transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_part c ))where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_WORK_PERS_ROLE_KEY_DIFF_DELTACURR_CURRHIST =
-            "select u_key as EPRID from \n" +
-                    "(select c.u_key from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_part c\n" +
-                    "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work_person_role d on c.u_key  = d.u_key \n" +
+    public static final String GET_RANDOM_WORK_PERS_ROLE_KEY_DIFF_DELTACURR_CURRHIST =
+            "select u_key as eprid from \n" +
+                    "(select c.u_key from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_part c\n" +
+                    "left join "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_work_person_role d on c.u_key  = d.u_key \n" +
                     "where d.u_key is null and c.transform_ts = (\n" +
-                    "select max(c.transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_part c ))order by rand() limit %s";
+                    "select max(c.transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_part c ))order by rand() limit %s";
 
 
-    public static String GET_WORK_PERS_ROLE_REC_DIFF_DELTACURR_CURRHIST =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
+    public static final String GET_WORK_PERS_ROLE_REC_DIFF_DELTACURR_CURRHIST =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
                     ",worksourceref as worksourceref" +
                     ",personsourceref as personsourceref" +
                     ",source as source" +
-                    ",work_type as work_type" +
-                    ",core_reference as core_reference" +
+                    ",work_type as worktype" +
+                    ",core_reference as corereference" +
                     ",roletype as roletype" +
                     ",rolename as rolename" +
                     ",title as title" +
-                    ",person_first_name as person_first_name" +
-                    ",person_family_name as person_family_name" +
-                    ",email_address as email_address" +
+                    ",person_first_name as personfirstname" +
+                    ",person_family_name as personfamilyname" +
+                    ",email_address as emailaddress" +
                     ",honours as honours" +
                     ",affiliation as affiliation" +
                     ",imageurl as imageurl" +
@@ -3286,33 +3286,33 @@ public class BCS_ETLExtendedDataChecksSQL {
                     "(select c.u_key, c.worksourceref, c.personsourceref, c.source, c.eprid, c.work_type, c.core_reference, c.roletype,c.rolename,c.title,c.person_first_name," +
                     "c.person_family_name,c.email_address,c.honours,c.affiliation,c.imageurl,c.footnotetxt,c.notestxt," +
                     "c.sequence,c.groupnumber,c.modifiedon,c.metadeleted" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_part c\n" +
-                    "left join "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work_person_role d on c.eprid  = d.eprid \n" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_part c\n" +
+                    "left join "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_work_person_role d on c.eprid  = d.eprid \n" +
                     "where d.u_key is null and c.transform_ts = (\n" +
-                    "select max(c.transform_ts) from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_part c ))where u_key in ('%s') order by u_key desc";
+                    "select max(c.transform_ts) from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_part c ))where u_key in ('%s') order by u_key desc";
 
 
-    public static String GET_AVAILABILITY_REC_EXCL_DELTA =
-            " select u_key as UKEY " +
-                    ",sourceref as SOURCEREF" +
-                    ",eprid as EPRID" +
-                    ",producttype as PRODUCTTYPE" +
-                    ",modifiedon as MODIFIEDON" +
-                    ",application as APPLICATION" +
+    public static final String GET_AVAILABILITY_REC_EXCL_DELTA =
+            " select u_key as ukey " +
+                    ",sourceref as sourceref" +
+                    ",eprid as eprid" +
+                    ",producttype as producttype" +
+                    ",modifiedon as modifiedon" +
+                    ",application as application" +
                     ",deltaanswercodeuk as deltaanswercodeuk" +
                     ",deltaanswercodeus as deltaanswercodeus" +
                     ",anzpubstatus as anzpubstatus" +
                     ",pubdateactual as pubdateactual" +
                     ",status as status" +
                     ",metadeleted as metadeleted" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_excl_delta where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_availability_excl_delta where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_MANIF_EXT_REC_EXCL_DELTA =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_EXT_REC_EXCL_DELTA =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",uktextbookind as uktextbookind" +
                     ",ustextbookind as ustextbookind" +
@@ -3327,39 +3327,39 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
                     ",exporttowebind as exporttowebind" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_excl_delta where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_excl_delta where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_PAGE_COUNT_REC_EXCL_DELTA =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PAGE_COUNT_REC_EXCL_DELTA =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pagecounttypecode as pagecounttypecode" +
                     ",pagecounttypename as pagecounttypename" +
                     ",pagecount as pagecount" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_excl_delta where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_page_count_excl_delta where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_URL_REC_EXCL_DELTA =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_URL_REC_EXCL_DELTA =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",urltypecode as urltypecode" +
                     ",urltypecode as urltypecode" +
                     ",source as source" +
                     ",name as name" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_excl_delta where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_url_excl_delta where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_WORK_EXT_REC_EXCL_DELTA =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_EXT_REC_EXCL_DELTA =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",companygroup as companygroup" +
                     ",imagefileref as imagefileref" +
@@ -3367,8 +3367,8 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",textreftrade as textreftrade" +
                     ",features as features" +
                     ",awards as awards" +
-                    ",toc_long as toc_long" +
-                    ",toc_short as toc_short" +
+                    ",toc_long as toclong" +
+                    ",toc_short as tocshort" +
                     ",audience as audience" +
                     ",authorbyline as authorbyline" +
                     ",description as description" +
@@ -3398,39 +3398,39 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",rflvi as rflvi" +
                     ",journalprevioustitle as journalprevioustitle" +
                     ",journalprimaryauthor as journalprimaryauthor" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_excl_delta where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_excl_delta where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_WORK_SUB_AREA_REC_EXCL_DELTA =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_SUB_AREA_REC_EXCL_DELTA =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",typecode as typecode" +
                     ",typedesc as typedesc" +
                     ",subjcode as subjcode" +
                     ",subjdesc as subjdesc" +
                     ",priority as priority" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_excl_delta where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_subject_area_excl_delta where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_MANIF_RESTRICT_REC_DIFF_EXCL_DELTA =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_RESTRICT_REC_DIFF_EXCL_DELTA =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",restrictioncode as restrictioncode" +
                     ",restrictionname as restrictionname" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_excl_delta where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_excl_delta where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_PROD_PRICE_EXT_REC_EXCL_DELTA =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",product_type as product_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PROD_PRICE_EXT_REC_EXCL_DELTA =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",product_type as producttype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pricecurrency as pricecurrency" +
                     ",priceamount as priceamount" +
@@ -3440,22 +3440,22 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",pricecategory as pricecategory" +
                     ",pricecustomercategory as pricecustomercategory" +
                     ",pricepurchasequantity as pricepurchasequantity" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_excl_delta where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_excl_delta where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_WORK_PERS_ROLE_REC_EXCL_DELTA =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
+    public static final String GET_WORK_PERS_ROLE_REC_EXCL_DELTA =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
                     ",worksourceref as worksourceref" +
                     ",personsourceref as personsourceref" +
                     ",source as source" +
-                    ",work_type as work_type" +
-                    ",core_reference as core_reference" +
+                    ",work_type as worktype" +
+                    ",core_reference as corereference" +
                     ",roletype as roletype" +
                     ",rolename as rolename" +
                     ",title as title" +
-                    ",person_first_name as person_first_name" +
-                    ",person_family_name as person_family_name" +
-                    ",email_address as email_address" +
+                    ",person_first_name as personfirstname" +
+                    ",person_family_name as personfamilyname" +
+                    ",email_address as emailaddress" +
                     ",honours as honours" +
                     ",affiliation as affiliation" +
                     ",imageurl as imageurl" +
@@ -3464,20 +3464,20 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",sequence as sequence" +
                     ",groupnumber as groupnumber" +
                     ",metadeleted as metadeleted" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_excl_delta where u_key in ('%s') order by u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_excl_delta where u_key in ('%s') order by u_key desc";
 
-    public static String GET_RANDOM_AVAILABILITY_KEY_SUM_DELTACURR_EXCL =
-            "select eprid as EPRID from \n" +
-                    "(select c.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_excl_delta as c union all \n" +
-                    "select d.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_availability as d) order by rand() limit %s";
+    public static final String GET_RANDOM_AVAILABILITY_KEY_SUM_DELTACURR_EXCL =
+            "select eprid as eprid from \n" +
+                    "(select c.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_availability_excl_delta as c union all \n" +
+                    "select d.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_availability as d) order by rand() limit %s";
 
-    public static String GET_AVAILABILITY_REC_SUM_DELTACURR_EXCL =
-            " select u_key as UKEY " +
-                    ",sourceref as SOURCEREF" +
-                    ",eprid as EPRID" +
-                    ",producttype as PRODUCTTYPE" +
-                    ",modifiedon as MODIFIEDON" +
-                    ",application as APPLICATION" +
+    public static final String GET_AVAILABILITY_REC_SUM_DELTACURR_EXCL =
+            " select u_key as ukey " +
+                    ",sourceref as sourceref" +
+                    ",eprid as eprid" +
+                    ",producttype as producttype" +
+                    ",modifiedon as modifiedon" +
+                    ",application as application" +
                     ",deltaanswercodeuk as deltaanswercodeuk" +
                     ",deltaanswercodeus as deltaanswercodeus" +
                     ",anzpubstatus as anzpubstatus" +
@@ -3485,21 +3485,21 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",status as status" +
                     ",metadeleted as metadeleted from " +
                     "(select c.eprid,c.u_key,c.sourceref,c.modifiedon,c.application,c.deltaanswercodeuk,c.deltaanswercodeus,c.anzpubstatus,c.pubdateactual,c.status,c.metadeleted,c.producttype" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_excl_delta as c union all \n" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_availability_excl_delta as c union all \n" +
                     "select d.eprid,d.u_key,d.sourceref,d.modifiedon,d.application,d.deltaanswercodeuk,d.deltaanswercodeus,d.anzpubstatus,d.pubdateactual,d.status,d.metadeleted,d.producttype" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_availability as d) where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_availability as d) where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_MANIF_EXT_KEY_SUM_DELTACURR_EXCL =
-            "select eprid as EPRID from \n" +
-                    "(select c.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_excl_delta as c union all \n" +
-                    "select d.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_manifestation as d)order by rand() limit %s";
+    public static final String GET_RANDOM_MANIF_EXT_KEY_SUM_DELTACURR_EXCL =
+            "select eprid as eprid from \n" +
+                    "(select c.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_excl_delta as c union all \n" +
+                    "select d.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_manifestation as d)order by rand() limit %s";
 
-    public static String GET_MANIF_EXT_REC_SUM_DELTACURR_EXCL =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_EXT_REC_SUM_DELTACURR_EXCL =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",uktextbookind as uktextbookind" +
                     ",ustextbookind as ustextbookind" +
@@ -3516,42 +3516,42 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",exporttowebind as exporttowebind" +
                     " from \n" +
                     "(select c.eprid, c.u_key, c.sourceref, c.modifiedon, c.metadeleted, c.manifestation_type, c.uktextbookind, c.ustextbookind,c.usdiscountcode,c.usdiscountname,c.emeadiscountcode,c.emeadiscountname,c.trimsize,c.weight,c.commcode,c.journalprodsitecode,c.journalissuetrimsize,c.warreference,c.exporttowebind" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_excl_delta as c union all \n" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_excl_delta as c union all \n" +
                     "select d.eprid, d.u_key, d.sourceref, d.modifiedon, d.metadeleted, d.manifestation_type, d.uktextbookind, d.ustextbookind,d.usdiscountcode,d.usdiscountname,d.emeadiscountcode,d.emeadiscountname,d.trimsize,d.weight,d.commcode,d.journalprodsitecode,d.journalissuetrimsize,d.warreference,d.exporttowebind" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_manifestation as d)where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_manifestation as d)where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_PAGE_COUNT_KEY_SUM_DELTACURR_EXCL =
-            "select eprid as EPRID from \n" +
-                    "(select c.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_excl_delta as c union all \n" +
-                    "select d.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_page_count as d)order by rand() limit %s";
+    public static final String GET_RANDOM_PAGE_COUNT_KEY_SUM_DELTACURR_EXCL =
+            "select eprid as eprid from \n" +
+                    "(select c.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_page_count_excl_delta as c union all \n" +
+                    "select d.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_page_count as d)order by rand() limit %s";
 
-    public static String GET_PAGE_COUNT_REC_SUM_DELTACURR_EXCL =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PAGE_COUNT_REC_SUM_DELTACURR_EXCL =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pagecounttypecode as pagecounttypecode" +
                     ",pagecounttypename as pagecounttypename" +
                     ",pagecount as pagecount" +
                     " from \n" +
                     "(select c.eprid, c.u_key, c.sourceref, c.modifiedon, c.metadeleted, c.manifestation_type, c.pagecounttypecode, c.pagecounttypename,c.pagecount" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_excl_delta as c union all \n" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_page_count_excl_delta as c union all \n" +
                     "select d.eprid, d.u_key, d.sourceref, d.modifiedon, d.metadeleted, d.manifestation_type, d.pagecounttypecode, d.pagecounttypename,d.pagecount" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_page_count as d)where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_page_count as d)where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_URL_KEY_SUM_DELTACURR_EXCL =
-            "select eprid as EPRID from \n" +
-                    "(select c.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_excl_delta as c union all \n" +
-                    "select d.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_url as d)order by rand() limit %s";
+    public static final String GET_RANDOM_URL_KEY_SUM_DELTACURR_EXCL =
+            "select eprid as eprid from \n" +
+                    "(select c.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_url_excl_delta as c union all \n" +
+                    "select d.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_url as d)order by rand() limit %s";
 
-    public static String GET_URL_SUM_REC_DELTACURR_EXCL =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_URL_SUM_REC_DELTACURR_EXCL =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",urltypecode as urltypecode" +
                     ",urltypecode as urltypecode" +
@@ -3559,22 +3559,22 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",name as name" +
                     " from \n" +
                     "(select c.eprid, c.u_key, c.sourceref, c.modifiedon, c.metadeleted, c.work_type, c.urltypecode, c.urltypename, c.source, c.name " +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_excl_delta as c union all \n" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_url_excl_delta as c union all \n" +
                     "select d.eprid, d.u_key, d.sourceref, d.modifiedon, d.metadeleted, d.work_type, d.urltypecode, d.urltypename, d.source, d.name " +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_url as d)" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_url as d)" +
                     "where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_WORK_EXT_KEY_SUM_DELTACURR_EXCL =
-            "select eprid as EPRID from \n" +
-                    "(select c.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_excl_delta as c union all \n" +
-                    "select d.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work as d)order by rand() limit %s";
+    public static final String GET_RANDOM_WORK_EXT_KEY_SUM_DELTACURR_EXCL =
+            "select eprid as eprid from \n" +
+                    "(select c.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_excl_delta as c union all \n" +
+                    "select d.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_work as d)order by rand() limit %s";
 
-    public static String GET_WORK_EXT_REC_SUM_DELTACURR_EXCL =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_EXT_REC_SUM_DELTACURR_EXCL =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",companygroup as companygroup" +
                     ",imagefileref as imagefileref" +
@@ -3582,8 +3582,8 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",textreftrade as textreftrade" +
                     ",features as features" +
                     ",awards as awards" +
-                    ",toc_long as toc_long" +
-                    ",toc_short as toc_short" +
+                    ",toc_long as toclong" +
+                    ",toc_short as tocshort" +
                     ",audience as audience" +
                     ",authorbyline as authorbyline" +
                     ",description as description" +
@@ -3618,24 +3618,24 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",c.primarysitesystem,c.primarysiteacronym,c.primarysitesupportlevel,c.fulfilmentsystem,c.fulfilmentjournalacronym,c.issueprodtypecode," +
                     "c.cataloguevolumesqty,c.catalogueissuesqty,c.cataloguevolumefrom,c.cataloguevolumeto,c.rfissuesqty," +
                     "c.rftotalpagesqty,c.rffvi,c.rflvi,c.journalprevioustitle,c.journalprimaryauthor" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_excl_delta as c union all \n" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_excl_delta as c union all \n" +
                     "select d.eprid, d.u_key, d.sourceref, d.modifiedon, d.metadeleted, d.work_type, d.companygroup, d.imagefileref, d.workmasterisbn, d.textreftrade, d.features,d.awards,d.toc_long,d.toc_short,d.audience,d.authorbyline,d.description,d.sbu,d.profitcentre,d.review,d.journalelscomind,d.journalaimsscope,d.ddpeligibind,d.ptsjournalind,d.authorfeedbackind,d.deltabusinessunit,d.printername" +
                     ",d.primarysitesystem,d.primarysiteacronym,d.primarysitesupportlevel,d.fulfilmentsystem,d.fulfilmentjournalacronym,d.issueprodtypecode," +
                     "d.cataloguevolumesqty,d.catalogueissuesqty,d.cataloguevolumefrom,d.cataloguevolumeto,d.rfissuesqty," +
                     "d.rftotalpagesqty,d.rffvi,d.rflvi,d.journalprevioustitle,d.journalprimaryauthor" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work as d) where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_work as d) where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_WORK_SUB_AREA_KEY_SUM_DELTACURR_EXCL =
-            "select eprid as EPRID from \n" +
-                    "(select c.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_excl_delta as c union all \n" +
-                    "select d.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work_subject_area as d)order by rand() limit %s";
+    public static final String GET_RANDOM_WORK_SUB_AREA_KEY_SUM_DELTACURR_EXCL =
+            "select eprid as eprid from \n" +
+                    "(select c.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_subject_area_excl_delta as c union all \n" +
+                    "select d.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_work_subject_area as d)order by rand() limit %s";
 
-    public static String GET_WORK_SUB_AREA_REC_SUM_DELTACURR_EXCL =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_SUB_AREA_REC_SUM_DELTACURR_EXCL =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",typecode as typecode" +
                     ",typedesc as typedesc" +
@@ -3644,42 +3644,42 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",priority as priority" +
                     " from \n" +
                     "(select c.eprid, c.u_key, c.sourceref, c.modifiedon, c.metadeleted, c.work_type, c.typecode, c.typedesc, c.subjcode, c.subjdesc, c.priority" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_excl_delta as c union all \n" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_subject_area_excl_delta as c union all \n" +
                     "select d.eprid, d.u_key, d.sourceref, d.modifiedon, d.metadeleted, d.work_type, d.typecode, d.typedesc, d.subjcode, d.subjdesc, d.priority" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work_subject_area as d)where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_work_subject_area as d)where eprid in ('%s') order by eprid,u_key desc";
 
 
-    public static String GET_RANDOM_MANIF_RESTRICT_KEY_SUM_DELTACURR_EXCL =
-            "select eprid as EPRID from \n" +
-                    "(select c.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_excl_delta as c union all \n" +
-                    "select d.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_manifestation_restrictions as d)order by rand() limit %s";
+    public static final String GET_RANDOM_MANIF_RESTRICT_KEY_SUM_DELTACURR_EXCL =
+            "select eprid as eprid from \n" +
+                    "(select c.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_excl_delta as c union all \n" +
+                    "select d.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_manifestation_restrictions as d)order by rand() limit %s";
 
-    public static String GET_MANIF_RESTRICT_REC_SUM_DELTACURR_EXCL =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_RESTRICT_REC_SUM_DELTACURR_EXCL =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",restrictioncode as restrictioncode" +
                     ",restrictionname as restrictionname" +
                     " from \n" +
                     "(select c.eprid, c.u_key, c.sourceref, c.modifiedon, c.metadeleted, c.manifestation_type, c.restrictioncode, c.restrictionname" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_excl_delta as c union all \n" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_excl_delta as c union all \n" +
                     " select d.eprid, d.u_key, d.sourceref, d.modifiedon, d.metadeleted, d.manifestation_type, d.restrictioncode, d.restrictionname" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_manifestation_restrictions as d)where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_manifestation_restrictions as d)where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_PROD_PRICE_KEY_SUM_DELTACURR_EXCL =
-            "select eprid as EPRID from \n" +
-                    "(select c.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_excl_delta as c union all \n" +
-                    "select d.eprid from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_product_prices as d)order by rand() limit %s";
+    public static final String GET_RANDOM_PROD_PRICE_KEY_SUM_DELTACURR_EXCL =
+            "select eprid as eprid from \n" +
+                    "(select c.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_excl_delta as c union all \n" +
+                    "select d.eprid from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_product_prices as d)order by rand() limit %s";
 
-    public static String GET_PROD_PRICE_REC_SUM_DELTACURR_EXCL =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",product_type as product_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PROD_PRICE_REC_SUM_DELTACURR_EXCL =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",product_type as producttype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pricecurrency as pricecurrency" +
                     ",priceamount as priceamount" +
@@ -3691,28 +3691,28 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",pricepurchasequantity as pricepurchasequantity" +
                     " from \n" +
                     "(select c.eprid,c.u_key,c.sourceref,c.modifiedon,c.metadeleted,c.product_type,c.pricecurrency,c.priceamount,c.pricestartdate,c.priceenddate,c.priceregion,c.pricecategory,c.pricecustomercategory,c.pricepurchasequantity" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_excl_delta as c union all \n" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_excl_delta as c union all \n" +
                     "select d.eprid,d.u_key,d.sourceref,d.modifiedon,d.metadeleted,d.product_type,d.pricecurrency,d.priceamount,d.pricestartdate,d.priceenddate,d.priceregion,d.pricecategory,d.pricecustomercategory,d.pricepurchasequantity" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_product_prices as d)where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_product_prices as d)where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_RANDOM_WORK_PERS_ROLE_KEY_SUM_DELTACURR_EXCL =
-            "select u_key as EPRID from \n" +
-                    "(select c.u_key from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_excl_delta as c union all \n" +
-                    "select d.u_key from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work_person_role as d)order by rand() limit %s";
+    public static final String GET_RANDOM_WORK_PERS_ROLE_KEY_SUM_DELTACURR_EXCL =
+            "select u_key as eprid from \n" +
+                    "(select c.u_key from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_excl_delta as c union all \n" +
+                    "select d.u_key from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_work_person_role as d)order by rand() limit %s";
 
-    public static String GET_WORK_PERSON_ROLE_REC_SUM_DELTACURR_EXCL =
-            " select u_key as UKEY" +
+    public static final String GET_WORK_PERSON_ROLE_REC_SUM_DELTACURR_EXCL =
+            " select u_key as ukey" +
                     ",worksourceref as worksourceref" +
                     ",personsourceref as personsourceref" +
                     ",source as source" +
-                    ",work_type as work_type" +
-                    ",core_reference as core_reference" +
+                    ",work_type as worktype" +
+                    ",core_reference as corereference" +
                     ",roletype as roletype" +
                     ",rolename as rolename" +
                     ",title as title" +
-                    ",person_first_name as person_first_name" +
-                    ",person_family_name as person_family_name" +
-                    ",email_address as email_address" +
+                    ",person_first_name as personfirstname" +
+                    ",person_family_name as personfamilyname" +
+                    ",email_address as emailaddress" +
                     ",honours as honours" +
                     ",affiliation as affiliation" +
                     ",imageurl as imageurl" +
@@ -3725,32 +3725,32 @@ public class BCS_ETLExtendedDataChecksSQL {
                     " from \n" +
                     "(select c.u_key, c.worksourceref, c.personsourceref, c.source, c.work_type, c.core_reference, c.roletype,c.rolename,c.title,c.person_first_name,c.person_family_name,c.email_address,c.honours,c.affiliation,c.imageurl,c.footnotetxt,c.notestxt," +
                     "c.sequence,c.groupnumber,c.modifiedon,c.metadeleted" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_excl_delta as c union all \n" +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_excl_delta as c union all \n" +
                     "select d.u_key, d.worksourceref, d.personsourceref, d.source, d.work_type, d.core_reference, d.roletype,d.rolename,d.title,d.person_first_name,d.person_family_name,d.email_address,d.honours,d.affiliation,d.imageurl,d.footnotetxt,d.notestxt," +
                     "d.sequence,d.groupnumber,d.modifiedon,d.metadeleted" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_delta_current_extended_work_person_role as d)where u_key in ('%s') order by u_key,honours desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_delta_current_extended_work_person_role as d)where u_key in ('%s') order by u_key,honours desc";
 
-    public static String GET_AVAILABILITY_REC_LATEST =
-            " select u_key as UKEY " +
-                    ",sourceref as SOURCEREF" +
-                    ",eprid as EPRID" +
-                    ",producttype as PRODUCTTYPE" +
-                    ",modifiedon as MODIFIEDON" +
-                    ",application as APPLICATION" +
+    public static final String GET_AVAILABILITY_REC_LATEST =
+            " select u_key as ukey " +
+                    ",sourceref as sourceref" +
+                    ",eprid as eprid" +
+                    ",producttype as producttype" +
+                    ",modifiedon as modifiedon" +
+                    ",application as application" +
                     ",deltaanswercodeuk as deltaanswercodeuk" +
                     ",deltaanswercodeus as deltaanswercodeus" +
                     ",anzpubstatus as anzpubstatus" +
                     ",pubdateactual as pubdateactual" +
                     ",status as status" +
                     ",metadeleted as metadeleted" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_availability_latest where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_availability_latest where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_MANIF_EXT_REC_LATEST =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_EXT_REC_LATEST =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",uktextbookind as uktextbookind" +
                     ",ustextbookind as ustextbookind" +
@@ -3765,39 +3765,39 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",journalissuetrimsize as journalissuetrimsize" +
                     ",warreference as warreference" +
                     ",exporttowebind as exporttowebind" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_latest where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_latest where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_PAGE_COUNT_IDENT_REC_LATEST =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PAGE_COUNT_IDENT_REC_LATEST =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pagecounttypecode as pagecounttypecode" +
                     ",pagecounttypename as pagecounttypename" +
                     ",pagecount as pagecount" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_page_count_latest where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_page_count_latest where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_URL_EXT_LATEST =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_URL_EXT_LATEST =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",urltypecode as urltypecode" +
                     ",urltypecode as urltypecode" +
                     ",source as source" +
                     ",name as name" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_url_latest where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_url_latest where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_WRK_EXT_LATEST_COUNT =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WRK_EXT_LATEST_COUNT =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",companygroup as companygroup" +
                     ",imagefileref as imagefileref" +
@@ -3805,8 +3805,8 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",textreftrade as textreftrade" +
                     ",features as features" +
                     ",awards as awards" +
-                    ",toc_long as toc_long" +
-                    ",toc_short as toc_short" +
+                    ",toc_long as toclong" +
+                    ",toc_short as tocshort" +
                     ",audience as audience" +
                     ",authorbyline as authorbyline" +
                     ",description as description" +
@@ -3836,46 +3836,46 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",rflvi as rflvi" +
                     ",journalprevioustitle as journalprevioustitle" +
                     ",journalprimaryauthor as journalprimaryauthor" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_latest where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_latest where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_WORK_SUB_AREA_REC_LATEST =
-            "select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",work_type as work_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_WORK_SUB_AREA_REC_LATEST =
+            "select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",work_type as worktype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",typecode as typecode" +
                     ",typedesc as typedesc" +
                     ",subjcode as subjcode" +
                     ",subjdesc as subjdesc" +
                     ",priority as priority" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_subject_area_latest where eprid in ('%s') order by eprid desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_subject_area_latest where eprid in ('%s') order by eprid desc";
 
-    public static String GET_MANIF_RESTRICT_REC_LATEST =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",manifestation_type as manifestation_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_MANIF_RESTRICT_REC_LATEST =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",manifestation_type as manifestationtype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",restrictioncode as restrictioncode" +
                     ",restrictionname as restrictionname" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_latest where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_manifestation_restrictions_latest where eprid in ('%s') order by eprid,u_key desc";
 
-    public static String GET_WORK_PERSON_ROLE_REC_LATEST =
-            " select u_key as UKEY " +
+    public static final String GET_WORK_PERSON_ROLE_REC_LATEST =
+            " select u_key as ukey " +
                     ",worksourceref as worksourceref" +
                     ",personsourceref as personsourceref" +
                     ",source as source" +
-                    ",work_type as work_type" +
-                    ",core_reference as core_reference" +
+                    ",work_type as worktype" +
+                    ",core_reference as corereference" +
                     ",roletype as roletype" +
                     ",rolename as rolename" +
                     ",title as title" +
-                    ",person_first_name as person_first_name" +
-                    ",person_family_name as person_family_name" +
-                    ",email_address as email_address" +
+                    ",person_first_name as personfirstname" +
+                    ",person_family_name as personfamilyname" +
+                    ",email_address as emailaddress" +
                     ",honours as honours" +
                     ",affiliation as affiliation" +
                     ",imageurl as imageurl" +
@@ -3884,14 +3884,14 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",sequence as sequence" +
                     ",groupnumber as groupnumber" +
                     ",metadeleted as metadeleted" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_work_person_role_latest where u_key in ('%s') order by u_key,honours desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_work_person_role_latest where u_key in ('%s') order by u_key,honours desc";
 
-    public static String GET_PROD_PRICE_REC_LATEST =
-            " select eprid as EPRID " +
-                    ",u_key as UKEY" +
-                    ",product_type as product_type" +
-                    ",sourceref as SOURCEREF" +
-                    ",modifiedon as MODIFIEDON" +
+    public static final String GET_PROD_PRICE_REC_LATEST =
+            " select eprid as eprid " +
+                    ",u_key as ukey" +
+                    ",product_type as producttype" +
+                    ",sourceref as sourceref" +
+                    ",modifiedon as modifiedon" +
                     ",metadeleted as metadeleted" +
                     ",pricecurrency as pricecurrency" +
                     ",priceamount as priceamount" +
@@ -3901,7 +3901,7 @@ public class BCS_ETLExtendedDataChecksSQL {
                     ",pricecategory as pricecategory" +
                     ",pricecustomercategory as pricecustomercategory" +
                     ",pricepurchasequantity as pricepurchasequantity" +
-                    " from "+GetBCS_ETLExtendedDLDBUser.getBCS_ETLCoreDataBase()+".etl_transform_history_extended_product_prices_latest where eprid in ('%s') order by eprid,u_key desc";
+                    " from "+ GetBcsEtlExtendedDLDBUser.getBcsEtlCoreDataBase()+".etl_transform_history_extended_product_prices_latest where eprid in ('%s') order by eprid,u_key desc";
 
 
 }
