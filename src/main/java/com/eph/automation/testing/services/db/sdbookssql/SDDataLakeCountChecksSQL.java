@@ -1,9 +1,12 @@
-package com.eph.automation.testing.services.db.SDBooksDataLakeSQL;
+package com.eph.automation.testing.services.db.sdbookssql;
 
 
 public class SDDataLakeCountChecksSQL {
+     private SDDataLakeCountChecksSQL() {
+         throw new IllegalStateException("Utility class");
+     }
 
-       public static String GET_SD_URL_SOURCE_COUNT =
+       public static final String GET_SD_URL_SOURCE_COUNT =
                "select count(*) as Source_Count from (SELECT\n" +
                        "  src.unformatted_isbn   as isbn\n" +
                        ", src.book_title         as book_title\n" +
@@ -20,20 +23,18 @@ public class SDDataLakeCountChecksSQL {
                        "WHERE crf.epr is not null) where inbound_ts = (select max(inbound_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_inbound_part)";
 
 
-       public static String GET_SD_URL_CURRENT_COUNT =
+     public static final String GET_SD_URL_CURRENT_COUNT =
                "SELECT count(*) as Target_count FROM "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_current_urls";
 
-
-        public static String GET_SD_URL_CURRENT_HISTORY_COUNT =
+     public static final String GET_SD_URL_CURRENT_HISTORY_COUNT =
                 "select count(*) as History_Count from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_urls_part where delete_flag=false and\n " +
                         " transform_ts = (select max(transform_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_urls_part)\n";
 
-
-    public static String GET_SD_URL_TRANSFORM_FILE =
+     public static final String GET_SD_URL_TRANSFORM_FILE =
             "select count(*) as Transform_Count from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part where\n " +
                     "transform_file_ts = (select max(transform_file_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part)\n";
 
-    public static String GET_SD_URL_DIFF_CURR_PREV_COUNT =
+    public static final String GET_SD_URL_DIFF_CURR_PREV_COUNT =
             "with crr_dataset as(\n" +
                     "  select isbn, book_title, url, url_code, url_name, url_title, epr_id, work_type\n" +
                     "  from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_file_history_urls_part\n" +
@@ -73,23 +74,23 @@ public class SDDataLakeCountChecksSQL {
                     "            coalesce (crr.work_type, 'na') <> coalesce (prev.work_type, 'na')))";
 
 
-    public static String GET_SD_URL_DELTA_CURRENT_COUNT =
+    public static final String GET_SD_URL_DELTA_CURRENT_COUNT =
             "select count(*) as Delta_Count from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_current_urls";
 
-    public static String GET_SD_URL_DELTA_CURR_HIST_COUNT =
+    public static final String GET_SD_URL_DELTA_CURR_HIST_COUNT =
             "select count(*) as Delta_History_Count from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_history_urls_part\n " +
                     "where delta_ts = (select max(delta_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_history_urls_part)";
 
 
-    public static String GET_SD_URL_LATEST_CURRENT_COUNT =
+    public static final String GET_SD_URL_LATEST_CURRENT_COUNT =
                     "select count(*) as latest_count from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_latest_urls";
 
-    public static String GET_SD_URL_SUM_DELTA_EXCL_COUNT =
+    public static final String GET_SD_URL_SUM_DELTA_EXCL_COUNT =
             "select count(*) as source_count from \n" +
                     "(select c.isbn from " +GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_excl_delta as c union all \n" +
                     "select d.isbn from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_current_urls as d)";
 
-    public static String GET_SD_URL_DIFF_DELTA_CURR_HIST_COUNT =
+    public static final String GET_SD_URL_DIFF_DELTA_CURR_HIST_COUNT =
             "select count(*) as source_count from \n" +
                     "(select c.isbn from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_urls_part c\n" +
                     "left join "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_delta_current_urls d on c.isbn  = d.isbn \n" +
@@ -97,10 +98,10 @@ public class SDDataLakeCountChecksSQL {
                     "select max(c.transform_ts) from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_urls_part c ))";
 
 
-    public static String GET_SD_URL_EXCLUDE_CURRENT_COUNT =
+    public static final String GET_SD_URL_EXCLUDE_CURRENT_COUNT =
             "select count(*) as excl_count from "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_history_excl_delta";
 
-    public static String GET_SD_DUPLICATES_LATEST_URL_COUNT =
+    public static final String GET_SD_DUPLICATES_LATEST_URL_COUNT =
             "select count(*)  as Duplicate_Count from (SELECT count(*) FROM "+GetSDBooksDLDBUser.getSDDataBase()+".sdbooks_transform_latest_urls \n" +
                     " group by isbn having count(*)>1)";
 }

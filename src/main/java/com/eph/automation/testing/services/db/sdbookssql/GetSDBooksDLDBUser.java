@@ -1,6 +1,10 @@
-package com.eph.automation.testing.services.db.SDBooksDataLakeSQL;
+package com.eph.automation.testing.services.db.sdbookssql;
 
 public class GetSDBooksDLDBUser {
+
+    private GetSDBooksDLDBUser() {
+        throw new IllegalStateException("Utility class");
+    }
 
     public static String getSDDataBase(){
         String dbSDDL = null;
@@ -10,12 +14,8 @@ public class GetSDBooksDLDBUser {
             }
             else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbSDDL = "sdbooks_staging_uat";
-            }else{
-                dbSDDL = "sdbooks_staging_uat2";
             }
-
         }else{
-          //  dbSDDL = "sdbooks_staging_sit";
             dbSDDL = "sdbooks_staging_uat";
         }
         return dbSDDL;
@@ -29,11 +29,8 @@ public class GetSDBooksDLDBUser {
             }
             else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbProdDb = "product_staging_database_uat";
-            }else{
-                dbProdDb = "product_staging_database_uat2";
             }
         }else{
-          //  dbProdDb = "product_staging_database_sit";
             dbProdDb = "product_staging_database_uat";
         }
         return dbProdDb;

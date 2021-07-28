@@ -1,7 +1,7 @@
 package com.eph.automation.testing.models.contexts;
 
 import com.eph.automation.testing.annotations.StaticInjection;
-import com.eph.automation.testing.models.dao.SDBooksDataLake.SDBooksDLAccessObject;
+import com.eph.automation.testing.models.dao.sdbooks.SDBooksDLAccessObject;
 
 import java.util.List;
 
