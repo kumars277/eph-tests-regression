@@ -21,7 +21,7 @@ import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import com.eph.automation.testing.services.db.sql.PersonWorkRoleDataSQL;
 import com.eph.automation.testing.services.db.sql.ProductFinderSQL;
-import com.eph.automation.testing.steps.searchAPI.apiWorksSearchSteps;
+import com.eph.automation.testing.steps.search_api.ApiWorksSearchSteps;
 import com.google.common.base.Joiner;
 import com.google.inject.Inject;
 import cucumber.api.java.en.*;
@@ -36,7 +36,6 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 import org.junit.Assert;
@@ -79,7 +78,7 @@ public class ProductFinderUISteps {
     private FinancialAttribsContext financialAttribs = new FinancialAttribsContext();
     private WorkApiObject workApiObject = new WorkApiObject();
     private WorkManifestationApiObject workManifestationApiObject = new WorkManifestationApiObject();
-    private com.eph.automation.testing.steps.searchAPI.apiWorksSearchSteps apiWorksSearchSteps = new apiWorksSearchSteps();
+    private ApiWorksSearchSteps apiWorksSearchSteps = new ApiWorksSearchSteps();
     private PersonsApiObject personsApiObject = new PersonsApiObject();
 
     @Inject
@@ -94,7 +93,7 @@ public class ProductFinderUISteps {
     @Given("^get (.*) random work id from DB")
     public void getRandomWorkIds(String numberOfRecords) {
         //created by Nishant @ 15 May 2020
-        sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_IDS_FOR_SEARCH, numberOfRecords);
+        sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_ID, numberOfRecords);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random work ids  : " + ids);
@@ -486,7 +485,7 @@ public class ProductFinderUISteps {
                 !TestContext.getValues().environment.equalsIgnoreCase("PRODUCTION")&&
                 !TestContext.getValues().environment.equalsIgnoreCase("UAT2")) {
 
-            sql = String.format(APIDataSQL.SELECT_GD_WWORK_TYPE_STATUS, ProductFinderTasks.searchResultId);
+            sql = String.format(APIDataSQL.SELECT_GD_WORK_TYPE_STATUS_BY_WORKID, ProductFinderTasks.searchResultId);
             List<Map<?, ?>> workTypeStatusCode = DBManager.getDBResultMap(sql, Constants.EPH_URL);
             workStatusCode = workTypeStatusCode.stream().map(m -> (String) m.get("WORK_STATUS")).map(String::valueOf).collect(Collectors.toList());
 
@@ -609,7 +608,7 @@ public class ProductFinderUISteps {
     @Given("^get (\\d+) random product id from DB$")
     public void getRandomProductIds(String numberOfRecords) {
         //created by Nishant @ 19 May 2020
-        sql = String.format(APIDataSQL.SELECT_RANDOM_PRODUCT_IDS_FOR_SEARCH, numberOfRecords);
+        sql = String.format(APIDataSQL.SELECT_GD_RANDOM_PRODUCT_ID, numberOfRecords);
         List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         ids = randomProductSearchIds.stream().map(m -> (String) m.get("PRODUCT_ID")).map(String::valueOf).collect(Collectors.toList());
         Log.info("Selected random product ids are : " + ids);
@@ -622,7 +621,7 @@ public class ProductFinderUISteps {
     public void getProductsDataFromEPHGD() {
         //created by Nishant @ 19 May 2020
         Log.info("get products data from EPH GD ...");
-        sql = String.format(APIDataSQL.EPH_GD_PRODUCT_EXTRACT_FOR_SEARCH, Joiner.on("','").join(ids));
+        sql = String.format(APIDataSQL.GET_GD_DATA_PRODUCT, Joiner.on("','").join(ids));
         DataQualityContext.productDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
         DataQualityContext.productDataObjectsFromEPHGD.sort(Comparator.comparing(ProductDataObject::getPRODUCT_NAME));
         Assert.assertFalse("Verify That product objects list from DB is not empty.", DataQualityContext.productDataObjectsFromEPHGD.isEmpty());
@@ -1307,7 +1306,7 @@ public class ProductFinderUISteps {
     }
 
     private void getFinancialData(String workid) {
-        String sql = String.format(APIDataSQL.GET_GD_FinnAttr_DATA, workid);
+        String sql = String.format(APIDataSQL.GET_GD_DATA_FINN_ATTR, workid);
         financialAttribs.financialDataFromGD = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
     }
 
@@ -1316,7 +1315,7 @@ public class ProductFinderUISteps {
     }
 
     private void getAccountableProductFromEPHGD(String accountable_product_id) {
-        String sql = String.format(APIDataSQL.SELECT_ACCOUNTABLE_PRODUCT_BY_ACCOUNTABLEID, accountable_product_id);
+        String sql = String.format(APIDataSQL.GET_GD_DATA_ACCOUNTABLEPRODUCT_BY_ID, accountable_product_id);
         accountableProductDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, AccountableProductDataObject.class, Constants.EPH_URL);
     }
 

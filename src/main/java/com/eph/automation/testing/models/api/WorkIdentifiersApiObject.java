@@ -45,7 +45,7 @@ public class WorkIdentifiersApiObject {
     public void setEffectiveEndDate(String effectiveEndDate) {this.effectiveEndDate = effectiveEndDate;}
 
     private void getWorkIdentifierByID(String workidentifierID){
-        String sql = APIDataSQL.getWorkIdentifiersDataFromGDByIdentifier.replace("PARAM1", workidentifierID);
+        String sql = APIDataSQL.GET_GD_DATA_WORKIDENTIFIER_BY_IDENTIFIER.replace("PARAM1", workidentifierID);
         DBworkIdentifier = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
     }
 
@@ -70,7 +70,7 @@ public class WorkIdentifiersApiObject {
     }
 
     private String getWorkIdentifierName(String code){//created by Nishant @ 18 May 2021, EPHD-3122
-        String sql = String.format(APIDataSQL.SelectLovWorkIdentifierValue,code);
+        String sql = String.format(APIDataSQL.SELECT_GD_LOV_DESCRIPTION_OF_IDENTIFIER,code);
         List<Map<String,Object>> workIdentifierName = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         return (String) workIdentifierName.get(0).get("l_description");
     }

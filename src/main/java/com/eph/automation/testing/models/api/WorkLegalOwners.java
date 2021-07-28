@@ -98,26 +98,26 @@ public class WorkLegalOwners {
     }
 
     private List<Map<String,Object>> getWorkLegalOwnersById(String workId){
-        String sql = APIDataSQL.getWorkLegelOwnersByWorkId.replace("PARAM1", workId);
+        String sql = APIDataSQL.GET_GD_DATA_WORKLEGELOWNDER_BY_WORKID.replace("PARAM1", workId);
         workLegalOwners = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         return workLegalOwners;
     }
 
     private String getownershipDescriptionName(String code){
-        String sql = String.format(APIDataSQL.SelectLovWorkOwnershipDescriptionValue,code);
+        String sql = String.format(APIDataSQL.SELECT_GD_LOV_DESCRIPTION_OF_OWNER,code);
         List<Map<String,Object>> ownershipDescriptionName = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         return (String) ownershipDescriptionName.get(0).get("l_description");
     }
 
     private String[] getLegalOwnerValues(String code){
-        String sql = String.format(APIDataSQL.SelectLovWorkLegalOwnerValue,code);
+        String sql = String.format(APIDataSQL.SELECT_GD_LOV_OF_LEGALOWNER,code);
         List<Map<String,Object>> legalOwnerValues = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         String[] arr_temp={legalOwnerValues.get(0).get("name").toString(),legalOwnerValues.get(0).get("f_legal_ownership").toString()};
         return arr_temp;
     }
 
     private String[] getLegalOwnershipValues(String code){
-        String sql = String.format(APIDataSQL.SelectLovLegalOwnershipValue,code);
+        String sql = String.format(APIDataSQL.SELECT_GD_LOV_OF_LEGALOWNERSHIP,code);
         List<Map<String,Object>> legalOwnershipValues = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         String[] arr_temp={legalOwnershipValues.get(0).get("l_description").toString(),
                 legalOwnershipValues.get(0).get("roll_up_ownership").toString()};

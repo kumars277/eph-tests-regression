@@ -454,55 +454,59 @@ public class workCore {
     private void getWorkDataFromEPHGD(String workID) {
         List<String> ids = new ArrayList<>();
         ids.add(workID);
-        String sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, Joiner.on("','").join(ids));
+        String sql = String.format(APIDataSQL.GET_GD_DATA_WORK, Joiner.on("','").join(ids));
         workDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
     }
 
     private String getPMGcodeByPMC(String pmcCode) {
-        String sql = String.format(APIDataSQL.EPH_GD_PMG_CODE_EXTRACT_BYPMC, pmcCode);
+        String sql = String.format(APIDataSQL.SELECT_GD_PMG_BY_PMC, pmcCode);
         List<Map<String, Object>> getPMG = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         String pmgCode = ((String) getPMG.get(0).get("f_pmg"));
         return pmgCode;
     }
 
     private void getAccountableProductFromEPHGD(String accountable_product_id) {
-        String sql = String.format(APIDataSQL.SELECT_ACCOUNTABLE_PRODUCT_BY_ACCOUNTABLEID, accountable_product_id);
+        String sql = String.format(APIDataSQL.GET_GD_DATA_ACCOUNTABLEPRODUCT_BY_ID, accountable_product_id);
         accountableProductDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, AccountableProductDataObject.class, Constants.EPH_URL);
     }
 
     private String getLanguageName(String code){//created by Nishant @ 18 May 2021, EPHD-3122
-        String sql = String.format(APIDataSQL.SelectLovLanguageDescription,code);
+        String sql = String.format(APIDataSQL.SELECT_GD_LOV_DESCRIPTION_OF_LANGUAGE
+                ,code);
         List<Map<String,Object>> languageName = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         return (String) languageName.get(0).get("l_description");
     }
 
     private String getSubscriptionName(String code){//created by Nishant @ 18 May 2021, EPHD-3122
-        String sql = String.format(APIDataSQL.SelectLovSubscriptionDescription,code);
+        String sql = String.format(APIDataSQL.SELECT_GD_LOV_DISCRIPTION_OF_SUBSCRIPTION,code);
         List<Map<String,Object>> subscriptionName = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         return (String) subscriptionName.get(0).get("l_description");
     }
 
-    private String getSocietyOwnershipName(String code){//created by Nishant @ 18 May 2021, EPHD-3122
-        String sql = String.format(APIDataSQL.SelectLovsocietyOwnershipValue,code);
+    private String[] getSocietyOwnershipName(String code){//created by Nishant @ 18 May 2021, EPHD-3122
+        String sql = String.format(APIDataSQL.SELECT_GD_LOV_DESCRIPTION_OF_SOCIATYOWNERSHIP,code);
         List<Map<String,Object>> societyOwnershipValue = DBManager.getDBResultMap(sql,Constants.EPH_URL);
-        return (String)societyOwnershipValue.get(0).get("l_description");
-    }
+        String[] arr_temp={societyOwnershipValue.get(0).get("l_description").toString(),
+                societyOwnershipValue.get(0).get("roll_up_ownership").toString()};
+        return arr_temp;
 
+    }
+/*
     private String getSocietyOwnershipRollUp(String code){//created by Nishant @ 18 May 2021, EPHD-3122
-        String sql = String.format(APIDataSQL.SelectLovsocietyOwnershipValue,code);
+        String sql = String.format(APIDataSQL.SELECT_GD_LOV_DESCRIPTION_OF_SOCIATYOWNERSHIP,code);
         List<Map<String,Object>> societyOwnershipValue = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         return (String)societyOwnershipValue.get(0).get("roll_up_ownership");
-    }
+    }*/
 
     private String[] getLegalOwnershipValue(String code){//created by Nishant @ 18 May 2021, EPHD-3122
-        String sql = String.format(APIDataSQL.SelectLovLegalOwnershipValue,code);
+        String sql = String.format(APIDataSQL.SELECT_GD_LOV_OF_LEGALOWNERSHIP,code);
         List<Map<String,Object>> legalOwnershipValue = DBManager.getDBResultMap(sql,Constants.EPH_URL);
         String[] arr_lov = {(String)legalOwnershipValue.get(0).get("l_description"),(String)legalOwnershipValue.get(0).get("roll_up_ownership")};
         return arr_lov;
     }
 
     private List<Map<String,Object>> getWorkAccessModelsId(String workId){//created by Nishant @ 19 May 2021
-        String sql = APIDataSQL.getWorkAccessModelsById.replace("PARAM1", workId);
+        String sql = APIDataSQL.SELECT_GD_ACCESSMODEL_BY_WORKID.replace("PARAM1", workId);
         return  DBManager.getDBResultMap(sql,Constants.EPH_URL);
     }
 
@@ -527,12 +531,12 @@ public class workCore {
     }
 
     private List<Map<String,Object>> getWorkBusinessModelsId(String workId){//created by Nishant @ 19 May 2021
-        String sql = APIDataSQL.getWorkBusinessModelById.replace("PARAM1", workId);
+        String sql = APIDataSQL.SELECT_GD_BUSINESSMODEL_BY_WORKID.replace("PARAM1", workId);
         return  DBManager.getDBResultMap(sql,Constants.EPH_URL);
     }
 
     private List<Map<String,Object>> getWorkSubjectAreasByWorkId(String workId){//created by Nishant @ 20 May 2021
-        String sql = APIDataSQL.getWorkSubjectAreaByWorkId.replace("PARAM1", workId);
+        String sql = APIDataSQL.GET_GD_DATA_SUBJECTAREA_BY_WORKID.replace("PARAM1", workId);
         return  DBManager.getDBResultMap(sql,Constants.EPH_URL);
     }
     private void printLog(String verified) {Log.info("verified..." + verified);}

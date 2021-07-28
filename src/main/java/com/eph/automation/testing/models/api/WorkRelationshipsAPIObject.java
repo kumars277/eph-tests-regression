@@ -198,7 +198,7 @@ public class WorkRelationshipsAPIObject {
 
   private void getWorksDataFromEPHGD(String workId) {
     Log.info("getWork record ..." + workId);
-    String sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, workId);
+    String sql = String.format(APIDataSQL.GET_GD_DATA_WORK, workId);
     dataQualityContext.workDataObjectsFromEPHGD =
         DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
     dataQualityContext.workDataObjectsFromEPHGD.sort(

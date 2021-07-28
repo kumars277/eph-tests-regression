@@ -46,7 +46,7 @@ public class FinancialAttributesApiObject {
     public void setEffectiveEndDate(String effectiveEndDate) {this.effectiveEndDate = effectiveEndDate;}
 
     private void getFinancialData(String workid){
-        String sql = String.format(APIDataSQL.GET_GD_FinnAttr_DATA, workid);
+        String sql = String.format(APIDataSQL.GET_GD_DATA_FINN_ATTR, workid);
         financialAttribs.financialDataFromGD = DBManager.getDBResultAsBeanList(sql, FinancialAttribsDataObject.class, Constants.EPH_URL);
     }
 

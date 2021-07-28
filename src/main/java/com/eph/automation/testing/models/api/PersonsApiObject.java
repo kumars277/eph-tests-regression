@@ -97,6 +97,11 @@ public class PersonsApiObject {
         if(dataQualityContext.personDataObjectsFromEPHGD!=null){dataQualityContext.personDataObjectsFromEPHGD.clear();}
         if(dataQualityContext.personWorkRoleDataObjectsFromEPHGD!=null){dataQualityContext.personWorkRoleDataObjectsFromEPHGD.clear();}
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         getPersonWorkRoleRecordsEPHGD(this.id);
 
      Assert.assertEquals(id+ " - person role",dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_ROLE(), this.role.get("code"));
