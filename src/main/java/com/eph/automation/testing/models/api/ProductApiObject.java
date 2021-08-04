@@ -115,11 +115,13 @@ public class ProductApiObject {
                Log.info("---- verifying product pricingExtended data...");
                ApiSearchDataCheckStitchingLayerSteps apiSearchDataCheckStitchingLayer = new ApiSearchDataCheckStitchingLayerSteps();
 
-               String sql;
-               if (TestContext.getValues().environment.equalsIgnoreCase("UAT"))
-                   sql = "select  epr_id ,json from ephuat_extended_data_stitch.stch_product_ext_json where extension_type = 'Prices' and epr_id='" + id + "'";
-               else
-                   sql = "select  epr_id ,json from ephsit_extended_data_stitch.stch_product_ext_json where extension_type = 'Prices' and epr_id='" + id + "'";
+               String dbEnv = "uat";
+               if (TestContext.getValues().environment.equalsIgnoreCase("SIT"))
+                    dbEnv = "sit";
+               else if (TestContext.getValues().environment.equalsIgnoreCase("UAT"))
+                   dbEnv = "uat";
+
+               String sql = "select  epr_id ,json from eph"+dbEnv+"_extended_data_stitch.stch_product_ext_json where extension_type = 'Prices' and epr_id='" + id + "'";
 
                randomIdsData = DBManager.getDBResultMap(sql, Constants.EPH_URL);
                PricingExtendedTestClass jsonValue = new Gson().fromJson(randomIdsData.get(0).get("json").toString(), PricingExtendedTestClass.class);
@@ -143,21 +145,20 @@ public class ProductApiObject {
                }
            }
        }
-       catch (NullPointerException e)
-       {
-           e.getMessage();
-        //   DataQualityContext.api_response.prettyPrint();
-       }
        catch (Exception e)
        {
            e.getMessage();
+
+           Assert.assertFalse(DataQualityContext.breadcrumbMessage +" e.message>"+e.getMessage()+ " scenario Failed ", true);
+        //   DataQualityContext.api_response.prettyPrint();
        }
+
     }
 
     private void getProductDataFromEPHGD(String workID) {
         List<String> ids = new ArrayList<>();
         ids.add(workID);
-        String sql = String.format(APIDataSQL.EPH_GD_PRODUCT_EXTRACT_FOR_SEARCH, Joiner.on("','").join(ids));
+        String sql = String.format(APIDataSQL.GET_GD_DATA_PRODUCT, Joiner.on("','").join(ids));
         productDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
     }
 

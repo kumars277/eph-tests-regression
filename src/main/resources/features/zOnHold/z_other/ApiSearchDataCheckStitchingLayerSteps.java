@@ -10,7 +10,7 @@ import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.services.api.APIService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.eph.automation.testing.services.db.sql.stitchingDataSQL;
-import com.eph.automation.testing.steps.searchAPI.apiWorksSearchSteps;
+import com.eph.automation.testing.steps.search_api.ApiWorksSearchSteps;
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import cucumber.api.java.en.*;
@@ -29,7 +29,7 @@ public class ApiSearchDataCheckStitchingLayerSteps {
 
     private String sql;
     private APIService apiService = new APIService();
-    private com.eph.automation.testing.steps.searchAPI.apiWorksSearchSteps apiWorksSearchSteps = new apiWorksSearchSteps();
+    private ApiWorksSearchSteps apiWorksSearchSteps = new ApiWorksSearchSteps();
     private ProductApiObject response;
     private WorkApiObject workResponse;
     List<Integer> ignore = new ArrayList<>();

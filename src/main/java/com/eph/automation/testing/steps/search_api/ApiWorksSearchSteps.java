@@ -1,4 +1,4 @@
-package com.eph.automation.testing.steps.searchAPI;
+package com.eph.automation.testing.steps.search_api;
 
 import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.configuration.Constants;
@@ -12,7 +12,6 @@ import com.eph.automation.testing.services.api.APIService;
 import com.eph.automation.testing.services.api.AzureOauthTokenFetchingException;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
 import static com.eph.automation.testing.models.contexts.DataQualityContext.*;
-
 import com.google.common.base.Joiner;
 import com.google.gson.Gson;
 import cucumber.api.java.en.*;
@@ -26,56 +25,54 @@ import org.junit.Assert;
  * updated by Nishant @ 20 April 2020 for data model changes
  */
 
-public class apiWorksSearchSteps {
-  @StaticInjection public DataQualityContext dataQualityContext;
+public class ApiWorksSearchSteps {
+  @StaticInjection
   private APIService apiService = new APIService();
-  private String sql;
-  // private static List<String> ids;
+  private static String sql;
   private static List<String> manifestaionids;
   private WorkApiObject workApi_response;
   private static List<WorkDataObject> workIdentifiers;
-  private com.eph.automation.testing.steps.searchAPI.apiProductsSearchSteps apiProductsSearchSteps =
-      new apiProductsSearchSteps();
 
-  String EndPoint;
+  private static final String W_ID = "WORK_ID";
+  private static final String W_IDENTIFIER = "WORK_IDENTIFIER";
+  private static final String WPR_SUMMARYNAME = "WORK_PRODUCT_SUMMARY_NAME";
+  private static final String WPR_ID = "WORK_PRODUCT_ID";
+  private static final String WMPR_SUMMARYNAME = "WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME";
+  private static final String WM_IDENTIFIER = "WORK_MANIFESTATION_IDENTIFIER";
 
-  public apiWorksSearchSteps() {}
+  public ApiWorksSearchSteps() {/**/}
 
   @Given("^We get (.*) random search ids for works (.*)$")
-  public void getRandomWorkIds(String numberOfRecords, String workProperty) {
+  public static void getRandomWorkIds(String numberOfRecords, String workProperty) {
     // updated by Nishant @ 25 May 2021
     switch (workProperty) {
-      case "WORK_PRODUCT_ID":
-      case "WORK_PRODUCT_SUMMARY_NAME":
-        sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_IDS_WITH_PRODUCT, numberOfRecords);
+      case WPR_ID:
+      case WPR_SUMMARYNAME:
+        sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_ID_WITH_PRODUCT, numberOfRecords);
         break;
 
-      case "WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME":
-        sql =
-            String.format(
-                APIDataSQL.SELECT_RANDOM_WORK_WITH_MANIFESTATION_WITH_PRODUCT, numberOfRecords);
+      case WMPR_SUMMARYNAME:
+        sql =  String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_WITH_MANIFESTATION_WITH_PRODUCT, numberOfRecords);
         break;
 
-      case "WORK_MANIFESTATION_IDENTIFIER":
-        sql =
-            String.format(
-                APIDataSQL.SELECT_RANDOM_WORK_WITH_MANIFESTATION_IDENTIFIER, numberOfRecords);
+      case WM_IDENTIFIER:
+        sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_WITH_MANIFESTATION_IDENTIFIER, numberOfRecords);
         break;
 
       default:
-        sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_IDS_FOR_SEARCH, numberOfRecords);
+        sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_ID, numberOfRecords);
         break;
     }
     List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     ids =
         randomProductSearchIds.stream()
-            .map(m -> (String) m.get("WORK_ID"))
+            .map(m -> (String) m.get(W_ID))
             .map(String::valueOf)
             .collect(Collectors.toList());
 
     Log.info("Selected random work ids  : " + ids + "on environment " + System.getProperty("ENV"));
     // added by Nishant @ 27 Dec for debugging failures
-    // ids.clear();ids.add("EPR-W-10Y7KC");Log.info("hard coded work ids are : " + ids);
+    // "ids.clear();ids.add("EPR-W-10Y7KC");Log.info("hard coded work ids are : " + ids);"
     DataQualityContext.breadcrumbMessage += "->" + ids;
     Assert.assertFalse(
         DataQualityContext.breadcrumbMessage + "- Verify That list with random ids is not empty.",
@@ -83,19 +80,19 @@ public class apiWorksSearchSteps {
   }
 
   @Given("^We get (.*) random journal ids for search")
-  public void getRandomJournalIds(String numberOfRecords) { // created by Nishant @ 25 Jun 2020
-    //  DataQualityContext.breadcrumbMessage = "";
-    sql = String.format(APIDataSQL.SELECT_RANDOM_JOURNAL_IDS_FOR_SEARCH, numberOfRecords);
+  public static void getRandomJournalIds(String numberOfRecords) { // created by Nishant @ 25 Jun 2020
+
+    sql = String.format(APIDataSQL.SELECT_GD_RANDOM_JOURNAL_ID, numberOfRecords);
     List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     ids =
         randomProductSearchIds.stream()
-            .map(m -> (String) m.get("WORK_ID"))
+            .map(m -> (String) m.get(W_ID))
             .map(String::valueOf)
             .collect(Collectors.toList());
     Log.info("Environment used..." + System.getProperty("ENV"));
     Log.info("Selected random Journal ids  : " + ids);
     // for debugging failure
-       //ids.clear();    ids.add("EPR-W-102V8J");  Log.info("hard coded work ids are : " + ids);
+       //"ids.clear();    ids.add("EPR-W-102V8J");  Log.info("hard coded work ids are : " + ids);"
 
     DataQualityContext.breadcrumbMessage += "->" + ids;
     Assert.assertFalse(
@@ -103,41 +100,22 @@ public class apiWorksSearchSteps {
         ids.isEmpty());
   }
 
-  /*
-      @Given("^We get id for work search (.*)$")
-      public void getProductById(String workID) {
-          sql = String.format(APIDataSQL.SELECT_WORK_BY_ID_FOR_SEARCH, workID);
-          List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-          DataQualityContext.ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
-          Log.info("work ids  : " + ids);
-      }
-  */
-  /*
-  private void getRandomWorkIdWithProducts() {
-      sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_IDS_WITH_PRODUCT);
-      List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
-      ids = randomProductSearchIds.stream().map(m -> (String) m.get("WORK_ID")).map(String::valueOf).collect(Collectors.toList());
-      Log.info("Selected random work ids with product is : " + ids);
-      Assert.assertFalse(DataQualityContext.breadcrumbMessage +"-> verify list with random id is not empty", ids.isEmpty());
-  }
-  */
-
   @Given("^We get (.*) random search ids for Extended works")
-  public void getRandomExtendedWorkIds(String numberOfRecords) {
+  public static void getRandomExtendedWorkIds(String numberOfRecords) {
     // created by Nishant @ 01 Jul 2020
     String dbEnv;
     if (TestContext.getValues().environment.equalsIgnoreCase("UAT")) dbEnv = "uat";
     else dbEnv = "sit";
-    sql = String.format(APIDataSQL.SELECT_RANDOM_EXTENDED_WORK_IDS, dbEnv, numberOfRecords);
+    sql = String.format(APIDataSQL.SELECT_RANDOM_EXTENDED_WORK_ID, dbEnv, numberOfRecords);
     List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     ids =
         randomProductSearchIds.stream()
-            .map(m -> (String) m.get("WORK_ID"))
+            .map(m -> (String) m.get(W_ID))
             .map(String::valueOf)
             .collect(Collectors.toList());
     Log.info("Selected random work ids  : " + ids);
     // added by Nishant @ 27 Dec for debugging failures
-    // ids.clear(); ids.add("EPR-W-108TJK");  Log.info("hard coded work ids are : " + ids);
+    // "ids.clear(); ids.add("EPR-W-108TJK");  Log.info("hard coded work ids are : " + ids);"
     DataQualityContext.breadcrumbMessage += "->" + ids;
     Assert.assertFalse(
         DataQualityContext.breadcrumbMessage + "-> Verify That list with random ids is not empty.",
@@ -145,17 +123,17 @@ public class apiWorksSearchSteps {
   }
 
   @Given("^We get (.*) random search ids for Extended manifestation")
-  public void getRandomExtendedManifestationIds(String numberOfRecords) {
+  public static void getRandomExtendedManifestationIds(String numberOfRecords) {
     // created by Nishant @ 01 Jul 2020
     String dbEnv;
     if (TestContext.getValues().environment.equals("UAT")) dbEnv = "uat";
     else dbEnv = "sit";
     sql =
-        String.format(APIDataSQL.SELECT_RANDOM_EXTENDED_MANIFESTATION_IDS, dbEnv, numberOfRecords);
+        String.format(APIDataSQL.SELECT_RANDOM_EXTENDED_MANIFESTATION_ID, dbEnv, numberOfRecords);
     List<Map<?, ?>> randomProductSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     manifestaionids =
         randomProductSearchIds.stream()
-            .map(m -> (String) m.get("WORK_ID"))
+            .map(m -> (String) m.get(W_ID))
             .map(String::valueOf)
             .collect(Collectors.toList());
     Log.info("Selected random extended manifestation ids  : " + manifestaionids);
@@ -166,7 +144,7 @@ public class apiWorksSearchSteps {
   }
 
   @Given("^We set specific journal ids for search")
-  public void setspecificJournalIds() { // created by Nishant @ 04 Aug 2020
+  public static void setspecificJournalIds() { // created by Nishant @ 04 Aug 2020
     ids = new ArrayList<>();
     // production random work ids
     ids.add("EPR-W-102RGY");
@@ -179,9 +157,9 @@ public class apiWorksSearchSteps {
   }
 
   @Given("^We get (.*) random search ids for person roles")
-  public void getRandomPersonRolesIds(String numberOfRecords) {
+  public static void getRandomPersonRolesIds(String numberOfRecords) {
 
-    sql = String.format(APIDataSQL.SELECT_RANDOM_WORK_PERSON_ROLES_FOR_SEARCH, numberOfRecords);
+    sql = String.format(APIDataSQL.SELECT_GD_RANDOM_WORK_PERSON_ROLE, numberOfRecords);
     List<Map<?, ?>> randomPersonSearchIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     ids =
         randomPersonSearchIds.stream()
@@ -189,7 +167,7 @@ public class apiWorksSearchSteps {
             .map(String::valueOf)
             .collect(Collectors.toList());
     Log.info("Selected random person ids  : " + ids);
-    //  ids.clear(); ids.add("10077793");  Log.info("hard coded work ids are : " + ids);
+    //  "ids.clear(); ids.add("10077793");  Log.info("hard coded work ids are : " + ids);"
     DataQualityContext.breadcrumbMessage += "->" + ids;
     Assert.assertFalse(
         DataQualityContext.breadcrumbMessage
@@ -198,26 +176,26 @@ public class apiWorksSearchSteps {
   }
 
   @And("^We get the work search data from EPH GD$")
-  public void getWorksDataFromEPHGD() {
+  public static void getWorksDataFromEPHGD() {
     Log.info(
         "We get the work data from EPH GD ..." + Joiner.on("','").join(DataQualityContext.ids));
     sql =
         String.format(
-            APIDataSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH,
+            APIDataSQL.GET_GD_DATA_WORK,
             Joiner.on("','").join(DataQualityContext.ids));
-    dataQualityContext.workDataObjectsFromEPHGD =
+    DataQualityContext.workDataObjectsFromEPHGD =
         DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
-    dataQualityContext.workDataObjectsFromEPHGD.sort(
+    DataQualityContext.workDataObjectsFromEPHGD.sort(
         Comparator.comparing(WorkDataObject::getWORK_ID));
     Assert.assertFalse(
         DataQualityContext.breadcrumbMessage
             + "-> Verify that list with work objects from DB is not empty",
-        dataQualityContext.workDataObjectsFromEPHGD.isEmpty());
+        DataQualityContext.workDataObjectsFromEPHGD.isEmpty());
   }
 
   @Given("We get the work data from EPH GD for (.*)")
-  public void getSpecificWorkDataFromEPHGD(String WorkId) {
-    sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, WorkId);
+  public static void getSpecificWorkDataFromEPHGD(String WorkId) {
+    sql = String.format(APIDataSQL.GET_GD_DATA_WORK, WorkId);
     DataQualityContext.workDataObjectsFromEPHGD =
         DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
     DataQualityContext.workDataObjectsFromEPHGD.sort(
@@ -227,13 +205,13 @@ public class apiWorksSearchSteps {
   // Updated by Nishant for data model changes in Apr 2020
   @When("^the work details are retrieved and compared$")
   public void compareWorkSearchResultsWithDB() throws AzureOauthTokenFetchingException {
-    int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
+    int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
     for (int i = 0; i < bound; i++) {
       Log.info("#################################################################################");
-      Log.info("Verifying " + dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+      Log.info("Verifying " + DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
       workApi_response =
-          apiService.searchForWorkByIDResult(
-              dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+              APIService.searchForWorkByIDResult(
+                      DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
       workApi_response.compareWithDB();
     }
   }
@@ -241,13 +219,13 @@ public class apiWorksSearchSteps {
   @Then("^the work details are retrieved by accountableProduct and compared$")
   public void compareWorkByAccountableProductWithDB() throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks;
-    int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
+    int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
     for (int i = 0; i < bound; i++) {
       String accountableProduct_SegmentCode =
-          apiProductsSearchSteps.getSegmentCode(
-              dataQualityContext.workDataObjectsFromEPHGD.get(i).getF_accountable_product());
+              ApiProductsSearchSteps.getSegmentCode(
+                      DataQualityContext.workDataObjectsFromEPHGD.get(i).getF_accountable_product());
       Log.info("acountableProduct to be tested..." + accountableProduct_SegmentCode);
-      returnedWorks = apiService.searchForWorksByaccountableProduct(accountableProduct_SegmentCode);
+      returnedWorks = APIService.searchForWorksByaccountableProduct(accountableProduct_SegmentCode);
       Log.info("API total count matched..." + returnedWorks.getTotalMatchCount());
       returnedWorks.verifyWorksAreReturned();
       returnedWorks.verifyWorksReturnedCount(
@@ -258,21 +236,21 @@ public class apiWorksSearchSteps {
   @Then("^the work details are retrieved by workStatus and compared$")
   public void compareWorksByWorkStatusWithDB() {
     WorksMatchedApiObject returnedWorks;
-    boolean failed = false;
+
     try {
-      int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
+      int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
         String searchKeyword =
-            dataQualityContext
+                DataQualityContext
                 .workDataObjectsFromEPHGD
                 .get(0)
                 .getWORK_TITLE()
                 .split(" ")[0]
                 .toUpperCase();
-        String workStatus = dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_STATUS();
+        String workStatus = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_STATUS();
         Log.info("searchKeyword and workStatus: " + searchKeyword + " and " + workStatus);
 
-        returnedWorks = apiService.searchForWorksByWorkStatus(searchKeyword, workStatus);
+        returnedWorks = APIService.searchForWorksByWorkStatus(searchKeyword, workStatus);
         Log.info("API total count matched..." + returnedWorks.getTotalMatchCount());
         returnedWorks.verifyWorksAreReturned();
         returnedWorks.verifyWorksReturnedCount(
@@ -289,19 +267,19 @@ public class apiWorksSearchSteps {
     WorksMatchedApiObject returnedWorks;
     boolean failed = false;
     try {
-      int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
+      int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
         String searchKeyword =
-            dataQualityContext
+                DataQualityContext
                 .workDataObjectsFromEPHGD
                 .get(0)
                 .getWORK_TITLE()
                 .split(" ")[0]
                 .toUpperCase();
-        String workType = dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TYPE();
+        String workType = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TYPE();
         Log.info("searchKeyword and workType: " + searchKeyword + " and " + workType);
 
-        returnedWorks = apiService.searchForWorksByWorkType(searchKeyword, workType);
+        returnedWorks = APIService.searchForWorksByWorkType(searchKeyword, workType);
         Log.info("API total count matched..." + returnedWorks.getTotalMatchCount());
         returnedWorks.verifyWorksAreReturned();
         returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByWorkType(searchKeyword, workType));
@@ -321,24 +299,24 @@ public class apiWorksSearchSteps {
   @Then("^the work details are retrieved by manifestationType and compared$")
   public void compareWorksByManifestationTypeWithDB() {
     WorksMatchedApiObject returnedWorks;
-    boolean failed = false;
+
     try {
-      int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
+      int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
-        getManifestationsByWorkID(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+        getManifestationsByWorkID(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
         String searchKeyword =
-            dataQualityContext
+            DataQualityContext
                 .workDataObjectsFromEPHGD
                 .get(0)
                 .getWORK_TITLE()
                 .split(" ")[0]
                 .toUpperCase();
         String ManifestationType =
-            dataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getF_TYPE();
+            DataQualityContext.manifestationDataObjectsFromEPHGD.get(0).getF_TYPE();
         Log.info(
             "searchKeyword and ManifestationType: " + searchKeyword + " and " + ManifestationType);
         returnedWorks =
-            apiService.searchForWorksByManifestationType(searchKeyword, ManifestationType);
+                APIService.searchForWorksByManifestationType(searchKeyword, ManifestationType);
         Log.info("API total count matched..." + returnedWorks.getTotalMatchCount());
         returnedWorks.verifyWorksAreReturned();
         returnedWorks.verifyWorksReturnedCount(
@@ -347,7 +325,6 @@ public class apiWorksSearchSteps {
 
     } catch (Exception e) {
       e.getMessage();
-     // DataQualityContext.api_response.prettyPrint();
       Assert.assertFalse(DataQualityContext.breadcrumbMessage + " scenario Failed ", true);
     }
   }
@@ -356,29 +333,28 @@ public class apiWorksSearchSteps {
   public void compareWorkBySearchWithPMCCodeWithDB() {
     WorksMatchedApiObject returnedWorks;
     try{
-    int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
+    int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
     String searchKeyword =
-        dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().split(" ")[0];
+        DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_TITLE().split(" ")[0];
 
     for (int i = 0; i < bound; i++) {
       Log.info(
           "search keyword '"
               + searchKeyword
               + "' and pmcCode '"
-              + dataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC()
+              + DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC()
               + "'");
       returnedWorks =
-          apiService.searchForWorksBySearchWithPMCCode(
-              searchKeyword, dataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
+              APIService.searchForWorksBySearchWithPMCCode(
+              searchKeyword, DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC());
       Log.info("API total count matched..." + returnedWorks.getTotalMatchCount());
       returnedWorks.verifyWorksAreReturned();
       returnedWorks.verifyWorksReturnedCount(
           getNumberOfWorksBySearchWithPMCCode(
-              searchKeyword, dataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC()));
+              searchKeyword, DataQualityContext.workDataObjectsFromEPHGD.get(0).getPMC()));
     }
     } catch (Exception e) {
       e.getMessage();
-      // DataQualityContext.api_response.prettyPrint();
       Assert.assertFalse(DataQualityContext.breadcrumbMessage + " scenario Failed ", true);
     }
   }
@@ -387,9 +363,9 @@ public class apiWorksSearchSteps {
   public void compareWorkBySearchWithPMGCodeWithDB() {
     WorksMatchedApiObject returnedWorks;
     try {
-      int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
+      int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       String searchKeyword =
-          dataQualityContext
+          DataQualityContext
               .workDataObjectsFromEPHGD
               .get(0)
               .getWORK_TITLE()
@@ -397,10 +373,10 @@ public class apiWorksSearchSteps {
               .toUpperCase();
       for (int i = 0; i < bound; i++) {
         String PMGCode =
-            getPMGcodeByPMC(dataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
+            getPMGcodeByPMC(DataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
         Log.info("search keyword '" + searchKeyword + "' and pmgCode '" + PMGCode + "'");
 
-        returnedWorks = apiService.searchForWorksBySearchWithPMGCode(searchKeyword, PMGCode);
+        returnedWorks = APIService.searchForWorksBySearchWithPMGCode(searchKeyword, PMGCode);
         Log.info("API total matched count..." + returnedWorks.getTotalMatchCount());
         returnedWorks.verifyWorksAreReturned();
         returnedWorks.verifyWorksReturnedCount(
@@ -408,7 +384,7 @@ public class apiWorksSearchSteps {
       }
 
     } catch (Exception e) {
-      Log.info(e.getMessage()); //  DataQualityContext.api_response.prettyPrint();
+      Log.info(e.getMessage());
       Assert.assertFalse(
           DataQualityContext.breadcrumbMessage
               + " e.message>"
@@ -424,54 +400,53 @@ public class apiWorksSearchSteps {
     WorksMatchedApiObject returnedWorks = null;
     boolean failed = false;
     try {
-      int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
+      int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
         Log.info("###########-----getWorkByTitle - " + titleType);
         Log.info("#######################################################");
-        Assert.assertTrue(
-            DataQualityContext.breadcrumbMessage
-                + "-> Verify that the searched work exists and is accessible trough the API",
-            apiService.checkWorkExists(
-                dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID()));
+        Assert.assertEquals(DataQualityContext.breadcrumbMessage + "-> Verify that the searched work exists and is accessible trough the API",
+            200,APIService.checkWorkExists(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID()));
+
         switch (titleType) {
           case "WORK_TITLE":
             returnedWorks =
-                apiService.searchForWorkByTitleResult(
-                    dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TITLE());
+                    APIService.searchForWorkByTitleResult(
+                            DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TITLE());
             break;
             // implemented by Nishant @ 20 Apr 2020
           case "WORK_MANIFESTATION_TITLE":
             getManifestationsByWorkID(
-                dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                    DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
             returnedWorks =
-                apiService.searchForWorkByTitleResult(
-                    dataQualityContext
+                    APIService.searchForWorkByTitleResult(
+                            DataQualityContext
                         .manifestationDataObjectsFromEPHGD
                         .get(i)
                         .getMANIFESTATION_KEY_TITLE());
             break;
             // implemented by Nishant @ 22 Apr 2020
-          case "WORK_PRODUCT_SUMMARY_NAME":
+          case WPR_SUMMARYNAME:
             getProductDetailByWorkId(
-                dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                    DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
             returnedWorks =
-                apiService.searchForWorkByTitleResult(
-                    dataQualityContext.productDataObjectsFromEPHGD.get(i).getPRODUCT_NAME());
+                    APIService.searchForWorkByTitleResult(
+                            DataQualityContext.productDataObjectsFromEPHGD.get(i).getPRODUCT_NAME());
             break;
             // implemented by Nishant @ 21 Apr 2020
-          case "WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME":
+          case WMPR_SUMMARYNAME:
             getManifestationsByWorkID(
-                dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                    DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
             getProductDetailByManifestationId(
-                dataQualityContext.manifestationDataObjectsFromEPHGD.get(i).getMANIFESTATION_ID());
+                    DataQualityContext.manifestationDataObjectsFromEPHGD.get(i).getMANIFESTATION_ID());
             returnedWorks =
-                apiService.searchForWorkByTitleResult(
-                    dataQualityContext.productDataObjectsFromEPHGD.get(i).getPRODUCT_NAME());
+                    APIService.searchForWorkByTitleResult(
+                            DataQualityContext.productDataObjectsFromEPHGD.get(i).getPRODUCT_NAME());
             break;
+          default:throw new IllegalArgumentException(titleType);
         }
         returnedWorks.verifyWorksAreReturned();
         returnedWorks.verifyWorkWithIdIsReturned(
-            dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
       }
     } catch (NullPointerException e) {
       e.getMessage();
@@ -491,25 +466,25 @@ public class apiWorksSearchSteps {
     WorksMatchedApiObject returnedWorks = null;
     boolean failed = false;
     try {
-      int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
+      int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
 
         int from = 0;
         int size = 50;
 
         switch (identifierType) {
-          case "WORK_IDENTIFIER":
+          case W_IDENTIFIER:
             getWorkIdentifiersByWorkID(
-                dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                    DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
             returnedWorks =
-                apiService.searchForWorksByIdentifierResult(workIdentifiers.get(i).getIDENTIFIER());
+                    APIService.searchForWorksByIdentifierResult(workIdentifiers.get(i).getIDENTIFIER());
             break;
-          case "WORK_MANIFESTATION_IDENTIFIER":
+          case WM_IDENTIFIER:
             List<Map<String, Object>> manifIdentifiers =
                 getEPHGDManifestationIdentifiersByWorkID(
-                    dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                        DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
             returnedWorks =
-                apiService.searchForWorksByIdentifierResult(
+                    APIService.searchForWorksByIdentifierResult(
                     manifIdentifiers.get(i).get("identifier").toString()
                         + "&from="
                         + from
@@ -520,12 +495,12 @@ public class apiWorksSearchSteps {
                 "Total work found for WORK_MANIFESTATION_IDENTIFIER... - "
                     + returnedWorks.getTotalMatchCount());
             while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(
-                    dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID())
+                    DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID())
                 && from + size < returnedWorks.getTotalMatchCount()) {
               from += size;
               Log.info("scanned workId from " + (from - size) + " to " + from + " records...");
               returnedWorks =
-                  apiService.searchForWorksByIdentifierResult(
+                      APIService.searchForWorksByIdentifierResult(
                       manifIdentifiers.get(i).get("identifier").toString()
                           + "&from="
                           + from
@@ -535,27 +510,27 @@ public class apiWorksSearchSteps {
 
             break;
 
-          case "WORK_ID":
+          case W_ID:
             returnedWorks =
-                apiService.searchForWorksByIdentifierResult(
-                    dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                    APIService.searchForWorksByIdentifierResult(
+                            DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
             break;
           case "WORK_MANIFESTATION_ID":
             getManifestationsByWorkID(
-                dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                    DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
             returnedWorks =
-                apiService.searchForWorksByIdentifierResult(
-                    dataQualityContext
+                    APIService.searchForWorksByIdentifierResult(
+                            DataQualityContext
                         .manifestationDataObjectsFromEPHGD
                         .get(0)
                         .getMANIFESTATION_ID());
             break;
+          default: throw new IllegalArgumentException(identifierType);
         }
-        // assert returnedWorks != null;
-        // Log.info(returnedWorks.toString());
+
         returnedWorks.verifyWorksAreReturned();
         returnedWorks.verifyWorkWithIdIsReturned(
-            dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
       }
     } catch (NullPointerException e) {
       e.getMessage();
@@ -571,30 +546,30 @@ public class apiWorksSearchSteps {
 
   @When("^the work search by identifier (.*) and type details are retrieved and compared$")
   public void compareSearchByIdentifierAndTypeResultsWithDB(String identifierType)
-      throws AzureOauthTokenFetchingException {
-    WorksMatchedApiObject returnedWorks = null;
+       {
+    WorksMatchedApiObject returnedWorks=null;
     boolean failed = false;
     try {
-      int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
+      int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
-        if (identifierType.equals("WORK_IDENTIFIER")) {
+        if (identifierType.equals(W_IDENTIFIER)) {
           getWorkIdentifiersByWorkID(
-              dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                  DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
           returnedWorks =
-              apiService.searchForWorksByIdentifierAndTypeResult(
+                  APIService.searchForWorksByIdentifierAndTypeResult(
                   workIdentifiers.get(i).getIDENTIFIER(), workIdentifiers.get(i).getF_TYPE());
-        } else if (identifierType.equals("WORK_MANIFESTATION_IDENTIFIER")) {
+        } else if (identifierType.equals(WM_IDENTIFIER)) {
           List<Map<String, Object>> manifIdentifiers =
               getEPHGDManifestationIdentifiersByWorkID(
-                  dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                      DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
           returnedWorks =
-              apiService.searchForWorksByIdentifierAndTypeResult(
+                  APIService.searchForWorksByIdentifierAndTypeResult(
                   manifIdentifiers.get(i).get("identifier").toString(),
                   manifIdentifiers.get(i).get("f_type").toString());
         }
         returnedWorks.verifyWorksAreReturned();
         returnedWorks.verifyWorkWithIdIsReturned(
-            dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
       }
     } catch (NullPointerException e) {
       e.getMessage();
@@ -613,17 +588,17 @@ public class apiWorksSearchSteps {
       throws AzureOauthTokenFetchingException {
     // completed by Nishant @ 23-24 Apr 2020
     WorksMatchedApiObject returnedWorks = null;
-    boolean failed = false;
+
     Log.info("searching by..." + searchType);
-    int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
+    int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
 
     for (int i = 0; i < bound; i++) {
-      String workId = dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID();
+      String workId = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID();
       switch (searchType) {
-        case "WORK_IDENTIFIER":
+        case W_IDENTIFIER:
           getWorkIdentifiersByWorkID(workId);
           returnedWorks =
-              apiService.searchForWorksBySearchOptionResult(workIdentifiers.get(i).getIDENTIFIER());
+                  APIService.searchForWorksBySearchOptionResult(workIdentifiers.get(i).getIDENTIFIER());
           break;
 
         case "JOURNAL_ACRONYM":
@@ -634,7 +609,7 @@ public class apiWorksSearchSteps {
               jacronymValue = workIdentifier.getIDENTIFIER();
             break;
           }
-          returnedWorks = apiService.searchForWorksBySearchOptionResult(jacronymValue);
+          returnedWorks = APIService.searchForWorksBySearchOptionResult(jacronymValue);
           break;
 
         case "JOURNAL_NUMBER":
@@ -645,7 +620,7 @@ public class apiWorksSearchSteps {
               jNumber = workIdentifier.getIDENTIFIER();
             break;
           }
-          returnedWorks = apiService.searchForWorksBySearchOptionResult(jNumber);
+          returnedWorks = APIService.searchForWorksBySearchOptionResult(jNumber);
           break;
 
         case "ISSN":
@@ -656,62 +631,62 @@ public class apiWorksSearchSteps {
               issn = workIdentifier.getIDENTIFIER();
             break;
           }
-          returnedWorks = apiService.searchForWorksBySearchOptionResult(issn);
+          returnedWorks = APIService.searchForWorksBySearchOptionResult(issn);
           break;
 
-        case "WORK_ID":
+        case W_ID:
         case "EPR_ID":
-          returnedWorks = apiService.searchForWorksBySearchOptionResult(workId);
+          returnedWorks = APIService.searchForWorksBySearchOptionResult(workId);
           break;
 
         case "WORK_MANIFESTATION_ID":
           getManifestationsByWorkID(workId);
           returnedWorks =
-              apiService.searchForWorksBySearchOptionResult(
-                  dataQualityContext
+                  APIService.searchForWorksBySearchOptionResult(
+                          DataQualityContext
                       .manifestationDataObjectsFromEPHGD
                       .get(i)
                       .getMANIFESTATION_ID());
           break;
 
-        case "WORK_MANIFESTATION_IDENTIFIER":
+        case WM_IDENTIFIER:
           List<Map<String, Object>> manifIdentifiers =
               getEPHGDManifestationIdentifiersByWorkID(workId);
           returnedWorks =
-              apiService.searchForWorksBySearchOptionResult(
+                  APIService.searchForWorksBySearchOptionResult(
                   manifIdentifiers.get(0).get("identifier").toString());
           break;
 
-        case "WORK_PRODUCT_ID":
-          getProductDetailByWorkId(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+        case WPR_ID:
+          getProductDetailByWorkId(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
           returnedWorks =
-              apiService.searchForWorksBySearchOptionResult(
-                  dataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_ID());
+                  APIService.searchForWorksBySearchOptionResult(
+                          DataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_ID());
           break;
 
         case "WORK_MANIFESTATION_PRODUCT_ID":
           getManifestationsByWorkID(
-              dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                  DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
           getProductDetailByManifestationId(
-              dataQualityContext.manifestationDataObjectsFromEPHGD.get(i).getMANIFESTATION_ID());
+                  DataQualityContext.manifestationDataObjectsFromEPHGD.get(i).getMANIFESTATION_ID());
           returnedWorks =
-              apiService.searchForWorksBySearchOptionResult(
-                  dataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_ID());
+                  APIService.searchForWorksBySearchOptionResult(
+                          DataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_ID());
           break;
 
         case "WORK_TITLE":
         case "TITLE":
           returnedWorks =
-              apiService.searchForWorksBySearchOptionResult(
-                  dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TITLE());
+                  APIService.searchForWorksBySearchOptionResult(
+                          DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TITLE());
           break;
 
         case "WORK_MANIFESTATION_TITLE":
           getManifestationsByWorkID(
-              dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                  DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
           returnedWorks =
-              apiService.searchForWorksBySearchOptionResult(
-                  dataQualityContext
+                  APIService.searchForWorksBySearchOptionResult(
+                          DataQualityContext
                       .manifestationDataObjectsFromEPHGD
                       .get(0)
                       .getMANIFESTATION_KEY_TITLE());
@@ -729,14 +704,14 @@ public class apiWorksSearchSteps {
           int from = 0;
           int size = 500;
           getWorkPersonRoleByWorkId(
-              dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
+                  DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID());
           getPersonDataByPersonId(
-              dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
+                  DataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
           returnedWorks =
-              apiService.searchForWorksBySearchOptionResult(
-                  dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()
+                  APIService.searchForWorksBySearchOptionResult(
+                          DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()
                       + " "
-                      + dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME()
+                      + DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME()
                       + "&from="
                       + from
                       + "&size="
@@ -744,15 +719,15 @@ public class apiWorksSearchSteps {
 
           Log.info("Total work found... - " + returnedWorks.getTotalMatchCount());
           while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(
-                  dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
+                  DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
               && from + size < returnedWorks.getTotalMatchCount()) {
             from += size;
             Log.info("scanned workID from " + (from - size) + " to " + from + " records...");
             returnedWorks =
-                apiService.searchForWorksBySearchOptionResult(
-                    dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()
+                    APIService.searchForWorksBySearchOptionResult(
+                            DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()
                         + " "
-                        + dataQualityContext
+                        + DataQualityContext
                             .personDataObjectsFromEPHGD
                             .get(0)
                             .getPERSON_FAMILY_NAME()
@@ -762,26 +737,27 @@ public class apiWorksSearchSteps {
                         + size);
           }
           break;
-        case "WORK_PRODUCT_SUMMARY_NAME":
-          getProductDetailByWorkId(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+        case WPR_SUMMARYNAME:
+          getProductDetailByWorkId(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
           returnedWorks =
-              apiService.searchForWorksBySearchOptionResult(
-                  dataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME());
+                  APIService.searchForWorksBySearchOptionResult(
+                          DataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME());
           break;
-        case "WORK_MANIFESTATION_PRODUCT_SUMMARY_NAME":
+        case WMPR_SUMMARYNAME:
           getManifestationsByWorkID(
-              dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+                  DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
           getProductDetailByManifestationId(
-              dataQualityContext.manifestationDataObjectsFromEPHGD.get(i).getMANIFESTATION_ID());
+                  DataQualityContext.manifestationDataObjectsFromEPHGD.get(i).getMANIFESTATION_ID());
           returnedWorks =
-              apiService.searchForWorksBySearchOptionResult(
-                  dataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME());
+                  APIService.searchForWorksBySearchOptionResult(
+                          DataQualityContext.productDataObjectsFromEPHGD.get(0).getPRODUCT_NAME());
           break;
+        default:throw new IllegalArgumentException(searchType);
       }
       assert returnedWorks != null;
       returnedWorks.verifyWorksAreReturned();
       returnedWorks.verifyWorkWithIdIsReturned(
-          dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+              DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
     }
   }
 
@@ -790,22 +766,22 @@ public class apiWorksSearchSteps {
       throws AzureOauthTokenFetchingException {
     // created by Nishant @ 24-25 Apr 2020
     WorksMatchedApiObject returnedWorks = null;
-    boolean failed = false;
+
 
     Log.info("searching by..." + searchType);
-    int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
+    int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
     for (int i = 0; i < bound; i++) {
-      String workId = dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID();
+      String workId = DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID();
       //   DataQualityContext.breadcrumbMessage += "->" + ids;
       switch (searchType) {
         case "EPR_ID":
-          returnedWorks = apiService.searchForWorksBySearchOptionResult(workId);
+          returnedWorks = APIService.searchForWorksBySearchOptionResult(workId);
           break;
 
         case "TITLE":
           returnedWorks =
-              apiService.searchForWorksBySearchOptionResult(
-                  dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TITLE());
+                  APIService.searchForWorksBySearchOptionResult(
+                  DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_TITLE());
           break;
 
         case "JOURNAL_ACRONYM":
@@ -817,7 +793,7 @@ public class apiWorksSearchSteps {
               break;
             }
           }
-          returnedWorks = apiService.searchForWorksBySearchOptionResult(jacronymValue);
+          returnedWorks = APIService.searchForWorksBySearchOptionResult(jacronymValue);
           break;
 
         case "JOURNAL_NUMBER":
@@ -829,7 +805,7 @@ public class apiWorksSearchSteps {
               break;
             }
           }
-          returnedWorks = apiService.searchForWorksBySearchOptionResult(jNumber);
+          returnedWorks = APIService.searchForWorksBySearchOptionResult(jNumber);
           break;
 
         case "ISSN":
@@ -841,13 +817,14 @@ public class apiWorksSearchSteps {
               break;
             }
           }
-          returnedWorks = apiService.searchForWorksBySearchOptionResult(issn);
+          returnedWorks = APIService.searchForWorksBySearchOptionResult(issn);
           break;
+          default:throw new IllegalArgumentException(searchType);
       }
       assert returnedWorks != null;
       returnedWorks.verifyWorksAreReturned();
       returnedWorks.verifyWorkWithIdIsReturned(
-          dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+          DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
     }
   }
 
@@ -856,17 +833,17 @@ public class apiWorksSearchSteps {
     WorksMatchedApiObject returnedWorks;
     boolean failed = false;
     try {
-      int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
+      int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
         Log.info(
-            "pmc to be tested..." + dataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
+            "pmc to be tested..." + DataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
         returnedWorks =
-            apiService.searchForWorkByPMCResult(
-                dataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
+                APIService.searchForWorkByPMCResult(
+                DataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
         returnedWorks.verifyWorksAreReturned();
         Log.info("API total count matched..." + returnedWorks.getTotalMatchCount());
         returnedWorks.verifyWorksReturnedCount(
-            getNumberOfWorksByPMC(dataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC()));
+            getNumberOfWorksByPMC(DataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC()));
       }
     } catch (NullPointerException e) {
       e.getMessage();
@@ -885,11 +862,11 @@ public class apiWorksSearchSteps {
     WorksMatchedApiObject returnedWorks;
     boolean failed = false;
     try {
-      int bound = dataQualityContext.workDataObjectsFromEPHGD.size();
+      int bound = DataQualityContext.workDataObjectsFromEPHGD.size();
       for (int i = 0; i < bound; i++) {
         String pmgCode =
-            getPMGcodeByPMC(dataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
-        returnedWorks = apiService.searchForWorkByPMGResult(pmgCode);
+            getPMGcodeByPMC(DataQualityContext.workDataObjectsFromEPHGD.get(i).getPMC());
+        returnedWorks = APIService.searchForWorkByPMGResult(pmgCode);
         returnedWorks.verifyWorksAreReturned();
         Log.info("API total count matched..." + returnedWorks.getTotalMatchCount());
         returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByPMG(pmgCode));
@@ -910,10 +887,10 @@ public class apiWorksSearchSteps {
   public void compareSearchResultCountForPersonIdresponse()
       throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks;
-    int bound = ids.size();
+
     for (String id : ids) {
       Log.info("personId to be tested..." + id);
-      returnedWorks = apiService.searchForWorksByPersonIDResult(id);
+      returnedWorks = APIService.searchForWorksByPersonIDResult(id);
       returnedWorks.verifyWorksAreReturned();
       Log.info("Total API count matched..." + returnedWorks.getTotalMatchCount());
       returnedWorks.verifyWorksReturnedCount(getNumberOfWorksByPersonIDs("", id));
@@ -921,15 +898,15 @@ public class apiWorksSearchSteps {
   }
 
   @When("^work response is compared with the DB for (.*)$")
-  public void compareSearchResultCountForPersonOptions(String personSearchOption)
+  public static void compareSearchResultCountForPersonOptions(String personSearchOption)
       throws AzureOauthTokenFetchingException {
     WorksMatchedApiObject returnedWorks = null;
     int dbCount = 0;
     int bound = ids.size();
     for (int i = 0; i < bound; i++) {
-      getWorkPersonRoleByWorkId(dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+      getWorkPersonRoleByWorkId(DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
       getPersonDataByPersonId(
-          dataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
+          DataQualityContext.personWorkRoleDataObjectsFromEPHGD.get(0).getF_PERSON());
       Log.info("personId to be tested..." + personDataObjectsFromEPHGD.get(0).getPERSON_ID());
       DataQualityContext.breadcrumbMessage +=
           "->" + personDataObjectsFromEPHGD.get(0).getPERSON_ID();
@@ -943,26 +920,26 @@ public class apiWorksSearchSteps {
           if not, send request again for next 5000 records*/
 
           returnedWorks =
-              apiService.searchForWorksByQueryTypeResult(
+                  APIService.searchForWorksByQueryTypeResult(
                   "personName",
-                  dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()
+                          DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()
                       + " "
-                      + dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME()
+                      + DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME()
                       + "&from="
                       + from
                       + "&size="
                       + size);
 
           while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(
-                  dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
+                  DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
               && from + size < returnedWorks.getTotalMatchCount()) {
             from += size;
             Log.info("scanned workID from " + (from - size) + " to " + from + " records...");
             returnedWorks =
-                apiService.searchForWorksBySearchOptionResult(
-                    dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()
+                    APIService.searchForWorksBySearchOptionResult(
+                            DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()
                         + " "
-                        + dataQualityContext
+                        + DataQualityContext
                             .personDataObjectsFromEPHGD
                             .get(0)
                             .getPERSON_FAMILY_NAME()
@@ -975,10 +952,10 @@ public class apiWorksSearchSteps {
 
         case "personFullNameCurrent": // updated by Nishant @ 10 Jun 2021
           returnedWorks =
-              apiService.searchForWorksByPersonFullNameResult(
-                  dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()
+                  APIService.searchForWorksByPersonFullNameResult(
+                          DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()
                       + " "
-                      + dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME()
+                      + DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FAMILY_NAME()
                       + "&from="
                       + from
                       + "&size="
@@ -986,15 +963,15 @@ public class apiWorksSearchSteps {
                       + "&workType=ABS,JBB,JNL,NWL&workStatus=WLA,WDA,WTA,WVA");
 
           while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(
-                  dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
+                  DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
               && from + size < returnedWorks.getTotalMatchCount()) {
             from += size;
             Log.info("scanned workID from " + (from - size) + " to " + from + " records...");
             returnedWorks =
-                apiService.searchForWorksByPersonFullNameResult(
-                    dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()
+                    APIService.searchForWorksByPersonFullNameResult(
+                            DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_FIRST_NAME()
                         + " "
-                        + dataQualityContext
+                        + DataQualityContext
                             .personDataObjectsFromEPHGD
                             .get(0)
                             .getPERSON_FAMILY_NAME()
@@ -1008,19 +985,19 @@ public class apiWorksSearchSteps {
 
         case "PEOPLE_HUB_ID":
           returnedWorks =
-              apiService.searchForWorksByPersonIDResult(
+                  APIService.searchForWorksByPersonIDResult(
                   personDataObjectsFromEPHGD.get(0).getPEOPLEHUB_ID()
                       + "&from="
                       + from
                       + "&size="
                       + size);
           while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(
-                  dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
+                  DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
               && from + size < returnedWorks.getTotalMatchCount()) {
             from += size;
             Log.info("scanned workID from " + (from - size) + " to " + from + " records...");
             returnedWorks =
-                apiService.searchForWorksByPersonIDResult(
+                    APIService.searchForWorksByPersonIDResult(
                     personDataObjectsFromEPHGD.get(0).getPEOPLEHUB_ID()
                         + "&from="
                         + from
@@ -1031,21 +1008,20 @@ public class apiWorksSearchSteps {
 
         case "PERSON_ID":
           returnedWorks =
-              apiService.searchForWorksByPersonIDResult(
+                  APIService.searchForWorksByPersonIDResult(
                   personDataObjectsFromEPHGD.get(0).getPERSON_ID()
                       + "&from="
                       + from
                       + "&size="
                       + size
                       + "&workType=ABS,JBB,JNL,NWL&workStatus=WLA");
-          //+ "&workType=ABS,JBB,JNL,NWL&workStatus=WLA,WDA,WTA,WVA");
           while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(
-                  dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
+                  DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
               && from + size < returnedWorks.getTotalMatchCount()) {
             from += size;
             Log.info("scanned workID from " + (from - size) + " to " + from + " records...");
             returnedWorks =
-                apiService.searchForWorksByPersonIDResult(
+                    APIService.searchForWorksByPersonIDResult(
                     personDataObjectsFromEPHGD.get(0).getPERSON_ID()
                         + "&from="
                         + from
@@ -1057,19 +1033,19 @@ public class apiWorksSearchSteps {
 
         case "personIdCurrent":
           returnedWorks =
-              apiService.searchForWorksByPersonIDResult(
+                  APIService.searchForWorksByPersonIDResult(
                   personDataObjectsFromEPHGD.get(0).getPERSON_ID()
                       + "&from="
                       + from
                       + "&size="
                       + size);
           while (!returnedWorks.verifyWorkWithIdIsReturnedOnly(
-                  dataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
+                  DataQualityContext.workDataObjectsFromEPHGD.get(0).getWORK_ID())
               && from + size < returnedWorks.getTotalMatchCount()) {
             from += size;
             Log.info("scanned workID from " + (from - size) + " to " + from + " records...");
             returnedWorks =
-                apiService.searchForWorksByPersonIDResult(
+                    APIService.searchForWorksByPersonIDResult(
                     personDataObjectsFromEPHGD.get(0).getPERSON_ID()
                         + "&from="
                         + from
@@ -1077,6 +1053,7 @@ public class apiWorksSearchSteps {
                         + size);
           }
           break;
+        default: throw new IllegalArgumentException(personSearchOption);
       }
 
       returnedWorks.verifyWorksAreReturned();
@@ -1085,12 +1062,12 @@ public class apiWorksSearchSteps {
       dbCount =
           getNumberOfWorksByPersonIDs(
               personSearchOption,
-              dataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_ID());
+              DataQualityContext.personDataObjectsFromEPHGD.get(0).getPERSON_ID());
       returnedWorks.verifyWorksReturnedCount(dbCount);
 
       if (!personSearchOption.equalsIgnoreCase("personFullNameCurrent")) {
         returnedWorks.verifyWorkWithIdIsReturned(
-            dataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
+            DataQualityContext.workDataObjectsFromEPHGD.get(i).getWORK_ID());
         Log.info("verified work present in search result...");
       }
     }
@@ -1102,56 +1079,53 @@ public class apiWorksSearchSteps {
     // verify Journal Finder search result with API
     Log.info("calling workAPI for... " + personSearchOption);
     WorksMatchedApiObject returnedWorks;
-    returnedWorks = apiService.searchForWorksByQueryTypeResult(personSearchOption, queryValue);
+    returnedWorks = APIService.searchForWorksByQueryTypeResult(personSearchOption, queryValue);
     return returnedWorks;
   }
 
   @And("^get work by manifestation$")
-  public void getWorkByManifestation() {
-    sql =
-        String.format(
-            APIDataSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH_BY_MANIFESTATIONID,
-            Joiner.on("','").join(manifestaionids));
+  public static void getWorkByManifestation() {
+    sql = String.format(APIDataSQL.GET_GD_DATA_WORK_BY_MANIFESTATION,Joiner.on("','").join(manifestaionids));
     List<Map<?, ?>> workIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     ids =
         workIds.stream()
-            .map(m -> (String) m.get("WORK_ID"))
+            .map(m -> (String) m.get(W_ID))
             .map(String::valueOf)
             .collect(Collectors.toList());
   }
 
-  private int getNumberOfWorksByAccountableProduct(String accountableProduct) {
-    sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_BY_ACCOUNTABLE_PRODUCT, accountableProduct);
+  private static int getNumberOfWorksByAccountableProduct(String accountableProduct) {
+    sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_ACCOUNTABLEPRODUCT, accountableProduct);
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     int count = ((Long) getCount.get(0).get("count")).intValue();
     Log.info("EPH work count..." + count);
     return count;
   }
 
-  private int getNumberOfWorksByWorkStatus(String searchKeyword, String workStatus) {
+  private static int getNumberOfWorksByWorkStatus(String searchKeyword, String workStatus) {
     sql =
         String.format(
-            APIDataSQL.EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_WORKSTATUS, searchKeyword, workStatus);
+            APIDataSQL.SELECT_GD_COUNT_WORK_BY_WORKSTATUS_WITHSEARCH, searchKeyword, workStatus);
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     int count = ((Long) getCount.get(0).get("count")).intValue();
     Log.info("EPH work count..." + count);
     return count;
   }
 
-  private int getNumberOfWorksByWorkType(String searchKeyword, String workType) {
+  private static int getNumberOfWorksByWorkType(String searchKeyword, String workType) {
     sql =
         String.format(
-            APIDataSQL.EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_WORKTYPE, searchKeyword, workType);
+            APIDataSQL.SELECT_GD_COUNT_WORK_BY_WORKTYPE_WITHSEARCH, searchKeyword, workType);
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     int count = ((Long) getCount.get(0).get("count")).intValue();
     Log.info("EPH work count..." + count);
     return count;
   }
 
-  private int getNumberOfWorksByManifestationType(String searchKeyword, String manifestationType) {
+  private static int getNumberOfWorksByManifestationType(String searchKeyword, String manifestationType) {
     sql =
         String.format(
-            APIDataSQL.EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_MANIFESTATIONTYPE,
+            APIDataSQL.SELECT_GD_COUNT_WORK_BY_MANIFESTATIONTPYE_WITHSEARCH,
             searchKeyword,
             manifestationType);
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
@@ -1160,45 +1134,45 @@ public class apiWorksSearchSteps {
     return count;
   }
 
-  private int getNumberOfWorksBySearchWithPMCCode(String searchKeyword, String PMCCode) {
+  private static int getNumberOfWorksBySearchWithPMCCode(String searchKeyword, String PMCCode) {
     sql =
         String.format(
-            APIDataSQL.EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_PMCCODE, searchKeyword, PMCCode);
+            APIDataSQL.SELECT_GD_COUNT_WORK_BY_PMC_WITHSEARCH, searchKeyword, PMCCode);
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     int count = ((Long) getCount.get(0).get("count")).intValue();
     Log.info("EPH count..." + count);
     return count;
   }
 
-  private int getNumberOfWorksBySearchWithPMGCode(String searchKeyword, String PMCCode) {
+  private static int getNumberOfWorksBySearchWithPMGCode(String searchKeyword, String PMCCode) {
     sql =
         String.format(
-            APIDataSQL.EPH_GD_WORK_EXTRACT_BY_SEARCH_WITH_PMGCODE, searchKeyword, PMCCode);
+            APIDataSQL.SELECT_GD_COUNT_WORK_BY_PMG_WITHSEARCH, searchKeyword, PMCCode);
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     int count = ((Long) getCount.get(0).get("count")).intValue();
     Log.info("EPH count..." + count);
     return count;
   }
 
-  private int getNumberOfWorksByPMC(String pmcCode) {
-    sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_AMOUNT_BYPMC, pmcCode);
+  private static int getNumberOfWorksByPMC(String pmcCode) {
+    sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PMC, pmcCode);
     List<Map<String, Object>> getCount = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     int count = ((Long) getCount.get(0).get("count")).intValue();
     Log.info("EPH work count... " + count);
     return count;
   }
 
-  private int getNumberOfWorksByPersonIDs(String searchType, String personID) {
+  private static int getNumberOfWorksByPersonIDs(String searchType, String personID) {
 
     switch (searchType) {
       case "personIdCurrent":
-        sql = String.format(APIDataSQL.SELECT_WORK_COUNT_BY_PERSONID_ALL, personID);
+        sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID_ALL, personID);
         break;
       case "personFullNameCurrent":
-        sql = String.format(APIDataSQL.SELECT_WORK_COUNT_BY_PERSONID_ACTIVE_ONLY, personID);
+        sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID_ALLACTIVE, personID);
         break;
       default:
-        sql = String.format(APIDataSQL.SELECT_WORK_COUNT_BY_PERSONID_VALID_ONLY, personID);
+        sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PERSONID_ALLVALID, personID);
         break;
     }
 
@@ -1208,16 +1182,16 @@ public class apiWorksSearchSteps {
     return count;
   }
 
-  private int getNumberOfWorksByPMG(String pmgCode) {
-    sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_AMOUNT_BYPMG, pmgCode);
+  private static int getNumberOfWorksByPMG(String pmgCode) {
+    sql = String.format(APIDataSQL.SELECT_GD_COUNT_WORK_BY_PMG, pmgCode);
     List<Map<String, Object>> subjectAreaNumber = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     int count = ((Long) subjectAreaNumber.get(0).get("count")).intValue();
     Log.info("EPH work count..." + count);
     return count;
   }
 
-  public String getPMGcodeByPMC(String pmcCode) {
-    sql = String.format(APIDataSQL.EPH_GD_PMG_CODE_EXTRACT_BYPMC, pmcCode);
+  public static String getPMGcodeByPMC(String pmcCode) {
+    sql = String.format(APIDataSQL.SELECT_GD_PMG_BY_PMC, pmcCode);
     Log.info(sql);
     List<Map<String, Object>> getPMG = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     String pmgCode = ((String) getPMG.get(0).get("f_pmg"));
@@ -1225,8 +1199,8 @@ public class apiWorksSearchSteps {
     return pmgCode;
   }
 
-  public List<String> getManifestationIdsForWorkID(String workID) {
-    sql = String.format(APIDataSQL.SELECT_MANIFESTATION_IDS_BY_WORKID, workID);
+  public static List<String> getManifestationIdsForWorkID(String workID) {
+    sql = String.format(APIDataSQL.SELECT_GD_MANIFESTATIONS_BY_WORKID, workID);
     List<Map<?, ?>> manifestationIds = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     List<String> ids =
         manifestationIds.stream()
@@ -1242,21 +1216,21 @@ public class apiWorksSearchSteps {
   }
 
   // created by Nishant @ 22 Apr 2020
-  public void getProductDetailByManifestationId(String manifestationId) {
+  public static void getProductDetailByManifestationId(String manifestationId) {
     Log.info("get product by manifestation id of the work...");
-    sql = String.format(APIDataSQL.SelectProductByManifestationId, manifestationId);
-    productDataObjectsFromEPHGD =
+    sql = String.format(APIDataSQL.GET_GD_DATA_PRODUCT_BY_MANIFESTATIONID, manifestationId);
+    DataQualityContext.productDataObjectsFromEPHGD =
         DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
     Assert.assertFalse(
         DataQualityContext.breadcrumbMessage
             + "-> Verify that product by manifestation id is extracted successfully from the DB",
-        productDataObjectsFromEPHGD.isEmpty());
+            DataQualityContext.productDataObjectsFromEPHGD.isEmpty());
   }
 
-  public void getProductDetailByWorkId(String workId) {
+  public static void getProductDetailByWorkId(String workId) {
     Log.info("get product by work id...");
-    sql = String.format(APIDataSQL.SelectProductByWorkId, workId);
-    productDataObjectsFromEPHGD =
+    sql = String.format(APIDataSQL.GET_GD_DATA_PRODUCT_BY_WORKID, workId);
+    DataQualityContext.productDataObjectsFromEPHGD =
         DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
     Assert.assertFalse(
         DataQualityContext.breadcrumbMessage
@@ -1265,9 +1239,9 @@ public class apiWorksSearchSteps {
   }
 
   // created by Nishant @ 24 Apr 2020
-  private void getWorkPersonRoleByWorkId(String workId) {
-    sql = String.format(APIDataSQL.selectWorkPersonByworkId, workId);
-    personWorkRoleDataObjectsFromEPHGD =
+  private static void getWorkPersonRoleByWorkId(String workId) {
+    sql = String.format(APIDataSQL.GET_GD_DATA_WORKPERSON_BY_WORKID, workId);
+    DataQualityContext.personWorkRoleDataObjectsFromEPHGD =
         DBManager.getDBResultAsBeanList(sql, PersonWorkRoleDataObject.class, Constants.EPH_URL);
     Assert.assertFalse(
         DataQualityContext.breadcrumbMessage
@@ -1275,7 +1249,7 @@ public class apiWorksSearchSteps {
         personWorkRoleDataObjectsFromEPHGD.isEmpty());
   }
 
-  private List getEPHGDManifestationIdentifiersByWorkID(String workID) {
+  private static List getEPHGDManifestationIdentifiersByWorkID(String workID) {
     sql =
         String.format(
             APIDataSQL.SELECT_GD_MANIFESTATION_IDENTIFIER_BY_MANIFESTATION_ID,
@@ -1284,8 +1258,8 @@ public class apiWorksSearchSteps {
     return DBManager.getDBResultMap(sql, Constants.EPH_URL);
   }
 
-  private void getWorkIdentifiersByWorkID(String workID) {
-    sql = APIDataSQL.getWorkIdentifiersDataFromGD.replace("PARAM1", workID);
+  public static void getWorkIdentifiersByWorkID(String workID) {
+    sql = APIDataSQL.GET_GD_DATA_WORKIDENTIFIER_BY_WORKID.replace("PARAM1", workID);
     workIdentifiers = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
     // added by Nishant @ 28 Dec 2019 to handle works without identifiers
     if (workIdentifiers.size() == 0) {
@@ -1293,10 +1267,10 @@ public class apiWorksSearchSteps {
     }
   }
 
-  private void getManifestationsByWorkID(String workID) {
+  private static void getManifestationsByWorkID(String workID) {
     Log.info("get manifestations for the work in EPH GD ..");
     sql = String.format(APIDataSQL.SELECT_MANIFESTATIONS_DATA_IN_EPH_GD_BY_WORKID, workID);
-    manifestationDataObjectsFromEPHGD =
+    DataQualityContext.manifestationDataObjectsFromEPHGD =
         DBManager.getDBResultAsBeanList(sql, ManifestationDataObject.class, Constants.EPH_URL);
     Assert.assertFalse(
         DataQualityContext.breadcrumbMessage
@@ -1304,9 +1278,9 @@ public class apiWorksSearchSteps {
         manifestationDataObjectsFromEPHGD.isEmpty());
   }
 
-  private void getPersonDataByPersonId(String personId) {
-    sql = String.format(APIDataSQL.SelectPersonDataByPersonId, personId);
-    personDataObjectsFromEPHGD =
+  private static void getPersonDataByPersonId(String personId) {
+    sql = String.format(APIDataSQL.GET_GD_DATA_PERSON_BY_PERSONID, personId);
+    DataQualityContext.personDataObjectsFromEPHGD =
         DBManager.getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
     Assert.assertFalse(
         DataQualityContext.breadcrumbMessage
@@ -1314,19 +1288,29 @@ public class apiWorksSearchSteps {
         personDataObjectsFromEPHGD.isEmpty());
   }
 
-  public void getJsonToObject(String workId) {
+  private static void getPersonDataByPersonId(List<String> personId) {
+    sql = String.format(APIDataSQL.GET_GD_DATA_PERSON_BY_PERSONID, Joiner.on("','").join(personId));
+    DataQualityContext.personDataObjectsFromEPHGD =
+            DBManager.getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
+    DataQualityContext.personDataObjectsFromEPHGD.sort(
+            Comparator.comparing(PersonDataObject::getPERSON_ID));
+    Assert.assertFalse(
+            DataQualityContext.breadcrumbMessage
+                    + "-> verify person Data by person id extracted from EPH DB",
+            personDataObjectsFromEPHGD.isEmpty());
+  }
+
+  public static void getJsonToObject(String workId) {
     // created by Nishant @ 19 Jun 2020 to verify extended json value with APIv3
-    String sql = "";
+   String dbEnv = "uat";
     if (TestContext.getValues().environment.equalsIgnoreCase("UAT"))
+      dbEnv = "uat";
+    else if (TestContext.getValues().environment.equalsIgnoreCase("SIT")) dbEnv = "sit";
       sql =
-          "SELECT \"json\" FROM ephuat_extended_data_stitch.stch_work_ext_json where epr_id='"
+          "SELECT \"json\" FROM eph"+dbEnv+"_extended_data_stitch.stch_work_ext_json where epr_id='"
               + workId
               + "'";
-    else
-      sql =
-          "SELECT \"json\" FROM ephsit_extended_data_stitch.stch_work_ext_json where epr_id='"
-              + workId
-              + "'";
+
 
     List<Map<String, String>> jsonValue = DBManager.getDBResultMap(sql, Constants.EPH_URL);
     DataQualityContext.workExtendedTestClass =
@@ -1336,14 +1320,11 @@ public class apiWorksSearchSteps {
   @And("^get person data from EPH DB$")
   public void getPersonDataByPersonId() {
     Log.info("We get the work data from EPH GD ...");
-    sql = String.format(APIDataSQL.SelectPersonDataByPersonId, Joiner.on("','").join(ids));
-    dataQualityContext.personDataObjectsFromEPHGD =
-        DBManager.getDBResultAsBeanList(sql, PersonDataObject.class, Constants.EPH_URL);
-    dataQualityContext.personDataObjectsFromEPHGD.sort(
-        Comparator.comparing(PersonDataObject::getPERSON_ID));
-    Assert.assertFalse(
-        DataQualityContext.breadcrumbMessage
-            + "-> Verify that list with person objects from DB is not empty",
-        dataQualityContext.personDataObjectsFromEPHGD.isEmpty());
+    getPersonDataByPersonId(ids);
+
   }
+
+
+
+
 }

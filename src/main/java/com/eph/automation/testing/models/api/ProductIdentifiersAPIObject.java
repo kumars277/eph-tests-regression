@@ -33,7 +33,7 @@ public class ProductIdentifiersAPIObject {
 
 
         private void getProductIdentifierByID(String productIdentifierID){
-            String sql = APIDataSQL.getWorkIdentifiersDataFromGDByIdentifier.replace("PARAM1", productIdentifierID);
+            String sql = APIDataSQL.GET_GD_DATA_WORKIDENTIFIER_BY_IDENTIFIER.replace("PARAM1", productIdentifierID);
             DBproductIdentifier = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
         }
 

@@ -63,7 +63,7 @@ public class SubjectAreasApiObject {
 
     private void getSubjectAreaDataEPHGDbyCode(String code) {
        // Log.info("Get the subject area data from EPH GD  ..");
-        String sql = String.format(APIDataSQL.EXTRACT_DATA_SUBJECT_AREA_GD_BY_CODE, code);
+        String sql = String.format(APIDataSQL.GET_GD_DATA_SUBJECT_AREA, code);
      //   Log.info(sql);
 
         subjectAreaDataObjectsFromGD_child = DBManager
@@ -72,7 +72,7 @@ public class SubjectAreasApiObject {
 
     private void getParentSubjectAreaDataEPHGDbyCode(String code) {
        // Log.info("Get the subject area data from EPH GD  ..");
-        String sql = String.format(APIDataSQL.EXTRACT_DATA_SUBJECT_AREA_GD_BY_CODE, code);
+        String sql = String.format(APIDataSQL.GET_GD_DATA_SUBJECT_AREA, code);
      //   Log.info(sql);
 
         subjectAreaDataObjectsFromGD_parent = DBManager

@@ -40,7 +40,7 @@ public class ManifestationProductAPIObject {
     private void getProductDataFromEPHGD(String productID) {
         List<String> ids = new ArrayList<>();
         ids.add(productID);
-        String sql = String.format(APIDataSQL.EPH_GD_PRODUCT_EXTRACT_FOR_SEARCH, Joiner.on("','").join(ids));
+        String sql = String.format(APIDataSQL.GET_GD_DATA_PRODUCT, Joiner.on("','").join(ids));
         productDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, ProductDataObject.class, Constants.EPH_URL);
     }
 

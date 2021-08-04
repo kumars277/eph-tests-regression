@@ -109,12 +109,12 @@ public class ManifestationWorkApiObject {
     private void getWorkDataFromEPHGD(String workID) {
         List<String> ids = new ArrayList<>();
         ids.add(workID);
-        String sql = String.format(APIDataSQL.EPH_GD_WORK_EXTRACT_FOR_SEARCH, Joiner.on("','").join(ids));
+        String sql = String.format(APIDataSQL.GET_GD_DATA_WORK, Joiner.on("','").join(ids));
         workDataObjectsFromEPHGD = DBManager.getDBResultAsBeanList(sql, WorkDataObject.class, Constants.EPH_URL);
     }
 
     private String getPMGcodeByPMC(String pmcCode) {
-        String sql = String.format(APIDataSQL.EPH_GD_PMG_CODE_EXTRACT_BYPMC, pmcCode);
+        String sql = String.format(APIDataSQL.SELECT_GD_PMG_BY_PMC, pmcCode);
         //Log.info(sql);
         List<Map<String, Object>> getPMG = DBManager.getDBResultMap(sql, Constants.EPH_URL);
         String pmgCode = ((String) getPMG.get(0).get("f_pmg"));
@@ -123,7 +123,7 @@ public class ManifestationWorkApiObject {
 
     private void getAccountableProductFromEPHGD(String accountable_product_id)
     {
-        String sql=String.format(APIDataSQL.SELECT_ACCOUNTABLE_PRODUCT_BY_ACCOUNTABLEID,accountable_product_id);
+        String sql=String.format(APIDataSQL.GET_GD_DATA_ACCOUNTABLEPRODUCT_BY_ID,accountable_product_id);
         accountableProductDataObjectsFromEPHGD=DBManager.getDBResultAsBeanList(sql, AccountableProductDataObject.class,Constants.EPH_URL);
     }
 

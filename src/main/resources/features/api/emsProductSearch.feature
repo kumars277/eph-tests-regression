@@ -15,10 +15,10 @@ Feature: Search API: Products
     And We get the search data from EPH GD for products
     Then the product details are retrieved when searched by <title> and compared
     Examples:
-      | title                            |
-      | PRODUCT_PRODUCT_TITLE            |
-      | WORK_MANIFESTATION_TITLE         |
-      | PRODUCT_MANIFESTATION_WORK_TITLE |
+      | title                              |
+      | PRODUCT_TITLE                      |
+      | PRODUCT_MANIFESTATION_TITLE        |
+      | PRODUCT_MANIFESTATION_WORK_TITLE   |
 
   @searchAPI @productSearchAPI
   Scenario Outline: search product by identifier
@@ -27,8 +27,9 @@ Feature: Search API: Products
     Then   the product details are retrieved and compared when searched by <idType>
     Examples:
       | idType                                |
-      | PRODUCT_IDENTIFIER                    |
       | PRODUCT_WORK_IDENTIFIER               |
+      | PRODUCT_IDENTIFIER                    |
+
       | PRODUCT_MANIFESTATION_IDENTIFIER      |
       | PRODUCT_MANIFESTATION_WORK_IDENTIFIER |
       | PRODUCT_ID                            |
@@ -55,7 +56,6 @@ Feature: Search API: Products
     Then   the product details are retrieved and compared when search option is used with <idType>
     Examples:
       | idType                                      |
-      | PRODUCT_WORK_PERSONS_FULLNAME               |
       | PRODUCT_ID                                  |
       | PRODUCT_TITLE                               |
       | PRODUCT_IDENTIFIER                          |
@@ -69,7 +69,7 @@ Feature: Search API: Products
       | PRODUCT_MANIFESTATION_WORK_TITLE            |
       | PRODUCT_MANIFESTATION_WORK_IDENTIFIER       |
       | PRODUCT_PERSONS_FULLNAME                    |
-
+      | PRODUCT_WORK_PERSONS_FULLNAME               |
       | PRODUCT_MANIFESTATION_WORK_PERSONS_FULLNAME |
 
   @searchAPI @productSearchAPI
@@ -139,7 +139,6 @@ Feature: Search API: Products
       | EPR-11BBFM |
       | EPR-11BBFN |
       | EPR-11BBFR |
-
 
   @searchAPIdebug @productSearchAPIdebug
   Scenario Outline: search product and verify title contains searchKey
