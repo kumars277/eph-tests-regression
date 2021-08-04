@@ -1,46 +1,39 @@
 package com.eph.automation.testing.models.dao.JRBIDataLakeAccess;
 
 public class JRBIDLAccessObject {
-
-
-    private String JOURNAL_PROD_SITE;
-    private String JOURNAL_ISSUE_TRIM_SIZE;
-    private String WAR_REFERENCE;
-    private String MANIFESTATION_TYPE;
-    private String PRIMARY_SITE_SYSTEM;
-    private String PRIMARY_SITE_ACRONYM;
-    private String PRIMARY_SITE_SUPPORT_LEVEL;
-    private String FULFILMENT_SYSTEM;
-    private String FULFILMENT_JOURNAL_ACRONYM;
-    private String ISSUE_PROD_TYPE_CODE;
-    private String CATALOGUE_VOLUME_QTY;
-    private String CATALOGUE_ISSUES_QTY;
-    private String CATALOGUE_VOLUME_FROM;
-    private String CATALOGUE_VOLUME_TO;
-    private String RF_ISSUES_QTY;
-    private String RF_TOTAL_PAGES_QTY;
-    private String RF_FVI;
-    private String RF_LVI;
-    private String BUSINESS_UNIT_DESC;
-    private String WORK_TYPE;
+    private String warReference;
+    private String manifestationType;
+    private String primarySiteSystem;
+    private String primarySiteAcronym;
+    private String primarySiteSupportLevel;
+    private String fulfilmentSystem;
+    private String fulfilmentJournalAcronym;
+    private String issueProdTypeCode;
+    private String catalogueVolumeQty;
+    private String catalogueIssuesqty;
+    private String catalogueVolumeFrom;
+    private String catalogueVolumeTo;
+    private String rfIssuesQty;
+    private String rfTotalPagesQty;
+    private String rfFvi;
+    private String rfLvi;
+    private String businessUnitDesc;
+    private String workType;
     private String EPR;
-    private String RECORD_TYPE;
-    private String ROLE_CODE;
-    private String U_KEY;
-    private String ROLE_DESCRIPTION;
-    private String GIVEN_NAME;
-    private String FAMILY_NAME;
-    private String PEOPLEHUB_ID;
-    private String EMAIL;
-    private String TYPE;
-    private String DELTA_MODE;
-    private String LAST_UPDATED_DATE;
-    private String DELETE_FLAG;
-    private String EPR_ID;
-    private String ROLE_NAME;
-    private String FIRST_NAME;
-    private String LAST_NAME;
-
+    private String recordType;
+    private String roleCode;
+    private String uKey;
+    private String roleDescription;
+    private String givenName;
+    private String familyName;
+    private String peopleHubId;
+    private String email;
+    private String type;
+    private String deltaMode;
+    private String lastUpdatedDate;
+    private String deleteFlag;
+    private String eprId;
+    private String roleName;
     private String title;
     private String issn;
     private String journal_number;
@@ -67,7 +60,7 @@ public class JRBIDLAccessObject {
     private String catalogue_issues_qty;
     private String catalogue_volume_from;
     private String catalogue_volume_to;
-    private String rf_issues_qty;
+    private String rfIssueQty;
     private String rf_total_pages_qty;
     private String rf_fvi;
     private String rf_lvi;
@@ -306,11 +299,11 @@ public class JRBIDLAccessObject {
     public void setcatalogue_volume_to(String catalogue_volume_to) {
         this.catalogue_volume_to = catalogue_volume_to;
     }
-    public String getrf_issues_qty() {
-        return rf_issues_qty;
+    public String getrfIssueQty() {
+        return rfIssueQty;
     }
-    public void setrf_issues_qty(String rf_issues_qty) {
-        this.rf_issues_qty = rf_issues_qty;
+    public void setrfIssueQty(String rfIssueQty) {
+        this.rfIssueQty = rfIssueQty;
     }
     public String getrf_total_pages_qty() {
         return rf_total_pages_qty;
@@ -455,46 +448,32 @@ public class JRBIDLAccessObject {
         this.journal_acronym = journal_acronym;
     }
 
-     public String getLAST_NAME() {
-        return LAST_NAME;
+    public String getroleName() {
+        return roleName;
     }
-    public void setLAST_NAME(String LAST_NAME) {
-        this.LAST_NAME = LAST_NAME;
-    }
-
-    public String getFIRST_NAME() {
-        return FIRST_NAME;
-    }
-    public void setFIRST_NAME(String FIRST_NAME) {
-        this.FIRST_NAME = FIRST_NAME;
+    public void setroleName(String roleName) {
+        this.roleName = roleName;
     }
 
-    public String getROLE_NAME() {
-        return ROLE_NAME;
+    public String geteprId() {
+        return eprId;
     }
-    public void setROLE_NAME(String ROLE_NAME) {
-        this.ROLE_NAME = ROLE_NAME;
-    }
-
-    public String getEPR_ID() {
-        return EPR_ID;
-    }
-    public void setEPR_ID(String EPR_ID) {
-        this.EPR_ID = EPR_ID;
+    public void seteprId(String eprId) {
+        this.eprId = eprId;
     }
 
-    public String getDELETE_FLAG() {
-        return DELETE_FLAG;
+    public String getdeleteFlag() {
+        return deleteFlag;
     }
-    public void setDELETE_FLAG(String DELETE_FLAG) {
-        this.DELETE_FLAG = DELETE_FLAG;
+    public void setdeleteFlag(String deleteFlag) {
+        this.deleteFlag = deleteFlag;
     }
 
-    public String getLAST_UPDATED_DATE() {
-        return LAST_UPDATED_DATE;
+    public String getlastUpdatedDate() {
+        return lastUpdatedDate;
     }
-    public void setLAST_UPDATED_DATE(String LAST_UPDATED_DATE) {
-        this.LAST_UPDATED_DATE = LAST_UPDATED_DATE;
+    public void setlastUpdatedDate(String lastUpdatedDate) {
+        this.lastUpdatedDate = lastUpdatedDate;
     }
 
     public String getEPR() {
@@ -504,216 +483,200 @@ public class JRBIDLAccessObject {
         this.EPR = EPR;
     }
 
-    public String getROLE_CODE() {
-        return ROLE_CODE;
+    public String getroleCode() {
+        return roleCode;
     }
-    public void setROLE_CODE(String ROLE_CODE) {
-        this.ROLE_CODE = ROLE_CODE;
-    }
-
-    public String getRECORD_TYPE() {
-        return RECORD_TYPE;
-    }
-    public void setRECORD_TYPE(String RECORD_TYPE) {
-        this.RECORD_TYPE = RECORD_TYPE;
+    public void setroleCode(String roleCode) {
+        this.roleCode = roleCode;
     }
 
-    public String getU_KEY() {
-        return U_KEY;
+    public String getrecordType() {
+        return recordType;
     }
-    public void setU_KEY(String U_KEY) {
-        this.U_KEY = U_KEY;
-    }
-
-    public String getROLE_DESCRIPTION() {
-        return ROLE_DESCRIPTION;
-    }
-    public void setROLE_DESCRIPTION(String ROLE_DESCRIPTION) {
-        this.ROLE_DESCRIPTION = ROLE_DESCRIPTION;
+    public void setrecordType(String recordType) {
+        this.recordType = recordType;
     }
 
-    public String getGIVEN_NAME() {
-        return GIVEN_NAME;
+    public String getuKey() {
+        return uKey;
     }
-    public void setGIVEN_NAME(String GIVEN_NAME) {
-        this.GIVEN_NAME = GIVEN_NAME;
-    }
-
-    public String getFAMILY_NAME() {
-        return FAMILY_NAME;
-    }
-    public void setFAMILY_NAME(String FAMILY_NAME) {
-        this.FAMILY_NAME = FAMILY_NAME;
+    public void setuKey(String uKey) {
+        this.uKey = uKey;
     }
 
-    public String getPEOPLEHUB_ID() {
-        return PEOPLEHUB_ID;
+    public String getroleDescription() {
+        return roleDescription;
     }
-    public void setPEOPLEHUB_ID(String PEOPLEHUB_ID) {
-        this.PEOPLEHUB_ID = PEOPLEHUB_ID;
-    }
-
-    public String getEMAIL() {
-        return EMAIL;
-    }
-    public void setEMAIL(String EMAIL) {
-        this.EMAIL = EMAIL;
+    public void setroleDescription(String roleDescription) {
+        this.roleDescription = roleDescription;
     }
 
-    public String getWORK_TYPE(){return WORK_TYPE;}
-    public void setWORK_TYPE(String WORK_TYPE) {
-        this.WORK_TYPE = WORK_TYPE;
+    public String getgivenName() {
+        return givenName;
+    }
+    public void setgivenName(String givenName) {
+        this.givenName = givenName;
     }
 
-    public String getPRIMARY_SITE_SYSTEM() {
-        return PRIMARY_SITE_SYSTEM;
+    public String getfamilyName() {
+        return familyName;
     }
-    public void setPRIMARY_SITE_SYSTEM(String PRIMARY_SITE_SYSTEM) {
-        this.PRIMARY_SITE_SYSTEM = PRIMARY_SITE_SYSTEM;
-    }
-
-    public String getPRIMARY_SITE_ACRONYM() {
-        return PRIMARY_SITE_ACRONYM;
-    }
-    public void setPRIMARY_SITE_ACRONYM(String PRIMARY_SITE_ACRONYM) {
-        this.PRIMARY_SITE_ACRONYM = PRIMARY_SITE_ACRONYM;
+    public void setfamilyName(String familyName) {
+        this.familyName = familyName;
     }
 
-    public String getPRIMARY_SITE_SUPPORT_LEVEL() {
-        return PRIMARY_SITE_SUPPORT_LEVEL;
+    public String getpeopleHubId() {
+        return peopleHubId;
     }
-    public void setPRIMARY_SITE_SUPPORT_LEVEL(String PRIMARY_SITE_SUPPORT_LEVEL) {
-        this.PRIMARY_SITE_SUPPORT_LEVEL = PRIMARY_SITE_SUPPORT_LEVEL;
-    }
-
-    public String getFULFILMENT_SYSTEM() {
-        return FULFILMENT_SYSTEM;
-    }
-    public void setFULFILMENT_SYSTEM(String FULFILMENT_SYSTEM) {
-        this.FULFILMENT_SYSTEM = FULFILMENT_SYSTEM;
+    public void setpeopleHubId(String peopleHubId) {
+        this.peopleHubId = peopleHubId;
     }
 
-    public String getFULFILMENT_JOURNAL_ACRONYM() {
-        return FULFILMENT_JOURNAL_ACRONYM;
+    public String getemail() {
+        return email;
     }
-    public void setFULFILMENT_JOURNAL_ACRONYM(String FULFILMENT_JOURNAL_ACRONYM) {
-        this.FULFILMENT_JOURNAL_ACRONYM = FULFILMENT_JOURNAL_ACRONYM;
-    }
-
-    public String getISSUE_PROD_TYPE_CODE() {
-        return ISSUE_PROD_TYPE_CODE;
-    }
-    public void setISSUE_PROD_TYPE_CODE(String ISSUE_PROD_TYPE_CODE) {
-        this.ISSUE_PROD_TYPE_CODE = ISSUE_PROD_TYPE_CODE;
+    public void setemail(String email) {
+        this.email = email;
     }
 
-    public String getCATALOGUE_VOLUME_QTY() {
-        return CATALOGUE_VOLUME_QTY;
-    }
-    public void setCATALOGUE_VOLUME_QTY(String CATALOGUE_VOLUME_QTY) {
-        this.CATALOGUE_VOLUME_QTY = CATALOGUE_VOLUME_QTY;
+    public String getworkType(){return workType;}
+    public void setworkType(String workType) {
+        this.workType = workType;
     }
 
-    public String getCATALOGUE_ISSUES_QTY() {
-        return CATALOGUE_ISSUES_QTY;
+    public String getprimarySiteSystem() {
+        return primarySiteSystem;
     }
-    public void setCATALOGUE_ISSUES_QTY(String CATALOGUE_ISSUES_QTY) {
-        this.CATALOGUE_ISSUES_QTY = CATALOGUE_ISSUES_QTY;
-    }
-
-    public String getCATALOGUE_VOLUME_FROM() {
-        return CATALOGUE_VOLUME_FROM;
-    }
-    public void setCATALOGUE_VOLUME_FROM(String CATALOGUE_VOLUME_FROM) {
-        this.CATALOGUE_VOLUME_FROM = CATALOGUE_VOLUME_FROM;
+    public void setprimarySiteSystem(String primarySiteSystem) {
+        this.primarySiteSystem = primarySiteSystem;
     }
 
-    public String getCATALOGUE_VOLUME_TO() {
-        return CATALOGUE_VOLUME_TO;
+    public String getprimarySiteAcronym() {
+        return primarySiteAcronym;
     }
-    public void setCATALOGUE_VOLUME_TO(String CATALOGUE_VOLUME_TO) {
-        this.CATALOGUE_VOLUME_TO = CATALOGUE_VOLUME_TO;
-    }
-
-    public String getRF_ISSUES_QTY() {
-        return RF_ISSUES_QTY;
-    }
-    public void setRF_ISSUES_QTY(String RF_ISSUES_QTY) {
-        this.RF_ISSUES_QTY = RF_ISSUES_QTY;
+    public void setprimarySiteAcronym(String primarySiteAcronym) {
+        this.primarySiteAcronym = primarySiteAcronym;
     }
 
-    public String getRF_TOTAL_PAGES_QTY() {
-        return RF_TOTAL_PAGES_QTY;
+    public String getprimarySiteSupportLevel() {
+        return primarySiteSupportLevel;
     }
-    public void setRF_TOTAL_PAGES_QTY(String RF_TOTAL_PAGES_QTY) {
-        this.RF_TOTAL_PAGES_QTY = RF_TOTAL_PAGES_QTY;
-    }
-
-    public String getRF_FVI() {
-        return RF_FVI;
-    }
-    public void setRF_FVI(String RF_FVI) {
-        this.RF_FVI = RF_FVI;
+    public void setprimarySiteSupportLevel(String primarySiteSupportLevel) {
+        this.primarySiteSupportLevel = primarySiteSupportLevel;
     }
 
-    public String getRF_LVI() {
-        return RF_LVI;
+    public String getfulfilmentSystem() {
+        return fulfilmentSystem;
     }
-    public void setRF_LVI(String RF_LVI) {
-        this.RF_LVI = RF_LVI;
-    }
-
-    public String getBUSINESS_UNIT_DESC() {
-        return BUSINESS_UNIT_DESC;
-    }
-    public void setBUSINESS_UNIT_DESC(String BUSINESS_UNIT_DESC) {
-        this.BUSINESS_UNIT_DESC = BUSINESS_UNIT_DESC;
+    public void setfulfilmentSystem(String fulfilmentSystem) {
+        this.fulfilmentSystem = fulfilmentSystem;
     }
 
-
-
-    public String getMANIFESTATION_TYPE() {
-        return MANIFESTATION_TYPE;
+    public String getfulfilmentJournalAcronym() {
+        return fulfilmentJournalAcronym;
     }
-    public void setMANIFESTATION_TYPE(String MANIFESTATION_TYPE) {
-        this.MANIFESTATION_TYPE = MANIFESTATION_TYPE;
+    public void setfulfilmentJournalAcronym(String fulfilmentJournalAcronym) {
+        this.fulfilmentJournalAcronym = fulfilmentJournalAcronym;
+    }
+
+    public String getissueProdTypeCode() {
+        return issueProdTypeCode;
+    }
+    public void setissueProdTypeCode(String issueProdTypeCode) {
+        this.issueProdTypeCode = issueProdTypeCode;
+    }
+
+    public String getcatalogueVolumeQty() {
+        return catalogueVolumeQty;
+    }
+    public void setcatalogueVolumeQty(String catalogueVolumeQty) {
+        this.catalogueVolumeQty = catalogueVolumeQty;
+    }
+
+    public String getcatalogueIssuesqty() {
+        return catalogueIssuesqty;
+    }
+    public void setcatalogueIssuesqty(String catalogueIssuesqty) {
+        this.catalogueIssuesqty = catalogueIssuesqty;
+    }
+
+    public String getcatalogueVolumeFrom() {
+        return catalogueVolumeFrom;
+    }
+    public void setcatalogueVolumeFrom(String catalogueVolumeFrom) {
+        this.catalogueVolumeFrom = catalogueVolumeFrom;
+    }
+
+    public String getcatalogueVolumeTo() {
+        return catalogueVolumeTo;
+    }
+    public void setcatalogueVolumeTo(String catalogueVolumeTo) {
+        this.catalogueVolumeTo = catalogueVolumeTo;
+    }
+
+    public String getrfIssuesQty() {
+        return rfIssuesQty;
+    }
+    public void setrfIssuesQty(String rfIssuesQty) {
+        this.rfIssuesQty = rfIssuesQty;
+    }
+
+    public String getrfTotalPagesQty() {
+        return rfTotalPagesQty;
+    }
+    public void setrfTotalPagesQty(String rfTotalPagesQty) {
+        this.rfTotalPagesQty = rfTotalPagesQty;
+    }
+
+    public String getrfFvi() {
+        return rfFvi;
+    }
+    public void setrfFvi(String rfFvi) {
+        this.rfFvi = rfFvi;
+    }
+
+    public String getrfLvi() {
+        return rfLvi;
+    }
+    public void setrfLvi(String rfLvi) {
+        this.rfLvi = rfLvi;
+    }
+
+    public String getbusinessUnitDesc() {
+        return businessUnitDesc;
+    }
+    public void setbusinessUnitDesc(String businessUnitDesc) {
+        this.businessUnitDesc = businessUnitDesc;
     }
 
 
 
-    public String getJOURNAL_PROD_SITE() {
-        return JOURNAL_PROD_SITE;
+    public String getmanifestationType() {
+        return manifestationType;
     }
-    public void setJOURNAL_PROD_SITE(String JOURNAL_PROD_SITE) {
-        this.JOURNAL_PROD_SITE = JOURNAL_PROD_SITE;
+    public void setmanifestationType(String manifestationType) {
+        this.manifestationType = manifestationType;
     }
-
-    public String getJOURNAL_ISSUE_TRIM_SIZE() {
-        return JOURNAL_ISSUE_TRIM_SIZE;
+    
+    public String getwarReference() {
+        return warReference;
     }
-    public void setJOURNAL_ISSUE_TRIM_SIZE(String JOURNAL_ISSUE_TRIM_SIZE) {
-        this.JOURNAL_ISSUE_TRIM_SIZE = JOURNAL_ISSUE_TRIM_SIZE;
-    }
-
-    public String getWAR_REFERENCE() {
-        return WAR_REFERENCE;
-    }
-    public void setWAR_REFERENCE(String WAR_REFERENCE) {
-        this.WAR_REFERENCE = WAR_REFERENCE;
+    public void setwarReference(String warReference) {
+        this.warReference = warReference;
     }
 
-    public String getDELTA_MODE() {
-        return DELTA_MODE;
+    public String getdeltaMode() {
+        return deltaMode;
     }
-    public void setDELTA_MODE(String DELTA_MODE) {
-        this.DELTA_MODE = DELTA_MODE;
+    public void setdeltaMode(String deltaMode) {
+        this.deltaMode = deltaMode;
     }
 
-    public String getTYPE() {
-        return TYPE;
+    public String gettype() {
+        return type;
     }
-    public void setTYPE(String TYPE) {
-        this.TYPE = TYPE;
+    public void settype(String type) {
+        this.type = type;
     }
 
 }

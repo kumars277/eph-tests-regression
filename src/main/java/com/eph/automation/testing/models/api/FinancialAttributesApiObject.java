@@ -7,12 +7,10 @@ import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.helper.Log;
-import com.eph.automation.testing.models.contexts.FinancialAttribsContext;
-import com.eph.automation.testing.models.dao.FinancialAttribsDataObject;
+import features.zOnHold.znotused.context.FinancialAttribsContext;
+import features.zOnHold.znotused.znotusedobjects.FinancialAttribsDataObject;
 import com.eph.automation.testing.services.db.sql.APIDataSQL;
-import com.eph.automation.testing.services.db.sql.FinAttrSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.common.base.Joiner;
 import org.junit.Assert;
 
 import java.util.HashMap;

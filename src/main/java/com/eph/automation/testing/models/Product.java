@@ -3,7 +3,7 @@ package com.eph.automation.testing.models;
 import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.models.dao.WorkDataObject;
-import com.eph.automation.testing.services.db.sql.WorkExtractSQL;
+import features.zOnHold.znotused.WorkExtractSQL;
 
 import java.util.List;
 

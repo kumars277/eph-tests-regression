@@ -1,7 +1,6 @@
-Feature:Validate data count for JRBI Work,Manifestation and Person tables in Data Lake
-
+Feature:Validate data for JRBI Extended
   #confluence Version: v.3
-  #Confluence LinK: https://confluence.cbsels.com/pages/viewpage.action?pageId=168466078
+  #Confluence LinK: https://elsevier.atlassian.net/wiki/spaces/EPH/pages/45468777561/JRBI+ETL
 
   @JRBIETLExtended
   Scenario Outline: Verify Data Count for JRBI transform_Current_tables is transferred from Source Table
@@ -33,6 +32,33 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
       |jrbi_transform_current_work          |jrbi_transform_current_work_history_part         |   10                |
       |jrbi_transform_current_manifestation |jrbi_transform_current_manifestation_history_part|   10                  |
       |jrbi_transform_current_person        |jrbi_transform_current_person_history_part       |   10                |
+
+  @JRBIETLExtended
+  Scenario Outline: Verify Data count for JRBI delta_latest tables are transferred from delta_current and Current_Exclude tables
+    Given Get the sum of total count between delta current and and Current_Exclude Table <TargetTable>
+   Then Get the JRBI <TargetTable> latest data count
+    And Compare latest counts of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
+    Given We get the <countOfRandomIds> random EPR ids from <TargetTable>
+    When Get the records from the addition of delta current and exclude <TargetTable>
+    Then Get the records from latest table <TargetTable>
+    And  Compare the records for Latest tables <TargetTable>
+    Examples:
+      |FirstSourceTable                 |SecondSourceTable                               |TargetTable                            |countOfRandomIds |
+      |jrbi_delta_current_work          |jrbi_transform_history_work_excl_delta          |jrbi_transform_latest_work             |10              |
+      |jrbi_delta_current_manifestation |jrbi_transform_history_manifestation_excl_delta |jrbi_transform_latest_manifestation    |10              |
+      |jrbi_delta_current_person        |jrbi_transform_history_person_excl_delta        |jrbi_transform_latest_person           |10              |
+
+    @JRBIETLExtended
+    Scenario Outline: Verify Duplicate Entry for JRBI in transform latest tables
+      Given Get the Duplicate count in <SourceTableName> table
+      Then Check the count should be equal to Zero <SourceTableName>
+      Examples:
+        |SourceTableName                      |
+        |jrbi_transform_latest_work           |
+        |jrbi_transform_latest_manifestation  |
+        |jrbi_transform_latest_person         |
+
+      ###################################3
 
   @notUsed
   Scenario Outline: Verify Data count for JRBI transform_previous_history tables are transferred from transformed_previous tables
@@ -81,21 +107,6 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
       |jrbi_delta_current_manifestation |jrbi_transform_current_manifestation_history_part |jrbi_transform_history_manifestation_excl_delta|10        |
       |jrbi_delta_current_person        |jrbi_transform_current_person_history_part        |jrbi_transform_history_person_excl_delta|10               |
 
-  @JRBIETLExtended
-  Scenario Outline: Verify Data count for JRBI delta_latest tables are transferred from delta_current and Current_Exclude tables
-    Given Get the sum of total count between delta current and and Current_Exclude Table <TargetTable>
-   Then Get the JRBI <TargetTable> latest data count
-    And Compare latest counts of <FirstSourceTable> and <SecondSourceTable> with <TargetTable> are identical
-    Given We get the <countOfRandomIds> random EPR ids from <TargetTable>
-    When Get the records from the addition of delta current and exclude <TargetTable>
-    Then Get the records from latest table <TargetTable>
-    And  Compare the records for Latest tables <TargetTable>
-    Examples:
-      |FirstSourceTable                 |SecondSourceTable                               |TargetTable                            |countOfRandomIds |
-      |jrbi_delta_current_work          |jrbi_transform_history_work_excl_delta          |jrbi_transform_latest_work             |10              |
-      |jrbi_delta_current_manifestation |jrbi_transform_history_manifestation_excl_delta |jrbi_transform_latest_manifestation    |10              |
-      |jrbi_delta_current_person        |jrbi_transform_history_person_excl_delta        |jrbi_transform_latest_person           |10              |
-
   @notUsed
   Scenario Outline: Verify Data count for JRBI delta_current_history tables are transferred from delta_current_work tables
     Given We know the delta current count for tables <SourceTableName>
@@ -107,15 +118,6 @@ Feature:Validate data count for JRBI Work,Manifestation and Person tables in Dat
       |jrbi_delta_current_manifestation  |jrbi_transform_delta_manifestation_history_part   |
       |jrbi_delta_current_person         |jrbi_transform_delta_person_history_part   |
 
-    @JRBIETLExtended
-    Scenario Outline: Verify Duplicate Entry for JRBI in transform latest tables
-      Given Get the Duplicate count in <SourceTableName> table
-      Then Check the count should be equal to Zero <SourceTableName>
-      Examples:
-        |SourceTableName                      |
-        |jrbi_transform_latest_work           |
-        |jrbi_transform_latest_manifestation  |
-        |jrbi_transform_latest_person         |
 
 
 

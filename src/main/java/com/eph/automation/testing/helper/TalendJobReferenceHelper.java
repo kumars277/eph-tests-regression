@@ -1,8 +1,8 @@
 package com.eph.automation.testing.helper;
 
 import com.eph.automation.testing.configuration.DBManager;
-import com.eph.automation.testing.models.batch.JobConfiguration;
-import com.eph.automation.testing.services.db.sql.BatchJobChecksSQL;
+import features.zOnHold.znotused.batch.JobConfiguration;
+import features.zOnHold.znotused.BatchJobChecksSQL;
 
 import java.util.HashMap;
 import java.util.Iterator;

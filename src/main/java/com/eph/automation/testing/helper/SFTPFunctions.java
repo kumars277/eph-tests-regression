@@ -1,6 +1,6 @@
 package com.eph.automation.testing.helper;
 
-import com.eph.automation.testing.services.talend.TalendServerVariables;
+import features.zOnHold.talend.TalendServerVariables;
 import com.jcraft.jsch.*;
 
 import java.io.File;

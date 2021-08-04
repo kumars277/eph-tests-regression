@@ -5,9 +5,6 @@ import com.eph.automation.testing.services.db.bcsetlextendedsql.GetBcsEtlExtende
 
 public class DL_ExtendedViewChecksSQL {
 
-
-
-
     public static String GET_DL_PROD_EXT_AVAILABILITY_COUNT =
             "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".product_extended_availability";
 

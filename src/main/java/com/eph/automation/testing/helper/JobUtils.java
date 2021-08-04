@@ -1,8 +1,8 @@
 package com.eph.automation.testing.helper;
 
 import com.eph.automation.testing.annotations.StaticInjection;
-import com.eph.automation.testing.models.contexts.LoadBatchContext;
-import com.eph.automation.testing.services.batch.LimitedTimeCondition;
+import features.zOnHold.znotused.context.LoadBatchContext;
+import features.zOnHold.znotused.batch.LimitedTimeCondition;
 
 import java.util.concurrent.TimeUnit;
 
