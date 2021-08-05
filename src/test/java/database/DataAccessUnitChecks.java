@@ -5,7 +5,7 @@ import com.eph.automation.testing.configuration.Constants;
 import com.eph.automation.testing.configuration.DBManager;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.WorkDataObject;
-import features.zOnHold.znotused.WorkExtractSQL;
+import com.eph.automation.testing.services.db.sql.WorkExtractSQL;
 import com.eph.automation.testing.services.security.DecryptionService;
 import org.junit.Ignore;
 import org.junit.Test;

@@ -5,10 +5,6 @@ import com.eph.automation.testing.models.api.AvailabilityExtendedTestClass;
 import com.eph.automation.testing.models.api.ManifestationExtendedTestClass;
 import com.eph.automation.testing.models.api.WorkExtendedTestClass;
 import com.eph.automation.testing.models.dao.*;
-import features.zOnHold.znotused.znotusedobjects.GenericDataObject;
-import features.zOnHold.znotused.znotusedobjects.ManifestationIdentifierObject;
-import features.zOnHold.znotused.znotusedobjects.SubjectAreaDataObject;
-import features.zOnHold.znotused.znotusedobjects.WorkSubjectAreaLinkDataObject;
 import com.eph.automation.testing.services.db.sql.WorkRelationshipDataObject;
 import com.jayway.restassured.response.Response;
 

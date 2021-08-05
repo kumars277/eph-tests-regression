@@ -70,6 +70,7 @@ public class DBManager {
         }
         return dbEndPointKey;
     }
+/*
 
     public static int mysqlConnection(String sql, Class<features.zOnHold.znotused.batch.JobConfiguration> classType, String URL) {
         int updateStatus = 0;
@@ -93,6 +94,7 @@ public class DBManager {
         }
         return updateStatus;
     }
+*/
 
     public static List<java.util.Map<String, Object>> getDLResultMap(String sql, String URL) {
         List<java.util.Map<String, Object>> mapList = null;
