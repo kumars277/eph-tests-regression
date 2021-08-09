@@ -100,6 +100,10 @@ public class BcsEtlCoreCountChecksSql {
     public static final String GET_BCS_ETL_CORE_MANIF_IDENTIF_CURR_COUNT =
             "select count(*) as Target_Count from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_manifestation_identifier_current_v";
 
+    public static final String GET_LEAD_INDICATOR_MANIF_IDENTIF_CURR_COUNT =
+            "select count(*) as Target_Count from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_manifestation_identifier_current_v where lead_indicator=true \n";
+
+
     public static final String GET_BCS_ETL_CORE_MANIF_STATUSES_COUNT =
             "select count(*) as Target_Count from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".all_manifestation_statuses_v";
 
@@ -284,18 +288,28 @@ public class BcsEtlCoreCountChecksSql {
                     "SELECT A.*\n" +
                     ", sourceref||identifier||identifier_type as u_key FROM (\n" +
                     "SELECT DISTINCT\n" +
-                    "     NULLIF(sourceref,'') sourceref\n" +
+                    "     NULLIF(p.sourceref,'') sourceref\n" +
                     "   , NULLIF(isbn13,'') identifier\n" +
-                    "   , 'ISBN' identifier_type\n" +
-                    "   FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_product\n" +
+                    "   ,'ISBN' identifier_type\n" +
+                    "   , case when v.sourceref is null then null else true end as lead_indicator\n" +
+                    "   FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_product p\n" +
+                    "   LEFT OUTER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily v on (p.sourceref = v.sourceref and p.sourceref = v.workmasterprojectno)\n" +
                     "   WHERE (isbn13 <> '')\n" +
-                   /* "UNION ALL    SELECT\n" +
-                    "     NULLIF(sourceref,'') sourceref\n" +
-                    "   , NULLIF(seriesissn,'') identifier\n" +
-                    "   , 'ISSN' identifier_type\n" +
-                    "   FROM "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content\n" +
-                    "   WHERE (seriesissn <> '')\n" + */
                     ")A WHERE A.sourceref is not null and A.identifier is not null)";
+
+    public static final String GET_LEAD_INDICATOR_INBOUND_CURRENT_COUNT =
+            "select count(*) as Source_Count from(\n" +
+                    "SELECT A.*\n" +
+                    ", sourceref||identifier||identifier_type as u_key FROM (\n" +
+                    "SELECT DISTINCT\n" +
+                    "     NULLIF(p.sourceref,'') sourceref\n" +
+                    "   , NULLIF(isbn13,'') identifier\n" +
+                    "   ,'ISBN' identifier_type\n" +
+                    "   , case when v.sourceref is null then null else true end as lead_indicator\n" +
+                    "   FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_product p\n" +
+                    "   LEFT OUTER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily v on (p.sourceref = v.sourceref and p.sourceref = v.workmasterprojectno)\n" +
+                    "   WHERE (isbn13 <> '')\n" +
+                    ")A WHERE A.sourceref is not null and A.identifier is not null)where lead_indicator=true";
 
     public static final String GET_WRK_IDENTIF_INBOUND_CURRENT_COUNT =
             "WITH\n" +
@@ -982,7 +996,7 @@ public class BcsEtlCoreCountChecksSql {
 
     public static final String GET_DUPLICATES_MANIF_IDENTIFIER_COUNT =
             "select count(*) as Duplicate_Count from (SELECT count(*) FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_manifestation_identifier_latest" +
-                    " where delete_flag=false group by sourceref,identifier,identifier_type having count(*)>1)";
+                    " where delete_flag=false group by sourceref,identifier,identifier_type,lead_indicator having count(*)>1)";
 
     public static final String GET_PERSON_DIFF_TRANSFORM_FILE_COUNT =
             " with crr_dataset as(\n" +

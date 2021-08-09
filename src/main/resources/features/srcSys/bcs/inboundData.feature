@@ -1,6 +1,5 @@
-#Created by Nishant @ 04 Aug 2020, updated by Nishant @ 02 Jun 2021
-#confluence page link
-#https://confluence.cbsels.com/pages/viewpage.action?spaceKey=EPH&title=BCS+Inbound
+#confluence v11
+#https://elsevier.atlassian.net/wiki/spaces/EPH/pages/45487296633/BCS+Inbound
 
 Feature:Validate data count for BCS tables in Data Lake
 

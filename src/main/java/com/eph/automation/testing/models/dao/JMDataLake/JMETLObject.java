@@ -509,6 +509,11 @@ public class JMETLObject {
     private String DELTA_ANSWER_CODE_US;
     private String PUBLICATION_STATUS_ANZ;
     private String AVAILABILITY_FORMAT;
+    private String leadIndicator;
+
+
+    public String getleadIndicator() { return leadIndicator; }
+    public void setleadIndicator(String leadIndicator) { this.leadIndicator = leadIndicator; }
 
     public String getAVAILABILITY_FORMAT() { return AVAILABILITY_FORMAT; }
     public void setAVAILABILITY_FORMAT(String AVAILABILITY_FORMAT) { this.AVAILABILITY_FORMAT = AVAILABILITY_FORMAT; }

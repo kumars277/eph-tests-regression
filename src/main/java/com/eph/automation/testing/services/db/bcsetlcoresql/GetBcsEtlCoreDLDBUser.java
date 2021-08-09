@@ -57,7 +57,7 @@ public class GetBcsEtlCoreDLDBUser {
         String dbJM = null;
         if (System.getProperty("ENV") != null){
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
-                dbJM = "journalmaestro_sit2";
+                dbJM = "journalmaestro_sit";
             }
             else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
                 dbJM = "journalmaestro_uat";

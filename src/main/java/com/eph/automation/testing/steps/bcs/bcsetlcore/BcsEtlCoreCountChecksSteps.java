@@ -16,6 +16,10 @@ import java.util.Map;
 public class BcsEtlCoreCountChecksSteps {
     private static  String bcsCoreSQLCurrentCount;
     private static int bcsCoreCurrentCount;
+    private static String leadIndicatorSQLCount;
+    private static String leadIndicatorSQLCountInbound;
+    private static int leadIndicatorCountInbound;
+    private static int leadIndicatorCountCurr;
     private static String bcsInboundCurrentSQLCount;
     private static String bcsCoreSQLDeltaCurrentCount;
     private static String bcsCoreSQLDeltaCurrentHistCount;
@@ -97,6 +101,31 @@ public class BcsEtlCoreCountChecksSteps {
         Log.info(bcsCoreSQLCurrentCount);
         List<Map<String, Object>> bcsETLCoreCurrentTableCount = DBManager.getDBResultMap(bcsCoreSQLCurrentCount, Constants.AWS_URL);
         bcsCoreCurrentCount = ((Long) bcsETLCoreCurrentTableCount.get(0).get("Target_Count")).intValue();
+    }
+
+    @Given ("^Get the total count of the lead indicator from the inbound table$")
+    public static void getInboundLeadIndicator(){
+        Log.info("Getting Lead indiccator Count from Inbound...");
+        leadIndicatorSQLCountInbound = BcsEtlCoreCountChecksSql.GET_LEAD_INDICATOR_INBOUND_CURRENT_COUNT;
+        Log.info(leadIndicatorSQLCountInbound);
+        List<Map<String, Object>> leadIndicatorInboundTableCount = DBManager.getDBResultMap(leadIndicatorSQLCountInbound, Constants.AWS_URL);
+        leadIndicatorCountInbound = ((Long) leadIndicatorInboundTableCount.get(0).get("Source_Count")).intValue();
+
+    }
+
+    @Then ("^Get the count of the lead indicator from the current table of manifestation identifier$")
+    public static void getCurrLeadIndicator(){
+        Log.info("Getting Lead indiccator Count from manifestation identifier current...");
+        leadIndicatorSQLCount = BcsEtlCoreCountChecksSql.GET_LEAD_INDICATOR_MANIF_IDENTIF_CURR_COUNT;
+        Log.info(leadIndicatorSQLCount);
+        List<Map<String, Object>> leadIndicatorCurrentTableCount = DBManager.getDBResultMap(leadIndicatorSQLCount, Constants.AWS_URL);
+        leadIndicatorCountCurr = ((Long) leadIndicatorCurrentTableCount.get(0).get("Target_Count")).intValue();
+    }
+
+    @And("^Compare the inbound and current tables of manifestation identifier$")
+    public void compareleadIndicatorCounts(){
+        Log.info("The count for table manifestationIdentifier_current => " + leadIndicatorCountCurr + " and in Inbound  => " + leadIndicatorCountInbound);
+        Assert.assertEquals("The counts are not equal when compared with manifestationIdentifier_current and Inbound ", leadIndicatorCountCurr, leadIndicatorCountInbound);
     }
 
     @Given("^We know the total count of Inbound tables (.*)$")

@@ -1769,7 +1769,7 @@ public class JMETLDataChecks {
     //Comparing Core records between Semarchy and Stiching
     @Given("^We get the (.*) random Stitching ids of (.*)$")
     public void getRandomStitchingIds(String numberOfRecords, String SemarchyTable) {
-       //numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Getting random records...");
         switch (SemarchyTable) {
@@ -2568,7 +2568,7 @@ public class JMETLDataChecks {
         Log.info("Getting random records...");
         switch (SourceTable) {
             case "all_manifestation_identifiers_v":
-                sql = String.format(JMETLDataChecksSQL.GET_ALL_MANIFESTATION_IDENTIFIERS_IDs,SourceTable, numberOfRecords);
+                sql = String.format(JMETLDataChecksSQL.GET_ALL_MANIFESTATION_IDENTIFIERS_IDs, numberOfRecords);
                 List<Map<?, ?>> randomManifestationIdentifierIds = DBManager.getDBResultMap(sql, Constants.AWS_URL);
                 Ids = randomManifestationIdentifierIds.stream().map(m -> (String) m.get("IDENTIFIER")).map(String::valueOf).collect(Collectors.toList());
                 break;
@@ -2705,7 +2705,7 @@ public class JMETLDataChecks {
                         JMContext.JMObjectsFromDL.sort(Comparator.comparing(JMETLObject::getidentifier)); //sort data in the lists
                         JMContext.JMTransformObjectsFromDL.sort(Comparator.comparing(JMETLObject::getidentifier));
 
-                        String[] Manifestation_IdentifierColumnName = {"getidentifier", "getf_type"};
+                        String[] Manifestation_IdentifierColumnName = {"getidentifier", "getf_type","getleadIndicator"};
 
                         for (String strTemp : Manifestation_IdentifierColumnName) {
 

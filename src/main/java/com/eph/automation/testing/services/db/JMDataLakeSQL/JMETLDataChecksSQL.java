@@ -2600,7 +2600,7 @@ public class JMETLDataChecksSQL {
 
 
 //Get Semarchy Records
-    public static String GET_GD_MANIFESTATION_IDENTIFIER = "select * from semarchy_eph_mdm.gd_manifestation_identifier where identifier in ('%s') order by identifier desc";
+    public static String GET_GD_MANIFESTATION_IDENTIFIER = "select identifier,f_type,cast(lead_indicator as integer) leadIndicator from semarchy_eph_mdm.gd_manifestation_identifier where identifier in ('%s') order by identifier desc";
     public static String GET_GD_MANIFESTATION_IDENTIFIER_COUNT = "select count(*) as Target_Count from semarchy_eph_mdm.gd_manifestation_identifier";
 
     public static String GET_GD_MANIFESTATION = "select * from semarchy_eph_mdm.gd_manifestation where external_reference in ('%s') order by external_reference desc";

@@ -60,7 +60,7 @@ public class BcsEtlCoreDataChecksSteps {
                 sql = String.format(BcsEtlCoreDataChecksSql.GET_RANDOM_PERSON_KEY_INBOUND, numberOfRecords);
                 break;
             case "all_manifestation_statuses_v":
-                sql = String.format(BcsEtlCoreDataChecksSql.GET_RANDOM_MANIF_status_KEY_INBOUND, numberOfRecords);
+                sql = String.format(BcsEtlCoreDataChecksSql.GET_RANDOM_MANIF_STATUS_KEY_INBOUND, numberOfRecords);
                 break;
             case "all_manifestation_pubdates_v":
                 sql = String.format(BcsEtlCoreDataChecksSql.GET_RANDOM_MANIF_PUBDATES_KEY_INBOUND, numberOfRecords);
@@ -152,7 +152,7 @@ public class BcsEtlCoreDataChecksSteps {
                 sql = String.format(BcsEtlCoreDataChecksSql.GET_WORK_CURR_DATA, String.join("','",ids));
                 break;
             case "all_manifestation_statuses_v":
-                sql = String.format(BcsEtlCoreDataChecksSql.GET_MANIF_statusES_DATA, String.join("','",ids));
+                sql = String.format(BcsEtlCoreDataChecksSql.GET_MANIF_STATUSES_DATA, String.join("','",ids));
                 break;
             case "all_manifestation_pubdates_v":
                 sql = String.format(BcsEtlCoreDataChecksSql.GET_MANIF_PUBDATES_DATA, String.join("','",ids));
@@ -289,7 +289,7 @@ public class BcsEtlCoreDataChecksSteps {
                         BcsEtlCoreAccessDLContext.recordsFromInboundData.sort(Comparator.comparing(BcsEtlCoreDLAccessObject::getuKey)); //sort primarykey data in the lists
                         BcsEtlCoreAccessDLContext.recordsFromCurrent.sort(Comparator.comparing(BcsEtlCoreDLAccessObject::getuKey));
 
-                        String[] etlManifIdentifierCurrentCol = {"getuKey","getsourceRef","getidentifier","getidentifierType"};
+                        String[] etlManifIdentifierCurrentCol = {"getuKey","getsourceRef","getidentifier","getidentifierType","getleadIndicator"};
                         for (String strTemp : etlManifIdentifierCurrentCol) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -486,6 +486,7 @@ public class BcsEtlCoreDataChecksSteps {
             }
         }
     }
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Given("^Get the (.*) of BCS Core data from Current Tables (.*)$")
@@ -678,7 +679,7 @@ public class BcsEtlCoreDataChecksSteps {
                         BcsEtlCoreAccessDLContext.recordsFromCurrent.sort(Comparator.comparing(BcsEtlCoreDLAccessObject::getuKey)); //sort primarykey data in the lists
                         BcsEtlCoreAccessDLContext.recFromCurrentHist.sort(Comparator.comparing(BcsEtlCoreDLAccessObject::getuKey));
 
-                        String[] etlTransformHistManifIdentifierPart = {"getuKey", "getsourceRef", "getidentifier", "getidentifierType"};
+                        String[] etlTransformHistManifIdentifierPart = {"getuKey", "getsourceRef", "getidentifier", "getidentifierType","getleadIndicator"};
                         for (String strTemp : etlTransformHistManifIdentifierPart) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -875,8 +876,6 @@ public class BcsEtlCoreDataChecksSteps {
         }
     }
 
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @Then("^We Get the records from transform BCS Transform_File (.*)$")
@@ -987,7 +986,7 @@ public class BcsEtlCoreDataChecksSteps {
                         BcsEtlCoreAccessDLContext.recordsFromCurrent.sort(Comparator.comparing(BcsEtlCoreDLAccessObject::getuKey)); //sort primarykey data in the lists
                         BcsEtlCoreAccessDLContext.recFromTransformFile.sort(Comparator.comparing(BcsEtlCoreDLAccessObject::getuKey));
 
-                        String[] etlManifIdentifierTransformFileHistPart = {"getuKey", "getsourceRef", "getidentifier", "getidentifierType"};
+                        String[] etlManifIdentifierTransformFileHistPart = {"getuKey", "getsourceRef", "getidentifier", "getidentifierType","getleadIndicator"};
                         for (String strTemp : etlManifIdentifierTransformFileHistPart) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;

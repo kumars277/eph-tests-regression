@@ -5,7 +5,6 @@ public class GetJMDLDBUser {
     public static String[] getJMDataBase(){
         String dbJMSQL  = null;
         String dbJMDL = null;
-      //  System.setProperty("ENV","SIT");
         if (System.getProperty("ENV") != null){
             if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
                 dbJMDL = "journalmaestro_staging_sit";
@@ -17,10 +16,7 @@ public class GetJMDLDBUser {
             }
 
         }else{
-        //    dbJMDL = "journalmaestro_staging_sit";
-         //   dbJMSQL = "jmf_sit_application";
-
-            dbJMDL = "journalmaestro_staging_uat";
+             dbJMDL = "journalmaestro_staging_uat";
             dbJMSQL = "jmf_uat_application";
         }
         return new String[]{dbJMSQL,dbJMDL};
@@ -33,10 +29,9 @@ public class GetJMDLDBUser {
                 dbJMDataLake = "journalmaestro_sit";
             }
             else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
-                dbJMDataLake = "journalmaestro_uat2";
+                dbJMDataLake = "journalmaestro_uat";
             }
         }else{
-           //dbJMDataLake = "journalmaestro_sit";
             dbJMDataLake = "journalmaestro_uat";
         }
         return dbJMDataLake;
@@ -53,7 +48,6 @@ public class GetJMDLDBUser {
             }
         }else{
            dbJMDataLake = "journalmaestro_staging_uat";
-        //    dbJMDataLake = "journalmaestro_staging_sit";
         }
         return dbJMDataLake;
     }
@@ -84,26 +78,8 @@ public class GetJMDLDBUser {
                 dbStageProdDL = "product_staging_database_uat";
             }
         }else{
-          //  dbStageProdDL = "product_staging_database_sit";
            dbStageProdDL = "product_staging_database_uat";
         }
         return dbStageProdDL;
     }
-
-    public static String getProdStagingDataBase2(){
-        String dbStageProdDL = null;
-        if (System.getProperty("ENV") != null){
-            if(System.getProperty("ENV").equalsIgnoreCase("SIT")){
-                dbStageProdDL = "product_staging_database_sit2";
-            }
-            else if(System.getProperty("ENV").equalsIgnoreCase("UAT")){
-                dbStageProdDL = "product_staging_database_uat2";
-            }
-        }else{
-            //  dbStageProdDL = "product_staging_database_sit";
-            dbStageProdDL = "product_staging_database_uat";
-        }
-        return dbStageProdDL;
-    }
-
 }

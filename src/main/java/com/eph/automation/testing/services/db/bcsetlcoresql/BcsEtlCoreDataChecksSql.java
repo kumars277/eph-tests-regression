@@ -708,17 +708,13 @@ public class BcsEtlCoreDataChecksSql {
                     "SELECT A.*\n" +
                     ", sourceref||identifier||identifier_type as u_key FROM (\n" +
                     "SELECT DISTINCT\n" +
-                    "     NULLIF(sourceref,'') sourceref\n" +
+                    "     NULLIF(p.sourceref,'') sourceref\n" +
                     "   , NULLIF(isbn13,'') identifier\n" +
-                    "   , 'ISBN' identifier_type\n" +
-                    "   FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_product\n" +
+                    "   ,'ISBN' identifier_type\n" +
+                    "   , case when v.sourceref is null then null else true end as lead_indicator\n" +
+                    "   FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_product p\n" +
+                    "   LEFT OUTER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily v on (p.sourceref = v.sourceref and p.sourceref = v.workmasterprojectno)\n" +
                     "   WHERE (isbn13 <> '')\n" +
-                   /* "UNION ALL    SELECT\n" +
-                    "     NULLIF(sourceref,'') sourceref\n" +
-                    "   , NULLIF(seriesissn,'') identifier\n" +
-                    "   , 'ISSN' identifier_type\n" +
-                    "   FROM "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content\n" +
-                    "   WHERE (seriesissn <> '')\n" +*/
                     ")A WHERE A.sourceref is not null and A.identifier is not null) order by rand() limit %s";
 
     public static final String GET_RANDOM_WORK_IDENT_KEY_INBOUND =
@@ -808,23 +804,19 @@ public class BcsEtlCoreDataChecksSql {
                     ",identifier as identifier \n" +
                     ",u_key as uKey \n" +
                     ",identifier_type as identifierType \n" +
+                    ",lead_indicator as leadIndicator \n" +
                     "from ( \n"+
-             "SELECT A.*\n" +
-                     ", sourceref||identifier||identifier_type as u_key FROM (\n" +
-                     "SELECT DISTINCT\n" +
-                     "     NULLIF(sourceref,'') sourceref\n" +
-                     "   , NULLIF(isbn13,'') identifier\n" +
-                     "   , 'ISBN' identifier_type\n" +
-                     "   FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_product\n" +
-                     "   WHERE (isbn13 <> '')\n" +
-                 /*    "UNION ALL    SELECT\n" +
-                     "     NULLIF(sourceref,'') sourceref\n" +
-                     "   , NULLIF(seriesissn,'') identifier\n" +
-                     "   , 'ISSN' identifier_type\n" +
-                     "   FROM "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content\n" +
-                     "   WHERE (seriesissn <> '')\n" +*/
-                     ")A WHERE A.sourceref is not null and A.identifier is not null) where u_key in ('%s') order by u_key desc";
-
+               "SELECT A.*\n"+
+                       " , sourceref||identifier||identifier_type as u_key FROM (\n"+
+                       " SELECT DISTINCT\n"+
+                       " NULLIF(p.sourceref,'') sourceref\n"+
+                       " , NULLIF(isbn13,'') identifier\n"+
+                       " ,'ISBN' identifier_type\n"+
+                       " , case when v.sourceref is null then null else true end as lead_indicator\n"+
+                       "  FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_product p\n"+
+                       "  LEFT OUTER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily v on (p.sourceref = v.sourceref and p.sourceref = v.workmasterprojectno)\n"+
+                       "  WHERE (isbn13 <> '')\n"+
+                       "  )A WHERE A.sourceref is not null and A.identifier is not null) where u_key in ('%s') order by u_key desc";
 
     public static final String GET_MANIF_IDENT_CURR_DATA =
             "select " +
@@ -832,6 +824,7 @@ public class BcsEtlCoreDataChecksSql {
                     ",identifier as identifier \n" +
                     ",u_key as uKey \n" +
                     ",identifier_type as identifierType \n" +
+                    ",lead_indicator as leadIndicator \n" +
                     "from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_manifestation_identifier_current_v where u_key in ('%s') order by u_key desc";
 
     public static final String GET_WORK_IDENT_CURR_DATA =
@@ -1044,6 +1037,7 @@ public class BcsEtlCoreDataChecksSql {
                     ",u_key as uKey \n" +
                     ",identifier as identifier \n" +
                     ",identifier_type as identifierType \n" +
+                    ",lead_indicator as leadIndicator \n" +
                     "from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_manifestation_identifier_current_v where u_key in ('%s') order by u_key desc";
 
     public static final String GET_MANIF_IDENT_REC_DELTA_CURRENT =
@@ -1079,6 +1073,7 @@ public class BcsEtlCoreDataChecksSql {
                     ",u_key as uKey \n" +
                     ",identifier as identifier \n" +
                     ",identifier_type as identifierType \n" +
+                    ",lead_indicator as leadIndicator \n" +
                     "from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_manifestation_identifier_part  where " +
                     "transform_ts = (select max(transform_ts) from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_manifestation_identifier_part)" +
                     "and u_key in ('%s') \n" +
@@ -1090,6 +1085,7 @@ public class BcsEtlCoreDataChecksSql {
                     ",u_key as uKey \n" +
                     ",identifier as identifier \n" +
                     ",identifier_type as identifierType \n" +
+                    ",lead_indicator as leadIndicator \n" +
                     "from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_manifestation_identifier_transform_file_history_part  where " +
                     "transform_file_ts = (select max(transform_file_ts) from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_manifestation_identifier_transform_file_history_part)" +
                     "and u_key in ('%s') \n" +
@@ -2675,6 +2671,7 @@ public class BcsEtlCoreDataChecksSql {
                     ",u_key as uKey \n" +
                     ",identifier as identifier \n" +
                     ",identifier_type as identifierType \n" +
+                    ",lead_indicator as leadIndicator \n" +
                     "from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_manifestation_identifier_latest where u_key in ('%s') order by u_key desc";
 
     public static final String GET_PRODUCT_REC_LATEST =
@@ -2766,9 +2763,10 @@ public class BcsEtlCoreDataChecksSql {
                     "sourceref as sourceRef \n" +
                     ",u_key as uKey \n" +
                     ",identifier as identifier \n" +
-                    ",identifier_type as identifierType from \n" +
-                    "(select c.u_key,c.sourceref,c.identifier,c.identifier_type from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_manifestation_identifier_excl_delta as c union all \n" +
-                    "select d.u_key,d.sourceref,d.identifier,d.identifier_type \n" +
+                    ",identifier_type as identifierType" +
+                    ",lead_indicator as leadIndicator from \n" +
+                    "(select c.u_key,c.sourceref,c.identifier,c.identifier_type,c.lead_indicator from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_manifestation_identifier_excl_delta as c union all \n" +
+                    "select d.u_key,d.sourceref,d.identifier,d.identifier_type,d.lead_indicator \n" +
                     " from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_delta_current_manifestation_identifier as d) \n" +
                     " where u_key in ('%s') order by u_key desc";
 
@@ -3308,7 +3306,7 @@ public class BcsEtlCoreDataChecksSql {
                     "where u_key in ('%s') \n" +
                     "order by u_key desc";
 
-    public static final String GET_RANDOM_MANIF_status_KEY_INBOUND =
+    public static final String GET_RANDOM_MANIF_STATUS_KEY_INBOUND =
             "select sourceref from(\n" +
                     "select\n" +
                     "   a.sourceref,\n" +
@@ -3648,7 +3646,7 @@ public class BcsEtlCoreDataChecksSql {
             "and nullif(versionfamily.workmasterprojectno,'')is not null\n" +
             "group by a.sourceref, versionfamily.workmasterprojectno) where sourceref in ('%s') order by sourceref desc";
 
-    public static final String GET_MANIF_statusES_DATA =
+    public static final String GET_MANIF_STATUSES_DATA =
             "select sourceref as sourceRef \n" +
                     ",ref_key_product_priority as refKeyProdPriority \n" +
                     ",delivery_status_product_priority as deliveryStatusProdPriority \n" +

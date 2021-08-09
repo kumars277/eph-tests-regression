@@ -12,6 +12,9 @@ public class DL_CoreViewChecksSQL {
     public static String GET_DL_CORE_ALL_MANIF_IDENT_VIEW_COUNT =
                "select count(*) as Target_Count from "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".all_manifestation_identifiers_v";
 
+    public static String GET_LEAD_INDICATOR_ALL_CORE_VIEW_COUNT =
+            "select count(*) as Target_Count from "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".all_manifestation_identifiers_v where lead_indicator=true";
+
     public static String GET_DL_CORE_ALL_MANIF_VIEW_COUNT =
             "select count(*) as Target_Count from "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".all_manifestation_v";
 
@@ -355,7 +358,7 @@ public class DL_CoreViewChecksSQL {
 
     public static String GET_BCS_JM_CORE_MANIF_IDENT_COUNT =
             "select count(*) as Source_Count from(\n" +
-                    "SELECT\n" +
+                    " SELECT\n" +
                     "  concat(mi.jm_source_ref_new, '-', mi.identifier_new) external_reference\n" +
                     ", mi.identifier_new identifier\n" +
                     ", mi.effective_start_date effective_start_date\n" +
@@ -365,19 +368,22 @@ public class DL_CoreViewChecksSQL {
                     ", mi.manifestation_source_reference manifestation_source_reference\n" +
                     ", mi.notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'jm' source_system\n" +
+                    ", 'JM' source_system\n" +
                     ", mi.scenario_code scenario_code\n" +
                     ", mi.scenario_name scenario_name\n" +
-                    " FROM ("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
-                    "INNER JOIN (\n" +
+                    ", CAST(null AS boolean) lead_indicator\n" +
+                    " FROM\n" +
+                    "  ("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
+                    " INNER JOIN (\n" +
                     "   SELECT\n" +
                     "     scenario_code\n" +
                     "   , jm_source_reference\n" +
                     "   , max(notified_date) max_notified_date\n" +
-                    "   FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_dq\n" +
+                    "   FROM\n" +
+                    "      "+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_dq\n" +
                     "   GROUP BY scenario_code, jm_source_reference\n" +
                     ")  maxm ON (((maxm.max_notified_date = mi.notified_date) AND (maxm.scenario_code = mi.scenario_code)) AND (maxm.jm_source_reference = mi.manifestation_source_reference)))\n" +
-                    "UNION ALL SELECT\n" +
+                    " UNION ALL SELECT\n" +
                     "  concat(mi.jm_source_ref_old, '-', mi.identifier_old) external_reference\n" +
                     ", mi.identifier_old identifier\n" +
                     ", CAST(null AS date) effective_start_date\n" +
@@ -387,19 +393,21 @@ public class DL_CoreViewChecksSQL {
                     ", mi.manifestation_source_reference manifestation_source_reference\n" +
                     ", mi.notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'jm' source_system\n" +
+                    ", 'JM' source_system\n" +
                     ", mi.scenario_code scenario_code\n" +
                     ", mi.scenario_name scenario_name\n" +
-                    " FROM("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
+                    ", CAST(null AS boolean) lead_indicator\n" +
+                    " FROM\n" +
+                    "  ("+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
                     "INNER JOIN (\n" +
                     "   SELECT\n" +
                     "     scenario_code\n" +
                     "   , jm_source_reference\n" +
                     "   , max(notified_date) max_notified_date\n" +
-                    "   FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_dq\n" +
-                    "   GROUP BY scenario_code, jm_source_reference)" +
-                    "  maxm ON (((maxm.max_notified_date = mi.notified_date) " +
-                    " AND (maxm.scenario_code = mi.scenario_code)) AND (maxm.jm_source_reference = mi.manifestation_source_reference)))\n" +
+                    "   FROM\n" +
+                    "     "+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_dq\n" +
+                    "   GROUP BY scenario_code, jm_source_reference\n" +
+                    ")  maxm ON (((maxm.max_notified_date = mi.notified_date) AND (maxm.scenario_code = mi.scenario_code)) AND (maxm.jm_source_reference = mi.manifestation_source_reference)))\n" +
                     " WHERE (mi.identifier_old IS NOT NULL)\n" +
                     " UNION ALL SELECT\n" +
                     "  concat(sourceref, '-', identifier_type, '-', identifier) external_reference\n" +
@@ -411,14 +419,86 @@ public class DL_CoreViewChecksSQL {
                     ", sourceref manifestation_source_reference\n" +
                     ", last_updated_date last_updated_date\n" +
                     ", delete_flag delete_flag\n" +
-                    ", 'bcs' source_system\n" +
+                    ", 'BCS' source_system\n" +
                     ", CAST(null AS varchar) scenario_code\n" +
                     ", CAST(null AS varchar) scenario_name\n" +
-                    "FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_manifestation_identifier_latest_v m)\n";
+                    ", lead_indicator lead_indicator\n" +
+                    " FROM\n" +
+                    "  "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_manifestation_identifier_latest_v m)";
+
+    public static String GET_SOURCE_LEAD_INDICATOR_COUNT =
+            "select count(*) as Source_Count from(\n" +
+                    " SELECT\n" +
+                    "  concat(mi.jm_source_ref_new, '-', mi.identifier_new) external_reference\n" +
+                    ", mi.identifier_new identifier\n" +
+                    ", mi.effective_start_date effective_start_date\n" +
+                    ", CAST(null AS date) effective_end_date\n" +
+                    ", mi.f_type f_type\n" +
+                    ", mi.eph_manifestation_id f_manifestation\n" +
+                    ", mi.manifestation_source_reference manifestation_source_reference\n" +
+                    ", mi.notified_date last_updated_date\n" +
+                    ", false delete_flag\n" +
+                    ", 'JM' source_system\n" +
+                    ", mi.scenario_code scenario_code\n" +
+                    ", mi.scenario_name scenario_name\n" +
+                    ", CAST(null AS boolean) lead_indicator\n" +
+                    " FROM\n" +
+                    "  ("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
+                    " INNER JOIN (\n" +
+                    "   SELECT\n" +
+                    "     scenario_code\n" +
+                    "   , jm_source_reference\n" +
+                    "   , max(notified_date) max_notified_date\n" +
+                    "   FROM\n" +
+                    "      "+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_dq\n" +
+                    "   GROUP BY scenario_code, jm_source_reference\n" +
+                    ")  maxm ON (((maxm.max_notified_date = mi.notified_date) AND (maxm.scenario_code = mi.scenario_code)) AND (maxm.jm_source_reference = mi.manifestation_source_reference)))\n" +
+                    " UNION ALL SELECT\n" +
+                    "  concat(mi.jm_source_ref_old, '-', mi.identifier_old) external_reference\n" +
+                    ", mi.identifier_old identifier\n" +
+                    ", CAST(null AS date) effective_start_date\n" +
+                    ", (mi.effective_start_date - INTERVAL  '1' DAY) effective_end_date\n" +
+                    ", mi.f_type f_type\n" +
+                    ", mi.eph_manifestation_id f_manifestation\n" +
+                    ", mi.manifestation_source_reference manifestation_source_reference\n" +
+                    ", mi.notified_date last_updated_date\n" +
+                    ", false delete_flag\n" +
+                    ", 'JM' source_system\n" +
+                    ", mi.scenario_code scenario_code\n" +
+                    ", mi.scenario_name scenario_name\n" +
+                    ", CAST(null AS boolean) lead_indicator\n" +
+                    " FROM\n" +
+                    "  ("+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
+                    "INNER JOIN (\n" +
+                    "   SELECT\n" +
+                    "     scenario_code\n" +
+                    "   , jm_source_reference\n" +
+                    "   , max(notified_date) max_notified_date\n" +
+                    "   FROM\n" +
+                    "     "+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_dq\n" +
+                    "   GROUP BY scenario_code, jm_source_reference\n" +
+                    ")  maxm ON (((maxm.max_notified_date = mi.notified_date) AND (maxm.scenario_code = mi.scenario_code)) AND (maxm.jm_source_reference = mi.manifestation_source_reference)))\n" +
+                    " WHERE (mi.identifier_old IS NOT NULL)\n" +
+                    " UNION ALL SELECT\n" +
+                    "  concat(sourceref, '-', identifier_type, '-', identifier) external_reference\n" +
+                    ", identifier identifier\n" +
+                    ", last_updated_date effective_start_date\n" +
+                    ", CAST(null AS date) effective_end_date\n" +
+                    ", identifier_type f_type\n" +
+                    ", null f_manifestation\n" +
+                    ", sourceref manifestation_source_reference\n" +
+                    ", last_updated_date last_updated_date\n" +
+                    ", delete_flag delete_flag\n" +
+                    ", 'BCS' source_system\n" +
+                    ", CAST(null AS varchar) scenario_code\n" +
+                    ", CAST(null AS varchar) scenario_name\n" +
+                    ", lead_indicator lead_indicator\n" +
+                    " FROM\n" +
+                    "  "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_manifestation_identifier_latest_v m) where lead_indicator=true";
 
     public static String GET_BCS_JM_CORE_MANIF_IDENT_RAND_ID =
             "select external_reference as id from(\n" +
-                    "SELECT\n" +
+                    " SELECT\n" +
                     "  concat(mi.jm_source_ref_new, '-', mi.identifier_new) external_reference\n" +
                     ", mi.identifier_new identifier\n" +
                     ", mi.effective_start_date effective_start_date\n" +
@@ -428,19 +508,22 @@ public class DL_CoreViewChecksSQL {
                     ", mi.manifestation_source_reference manifestation_source_reference\n" +
                     ", mi.notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'jm' source_system\n" +
+                    ", 'JM' source_system\n" +
                     ", mi.scenario_code scenario_code\n" +
                     ", mi.scenario_name scenario_name\n" +
-                    " FROM ("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
-                    "INNER JOIN (\n" +
+                    ", CAST(null AS boolean) lead_indicator\n" +
+                    " FROM\n" +
+                    "  ("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
+                    " INNER JOIN (\n" +
                     "   SELECT\n" +
                     "     scenario_code\n" +
                     "   , jm_source_reference\n" +
                     "   , max(notified_date) max_notified_date\n" +
-                    "   FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_dq\n" +
+                    "   FROM\n" +
+                    "      "+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_dq\n" +
                     "   GROUP BY scenario_code, jm_source_reference\n" +
                     ")  maxm ON (((maxm.max_notified_date = mi.notified_date) AND (maxm.scenario_code = mi.scenario_code)) AND (maxm.jm_source_reference = mi.manifestation_source_reference)))\n" +
-                    "UNION ALL SELECT\n" +
+                    " UNION ALL SELECT\n" +
                     "  concat(mi.jm_source_ref_old, '-', mi.identifier_old) external_reference\n" +
                     ", mi.identifier_old identifier\n" +
                     ", CAST(null AS date) effective_start_date\n" +
@@ -450,19 +533,21 @@ public class DL_CoreViewChecksSQL {
                     ", mi.manifestation_source_reference manifestation_source_reference\n" +
                     ", mi.notified_date last_updated_date\n" +
                     ", false delete_flag\n" +
-                    ", 'jm' source_system\n" +
+                    ", 'JM' source_system\n" +
                     ", mi.scenario_code scenario_code\n" +
                     ", mi.scenario_name scenario_name\n" +
-                    " FROM("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
+                    ", CAST(null AS boolean) lead_indicator\n" +
+                    " FROM\n" +
+                    "  ("+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
                     "INNER JOIN (\n" +
                     "   SELECT\n" +
                     "     scenario_code\n" +
                     "   , jm_source_reference\n" +
                     "   , max(notified_date) max_notified_date\n" +
-                    "   FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_dq\n" +
-                    "   GROUP BY scenario_code, jm_source_reference)" +
-                    "  maxm ON (((maxm.max_notified_date = mi.notified_date) " +
-                    " AND (maxm.scenario_code = mi.scenario_code)) AND (maxm.jm_source_reference = mi.manifestation_source_reference)))\n" +
+                    "   FROM\n" +
+                    "     "+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_dq\n" +
+                    "   GROUP BY scenario_code, jm_source_reference\n" +
+                    ")  maxm ON (((maxm.max_notified_date = mi.notified_date) AND (maxm.scenario_code = mi.scenario_code)) AND (maxm.jm_source_reference = mi.manifestation_source_reference)))\n" +
                     " WHERE (mi.identifier_old IS NOT NULL)\n" +
                     " UNION ALL SELECT\n" +
                     "  concat(sourceref, '-', identifier_type, '-', identifier) external_reference\n" +
@@ -474,10 +559,12 @@ public class DL_CoreViewChecksSQL {
                     ", sourceref manifestation_source_reference\n" +
                     ", last_updated_date last_updated_date\n" +
                     ", delete_flag delete_flag\n" +
-                    ", 'bcs' source_system\n" +
+                    ", 'BCS' source_system\n" +
                     ", CAST(null AS varchar) scenario_code\n" +
                     ", CAST(null AS varchar) scenario_name\n" +
-                    " FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_manifestation_identifier_latest_v m)order by rand() limit %s \n";
+                    ", lead_indicator lead_indicator\n" +
+                    " FROM\n" +
+                    "  "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_manifestation_identifier_latest_v m) order by rand() limit %s \n";
 
     public static String GET_BCS_JM_CORE_MANIF_IDENT_REC =
                     "select external_reference as EXTERNALREFERENCE" +
@@ -492,67 +579,75 @@ public class DL_CoreViewChecksSQL {
                     ",source_system as SOURCESYSTEM" +
                     ",scenario_code as SCENARIOCODE" +
                     ",scenario_name as SCENARIONAME" +
+                    ",lead_indicator as leadIndicator" +
                     " from(\n" +
-                    "SELECT\n" +
-                    "  concat(mi.jm_source_ref_new, '-', mi.identifier_new) external_reference\n" +
-                    ", mi.identifier_new identifier\n" +
-                    ", mi.effective_start_date effective_start_date\n" +
-                    ", CAST(null AS date) effective_end_date\n" +
-                    ", mi.f_type f_type\n" +
-                    ", mi.eph_manifestation_id f_manifestation\n" +
-                    ", mi.manifestation_source_reference manifestation_source_reference\n" +
-                    ", mi.notified_date last_updated_date\n" +
-                    ", false delete_flag\n" +
-                    ", 'jm' source_system\n" +
-                    ", mi.scenario_code scenario_code\n" +
-                    ", mi.scenario_name scenario_name\n" +
-                    " FROM ("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
-                    "INNER JOIN (\n" +
-                    "   SELECT\n" +
-                    "     scenario_code\n" +
-                    "   , jm_source_reference\n" +
-                    "   , max(notified_date) max_notified_date\n" +
-                    "   FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_dq\n" +
-                    "   GROUP BY scenario_code, jm_source_reference\n" +
-                    ")  maxm ON (((maxm.max_notified_date = mi.notified_date) AND (maxm.scenario_code = mi.scenario_code)) AND (maxm.jm_source_reference = mi.manifestation_source_reference)))\n" +
-                    "UNION ALL SELECT\n" +
-                    "  concat(mi.jm_source_ref_old, '-', mi.identifier_old) external_reference\n" +
-                    ", mi.identifier_old identifier\n" +
-                    ", CAST(null AS date) effective_start_date\n" +
-                    ", (mi.effective_start_date - INTERVAL  '1' DAY) effective_end_date\n" +
-                    ", mi.f_type f_type\n" +
-                    ", mi.eph_manifestation_id f_manifestation\n" +
-                    ", mi.manifestation_source_reference manifestation_source_reference\n" +
-                    ", mi.notified_date last_updated_date\n" +
-                    ", false delete_flag\n" +
-                    ", 'jm' source_system\n" +
-                    ", mi.scenario_code scenario_code\n" +
-                    ", mi.scenario_name scenario_name\n" +
-                    " FROM("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
-                    "INNER JOIN (\n" +
-                    "   SELECT\n" +
-                    "     scenario_code\n" +
-                    "   , jm_source_reference\n" +
-                    "   , max(notified_date) max_notified_date\n" +
-                    "   FROM "+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_dq\n" +
-                    "   GROUP BY scenario_code, jm_source_reference)" +
-                    "  maxm ON (((maxm.max_notified_date = mi.notified_date) " +
-                    " AND (maxm.scenario_code = mi.scenario_code)) AND (maxm.jm_source_reference = mi.manifestation_source_reference)))\n" +
-                    " WHERE (mi.identifier_old IS NOT NULL)\n" +
-                    " UNION ALL SELECT\n" +
-                    "  concat(sourceref, '-', identifier_type, '-', identifier) external_reference\n" +
-                    ", identifier identifier\n" +
-                    ", last_updated_date effective_start_date\n" +
-                    ", CAST(null AS date) effective_end_date\n" +
-                    ", identifier_type f_type\n" +
-                    ", null f_manifestation\n" +
-                    ", sourceref manifestation_source_reference\n" +
-                    ", last_updated_date last_updated_date\n" +
-                    ", delete_flag delete_flag\n" +
-                    ", 'bcs' source_system\n" +
-                    ", CAST(null AS varchar) scenario_code\n" +
-                    ", CAST(null AS varchar) scenario_name\n" +
-                    " FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_manifestation_identifier_latest_v m) where external_reference in ('%s') order by external_reference desc \n";
+                            " SELECT\n" +
+                            "  concat(mi.jm_source_ref_new, '-', mi.identifier_new) external_reference\n" +
+                            ", mi.identifier_new identifier\n" +
+                            ", mi.effective_start_date effective_start_date\n" +
+                            ", CAST(null AS date) effective_end_date\n" +
+                            ", mi.f_type f_type\n" +
+                            ", mi.eph_manifestation_id f_manifestation\n" +
+                            ", mi.manifestation_source_reference manifestation_source_reference\n" +
+                            ", mi.notified_date last_updated_date\n" +
+                            ", false delete_flag\n" +
+                            ", 'JM' source_system\n" +
+                            ", mi.scenario_code scenario_code\n" +
+                            ", mi.scenario_name scenario_name\n" +
+                            ", CAST(null AS boolean) lead_indicator\n" +
+                            " FROM\n" +
+                            "  ("+ GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
+                            " INNER JOIN (\n" +
+                            "   SELECT\n" +
+                            "     scenario_code\n" +
+                            "   , jm_source_reference\n" +
+                            "   , max(notified_date) max_notified_date\n" +
+                            "   FROM\n" +
+                            "      "+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_dq\n" +
+                            "   GROUP BY scenario_code, jm_source_reference\n" +
+                            ")  maxm ON (((maxm.max_notified_date = mi.notified_date) AND (maxm.scenario_code = mi.scenario_code)) AND (maxm.jm_source_reference = mi.manifestation_source_reference)))\n" +
+                            " UNION ALL SELECT\n" +
+                            "  concat(mi.jm_source_ref_old, '-', mi.identifier_old) external_reference\n" +
+                            ", mi.identifier_old identifier\n" +
+                            ", CAST(null AS date) effective_start_date\n" +
+                            ", (mi.effective_start_date - INTERVAL  '1' DAY) effective_end_date\n" +
+                            ", mi.f_type f_type\n" +
+                            ", mi.eph_manifestation_id f_manifestation\n" +
+                            ", mi.manifestation_source_reference manifestation_source_reference\n" +
+                            ", mi.notified_date last_updated_date\n" +
+                            ", false delete_flag\n" +
+                            ", 'JM' source_system\n" +
+                            ", mi.scenario_code scenario_code\n" +
+                            ", mi.scenario_name scenario_name\n" +
+                            ", CAST(null AS boolean) lead_indicator\n" +
+                            " FROM\n" +
+                            "  ("+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_identifier_dq mi\n" +
+                            "INNER JOIN (\n" +
+                            "   SELECT\n" +
+                            "     scenario_code\n" +
+                            "   , jm_source_reference\n" +
+                            "   , max(notified_date) max_notified_date\n" +
+                            "   FROM\n" +
+                            "     "+GetBcsEtlCoreDLDBUser.getJmCoreDataBase()+".etl_manifestation_dq\n" +
+                            "   GROUP BY scenario_code, jm_source_reference\n" +
+                            ")  maxm ON (((maxm.max_notified_date = mi.notified_date) AND (maxm.scenario_code = mi.scenario_code)) AND (maxm.jm_source_reference = mi.manifestation_source_reference)))\n" +
+                            " WHERE (mi.identifier_old IS NOT NULL)\n" +
+                            " UNION ALL SELECT\n" +
+                            "  concat(sourceref, '-', identifier_type, '-', identifier) external_reference\n" +
+                            ", identifier identifier\n" +
+                            ", last_updated_date effective_start_date\n" +
+                            ", CAST(null AS date) effective_end_date\n" +
+                            ", identifier_type f_type\n" +
+                            ", null f_manifestation\n" +
+                            ", sourceref manifestation_source_reference\n" +
+                            ", last_updated_date last_updated_date\n" +
+                            ", delete_flag delete_flag\n" +
+                            ", 'BCS' source_system\n" +
+                            ", CAST(null AS varchar) scenario_code\n" +
+                            ", CAST(null AS varchar) scenario_name\n" +
+                            ", lead_indicator lead_indicator\n" +
+                            " FROM\n" +
+                            "  "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_manifestation_identifier_latest_v m)where external_reference in ('%s') order by external_reference desc \n";
 
 
     public static String GET_DL_CORE_ALL_MANIF_IDENT_VIEW_REC =
@@ -568,6 +663,7 @@ public class DL_CoreViewChecksSQL {
                     ",source_system as SOURCESYSTEM" +
                     ",scenario_code as SCENARIOCODE" +
                     ",scenario_name as SCENARIONAME" +
+                    ",lead_indicator as leadIndicator" +
                     " from "+ GetBcsEtlCoreDLDBUser.getDlCoreViewDataBase()+".all_manifestation_identifiers_v" +
                     " where external_reference in ('%s') \n" +
                     "order by external_reference desc \n";
