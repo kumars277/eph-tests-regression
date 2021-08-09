@@ -31,6 +31,7 @@ Feature:Validate data of DL All Core Views where data comes from BCS and JM Core
       |all_work_access_model_v              |50                 |
       |all_work_business_model_v            |50                 |
 
+    #EPHD-3362
     Scenario: Verify the leadIndicator count in the all core view
       Given Get the leadIndicator count from the sourcesystem table
       Then  Get the count of leadIndicator from the all_manifestation_identifiers_v

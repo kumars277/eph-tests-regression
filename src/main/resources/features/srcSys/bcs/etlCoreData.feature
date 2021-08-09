@@ -26,6 +26,7 @@ Feature:Validate data for BCS ETL Core in Data Lake Access Layer
       |all_manifestation_statuses_v                 |10              |
       |all_manifestation_pubdates_v                 |10              |
 
+    #EPHD-3362
   @BCSCore
     Scenario: Verify the count for the lead indicator in the manifestation identifier tables
     Given Get the total count of the lead indicator from the inbound table
