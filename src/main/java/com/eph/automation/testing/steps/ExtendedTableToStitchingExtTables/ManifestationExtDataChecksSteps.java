@@ -180,6 +180,22 @@ public class ManifestationExtDataChecksSteps {
                             dataQualityStitchContext.recordsFromManifExtended.get(i).getdiscount_code_us(),
                             dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getdiscountCodeUS());
                 }
+                String exportWebInd;
+                if(dataQualityStitchContext.recordsFromManifExtended.get(i).getexport_to_web_ind()){
+                    exportWebInd ="true";
+                }else{
+                    exportWebInd="false";
+                }
+                Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() +
+                        " Manif_Extended -> exportToWebInd => " + exportWebInd +
+                        " Manif_JSON -> exportToWebInd => " + dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getexportToWebInd());
+
+                if (exportWebInd != null ||
+                        (dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getexportToWebInd() != null)) {
+                    Assert.assertEquals("The exportToWebInd is incorrect for EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id(),
+                            exportWebInd,dataQualityStitchContext.recordsFromManifStitching.getManifestationExtended().getexportToWebInd());
+                }
+
 
                 Log.info("EPR => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getepr_id() +
                         " Manif_Extended -> war_reference => " + dataQualityStitchContext.recordsFromManifExtended.get(i).getwar_reference() +

@@ -497,7 +497,6 @@ public class JMETLDataChecksSQL {
             "        CAST (null as varchar) as       f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
             "        CAST (null as varchar) as       f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
             "        CAST (null as varchar) as       opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
-            "--      CAST (null as varchar) as       f_society_ownership,        -- deprecated field. jm populated this for new journals only.\n" +
             "        CAST (null as varchar) as       f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
             "        CAST (null as varchar) as       subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
             "        CAST (null as varchar) as       resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
@@ -545,7 +544,6 @@ public class JMETLDataChecksSQL {
             "        CAST (null as varchar)          f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
             "        CAST (null as varchar)          f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
             "        CAST (null as varchar)          opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
-            "--      CAST (null as varchar)          f_society_ownership,        -- deprecated field. jm populated this for new journals only.\n" +
             "        CAST (null as varchar)          f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
             "        CAST (null as varchar)          subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
             "        CAST (null as varchar)          resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
@@ -595,7 +593,6 @@ public class JMETLDataChecksSQL {
             "        CAST (null as varchar)          f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
             "        CAST (null as varchar)          f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
             "        CAST (null as varchar)          opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
-            "--      CAST (null as varchar)          f_society_ownership,        -- deprecated field. jm populated this for new journals only.\n" +
             "        CAST (null as varchar)          f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
             "        CAST (null as varchar)          subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
             "        CAST (null as varchar)          resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +
@@ -645,7 +642,6 @@ public class JMETLDataChecksSQL {
             "        CAST (null as varchar)          f_oa_type,                  -- for inserts is set F, S, H, N or null.\n" +
             "        CAST (null as varchar)          f_imprint,                  -- for inserts was w.imprint_code  as f_imprint,\n" +
             "        CAST (null as varchar)          opco,                       -- for inserts was w.opco_r12_id   as opco,\n" +
-            "--      CAST (null as varchar)          f_society_ownership,        -- deprecated field. jm populated this for new journals only.\n" +
             "        CAST (null as varchar)          f_legal_ownership,          -- Ownership Level 1 - replaces f_society_ownership. Populated for new journals only.\n" +
             "        CAST (null as varchar)          subscription_type,          -- for inserts, use m.manifestation_type FY/RY\n" +
             "        CAST (null as varchar)          resp_centre,                -- for inserts, was w.responsibility_centre_code as resp_centre,\n" +

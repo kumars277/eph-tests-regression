@@ -6,6 +6,13 @@ public class StitchSubIdentifierJson {
     public String getidentifier() {return identifier;}
     public void setidentifier(String identifier) {this.identifier = identifier;}
 
+    private String leadInd;
+
+    public String getleadInd() {
+        return leadInd;
+    }
+    public void setleadInd(String leadInd){this.leadInd = leadInd;}
+
     private StitchSubWorkCoreJson id;
     public StitchSubWorkCoreJson getid() {return id;}
     public void setid(StitchSubWorkCoreJson id) {this.id = id;}
@@ -14,9 +21,13 @@ public class StitchSubIdentifierJson {
     public StitchSubWorkCoreJson getidentifierType() {return identifierType;}
     public void setidentifierType(StitchSubWorkCoreJson identifierType) {this.identifierType = identifierType;}
 
+
+
     private StitchSubWorkCoreJson role;
     public StitchSubWorkCoreJson getrole() {return role;}
     public void setrole(StitchSubWorkCoreJson role) {this.role = role;}
+
+
 
     private StitchPersonJson [] workChild;
     public StitchPersonJson [] getworkChild() {return workChild;}

@@ -306,23 +306,6 @@ public class DL_AllSourceExtViewsChecksSteps {
                 case "product_availability_extended_allsource_v":
 
                     Log.info("product_availability_extended_allsource_v Records:");
-                   /* dataQualityDLExtViewContext.recordsFromSourceIngestTable.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id)); //sort primarykey data in the lists
-                    dataQualityDLExtViewContext.recordsFromAllExtViews.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id));
-                    if(!dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getapplication_name().isEmpty()) {
-                        dataQualityDLExtViewContext.recordsFromSourceIngestTable.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getapplication_name)); //sort primarykey data in the lists
-                        dataQualityDLExtViewContext.recordsFromAllExtViews.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getapplication_name));
-                    }
-                    if(dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getavailability_start_date() != null) {
-
-                        dataQualityDLExtViewContext.recordsFromSourceIngestTable.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getavailability_start_date)); //sort primarykey data in the lists
-                        dataQualityDLExtViewContext.recordsFromAllExtViews.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getavailability_start_date));
-                    }
-                    if(!dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getdelta_answer_code_uk().isEmpty()) {
-                        dataQualityDLExtViewContext.recordsFromSourceIngestTable.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getdelta_answer_code_uk)); //sort primarykey data in the lists
-                        dataQualityDLExtViewContext.recordsFromAllExtViews.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getdelta_answer_code_uk));
-                    }
-*/
-
                     String[] all_prod_avail_Col = {"getepr_id", "getsource", "getproduct_type", "getlast_updated_date", "getapplication_name", "getdelta_answer_code_uk",
                             "getdelta_answer_code_us","getpublication_status_anz","getavailability_format","getavailability_start_date","getavailability_status","getdelete_flag"};
                     for (String strTemp : all_prod_avail_Col) {

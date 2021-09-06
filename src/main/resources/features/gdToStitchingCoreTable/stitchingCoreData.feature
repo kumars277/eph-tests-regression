@@ -14,8 +14,8 @@ Feature:Validate data for Stitching Core Tables
       | 5               |gd_person                       |
       | 5               |gd_subject_area                 |
       | 5               |gd_manifestation                |
-      | 5               |gd_manifestation_identifier     |
-      | 5               |gd_accountable_product          |
+      |  5               |gd_manifestation_identifier     |
+     | 5               |gd_accountable_product          |
 
 
 

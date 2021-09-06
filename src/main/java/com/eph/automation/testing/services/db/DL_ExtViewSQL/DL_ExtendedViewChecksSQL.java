@@ -1340,7 +1340,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.uktextbookind as uk_textbook_ind\n" +
