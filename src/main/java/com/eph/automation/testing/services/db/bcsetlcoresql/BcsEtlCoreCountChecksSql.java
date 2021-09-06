@@ -503,17 +503,17 @@ public class BcsEtlCoreCountChecksSql {
     public static final String GET_WRK_RELT_INBOUND_CURRENT_COUNT =
      "SELECT count(*) as Source_Count FROM (\n" +
             "   SELECT DISTINCT\n"+
-            "     NULLIF(concat(concat(CAST(relations.sourceref AS varchar), split_part(relations.relationtype, ' | ', 1)), CAST(relations.projectno AS varchar)), '') u_key\n"+
-            "   , NULLIF(relations.sourceref, '') parentref\n"+
-            "   , NULLIF(relations.projectno, '') childref\n"+
+            "     NULLIF(concat(concat(CAST(parent.workmasterprojectno AS varchar), split_part(relations.relationtype, ' | ', 1)), CAST(child.workmasterprojectno AS varchar)), '') u_key\n"+
+            "   , NULLIF(parent.workmasterprojectno, '') parentref\n"+
+            "   , NULLIF(child.workmasterprojectno, '') childref\n"+
             "   , NULLIF(code.ephcode, '') relationtyperef\n"+
             "   , date_parse(NULLIF(relations.metamodifiedon, ''), '%d-%b-%Y %H:%i:%s') modifiedon\n"+
             "   , 'N' dq_err\n"+
             "   FROM\n"+
             "     ((("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_relations relations\n"+
             "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".relationtypecode code ON (split_part(relations.relationtype, ' | ', 1) = code.ppmcode))\n"+
-            "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily parent ON ((relations.sourceref = parent.sourceref) AND (relations.sourceref = parent.workmasterprojectno)))\n"+
-            "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily child ON ((relations.projectno = child.sourceref) AND (relations.projectno = child.workmasterprojectno)))\n"+
+            "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily parent ON ((relations.sourceref = parent.sourceref) AND (parent.workmasterprojectno IS NOT NULL)))\n"+
+            "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily child ON ((relations.projectno = child.sourceref) AND (child.workmasterprojectno IS NOT NULL)))\n"+
             "UNION ALL    SELECT DISTINCT\n"+
             "     concat(CAST(content.seriesid AS varchar), 'CON', CAST(content.sourceref AS varchar)) u_key\n"+
             "   , content.seriesid parentref\n"+
