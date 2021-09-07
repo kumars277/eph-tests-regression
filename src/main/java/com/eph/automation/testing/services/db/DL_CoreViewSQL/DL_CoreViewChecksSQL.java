@@ -129,7 +129,7 @@ public class DL_CoreViewChecksSQL {
                     ", last_updated_date last_updated_date\n" +
                     ", sourceref work_source_reference\n" +
                     ", delete_flag delete_flag\n" +
-                    ", 'bcs' source_system\n" +
+                    ", 'BCS' source_system\n" +
                     " FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_accountable_product_latest_v\n" +
                     " UNION ALL SELECT\n" +
                     "  jm_source_reference external_reference\n" +
