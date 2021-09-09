@@ -1077,6 +1077,50 @@ private static final String W_IN_PACKAGE = "IS_IN_WORK_PACKAGES";
 
   }
 
+  @When("^verify works retrieved by search (.*) for excludeNonElsevier$")
+  public void compareWorksRetrievdByexcludeNonElsevier(String searchKey)
+          throws AzureOauthTokenFetchingException {
+
+    WorksMatchedApiObject returnedWorks = null;
+    Log.info("searching by..." + searchKey);
+
+    int fromCntr = 0;
+    int sizeCntr = 500;
+
+    do{
+      returnedWorks =
+              APIService.searchForWorksBySearchOptionResult(
+                      searchKey+"&excludeNonElsevier=true"
+                              + from
+                              + fromCntr
+                              + size
+                              + sizeCntr);
+      Log.info("Total work found to verify for nonElsevierInd to be false - " + returnedWorks.getTotalMatchCount());
+
+      returnedWorks.verifyWorksAreReturned();
+      WorkApiObject[] items = returnedWorks.getItems().clone();
+
+      for (int i = 0; i < items.length; i++) {
+        Assert.assertEquals("found nonElsevierInd work at index "+i,
+                items[i]
+                        .getWorkCore()
+                        .getType()
+                        .get("nonElsevierInd")
+                        .toString()
+                        .equalsIgnoreCase("false"),
+                true);
+      }
+
+      fromCntr += sizeCntr;
+      Log.info("scanned workID from " + (fromCntr - sizeCntr) + " to " + fromCntr + " records...");
+
+    }
+    while (fromCntr < returnedWorks.getTotalMatchCount());
+
+  }
+
+
+
   @And("^get work by manifestation$")
   public static void getWorkByManifestation() {
     sql = String.format(APIDataSQL.GET_GD_DATA_WORK_BY_MANIFESTATION,Joiner.on("','").join(manifestaionids));
