@@ -23,9 +23,8 @@ public class APIService {
   private static String worksByTitleResource =
       "/product-hub-works/works?queryType=title&queryValue=";
 
-  public APIService() {
-    setApiEndpoint();
-  }
+  public APIService() {setApiEndpoint(); }
+
 
   // by Nishant - updated for search API v2 - complete as of 27 Nov 2019
   // updated by Nishant @ 28 Apr 2020 for data model changes
@@ -53,6 +52,7 @@ public class APIService {
             .get("/product-hub-products/products/" + productID);
 
     DataQualityContext.api_response = response;
+    DataQualityContext.api_response.prettyPrint();
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
     return response.thenReturn().as(ProductApiObject.class);
   }
@@ -485,7 +485,35 @@ public class APIService {
     return response.thenReturn().as(WorksMatchedApiObject.class);
   }
 
-  public static void setApiEndpoint() {
+  public static WorksMatchedApiObject searchForWorkByHasWorkComponents(String workID)
+          throws AzureOauthTokenFetchingException {
+    Response response =
+            given()
+                    .baseUri(searchAPIEndPoint)
+                    .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
+                    .when()
+                    .get("/product-hub-works/works?_alt=1&queryType=hasWorkComponents&queryValue=" + workID);
+
+    DataQualityContext.api_response = response;
+    Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    return response.thenReturn().as(WorksMatchedApiObject.class);
+  }
+
+  public static WorksMatchedApiObject searchForWorkByIsInPackage(String workID)
+          throws AzureOauthTokenFetchingException {
+    Response response =
+            given()
+                    .baseUri(searchAPIEndPoint)
+                    .header(Constants.AUTHORIZATION_HEADER, AuthorizationService.getAuthToken().getToken())
+                    .when()
+                    .get("/product-hub-works/works?_alt=1&queryType=isInWorkPackages&queryValue=" + workID);
+
+    DataQualityContext.api_response = response;
+    Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
+    return response.thenReturn().as(WorksMatchedApiObject.class);
+  }
+
+  public  void setApiEndpoint() {
     if (TestContext.getValues().environment.equalsIgnoreCase("SIT"))
       searchAPIEndPoint = Constants.PRODUCT_SEARCH_END_POINT_SIT;
     else searchAPIEndPoint = Constants.PRODUCT_SEARCH_END_POINT_UAT;

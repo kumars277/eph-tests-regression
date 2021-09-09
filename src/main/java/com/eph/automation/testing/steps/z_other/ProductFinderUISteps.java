@@ -408,7 +408,7 @@ public class ProductFinderUISteps {
     public void filter_Search_Result_by_workType(String workFilterType) throws InterruptedException {
         String buildWorkFilterLocator = "//span[contains(text(),\'" + workFilterType + "\')]";
         tasks.click("XPATH", buildWorkFilterLocator);
-        Thread.sleep(1000);
+        Thread.sleep(3000);
     }
 
     @Given("^Filter the Search Result by filter \"([^\"]*)\" and value \"(.*)\"$")
@@ -469,7 +469,7 @@ public class ProductFinderUISteps {
 
 
     @Then("^Verify the Work Status is \"([^\"]*)\"$")
-    public void verify_the_Work_Status_is(String workStatus) {
+    public void verify_the_Work_Status_is(String workStatus) throws InterruptedException {
         //updated by Nishant @ 22 May 2020
         //updated by Nishant @ 22 Apr 2021
         List<String> workStatusCode;
@@ -478,7 +478,7 @@ public class ProductFinderUISteps {
         String[] workStatusCodesofPlanned = {"WAM", "WAP", "WCO", "WIP", "WPL", "WSP"};
         String[] workStatusCodesofApproved = {"WAP"};
         boolean flag = false;
-
+        tasks.waitUntilPageLoad();
         workStatusUIValidation(workStatus);
 
         if (!TestContext.getValues().environment.equalsIgnoreCase("PROD") &&

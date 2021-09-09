@@ -119,12 +119,9 @@ public class SecretsManagerHandler {
         //created by Nishant @  29 Mar 2021
         JSONObject object = null;
 
-
         AWSSecretsManager client = AWSSecretsManagerClientBuilder.standard()
                 .withRegion(region)
                 .build();
-
-
 
         String secret = "";
         String decodedBinarySecret = "";
