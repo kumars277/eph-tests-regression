@@ -1,4 +1,4 @@
-package com.eph.automation.testing.steps.z_other;
+package com.eph.automation.testing.steps.specific;
 
 import com.eph.automation.testing.annotations.StaticInjection;
 import com.eph.automation.testing.configuration.Constants;
@@ -1093,6 +1093,7 @@ public class ProductFinderUISteps {
                     case 403:
                         System.out.println("403 Forbidden - The server understood the request but is refusing to fulfill it");
                         statusDescription = "403 Forbidden";
+                        break;
                     case 404:
                         System.out.println("page not found");
                         statusDescription = "Page not Found";
