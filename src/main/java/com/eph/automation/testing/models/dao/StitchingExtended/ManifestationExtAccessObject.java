@@ -15,6 +15,7 @@ public class ManifestationExtAccessObject {
     private String journal_issue_trim_size;
     private String war_reference;
     private String type;
+    private boolean export_to_web_ind;
 
     private String count_type_code;
     private String count_type_name;
@@ -22,6 +23,14 @@ public class ManifestationExtAccessObject {
 
     private String restriction_name;
     private String restriction_code;
+
+
+    public boolean getexport_to_web_ind() {
+        return export_to_web_ind;
+    }
+    public void setexport_to_web_ind(boolean export_to_web_ind) {
+        this.export_to_web_ind = export_to_web_ind;
+    }
 
     public String getrestriction_name() {
         return restriction_name;

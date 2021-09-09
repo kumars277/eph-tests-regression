@@ -2,9 +2,7 @@ package com.eph.automation.testing.configuration;
 
 import com.eph.automation.testing.models.EnumConstants;
 import com.eph.automation.testing.models.TestContext;
-import com.eph.automation.testing.models.dao.WorkDataObject;
 import com.eph.automation.testing.services.db.sql.GetEPHDBUser;
-import net.minidev.json.parser.ParseException;
 import org.apache.commons.dbutils.DbUtils;
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
@@ -72,8 +70,9 @@ public class DBManager {
         }
         return dbEndPointKey;
     }
+/*
 
-    public static int mysqlConnection(String sql, Class<com.eph.automation.testing.models.batch.JobConfiguration> classType, String URL) {
+    public static int mysqlConnection(String sql, Class<features.zOnHold.znotused.batch.JobConfiguration> classType, String URL) {
         int updateStatus = 0;
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -95,6 +94,7 @@ public class DBManager {
         }
         return updateStatus;
     }
+*/
 
     public static List<java.util.Map<String, Object>> getDLResultMap(String sql, String URL) {
         List<java.util.Map<String, Object>> mapList = null;

@@ -1,30 +1,9 @@
-package com.eph.automation.testing.services.db.JRBIDataLakeAccesSQL;
-
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
+package com.eph.automation.testing.services.db.jrbisql;
 
 public class JRBIPersonDataChecksSQL {
+    private JRBIPersonDataChecksSQL() {throw new IllegalStateException("Utility class");}
 
-    public static String currentDate(){
-        Calendar cal = Calendar.getInstance();
-         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String todayDate= dateFormat.format(cal.getTime());
-        return todayDate;
-
-    }
-
-    public static String previousDate(){
-        Calendar cal = Calendar.getInstance();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        cal.add(Calendar.DATE, -1);
-        String yesterdayDate = dateFormat.format(cal.getTime());
-        return yesterdayDate;
-    }
-
-    public static String GET_EPR_IDS_PERSON_FULLLOAD =
+    public static final String GET_EPR_IDS_PERSON_FULLLOAD =
        "SELECT epr as EPR from(\n" +
                "SELECT DISTINCT\n" +
                "  cr2.epr epr\n" +
@@ -45,16 +24,16 @@ public class JRBIPersonDataChecksSQL {
                "WHERE ((NULLIF(COALESCE(rtrim(ltrim(lower(j.email), ' '), ' '), rtrim(ltrim(lower(jel.email), ' '), ' ')), '') IS NOT NULL) \n" +
                "AND (COALESCE(p.peoplehub_id, jel.peoplehub_id) IS NOT NULL))) order by rand() limit %s\n";
 
-    public static String GET_PERSON_RECORDS_FULL_LOAD =
+    public static final String GET_PERSON_RECORDS_FULL_LOAD =
                     "select epr as EPR" +
-                    ",record_type as RECORD_TYPE" +
-                    ",role_code as ROLE_CODE" +
-                    ",u_key as U_KEY" +
-                    ",role_description as ROLE_DESCRIPTION" +
-                    ",given_name as GIVEN_NAME" +
-                    ",family_name as FAMILY_NAME" +
-                    ",peoplehub_id as PEOPLEHUB_ID" +
-                    ",email as EMAIL" +
+                    ",record_type as recordType" +
+                    ",role_code as roleCode" +
+                    ",u_key as uKey" +
+                    ",role_description as roleDescription" +
+                    ",given_name as givenName" +
+                    ",family_name as familyName" +
+                    ",peoplehub_id as peopleHubId" +
+                    ",email as email" +
                     " from(\n" +
                     " SELECT DISTINCT\n" +
                     "  cr2.epr epr\n" +
@@ -75,104 +54,73 @@ public class JRBIPersonDataChecksSQL {
                     "WHERE ((NULLIF(COALESCE(rtrim(ltrim(lower(j.email), ' '), ' '), rtrim(ltrim(lower(jel.email), ' '), ' ')), '') IS NOT NULL) \n" +
                     "AND (COALESCE(p.peoplehub_id, jel.peoplehub_id) IS NOT NULL))) where EPR in ('%s')\n";
 
-    public static String GET_CURRENT_PERSON_RECORDS =
+    public static final String GET_CURRENT_PERSON_RECORDS =
             "select epr as EPR" +
-                    ",record_type as RECORD_TYPE" +
-                    ",role_code as ROLE_CODE" +
-                    ",u_key as U_KEY" +
-                    ",role_description as ROLE_DESCRIPTION" +
-                    ",given_name as GIVEN_NAME" +
-                    ",family_name as FAMILY_NAME" +
-                    ",peoplehub_id as PEOPLEHUB_ID" +
-                    ",email as EMAIL" +
+                    ",record_type as recordType" +
+                    ",role_code as roleCode" +
+                    ",u_key as uKey" +
+                    ",role_description as roleDescription" +
+                    ",given_name as givenName" +
+                    ",family_name as familyName" +
+                    ",peoplehub_id as peopleHubId" +
+                    ",email as email" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person where EPR in ('%s')";
 
-    public static String GET_DELTA_PERSON_EPR_ID =
+    public static final String GET_DELTA_PERSON_EPR_ID =
             "select epr as EPR from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person order by rand() limit %s\n";
 
-    public static String GET_DELTA_PERSON_RECORDS =
+    public static final String GET_DELTA_PERSON_RECORDS =
             "select epr as EPR" +
-                    ",record_type as RECORD_TYPE" +
-                    ",role_code as ROLE_CODE" +
-                    ",u_key as U_KEY" +
-                    ",role_description as ROLE_DESCRIPTION" +
-                    ",given_name as GIVEN_NAME" +
-                    ",family_name as FAMILY_NAME" +
-                    ",peoplehub_id as PEOPLEHUB_ID" +
-                    ",email as EMAIL" +
-                    ",type as TYPE" +
-                    ",delta_mode as DELTA_MODE" +
+                    ",record_type as recordType" +
+                    ",role_code as roleCode" +
+                    ",u_key as uKey" +
+                    ",role_description as roleDescription" +
+                    ",given_name as givenName" +
+                    ",family_name as familyName" +
+                    ",peoplehub_id as peopleHubId" +
+                    ",email as email" +
+                    ",type as type" +
+                    ",delta_mode as deltaMode" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person where EPR in ('%s')";
 
-    public static String GET_DELTA_PERSON_HISTORY_RECORDS =
-            "select epr as EPR" +
-                    ",record_type as RECORD_TYPE" +
-                    ",role_code as ROLE_CODE" +
-                    ",u_key as U_KEY" +
-                    ",role_description as ROLE_DESCRIPTION" +
-                    ",given_name as GIVEN_NAME" +
-                    ",family_name as FAMILY_NAME" +
-                    ",peoplehub_id as PEOPLEHUB_ID" +
-                    ",email as EMAIL" +
-                    ",type as TYPE" +
-                    ",delta_mode as DELTA_MODE" +
-                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_person_history_part where EPR in ('%s') AND " +
-                    //"delta_ts like \'%%"+bcsEtlCoreCountChecksSql.previousDate()+"%%\'";
-                    "delta_ts=(select max(delta_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_person_history_part)\n ";
 
-
-
-
-    public static String GET_CURRENT_PERSON_EPR_ID =
+    public static final String GET_CURRENT_PERSON_EPR_ID =
             "select epr as EPR from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person order by rand() limit %s\n";
 
-    public static String GET_PREVIOUS_PERSON_EPR_ID =
+    public static final String GET_PREVIOUS_PERSON_EPR_ID =
             "select epr as EPR from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_person order by rand() limit %s\n";
 
-    public static String GET_PREVIOUS_PERSON_RECORDS =
-            "select epr as EPR" +
-                    ",record_type as RECORD_TYPE" +
-                    ",role_code as ROLE_CODE" +
-                    ",u_key as U_KEY" +
-                    ",role_description as ROLE_DESCRIPTION" +
-                    ",given_name as GIVEN_NAME" +
-                    ",family_name as FAMILY_NAME" +
-                    ",peoplehub_id as PEOPLEHUB_ID" +
-                    ",email as EMAIL" +
-                    " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_person where EPR in ('%s')";
 
-
-    public static String GET_CURRENT_PERSON_HISTORY_RECORDS =
+    public static final String GET_CURRENT_PERSON_HISTORY_RECORDS =
             "select epr as EPR" +
-                    ",record_type as RECORD_TYPE" +
-                    ",role_code as ROLE_CODE" +
-                    ",u_key as U_KEY" +
-                    ",role_description as ROLE_DESCRIPTION" +
-                    ",given_name as GIVEN_NAME" +
-                    ",family_name as FAMILY_NAME" +
-                    ",peoplehub_id as PEOPLEHUB_ID" +
-                    ",email as EMAIL" +
+                    ",record_type as recordType" +
+                    ",role_code as roleCode" +
+                    ",u_key as uKey" +
+                    ",role_description as roleDescription" +
+                    ",given_name as givenName" +
+                    ",family_name as familyName" +
+                    ",peoplehub_id as peopleHubId" +
+                    ",email as email" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part where EPR in ('%s') AND " +
                     //"transform_ts like \'%%"+bcsEtlCoreCountChecksSql.currentDate()+"%%\' " +
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part)\n " +
                     "and delete_flag=false";
 
-    public static String GET_PREVIOUS_PERSON_HISTORY_RECORDS =
+    public static final String GET_PREVIOUS_PERSON_HISTORY_RECORDS =
             "select epr as EPR" +
-                    ",record_type as RECORD_TYPE" +
-                    ",role_code as ROLE_CODE" +
-                    ",u_key as U_KEY" +
-                    ",role_description as ROLE_DESCRIPTION" +
-                    ",given_name as GIVEN_NAME" +
-                    ",family_name as FAMILY_NAME" +
-                    ",peoplehub_id as PEOPLEHUB_ID" +
-                    ",email as EMAIL" +
+                    ",record_type as recordType" +
+                    ",role_code as roleCode" +
+                    ",u_key as uKey" +
+                    ",role_description as roleDescription" +
+                    ",given_name as givenName" +
+                    ",family_name as familyName" +
+                    ",peoplehub_id as peopleHubId" +
+                    ",email as email" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part where EPR in ('%s') AND " +
-                    //"transform_ts like \'%%"+bcsEtlCoreCountChecksSql.previousDate()+"%%\'";
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part\n " +
                     "where transform_ts < (select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part))\n";
 
-    public static String GET_EPR_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_PERSON =
+    public static final String GET_EPR_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_PERSON =
             "select epr as EPR from \n" +
                     "(select A.epr, A.record_type, A.role_code, A.u_key\n" +
                     ", A.role_description, A.given_name, A.family_name, A.peoplehub_id\n" +
@@ -184,16 +132,16 @@ public class JRBIPersonDataChecksSQL {
                     "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A))\n " +
                     " order by rand() limit %s\n";
 
-    public static String GET_RECORDS_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_PERSON =
+    public static final String GET_RECORDS_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_PERSON =
             "select epr as EPR, record_type as RECORDS_TYPE,\n" +
-                    "role_code as ROLE_CODE, u_key as U_KEY,\n" +
-                    "role_description as ROLE_DESCRIPTION,\n" +
-                    "given_name as GIVEN_NAME,\n" +
-                    "family_name as FAMILY_NAME,\n" +
-                    "peoplehub_id as PEOPLEHUB_ID,\n" +
-                    "email as EMAIL,\n" +
-                    "last_updated_date as LAST_UPDATED_DATE,\n" +
-                    "delete_flag as DELETE_FLAG\n" +
+                    "role_code as roleCode, u_key as uKey,\n" +
+                    "role_description as roleDescription,\n" +
+                    "given_name as givenName,\n" +
+                    "family_name as familyName,\n" +
+                    "peoplehub_id as peopleHubId,\n" +
+                    "email as email,\n" +
+                    "last_updated_date as lastUpdatedDate,\n" +
+                    "delete_flag as deleteFlag\n" +
                     "from \n" +
                     "(select A.epr, A.record_type, A.role_code, A.u_key\n" +
                     ", A.role_description, A.given_name, A.family_name, A.peoplehub_id\n" +
@@ -201,26 +149,25 @@ public class JRBIPersonDataChecksSQL {
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person B on A.u_key  = B.u_key\n" +
                     "where B.u_key is null and " +
-                   // "A.transform_ts like \'%%"+bcsEtlCoreCountChecksSql.currentDate()+"%%\' " +
                     "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person_history_part A)\n " +
                     "AND A.epr in ('%s'))\n";
 
 
-    public static String GET_RECORDS_FROM_PERSON_EXCLUDE =
+    public static final String GET_RECORDS_FROM_PERSON_EXCLUDE =
             "select epr as EPR, record_type as RECORDS_TYPE,\n" +
-                    "role_code as ROLE_CODE, u_key as U_KEY,\n" +
-                    "role_description as ROLE_DESCRIPTION,\n" +
-                    "given_name as GIVEN_NAME,\n" +
-                    "family_name as FAMILY_NAME,\n" +
-                    "peoplehub_id as PEOPLEHUB_ID,\n" +
-                    "email as EMAIL,\n" +
-                    "last_updated_date as LAST_UPDATED_DATE,\n" +
-                    "delete_flag as DELETE_FLAG\n" +
+                    "role_code as roleCode, u_key as uKey,\n" +
+                    "role_description as roleDescription,\n" +
+                    "given_name as givenName,\n" +
+                    "family_name as familyName,\n" +
+                    "peoplehub_id as peopleHubId,\n" +
+                    "email as email,\n" +
+                    "last_updated_date as lastUpdatedDate,\n" +
+                    "delete_flag as deleteFlag\n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_person_excl_delta \n"+
                     "where EPR in ('%s')\n";
 
 
-    public static String GET_EPR_FOR_PERSON_LATEST =
+    public static final String GET_EPR_FOR_PERSON_LATEST =
             "select epr as EPR from \n" +
                     "(select a.epr, a.record_type, a.role_code, \n" +
                     "a.u_key, a.role_description, a.given_name, a.family_name, \n" +
@@ -233,16 +180,16 @@ public class JRBIPersonDataChecksSQL {
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person as b)\n "+
                     "order by rand() limit %s\n";
 
-    public  static String GET_JRBI_REC_SUM_DELTA_PERSON_AND_PERSON_EXCL =
+    public  static final String GET_JRBI_REC_SUM_DELTA_PERSON_AND_PERSON_EXCL =
             "select epr as EPR, record_type as RECORDS_TYPE,\n" +
-                    "role_code as ROLE_CODE, u_key as U_KEY,\n" +
-                    "role_description as ROLE_DESCRIPTION,\n" +
-                    "given_name as GIVEN_NAME,\n" +
-                    "family_name as FAMILY_NAME,\n" +
-                    "peoplehub_id as PEOPLEHUB_ID,\n" +
-                    "email as EMAIL,\n" +
-                    "last_updated_date as LAST_UPDATED_DATE,\n" +
-                    "delete_flag as DELETE_FLAG\n" +
+                    "role_code as roleCode, u_key as uKey,\n" +
+                    "role_description as roleDescription,\n" +
+                    "given_name as givenName,\n" +
+                    "family_name as familyName,\n" +
+                    "peoplehub_id as peopleHubId,\n" +
+                    "email as email,\n" +
+                    "last_updated_date as lastUpdatedDate,\n" +
+                    "delete_flag as deleteFlag\n" +
                     " from(select a.epr, a.record_type, a.role_code, \n" +
                     "a.u_key, a.role_description, a.given_name, a.family_name, \n" +
                     "a.peoplehub_id, a.email, a.transform_ts, a.delete_flag, \n" +
@@ -254,73 +201,33 @@ public class JRBIPersonDataChecksSQL {
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_person as b)\n "+
                     "where EPR in ('%s')\n";
 
-    public static String GET_JRBI_PERSON_LATEST_RECORDS =
+    public static final String GET_JRBI_PERSON_LATEST_RECORDS =
             "select epr as EPR, record_type as RECORDS_TYPE,\n" +
-                    "role_code as ROLE_CODE, u_key as U_KEY,\n" +
-                    "role_description as ROLE_DESCRIPTION,\n" +
-                    "given_name as GIVEN_NAME,\n" +
-                    "family_name as FAMILY_NAME,\n" +
-                    "peoplehub_id as PEOPLEHUB_ID,\n" +
-                    "email as EMAIL,\n" +
-                    "last_updated_date as LAST_UPDATED_DATE,\n" +
-                    "delete_flag as DELETE_FLAG\n" +
+                    "role_code as roleCode, u_key as uKey,\n" +
+                    "role_description as roleDescription,\n" +
+                    "given_name as givenName,\n" +
+                    "family_name as familyName,\n" +
+                    "peoplehub_id as peopleHubId,\n" +
+                    "email as email,\n" +
+                    "last_updated_date as lastUpdatedDate,\n" +
+                    "delete_flag as deleteFlag\n" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_person\n" +
                     " where EPR in ('%s') order by role_code,peoplehub_id\n";
 
 
-    public static String GET_JRBI_PERSON_EXTENDED_RECORDS =
-            "select epr_id as EPR,\n" +
-                    "role_code as ROLE_CODE,\n" +
-                    "role_name as ROLE_NAME,\n" +
-                    "first_name as FIRST_NAME,\n" +
-                    "last_name as LAST_NAME,\n" +
-                    "peoplehub_id as PEOPLEHUB_ID,\n" +
-                    "email as EMAIL,\n" +
-                    "last_updated_date as LAST_UPDATED_DATE,\n" +
-                    "delete_flag as DELETE_FLAG\n" +
-                    " from "+GetJRBIDLDBUser.getProductExtdb()+".work_extended_person_role\n" +
-                    " where epr_id in ('%s') order by role_code,peoplehub_id\n";
 
-
-    public static String GET_RANDOM_EPR_DELTA_PERSON =
-            "select epr as EPR" +
-                    " from (\n" +
-                    "--new\n" +
-                    "select c.epr, c.record_type, c.role_code , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email,'I' as delta_mode FROM "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person c\n" +
-                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_person p  on c.u_key = p.u_key\n" +
-                    "where p.u_key is null\n" +
-                    "union all\n" +
-                    "-- deleted\n" +
-                    "select c.epr, c.record_type, c.role_code , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email, 'D' as delta_mode FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_person  c\n" +
-                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person p  on c.u_key = p.u_key\n" +
-                    "where p.u_key is null\n" +
-                    "union all\n" +
-                    "--changed\n" +
-                    "select c.epr, c.record_type, c.role_code , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email, 'C' as delta_mode\n" +
-                    "FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_person  c\n" +
-                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person p  on c.u_key = p.u_key\n" +
-                    "where (c.epr !=(p.epr) or\n" +
-                    "c.record_type != (p.record_type) or \n" +
-                    "c.role_code !=  (p.role_code) or\n" +
-                    "c.role_description !=  (p.role_description) or\n" +
-                    "c.given_name !=  (p.given_name) or\n" +
-                    "c. family_name !=  (p.family_name) or\n" +
-                    "c.peoplehub_id !=  (p.peoplehub_id) or\n" +
-                    "c.email != (p.email))) order by rand() limit %s\n";
-
-
-    public static String GET_DIFF_REC_PREVIOUS_CURRENT_PREVIOUS_PERSON =
+    public static final String GET_DIFF_REC_PREVIOUS_CURRENT_PREVIOUS_PERSON =
             "select epr as EPR\n" +
-                    ",record_type as RECORD_TYPE\n" +
-                    ",role_code as ROLE_CODE\n" +
-                    ",u_key as U_KEY\n" +
-                    ",role_description as ROLE_DESCRIPTION\n" +
-                    ",given_name as GIVEN_NAME\n" +
-                    ",family_name as FAMILY_NAME\n" +
-                    ",peoplehub_id as PEOPLEHUB_ID\n" +
-                    ",email as EMAIL\n" +
-                    ",type as TYPE\n" +
-                    ",delta_mode as DELTA_MODE from (\n" +
+                    ",record_type as recordType\n" +
+                    ",role_code as roleCode\n" +
+                    ",u_key as uKey\n" +
+                    ",role_description as roleDescription\n" +
+                    ",given_name as givenName\n" +
+                    ",family_name as familyName\n" +
+                    ",peoplehub_id as peopleHubId\n" +
+                    ",email as email\n" +
+                    ",type as type\n" +
+                    ",delta_mode as deltaMode from (\n" +
                     "--new\n" +
                     "select c.epr, c.record_type, c.role_code , c.u_key , c.role_description ,c.given_name , c.family_name , c.peoplehub_id , c.email,'NEW' as type,'I' as delta_mode FROM "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_person c\n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_person p  on c.u_key = p.u_key\n" +

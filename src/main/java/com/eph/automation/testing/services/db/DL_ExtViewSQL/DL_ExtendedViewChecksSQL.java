@@ -5,9 +5,6 @@ import com.eph.automation.testing.services.db.bcsetlextendedsql.GetBcsEtlExtende
 
 public class DL_ExtendedViewChecksSQL {
 
-
-
-
     public static String GET_DL_PROD_EXT_AVAILABILITY_COUNT =
             "select count(*) as Target_Count from "+ GetBcsEtlExtendedDLDBUser.getDL_ExtViewDataBase()+".product_extended_availability";
 
@@ -869,10 +866,10 @@ public class DL_ExtendedViewChecksSQL {
             "select count(*) as Source_Count from (\n" +
                     "SELECT \n" +
                     "sdrm.epr_id\n" +
-                    ", 'sdrm' as source\n" +
+                    ", 'SDRM' as source\n" +
                     ", sdrm.product_type\n" +
                     ", sdrm.last_updated_date\n" +
-                    ", CAST('sdrm' AS varchar) as application_name\n" +
+                    ", CAST('SDRM' AS varchar) as application_name\n" +
                     ", CAST(null AS varchar) as delta_answer_code_uk\n" +
                     ", CAST(null AS varchar) as delta_answer_code_us\n" +
                     ", CAST(null AS varchar) as publication_status_anz\n" +
@@ -885,7 +882,7 @@ public class DL_ExtendedViewChecksSQL {
                     "\n" +
                     "SELECT\n" +
                     "bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.producttype as product_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.application as application_name\n" +
@@ -935,10 +932,10 @@ public class DL_ExtendedViewChecksSQL {
             "select epr_id as EPRID from (\n" +
                     "SELECT \n" +
                     "sdrm.epr_id\n" +
-                    ", 'sdrm' as source\n" +
+                    ", 'SDRM' as source\n" +
                     ", sdrm.product_type\n" +
                     ", sdrm.last_updated_date\n" +
-                    ", CAST('sdrm' AS varchar) as application_name\n" +
+                    ", CAST('SDRM' AS varchar) as application_name\n" +
                     ", CAST(null AS varchar) as delta_answer_code_uk\n" +
                     ", CAST(null AS varchar) as delta_answer_code_us\n" +
                     ", CAST(null AS varchar) as publication_status_anz\n" +
@@ -951,7 +948,7 @@ public class DL_ExtendedViewChecksSQL {
                     "\n" +
                     "SELECT\n" +
                     "bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.producttype as product_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.application as application_name\n" +
@@ -1012,10 +1009,10 @@ public class DL_ExtendedViewChecksSQL {
                     " from (\n" +
                     "SELECT \n" +
                     "sdrm.epr_id\n" +
-                    ", 'sdrm' as source\n" +
+                    ", 'SDRM' as source\n" +
                     ", sdrm.product_type\n" +
                     ", sdrm.last_updated_date\n" +
-                    ", CAST('sdrm' AS varchar) as application_name\n" +
+                    ", CAST('SDRM' AS varchar) as application_name\n" +
                     ", CAST(null AS varchar) as delta_answer_code_uk\n" +
                     ", CAST(null AS varchar) as delta_answer_code_us\n" +
                     ", CAST(null AS varchar) as publication_status_anz\n" +
@@ -1027,7 +1024,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.producttype as product_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.application as application_name\n" +
@@ -1068,9 +1065,9 @@ public class DL_ExtendedViewChecksSQL {
                     ", jfs.availability_start_date\n" +
                     ", jfs.availability_status\n" +
                     ", jfs.delete_flag\n" +
-                    "from "+ GetBcsEtlExtendedDLDBUser.getJM_CoreDataBase()+".jnl_fulfilment_system_v jfs) where epr_id in ('%s')" +
+                    "from "+ GetBcsEtlExtendedDLDBUser.getJM_CoreDataBase()+".jnl_fulfilment_system_v jfs) where epr_id in ('EPR-10JYD5')" +
                     " order by epr_id,application_name,availability_start_date,delta_answer_code_uk,availability_status,publication_status_anz," +
-                    "availability_format,delta_answer_code_us,delete_flag desc";
+                    "availability_format,delta_answer_code_us,delete_flag,source,application_name,last_updated_date desc";
 
     public static String GET_ALL_VIEW_PROD_EXT_AVAILABILITY_REC =
             "select epr_id as epr_id" +
@@ -1085,15 +1082,15 @@ public class DL_ExtendedViewChecksSQL {
                     ",availability_start_date as availability_start_date" +
                     ",availability_status as availability_status" +
                     ",delete_flag as delete_flag" +
-                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".product_availability_extended_allsource_v where epr_id in ('%s') " +
+                    " from "+ GetBcsEtlExtendedDLDBUser.getProductStagingDatabase()+".product_availability_extended_allsource_v where epr_id in ('EPR-10JYD5') " +
                     " order by epr_id,application_name,availability_start_date,delta_answer_code_uk,availability_status,publication_status_anz," +
-                    "availability_format,delta_answer_code_us,delete_flag desc";
+                    "availability_format,delta_answer_code_us,delete_flag,source,application_name,last_updated_date desc";
 
     public static String GET_SOURCE_PROD_PRICING_EXT_COUNT =
             "select count(*) as Source_Count from (\n" +
                     "SELECT \n" +
                     "  promis.epr_id\n" +
-                    ", 'promis'                 as source\n" +
+                    ", 'PROMIS' as source\n" +
                     ", promis.product_type\n" +
                     ", promis.last_updated_date\n" +
                     ", promis.currency          as price_currency\n" +
@@ -1110,7 +1107,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                 as epr_id\n" +
-                    ", 'bcs'                     as source\n" +
+                    ", 'BCS'                     as source\n" +
                     ", bcs.product_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.pricecurrency         as price_currency\n" +
@@ -1129,7 +1126,7 @@ public class DL_ExtendedViewChecksSQL {
             "select epr_id as EPRID from (\n" +
                     "SELECT \n" +
                     "  promis.epr_id\n" +
-                    ", 'promis'                 as source\n" +
+                    ", 'PROMIS'                 as source\n" +
                     ", promis.product_type\n" +
                     ", promis.last_updated_date\n" +
                     ", promis.currency          as price_currency\n" +
@@ -1146,7 +1143,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                 as epr_id\n" +
-                    ", 'bcs'                     as source\n" +
+                    ", 'BCS'                     as source\n" +
                     ", bcs.product_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.pricecurrency         as price_currency\n" +
@@ -1178,7 +1175,7 @@ public class DL_ExtendedViewChecksSQL {
                     " from (\n" +
                     "SELECT \n" +
                     "  promis.epr_id\n" +
-                    ", 'promis'                 as source\n" +
+                    ", 'PROMIS'                 as source\n" +
                     ", promis.product_type\n" +
                     ", promis.last_updated_date\n" +
                     ", promis.currency          as price_currency\n" +
@@ -1195,7 +1192,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                 as epr_id\n" +
-                    ", 'bcs'                     as source\n" +
+                    ", 'BCS'                     as source\n" +
                     ", bcs.product_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.pricecurrency         as price_currency\n" +
@@ -1234,7 +1231,7 @@ public class DL_ExtendedViewChecksSQL {
             "select count(*) as Source_Count from (\n" +
                     "SELECT \n" +
                     "  jrbi.epr as epr_id\n" +
-                    ", 'jrbi' as source\n" +
+                    ", 'JRBI' as source\n" +
                     ", jrbi.manifestation_type\n" +
                     ", jrbi.last_updated_date\n" +
                     ", CAST(null AS Boolean) uk_textbook_ind\n" +
@@ -1252,7 +1249,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.uktextbookind as uk_textbook_ind\n" +
@@ -1272,7 +1269,7 @@ public class DL_ExtendedViewChecksSQL {
             "select epr_id as EPRID from (\n" +
                     "SELECT \n" +
                     "  jrbi.epr as epr_id\n" +
-                    ", 'jrbi' as source\n" +
+                    ", 'JRBI' as source\n" +
                     ", jrbi.manifestation_type\n" +
                     ", jrbi.last_updated_date\n" +
                     ", CAST(null AS Boolean) uk_textbook_ind\n" +
@@ -1290,7 +1287,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.uktextbookind as uk_textbook_ind\n" +
@@ -1325,7 +1322,7 @@ public class DL_ExtendedViewChecksSQL {
                     " from (\n" +
                     "SELECT \n" +
                     "  jrbi.epr as epr_id\n" +
-                    ", 'jrbi' as source\n" +
+                    ", 'JRBI' as source\n" +
                     ", jrbi.manifestation_type\n" +
                     ", jrbi.last_updated_date\n" +
                     ", CAST(null AS Boolean) uk_textbook_ind\n" +
@@ -1343,7 +1340,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.uktextbookind as uk_textbook_ind\n" +
@@ -1385,7 +1382,7 @@ public class DL_ExtendedViewChecksSQL {
             "select count(*) as Source_Count from (\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.pagecounttypecode as count_type_code\n" +
@@ -1399,7 +1396,7 @@ public class DL_ExtendedViewChecksSQL {
             "select epr_id as EPRID from (\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.pagecounttypecode as count_type_code\n" +
@@ -1421,7 +1418,7 @@ public class DL_ExtendedViewChecksSQL {
                     " from (\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.pagecounttypecode as count_type_code\n" +
@@ -1447,7 +1444,7 @@ public class DL_ExtendedViewChecksSQL {
             "select count(*) as Source_Count from (\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.restrictioncode as restriction_code\n" +
@@ -1459,7 +1456,7 @@ public class DL_ExtendedViewChecksSQL {
             "select epr_id as EPRID from (\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.restrictioncode as restriction_code\n" +
@@ -1491,7 +1488,7 @@ public class DL_ExtendedViewChecksSQL {
                     " from (\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.manifestation_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.restrictioncode as restriction_code\n" +
@@ -1505,7 +1502,7 @@ public class DL_ExtendedViewChecksSQL {
             "select count(*) as Source_Count from (\n" +
                     "SELECT \n" +
                     "  jrbi.epr as epr_id\n" +
-                    ", 'jrbi' as source\n" +
+                    ", 'JRBI' as source\n" +
                     ", jrbi.work_type as work_type\n" +
                     ", jrbi.last_updated_date\n" +
                     ", CAST(null AS Boolean) journal_els_com_ind\n" +
@@ -1545,7 +1542,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT \n" +
                     "  promis.epr_id as epr_id\n" +
-                    ", 'promis' as source\n" +
+                    ", 'PROMIS' as source\n" +
                     ", promis.work_type as work_type\n" +
                     ", promis.last_updated_date\n" +
                     ", case when delete_flag=false then (case when promis.elsevier_com_ind = 'N' then false when promis.elsevier_com_ind = 'Y' then true end) else null end as journal_els_com_ind\n" +
@@ -1585,7 +1582,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.work_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", CAST(null AS Boolean) journal_els_com_ind\n" +
@@ -1670,7 +1667,7 @@ public class DL_ExtendedViewChecksSQL {
             "select epr_id as EPRID from (\n" +
                     "SELECT \n" +
                     "  jrbi.epr as epr_id\n" +
-                    ", 'jrbi' as source\n" +
+                    ", 'JRBI' as source\n" +
                     ", jrbi.work_type as work_type\n" +
                     ", jrbi.last_updated_date\n" +
                     ", CAST(null AS Boolean) journal_els_com_ind\n" +
@@ -1710,7 +1707,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT \n" +
                     "  promis.epr_id as epr_id\n" +
-                    ", 'promis' as source\n" +
+                    ", 'PROMIS' as source\n" +
                     ", promis.work_type as work_type\n" +
                     ", promis.last_updated_date\n" +
                     ", case when delete_flag=false then (case when promis.elsevier_com_ind = 'N' then false when promis.elsevier_com_ind = 'Y' then true end) else null end as journal_els_com_ind\n" +
@@ -1750,7 +1747,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.work_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", CAST(null AS Boolean) journal_els_com_ind\n" +
@@ -1872,7 +1869,7 @@ public class DL_ExtendedViewChecksSQL {
                     " from (\n" +
                     "SELECT \n" +
                     "  jrbi.epr as epr_id\n" +
-                    ", 'jrbi' as source\n" +
+                    ", 'JRBI' as source\n" +
                     ", jrbi.work_type as work_type\n" +
                     ", jrbi.last_updated_date\n" +
                     ", CAST(null AS Boolean) journal_els_com_ind\n" +
@@ -1912,7 +1909,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT \n" +
                     "  promis.epr_id as epr_id\n" +
-                    ", 'promis' as source\n" +
+                    ", 'PROMIS' as source\n" +
                     ", promis.work_type as work_type\n" +
                     ", promis.last_updated_date\n" +
                     ", case when delete_flag=false then (case when promis.elsevier_com_ind = 'N' then false when promis.elsevier_com_ind = 'Y' then true end) else null end as journal_els_com_ind\n" +
@@ -1952,7 +1949,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.work_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", CAST(null AS Boolean) journal_els_com_ind\n" +
@@ -2086,7 +2083,7 @@ public class DL_ExtendedViewChecksSQL {
             "select count(*) as Source_Count from (\n" +
                     "SELECT\n" +
                     "  promis.epr_id as epr_id\n" +
-                    ", 'promis' as source\n" +
+                    ", 'PROMIS' as source\n" +
                     ", promis.work_type as work_type\n" +
                     ", promis.last_updated_date\n" +
                     ", promis.metric_code\n" +
@@ -2101,7 +2098,7 @@ public class DL_ExtendedViewChecksSQL {
             "select epr_id as EPRID from (\n" +
                     "SELECT\n" +
                     "  promis.epr_id as epr_id\n" +
-                    ", 'promis' as source\n" +
+                    ", 'PROMIS' as source\n" +
                     ", promis.work_type as work_type\n" +
                     ", promis.last_updated_date\n" +
                     ", promis.metric_code\n" +
@@ -2141,7 +2138,7 @@ public class DL_ExtendedViewChecksSQL {
                     " from (\n" +
                     "SELECT\n" +
                     "  promis.epr_id as epr_id\n" +
-                    ", 'promis' as source\n" +
+                    ", 'PROMIS' as source\n" +
                     ", promis.work_type as work_type\n" +
                     ", promis.last_updated_date\n" +
                     ", promis.metric_code\n" +
@@ -2158,7 +2155,7 @@ public class DL_ExtendedViewChecksSQL {
             "select count(*) as Source_Count from (\n" +
                     "SELECT\n" +
                     "  jrbi.epr as epr_id\n" +
-                    ", 'jrbi' as source\n" +
+                    ", 'JRBI' as source\n" +
                     ", jrbi.work_type as work_type\n" +
                     ", CAST(null AS integer) as core_work_person_role_id\n" +
                     ", jrbi.last_updated_date\n" +
@@ -2181,7 +2178,7 @@ public class DL_ExtendedViewChecksSQL {
                     "union all\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.work_type as work_type\n" +
                     ", CAST(bcs.core_reference AS integer) as core_work_person_role_id\n" +
                     ", bcs.last_updated_date\n" +
@@ -2206,7 +2203,7 @@ public class DL_ExtendedViewChecksSQL {
             "select epr_id as EPRID from (\n" +
                     "SELECT\n" +
                     "  jrbi.epr as epr_id\n" +
-                    ", 'jrbi' as source\n" +
+                    ", 'JRBI' as source\n" +
                     ", jrbi.work_type as work_type\n" +
                     ", CAST(null AS integer) as core_work_person_role_id\n" +
                     ", jrbi.last_updated_date\n" +
@@ -2229,7 +2226,7 @@ public class DL_ExtendedViewChecksSQL {
                     "union all\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.work_type as work_type\n" +
                     ", CAST(bcs.core_reference AS integer) as core_work_person_role_id\n" +
                     ", bcs.last_updated_date\n" +
@@ -2275,7 +2272,7 @@ public class DL_ExtendedViewChecksSQL {
                     " from (\n" +
                     "SELECT\n" +
                     "  jrbi.epr as epr_id\n" +
-                    ", 'jrbi' as source\n" +
+                    ", 'JRBI' as source\n" +
                     ", jrbi.work_type as work_type\n" +
                     ", CAST(null AS integer) as core_work_person_role_id\n" +
                     ", jrbi.last_updated_date\n" +
@@ -2298,7 +2295,7 @@ public class DL_ExtendedViewChecksSQL {
                     "union all\n" +
                     "SELECT\n" +
                     "  bcs.eprid as epr_id\n" +
-                    ", 'bcs' as source\n" +
+                    ", 'BCS' as source\n" +
                     ", bcs.work_type as work_type\n" +
                     ", CAST(bcs.core_reference AS integer) as core_work_person_role_id\n" +
                     ", bcs.last_updated_date\n" +
@@ -2352,7 +2349,7 @@ public class DL_ExtendedViewChecksSQL {
             "select count(*) as Source_Count from (\n" +
                     "SELECT\n" +
                     "  promis.parent_epr_id                as epr_id\n" +
-                    ", 'promis'                            as source\n" +
+                    ", 'PROMIS'                            as source\n" +
                     ", promis.work_type                    as work_type\n" +
                     ", promis.last_updated_date\n" +
                     ", promis.child_epr_id                 as related_epr_id\n" +
@@ -2372,7 +2369,7 @@ public class DL_ExtendedViewChecksSQL {
             "select epr_id as EPRID from (\n" +
                     "SELECT\n" +
                     "  promis.parent_epr_id                as epr_id\n" +
-                    ", 'promis'                            as source\n" +
+                    ", 'PROMIS'                            as source\n" +
                     ", promis.work_type                    as work_type\n" +
                     ", promis.last_updated_date\n" +
                     ", promis.child_epr_id                 as related_epr_id\n" +
@@ -2407,7 +2404,7 @@ public class DL_ExtendedViewChecksSQL {
                     " from (\n" +
                     "SELECT\n" +
                     "  promis.parent_epr_id                as epr_id\n" +
-                    ", 'promis'                            as source\n" +
+                    ", 'PROMIS'                            as source\n" +
                     ", promis.work_type                    as work_type\n" +
                     ", promis.last_updated_date\n" +
                     ", promis.child_epr_id                 as related_epr_id\n" +
@@ -2451,7 +2448,7 @@ public class DL_ExtendedViewChecksSQL {
             "select count(*) as Source_Count from (\n" +
                     "SELECT \n" +
                     "  promis.epr_id                    as epr_id\n" +
-                    ", 'promis'                         as source\n" +
+                    ", 'PROMIS'                         as source\n" +
                     ", promis.work_type                 as work_type\n" +
                     ", promis.last_updated_date\n" +
                     ", promis.subject_area_code         as code\n" +
@@ -2464,7 +2461,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                        as epr_id\n" +
-                    ", 'bcs'                            as source\n" +
+                    ", 'BCS'                            as source\n" +
                     ", bcs.work_type                    as work_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.subjcode                     as code\n" +
@@ -2479,7 +2476,7 @@ public class DL_ExtendedViewChecksSQL {
             "select epr_id as EPRID from (\n" +
                     "SELECT \n" +
                     "  promis.epr_id                    as epr_id\n" +
-                    ", 'promis'                         as source\n" +
+                    ", 'PROMIS'                         as source\n" +
                     ", promis.work_type                 as work_type\n" +
                     ", promis.last_updated_date\n" +
                     ", promis.subject_area_code         as code\n" +
@@ -2492,7 +2489,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                        as epr_id\n" +
-                    ", 'bcs'                            as source\n" +
+                    ", 'BCS'                            as source\n" +
                     ", bcs.work_type                    as work_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.subjcode                     as code\n" +
@@ -2517,7 +2514,7 @@ public class DL_ExtendedViewChecksSQL {
                     " from (\n" +
                     "SELECT \n" +
                     "  promis.epr_id                    as epr_id\n" +
-                    ", 'promis'                         as source\n" +
+                    ", 'PROMIS'                         as source\n" +
                     ", promis.work_type                 as work_type\n" +
                     ", promis.last_updated_date\n" +
                     ", promis.subject_area_code         as code\n" +
@@ -2530,7 +2527,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                        as epr_id\n" +
-                    ", 'bcs'                            as source\n" +
+                    ", 'BCS'                            as source\n" +
                     ", bcs.work_type                    as work_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.subjcode                     as code\n" +
@@ -2561,7 +2558,7 @@ public class DL_ExtendedViewChecksSQL {
             "select count(*) as Source_Count from (\n" +
                     "SELECT \n" +
                     "  promis.epr_id            as epr_id\n" +
-                    ", 'promis'                 as source\n" +
+                    ", 'PROMIS'                 as source\n" +
                     ", promis.work_type         as work_type\n" +
                     ", promis.last_updated_date\n" +
                     ", promis.url_code          as url_type_code\n" +
@@ -2573,7 +2570,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                as epr_id\n" +
-                    ", 'bcs'                    as source\n" +
+                    ", 'BCS'                    as source\n" +
                     ", bcs.work_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.urltypecode          as url_type_code\n" +
@@ -2599,7 +2596,7 @@ public class DL_ExtendedViewChecksSQL {
             "select epr_id as EPRID from (\n" +
                     "SELECT \n" +
                     "  promis.epr_id            as epr_id\n" +
-                    ", 'promis'                 as source\n" +
+                    ", 'PROMIS'                 as source\n" +
                     ", promis.work_type         as work_type\n" +
                     ", promis.last_updated_date\n" +
                     ", promis.url_code          as url_type_code\n" +
@@ -2611,7 +2608,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                as epr_id\n" +
-                    ", 'bcs'                    as source\n" +
+                    ", 'BCS'                    as source\n" +
                     ", bcs.work_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.urltypecode          as url_type_code\n" +
@@ -2646,7 +2643,7 @@ public class DL_ExtendedViewChecksSQL {
                     " from (\n" +
                     "SELECT \n" +
                     "  promis.epr_id            as epr_id\n" +
-                    ", 'promis'                 as source\n" +
+                    ", 'PROMIS'                 as source\n" +
                     ", promis.work_type         as work_type\n" +
                     ", promis.last_updated_date\n" +
                     ", promis.url_code          as url_type_code\n" +
@@ -2658,7 +2655,7 @@ public class DL_ExtendedViewChecksSQL {
                     "UNION ALL\n" +
                     "SELECT\n" +
                     "  bcs.eprid                as epr_id\n" +
-                    ", 'bcs'                    as source\n" +
+                    ", 'BCS'                    as source\n" +
                     ", bcs.work_type\n" +
                     ", bcs.last_updated_date\n" +
                     ", bcs.urltypecode          as url_type_code\n" +
@@ -2698,7 +2695,7 @@ public class DL_ExtendedViewChecksSQL {
             "select count(*) as Source_Count from (\n" +
                     "SELECT\n" +
                     "  promis.epr_id as epr_id\n" +
-                    ", 'promis' as source\n" +
+                    ", 'PROMIS' as source\n" +
                     ", promis.work_type as work_type\n" +
                     ", promis.last_updated_date\n" +
                     ", 'EBM' as role_code\n" +
@@ -2720,7 +2717,7 @@ public class DL_ExtendedViewChecksSQL {
             "select epr_id as EPRID from (\n" +
                     "SELECT\n" +
                     "  promis.epr_id as epr_id\n" +
-                    ", 'promis' as source\n" +
+                    ", 'PROMIS' as source\n" +
                     ", promis.work_type as work_type\n" +
                     ", promis.last_updated_date\n" +
                     ", 'EBM' as role_code\n" +
@@ -2759,7 +2756,7 @@ public class DL_ExtendedViewChecksSQL {
                     " from (\n" +
                     "SELECT\n" +
                     "  promis.epr_id as epr_id\n" +
-                    ", 'promis' as source\n" +
+                    ", 'PROMIS' as source\n" +
                     ", promis.work_type as work_type\n" +
                     ", promis.last_updated_date\n" +
                     ", 'EBM' as role_code\n" +

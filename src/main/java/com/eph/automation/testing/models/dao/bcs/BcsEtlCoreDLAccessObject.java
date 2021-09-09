@@ -70,7 +70,13 @@ public class BcsEtlCoreDLAccessObject {
     private String workMasterProjNo;
     private String minActualPubDate;
     private String minPlannedPubDate;
+    private String leadIndicator;
 
+
+    public String getleadIndicator() { return leadIndicator; }
+    public void setleadIndicator(String leadIndicator) {
+        this.leadIndicator = leadIndicator;
+    }
 
     public String getminPlannedPubDate() { return minPlannedPubDate; }
     public void setminPlannedPubDate(String minPlannedPubDate) {

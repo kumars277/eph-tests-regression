@@ -42,6 +42,7 @@ public class StitchingExtDataChecksSQL {
                     ",discount_code_us as discount_code_us\n" +
                     ",manifestation_weight as manifestation_weight\n" +
                     ",journal_issue_trim_size as journal_issue_trim_size\n" +
+                    ",export_to_web_ind as export_to_web_ind\n" +
                     ",war_reference as war_reference\n" +
                     ",delete_flag as delete_flag\n" +
                     " from "+GetStitchDLDBUser.getProdExtDB()+".manifestation_extended where epr_id in ('%s') and delete_flag=false\n";

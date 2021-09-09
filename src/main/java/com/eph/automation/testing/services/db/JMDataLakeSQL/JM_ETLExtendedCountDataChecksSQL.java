@@ -199,7 +199,7 @@ public class JM_ETLExtendedCountDataChecksSQL {
             ", jfs.delete_flag\n" +
             "from "+GetJMDLDBUser.getJMDB()+".jnl_fulfilment_system_v jfs) where last_updated_date in (select last_updated_date from "+GetJMDLDBUser.getJMDB()+".jnl_new_fulfilment_system order by last_updated_date desc limit 1)";
 
-    public static String GET_JMStitched_Count = "select count(*) as COUNT from "+GetJMDLDBUser.getProdStagingDataBase2()+".product_availability_extended_allsource_v where source in ('JM')";
+    public static String GET_JMStitched_Count = "select count(*) as COUNT from "+GetJMDLDBUser.getProdStagingDataBase()+".product_availability_extended_allsource_v where source in ('JM')";
 
     public static String GET_SOURCE_JM_ETLExtended_IDs = "select epr_id as EPR_ID from (\n" +
             "select\n" +
@@ -263,7 +263,7 @@ public class JM_ETLExtendedCountDataChecksSQL {
             ", jfs.delete_flag\n" +
             "from "+GetJMDLDBUser.getJMDB()+".jnl_fulfilment_system_v jfs) where last_updated_date in (select last_updated_date from "+GetJMDLDBUser.getJMDB()+".jnl_new_fulfilment_system order by last_updated_date desc limit 1) and epr_id in ('%s')";
 
-    public static String GET_JM_ETLEXT_Stitched_Records = "select * from "+GetJMDLDBUser.getProdStagingDataBase2()+".product_availability_extended_allsource_v where source in ('JM') and epr_id in ('%s')";
+    public static String GET_JM_ETLEXT_Stitched_Records = "select * from "+GetJMDLDBUser.getProdStagingDataBase()+".product_availability_extended_allsource_v where source in ('JM') and epr_id in ('%s')";
 }
 
 

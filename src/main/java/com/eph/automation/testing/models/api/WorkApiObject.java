@@ -13,16 +13,9 @@ import com.eph.automation.testing.models.TestContext;
 import com.eph.automation.testing.models.contexts.DataQualityContext;
 import com.eph.automation.testing.models.dao.AccountableProductDataObject;
 import com.eph.automation.testing.models.dao.WorkDataObject;
-import com.eph.automation.testing.services.db.sql.APIDataSQL;
-import com.eph.automation.testing.services.db.sql.DataQualityChecksSQL;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.common.base.Joiner;
 import com.google.gson.Gson;
-import net.minidev.json.parser.ParseException;
-import org.junit.Assert;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

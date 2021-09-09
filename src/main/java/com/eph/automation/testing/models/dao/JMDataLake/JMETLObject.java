@@ -40,7 +40,6 @@ public class JMETLObject {
     private String first_year_volumes_per_year_quantity;
     private String first_year_issues_per_volume_quantity;
     private String periodical_timing_desc;
-    private String open_accesstype_code;
     private String open_access_sponsor_name;
     private String open_access_fee;
     private String open_access_fee_short_art;
@@ -367,7 +366,6 @@ public class JMETLObject {
     private String f_oa_type;
     private String f_imprint;
     private String opco;
-    private String f_society_ownership;
     private String resp_centre;
     private String language_code;
     private String work_source_reference;
@@ -509,6 +507,11 @@ public class JMETLObject {
     private String DELTA_ANSWER_CODE_US;
     private String PUBLICATION_STATUS_ANZ;
     private String AVAILABILITY_FORMAT;
+    private String leadIndicator;
+
+
+    public String getleadIndicator() { return leadIndicator; }
+    public void setleadIndicator(String leadIndicator) { this.leadIndicator = leadIndicator; }
 
     public String getAVAILABILITY_FORMAT() { return AVAILABILITY_FORMAT; }
     public void setAVAILABILITY_FORMAT(String AVAILABILITY_FORMAT) { this.AVAILABILITY_FORMAT = AVAILABILITY_FORMAT; }
@@ -965,9 +968,6 @@ public class JMETLObject {
 
     public String getopco() { return opco; }
     public void setopco(String opco) { this.opco = opco; }
-
-    public String getf_society_ownership() { return f_society_ownership; }
-    public void setf_society_ownership(String f_society_ownership) { this.f_society_ownership = f_society_ownership; }
 
     public String getresp_centre() { return resp_centre; }
     public void setresp_centre(String resp_centre) { this.resp_centre = resp_centre; }
@@ -1525,9 +1525,6 @@ public class JMETLObject {
 
     public String getperiodical_timing_desc() { return periodical_timing_desc; }
     public void setperiodical_timing_desc(String periodical_timing_desc) { this.periodical_timing_desc = periodical_timing_desc; }
-
-    public String getopen_accesstype_code() { return open_accesstype_code; }
-    public void setopen_accesstype_code(String open_accesstype_code) { this.open_accesstype_code = open_accesstype_code; }
 
     public String getopen_access_sponsor_name() { return open_access_sponsor_name; }
     public void setopen_access_sponsor_name(String open_access_sponsor_name) { this.open_access_sponsor_name = open_access_sponsor_name; }

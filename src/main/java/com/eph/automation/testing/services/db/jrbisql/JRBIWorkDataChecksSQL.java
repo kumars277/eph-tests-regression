@@ -1,31 +1,8 @@
-package com.eph.automation.testing.services.db.JRBIDataLakeAccesSQL;
-
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
+package com.eph.automation.testing.services.db.jrbisql;
 
 public class JRBIWorkDataChecksSQL {
-
-    public static String currentDate(){
-        Calendar cal = Calendar.getInstance();
-         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String todayDate= dateFormat.format(cal.getTime());
-        return todayDate;
-
-    }
-
-    public static String previousDate(){
-        Calendar cal = Calendar.getInstance();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        cal.add(Calendar.DATE, -1);
-        String yesterdayDate = dateFormat.format(cal.getTime());
-        return yesterdayDate;
-    }
-
-
-    public static String GET_EPR_IDS_FULLLOAD =
+    private JRBIWorkDataChecksSQL() {throw new IllegalStateException("Utility class");}
+    public static final String GET_EPR_IDS_FULLLOAD =
             "WITH\n" +
                     "  jrbi_catalogue_max AS (\n" +
                     "   SELECT\n" +
@@ -94,8 +71,7 @@ public class JRBIWorkDataChecksSQL {
                     "LEFT JOIN jrbi_catalogue_max m ON (ji.epr = m.epr)))\n" +
                     "order by rand() limit %s\n";
 
-    public static String GET_WORK_RECORDS_FULL_LOAD =
-
+    public static final String GET_WORK_RECORDS_FULL_LOAD =
             "WITH\n" +
                     "  jrbi_catalogue_max AS (\n" +
                     "   SELECT\n" +
@@ -139,23 +115,23 @@ public class JRBIWorkDataChecksSQL {
                     "   INNER JOIN "+GetJRBIDLDBUser.getProductDatabase()+".eph_identifier_cross_reference_v cr2 ON (((concat(substr('00000', 1, (5 - length(j.journal_number))), j.journal_number) = cr2.identifier) AND (cr2.identifier_type = 'ELSEVIER JOURNAL NUMBER')) AND (cr2.record_level = 'Work')))\n" +
                     ") \n" +
                     " select epr as EPR" +
-                    ",record_type as RECORD_TYPE" +
-                    ",work_type as WORK_TYPE" +
-                    ",primary_site_system as PRIMARY_SITE_SYSTEM" +
-                    ",primary_site_acronym as PRIMARY_SITE_ACRONYM" +
-                    ",primary_site_support_level as PRIMARY_SITE_SUPPORT_LEVEL" +
-                    ",fulfilment_system as FULFILMENT_SYSTEM" +
-                    ",fulfilment_journal_acronym as FULFILMENT_JOURNAL_ACRONYM" +
-                    ",issue_prod_type_code as ISSUE_PROD_TYPE_CODE" +
+                    ",record_type as recordType" +
+                    ",work_type as workType" +
+                    ",primary_site_system as primarySiteSystem" +
+                    ",primary_site_acronym as primarySiteAcronym" +
+                    ",primary_site_support_level as primarySiteSupportLevel" +
+                    ",fulfilment_system as fulfilmentSystem" +
+                    ",fulfilment_journal_acronym as fulfilmentJournalAcronym" +
+                    ",issue_prod_type_code as issueProdTypeCode" +
                     ",catalogue_volumes_qty as CATALOGUE_VOLUME_QTY" +
-                    ",catalogue_issues_qty as CATALOGUE_ISSUES_QTY" +
-                    ",catalogue_volume_from as CATALOGUE_VOLUME_FROM" +
-                    ",catalogue_volume_to as CATALOGUE_VOLUME_TO" +
-                    ",rf_issues_qty as RF_ISSUES_QTY" +
-                    ",rf_total_pages_qty as RF_TOTAL_PAGES_QTY" +
-                    ",rf_fvi as RF_FVI" +
-                    ",rf_lvi as RF_LVI" +
-                    ",business_unit_desc as BUSINESS_UNIT_DESC" +
+                    ",catalogue_issues_qty as catalogueIssuesqty" +
+                    ",catalogue_volume_from as catalogueVolumeFrom" +
+                    ",catalogue_volume_to as catalogueVolumeTo" +
+                    ",rf_issues_qty as rfIssuesQty" +
+                    ",rf_total_pages_qty as rfTotalPagesQty" +
+                    ",rf_fvi as rfFvi" +
+                    ",rf_lvi as rfLvi" +
+                    ",business_unit_desc as businessUnitDesc" +
                     " from (SELECT DISTINCT\n" +
                     "  ji.epr epr\n" +
                     ", ji.record_type record_type\n" +
@@ -181,159 +157,154 @@ public class JRBIWorkDataChecksSQL {
                     "LEFT JOIN jrbi_catalogue_max m ON (ji.epr = m.epr)))\n" +
                     " where EPR in ('%s')";
 
-
-    public static String GET_CURRENT_WORK_RECORDS =
+    public static final String GET_CURRENT_WORK_RECORDS =
                     "select epr as EPR" +
-                    ",record_type as RECORD_TYPE" +
-                    ",work_type as WORK_TYPE" +
-                    ",primary_site_system as PRIMARY_SITE_SYSTEM" +
-                    ",primary_site_acronym as PRIMARY_SITE_ACRONYM" +
-                    ",primary_site_support_level as PRIMARY_SITE_SUPPORT_LEVEL" +
-                    ",fulfilment_system as FULFILMENT_SYSTEM" +
-                    ",fulfilment_journal_acronym as FULFILMENT_JOURNAL_ACRONYM" +
-                    ",issue_prod_type_code as ISSUE_PROD_TYPE_CODE" +
+                    ",record_type as recordType" +
+                    ",work_type as workType" +
+                    ",primary_site_system as primarySiteSystem" +
+                    ",primary_site_acronym as primarySiteAcronym" +
+                    ",primary_site_support_level as primarySiteSupportLevel" +
+                    ",fulfilment_system as fulfilmentSystem" +
+                    ",fulfilment_journal_acronym as fulfilmentJournalAcronym" +
+                    ",issue_prod_type_code as issueProdTypeCode" +
                     ",catalogue_volumes_qty as CATALOGUE_VOLUME_QTY" +
-                    ",catalogue_issues_qty as CATALOGUE_ISSUES_QTY" +
-                    ",catalogue_volume_from as CATALOGUE_VOLUME_FROM" +
-                    ",catalogue_volume_to as CATALOGUE_VOLUME_TO" +
-                    ",rf_issues_qty as RF_ISSUES_QTY" +
-                    ",rf_total_pages_qty as RF_TOTAL_PAGES_QTY" +
-                    ",rf_fvi as RF_FVI" +
-                    ",rf_lvi as RF_LVI" +
-                    ",business_unit_desc as BUSINESS_UNIT_DESC" +
+                    ",catalogue_issues_qty as catalogueIssuesqty" +
+                    ",catalogue_volume_from as catalogueVolumeFrom" +
+                    ",catalogue_volume_to as catalogueVolumeTo" +
+                    ",rf_issues_qty as rfIssuesQty" +
+                    ",rf_total_pages_qty as rfTotalPagesQty" +
+                    ",rf_fvi as rfFvi" +
+                    ",rf_lvi as rfLvi" +
+                    ",business_unit_desc as businessUnitDesc" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work where EPR in ('%s') order by catalogue_issues_qty desc";
 
-    public static String GET_CURRENT_WORK_HISTORY_RECORDS =
+    public static final String GET_CURRENT_WORK_HISTORY_RECORDS =
             "select epr as EPR" +
-                    ",record_type as RECORD_TYPE" +
-                    ",work_type as WORK_TYPE" +
-                    ",primary_site_system as PRIMARY_SITE_SYSTEM" +
-                    ",primary_site_acronym as PRIMARY_SITE_ACRONYM" +
-                    ",primary_site_support_level as PRIMARY_SITE_SUPPORT_LEVEL" +
-                    ",fulfilment_system as FULFILMENT_SYSTEM" +
-                    ",fulfilment_journal_acronym as FULFILMENT_JOURNAL_ACRONYM" +
-                    ",issue_prod_type_code as ISSUE_PROD_TYPE_CODE" +
+                    ",record_type as recordType" +
+                    ",work_type as workType" +
+                    ",primary_site_system as primarySiteSystem" +
+                    ",primary_site_acronym as primarySiteAcronym" +
+                    ",primary_site_support_level as primarySiteSupportLevel" +
+                    ",fulfilment_system as fulfilmentSystem" +
+                    ",fulfilment_journal_acronym as fulfilmentJournalAcronym" +
+                    ",issue_prod_type_code as issueProdTypeCode" +
                     ",catalogue_volumes_qty as CATALOGUE_VOLUME_QTY" +
-                    ",catalogue_issues_qty as CATALOGUE_ISSUES_QTY" +
-                    ",catalogue_volume_from as CATALOGUE_VOLUME_FROM" +
-                    ",catalogue_volume_to as CATALOGUE_VOLUME_TO" +
-                    ",rf_issues_qty as RF_ISSUES_QTY" +
-                    ",rf_total_pages_qty as RF_TOTAL_PAGES_QTY" +
-                    ",rf_fvi as RF_FVI" +
-                    ",rf_lvi as RF_LVI" +
-                    ",business_unit_desc as BUSINESS_UNIT_DESC" +
+                    ",catalogue_issues_qty as catalogueIssuesqty" +
+                    ",catalogue_volume_from as catalogueVolumeFrom" +
+                    ",catalogue_volume_to as catalogueVolumeTo" +
+                    ",rf_issues_qty as rfIssuesQty" +
+                    ",rf_total_pages_qty as rfTotalPagesQty" +
+                    ",rf_fvi as rfFvi" +
+                    ",rf_lvi as rfLvi" +
+                    ",business_unit_desc as businessUnitDesc" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part where EPR in ('%s') AND " +
-                    //"transform_ts like \'%%"+bcsEtlCoreCountChecksSql.currentDate()+"%%\' " +
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part)\n " +
                     "AND delete_flag=false order by catalogue_issues_qty desc";
 
-    public static String GET_CURRENT_WORK_EPR_ID=
+    public static final String GET_CURRENT_WORK_EPR_ID=
             "select epr as EPR from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work order by rand() limit %s\n";
 
 
-    public static String GET_PREVIOUS_WORK_EPR_ID=
+    public static final String GET_PREVIOUS_WORK_EPR_ID=
             "select epr as EPR from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_work order by rand() limit %s\n";
 
-    public static String GET_DELTA_WORK_EPR_ID=
+    public static final String GET_DELTA_WORK_EPR_ID=
             "select epr as EPR from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work order by rand() limit %s\n";
 
 
-    public static String GET_DELTA_WORK_CURRENT_RECORDS =
+    public static final String GET_DELTA_WORK_CURRENT_RECORDS =
             "select epr as EPR" +
-            ",record_type as RECORD_TYPE" +
-            ",work_type as WORK_TYPE" +
-            ",primary_site_system as PRIMARY_SITE_SYSTEM" +
-            ",primary_site_acronym as PRIMARY_SITE_ACRONYM" +
-            ",primary_site_support_level as PRIMARY_SITE_SUPPORT_LEVEL" +
-            ",fulfilment_system as FULFILMENT_SYSTEM" +
-            ",fulfilment_journal_acronym as FULFILMENT_JOURNAL_ACRONYM" +
-            ",issue_prod_type_code as ISSUE_PROD_TYPE_CODE" +
+            ",record_type as recordType" +
+            ",work_type as workType" +
+            ",primary_site_system as primarySiteSystem" +
+            ",primary_site_acronym as primarySiteAcronym" +
+            ",primary_site_support_level as primarySiteSupportLevel" +
+            ",fulfilment_system as fulfilmentSystem" +
+            ",fulfilment_journal_acronym as fulfilmentJournalAcronym" +
+            ",issue_prod_type_code as issueProdTypeCode" +
             ",catalogue_volumes_qty as CATALOGUE_VOLUME_QTY" +
-            ",catalogue_issues_qty as CATALOGUE_ISSUES_QTY" +
-            ",catalogue_volume_from as CATALOGUE_VOLUME_FROM" +
-            ",catalogue_volume_to as CATALOGUE_VOLUME_TO" +
-            ",rf_issues_qty as RF_ISSUES_QTY" +
-            ",rf_total_pages_qty as RF_TOTAL_PAGES_QTY" +
-            ",rf_fvi as RF_FVI" +
-            ",rf_lvi as RF_LVI" +
-            ",business_unit_desc as BUSINESS_UNIT_DESC" +
-            ",delta_mode as DELTA_MODE" +
-            ",type as TYPE" +
+            ",catalogue_issues_qty as catalogueIssuesqty" +
+            ",catalogue_volume_from as catalogueVolumeFrom" +
+            ",catalogue_volume_to as catalogueVolumeTo" +
+            ",rf_issues_qty as rfIssuesQty" +
+            ",rf_total_pages_qty as rfTotalPagesQty" +
+            ",rf_fvi as rfFvi" +
+            ",rf_lvi as rfLvi" +
+            ",business_unit_desc as businessUnitDesc" +
+            ",delta_mode as deltaMode" +
+            ",type as type" +
             " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work where EPR in ('%s')";
 
-    public static String GET_DELTA_WORK_HISTORY_RECORDS =
+    public static final String GET_DELTA_WORK_HISTORY_RECORDS =
             "select epr as EPR" +
-                    ",record_type as RECORD_TYPE" +
-                    ",work_type as WORK_TYPE" +
-                    ",primary_site_system as PRIMARY_SITE_SYSTEM" +
-                    ",primary_site_acronym as PRIMARY_SITE_ACRONYM" +
-                    ",primary_site_support_level as PRIMARY_SITE_SUPPORT_LEVEL" +
-                    ",fulfilment_system as FULFILMENT_SYSTEM" +
-                    ",fulfilment_journal_acronym as FULFILMENT_JOURNAL_ACRONYM" +
-                    ",issue_prod_type_code as ISSUE_PROD_TYPE_CODE" +
+                    ",record_type as recordType" +
+                    ",work_type as workType" +
+                    ",primary_site_system as primarySiteSystem" +
+                    ",primary_site_acronym as primarySiteAcronym" +
+                    ",primary_site_support_level as primarySiteSupportLevel" +
+                    ",fulfilment_system as fulfilmentSystem" +
+                    ",fulfilment_journal_acronym as fulfilmentJournalAcronym" +
+                    ",issue_prod_type_code as issueProdTypeCode" +
                     ",catalogue_volumes_qty as CATALOGUE_VOLUME_QTY" +
-                    ",catalogue_issues_qty as CATALOGUE_ISSUES_QTY" +
-                    ",catalogue_volume_from as CATALOGUE_VOLUME_FROM" +
-                    ",catalogue_volume_to as CATALOGUE_VOLUME_TO" +
-                    ",rf_issues_qty as RF_ISSUES_QTY" +
-                    ",rf_total_pages_qty as RF_TOTAL_PAGES_QTY" +
-                    ",rf_fvi as RF_FVI" +
-                    ",rf_lvi as RF_LVI" +
-                    ",business_unit_desc as BUSINESS_UNIT_DESC" +
-                    ",delta_mode as DELTA_MODE" +
-                    ",type as TYPE" +
+                    ",catalogue_issues_qty as catalogueIssuesqty" +
+                    ",catalogue_volume_from as catalogueVolumeFrom" +
+                    ",catalogue_volume_to as catalogueVolumeTo" +
+                    ",rf_issues_qty as rfIssuesQty" +
+                    ",rf_total_pages_qty as rfTotalPagesQty" +
+                    ",rf_fvi as rfFvi" +
+                    ",rf_lvi as rfLvi" +
+                    ",business_unit_desc as businessUnitDesc" +
+                    ",delta_mode as deltaMode" +
+                    ",type as type" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_work_history_part where EPR in ('%s') AND \n" +
-                    //"delta_ts like \'%%"+bcsEtlCoreCountChecksSql.currentDate()+"%%\'";
                     "delta_ts=(select max(delta_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_delta_work_history_part)\n " ;
 
-    public static String GET_PREVIOUS_WORK_RECORDS =
+    public static final String GET_PREVIOUS_WORK_RECORDS =
             "select epr as EPR" +
-                    ",record_type as RECORD_TYPE" +
-                    ",work_type as WORK_TYPE" +
-                    ",primary_site_system as PRIMARY_SITE_SYSTEM" +
-                    ",primary_site_acronym as PRIMARY_SITE_ACRONYM" +
-                    ",primary_site_support_level as PRIMARY_SITE_SUPPORT_LEVEL" +
-                    ",fulfilment_system as FULFILMENT_SYSTEM" +
-                    ",fulfilment_journal_acronym as FULFILMENT_JOURNAL_ACRONYM" +
-                    ",issue_prod_type_code as ISSUE_PROD_TYPE_CODE" +
+                    ",record_type as recordType" +
+                    ",work_type as workType" +
+                    ",primary_site_system as primarySiteSystem" +
+                    ",primary_site_acronym as primarySiteAcronym" +
+                    ",primary_site_support_level as primarySiteSupportLevel" +
+                    ",fulfilment_system as fulfilmentSystem" +
+                    ",fulfilment_journal_acronym as fulfilmentJournalAcronym" +
+                    ",issue_prod_type_code as issueProdTypeCode" +
                     ",catalogue_volumes_qty as CATALOGUE_VOLUME_QTY" +
-                    ",catalogue_issues_qty as CATALOGUE_ISSUES_QTY" +
-                    ",catalogue_volume_from as CATALOGUE_VOLUME_FROM" +
-                    ",catalogue_volume_to as CATALOGUE_VOLUME_TO" +
-                    ",rf_issues_qty as RF_ISSUES_QTY" +
-                    ",rf_total_pages_qty as RF_TOTAL_PAGES_QTY" +
-                    ",rf_fvi as RF_FVI" +
-                    ",rf_lvi as RF_LVI" +
-                    ",business_unit_desc as BUSINESS_UNIT_DESC" +
+                    ",catalogue_issues_qty as catalogueIssuesqty" +
+                    ",catalogue_volume_from as catalogueVolumeFrom" +
+                    ",catalogue_volume_to as catalogueVolumeTo" +
+                    ",rf_issues_qty as rfIssuesQty" +
+                    ",rf_total_pages_qty as rfTotalPagesQty" +
+                    ",rf_fvi as rfFvi" +
+                    ",rf_lvi as rfLvi" +
+                    ",business_unit_desc as businessUnitDesc" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_work where EPR in ('%s') order by catalogue_issues_qty desc";
 
-    public static String GET_PREVIOUS_WORK_HISTORY_RECORDS =
+    public static final String GET_PREVIOUS_WORK_HISTORY_RECORDS =
             "select epr as EPR" +
-                    ",record_type as RECORD_TYPE" +
-                    ",work_type as WORK_TYPE" +
-                    ",primary_site_system as PRIMARY_SITE_SYSTEM" +
-                    ",primary_site_acronym as PRIMARY_SITE_ACRONYM" +
-                    ",primary_site_support_level as PRIMARY_SITE_SUPPORT_LEVEL" +
-                    ",fulfilment_system as FULFILMENT_SYSTEM" +
-                    ",fulfilment_journal_acronym as FULFILMENT_JOURNAL_ACRONYM" +
-                    ",issue_prod_type_code as ISSUE_PROD_TYPE_CODE" +
+                    ",record_type as recordType" +
+                    ",work_type as workType" +
+                    ",primary_site_system as primarySiteSystem" +
+                    ",primary_site_acronym as primarySiteAcronym" +
+                    ",primary_site_support_level as primarySiteSupportLevel" +
+                    ",fulfilment_system as fulfilmentSystem" +
+                    ",fulfilment_journal_acronym as fulfilmentJournalAcronym" +
+                    ",issue_prod_type_code as issueProdTypeCode" +
                     ",catalogue_volumes_qty as CATALOGUE_VOLUME_QTY" +
-                    ",catalogue_issues_qty as CATALOGUE_ISSUES_QTY" +
-                    ",catalogue_volume_from as CATALOGUE_VOLUME_FROM" +
-                    ",catalogue_volume_to as CATALOGUE_VOLUME_TO" +
-                    ",rf_issues_qty as RF_ISSUES_QTY" +
-                    ",rf_total_pages_qty as RF_TOTAL_PAGES_QTY" +
-                    ",rf_fvi as RF_FVI" +
-                    ",rf_lvi as RF_LVI" +
-                    ",business_unit_desc as BUSINESS_UNIT_DESC" +
+                    ",catalogue_issues_qty as catalogueIssuesqty" +
+                    ",catalogue_volume_from as catalogueVolumeFrom" +
+                    ",catalogue_volume_to as catalogueVolumeTo" +
+                    ",rf_issues_qty as rfIssuesQty" +
+                    ",rf_total_pages_qty as rfTotalPagesQty" +
+                    ",rf_fvi as rfFvi" +
+                    ",rf_lvi as rfLvi" +
+                    ",business_unit_desc as businessUnitDesc" +
                     " from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part where EPR in ('%s') AND " +
-                   // "transform_ts like \'%%"+bcsEtlCoreCountChecksSql.previousDate()+"%%\'";
                     "transform_ts=(select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part\n " +
                     " where transform_ts < (select max(transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part))\n" +
                     " order by catalogue_issues_qty desc\n";
 
-
-    public static String GET_EPR_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_WORK =
+    public static final String GET_EPR_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_WORK =
             "select epr as EPR from \n" +
                     "(select A.epr, A.record_type, A.primary_site_system\n" +
                     ", A.primary_site_acronym, A.primary_site_support_level, A.fulfilment_system\n" +
@@ -343,31 +314,30 @@ public class JRBIWorkDataChecksSQL {
                     ", A.delete_flag, A.transform_ts from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work B on A.epr  = B.epr \n" +
                     "where B.epr is null and " +
-                    //"A.transform_ts like \'%%"+bcsEtlCoreCountChecksSql.currentDate()+"%%\')\n" +
                     "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A))\n " +
                     " order by rand() limit %s\n";
 
-    public static String GET_RECORDS_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_WORK =
+    public static final String GET_RECORDS_FROM_DIFF_OF_DELTA_AND_CURRENT_HISTORY_WORK =
             "select epr as EPR \n" +
-                    ",record_type as RECORD_TYPE\n" +
-                    ",work_type as WORK_TYPE\n" +
-                    ",primary_site_system as PRIMARY_SITE_SYSTEM\n" +
-                    ",primary_site_acronym as PRIMARY_SITE_ACRONYM\n" +
-                    ",primary_site_support_level as PRIMARY_SITE_SUPPORT_LEVEL\n" +
-                    ",fulfilment_system as FULFILMENT_SYSTEM\n" +
-                    ",fulfilment_journal_acronym as FULFILMENT_JOURNAL_ACRONYM\n" +
-                    ",issue_prod_type_code as ISSUE_PROD_TYPE_CODE\n" +
+                    ",record_type as recordType\n" +
+                    ",work_type as workType\n" +
+                    ",primary_site_system as primarySiteSystem\n" +
+                    ",primary_site_acronym as primarySiteAcronym\n" +
+                    ",primary_site_support_level as primarySiteSupportLevel\n" +
+                    ",fulfilment_system as fulfilmentSystem\n" +
+                    ",fulfilment_journal_acronym as fulfilmentJournalAcronym\n" +
+                    ",issue_prod_type_code as issueProdTypeCode\n" +
                     ",catalogue_volumes_qty as CATALOGUE_VOLUME_QTY\n" +
-                    ",catalogue_issues_qty as CATALOGUE_ISSUES_QTY\n" +
-                    ",catalogue_volume_from as CATALOGUE_VOLUME_FROM\n" +
-                    ",catalogue_volume_to as CATALOGUE_VOLUME_TO\n" +
-                    ",rf_issues_qty as RF_ISSUES_QTY\n" +
-                    ",rf_total_pages_qty as RF_TOTAL_PAGES_QTY\n" +
-                    ",rf_fvi as RF_FVI\n" +
-                    ",rf_lvi as RF_LVI\n" +
-                    ",business_unit_desc as BUSINESS_UNIT_DESC\n" +
-                    ",last_updated_date as LAST_UPDATED_DATE\n" +
-                    ",delete_flag as DELETE_FLAG\n" +
+                    ",catalogue_issues_qty as catalogueIssuesqty\n" +
+                    ",catalogue_volume_from as catalogueVolumeFrom\n" +
+                    ",catalogue_volume_to as catalogueVolumeTo\n" +
+                    ",rf_issues_qty as rfIssuesQty\n" +
+                    ",rf_total_pages_qty as rfTotalPagesQty\n" +
+                    ",rf_fvi as rfFvi\n" +
+                    ",rf_lvi as rfLvi\n" +
+                    ",business_unit_desc as businessUnitDesc\n" +
+                    ",last_updated_date as lastUpdatedDate\n" +
+                    ",delete_flag as deleteFlag\n" +
                     "from \n" +
                     "(select A.epr, A.record_type,A.work_type, A.primary_site_system\n" +
                     ", A.primary_site_acronym, A.primary_site_support_level, A.fulfilment_system\n" +
@@ -377,35 +347,34 @@ public class JRBIWorkDataChecksSQL {
                     ", A.delete_flag, A.transform_ts from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A \n" +
                     "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work B on A.epr  = B.epr \n" +
                     "where B.epr is null and " +
-                   // "A.transform_ts like \'%%"+bcsEtlCoreCountChecksSql.currentDate()+"%%\' " +
                     "A.transform_ts=(select max(A.transform_ts) from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work_history_part A)\n " +
                     "AND A.epr in ('%s'))\n";
 
-    public static String GET_RECORDS_FROM_WORK_EXCLUDE =
+    public static final String GET_RECORDS_FROM_WORK_EXCLUDE =
             "select epr as EPR \n" +
-                    ",record_type as RECORD_TYPE\n" +
-                    ",work_type as WORK_TYPE\n"+
-                    ",primary_site_system as PRIMARY_SITE_SYSTEM\n" +
-                    ",primary_site_acronym as PRIMARY_SITE_ACRONYM\n" +
-                    ",primary_site_support_level as PRIMARY_SITE_SUPPORT_LEVEL\n" +
-                    ",fulfilment_system as FULFILMENT_SYSTEM\n" +
-                    ",fulfilment_journal_acronym as FULFILMENT_JOURNAL_ACRONYM\n" +
-                    ",issue_prod_type_code as ISSUE_PROD_TYPE_CODE\n" +
+                    ",record_type as recordType\n" +
+                    ",work_type as workType\n"+
+                    ",primary_site_system as primarySiteSystem\n" +
+                    ",primary_site_acronym as primarySiteAcronym\n" +
+                    ",primary_site_support_level as primarySiteSupportLevel\n" +
+                    ",fulfilment_system as fulfilmentSystem\n" +
+                    ",fulfilment_journal_acronym as fulfilmentJournalAcronym\n" +
+                    ",issue_prod_type_code as issueProdTypeCode\n" +
                     ",catalogue_volumes_qty as CATALOGUE_VOLUME_QTY\n" +
-                    ",catalogue_issues_qty as CATALOGUE_ISSUES_QTY\n" +
-                    ",catalogue_volume_from as CATALOGUE_VOLUME_FROM\n" +
-                    ",catalogue_volume_to as CATALOGUE_VOLUME_TO\n" +
-                    ",rf_issues_qty as RF_ISSUES_QTY\n" +
-                    ",rf_total_pages_qty as RF_TOTAL_PAGES_QTY\n" +
-                    ",rf_fvi as RF_FVI\n" +
-                    ",rf_lvi as RF_LVI\n" +
-                    ",business_unit_desc as BUSINESS_UNIT_DESC\n" +
-                    ",last_updated_date as LAST_UPDATED_DATE\n" +
-                    ",delete_flag as DELETE_FLAG \n" +
+                    ",catalogue_issues_qty as catalogueIssuesqty\n" +
+                    ",catalogue_volume_from as catalogueVolumeFrom\n" +
+                    ",catalogue_volume_to as catalogueVolumeTo\n" +
+                    ",rf_issues_qty as rfIssuesQty\n" +
+                    ",rf_total_pages_qty as rfTotalPagesQty\n" +
+                    ",rf_fvi as rfFvi\n" +
+                    ",rf_lvi as rfLvi\n" +
+                    ",business_unit_desc as businessUnitDesc\n" +
+                    ",last_updated_date as lastUpdatedDate\n" +
+                    ",delete_flag as deleteFlag \n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_history_work_excl_delta \n" +
                     "where EPR in ('%s')\n";
 
-    public static String GET_EPR_LATEST_WORK =
+    public static final String GET_EPR_LATEST_WORK =
             "select epr as EPR from \n" +
                     "(select a.epr, a.record_type, a.primary_site_system, \n" +
                     "a.primary_site_acronym, a.primary_site_support_level, a.fulfilment_system, a.fulfilment_journal_acronym, \n" +
@@ -421,27 +390,27 @@ public class JRBIWorkDataChecksSQL {
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work as b)\n" +
                     " order by rand() limit %s\n";
 
-    public static String GET_JRBI_REC_SUM_DELTA_WORK_AND_EXCLUDE =
+    public static final String GET_JRBI_REC_SUM_DELTA_WORK_AND_EXCLUDE =
             "select epr as EPR \n" +
-                    ",record_type as RECORD_TYPE\n" +
-                    ",work_type as WORK_TYPE\n" +
-                    ",primary_site_system as PRIMARY_SITE_SYSTEM\n" +
-                    ",primary_site_acronym as PRIMARY_SITE_ACRONYM\n" +
-                    ",primary_site_support_level as PRIMARY_SITE_SUPPORT_LEVEL\n" +
-                    ",fulfilment_system as FULFILMENT_SYSTEM\n" +
-                    ",fulfilment_journal_acronym as FULFILMENT_JOURNAL_ACRONYM\n" +
-                    ",issue_prod_type_code as ISSUE_PROD_TYPE_CODE\n" +
+                    ",record_type as recordType\n" +
+                    ",work_type as workType\n" +
+                    ",primary_site_system as primarySiteSystem\n" +
+                    ",primary_site_acronym as primarySiteAcronym\n" +
+                    ",primary_site_support_level as primarySiteSupportLevel\n" +
+                    ",fulfilment_system as fulfilmentSystem\n" +
+                    ",fulfilment_journal_acronym as fulfilmentJournalAcronym\n" +
+                    ",issue_prod_type_code as issueProdTypeCode\n" +
                     ",catalogue_volumes_qty as CATALOGUE_VOLUME_QTY\n" +
-                    ",catalogue_issues_qty as CATALOGUE_ISSUES_QTY\n" +
-                    ",catalogue_volume_from as CATALOGUE_VOLUME_FROM\n" +
-                    ",catalogue_volume_to as CATALOGUE_VOLUME_TO\n" +
-                    ",rf_issues_qty as RF_ISSUES_QTY\n" +
-                    ",rf_total_pages_qty as RF_TOTAL_PAGES_QTY\n" +
-                    ",rf_fvi as RF_FVI\n" +
-                    ",rf_lvi as RF_LVI\n" +
-                    ",business_unit_desc as BUSINESS_UNIT_DESC\n" +
-                    ",delete_flag as DELETE_FLAG\n" +
-                    ",last_updated_date as LAST_UPDATED_DATE\n" +
+                    ",catalogue_issues_qty as catalogueIssuesqty\n" +
+                    ",catalogue_volume_from as catalogueVolumeFrom\n" +
+                    ",catalogue_volume_to as catalogueVolumeTo\n" +
+                    ",rf_issues_qty as rfIssuesQty\n" +
+                    ",rf_total_pages_qty as rfTotalPagesQty\n" +
+                    ",rf_fvi as rfFvi\n" +
+                    ",rf_lvi as rfLvi\n" +
+                    ",business_unit_desc as businessUnitDesc\n" +
+                    ",delete_flag as deleteFlag\n" +
+                    ",last_updated_date as lastUpdatedDate\n" +
                     " from(select a.epr, a.record_type,a.work_type, a.primary_site_system, \n" +
                     "a.primary_site_acronym, a.primary_site_support_level, a.fulfilment_system, a.fulfilment_journal_acronym, \n" +
                     "a.issue_prod_type_code, a.catalogue_volumes_qty, a.catalogue_issues_qty, a.catalogue_volume_from, \n" +
@@ -456,96 +425,51 @@ public class JRBIWorkDataChecksSQL {
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_delta_current_work as b)\n" +
                     " where EPR in ('%s') order by epr desc\n";
 
-    public static String GET_JRBI_WORK_LATEST_RECORDS =
+    public static final String GET_JRBI_WORK_LATEST_RECORDS =
             "select epr as EPR \n" +
-                    ",record_type as RECORD_TYPE\n" +
-                    ",work_type as WORK_TYPE\n" +
-                    ",primary_site_system as PRIMARY_SITE_SYSTEM\n" +
-                    ",primary_site_acronym as PRIMARY_SITE_ACRONYM\n" +
-                    ",primary_site_support_level as PRIMARY_SITE_SUPPORT_LEVEL\n" +
-                    ",fulfilment_system as FULFILMENT_SYSTEM\n" +
-                    ",fulfilment_journal_acronym as FULFILMENT_JOURNAL_ACRONYM\n" +
-                    ",issue_prod_type_code as ISSUE_PROD_TYPE_CODE\n" +
+                    ",record_type as recordType\n" +
+                    ",work_type as workType\n" +
+                    ",primary_site_system as primarySiteSystem\n" +
+                    ",primary_site_acronym as primarySiteAcronym\n" +
+                    ",primary_site_support_level as primarySiteSupportLevel\n" +
+                    ",fulfilment_system as fulfilmentSystem\n" +
+                    ",fulfilment_journal_acronym as fulfilmentJournalAcronym\n" +
+                    ",issue_prod_type_code as issueProdTypeCode\n" +
                     ",catalogue_volumes_qty as CATALOGUE_VOLUME_QTY\n" +
-                    ",catalogue_issues_qty as CATALOGUE_ISSUES_QTY\n" +
-                    ",catalogue_volume_from as CATALOGUE_VOLUME_FROM\n" +
-                    ",catalogue_volume_to as CATALOGUE_VOLUME_TO\n" +
-                    ",rf_issues_qty as RF_ISSUES_QTY\n" +
-                    ",rf_total_pages_qty as RF_TOTAL_PAGES_QTY\n" +
-                    ",rf_fvi as RF_FVI\n" +
-                    ",rf_lvi as RF_LVI\n" +
-                    ",business_unit_desc as BUSINESS_UNIT_DESC\n" +
-                    ",delete_flag as DELETE_FLAG\n" +
-                    ",last_updated_date as LAST_UPDATED_DATE\n" +
+                    ",catalogue_issues_qty as catalogueIssuesqty\n" +
+                    ",catalogue_volume_from as catalogueVolumeFrom\n" +
+                    ",catalogue_volume_to as catalogueVolumeTo\n" +
+                    ",rf_issues_qty as rfIssuesQty\n" +
+                    ",rf_total_pages_qty as rfTotalPagesQty\n" +
+                    ",rf_fvi as rfFvi\n" +
+                    ",rf_lvi as rfLvi\n" +
+                    ",business_unit_desc as businessUnitDesc\n" +
+                    ",delete_flag as deleteFlag\n" +
+                    ",last_updated_date as lastUpdatedDate\n" +
                     "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_latest_work\n" +
                     "where EPR in ('%s') order by epr desc\n";
 
-    public static String GET_RANDOM_DELTA_EPR_WORK =
-            "select epr as EPR from (\n" +
-                    "--inserted\n" +
-                    "select c.epr,c.record_type,c.work_type, c.primary_site_system,c.primary_site_acronym,c.primary_site_support_level,\n" +
-                    "c.fulfilment_system,c.fulfilment_journal_acronym,c.issue_prod_type_code,c.catalogue_volumes_qty,\n" +
-                    "c.catalogue_issues_qty,c.catalogue_volume_from,c.catalogue_volume_to,\n" +
-                    "c.rf_issues_qty,c.rf_total_pages_qty,c.rf_fvi,c.rf_lvi,c.business_unit_desc,'I' as delta_mode\n" +
-                    "from "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work c\n" +
-                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_work p  on c.epr = p.epr\n" +
-                    "where p.epr is null\n" +
-                    "union all\n" +
-                    "select c.epr,c.record_type, c.work_type, c.primary_site_system,c.primary_site_acronym,c.primary_site_support_level,\n" +
-                    "c.fulfilment_system,c.fulfilment_journal_acronym,c.issue_prod_type_code,c.catalogue_volumes_qty,\n" +
-                    "c.catalogue_issues_qty,c.catalogue_volume_from,c.catalogue_volume_to,\n" +
-                    "c.rf_issues_qty,c.rf_total_pages_qty,c.rf_fvi,c.rf_lvi,c.business_unit_desc,'D' as delta_mode\n" +
-                    "FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_work  c\n" +
-                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work p  on c.epr = p.epr\n" +
-                    "where p.epr is null\n" +
-                    "union all\n" +
-                    "select c.epr,c.record_type,c.work_type, c.primary_site_system,c.primary_site_acronym,c.primary_site_support_level,\n" +
-                    "c.fulfilment_system,c.fulfilment_journal_acronym,c.issue_prod_type_code,c.catalogue_volumes_qty,\n" +
-                    "c.catalogue_issues_qty,c.catalogue_volume_from,c.catalogue_volume_to,\n" +
-                    "c.rf_issues_qty,c.rf_total_pages_qty,c.rf_fvi,c.rf_lvi,c.business_unit_desc, 'C' as delta_mode\n" +
-                    "FROM  "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_previous_work  c\n" +
-                    "left join "+GetJRBIDLDBUser.getJRBIDataBase()+".jrbi_transform_current_work p  on c.epr = p.epr\n" +
-                    "where (c.record_type != (p.record_type) or \n" +
-                    "c.work_type != (p.work_type) or\n" +
-                    "c.primary_site_system !=  (p.primary_site_system) or\n" +
-                    "c.primary_site_acronym !=  (p.primary_site_acronym) or\n" +
-                    "c.primary_site_support_level !=  (p.primary_site_support_level) or\n" +
-                    "c.fulfilment_system !=  (p.fulfilment_system) or\n" +
-                    "c.fulfilment_journal_acronym !=  (p.fulfilment_journal_acronym) or \n" +
-                    "c.issue_prod_type_code !=  (p.issue_prod_type_code) or\n" +
-                    "c.catalogue_volumes_qty !=  (p.catalogue_volumes_qty) or\n" +
-                    "c.catalogue_issues_qty !=  (p.catalogue_issues_qty) or\n" +
-                    "c.catalogue_volume_from !=  (p.catalogue_volume_from) or\n" +
-                    "c.catalogue_volume_to !=  (p.catalogue_volume_to) or\n" +
-                    "c.rf_issues_qty !=  (p.rf_issues_qty) or\n" +
-                    "c.rf_total_pages_qty !=  (p.rf_total_pages_qty) or\n" +
-                    "c.rf_fvi !=  (p.rf_fvi) or\n" +
-                    "c.rf_lvi !=  (p.rf_lvi) or\n" +
-                    "c.business_unit_desc !=  (p.business_unit_desc)))\n" +
-                    " order by rand() limit %s\n";
-
-
-    public static String GET_DIFF_REC_PREVIOUS_CURRENT_WORK =
+    public static final String GET_DIFF_REC_PREVIOUS_CURRENT_WORK =
                 "select epr as EPR" +
-                    ",record_type as RECORD_TYPE" +
-                    ",work_type as WORK_TYPE" +
-                    ",primary_site_system as PRIMARY_SITE_SYSTEM" +
-                    ",primary_site_acronym as PRIMARY_SITE_ACRONYM" +
-                    ",primary_site_support_level as PRIMARY_SITE_SUPPORT_LEVEL" +
-                    ",fulfilment_system as FULFILMENT_SYSTEM" +
-                    ",fulfilment_journal_acronym as FULFILMENT_JOURNAL_ACRONYM" +
-                    ",issue_prod_type_code as ISSUE_PROD_TYPE_CODE" +
+                    ",record_type as recordType" +
+                    ",work_type as workType" +
+                    ",primary_site_system as primarySiteSystem" +
+                    ",primary_site_acronym as primarySiteAcronym" +
+                    ",primary_site_support_level as primarySiteSupportLevel" +
+                    ",fulfilment_system as fulfilmentSystem" +
+                    ",fulfilment_journal_acronym as fulfilmentJournalAcronym" +
+                    ",issue_prod_type_code as issueProdTypeCode" +
                     ",catalogue_volumes_qty as CATALOGUE_VOLUME_QTY" +
-                    ",catalogue_issues_qty as CATALOGUE_ISSUES_QTY" +
-                    ",catalogue_volume_from as CATALOGUE_VOLUME_FROM" +
-                    ",catalogue_volume_to as CATALOGUE_VOLUME_TO" +
-                    ",rf_issues_qty as RF_ISSUES_QTY" +
-                    ",rf_total_pages_qty as RF_TOTAL_PAGES_QTY" +
-                    ",rf_fvi as RF_FVI" +
-                    ",rf_lvi as RF_LVI" +
-                    ",business_unit_desc as BUSINESS_UNIT_DESC" +
-                    ",type as TYPE" +
-                    ",delta_mode as DELTA_MODE" +
+                    ",catalogue_issues_qty as catalogueIssuesqty" +
+                    ",catalogue_volume_from as catalogueVolumeFrom" +
+                    ",catalogue_volume_to as catalogueVolumeTo" +
+                    ",rf_issues_qty as rfIssuesQty" +
+                    ",rf_total_pages_qty as rfTotalPagesQty" +
+                    ",rf_fvi as rfFvi" +
+                    ",rf_lvi as rfLvi" +
+                    ",business_unit_desc as businessUnitDesc" +
+                    ",type as type" +
+                    ",delta_mode as deltaMode" +
                     " from (\n" +
                     "--inserted\n" +
                     "select c.epr,c.record_type,c.work_type, c.primary_site_system,c.primary_site_acronym,c.primary_site_support_level,\n" +
@@ -590,46 +514,5 @@ public class JRBIWorkDataChecksSQL {
                     "where EPR in ('%s')\n";
 
 
-    public static String GET_JRBI_WORK_EXTENDED_RECORDS =
-            "select epr_id as EPR_ID \n" +
-                    ",work_type as WORK_TYPE\n" +
-                    ",primary_site_system as PRIMARY_SITE_SYSTEM\n" +
-                    ",primary_site_acronym as PRIMARY_SITE_ACRONYM\n" +
-                    ",primary_site_support_level as PRIMARY_SITE_SUPPORT_LEVEL\n" +
-                    ",issue_prod_type_code as ISSUE_PROD_TYPE_CODE\n" +
-                    ",catalogue_volumes_qty as CATALOGUE_VOLUME_QTY\n" +
-                    ",catalogue_issues_qty as CATALOGUE_ISSUES_QTY\n" +
-                    ",catalogue_volume_from as CATALOGUE_VOLUME_FROM\n" +
-                    ",catalogue_volume_to as CATALOGUE_VOLUME_TO\n" +
-                    ",rf_issues_qty as RF_ISSUES_QTY\n" +
-                    ",rf_total_pages_qty as RF_TOTAL_PAGES_QTY\n" +
-                    ",rf_fvi as RF_FVI\n" +
-                    ",rf_lvi as RF_LVI\n" +
-                    ",business_unit_desc as BUSINESS_UNIT_DESC\n" +
-                    ",delete_flag as DELETE_FLAG\n" +
-                    ",last_updated_date as LAST_UPDATED_DATE\n" +
-                    "from "+GetJRBIDLDBUser.getProductExtdb()+".work_extended\n" +
-                    "where EPR_ID in ('%s')\n";
 
-
-    public static String GET_RANDOM_EPR_WORK_EXTENDED =
-            "select epr_id as EPR from "+GetJRBIDLDBUser.getProductExtdb()+".work_extended where delete_flag=false order by rand() limit %s\n";
-
-    public static String GET_WORK_JSON_RECORDS =
-            "select json as JSON, epr_id as EPR from "+GetJRBIDLDBUser.getStitchingdb()+".stch_work_ext_json WHERE epr_id in ('%s')\n";
-
-
-    public static String GET_JRBI_PERSON_ROLE_REC =
-            "select epr_id as EPR_ID,\n" +
-                    "role_code as ROLE_CODE,\n" +
-                    "role_name as ROLE_NAME,\n" +
-                    "first_name as FIRST_NAME,\n" +
-                    "last_name as LAST_NAME,\n" +
-                    "peoplehub_id as PEOPLEHUB_ID,\n" +
-                    "email as EMAIL,\n" +
-                    "last_updated_date as LAST_UPDATED_DATE,\n" +
-                    "delete_flag as DELETE_FLAG\n" +
-                    " from "+GetJRBIDLDBUser.getProductExtdb()+".work_extended_person_role\n" +
-                    " where epr_id in ('%s') and delete_flag = false\n";
-
-}
+   }

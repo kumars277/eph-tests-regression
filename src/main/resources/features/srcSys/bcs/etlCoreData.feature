@@ -1,7 +1,7 @@
 Feature:Validate data for BCS ETL Core in Data Lake Access Layer
 
  #confluence Link: https://elsevier.atlassian.net/wiki/spaces/EPH/pages/45477370317/Core+Transformed+View+Mappings
- #conflunce Veraion: v86
+ #conflunce Veraion: v90
 
   @BCSCore
   Scenario Outline: Verify Data for BCS_ETL Core tables is transferred from Inbound Tables
@@ -25,6 +25,13 @@ Feature:Validate data for BCS ETL Core in Data Lake Access Layer
       |etl_manifestation_identifier_current_v       |10              |
       |all_manifestation_statuses_v                 |10              |
       |all_manifestation_pubdates_v                 |10              |
+
+    #EPHD-3362
+  @BCSCore
+    Scenario: Verify the count for the lead indicator in the manifestation identifier tables
+    Given Get the total count of the lead indicator from the inbound table
+    Then  Get the count of the lead indicator from the current table of manifestation identifier
+    And   Compare the inbound and current tables of manifestation identifier
 
   @BCSCore
   Scenario Outline: Verify Data for BCS core history tables are transferred from current tables

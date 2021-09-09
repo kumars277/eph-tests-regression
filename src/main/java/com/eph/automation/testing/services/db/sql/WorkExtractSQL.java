@@ -1,8 +1,5 @@
 package com.eph.automation.testing.services.db.sql;
 
-/**
- * Created by RAVIVARMANS on 26/11/2018.
- */
 public class WorkExtractSQL {
 
     public static String PMX_WORK_EXTRACT= " SELECT\n" +

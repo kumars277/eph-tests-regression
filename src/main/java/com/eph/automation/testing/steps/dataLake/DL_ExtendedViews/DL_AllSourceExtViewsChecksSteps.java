@@ -306,45 +306,89 @@ public class DL_AllSourceExtViewsChecksSteps {
                 case "product_availability_extended_allsource_v":
 
                     Log.info("product_availability_extended_allsource_v Records:");
-                   /* dataQualityDLExtViewContext.recordsFromSourceIngestTable.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id)); //sort primarykey data in the lists
-                    dataQualityDLExtViewContext.recordsFromAllExtViews.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getepr_id));
-                    if(!dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getapplication_name().isEmpty()) {
-                        dataQualityDLExtViewContext.recordsFromSourceIngestTable.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getapplication_name)); //sort primarykey data in the lists
-                        dataQualityDLExtViewContext.recordsFromAllExtViews.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getapplication_name));
-                    }
-                    if(dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getavailability_start_date() != null) {
-
-                        dataQualityDLExtViewContext.recordsFromSourceIngestTable.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getavailability_start_date)); //sort primarykey data in the lists
-                        dataQualityDLExtViewContext.recordsFromAllExtViews.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getavailability_start_date));
-                    }
-                    if(!dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getdelta_answer_code_uk().isEmpty()) {
-                        dataQualityDLExtViewContext.recordsFromSourceIngestTable.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getdelta_answer_code_uk)); //sort primarykey data in the lists
-                        dataQualityDLExtViewContext.recordsFromAllExtViews.sort(Comparator.comparing(DL_ExtendedViewsAccessObject::getdelta_answer_code_uk));
-                    }
-*/
-
                     String[] all_prod_avail_Col = {"getepr_id", "getsource", "getproduct_type", "getlast_updated_date", "getapplication_name", "getdelta_answer_code_uk",
                             "getdelta_answer_code_us","getpublication_status_anz","getavailability_format","getavailability_start_date","getavailability_status","getdelete_flag"};
                     for (String strTemp : all_prod_avail_Col) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;
 
-                        DL_ExtendedViewsAccessObject objectToCompare1 = dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i);
-                        DL_ExtendedViewsAccessObject objectToCompare2 = dataQualityDLExtViewContext.recordsFromAllExtViews.get(i);
+                            DL_ExtendedViewsAccessObject objectToCompare1 = dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i);
+                            DL_ExtendedViewsAccessObject objectToCompare2 = dataQualityDLExtViewContext.recordsFromAllExtViews.get(i);
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+                            Log.info("EPRIDs => " + dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getepr_id() +
+                                    " " + strTemp + " => SourceIngest = " + method.invoke(objectToCompare1) +
+                                    " All_Views_EXT = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " are mismatch/not found in All Views for EPRID:" + dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getepr_id(),
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                        /*if(dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getavailability_status()!=null) {
+
+                            DL_ExtendedViewsAccessObject objectToCompare1 = dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i);
+                            DL_ExtendedViewsAccessObject objectToCompare2 = dataQualityDLExtViewContext.recordsFromAllExtViews.get(i);
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+                            Log.info("EPRIDs => " + dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getepr_id() +
+                                    " " + strTemp + " => SourceIngest = " + method.invoke(objectToCompare1) +
+                                    " All_Views_EXT = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " are mismatch/not found in All Views for EPRID:" + dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getepr_id(),
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+                            }
+                        }if(dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getdelta_answer_code_uk()==null){
+                                DL_ExtendedViewsAccessObject objectToCompare1 = dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i);
+                                DL_ExtendedViewsAccessObject objectToCompare2 = dataQualityDLExtViewContext.recordsFromAllExtViews.get(i);
+                                method = objectToCompare1.getClass().getMethod(strTemp);
+                                method2 = objectToCompare2.getClass().getMethod(strTemp);
+                                Log.info("EPRIDs => " + dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getepr_id() +
+                                        " " + strTemp + " => SourceIngest = " + method.invoke(objectToCompare1) +
+                                        " All_Views_EXT = " + method2.invoke(objectToCompare2));
+                                if (method.invoke(objectToCompare1) != null ||
+                                        (method2.invoke(objectToCompare2) != null)) {
+                                    Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " are mismatch/not found in All Views for EPRID:" + dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getepr_id(),
+                                            method.invoke(objectToCompare1),
+                                            method2.invoke(objectToCompare2));
+
+                            }
+                        }if(dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getdelta_answer_code_us()==null){
+                            DL_ExtendedViewsAccessObject objectToCompare1 = dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i);
+                            DL_ExtendedViewsAccessObject objectToCompare2 = dataQualityDLExtViewContext.recordsFromAllExtViews.get(i);
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+                            Log.info("EPRIDs => " + dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getepr_id() +
+                                    " " + strTemp + " => SourceIngest = " + method.invoke(objectToCompare1) +
+                                    " All_Views_EXT = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " are mismatch/not found in All Views for EPRID:" + dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getepr_id(),
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+
+                            }
+                        }if(dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getpublication_status_anz()==null){
+                            DL_ExtendedViewsAccessObject objectToCompare1 = dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i);
+                            DL_ExtendedViewsAccessObject objectToCompare2 = dataQualityDLExtViewContext.recordsFromAllExtViews.get(i);
+                            method = objectToCompare1.getClass().getMethod(strTemp);
+                            method2 = objectToCompare2.getClass().getMethod(strTemp);
+                            Log.info("EPRIDs => " + dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getepr_id() +
+                                    " " + strTemp + " => SourceIngest = " + method.invoke(objectToCompare1) +
+                                    " All_Views_EXT = " + method2.invoke(objectToCompare2));
+                            if (method.invoke(objectToCompare1) != null ||
+                                    (method2.invoke(objectToCompare2) != null)) {
+                                Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " are mismatch/not found in All Views for EPRID:" + dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getepr_id(),
+                                        method.invoke(objectToCompare1),
+                                        method2.invoke(objectToCompare2));
+
+                            }
+                        }*/
 
 
-                        method = objectToCompare1.getClass().getMethod(strTemp);
-                        method2 = objectToCompare2.getClass().getMethod(strTemp);
 
-                        Log.info("EPRIDs => " + dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getepr_id() +
-                                " " + strTemp + " => SourceIngest = " + method.invoke(objectToCompare1) +
-                                " All_Views_EXT = " + method2.invoke(objectToCompare2));
-                        if (method.invoke(objectToCompare1) != null ||
-                                (method2.invoke(objectToCompare2) != null)) {
-                            Assert.assertEquals("The " + strTemp + " is =" + method.invoke(objectToCompare1) + " are mismatch/not found in All Views for EPRID:" + dataQualityDLExtViewContext.recordsFromSourceIngestTable.get(i).getepr_id(),
-                                    method.invoke(objectToCompare1),
-                                    method2.invoke(objectToCompare2));
-                        }
                     }
                     break;
                 case "product_extended_pricing_allsource_v":

@@ -1,4 +1,4 @@
-package com.eph.automation.testing.steps.z_other;
+package com.eph.automation.testing.steps;
 //created by Nishant @ 29 Jan 2021
 
 import com.eph.automation.testing.configuration.Constants;

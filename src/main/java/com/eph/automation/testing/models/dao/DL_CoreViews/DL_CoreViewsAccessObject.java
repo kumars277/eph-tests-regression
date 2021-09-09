@@ -93,11 +93,17 @@ public class DL_CoreViewsAccessObject {
     private String access_model_description;
     private String business_model_code;
     private String business_model_description;
+    private String leadIndicator;
 
 
     public String getFPACKAGEOWNER() { return FPACKAGEOWNER; }
     public void setFPACKAGEOWNER(String FPACKAGEOWNER) {
         this.FPACKAGEOWNER = FPACKAGEOWNER;
+    }
+
+    public String getleadIndicator() { return leadIndicator; }
+    public void setleadIndicator(String leadIndicator) {
+        this.leadIndicator = leadIndicator;
     }
 
     public String getbusiness_model_description() { return business_model_description; }

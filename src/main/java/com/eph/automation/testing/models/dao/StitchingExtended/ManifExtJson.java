@@ -77,6 +77,15 @@ public class ManifExtJson {
         this.discountCodeUS = discountCodeUS;
     }
 
+    private String exportToWebInd;
+    public String getexportToWebInd() {
+        return exportToWebInd;
+    }
+    public void setexportToWebInd(String exportToWebInd) {
+        this.exportToWebInd = exportToWebInd;
+    }
+
+
     private String warReference;
     public String getWarReference() {
         return warReference;

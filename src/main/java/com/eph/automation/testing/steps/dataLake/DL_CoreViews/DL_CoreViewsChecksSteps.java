@@ -21,7 +21,11 @@ import java.util.Comparator;
 
 public class DL_CoreViewsChecksSteps {
     private static String DLCoreSQLViewCount;
+    private static String leadIndSourceSQLCount;
+    private static String leadIndAllCoreSQLCount;
     private static int DLCoreViewCount;
+    private static int leadIndSrcCount;
+    private static int leadIndAllCoreCount;
     private static String BCSJMCoreSQLCount;
     private static int BCSJMCoreCount;
     private static int BCSJMCExtRefFieldNullCount;
@@ -447,7 +451,7 @@ public class DL_CoreViewsChecksSteps {
                         dataQualityDLCoreViewContext.recordsFromAllViews.sort(Comparator.comparing(DL_CoreViewsAccessObject::getEXTERNALREFERENCE));
 
                         String[] all_manifestation_identifiers_col = {"getEXTERNALREFERENCE","getIDENTIFIER","getEFFECTIVE_START_DATE","getEFFECTIVE_END_DATE","getF_TYPE","getF_MANIFESTATION","getMANIFESTATIONSOURCEREF",
-                        "getLASTUPDATEDDATE","getDELETEFLAG","getSOURCESYSTEM","getSCENARIOCODE","getSCENARIONAME"};
+                        "getLASTUPDATEDDATE","getDELETEFLAG","getSOURCESYSTEM","getSCENARIOCODE","getSCENARIONAME","getleadIndicator"};
                         for (String strTemp : all_manifestation_identifiers_col) {
                             java.lang.reflect.Method method;
                             java.lang.reflect.Method method2;
@@ -818,6 +822,31 @@ public class DL_CoreViewsChecksSteps {
             }
         }
     }
+
+    @Given("^Get the leadIndicator count from the sourcesystem table$")
+    public void getLeadIndicatorCount () {
+                Log.info("Getting Lead indicatore source sys Count...");
+                leadIndSourceSQLCount = DL_CoreViewChecksSQL.GET_SOURCE_LEAD_INDICATOR_COUNT;
+                Log.info(leadIndSourceSQLCount);
+                List<Map<String, Object>> leadIndicatorSrcTableCount = DBManager.getDBResultMap(leadIndSourceSQLCount, Constants.AWS_URL);
+                leadIndSrcCount = ((Long) leadIndicatorSrcTableCount.get(0).get("Source_Count")).intValue();
+    }
+
+    @Then("^Get the count of leadIndicator from the all_manifestation_identifiers_v$")
+    public void getLeadIndicatorallCoreCount () {
+        Log.info("Getting Lead indicatore all core views Count...");
+        leadIndAllCoreSQLCount = DL_CoreViewChecksSQL.GET_LEAD_INDICATOR_ALL_CORE_VIEW_COUNT;
+        Log.info(leadIndAllCoreSQLCount);
+        List<Map<String, Object>> leadIndicatorAllCoreTableCount = DBManager.getDBResultMap(leadIndAllCoreSQLCount, Constants.AWS_URL);
+        leadIndAllCoreCount = ((Long) leadIndicatorAllCoreTableCount.get(0).get("Target_Count")).intValue();
+    }
+
+    @And("^Compare the counts to verify their counts are equal$")
+    public void compareleadIndCounts(){
+        Log.info("The count for all core => " + leadIndAllCoreCount + " and in Source sys => " + leadIndSrcCount);
+        Assert.assertEquals("The counts are not equal when compared with all core and Source sys ", leadIndAllCoreCount, leadIndSrcCount);
+    }
+
 }
 
 

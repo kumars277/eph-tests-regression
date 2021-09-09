@@ -417,7 +417,7 @@ public class BcsEtlCoreLatestDataChecksSteps {
 
     @Given("^Get the (.*) from sum of delta_current and exclude_delta tables (.*)$")
     public static void getIdsFromDiffOfDeltaCurrAndExcl(String numberOfRecords, String tableName) {
-        numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
+       numberOfRecords = System.getProperty("dbRandomRecordsNumber"); //Uncomment when running in jenkins
         Log.info("numberOfRecords = " + numberOfRecords);
         Log.info("Get random Ids for bcs Core Tables from Diff of Delta Current and Exclude....");
         switch (tableName) {
@@ -603,7 +603,7 @@ public class BcsEtlCoreLatestDataChecksSteps {
                     BcsEtlCoreAccessDLContext.recFromDiffOfDeltaAndExcl.sort(Comparator.comparing(BcsEtlCoreDLAccessObject::getuKey)); //sort primarykey data in the lists
                     BcsEtlCoreAccessDLContext.recFromLatest.sort(Comparator.comparing(BcsEtlCoreDLAccessObject::getuKey));
 
-                    String[] etlTransformHistoryManifestationIdentifierLatest = {"getuKey", "getsourceRef", "getidentifier", "getidentifierType"};
+                    String[] etlTransformHistoryManifestationIdentifierLatest = {"getuKey", "getsourceRef", "getidentifier", "getidentifierType","getleadIndicator"};
                     for (String strTemp : etlTransformHistoryManifestationIdentifierLatest) {
                         java.lang.reflect.Method method;
                         java.lang.reflect.Method method2;

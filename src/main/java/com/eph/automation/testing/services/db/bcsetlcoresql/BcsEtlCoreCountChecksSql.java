@@ -100,6 +100,10 @@ public class BcsEtlCoreCountChecksSql {
     public static final String GET_BCS_ETL_CORE_MANIF_IDENTIF_CURR_COUNT =
             "select count(*) as Target_Count from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_manifestation_identifier_current_v";
 
+    public static final String GET_LEAD_INDICATOR_MANIF_IDENTIF_CURR_COUNT =
+            "select count(*) as Target_Count from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_manifestation_identifier_current_v where lead_indicator=true \n";
+
+
     public static final String GET_BCS_ETL_CORE_MANIF_STATUSES_COUNT =
             "select count(*) as Target_Count from "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".all_manifestation_statuses_v";
 
@@ -284,18 +288,28 @@ public class BcsEtlCoreCountChecksSql {
                     "SELECT A.*\n" +
                     ", sourceref||identifier||identifier_type as u_key FROM (\n" +
                     "SELECT DISTINCT\n" +
-                    "     NULLIF(sourceref,'') sourceref\n" +
+                    "     NULLIF(p.sourceref,'') sourceref\n" +
                     "   , NULLIF(isbn13,'') identifier\n" +
-                    "   , 'ISBN' identifier_type\n" +
-                    "   FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_product\n" +
+                    "   ,'ISBN' identifier_type\n" +
+                    "   , case when v.sourceref is null then null else true end as lead_indicator\n" +
+                    "   FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_product p\n" +
+                    "   LEFT OUTER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily v on (p.sourceref = v.sourceref and p.sourceref = v.workmasterprojectno)\n" +
                     "   WHERE (isbn13 <> '')\n" +
-                   /* "UNION ALL    SELECT\n" +
-                    "     NULLIF(sourceref,'') sourceref\n" +
-                    "   , NULLIF(seriesissn,'') identifier\n" +
-                    "   , 'ISSN' identifier_type\n" +
-                    "   FROM "+GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_content\n" +
-                    "   WHERE (seriesissn <> '')\n" + */
                     ")A WHERE A.sourceref is not null and A.identifier is not null)";
+
+    public static final String GET_LEAD_INDICATOR_INBOUND_CURRENT_COUNT =
+            "select count(*) as Source_Count from(\n" +
+                    "SELECT A.*\n" +
+                    ", sourceref||identifier||identifier_type as u_key FROM (\n" +
+                    "SELECT DISTINCT\n" +
+                    "     NULLIF(p.sourceref,'') sourceref\n" +
+                    "   , NULLIF(isbn13,'') identifier\n" +
+                    "   ,'ISBN' identifier_type\n" +
+                    "   , case when v.sourceref is null then null else true end as lead_indicator\n" +
+                    "   FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_product p\n" +
+                    "   LEFT OUTER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily v on (p.sourceref = v.sourceref and p.sourceref = v.workmasterprojectno)\n" +
+                    "   WHERE (isbn13 <> '')\n" +
+                    ")A WHERE A.sourceref is not null and A.identifier is not null)where lead_indicator=true";
 
     public static final String GET_WRK_IDENTIF_INBOUND_CURRENT_COUNT =
             "WITH\n" +
@@ -489,17 +503,17 @@ public class BcsEtlCoreCountChecksSql {
     public static final String GET_WRK_RELT_INBOUND_CURRENT_COUNT =
      "SELECT count(*) as Source_Count FROM (\n" +
             "   SELECT DISTINCT\n"+
-            "     NULLIF(concat(concat(CAST(relations.sourceref AS varchar), split_part(relations.relationtype, ' | ', 1)), CAST(relations.projectno AS varchar)), '') u_key\n"+
-            "   , NULLIF(relations.sourceref, '') parentref\n"+
-            "   , NULLIF(relations.projectno, '') childref\n"+
+            "     NULLIF(concat(concat(CAST(parent.workmasterprojectno AS varchar), split_part(relations.relationtype, ' | ', 1)), CAST(child.workmasterprojectno AS varchar)), '') u_key\n"+
+            "   , NULLIF(parent.workmasterprojectno, '') parentref\n"+
+            "   , NULLIF(child.workmasterprojectno, '') childref\n"+
             "   , NULLIF(code.ephcode, '') relationtyperef\n"+
             "   , date_parse(NULLIF(relations.metamodifiedon, ''), '%d-%b-%Y %H:%i:%s') modifiedon\n"+
             "   , 'N' dq_err\n"+
             "   FROM\n"+
             "     ((("+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_relations relations\n"+
             "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".relationtypecode code ON (split_part(relations.relationtype, ' | ', 1) = code.ppmcode))\n"+
-            "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily parent ON ((relations.sourceref = parent.sourceref) AND (relations.sourceref = parent.workmasterprojectno)))\n"+
-            "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily child ON ((relations.projectno = child.sourceref) AND (relations.projectno = child.workmasterprojectno)))\n"+
+            "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily parent ON ((relations.sourceref = parent.sourceref) AND (parent.workmasterprojectno IS NOT NULL)))\n"+
+            "   INNER JOIN "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".stg_current_versionfamily child ON ((relations.projectno = child.sourceref) AND (child.workmasterprojectno IS NOT NULL)))\n"+
             "UNION ALL    SELECT DISTINCT\n"+
             "     concat(CAST(content.seriesid AS varchar), 'CON', CAST(content.sourceref AS varchar)) u_key\n"+
             "   , content.seriesid parentref\n"+
@@ -982,7 +996,7 @@ public class BcsEtlCoreCountChecksSql {
 
     public static final String GET_DUPLICATES_MANIF_IDENTIFIER_COUNT =
             "select count(*) as Duplicate_Count from (SELECT count(*) FROM "+ GetBcsEtlCoreDLDBUser.getBcsETLCoreDataBase()+".etl_transform_history_manifestation_identifier_latest" +
-                    " where delete_flag=false group by sourceref,identifier,identifier_type having count(*)>1)";
+                    " where delete_flag=false group by sourceref,identifier,identifier_type,lead_indicator having count(*)>1)";
 
     public static final String GET_PERSON_DIFF_TRANSFORM_FILE_COUNT =
             " with crr_dataset as(\n" +
