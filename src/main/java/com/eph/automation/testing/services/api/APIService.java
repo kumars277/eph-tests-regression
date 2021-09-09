@@ -52,7 +52,7 @@ public class APIService {
             .get("/product-hub-products/products/" + productID);
 
     DataQualityContext.api_response = response;
-    DataQualityContext.api_response.prettyPrint();
+ //   DataQualityContext.api_response.prettyPrint();
     Assert.assertEquals(responseCodeMessage, 200, response.statusCode());
     return response.thenReturn().as(ProductApiObject.class);
   }
